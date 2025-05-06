@@ -77,7 +77,7 @@ sealed class GalipotStream : DruidicProjectile {
     }
 
     public override void AI() {
-        ShouldApplyAttachedItemDamage = Projectile.penetrate >= 2;
+        ShouldApplyAttachedNatureWeaponCurrentDamage = Projectile.penetrate >= 2;
 
         bool flag2 = IsActive && Projectile.velocity.Length() > 0.5f;
 

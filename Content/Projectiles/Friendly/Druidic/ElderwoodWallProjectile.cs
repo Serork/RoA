@@ -47,7 +47,7 @@ sealed class ElderwoodWallProjectile : DruidicProjectile {
 
         Projectile.hide = true;
 
-        ShouldChargeWreath = false;
+        ShouldChargeWreathOnDamage = false;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {

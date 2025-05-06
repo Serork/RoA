@@ -104,7 +104,7 @@ sealed class EvilBranch : DruidicProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
 
-        ShouldApplyAttachedItemDamage = false;
+        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -204,7 +204,7 @@ sealed class EvilBranch : DruidicProjectile {
                 }
                 direction *= -_direction;
                 Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
-                int projectile = Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(AttachedItem, Main.player[Projectile.owner]), Projectile.knockBack,
+                int projectile = Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(AttachedNatureWeapon, Main.player[Projectile.owner]), Projectile.knockBack,
                     Projectile.owner, direction, Projectile.identity, index);
                 Main.projectile[projectile].As<EvilLeaf>().SetUpTwigPosition(leafTwigPosition);
                 index++;

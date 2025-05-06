@@ -320,7 +320,7 @@ sealed class TulipPetalOld : DruidicProjectile {
 
             Projectile.timeLeft = 10;
 
-            ShouldApplyAttachedItemDamage = false;
+            ShouldApplyAttachedNatureWeaponCurrentDamage = false;
         }
 
         protected override void SafeOnSpawn(IEntitySource source) {

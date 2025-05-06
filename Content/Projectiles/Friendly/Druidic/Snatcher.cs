@@ -85,7 +85,7 @@ sealed class Snatcher : DruidicProjectile {
         Projectile.timeLeft = TIMELEFT * 2;
         Projectile.penetrate = -1;
 
-        ShouldChargeWreath = false;
+        ShouldChargeWreathOnDamage = false;
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 30;

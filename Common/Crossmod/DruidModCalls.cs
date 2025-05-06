@@ -70,10 +70,10 @@ public static class DruidModCalls {
                 if (!CrossmodNatureContent.IsProjectileNature(projectile)) {
                     throw new Exception($"Projectile is not nature");
                 }
-                bool? shouldChargeWreath = args[2] as bool?;
-                bool? shouldApplyAttachedItemDamage = args[3] as bool?;
+                bool? shouldChargeWreathOnDamage = args[2] as bool?;
+                bool? shouldApplyAttachedNatureWeaponCurrentDamage = args[3] as bool?;
                 float? wreathFillingFine = args[4] as float?;
-                DruidicProjectile.NatureProjectileSetValues(projectile, shouldChargeWreath ?? true, shouldApplyAttachedItemDamage ?? true, wreathFillingFine ?? 0f);
+                DruidicProjectile.NatureProjectileSetValues(projectile, shouldChargeWreathOnDamage ?? true, shouldApplyAttachedNatureWeaponCurrentDamage ?? true, wreathFillingFine ?? 0f);
                 return success;
             }
             if (message == "SetAttachedItemToDruidicProjectile") {
@@ -86,16 +86,16 @@ public static class DruidModCalls {
                 DruidicProjectile.NatureProjectileSetItem(projectile, item);
                 return success;
             }
-            if (message == "GetAttachedItemToDruidicProjectile") {
+            if (message == "GetAttachedNatureWeaponToDruidicProjectile") {
                 if (args[1] is not Projectile projectile) {
                     throw new Exception($"{args[1]} is not projectile");
                 }
                 if (!CrossmodNatureContent.IsProjectileNature(projectile)) {
                     throw new Exception($"Projectile is not nature");
                 }
-                return projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedItem;
+                return projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedNatureWeapon;
             }
-            if (message == "GetDruidicWeaponBasePotentialDamage") {
+            if (message == "GetAttachedNatureWeaponToDruidicProjectile") {
                 if (args[1] is not Item item) {
                     throw new Exception($"{args[1]} is not Item");
                 }

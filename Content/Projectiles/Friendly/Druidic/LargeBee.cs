@@ -38,7 +38,7 @@ sealed class LargeBee : DruidicProjectile {
         Projectile.friendly = true;
         Projectile.hostile = false;
 
-        ShouldApplyAttachedItemDamage = false;
+        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {

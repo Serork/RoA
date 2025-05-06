@@ -41,7 +41,7 @@ sealed class RootRing : DruidicProjectile {
         Projectile.usesIDStaticNPCImmunity = true;
         Projectile.idStaticNPCHitCooldown = 30;
 
-        ShouldChargeWreath = false;
+        ShouldChargeWreathOnDamage = false;
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {

@@ -119,7 +119,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedItem, player) * 3);
+        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedNatureWeapon, player) * 3);
 
         protected override bool DespawnWithProj() => true;
 

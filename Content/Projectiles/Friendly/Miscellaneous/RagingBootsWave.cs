@@ -25,7 +25,7 @@ sealed class RagingBootsWave : DruidicProjectile {
         Projectile.penetrate = -1;
         AIType = 14;
 
-        ShouldApplyAttachedItemDamage = false;
+        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
     public override bool? CanCutTiles() => false;

@@ -229,7 +229,7 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (proj.ModProjectile is DruidicProjectile natureProjectile) {
-            if (!natureProjectile.ShouldChargeWreath && !nonDataReset) {
+            if (!natureProjectile.ShouldChargeWreathOnDamage && !nonDataReset) {
                 return;
             }
 
@@ -248,7 +248,7 @@ sealed class WreathHandler : ModPlayer {
         try {
             if (CrossmodNatureContent.IsProjectileNature(proj)) {
                 CrossmodNatureProjectileHandler handler = proj.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
-                if (!(!handler.ShouldChargeWreath && !nonDataReset)) {
+                if (!(!handler.ShouldChargeWreathOnDamage && !nonDataReset)) {
                     ClawsReset(proj, nonDataReset);
 
                     IncreaseResourceValue(handler.WreathFillingFine);
@@ -280,7 +280,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void ClawsReset(Projectile projectile, bool nonDataReset) {
-        Item attachedItem = projectile.ModProjectile is DruidicProjectile natureProjectile ? natureProjectile.AttachedItem : projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedItem;
+        Item attachedItem = projectile.ModProjectile is DruidicProjectile natureProjectile ? natureProjectile.AttachedNatureWeapon : projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedNatureWeapon;
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && Player.ItemAnimationActive && attachedItem == selectedItem) {

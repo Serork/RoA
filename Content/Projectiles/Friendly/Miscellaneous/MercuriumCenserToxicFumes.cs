@@ -32,7 +32,7 @@ sealed class MercuriumCenserToxicFumes : DruidicProjectile {
         Projectile.usesIDStaticNPCImmunity = true;
         Projectile.idStaticNPCHitCooldown = 10;
 
-        ShouldChargeWreath = false;
+        ShouldChargeWreathOnDamage = false;
 
         Projectile.aiStyle = -1;
     }

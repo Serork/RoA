@@ -65,7 +65,7 @@ abstract class EvilStaffBase : BaseRodProjectile {
 
     protected override bool ShouldWaitUntilProjDespawns() => false;
 
-    protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(AttachedItem, player);
+    protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(AttachedNatureWeapon, player);
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         base.SafeSendExtraAI(writer);

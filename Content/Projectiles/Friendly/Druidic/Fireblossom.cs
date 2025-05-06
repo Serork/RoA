@@ -44,7 +44,7 @@ sealed class FireblossomExplosion : DruidicProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
 
-        ShouldChargeWreath = false;
+        ShouldChargeWreathOnDamage = false;
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -123,7 +123,7 @@ sealed class Fireblossom : DruidicProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
 
-        ShouldChargeWreath = false;
+        ShouldChargeWreathOnDamage = false;
     }
 
     private float Speed => MathHelper.Clamp(Projectile.localAI[2], 0f, 1.4f);

@@ -56,7 +56,7 @@ abstract class Wave : DruidicProjectile {
         Projectile.ignoreWater = true;
         Projectile.localNPCHitCooldown = 100;
 
-        ShouldChargeWreath = false;
+        ShouldChargeWreathOnDamage = false;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {

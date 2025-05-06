@@ -34,7 +34,7 @@ class ClawsSlash : DruidicProjectile {
 
     protected virtual bool SpawnSlashDust { get; } = true;
 
-    protected bool ShouldFullBright => AttachedItem != null && AttachedItem.type == ModContent.ItemType<HellfireClaws>();
+    protected bool ShouldFullBright => AttachedNatureWeapon != null && AttachedNatureWeapon.type == ModContent.ItemType<HellfireClaws>();
 
     protected Color? FirstSlashColor => _firstSlashColor;
     protected Color? SecondSlashColor => _secondSlashColor;

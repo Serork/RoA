@@ -39,7 +39,7 @@ sealed class HellfireFracture : DruidicProjectile {
 
         Projectile.timeLeft = 300;
 
-        ShouldChargeWreath = false;
+        ShouldChargeWreathOnDamage = false;
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
