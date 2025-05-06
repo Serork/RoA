@@ -77,7 +77,7 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
             }
             Vector2 position;
             position = _tempMousePosition;
-            dustType = TileHelper.GetKillTileDust((int)position.X / 16, (int)position.Y / 16, Main.tile[(int)position.X / 16, (int)position.Y / 16]);
+            dustType = Main.rand.NextBool(4) ? DustID.Torch : TileHelper.GetKillTileDust((int)position.X / 16, (int)position.Y / 16, Main.tile[(int)position.X / 16, (int)position.Y / 16]);
             float progress = 1.25f * Ease.ExpoInOut(Math.Max(step, 0.25f)) + 0.25f;
             int count = (int)(4 * Math.Max(0.25f, progress));
             for (int k = 0; k < count; k++) {
