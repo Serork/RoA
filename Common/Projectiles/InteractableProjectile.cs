@@ -76,6 +76,9 @@ abstract class InteractableProjectile : ModProjectile {
         if (localPlayer.whoAmI != Main.myPlayer) {
             return 0;
         }
+        if (Main.HoveringOverAnNPC) {
+            return 0;
+        }
         Microsoft.Xna.Framework.Point point = proj.Center.ToTileCoordinates();
         Vector2 compareSpot = localPlayer.Center;
         if (!localPlayer.IsProjectileInteractibleAndInInteractionRange(proj, ref compareSpot))
