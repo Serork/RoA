@@ -1,6 +1,10 @@
-- Lothor now emits light upon spawning 
-- Lothor's scream attack no longer stops projectiles completely 
-- Fixed world seeds not replicating generated details correctly
-- Fixed the Dryad not respawning if killed before moving into a house 
-- Gems no longer generate on sand blocks in the Backwoods 
-- Backwoods Leaf blocks no longer merge with Backwoods Grass
+- Added basic cross-mod support for Druid weapons
+- Wreath no longer starts discharging while charging up an attack with a Cane
+- Wreath now loses charge slower while charging up an attack with a Cane (if already discharging)
+- Tectonic Cane now creates glowing dust at the pillar's spawn location
+- Fleder Staff now has autoattack
+- Undead Harpy no longer activates when trying to interact with an NPC
+- Fog vignette now disappears correctly after teleporting out of the backwoods
+- Slightly reduced Fleder enemy damage
+- Made a few minor improvements to Backwoods biome generation
+- Backwoods Leaf blocks now merge with Backwoods Grass again
