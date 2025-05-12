@@ -170,22 +170,19 @@ sealed class BackwoodsVars : ModSystem {
         NetManager.Instance.SendToClient(TreePositionsModule.SerializePositions(), playerIndex);
     }
 
-    sealed class TreePositionsModule : NetModule {
+    private class TreePositionsModule : NetModule {
         public static NetPacket SerializePositions() {
             NetPacket result = CreatePacket<TreePositionsModule>(BackwoodsTreeCountInWorld * 2 + 1);
-            result.Writer.Write(BackwoodsTreeCountInWorld);
+            result.Writer.Write((short)BackwoodsTreeCountInWorld);
             for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-                result.Writer.Write(AllTreesWorldPositions[i].X);
-                result.Writer.Write(AllTreesWorldPositions[i].Y);
+                result.Writer.Write((short)AllTreesWorldPositions[i].X);
+                result.Writer.Write((short)AllTreesWorldPositions[i].Y);
             }
 
             return result;
         }
 
         public override bool Deserialize(BinaryReader reader, int userId) {
-            if (Main.dedServ)
-                return false;
-
             BackwoodsTreeCountInWorld = reader.ReadInt16();
             AllTreesWorldPositions.Clear();
             for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
