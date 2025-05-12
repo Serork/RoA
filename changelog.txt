@@ -1,10 +1,2 @@
-- Added basic cross-mod support for Druid weapons
-- Wreath no longer starts discharging while charging up an attack with a Cane
-- Wreath now loses charge slower while charging up an attack with a Cane (if already discharging)
-- Tectonic Cane now creates glowing dust at the pillar's spawn location
-- Fleder Staff now has autoattack
-- Undead Harpy no longer activates when trying to interact with an NPC
-- Fog vignette now disappears correctly after teleporting out of the backwoods
-- Slightly reduced Fleder enemy damage
-- Made a few minor improvements to Backwoods biome generation
-- Backwoods Leaf blocks now merge with Backwoods Grass again
+- Fixed not being able to generate a world with Fargo's Best of Both Worlds enabled
+- Fixed the dedicated server crashing upon opening a chest in the backwoods
