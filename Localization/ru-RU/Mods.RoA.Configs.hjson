@@ -1,41 +1,41 @@
 HighlightModes: {
-	// Tooltip: ""
-	Normal.Label: Стандартно
-	Always.Label: Всегда
-	Off.Label: Выключено
+	Tooltip: ""
+	Normal.Label: градиент
+	Always.Label: сплошной цвет
+	Off.Label: выключен
 }
 
 WreathDrawingModes: {
-	// Tooltip: ""
-	Normal.Label: Классический
-	Normal2.Label: Классический 2
-	Fancy.Label: Узорчатый
-	Bars.Label: Полоски
-	Fancy2.Label: Узорчатый 2
-	Bars2.Label: Полоски 2
+	Tooltip: ""
+	Normal.Label: классический
+	Normal2.Label: классический 2
+	Fancy.Label: узорчатый
+	Bars.Label: полоски
+	Fancy2.Label: узорчатый 2
+	Bars2.Label: полоски 2
 }
 
 RoAClientConfig: {
-	DisplayName: Настройки клиента
+	DisplayName: Клиентская конфигурация
 
 	DruidLeaves: {
-		Label: Графика описаний предметов класса 'Друид'
-		Tooltip: Добавляет листья около названий предметов класса 'Друид'
+		Label: Визуальные эффекты названий предметов друида
+		Tooltip: Добавляет эффект листьев по бокам названий предметов друида
 	}
 
 	HighlightMode: {
-		Label: Выделение ключевых слов ресурсов
-		// Tooltip: ""
+		Label: Выделение ключевых слов параметров
+		Tooltip: ""
 	}
 
 	WreathDrawingMode: {
 		Label: Стиль индикатора венка
-		// Tooltip: ""
+		Tooltip: ""
 	}
 
 	VanillaResprites: {
-		Label: Изменения спрайтов оригинальной игры
-		Tooltip: Заменяет некоторые текстуры, в том числе алхимических трав и Мерзкой колючки
+		Label: Изменённые ванильные спрайты
+		Tooltip: Изменяет некоторые спрайты, в том числе алхимических трав и мерзкой колючки
 	}
 
 	Headers: {
@@ -43,7 +43,7 @@ RoAClientConfig: {
 			RoA: {
 				Configs: {
 					GeneralOptionsHeader: Основные настройки
-					DruidOptionsHeader: Настройки класса 'Друид'
+					DruidOptionsHeader: Настройки друида
 				}
 			}
 		}
@@ -51,52 +51,52 @@ RoAClientConfig: {
 
 	WreathPosition: {
 		Label: Расположение индикатора венка
-		// Tooltip: ""
+		Tooltip: ""
 	}
 
 	DamageTooltipOption: {
-		Label: Формат описания урона класса 'Друид'
+		Label: Стиль написания типа урона
 		Label2: Предпросмотр
-		// Tooltip: ""
+		Tooltip: ""
 	}
 
 	DamageTooltipOption_Internal: {
-		// Label: ""
-		// Tooltip: ""
+		Label: ""
+		Tooltip: ""
 	}
 
 	DamageScaling: {
-		Label: Подсказка о масштабировании урона класса 'Друид'
-		// Tooltip: ""
+		Label: Подсказка о масштабировании природного урона
+		Tooltip: ""
 	}
 
 	WreathSoundMode: {
 		Label: Стиль звукового оповещения венка
-		// Tooltip: ""
+		Tooltip: ""
 	}
 }
 
 RoAServerConfig: {
-	DisplayName: Настройки
+	DisplayName: Конфигурация
 
 	DropDevSets: {
 		Label: Выпадение предметов разработчиков мода
-		Tooltip: Если включено, предметы разработчиков RoA могут выпасть из сумок боссов простого режима
+		Tooltip: Предметы разработчиков RoA будут выпадать из мешком с сокровищами пре-хардмодных боссов
 	}
 
 	BackwoodsWidthMultiplier: {
-		Label: Множитель ширины биома 'Чаща'
-		// Tooltip: ""
+		Label: Множитель ширины чащи
+		Tooltip: ""
 	}
 
 	BackwoodsHeightMultiplier: {
-		Label: Множитель высоты биома 'Чаща'
-		// Tooltip: ""
+		Label: Множитель высоты чащи
+		Tooltip: ""
 	}
 
 	EvilBiomeExtraItemChance: {
-		Label: Шанс дополнительных предметов злого биома
-		Tooltip: Позволяет получить два предмета одновременно со Сферы теней/Сердца багрянца
+		Label: Множ. выпадения доп. предмета со сфер
+		Tooltip: С теневых сфер и багровых сердец сможет выпасть сразу 2 предмета с указанным шансом
 	}
 
 	Headers: {
@@ -104,35 +104,35 @@ RoAServerConfig: {
 			RoA: {
 				Configs: {
 					GeneralOptionsHeader2: Основные настройки
-					GenerationOptionHeader: Настройки создания мира
+					GenerationOptionHeader: Настройки генерации
 				}
 			}
 		}
 	}
 
 	ChangeVanillaRecipes: {
-		Label: Изменения рецептов оригинальной игры
-		Tooltip: Изменяет некоторые рецепты крафта, в том числе зелий
+		Label: Изменённые ванильные рецепты
+		Tooltip: Изменяет рецепты создания некоторых предметов, в том числе зелий
 	}
 }
 
 WreathPositions: {
-	// Tooltip: ""
-	Health.Label: Сверху справа
-	Player.Label: Над игроком
+	Tooltip: ""
+	Health.Label: серху справа
+	Player.Label: над игроком
 }
 
 DamageTooltipOptions: {
-	// Tooltip: ""
-	// Option1.Label: "1"
-	// Option2.Label: "2"
-	// Option3.Label: "3"
-	// Option4.Label: "4"
-	// Option5.Label: "5"
+	Tooltip: ""
+	Option1.Label: "1"
+	Option2.Label: "2"
+	Option3.Label: "3"
+	Option4.Label: "4"
+	Option5.Label: "5"
 }
 
 WreathSoundModes: {
-	// Tooltip: ""
+	Tooltip: ""
 	Normal.Label: Классический
 	Alt.Label: Узорчатый
 }
