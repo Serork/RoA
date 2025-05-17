@@ -1,1 +1,1 @@
-- Fixed not being able to generate a world with Remnants enabled
+- Fixed not being able to generate the Dryad Structure with Remnants enabled
