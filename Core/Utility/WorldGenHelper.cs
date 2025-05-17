@@ -435,7 +435,7 @@ static class WorldGenHelper {
         return tile.HasTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] || (TileID.Sets.Platforms[tile.TileType] && WorldGen.PlatformProperTopFrame(tile.TileFrameX)));
     }
 
-    public static int SafeFloatingIslandY => ModLoader.HasMod("Remnants") ? (WorldGenHelperVars.worldSurfaceLow + 22) : (WorldGenHelperVars.worldSurfaceLow - 22);
+    public static int SafeFloatingIslandY => ModLoader.HasMod("Remnants") ? (WorldGenHelperVars.worldSurfaceLow + 44) : (WorldGenHelperVars.worldSurfaceLow - 22);
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;

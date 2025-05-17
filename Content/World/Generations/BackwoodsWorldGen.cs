@@ -50,11 +50,8 @@ sealed class BackwoodsWorldGen : ModSystem {
             genIndex++;
             tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
 
-            if (hasSpirit) {
-                genIndex++;
-
-                tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
-            }
+            genIndex++;
+            tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
 
             tasks.Insert(tasks.Count - 4, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
             tasks.Insert(tasks.Count - 3, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsTilesReplacement));
