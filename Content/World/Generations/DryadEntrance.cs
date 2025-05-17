@@ -259,19 +259,21 @@ sealed class DryadEntrance : ModSystem {
     }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
+        bool hasRemnants = ModLoader.HasMod("Remnants");
+
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mount Caves"));
         tasks.RemoveAt(genIndex);
 
-        tasks.Insert(genIndex, new PassLegacy("Mount Caves", ExtraMountCavesGenerator, 49.9993f));
+        string pass = hasRemnants ? "Mount Caves, Dryad Entrance Mount Cave" : "Mount Caves";
+        tasks.Insert(genIndex, new PassLegacy(pass, ExtraMountCavesGenerator, 49.9993f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mountain Caves"));
         tasks.RemoveAt(genIndex);
 
-        tasks.Insert(genIndex, new PassLegacy("Mountain Caves", DryadEntranceGenerator, 14.2958f));
+        pass = hasRemnants ? "Mountain Caves, Dryad Entrance" : "Mountain Caves";
+        tasks.Insert(genIndex, new PassLegacy(pass, DryadEntranceGenerator, 14.2958f));
 
         tasks.Add(new PassLegacy("Dryad Entrance", DryadEntranceCleanUp));
-
-        genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Living Trees"));
         tasks.Add(new PassLegacy("Dryad Entrance Loom Placement", DryadEntranceLoomPlacement));
     }
 

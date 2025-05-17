@@ -1,2 +1,1 @@
-- Fixed not being able to generate a world with Fargo's Best of Both Worlds enabled
-- Fixed the dedicated server crashing upon opening a chest in the backwoods
+- Fixed not being able to generate a world with Remnants enabled
