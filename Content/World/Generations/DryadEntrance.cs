@@ -264,7 +264,7 @@ sealed class DryadEntrance : ModSystem {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mount Caves"));
         tasks.RemoveAt(genIndex);
 
-        string pass = hasRemnants ? "Mount Caves, Dryad Entrance Mount Cave" : "Mount Caves";
+        string pass = hasRemnants ? "Mount Caves, Dryad Entrance" : "Mount Caves";
         tasks.Insert(genIndex, new PassLegacy(pass, ExtraMountCavesGenerator, 49.9993f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mountain Caves"));
