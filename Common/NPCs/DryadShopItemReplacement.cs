@@ -27,7 +27,7 @@ sealed class DryadShopItemReplacement : GlobalNPC {
         List<short> moddedPlanterBoxes = [];
         for (int i = ItemID.Count; i < ItemLoader.ItemCount; i++) {
             ModItem item = ItemLoader.GetItem(i);
-            if (item.Item.GetType().ToString().Contains("PlanterBox")) {
+            if (item.FullName.Contains("PlanterBox")) {
                 moddedPlanterBoxes.Add((short)item.Type);
             }
         }
