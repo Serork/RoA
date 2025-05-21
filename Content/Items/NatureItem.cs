@@ -15,6 +15,11 @@ sealed class CrossmodNatureContent : ModSystem {
     public static void RegisterNatureItem(Item item) => natureItems.Add(item.type);
     public static void RegisterNatureProjectile(Projectile projectile) => natureProjectiles.Add(projectile.type);
 
+    public static void MakeProjectileDruidic(Projectile projectile) {
+        RegisterNatureProjectile(projectile);
+        projectile.MakeProjectileDruidic();
+    }
+
     public static bool IsItemNature(Item item) => natureItems.Contains(item.type);
     public static bool IsProjectileNature(Projectile projectile) => natureProjectiles.Contains(projectile.type);
 

@@ -75,8 +75,7 @@ public static class DruidModCalls {
                 if (args[1] is not Projectile projectile) {
                     throw new Exception($"{args[1]} is not projectile");
                 }
-                CrossmodNatureContent.RegisterNatureProjectile(projectile);
-                projectile.MakeProjectileDruidic();
+                CrossmodNatureContent.MakeProjectileDruidic(projectile);
                 return success;
             }
             if (message == "SetDruidicProjectileValues") {
@@ -84,7 +83,7 @@ public static class DruidModCalls {
                     throw new Exception($"{args[1]} is not projectile");
                 }
                 if (!CrossmodNatureContent.IsProjectileNature(projectile)) {
-                    throw new Exception($"Projectile is not nature");
+                    CrossmodNatureContent.MakeProjectileDruidic(projectile);
                 }
                 bool? shouldChargeWreathOnDamage = args[2] as bool?;
                 bool? shouldApplyAttachedNatureWeaponCurrentDamage = args[3] as bool?;
@@ -107,7 +106,7 @@ public static class DruidModCalls {
                     throw new Exception($"{args[1]} is not projectile");
                 }
                 if (!CrossmodNatureContent.IsProjectileNature(projectile)) {
-                    throw new Exception($"Projectile is not nature");
+                    CrossmodNatureContent.MakeProjectileDruidic(projectile);
                 }
                 return projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedNatureWeapon;
             }
