@@ -3,9 +3,9 @@ using RoA.Core.Defaults;
 
 using Terraria;
 
-namespace RoA.Content.Items.Equipables.Wreaths;
+namespace RoA.Content.Items.Equipables.Wreaths.Tier3;
 
-sealed class ForestWreathTier3 : WreathItem {
+sealed class BeachWreathTier3 : WreathItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(width: 30, height: 28);
 
@@ -15,10 +15,10 @@ sealed class ForestWreathTier3 : WreathItem {
     public override void UpdateAccessory(Player player, bool hideVisual) {
         DruidStats.ApplyUpTo10ReducedDamageTaken(player);
 
-        DruidStats.Apply40MaximumLifeWhenCharged(player);
+        DruidStats.Apply15MovementSpeedWhenCharged(player);
 
-        OccasionallyGrowSunflower();
+        RandomlyGrowCorals();
     }
 
-    private void OccasionallyGrowSunflower() { }
+    private void RandomlyGrowCorals() { }
 }

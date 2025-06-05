@@ -1,8 +1,9 @@
 ﻿using RoA.Content.Items.Equipables.Wreaths;
-using RoA.Content.Items.Materials;
+using RoA.Content.Items.Equipables.Wreaths.Tier2;
+using RoA.Content.Items.Equipables.Wreaths.Tier3;
 
-using Terraria.ID;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Recipes;

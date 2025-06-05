@@ -3,7 +3,7 @@ using RoA.Core.Defaults;
 
 using Terraria;
 
-namespace RoA.Content.Items.Equipables.Wreaths;
+namespace RoA.Content.Items.Equipables.Wreaths.Tier3;
 
 sealed class JungleWreathTier3 : WreathItem {
     protected override void SafeSetDefaults() {

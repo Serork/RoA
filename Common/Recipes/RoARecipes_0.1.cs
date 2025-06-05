@@ -7,6 +7,8 @@ using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Equipables.Wreaths;
+using RoA.Content.Items.Equipables.Wreaths.Tier1;
+using RoA.Content.Items.Equipables.Wreaths.Tier2;
 using RoA.Content.Items.Food;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Miscellaneous;
