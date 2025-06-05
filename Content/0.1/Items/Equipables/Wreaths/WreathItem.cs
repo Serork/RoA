@@ -8,7 +8,14 @@ using static Terraria.GameContent.Creative.ItemFilters.AAccessories;
 
 namespace RoA.Content.Items.Equipables.Wreaths;
 
-abstract class BaseWreathItem : NatureItem {
+abstract class WreathItem : NatureItem {
+    protected void DefaultsToTier3Wreath() {
+        Item.maxStack = 1;
+        Item.rare = ItemRarityID.LightRed;
+
+        Item.value = Item.sellPrice(0, 0, 75, 0);
+    }
+
     internal interface IWreathGlowMask {
         public Color GlowColor { get; }
     }
@@ -18,7 +25,7 @@ abstract class BaseWreathItem : NatureItem {
     }
 
     private bool AAccessories_IsAnAccessoryOfType(On_ItemFilters.AAccessories.orig_IsAnAccessoryOfType orig, ItemFilters.AAccessories self, Item entry, ItemFilters.AAccessories.AccessoriesCategory categoryType) {
-        bool flag = entry.ModItem != null && entry.ModItem is BaseWreathItem;
+        bool flag = entry.ModItem != null && entry.ModItem is WreathItem;
         if (flag && categoryType == AccessoriesCategory.Misc) {
             return true;
         }

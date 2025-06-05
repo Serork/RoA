@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Wreaths;
 
-sealed class FenethsBlazingWreath : BaseWreathItem, BaseWreathItem.IWreathGlowMask {
+sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
     Color IWreathGlowMask.GlowColor => Color.White;
 
     protected override void SafeSetDefaults() {

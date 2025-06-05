@@ -120,9 +120,6 @@
 	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Tops.png" />
 	  <None Remove="Resources\Textures\Tiles\Walls\LivingBackwoodsLeavesWall.png" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Content\0.2\" />
-	</ItemGroup>
 
 	<!-- References -->
 

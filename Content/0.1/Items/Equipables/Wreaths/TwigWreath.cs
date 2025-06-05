@@ -7,7 +7,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Items.Equipables.Wreaths;
 
-sealed class TwigWreath : BaseWreathItem {
+sealed class TwigWreath : WreathItem {
     protected override void SafeSetDefaults() {
         int width = 20; int height = width;
         Item.Size = new Vector2(width, height);

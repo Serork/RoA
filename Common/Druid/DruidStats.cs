@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Druid;
 
-sealed class DruidStats : ModPlayer {
+sealed partial class DruidStats : ModPlayer {
     private float _druidPotentialDamageMultiplier = 1f;
     private float _druidDamageExtraIncreaseValueMultiplier = 1f;
     private float _keepBonusesForTime = 0f;
@@ -74,5 +75,11 @@ sealed class DruidStats : ModPlayer {
         DruidBaseDamage = DruidPotentialDamage = 0;
 
         SoulOfTheWoods = false;
+
+        ResetEquippableWreathStats();
+    }
+
+    public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
+        ApplyVenomToAttackerAndDamageIt(Player, npc, hurtInfo);
     }
 }

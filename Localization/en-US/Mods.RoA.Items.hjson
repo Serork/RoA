@@ -1933,3 +1933,39 @@ AltarPlacer: {
 	DisplayName: Overgrown Altar
 	Tooltip: "#TEST: PLACES AN OVERGROWN ALTAR"
 }
+
+BeachWreathTier3: {
+	DisplayName: Beach Wreath III
+	Tooltip:
+		'''
+		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
+		While wreath is charged, increases movement speed by 15% and randomly grows corals that float around the holder
+		'''
+}
+
+ForestWreathTier3: {
+	DisplayName: Forest Wreath III
+	Tooltip:
+		'''
+		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
+		While wreath is charged, increases maximum life by 40 and occasionally grows a sunflower to increase movement speed and life regeneration nearby
+		'''
+}
+
+JungleWreathTier3: {
+	DisplayName: Jungle Wreath III
+	Tooltip:
+		'''
+		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
+		While wreath is charged, attackers take damage from venomous thorns and 
+		'''
+}
+
+SnowWreathTier3: {
+	DisplayName: Snow Wreath III
+	Tooltip:
+		'''
+		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
+		While wreath is charged, increases nature critical strike chance by 8% and attacking has a chance to throw a bunch of cloudberries on the ground
+		'''
+}

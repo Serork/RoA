@@ -102,7 +102,7 @@ class WreathSlot : ModAccessorySlot {
                     wreathSlot.VanityItem.type == item.type) {
                     return true;
                 }
-                if (item.ModItem != null && item.ModItem is BaseWreathItem) {
+                if (item.ModItem != null && item.ModItem is WreathItem) {
                     continue;
                 }
                 return true;
@@ -169,7 +169,7 @@ class WreathSlot : ModAccessorySlot {
         return result;
     }
 
-    public static bool IsItemValidForSlot(Item item) => item.ModItem is BaseWreathItem;
+    public static bool IsItemValidForSlot(Item item) => item.ModItem is WreathItem;
 
     public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo) {
         if (IsHidden()) {

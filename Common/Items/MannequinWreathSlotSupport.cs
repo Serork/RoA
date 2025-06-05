@@ -188,7 +188,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
 
         private void On_ItemSlot_Handle_ItemArray_int_int(On_ItemSlot.orig_Handle_ItemArray_int_int orig, Item[] inv, int context, int slot) {
             Item item = inv[slot];
-            if (context == 24 && (item.ModItem != null && item.ModItem is BaseWreathItem || Main.mouseItem.ModItem != null && Main.mouseItem.ModItem is BaseWreathItem)) {
+            if (context == 24 && (item.ModItem != null && item.ModItem is WreathItem || Main.mouseItem.ModItem != null && Main.mouseItem.ModItem is WreathItem)) {
                 return;
             }
             orig(inv, context, slot);
@@ -196,7 +196,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
 
         private bool On_TEDisplayDoll_TryFitting(On_TEDisplayDoll.orig_TryFitting orig, TEDisplayDoll self, Item[] inv, int context, int slot, bool justCheck) {
             Item item = inv[slot];
-            if (item.ModItem != null && item.ModItem is BaseWreathItem) {
+            if (item.ModItem != null && item.ModItem is WreathItem) {
                 var data = MannequinsInWorld.FirstOrDefault(x => x.Position == self.Position);
                 if (data == null) {
                     return false;
@@ -373,7 +373,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                         }
                     }
                     else {
-                        if (!Main.mouseItem.IsAir && Main.mouseItem.ModItem is BaseWreathItem) {
+                        if (!Main.mouseItem.IsAir && Main.mouseItem.ModItem is WreathItem) {
                             if (Main.mouseItem.stack == 1) {
                                 data.Wreath = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
                                 SoundEngine.PlaySound(SoundID.Grab);

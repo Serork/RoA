@@ -316,7 +316,7 @@ sealed class ItemSorting {
             return indexesSortable24;
         });
         public static ItemSortingLayer ArmorWreaths = new ItemSortingLayer("Armor - Wreaths", delegate (ItemSortingLayer layer, Item[] inv, List<int> itemsToSort) {
-            List<int> indexesSortable23 = itemsToSort.Where((i) => inv[i].ModItem != null && inv[i].ModItem is BaseWreathItem).ToList();
+            List<int> indexesSortable23 = itemsToSort.Where((i) => inv[i].ModItem != null && inv[i].ModItem is WreathItem).ToList();
             layer.Validate(ref indexesSortable23, inv);
             foreach (int item16 in indexesSortable23) {
                 itemsToSort.Remove(item16);

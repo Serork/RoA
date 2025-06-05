@@ -30,6 +30,10 @@ using static RoA.Common.Druid.Forms.BaseFormHandler;
 namespace RoA.Common.Druid.Wreath;
 
 sealed class WreathHandler : ModPlayer {
+    public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
+    public static bool IsWreathCharged(Player player) => GetWreathStats(player).IsFull1;
+    public static float GetWreathChargeProgress(Player player) => GetWreathStats(player).ActualProgress4;
+
     public enum WreathType : byte {
         Normal,
         Phoenix
