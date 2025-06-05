@@ -13,7 +13,7 @@ abstract class WreathItem : NatureItem {
         Item.maxStack = 1;
         Item.rare = ItemRarityID.LightRed;
 
-        Item.value = Item.sellPrice(0, 0, 75, 0);
+        Item.value = Item.sellPrice(0, 1, 50, 0);
     }
 
     internal interface IWreathGlowMask {
