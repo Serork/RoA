@@ -1,12 +1,11 @@
 displayName = Rise of Ages
 author = RoA Gang (Serork, peege.on, has2r, N.F.A., cleo. and friends)
 
-version = 0.1.0.21
+version = 0.2
 homepage = https://forums.terraria.org/index.php?threads/rise-of-ages-lore-bosses-and-druid-class.72219/
 
 hideCode = true
 hideResources = true
 includeSource = true
 
-buildIgnore = *.csproj, *.sln, *.user, obj\*, bin\*, .vs\*, Properties\*, .git\*, .gitattributes, .gitignore
 includePDB = true
