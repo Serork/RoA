@@ -7,17 +7,17 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Equipables.Wreaths.Tier1;
+namespace RoA.Content.Items.Equipables.Wreaths.Tier2;
 
-sealed class JungleWreath : WreathItem {
+sealed class JungleWreathTier2 : WreathItem {
     protected override void SafeSetDefaults() {
-        int width = 30; int height = 26;
+        int width = 30; int height = 28;
         Item.Size = new Vector2(width, height);
 
         Item.maxStack = 1;
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Green;
 
-        Item.value = Item.sellPrice(0, 0, 50, 0);
+        Item.value = Item.sellPrice(0, 0, 75, 0);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
@@ -28,25 +28,25 @@ sealed class JungleWreath : WreathItem {
 
         if (handler.IsFull1) {
             //if (player.thorns < 1f) player.thorns += 0.5f;
-            player.GetModPlayer<JungleWreathDamageAttackersHandler>().poisonedSkin = true;
+            player.GetModPlayer<JungleWreath2DamageAttackersHandler>().poisonedSkin2 = true;
         }
     }
 
-    private class JungleWreathDamageAttackersHandler : ModPlayer {
-        public bool poisonedSkin;
+    private class JungleWreath2DamageAttackersHandler : ModPlayer {
+        public bool poisonedSkin2;
 
-        public override void ResetEffects() => poisonedSkin = false;
+        public override void ResetEffects() => poisonedSkin2 = false;
 
         public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
-            if (!poisonedSkin) {
+            if (!poisonedSkin2) {
                 return;
             }
 
-            int damage = 10;
+            int damage = 15;
             if (Main.masterMode)
-                damage = 30;
+                damage = 45;
             else if (Main.expertMode)
-                damage = 20;
+                damage = 30;
             damage *= 2;
             DruidStats.DamageAttacker(Player, npc, damage, hurtInfo, onDamage: (damageNPC) => {
                 damageNPC.AddBuff(BuffID.Poisoned, 150, false);

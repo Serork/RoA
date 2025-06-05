@@ -1,5 +1,4 @@
-﻿using RoA.Content.Items.Equipables.Wreaths;
-using RoA.Content.Items.Equipables.Wreaths.Tier2;
+﻿using RoA.Content.Items.Equipables.Wreaths.Tier2;
 using RoA.Content.Items.Equipables.Wreaths.Tier3;
 
 using Terraria;
@@ -15,34 +14,34 @@ sealed partial class RoARecipes : ModSystem {
 
     private static void V02AddWreaths() {
         Recipe.Create(ModContent.ItemType<ForestWreathTier3>())
-            .AddIngredient<ForestWreath2>(1)
+            .AddIngredient<ForestWreathTier2>(1)
             .AddIngredient(ItemID.CrystalShard, 5)
             .AddTile(TileID.MythrilAnvil)
-            .SortAfter(GetAddedWreathRecipe<ForestWreath2>())
+            .SortAfter(GetAddedWreathRecipe<ForestWreathTier2>())
             .AddOnCraftCallback(CompleteWreathCraftAchievement)
             .Register();
 
         Recipe.Create(ModContent.ItemType<JungleWreathTier3>())
-            .AddIngredient<JungleWreath2>(1)
+            .AddIngredient<JungleWreathTier2>(1)
             .AddIngredient(ItemID.CrystalShard, 5)
             .AddTile(TileID.MythrilAnvil)
-            .SortAfter(GetAddedWreathRecipe<JungleWreath2>())
+            .SortAfter(GetAddedWreathRecipe<JungleWreathTier2>())
             .AddOnCraftCallback(CompleteWreathCraftAchievement)
             .Register();
 
         Recipe.Create(ModContent.ItemType<BeachWreathTier3>())
-            .AddIngredient<BeachWreath2>(1)
+            .AddIngredient<BeachWreathTier2>(1)
             .AddIngredient(ItemID.CrystalShard, 5)
             .AddTile(TileID.MythrilAnvil)
-            .SortAfter(GetAddedWreathRecipe<BeachWreath2>())
+            .SortAfter(GetAddedWreathRecipe<BeachWreathTier2>())
             .AddOnCraftCallback(CompleteWreathCraftAchievement)
             .Register();
 
         Recipe.Create(ModContent.ItemType<SnowWreathTier3>())
-            .AddIngredient<SnowWreath2>(1)
+            .AddIngredient<SnowWreathTier2>(1)
             .AddIngredient(ItemID.CrystalShard, 5)
             .AddTile(TileID.MythrilAnvil)
-            .SortAfter(GetAddedWreathRecipe<SnowWreath2>())
+            .SortAfter(GetAddedWreathRecipe<SnowWreathTier2>())
             .AddOnCraftCallback(CompleteWreathCraftAchievement)
             .Register();
     }

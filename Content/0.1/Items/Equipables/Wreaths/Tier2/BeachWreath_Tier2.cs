@@ -7,7 +7,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Items.Equipables.Wreaths.Tier2;
 
-sealed class SnowWreath2 : WreathItem {
+sealed class BeachWreathTier2 : WreathItem {
     protected override void SafeSetDefaults() {
         int width = 30; int height = 28;
         Item.Size = new Vector2(width, height);
@@ -22,8 +22,8 @@ sealed class SnowWreath2 : WreathItem {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
         float value = 0.1f * handler.ActualProgress4;
         player.endurance += value;
-        if (handler.IsFull1) {
-            player.GetCritChance(DruidClass.NatureDamage) += 8;
+        if (player.GetModPlayer<WreathHandler>().IsFull1) {
+            player.moveSpeed += 0.15f;
         }
     }
 }

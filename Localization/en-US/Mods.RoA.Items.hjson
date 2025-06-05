@@ -279,7 +279,7 @@ TwigWreath: {
 	Tooltip: Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
 }
 
-ForestWreath: {
+ForestWreathTier1: {
 	DisplayName: Forest Wreath I
 	Tooltip:
 		'''
@@ -288,7 +288,7 @@ ForestWreath: {
 		'''
 }
 
-ForestWreath2: {
+ForestWreathTier2: {
 	DisplayName: Forest Wreath II
 	Tooltip:
 		'''
@@ -297,7 +297,7 @@ ForestWreath2: {
 		'''
 }
 
-SnowWreath: {
+SnowWreathTier1: {
 	DisplayName: Snow Wreath I
 	Tooltip:
 		'''
@@ -306,7 +306,7 @@ SnowWreath: {
 		'''
 }
 
-SnowWreath2: {
+SnowWreathTier2: {
 	DisplayName: Snow Wreath II
 	Tooltip:
 		'''
@@ -315,7 +315,7 @@ SnowWreath2: {
 		'''
 }
 
-JungleWreath: {
+JungleWreathTier1: {
 	DisplayName: Jungle Wreath I
 	Tooltip:
 		'''
@@ -324,7 +324,7 @@ JungleWreath: {
 		'''
 }
 
-JungleWreath2: {
+JungleWreathTier2: {
 	DisplayName: Jungle Wreath II
 	Tooltip:
 		'''
@@ -333,7 +333,7 @@ JungleWreath2: {
 		'''
 }
 
-BeachWreath: {
+BeachWreathTier1: {
 	DisplayName: Beach Wreath I
 	Tooltip:
 		'''
@@ -342,7 +342,7 @@ BeachWreath: {
 		'''
 }
 
-BeachWreath2: {
+BeachWreathTier2: {
 	DisplayName: Beach Wreath II
 	Tooltip:
 		'''
