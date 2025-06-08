@@ -255,3 +255,8 @@ Honey: {
 	DisplayName: Honey
 	Description: "{$BuffDescription.Honey}"
 }
+
+SunflowerBuff: {
+	DisplayName: Sunflower Buff
+	Description: Mods.RoA.Buffs.SunflowerBuff.Description
+}

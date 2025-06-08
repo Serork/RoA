@@ -152,4 +152,8 @@ static class PlayerExtensions {
             return true;
         return false;
     }
+
+    public static void AddBuff<T>(this Player player, int timeToAdd) where T : ModBuff {
+        player.AddBuff(ModContent.BuffType<T>(), timeToAdd);
+    }
 }

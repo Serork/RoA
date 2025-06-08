@@ -59,8 +59,8 @@ sealed class ShepherdLeaves : NatureProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        if (Projectile.IsOwnerMyPlayer(player)) {
-            Vector2 pointPosition = Main.player[Projectile.owner].GetViableMousePosition();
+        if (Projectile.IsOwnerMyPlayer()) {
+            Vector2 pointPosition = player.GetViableMousePosition();
             Projectile.ai[1] = pointPosition.X;
             Projectile.ai[2] = pointPosition.Y;
             Projectile.netUpdate = true;

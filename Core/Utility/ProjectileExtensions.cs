@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Projectiles.Friendly;
+using RoA.Core.Data;
 
 using Terraria;
 using Terraria.GameContent;
@@ -35,7 +38,7 @@ static class ProjectileExtensions {
     }
 
     public static Player GetOwnerAsPlayer(this Projectile projectile) => Main.player[projectile.owner];
-    public static bool IsOwnerMyPlayer(this Projectile projectile, Player player) => player.whoAmI == Main.myPlayer;
+    public static bool IsOwnerMyPlayer(this Projectile projectile) => projectile.whoAmI == Main.myPlayer;
 
     public static T As<T>(this Projectile projectile) where T : ModProjectile => projectile.ModProjectile as T;
 

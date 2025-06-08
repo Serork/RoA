@@ -145,7 +145,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         int damage = Projectile.damage;
         float knockBack = Projectile.knockBack;
         float ai0 = 0f, ai1 = 0f, ai2 = 0f;
-        if (Projectile.IsOwnerMyPlayer(Owner)) {
+        if (Projectile.IsOwnerMyPlayer()) {
             for (int i = 0; i < count; i++) {
                 SetSpawnProjectileSettings(Owner, ref spawnPosition, ref velocity, ref count, ref ai0, ref ai1, ref ai2);
                 SetSpawnProjectileSettings2(Owner, ref damage, ref knockBack);
@@ -219,7 +219,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     }
 
     protected sealed override void SafeOnSpawn(IEntitySource source) {
-        if (Projectile.IsOwnerMyPlayer(Owner)) {
+        if (Projectile.IsOwnerMyPlayer()) {
             _rotation = FacedLeft ? STARTROTATION : -STARTROTATION;
             if (Owner.gravDir == -1) {
                 _rotation -= MathHelper.Pi;
@@ -356,7 +356,7 @@ abstract class BaseRodProjectile : NatureProjectile {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
         Projectile.Center = center;
         bool flag = !AttachedNatureWeapon.IsEmpty() && !ShouldntUpdateRotationAndDirection();
-        if (Projectile.IsOwnerMyPlayer(Owner) && flag) {
+        if (Projectile.IsOwnerMyPlayer() && flag) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
             Projectile.velocity = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
             _positionOffset = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One) * OffsetPositionMult;

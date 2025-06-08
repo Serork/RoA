@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core.Data;
+
 using System;
 
 using Terraria;
@@ -8,6 +10,10 @@ using Terraria;
 namespace RoA.Core.Utility;
 
 static class SpriteBatchExtensions {
+    public static void DrawWith(this SpriteBatch spriteBatch, Texture2D textureToDraw, Vector2 position, DrawInfo drawInfo, bool onScreen = true) {
+        spriteBatch.Draw(textureToDraw, position - (onScreen ? Main.screenPosition : Vector2.Zero), drawInfo.Clip, drawInfo.Color, drawInfo.Rotation, drawInfo.Origin, drawInfo.Scale, drawInfo.ImageFlip, 0f);
+    }
+
     public static void Line(this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, SpriteEffects effects = 0) => LineAngle(spriteBatch, start, Utils.AngleTo(start, end), Vector2.Distance(start, end), color, effects);
     public static void Line(this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, float thickness, SpriteEffects effects = 0) => LineAngle(spriteBatch, start, Utils.AngleTo(start, end), Vector2.Distance(start, end), color, thickness, effects);
 
