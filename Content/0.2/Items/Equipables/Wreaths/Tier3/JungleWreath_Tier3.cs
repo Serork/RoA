@@ -15,7 +15,9 @@ sealed class JungleWreathTier3 : WreathItem {
     public override void UpdateAccessory(Player player, bool hideVisual) {
         DruidStats.ApplyUpTo10ReducedDamageTaken(player);
 
-        DruidStats.InflictVenomOnAttackersAndDamageThemWhenCharged(player);
+        //DruidStats.InflictVenomOnAttackersAndDamageThemWhenCharged(player);
+
+        DruidStats.InflictPoisonOnNatureDamageWhenCharged(player);
 
         TriggerThornsAttackOnHurt();
     }

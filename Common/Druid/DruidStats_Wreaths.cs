@@ -94,7 +94,7 @@ sealed partial class DruidStats : ModPlayer {
             return;
         }
  
-        int chance = 5;
+        int chance = 4;
         bool rolled = Main.rand.NextBool(chance);
         if (!rolled) {
             return;

@@ -281,10 +281,7 @@ TwigWreath: {
 
 ForestWreathTier1: {
 	DisplayName: Forest Wreath I
-	Tooltip:
-		'''
-		While wreath is charged, increases maximum life by 40
-		'''
+	Tooltip: While wreath is charged, increases maximum life by 40
 }
 
 ForestWreathTier2: {
@@ -298,10 +295,7 @@ ForestWreathTier2: {
 
 SnowWreathTier1: {
 	DisplayName: Snow Wreath I
-	Tooltip:
-		'''
-		While wreath is charged, increases nature critical strike chance by 8%
-		'''
+	Tooltip: While wreath is charged, increases nature critical strike chance by 8%
 }
 
 SnowWreathTier2: {
@@ -315,10 +309,7 @@ SnowWreathTier2: {
 
 JungleWreathTier1: {
 	DisplayName: Jungle Wreath I
-	Tooltip:
-		'''
-		While wreath is charged, nature attacks may inflict poison
-		'''
+	Tooltip: While wreath is charged, nature attacks may inflict poison
 }
 
 JungleWreathTier2: {
@@ -332,10 +323,7 @@ JungleWreathTier2: {
 
 BeachWreathTier1: {
 	DisplayName: Beach Wreath I
-	Tooltip:
-		'''
-		While wreath is charged, increases movement speed by 15%
-		'''
+	Tooltip: While wreath is charged, increases movement speed by 15%
 }
 
 BeachWreathTier2: {
@@ -1953,7 +1941,7 @@ JungleWreathTier3: {
 	Tooltip:
 		'''
 		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
-		While wreath is charged, attackers take damage from venomous thorns and 
+		While wreath is charged, nature attacks may inflict poison and 
 		'''
 }
 
