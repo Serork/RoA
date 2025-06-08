@@ -24,7 +24,15 @@ sealed partial class DruidStats : ModPlayer {
     }
 
     public static void ApplyUpTo10ReducedDamageTaken(Player target) {
-        float reducedDamageTaken = 0.1f * WreathHandler.GetWreathChargeProgress(target);
+        ReduceDamageTakenByValueBasedOnCharge(target, 0.1f);
+    }
+
+    public static void ApplyUpTo5ReducedDamageTaken(Player target) {
+        ReduceDamageTakenByValueBasedOnCharge(target, 0.05f);
+    }
+
+    private static void ReduceDamageTakenByValueBasedOnCharge(Player target, float value) {
+        float reducedDamageTaken = value * WreathHandler.GetWreathChargeProgress(target);
         target.endurance += reducedDamageTaken;
     }
 
