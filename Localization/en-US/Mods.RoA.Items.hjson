@@ -276,15 +276,14 @@ ResiliencePotion: {
 
 TwigWreath: {
 	DisplayName: Twig Wreath
-	Tooltip: Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
+	Tooltip: ""
 }
 
 ForestWreathTier1: {
 	DisplayName: Forest Wreath I
 	Tooltip:
 		'''
-		Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
-		While wreath is charged, increases maximum life by 20
+		While wreath is charged, increases maximum life by 40
 		'''
 }
 
@@ -301,8 +300,7 @@ SnowWreathTier1: {
 	DisplayName: Snow Wreath I
 	Tooltip:
 		'''
-		Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
-		While wreath is charged, increases nature critical strike chance by 4%
+		While wreath is charged, increases nature critical strike chance by 8%
 		'''
 }
 
@@ -319,8 +317,7 @@ JungleWreathTier1: {
 	DisplayName: Jungle Wreath I
 	Tooltip:
 		'''
-		Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
-		While wreath is charged, attackers take damage from poisonous thorns
+		While wreath is charged, nature attacks may inflict poison
 		'''
 }
 
@@ -337,8 +334,7 @@ BeachWreathTier1: {
 	DisplayName: Beach Wreath I
 	Tooltip:
 		'''
-		Wreath is charged by dealing nature damage, providing up to 5% reduced damage taken
-		While wreath is charged, increases movement speed by 7%
+		While wreath is charged, increases movement speed by 15%
 		'''
 }
 
