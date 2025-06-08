@@ -30,7 +30,7 @@ sealed class EvilLeaf : NatureProjectile {
 
     private float[] _oldRotations = new float[18];
 
-    public override string Texture => ResourceManager.FriendlyProjectileTextures + $"Druidic/{nameof(EvilLeaf)}";
+    public override string Texture => ResourceManager.FriendlyProjectileTextures + $"Nature/{nameof(EvilLeaf)}";
 
     public override void SetStaticDefaults() => Projectile.SetTrail(2, 18);
 

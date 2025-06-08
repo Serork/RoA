@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class VilethornTip : Vilethorn {
-    public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? ResourceManager.FriendlyProjectileTextures + "Druidic/VilethornTip" :
+    public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? ResourceManager.FriendlyProjectileTextures + "Nature/VilethornTip" :
         $"Terraria/Images/Projectile_{ProjectileID.VilethornTip}";
 }
 
