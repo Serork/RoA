@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 
 using Terraria;
@@ -19,11 +20,13 @@ sealed class BeachWreathTier1 : WreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
-        player.endurance += value;
+        //float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
+        //player.endurance += value;
 
-        if (player.GetModPlayer<WreathHandler>().IsFull1) {
-            player.moveSpeed += 0.075f;
-        }
+        //if (player.GetModPlayer<WreathHandler>().IsFull1) {
+        //    player.moveSpeed += 0.075f;
+        //}
+
+        DruidStats.Apply15MovementSpeedWhenCharged(player);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid.Wreath;
+using RoA.Common.Druid;
 
 using Terraria;
 using Terraria.ID;
@@ -19,11 +19,13 @@ sealed class SnowWreathTier1 : WreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
-        player.endurance += value;
+        //float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
+        //player.endurance += value;
 
-        if (player.GetModPlayer<WreathHandler>().IsFull1) {
-            player.GetCritChance(DruidClass.NatureDamage) += 4;
-        }
+        //if (player.GetModPlayer<WreathHandler>().IsFull1) {
+        //    player.GetCritChance(DruidClass.NatureDamage) += 4;
+        //}
+
+        DruidStats.Apply8CritChanceWhenCharged(player);
     }
 }

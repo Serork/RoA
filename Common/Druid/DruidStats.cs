@@ -82,4 +82,12 @@ sealed partial class DruidStats : ModPlayer {
     public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
         ApplyVenomToAttackerAndDamageIt(Player, npc, hurtInfo);
     }
+
+    public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
+        ApplyPoisonOnNatureDamage(Player, target, proj);
+    }
+
+    public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone) {
+        ApplyPoisonOnNatureDamage(Player, target, item);
+    }
 }

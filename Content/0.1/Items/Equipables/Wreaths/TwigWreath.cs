@@ -1,7 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid.Wreath;
-
 using Terraria;
 using Terraria.ID;
 
@@ -19,7 +17,7 @@ sealed class TwigWreath : WreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
-        player.endurance += value;
+        //float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
+        //player.endurance += value;
     }
 }

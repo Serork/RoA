@@ -2,6 +2,7 @@
 
 using RoA.Common.Druid.Wreath;
 using RoA.Content;
+using RoA.Core.Utility;
 
 using System;
 
@@ -15,9 +16,11 @@ sealed partial class DruidStats : ModPlayer {
     public static DruidStats GetDruidStats(Player player) => player.GetModPlayer<DruidStats>();
 
     private bool _shouldInflictVenomOnAttackers;
+    private bool _shouldInflictPoisonOnNatureDamage;
 
     private void ResetEquippableWreathStats() {
         _shouldInflictVenomOnAttackers = false;
+        _shouldInflictPoisonOnNatureDamage = false;
     }
 
     public static void ApplyUpTo10ReducedDamageTaken(Player target) {
@@ -49,6 +52,14 @@ sealed partial class DruidStats : ModPlayer {
         GetDruidStats(target)._shouldInflictVenomOnAttackers = true;
     }
 
+    public static void InflictPoisonOnNatureDamageWhenCharged(Player target) {
+        if (!WreathHandler.IsWreathCharged(target)) {
+            return;
+        }
+
+        GetDruidStats(target)._shouldInflictPoisonOnNatureDamage = true;
+    }
+
     public static void ApplyVenomToAttackerAndDamageIt(Player player, NPC target, Player.HurtInfo hurtInfo) {
         if (!GetDruidStats(player)._shouldInflictVenomOnAttackers) {
             return;
@@ -63,6 +74,26 @@ sealed partial class DruidStats : ModPlayer {
         DamageAttacker(player, target, damage, hurtInfo, onDamage: (damageNPC) => {
             damageNPC.AddBuff(BuffID.Venom, 150, false);
         });
+    }
+
+    public static void ApplyPoisonOnNatureDamage(Player player, NPC target, Entity damageSource) {
+        if (!GetDruidStats(player)._shouldInflictPoisonOnNatureDamage) {
+            return;
+        }
+
+        bool isDamageSourceDruidic = (damageSource is Projectile projectileAsDamageSource && projectileAsDamageSource.IsDruidic()) || (damageSource is Item itemAsDamageSource && itemAsDamageSource.IsADruidicWeapon()); 
+        if (!isDamageSourceDruidic) {
+            return;
+        }
+ 
+        int chance = 5;
+        bool rolled = Main.rand.NextBool(chance);
+        if (!rolled) {
+            return;
+        }
+
+        int timeInTicks = 150;
+        target.AddBuff(BuffID.Poisoned, timeInTicks);
     }
 
     public static void DamageAttacker(Player player, NPC target, int damage, Player.HurtInfo hurtInfo, float knockBackModifier = 1f, Action<NPC> onDamage = null) {

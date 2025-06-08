@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 
 using Terraria;
@@ -19,11 +20,13 @@ sealed class ForestWreathTier1 : WreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
-        player.endurance += value;
+        //float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
+        //player.endurance += value;
 
-        if (player.GetModPlayer<WreathHandler>().IsFull1) {
-            player.statLifeMax2 += 20;
-        }
+        //if (player.GetModPlayer<WreathHandler>().IsFull1) {
+        //    player.statLifeMax2 += 40;
+        //}
+
+        DruidStats.Apply40MaximumLifeWhenCharged(player);
     }
 }
