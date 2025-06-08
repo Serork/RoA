@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Configs;
-using RoA.Content.Items.Weapons.Druidic;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Summon;
 using RoA.Core.Utility;

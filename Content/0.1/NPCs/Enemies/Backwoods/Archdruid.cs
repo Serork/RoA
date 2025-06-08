@@ -6,7 +6,7 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Placeable.Banners;
-using RoA.Content.Items.Weapons.Druidic;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
 

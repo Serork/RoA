@@ -5,7 +5,7 @@ using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
-using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core.Utility;
 
 using System;
@@ -35,7 +35,7 @@ abstract class InsectForm : BaseForm {
         internal float _directionChangedFor;
 
         public override void ResetEffects() {
-            if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            if (!Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
                 _facedRight = null;
                 _shootCounter = _insectTimer = 0;
                 _directionChangedFor = 0f;

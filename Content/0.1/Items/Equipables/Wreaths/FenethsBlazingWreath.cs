@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
-using RoA.Content.Projectiles.Friendly.Druidic;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -43,7 +43,7 @@ sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
                 return;
             }
 
-            if (!proj.IsDruidic()) {
+            if (!proj.IsNature()) {
                 return;
             }
 
@@ -69,7 +69,7 @@ sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
                 return;
             }
 
-            if (!item.IsADruidicWeapon()) {
+            if (!item.IsANatureWeapon()) {
                 return;
             }
 

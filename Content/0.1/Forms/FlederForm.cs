@@ -7,7 +7,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Content.Items;
 using RoA.Content.NPCs.Enemies.Backwoods;
-using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -42,7 +42,7 @@ sealed class FlederForm : BaseForm {
         public bool ActiveDash => _dashDelay > 0;
 
         public override void ResetEffects() {
-            if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            if (!Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
                 _dashDelay = _dashTimer = 0;
                 _dashDirection = IDoubleTap.TapDirection.None;
                 _shootCounter = 0;

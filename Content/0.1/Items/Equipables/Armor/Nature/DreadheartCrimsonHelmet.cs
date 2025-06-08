@@ -5,7 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Forms;
-using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core.Utility;
 
 using Terraria;

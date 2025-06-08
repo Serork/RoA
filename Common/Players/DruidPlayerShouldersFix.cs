@@ -1,4 +1,4 @@
-﻿using RoA.Content.Items.Weapons.Druidic.Rods;
+﻿using RoA.Content.Items.Weapons.Nature.Rods;
 
 using Terraria;
 using Terraria.DataStructures;

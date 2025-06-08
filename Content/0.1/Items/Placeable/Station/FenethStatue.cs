@@ -18,7 +18,7 @@ sealed class FenethStatue : ModItem {
 
         Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Station.FenethStatue>());
 
-        Item.SetDefaultToStackable(1);
+        Item.SetDefaultsToStackable(1);
 
         Item.rare = ItemRarityID.LightRed;
     }

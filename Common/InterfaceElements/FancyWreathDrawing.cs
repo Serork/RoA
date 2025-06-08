@@ -239,7 +239,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             if (reversedGravity) {
                 vector.Y += 28f;
             }
-            if (formHandler.IsInDruidicForm && currentForm != null) {
+            if (formHandler.IsInADruidicForm && currentForm != null) {
                 vector += currentForm.BaseForm.WreathOffset2;
             }
             spriteBatch.DrawString(FontAssets.MouseText.Value, text3,
@@ -276,7 +276,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             effects = SpriteEffects.FlipHorizontally;
             position.Y -= 0f;
         }
-        if (formHandler.IsInDruidicForm && currentForm != null) {
+        if (formHandler.IsInADruidicForm && currentForm != null) {
             position += currentForm.BaseForm.WreathOffset2;
         }
         spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);
@@ -439,7 +439,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             if (reversedGravity) {
                 vector.Y += 28f;
             }
-            if (formHandler.IsInDruidicForm && currentForm != null) {
+            if (formHandler.IsInADruidicForm && currentForm != null) {
                 vector2 += currentForm.BaseForm.WreathOffset2;
             }
             spriteBatch.DrawString(FontAssets.MouseText.Value, text3,
@@ -478,7 +478,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (reversedGravity) {
             position.Y += 1f;
         }
-        if (formHandler.IsInDruidicForm && currentForm != null) {
+        if (formHandler.IsInADruidicForm && currentForm != null) {
             position += currentForm.BaseForm.WreathOffset2;
         }
         spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);

@@ -41,11 +41,11 @@ sealed class BaseFormHandler : ModPlayer {
     private bool _startDecreasingWreath;
     internal byte _sync;
 
-    public bool CanTransform => IsInDruidicForm || !Player.mount.Active;
+    public bool CanTransform => IsInADruidicForm || !Player.mount.Active;
 
     public static IReadOnlyCollection<FormInfo> Forms => _formsByType.Values;
     public FormInfo CurrentForm => _currentForm;
-    public bool IsInDruidicForm => CurrentForm != null;
+    public bool IsInADruidicForm => CurrentForm != null;
     public bool HasDruidArmorSet => _shouldBeActive == true;
 
     public bool UsePlayerSpeed { get; internal set; }
@@ -68,7 +68,7 @@ sealed class BaseFormHandler : ModPlayer {
         }
     }
 
-    public bool IsConsideredAs<T>() where T : BaseForm => IsInDruidicForm && CurrentForm.BaseForm.GetType().Equals(typeof(T));
+    public bool IsConsideredAs<T>() where T : BaseForm => IsInADruidicForm && CurrentForm.BaseForm.GetType().Equals(typeof(T));
 
     public bool ShouldFormBeActive<T>(T instance = null) where T : FormInfo {
         T formInstance = instance ?? GetForm<T>();
@@ -98,7 +98,7 @@ sealed class BaseFormHandler : ModPlayer {
 
     public static void ApplyForm<T>(Player player, T instance = null) where T : FormInfo {
         BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
-        if (handler.IsInDruidicForm) {
+        if (handler.IsInADruidicForm) {
             return;
         }
 
@@ -158,7 +158,7 @@ sealed class BaseFormHandler : ModPlayer {
             return;
         }
 
-        if (handler.IsInDruidicForm) {
+        if (handler.IsInADruidicForm) {
             ReleaseForm(player, formInstance);
 
             return;
@@ -185,7 +185,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public override void ModifyHurt(ref Player.HurtModifiers modifiers) {
-        if (!IsInDruidicForm) {
+        if (!IsInADruidicForm) {
             return;
         }
         SoundStyle? hurtSound = _currentForm.BaseForm.HurtSound;
@@ -202,7 +202,7 @@ sealed class BaseFormHandler : ModPlayer {
     internal void HardResetActiveForm() => _currentForm = null;
 
     private void MakePlayerUnavailableToUseItems() {
-        if (!IsInDruidicForm) {
+        if (!IsInADruidicForm) {
             return;
         }
 
@@ -212,11 +212,11 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void ClearForm() {
-        if (IsInDruidicForm && Player.mount.Active && Player.mount._type < MountID.Count) {
+        if (IsInADruidicForm && Player.mount.Active && Player.mount._type < MountID.Count) {
             ReleaseForm(Player, _currentForm);
         }
 
-        if (Player.mount.Active && (!_shouldClear || !IsInDruidicForm || _shouldBeActive)) {
+        if (Player.mount.Active && (!_shouldClear || !IsInADruidicForm || _shouldBeActive)) {
             return;
         }
 
@@ -228,7 +228,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) {
-        if (!IsInDruidicForm) {
+        if (!IsInADruidicForm) {
             return;
         }
 
@@ -236,7 +236,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public override void HideDrawLayers(PlayerDrawSet drawInfo) {
-        if (!IsInDruidicForm || _layers == null) {
+        if (!IsInADruidicForm || _layers == null) {
             return;
         }
 
@@ -259,7 +259,7 @@ sealed class BaseFormHandler : ModPlayer {
 
     private Vector2 On_Player_RotatedRelativePoint(On_Player.orig_RotatedRelativePoint orig, Player self, Vector2 pos, bool reverseRotation, bool addGfxOffY) {
         BaseFormHandler handler = self.GetModPlayer<BaseFormHandler>();
-        if (handler.IsInDruidicForm) {
+        if (handler.IsInADruidicForm) {
             Vector2 result = pos;
             return result;
         }
@@ -271,7 +271,7 @@ sealed class BaseFormHandler : ModPlayer {
         Player player = typeof(PlayerHeadDrawRenderTargetContent).GetFieldValue<Player>("_player", self);
         if (player != null && !player.ShouldNotDraw) {
             BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
-            if (handler.IsInDruidicForm) {
+            if (handler.IsInADruidicForm) {
                 Texture2D texture = ModContent.Request<Texture2D>(handler.CurrentForm.BaseForm.Texture + "_Head").Value;
                 Vector2 position = new(84f * 0.5f, 84f * 0.5f);
                 position.X -= 6f;
@@ -432,7 +432,7 @@ sealed class BaseFormHandler : ModPlayer {
             if (!(self.velocity.X != 0f || Falling))
                 continue;
 
-            if (self.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
                 num3 = self.mount._data.spawnDust;
             }
 
@@ -490,7 +490,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_Player_QuickMount(On_Player.orig_QuickMount orig, Player self) {
-        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             return;
         }
 
@@ -498,7 +498,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private Item On_Player_QuickMount_GetItemToUse(On_Player.orig_QuickMount_GetItemToUse orig, Player self) {
-        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             return null;
         }
 
@@ -506,7 +506,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_Main_DrawInterface_40_InteractItemIcon(On_Main.orig_DrawInterface_40_InteractItemIcon orig, Main self) {
-        if (Main.player[Main.myPlayer].cursorItemIconID <= 0 && Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (Main.player[Main.myPlayer].cursorItemIconID <= 0 && Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             return;
         }
 
@@ -514,7 +514,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_TileObject_DrawPreview(On_TileObject.orig_DrawPreview orig, Microsoft.Xna.Framework.Graphics.SpriteBatch sb, TileObjectPreviewData op, Vector2 position) {
-        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             return;
         }
 

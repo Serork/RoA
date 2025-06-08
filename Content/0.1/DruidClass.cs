@@ -1,4 +1,4 @@
-﻿using RoA.Content.Items.Weapons.Druidic.Claws;
+﻿using RoA.Content.Items.Weapons.Nature.Claws;
 using RoA.Content.Prefixes;
 using RoA.Core.Utility;
 
@@ -17,13 +17,13 @@ sealed class DruidClass : DamageClass {
         On_WorldGen.GiveItemGoodPrefixes += On_WorldGen_GiveItemGoodPrefixes;
     }
 
-    private static Dictionary<int, DruidicPrefix> GoodPrefixIdsForDruidWeapon1 => DruidicPrefix.DruidicPrefixes.Where(x => DruidicPrefix.BestNotClaws.Contains(x.Value.Name)).ToDictionary();
-    private static Dictionary<int, DruidicPrefix> GoodPrefixIdsForDruidWeapon2 => DruidicPrefix.DruidicPrefixes.Where(x => DruidicPrefix.BestClaws.Contains(x.Value.Name)).ToDictionary();
+    private static Dictionary<int, NaturePrefix> GoodPrefixIdsForDruidWeapon1 => NaturePrefix.NaturePrefixes.Where(x => NaturePrefix.BestNotClaws.Contains(x.Value.Name)).ToDictionary();
+    private static Dictionary<int, NaturePrefix> GoodPrefixIdsForDruidWeapon2 => NaturePrefix.NaturePrefixes.Where(x => NaturePrefix.BestClaws.Contains(x.Value.Name)).ToDictionary();
 
     private void On_WorldGen_GiveItemGoodPrefixes(On_WorldGen.orig_GiveItemGoodPrefixes orig, Item item) {
         orig(item);
 
-        if (item.IsADruidicWeapon()) {
+        if (item.IsANatureWeapon()) {
             if (item.ModItem is not BaseClawsItem) {
                 PrefixItemFromOptions(item, GoodPrefixIdsForDruidWeapon1);
             }
@@ -33,7 +33,7 @@ sealed class DruidClass : DamageClass {
         }
     }
 
-    private static void PrefixItemFromOptions(Item item, Dictionary<int, DruidicPrefix> options) {
+    private static void PrefixItemFromOptions(Item item, Dictionary<int, NaturePrefix> options) {
         int prefix = item.prefix;
 
         var list = options;

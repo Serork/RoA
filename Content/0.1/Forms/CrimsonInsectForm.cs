@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
-using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Content.Projectiles.Friendly.Nature.Forms;
 
 using Terraria;
 using Terraria.ModLoader;

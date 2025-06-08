@@ -107,7 +107,7 @@ abstract class BaseForm : ModMount {
     protected virtual bool ShouldApplyUpdateJumpHeightLogic { get; }
 
     private void On_Player_UpdateJumpHeight(On_Player.orig_UpdateJumpHeight orig, Player self) {
-        if (self.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
             if (mountData != null && !mountData.ShouldApplyUpdateJumpHeightLogic) {
                 bool flag = false;
@@ -173,7 +173,7 @@ abstract class BaseForm : ModMount {
     }
 
     private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
-        if (self.GetModPlayer<BaseFormHandler>().UsePlayerSpeed && self.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (self.GetModPlayer<BaseFormHandler>().UsePlayerSpeed && self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
             self.maxRunSpeed = _playerMovementSpeedInfo.MaxRunSpeed * mountData.GetMaxSpeedMultiplier(self);
             self.accRunSpeed = _playerMovementSpeedInfo.AccRunSpeed * mountData.GetAccRunSpeedMultiplier(self);

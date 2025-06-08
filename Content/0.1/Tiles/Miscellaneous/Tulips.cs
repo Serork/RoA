@@ -160,7 +160,7 @@ sealed class ExoticTulip : ModTile {
         spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
 
-    public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Weapons.Druidic.ExoticTulip>())];
+    public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Weapons.Nature.ExoticTulip>())];
 
     public override void MouseOver(int i, int j) {
         Player player = Main.player[Main.myPlayer];
@@ -228,7 +228,7 @@ sealed class SweetTulip : ModTile {
         spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
 
-    public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Weapons.Druidic.SweetTulip>())];
+    public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Weapons.Nature.SweetTulip>())];
 
     public override void MouseOver(int i, int j) {
         Player player = Main.player[Main.myPlayer];
@@ -298,7 +298,7 @@ sealed class WeepingTulip : ModTile {
         spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
     }
 
-    public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Weapons.Druidic.WeepingTulip>())];
+    public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Weapons.Nature.WeepingTulip>())];
 
     public override void MouseOver(int i, int j) {
         Player player = Main.player[Main.myPlayer];

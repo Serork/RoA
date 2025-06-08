@@ -15,9 +15,9 @@ sealed class CrossmodNatureContent : ModSystem {
     public static void RegisterNatureItem(Item item) => natureItems.Add(item.type);
     public static void RegisterNatureProjectile(Projectile projectile) => natureProjectiles.Add(projectile.type);
 
-    public static void MakeProjectileDruidic(Projectile projectile) {
+    public static void MakeProjectileNature(Projectile projectile) {
         RegisterNatureProjectile(projectile);
-        projectile.MakeProjectileDruidic();
+        projectile.MakeProjectileNature();
     }
 
     public static bool IsItemNature(Item item) => natureItems.Contains(item.type);
@@ -39,7 +39,7 @@ abstract class NatureItem : ModItem {
         SafeSetDefaults();
 
         if (Item.IsAWeapon()) {
-            Item.SetDefaultToDruidicWeapon();
+            Item.SetDefaultsToNatureWeapon();
         }
 
         SafeSetDefaults2();

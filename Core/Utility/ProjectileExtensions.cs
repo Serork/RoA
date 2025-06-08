@@ -22,10 +22,10 @@ static class ProjectileExtensions {
 
     public static bool IsDamageable(this Projectile projectile) => projectile.damage > 0;
 
-    public static bool IsDruidic(this Projectile projectile) => projectile.ModProjectile is DruidicProjectile;
+    public static bool IsNature(this Projectile projectile) => projectile.ModProjectile is NatureProjectile;
 
-    public static bool IsDruidic(this Projectile projectile, out DruidicProjectile result) {
-        if (projectile.ModProjectile is DruidicProjectile natureProjectile) {
+    public static bool IsNature(this Projectile projectile, out NatureProjectile result) {
+        if (projectile.ModProjectile is NatureProjectile natureProjectile) {
             result = natureProjectile;
             return true;
         }

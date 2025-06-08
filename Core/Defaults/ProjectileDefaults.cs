@@ -6,11 +6,11 @@ using Terraria;
 namespace RoA.Core.Defaults;
 
 static class ProjectileDefaults {
-    public static void SetDefaultToDruidicProjectile(this Projectile projectile) => projectile.DamageType = DruidClass.NatureDamage;
+    public static void SetDefaultsToNatureProjectile(this Projectile projectile) => projectile.DamageType = DruidClass.NatureDamage;
 
-    public static void MakeProjectileDruidic(this Projectile projectile) {
+    public static void MakeProjectileNature(this Projectile projectile) {
         if (projectile.IsDamageable() && projectile.friendly) {
-            projectile.SetDefaultToDruidicProjectile();
+            projectile.SetDefaultsToNatureProjectile();
         }
     }
 }

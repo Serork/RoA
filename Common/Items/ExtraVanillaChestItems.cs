@@ -5,9 +5,9 @@ using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
-using RoA.Content.Items.Weapons.Druidic;
-using RoA.Content.Items.Weapons.Druidic.Claws;
-using RoA.Content.Items.Weapons.Druidic.Rods;
+using RoA.Content.Items.Weapons.Nature;
+using RoA.Content.Items.Weapons.Nature.Claws;
+using RoA.Content.Items.Weapons.Nature.Rods;
 using RoA.Content.Tiles.Furniture;
 
 using System;

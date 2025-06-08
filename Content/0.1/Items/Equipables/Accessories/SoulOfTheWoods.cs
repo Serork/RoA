@@ -2,7 +2,7 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
-using RoA.Content.Projectiles.Friendly.Druidic;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 
 using Terraria;

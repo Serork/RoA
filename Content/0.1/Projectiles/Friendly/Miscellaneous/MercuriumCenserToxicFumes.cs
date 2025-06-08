@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
-sealed class MercuriumCenserToxicFumes : DruidicProjectile {
+sealed class MercuriumCenserToxicFumes : NatureProjectile {
     public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<MercuriumFumes>()).Texture;
 
     public override void SetStaticDefaults() => Main.projFrames[Projectile.type] = 3;

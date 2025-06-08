@@ -79,7 +79,7 @@ static class PlayerExtensions {
 
     public static bool IsHoldingNatureWeapon(this Player player) {
         Item selectedItem = player.GetSelectedItem();
-        if (!selectedItem.IsADruidicWeapon()) {
+        if (!selectedItem.IsANatureWeapon()) {
             return false;
         }
 

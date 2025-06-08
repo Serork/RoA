@@ -44,7 +44,7 @@ sealed class ClawsHandler : ModPlayer {
 
     public void SetColors(Color firstSlashColor, Color secondSlashColor) => SlashColors = (firstSlashColor, secondSlashColor);
 
-    public void SetSpecialAttackData<T>(AttackSpawnInfoArgs args) where T : DruidicProjectile {
+    public void SetSpecialAttackData<T>(AttackSpawnInfoArgs args) where T : NatureProjectile {
         ushort type = (ushort)ModContent.ProjectileType<T>();
         args.ProjectileTypeToSpawn = type;
         SpecialAttackData = new SpecialAttackSpawnInfo(args);

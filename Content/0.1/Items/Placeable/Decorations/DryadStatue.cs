@@ -16,7 +16,7 @@ sealed class DryadStatue : ModItem {
     public override void SetDefaults() {
         Item.SetSize(28, 42);
 
-        Item.SetDefaultToStackable(Item.CommonMaxStack);
+        Item.SetDefaultsToStackable(Item.CommonMaxStack);
 
         Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Ambient.DryadStatue>());
 

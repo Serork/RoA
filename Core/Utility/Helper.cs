@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using RoA.Common;
 using RoA.Common.Druid;
 using RoA.Common.Players;
-using RoA.Content.Items.Weapons.Druidic.Claws;
+using RoA.Content.Items.Weapons.Nature.Claws;
 
 using System;
 using System.Linq;

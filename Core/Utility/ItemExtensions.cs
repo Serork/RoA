@@ -16,9 +16,9 @@ static class ItemExtensions {
 
     public static T GetAttribute<T>(this Item item) where T : Attribute => item.ModItem?.GetType().GetCustomAttribute<T>();
 
-    public static bool IsDruidic(this Item item) => item.ModItem is NatureItem || CrossmodNatureContent.IsItemNature(item);
+    public static bool IsNature(this Item item) => item.ModItem is NatureItem || CrossmodNatureContent.IsItemNature(item);
 
-    public static bool IsADruidicWeapon(this Item item) => item.IsDruidic() && item.IsAWeapon();
+    public static bool IsANatureWeapon(this Item item) => item.IsNature() && item.IsAWeapon();
 
     public static T As<T>(this Item item) where T : ModItem => item.ModItem as T;
 }

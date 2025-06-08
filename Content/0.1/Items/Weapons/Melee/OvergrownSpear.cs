@@ -49,7 +49,7 @@ sealed class OvergrownSpearPlayer : ModPlayer {
     public override void UpdateEquips() {
         ushort type = (ushort)ModContent.ProjectileType<Projectiles.Friendly.Melee.OvergrownSphere>();
         if (Player.whoAmI == Main.myPlayer) {
-            if (Player.inventory[Player.selectedItem].type == ModContent.ItemType<OvergrownSpear>() && Player.active && !Player.dead && !Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            if (Player.inventory[Player.selectedItem].type == ModContent.ItemType<OvergrownSpear>() && Player.active && !Player.dead && !Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
                 bool flag = Player.ownedProjectileCounts[type] <= 1;
                 if (!_overgrownSphereSpawned && flag) {
                     int _randCord = Main.rand.Next(-20, 20);

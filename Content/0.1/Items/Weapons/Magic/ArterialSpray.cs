@@ -30,7 +30,7 @@ sealed class ArterialSpray : ModItem {
 
         Item.DefaultToMagicWeapon(ModContent.ProjectileType<ArterialSprayProjectile3>(), 0, 1f);
 
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 20);
+        Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 20);
 
         Item.damage = 16;
         Item.crit = 4;

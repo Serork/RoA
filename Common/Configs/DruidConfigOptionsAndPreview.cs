@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Text;
-using RoA.Content.Items.Weapons.Druidic.Rods;
+using RoA.Content.Items.Weapons.Nature.Rods;
 
 using System;
 using System.Collections.Generic;

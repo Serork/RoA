@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Content.Items.Weapons.Druidic;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;

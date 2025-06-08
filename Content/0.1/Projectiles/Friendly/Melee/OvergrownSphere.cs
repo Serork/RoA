@@ -157,7 +157,7 @@ sealed class OvergrownSphere : ModProjectile {
         else _changeAlpha = true;
 
         int type = ModContent.ItemType<Items.Weapons.Melee.OvergrownSpear>();
-        if (player.GetSelectedItem().type != type || !player.active || player.dead || player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (player.GetSelectedItem().type != type || !player.active || player.dead || player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             _changeAlpha = true;
 
             if (Projectile.Opacity > 0f) Projectile.Opacity -= 0.025f;

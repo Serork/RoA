@@ -2,7 +2,7 @@
 
 using RoA.Common.Druid.Wreath;
 using RoA.Content;
-using RoA.Content.Items.Weapons.Druidic.Claws;
+using RoA.Content.Items.Weapons.Nature.Claws;
 using RoA.Content.Prefixes;
 using RoA.Core.Utility;
 
@@ -21,7 +21,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     private float _fillingRateModifier = 1f;
     private ushort _basePotentialUseSpeed;
 
-    internal DruidicPrefix ActivePrefix { get; set; }
+    internal NaturePrefix ActivePrefix { get; set; }
 
     public float FillingRateModifier => _fillingRateModifier;
     public ushort PotentialDamage => _basePotentialDamage;
@@ -29,7 +29,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public override bool InstancePerEntity => true;
 
     public override void PreReforge(Item item) {
-        if (!item.IsADruidicWeapon()) {
+        if (!item.IsANatureWeapon()) {
             return;
         }
 
@@ -37,13 +37,13 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public override int ChoosePrefix(Item item, UnifiedRandom rand) {
-        if (item.IsADruidicWeapon() && !item.accessory) {
-            int result = DruidicPrefix.DruidicPrefixes.ElementAt(rand.Next(0, DruidicPrefix.DruidicPrefixes.Count)).Key;
-            while (item.ModItem is not BaseClawsItem && DruidicPrefix.DruidicPrefixes[result]._forClaws) {
-                result = DruidicPrefix.DruidicPrefixes.ElementAt(rand.Next(0, DruidicPrefix.DruidicPrefixes.Count)).Key;
+        if (item.IsANatureWeapon() && !item.accessory) {
+            int result = NaturePrefix.NaturePrefixes.ElementAt(rand.Next(0, NaturePrefix.NaturePrefixes.Count)).Key;
+            while (item.ModItem is not BaseClawsItem && NaturePrefix.NaturePrefixes[result]._forClaws) {
+                result = NaturePrefix.NaturePrefixes.ElementAt(rand.Next(0, NaturePrefix.NaturePrefixes.Count)).Key;
             }
-            while (item.ModItem is BaseClawsItem && !DruidicPrefix.DruidicPrefixes[result]._forClaws && !DruidicPrefix.DruidicPrefixes[result]._vanillaAdapted) {
-                result = DruidicPrefix.DruidicPrefixes.ElementAt(rand.Next(0, DruidicPrefix.DruidicPrefixes.Count)).Key;
+            while (item.ModItem is BaseClawsItem && !NaturePrefix.NaturePrefixes[result]._forClaws && !NaturePrefix.NaturePrefixes[result]._vanillaAdapted) {
+                result = NaturePrefix.NaturePrefixes.ElementAt(rand.Next(0, NaturePrefix.NaturePrefixes.Count)).Key;
             }
             return result;
         }
@@ -53,7 +53,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
     public static float GetSize(Item item) {
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
-        DruidicPrefix activePrefix = handler.ActivePrefix;
+        NaturePrefix activePrefix = handler.ActivePrefix;
         float result = item.scale;
         if (activePrefix != null) {
             result *= activePrefix._druidSize;
@@ -63,7 +63,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
 
     public static float GetFillingRate(Item item) {
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
-        DruidicPrefix activePrefix = handler.ActivePrefix;
+        NaturePrefix activePrefix = handler.ActivePrefix;
         float result = handler._fillingRateModifier;
         if (activePrefix != null) {
             result *= activePrefix._fillingRateMult;
@@ -76,7 +76,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static int GetItemDamage(Item item, Player player) {
         int result = item.damage;
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
-        DruidicPrefix activePrefix = handler.ActivePrefix;
+        NaturePrefix activePrefix = handler.ActivePrefix;
         if (activePrefix != null) {
             result += activePrefix._druidDamage;
             bool flag = Main.gameMenu || Main.InGameUI.IsVisible;
@@ -91,7 +91,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static int GetItemUseTime(Item item) {
         int result = item.useTime;
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
-        DruidicPrefix activePrefix = handler.ActivePrefix;
+        NaturePrefix activePrefix = handler.ActivePrefix;
         if (activePrefix != null) {
             result = (int)(result / activePrefix._druidSpeedMult);
         }
@@ -105,7 +105,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static ushort GetBasePotentialDamage(Item item, Player player) {
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
         ushort baseDamage = handler._basePotentialDamage;
-        DruidicPrefix activePrefix = handler.ActivePrefix;
+        NaturePrefix activePrefix = handler.ActivePrefix;
         bool flag = activePrefix != null;
         bool flag2 = Main.gameMenu || Main.InGameUI.IsVisible;
         baseDamage += (ushort)(flag2 ? 0 : player.GetModPlayer<DruidStats>().DruidPotentialDamage);
@@ -125,7 +125,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static ushort GetBasePotentialUseSpeed(Item item, Player player) {
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
         ushort baseSpeed = handler._basePotentialUseSpeed;
-        DruidicPrefix activePrefix = handler.ActivePrefix;
+        NaturePrefix activePrefix = handler.ActivePrefix;
         bool flag = activePrefix != null;
         ushort result = (ushort)(baseSpeed / (Main.gameMenu || Main.InGameUI.IsVisible ? 1f : player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier));
         if (flag) {
@@ -164,7 +164,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public override void ModifyWeaponKnockback(Item item, Player player, ref StatModifier knockback) {
-        if (!item.IsADruidicWeapon()) {
+        if (!item.IsANatureWeapon()) {
             return;
         }
 
@@ -175,7 +175,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public override void ModifyWeaponCrit(Item item, Player player, ref float crit) {
-        if (!item.IsADruidicWeapon()) {
+        if (!item.IsANatureWeapon()) {
             return;
         }
 
@@ -185,7 +185,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public override void ModifyWeaponDamage(Item item, Player player, ref StatModifier damage) {
-        if (!item.IsADruidicWeapon()) {
+        if (!item.IsANatureWeapon()) {
             return;
         }
 
@@ -217,7 +217,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public override bool? UseItem(Item item, Player player) {
-        if (item.IsADruidicWeapon() && ActivePrefix != null && ActivePrefix._shouldApplyTipsy && player.ItemAnimationJustStarted) {
+        if (item.IsANatureWeapon() && ActivePrefix != null && ActivePrefix._shouldApplyTipsy && player.ItemAnimationJustStarted) {
             player.AddBuff(BuffID.Tipsy, 300);
 
             return base.UseItem(item, player);
@@ -227,7 +227,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public override float UseSpeedMultiplier(Item item, Player player) {
-        if (!item.IsADruidicWeapon()) {
+        if (!item.IsANatureWeapon()) {
             return base.UseSpeedMultiplier(item, player);
         }
 

@@ -89,7 +89,7 @@ sealed partial class DruidStats : ModPlayer {
             return;
         }
 
-        bool isDamageSourceDruidic = (damageSource is Projectile projectileAsDamageSource && projectileAsDamageSource.IsDruidic()) || (damageSource is Item itemAsDamageSource && itemAsDamageSource.IsADruidicWeapon()); 
+        bool isDamageSourceDruidic = (damageSource is Projectile projectileAsDamageSource && projectileAsDamageSource.IsNature()) || (damageSource is Item itemAsDamageSource && itemAsDamageSource.IsANatureWeapon()); 
         if (!isDamageSourceDruidic) {
             return;
         }

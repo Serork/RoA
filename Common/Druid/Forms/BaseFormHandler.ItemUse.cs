@@ -8,7 +8,7 @@ namespace RoA.Common.Druid.Forms;
 sealed class FormCanUseItem : GlobalItem {
     public override bool CanUseItem(Item item, Player player) {
         if (player.GetModPlayer<WreathHandler>().StartSlowlyIncreasingUntilFull ||
-            player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             return false;
         }
 

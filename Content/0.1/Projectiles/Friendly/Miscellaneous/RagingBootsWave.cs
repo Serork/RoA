@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
-sealed class RagingBootsWave : DruidicProjectile {
+sealed class RagingBootsWave : NatureProjectile {
     public override void SetStaticDefaults() {
         Main.projFrames[Projectile.type] = 4;
     }

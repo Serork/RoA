@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Content.Items.Weapons;
-using RoA.Content.Items.Weapons.Druidic.Claws;
+using RoA.Content.Items.Weapons.Nature.Claws;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;

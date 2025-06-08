@@ -10,9 +10,9 @@ sealed class BackwoodsStoneChest : ModItem {
     public override void SetDefaults() {
         Item.SetSize(32, 30);
 
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 10, 15, useTurn: true, autoReuse: true);
+        Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 10, 15, useTurn: true, autoReuse: true);
 
-        Item.SetDefaultToStackable(Terraria.Item.CommonMaxStack);
+        Item.SetDefaultsToStackable(Terraria.Item.CommonMaxStack);
 
         Item.value = 500;
 

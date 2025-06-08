@@ -14,7 +14,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     private static string GetLocalizedText(string name) => Language.GetOrRegister("Mods.RoA.Items.Tooltips." + name).Value;
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
-        if (!item.IsADruidicWeapon()) {
+        if (!item.IsANatureWeapon()) {
             return;
         }
 

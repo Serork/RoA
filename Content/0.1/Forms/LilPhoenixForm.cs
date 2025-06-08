@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
-using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -73,7 +73,7 @@ sealed class LilPhoenixForm : BaseForm {
         }
 
         public override void ResetEffects() {
-            if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+            if (!Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
                 ResetDash();
             }
         }

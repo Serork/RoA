@@ -10,8 +10,8 @@ using RoA.Content.Buffs;
 using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Wreaths;
-using RoA.Content.Items.Weapons.Druidic.Claws;
-using RoA.Content.Items.Weapons.Druidic.Rods;
+using RoA.Content.Items.Weapons.Nature.Claws;
+using RoA.Content.Items.Weapons.Nature.Rods;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -125,7 +125,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsEmpty => ActualProgress2 <= 0.01f;
     public bool IsEmpty2 => ActualProgress2 <= 0.05f;
     public bool IsEmpty3 => ActualProgress2 <= 0.15f;
-    public bool IsFull1 => Progress >= 0.95f /*|| Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm*/;
+    public bool IsFull1 => Progress >= 0.95f /*|| Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm*/;
     public bool IsActualFull1 => ActualProgress2 >= 0.95f;
     public bool WillBeFull(ushort currentResource, bool clawsReset = false) => (clawsReset ? GetActualProgress2(currentResource) : GetProgress(currentResource)) > 0.95f;
     public bool IsFull2 => Progress >= 1.95f;
@@ -140,7 +140,7 @@ sealed class WreathHandler : ModPlayer {
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
 
-    public bool ShouldDrawItself => !IsEmpty/* || Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet*/ || Player.IsHoldingNatureWeapon() || Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm;
+    public bool ShouldDrawItself => !IsEmpty/* || Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet*/ || Player.IsHoldingNatureWeapon() || Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm;
     public float PulseIntensity { get; private set; }
 
     public bool HasKeepTime => _keepBonusesForTime > 0f;
@@ -212,14 +212,14 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
-        HandleOnHitNPCForDruidicProjectile(proj, target: target);
+        HandleOnHitNPCForNatureProjectile(proj, target: target);
     }
 
     public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone) {
         if (target.immortal) {
             return;
         }
-        if (!item.IsADruidicWeapon()) {
+        if (!item.IsANatureWeapon()) {
             return;
         }
 
@@ -227,12 +227,12 @@ sealed class WreathHandler : ModPlayer {
         MakeDustsOnHit();
     }
 
-    internal void HandleOnHitNPCForDruidicProjectile(Projectile proj, bool nonDataReset = false, NPC target = null) {
+    internal void HandleOnHitNPCForNatureProjectile(Projectile proj, bool nonDataReset = false, NPC target = null) {
         if (target != null && target.immortal) {
             return;
         }
 
-        if (proj.ModProjectile is DruidicProjectile natureProjectile) {
+        if (proj.ModProjectile is NatureProjectile natureProjectile) {
             if (!natureProjectile.ShouldChargeWreathOnDamage && !nonDataReset) {
                 return;
             }
@@ -284,7 +284,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void ClawsReset(Projectile projectile, bool nonDataReset) {
-        Item attachedItem = projectile.ModProjectile is DruidicProjectile natureProjectile ? natureProjectile.AttachedNatureWeapon : projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedNatureWeapon;
+        Item attachedItem = projectile.ModProjectile is NatureProjectile natureProjectile ? natureProjectile.AttachedNatureWeapon : projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedNatureWeapon;
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
         if (playerUsingClaws && Player.ItemAnimationActive && attachedItem == selectedItem) {
@@ -334,7 +334,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void SlowlyActivateForm(FormInfo formInfo) {
-        if (Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             return;
         }
         if (StartSlowlyIncreasingUntilFull) {
@@ -531,7 +531,7 @@ sealed class WreathHandler : ModPlayer {
         else if (_stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
         }
-        else if (!Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        else if (!Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             BaseRodProjectile? rodProjectile = GetHeldRodStaff();
             bool flag = rodProjectile == null;
             bool flag2 = !flag && !rodProjectile.PreparingAttack;
@@ -546,7 +546,7 @@ sealed class WreathHandler : ModPlayer {
         if (HasKeepTime) {
             _keepBonusesForTime -= 1f;
         }
-        if (Player.GetModPlayer<BaseFormHandler>().IsInDruidicForm && !IsFull1) {
+        if (Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm && !IsFull1) {
             _keepBonusesForTime = Math.Max(Math.Max(DruidPlayerStats.KeepBonusesForTime, 10), _keepBonusesForTime);
         }
 
