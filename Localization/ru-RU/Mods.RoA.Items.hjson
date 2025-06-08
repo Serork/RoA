@@ -1957,7 +1957,7 @@ JungleWreathTier3: {
 	/* Tooltip:
 		'''
 		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
-		While wreath is charged, attackers take damage from venomous thorns and 
+		While wreath is charged, nature attacks may inflict poison and 
 		''' */
 }
 
