@@ -75,7 +75,7 @@ sealed class EvilBranch : NatureProjectile {
     public ref float ScaleX => ref Projectile.ai[0];
     public ref float ScaleY => ref Projectile.ai[1];
 
-    public override string Texture => ResourceManager.FriendlyProjectileTextures + $"Druidic/{nameof(EvilBranch)}";
+    public override string Texture => ResourceManager.FriendlyProjectileTextures + $"Nature/{nameof(EvilBranch)}";
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         writer.Write(Projectile.rotation);
