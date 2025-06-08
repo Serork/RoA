@@ -21,7 +21,7 @@ public static class DruidModCalls {
                 CrossmodNatureContent.RegisterNatureItem(item);
                 return success;
             }
-            if (message == "MakeItemDruidicWeapon") {
+            if (message == "MakeItemNatureWeapon") {
                 if (args[1] is not Item item) {
                     throw new Exception($"{args[1]} is not Item");
                 }
@@ -29,7 +29,7 @@ public static class DruidModCalls {
                 item.MakeItemNatureWeapon();
                 return success;
             }
-            if (message == "SetDruidicWeaponValues") {
+            if (message == "SetNatureWeaponValues") {
                 if (args[1] is not Item item) {
                     throw new Exception($"{args[1]} is not Item");
                 }
@@ -44,7 +44,7 @@ public static class DruidModCalls {
                 NatureWeaponHandler.SetFillingRateModifier(item, fillingRateModifier ?? 1f);
                 return success;
             }
-            if (message == "GetDruidicWeaponBaseDamage") {
+            if (message == "GetNatureWeaponBaseDamage") {
                 if (args[1] is not Item item) {
                     throw new Exception($"{args[1]} is not Item");
                 }
@@ -53,7 +53,7 @@ public static class DruidModCalls {
                 }
                 return NatureWeaponHandler.GetFinalBaseDamage(item, player);
             }
-            if (message == "GetDruidicWeaponBasePotentialDamage") {
+            if (message == "GetNatureWeaponBasePotentialDamage") {
                 if (args[1] is not Item item) {
                     throw new Exception($"{args[1]} is not Item");
                 }
@@ -62,7 +62,7 @@ public static class DruidModCalls {
                 }
                 return NatureWeaponHandler.GetBasePotentialDamage(item, player);
             }
-            if (message == "GetDruidicWeaponCurrentDamage") {
+            if (message == "GetNatureWeaponCurrentDamage") {
                 if (args[1] is not Item item) {
                     throw new Exception($"{args[1]} is not Item");
                 }
@@ -71,14 +71,14 @@ public static class DruidModCalls {
                 }
                 return NatureWeaponHandler.GetNatureDamage(item, player);
             }
-            if (message == "MakeProjectileDruidic") {
+            if (message == "MakeProjectileNature") {
                 if (args[1] is not Projectile projectile) {
                     throw new Exception($"{args[1]} is not projectile");
                 }
                 CrossmodNatureContent.MakeProjectileNature(projectile);
                 return success;
             }
-            if (message == "SetDruidicProjectileValues") {
+            if (message == "SetNatureProjectileValues") {
                 if (args[1] is not Projectile projectile) {
                     throw new Exception($"{args[1]} is not projectile");
                 }
@@ -88,10 +88,10 @@ public static class DruidModCalls {
                 bool? shouldChargeWreathOnDamage = args[2] as bool?;
                 bool? shouldApplyAttachedNatureWeaponCurrentDamage = args[3] as bool?;
                 float? wreathFillingFine = args[4] as float?;
-                NatureProjectile.NatureProjectileSetValues(projectile, shouldChargeWreathOnDamage ?? true, shouldApplyAttachedNatureWeaponCurrentDamage ?? true, wreathFillingFine ?? 0f);
+                NatureProjectile.SetNatureValues(projectile, shouldChargeWreathOnDamage ?? true, shouldApplyAttachedNatureWeaponCurrentDamage ?? true, wreathFillingFine ?? 0f);
                 return success;
             }
-            if (message == "SetAttachedNatureWeaponToDruidicProjectile") {
+            if (message == "SetAttachedNatureWeaponToNatureProjectile") {
                 if (args[1] is not Projectile projectile) {
                     throw new Exception($"{args[1]} is not Projectile");
                 }
@@ -101,7 +101,7 @@ public static class DruidModCalls {
                 NatureProjectile.NatureProjectileSetItem(projectile, item);
                 return success;
             }
-            if (message == "GetAttachedNatureWeaponToDruidicProjectile") {
+            if (message == "GetAttachedNatureWeaponToNatureProjectile") {
                 if (args[1] is not Projectile projectile) {
                     throw new Exception($"{args[1]} is not projectile");
                 }

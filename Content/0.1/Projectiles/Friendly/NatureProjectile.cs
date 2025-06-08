@@ -72,7 +72,7 @@ abstract class NatureProjectile : ModProjectile {
         }
     }
 
-    public static void NatureProjectileSetValues(Projectile projectile, bool shouldChargeWreath = true, bool shouldApplyAttachedItemDamage = true, float wreathFillingFine = 0f) {
+    public static void SetNatureValues(Projectile projectile, bool shouldChargeWreath = true, bool shouldApplyAttachedItemDamage = true, float wreathFillingFine = 0f) {
         if (projectile.ModProjectile is NatureProjectile natureProjectile) {
             natureProjectile.ShouldChargeWreathOnDamage = shouldChargeWreath;
             natureProjectile.ShouldApplyAttachedNatureWeaponCurrentDamage = shouldApplyAttachedItemDamage;
