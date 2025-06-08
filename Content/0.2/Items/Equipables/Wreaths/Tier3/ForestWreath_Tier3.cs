@@ -27,9 +27,9 @@ sealed class ForestWreathTier3 : WreathItem {
     }
 
     private void OccasionallyGrowSunflowerWhenCharged(Player player) {
-        //if (!WreathHandler.IsWreathCharged(player)) {
-        //    return;
-        //}
+        if (!WreathHandler.IsWreathCharged(player)) {
+            return;
+        }
 
         SunflowerSpawnTimerHandler timerHandler = player.GetModPlayer<SunflowerSpawnTimerHandler>();
         timerHandler.ShouldCount = true;
