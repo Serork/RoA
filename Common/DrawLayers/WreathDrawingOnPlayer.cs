@@ -80,7 +80,11 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
             return;
         }
 
-        Asset<Texture2D>? asset = _wreathsOutfitTextures[WeaponOverlay.GetItemNameForTexture(wreathItem)];
+        string wreathNameTexture = WeaponOverlay.GetItemNameForTexture(wreathItem);
+        if (wreathNameTexture == "UnloadedItem") {
+            return;
+        }
+        Asset<Texture2D>? asset = _wreathsOutfitTextures[wreathNameTexture];
         if (asset?.IsLoaded != true) {
             return;
         }
