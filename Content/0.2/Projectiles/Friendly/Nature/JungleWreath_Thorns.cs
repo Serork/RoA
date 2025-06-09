@@ -22,6 +22,7 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
     private static byte FRAMECOUNT => 5;
     private static byte BASELENGTH => 10;
     private static byte SEGMENTHEIGHT => 18;
+    private static float GROWTHSPEED => 0.3f; // this must be [0..1]
 
     private static Asset<Texture2D>? _thornsTexture;
 
@@ -117,7 +118,7 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
                     continue;
                 }
                 //currentSegmentData.Progress += thornsLength / 50f;
-                currentSegmentData.Progress += 0.2f;
+                currentSegmentData.Progress += GROWTHSPEED;
                 currentSegmentData.Progress = MathF.Min(1f, currentSegmentData.Progress);
             }
         }
