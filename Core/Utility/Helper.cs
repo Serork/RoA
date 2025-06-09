@@ -19,6 +19,12 @@ using Terraria.UI.Gamepad;
 namespace RoA.Core.Utility;
 
 static class Helper {
+    public static Point AdjustY(this Point vector2, int value) => new(vector2.X, vector2.Y + value);
+    public static Vector2 AdjustY(this Vector2 vector2, float value) => new(vector2.X, vector2.Y + value);
+
+    public static bool Approximately(float a, float b, float tolerance = 1E-06f) => Math.Abs(a - b) < tolerance;
+    public static bool Approximately(Vector2 a, Vector2 b, float tolerance = 1E-06f) => Approximately(a.X, b.X, tolerance) && Approximately(a.Y, b.Y, tolerance);
+
     public static NPC? FindClosestNPC(Vector2 checkPosition, int checkDistance, bool checkForCollisions = true) {
         NPC? target = null;
         int neededDistance = checkDistance;

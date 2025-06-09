@@ -56,11 +56,16 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
         public readonly bool IsEndSegment => SegmentType == SegmentTypeInfo.End;
     }
 
-    public ref struct ThornsValues(Projectile projectile) {
+    private ref struct ThornsValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float LengthValue = ref projectile.ai[0];
         public ref float WrapDirectionValue = ref projectile.ai[1];
         public ref float LostHPProcentValue = ref projectile.ai[2];
+
+        public bool Init {
+            readonly get => InitOnSpawnValue == 1f;
+            set => InitOnSpawnValue = value.ToInt();
+        }
 
         public readonly int Length => (int)LengthValue;
         public readonly int WrapDirection => (int)WrapDirectionValue;
@@ -94,8 +99,8 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
     public override void AI() {
         void initSegmentInfo() {
             ThornsValues thornValues = new(Projectile);
-            if (thornValues.InitOnSpawnValue == 0f) {
-                thornValues.InitOnSpawnValue = 1f;
+            if (!thornValues.Init) {
+                thornValues.Init = true;
 
                 if (Projectile.IsOwnerLocal()) {
                     thornValues.LengthValue = BASELENGTH + thornValues.LostHPProcentValue * BASELENGTH;

@@ -29,12 +29,19 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
         public bool ExtraScaleDirection;
     }
 
-    private PetalInfo[] _petalData = [];
+    private ref struct SunflowerValues(Projectile projectile) {
+        public ref float InitOnSpawnValue = ref projectile.localAI[0];
+        public ref float RandomRotationOnSpawn = ref projectile.ai[0];
+        public ref float PetalSpawnTimer = ref projectile.localAI[1];
+        public ref float BaseExtraScale = ref projectile.localAI[2];
 
-    private ref float InitOnSpawnValue => ref Projectile.localAI[0];
-    private ref float RandomRotationOnSpawn => ref Projectile.ai[0];
-    private ref float PetalSpawnTimer => ref Projectile.localAI[1];
-    private ref float BaseExtraScale => ref Projectile.localAI[2];
+        public bool Init {
+            readonly get => InitOnSpawnValue == 1f;
+            set => InitOnSpawnValue = value.ToInt();
+        }
+    }
+
+    private PetalInfo[] _petalData = [];
 
     public override void Load() {
         LoadSunflowerTextures();
@@ -63,8 +70,9 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
             Projectile.Opacity = Ease.SineInOut(Utils.GetLerpValue(0, TIMELEFT / 3, Projectile.timeLeft, true));
         }
         void initPetalsAndRandomRotation() {
-            if (InitOnSpawnValue == 0f) {
-                InitOnSpawnValue = 1f;
+            SunflowerValues sunflowerValues = new(Projectile);
+            if (!sunflowerValues.Init) {
+                sunflowerValues.Init = true;
 
                 _petalData = new PetalInfo[PETALCOUNT];
                 for (int i = 0; i < PETALCOUNT; i++) {
@@ -78,19 +86,20 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                 }
 
                 if (Projectile.IsOwnerLocal()) {
-                    RandomRotationOnSpawn = Main.rand.NextFloatRange(MathHelper.PiOver2);
+                    sunflowerValues.RandomRotationOnSpawn = Main.rand.NextFloatRange(MathHelper.PiOver2);
                     Projectile.netUpdate = true;
                 }
 
-                Projectile.rotation = RandomRotationOnSpawn;
+                Projectile.rotation = sunflowerValues.RandomRotationOnSpawn;
             }
         }
         void scalePetals() {
-            if (PetalSpawnTimer < 1f) {
+            SunflowerValues sunflowerValues = new(Projectile);
+            if (sunflowerValues.PetalSpawnTimer < 1f) {
                 float appearanceFactor = 1.5f;
                 float countSpeed = MathF.Pow(PETALCOUNT, appearanceFactor);
-                PetalSpawnTimer += 1f / countSpeed;
-                PetalSpawnTimer = MathF.Min(PetalSpawnTimer, 1f);
+                sunflowerValues.PetalSpawnTimer += 1f / countSpeed;
+                sunflowerValues.PetalSpawnTimer = MathF.Min(sunflowerValues.PetalSpawnTimer, 1f);
             }
 
             for (int i = 0; i < PETALCOUNT; i++) {
@@ -111,7 +120,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                 PetalInfo petalData = _petalData[i];
                 maxScale += petalData.ExtraScale;
             }
-            BaseExtraScale = maxScale * 0.1f;
+            sunflowerValues.BaseExtraScale = maxScale * 0.1f;
         }
 
         makeSmoothDisappearOnDeath();
@@ -131,12 +140,13 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
               baseColor = lightColor * baseOpacity;
         float[] petalFills = CalculatePetalFills();
         void drawBase() {
+            SunflowerValues sunflowerValues = new(Projectile);
             Texture2D baseTexture = _baseTexture!.Value;
             Main.spriteBatch.DrawWith(baseTexture, Projectile.Center, DrawInfo.Default with {
                 Rotation = Projectile.rotation,
                 Color = baseColor,
                 Origin = baseTexture.Size() / 2f,
-                Scale = Vector2.One * (Projectile.scale + BaseExtraScale * baseOpacity) * 1.35f,
+                Scale = Vector2.One * (Projectile.scale + sunflowerValues.BaseExtraScale * baseOpacity) * 1.35f,
                 Clip = Rectangle.Empty with { Width = baseTexture.Width, Height = baseTexture.Height }
             });
 
@@ -160,6 +170,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
             }
         }
         void drawRays() {
+            SunflowerValues sunflowerValues = new(Projectile);
             Texture2D rayTexture = _rayTexture!.Value;
             Main.spriteBatch.BeginBlendState(BlendState.Additive);
             int rayCount = 10;
@@ -175,7 +186,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                 Vector2 offset = Vector2.UnitY.RotatedBy(rayRotation) * offsetValue;
                 float extraScale = MathF.Min(0.75f, MathF.Sin(maxScale));
                 Main.spriteBatch.DrawWith(rayTexture, Projectile.Center + offset, DrawInfo.Default with {
-                    Color = Utils.MultiplyRGB(Color.Yellow, petalColor) * 0.55f * Projectile.Opacity * petalFills[i] * PetalSpawnTimer,
+                    Color = Utils.MultiplyRGB(Color.Yellow, petalColor) * 0.55f * Projectile.Opacity * petalFills[i] * sunflowerValues.PetalSpawnTimer,
                     Rotation = rayRotation - MathHelper.PiOver2,
                     Origin = new Vector2(0f, rayTexture.Height / 2f),
                     Clip = Rectangle.Empty with { Width = rayTexture.Width, Height = rayTexture.Height },
@@ -204,15 +215,16 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
     }
 
     private float[] CalculatePetalFills() {
+        SunflowerValues sunflowerValues = new(Projectile);
         float[] fills = new float[PETALCOUNT]; 
         for (int k = 1; k <= PETALCOUNT; k++) {
             float lower = (k - 1) / (float)PETALCOUNT;
             float upper = k / (float)PETALCOUNT;
-            if (PetalSpawnTimer >= upper) {
+            if (sunflowerValues.PetalSpawnTimer >= upper) {
                 fills[k - 1] = 1f;
             }
-            else if (PetalSpawnTimer >= lower) {
-                fills[k - 1] = (PetalSpawnTimer - lower) * PETALCOUNT;
+            else if (sunflowerValues.PetalSpawnTimer >= lower) {
+                fills[k - 1] = (sunflowerValues.PetalSpawnTimer - lower) * PETALCOUNT;
             }
             else {
                 fills[k - 1] = 0f;

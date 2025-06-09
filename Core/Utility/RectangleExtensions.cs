@@ -8,4 +8,6 @@ static class RectangleExtensions {
     public static Vector2 Centered(this Rectangle rectangle) => rectangle.Size() / 2f;
 
     public static Vector2 BottomCenter(this Rectangle rectangle) => new(rectangle.Width / 2f, rectangle.Height);
+
+    public static Rectangle AdjustHeight(this Rectangle rectangle, int value) => new(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height + value);
 }
