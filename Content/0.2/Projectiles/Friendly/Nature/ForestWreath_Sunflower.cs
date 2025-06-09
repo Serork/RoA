@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.Projectiles;
 using RoA.Content.Buffs;
 using RoA.Core;
 using RoA.Core.Data;
@@ -16,7 +17,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class Sunflower : NatureProjectile {
+sealed class Sunflower : NatureProjectile_NoTextureLoad {
     private static byte PETALCOUNT => 10;
     private static short TIMELEFT => 360;
 
@@ -34,8 +35,6 @@ sealed class Sunflower : NatureProjectile {
     private ref float RandomRotationOnSpawn => ref Projectile.ai[0];
     private ref float PetalSpawnTimer => ref Projectile.localAI[1];
     private ref float BaseExtraScale => ref Projectile.localAI[2];
-
-    public override string Texture => ResourceManager.EmptyTexture;
 
     public override void Load() {
         LoadSunflowerTextures();
@@ -121,9 +120,9 @@ sealed class Sunflower : NatureProjectile {
         givePlayersBuff();
     }
 
-    public override bool PreDraw(ref Color lightColor) {
+    protected override void Draw(ref Color lightColor) {
         if (_baseTexture?.IsLoaded != true || _petalTexture?.IsLoaded != true || _rayTexture?.IsLoaded != true) {
-            return false;
+            return;
         }
 
         lightColor = Color.Lerp(lightColor, Color.White, 0.85f);
@@ -192,8 +191,6 @@ sealed class Sunflower : NatureProjectile {
         drawRays();
         drawPetals();
         drawBase();
-
-        return false;
     }
 
     private void LoadSunflowerTextures() {

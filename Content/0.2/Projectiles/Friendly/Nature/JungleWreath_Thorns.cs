@@ -26,6 +26,14 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
 
     private static Asset<Texture2D>? _thornsTexture;
 
+    private struct SegmentIterationArgs {
+        public SegmentInfo Info;
+        public int Index;
+        public int Length;
+        public Vector2 Position, PositionOffset;
+        public Vector2 Velocity;
+    }
+
     private struct SegmentInfo(byte frameToUse, SegmentInfo.SegmentTypeInfo segmentType) {
         public enum SegmentTypeInfo {
             Start,
@@ -39,6 +47,7 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
             readonly get => _progress;
             set => _progress = Helper.Clamp01(value);
         }
+
         public readonly byte FrameToUse = frameToUse;
         public readonly SegmentTypeInfo SegmentType = segmentType;
 
@@ -46,8 +55,6 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
         public readonly bool IsMidSegment => SegmentType == SegmentTypeInfo.Mid;
         public readonly bool IsEndSegment => SegmentType == SegmentTypeInfo.End;
     }
-
-    private SegmentInfo[] _segmentData = [];
 
     public ref struct ThornsValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
@@ -58,6 +65,8 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
         public readonly int Length => (int)LengthValue;
         public readonly int WrapDirection => (int)WrapDirectionValue;
     }
+
+    private SegmentInfo[] _segmentData = [];
 
     private int GetThornsLength() => new ThornsValues(Projectile).Length;
 
@@ -123,32 +132,13 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
             }
         }
         void makeDustsOnGrowth() {
-            Vector2 velocityToMove = Projectile.velocity;
-            Vector2 positionForDusts = Projectile.Center;
-            int segmentHeight = SEGMENTHEIGHT;
-            int thornsLength = GetThornsLength();
-            for (int i = 0; i < thornsLength; i++) {
-                int currentSegmentIndex = i,
-                    previousSegmentIndex = Math.Max(0, i - 1);
-                SegmentInfo currentSegmentData = _segmentData[currentSegmentIndex],
-                            previousSegmentData = _segmentData[previousSegmentIndex];
-                if (currentSegmentIndex > 0 && previousSegmentData.Progress < 1f) {
-                    continue;
-                }
-
-                int currentSegmentHeight = (int)(segmentHeight * currentSegmentData.Progress);
-                Vector2 segmentVelocityToMove = velocityToMove.SafeNormalize();
-                Vector2 offset = segmentVelocityToMove * currentSegmentHeight;
-                positionForDusts += offset;
-
-                if (Main.rand.NextChance(1.25f - i / (float)thornsLength)) {
-                    if (currentSegmentData.Progress < 1f) {
-                        SpawnThornsDust(positionForDusts - offset * 2f);
+            DoOnSegmentIteration((SegmentIterationArgs) => {
+                if (Main.rand.NextChance(1.25f - SegmentIterationArgs.Index / (float)SegmentIterationArgs.Length)) {
+                    if (SegmentIterationArgs.Info.Progress < 1f) {
+                        SpawnThornsDust(SegmentIterationArgs.Position);
                     }
                 }
-
-                UpdateSegmentVelocity(ref velocityToMove, i);
-            }
+            });
         }
 
         makeDustsOnGrowth();
@@ -164,42 +154,47 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
         Texture2D segmentTexture = _thornsTexture.Value;
         int segmentWidth = segmentTexture.Width,
             segmentHeight = segmentTexture.Height / FRAMECOUNT;
-        Vector2 velocityToMove = Projectile.velocity;
-        Vector2 positionToDraw = Projectile.Center;
-        for (int i = 0; i < GetThornsLength(); i++) {
-            int currentSegmentIndex = i,
-                previousSegmentIndex = Math.Max(0, i - 1);
-            SegmentInfo currentSegmentData = _segmentData[currentSegmentIndex],
-                        previousSegmentData = _segmentData[previousSegmentIndex];
-            if (currentSegmentIndex > 0 && previousSegmentData.Progress < 1f) {
-                continue;
-            }
-            int currentSegmentHeight = (int)(segmentHeight * currentSegmentData.Progress);
-            float segmentRotation = velocityToMove.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi;
-            Vector2 segmentVelocityToMove = velocityToMove.SafeNormalize();
-            Main.spriteBatch.DrawWith(segmentTexture, positionToDraw, DrawInfo.Default with {
-                Color = Lighting.GetColor(positionToDraw.ToTileCoordinates()),
+        DoOnSegmentIteration((segmentIterationArgs) => {
+            int currentSegmentHeight = (int)(segmentHeight * segmentIterationArgs.Info.Progress);
+            float segmentRotation = segmentIterationArgs.Velocity.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi;
+            Main.spriteBatch.DrawWith(segmentTexture, segmentIterationArgs.Position, DrawInfo.Default with {
+                Color = Lighting.GetColor(segmentIterationArgs.Position.ToTileCoordinates()),
                 Rotation = segmentRotation,
                 Origin = new Vector2(segmentWidth, segmentHeight) / 2f,
-                Clip = new Rectangle(0, currentSegmentData.FrameToUse * segmentHeight, segmentWidth, currentSegmentHeight)
+                Clip = new Rectangle(0, segmentIterationArgs.Info.FrameToUse * segmentHeight, segmentWidth, currentSegmentHeight)
             });
-            if (currentSegmentData.IsStartSegment) {
-                positionToDraw -= segmentVelocityToMove * 4f;
-            }
-            else if (!currentSegmentData.IsEndSegment) {
-                positionToDraw -= segmentVelocityToMove * 2f;
-            }
-            positionToDraw += segmentVelocityToMove * segmentHeight;
-
-            UpdateSegmentVelocity(ref velocityToMove, i);
-        }
+        });
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        bool result = false;
+        DoOnSegmentIteration((segmentIterationArgs) => {
+            if (Helper.CenteredSquare(segmentIterationArgs.Position, SEGMENTHEIGHT).Intersects(targetHitbox)) {
+                result = true;
+            }
+        });
+        return result;
+    }
+
+    public override void OnKill(int timeLeft) {
+        void makeKillDusts() {
+            DoOnSegmentIteration((segmentIterationArgs) => {
+                int dustCount = 4;
+                for (int j = 0; j < dustCount; j++) {
+                    SpawnThornsDust(segmentIterationArgs.Position);
+                }
+            });
+        }
+
+        makeKillDusts();
+    }
+
+    private void DoOnSegmentIteration(Action<SegmentIterationArgs> onIteration) {
         Vector2 velocityToMove = Projectile.velocity;
-        int collisionCheckHeight = SEGMENTHEIGHT;
-        Vector2 positionForColliding = Projectile.Center + velocityToMove.SafeNormalize() * collisionCheckHeight * 2f;
-        for (int i = 0; i < GetThornsLength(); i++) {
+        int segmentHeight = SEGMENTHEIGHT;
+        Vector2 segmentPosition = Projectile.Center;
+        int thornsLength = GetThornsLength();
+        for (int i = 0; i < thornsLength; i++) {
             int currentSegmentIndex = i,
                 previousSegmentIndex = Math.Max(0, i - 1);
             SegmentInfo currentSegmentData = _segmentData[currentSegmentIndex],
@@ -208,53 +203,33 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
                 continue;
             }
 
-            int currentSegmentHeight = (int)(collisionCheckHeight * currentSegmentData.Progress);
+            int currentSegmentHeight = (int)(segmentHeight * currentSegmentData.Progress);
             Vector2 segmentVelocityToMove = velocityToMove.SafeNormalize();
-            positionForColliding += segmentVelocityToMove * currentSegmentHeight;
-            if (Helper.CenteredSquare(positionForColliding, collisionCheckHeight).Intersects(targetHitbox)) {
-                return true;
+            Vector2 offset = segmentVelocityToMove * currentSegmentHeight;
+            onIteration(new SegmentIterationArgs() {
+                Info = currentSegmentData,
+                Index = currentSegmentIndex,
+                Length = thornsLength,
+                Position = segmentPosition,
+                Velocity = velocityToMove,
+                PositionOffset = offset,
+            });
+            if (currentSegmentData.IsStartSegment) {
+                segmentPosition -= segmentVelocityToMove * 4f;
             }
+            else if (!currentSegmentData.IsEndSegment) {
+                segmentPosition -= segmentVelocityToMove * 2f;
+            }
+            segmentPosition += offset;
 
             UpdateSegmentVelocity(ref velocityToMove, i);
         }
-
-        return false;
-    }
-
-    public override void OnKill(int timeLeft) {
-        void makeDustsOnKill() {
-            Vector2 velocityToMove = Projectile.velocity;
-            int segmentHeight = SEGMENTHEIGHT;
-            Vector2 positionForDusts = Projectile.Center + velocityToMove.SafeNormalize() * segmentHeight * 2f;
-            for (int i = 0; i < GetThornsLength(); i++) {
-                int currentSegmentIndex = i,
-                    previousSegmentIndex = Math.Max(0, i - 1);
-                SegmentInfo currentSegmentData = _segmentData[currentSegmentIndex],
-                            previousSegmentData = _segmentData[previousSegmentIndex];
-                if (currentSegmentIndex > 0 && previousSegmentData.Progress < 1f) {
-                    continue;
-                }
-
-                int currentSegmentHeight = (int)(segmentHeight * currentSegmentData.Progress);
-                Vector2 segmentVelocityToMove = velocityToMove.SafeNormalize();
-                Vector2 offset = segmentVelocityToMove * currentSegmentHeight;
-                positionForDusts += offset;
-
-                int dustCount = 4;
-                for (int j = 0; j < dustCount; j++) {
-                    SpawnThornsDust(positionForDusts - offset * 3f);
-                }
-
-                UpdateSegmentVelocity(ref velocityToMove, i);
-            }
-        }
-
-        makeDustsOnKill();
     }
 
     private void SpawnThornsDust(Vector2 dustSpawnPosition) {
         float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
-        Dust dust = Main.dust[Dust.NewDust(dustSpawnPosition, Projectile.width, Projectile.height, DustID.JunglePlants, 0f, 0f, 0, default, dustScale)];
+        int segmentHeight = SEGMENTHEIGHT;
+        Dust dust = Main.dust[Dust.NewDust(dustSpawnPosition - Vector2.One * segmentHeight / 2f, segmentHeight, segmentHeight, DustID.JunglePlants, 0f, 0f, 0, default, dustScale)];
         dust.noGravity = true;
         dust.fadeIn = 0.5f;
         dust.noLight = true;

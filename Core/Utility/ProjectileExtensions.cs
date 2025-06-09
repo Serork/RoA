@@ -14,6 +14,12 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static class ProjectileExtensions {
+    public static bool IsModded(this Projectile projectile) => projectile.ModProjectile is not null;
+    public static bool IsModded(this Projectile projectile, out ModProjectile modProjectile) {
+        modProjectile = projectile.ModProjectile;
+        return modProjectile is not null;
+    }
+
     public static Texture2D GetTexture(this Projectile projectile) => TextureAssets.Projectile[projectile.type].Value;
 
     public static void SetTrail(this Projectile projectile, int trailingMode = 2, int length = -1) {

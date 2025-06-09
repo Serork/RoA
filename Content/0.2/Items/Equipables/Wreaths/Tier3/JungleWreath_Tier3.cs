@@ -25,10 +25,10 @@ sealed class JungleWreathTier3 : WreathItem {
 
         DruidStats.InflictPoisonOnNatureDamageWhenCharged(player);
 
-        TriggerThornsAttackOnHurt(player);
+        TriggerThornsAttackOnHurtWhenCharged(player);
     }
 
-    private void TriggerThornsAttackOnHurt(Player player) {
+    private void TriggerThornsAttackOnHurtWhenCharged(Player player) {
         if (!WreathHandler.IsWreathCharged(player)) {
             return;
         }
@@ -56,7 +56,7 @@ sealed class JungleWreathTier3 : WreathItem {
             bool foundTarget = target != null;
             Vector2 thornsVelocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
             if (foundTarget) {
-                thornsVelocity = (target!.Center - thornsSpawnPosition).SafeNormalize();
+                thornsVelocity = target!.Center.DirectionTo(thornsSpawnPosition);
             }
             Vector2 startOffset = thornsVelocity.SafeNormalize() * 10f;
             thornsSpawnPosition += startOffset;
