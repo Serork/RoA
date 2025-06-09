@@ -27,9 +27,9 @@ sealed class SnowWreathTier3 : WreathItem {
     }
 
     private void SpawnCloudberriesOnNatureAttackWhenCharged(Player player) {
-        if (!WreathHandler.IsWreathCharged(player)) {
-            return;
-        }
+        //if (!WreathHandler.IsWreathCharged(player)) {
+        //    return;
+        //}
 
         player.GetModPlayer<SpawnCloudberriesOnNatureAttackHandler>().IsEffectActive = true;
     }
@@ -60,15 +60,14 @@ sealed class SnowWreathTier3 : WreathItem {
                 return;
             }
 
-            int chance = 4;
-            bool rolled = Main.rand.NextBool(chance);
-            if (!rolled) {
-                return;
-            }
+            //int chance = 4;
+            //bool rolled = Main.rand.NextBool(chance);
+            //if (!rolled) {
+            //    return;
+            //}
 
             int cloudberryCount = Main.rand.Next(3, 5);
             Vector2 cloudberrySpawnPosition = Player.Center;
-            Vector2 mousePosition = Player.GetViableMousePosition();
 
             int damage = 75;
             if (Main.masterMode) {
@@ -79,14 +78,22 @@ sealed class SnowWreathTier3 : WreathItem {
             }
             float knockBack = 5f;
 
-            int denom = cloudberryCount - 1;
+            int denom = cloudberryCount;
             damage /= denom;
             knockBack /= denom;
 
             for (int i = 0; i < cloudberryCount; i++) {
-                Vector2 cloudberryVelocity = cloudberrySpawnPosition.DirectionTo(mousePosition).RotatedByRandom(MathHelper.PiOver4);
+                NPC? target = Helper.FindClosestNPC(cloudberrySpawnPosition, 300);
+                bool foundTarget = target != null;
+                Vector2 cloudberryVelocity = -Vector2.UnitY.RotatedByRandom(MathHelper.PiOver2);
+                if (foundTarget) {
+                    cloudberryVelocity = (target!.Top - Vector2.UnitY * Player.height).DirectionFrom(cloudberrySpawnPosition).RotatedByRandom(MathHelper.PiOver2);
+                }
+                Vector2 startOffset = cloudberryVelocity.SafeNormalize() * 10f;
+                cloudberrySpawnPosition += startOffset;
+                cloudberryVelocity += cloudberryVelocity.RotatedByRandom(MathHelper.PiOver4);
                 cloudberryVelocity *= Main.rand.NextFloat(0.75f, 1f);
-                cloudberryVelocity *= 1.5f;
+                cloudberryVelocity *= 0.5f;
                 ProjectileHelper.SpawnPlayerOwnedProjectile<Cloudberry>(new ProjectileHelper.SpawnProjectileArgs(Player, Player.GetSource_ItemUse(heldItem)) with {
                     Position = cloudberrySpawnPosition,
                     Velocity = cloudberryVelocity,

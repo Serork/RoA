@@ -86,6 +86,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
     public override void SetStaticDefaults() {
         ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
         ProjectileID.Sets.Explosive[Type] = true;
+        ProjectileID.Sets.RocketsSkipDamageForPlayers[Type] = true;
     }
 
     protected override void SafeSetDefaults() {
@@ -306,7 +307,8 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
         explode();
     }
 
-    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) => modifiers.FinalDamage /= 3;
+    public override bool CanHitPlayer(Player target) => false;
+    //public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) => modifiers.FinalDamage /= 3;
 
     public override void OnKill(int timeLeft) {
         void makeHitboxBiggerAndPlayExplosionSound() {
@@ -462,6 +464,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
         if (_lastTilePosition == positionInTiles) {
             return;
         }
+
         void makeTileSnow() {
             if (_currentTileIndex >= MAXSNOWBLOCKS) {
                 _currentTileIndex = 0;
@@ -483,6 +486,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
                 Dust.NewDust(new Vector2(dustPosition.X, dustPosition.Y), 16, 16, DustID.SnowBlock, SpeedX: -Projectile.velocity.X * 0.4f, SpeedY: -Projectile.velocity.Y * 0.4f, Alpha: Main.rand.Next(255), Scale: Main.rand.NextFloat(1.5f) * 0.75f);
             }
         }
+
         createSnowDusts();
         makeTileSnow();
     }
