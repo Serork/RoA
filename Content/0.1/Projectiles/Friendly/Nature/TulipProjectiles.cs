@@ -158,7 +158,7 @@ sealed class TulipPetal : NatureProjectile {
         //float lerpValue = Utils.GetLerpValue(0f, 10f, _parent.localAI[0], clamped: true);
         //Vector2 scale = new Vector2(MathHelper.Lerp(0.25f, 1f, lerpValue), 1f) * new Vector2(Utils.GetLerpValue(Max, Max - 15f, _parent.localAI[0], clamped: true)) * Projectile.scale * 0.65f;
 
-        //SpriteFrame frame = new(PETALCOUNT, 1);
+        //SpriteFrame frame = new(SEGMENTCOUNT, 1);
         //frame = frame.With(UsedFrameX, 0);
         //Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
         //Vector2 lightPosition = Projectile.position + Offset.RotatedBy(Projectile.rotation + MathHelper.Pi);

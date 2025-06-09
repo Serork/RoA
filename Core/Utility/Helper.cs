@@ -19,6 +19,26 @@ using Terraria.UI.Gamepad;
 namespace RoA.Core.Utility;
 
 static class Helper {
+    public static NPC? FindClosestNPC(Vector2 checkPosition, int checkDistance, bool checkForCollisions = true) {
+        NPC? target = null;
+        int neededDistance = checkDistance;
+        foreach (NPC checkNPC in Main.ActiveNPCs) {
+            if (!checkNPC.CanBeChasedBy()) {
+                continue;
+            }
+            float distance = (checkPosition - checkNPC.Center).Length();
+            if (distance < neededDistance && (!checkForCollisions || Collision.CanHitLine(checkPosition, 1, 1, checkNPC.Center, 1, 1))) {
+                target = checkNPC;
+            }
+        }
+        return target;
+    }
+
+    public static Rectangle CenteredSquare(Vector2 position, int size) => new Rectangle { X = (int)position.X, Y = (int)position.Y, Width = size, Height = size };
+
+    public static float Clamp01(float value) => value <= 0f ? 0f : value >= 1f ? 1f : value;
+    public static double Clamp01(double value) => value <= 0.0 ? 0.0 : value >= 1.0 ? 1.0 : value;
+
     public static readonly Color AwakenMessageColor = new(175, 75, 255);
     public static readonly Color EventMessageColor = new(50, 255, 130);
 

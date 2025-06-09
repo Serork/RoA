@@ -38,7 +38,7 @@ static class ProjectileExtensions {
     }
 
     public static Player GetOwnerAsPlayer(this Projectile projectile) => Main.player[projectile.owner];
-    public static bool IsOwnerMyPlayer(this Projectile projectile) => projectile.whoAmI == Main.myPlayer;
+    public static bool IsOwnerLocal(this Projectile projectile) => projectile.owner == Main.myPlayer;
 
     public static T As<T>(this Projectile projectile) where T : ModProjectile => projectile.ModProjectile as T;
 

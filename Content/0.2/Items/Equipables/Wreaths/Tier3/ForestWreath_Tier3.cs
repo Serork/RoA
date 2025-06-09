@@ -41,7 +41,7 @@ sealed class ForestWreathTier3 : WreathItem {
         if (!timerHandler.Counted) {
             return;
         }
-        ProjectileHelper.SpawnPlayerOwnedNoDamageProjectile<Sunflower>(player, player.GetSource_Accessory(Item));
+        ProjectileHelper.SpawnPlayerOwnedProjectile<Sunflower>(new ProjectileHelper.SpawnProjectileArgs(player, player.GetSource_Accessory(Item)));
         timerHandler.Counted = false;
     }
 

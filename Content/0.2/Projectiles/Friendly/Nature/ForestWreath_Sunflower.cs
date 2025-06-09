@@ -17,10 +17,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Sunflower : NatureProjectile {
-    private const byte PETALCOUNT = 10;
-    private const short TIMELEFT = 360;
+    private static byte PETALCOUNT => 10;
+    private static short TIMELEFT => 360;
 
-    private static Asset<Texture2D> _baseTexture, _petalTexture, _rayTexture;
+    private static Asset<Texture2D>? _baseTexture, _petalTexture, _rayTexture;
 
     private struct PetalInfo {
         public int Index;
@@ -28,12 +28,12 @@ sealed class Sunflower : NatureProjectile {
         public bool ExtraScaleDirection;
     }
 
-    private PetalInfo[] _petalData;
+    private PetalInfo[] _petalData = [];
 
-    public ref float InitOnSpawnValue => ref Projectile.localAI[0];
-    public ref float RandomRotationOnSpawn => ref Projectile.ai[0];
-    public ref float PetalSpawnTimer => ref Projectile.localAI[1];
-    public ref float BaseExtraScale => ref Projectile.localAI[2];
+    private ref float InitOnSpawnValue => ref Projectile.localAI[0];
+    private ref float RandomRotationOnSpawn => ref Projectile.ai[0];
+    private ref float PetalSpawnTimer => ref Projectile.localAI[1];
+    private ref float BaseExtraScale => ref Projectile.localAI[2];
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -63,7 +63,7 @@ sealed class Sunflower : NatureProjectile {
         void makeSmoothDisappearOnDeath() {
             Projectile.Opacity = Ease.SineInOut(Utils.GetLerpValue(0, TIMELEFT / 3, Projectile.timeLeft, true));
         }
-        void init() {
+        void initPetalsAndRandomRotation() {
             if (InitOnSpawnValue == 0f) {
                 InitOnSpawnValue = 1f;
 
@@ -78,7 +78,7 @@ sealed class Sunflower : NatureProjectile {
                     };
                 }
 
-                if (Projectile.IsOwnerMyPlayer()) {
+                if (Projectile.IsOwnerLocal()) {
                     RandomRotationOnSpawn = Main.rand.NextFloatRange(MathHelper.PiOver2);
                     Projectile.netUpdate = true;
                 }
@@ -116,19 +116,23 @@ sealed class Sunflower : NatureProjectile {
         }
 
         makeSmoothDisappearOnDeath();
-        init();
+        initPetalsAndRandomRotation();
         scalePetals();
         givePlayersBuff();
     }
 
     public override bool PreDraw(ref Color lightColor) {
+        if (_baseTexture?.IsLoaded != true || _petalTexture?.IsLoaded != true || _rayTexture?.IsLoaded != true) {
+            return false;
+        }
+
         lightColor = Color.Lerp(lightColor, Color.White, 0.85f);
         float baseOpacity = Ease.CubeInOut(Projectile.Opacity);
         Color petalColor = lightColor * Ease.ExpoIn(Projectile.Opacity),
               baseColor = lightColor * baseOpacity;
         float[] petalFills = CalculatePetalFills();
         void drawBase() {
-            Texture2D baseTexture = _baseTexture.Value;
+            Texture2D baseTexture = _baseTexture!.Value;
             Main.spriteBatch.DrawWith(baseTexture, Projectile.Center, DrawInfo.Default with {
                 Rotation = Projectile.rotation,
                 Color = baseColor,
@@ -140,7 +144,7 @@ sealed class Sunflower : NatureProjectile {
             Lighting.AddLight(Projectile.Center, Vector3.One * 0.25f * baseOpacity);
         }
         void drawPetals() {
-            Texture2D petalTexture = _petalTexture.Value;
+            Texture2D petalTexture = _petalTexture!.Value;
             for (int i = 0; i < PETALCOUNT; i++) {
                 float petalFill = petalFills[i] * Projectile.Opacity;
                 float petalRotation = Projectile.rotation + i * MathHelper.TwoPi / PETALCOUNT + 0.6f;
@@ -157,7 +161,7 @@ sealed class Sunflower : NatureProjectile {
             }
         }
         void drawRays() {
-            Texture2D rayTexture = _rayTexture.Value;
+            Texture2D rayTexture = _rayTexture!.Value;
             Main.spriteBatch.BeginBlendState(BlendState.Additive);
             int rayCount = 10;
             float maxScale = 0f;
@@ -193,6 +197,10 @@ sealed class Sunflower : NatureProjectile {
     }
 
     private void LoadSunflowerTextures() {
+        if (Main.dedServ) {
+            return;
+        }
+
         _baseTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "SunflowerBase");
         _petalTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "SunflowerPetal");
         _rayTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "SunflowerRay");
