@@ -27,9 +27,9 @@ sealed class SnowWreathTier3 : WreathItem {
     }
 
     private void SpawnCloudberriesOnNatureAttackWhenCharged(Player player) {
-        //if (!WreathHandler.IsWreathCharged(player)) {
-        //    return;
-        //}
+        if (!WreathHandler.IsWreathCharged(player)) {
+            return;
+        }
 
         player.GetModPlayer<SpawnCloudberriesOnNatureAttackHandler>().IsEffectActive = true;
     }
@@ -60,11 +60,11 @@ sealed class SnowWreathTier3 : WreathItem {
                 return;
             }
 
-            //int chance = 4;
-            //bool rolled = Main.rand.NextBool(chance);
-            //if (!rolled) {
-            //    return;
-            //}
+            int chance = 4;
+            bool rolled = Main.rand.NextBool(chance);
+            if (!rolled) {
+                return;
+            }
 
             int cloudberryCount = Main.rand.Next(3, 5);
             Vector2 cloudberrySpawnPosition = Player.Center;
