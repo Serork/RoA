@@ -47,7 +47,17 @@ sealed class ForestWreathTier3 : WreathItem {
 
     private class SunflowerSpawnTimerHandler : ModPlayer {
         public bool ShouldCount, Counted;
-        public int Time;
+        public int Time = TIMETOSPAWNASUNFLOWER;
+
+        public override void OnRespawn() {
+            if (Player.IsLocal()) {
+                if (!ShouldCount) {
+                    return;
+                }
+
+                Time = TIMETOSPAWNASUNFLOWER;
+            }
+        }
 
         public override void ResetEffects() => ShouldCount = false;
 
