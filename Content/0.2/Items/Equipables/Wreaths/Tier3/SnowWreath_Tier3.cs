@@ -76,7 +76,7 @@ sealed class SnowWreathTier3 : WreathItem {
             else if (Main.expertMode) {
                 damage *= 2;
             }
-            float knockBack = 5f;
+            float knockBack = 7f;
 
             int denom = cloudberryCount;
             damage /= denom;
