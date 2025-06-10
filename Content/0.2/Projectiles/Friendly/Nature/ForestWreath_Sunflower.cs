@@ -86,7 +86,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                 }
 
                 if (Projectile.IsOwnerLocal()) {
-                    sunflowerValues.RandomRotationOnSpawn = Main.rand.NextFloatRange(MathHelper.PiOver2);
+                    sunflowerValues.RandomRotationOnSpawn = Main.rand.NextFloatRange(MathHelper.PiOver4);
                     Projectile.netUpdate = true;
                 }
 
