@@ -98,11 +98,10 @@ sealed class BeachWreathTier3 : WreathItem {
             else if (Main.expertMode) {
                 damage *= 2;
             }
-            float knockBack = 5f;
+            float knockBack = 3f;
 
             int denom = 3;
             damage /= denom;
-            knockBack /= denom;
 
             ProjectileHelper.SpawnPlayerOwnedProjectile<Coral>(new ProjectileHelper.SpawnProjectileArgs(Player, Player.GetSource_Misc(nameof(BeachWreathTier3))) with {
                 Position = coralSpawnPosition,
