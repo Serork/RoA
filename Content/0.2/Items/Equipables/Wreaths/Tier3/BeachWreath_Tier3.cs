@@ -40,7 +40,7 @@ sealed class BeachWreathTier3 : WreathItem {
     private class RandomlyGrowCoralsHandler : ModPlayer {
         private static byte TIMETOMAKEACORAL => 100;
 
-        private float _makeCoralTimer;
+        private float _makeCoralTimer = TIMETOMAKEACORAL;
 
         public bool IsEffectActive;
 
