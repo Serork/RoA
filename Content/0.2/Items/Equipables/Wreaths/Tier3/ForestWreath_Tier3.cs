@@ -50,13 +50,11 @@ sealed class ForestWreathTier3 : WreathItem {
         public int Time = TIMETOSPAWNASUNFLOWER;
 
         public override void OnRespawn() {
-            if (Player.IsLocal()) {
-                if (!ShouldCount) {
-                    return;
-                }
-
-                Time = TIMETOSPAWNASUNFLOWER;
+            if (!Player.IsLocal()) {
+                return;
             }
+
+            Time = TIMETOSPAWNASUNFLOWER;
         }
 
         public override void ResetEffects() => ShouldCount = false;

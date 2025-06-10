@@ -19,12 +19,12 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Sunflower : NatureProjectile_NoTextureLoad {
     private static byte PETALCOUNT => 10;
-    private static short TIMELEFT => 360;
+    private static ushort TIMELEFT => 360;
 
     private static Asset<Texture2D>? _baseTexture, _petalTexture, _rayTexture;
 
     private struct PetalInfo {
-        public int Index;
+        public byte Index;
         public float Scale, MaxScale, ExtraScale, MaxExtraScale;
         public bool ExtraScaleDirection;
     }
@@ -79,7 +79,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                     ref PetalInfo petalData = ref _petalData[i];
                     float maxExtraScale = 1f;
                     petalData = new PetalInfo() {
-                        Index = i,
+                        Index = (byte)i,
                         MaxExtraScale = maxExtraScale,
                         ExtraScaleDirection = true
                     };

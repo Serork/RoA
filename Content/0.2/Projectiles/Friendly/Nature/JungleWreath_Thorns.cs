@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.Projectiles;
 using RoA.Core;
 using RoA.Core.Data;
@@ -18,7 +19,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Thorns : NatureProjectile_NoTextureLoad {
-    private static short TIMELEFT => 180;
+    private static ushort TIMELEFT => 180;
     private static byte FRAMECOUNT => 5;
     private static byte BASELENGTH => 10;
     private static byte SEGMENTHEIGHT => 18;
@@ -28,8 +29,8 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
 
     private struct SegmentIterationArgs {
         public SegmentInfo Info;
-        public int Index;
-        public int Length;
+        public byte Index;
+        public byte Length;
         public Vector2 Position, PositionOffset;
         public Vector2 Velocity;
     }
@@ -213,8 +214,8 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
             Vector2 offset = segmentVelocityToMove * currentSegmentHeight;
             onIteration(new SegmentIterationArgs() {
                 Info = currentSegmentData,
-                Index = currentSegmentIndex,
-                Length = thornsLength,
+                Index = (byte)currentSegmentIndex,
+                Length = (byte)thornsLength,
                 Position = segmentPosition,
                 Velocity = velocityToMove,
                 PositionOffset = offset,

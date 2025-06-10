@@ -20,7 +20,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Cloudberry : NatureProjectile_NoTextureLoad {
-    private static short TIMELEFT => 260;
+    private static ushort TIMELEFT => 260;
     private static byte FRAMECOUNT => 4;
     private static float STARTFRAMINGSPEED => 0.05f;
     private static byte MAXCOPIES => 10;

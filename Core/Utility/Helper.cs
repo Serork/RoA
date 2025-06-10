@@ -15,10 +15,16 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Gamepad;
+using Terraria.Utilities;
 
 namespace RoA.Core.Utility;
 
 static class Helper {
+    public static T GetRandomEnumValue<T>(this UnifiedRandom random) where T : Enum {
+        Array values = Enum.GetValues(typeof(T));
+        return (T)values.GetValue(random.Next(values.Length));
+    }
+
     public static Point AdjustY(this Point vector2, int value) => new(vector2.X, vector2.Y + value);
     public static Vector2 AdjustY(this Vector2 vector2, float value) => new(vector2.X, vector2.Y + value);
 
