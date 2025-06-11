@@ -113,7 +113,7 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
             if (Main.rand.NextChance(chance * 0.5f)) {
                 Dust.NewDustDirect(dustSpawnPosition, spawnAreaWidth, spawnAreaHeight, bubbleDustType, SpeedX: dustVelocity.X, SpeedY: dustVelocity.Y);
             }
-            int waterDustAmount = (int)(1 + chance * 12.5f);
+            int waterDustAmount = (int)(1 + chance * 15f);
             for (int i = 0; i < waterDustAmount; i++) {
                 if (Main.rand.NextChance(chance * 5f)) {
                     Dust.NewDustDirect(dustSpawnPosition, spawnAreaWidth, spawnAreaHeight, DustID.Water, SpeedX: dustVelocity.X, SpeedY: dustVelocity.Y - 10f * Main.rand.NextFloat(), Alpha: 0, Scale: 1.25f - 0.25f * Main.rand.NextFloat());
