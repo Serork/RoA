@@ -9,9 +9,9 @@ namespace RoA.Common.Tiles;
 
 abstract class TulipLikeTileBaseButPlant : TulipLikeTileBase {
     protected short FrameWidth => 18;
-    protected PlantBase.PlantStage GetStage(int i, int j) => (PlantBase.PlantStage)(WorldGenHelper.GetTileSafely(i, j).TileFrameX / FrameWidth);
-    protected bool IsGrowing(int i, int j) => GetStage(i, j) == PlantBase.PlantStage.Growing;
-    protected bool IsGrown(int i, int j) => GetStage(i, j) == PlantBase.PlantStage.Grown;
+    protected PlantStage GetStage(int i, int j) => (PlantStage)(WorldGenHelper.GetTileSafely(i, j).TileFrameX / FrameWidth);
+    protected bool IsGrowing(int i, int j) => GetStage(i, j) == PlantStage.Growing;
+    protected bool IsGrown(int i, int j) => GetStage(i, j) == PlantStage.Grown;
 
     public override string Texture => (GetType().Namespace + "." + Name).Replace('.', '/');
 

@@ -3,9 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.Projectiles;
 using RoA.Core;
-using RoA.Core.Data.Graphics;
+using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Core.Data.Graphics;
+using RoA.Core.Data;
 
 using System;
 

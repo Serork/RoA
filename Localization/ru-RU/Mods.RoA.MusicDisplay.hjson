@@ -1,4 +1,7 @@
-Lothor.Author: Croul
+﻿Lothor: {
+	Author: Croul
+	DisplayName: Лотор Лютый
+}
 
 Backwoods: {
 	Author: Croul и A44

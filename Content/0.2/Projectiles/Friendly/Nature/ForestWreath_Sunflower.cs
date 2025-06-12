@@ -6,7 +6,7 @@ using ReLogic.Content;
 using RoA.Common.Projectiles;
 using RoA.Content.Buffs;
 using RoA.Core;
-using RoA.Core.Data.Graphics;
+using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
