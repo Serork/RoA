@@ -7,6 +7,7 @@ using RoA.Common.Projectiles;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Defaults;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using System;
