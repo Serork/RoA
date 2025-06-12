@@ -70,18 +70,18 @@
 	  <None Remove="Resources\Textures\Items\Placeable\Crafting\Tapper.png" />
 	  <None Remove="Resources\Textures\Items\Placeable\Decorations\DryadStatue.png" />
 	  <None Remove="Resources\Textures\Items\Placeable\ElderwoodChest.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\ElderwoodClaws.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\ElderwoodClaws_Outfit.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\GutwrenchingHooks.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\GutwrenchingHooks_Outfit.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\HellfireClaws.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\HellfireClaws_Outfit.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\HorrorPincers.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\HorrorPincers_Outfit.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\ThornyClaws.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Claws\ThornyClaws_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\ElderwoodClaws.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\ElderwoodClaws_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\GutwrenchingHooks.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\GutwrenchingHooks_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\HellfireClaws.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\HellfireClaws_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\HorrorPincers.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\HorrorPincers_Outfit.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\ThornyClaws.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Claws\ThornyClaws_Outfit.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Nature\RipePumpkin.png" />
-	  <None Remove="Resources\Textures\Items\Weapons\Nature\Rods\MushroomStaff.png" />
+	  <None Remove="Resources\Textures\Items\Weapons\Nature\PreHardmode\Canes\MushroomStaff.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Magic\RodOfTheDragonfire.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Magic\RodOfTheShock_Glow.png" />
 	  <None Remove="Resources\Textures\Items\Weapons\Magic\RodOfTheStream.png" />
@@ -120,6 +120,10 @@
 	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Branches.png" />
 	  <None Remove="Resources\Textures\Tiles\Trees\PrimordialTree_Tops.png" />
 	  <None Remove="Resources\Textures\Tiles\Walls\LivingBackwoodsLeavesWall.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Content\0.1\Items\Weapons\Nature\Hardmode\" />
+	  <Folder Include="Content\0.2\Items\Weapons\Nature\" />
 	</ItemGroup>
 
 	<!-- References -->

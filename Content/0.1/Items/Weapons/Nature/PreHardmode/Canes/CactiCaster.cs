@@ -12,8 +12,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Rods;
-sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
+
+sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<Cacti>();
 
     protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
@@ -32,7 +33,7 @@ sealed class CactiCaster : BaseRodItem<CactiCaster.CactiCasterBase> {
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 15);
     }
 
-    public sealed class CactiCasterBase : BaseRodProjectile {
+    public sealed class CactiCasterBase : CaneBaseProjectile {
         internal Vector2 _position = Vector2.Zero;
         private float _rotation2 = float.MaxValue, _rotation3;
         private bool _makeDust = true;

@@ -14,9 +14,9 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Claws;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
-sealed class ThornyClaws : BaseClawsItem {
+sealed class ThornyClaws : ClawsBaseItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(26, 4f);

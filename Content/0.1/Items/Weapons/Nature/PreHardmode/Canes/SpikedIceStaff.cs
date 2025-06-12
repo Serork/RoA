@@ -14,9 +14,9 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Rods;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
-sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
+sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<SharpIcicle>();
 
     protected override void SafeSetDefaults() {
@@ -36,7 +36,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         Item.staff[Type] = true;
     }
 
-    public sealed class SpikedIceStaffBase : BaseRodProjectile {
+    public sealed class SpikedIceStaffBase : CaneBaseProjectile {
         private const byte MAXSHOOTCOUNT = 3;
 
         private bool _shouldShoot;

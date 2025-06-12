@@ -1,4 +1,4 @@
-﻿using RoA.Content.Items.Weapons.Nature.Rods;
+﻿using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
 using Terraria.ID;
 

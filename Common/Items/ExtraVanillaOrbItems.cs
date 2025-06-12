@@ -15,6 +15,7 @@ using Terraria.GameContent.Achievements;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 namespace RoA.Common.Items;
 

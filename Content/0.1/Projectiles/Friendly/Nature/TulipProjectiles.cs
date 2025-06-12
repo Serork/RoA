@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Items.Weapons.Nature.Rods;
+using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 using RoA.Core;
 using RoA.Core.Utility;
 

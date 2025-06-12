@@ -1,4 +1,4 @@
-﻿using RoA.Content.Items.Weapons.Nature.Claws;
+﻿using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Prefixes;
 using RoA.Core.Utility;
 
@@ -24,7 +24,7 @@ sealed class DruidClass : DamageClass {
         orig(item);
 
         if (item.IsANatureWeapon()) {
-            if (item.ModItem is not BaseClawsItem) {
+            if (item.ModItem is not ClawsBaseItem) {
                 PrefixItemFromOptions(item, GoodPrefixIdsForDruidWeapon1);
             }
             else {

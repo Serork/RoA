@@ -2,8 +2,7 @@ ClawsSlash.DisplayName: Claws Slash
 HemorrhageWave.DisplayName: Hemorrhage Wave
 InfectedWave.DisplayName: Infected Wave
 MushroomSpore.DisplayName: Mushroom Spore
-BaseRodProjectileType.DisplayName: Base Rod Projectile Type
-BaseRodProjectile.DisplayName: Base Rod Projectile
+CaneBaseProjectile.DisplayName: Cane
 PastoralRodBase.DisplayName: Pastoral Rod Base
 PastoralRodEnergy.DisplayName: Pastoral Rod Energy
 ShepherdLeaves.DisplayName: Shepherd Leaves

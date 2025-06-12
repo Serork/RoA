@@ -7,6 +7,7 @@ using RoA.Content.Dusts;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Items.Weapons.Nature;
+using RoA.Content.Items.Weapons.Nature.PreHardmode;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core.Utility;
 

@@ -13,9 +13,9 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Rods;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
-sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
+sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<ShepherdLeaves>();
 
     protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
@@ -32,7 +32,7 @@ sealed class PastoralRod : BaseRodItem<PastoralRod.PastoralRodBase> {
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
-    public sealed class PastoralRodBase : BaseRodProjectile {
+    public sealed class PastoralRodBase : CaneBaseProjectile {
         private Color? _color = null;
 
         protected override bool ShouldntUpdateRotationAndDirection() => false;

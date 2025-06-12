@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Content.Items.Weapons;
-using RoA.Content.Items.Weapons.Nature.Claws;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
     private static void LoadClawsOutfitTextures() {
         for (int i = ItemID.Count; i < ItemLoader.ItemCount; i++) {
             ModItem item = ItemLoader.GetItem(i);
-            if (item is BaseClawsItem) {
+            if (item is ClawsBaseItem) {
                 _clawsOutfitTextures.Add(item.Name, ModContent.Request<Texture2D>(item.Texture + REQUIREMENT));
             }
         }

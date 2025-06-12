@@ -88,7 +88,7 @@ sealed class RipePumpkin : NatureProjectile {
                 //Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 45.0)) * progress;
                 Projectile.rotation = Projectile.ai[1];
                 if (Projectile.ai[0] >= max * 0.75f) {
-                    int type = ModContent.ItemType<Items.Weapons.Nature.RipePumpkin>();
+                    int type = ModContent.ItemType<Items.Weapons.Nature.PreHardmode.RipePumpkin>();
                     if (Projectile.owner == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && (Main.player[Projectile.owner].GetSelectedItem().type == type || Main.mouseItem.type == type)) {
                         Player player = Main.player[Projectile.owner];
                         player.itemAnimation = player.itemTime = player.itemAnimationMax / 2;

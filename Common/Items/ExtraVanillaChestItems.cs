@@ -1,13 +1,11 @@
-﻿using ReLogic.Utilities;
-
-using RoA.Content.Items.Equipables.Accessories;
+﻿using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Potions;
-using RoA.Content.Items.Weapons.Nature;
-using RoA.Content.Items.Weapons.Nature.Claws;
-using RoA.Content.Items.Weapons.Nature.Rods;
+using RoA.Content.Items.Weapons.Nature.PreHardmode;
+using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
+using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 using RoA.Content.Tiles.Furniture;
 
 using System;
@@ -23,8 +21,8 @@ using Terraria.WorldBuilding;
 namespace RoA.Common.Items;
 
 sealed class ExtraVanillaChestItems : ModSystem {
-    private static bool _cactiCactusRodAdded;
-    private static bool _iceRodAdded;
+    private static bool _cactiCactusCaneAdded;
+    private static bool _iceCaneAdded;
     private static bool _mushroomStaffAdded;
     private static bool _hellfireClawsAdded;
     internal static bool _giantTreeSaplingAdded;
@@ -1275,8 +1273,8 @@ sealed class ExtraVanillaChestItems : ModSystem {
     }
 
     public override void PostWorldGen() {
-        _cactiCactusRodAdded = false;
-        _iceRodAdded = false;
+        _cactiCactusCaneAdded = false;
+        _iceCaneAdded = false;
         _mushroomStaffAdded = false;
         _hellfireClawsAdded = false;
         _giantTreeSaplingAdded = false;
@@ -1404,9 +1402,9 @@ sealed class ExtraVanillaChestItems : ModSystem {
                 num9 = 10;
                 chestTileType = 467;
                 bool added = false;
-                if (!_cactiCactusRodAdded) {
+                if (!_cactiCactusCaneAdded) {
                     contain = (short)ModContent.ItemType<CactiCaster>();
-                    _cactiCactusRodAdded = true;
+                    _cactiCactusCaneAdded = true;
                     added = true;
                 }
                 if (!added) {
@@ -1432,10 +1430,10 @@ sealed class ExtraVanillaChestItems : ModSystem {
                 flag = true;
                 num9 = 11;
                 bool added = false;
-                short iceRodType = (short)ModContent.ItemType<SpikedIceStaff>();
-                if (!_iceRodAdded) {
-                    contain = iceRodType;
-                    _iceRodAdded = true;
+                short iceCaneType = (short)ModContent.ItemType<SpikedIceStaff>();
+                if (!_iceCaneAdded) {
+                    contain = iceCaneType;
+                    _iceCaneAdded = true;
                     added = true;
                 }
                 if (!added) {
@@ -1456,7 +1454,7 @@ sealed class ExtraVanillaChestItems : ModSystem {
                             contain = 987;
                             break;
                         case 5:
-                            contain = iceRodType;
+                            contain = iceCaneType;
                             break;
                         default:
                             contain = 1579;

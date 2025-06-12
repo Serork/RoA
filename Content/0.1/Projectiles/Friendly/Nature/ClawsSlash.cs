@@ -8,7 +8,8 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
-using RoA.Content.Items.Weapons.Nature.Claws;
+using RoA.Content.Items.Weapons.Nature;
+using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -321,7 +322,7 @@ class ClawsSlash : NatureProjectile {
 
         player.ChangeDir((int)Projectile.ai[0]);
 
-        if (player.inventory[player.selectedItem].ModItem is not BaseClawsItem) {
+        if (player.inventory[player.selectedItem].ModItem is not ClawsBaseItem) {
             Projectile.Kill();
 
             return;

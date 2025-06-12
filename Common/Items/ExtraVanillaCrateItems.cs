@@ -4,10 +4,10 @@ using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Items.Potions;
-using RoA.Content.Items.Weapons.Nature;
-using RoA.Content.Items.Weapons.Nature.Claws;
-using RoA.Content.Items.Weapons.Nature.Rods;
 using RoA.Content.Items.Weapons.Magic;
+using RoA.Content.Items.Weapons.Nature.PreHardmode;
+using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
+using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 using RoA.Content.Items.Weapons.Summon;
 
 using Terraria.GameContent.ItemDropRules;

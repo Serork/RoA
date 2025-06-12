@@ -10,8 +10,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Wreaths;
-using RoA.Content.Items.Weapons.Nature.Claws;
-using RoA.Content.Items.Weapons.Nature.Rods;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -286,9 +285,9 @@ sealed class WreathHandler : ModPlayer {
     private void ClawsReset(Projectile projectile, bool nonDataReset) {
         Item attachedItem = projectile.ModProjectile is NatureProjectile natureProjectile ? natureProjectile.AttachedNatureWeapon : projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedNatureWeapon;
         Item selectedItem = Player.GetSelectedItem();
-        bool playerUsingClaws = selectedItem.ModItem is BaseClawsItem;
+        bool playerUsingClaws = selectedItem.ModItem is ClawsBaseItem;
         if (playerUsingClaws && Player.ItemAnimationActive && attachedItem == selectedItem) {
-            selectedItem.As<BaseClawsItem>().OnHit(Player, Progress);
+            selectedItem.As<ClawsBaseItem>().OnHit(Player, Progress);
             if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
                     if (!SpecialAttackData.OnlySpawn || nonDataReset) {
@@ -438,18 +437,18 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    private BaseRodProjectile? GetHeldRodStaff() {
-        BaseRodProjectile? rodProjectile = null;
+    private CaneBaseProjectile? GetHeldCane() {
+        CaneBaseProjectile? caneProjectile = null;
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             if (projectile.owner != Player.whoAmI) {
                 continue;
             }
-            if (projectile.ModProjectile is BaseRodProjectile baseRodProjectile) {
-                rodProjectile = baseRodProjectile;
+            if (projectile.ModProjectile is CaneBaseProjectile baseCaneProjectile) {
+                caneProjectile = baseCaneProjectile;
                 break;
             }
         }
-        return rodProjectile;
+        return caneProjectile;
     }
 
     public override void PostUpdateEquips() {
@@ -532,9 +531,9 @@ sealed class WreathHandler : ModPlayer {
             Reset(true);
         }
         else if (!Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
-            BaseRodProjectile? rodProjectile = GetHeldRodStaff();
-            bool flag = rodProjectile == null;
-            bool flag2 = !flag && !rodProjectile.PreparingAttack;
+            CaneBaseProjectile? caneProjectile = GetHeldCane();
+            bool flag = caneProjectile == null;
+            bool flag2 = !flag && !caneProjectile!.PreparingAttack;
             _stayTime -= TimeSystem.LogicDeltaTime * (flag2 ? 0f : 1f);
         }
         else {
@@ -708,8 +707,8 @@ sealed class WreathHandler : ModPlayer {
         if (StartSlowlyIncreasingUntilFull) {
             value2 *= 0.15f;
         }
-        BaseRodProjectile? rodProjectile = GetHeldRodStaff();
-        if ((_shouldDecrease || _shouldDecrease2) && rodProjectile != null && rodProjectile.PreparingAttack) {
+        CaneBaseProjectile? caneProjectile = GetHeldCane();
+        if ((_shouldDecrease || _shouldDecrease2) && caneProjectile != null && caneProjectile.PreparingAttack) {
             value2 *= 0.15f;
         }
         _shouldSync = true;

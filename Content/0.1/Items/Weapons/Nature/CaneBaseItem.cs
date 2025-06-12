@@ -16,11 +16,12 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Rods;
+namespace RoA.Content.Items.Weapons.Nature;
 
-abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
+abstract class CaneBaseItem<T> : NatureItem where T : CaneBaseProjectile {
     public override void Load() {
         On_Player.TryAllowingItemReuse += On_Player_TryAllowingItemReuse;
     }
@@ -63,9 +64,9 @@ abstract class BaseRodItem<T> : NatureItem where T : BaseRodProjectile {
     }
 }
 
-abstract class BaseRodItem : BaseRodItem<BaseRodProjectile> { }
+abstract class CaneBaseItem : CaneBaseItem<CaneBaseProjectile> { }
 
-abstract class BaseRodProjectile : NatureProjectile {
+abstract class CaneBaseProjectile : NatureProjectile {
     protected const float STARTROTATION = 1.4f;
     protected const float MINROTATION = -0.24f, MAXROTATION = 0.24f;
     protected const int TICKSTOREUSE = 30;
@@ -86,7 +87,7 @@ abstract class BaseRodProjectile : NatureProjectile {
     protected float Step => Math.Clamp(1f - UseTime, 0f, 1f);
 
     protected Item HeldItem => AttachedNatureWeapon;
-    protected Texture2D HeldItemTexture => HeldItem.IsEmpty() ? null : TextureAssets.Item[HeldItem.type].Value;
+    protected Texture2D? HeldItemTexture => HeldItem.IsEmpty() ? null : TextureAssets.Item[HeldItem.type].Value;
 
     protected Vector2 GravityOffset => Owner.gravDir == -1 ? (-Vector2.UnitY * 10f) : Vector2.Zero;
     protected Vector2 Offset => HeldItemTexture == null ? Vector2.Zero : (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));

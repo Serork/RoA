@@ -10,7 +10,7 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 sealed class WeepingTulip : NatureItem {
     public override void SetStaticDefaults() {
@@ -251,7 +251,7 @@ sealed class ExoticTulip : NatureItem {
 //    }
 //}
 
-//abstract class TulipBaseItem<T> : BaseRodItem<T> where T : BaseRodProjectile {
+//abstract class TulipBaseItem<T> : CaneBaseItem<T> where T : CaneBaseProjectile {
 //    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TulipFlower>();
 
 //    protected override void SafeSetDefaults() {
@@ -261,7 +261,7 @@ sealed class ExoticTulip : NatureItem {
 //    }
 //}
 
-//abstract class TulipBase : BaseRodProjectile {
+//abstract class TulipBase : CaneBaseProjectile {
 //    public sealed class TulipBaseExtraData : ModPlayer {
 //        public Vector2 TempMousePosition { get; set; } = Vector2.Zero;
 

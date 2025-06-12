@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using RoA.Common;
 using RoA.Common.Druid;
 using RoA.Common.Players;
-using RoA.Content.Items.Weapons.Nature.Claws;
+using RoA.Content.Items.Weapons.Nature;
 
 using System;
 using System.Linq;
@@ -357,7 +357,7 @@ static class Helper {
     public static float CappedMeleeOrDruidScale(this Player player) {
         var item = player.HeldItem;
         float result = player.GetAdjustedItemScale(item);
-        if (item.ModItem != null && item.ModItem is BaseClawsItem) {
+        if (item.ModItem != null && item.ModItem is ClawsBaseItem) {
             result *= NatureWeaponHandler.GetSize(item);
         }
         return Math.Clamp(result, 0.5f * item.scale, 2f * item.scale);

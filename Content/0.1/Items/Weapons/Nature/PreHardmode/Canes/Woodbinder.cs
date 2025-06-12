@@ -16,9 +16,9 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Rods;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
-sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
+sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<ProtectiveRoots>();
 
     protected override void SafeSetDefaults() {
@@ -34,7 +34,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
-    public sealed class WoodbinderBase : BaseRodProjectile {
+    public sealed class WoodbinderBase : CaneBaseProjectile {
         private Vector2 _mousePosition;
         private float _strength = 0.15f;
 

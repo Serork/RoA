@@ -11,10 +11,10 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Claws;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
 [WeaponOverlay(WeaponType.Claws, 0xffffff)]
-sealed class HellfireClaws : BaseClawsItem {
+sealed class HellfireClaws : ClawsBaseItem {
     public override Color? GetAlpha(Color lightColor) => Color.White;
 
     protected override void SafeSetDefaults() {

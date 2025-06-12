@@ -13,9 +13,9 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 
-namespace RoA.Content.Items.Weapons.Nature.Claws;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
-sealed class HorrorPincers : BaseClawsItem {
+sealed class HorrorPincers : ClawsBaseItem {
     protected override void SafeSetDefaults() {
         Item.SetSize(26);
         Item.SetWeaponValues(24, 3f);

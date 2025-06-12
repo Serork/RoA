@@ -10,10 +10,10 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Claws;
+namespace RoA.Content.Items.Weapons.Nature;
 
 [WeaponOverlay(WeaponType.Claws)]
-abstract class BaseClawsItem : NatureItem {
+abstract class ClawsBaseItem : NatureItem {
     protected sealed override void SafeSetDefaults2() {
         Item.SetDefaultsToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
     }

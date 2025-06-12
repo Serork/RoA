@@ -18,7 +18,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace RoA.Content.Items.Weapons.Nature;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 sealed class PineCone : NatureItem {
     internal sealed class GeneratedStorage : ModSystem {

@@ -11,7 +11,7 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 [AutoloadGlowMask]
 sealed class SacrificialSickleOfTheMoon : NatureItem {

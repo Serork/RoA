@@ -8,7 +8,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 sealed class CrimsonRod : NatureItem {
     protected override void SafeSetDefaults() {

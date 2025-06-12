@@ -2,7 +2,7 @@
 
 using RoA.Common.Druid.Wreath;
 using RoA.Content;
-using RoA.Content.Items.Weapons.Nature.Claws;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Prefixes;
 using RoA.Core.Utility;
 
@@ -39,10 +39,10 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public override int ChoosePrefix(Item item, UnifiedRandom rand) {
         if (item.IsANatureWeapon() && !item.accessory) {
             int result = NaturePrefix.NaturePrefixes.ElementAt(rand.Next(0, NaturePrefix.NaturePrefixes.Count)).Key;
-            while (item.ModItem is not BaseClawsItem && NaturePrefix.NaturePrefixes[result]._forClaws) {
+            while (item.ModItem is not ClawsBaseItem && NaturePrefix.NaturePrefixes[result]._forClaws) {
                 result = NaturePrefix.NaturePrefixes.ElementAt(rand.Next(0, NaturePrefix.NaturePrefixes.Count)).Key;
             }
-            while (item.ModItem is BaseClawsItem && !NaturePrefix.NaturePrefixes[result]._forClaws && !NaturePrefix.NaturePrefixes[result]._vanillaAdapted) {
+            while (item.ModItem is ClawsBaseItem && !NaturePrefix.NaturePrefixes[result]._forClaws && !NaturePrefix.NaturePrefixes[result]._vanillaAdapted) {
                 result = NaturePrefix.NaturePrefixes.ElementAt(rand.Next(0, NaturePrefix.NaturePrefixes.Count)).Key;
             }
             return result;
@@ -199,7 +199,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             damage.Flat = Math.Min(GetItemDamage(item, player) + GetBasePotentialDamage(item, player), damage.Flat);
         }
 
-        bool claws = item.ModItem is BaseClawsItem;
+        bool claws = item.ModItem is ClawsBaseItem;
         if (ActivePrefix != null) {
             if (HasPotentialDamage()) {
                 damage *= ActivePrefix._druidDamageMult;

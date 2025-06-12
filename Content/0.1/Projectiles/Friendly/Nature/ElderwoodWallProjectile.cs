@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Items.Weapons.Nature.Claws;
+using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
 using RoA.Core.Utility;

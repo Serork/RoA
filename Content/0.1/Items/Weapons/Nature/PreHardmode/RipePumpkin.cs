@@ -11,7 +11,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 sealed class RipePumpkin : NatureItem {
     protected override void SafeSetDefaults() {

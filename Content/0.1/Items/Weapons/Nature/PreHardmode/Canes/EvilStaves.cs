@@ -13,9 +13,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Rods;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
-sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
+sealed class ShadewoodStaff : CaneBaseItem<ShadewoodStaff.ShadewoodStaffBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<EvilBranch>();
 
     public static void SetDefaultsInner(Item item) {
@@ -42,7 +42,7 @@ sealed class ShadewoodStaff : BaseRodItem<ShadewoodStaff.ShadewoodStaffBase> {
     }
 }
 
-sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
+sealed class EbonwoodStaff : CaneBaseItem<EbonwoodStaff.EbonwoodStaffBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<EvilBranch>();
 
     protected override void SafeSetDefaults() => ShadewoodStaff.SetDefaultsInner(Item);
@@ -53,7 +53,7 @@ sealed class EbonwoodStaff : BaseRodItem<EbonwoodStaff.EbonwoodStaffBase> {
     }
 }
 
-abstract class EvilStaffBase : BaseRodProjectile {
+abstract class EvilStaffBase : CaneBaseProjectile {
     private Vector2 _mousePosition;
 
     protected virtual ushort Dust1Type { get; }

@@ -18,7 +18,7 @@ sealed class MercuriumOre : ModTile {
 
     private void On_TileDrawing_DrawTiles_EmitParticles(On_TileDrawing.orig_DrawTiles_EmitParticles orig, TileDrawing self, int j, int i, Tile tileCache, ushort typeCache, short tileFrameX, short tileFrameY, Color tileLight) {
         if (typeCache == ModContent.TileType<MercuriumOre>()) {
-            var _rand = Items.Weapons.Nature.PineCone.TileDrawing_rand(self);
+            var _rand = Items.Weapons.Nature.PreHardmode.PineCone.TileDrawing_rand(self);
             if (Main.tileShine[typeCache] > 0) {
                 if (tileLight.R <= 20 && tileLight.B <= 20 && tileLight.G <= 20)
                     return;

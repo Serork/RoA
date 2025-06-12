@@ -16,7 +16,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace RoA.Content.Items.Weapons.Nature.Rods;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
 sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
     protected override void SafeSetDefaults() {
@@ -42,7 +42,7 @@ sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
     }
 }
 
-abstract class TulipBaseItem<T> : BaseRodItem<T> where T : BaseRodProjectile {
+abstract class TulipBaseItem<T> : CaneBaseItem<T> where T : CaneBaseProjectile {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TulipFlower>();
 
     protected override void SafeSetDefaults() {
@@ -50,7 +50,7 @@ abstract class TulipBaseItem<T> : BaseRodItem<T> where T : BaseRodProjectile {
     }
 }
 
-abstract class TulipBase : BaseRodProjectile {
+abstract class TulipBase : CaneBaseProjectile {
     private readonly WeightedRandom<int> _random = new();
 
     private Vector2 _mousePosition = Vector2.Zero;

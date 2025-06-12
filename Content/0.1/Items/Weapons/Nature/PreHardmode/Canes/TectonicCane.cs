@@ -17,9 +17,9 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Rods;
+namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
-sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
+sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TectonicCaneProjectile>();
 
     protected override void SafeSetDefaults() {
@@ -35,7 +35,7 @@ sealed class TectonicCane : BaseRodItem<TectonicCane.TectonicCaneBase> {
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 20);
     }
 
-    public sealed class TectonicCaneBase : BaseRodProjectile {
+    public sealed class TectonicCaneBase : CaneBaseProjectile {
 
         private Vector2 _tempMousePosition;
 
