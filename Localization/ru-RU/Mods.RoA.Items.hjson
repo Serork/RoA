@@ -1969,3 +1969,8 @@ SnowWreathTier3: {
 		While wreath is charged, increases nature critical strike chance by 8% and
 		''' */
 }
+
+CavernCane: {
+	// DisplayName: Cavern Cane
+	// Tooltip: ""
+}

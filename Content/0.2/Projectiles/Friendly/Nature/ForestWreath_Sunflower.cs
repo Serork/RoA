@@ -139,7 +139,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
         Color petalColor = lightColor * Ease.ExpoIn(Projectile.Opacity),
               baseColor = lightColor * baseOpacity;
         float[] petalFills = CalculatePetalFills();
-        void drawBase() {
+        void drawBaseAndAddLight() {
             SunflowerValues sunflowerValues = new(Projectile);
             Texture2D baseTexture = _baseTexture!.Value;
             Main.spriteBatch.DrawWith(baseTexture, Projectile.Center, DrawInfo.Default with {
@@ -169,7 +169,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                 });
             }
         }
-        void drawRays() {
+        void drawRaysAndAddLights() {
             SunflowerValues sunflowerValues = new(Projectile);
             Texture2D rayTexture = _rayTexture!.Value;
             Main.spriteBatch.BeginBlendState(BlendState.Additive);
@@ -199,9 +199,9 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
             Main.spriteBatch.EndBlendState();
         }
 
-        drawRays();
+        drawRaysAndAddLights();
         drawPetals();
-        drawBase();
+        drawBaseAndAddLight();
     }
 
     private void LoadSunflowerTextures() {

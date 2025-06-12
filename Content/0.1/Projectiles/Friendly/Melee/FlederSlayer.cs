@@ -611,7 +611,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                                 0f);
             spriteBatch.EndBlendState();
             spriteBatch.Draw(bladeTexture2D,
-                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f * charge % 1f)) * 3f * charge + shiftFix,
+                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f * charge % 1f * player.direction)) * 3f * charge + shiftFix,
                             glowRectangle,
                             color * Projectile.Opacity * 0.3f * charge,
                             Projectile.rotation + 0.78f,
