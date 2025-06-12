@@ -22,6 +22,12 @@ using Terraria.ObjectData;
 namespace RoA.Common.Tiles;
 
 abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
+    public enum PlantStage : byte {
+        Planted,
+        Growing,
+        Grown
+    }
+
     public override void Load() {
         On_TileObject.DrawPreview += On_TileObject_DrawPreview;
     }

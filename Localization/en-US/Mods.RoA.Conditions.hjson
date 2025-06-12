@@ -2,7 +2,6 @@
 FlederSlayer: Drops if Lothor the Wild is killed while enraged
 BackwoodsKeyCondition: Drops in the Hardmode Backwoods
 TanningRack: Drops when the player has the Skinning buff
-InBackwoods: Mods.RoA.Conditions.InBackwoods
 BackwoodsBiome: Mods.RoA.Conditions.BackwoodsBiome
 HasSaddle: Mods.RoA.Conditions.HasSaddleCondition
 SailorHat: Mods.RoA.Conditions.SailorHatCondition

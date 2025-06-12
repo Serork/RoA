@@ -1911,14 +1911,11 @@ BackwoodsRootWall: {
 	// Tooltip: ""
 }
 
-DruidSoul: {
-	DisplayName: Душа друида
-	Tooltip:
-		'''
-		Может быть поймана особым сачком
-		'Дух подчинился, ожидая древний ритуал'
-		'''
-}
+DruidSoul.Tooltip:
+	'''
+	Может быть поймана особым сачком
+	'Дух подчинился, ожидая древний ритуал'
+	'''
 
 JewellersBelt: {
 	DisplayName: Сумка ювелира
@@ -1968,4 +1965,9 @@ SnowWreathTier3: {
 		Wreath is charged by dealing nature damage, providing up to 10% reduced damage taken
 		While wreath is charged, increases nature critical strike chance by 8% and
 		''' */
+}
+
+CavernCane: {
+	// DisplayName: Cavern Cane
+	// Tooltip: ""
 }

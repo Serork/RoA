@@ -6,7 +6,6 @@ CaneBaseProjectile.DisplayName: Cane
 PastoralRodBase.DisplayName: Pastoral Rod Base
 PastoralRodEnergy.DisplayName: Pastoral Rod Energy
 ShepherdLeaves.DisplayName: Shepherd Leaves
-RipePumpkin.DisplayName: Ripe Pumpkin
 PumpkinSeed.DisplayName: Pumpkin Seed
 ExoticTulipBase.DisplayName: Exotic Tulip
 SweepTulipBase.DisplayName: Sweep Tulip
@@ -14,7 +13,6 @@ WeepingTulipBase.DisplayName: Weeping Tulip
 TulipFlower.DisplayName: Tulip Flower
 TulipPetal.DisplayName: Tulip Petal
 Bone.DisplayName: Tulip Bone
-PineCone.DisplayName: Pine Cone
 CactiCasterBase.DisplayName: Cacti Caster Base
 Cacti.DisplayName: Cacti
 CactiExplosion.DisplayName: Cacti Explosion
@@ -39,7 +37,6 @@ TerraProj.DisplayName: Terra Proj
 BeastProj.DisplayName: Beast Proj
 RootRing.DisplayName: Root Ring
 GrimDefenderSpearAttack.DisplayName: Grim Defender Spear Attack
-Brightstone.DisplayName: Brightstone
 Snatcher.DisplayName: Snatcher
 ElderwoodWallProjectile.DisplayName: Everwood Wall
 HellfireClawsSlash.DisplayName: Hellfire Claws Slash
@@ -49,10 +46,6 @@ HellfireFracture.DisplayName: Hellfire Fracture
 GalipotStream.DisplayName: Galipot Stream
 WoodbinderBase.DisplayName: Woodbinder Base
 ProtectiveRoots.DisplayName: Protective Roots
-SlipperyBomb.DisplayName: Slippery Bomb
-SlipperyDynamite.DisplayName: Slippery Dynamite
-SlipperyGlowstick.DisplayName: Slippery Glowstick
-SlipperyGrenade.DisplayName: Slippery Grenade
 EbonwoodStaffBase.DisplayName: Ebonwood Staff Base
 ShadewoodStaffBase.DisplayName: Shadewood Staff Base
 Bee.DisplayName: "{$ProjectileName.Bee}"
@@ -78,7 +71,6 @@ LilPhoenixFlames.DisplayName: Firebird Flames
 LilPhoenixFlames2.DisplayName: Firebird Flames
 LilPhoenixTrailFlame.DisplayName: Firebird Trail Flame
 LilPhoenixExplosion.DisplayName: Firebird Explosion
-WeaknessPotion.DisplayName: Weakness Potion
 BoneArm.DisplayName: Bone Arm
 BoneArm_Back.DisplayName: Bone Arm
 BoneBody.DisplayName: Bone Body
@@ -87,11 +79,8 @@ BoneLeg.DisplayName: Bone Leg
 BoneLeg_Back.DisplayName: Bone Leg
 BoneSkull.DisplayName: Bone Skull
 BoneSkull_Back.DisplayName: Bone Skull
-Hedgehog.DisplayName: Hedgehog
 OvergrownBolt.DisplayName: Overgrown Bolt
-OvergrownSpear.DisplayName: Overgrown Spear
 OvergrownSphere.DisplayName: Overgrown Sphere
-Moth.DisplayName: Moth
 SmallMoth.DisplayName: Small Moth
 MercuriumFumes.DisplayName: Mercurium Fumes
 MeltingStar.DisplayName: Melting Star
@@ -99,14 +88,12 @@ BloodyFeather.DisplayName: Bloody Feather
 QuicksilverBolt.DisplayName: Quicksilver Bolt
 TrackingBolt.DisplayName: Tracking Bolt
 AmuletOfLifeWisps.DisplayName: Healing Wisps
-Fireblossom.DisplayName: Fireblossom
 FireblossomExplosion.DisplayName: Fireblossom Explosion
 VengefulSpirit.DisplayName: Vengeful Spirit
 CosmicMana.DisplayName: Cosmic Mana
 BoneHarpy.DisplayName: Bone Harpy
 BoneHarpyFeather.DisplayName: Bone Harpy Feather
 RagingBootsWave.DisplayName: Raging Boots Wave
-PettyBag.DisplayName: Petty Bag
 TectonicCaneFlames.DisplayName: Tectonic Cane Flames
 LothorStomp.DisplayName: Lothor's Stomp
 LothorClawsSlash.DisplayName: Lothor's Claws
@@ -116,7 +103,6 @@ CursedAcorn.DisplayName: Cursed Acorn
 LothorScream.DisplayName: Lothor's Scream
 LothorAngleAttack2.DisplayName: Lothor's Poison
 BloodshedAxeHeal.DisplayName: Bloodshed Axe
-BloodshedAxe.DisplayName: Bloodshed Axe
 BloodshedAxeEnergy.DisplayName: Bloodshed Axe
 BloodShedAxesTarget.DisplayName: Bloodshed Axe
 ChemicalFlask.DisplayName: Poisoned Flask
@@ -124,14 +110,10 @@ ToxicCrystal1.DisplayName: Flask Shard
 ToxicCrystal2.DisplayName: Flask Shard
 ToxicCrystal3.DisplayName: Flask Shard
 ChemicalFlask2.DisplayName: Poisoned Flask
-LittleFleder.DisplayName: Little Fleder
 Acorn.DisplayName: Acorn
-FlederSlayer.DisplayName: Fleder Slayer
 WaveSlash.DisplayName: Deafening Wave
 BaneSpell.DisplayName: Essence Drain
 GoblinsDagger.DisplayName: Goblin Dagger
-SmallMoon.DisplayName: Small Moon
-Vilethorn.DisplayName: "{$ProjectileName.VilethornBase}"
 VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
 BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"
 BloodCloudRaining.DisplayName: "{$ProjectileName.BloodCloudRaining}"
@@ -160,5 +142,5 @@ PoisonBubble_Large.DisplayName: Poison Bubble
 PoisonBubble_Small.DisplayName: Poison Bubble
 Sunflower.DisplayName: Sunflower
 Thorns.DisplayName: Thorns
-Cloudberry.DisplayName: Cloudberry
 Coral.DisplayName: Coral
+CavernCaneBase.DisplayName: Cavern Cane Base

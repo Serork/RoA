@@ -1,0 +1,2367 @@
+Mods: {
+	RoA: {
+		Emotes: {
+			// BackwoodsEmote.Command: backwoodsemote
+			// BackwoodsFogEmote.Command: backwoodsfogemote
+			// HunterEmote.Command: hunteremote
+			// LothorEmote.Command: lothoremote
+		}
+
+		Biomes: {
+			BackwoodsBiome: {
+				// DisplayName: Backwoods Biome
+				// TownNPCDialogueName: the Backwoods Biome
+			}
+
+			BackwoodsBiomeFog: {
+				// DisplayName: Backwoods Biome Fog
+				// TownNPCDialogueName: the Backwoods Biome Fog
+			}
+		}
+
+		// DamageClasses.DruidClass.DisplayName: Druid Class
+
+		Tiles: {
+			// DryadStatue.MapEntry: Dryad Statue
+			// DryadStatue_Rubble.MapEntry: Dryad Statue_ Rubble
+			// FallenTree.MapEntry: Fallen Tree
+			// BackwoodsBigTree.MapEntry: Backwoods Big Tree
+			// NexusGateway.MapEntry: Nexus Gateway
+			// OvergrownAltar.MapEntry: Overgrown Altar
+			// Elderwood.MapEntry: Elderwood
+			// MercuriumOre.MapEntry: Mercurium Ore
+			// TanningRack.MapEntry: Tanning Rack
+			// Tapper.MapEntry: Tapper
+			// Absolute.MapEntry: Absolute
+			// Coffin.MapEntry: Coffin
+			// FlederSlayerDecoration.MapEntry: Fleder Slayer Decoration
+			// MillionDollarPainting.MapEntry: Million Dollar Painting
+			// Moss.MapEntry: Moss
+			// Nihility.MapEntry: Nihility
+			// OniMask.MapEntry: Oni Mask
+			// TheLegend.MapEntry: The Legend
+			// Them.MapEntry: Them
+			// BackwoodsDungeonChest.MapEntry: Backwoods Dungeon Chest
+			// BackwoodsStoneChest.MapEntry: Backwoods Stone Chest
+			// ElderwoodChest.MapEntry: Elderwood Chest
+			// ElderwoodChest2.MapEntry: Elderwood Chest2
+			// ElderwoodDoorClosed.MapEntry: Elderwood Door Closed
+			// ElderwoodDoorOpened.MapEntry: Elderwood Door Opened
+			// ElderwoodDresser.MapEntry: Elderwood Dresser
+			// BackwoodsPylonTile.MapEntry: Backwoods Pylon Tile
+			// DullDaikatana.MapEntry: Dull Daikatana
+			// ExoticTulip.MapEntry: Exotic Tulip
+			// JawTrap.MapEntry: Jaw Trap
+			// LuminousFlower.MapEntry: Luminous Flower
+			// SweetTulip.MapEntry: Sweet Tulip
+			// TreeDryad.MapEntry: Tree Dryad
+			// WeepingTulip.MapEntry: Weeping Tulip
+			// Bonerose.MapEntry: Bonerose
+			// Cloudberry.MapEntry: Cloudberry
+			// MiracleMint.MapEntry: Miracle Mint
+			// TreeBranch.MapEntry: Tree Branch
+			// LivingElderwood.MapEntry: Living Elderwood
+			// LivingElderwood2.MapEntry: Living Elderwood2
+			// LivingElderwood3.MapEntry: Living Elderwood3
+			// FenethStatue.MapEntry: Feneth Statue
+			// PrimordialSapling.MapEntry: Primordial Sapling
+		}
+
+		// Map.Beacon: Mods.RoA.Map.Beacon
+
+		Items: {
+			HedgehogTerrarium: {
+				// DisplayName: Hedgehog Terrarium
+				// Tooltip: ""
+			}
+
+			Hedgehog: {
+				// DisplayName: Hedgehog
+				// Tooltip: ""
+			}
+
+			DruidSoul: {
+				// DisplayName: Druid Soul
+				// Tooltip: ""
+			}
+
+			SlipperyBomb: {
+				// DisplayName: Slippery Bomb
+				// Tooltip: ""
+			}
+
+			SlipperyDynamite: {
+				// DisplayName: Slippery Dynamite
+				// Tooltip: ""
+			}
+
+			SlipperyGlowstick: {
+				// DisplayName: Slippery Glowstick
+				// Tooltip: ""
+			}
+
+			SlipperyGrenade: {
+				// DisplayName: Slippery Grenade
+				// Tooltip: ""
+			}
+
+			AlchemicalSkull: {
+				// DisplayName: Alchemical Skull
+				// Tooltip: ""
+			}
+
+			BandOfNature: {
+				// DisplayName: Band Of Nature
+				// Tooltip: ""
+			}
+
+			BandOfPurity: {
+				// DisplayName: Band Of Purity
+				// Tooltip: ""
+			}
+
+			BloodbathLocket: {
+				// DisplayName: Bloodbath Locket
+				// Tooltip: ""
+			}
+
+			Coffin: {
+				// DisplayName: Coffin
+				// Tooltip: ""
+			}
+
+			CosmicHat: {
+				// DisplayName: Cosmic Hat
+				// Tooltip: ""
+			}
+
+			DoubleFocusCharm: {
+				// DisplayName: Double Focus Charm
+				// Tooltip: ""
+			}
+
+			FeathersInABalloon: {
+				// DisplayName: Feathers In A Balloon
+				// Tooltip: ""
+			}
+
+			FeathersInABottle: {
+				// DisplayName: Feathers In A Bottle
+				// Tooltip: ""
+			}
+
+			FireflyPin: {
+				// DisplayName: Firefly Pin
+				// Tooltip: ""
+			}
+
+			GiantTreeSapling: {
+				// DisplayName: Giant Tree Sapling
+				// Tooltip: ""
+			}
+
+			Herbarium: {
+				// DisplayName: Herbarium
+				// Tooltip: ""
+			}
+
+			JewellersBelt: {
+				// DisplayName: Jewellers Belt
+				// Tooltip: ""
+			}
+
+			MercuriumCenser: {
+				// DisplayName: Mercurium Censer
+				// Tooltip: ""
+			}
+
+			RagingBoots: {
+				// DisplayName: Raging Boots
+				// Tooltip: ""
+			}
+
+			RavencallersCloak: {
+				// DisplayName: Ravencallers Cloak
+				// Tooltip: ""
+			}
+
+			RoyalQualityHoney: {
+				// DisplayName: Royal Quality Honey
+				// Tooltip: ""
+			}
+
+			SoulOfTheWoods: {
+				// DisplayName: Soul Of The Woods
+				// Tooltip: ""
+			}
+
+			CopperAcolyteHat: {
+				// DisplayName: Copper Acolyte Hat
+				// Tooltip: ""
+			}
+
+			CopperAcolyteJacket: {
+				// DisplayName: Copper Acolyte Jacket
+				// Tooltip: ""
+			}
+
+			CopperAcolyteLeggings: {
+				// DisplayName: Copper Acolyte Leggings
+				// Tooltip: ""
+			}
+
+			FlametrackerHat: {
+				// DisplayName: Flametracker Hat
+				// Tooltip: ""
+			}
+
+			FlametrackerJacket: {
+				// DisplayName: Flametracker Jacket
+				// Tooltip: ""
+			}
+
+			FlametrackerPants: {
+				// DisplayName: Flametracker Pants
+				// Tooltip: ""
+			}
+
+			TinAcolyteHat: {
+				// DisplayName: Tin Acolyte Hat
+				// Tooltip: ""
+			}
+
+			TinAcolyteJacket: {
+				// DisplayName: Tin Acolyte Jacket
+				// Tooltip: ""
+			}
+
+			TinAcolyteLeggings: {
+				// DisplayName: Tin Acolyte Leggings
+				// Tooltip: ""
+			}
+
+			AshwalkerHood: {
+				// DisplayName: Ashwalker Hood
+				// Tooltip: ""
+			}
+
+			AshwalkerLeggings: {
+				// DisplayName: Ashwalker Leggings
+				// Tooltip: ""
+			}
+
+			AshwalkerRobe: {
+				// DisplayName: Ashwalker Robe
+				// Tooltip: ""
+			}
+
+			DreadheartCorruptionChestplate: {
+				// DisplayName: Dreadheart Corruption Chestplate
+				// Tooltip: ""
+			}
+
+			DreadheartCorruptionHelmet: {
+				// DisplayName: Dreadheart Corruption Helmet
+				// Tooltip: ""
+			}
+
+			DreadheartCorruptionLeggings: {
+				// DisplayName: Dreadheart Corruption Leggings
+				// Tooltip: ""
+			}
+
+			DreadheartCrimsonChestplate: {
+				// DisplayName: Dreadheart Crimson Chestplate
+				// Tooltip: ""
+			}
+
+			DreadheartCrimsonHelmet: {
+				// DisplayName: Dreadheart Crimson Helmet
+				// Tooltip: ""
+			}
+
+			DreadheartCrimsonLeggings: {
+				// DisplayName: Dreadheart Crimson Leggings
+				// Tooltip: ""
+			}
+
+			LivingBorealWoodChestplate: {
+				// DisplayName: Living Boreal Wood Chestplate
+				// Tooltip: ""
+			}
+
+			LivingBorealWoodGreaves: {
+				// DisplayName: Living Boreal Wood Greaves
+				// Tooltip: ""
+			}
+
+			LivingBorealWoodHelmet: {
+				// DisplayName: Living Boreal Wood Helmet
+				// Tooltip: ""
+			}
+
+			LivingElderwoodBreastplate: {
+				// DisplayName: Living Elderwood Breastplate
+				// Tooltip: ""
+			}
+
+			LivingElderwoodCrown: {
+				// DisplayName: Living Elderwood Crown
+				// Tooltip: ""
+			}
+
+			LivingElderwoodGreaves: {
+				// DisplayName: Living Elderwood Greaves
+				// Tooltip: ""
+			}
+
+			LivingMahoganyChestplate: {
+				// DisplayName: Living Mahogany Chestplate
+				// Tooltip: ""
+			}
+
+			LivingMahoganyGreaves: {
+				// DisplayName: Living Mahogany Greaves
+				// Tooltip: ""
+			}
+
+			LivingMahoganyHelmet: {
+				// DisplayName: Living Mahogany Helmet
+				// Tooltip: ""
+			}
+
+			LivingPalmChestplate: {
+				// DisplayName: Living Palm Chestplate
+				// Tooltip: ""
+			}
+
+			LivingPalmGreaves: {
+				// DisplayName: Living Palm Greaves
+				// Tooltip: ""
+			}
+
+			LivingPalmHelmet: {
+				// DisplayName: Living Palm Helmet
+				// Tooltip: ""
+			}
+
+			LivingWoodChestplate: {
+				// DisplayName: Living Wood Chestplate
+				// Tooltip: ""
+			}
+
+			LivingWoodGreaves: {
+				// DisplayName: Living Wood Greaves
+				// Tooltip: ""
+			}
+
+			LivingWoodHelmet: {
+				// DisplayName: Living Wood Helmet
+				// Tooltip: ""
+			}
+
+			SentinelBreastplate: {
+				// DisplayName: Sentinel Breastplate
+				// Tooltip: ""
+			}
+
+			SentinelHelmet: {
+				// DisplayName: Sentinel Helmet
+				// Tooltip: ""
+			}
+
+			SentinelLeggings: {
+				// DisplayName: Sentinel Leggings
+				// Tooltip: ""
+			}
+
+			SentinelTaurusMask: {
+				// DisplayName: Sentinel Taurus Mask
+				// Tooltip: ""
+			}
+
+			FlinxFurUshanka: {
+				// DisplayName: Flinx Fur Ushanka
+				// Tooltip: ""
+			}
+
+			WorshipperBonehelm: {
+				// DisplayName: Worshipper Bonehelm
+				// Tooltip: ""
+			}
+
+			WorshipperGarb: {
+				// DisplayName: Worshipper Garb
+				// Tooltip: ""
+			}
+
+			WorshipperMantle: {
+				// DisplayName: Worshipper Mantle
+				// Tooltip: ""
+			}
+
+			BloodCursor: {
+				// DisplayName: Blood Cursor
+				// Tooltip: ""
+			}
+
+			DeerSkull: {
+				// DisplayName: Deer Skull
+				// Tooltip: ""
+			}
+
+			DynastyWoodBreastplate: {
+				// DisplayName: Dynasty Wood Breastplate
+				// Tooltip: ""
+			}
+
+			DynastyWoodHelmet: {
+				// DisplayName: Dynasty Wood Helmet
+				// Tooltip: ""
+			}
+
+			DynastyWoodLeggings: {
+				// DisplayName: Dynasty Wood Leggings
+				// Tooltip: ""
+			}
+
+			ElderwoodChestplate: {
+				// DisplayName: Elderwood Chestplate
+				// Tooltip: ""
+			}
+
+			ElderwoodHelmet: {
+				// DisplayName: Elderwood Helmet
+				// Tooltip: ""
+			}
+
+			ElderwoodLeggings: {
+				// DisplayName: Elderwood Leggings
+				// Tooltip: ""
+			}
+
+			Elderwood: {
+				// DisplayName: Elderwood
+				// Tooltip: ""
+			}
+
+			LuminousFlowerHat: {
+				// DisplayName: Luminous Flower Hat
+				// Tooltip: ""
+			}
+
+			LuminousFlower: {
+				// DisplayName: Luminous Flower
+				// Tooltip: ""
+			}
+
+			OniMask: {
+				// DisplayName: Oni Mask
+				// Tooltip: ""
+			}
+
+			BizarreCowboyHat: {
+				// DisplayName: Bizarre Cowboy Hat
+				// Tooltip: ""
+			}
+
+			BunnyHat: {
+				// DisplayName: Bunny Hat
+				// Tooltip: ""
+			}
+
+			BunnyJacket: {
+				// DisplayName: Bunny Jacket
+				// Tooltip: ""
+			}
+
+			BunnyPants: {
+				// DisplayName: Bunny Pants
+				// Tooltip: ""
+			}
+
+			BRIPEsHeart: {
+				// DisplayName: B R I P Es Heart
+				// Tooltip: ""
+			}
+
+			BRIPEsHelmet: {
+				// DisplayName: B R I P Es Helmet
+				// Tooltip: ""
+			}
+
+			BRIPEsRocketBoots: {
+				// DisplayName: B R I P Es Rocket Boots
+				// Tooltip: ""
+			}
+
+			cleoChestguard: {
+				// DisplayName: cleo Chestguard
+				// Tooltip: ""
+			}
+
+			cleoMask: {
+				// DisplayName: cleo Mask
+				// Tooltip: ""
+			}
+
+			cleoPants: {
+				// DisplayName: cleo Pants
+				// Tooltip: ""
+			}
+
+			EldritchRing: {
+				// DisplayName: Eldritch Ring
+				// Tooltip: ""
+			}
+
+			Has2rJacket: {
+				// DisplayName: Has2r Jacket
+				// Tooltip: ""
+			}
+
+			Has2rMask: {
+				// DisplayName: Has2r Mask
+				// Tooltip: ""
+			}
+
+			Has2rPants: {
+				// DisplayName: Has2r Pants
+				// Tooltip: ""
+			}
+
+			Has2rShades: {
+				// DisplayName: Has2r Shades
+				// Tooltip: ""
+			}
+
+			HereticChestguard: {
+				// DisplayName: Heretic Chestguard
+				// Tooltip: ""
+			}
+
+			HereticHood: {
+				// DisplayName: Heretic Hood
+				// Tooltip: ""
+			}
+
+			HereticPants: {
+				// DisplayName: Heretic Pants
+				// Tooltip: ""
+			}
+
+			NFAHorns: {
+				// DisplayName: N F A Horns
+				// Tooltip: ""
+			}
+
+			NFAJacket: {
+				// DisplayName: N F A Jacket
+				// Tooltip: ""
+			}
+
+			NFAPants: {
+				// DisplayName: N F A Pants
+				// Tooltip: ""
+			}
+
+			NFAWings: {
+				// DisplayName: N F A Wings
+				// Tooltip: ""
+			}
+
+			PeegeonCape: {
+				// DisplayName: Peegeon Cape
+				// Tooltip: ""
+			}
+
+			PeegeonChestguard: {
+				// DisplayName: Peegeon Chestguard
+				// Tooltip: ""
+			}
+
+			PeegeonGreaves: {
+				// DisplayName: Peegeon Greaves
+				// Tooltip: ""
+			}
+
+			PeegeonHood: {
+				// DisplayName: Peegeon Hood
+				// Tooltip: ""
+			}
+
+			SerorkBreastplate: {
+				// DisplayName: Serork Breastplate
+				// Tooltip: ""
+			}
+
+			SerorkGreaves: {
+				// DisplayName: Serork Greaves
+				// Tooltip: ""
+			}
+
+			SerorkHelmet: {
+				// DisplayName: Serork Helmet
+				// Tooltip: ""
+			}
+
+			SerorkMask: {
+				// DisplayName: Serork Mask
+				// Tooltip: ""
+			}
+
+			DevilHunterCloak: {
+				// DisplayName: Devil Hunter Cloak
+				// Tooltip: ""
+			}
+
+			DevilHunterPants: {
+				// DisplayName: Devil Hunter Pants
+				// Tooltip: ""
+			}
+
+			DinoHat: {
+				// DisplayName: Dino Hat
+				// Tooltip: ""
+			}
+
+			JockeyHat: {
+				// DisplayName: Jockey Hat
+				// Tooltip: ""
+			}
+
+			MentorsHat: {
+				// DisplayName: Mentors Hat
+				// Tooltip: ""
+			}
+
+			PresidentJacket: {
+				// DisplayName: President Jacket
+				// Tooltip: ""
+			}
+
+			PresidentPants: {
+				// DisplayName: President Pants
+				// Tooltip: ""
+			}
+
+			PresidentWig: {
+				// DisplayName: President Wig
+				// Tooltip: ""
+			}
+
+			SailorHat: {
+				// DisplayName: Sailor Hat
+				// Tooltip: ""
+			}
+
+			SoapSellersJacket: {
+				// DisplayName: Soap Sellers Jacket
+				// Tooltip: ""
+			}
+
+			SoapSellersJeans: {
+				// DisplayName: Soap Sellers Jeans
+				// Tooltip: ""
+			}
+
+			SoapSellersShades: {
+				// DisplayName: Soap Sellers Shades
+				// Tooltip: ""
+			}
+
+			StoneMask: {
+				// DisplayName: Stone Mask
+				// Tooltip: ""
+			}
+
+			StrangerCoat: {
+				// DisplayName: Stranger Coat
+				// Tooltip: ""
+			}
+
+			StrangerPants: {
+				// DisplayName: Stranger Pants
+				// Tooltip: ""
+			}
+
+			FenethsBlazingWreath: {
+				// DisplayName: Feneths Blazing Wreath
+				// Tooltip: ""
+			}
+
+			BeachWreathTier1: {
+				// DisplayName: Beach Wreath Tier1
+				// Tooltip: ""
+			}
+
+			ForestWreathTier1: {
+				// DisplayName: Forest Wreath Tier1
+				// Tooltip: ""
+			}
+
+			JungleWreathTier1: {
+				// DisplayName: Jungle Wreath Tier1
+				// Tooltip: ""
+			}
+
+			SnowWreathTier1: {
+				// DisplayName: Snow Wreath Tier1
+				// Tooltip: ""
+			}
+
+			BeachWreathTier2: {
+				// DisplayName: Beach Wreath Tier2
+				// Tooltip: ""
+			}
+
+			ForestWreathTier2: {
+				// DisplayName: Forest Wreath Tier2
+				// Tooltip: ""
+			}
+
+			JungleWreathTier2: {
+				// DisplayName: Jungle Wreath Tier2
+				// Tooltip: ""
+			}
+
+			SnowWreathTier2: {
+				// DisplayName: Snow Wreath Tier2
+				// Tooltip: ""
+			}
+
+			BeachWreathTier3: {
+				// DisplayName: Beach Wreath Tier3
+				// Tooltip: ""
+			}
+
+			ForestWreathTier3: {
+				// DisplayName: Forest Wreath Tier3
+				// Tooltip: ""
+			}
+
+			JungleWreathTier3: {
+				// DisplayName: Jungle Wreath Tier3
+				// Tooltip: ""
+			}
+
+			SnowWreathTier3: {
+				// DisplayName: Snow Wreath Tier3
+				// Tooltip: ""
+			}
+
+			TwigWreath: {
+				// DisplayName: Twig Wreath
+				// Tooltip: ""
+			}
+
+			Almond: {
+				// DisplayName: Almond
+				// Tooltip: ""
+			}
+
+			AlmondMilk: {
+				// DisplayName: Almond Milk
+				// Tooltip: ""
+			}
+
+			Pistachio: {
+				// DisplayName: Pistachio
+				// Tooltip: ""
+			}
+
+			SherwoodShake: {
+				// DisplayName: Sherwood Shake
+				// Tooltip: ""
+			}
+
+			Bonerose: {
+				// DisplayName: Bonerose
+				// Tooltip: ""
+			}
+
+			Cloudberry: {
+				// DisplayName: Cloudberry
+				// Tooltip: ""
+			}
+
+			DullDaikatana: {
+				// DisplayName: Dull Daikatana
+				// Tooltip: ""
+			}
+
+			EmptyPlanterBox: {
+				// DisplayName: Empty Planter Box
+				// Tooltip: ""
+			}
+
+			FlamingFabric: {
+				// DisplayName: Flaming Fabric
+				// Tooltip: ""
+			}
+
+			Galipot: {
+				// DisplayName: Galipot
+				// Tooltip: ""
+			}
+
+			MercuriumNugget: {
+				// DisplayName: Mercurium Nugget
+				// Tooltip: ""
+			}
+
+			MiracleMint: {
+				// DisplayName: Miracle Mint
+				// Tooltip: ""
+			}
+
+			NaturesHeart: {
+				// DisplayName: Natures Heart
+				// Tooltip: ""
+			}
+
+			AltarPlacer: {
+				// DisplayName: Altar Placer
+				// Tooltip: ""
+			}
+
+			AmuletOfLife: {
+				// DisplayName: Amulet Of Life
+				// Tooltip: ""
+			}
+
+			AnimalLeather: {
+				// DisplayName: Animal Leather
+				// Tooltip: ""
+			}
+
+			BackwoodsDungeonKey: {
+				// DisplayName: Backwoods Dungeon Key
+				// Tooltip: ""
+			}
+
+			BigTreeSpawner: {
+				// DisplayName: Big Tree Spawner
+				// Tooltip: ""
+			}
+
+			ElathaAmulet: {
+				// DisplayName: Elatha Amulet
+				// Tooltip: ""
+			}
+
+			FogStarter: {
+				// DisplayName: Fog Starter
+				// Tooltip: ""
+			}
+
+			IOU: {
+				// DisplayName: I O U
+				// Tooltip: ""
+			}
+
+			MagicHerb1: {
+				// DisplayName: Magic Herb1
+				// Tooltip: ""
+			}
+
+			MagicHerb2: {
+				// DisplayName: Magic Herb2
+				// Tooltip: ""
+			}
+
+			MagicHerb3: {
+				// DisplayName: Magic Herb3
+				// Tooltip: ""
+			}
+
+			PettyBag: {
+				// DisplayName: Petty Bag
+				// Tooltip: ""
+			}
+
+			RodOfTheCondor: {
+				// DisplayName: Rod Of The Condor
+				// Tooltip: ""
+			}
+
+			RoughLeather: {
+				// DisplayName: Rough Leather
+				// Tooltip: ""
+			}
+
+			SpoiledRawhide: {
+				// DisplayName: Spoiled Rawhide
+				// Tooltip: ""
+			}
+
+			WreathCharger: {
+				// DisplayName: Wreath Charger
+				// Tooltip: ""
+			}
+
+			MoonFlower: {
+				// DisplayName: Moon Flower
+				// Tooltip: ""
+			}
+
+			BackwoodsCrate: {
+				// DisplayName: Backwoods Crate
+				// Tooltip: ""
+			}
+
+			BackwoodsDayMusicBox: {
+				// DisplayName: Backwoods Day Music Box
+				// Tooltip: ""
+			}
+
+			BackwoodsDungeonChest_Trapped: {
+				// DisplayName: Backwoods Dungeon Chest_ Trapped
+				// Tooltip: ""
+			}
+
+			BackwoodsDungeonChest: {
+				// DisplayName: Backwoods Dungeon Chest
+				// Tooltip: ""
+			}
+
+			BackwoodsFogMusicBox: {
+				// DisplayName: Backwoods Fog Music Box
+				// Tooltip: ""
+			}
+
+			BackwoodsPylon: {
+				// DisplayName: Backwoods Pylon
+				// Tooltip: ""
+			}
+
+			BackwoodsStoneChest_Trapped: {
+				// DisplayName: Backwoods Stone Chest_ Trapped
+				// Tooltip: ""
+			}
+
+			BackwoodsStoneChest: {
+				// DisplayName: Backwoods Stone Chest
+				// Tooltip: ""
+			}
+
+			ArchdruidBanner: {
+				// DisplayName: Archdruid Banner
+				// Tooltip: ""
+			}
+
+			BabyFlederBanner: {
+				// DisplayName: Baby Fleder Banner
+				// Tooltip: ""
+			}
+
+			BackwoodsRavenBanner: {
+				// DisplayName: Backwoods Raven Banner
+				// Tooltip: ""
+			}
+
+			DeerSkullBanner: {
+				// DisplayName: Deer Skull Banner
+				// Tooltip: ""
+			}
+
+			EntBanner: {
+				// DisplayName: Ent Banner
+				// Tooltip: ""
+			}
+
+			FlederBanner: {
+				// DisplayName: Fleder Banner
+				// Tooltip: ""
+			}
+
+			GrimDefenderBanner: {
+				// DisplayName: Grim Defender Banner
+				// Tooltip: ""
+			}
+
+			GrimdruidBanner: {
+				// DisplayName: Grimdruid Banner
+				// Tooltip: ""
+			}
+
+			HedgehogBanner: {
+				// DisplayName: Hedgehog Banner
+				// Tooltip: ""
+			}
+
+			HogBanner: {
+				// DisplayName: Hog Banner
+				// Tooltip: ""
+			}
+
+			LumberjackBanner: {
+				// DisplayName: Lumberjack Banner
+				// Tooltip: ""
+			}
+
+			PettyGoblinBanner: {
+				// DisplayName: Petty Goblin Banner
+				// Tooltip: ""
+			}
+
+			RavencallerBanner: {
+				// DisplayName: Ravencaller Banner
+				// Tooltip: ""
+			}
+
+			SapSlimeBanner: {
+				// DisplayName: Sap Slime Banner
+				// Tooltip: ""
+			}
+
+			BoneroseHangingPot: {
+				// DisplayName: Bonerose Hanging Pot
+				// Tooltip: ""
+			}
+
+			BackwoodsCampfire: {
+				// DisplayName: Backwoods Campfire
+				// Tooltip: ""
+			}
+
+			Beacon: {
+				// DisplayName: Beacon
+				// Tooltip: ""
+			}
+
+			ElderTorch: {
+				// DisplayName: Elder Torch
+				// Tooltip: ""
+			}
+
+			Grimstone: {
+				// DisplayName: Grimstone
+				// Tooltip: ""
+			}
+
+			GrimstoneBrick: {
+				// DisplayName: Grimstone Brick
+				// Tooltip: ""
+			}
+
+			MercuriumOre: {
+				// DisplayName: Mercurium Ore
+				// Tooltip: ""
+			}
+
+			TanningRack: {
+				// DisplayName: Tanning Rack
+				// Tooltip: ""
+			}
+
+			Tapper: {
+				// DisplayName: Tapper
+				// Tooltip: ""
+			}
+
+			Absolute: {
+				// DisplayName: Absolute
+				// Tooltip: ""
+			}
+
+			BackwoodsWaterFountain: {
+				// DisplayName: Backwoods Water Fountain
+				// Tooltip: ""
+			}
+
+			DryadStatue: {
+				// DisplayName: Dryad Statue
+				// Tooltip: ""
+			}
+
+			FlederSlayerDecoration: {
+				// DisplayName: Fleder Slayer Decoration
+				// Tooltip: ""
+			}
+
+			FlederSlayer: {
+				// DisplayName: Fleder Slayer
+				// Tooltip: ""
+			}
+
+			LothorEnrageMonolith: {
+				// DisplayName: Lothor Enrage Monolith
+				// Tooltip: ""
+			}
+
+			MillionDollarPainting: {
+				// DisplayName: Million Dollar Painting
+				// Tooltip: ""
+			}
+
+			Moss: {
+				// DisplayName: Moss
+				// Tooltip: ""
+			}
+
+			Nihility: {
+				// DisplayName: Nihility
+				// Tooltip: ""
+			}
+
+			TheLegend: {
+				// DisplayName: The Legend
+				// Tooltip: ""
+			}
+
+			Them: {
+				// DisplayName: Them
+				// Tooltip: ""
+			}
+
+			ElderwoodChest_Trapped: {
+				// DisplayName: Elderwood Chest_ Trapped
+				// Tooltip: ""
+			}
+
+			ElderwoodChest2_Trapped: {
+				// DisplayName: Elderwood Chest2_ Trapped
+				// Tooltip: ""
+			}
+
+			ElderwoodChest2: {
+				// DisplayName: Elderwood Chest2
+				// Tooltip: ""
+			}
+
+			ElderwoodChest: {
+				// DisplayName: Elderwood Chest
+				// Tooltip: ""
+			}
+
+			ElderwoodBathtub: {
+				// DisplayName: Elderwood Bathtub
+				// Tooltip: ""
+			}
+
+			ElderwoodBeam: {
+				// DisplayName: Elderwood Beam
+				// Tooltip: ""
+			}
+
+			ElderwoodBed: {
+				// DisplayName: Elderwood Bed
+				// Tooltip: ""
+			}
+
+			ElderwoodBookcase: {
+				// DisplayName: Elderwood Bookcase
+				// Tooltip: ""
+			}
+
+			ElderwoodCandelabra: {
+				// DisplayName: Elderwood Candelabra
+				// Tooltip: ""
+			}
+
+			ElderwoodCandle: {
+				// DisplayName: Elderwood Candle
+				// Tooltip: ""
+			}
+
+			ElderwoodChair: {
+				// DisplayName: Elderwood Chair
+				// Tooltip: ""
+			}
+
+			ElderwoodChandelier: {
+				// DisplayName: Elderwood Chandelier
+				// Tooltip: ""
+			}
+
+			ElderwoodClock: {
+				// DisplayName: Elderwood Clock
+				// Tooltip: ""
+			}
+
+			ElderwoodDoor: {
+				// DisplayName: Elderwood Door
+				// Tooltip: ""
+			}
+
+			ElderwoodDresser: {
+				// DisplayName: Elderwood Dresser
+				// Tooltip: ""
+			}
+
+			ElderwoodLamp: {
+				// DisplayName: Elderwood Lamp
+				// Tooltip: ""
+			}
+
+			ElderwoodLantern: {
+				// DisplayName: Elderwood Lantern
+				// Tooltip: ""
+			}
+
+			ElderwoodPiano: {
+				// DisplayName: Elderwood Piano
+				// Tooltip: ""
+			}
+
+			ElderwoodPlatform: {
+				// DisplayName: Elderwood Platform
+				// Tooltip: ""
+			}
+
+			ElderwoodSink: {
+				// DisplayName: Elderwood Sink
+				// Tooltip: ""
+			}
+
+			ElderwoodSofa: {
+				// DisplayName: Elderwood Sofa
+				// Tooltip: ""
+			}
+
+			ElderwoodTable: {
+				// DisplayName: Elderwood Table
+				// Tooltip: ""
+			}
+
+			ElderwoodToilet: {
+				// DisplayName: Elderwood Toilet
+				// Tooltip: ""
+			}
+
+			ElderwoodWorkbench: {
+				// DisplayName: Elderwood Workbench
+				// Tooltip: ""
+			}
+
+			JawTrap: {
+				// DisplayName: Jaw Trap
+				// Tooltip: ""
+			}
+
+			LivingPrimordialWand: {
+				// DisplayName: Living Primordial Wand
+				// Tooltip: ""
+			}
+
+			LivingPrimordialWand2: {
+				// DisplayName: Living Primordial Wand2
+				// Tooltip: ""
+			}
+
+			MiracleMintHangingPot: {
+				// DisplayName: Miracle Mint Hanging Pot
+				// Tooltip: ""
+			}
+
+			MiracleMintPlanterBox: {
+				// DisplayName: Miracle Mint Planter Box
+				// Tooltip: ""
+			}
+
+			BackwoodsGrassSeeds: {
+				// DisplayName: Backwoods Grass Seeds
+				// Tooltip: ""
+			}
+
+			MiracleMintSeeds: {
+				// DisplayName: Miracle Mint Seeds
+				// Tooltip: ""
+			}
+
+			FenethStatue: {
+				// DisplayName: Feneth Statue
+				// Tooltip: ""
+			}
+
+			TealMoss: {
+				// DisplayName: Teal Moss
+				// Tooltip: ""
+			}
+
+			BackwoodsFlowerGrassWall: {
+				// DisplayName: Backwoods Flower Grass Wall
+				// Tooltip: ""
+			}
+
+			BackwoodsGrassWall: {
+				// DisplayName: Backwoods Grass Wall
+				// Tooltip: ""
+			}
+
+			BackwoodsRootWall: {
+				// DisplayName: Backwoods Root Wall
+				// Tooltip: ""
+			}
+
+			ElderwoodFence: {
+				// DisplayName: Elderwood Fence
+				// Tooltip: ""
+			}
+
+			ElderwoodWall: {
+				// DisplayName: Elderwood Wall
+				// Tooltip: ""
+			}
+
+			GrimstoneBrickWall: {
+				// DisplayName: Grimstone Brick Wall
+				// Tooltip: ""
+			}
+
+			GrimstoneWall: {
+				// DisplayName: Grimstone Wall
+				// Tooltip: ""
+			}
+
+			LivingBackwoodsLeavesWall: {
+				// DisplayName: Living Backwoods Leaves Wall
+				// Tooltip: ""
+			}
+
+			TealMossWall: {
+				// DisplayName: Teal Moss Wall
+				// Tooltip: ""
+			}
+
+			BloodlustPotion: {
+				// DisplayName: Bloodlust Potion
+				// Tooltip: ""
+			}
+
+			BrightstonePotion: {
+				// DisplayName: Brightstone Potion
+				// Tooltip: ""
+			}
+
+			DeathWardPotion: {
+				// DisplayName: Death Ward Potion
+				// Tooltip: ""
+			}
+
+			DryadBloodPotion: {
+				// DisplayName: Dryad Blood Potion
+				// Tooltip: ""
+			}
+
+			PrismaticPotion: {
+				// DisplayName: Prismatic Potion
+				// Tooltip: ""
+			}
+
+			ResiliencePotion: {
+				// DisplayName: Resilience Potion
+				// Tooltip: ""
+			}
+
+			WeaknessPotion: {
+				// DisplayName: Weakness Potion
+				// Tooltip: ""
+			}
+
+			WeightPotion: {
+				// DisplayName: Weight Potion
+				// Tooltip: ""
+			}
+
+			WillpowerPotion: {
+				// DisplayName: Willpower Potion
+				// Tooltip: ""
+			}
+
+			LothorBag: {
+				// DisplayName: Lothor Bag
+				// Tooltip: ""
+			}
+
+			LothorMask: {
+				// DisplayName: Lothor Mask
+				// Tooltip: ""
+			}
+
+			LothorMusicBox: {
+				// DisplayName: Lothor Music Box
+				// Tooltip: ""
+			}
+
+			LothorRelic: {
+				// DisplayName: Lothor Relic
+				// Tooltip: ""
+			}
+
+			LothorTrophy: {
+				// DisplayName: Lothor Trophy
+				// Tooltip: ""
+			}
+
+			SphereOfAspiration: {
+				// DisplayName: Sphere Of Aspiration
+				// Tooltip: ""
+			}
+
+			SphereOfCondor: {
+				// DisplayName: Sphere Of Condor
+				// Tooltip: ""
+			}
+
+			SphereOfPyre: {
+				// DisplayName: Sphere Of Pyre
+				// Tooltip: ""
+			}
+
+			SphereOfQuake: {
+				// DisplayName: Sphere Of Quake
+				// Tooltip: ""
+			}
+
+			SphereOfShock: {
+				// DisplayName: Sphere Of Shock
+				// Tooltip: ""
+			}
+
+			SphereOfStream: {
+				// DisplayName: Sphere Of Stream
+				// Tooltip: ""
+			}
+
+			DynastyWoodHammer: {
+				// DisplayName: Dynasty Wood Hammer
+				// Tooltip: ""
+			}
+
+			ElderwoodHammer: {
+				// DisplayName: Elderwood Hammer
+				// Tooltip: ""
+			}
+
+			MercuriumAxe: {
+				// DisplayName: Mercurium Axe
+				// Tooltip: ""
+			}
+
+			MercuriumHammer: {
+				// DisplayName: Mercurium Hammer
+				// Tooltip: ""
+			}
+
+			MercuriumPickaxe: {
+				// DisplayName: Mercurium Pickaxe
+				// Tooltip: ""
+			}
+
+			ArterialSpray: {
+				// DisplayName: Arterial Spray
+				// Tooltip: ""
+			}
+
+			Bane: {
+				// DisplayName: Bane
+				// Tooltip: ""
+			}
+
+			Bookworms: {
+				// DisplayName: Bookworms
+				// Tooltip: ""
+			}
+
+			FireLighter: {
+				// DisplayName: Fire Lighter
+				// Tooltip: ""
+			}
+
+			MercuriumStaff: {
+				// DisplayName: Mercurium Staff
+				// Tooltip: ""
+			}
+
+			RavensEye: {
+				// DisplayName: Ravens Eye
+				// Tooltip: ""
+			}
+
+			RodOfTheDragonfire: {
+				// DisplayName: Rod Of The Dragonfire
+				// Tooltip: ""
+			}
+
+			RodOfTheShock: {
+				// DisplayName: Rod Of The Shock
+				// Tooltip: ""
+			}
+
+			RodOfTheStream: {
+				// DisplayName: Rod Of The Stream
+				// Tooltip: ""
+			}
+
+			RodOfTheTerra: {
+				// DisplayName: Rod Of The Terra
+				// Tooltip: ""
+			}
+
+			BloodshedAxe: {
+				// DisplayName: Bloodshed Axe
+				// Tooltip: ""
+			}
+
+			DiabolicDaikatana: {
+				// DisplayName: Diabolic Daikatana
+				// Tooltip: ""
+			}
+
+			DynastyWoodSword: {
+				// DisplayName: Dynasty Wood Sword
+				// Tooltip: ""
+			}
+
+			ElderwoodSword: {
+				// DisplayName: Elderwood Sword
+				// Tooltip: ""
+			}
+
+			MercuriumSword: {
+				// DisplayName: Mercurium Sword
+				// Tooltip: ""
+			}
+
+			OvergrownSpear: {
+				// DisplayName: Overgrown Spear
+				// Tooltip: ""
+			}
+
+			StarFusion: {
+				// DisplayName: Star Fusion
+				// Tooltip: ""
+			}
+
+			CavernCane: {
+				// DisplayName: Cavern Cane
+				// Tooltip: ""
+			}
+
+			BrilliantBouquet: {
+				// DisplayName: Brilliant Bouquet
+				// Tooltip: ""
+			}
+
+			BloomingDoom: {
+				// DisplayName: Blooming Doom
+				// Tooltip: ""
+			}
+
+			CactiCaster: {
+				// DisplayName: Cacti Caster
+				// Tooltip: ""
+			}
+
+			EbonwoodStaff: {
+				// DisplayName: Ebonwood Staff
+				// Tooltip: ""
+			}
+
+			PastoralRod: {
+				// DisplayName: Pastoral Rod
+				// Tooltip: ""
+			}
+
+			ShadewoodStaff: {
+				// DisplayName: Shadewood Staff
+				// Tooltip: ""
+			}
+
+			SpikedIceStaff: {
+				// DisplayName: Spiked Ice Staff
+				// Tooltip: ""
+			}
+
+			TectonicCane: {
+				// DisplayName: Tectonic Cane
+				// Tooltip: ""
+			}
+
+			Woodbinder: {
+				// DisplayName: Woodbinder
+				// Tooltip: ""
+			}
+
+			ElderwoodClaws: {
+				// DisplayName: Elderwood Claws
+				// Tooltip: ""
+			}
+
+			GutwrenchingHooks: {
+				// DisplayName: Gutwrenching Hooks
+				// Tooltip: ""
+			}
+
+			HellfireClaws: {
+				// DisplayName: Hellfire Claws
+				// Tooltip: ""
+			}
+
+			HorrorPincers: {
+				// DisplayName: Horror Pincers
+				// Tooltip: ""
+			}
+
+			ThornyClaws: {
+				// DisplayName: Thorny Claws
+				// Tooltip: ""
+			}
+
+			CrimsonRod: {
+				// DisplayName: Crimson Rod
+				// Tooltip: ""
+			}
+
+			ExoticTulip: {
+				// DisplayName: Exotic Tulip
+				// Tooltip: ""
+			}
+
+			MushroomStaff: {
+				// DisplayName: Mushroom Staff
+				// Tooltip: ""
+			}
+
+			PineCone: {
+				// DisplayName: Pine Cone
+				// Tooltip: ""
+			}
+
+			RipePumpkin: {
+				// DisplayName: Ripe Pumpkin
+				// Tooltip: ""
+			}
+
+			SacrificialSickleOfTheMoon: {
+				// DisplayName: Sacrificial Sickle Of The Moon
+				// Tooltip: ""
+			}
+
+			SapStream: {
+				// DisplayName: Sap Stream
+				// Tooltip: ""
+			}
+
+			SweetTulip: {
+				// DisplayName: Sweet Tulip
+				// Tooltip: ""
+			}
+
+			Vilethorn: {
+				// DisplayName: Vilethorn
+				// Tooltip: ""
+			}
+
+			WeepingTulip: {
+				// DisplayName: Weeping Tulip
+				// Tooltip: ""
+			}
+
+			GalipotArrow: {
+				// DisplayName: Galipot Arrow
+				// Tooltip: ""
+			}
+
+			MercuriumBolt: {
+				// DisplayName: Mercurium Bolt
+				// Tooltip: ""
+			}
+
+			MercuriumBullet: {
+				// DisplayName: Mercurium Bullet
+				// Tooltip: ""
+			}
+
+			BeastBow: {
+				// DisplayName: Beast Bow
+				// Tooltip: ""
+			}
+
+			ChemicalPrisoner: {
+				// DisplayName: Chemical Prisoner
+				// Tooltip: ""
+			}
+
+			DynastyWoodBow: {
+				// DisplayName: Dynasty Wood Bow
+				// Tooltip: ""
+			}
+
+			ElderwoodBow: {
+				// DisplayName: Elderwood Bow
+				// Tooltip: ""
+			}
+
+			MercuriumBolter: {
+				// DisplayName: Mercurium Bolter
+				// Tooltip: ""
+			}
+
+			FlederStaff: {
+				// DisplayName: Fleder Staff
+				// Tooltip: ""
+			}
+
+			GastroIntestinalMallet: {
+				// DisplayName: Gastro Intestinal Mallet
+				// Tooltip: ""
+			}
+
+			MercuriumZipper: {
+				// DisplayName: Mercurium Zipper
+				// Tooltip: ""
+			}
+
+			MothStaff: {
+				// DisplayName: Moth Staff
+				// Tooltip: ""
+			}
+
+			PlanetomaStaff: {
+				// DisplayName: Planetoma Staff
+				// Tooltip: ""
+			}
+
+			WingIcon: {
+				// DisplayName: Wing Icon
+				// Tooltip: ""
+			}
+		}
+
+		Buffs: {
+			BeastPoison: {
+				// DisplayName: Beast Poison
+				// Description: Mods.RoA.Buffs.BeastPoison.Description
+			}
+
+			Bloodlust: {
+				// DisplayName: Bloodlust
+				// Description: Mods.RoA.Buffs.Bloodlust.Description
+			}
+
+			BloodShedAxesDebuff: {
+				// DisplayName: Blood Shed Axes Debuff
+				// Description: Mods.RoA.Buffs.BloodShedAxesDebuff.Description
+			}
+
+			BoneHarpyAttackDebuff: {
+				// DisplayName: Bone Harpy Attack Debuff
+				// Description: Mods.RoA.Buffs.BoneHarpyAttackDebuff.Description
+			}
+
+			BoneHarpyMountBuff: {
+				// DisplayName: Bone Harpy Mount Buff
+				// Description: Mods.RoA.Buffs.BoneHarpyMountBuff.Description
+			}
+
+			Brightstone: {
+				// DisplayName: Brightstone
+				// Description: Mods.RoA.Buffs.Brightstone.Description
+			}
+
+			Burning: {
+				// DisplayName: Burning
+				// Description: Mods.RoA.Buffs.Burning.Description
+			}
+
+			CosmicHat_Buff: {
+				// DisplayName: Cosmic Hat_ Buff
+				// Description: Mods.RoA.Buffs.CosmicHat_Buff.Description
+			}
+
+			CosmicHat_Cooldown: {
+				// DisplayName: Cosmic Hat_ Cooldown
+				// Description: Mods.RoA.Buffs.CosmicHat_Cooldown.Description
+			}
+
+			DeathWard: {
+				// DisplayName: Death Ward
+				// Description: Mods.RoA.Buffs.DeathWard.Description
+			}
+
+			Deceleration: {
+				// DisplayName: Deceleration
+				// Description: Mods.RoA.Buffs.Deceleration.Description
+			}
+
+			DryadBlood: {
+				// DisplayName: Dryad Blood
+				// Description: Mods.RoA.Buffs.DryadBlood.Description
+			}
+
+			DynastySetBonusBuff: {
+				// DisplayName: Dynasty Set Bonus Buff
+				// Description: Mods.RoA.Buffs.DynastySetBonusBuff.Description
+			}
+
+			ElderwoodSetBonusBuff: {
+				// DisplayName: Elderwood Set Bonus Buff
+				// Description: Mods.RoA.Buffs.ElderwoodSetBonusBuff.Description
+			}
+
+			EssenceDrain: {
+				// DisplayName: Essence Drain
+				// Description: Mods.RoA.Buffs.EssenceDrain.Description
+			}
+
+			ExtraRegen: {
+				// DisplayName: Extra Regen
+				// Description: Mods.RoA.Buffs.ExtraRegen.Description
+			}
+
+			Fireblossom: {
+				// DisplayName: Fireblossom
+				// Description: Mods.RoA.Buffs.Fireblossom.Description
+			}
+
+			FlametrackerDebuff: {
+				// DisplayName: Flametracker Debuff
+				// Description: Mods.RoA.Buffs.FlametrackerDebuff.Description
+			}
+
+			Heavy: {
+				// DisplayName: Heavy
+				// Description: Mods.RoA.Buffs.Heavy.Description
+			}
+
+			Hemorrhage: {
+				// DisplayName: Hemorrhage
+				// Description: Mods.RoA.Buffs.Hemorrhage.Description
+			}
+
+			Honey: {
+				// DisplayName: Honey
+				// Description: Mods.RoA.Buffs.Honey.Description
+			}
+
+			Infected: {
+				// DisplayName: Infected
+				// Description: Mods.RoA.Buffs.Infected.Description
+			}
+
+			LittleFleder: {
+				// DisplayName: Little Fleder
+				// Description: Mods.RoA.Buffs.LittleFleder.Description
+			}
+
+			MercuriumZipperDebuff: {
+				// DisplayName: Mercurium Zipper Debuff
+				// Description: Mods.RoA.Buffs.MercuriumZipperDebuff.Description
+			}
+
+			Moth: {
+				// DisplayName: Moth
+				// Description: Mods.RoA.Buffs.Moth.Description
+			}
+
+			OnFire: {
+				// DisplayName: On Fire
+				// Description: Mods.RoA.Buffs.OnFire.Description
+			}
+
+			OniMask: {
+				// DisplayName: Oni Mask
+				// Description: Mods.RoA.Buffs.OniMask.Description
+			}
+
+			PrismaticFavor: {
+				// DisplayName: Prismatic Favor
+				// Description: Mods.RoA.Buffs.PrismaticFavor.Description
+			}
+
+			RavencallersCloakBuff: {
+				// DisplayName: Ravencallers Cloak Buff
+				// Description: Mods.RoA.Buffs.RavencallersCloakBuff.Description
+			}
+
+			Resilience: {
+				// DisplayName: Resilience
+				// Description: Mods.RoA.Buffs.Resilience.Description
+			}
+
+			Root: {
+				// DisplayName: Root
+				// Description: Mods.RoA.Buffs.Root.Description
+			}
+
+			Skinning: {
+				// DisplayName: Skinning
+				// Description: Mods.RoA.Buffs.Skinning.Description
+			}
+
+			SmallMoon: {
+				// DisplayName: Small Moon
+				// Description: Mods.RoA.Buffs.SmallMoon.Description
+			}
+
+			SolidifyingSap: {
+				// DisplayName: Solidifying Sap
+				// Description: Mods.RoA.Buffs.SolidifyingSap.Description
+			}
+
+			SunflowerBuff: {
+				// DisplayName: Sunflower Buff
+				// Description: Mods.RoA.Buffs.SunflowerBuff.Description
+			}
+
+			ToxicFumes: {
+				// DisplayName: Toxic Fumes
+				// Description: Mods.RoA.Buffs.ToxicFumes.Description
+			}
+
+			ToxicFumesNoTimeDisplay: {
+				// DisplayName: Toxic Fumes No Time Display
+				// Description: Mods.RoA.Buffs.ToxicFumesNoTimeDisplay.Description
+			}
+
+			Unburning: {
+				// DisplayName: Unburning
+				// Description: Mods.RoA.Buffs.Unburning.Description
+			}
+
+			Weak: {
+				// DisplayName: Weak
+				// Description: Mods.RoA.Buffs.Weak.Description
+			}
+
+			Willpower: {
+				// DisplayName: Willpower
+				// Description: Mods.RoA.Buffs.Willpower.Description
+			}
+
+			WreathCharged: {
+				// DisplayName: Wreath Charged
+				// Description: Mods.RoA.Buffs.WreathCharged.Description
+			}
+
+			WreathFullCharged: {
+				// DisplayName: Wreath Full Charged
+				// Description: Mods.RoA.Buffs.WreathFullCharged.Description
+			}
+
+			WreathFullCharged2: {
+				// DisplayName: Wreath Full Charged2
+				// Description: Mods.RoA.Buffs.WreathFullCharged2.Description
+			}
+
+			CorruptionInsectForm: {
+				// DisplayName: Corruption Insect Form
+				// Description: Mods.RoA.Buffs.CorruptionInsectForm.Description
+			}
+
+			CrimsonInsectForm: {
+				// DisplayName: Crimson Insect Form
+				// Description: Mods.RoA.Buffs.CrimsonInsectForm.Description
+			}
+
+			FlederForm: {
+				// DisplayName: Fleder Form
+				// Description: Mods.RoA.Buffs.FlederForm.Description
+			}
+
+			LilPhoenixForm: {
+				// DisplayName: Lil Phoenix Form
+				// Description: Mods.RoA.Buffs.LilPhoenixForm.Description
+			}
+		}
+
+		NPCs: {
+			// Archdruid.DisplayName: Archdruid
+			// BabyFleder.DisplayName: Baby Fleder
+			// BackwoodsRaven.DisplayName: Backwoods Raven
+			// CrowdRaven.DisplayName: Crowd Raven
+			// DeerSkullBody.DisplayName: Deer Skull Body
+			// DeerSkullHead.DisplayName: Deer Skull Head
+			// DeerSkullTail.DisplayName: Deer Skull Tail
+			// Ent.DisplayName: Ent
+			// EntLegs.DisplayName: Ent Legs
+			// Fleder.DisplayName: Fleder
+			// FlederSachem.DisplayName: Fleder Sachem
+			// GrimDefender.DisplayName: Grim Defender
+			// GrimDruid.DisplayName: Grim Druid
+			// Hog.DisplayName: Hog
+			// Lumberjack.DisplayName: Lumberjack
+			// Ravencaller.DisplayName: Ravencaller
+			// SummonedRaven.DisplayName: Summoned Raven
+			// Lothor.DisplayName: Lothor
+			// Lothor2.DisplayName: Lothor2
+			// LothorSoul.DisplayName: Lothor Soul
+			// Pipistrelle.DisplayName: Pipistrelle
+			// DruidSoul.DisplayName: Druid Soul
+			// DruidSoul2.DisplayName: Druid Soul2
+			// PettyGoblin.DisplayName: Petty Goblin
+			// SapSlime.DisplayName: Sap Slime
+			// FireflyMimic.DisplayName: Firefly Mimic
+			// Hedgehog.DisplayName: Hedgehog
+			// Hunter.DisplayName: Hunter
+		}
+
+		Prefixes: {
+			// Ingrained: Mods.RoA.Prefixes.Ingrained
+			// Fragrant: Mods.RoA.Prefixes.Fragrant
+			// Bountiful: Mods.RoA.Prefixes.Bountiful
+			// Vivid: Mods.RoA.Prefixes.Vivid
+			// Overripe: Mods.RoA.Prefixes.Overripe
+			// Withered: Mods.RoA.Prefixes.Withered
+			// Rotten: Mods.RoA.Prefixes.Rotten
+			// Ragged: Mods.RoA.Prefixes.Ragged
+			// Blooming: Mods.RoA.Prefixes.Blooming
+			// Fertile: Mods.RoA.Prefixes.Fertile
+			// Nourished: Mods.RoA.Prefixes.Nourished
+			// Thorny: Mods.RoA.Prefixes.Thorny
+			// Stumpy: Mods.RoA.Prefixes.Stumpy
+			// Irritated: Mods.RoA.Prefixes.Irritated
+			// Keen: Mods.RoA.Prefixes.Keen
+			// Superior: Mods.RoA.Prefixes.Superior
+			// Forceful: Mods.RoA.Prefixes.Forceful
+			// Broken: Mods.RoA.Prefixes.Broken
+			// Damaged: Mods.RoA.Prefixes.Damaged
+			// Shoddy: Mods.RoA.Prefixes.Shoddy
+			// Hurtful: Mods.RoA.Prefixes.Hurtful
+			// Strong: Mods.RoA.Prefixes.Strong
+			// Unpleasant: Mods.RoA.Prefixes.Unpleasant
+			// Weak: Mods.RoA.Prefixes.Weak
+			// Ruthless: Mods.RoA.Prefixes.Ruthless
+			// Godly: Mods.RoA.Prefixes.Godly
+			// Demonic: Mods.RoA.Prefixes.Demonic
+			// Zealous: Mods.RoA.Prefixes.Zealous
+			// Quick: Mods.RoA.Prefixes.Quick
+			// Deadly: Mods.RoA.Prefixes.Deadly
+			// Agile: Mods.RoA.Prefixes.Agile
+			// Nimble: Mods.RoA.Prefixes.Nimble
+			// Murderous: Mods.RoA.Prefixes.Murderous
+			// Slow: Mods.RoA.Prefixes.Slow
+			// Sluggish: Mods.RoA.Prefixes.Sluggish
+			// Lazy: Mods.RoA.Prefixes.Lazy
+			// Annoying: Mods.RoA.Prefixes.Annoying
+			// Nasty: Mods.RoA.Prefixes.Nasty
+			// Large: Mods.RoA.Prefixes.Large
+			// Massive: Mods.RoA.Prefixes.Massive
+			// Dangerous: Mods.RoA.Prefixes.Dangerous
+			// Savage: Mods.RoA.Prefixes.Savage
+			// Sharp: Mods.RoA.Prefixes.Sharp
+			// Pointy: Mods.RoA.Prefixes.Pointy
+			// Tiny: Mods.RoA.Prefixes.Tiny
+			// Terrible: Mods.RoA.Prefixes.Terrible
+			// Small: Mods.RoA.Prefixes.Small
+			// Dull: Mods.RoA.Prefixes.Dull
+			// Unhappy: Mods.RoA.Prefixes.Unhappy
+			// Bulky: Mods.RoA.Prefixes.Bulky
+			// Shameful: Mods.RoA.Prefixes.Shameful
+			// Heavy: Mods.RoA.Prefixes.Heavy
+			// Light: Mods.RoA.Prefixes.Light
+			// Legendary: Mods.RoA.Prefixes.Legendary
+		}
+
+		Projectiles: {
+			// ArterialSprayProjectile.DisplayName: Arterial Spray Projectile
+			// ArterialSprayProjectile2.DisplayName: Arterial Spray Projectile2
+			// ArterialSprayProjectile3.DisplayName: Arterial Spray Projectile3
+			// BookwormsProjectile.DisplayName: Bookworms Projectile
+			// BloodshedAxeHeal.DisplayName: Bloodshed Axe Heal
+			// BloodshedAxe.DisplayName: Bloodshed Axe
+			// DiabolicDaikatanaProj.DisplayName: Diabolic Daikatana Proj
+			// CavernCaneBase.DisplayName: Cavern Cane Base
+			// BloomingDoomBase.DisplayName: Blooming Doom Base
+			// CactiCasterBase.DisplayName: Cacti Caster Base
+			// Cacti.DisplayName: Cacti
+			// EbonwoodStaffBase.DisplayName: Ebonwood Staff Base
+			// PastoralRodBase.DisplayName: Pastoral Rod Base
+			// ShadewoodStaffBase.DisplayName: Shadewood Staff Base
+			// SpikedIceStaffBase.DisplayName: Spiked Ice Staff Base
+			// TectonicCaneBase.DisplayName: Tectonic Cane Base
+			// WoodbinderBase.DisplayName: Woodbinder Base
+			// BeastProj.DisplayName: Beast Proj
+			// GastroIntestinalMalletProjectile.DisplayName: Gastro Intestinal Mallet Projectile
+			// GastroIntestinalMalletProjectile2.DisplayName: Gastro Intestinal Mallet Projectile2
+			// PlanetomaStaffProjectile.DisplayName: Planetoma Staff Projectile
+			// PlanetomaStaffProjectile2.DisplayName: Planetoma Staff Projectile2
+			// GrimDefenderSpearAttack.DisplayName: Grim Defender Spear Attack
+			// LumberjackAxeSlash.DisplayName: Lumberjack Axe Slash
+			// ArchBranch.DisplayName: Arch Branch
+			// ArchVileSpike.DisplayName: Arch Vile Spike
+			// ArchVileSpikeTip.DisplayName: Arch Vile Spike Tip
+			// GoblinsDagger.DisplayName: Goblins Dagger
+			// GrimBranch.DisplayName: Grim Branch
+			// CursedAcorn.DisplayName: Cursed Acorn
+			// LothorAngleAttack.DisplayName: Lothor Angle Attack
+			// LothorAngleAttack2.DisplayName: Lothor Angle Attack2
+			// LothorClawsSlash.DisplayName: Lothor Claws Slash
+			// LothorScream.DisplayName: Lothor Scream
+			// LothorSpike.DisplayName: Lothor Spike
+			// LothorStomp.DisplayName: Lothor Stomp
+			// PoisonBubble_Large.DisplayName: Poison Bubble_ Large
+			// PoisonBubble_Small.DisplayName: Poison Bubble_ Small
+			// PrimordialLeaf.DisplayName: Primordial Leaf
+			// VileSpike.DisplayName: Vile Spike
+			// VileSpikeTip.DisplayName: Vile Spike Tip
+			// BaneSpell.DisplayName: Bane Spell
+			// BloodyFeather.DisplayName: Bloody Feather
+			// HarmonizingBeam.DisplayName: Harmonizing Beam
+			// Hellbat.DisplayName: Hellbat
+			// QuicksilverBolt.DisplayName: Quicksilver Bolt
+			// ShockLightning.DisplayName: Shock Lightning
+			// TerraProj.DisplayName: Terra Proj
+			// TrackingBolt.DisplayName: Tracking Bolt
+			// WaterStream.DisplayName: Water Stream
+			// BloodshedAxeEnergy.DisplayName: Bloodshed Axe Energy
+			// BloodShedAxesTarget.DisplayName: Blood Shed Axes Target
+			// FlederSlayer.DisplayName: Fleder Slayer
+			// WaveSlash.DisplayName: Wave Slash
+			// JudgementCut.DisplayName: Judgement Cut
+			// JudgementSlash.DisplayName: Judgement Slash
+			// MeltingStar.DisplayName: Melting Star
+			// MercuriumFumes.DisplayName: Mercurium Fumes
+			// OvergrownBolt.DisplayName: Overgrown Bolt
+			// OvergrownSpear.DisplayName: Overgrown Spear
+			// OvergrownSphere.DisplayName: Overgrown Sphere
+			// AmuletOfLifeWisps.DisplayName: Amulet Of Life Wisps
+			// BoneArm.DisplayName: Bone Arm
+			// BoneArm_Back.DisplayName: Bone Arm_ Back
+			// BoneBody.DisplayName: Bone Body
+			// BoneBody_Back.DisplayName: Bone Body_ Back
+			// BoneLeg.DisplayName: Bone Leg
+			// BoneLeg_Back.DisplayName: Bone Leg_ Back
+			// BoneSkull.DisplayName: Bone Skull
+			// BoneSkull_Back.DisplayName: Bone Skull_ Back
+			// Bone.DisplayName: Bone
+			// Brightstone.DisplayName: Brightstone
+			// CosmicMana.DisplayName: Cosmic Mana
+			// Hedgehog.DisplayName: Hedgehog
+			// MercuriumCenserToxicFumes.DisplayName: Mercurium Censer Toxic Fumes
+			// PettyBag.DisplayName: Petty Bag
+			// RagingBootsWave.DisplayName: Raging Boots Wave
+			// SlipperyBomb.DisplayName: Slippery Bomb
+			// SlipperyDynamite.DisplayName: Slippery Dynamite
+			// SlipperyGlowstick.DisplayName: Slippery Glowstick
+			// SlipperyGrenade.DisplayName: Slippery Grenade
+			// VengefulSpirit.DisplayName: Vengeful Spirit
+			// WeaknessPotion.DisplayName: Weakness Potion
+			// Bee.DisplayName: Bee
+			// BloodCloudMoving.DisplayName: Blood Cloud Moving
+			// BloodCloudRaining.DisplayName: Blood Cloud Raining
+			// BloodRain.DisplayName: Blood Rain
+			// CactiExplosion.DisplayName: Cacti Explosion
+			// ClawsSlash.DisplayName: Claws Slash
+			// Cloudberry.DisplayName: Cloudberry
+			// Coral.DisplayName: Coral
+			// ElderwoodWallProjectile.DisplayName: Elderwood Wall Projectile
+			// EvilBranch.DisplayName: Evil Branch
+			// EvilLeaf.DisplayName: Evil Leaf
+			// Fireblossom.DisplayName: Fireblossom
+			// FireblossomExplosion.DisplayName: Fireblossom Explosion
+			// CorruptionInsect.DisplayName: Corruption Insect
+			// CrimsonInsect.DisplayName: Crimson Insect
+			// FlederBomb.DisplayName: Fleder Bomb
+			// FlederFlame.DisplayName: Fleder Flame
+			// LilPhoenixExplosion.DisplayName: Lil Phoenix Explosion
+			// LilPhoenixFlames.DisplayName: Lil Phoenix Flames
+			// LilPhoenixTrailFlame.DisplayName: Lil Phoenix Trail Flame
+			// ToxicStream.DisplayName: Toxic Stream
+			// GalipotStream.DisplayName: Galipot Stream
+			// HellfireClawsSlash.DisplayName: Hellfire Claws Slash
+			// HellfireFracture.DisplayName: Hellfire Fracture
+			// HemorrhageWave.DisplayName: Hemorrhage Wave
+			// InfectedWave.DisplayName: Infected Wave
+			// LargeBee.DisplayName: Large Bee
+			// MoonlightBeam.DisplayName: Moonlight Beam
+			// MoonSickle.DisplayName: Moon Sickle
+			// MoonSigil.DisplayName: Moon Sigil
+			// MushroomSpore.DisplayName: Mushroom Spore
+			// PineCone.DisplayName: Pine Cone
+			// ProtectiveRoots.DisplayName: Protective Roots
+			// PumpkinSeed.DisplayName: Pumpkin Seed
+			// RipePumpkin.DisplayName: Ripe Pumpkin
+			// RootRing.DisplayName: Root Ring
+			// SacrificialSickle.DisplayName: Sacrificial Sickle
+			// SharpIcicle.DisplayName: Sharp Icicle
+			// ShepherdLeaves.DisplayName: Shepherd Leaves
+			// Snatcher.DisplayName: Snatcher
+			// Sunflower.DisplayName: Sunflower
+			// TectonicCaneFlames.DisplayName: Tectonic Cane Flames
+			// TectonicCaneProjectile.DisplayName: Tectonic Cane Projectile
+			// TectonicCaneProjectile2.DisplayName: Tectonic Cane Projectile2
+			// Thorns.DisplayName: Thorns
+			// TulipFlower.DisplayName: Tulip Flower
+			// TulipPetal.DisplayName: Tulip Petal
+			// TulipPetalOld.DisplayName: Tulip Petal Old
+			// WeepingTulipExplosion.DisplayName: Weeping Tulip Explosion
+			// TulipTrailOld.DisplayName: Tulip Trail Old
+			// Vilethorn.DisplayName: Vilethorn
+			// VilethornTip.DisplayName: Vilethorn Tip
+			// SmallMoon.DisplayName: Small Moon
+			// GalipotArrowProjectile.DisplayName: Galipot Arrow Projectile
+			// GalipotStream2.DisplayName: Galipot Stream2
+			// MercuriumBoltProjectile.DisplayName: Mercurium Bolt Projectile
+			// MercuriumBulletProjectile.DisplayName: Mercurium Bullet Projectile
+			// ChemicalFlask.DisplayName: Chemical Flask
+			// ToxicCrystal1.DisplayName: Toxic Crystal1
+			// ToxicCrystal2.DisplayName: Toxic Crystal2
+			// ToxicCrystal3.DisplayName: Toxic Crystal3
+			// Acorn.DisplayName: Acorn
+			// BoneHarpy.DisplayName: Bone Harpy
+			// BoneHarpyFeather.DisplayName: Bone Harpy Feather
+			// LittleFleder.DisplayName: Little Fleder
+			// MercuriumZipper_Effect.DisplayName: Mercurium Zipper_ Effect
+			// MercuriumZipper_MercuriumCenserToxicFumes.DisplayName: Mercurium Zipper_ Mercurium Censer Toxic Fumes
+			// MercuriumZipperProjectile.DisplayName: Mercurium Zipper Projectile
+			// Moth.DisplayName: Moth
+			// SmallMoth.DisplayName: Small Moth
+			// HunterProjectile1.DisplayName: Hunter Projectile1
+			// HunterProjectile2.DisplayName: Hunter Projectile2
+		}
+
+		Configs: {
+			RoAClientConfig: {
+				// DisplayName: Ro A Client Config
+
+				Headers: {
+					Mods: {
+						RoA: {
+							Configs: {
+								// GeneralOptionsHeader: Mods. Ro A. Configs. General Options Header Header
+								// DruidOptionsHeader: Mods. Ro A. Configs. Druid Options Header Header
+							}
+						}
+					}
+				}
+
+				VanillaResprites: {
+					// Label: Vanilla Resprites
+					// Tooltip: ""
+				}
+
+				HighlightMode: {
+					// Label: Highlight Mode
+					// Tooltip: ""
+				}
+
+				DamageTooltipOption_Internal: {
+					// Label: Damage Tooltip Option_ Internal
+					// Tooltip: ""
+				}
+
+				DamageTooltipOption: {
+					// Label: Damage Tooltip Option
+					// Tooltip: ""
+				}
+
+				DamageScaling: {
+					// Label: Damage Scaling
+					// Tooltip: ""
+				}
+
+				DruidLeaves: {
+					// Label: Druid Leaves
+					// Tooltip: ""
+				}
+
+				WreathDrawingMode: {
+					// Label: Wreath Drawing Mode
+					// Tooltip: ""
+				}
+
+				WreathPosition: {
+					// Label: Wreath Position
+					// Tooltip: ""
+				}
+
+				WreathSoundMode: {
+					// Label: Wreath Sound Mode
+					// Tooltip: ""
+				}
+			}
+
+			HighlightModes: {
+				// Tooltip: ""
+				// Normal.Label: Normal
+				// Always.Label: Always
+				// Off.Label: Off
+			}
+
+			DamageTooltipOptions: {
+				// Tooltip: ""
+				// Option1.Label: Option1
+				// Option2.Label: Option2
+				// Option3.Label: Option3
+				// Option4.Label: Option4
+				// Option5.Label: Option5
+			}
+
+			WreathDrawingModes: {
+				// Tooltip: ""
+				// Normal.Label: Normal
+				// Normal2.Label: Normal2
+				// Fancy.Label: Fancy
+				// Fancy2.Label: Fancy2
+				// Bars.Label: Bars
+				// Bars2.Label: Bars2
+			}
+
+			WreathPositions: {
+				// Tooltip: ""
+				// Health.Label: Health
+				// Player.Label: Player
+			}
+
+			WreathSoundModes: {
+				// Tooltip: ""
+				// Normal.Label: Normal
+				// Alt.Label: Alt
+			}
+
+			RoAServerConfig: {
+				// DisplayName: Ro A Server Config
+
+				Headers: {
+					Mods: {
+						RoA: {
+							Configs: {
+								// GeneralOptionsHeader2: Mods. Ro A. Configs. General Options Header2 Header
+								// GenerationOptionHeader: Mods. Ro A. Configs. Generation Option Header Header
+							}
+						}
+					}
+				}
+
+				ChangeVanillaRecipes: {
+					// Label: Change Vanilla Recipes
+					// Tooltip: ""
+				}
+
+				DropDevSets: {
+					// Label: Drop Dev Sets
+					// Tooltip: ""
+				}
+
+				EvilBiomeExtraItemChance: {
+					// Label: Evil Biome Extra Item Chance
+					// Tooltip: ""
+				}
+
+				BackwoodsWidthMultiplier: {
+					// Label: Backwoods Width Multiplier
+					// Tooltip: ""
+				}
+
+				BackwoodsHeightMultiplier: {
+					// Label: Backwoods Height Multiplier
+					// Tooltip: ""
+				}
+			}
+		}
+
+		Conditions: {
+			// HasPeegeonSet: Mods.RoA.Conditions.HasPeegeonSet
+			// HasNFASet: Mods.RoA.Conditions.HasNFASet
+			// HasHas2rSet: Mods.RoA.Conditions.HasHas2rSet
+			// LothorEnrageMonolith: Mods.RoA.Conditions.LothorEnrageMonolith
+			// BackwoodsBiome: Mods.RoA.Conditions.BackwoodsBiome
+			// HasSaddle: Mods.RoA.Conditions.HasSaddle
+			// SailorHat: Mods.RoA.Conditions.SailorHat
+		}
+	}
+}

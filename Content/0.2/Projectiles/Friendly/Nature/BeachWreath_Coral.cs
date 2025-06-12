@@ -7,7 +7,7 @@ using RoA.Common;
 using RoA.Common.Projectiles;
 using RoA.Content.Dusts;
 using RoA.Core;
-using RoA.Core.Data;
+using RoA.Core.Data.Graphics;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 

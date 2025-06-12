@@ -6,7 +6,6 @@ MushroomSpore.DisplayName: Грибная спора
 // PastoralRodBase.DisplayName: Pastoral Rod Base
 // PastoralRodEnergy.DisplayName: Pastoral Rod Energy
 ShepherdLeaves.DisplayName: Пастушьи листья
-RipePumpkin.DisplayName: Спелая тыква
 PumpkinSeed.DisplayName: Тыквенные семена
 // ExoticTulipBase.DisplayName: Exotic Tulip
 // SweepTulipBase.DisplayName: Sweep Tulip
@@ -14,7 +13,6 @@ PumpkinSeed.DisplayName: Тыквенные семена
 TulipFlower.DisplayName: Цветок тюльпана
 TulipPetal.DisplayName: Лепесток тюльпана
 Bone.DisplayName: Кость тюльпана
-PineCone.DisplayName: Сосновая шишка
 // CactiCasterBase.DisplayName: Cacti Caster Base
 Cacti.DisplayName: Кактус
 CactiExplosion.DisplayName: Кактусовый взрыв
@@ -39,7 +37,6 @@ TerraProj.DisplayName: Луч дрожи
 // BeastProj.DisplayName: Beast Proj
 RootRing.DisplayName: Кольцо корней
 // GrimDefenderSpearAttack.DisplayName: Grim Defender Spear Attack
-Brightstone.DisplayName: Светлокамень
 // Snatcher.DisplayName: Snatcher
 // ElderwoodWallProjectile.DisplayName: Everwood Wall
 // HellfireClawsSlash.DisplayName: Hellfire Claws Slash
@@ -49,10 +46,6 @@ HellfireFracture.DisplayName: Разрыв адского пламени
 GalipotStream.DisplayName: Поток живицы
 // WoodbinderBase.DisplayName: Woodbinder Base
 ProtectiveRoots.DisplayName: Защищающие корни
-SlipperyBomb.DisplayName: Скользкая бомба
-SlipperyDynamite.DisplayName: Скользкий динамит
-SlipperyGlowstick.DisplayName: Скользкая светящаяся палочка
-SlipperyGrenade.DisplayName: Скользкая граната
 // EbonwoodStaffBase.DisplayName: Ebonwood Staff Base
 // ShadewoodStaffBase.DisplayName: Shadewood Staff Base
 Bee.DisplayName: "{$ProjectileName.Bee}"
@@ -78,7 +71,6 @@ SacrificialSickle.DisplayName: Жертвенный серп
 // LilPhoenixFlames2.DisplayName: Firebird Flames
 // LilPhoenixTrailFlame.DisplayName: Firebird Trail Flame
 // LilPhoenixExplosion.DisplayName: Firebird Explosion
-WeaknessPotion.DisplayName: Зелье слабости
 BoneArm.DisplayName: Костяная рука
 BoneArm_Back.DisplayName: Костяная рука
 BoneBody.DisplayName: Костяное тело
@@ -87,11 +79,8 @@ BoneLeg.DisplayName: Костяная нога
 BoneLeg_Back.DisplayName: Костяная нога
 BoneSkull.DisplayName: Костяной череп
 BoneSkull_Back.DisplayName: Костяной череп
-Hedgehog.DisplayName: Ёжик
 OvergrownBolt.DisplayName: Поросщий залп
-OvergrownSpear.DisplayName: Поросщее копье
 OvergrownSphere.DisplayName: Поросщая сфера
-Moth.DisplayName: Моль
 SmallMoth.DisplayName: Маленькая моль
 MercuriumFumes.DisplayName: Пары ртути
 MeltingStar.DisplayName: Плавящаяся звезда
@@ -99,14 +88,12 @@ BloodyFeather.DisplayName: Кровавое перо
 QuicksilverBolt.DisplayName: Ртутный болт
 TrackingBolt.DisplayName: Следопытный залп
 AmuletOfLifeWisps.DisplayName: Лечащие огоньки
-Fireblossom.DisplayName: Огнецвет
 FireblossomExplosion.DisplayName: Взрыв огнецвета
 VengefulSpirit.DisplayName: Мстительный дух
 CosmicMana.DisplayName: Небесная мана
 BoneHarpy.DisplayName: Гарпия-нежить
 BoneHarpyFeather.DisplayName: Перья гарпии-нежити
 // RagingBootsWave.DisplayName: Raging Boots Wave
-PettyBag.DisplayName: Мелочный мешок
 // TectonicCaneFlames.DisplayName: Tectonic Cane Flames
 LothorStomp.DisplayName: Топот Лотора
 LothorClawsSlash.DisplayName: Когти Лотора
@@ -116,7 +103,6 @@ CursedAcorn.DisplayName: Проклятый жёлудь
 LothorScream.DisplayName: Рык Лотора
 LothorAngleAttack2.DisplayName: Отрава Лотора
 BloodshedAxeHeal.DisplayName: Топор кровопролития
-BloodshedAxe.DisplayName: Топор кровопролития
 BloodshedAxeEnergy.DisplayName: Топор кровопролития
 BloodShedAxesTarget.DisplayName: Топор кровопролития
 ChemicalFlask.DisplayName: Склянка с ядом
@@ -124,14 +110,10 @@ ToxicCrystal1.DisplayName: Осколок склянки
 ToxicCrystal2.DisplayName: Осколок склянки
 ToxicCrystal3.DisplayName: Осколок склянки
 ChemicalFlask2.DisplayName: Склянка с ядом
-LittleFleder.DisplayName: Малыш-нетопырь
 Acorn.DisplayName: Жёлудь
-FlederSlayer.DisplayName: Бич нетопырей
 WaveSlash.DisplayName: Оглущающая волна
 BaneSpell.DisplayName: Похищение сущности
 GoblinsDagger.DisplayName: Goblin Dagger
-SmallMoon.DisplayName: Маленькая луна
-Vilethorn.DisplayName: "{$ProjectileName.VilethornBase}"
 VilethornTip.DisplayName: "{$ProjectileName.VilethornTip}"
 BloodCloudMoving.DisplayName: "{$ProjectileName.BloodCloudMoving}"
 BloodCloudRaining.DisplayName: "{$ProjectileName.BloodCloudRaining}"
@@ -160,5 +142,5 @@ PoisonBubble_Large.DisplayName: Ядовитый пузырь
 PoisonBubble_Small.DisplayName: Ядовитый пузырь
 // Sunflower.DisplayName: Sunflower
 // Thorns.DisplayName: Thorns
-// Cloudberry.DisplayName: Cloudberry
 // Coral.DisplayName: Coral
+// CavernCaneBase.DisplayName: Cavern Cane Base

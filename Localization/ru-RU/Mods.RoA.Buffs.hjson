@@ -146,10 +146,7 @@ ToxicFumesNoTimeDisplay: {
 	Description: Токсичные испарения Ртутной руды наполняют ваши легкие
 }
 
-OniMask: {
-	DisplayName: Маска Они
-	Description: Снижение скорости появления противников
-}
+OniMask.Description: Снижение скорости появления противников
 
 Weak: {
 	DisplayName: Слабость

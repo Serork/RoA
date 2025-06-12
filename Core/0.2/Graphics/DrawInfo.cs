@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace RoA.Core.Data;
+namespace RoA.Core.Data.Graphics;
 
 readonly struct DrawInfo() {
     public static DrawInfo Default => new();

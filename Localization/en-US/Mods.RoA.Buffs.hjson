@@ -146,10 +146,7 @@ ToxicFumesNoTimeDisplay: {
 	Description: Noxious vapors of Mercurium Ore are filling your lungs
 }
 
-OniMask: {
-	DisplayName: Oni Mask
-	Description: Reduced enemy spawn rate
-}
+OniMask.Description: Reduced enemy spawn rate
 
 Weak: {
 	DisplayName: Weak
