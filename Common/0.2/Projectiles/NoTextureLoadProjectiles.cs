@@ -2,12 +2,6 @@
 
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
-using RoA.Core.Utility;
-
-using System.Runtime.CompilerServices;
-
-using Terraria;
-using Terraria.ModLoader;
 
 namespace RoA.Common.Projectiles;
 

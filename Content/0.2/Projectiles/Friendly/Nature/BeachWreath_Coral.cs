@@ -10,6 +10,7 @@ using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility;
 
 using System;
@@ -103,7 +104,7 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
             _coralPositions.Add(coralValues.Destination);
         }
         void makeBubbleDusts() {
-            float chance = MathF.Max(0.15f, Helper.Clamp01(Projectile.velocity.Length() / 10f));
+            float chance = MathF.Max(0.15f, MathUtils.Clamp01(Projectile.velocity.Length() / 10f));
             chance /= 5f;
             ushort bubbleDustType = (ushort)ModContent.DustType<Bubble>();
             Vector2 dustSpawnPosition = Projectile.position - new Vector2(8f, 0f);
@@ -129,8 +130,12 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
     }
 
     protected override void Draw(ref Color lightColor) {
-        Dictionary<CoralType, Asset<Texture2D>?> coralTextures = _coralTextures!;
         CoralValues coralValues = new(Projectile);
+        if (!coralValues.Init) {
+            return;
+        }
+
+        Dictionary<CoralType, Asset<Texture2D>?> coralTextures = _coralTextures!;
         Asset<Texture2D>? coralAsset = coralTextures[coralValues.CoralType];
         if (coralAsset?.IsLoaded != true) {
             return;
@@ -148,10 +153,10 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
                   valueOut = Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
             float scaleY = Ease.QuartIn(valueIn) * Ease.QuartOut(valueOut),
                   scaleX = Ease.SineIn(valueIn) * Ease.SineOut(valueOut);
-            batch.DrawWith(coralTexture, Projectile.Center, DrawInfo.Default with {
+            batch.Draw(coralTexture, Projectile.Center, DrawInfo.Default with {
                 Rotation = Projectile.rotation,
                 Origin = new Vector2(coralTexture.Width / 2f, coralTexture.Height),
-                Clip = new Rectangle(0, 0, coralTexture.Width, coralTexture.Height),
+                Clip = coralTexture.Bounds,
                 Scale = new Vector2(scaleX, scaleY)
             });
         });

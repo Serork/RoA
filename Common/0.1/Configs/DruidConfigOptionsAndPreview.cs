@@ -1044,7 +1044,7 @@ sealed class DamageTooltipOptionConfigElement2 : ConfigElement {
         vector2.X += 8f;
         vector2.Y += 2f + num;
         vector2.X -= 17f;
-        //TextureAssets.ColorBar.Value.Frame(1, 1, 0, 0);
+        //TextureAssets.ColorBar.Value.UsedFrame(1, 1, 0, 0);
         vector2 = new Vector2(dimensions.X + dimensions.Width - 10f, dimensions.Y + 10f + num);
         IngameOptions.valuePosition = vector2;
         float obj = DrawValueBar(spriteBatch, 1f, Proportion, num2, ColorMethod);
@@ -1373,7 +1373,7 @@ sealed class DamageTooltipOptionConfigElement3 : ConfigElement {
         vector2.X += 8f;
         vector2.Y += 2f + num;
         vector2.X -= 17f;
-        //TextureAssets.ColorBar.Value.Frame(1, 1, 0, 0);
+        //TextureAssets.ColorBar.Value.UsedFrame(1, 1, 0, 0);
         vector2 = new Vector2(dimensions.X + dimensions.Width - 10f, dimensions.Y + 10f + num);
         IngameOptions.valuePosition = vector2;
         float obj = DrawValueBar(spriteBatch, 1f, Proportion, num2, ColorMethod);

@@ -14,9 +14,9 @@ sealed class MiracleMint : ModItem {
     }
 
     public override void SetDefaults() {
-        Item.SetSize(20, 22);
+        Item.SetSizeValues(20, 22);
 
-        Item.SetDefaultsOthers(Item.sellPrice(copper: 20));
+        Item.SetOtherValues(Item.sellPrice(copper: 20));
 
         Item.SetDefaultsToStackable(Item.CommonMaxStack);
 

@@ -98,7 +98,7 @@
 //                spriteBatch.Draw(texture, drawPosition, frame.GetSourceRectangle(texture), color.MultiplyRGBA(Color.Black with { A = 100 }));
 //            }
 //            gemType = beaconTE.GetItemID();
-//            Vector2 mousePosition = Main.MouseWorld;
+//            Vector2 mousePosition = Main.MousePosition;
 //            bool flag;
 //            Vector2 adjustedBeaconPosition = beaconPosition;
 //            Point tilePosition = beaconPosition.ToTileCoordinates();

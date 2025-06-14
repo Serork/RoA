@@ -231,7 +231,7 @@ sealed class Fleder : ModNPC {
                 if (Vector2.DistanceSquared(NPC.Center + NPC.velocity, destination) <= 15f * 15f && Math.Abs(NPC.Center.X + NPC.velocity.X - destination.X) <= 15f) {
                     //NPC.Center = destination;
                     NPC.velocity = Vector2.Zero;
-                    //NPC.rotation = 0f;
+                    //NPC._rotation = 0f;
 
                     _sittingPosition = destination;
                     _state = State.Sitting;

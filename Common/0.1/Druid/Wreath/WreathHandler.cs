@@ -437,7 +437,7 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    private CaneBaseProjectile? GetHeldCane() {
+    public CaneBaseProjectile? GetHeldCane() {
         CaneBaseProjectile? caneProjectile = null;
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             if (projectile.owner != Player.whoAmI) {
@@ -449,6 +449,20 @@ sealed class WreathHandler : ModPlayer {
             }
         }
         return caneProjectile;
+    }
+
+    public bool TryGetHeldCane(out CaneBaseProjectile? caneProjectile) {
+        foreach (Projectile projectile in Main.ActiveProjectiles) {
+            if (projectile.owner != Player.whoAmI) {
+                continue;
+            }
+            if (projectile.ModProjectile is CaneBaseProjectile baseCaneProjectile) {
+                caneProjectile = baseCaneProjectile;
+                return true;
+            }
+        }
+        caneProjectile = null;
+        return false;
     }
 
     public override void PostUpdateEquips() {

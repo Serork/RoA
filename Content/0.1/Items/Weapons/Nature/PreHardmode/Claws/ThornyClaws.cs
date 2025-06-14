@@ -18,14 +18,14 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
 sealed class ThornyClaws : ClawsBaseItem {
     protected override void SafeSetDefaults() {
-        Item.SetSize(26);
+        Item.SetSizeValues(26);
         Item.SetWeaponValues(26, 4f);
 
         Item.rare = ItemRarityID.Orange;
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
 
-        Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 20, false, autoReuse: true);
+        Item.SetUsageValues(ItemUseStyleID.Swing, 20, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 28);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);

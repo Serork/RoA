@@ -98,7 +98,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         //DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
         //Utils.TileActionAttempt plot = new Utils.TileActionAttempt(DelegateMethods.CutTiles);
         //Vector2 center = Projectile.Center;
-        //Utils.PlotTileLine(center + Projectile.rotation.ToRotationVector2() * 30f, center + Projectile.rotation.ToRotationVector2() * 150f, Projectile.width * Projectile.scale, plot);
+        //Utils.PlotTileLine(center + Projectile._rotation.ToRotationVector2() * 30f, center + Projectile._rotation.ToRotationVector2() * 150f, Projectile.width * Projectile.scale, plot);
     }
 
     public override bool? CanCutTiles() => false;

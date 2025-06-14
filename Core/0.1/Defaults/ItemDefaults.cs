@@ -8,12 +8,10 @@ using Terraria.ID;
 namespace RoA.Core.Defaults;
 
 static class ItemDefaults {
-    public static void SetSize(this Item item, int width, int height) {
+    public static void SetSizeValues(this Item item, int width, int? height = null) {
         item.width = width;
-        item.height = height;
+        item.height = height ?? width;
     }
-
-    public static void SetSize(this Item item, int width) => item.width = item.height = width;
 
     public static void MakeItemNatureWeapon(this Item item) {
         if (item.IsAWeapon()) {
@@ -33,8 +31,8 @@ static class ItemDefaults {
         item.consumable = consumable;
     }
 
-    public static void SetDefaultsToUsable(this Item item, int useStyleID, int useTime, int animationTime, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) {
-        item.useStyle = useStyleID;
+    public static void SetDefaultsToUsable(this Item item, int vanillaUseStyleID, int useTime, int animationTime, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) {
+        item.useStyle = vanillaUseStyleID;
         item.useTime = useTime;
         item.useAnimation = animationTime;
         item.noUseGraphic = !showItemOnUse;
@@ -45,9 +43,9 @@ static class ItemDefaults {
         }
     }
 
-    public static void SetDefaultsToUsable(this Item item, int useStyleID, int timeToUse, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) => item.SetDefaultsToUsable(useStyleID, timeToUse, timeToUse, showItemOnUse, useTurn, autoReuse, useSound);
+    public static void SetUsageValues(this Item item, int vanillaUseStyleID, int timeToUse, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) => item.SetDefaultsToUsable(vanillaUseStyleID, timeToUse, timeToUse, showItemOnUse, useTurn, autoReuse, useSound);
 
-    public static void SetDefaultsOthers(this Item item, int value, int rare = ItemRarityID.White) {
+    public static void SetOtherValues(this Item item, int value, int rare = ItemRarityID.White) {
         item.value = value;
         item.rare = rare;
     }

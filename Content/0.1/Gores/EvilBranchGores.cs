@@ -11,7 +11,7 @@
 //	public override void OnSpawn(Gore gore, IEntitySource source) {
 //		ChildSafety.SafeGore[gore.type] = true;
 
-//		gore.Frame = new SpriteFrame(1, 3) {
+//		gore.UsedFrame = new SpriteFrame(1, 3) {
 //			CurrentRow = (byte)Main.rand.Next(3)
 //		};
 //	}

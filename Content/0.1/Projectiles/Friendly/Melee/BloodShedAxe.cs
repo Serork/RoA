@@ -383,7 +383,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
 			Main.spriteBatch.Draw(texture2D, Projectile.Center + Utils.ToRotationVector2((float)(Main.GlobalTimeWrappedHourly + i * MathHelper.Pi * 2f / 5.0)) - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
 								  rectangle,
 								  Projectile.GetAlpha(lightColor) * 0.025f * MathUtils.Osc(0f, 1.5f, 0.5f, 0.5f) * Projectile.Opacity,
-								  Projectile.rotation + extraRotation + 0.78f,
+								  Projectile._rotation + extraRotation + 0.78f,
 								  new Vector2(0f, texture2D.Height),
 								  Projectile.scale, SpriteEffects.None, 0f);
 		}*/

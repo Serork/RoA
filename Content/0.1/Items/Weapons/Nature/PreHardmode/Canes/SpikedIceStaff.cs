@@ -20,10 +20,10 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<SharpIcicle>();
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(36);
-        Item.SetDefaultsToUsable(ItemUseStyleID.Shoot, 24, useSound: SoundID.Item7);
+        Item.SetSizeValues(36);
+        Item.SetUsageValues(ItemUseStyleID.Shoot, 24, useSound: SoundID.Item7);
         Item.SetWeaponValues(6, 4f);
-        Item.SetDefaultsOthers(Item.sellPrice(silver: 15), ItemRarityID.Blue);
+        Item.SetOtherValues(Item.sellPrice(silver: 15), ItemRarityID.Blue);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 20);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.4f);
@@ -49,7 +49,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
         private int PerShoot => (int)(_attackTime * 0.4f);
         private bool MinPassed => _attackTimer >= Min;
 
-        protected override bool IsInUse => !Owner.CCed && (Owner.controlUseItem || !MinPassed);
+        public override bool IsInUse => !Owner.CCed && (Owner.controlUseItem || !MinPassed);
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
@@ -61,9 +61,9 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         protected override bool ShouldPlayShootSound() => false;
 
-        protected override bool ShouldntUpdateRotationAndDirection() => false;
+        //protected override bool ShouldStopUpdatingRotationAndDirection() => false;
 
-        protected override byte TimeAfterShootToExist(Player player) {
+        protected override ushort TimeAfterShootToExist(Player player) {
             return (byte)(NatureWeaponHandler.GetUseSpeed(AttachedNatureWeapon, player) * 3 * Math.Min(1f, _attackTimer / _attackTime));
         }
 
@@ -200,7 +200,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
         }
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
-            if (_shootCount < MAXSHOOTCOUNT || _shot) {
+            if (_shootCount < MAXSHOOTCOUNT || !PreparingAttack) {
                 return;
             }
             if (Main.rand.NextChance(MathHelper.Clamp(step * 2f, 0f, 0.75f))) {

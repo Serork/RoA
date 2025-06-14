@@ -343,24 +343,16 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
     public static Color GetEffectsColor(int i, int j) {
         ModTile tile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType);
         ushort option = tile.GetMapOption(i, j);
-        switch (option) {
-            case 0:
-                return new Color(238, 51, 53);
-            case 1:
-                return new Color(13, 107, 216);
-            case 2:
-                return new Color(33, 184, 115);
-            case 3:
-                return new Color(255, 221, 62);
-            case 4:
-                return new Color(165, 0, 236);
-            case 5:
-                return new Color(223, 230, 238);
-            case 6:
-                return new Color(207, 101, 0);
-            default:
-                return new Color(238, 51, 53);
-        }
+        return option switch {
+            0 => new Color(238, 51, 53),
+            1 => new Color(13, 107, 216),
+            2 => new Color(33, 184, 115),
+            3 => new Color(255, 221, 62),
+            4 => new Color(165, 0, 236),
+            5 => new Color(223, 230, 238),
+            6 => new Color(207, 101, 0),
+            _ => new Color(238, 51, 53),
+        };
     }
 
     public static LocalizedText GetMapText(int i, int j) {
@@ -580,7 +572,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "GemCrack") { PitchVariance = 0.2f }, position);
         for (int k = 0; k < 8; k++) {
             Color color = GetEffectsColor(i, j);
-            int dust = Dust.NewDust(position + Vector2.UnitY * 2f, 4, 4, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
+            int dust = Dust.NewDust(position + Vector2.UnitY * 2f, 4, 4, DustID.RainbowMk2, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
             Main.dust[dust].noGravity = true;
             Main.dust[dust].color = color;
             Main.dust[dust].velocity *= 0.5f;

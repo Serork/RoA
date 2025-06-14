@@ -41,7 +41,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
         }
     }
 
-    private PetalInfo[] _petalData = [];
+    private PetalInfo[]? _petalData;
 
     public override void Load() {
         LoadSunflowerTextures();
@@ -103,7 +103,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
             }
 
             for (int i = 0; i < PETALCOUNT; i++) {
-                ref PetalInfo petalData = ref _petalData[i];
+                ref PetalInfo petalData = ref _petalData![i];
                 float edge = petalData.MaxExtraScale * 0.2f;
                 bool canScale = !(petalData.ExtraScale > edge * 1.1f || petalData.ExtraScale < -edge * 1.1f);
                 if (canScale) {
@@ -117,7 +117,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
 
             float maxScale = 0f;
             for (int i = 0; i < 6; i++) {
-                PetalInfo petalData = _petalData[i];
+                PetalInfo petalData = _petalData![i];
                 maxScale += petalData.ExtraScale;
             }
             sunflowerValues.BaseExtraScale = maxScale * 0.1f;
@@ -130,6 +130,11 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
     }
 
     protected override void Draw(ref Color lightColor) {
+        SunflowerValues sunflowerValues = new(Projectile);
+        if (!sunflowerValues.Init) {
+            return;
+        }
+
         if (_baseTexture?.IsLoaded != true || _petalTexture?.IsLoaded != true || _rayTexture?.IsLoaded != true) {
             return;
         }
@@ -142,12 +147,12 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
         void drawBaseAndAddLight() {
             SunflowerValues sunflowerValues = new(Projectile);
             Texture2D baseTexture = _baseTexture!.Value;
-            Main.spriteBatch.DrawWith(baseTexture, Projectile.Center, DrawInfo.Default with {
+            Main.spriteBatch.Draw(baseTexture, Projectile.Center, DrawInfo.Default with {
                 Rotation = Projectile.rotation,
                 Color = baseColor,
                 Origin = baseTexture.Size() / 2f,
                 Scale = Vector2.One * (Projectile.scale + sunflowerValues.BaseExtraScale * baseOpacity) * 1.35f,
-                Clip = Rectangle.Empty with { Width = baseTexture.Width, Height = baseTexture.Height }
+                Clip = baseTexture.Bounds
             });
 
             Lighting.AddLight(Projectile.Center, Vector3.One * 0.25f * baseOpacity);
@@ -159,12 +164,12 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                 float petalRotation = Projectile.rotation + i * MathHelper.TwoPi / PETALCOUNT + 0.6f;
                 float offsetValue = -5f;
                 Vector2 offset = Vector2.UnitY.RotatedBy(petalRotation) * offsetValue;
-                float extraScale = _petalData[i].ExtraScale * petalFill;
-                Main.spriteBatch.DrawWith(petalTexture, Projectile.Center + offset, DrawInfo.Default with { 
+                float extraScale = _petalData![i].ExtraScale * petalFill;
+                Main.spriteBatch.Draw(petalTexture, Projectile.Center + offset, DrawInfo.Default with { 
                     Color = petalColor,
                     Rotation = petalRotation,
                     Origin = new Vector2(petalTexture.Width / 2f, petalTexture.Height),
-                    Clip = Rectangle.Empty with { Width = petalTexture.Width, Height = petalTexture.Height },
+                    Clip = petalTexture.Bounds,
                     Scale = new Vector2(Ease.CircOut(petalFill), petalFill + MathF.Sin(extraScale * 6f) / 6f)
                 });
             }
@@ -176,7 +181,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
             int rayCount = 10;
             float maxScale = 0f;
             for (int i = 0; i < 6; i++) {
-                PetalInfo petalData = _petalData[i];
+                PetalInfo petalData = _petalData![i];
                 maxScale += petalData.ExtraScale;
             }
             for (int i = 0; i < rayCount; i++) {
@@ -185,11 +190,11 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                 float offsetValue = rayTexture.Height * 0.5f;
                 Vector2 offset = Vector2.UnitY.RotatedBy(rayRotation) * offsetValue;
                 float extraScale = MathF.Min(0.75f, MathF.Sin(maxScale));
-                Main.spriteBatch.DrawWith(rayTexture, Projectile.Center + offset, DrawInfo.Default with {
+                Main.spriteBatch.Draw(rayTexture, Projectile.Center + offset, DrawInfo.Default with {
                     Color = Utils.MultiplyRGB(Color.Yellow, petalColor) * 0.55f * Projectile.Opacity * petalFills[i] * sunflowerValues.PetalSpawnTimer,
                     Rotation = rayRotation - MathHelper.PiOver2,
                     Origin = new Vector2(0f, rayTexture.Height / 2f),
-                    Clip = Rectangle.Empty with { Width = rayTexture.Width, Height = rayTexture.Height },
+                    Clip = rayTexture.Bounds,
                     Scale = new Vector2(2f + extraScale * 0.5f, 1f * petalFill) * 0.5f * 0.85f
                 });
 

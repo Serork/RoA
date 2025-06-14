@@ -25,10 +25,7 @@ sealed class CrossmodNatureContent : ModSystem {
 
     public override void Unload() {
         natureItems.Clear();
-        natureItems = null;
-
         natureProjectiles.Clear();
-        natureProjectiles = null;
     }
 }
 

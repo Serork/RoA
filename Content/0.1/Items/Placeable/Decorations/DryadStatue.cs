@@ -14,7 +14,7 @@ sealed class DryadStatue : ModItem {
     }
 
     public override void SetDefaults() {
-        Item.SetSize(28, 42);
+        Item.SetSizeValues(28, 42);
 
         Item.SetDefaultsToStackable(Item.CommonMaxStack);
 

@@ -15,11 +15,11 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 sealed class RipePumpkin : NatureItem {
     protected override void SafeSetDefaults() {
-        Item.SetSize(30, 28);
+        Item.SetSizeValues(30, 28);
         Item.SetWeaponValues(4, 6f);
         Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 45, 20, false, useSound: SoundID.Item7);
         Item.SetDefaultsToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Nature.RipePumpkin>());
-        Item.SetDefaultsOthers(Item.sellPrice(silver: 20), ItemRarityID.Blue);
+        Item.SetOtherValues(Item.sellPrice(silver: 20), ItemRarityID.Blue);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 24);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.5f);

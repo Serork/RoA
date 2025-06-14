@@ -85,7 +85,7 @@ sealed class RipePumpkin : NatureProjectile {
                 }
                 _rotateWiggler.Update();*/
                 float progress = Math.Min((Projectile.ai[0] - min2) / (max - min2), 1f);
-                //Projectile.rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 45.0)) * progress;
+                //Projectile._rotation = Projectile.ai[1] + (float)((double)_rotateWiggler.Value * 13.5 * (Math.PI / 45.0)) * progress;
                 Projectile.rotation = Projectile.ai[1];
                 if (Projectile.ai[0] >= max * 0.75f) {
                     int type = ModContent.ItemType<Items.Weapons.Nature.PreHardmode.RipePumpkin>();

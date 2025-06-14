@@ -21,8 +21,8 @@ sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
     protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(38);
-        Item.SetDefaultsToUsable(-1, 27, useSound: SoundID.Item7);
+        Item.SetSizeValues(38);
+        Item.SetUsageValues(-1, 27, useSound: SoundID.Item7);
         Item.SetWeaponValues(8, 1f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 23);
@@ -35,7 +35,7 @@ sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
     public sealed class PastoralRodBase : CaneBaseProjectile {
         private Color? _color = null;
 
-        protected override bool ShouldntUpdateRotationAndDirection() => false;
+        //protected override bool ShouldStopUpdatingRotationAndDirection() => false;
 
         protected override void SafestOnSpawn(IEntitySource source) {
             //Color[] colors = [new Color(255, 0, 0), new Color(0, 255, 0), new Color(255, 255, 0)];

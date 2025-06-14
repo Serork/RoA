@@ -18,7 +18,7 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
 sealed class ElderwoodClaws : ClawsBaseItem {
     protected override void SafeSetDefaults() {
-        Item.SetSize(26);
+        Item.SetSizeValues(26);
         Item.SetWeaponValues(14, 4f);
         Item.SetDefaultsToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
 
@@ -26,7 +26,7 @@ sealed class ElderwoodClaws : ClawsBaseItem {
 
         Item.value = Item.sellPrice(0, 0, 22, 0);
 
-        Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
+        Item.SetUsageValues(ItemUseStyleID.Swing, 18, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 16);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);

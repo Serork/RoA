@@ -20,8 +20,8 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
     protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(38);
-        Item.SetDefaultsToUsable(-1, 25, useSound: SoundID.Item7);
+        Item.SetSizeValues(38);
+        Item.SetUsageValues(-1, 25, useSound: SoundID.Item7);
         Item.SetWeaponValues(14, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 26);
@@ -61,7 +61,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
             Vector2 mousePoint = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
             float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
             float y = mousePoint.Y + player.height - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
-            if (CurrentUseTime > _maxUseTime * MinUseTimeToShootFactor()) {
+            if (CurrentUseTime > UseTime * MinUseTimeToShootFactor()) {
                 if (Projectile.owner == Main.myPlayer && _position == Vector2.Zero) {
                     _position = new(mousePoint.X, y);
                     Projectile.netUpdate = true;
@@ -79,10 +79,10 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
             Vector2 mousePoint = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
             float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
             float y = mousePoint.Y + player.height - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
-            if (CurrentUseTime > _maxUseTime * MinUseTimeToShootFactor()) {
+            if (CurrentUseTime > UseTime * MinUseTimeToShootFactor()) {
 
             }
-            else if (_leftTimeToReuse <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {
+            else if (CurrentPenaltyTime <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {
                 _makeDust = false;
                 for (int num559 = 0; num559 < 10; num559++) {
                     int dustType = DustID.OasisCactus;
@@ -112,7 +112,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
             }
         }
 
-        protected override bool ShouldntUpdateRotationAndDirection() => _shot && _leftTimeToReuse < TimeAfterShootToExist(Owner) / 5f;
+        //protected override bool ShouldStopUpdatingRotationAndDirection() => Shot && _penaltyTime < TimeAfterShootToExist(Owner) / 5f;
 
         protected override float MinUseTimeToShootFactor() => 0.61f;
 
@@ -120,7 +120,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedNatureWeapon, player) * 3);
+        protected override ushort TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedNatureWeapon, player) * 3);
 
         protected override bool DespawnWithProj() => true;
 

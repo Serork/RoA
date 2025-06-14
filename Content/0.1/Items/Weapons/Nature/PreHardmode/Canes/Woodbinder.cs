@@ -22,8 +22,8 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<ProtectiveRoots>();
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(36, 42);
-        Item.SetDefaultsToUsable(-1, 24, useSound: SoundID.Item1);
+        Item.SetSizeValues(36, 42);
+        Item.SetUsageValues(-1, 24, useSound: SoundID.Item1);
         Item.SetWeaponValues(10, 2f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 22);
@@ -46,9 +46,9 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        protected override bool IsInUse => !Owner.CCed && Owner.controlUseItem;
+        public override bool IsInUse => !Owner.CCed && Owner.controlUseItem;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 3);
+        protected override ushort TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 3);
 
         protected override bool ShouldPlayShootSound() => false;
 
@@ -91,10 +91,10 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
             if (Projectile.owner != Main.myPlayer) {
                 return;
             }
-            if (CurrentUseTime <= 0f || _shot) {
+            if (CurrentUseTime <= 0f || !PreparingAttack) {
                 return;
             }
-            float opacity = Ease.CubeOut(Utils.GetLerpValue(1f, 0.85f, UseTime, true));
+            float opacity = Ease.CubeOut(Utils.GetLerpValue(1f, 0.85f, AttackTimeLeftProgress, true));
             opacity *= Utils.GetLerpValue(0.2f, 0.285f, _strength, true);
             Player player = Owner;
             float distY = 100f * Strength;
@@ -120,7 +120,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
         }
 
         protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
-            int count = (int)(16 * Ease.QuadOut(1f - UseTime));
+            int count = (int)(16 * Ease.QuadOut(1f - AttackTimeLeftProgress));
             for (int i = 0; i < count; i++) {
                 int type = Main.rand.NextBool(4) ? ModContent.DustType<Dusts.Woodbinder>() : ModContent.DustType<WoodTrash>();
                 Vector2 position = corePosition + new Vector2(0, -6) + new Vector2(20f, 0).RotatedBy(i * Math.PI * 2 / 16f) - new Vector2(8f, 4f);
@@ -134,7 +134,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
         }
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
-            if (_shot) {
+            if (!PreparingAttack) {
                 return;
             }
             float offset = 10f;

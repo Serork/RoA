@@ -5,10 +5,10 @@ using ReLogic.Content;
 
 using RoA.Common.Projectiles;
 using RoA.Core;
-using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -31,19 +31,36 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
     private static Asset<Texture2D>? _cloudberryTexture, _snowBlockTexture;
 
     private struct CopyInfo {
+        private float _opacity;
+        private byte _usedFrame;
+
         public Vector2 Position;
-        public byte UsedFrame;
         public float Rotation;
-        public float Opacity;
         public float Scale;
+
+        public float Opacity {
+            readonly get => _opacity;
+            set => _opacity = MathUtils.Clamp01(value);
+        }
+
+        public byte UsedFrame {
+            readonly get => _usedFrame;
+            set => _usedFrame = Utils.Clamp<byte>(value, 0, FRAMECOUNT);
+        }
     }
 
     private struct SnowBlockInfo {
+        private float _opacity;
+
         public Point Position;
         public Rectangle Clip;
-        public float Opacity;
         public SlopeType Slope;
         public bool HalfBlock;
+
+        public float Opacity {
+            readonly get => _opacity;
+            set => _opacity = MathUtils.Clamp01(value);
+        }
     }
 
     private ref struct CloudberryValues(Projectile projectile) {
@@ -72,9 +89,9 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
         }
     }
 
-    private CopyInfo[] _copyData = [];
+    private CopyInfo[]? _copyData;
     private byte _currentCopyIndex;
-    private SnowBlockInfo[] _snowBlockData = [];
+    private SnowBlockInfo[]? _snowBlockData;
     private byte _currentTileIndex;
     private Point _lastTilePosition;
 
@@ -156,7 +173,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
         }
         void updateCopies() {
             for (int i = 0; i < MAXCOPIES; i++) {
-                ref CopyInfo copyInfo = ref _copyData[i];
+                ref CopyInfo copyInfo = ref _copyData![i];
                 if (copyInfo.Opacity > 0f) {
                     copyInfo.Scale -= 0.05f;
                     copyInfo.Opacity -= 0.05f;
@@ -175,6 +192,11 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
     }
 
     protected override void Draw(ref Color lightColor) {
+        CloudberryValues cloudberryValues = new(Projectile);
+        if (!cloudberryValues.Init) {
+            return;
+        }
+
         if (_cloudberryTexture?.IsLoaded != true || _snowBlockTexture?.IsLoaded != true) {
             return;
         }
@@ -187,7 +209,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
         Texture2D snowBlockTexture = _snowBlockTexture.Value;
         void drawSelf() {
             CloudberryValues cloudberryValues = new(Projectile);
-            Main.spriteBatch.DrawWith(cloudberryTexture, Projectile.Center, DrawInfo.Default with {
+            Main.spriteBatch.Draw(cloudberryTexture, Projectile.Center, DrawInfo.Default with {
                 Color = color,
                 Rotation = cloudberryRotation,
                 Origin = new Vector2(cloudberryWidth, cloudberryHeight) / 2f,
@@ -196,12 +218,12 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
         }
         void drawCopies() {
             for (int i = 0; i < MAXCOPIES; i++) {
-                CopyInfo copyInfo = _copyData[i];
-                if (Helper.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
+                CopyInfo copyInfo = _copyData![i];
+                if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
                     continue;
                 }
-                Main.spriteBatch.DrawWith(cloudberryTexture, copyInfo.Position, DrawInfo.Default with {
-                    Color = color * Helper.Clamp01(copyInfo.Opacity) * Projectile.Opacity,
+                Main.spriteBatch.Draw(cloudberryTexture, copyInfo.Position, DrawInfo.Default with {
+                    Color = color * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity,
                     Rotation = copyInfo.Rotation,
                     Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
                     Origin = new Vector2(cloudberryWidth, cloudberryHeight) / 2f,
@@ -209,12 +231,12 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
                 });
             }
             for (int i = 0; i < MAXSNOWBLOCKS; i++) {
-                SnowBlockInfo tileInfo = _snowBlockData[i];
+                SnowBlockInfo tileInfo = _snowBlockData![i];
                 int num12 = (int)tileInfo.Slope;
                 bool halfBlock = tileInfo.HalfBlock;
                 if (num12 == 0) {
-                    Main.spriteBatch.DrawWith(snowBlockTexture, tileInfo.Position.ToWorldCoordinates() - Vector2.UnitY * 8f, DrawInfo.Default with {
-                        Color = color * Helper.Clamp01(tileInfo.Opacity),
+                    Main.spriteBatch.Draw(snowBlockTexture, tileInfo.Position.ToWorldCoordinates() - Vector2.UnitY * 8f, DrawInfo.Default with {
+                        Color = color * MathUtils.Clamp01(tileInfo.Opacity),
                         Clip = tileInfo.Clip
                     });
                 }
@@ -245,14 +267,14 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
                                 num17 = 16 - i2 * 2 - 2;
                                 break;
                         }
-                        Main.spriteBatch.DrawWith(snowBlockTexture, tileInfo.Position.ToWorldCoordinates() - Vector2.UnitY * 8f + new Vector2(num17, i2 * num13 + num14), DrawInfo.Default with {
-                            Color = color * Helper.Clamp01(tileInfo.Opacity),
+                        Main.spriteBatch.Draw(snowBlockTexture, tileInfo.Position.ToWorldCoordinates() - Vector2.UnitY * 8f + new Vector2(num17, i2 * num13 + num14), DrawInfo.Default with {
+                            Color = color * MathUtils.Clamp01(tileInfo.Opacity),
                             Clip = new Rectangle(tileInfo.Clip.X + num17, tileInfo.Clip.Y + num16, num13, num15)
                         });
                     }
                     int num18 = ((num12 <= 2) ? 14 : 0);
-                    Main.spriteBatch.DrawWith(snowBlockTexture, tileInfo.Position.ToWorldCoordinates() - Vector2.UnitY * 8f + new Vector2(0f, num18), DrawInfo.Default with {
-                        Color = color * Helper.Clamp01(tileInfo.Opacity),
+                    Main.spriteBatch.Draw(snowBlockTexture, tileInfo.Position.ToWorldCoordinates() - Vector2.UnitY * 8f + new Vector2(0f, num18), DrawInfo.Default with {
+                        Color = color * MathUtils.Clamp01(tileInfo.Opacity),
                         Clip = new Rectangle(tileInfo.Clip.X, tileInfo.Clip.Y + num18, 16, 2)
                     });
                 }
@@ -387,7 +409,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
                             }
                         }
 
-                        if (num4 > 0 && Main.rand.Next(3) == 0) {
+                        if (num4 > 0 && Main.rand.NextBool(3)) {
                             float num5 = (float)Math.Abs(num - j) / (mAX_SPREAD / 2f);
                             Gore gore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, Vector2.Zero, 61 + Main.rand.Next(3), 1f - (float)num3 * 0.5f + num5 * 0.5f);
                             gore.velocity.Y -= 0.1f + (float)num3 * 0.5f + num5 * (float)num3 * 1f;
@@ -410,7 +432,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
         }
         void createSnowBlockDusts() {
             for (int i = 0; i < MAXSNOWBLOCKS; i++) {
-                SnowBlockInfo tileInfo = _snowBlockData[i];
+                SnowBlockInfo tileInfo = _snowBlockData![i];
                 int j = tileInfo.Position.X,
                     k = tileInfo.Position.Y;
                 Tile tileSafely = WorldGenHelper.GetTileSafely(j, k);
@@ -441,7 +463,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
             if (_currentCopyIndex >= MAXCOPIES) {
                 _currentCopyIndex = 0;
             }
-            _copyData[_currentCopyIndex++] = new CopyInfo() {
+            _copyData![_currentCopyIndex++] = new CopyInfo() {
                 Position = Projectile.Center,
                 UsedFrame = EXPLOSIONFRAME,
                 Rotation = Projectile.rotation,
@@ -470,7 +492,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
             }
             _lastTilePosition = positionInTiles;
             Tile tile = WorldGenHelper.GetTileSafely(positionInTiles);
-            _snowBlockData[_currentTileIndex++] = new SnowBlockInfo() {
+            _snowBlockData![_currentTileIndex++] = new SnowBlockInfo() {
                 Position = positionInTiles,
                 Slope = tile.Slope,
                 HalfBlock = tile.IsHalfBlock,

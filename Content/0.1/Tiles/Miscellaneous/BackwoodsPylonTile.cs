@@ -140,7 +140,7 @@ sealed class BackwoodsPylonTile : ModPylon {
         // Calculate frame based on vanilla counters in order to line up the animation
         int frameY = Main.tileFrameCounter[TileID.TeleportationPylon] / crystalVerticalFrameCount;
 
-        // Frame our modded crystal sheet accordingly for proper drawing
+        // UsedFrame our modded crystal sheet accordingly for proper drawing
         Rectangle crystalFrame = crystalTexture.Frame(1, crystalVerticalFrameCount, 0, frameY);
         Rectangle smartCursorGlowFrame = crystalHighlightTexture.Frame(1, crystalVerticalFrameCount, 0, frameY);
         // I have no idea what is happening here; but it fixes the frame bleed issue. All I know is that the vertical sinusoidal motion has something to with it.

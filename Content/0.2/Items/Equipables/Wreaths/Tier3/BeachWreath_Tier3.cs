@@ -16,7 +16,7 @@ namespace RoA.Content.Items.Equipables.Wreaths.Tier3;
 
 sealed class BeachWreathTier3 : WreathItem {
     protected override void SafeSetDefaults() {
-        Item.SetSize(width: 30, height: 28);
+        Item.SetSizeValues(width: 30, height: 28);
 
         DefaultsToTier3Wreath();
     }

@@ -18,14 +18,14 @@ sealed class HellfireClaws : ClawsBaseItem {
     public override Color? GetAlpha(Color lightColor) => Color.White;
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(26);
+        Item.SetSizeValues(26);
         Item.SetWeaponValues(30, 4.2f);
 
         Item.rare = ItemRarityID.Orange;
 
         Item.value = Item.sellPrice(0, 2, 50, 0);
 
-        Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 18, false, autoReuse: true);
+        Item.SetUsageValues(ItemUseStyleID.Swing, 18, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 34);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);

@@ -13,7 +13,7 @@ sealed class FlederSlayerDecoration : ModItem {
     }
 
     public override void SetDefaults() {
-        Item.SetSize(20, 38);
+        Item.SetSizeValues(20, 38);
 
         Item.CloneDefaults(ItemID.BloodMoonMonolith);
         Item.createTile = ModContent.TileType<Tiles.Decorations.FlederSlayerDecoration>();

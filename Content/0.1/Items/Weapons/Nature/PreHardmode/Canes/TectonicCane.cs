@@ -23,8 +23,8 @@ sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TectonicCaneProjectile>();
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(36, 38);
-        Item.SetDefaultsToUsable(-1, 40, useSound: SoundID.Item7);
+        Item.SetSizeValues(36, 38);
+        Item.SetUsageValues(-1, 40, useSound: SoundID.Item7);
         Item.SetWeaponValues(12, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 30);
@@ -36,10 +36,9 @@ sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
     }
 
     public sealed class TectonicCaneBase : CaneBaseProjectile {
-
         private Vector2 _tempMousePosition;
 
-        protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedNatureWeapon, player) * 2);
+        protected override ushort TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedNatureWeapon, player) * 2);
 
         protected override void SetAttackSound(ref SoundStyle attackSound) => attackSound = SoundID.Item69 with { Pitch = 0.25f, Volume = 0.625f };
 

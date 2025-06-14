@@ -14,7 +14,7 @@ sealed class FenethStatue : ModItem {
     }
 
     public override void SetDefaults() {
-        Item.SetSize(36, 40);
+        Item.SetSizeValues(36, 40);
 
         Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Station.FenethStatue>());
 

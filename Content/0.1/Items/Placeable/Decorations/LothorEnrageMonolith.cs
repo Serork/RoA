@@ -9,7 +9,7 @@ namespace RoA.Content.Items.Placeable.Decorations;
 
 sealed class LothorEnrageMonolith : ModItem {
     public override void SetDefaults() {
-        Item.SetSize(26, 32);
+        Item.SetSizeValues(26, 32);
 
         Item.CloneDefaults(ItemID.BloodMoonMonolith);
         Item.accessory = true;

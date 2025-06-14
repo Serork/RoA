@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -13,7 +14,7 @@ namespace RoA.Content.Items.Equipables.Wreaths.Tier3;
 
 sealed class JungleWreathTier3 : WreathItem {
     protected override void SafeSetDefaults() {
-        Item.SetSize(width: 30, height: 28);
+        Item.SetSizeValues(width: 30, height: 28);
 
         DefaultsToTier3Wreath();
     }
@@ -52,7 +53,7 @@ sealed class JungleWreathTier3 : WreathItem {
         private void GrowThorns(Player.HurtInfo info) {
             Vector2 thornsSpawnPosition = Player.Center;
             float lostHPProcentValue = info.Damage / (float)Player.statLifeMax2;
-            NPC? target = Helper.FindClosestNPC(thornsSpawnPosition, 300, false);
+            NPC? target = NPCUtils.FindClosestNPC(thornsSpawnPosition, 300, false);
             bool foundTarget = target != null;
             Vector2 thornsVelocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
             if (foundTarget) {

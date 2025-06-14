@@ -17,14 +17,14 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
 sealed class HorrorPincers : ClawsBaseItem {
     protected override void SafeSetDefaults() {
-        Item.SetSize(26);
+        Item.SetSizeValues(26);
         Item.SetWeaponValues(24, 3f);
 
         Item.rare = ItemRarityID.Green;
 
         Item.value = Item.sellPrice(0, 0, 54, 0);
 
-        Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 16, false, autoReuse: true);
+        Item.SetUsageValues(ItemUseStyleID.Swing, 16, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 27);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.8f);

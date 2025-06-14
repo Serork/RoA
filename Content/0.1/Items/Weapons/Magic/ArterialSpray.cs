@@ -26,11 +26,11 @@ sealed class ArterialSpray : ModItem {
     }
 
     public override void SetDefaults() {
-        Item.SetSize(42);
+        Item.SetSizeValues(42);
 
         Item.DefaultToMagicWeapon(ModContent.ProjectileType<ArterialSprayProjectile3>(), 0, 1f);
 
-        Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 20);
+        Item.SetUsageValues(ItemUseStyleID.Swing, 20);
 
         Item.damage = 16;
         Item.crit = 4;
@@ -272,7 +272,7 @@ sealed class ArterialSprayProjectile2 : ModProjectile {
             Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
             Main.EntitySpriteDraw(texture, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
             texture2 = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray3").Value;
-            //Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
+            //Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile._rotation, origin, Projectile.scale, effects);
         }
 
         return false;

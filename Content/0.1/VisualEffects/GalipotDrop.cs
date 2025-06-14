@@ -69,8 +69,8 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
             Position += Velocity;
             Scale *= 0.98f;
         }
-        //if (_opacity < 1f) {
-        //    _opacity += 0.1f;
+        //if (_forcedOpacity < 1f) {
+        //    _forcedOpacity += 0.1f;
         //}
     }
 

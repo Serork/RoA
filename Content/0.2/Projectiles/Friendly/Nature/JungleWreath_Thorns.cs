@@ -9,6 +9,7 @@ using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility;
 
 using System;
@@ -47,7 +48,7 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
 
         public float Progress {
             readonly get => _progress;
-            set => _progress = Helper.Clamp01(value);
+            set => _progress = MathUtils.Clamp01(value);
         }
 
         public readonly byte FrameToUse = frameToUse;
@@ -73,7 +74,7 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
         public readonly int WrapDirection => (int)WrapDirectionValue;
     }
 
-    private SegmentInfo[] _segmentData = [];
+    private SegmentInfo[]? _segmentData;
 
     private int GetThornsLength() => new ThornsValues(Projectile).Length;
 
@@ -128,7 +129,7 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
             for (int i = 0; i < thornsLength; i++) {
                 int currentSegmentIndex = i,
                     previousSegmentIndex = Math.Max(0, i - 1);
-                ref SegmentInfo currentSegmentData = ref _segmentData[currentSegmentIndex],
+                ref SegmentInfo currentSegmentData = ref _segmentData![currentSegmentIndex],
                                 previousSegmentData = ref _segmentData[previousSegmentIndex];
                 if (currentSegmentIndex > 0 && previousSegmentData.Progress < 1f) {
                     continue;
@@ -139,10 +140,10 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
             }
         }
         void makeDustsOnGrowth() {
-            DoOnSegmentIteration((SegmentIterationArgs) => {
-                if (Main.rand.NextChance(1.25f - SegmentIterationArgs.Index / (float)SegmentIterationArgs.Length)) {
-                    if (SegmentIterationArgs.Info.Progress < 1f) {
-                        SpawnThornsDust(SegmentIterationArgs.Position);
+            DoOnSegmentIteration((segmentIterationArgs) => {
+                if (Main.rand.NextChance(1.25f - segmentIterationArgs.Index / (float)segmentIterationArgs.Length)) {
+                    if (segmentIterationArgs.Info.Progress < 1f) {
+                        SpawnThornsDust(segmentIterationArgs.Position);
                     }
                 }
             });
@@ -154,6 +155,11 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
     }
 
     protected override void Draw(ref Color lightColor) {
+        ThornsValues thornValues = new(Projectile);
+        if (!thornValues.Init) {
+            return;
+        }
+
         if (_thornsTexture?.IsLoaded != true) {
             return;
         }
@@ -164,7 +170,7 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
         DoOnSegmentIteration((segmentIterationArgs) => {
             int currentSegmentHeight = (int)(segmentHeight * segmentIterationArgs.Info.Progress);
             float segmentRotation = segmentIterationArgs.Velocity.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi;
-            Main.spriteBatch.DrawWith(segmentTexture, segmentIterationArgs.Position, DrawInfo.Default with {
+            Main.spriteBatch.Draw(segmentTexture, segmentIterationArgs.Position, DrawInfo.Default with {
                 Color = Lighting.GetColor(segmentIterationArgs.Position.ToTileCoordinates()),
                 Rotation = segmentRotation,
                 Origin = new Vector2(segmentWidth, segmentHeight) / 2f,
@@ -176,7 +182,7 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         bool result = false;
         DoOnSegmentIteration((segmentIterationArgs) => {
-            if (Helper.CenteredSquare(segmentIterationArgs.Position, SEGMENTHEIGHT).Intersects(targetHitbox)) {
+            if (GeometryUtils.CenteredSquare(segmentIterationArgs.Position, SEGMENTHEIGHT).Intersects(targetHitbox)) {
                 result = true;
             }
         });
@@ -204,7 +210,7 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
         for (int i = 0; i < thornsLength; i++) {
             int currentSegmentIndex = i,
                 previousSegmentIndex = Math.Max(0, i - 1);
-            SegmentInfo currentSegmentData = _segmentData[currentSegmentIndex],
+            SegmentInfo currentSegmentData = _segmentData![currentSegmentIndex],
                         previousSegmentData = _segmentData[previousSegmentIndex];
             if (currentSegmentIndex > 0 && previousSegmentData.Progress < 1f) {
                 continue;

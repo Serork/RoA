@@ -122,7 +122,7 @@ sealed class RootRing : NatureProjectile {
         Color color = stats.BaseColor * (0.5f + 0.5f * (1f - Projectile.ai[0]));
         float multiplier = 0.035f;
         //for (int i = 0; i < 2; i++)
-        //spriteBatch.Draw(texture, position, null, color * _fading2, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
+        //spriteBatch.Draw(texture, position, null, color * _fading2, Projectile._rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
 
         spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, SpriteEffects.None, 0);
 

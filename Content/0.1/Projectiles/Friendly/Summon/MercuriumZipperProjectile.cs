@@ -703,7 +703,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
                 frame.Height = 18;
             }
 
-            float rotation = diff.ToRotation() - MathHelper.PiOver2; // This projectile's sprite faces down, so PiOver2 is used to correct rotation.
+            float rotation = diff.ToRotation() - MathHelper.PiOver2; // This projectile's sprite faces down, so PiOver2 is used to correct _rotation.
             Color color = Lighting.GetColor(element.ToTileCoordinates());
 
             Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);

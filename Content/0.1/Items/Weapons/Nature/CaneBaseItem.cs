@@ -3,8 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
-using RoA.Content.Projectiles.Friendly;
+using RoA.Common.Projectiles;
 using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using System;
@@ -16,7 +17,6 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature;
@@ -66,40 +66,42 @@ abstract class CaneBaseItem<T> : NatureItem where T : CaneBaseProjectile {
 
 abstract class CaneBaseItem : CaneBaseItem<CaneBaseProjectile> { }
 
-abstract class CaneBaseProjectile : NatureProjectile {
-    protected const float STARTROTATION = 1.4f;
-    protected const float MINROTATION = -0.24f, MAXROTATION = 0.24f;
-    protected const int TICKSTOREUSE = 30;
+abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
+    private const float STARTROTATION = 1.4f;
+    private const float MINROTATION = -0.24f, MAXROTATION = 0.24f;
+    private const int BASEPENALTY = 30;
 
-    protected short _leftTimeToReuse;
-    protected float _maxUseTime, _maxUseTime2;
-    protected bool _shot, _shot2;
-    protected float _rotation;
-    protected Vector2 _positionOffset;
+    private bool _init;
+    private ushort _penaltyTime, _maxPenaltyTime;
+    private float _maxUseTime;
+    private float _rotation;
+    private Vector2 _positionOffset;
+
+    protected bool Shot, Shot2;
 
     protected Player Owner => Projectile.GetOwnerAsPlayer();
     protected bool FacedLeft => Owner.direction == -1;
-
     protected float OffsetRotation => FacedLeft ? -0.2f : 0.2f;
 
-    protected virtual bool IsInUse => !Owner.CCed;
-    protected float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
-    protected float Step => Math.Clamp(1f - UseTime, 0f, 1f);
+    public float UseTime => _maxUseTime;
 
-    protected Item HeldItem => AttachedNatureWeapon;
-    protected Texture2D? HeldItemTexture => HeldItem.IsEmpty() ? null : TextureAssets.Item[HeldItem.type].Value;
+    public float AttackTimeLeftProgress => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
+    public float AttackProgress01 => Math.Clamp(1f - AttackTimeLeftProgress, 0f, 1f);
 
     protected Vector2 GravityOffset => Owner.gravDir == -1 ? (-Vector2.UnitY * 10f) : Vector2.Zero;
-    protected Vector2 Offset => HeldItemTexture == null ? Vector2.Zero : (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(HeldItemTexture.Width, HeldItemTexture.Height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
+    protected Vector2 Offset => AttachedNatureWeapon.IsEmpty() ? default : (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(AttachedNatureWeapon.width, AttachedNatureWeapon.height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
     public Vector2 CorePosition => Projectile.Center + Offset + GravityOffset;
 
-    public bool PreparingAttack => !_shot;
+    public bool PreparingAttack => !Shot;
 
     public int CurrentUseTime { get => (int)Projectile.ai[0]; private set => Projectile.ai[0] = value < 0 ? 0 : value; }
-    protected ushort ShootType => (ushort)Projectile.ai[1];
     public bool ShouldBeActive { get => Projectile.ai[2] == 0f; private set => Projectile.ai[2] = 1 - value.ToInt(); }
 
-    public override string Texture => ResourceManager.EmptyTexture;
+    protected ushort CurrentPenaltyTime => _penaltyTime;
+    protected float PenaltyProgress => (float)_penaltyTime / _maxPenaltyTime;
+    protected ushort ShootType => (ushort)Projectile.ai[1];
+
+    public virtual bool IsInUse => !Owner.CCed;
 
     protected virtual float OffsetPositionMult { get; } = 0f;
 
@@ -116,7 +118,7 @@ abstract class CaneBaseProjectile : NatureProjectile {
 
     protected virtual Vector2 CorePositionOffsetFactor() => Vector2.Zero;
 
-    protected virtual byte TimeAfterShootToExist(Player player) => 0;
+    protected virtual ushort TimeAfterShootToExist(Player player) => 0;
 
     protected virtual bool ShouldWaitUntilProjDespawns() => true;
 
@@ -130,7 +132,7 @@ abstract class CaneBaseProjectile : NatureProjectile {
 
     protected virtual byte ProjActiveCount() => 1;
 
-    protected virtual bool ShouldntUpdateRotationAndDirection() => _shot && _leftTimeToReuse > 0;
+    //protected virtual bool ShouldStopUpdatingRotationAndDirection() => Shot && _penaltyTime > 0;
 
     protected bool ShouldShootInternal() => CurrentUseTime <= _maxUseTime * MinUseTimeToShootFactor();
     protected virtual bool ShouldShoot() => ShouldShootInternal() || !IsInUse;
@@ -167,33 +169,34 @@ abstract class CaneBaseProjectile : NatureProjectile {
     protected sealed override void SafeSetDefaults2() { }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
-        writer.Write(_leftTimeToReuse);
+        writer.Write(_penaltyTime);
         writer.Write(_maxUseTime);
-        writer.Write(_shot);
-        writer.Write(_shot2);
+        writer.Write(Shot);
+        writer.Write(Shot2);
         writer.Write(_rotation);
         writer.WriteVector2(_positionOffset);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
-        _leftTimeToReuse = reader.ReadInt16();
+        _penaltyTime = reader.ReadUInt16();
         _maxUseTime = reader.ReadSingle();
-        _shot = reader.ReadBoolean();
-        _shot2 = reader.ReadBoolean();
+        Shot = reader.ReadBoolean();
+        Shot2 = reader.ReadBoolean();
         _rotation = reader.ReadSingle();
         _positionOffset = reader.ReadVector2();
     }
 
-    public sealed override bool PreDraw(ref Color lightColor) {
-        Texture2D texture = HeldItemTexture;
-        if (texture == null) {
-            return false;
+    protected sealed override void Draw(ref Color lightColor) {
+        if (AttachedNatureWeapon.IsEmpty()) {
+            return;
         }
 
-        Rectangle sourceRectangle = texture.Bounds;
-        Vector2 position = Projectile.Center - Main.screenPosition;
+        Texture2D heldItemTexture = TextureAssets.Item[AttachedNatureWeapon.type].Value;
+
+        Rectangle sourceRectangle = heldItemTexture.Bounds;
+        Vector2 position = Projectile.Center;
         float offsetY = 5f * Owner.gravDir;
-        Vector2 origin = new(texture.Width * 0.5f * (1f - Owner.direction), Owner.gravDir == -1f ? 0 : texture.Height);
+        Vector2 origin = new(heldItemTexture.Width * 0.5f * (1f - Owner.direction), Owner.gravDir == -1f ? 0 : heldItemTexture.Height);
         Color color = lightColor;
         float rotation = Projectile.rotation;
         float scale = 1f;
@@ -214,9 +217,8 @@ abstract class CaneBaseProjectile : NatureProjectile {
             }
         }
         rotation += rotationOffset;
-        Main.EntitySpriteDraw(texture, position + Vector2.UnitY * offsetY, sourceRectangle, color, rotation, origin, scale, effects);
 
-        return false;
+        Main.EntitySpriteDraw(heldItemTexture, position + Vector2.UnitY * offsetY - Main.screenPosition, sourceRectangle, color, rotation, origin, scale, effects);
     }
 
     protected sealed override void SafeOnSpawn(IEntitySource source) {
@@ -226,7 +228,7 @@ abstract class CaneBaseProjectile : NatureProjectile {
                 _rotation -= MathHelper.Pi;
             }
             Projectile.spriteDirection = Owner.direction;
-            _maxUseTime = _maxUseTime2 = CurrentUseTime;
+            _maxUseTime = CurrentUseTime;
             SafestOnSpawn(source);
 
             Projectile.netUpdate = true;
@@ -243,13 +245,25 @@ abstract class CaneBaseProjectile : NatureProjectile {
         SoundEngine.PlaySound(attackSound, CorePosition);
     }
 
+    protected virtual void Initialize() { }
+
     public sealed override void AI() {
+        if (!_init) {
+            _init = true;
+
+            Initialize();
+        }
+
+        if (AttachedNatureWeapon.IsEmpty()) {
+            Projectile.Kill();
+            return;
+        }
+
         if (Owner.whoAmI != Main.myPlayer && Projectile.localAI[2] == 0f && AttachedNatureWeapon != null) {
             Projectile.localAI[2] = 1f;
 
             SoundEngine.PlaySound(AttachedNatureWeapon.UseSound, Owner.Center);
         }
-        //Main.NewText(NatureWeaponHandler.GetUseSpeed(Item, Owner));
 
         ActiveCheck();
         SetPosition();
@@ -264,40 +278,63 @@ abstract class CaneBaseProjectile : NatureProjectile {
         else if (CurrentUseTime > 0) {
             CurrentUseTime--;
 
-            SpawnCoreDustsBeforeShoot(Step, Owner, CorePosition);
+            SpawnCoreDustsBeforeShoot(AttackProgress01, Owner, CorePosition);
         }
-        else if (!_shot2) {
-            _shot2 = true;
+        else if (!Shot2) {
+            Shot2 = true;
             if (ShouldPlayShootSound()) {
                 PlayAttackSound();
             }
             SpawnDustsWhenReady(Owner, CorePosition);
         }
-        if (ShouldShoot() && !_shot) {
+        if (ShouldShoot() && !Shot) {
             ShootProjectile();
             SpawnDustsOnShoot(Owner, CorePosition);
-            _shot = true;
-            if (!ShouldBeActiveAfterShoot()) {
-                ShouldBeActive = false;
-            }
-            byte timeAfterShootToExist = (byte)(AttachedNatureWeapon.IsEmpty() ? 0 : TimeAfterShootToExist(Owner));
-            if (ShouldWaitUntilProjDespawns()) {
-                if (timeAfterShootToExist != 0) {
-                    _leftTimeToReuse = timeAfterShootToExist;
-                }
-                else {
-                    _leftTimeToReuse /= 2;
-                }
-            }
-            else {
-                if (timeAfterShootToExist != 0) {
-                    _leftTimeToReuse = timeAfterShootToExist;
-                }
-            }
+            ReleaseCane();
         }
 
         Projectile.rotation = Owner.fullRotation + _rotation;
+
+        AfterProcessingCane();
     }
+
+    protected virtual void AfterProcessingCane() { }
+
+    public virtual void ReleaseCane() {
+        if (Shot) {
+            return;
+        }
+
+        Shot = true;
+
+        if (!ShouldBeActiveAfterShoot()) {
+            ShouldBeActive = false;
+        }
+        ApplyWeaponPenalty();
+        Projectile.netUpdate = true;
+    }
+
+    protected void ApplyWeaponPenalty(ushort? timeAfterShootToExist = null) {
+        timeAfterShootToExist ??= GetTimeAfterShootToExist();
+        if (ShouldWaitUntilProjDespawns()) {
+            if (timeAfterShootToExist != 0) {
+                _penaltyTime = timeAfterShootToExist.Value;
+                _maxPenaltyTime = _penaltyTime;
+            }
+            else {
+                _penaltyTime /= 2;
+                _maxPenaltyTime = _penaltyTime;
+            }
+        }
+        else {
+            if (timeAfterShootToExist != 0) {
+                _penaltyTime = timeAfterShootToExist.Value;
+                _maxPenaltyTime = _penaltyTime;
+            }
+        }
+    } 
+
+    protected byte GetTimeAfterShootToExist() => (byte)(AttachedNatureWeapon!.IsEmpty() ? 0 : TimeAfterShootToExist(Owner));
 
     private void ActiveCheck() {
         if (!(!Owner.frozen && !Owner.stoned)) {
@@ -311,21 +348,21 @@ abstract class CaneBaseProjectile : NatureProjectile {
         if (!ShouldBeActive) {
             if (!haveProjsActive || !ShouldWaitUntilProjDespawns()) {
                 if (IsActive()) {
-                    _leftTimeToReuse--;
+                    _penaltyTime--;
                 }
             }
             else {
-                SpawnCoreDustsWhileShotProjectileIsActive(Step, Owner, CorePosition);
+                SpawnCoreDustsWhileShotProjectileIsActive(AttackProgress01, Owner, CorePosition);
             }
 
-            if (IsInUse && !_shot) {
+            if (IsInUse && !Shot) {
                 ShouldBeActive = true;
             }
         }
         else {
-            _leftTimeToReuse = TICKSTOREUSE;
+            _penaltyTime = BASEPENALTY;
         }
-        if (_leftTimeToReuse > 2) {
+        if (_penaltyTime > 2) {
             if (Owner.itemTime < 2) {
                 Owner.itemTime = Owner.itemAnimation = 10;
             }
@@ -333,12 +370,12 @@ abstract class CaneBaseProjectile : NatureProjectile {
             Projectile.timeLeft = 2;
             Owner.heldProj = Projectile.whoAmI;
         }
-        if (_shot && DespawnWithProj() && !haveProjsActive) {
+        if (Shot && DespawnWithProj() && !haveProjsActive) {
             Projectile.Kill();
         }
 
         if (Owner.whoAmI == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease &&
-            UseTime > 0.25f && UseTime < 0.75f) {
+            AttackTimeLeftProgress > 0.25f && AttackTimeLeftProgress < 0.75f) {
             if (DespawnWithProj()) {
                 foreach (Projectile projectile in Main.ActiveProjectiles) {
                     if (projectile.owner == Owner.whoAmI && projectile.type == ShootType) {
@@ -356,7 +393,8 @@ abstract class CaneBaseProjectile : NatureProjectile {
     private void SetPosition() {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
         Projectile.Center = center;
-        bool flag = !AttachedNatureWeapon.IsEmpty() && !ShouldntUpdateRotationAndDirection();
+        //bool flag = !ShouldStopUpdatingRotationAndDirection();
+        bool flag = true;
         if (Projectile.IsOwnerLocal() && flag) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
             Projectile.velocity = (pointPosition - Projectile.Center).SafeNormalize(Vector2.One);
@@ -367,7 +405,8 @@ abstract class CaneBaseProjectile : NatureProjectile {
     }
 
     private void SetDirection() {
-        bool flag = !AttachedNatureWeapon.IsEmpty() && !ShouldntUpdateRotationAndDirection();
+        //bool flag = !ShouldStopUpdatingRotationAndDirection();
+        bool flag = true;
         if (flag) {
             Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
             Owner.ChangeDir(Projectile.spriteDirection);
@@ -380,21 +419,22 @@ abstract class CaneBaseProjectile : NatureProjectile {
     }
 
     private void SetRotation() {
-        bool flag = !AttachedNatureWeapon.IsEmpty() && !ShouldntUpdateRotationAndDirection();
+        //bool flag = !ShouldStopUpdatingRotationAndDirection();
+        bool flag = true;
         if (flag) {
             float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
-            float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.75f;
+            float rotationLerp = Math.Clamp(Math.Abs(rotation - this._rotation), 0.16f, 0.24f) * 0.5f;
             if (!FacedLeft && rotation >= MathHelper.PiOver2) {
                 rotation = MathHelper.PiOver2;
             }
             if (FacedLeft && rotation <= 4.54f && rotation >= 4.51f) {
                 rotation = 4.55f;
             }
-            float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp);
+            float mouseRotation = Helper.SmoothAngleLerp(this._rotation, rotation, rotationLerp, MathHelper.Lerp);
             float min = MINROTATION;
             float max = MAXROTATION;
             Helper.SmoothClamp(ref mouseRotation, FacedLeft ? min : -max * 0.7f, FacedLeft ? max : -min, rotationLerp);
-            _rotation = mouseRotation;
+            this._rotation = mouseRotation;
         }
     }
 }

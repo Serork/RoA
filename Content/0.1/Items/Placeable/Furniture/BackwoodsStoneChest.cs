@@ -8,7 +8,7 @@ namespace RoA.Content.Items.Placeable.Furniture;
 
 sealed class BackwoodsStoneChest : ModItem {
     public override void SetDefaults() {
-        Item.SetSize(32, 30);
+        Item.SetSizeValues(32, 30);
 
         Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 10, 15, useTurn: true, autoReuse: true);
 

@@ -13,7 +13,7 @@ sealed class ForestWreathTier3 : WreathItem {
     private const int TIMETOSPAWNASUNFLOWER = 300;
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(width: 30, height: 28);
+        Item.SetSizeValues(width: 30, height: 28);
 
         DefaultsToTier3Wreath();
     }

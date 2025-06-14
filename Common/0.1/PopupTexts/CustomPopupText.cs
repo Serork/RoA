@@ -185,7 +185,7 @@ class CustomPopupText {
     public float scale = 1f;
 
     /// <summary>
-    /// The clockwise rotation of this <see cref="PopupText"/> in radians.
+    /// The clockwise _rotation of this <see cref="PopupText"/> in radians.
     /// </summary>
     public float rotation;
 

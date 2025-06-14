@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -13,7 +14,7 @@ namespace RoA.Content.Items.Equipables.Wreaths.Tier3;
 
 sealed class SnowWreathTier3 : WreathItem {
     protected override void SafeSetDefaults() {
-        Item.SetSize(width: 30, height: 28);
+        Item.SetSizeValues(width: 30, height: 28);
 
         DefaultsToTier3Wreath();
     }
@@ -83,7 +84,7 @@ sealed class SnowWreathTier3 : WreathItem {
             knockBack /= denom;
 
             for (int i = 0; i < cloudberryCount; i++) {
-                NPC? target = Helper.FindClosestNPC(cloudberrySpawnPosition, 300);
+                NPC? target = NPCUtils.FindClosestNPC(cloudberrySpawnPosition, 300);
                 bool foundTarget = target != null;
                 Vector2 cloudberryVelocity = -Vector2.UnitY.RotatedByRandom(MathHelper.PiOver2);
                 if (foundTarget) {

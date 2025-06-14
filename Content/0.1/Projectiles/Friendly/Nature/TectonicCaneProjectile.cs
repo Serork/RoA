@@ -378,7 +378,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
             position.Y = Projectile.position.Y;
         }
         //texture = ModContent.Request<Texture2D>(Texture + "3").Value;
-        //Main.EntitySpriteDraw(texture, position + Vector2.One, null, drawColor, Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
+        //Main.EntitySpriteDraw(texture, position + Vector2.One, null, drawColor, Projectile._rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
         texture = TextureAssets.Projectile[Type].Value;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, drawColor * Projectile.Opacity, Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
         texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;

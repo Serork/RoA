@@ -15,42 +15,10 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI.Gamepad;
-using Terraria.Utilities;
 
 namespace RoA.Core.Utility;
 
-static class Helper {
-    public static T GetRandomEnumValue<T>(this UnifiedRandom random) where T : Enum {
-        Array values = Enum.GetValues(typeof(T));
-        return (T)values.GetValue(random.Next(values.Length));
-    }
-
-    public static Point AdjustY(this Point vector2, int value) => new(vector2.X, vector2.Y + value);
-    public static Vector2 AdjustY(this Vector2 vector2, float value) => new(vector2.X, vector2.Y + value);
-
-    public static bool Approximately(float a, float b, float tolerance = 1E-06f) => Math.Abs(a - b) < tolerance;
-    public static bool Approximately(Vector2 a, Vector2 b, float tolerance = 1E-06f) => Approximately(a.X, b.X, tolerance) && Approximately(a.Y, b.Y, tolerance);
-
-    public static NPC? FindClosestNPC(Vector2 checkPosition, int checkDistance, bool checkForCollisions = true) {
-        NPC? target = null;
-        int neededDistance = checkDistance;
-        foreach (NPC checkNPC in Main.ActiveNPCs) {
-            if (!checkNPC.CanBeChasedBy()) {
-                continue;
-            }
-            float distance = (checkPosition - checkNPC.Center).Length();
-            if (distance < neededDistance && (!checkForCollisions || Collision.CanHitLine(checkPosition, 1, 1, checkNPC.Center, 1, 1))) {
-                target = checkNPC;
-            }
-        }
-        return target;
-    }
-
-    public static Rectangle CenteredSquare(Vector2 position, int size) => new Rectangle { X = (int)position.X, Y = (int)position.Y, Width = size, Height = size };
-
-    public static float Clamp01(float value) => value <= 0f ? 0f : value >= 1f ? 1f : value;
-    public static double Clamp01(double value) => value <= 0.0 ? 0.0 : value >= 1.0 ? 1.0 : value;
-
+static partial class Helper {
     public static readonly Color AwakenMessageColor = new(175, 75, 255);
     public static readonly Color EventMessageColor = new(50, 255, 130);
 
@@ -577,18 +545,19 @@ static class Helper {
     // terraria overhaul
     public static float Damp(float source, float destination, float smoothing, float dt) => MathHelper.Lerp(source, destination, 1f - MathF.Pow(smoothing, dt));
 
-    public static float SmoothAngleLerp(this float curAngle, float targetAngle, float amount) {
+    public static float SmoothAngleLerp(this float curAngle, float targetAngle, float amount, Func<float, float, float, float>? lerpFunction = null) {
+        lerpFunction ??= MathHelper.SmoothStep;
         float angle;
         if (targetAngle < curAngle) {
             float num = targetAngle + (float)Math.PI * 2f;
-            angle = num - curAngle > curAngle - targetAngle ? MathHelper.SmoothStep(curAngle, targetAngle, amount) : MathHelper.SmoothStep(curAngle, num, amount);
+            angle = num - curAngle > curAngle - targetAngle ? lerpFunction(curAngle, targetAngle, amount) : lerpFunction(curAngle, num, amount);
         }
         else {
             if (!(targetAngle > curAngle))
                 return curAngle;
 
             float num = targetAngle - (float)Math.PI * 2f;
-            angle = targetAngle - curAngle > curAngle - num ? MathHelper.SmoothStep(curAngle, num, amount) : MathHelper.SmoothStep(curAngle, targetAngle, amount);
+            angle = targetAngle - curAngle > curAngle - num ? lerpFunction(curAngle, num, amount) : lerpFunction(curAngle, targetAngle, amount);
         }
 
         return MathHelper.WrapAngle(angle);

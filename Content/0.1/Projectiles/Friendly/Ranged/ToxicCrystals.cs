@@ -49,7 +49,7 @@ class ToxicCrystal1 : ModProjectile {
         if (Projectile.velocity.Y < 0.25 && Projectile.velocity.Y > 0.15) {
             Projectile.velocity.X = Projectile.velocity.X * 0.8f;
         }
-        //Projectile.rotation = -Projectile.velocity.X * 0.05f;
+        //Projectile._rotation = -Projectile.velocity.X * 0.05f;
         int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<LothorPoison>(), 0f, 0f, 100, default, 1f);
         Main.dust[dust].scale += Main.rand.Next(40) * 0.01f;
         Main.dust[dust].noGravity = true;

@@ -19,8 +19,8 @@ sealed class ShadewoodStaff : CaneBaseItem<ShadewoodStaff.ShadewoodStaffBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<EvilBranch>();
 
     public static void SetDefaultsInner(Item item) {
-        item.SetSize(44);
-        item.SetDefaultsToUsable(-1, 44, useSound: SoundID.Item7);
+        item.SetSizeValues(44);
+        item.SetUsageValues(-1, 44, useSound: SoundID.Item7);
         item.SetWeaponValues(8, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(item, 28);
@@ -65,7 +65,7 @@ abstract class EvilStaffBase : CaneBaseProjectile {
 
     protected override bool ShouldWaitUntilProjDespawns() => false;
 
-    protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(AttachedNatureWeapon, player);
+    protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(AttachedNatureWeapon!, player);
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         base.SafeSendExtraAI(writer);

@@ -30,7 +30,7 @@ sealed class RagingBoots : NatureItem {
     }
 
     protected override void SafeSetDefaults() {
-        Item.SetSize(26, 30);
+        Item.SetSizeValues(26, 30);
 
         Item.damage = 34;
         Item.knockBack = 5f;

@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-
-using RoA.Common.Druid;
+﻿using RoA.Common.Druid;
 using RoA.Content.Items;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+
+using System;
+using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -23,7 +23,7 @@ sealed class CrossmodNatureProjectileHandler : GlobalProjectile {
     internal float _wreathFillingFine;
     internal bool _syncAttachedNatureWeapon;
 
-    public Item AttachedNatureWeapon { get; internal set; } = null;
+    public Item? AttachedNatureWeapon { get; internal set; } = null;
 
     public bool ShouldChargeWreathOnDamage { get; internal set; } = true;
     public bool ShouldApplyAttachedNatureWeaponCurrentDamage { get; internal set; } = true;
@@ -60,7 +60,7 @@ abstract class NatureProjectile : ModProjectile {
     private float _wreathFillingFine;
     private bool _syncAttachedNatureWeapon;
 
-    public Item AttachedNatureWeapon { get; private set; } = null;
+    public Item AttachedNatureWeapon { get; private set; } = null!;
 
     public bool ShouldChargeWreathOnDamage { get; protected set; } = true;
     public bool ShouldApplyAttachedNatureWeaponCurrentDamage { get; protected set; } = true;

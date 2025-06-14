@@ -203,7 +203,7 @@ sealed class ExoticTulip : NatureItem {
 //sealed class ExoticTulip : TulipBaseItem<ExoticTulip.ExoticTulipBase> {
 //    protected override void SafeSetDefaults() {
 //        Item.SetWeaponValues(6, 1.5f);
-//        Item.SetDefaultsToUsable(-1, 60, useSound: SoundID.Item65);
+//        Item.SetUsageValues(-1, 60, useSound: SoundID.Item65);
 
 //        NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
@@ -220,7 +220,7 @@ sealed class ExoticTulip : NatureItem {
 //sealed class SweetTulip : TulipBaseItem<SweetTulip.SweepTulipBase> {
 //    protected override void SafeSetDefaults() {
 //        Item.SetWeaponValues(6, 1.5f);
-//        Item.SetDefaultsToUsable(-1, 60, useSound: SoundID.Item65);
+//        Item.SetUsageValues(-1, 60, useSound: SoundID.Item65);
 
 //        NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
@@ -237,7 +237,7 @@ sealed class ExoticTulip : NatureItem {
 //sealed class WeepingTulip : TulipBaseItem<WeepingTulip.WeepingTulipBase> {
 //    protected override void SafeSetDefaults() {
 //        Item.SetWeaponValues(6, 1.5f);
-//        Item.SetDefaultsToUsable(-1, 45, useSound: SoundID.Item65);
+//        Item.SetUsageValues(-1, 45, useSound: SoundID.Item65);
 
 //        NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
@@ -255,7 +255,7 @@ sealed class ExoticTulip : NatureItem {
 //    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TulipFlower>();
 
 //    protected override void SafeSetDefaults() {
-//        Item.SetSize(34);
+//        Item.SetSizeValues(34);
 
 //        NatureWeaponHandler.SetFillingRate(Item, 0.4f);
 //    }
@@ -277,10 +277,10 @@ sealed class ExoticTulip : NatureItem {
 
 //    protected override Vector2 CorePositionOffsetFactor() => new(0.08f, 0.13f);
 
-//    protected override bool ShouldntUpdateRotationAndDirection() => false;
+//    protected override bool ShouldStopUpdatingRotationAndDirection() => false;
 
 //    protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
-//        spawnPosition = Main.MouseWorld;
+//        spawnPosition = Main.MousePosition;
 //        ai0 = DustFrameXUsed();
 //    }
 

@@ -15,7 +15,7 @@ sealed class LuminousFlower : ModItem {
     }
 
     public override void SetDefaults() {
-        Item.SetSize(34, 38);
+        Item.SetSizeValues(34, 38);
 
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.sellPrice(0, 0, 30, 0);
