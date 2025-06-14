@@ -24,7 +24,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.5f);
     }
 
-    protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 5);
+    protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 6);
 
     public sealed class CavernCaneBase : CaneBaseProjectile {
         public override bool IsInUse => base.IsInUse && Owner.controlUseItem;

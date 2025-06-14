@@ -23,7 +23,7 @@ sealed class CrossmodNatureProjectileHandler : GlobalProjectile {
     internal float _wreathFillingFine;
     internal bool _syncAttachedNatureWeapon;
 
-    public Item? AttachedNatureWeapon { get; internal set; } = null;
+    public Item AttachedNatureWeapon { get; internal set; } = null!;
 
     public bool ShouldChargeWreathOnDamage { get; internal set; } = true;
     public bool ShouldApplyAttachedNatureWeaponCurrentDamage { get; internal set; } = true;
