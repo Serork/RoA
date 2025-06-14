@@ -27,7 +27,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
     protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 4);
 
     public sealed class CavernCaneBase : CaneBaseProjectile {
-        public override bool IsInUse => base.IsInUse && Owner.controlUseItem;
+        public override bool IsInUse => base.IsInUse && Owner.controlUseItem && AttackProgress01 < 1f;
 
         protected override bool ShouldShoot() => false;
         protected override bool ShouldPlayShootSound() => false;
