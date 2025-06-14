@@ -17,14 +17,14 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(42);
         Item.SetWeaponValues(60, 4f);
-        Item.SetUsageValues(ItemUseStyleID.HiddenAnimation, 20, useSound: SoundID.Item7);
+        Item.SetUsageValues(ItemUseStyleID.HiddenAnimation, 30, useSound: SoundID.Item7);
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice());
 
         NatureWeaponHandler.SetPotentialDamage(Item, 100);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.5f);
     }
 
-    protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 6);
+    protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 4);
 
     public sealed class CavernCaneBase : CaneBaseProjectile {
         public override bool IsInUse => base.IsInUse && Owner.controlUseItem;
@@ -33,7 +33,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
         protected override bool ShouldPlayShootSound() => false;
 
         protected override ushort TimeAfterShootToExist(Player player) {
-            byte result = (byte)UseTime;
+            byte result = (byte)(UseTime * 0.75f);
             float cubicBezierEaseIn(float t, float control) => 3f * control * t * t * (1f - t) + t * t * t;
             float attackProgress = cubicBezierEaseIn(AttackProgress01, 0.7f);
             result = (byte)(result * (1f - Utils.Clamp(attackProgress, 0.3f, 0.8f)));
