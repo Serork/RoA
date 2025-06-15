@@ -63,6 +63,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
         public const byte ROCKSCOUNT = 2;
 
         public static byte HITBOXSIZE => 26;
+        public static byte TRAILLENGTH => 3;
 
         private byte _usedFrame1, _usedFrame2;
         private float _progress;
@@ -74,6 +75,9 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
         public float CollisionAngle;
         public Vector2 ExtraPosition1, ExtraPosition2;
         public float Gravity;
+        public Vector2[] TrailPositions;
+
+        public RocksInfo() => TrailPositions = new Vector2[TRAILLENGTH];
 
         public float Progress {
             readonly get => _progress;
@@ -551,10 +555,30 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                     float xScaleFactor = Ease.CircOut(rockProgress) * 0.75f * Ease.CircOut(1f - MathUtils.Clamp01(currentRocksData.Progress));
                     xScaleFactor *= 1f - currentRocksData.Gravity / MAXGRAVITY;
                     Vector2 rockScale = currentRocksData.Scale * new Vector2(1f + xScaleFactor, 1f);
+                    float rockRotation = rockPositionToDraw.DirectionTo(Projectile.Center).ToRotation();
+                    Vector2 rockOrigin = sourceRectangle.Size() / 2f;
+                    // trails
+                    for (int k = RocksInfo.TRAILLENGTH - 1; k > 0; k--) {
+                        currentRocksData.TrailPositions[k] = currentRocksData.TrailPositions[k - 1];
+                    }
+                    currentRocksData.TrailPositions[0] = rockPositionToDraw;
+                    for (int k = 0; k < RocksInfo.TRAILLENGTH; k++) {
+                        Vector2 trailPositionToDraw = currentRocksData.TrailPositions[k];
+                        float trailOpacity = 0.75f;
+                        Color trailColor = color * ((float)k / RocksInfo.TRAILLENGTH * trailOpacity);
+                        Main.spriteBatch.Draw(rocksTexture, trailPositionToDraw, DrawInfo.Default with {
+                            Color = trailColor,
+                            Rotation = rockRotation,
+                            Origin = rockOrigin,
+                            Clip = sourceRectangle,
+                            Scale = rockScale
+                        });
+                    }
+                    // rock
                     Main.spriteBatch.Draw(rocksTexture, rockPositionToDraw, DrawInfo.Default with {
                         Color = color,
                         Rotation = rockPositionToDraw.DirectionTo(Projectile.Center).ToRotation(),
-                        Origin = sourceRectangle.Size() / 2f,
+                        Origin = rockOrigin,
                         Clip = sourceRectangle,
                         Scale = rockScale
                     });
