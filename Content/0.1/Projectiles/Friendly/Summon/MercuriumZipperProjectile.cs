@@ -561,11 +561,11 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             // After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
             Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 50f;
             Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() +
-                offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
+                offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 0, Color.White);
             dust.position = points[pointIndex] + offset;
             dust.fadeIn = 0.3f;
-            dust.alpha = 100;
             Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
+            dust.scale *= 1.25f;
             dust.noGravity = true;
             dust.velocity *= 0.5f;
             // This math causes these dust to spawn with a velocity perpendicular to the direction of the whip segments, giving the impression of the dust flying off like sparks.
