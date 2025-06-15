@@ -236,60 +236,8 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
             void drawSnowBlocks() {
                 for (int i = 0; i < MAXSNOWBLOCKS; i++) {
                     SnowBlockInfo tileInfo = _snowBlockData![i];
-                    int num12 = (int)tileInfo.Slope;
-                    bool halfBlock = tileInfo.HalfBlock;
-                    // prolly need to separate
-                    Vector2 tilePositionToDraw = tileInfo.Position.ToWorldCoordinates() - Vector2.One * 8f;
-                    if (num12 == 0 && !halfBlock) {
-                        Main.spriteBatch.Draw(snowBlockTexture, tilePositionToDraw, DrawInfo.Default with {
-                            Color = color * MathUtils.Clamp01(tileInfo.Opacity),
-                            Clip = tileInfo.Clip
-                        });
-                    }
-                    else if (halfBlock) {
-                        Main.spriteBatch.Draw(snowBlockTexture, tilePositionToDraw + Vector2.UnitY * 8f, DrawInfo.Default with {
-                            Color = color * MathUtils.Clamp01(tileInfo.Opacity),
-                            Clip = tileInfo.Clip.AdjustHeight(-tileInfo.Clip.Height / 2)
-                        });
-                    }
-                    else {
-                        int num13 = 2;
-                        for (int i2 = 0; i2 < 8; i2++) {
-                            int num14 = i2 * -2;
-                            int num15 = 16 - i2 * 2;
-                            int num16 = 16 - num15;
-                            int num17;
-                            switch (num12) {
-                                case 1:
-                                    num14 = 0;
-                                    num17 = i2 * 2;
-                                    num15 = 14 - i2 * 2;
-                                    num16 = 0;
-                                    break;
-                                case 2:
-                                    num14 = 0;
-                                    num17 = 16 - i2 * 2 - 2;
-                                    num15 = 14 - i2 * 2;
-                                    num16 = 0;
-                                    break;
-                                case 3:
-                                    num17 = i2 * 2;
-                                    break;
-                                default:
-                                    num17 = 16 - i2 * 2 - 2;
-                                    break;
-                            }
-                            Main.spriteBatch.Draw(snowBlockTexture, tilePositionToDraw + new Vector2(num17, i2 * num13 + num14), DrawInfo.Default with {
-                                Color = color * MathUtils.Clamp01(tileInfo.Opacity),
-                                Clip = new Rectangle(tileInfo.Clip.X + num17, tileInfo.Clip.Y + num16, num13, num15)
-                            });
-                        }
-                        int num18 = ((num12 <= 2) ? 14 : 0);
-                        Main.spriteBatch.Draw(snowBlockTexture, tilePositionToDraw + new Vector2(0f, num18), DrawInfo.Default with {
-                            Color = color * MathUtils.Clamp01(tileInfo.Opacity),
-                            Clip = new Rectangle(tileInfo.Clip.X, tileInfo.Clip.Y + num18, 16, 2)
-                        });
-                    }
+                    Color tileColor = color * MathUtils.Clamp01(tileInfo.Opacity);
+                    DrawHelper.DrawSingleTile(new DrawHelper.SingleTileDrawInfo(_snowBlockTexture!.Value, tileInfo.Position, tileInfo.Clip, tileColor, tileInfo.Slope, tileInfo.HalfBlock));    
                 }
             }
 
