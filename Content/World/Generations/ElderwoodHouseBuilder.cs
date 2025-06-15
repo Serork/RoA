@@ -743,31 +743,34 @@ public class HouseBuilderCustom {
                 context.SharpenerCount++;
         }
 
-        if (!_random.NextChance(0.075)) {
-            return;
-        }
-        bool flag2 = false;
-        int type = ModContent.TileType<TanningRack>();
-        foreach (Rectangle room2 in Rooms) {
-            int num3 = room2.Height - 2 + room2.Y;
-            for (int k = 0; k < 10; k++) {
-                int num4 = _random.Next(2, room2.Width - 2) + room2.X;
-                WorldGen.PlaceTile(num4, num3, type, mute: true, forced: true);
-                if (flag2 = _tiles[num4, num3].HasTile && _tiles[num4, num3].TileType == type) {
-                    break;
+        bool flag3 = _random.NextChance(0.1);
+        if (flag3 || TanningRack.TanningRackGeneratedCountStorage.TanningRackCountInWorld < _random.Next(2, 5)) {
+            bool flag2 = false;
+            int type = ModContent.TileType<TanningRack>();
+            foreach (Rectangle room2 in Rooms) {
+                int num3 = room2.Height - 2 + room2.Y;
+                for (int k = 0; k < 10; k++) {
+                    int num4 = _random.Next(2, room2.Width - 2) + room2.X;
+                    WorldGen.PlaceTile(num4, num3, type, mute: true, forced: true);
+                    if (flag2 = _tiles[num4, num3].HasTile && _tiles[num4, num3].TileType == type) {
+                        break;
+                    }
                 }
-            }
 
-            if (flag2)
-                break;
-
-            for (int l = room2.X + 2; l <= room2.X + room2.Width - 2; l++) {
-                if (flag2 = WorldGen.PlaceTile(l, num3, type, mute: true, forced: true))
+                if (flag2)
                     break;
-            }
 
-            if (flag2)
-                break;
+                for (int l = room2.X + 2; l <= room2.X + room2.Width - 2; l++) {
+                    if (flag2 = WorldGen.PlaceTile(l, num3, type, mute: true, forced: true))
+                        break;
+                }
+
+                if (flag2)
+                    break;
+
+                if (!flag3 && flag2)
+                    TanningRack.TanningRackGeneratedCountStorage.TanningRackCountInWorld++;
+            }
         }
     }
 }

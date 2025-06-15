@@ -21,6 +21,14 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Crafting;
 
 sealed class TanningRack : ModTile {
+    public class TanningRackGeneratedCountStorage : ModSystem {
+        public static int TanningRackCountInWorld;
+
+        public override void PostWorldGen() {
+            TanningRackCountInWorld = 0;
+        }
+    }
+
     public override void Load() {
         On_HouseBuilder.PlaceBiomeSpecificTool += On_HouseBuilder_PlaceBiomeSpecificTool;
     }
@@ -28,7 +36,8 @@ sealed class TanningRack : ModTile {
     private void On_HouseBuilder_PlaceBiomeSpecificTool(On_HouseBuilder.orig_PlaceBiomeSpecificTool orig, HouseBuilder self, HouseBuilderContext context) {
         orig(self, context);
 
-        if (WorldGen.genRand.NextChance(0.1) && self.Type != HouseType.Ice) {
+        bool flag3 = WorldGen.genRand.NextChance(0.1);
+        if ((flag3 || TanningRackGeneratedCountStorage.TanningRackCountInWorld < WorldGen.genRand.Next(2, 5)) && self.Type != HouseType.Ice) {
             bool flag2 = false;
             int type = ModContent.TileType<TanningRack>();
             foreach (Rectangle room2 in self.Rooms) {
@@ -51,6 +60,9 @@ sealed class TanningRack : ModTile {
 
                 if (flag2)
                     break;
+
+                if (!flag3 && flag2)
+                    TanningRack.TanningRackGeneratedCountStorage.TanningRackCountInWorld++;
             }
         }
     }
