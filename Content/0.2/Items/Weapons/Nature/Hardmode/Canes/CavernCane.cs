@@ -102,6 +102,10 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
         }
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
+            if (!ShouldBeActive) {
+                return;
+            }
+
             float dustSpawnPositionOffsetFactor = 20f;
             float visualProgress = GetCubicBezierEaseInForCavernCaneVisuals(AttackProgress01, 1f);
             float visualProgress2 = 1f - MathF.Min(0.8f, AttackProgress01);
