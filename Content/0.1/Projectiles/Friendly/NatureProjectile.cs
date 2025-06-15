@@ -158,7 +158,7 @@ abstract class NatureProjectile : ModProjectile {
     public static void NatureProjectileSetItem(Projectile projectile, Item item = null) {
         if (projectile.ModProjectile is NatureProjectile natureProjectile) {
             if (natureProjectile is not FormProjectile && projectile.owner == Main.myPlayer) {
-                if (natureProjectile.AttachedNatureWeapon != null) {
+                if (!natureProjectile.AttachedNatureWeapon.IsEmpty()) {
                     projectile.netUpdate = true;
                     goto setWreathFillingRateFine;
                 }
@@ -172,7 +172,7 @@ abstract class NatureProjectile : ModProjectile {
                     }
                 }
             setWreathFillingRateFine:
-                if (natureProjectile.AttachedNatureWeapon != null) {
+                if (!natureProjectile.AttachedNatureWeapon.IsEmpty()) {
                     float fillingRate = NatureWeaponHandler.GetFillingRate(natureProjectile.AttachedNatureWeapon);
                     natureProjectile.WreathFillingFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
                 }
@@ -183,7 +183,7 @@ abstract class NatureProjectile : ModProjectile {
         if (CrossmodNatureContent.IsProjectileNature(projectile)) {
             CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
             if (projectile.owner == Main.myPlayer) {
-                if (handler.AttachedNatureWeapon != null) {
+                if (!handler.AttachedNatureWeapon.IsEmpty() ) {
                     projectile.netUpdate = true;
                     goto setWreathFillingRateFine;
                 }
@@ -197,7 +197,7 @@ abstract class NatureProjectile : ModProjectile {
                     }
                 }
             setWreathFillingRateFine:
-                if (handler.AttachedNatureWeapon != null) {
+                if (!handler.AttachedNatureWeapon.IsEmpty()) {
                     float fillingRate = NatureWeaponHandler.GetFillingRate(handler.AttachedNatureWeapon);
                     handler.WreathFillingFine = fillingRate <= 1f ? 1f - fillingRate : -(fillingRate - 1f);
                 }
@@ -214,7 +214,7 @@ abstract class NatureProjectile : ModProjectile {
     public static void NatureProjectilePostAI(Projectile projectile) {
         if (projectile.ModProjectile is NatureProjectile natureProjectile) {
             if (natureProjectile.ShouldChargeWreathOnDamage && natureProjectile is not FormProjectile) {
-                if (natureProjectile.AttachedNatureWeapon != null) {
+                if (!natureProjectile.AttachedNatureWeapon.IsEmpty()) {
                     if (natureProjectile.ShouldApplyAttachedNatureWeaponCurrentDamage) {
                         projectile.damage = NatureWeaponHandler.GetNatureDamage(natureProjectile.AttachedNatureWeapon, Main.player[projectile.owner]);
                     }
@@ -236,7 +236,7 @@ abstract class NatureProjectile : ModProjectile {
         if (CrossmodNatureContent.IsProjectileNature(projectile)) {
             CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
             if (handler.ShouldChargeWreathOnDamage) {
-                if (handler.AttachedNatureWeapon != null) {
+                if (!handler.AttachedNatureWeapon.IsEmpty()) {
                     if (handler.ShouldApplyAttachedNatureWeaponCurrentDamage) {
                         projectile.damage = NatureWeaponHandler.GetNatureDamage(handler.AttachedNatureWeapon, Main.player[projectile.owner]);
                     }

@@ -19,7 +19,7 @@ sealed class ShadewoodStaff : CaneBaseItem<ShadewoodStaff.ShadewoodStaffBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<EvilBranch>();
 
     public static void SetDefaultsInner(Item item) {
-        item.SetSizeValues(44);
+        item.SetSizeValues(36);
         item.SetUsageValues(-1, 44, useSound: SoundID.Item7);
         item.SetWeaponValues(8, 4f);
 
@@ -45,7 +45,11 @@ sealed class ShadewoodStaff : CaneBaseItem<ShadewoodStaff.ShadewoodStaffBase> {
 sealed class EbonwoodStaff : CaneBaseItem<EbonwoodStaff.EbonwoodStaffBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<EvilBranch>();
 
-    protected override void SafeSetDefaults() => ShadewoodStaff.SetDefaultsInner(Item);
+    protected override void SafeSetDefaults() {
+        ShadewoodStaff.SetDefaultsInner(Item);
+
+        Item.SetSizeValues(34, 38);
+    }
 
     public sealed class EbonwoodStaffBase : EvilStaffBase {
         protected override ushort Dust1Type => (ushort)ModContent.DustType<EvilStaff2>();

@@ -20,7 +20,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
     protected override ushort TimeToCastAttack(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(38);
+        Item.SetSizeValues(40);
         Item.SetUsageValues(-1, 25, useSound: SoundID.Item7);
         Item.SetWeaponValues(14, 4f);
 

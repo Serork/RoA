@@ -21,7 +21,7 @@ sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
     protected override ushort TimeToCastAttack(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(38);
+        Item.SetSizeValues(32);
         Item.SetUsageValues(-1, 27, useSound: SoundID.Item7);
         Item.SetWeaponValues(8, 1f);
 

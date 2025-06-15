@@ -564,8 +564,11 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                     currentRocksData.TrailPositions[0] = rockPositionToDraw;
                     for (int k = 0; k < RocksInfo.TRAILLENGTH; k++) {
                         Vector2 trailPositionToDraw = currentRocksData.TrailPositions[k];
+                        if (trailPositionToDraw == Vector2.Zero) {
+                            continue;
+                        }
                         float trailOpacity = 0.75f;
-                        Color trailColor = color * ((float)k / RocksInfo.TRAILLENGTH * trailOpacity);
+                        Color trailColor = Lighting.GetColor(trailPositionToDraw.ToTileCoordinates()) * ((float)k / RocksInfo.TRAILLENGTH * trailOpacity);
                         Main.spriteBatch.Draw(rocksTexture, trailPositionToDraw, DrawInfo.Default with {
                             Color = trailColor,
                             Rotation = rockRotation,
@@ -577,7 +580,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                     // rock
                     Main.spriteBatch.Draw(rocksTexture, rockPositionToDraw, DrawInfo.Default with {
                         Color = color,
-                        Rotation = rockPositionToDraw.DirectionTo(Projectile.Center).ToRotation(),
+                        Rotation = rockRotation,
                         Origin = rockOrigin,
                         Clip = sourceRectangle,
                         Scale = rockScale
