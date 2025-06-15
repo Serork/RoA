@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Data;
+
 using System;
+
+using Terraria;
 
 namespace RoA.Core.Utility;
 

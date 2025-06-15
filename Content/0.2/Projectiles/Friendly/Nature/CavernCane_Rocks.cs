@@ -9,10 +9,10 @@ using RoA.Common.Projectiles;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 using RoA.Core;
+using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
-using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -25,6 +25,32 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Rocks : NatureProjectile_NoTextureLoad {
+    public static Color GetGeodeColor(GemType gemType) {
+        return gemType switch {
+            GemType.Amethyst => Color.Purple,
+            GemType.Topaz => Color.Yellow,
+            GemType.Sapphire => Color.Blue,
+            GemType.Emerald => Color.Green,
+            GemType.Ruby => Color.Red,
+            GemType.Diamond => Color.White,
+            GemType.Amber => Color.Orange,
+            _ => Color.Transparent
+        };
+    }
+
+    public static short GetGeodeDustType(GemType gemType) {
+        return gemType switch {
+            GemType.Amethyst => DustID.GemAmethyst,
+            GemType.Topaz => DustID.GemTopaz,
+            GemType.Sapphire => DustID.GemSapphire,
+            GemType.Emerald => DustID.GemEmerald,
+            GemType.Ruby => DustID.GemRuby,
+            GemType.Diamond => DustID.GemDiamond,
+            GemType.Amber => DustID.AmberBolt,
+            _ => 0
+        };
+    }
+
     private const byte FRAMECOUNT = 3;
 
     private static byte ROCKATTACKCOUNT => 3;
@@ -98,16 +124,6 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
     private ref struct RocksValues(Projectile projectile) {
         public static float FORCEDOPACITYINCREASEVALUE => 0.015f;
 
-        public enum GemType {
-            Amethyst,
-            Topaz,
-            Sapphire,
-            Emerald,
-            Ruby,
-            Diamond,
-            Amber
-        }
-
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float ForcedOpacityValue = ref projectile.localAI[1];
         public ref float ThrowRocksValue = ref projectile.localAI[2];
@@ -169,6 +185,9 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
     }
 
     public override void AI() {
+        GemType geodeType = new RocksValues(Projectile).GeodeType;
+        Color dustColor = GetGeodeColor(geodeType);
+        int dustType = GetGeodeDustType(geodeType);
         void checkActive() {
             Player owner = Projectile.GetOwnerAsPlayer();
             if (owner.IsLocal()) {
@@ -197,10 +216,10 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                     _immunityFramesPerNPC[i] = new ushort[Main.npc.Length];
                 }
 
-                if (Projectile.IsOwnerLocal()) {
-                    rocksValues.GeodeType = Main.rand.GetRandomEnumValue<RocksValues.GemType>();
-                    Projectile.netUpdate = true;
-                }
+                //if (Projectile.IsOwnerLocal()) {
+                //    rocksValues.GeodeType = Main.rand.GetRandomEnumValue<GemType>();
+                //    Projectile.netUpdate = true;
+                //}
 
                 _rocks = new RocksInfo[ROCKATTACKCOUNT];
                 for (int i = 0; i < ROCKATTACKCOUNT; i++) {
@@ -292,69 +311,63 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                 Vector2 geodeProgressOffset = geodeSize * Vector2.One.RotatedBy(dustVelocity.ToRotation()) * iterationValue * 15f;
                 return geodeProgressOffset;
             }
-            for (int i = 0; i < 8; i++) {
-                Color getGeodeColor() {
-                    RocksValues rocksValues = new(Projectile);
-                    return rocksValues.GeodeType switch {
-                        RocksValues.GemType.Amethyst => Color.Purple,
-                        RocksValues.GemType.Topaz => Color.Yellow,
-                        RocksValues.GemType.Sapphire => Color.Blue,
-                        RocksValues.GemType.Emerald => Color.Green,
-                        RocksValues.GemType.Ruby => Color.Red,
-                        RocksValues.GemType.Diamond => Color.White,
-                        RocksValues.GemType.Amber => Color.Orange,
-                        _ => Color.Transparent,
-                    };
+            void makeDusts() {
+                for (int i = 0; i < 8; i++) {
+                    Vector2 dustSpawnPosition = Projectile.Center + getOffsetPosition(i / 8f);
+                    float dustScale = 0.8f + Main.rand.NextFloat() * 0.6f;
+                    int dustType2 = DustID.RainbowMk2;
+                    int dust = Dust.NewDust(dustSpawnPosition, 4, 4, dustType2, Scale: dustScale, newColor: dustColor, Alpha: 0);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].color = dustColor;
+                    Main.dust[dust].velocity *= 0.5f;
                 }
-                Color color = getGeodeColor();
-                int dust = Dust.NewDust(Projectile.Center + getOffsetPosition(i / 8f), 4, 4, DustID.RainbowMk2, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
-                Main.dust[dust].noGravity = true;
-                Main.dust[dust].color = color;
-                Main.dust[dust].velocity *= 0.5f;
-                Main.dust[dust].scale = 0.8f + Main.rand.NextFloat() * 0.6f;
-                Main.dust[dust].fadeIn = 0.5f;
             }
-            RocksValues rocksValues = new(Projectile);
-            ushort option = (ushort)(rocksValues.GeodeType + 1);
-            string name = string.Empty;
-            switch (option) {
-                case 1:
-                    name = "Amethyst";
-                    break;
-                case 2:
-                    name = "Topaz";
-                    break;
-                case 3:
-                    name = "Sapphire";
-                    break;
-                case 4:
-                    name = "Emerald";
-                    break;
-                case 5:
-                    name = "Ruby";
-                    break;
-                case 6:
-                    name = "Diamond";
-                    break;
-                case 7:
-                    name = "Amber";
-                    break;
-            }
-            if (!Main.dedServ) {
-                if (name != string.Empty) {
-                    int goreCount = 3;
-                    for (int i = 0; i < goreCount; i++) {
-                        int currentIndex = i + 1;
-                        float progress = currentIndex / goreCount;
-                        Vector2 gorePositionOffset = getOffsetPosition(progress);
-                        Vector2 gorePosition = Projectile.Center + gorePositionOffset;
-                        int gore = Gore.NewGore(Projectile.GetSource_Misc("caverncanehit"),
-                            gorePosition,
-                            Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type, 1f);
-                        Main.gore[gore].velocity *= 0.5f;
+            void makeGores() {
+                RocksValues rocksValues = new(Projectile);
+                ushort option = (ushort)(rocksValues.GeodeType + 1);
+                string name = string.Empty;
+                switch (option) {
+                    case 1:
+                        name = "Amethyst";
+                        break;
+                    case 2:
+                        name = "Topaz";
+                        break;
+                    case 3:
+                        name = "Sapphire";
+                        break;
+                    case 4:
+                        name = "Emerald";
+                        break;
+                    case 5:
+                        name = "Ruby";
+                        break;
+                    case 6:
+                        name = "Diamond";
+                        break;
+                    case 7:
+                        name = "Amber";
+                        break;
+                }
+                if (!Main.dedServ) {
+                    if (name != string.Empty) {
+                        int goreCount = 3;
+                        for (int i = 0; i < goreCount; i++) {
+                            int currentIndex = i + 1;
+                            float progress = currentIndex / goreCount;
+                            Vector2 gorePositionOffset = getOffsetPosition(progress);
+                            Vector2 gorePosition = Projectile.Center + gorePositionOffset;
+                            int gore = Gore.NewGore(Projectile.GetSource_Misc("caverncanehit"),
+                                gorePosition,
+                                Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type, 1f);
+                            Main.gore[gore].velocity *= 0.5f;
+                        }
                     }
                 }
             }
+
+            makeGores();
+            makeDusts();
         }
         void throwRocksWhenCharged() {
             RocksValues rocksValues = new(Projectile);
@@ -390,7 +403,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                 for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                     for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
                         for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
-                            ref ushort immuneTime = ref _immunityFramesPerNPC![(byte)(i * 2 + j)][npcId];
+                            ref ushort immuneTime = ref GetImmuneTime(i, j, npcId);
                             if (immuneTime > 0) {
                                 immuneTime = 0;
                             }
@@ -426,7 +439,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                     Vector2 rockPositionToHandleCollision = GetRockPosition(i, firstRock, out _);
                     foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
                         if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile, 
-                                                                         ref _immunityFramesPerNPC![(byte)(i * 2 + j)][npcForCollisionCheck.whoAmI],
+                                                                         ref GetImmuneTime(i, j, npcForCollisionCheck.whoAmI),
                                                                          damageSourceHitbox: GeometryUtils.CenteredSquare(rockPositionToHandleCollision, RocksInfo.HITBOXSIZE), 
                                                                          direction: MathF.Sign(rockPositionToHandleCollision.X - npcForCollisionCheck.Center.X))) {
                             continue;
@@ -455,6 +468,28 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                 Projectile.Kill();
             }
         }
+        void makeGeodeDustsOverTime() {
+            RocksValues rocksValues = new(Projectile);
+            if (rocksValues.ThrewRocks) {
+                return;
+            }
+
+            for (int i = 0; i < ROCKATTACKCOUNT; i++) {
+                RocksInfo rocksData = _rocks![i];
+                float geodeProgress = getGeneralProgressForVariousPurposes(rocksData);
+                if (Main.rand.NextChance(geodeProgress / ROCKATTACKCOUNT / 20f)) {
+                    float dustScale = 0.8f + Main.rand.NextFloat() * 0.6f;
+                    int dustAreaSize = 10;
+                    Vector2 dustVelocity = Vector2.One.RotateRandom(MathHelper.TwoPi);
+                    Vector2 dustSpawnPosition = Projectile.Center + dustVelocity - Vector2.One * dustAreaSize / 2f;
+                    int dust = Dust.NewDust(dustSpawnPosition, dustAreaSize, dustAreaSize, dustType, Scale: dustScale, newColor: dustColor, Alpha: 0);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].color = dustColor;
+                    Main.dust[dust].velocity += dustVelocity * 5f * geodeProgress;
+                    Main.dust[dust].velocity *= 0.5f;
+                }
+            }
+        }
 
         checkActive();
         init();
@@ -463,6 +498,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
         damageNPCs();
         cutTiles();
         releaseProjectile();
+        //makeGeodeDustsOverTime();
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -476,7 +512,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
         }
 
         Texture2D rocksTexture = _rocksTexture!.Value;
-        Color gemColor = lightColor * Ease.QuadIn(GetGeodeProgress()) * 0.5f;
+        Color gemColor = Color.White * Ease.QuadIn(GetGeodeProgress()) * 0.5f;
         void drawGeodeGem(float opacity = 1f) {
             RocksValues rocksValues = new(Projectile);
             Texture2D gemTexture = TextureAssets.Gem[(byte)rocksValues.GeodeType].Value;
@@ -548,11 +584,11 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
         drawGeodeEffectOnTop();
     }
 
-    public override void OnKill(int timeLeft) {
-
-    }
+    public override void OnKill(int timeLeft) { }
 
     public override bool? CanDamage() => false;
+
+    private ref ushort GetImmuneTime(int rockIndex, int pairIndex, int npcId) => ref _immunityFramesPerNPC![(byte)(rockIndex * 2 + pairIndex)][npcId];
 
     private void LoadRocksTexture() {
         if (Main.dedServ) {
@@ -561,8 +597,6 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
 
         _rocksTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "CavernCaneRock");
     }
-
-    private int GetImmuneTime(int rockIndex, int pairIndex, int npcId) => _immunityFramesPerNPC![(byte)(rockIndex * 2 + pairIndex)][npcId];
 
     private Vector2 GetRockPosition(int rockIndex, bool firstRock, out float rockProgress) {
         float collisionAngle = 0f;

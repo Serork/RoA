@@ -27,6 +27,10 @@ static class NPCUtils {
         if (target.dontTakeDamage || damageSourceAsProjectile.owner < 0) {
             return false;
         }
+        bool canDamage = damageSourceAsProjectile.friendly && !target.friendly;
+        if (!canDamage) {
+            return false;
+        }
         target.position += target.netOffset;
         int npcId = target.whoAmI;
         direction ??= damageSourceAsProjectile.direction;
