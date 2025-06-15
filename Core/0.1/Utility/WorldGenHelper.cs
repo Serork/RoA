@@ -23,6 +23,8 @@ using Terraria.WorldBuilding;
 namespace RoA.Core.Utility;
 
 static class WorldGenHelper {
+    public static int TILESIZE = 16;
+
     sealed class WorldGenHelperVars : ModSystem {
         public static int worldSurfaceLow = 0;
 
@@ -432,6 +434,11 @@ static class WorldGenHelper {
 
     public static bool SolidTile(int i, int j) {
         Tile tile = GetTileSafely(i, j);
+        return tile.HasTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] || (TileID.Sets.Platforms[tile.TileType] && WorldGen.PlatformProperTopFrame(tile.TileFrameX)));
+    }
+
+    public static bool SolidTile(Point tilePosition) {
+        Tile tile = GetTileSafely(tilePosition.X, tilePosition.Y);
         return tile.HasTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] || (TileID.Sets.Platforms[tile.TileType] && WorldGen.PlatformProperTopFrame(tile.TileFrameX)));
     }
 

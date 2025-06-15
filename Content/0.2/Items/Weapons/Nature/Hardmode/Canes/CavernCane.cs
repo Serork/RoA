@@ -72,8 +72,13 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                     if (owner.IsLocal()) {
                         GemType geodeType = Main.rand.GetRandomEnumValue<GemType>();
                         GeodeType = geodeType;
+                        Vector2 spawnPosition = owner.Center;
+                        int maxChecks = 40;
+                        while (maxChecks-- > 0 && !WorldGenHelper.SolidTile(spawnPosition.ToTileCoordinates())) {
+                            spawnPosition += spawnPosition.DirectionTo(Owner.GetMousePosition()) * WorldGenHelper.TILESIZE;
+                        }
                         ProjectileHelper.SpawnPlayerOwnedProjectile<Rocks>(new ProjectileHelper.SpawnProjectileArgs(owner, Projectile.GetSource_Misc("caneattack")) {
-                            Position = Owner.GetMousePosition(),
+                            Position = spawnPosition,
                             AI0 = (byte)geodeType,
                             AI1 = UseTime
                         });
