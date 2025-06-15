@@ -4,19 +4,10 @@ using RoA.Common;
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
-using System.Collections.Generic;
-using System;
-
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using System.Linq;
-using RoA.Content.Items.Weapons.Magic;
-using Terraria.ModLoader.Core;
-using System.Reflection;
-using RoA.Content.Items.Miscellaneous;
-using Terraria.UI;
 
 namespace RoA.Content.Items.Placeable.Crafting;
 

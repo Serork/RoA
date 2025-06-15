@@ -89,11 +89,11 @@ sealed partial class DruidStats : ModPlayer {
             return;
         }
 
-        bool isDamageSourceDruidic = (damageSource is Projectile projectileAsDamageSource && projectileAsDamageSource.IsNature()) || (damageSource is Item itemAsDamageSource && itemAsDamageSource.IsANatureWeapon()); 
+        bool isDamageSourceDruidic = (damageSource is Projectile projectileAsDamageSource && projectileAsDamageSource.IsNature()) || (damageSource is Item itemAsDamageSource && itemAsDamageSource.IsANatureWeapon());
         if (!isDamageSourceDruidic) {
             return;
         }
- 
+
         int chance = 4;
         bool rolled = Main.rand.NextBool(chance);
         if (!rolled) {

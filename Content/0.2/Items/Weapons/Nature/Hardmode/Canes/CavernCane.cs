@@ -3,7 +3,6 @@
 using RoA.Common.Druid;
 using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
-using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 

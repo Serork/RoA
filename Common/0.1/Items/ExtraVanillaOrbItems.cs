@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Configs;
-using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Items.Weapons.Magic;
+using RoA.Content.Items.Weapons.Nature.PreHardmode;
 using RoA.Content.Items.Weapons.Summon;
 using RoA.Core.Utility;
 
@@ -15,7 +15,6 @@ using Terraria.GameContent.Achievements;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 namespace RoA.Common.Items;
 

@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
-using RoA.Content.Items;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;

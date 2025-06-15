@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-using RoA.Common.Projectiles;
-using RoA.Core;
-using RoA.Core.Utility;
-
-using System.Runtime.CompilerServices;
+﻿using RoA.Core;
 
 using Terraria;
 using Terraria.ModLoader;

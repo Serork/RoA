@@ -87,7 +87,7 @@ sealed partial class DruidSoul : RoANPC {
         int num2 = -1;
         float num3 = -1f;
         for (int i = value.Left; i <= value.Right; i++) {
-            for (int j = value.Top; j <= value.Bottom; j++)  {
+            for (int j = value.Top; j <= value.Bottom; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (!tile.HasTile)
                     continue;

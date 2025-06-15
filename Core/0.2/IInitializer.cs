@@ -3,5 +3,5 @@
 namespace RoA.Core;
 
 interface IInitializer : ILoadable {
-	void ILoadable.Unload() { }
+    void ILoadable.Unload() { }
 }

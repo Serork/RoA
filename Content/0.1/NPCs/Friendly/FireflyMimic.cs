@@ -2,12 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Equipables.Accessories;
-using RoA.Core.Utility;
 
 using System;
 
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;

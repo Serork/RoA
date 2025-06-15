@@ -32,7 +32,7 @@ sealed class MinAxeAndHammerSystem : ILoadable {
         On_Player.ItemCheck_UseMiningTools_TryHittingWall += On_Player_ItemCheck_UseMiningTools_TryHittingWall;
     }
 
-    private void On_Player_ItemCheck_UseMiningTools_TryHittingWall(On_Player.orig_ItemCheck_UseMiningTools_TryHittingWall orig, Player self, Item sItem, int wX, int wY) { 
+    private void On_Player_ItemCheck_UseMiningTools_TryHittingWall(On_Player.orig_ItemCheck_UseMiningTools_TryHittingWall orig, Player self, Item sItem, int wX, int wY) {
         if (Main.tile[wX, wY].WallType > 0 && (!Main.tile[wX, wY].HasTile || wX != Player.tileTargetX || wY != Player.tileTargetY ||
             (!Main.tileHammer[Main.tile[wX, wY].TileType] && !self.poundRelease)) && self.toolTime == 0 && self.itemAnimation > 0 && self.controlUseItem && sItem.hammer > 0 &&
             Player.CanPlayerSmashWall(wX, wY)) {
@@ -67,7 +67,7 @@ sealed class MinAxeAndHammerSystem : ILoadable {
                 return;
             }
         }
-        
+
         int num = -1;
         int num2 = 0;
         canHitWalls = true;

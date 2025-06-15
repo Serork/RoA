@@ -2,8 +2,6 @@
 
 using RoA.Content.Tiles.Trees;
 
-using System;
-
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

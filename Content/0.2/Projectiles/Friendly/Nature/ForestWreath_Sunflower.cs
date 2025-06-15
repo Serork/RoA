@@ -165,7 +165,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                 float offsetValue = -5f;
                 Vector2 offset = Vector2.UnitY.RotatedBy(petalRotation) * offsetValue;
                 float extraScale = _petalData![i].ExtraScale * petalFill;
-                Main.spriteBatch.Draw(petalTexture, Projectile.Center + offset, DrawInfo.Default with { 
+                Main.spriteBatch.Draw(petalTexture, Projectile.Center + offset, DrawInfo.Default with {
                     Color = petalColor,
                     Rotation = petalRotation,
                     Origin = new Vector2(petalTexture.Width / 2f, petalTexture.Height),
@@ -221,7 +221,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
 
     private float[] CalculatePetalFills() {
         SunflowerValues sunflowerValues = new(Projectile);
-        float[] fills = new float[PETALCOUNT]; 
+        float[] fills = new float[PETALCOUNT];
         for (int k = 1; k <= PETALCOUNT; k++) {
             float lower = (k - 1) / (float)PETALCOUNT;
             float upper = k / (float)PETALCOUNT;

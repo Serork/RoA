@@ -1,5 +1,4 @@
 ﻿using RoA.Content.Buffs;
-using RoA.Content.Items.Special;
 
 using System.IO;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Terraria.Utilities;
 
 namespace RoA.Core.Utility.Extensions;

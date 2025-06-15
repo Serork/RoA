@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;

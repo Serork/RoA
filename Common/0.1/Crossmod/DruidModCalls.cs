@@ -1,9 +1,9 @@
-﻿using System;
-
-using RoA.Common.Druid;
+﻿using RoA.Common.Druid;
 using RoA.Content.Items;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core.Defaults;
+
+using System;
 
 using Terraria;
 

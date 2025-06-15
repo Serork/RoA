@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ReLogic.Content;
-
 using RoA.Content.Projectiles.Friendly;
-using RoA.Core.Data;
 
 using Terraria;
 using Terraria.GameContent;

@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Projectiles;
-using RoA.Core;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using System;
@@ -332,7 +330,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
                 _maxPenaltyTime = _penaltyTime;
             }
         }
-    } 
+    }
 
     protected byte GetTimeAfterShootToExist() => (byte)(AttachedNatureWeapon!.IsEmpty() ? 0 : TimeAfterShootToExist(Owner));
 

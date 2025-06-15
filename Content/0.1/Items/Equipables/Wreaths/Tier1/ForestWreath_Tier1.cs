@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
-using RoA.Common.Druid.Wreath;
 
 using Terraria;
 using Terraria.ID;

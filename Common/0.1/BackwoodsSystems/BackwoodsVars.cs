@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -17,7 +15,6 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Net;
-using Terraria.Utilities;
 
 namespace RoA.Common.BackwoodsSystems;
 

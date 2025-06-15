@@ -1,10 +1,10 @@
 ﻿using RoA.Content.NPCs.Friendly;
+using RoA.Core.Utility;
 
+using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
-using Terraria;
 using Terraria.ModLoader;
-using RoA.Core.Utility;
 
 namespace RoA.Common.NPCs;
 

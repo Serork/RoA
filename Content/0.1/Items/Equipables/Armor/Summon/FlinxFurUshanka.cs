@@ -25,10 +25,10 @@ sealed class FlinxFurUshanka : ModItem {
         Item.defense = 1;
     }
 
-	public override void UpdateEquip(Player player) {
+    public override void UpdateEquip(Player player) {
         player.whipRangeMultiplier += 0.1f;
     }
-	
+
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ItemID.FlinxFurCoat;
 
     public override void UpdateArmorSet(Player player) {

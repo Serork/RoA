@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Items.Weapons.Nature.PreHardmode;
 using RoA.Core.Utility;
+
 using System;
 using System.IO;
 

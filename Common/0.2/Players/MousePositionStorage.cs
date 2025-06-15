@@ -57,7 +57,7 @@ sealed class MousePositionStorage : ModPlayer {
                 return;
             }
 
-            Vector2 mousePosition = reader.ReadVector2();   
+            Vector2 mousePosition = reader.ReadVector2();
             MousePositionStorage mousePositionStorage = player.GetModPlayer<MousePositionStorage>();
             mousePositionStorage.MousePosition = mousePosition;
         }

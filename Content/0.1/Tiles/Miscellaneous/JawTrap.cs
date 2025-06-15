@@ -5,7 +5,6 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
 using RoA.Content.Buffs;
-using RoA.Content.Items.Placeable;
 using RoA.Core;
 using RoA.Core.Utility;
 

@@ -1,9 +1,6 @@
-using Humanizer;
-
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Miscellaneous;
-using RoA.Core.Utility;
 
 using System.Collections.Generic;
 

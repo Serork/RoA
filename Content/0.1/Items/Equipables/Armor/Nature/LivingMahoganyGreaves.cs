@@ -23,6 +23,6 @@ sealed class LivingMahoganyGreaves : NatureItem {
 
         Item.defense = 2;
     }
-	
-	public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 3;
+
+    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 3;
 }

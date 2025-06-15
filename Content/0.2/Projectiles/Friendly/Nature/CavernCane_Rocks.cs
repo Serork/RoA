@@ -399,7 +399,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
             float collisionAngle = 0f;
             for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                 RocksInfo currentRocksData = _rocks![i];
-                collisionAngle += currentRocksData.CollisionAngle;  
+                collisionAngle += currentRocksData.CollisionAngle;
             }
             RocksValues rocksValues = new(Projectile);
             float forcedOpacity = 1f - rocksValues.ForcedOpacity;
