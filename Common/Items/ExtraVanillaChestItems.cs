@@ -1,6 +1,4 @@
-﻿using ReLogic.Utilities;
-
-using RoA.Content.Items.Equipables.Accessories;
+﻿using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Placeable.Crafting;

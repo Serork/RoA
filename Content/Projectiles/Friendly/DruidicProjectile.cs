@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-
-using RoA.Common.Druid;
+﻿using RoA.Common.Druid;
 using RoA.Content.Items;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+
+using System;
+using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;

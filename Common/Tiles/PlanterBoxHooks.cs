@@ -598,7 +598,7 @@ sealed class PlanterBoxHooks : ILoadable {
                         if (!flag6 && (anchorBottom.type & AnchorType.PlatformNonHammered) == AnchorType.PlatformNonHammered && TileID.Sets.Platforms[tileSafely.TileType] && tileSafely.Slope == 0 && !tileSafely.IsHalfBlock)
                             flag6 = tileData2.isValidTileAnchor(tileSafely.TileType);
 
-                        if (!flag6 && (anchorBottom.type & AnchorType.PlanterBox) == AnchorType.PlanterBox && (tileSafely.TileType == 380 || 
+                        if (!flag6 && (anchorBottom.type & AnchorType.PlanterBox) == AnchorType.PlanterBox && (tileSafely.TileType == 380 ||
                             tileSafely.TileType == ModContent.TileType<PlanterBoxes>()))
                             flag6 = tileData2.isValidTileAnchor(tileSafely.TileType);
 

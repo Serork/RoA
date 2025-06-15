@@ -1,14 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
-using RoA.Content.Items;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
-using RoA.Content.Tiles.Furniture;
 using RoA.Core;
 using RoA.Core.Utility;
 

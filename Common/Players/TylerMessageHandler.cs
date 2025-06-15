@@ -24,7 +24,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
         OnSell,
         OnBuy,
         OnCall,
-		Special
+        Special
     }
 
     private byte _variation;
@@ -34,7 +34,7 @@ sealed partial class TylerMessageHandler : ModPlayer {
     private static string GetCategoryName(MessageSource source) {
         string id;
         switch (source) {
-			case MessageSource.Special:
+            case MessageSource.Special:
                 id = "Special";
                 break;
             case MessageSource.Death:

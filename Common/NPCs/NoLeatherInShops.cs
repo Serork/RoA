@@ -1,7 +1,5 @@
-﻿using RoA.Content.Items.Miscellaneous;
-using RoA.Content.Items.Placeable.Crafting;
+﻿using RoA.Content.Items.Placeable.Crafting;
 
-using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 

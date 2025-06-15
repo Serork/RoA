@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework.Input;
-
-using RoA.Content.Items.Miscellaneous;
-using RoA.Content.Items.Weapons.Magic;
+﻿using RoA.Content.Items.Miscellaneous;
 
 using Terraria;
 using Terraria.GameContent.ItemDropRules;

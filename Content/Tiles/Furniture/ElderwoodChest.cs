@@ -12,7 +12,6 @@ using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.Net.Sockets;
 using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Furniture;

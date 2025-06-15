@@ -21,8 +21,8 @@ sealed class BeachWreath : BaseWreathItem {
     public override void UpdateAccessory(Player player, bool hideVisual) {
         float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
         player.endurance += value;
-		
-		if (player.GetModPlayer<WreathHandler>().IsFull1) {
+
+        if (player.GetModPlayer<WreathHandler>().IsFull1) {
             player.moveSpeed += 0.075f;
         }
     }

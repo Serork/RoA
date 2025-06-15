@@ -1,13 +1,7 @@
-﻿using Basic.Reference.Assemblies;
-
-using Microsoft.Xna.Framework;
-
-using RoA.Content.Items.Miscellaneous;
+﻿using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Tiles.Furniture;
 
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 using Terraria;
 using Terraria.IO;

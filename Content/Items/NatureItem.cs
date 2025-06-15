@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-using RoA.Core.Defaults;
+﻿using RoA.Core.Defaults;
 using RoA.Core.Utility;
+
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.ModLoader;

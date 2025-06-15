@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Weapons.Druidic;
 using RoA.Core.Utility;
+
 using System;
 using System.IO;
 

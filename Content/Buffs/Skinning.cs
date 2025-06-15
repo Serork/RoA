@@ -10,11 +10,8 @@ using RoA.Content.Tiles.Crafting;
 using RoA.Core;
 using RoA.Core.Utility;
 
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -71,7 +68,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         }
 
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        writer.Write(handler.StartSpoilingTime);    
+        writer.Write(handler.StartSpoilingTime);
     }
 
     public override void NetReceive(Item item, BinaryReader reader) {
@@ -93,7 +90,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         int height = texture.Height / 5;
         int frames = 5;
         int usedFrame = (int)((TimeSystem.UpdateCount - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * frames);
-        spriteBatch.Draw(texture, position + TextureAssets.Item[item.type].Size() * 0.2f * item.scale, 
+        spriteBatch.Draw(texture, position + TextureAssets.Item[item.type].Size() * 0.2f * item.scale,
             new Rectangle(0, height * usedFrame, texture.Width, height),
             drawColor, 0f, new Vector2(4f), scale, SpriteEffects.None, 0f);
     }

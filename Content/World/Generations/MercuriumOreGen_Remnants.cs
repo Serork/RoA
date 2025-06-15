@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
 
-using Terraria.IO;
+using RoA.Content.Tiles.Crafting;
+using RoA.Core.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using Terraria;
+using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
-using RoA.Core.Utility;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using RoA.Content.Tiles.Crafting;
-using System;
 
 namespace RoA.Content.World.Generations;
 

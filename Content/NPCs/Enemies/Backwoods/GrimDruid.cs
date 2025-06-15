@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common;
 using RoA.Common.BackwoodsSystems;
-using RoA.Common.NPCs;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Dusts;

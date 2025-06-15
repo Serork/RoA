@@ -148,8 +148,8 @@ sealed class BookwormsProjectile : ModProjectile {
                 obj2.noGravity = true;
             }
         }
-		
-		SoundEngine.PlaySound(SoundID.NPCHit18 with { Volume = 0.07f, Pitch = -0.5f + Projectile.ai[2] * 0.1f }, Projectile.Center);
+
+        SoundEngine.PlaySound(SoundID.NPCHit18 with { Volume = 0.07f, Pitch = -0.5f + Projectile.ai[2] * 0.1f }, Projectile.Center);
     }
 
     public override void AI() {

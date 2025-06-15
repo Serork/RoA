@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
@@ -9,6 +9,8 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
 using RoA.Core;
 using RoA.Core.Utility;
+
+using System;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -90,7 +92,7 @@ sealed class OvergrownAltar : ModTile {
                     return true;
                 }
             }
-       }
+        }
 
         return orig(i, j, Type, mute, forced, plr, style);
     }

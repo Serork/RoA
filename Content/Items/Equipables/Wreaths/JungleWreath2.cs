@@ -21,11 +21,11 @@ sealed class JungleWreath2 : BaseWreathItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
-        
-		float value = 0.1f * handler.ActualProgress4;
+
+        float value = 0.1f * handler.ActualProgress4;
         player.endurance += value;
-        
-		if (handler.IsFull1) {
+
+        if (handler.IsFull1) {
             if (player.thorns < 1f) player.thorns += 0.5f;
             player.GetModPlayer<JungleWreathPlayer2>().poisonedSkin2 = true;
         }

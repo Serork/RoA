@@ -26,6 +26,6 @@ sealed class LivingPalmChestplate : NatureItem {
 
         Item.defense = 2;
     }
-	
-	public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.04f;
+
+    public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.04f;
 }

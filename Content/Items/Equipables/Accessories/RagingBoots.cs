@@ -6,7 +6,6 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
