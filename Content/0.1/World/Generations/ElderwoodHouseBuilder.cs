@@ -756,7 +756,6 @@ public class HouseBuilderCustom {
                     int num4 = _random.Next(2, room2.Width - 2) + room2.X;
                     WorldGen.PlaceTile(num4, num3, type, mute: true, forced: true);
                     if (flag2 = _tiles[num4, num3].HasTile && _tiles[num4, num3].TileType == type) {
-                        Console.WriteLine(num4 + " " + num3);
                         break;
                     }
                 }
@@ -768,7 +767,6 @@ public class HouseBuilderCustom {
 
                 for (int l = room2.X + 2; l <= room2.X + room2.Width - 2; l++) {
                     if (flag2 = WorldGen.PlaceTile(l, num3, type, mute: true, forced: true)) {
-                        Console.WriteLine(l + " " + num3);
                         break;
                     }
                 }
