@@ -27,6 +27,10 @@ sealed class BackwoodsWorldGen : ModSystem {
         bool hasSpiritReforged = ModLoader.HasMod("SpiritReforged");
         bool hasRemnants = ModLoader.HasMod("Remnants");
 
+        if (hasRemnants) {
+            _extraModSupport = true;
+        }
+
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         if (genIndex == -1) {
             _extraModSupport = true;
