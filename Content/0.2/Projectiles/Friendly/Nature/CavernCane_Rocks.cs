@@ -17,9 +17,13 @@ using RoA.Core.Utility.Extensions;
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -33,6 +37,10 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
     private static float MAXGRAVITY => 5f;
 
     private struct RocksInfo {
+        public const byte ROCKSCOUNT = 2;
+
+        public static byte HITBOXSIZE => 26;
+
         private byte _usedFrame1, _usedFrame2;
         private float _progress;
 
@@ -139,6 +147,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
     }
 
     private RocksInfo[]? _rocks;
+    private byte[][]? _immunityFramesPerNPC;
 
     private static Asset<Texture2D>? _rocksTexture;
     private static BlendState? _multiplyBlendState;
@@ -185,6 +194,11 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
             RocksValues rocksValues = new(Projectile);
             if (!rocksValues.Init) {
                 rocksValues.Init = true;
+
+                _immunityFramesPerNPC = new byte[ROCKATTACKCOUNT * 2][];
+                for (int i = 0; i < _immunityFramesPerNPC.Length; i++) {
+                    _immunityFramesPerNPC[i] = new byte[Main.npc.Length];
+                }
 
                 if (Projectile.IsOwnerLocal()) {
                     rocksValues.GeodeType = Main.rand.GetRandomEnumValue<RocksValues.GemType>();
@@ -353,22 +367,118 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
             rocksValues.ThrewRocks = true;
 
             void resetSomeRockInfo() {
+                RocksValues rocksValues = new(Projectile);
                 for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                     ref RocksInfo currentRocksData = ref _rocks![i];
                     currentRocksData.Progress = 1f;
                     currentRocksData.StartDistance *= 0.7f;
+                    ref float rocksAngle = ref currentRocksData.Angle;
+                    int nextIndex = i + 1;
+                    bool second = nextIndex % 2 == 0;
+                    bool third = nextIndex % 3 == 0;
+                    if (rocksValues.ThrewRocks) {
+                        if (third) {
+                            rocksAngle += MathHelper.PiOver2;
+                        }
+                        else if (second) {
+                            rocksAngle += MathHelper.PiOver4 / 3f;
+                        }
+                        else {
+                            rocksAngle -= MathHelper.PiOver4 / 3f;
+                        }
+                    }
+                }
+            }
+            void resetDamageInfo() {
+                for (int i = 0; i < ROCKATTACKCOUNT; i++) {
+                    for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
+                        for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
+                            ref byte immuneTime = ref _immunityFramesPerNPC![(byte)(i * 2 + j)][npcId];
+                            if (immuneTime > 0) {
+                                immuneTime = 0;
+                            }
+                        }
+                    }
                 }
             }
 
             resetSomeRockInfo();
             makeDustOnRockCollision();
             makeGeodeDustsAndGores();
+            resetDamageInfo();
+        }
+        void damageNPCs() {
+            if (!Projectile.IsOwnerLocal()) {
+                return;
+            }
+
+            RocksValues rocksValues = new(Projectile);
+            Player owner = Projectile.GetOwnerAsPlayer();
+            for (int i = 0; i < ROCKATTACKCOUNT; i++) {
+                RocksInfo rocksData = _rocks![i];
+                float generalProgressForDamaging = (1f - rocksValues.ForcedOpacity) * rocksData.Opacity * rocksData.Progress;
+                bool canDamage = generalProgressForDamaging >= 0.25f;
+                if (!canDamage) {
+                    continue;
+                }
+
+                for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
+                    bool firstRock = j == 0;
+                    Vector2 rockPositionToHandleCollision = GetRockPosition(i, firstRock, out float rockProgress);
+                    foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
+                        if (npcForCollisionCheck.dontTakeDamage) {
+                            continue;
+                        }
+                        npcForCollisionCheck.position += npcForCollisionCheck.netOffset;
+                        int npcId = npcForCollisionCheck.whoAmI;
+                        ref byte immuneTime = ref _immunityFramesPerNPC![(byte)(i * 2 + j)][npcId];
+                        int direction = MathF.Sign(rockPositionToHandleCollision.X - npcForCollisionCheck.Center.X);
+                        if (immuneTime == 0 && GeometryUtils.CenteredSquare(rockPositionToHandleCollision, RocksInfo.HITBOXSIZE).Intersects(npcForCollisionCheck.getRect())) {
+                            var modifiers = npcForCollisionCheck.GetIncomingStrikeModifiers(Projectile.DamageType, direction);
+                            modifiers.ArmorPenetration += Projectile.ArmorPenetration;
+                            bool crit = false;
+                            if (Projectile.DamageType.UseStandardCritCalcs && Main.rand.Next(100) < Projectile.CritChance) {
+                                crit = true;
+                            }
+
+                            int num26 = Item.NPCtoBanner(npcForCollisionCheck.BannerID());
+                            if (num26 >= 0)
+                                Main.player[Main.myPlayer].lastCreatureHit = num26;
+                            if (Main.netMode != NetmodeID.Server) {
+                                owner.ApplyBannerOffenseBuff(npcForCollisionCheck, ref modifiers);
+                            }
+                            Projectile.StatusNPC(npcId);
+                            if (npcForCollisionCheck.life > 5)
+                                owner.OnHit(npcForCollisionCheck.Center.X, npcForCollisionCheck.Center.Y, npcForCollisionCheck);
+
+                            if (ProjectileID.Sets.ImmediatelyUpdatesNPCBuffFlags[Type])
+                                npcForCollisionCheck.UpdateNPC_BuffSetFlags(lowerBuffTime: false);
+
+                            var strike = modifiers.ToHitInfo(Projectile.damage, crit, Projectile.knockBack, damageVariation: true, luck: owner.luck);
+                            NPCKillAttempt attempt = new NPCKillAttempt(npcForCollisionCheck);
+                            /*
+                            int num35 = ((!flag) ? ((int)nPC.StrikeNPCNoInteraction(num19, num3, num34, flag12)) : ((int)nPC.StrikeNPC(num19, num3, num34, flag12)));
+                            */
+                            int num35 = npcForCollisionCheck.StrikeNPC(strike, noPlayerInteraction: false);
+                            if (attempt.DidNPCDie())
+                                owner.OnKillNPC(ref attempt, this);
+
+                            if (owner.accDreamCatcher && !npcForCollisionCheck.HideStrikeDamage)
+                                owner.addDPS(num35);
+
+                            immuneTime = 10;
+                        }
+                        npcForCollisionCheck.position -= npcForCollisionCheck.netOffset;
+                    }
+                }
+            }
         }
 
         checkActive();
         init();
         processRocks();
         throwRocksWhenCharged();
+        damageNPCs();
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -396,11 +506,6 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
             });
         }
         void drawRocks() {
-            float collisionAngle = 0f;
-            for (int i = 0; i < ROCKATTACKCOUNT; i++) {
-                RocksInfo currentRocksData = _rocks![i];
-                collisionAngle += currentRocksData.CollisionAngle;
-            }
             RocksValues rocksValues = new(Projectile);
             float forcedOpacity = 1f - rocksValues.ForcedOpacity;
             for (int i = ROCKATTACKCOUNT - 1; i >= 0; i--) {
@@ -415,27 +520,9 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                 }
 
                 float rocksOpacity = currentRocksData.Opacity;
-                float rocksAngle = currentRocksData.Angle;
-                if (rocksValues.ThrewRocks) {
-                    rocksAngle += MathHelper.PiOver2;
-                }
-                for (int j = 0; j < 2; j++) {
+                for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
                     bool firstRock = j == 0;
-                    bool third = (i + 1) % 3 == 0;
-                    float rockCollisionProgress = MAXPROGRESS * currentRocksData.GetSizeByUsedFrame(firstRock) - (MAXPROGRESS - currentRocksData.Progress);
-                    float reachedPositionOffset = (third ? 0.055f : 0.035f) * rockCollisionProgress;
-                    float rockProgressBaseValue = Ease.SineIn(currentRocksData.Progress);
-                    float reversedRockProgress = 1f - rockProgressBaseValue;
-                    float rockProgress = Utils.Clamp(reversedRockProgress, reachedPositionOffset, 1f);
-                    int rockDirection = (j == 0).ToDirectionInt();
-                    Vector2 rockPosition = Vector2.UnitY.RotatedBy(rocksAngle) * rockDirection * currentRocksData.StartDistance * rockProgress;
-                    Vector2 rockExtraPosition = currentRocksData.GetExtraPosition(firstRock);
-                    Vector2 rockPositionToDraw = Projectile.Center + rockPosition + rockExtraPosition;
-                    Vector2 movementOffset = rockCollisionProgress * Vector2.One.RotatedBy(rocksAngle);
-                    rockPositionToDraw += movementOffset;
-                    float shakeStrength = 1f;
-                    Vector2 onCollisionShakeOffset = rockCollisionProgress * Vector2.One.RotatedBy(collisionAngle) * shakeStrength;
-                    rockPositionToDraw += onCollisionShakeOffset;
+                    Vector2 rockPositionToDraw = GetRockPosition(i, firstRock, out float rockProgress);
                     Color color = Lighting.GetColor(rockPositionToDraw.ToTileCoordinates());
                     color *= rocksOpacity;
                     color *= forcedOpacity;
@@ -481,6 +568,8 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
 
     }
 
+    public override bool? CanDamage() => false;
+
     private void LoadRocksTexture() {
         if (Main.dedServ) {
             return;
@@ -489,11 +578,40 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
         _rocksTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "CavernCaneRock");
     }
 
+    private int GetImmuneTime(int rockIndex, int pairIndex, int npcId) => _immunityFramesPerNPC![(byte)(rockIndex * 2 + pairIndex)][npcId];
+
+    private Vector2 GetRockPosition(int rockIndex, bool firstRock, out float rockProgress) {
+        float collisionAngle = 0f;
+        for (int i = 0; i < ROCKATTACKCOUNT; i++) {
+            RocksInfo currentRocksData = _rocks![i];
+            collisionAngle += currentRocksData.CollisionAngle;
+        }
+        RocksInfo rockData = _rocks![rockIndex];
+        int nextIndex = rockIndex + 1;
+        bool third = nextIndex % 3 == 0;
+        float rocksAngle = rockData.Angle;
+        float rockCollisionProgress = MAXPROGRESS * rockData.GetSizeByUsedFrame(firstRock) - (MAXPROGRESS - rockData.Progress);
+        float reachedPositionOffset = (third ? 0.055f : 0.035f) * rockCollisionProgress;
+        float rockProgressBaseValue = Ease.SineIn(rockData.Progress);
+        float reversedRockProgress = 1f - rockProgressBaseValue;
+        rockProgress = Utils.Clamp(reversedRockProgress, reachedPositionOffset, 1f);
+        int rockDirection = firstRock.ToDirectionInt();
+        Vector2 rockPosition = Vector2.UnitY.RotatedBy(rocksAngle) * rockDirection * rockData.StartDistance * rockProgress;
+        Vector2 rockExtraPosition = rockData.GetExtraPosition(firstRock);
+        Vector2 resultRockPosition = Projectile.Center + rockPosition + rockExtraPosition;
+        Vector2 movementOffset = rockCollisionProgress * Vector2.One.RotatedBy(rocksAngle);
+        resultRockPosition += movementOffset;
+        float shakeStrength = 1f;
+        Vector2 onCollisionShakeOffset = rockCollisionProgress * Vector2.One.RotatedBy(collisionAngle) * shakeStrength;
+        resultRockPosition += onCollisionShakeOffset;
+        return resultRockPosition;
+    }
+
     private bool IsGeodeCharged() {
         float geodeProgress = GetGeodeProgress(true);
         float maxProgress = MAXPROGRESS * ROCKATTACKCOUNT;
         float progress = geodeProgress / maxProgress;
-        return progress >= 0.98f;
+        return progress >= 0.96f;
     }
 
     private float GetGeodeSize() {

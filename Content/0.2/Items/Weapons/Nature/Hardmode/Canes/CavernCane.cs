@@ -34,8 +34,11 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
         protected override ushort TimeAfterShootToExist(Player player) {
             byte result = (byte)(UseTime * 0.75f);
             float cubicBezierEaseIn(float t, float control) => 3f * control * t * t * (1f - t) + t * t * t;
-            float attackProgress = cubicBezierEaseIn(AttackProgress01, 0.7f);
-            result = (byte)(result * (1f - Utils.Clamp(attackProgress, 0.3f, 0.8f)));
+            float bezierControlValue = 0.7f;
+            float attackProgress = cubicBezierEaseIn(AttackProgress01, bezierControlValue);
+            float minPenaltyFactor = 0.3f,
+                  maxPenaltyFactor = 0.65f;
+            result = (byte)(result * (1f - Utils.Clamp(attackProgress, minPenaltyFactor, maxPenaltyFactor)));
             return result;
         }
 
