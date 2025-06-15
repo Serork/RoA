@@ -4388,11 +4388,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Rectangle savannaArea = (Rectangle)mod.Call("GetSavannaArea");
             CenterX += -GenVars.dungeonSide * savannaArea.Width / 8;
         }
+        bool hasRemnants = ModLoader.HasMod("Remnants");
+        float checkWidthMultiplier = hasRemnants ? 5 : 3;
         CenterY = (int)Main.worldSurface - 200;
-        while (CenterX >= mid && CenterX < mid + _biomeWidth * 3) {
+        while (CenterX >= mid && CenterX < mid + _biomeWidth * checkWidthMultiplier) {
             CenterX++;
         }
-        while (CenterX <= mid && CenterX > mid - _biomeWidth * 3) {
+        while (CenterX <= mid && CenterX > mid - _biomeWidth * checkWidthMultiplier) {
             CenterX--;
         }
         BackwoodsVars.BackwoodsCenterX = CenterX;
