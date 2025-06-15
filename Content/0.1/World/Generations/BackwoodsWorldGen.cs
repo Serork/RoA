@@ -27,6 +27,10 @@ sealed class BackwoodsWorldGen : ModSystem {
         bool hasSpiritReforged = ModLoader.HasMod("SpiritReforged");
         bool hasRemnants = ModLoader.HasMod("Remnants");
 
+        if (hasRemnants) {
+            _extraModSupport = true;
+        }
+
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         if (genIndex == -1) {
             _extraModSupport = true;
@@ -45,7 +49,7 @@ sealed class BackwoodsWorldGen : ModSystem {
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new("Backwoods", LAYERWEIGHT));
 
         if (hasRemnants) {
-            genIndex += 14;
+            genIndex += 18;
             tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
             genIndex++;
             tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));

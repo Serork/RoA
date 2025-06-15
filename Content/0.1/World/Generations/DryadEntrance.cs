@@ -28,7 +28,7 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.World.Generations;
 
 sealed class DryadEntrance : ModSystem {
-    private static int _dryadEntranceX, _dryadEntranceY;
+    private static int _dryadEntranceX, _dryadEntranceY, _dryadEntrancemCave;
     private static Point _bigRubblePosition = Point.Zero;
     private static bool _loomPlacedInWorld;
     internal static bool _dryadStructureGenerated;
@@ -410,6 +410,7 @@ sealed class DryadEntrance : ModSystem {
                             GenVars.mCaveY[GenVars.numMCaves] = num1055;
                             _dryadEntranceX = num1053;
                             _dryadEntranceY = num1055;
+                            _dryadEntrancemCave = GenVars.numMCaves;
                             GenVars.numMCaves++;
                             flag = false;
                             break;
@@ -419,54 +420,56 @@ sealed class DryadEntrance : ModSystem {
             }
         }
 
-        int num1050 = (int)((double)Main.maxTilesX * 0.001);
-        if (WorldGen.remixWorldGen)
-            num1050 = (int)((double)num1050 * 1.5);
+        if (!ModLoader.HasMod("Remnants")) {
+            int num1050 = (int)((double)Main.maxTilesX * 0.001);
+            if (WorldGen.remixWorldGen)
+                num1050 = (int)((double)num1050 * 1.5);
 
-        for (int num1051 = 0; num1051 < num1050; num1051++) {
-            progress.Set((double)num1051 / (double)num1050);
-            int num1052 = 0;
-            bool flag59 = false;
-            bool flag60 = false;
-            int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.25), (int)((double)Main.maxTilesX * 0.75));
-            while (!flag60) {
-                flag60 = true;
-                if (!WorldGen.remixWorldGen) {
-                    while (num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) {
-                        num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.25), (int)((double)Main.maxTilesX * 0.75));
+            for (int num1051 = 0; num1051 < num1050; num1051++) {
+                progress.Set((double)num1051 / (double)num1050);
+                int num1052 = 0;
+                bool flag59 = false;
+                bool flag60 = false;
+                int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.25), (int)((double)Main.maxTilesX * 0.75));
+                while (!flag60) {
+                    flag60 = true;
+                    if (!WorldGen.remixWorldGen) {
+                        while (num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) {
+                            num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX * 0.25), (int)((double)Main.maxTilesX * 0.75));
+                        }
                     }
-                }
 
-                for (int num1054 = 0; num1054 < GenVars.numMCaves; num1054++) {
-                    if (Math.Abs(num1053 - GenVars.mCaveX[num1054]) < 100) {
-                        num1052++;
-                        flag60 = false;
+                    for (int num1054 = 0; num1054 < GenVars.numMCaves; num1054++) {
+                        if (Math.Abs(num1053 - GenVars.mCaveX[num1054]) < 100) {
+                            num1052++;
+                            flag60 = false;
+                            break;
+                        }
+                    }
+
+                    if (num1052 >= Main.maxTilesX / 5) {
+                        flag59 = true;
                         break;
                     }
                 }
 
-                if (num1052 >= Main.maxTilesX / 5) {
-                    flag59 = true;
-                    break;
-                }
-            }
-
-            if (!flag59) {
-                for (int num1055 = 0; (double)num1055 < Main.worldSurface; num1055++) {
-                    if (Main.tile[num1053, num1055].HasTile) {
-                        for (int num1056 = num1053 - 50; num1056 < num1053 + 50; num1056++) {
-                            for (int num1057 = num1055 - 25; num1057 < num1055 + 25; num1057++) {
-                                if (Main.tile[num1056, num1057].HasTile && (Main.tile[num1056, num1057].TileType == 53 || Main.tile[num1056, num1057].TileType == 151 || Main.tile[num1056, num1057].TileType == 274))
-                                    flag59 = true;
+                if (!flag59) {
+                    for (int num1055 = 0; (double)num1055 < Main.worldSurface; num1055++) {
+                        if (Main.tile[num1053, num1055].HasTile) {
+                            for (int num1056 = num1053 - 50; num1056 < num1053 + 50; num1056++) {
+                                for (int num1057 = num1055 - 25; num1057 < num1055 + 25; num1057++) {
+                                    if (Main.tile[num1056, num1057].HasTile && (Main.tile[num1056, num1057].TileType == 53 || Main.tile[num1056, num1057].TileType == 151 || Main.tile[num1056, num1057].TileType == 274))
+                                        flag59 = true;
+                                }
                             }
-                        }
 
-                        if (!flag59) {
-                            WorldGen.Mountinater(num1053, num1055);
-                            GenVars.mCaveX[GenVars.numMCaves] = num1053;
-                            GenVars.mCaveY[GenVars.numMCaves] = num1055;
-                            GenVars.numMCaves++;
-                            break;
+                            if (!flag59) {
+                                WorldGen.Mountinater(num1053, num1055);
+                                GenVars.mCaveX[GenVars.numMCaves] = num1053;
+                                GenVars.mCaveY[GenVars.numMCaves] = num1055;
+                                GenVars.numMCaves++;
+                                break;
+                            }
                         }
                     }
                 }
@@ -597,9 +600,17 @@ sealed class DryadEntrance : ModSystem {
 
     private void DryadEntranceGenerator(GenerationProgress progress, GameConfiguration configuration) {
         progress.Message = Lang.gen[21].Value;
-        for (int num749 = 0; num749 < GenVars.numMCaves; num749++) {
-            int i3 = GenVars.mCaveX[num749];
-            int j5 = GenVars.mCaveY[num749];
+        if (!ModLoader.HasMod("Remnants")) {
+            for (int num749 = 0; num749 < GenVars.numMCaves; num749++) {
+                int i3 = GenVars.mCaveX[num749];
+                int j5 = GenVars.mCaveY[num749];
+                WorldGen.CaveOpenater(i3, j5);
+                WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
+            }
+        }
+        else {
+            int i3 = GenVars.mCaveX[_dryadEntrancemCave];
+            int j5 = GenVars.mCaveY[_dryadEntrancemCave];
             WorldGen.CaveOpenater(i3, j5);
             WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
         }

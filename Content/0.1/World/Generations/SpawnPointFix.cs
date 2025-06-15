@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Terraria;
 using Terraria.GameContent.Generation;
@@ -11,6 +10,10 @@ namespace RoA.Content.World.Generations;
 
 sealed class SpawnPointFix : ModSystem {
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
+        if (ModLoader.HasMod("Remnants")) {
+            return;
+        }
+
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Spawn Point"));
         tasks.RemoveAt(genIndex);
 

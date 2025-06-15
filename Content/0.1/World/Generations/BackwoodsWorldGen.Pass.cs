@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 using ReLogic.Utilities;
 
@@ -26,6 +22,10 @@ using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -4312,20 +4312,35 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         CenterY = (int)Main.worldSurface;
 
         if (hasRemnants) {
-            CenterX = Main.maxTilesX / 2;
+            CenterX = Main.maxTilesX - 150;
             bool flag = false;
-            while (WorldGenHelper.GetTileSafely(CenterX, CenterY).TileType != TileID.Mud) {
+            bool scanMudInAreaAndSkipSand(Point checkPosition, int areaSize = 50) {
+                for (int x = checkPosition.X - areaSize; x < checkPosition.X + areaSize; x++) {
+                    for (int y = checkPosition.Y - areaSize; y < checkPosition.Y + areaSize; y++) {
+                        Tile checkTile = WorldGenHelper.GetTileSafely(x, y);
+                        if (checkTile.TileType == TileID.Mud) {
+                            return true;
+                        }
+                        if (checkTile.TileType == TileID.HardenedSand) {
+                            flag = true;
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+            while (!scanMudInAreaAndSkipSand(new Point(CenterX, CenterY))) {
                 CenterX--;
-                if (CenterX < 500) {
+                if (CenterX < 150) {
                     flag = true;
                     break;
                 }
             }
             if (flag) {
-                CenterX = Main.maxTilesX / 2;
-                while (WorldGenHelper.GetTileSafely(CenterX, CenterY).TileType != TileID.Mud) {
+                CenterX = 150;
+                while (!scanMudInAreaAndSkipSand(new Point(CenterX, CenterY))) {
                     CenterX++;
-                    if (CenterX > Main.maxTilesX - 500) {
+                    if (CenterX > Main.maxTilesX - 150) {
                         break;
                     }
                 }
@@ -4373,11 +4388,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             Rectangle savannaArea = (Rectangle)mod.Call("GetSavannaArea");
             CenterX += -GenVars.dungeonSide * savannaArea.Width / 8;
         }
+        bool hasRemnants = ModLoader.HasMod("Remnants");
+        float checkWidthMultiplier = hasRemnants ? 5 : 3;
         CenterY = (int)Main.worldSurface - 200;
-        while (CenterX >= mid && CenterX < mid + _biomeWidth * 3) {
+        while (CenterX >= mid && CenterX < mid + _biomeWidth * checkWidthMultiplier) {
             CenterX++;
         }
-        while (CenterX <= mid && CenterX > mid - _biomeWidth * 3) {
+        while (CenterX <= mid && CenterX > mid - _biomeWidth * checkWidthMultiplier) {
             CenterX--;
         }
         BackwoodsVars.BackwoodsCenterX = CenterX;
@@ -4763,7 +4780,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX : Right) : Right;
         for (int i = left - 100; i <= right + 100; i++) {
             if (i < left - 20 || i > right + 20) {
-                for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + 20; j++) {
+                for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + (ModLoader.HasMod("Remnants") ? 50 : 20); j++) {
                     Tile tile = WorldGenHelper.GetTileSafely(i, j);
                     if (WorldGenHelper.ActiveTile(i, j, _grassTileType) && !_backwoodsPlants.Contains(WorldGenHelper.GetTileSafely(i, j - 1).TileType) && tile.Slope == SlopeType.Solid && !tile.IsHalfBlock) {
                         WorldGen.GrowTree(i, j);

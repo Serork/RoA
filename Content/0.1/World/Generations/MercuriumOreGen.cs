@@ -14,7 +14,7 @@ namespace RoA.Content.World.Generations;
 sealed class MercuriumOreGen : ModSystem {
     private static int _tileCount;
 
-    private static IReadOnlyList<int> OresType = [7, 166, 6, 167, 9, 168, 8, 169, 22, 204];
+    public static IReadOnlyList<int> OresType = [7, 166, 6, 167, 9, 168, 8, 169, 22, 204];
 
     public override void Load() {
         On_WorldGen.TileRunner += On_WorldGen_TileRunner;
