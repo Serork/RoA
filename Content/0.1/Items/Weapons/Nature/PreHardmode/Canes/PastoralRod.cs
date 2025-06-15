@@ -18,7 +18,7 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<ShepherdLeaves>();
 
-    protected override ushort GetUseTime(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
+    protected override ushort TimeToCastAttack(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(38);

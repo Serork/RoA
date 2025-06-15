@@ -147,7 +147,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
     }
 
     private RocksInfo[]? _rocks;
-    private byte[][]? _immunityFramesPerNPC;
+    private ushort[][]? _immunityFramesPerNPC;
 
     private static Asset<Texture2D>? _rocksTexture;
     private static BlendState? _multiplyBlendState;
@@ -195,9 +195,9 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
             if (!rocksValues.Init) {
                 rocksValues.Init = true;
 
-                _immunityFramesPerNPC = new byte[ROCKATTACKCOUNT * 2][];
+                _immunityFramesPerNPC = new ushort[ROCKATTACKCOUNT * 2][];
                 for (int i = 0; i < _immunityFramesPerNPC.Length; i++) {
-                    _immunityFramesPerNPC[i] = new byte[Main.npc.Length];
+                    _immunityFramesPerNPC[i] = new ushort[Main.npc.Length];
                 }
 
                 if (Projectile.IsOwnerLocal()) {
@@ -393,7 +393,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                 for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                     for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
                         for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
-                            ref byte immuneTime = ref _immunityFramesPerNPC![(byte)(i * 2 + j)][npcId];
+                            ref ushort immuneTime = ref _immunityFramesPerNPC![(byte)(i * 2 + j)][npcId];
                             if (immuneTime > 0) {
                                 immuneTime = 0;
                             }
@@ -426,49 +426,12 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                     bool firstRock = j == 0;
                     Vector2 rockPositionToHandleCollision = GetRockPosition(i, firstRock, out float rockProgress);
                     foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
-                        if (npcForCollisionCheck.dontTakeDamage) {
+                        if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile, 
+                                                                         ref _immunityFramesPerNPC![(byte)(i * 2 + j)][npcForCollisionCheck.whoAmI],
+                                                                         damageSourceHitbox: GeometryUtils.CenteredSquare(rockPositionToHandleCollision, RocksInfo.HITBOXSIZE), 
+                                                                         direction: MathF.Sign(rockPositionToHandleCollision.X - npcForCollisionCheck.Center.X))) {
                             continue;
                         }
-                        npcForCollisionCheck.position += npcForCollisionCheck.netOffset;
-                        int npcId = npcForCollisionCheck.whoAmI;
-                        ref byte immuneTime = ref _immunityFramesPerNPC![(byte)(i * 2 + j)][npcId];
-                        int direction = MathF.Sign(rockPositionToHandleCollision.X - npcForCollisionCheck.Center.X);
-                        if (immuneTime == 0 && GeometryUtils.CenteredSquare(rockPositionToHandleCollision, RocksInfo.HITBOXSIZE).Intersects(npcForCollisionCheck.getRect())) {
-                            var modifiers = npcForCollisionCheck.GetIncomingStrikeModifiers(Projectile.DamageType, direction);
-                            modifiers.ArmorPenetration += Projectile.ArmorPenetration;
-                            bool crit = false;
-                            if (Projectile.DamageType.UseStandardCritCalcs && Main.rand.Next(100) < Projectile.CritChance) {
-                                crit = true;
-                            }
-
-                            int num26 = Item.NPCtoBanner(npcForCollisionCheck.BannerID());
-                            if (num26 >= 0)
-                                Main.player[Main.myPlayer].lastCreatureHit = num26;
-                            if (Main.netMode != NetmodeID.Server) {
-                                owner.ApplyBannerOffenseBuff(npcForCollisionCheck, ref modifiers);
-                            }
-                            Projectile.StatusNPC(npcId);
-                            if (npcForCollisionCheck.life > 5)
-                                owner.OnHit(npcForCollisionCheck.Center.X, npcForCollisionCheck.Center.Y, npcForCollisionCheck);
-
-                            if (ProjectileID.Sets.ImmediatelyUpdatesNPCBuffFlags[Type])
-                                npcForCollisionCheck.UpdateNPC_BuffSetFlags(lowerBuffTime: false);
-
-                            var strike = modifiers.ToHitInfo(Projectile.damage, crit, Projectile.knockBack, damageVariation: true, luck: owner.luck);
-                            NPCKillAttempt attempt = new NPCKillAttempt(npcForCollisionCheck);
-                            /*
-                            int num35 = ((!flag) ? ((int)nPC.StrikeNPCNoInteraction(num19, num3, num34, flag12)) : ((int)nPC.StrikeNPC(num19, num3, num34, flag12)));
-                            */
-                            int num35 = npcForCollisionCheck.StrikeNPC(strike, noPlayerInteraction: false);
-                            if (attempt.DidNPCDie())
-                                owner.OnKillNPC(ref attempt, this);
-
-                            if (owner.accDreamCatcher && !npcForCollisionCheck.HideStrikeDamage)
-                                owner.addDPS(num35);
-
-                            immuneTime = 10;
-                        }
-                        npcForCollisionCheck.position -= npcForCollisionCheck.netOffset;
                     }
                 }
             }
