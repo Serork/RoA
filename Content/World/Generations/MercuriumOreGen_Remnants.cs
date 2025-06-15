@@ -30,7 +30,7 @@ sealed class MercuriumOreGen_Remnants : ModSystem {
 
     private class MercuriumOrePass(string name, float loadWeight) : GenPass(name, loadWeight) {
         protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
-            for (int k = 0; k < (int)(Main.maxTilesX * Main.maxTilesY * 6E-04); k++) {
+            for (int k = 0; k < (int)(Main.maxTilesX * Main.maxTilesY * 6E-03); k++) {
                 int i = WorldGen.genRand.Next(0, Main.maxTilesX);
                 int j = WorldGen.genRand.Next((int)GenVars.worldSurfaceLow, Main.maxTilesY);
                 int type = Main.tile[i, j].TileType;
