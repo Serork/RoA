@@ -4312,7 +4312,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         CenterY = (int)Main.worldSurface;
 
         if (hasRemnants) {
-            CenterX = Main.maxTilesX - 300;
+            CenterX = Main.maxTilesX - 150;
             bool flag = false;
             bool scanMudInAreaAndSkipSand(Point checkPosition, int areaSize = 50) {
                 for (int x = checkPosition.X - areaSize; x < checkPosition.X + areaSize; x++) {
@@ -4331,16 +4331,16 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             while (!scanMudInAreaAndSkipSand(new Point(CenterX, CenterY))) {
                 CenterX--;
-                if (CenterX < 600) {
+                if (CenterX < 150) {
                     flag = true;
                     break;
                 }
             }
             if (flag) {
-                CenterX = 300;
+                CenterX = 150;
                 while (!scanMudInAreaAndSkipSand(new Point(CenterX, CenterY))) {
                     CenterX++;
-                    if (CenterX > Main.maxTilesX - 600) {
+                    if (CenterX > Main.maxTilesX - 150) {
                         break;
                     }
                 }

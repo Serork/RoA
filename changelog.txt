@@ -1,1 +1,1 @@
-- Added Remnants 2.0 compatibility
+- Made a few more Remnants 2.0 compatibility improvements
