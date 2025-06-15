@@ -1,15 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
-using System;
-
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static System.Net.Mime.MediaTypeNames;
-
-namespace RoA.Core.Utility;
+namespace RoA.Core.Utility.Vanilla;
 
 static class NPCUtils {
     public static NPC? FindClosestNPC(Vector2 checkPosition, int checkDistance, bool shouldCheckForCollisions = true) {

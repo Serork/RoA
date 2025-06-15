@@ -15,6 +15,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -217,68 +218,83 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
             });
         }
         void drawCopies() {
-            for (int i = 0; i < MAXCOPIES; i++) {
-                CopyInfo copyInfo = _copyData![i];
-                if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
-                    continue;
-                }
-                Main.spriteBatch.Draw(cloudberryTexture, copyInfo.Position, DrawInfo.Default with {
-                    Color = color * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity,
-                    Rotation = copyInfo.Rotation,
-                    Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
-                    Origin = new Vector2(cloudberryWidth, cloudberryHeight) / 2f,
-                    Clip = new Rectangle(0, copyInfo.UsedFrame * cloudberryHeight, cloudberryWidth, cloudberryHeight)
-                });
-            }
-            for (int i = 0; i < MAXSNOWBLOCKS; i++) {
-                SnowBlockInfo tileInfo = _snowBlockData![i];
-                int num12 = (int)tileInfo.Slope;
-                bool halfBlock = tileInfo.HalfBlock;
-                if (num12 == 0) {
-                    Main.spriteBatch.Draw(snowBlockTexture, tileInfo.Position.ToWorldCoordinates() - Vector2.UnitY * 8f, DrawInfo.Default with {
-                        Color = color * MathUtils.Clamp01(tileInfo.Opacity),
-                        Clip = tileInfo.Clip
+            void drawTrails() {
+                for (int i = 0; i < MAXCOPIES; i++) {
+                    CopyInfo copyInfo = _copyData![i];
+                    if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
+                        continue;
+                    }
+                    Main.spriteBatch.Draw(cloudberryTexture, copyInfo.Position, DrawInfo.Default with {
+                        Color = color * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity,
+                        Rotation = copyInfo.Rotation,
+                        Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
+                        Origin = new Vector2(cloudberryWidth, cloudberryHeight) / 2f,
+                        Clip = new Rectangle(0, copyInfo.UsedFrame * cloudberryHeight, cloudberryWidth, cloudberryHeight)
                     });
                 }
-                else {
-                    int num13 = 2;
-                    for (int i2 = 0; i2 < 8; i2++) {
-                        int num14 = i2 * -2;
-                        int num15 = 16 - i2 * 2;
-                        int num16 = 16 - num15;
-                        int num17;
-                        switch (num12) {
-                            case 1:
-                                num14 = 0;
-                                num17 = i2 * 2;
-                                num15 = 14 - i2 * 2;
-                                num16 = 0;
-                                break;
-                            case 2:
-                                num14 = 0;
-                                num17 = 16 - i2 * 2 - 2;
-                                num15 = 14 - i2 * 2;
-                                num16 = 0;
-                                break;
-                            case 3:
-                                num17 = i2 * 2;
-                                break;
-                            default:
-                                num17 = 16 - i2 * 2 - 2;
-                                break;
-                        }
-                        Main.spriteBatch.Draw(snowBlockTexture, tileInfo.Position.ToWorldCoordinates() - Vector2.UnitY * 8f + new Vector2(num17, i2 * num13 + num14), DrawInfo.Default with {
+            }
+            void drawSnowBlocks() {
+                for (int i = 0; i < MAXSNOWBLOCKS; i++) {
+                    SnowBlockInfo tileInfo = _snowBlockData![i];
+                    int num12 = (int)tileInfo.Slope;
+                    bool halfBlock = tileInfo.HalfBlock;
+                    // prolly need to separate
+                    Vector2 tilePositionToDraw = tileInfo.Position.ToWorldCoordinates() - Vector2.One * 8f;
+                    if (num12 == 0 && !halfBlock) {
+                        Main.spriteBatch.Draw(snowBlockTexture, tilePositionToDraw, DrawInfo.Default with {
                             Color = color * MathUtils.Clamp01(tileInfo.Opacity),
-                            Clip = new Rectangle(tileInfo.Clip.X + num17, tileInfo.Clip.Y + num16, num13, num15)
+                            Clip = tileInfo.Clip
                         });
                     }
-                    int num18 = ((num12 <= 2) ? 14 : 0);
-                    Main.spriteBatch.Draw(snowBlockTexture, tileInfo.Position.ToWorldCoordinates() - Vector2.UnitY * 8f + new Vector2(0f, num18), DrawInfo.Default with {
-                        Color = color * MathUtils.Clamp01(tileInfo.Opacity),
-                        Clip = new Rectangle(tileInfo.Clip.X, tileInfo.Clip.Y + num18, 16, 2)
-                    });
+                    else if (halfBlock) {
+                        Main.spriteBatch.Draw(snowBlockTexture, tilePositionToDraw + Vector2.UnitY * 8f, DrawInfo.Default with {
+                            Color = color * MathUtils.Clamp01(tileInfo.Opacity),
+                            Clip = tileInfo.Clip.AdjustHeight(-tileInfo.Clip.Height / 2)
+                        });
+                    }
+                    else {
+                        int num13 = 2;
+                        for (int i2 = 0; i2 < 8; i2++) {
+                            int num14 = i2 * -2;
+                            int num15 = 16 - i2 * 2;
+                            int num16 = 16 - num15;
+                            int num17;
+                            switch (num12) {
+                                case 1:
+                                    num14 = 0;
+                                    num17 = i2 * 2;
+                                    num15 = 14 - i2 * 2;
+                                    num16 = 0;
+                                    break;
+                                case 2:
+                                    num14 = 0;
+                                    num17 = 16 - i2 * 2 - 2;
+                                    num15 = 14 - i2 * 2;
+                                    num16 = 0;
+                                    break;
+                                case 3:
+                                    num17 = i2 * 2;
+                                    break;
+                                default:
+                                    num17 = 16 - i2 * 2 - 2;
+                                    break;
+                            }
+                            Main.spriteBatch.Draw(snowBlockTexture, tilePositionToDraw + new Vector2(num17, i2 * num13 + num14), DrawInfo.Default with {
+                                Color = color * MathUtils.Clamp01(tileInfo.Opacity),
+                                Clip = new Rectangle(tileInfo.Clip.X + num17, tileInfo.Clip.Y + num16, num13, num15)
+                            });
+                        }
+                        int num18 = ((num12 <= 2) ? 14 : 0);
+                        Main.spriteBatch.Draw(snowBlockTexture, tilePositionToDraw + new Vector2(0f, num18), DrawInfo.Default with {
+                            Color = color * MathUtils.Clamp01(tileInfo.Opacity),
+                            Clip = new Rectangle(tileInfo.Clip.X, tileInfo.Clip.Y + num18, 16, 2)
+                        });
+                    }
                 }
             }
+
+            drawTrails();
+            drawSnowBlocks();
         }
 
         drawCopies();

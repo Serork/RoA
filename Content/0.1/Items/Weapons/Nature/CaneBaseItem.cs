@@ -74,6 +74,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     private float _maxUseTime;
     private float _rotation;
     private Vector2 _positionOffset;
+    private bool _shouldBeActive;
 
     protected bool Shot, Shot2;
 
@@ -93,7 +94,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     public bool PreparingAttack => !Shot;
 
     public int CurrentUseTime { get => (int)Projectile.ai[0]; private set => Projectile.ai[0] = value < 0 ? 0 : value; }
-    public bool ShouldBeActive { get => Projectile.ai[2] == 0f; private set => Projectile.ai[2] = 1 - value.ToInt(); }
+    public bool ShouldBeActive { get => _shouldBeActive; private set => _shouldBeActive = value; }
 
     protected ushort CurrentPenaltyTime => _penaltyTime;
     protected float PenaltyProgress => (float)_penaltyTime / _maxPenaltyTime;

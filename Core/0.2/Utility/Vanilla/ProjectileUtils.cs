@@ -6,7 +6,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace RoA.Core.Utility;
+namespace RoA.Core.Utility.Vanilla;
 
 static class ProjectileUtils {
     public static bool CanProjectileCutTiles(Projectile checkProjectile) {

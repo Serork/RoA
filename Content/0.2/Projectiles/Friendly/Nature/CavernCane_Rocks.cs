@@ -13,17 +13,14 @@ using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -442,7 +439,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
             RocksValues rocksValues = new(Projectile);
             for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                 RocksInfo rocksData = _rocks![i];
-                bool canCutTiles = getGeneralProgressForVariousPurposes(rocksData) >= 0.25f;
+                bool canCutTiles = getGeneralProgressForVariousPurposes(rocksData) >= 0.5f;
                 if (!canCutTiles) {
                     continue;
                 }
@@ -452,6 +449,12 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                 }
             }
         }
+        void releaseProjectile() {
+            RocksValues rocksValues = new(Projectile);
+            if (rocksValues.ForcedOpacity >= 1f) {
+                Projectile.Kill();
+            }
+        }
 
         checkActive();
         init();
@@ -459,6 +462,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
         throwRocksWhenCharged();
         damageNPCs();
         cutTiles();
+        releaseProjectile();
     }
 
     protected override void Draw(ref Color lightColor) {
