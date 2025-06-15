@@ -407,24 +407,26 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
             makeGeodeDustsAndGores();
             resetDamageInfo();
         }
+        float getGeneralProgressForVariousPurposes(RocksInfo rocksData) {
+            RocksValues rocksValues = new(Projectile);
+            return (1f - rocksValues.ForcedOpacity) * rocksData.Opacity * rocksData.Progress;
+        }
         void damageNPCs() {
             if (!Projectile.IsOwnerLocal()) {
                 return;
             }
 
             RocksValues rocksValues = new(Projectile);
-            Player owner = Projectile.GetOwnerAsPlayer();
             for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                 RocksInfo rocksData = _rocks![i];
-                float generalProgressForDamaging = (1f - rocksValues.ForcedOpacity) * rocksData.Opacity * rocksData.Progress;
-                bool canDamage = generalProgressForDamaging >= 0.25f;
+                bool canDamage = getGeneralProgressForVariousPurposes(rocksData) >= 0.25f;
                 if (!canDamage) {
                     continue;
                 }
 
                 for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
                     bool firstRock = j == 0;
-                    Vector2 rockPositionToHandleCollision = GetRockPosition(i, firstRock, out float rockProgress);
+                    Vector2 rockPositionToHandleCollision = GetRockPosition(i, firstRock, out _);
                     foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
                         if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile, 
                                                                          ref _immunityFramesPerNPC![(byte)(i * 2 + j)][npcForCollisionCheck.whoAmI],
@@ -436,12 +438,27 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                 }
             }
         }
+        void cutTiles() {
+            RocksValues rocksValues = new(Projectile);
+            for (int i = 0; i < ROCKATTACKCOUNT; i++) {
+                RocksInfo rocksData = _rocks![i];
+                bool canCutTiles = getGeneralProgressForVariousPurposes(rocksData) >= 0.25f;
+                if (!canCutTiles) {
+                    continue;
+                }
+
+                for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
+                    ProjectileUtils.CutTilesAt(Projectile, GetRockPosition(i, j == 0, out _), RocksInfo.HITBOXSIZE, RocksInfo.HITBOXSIZE);
+                }
+            }
+        }
 
         checkActive();
         init();
         processRocks();
         throwRocksWhenCharged();
         damageNPCs();
+        cutTiles();
     }
 
     protected override void Draw(ref Color lightColor) {
