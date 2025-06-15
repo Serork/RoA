@@ -468,7 +468,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
         }
         void releaseProjectile() {
             RocksValues rocksValues = new(Projectile);
-            if (rocksValues.ForcedOpacity >= 1f) {
+            if (rocksValues.ForcedOpacity >= 1f || (rocksValues.ThrewRocks && GetGeodeProgress() <= 0f)) {
                 Projectile.Kill();
             }
         }
@@ -568,7 +568,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                             continue;
                         }
                         float trailOpacity = 0.75f;
-                        Color trailColor = Lighting.GetColor(trailPositionToDraw.ToTileCoordinates()) * ((float)k / RocksInfo.TRAILLENGTH * trailOpacity);
+                        Color trailColor = Lighting.GetColor(trailPositionToDraw.ToTileCoordinates()) * ((float)k / RocksInfo.TRAILLENGTH * trailOpacity) * rocksOpacity * forcedOpacity;
                         Main.spriteBatch.Draw(rocksTexture, trailPositionToDraw, DrawInfo.Default with {
                             Color = trailColor,
                             Rotation = rockRotation,
