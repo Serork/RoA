@@ -8,6 +8,7 @@ using RoA.Common.Players;
 using RoA.Content.Items;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Projectiles.Friendly.Druidic.Forms;
+using RoA.Content.Tiles.Furniture;
 using RoA.Core;
 using RoA.Core.Utility;
 

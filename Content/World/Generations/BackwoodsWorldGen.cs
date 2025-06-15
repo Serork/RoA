@@ -45,7 +45,7 @@ sealed class BackwoodsWorldGen : ModSystem {
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new("Backwoods", LAYERWEIGHT));
 
         if (hasRemnants) {
-            genIndex += 14;
+            genIndex += 18;
             tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
             genIndex++;
             tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));

@@ -4312,20 +4312,35 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         CenterY = (int)Main.worldSurface;
 
         if (hasRemnants) {
-            CenterX = Main.maxTilesX / 2;
+            CenterX = Main.maxTilesX - 300;
             bool flag = false;
-            while (WorldGenHelper.GetTileSafely(CenterX, CenterY).TileType != TileID.Mud) {
+            bool scanMudInAreaAndSkipSand(Point checkPosition, int areaSize = 50) {
+                for (int x = checkPosition.X - areaSize; x < checkPosition.X + areaSize; x++) {
+                    for (int y = checkPosition.Y - areaSize; y < checkPosition.Y + areaSize; y++) {
+                        Tile checkTile = WorldGenHelper.GetTileSafely(x, y);
+                        if (checkTile.TileType == TileID.Mud) {
+                            return true;
+                        }
+                        if (checkTile.TileType == TileID.HardenedSand) {
+                            flag = true;
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+            while (!scanMudInAreaAndSkipSand(new Point(CenterX, CenterY))) {
                 CenterX--;
-                if (CenterX < 500) {
+                if (CenterX < 600) {
                     flag = true;
                     break;
                 }
             }
             if (flag) {
-                CenterX = Main.maxTilesX / 2;
-                while (WorldGenHelper.GetTileSafely(CenterX, CenterY).TileType != TileID.Mud) {
+                CenterX = 300;
+                while (!scanMudInAreaAndSkipSand(new Point(CenterX, CenterY))) {
                     CenterX++;
-                    if (CenterX > Main.maxTilesX - 500) {
+                    if (CenterX > Main.maxTilesX - 600) {
                         break;
                     }
                 }
