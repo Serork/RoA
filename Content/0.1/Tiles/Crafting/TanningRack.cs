@@ -37,7 +37,8 @@ sealed class TanningRack : ModTile {
         orig(self, context);
 
         bool flag3 = WorldGen.genRand.NextChance(0.1);
-        if ((flag3 || TanningRackGeneratedCountStorage.TanningRackCountInWorld < WorldGen.genRand.Next(2, 5)) && self.Type != HouseType.Ice) {
+        bool flag4 = TanningRackGeneratedCountStorage.TanningRackCountInWorld < WorldGen.genRand.Next(2, 5);
+        if (flag4 || flag3) {
             bool flag2 = false;
             int type = ModContent.TileType<TanningRack>();
             foreach (Rectangle room2 in self.Rooms) {
@@ -50,19 +51,21 @@ sealed class TanningRack : ModTile {
                     }
                 }
 
-                if (flag2)
+                if (flag2) {
+                    TanningRackGeneratedCountStorage.TanningRackCountInWorld++;
                     break;
-
-                for (int l = room2.X + 2; l <= room2.X + room2.Width - 2; l++) {
-                    if (flag2 = WorldGen.PlaceTile(l, num3, type, mute: true, forced: true))
-                        break;
                 }
 
-                if (flag2)
-                    break;
+                for (int l = room2.X + 2; l <= room2.X + room2.Width - 2; l++) {
+                    if (flag2 = WorldGen.PlaceTile(l, num3, type, mute: true, forced: true)) {
+                        break;
+                    }
+                }
 
-                if (!flag3 && flag2)
-                    TanningRack.TanningRackGeneratedCountStorage.TanningRackCountInWorld++;
+                if (flag2) {
+                    TanningRackGeneratedCountStorage.TanningRackCountInWorld++;
+                    break;
+                }
             }
         }
     }
