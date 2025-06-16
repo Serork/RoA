@@ -1,0 +1,2 @@
+- Fixed certain tiles not breaking upon contact with liquid
+- Everwood trees and some Backwoods walls can now be destroyed with explosives and lava after beating the world evil boss (previously only in hardmode)
