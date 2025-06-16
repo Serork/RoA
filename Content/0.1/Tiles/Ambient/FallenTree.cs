@@ -53,7 +53,7 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.ITil
     public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 2 : 8;
 
     public override bool CanExplode(int i, int j) {
-        if (!Main.hardMode) {
+        if (!NPC.downedBoss2) {
             return false;
         }
 

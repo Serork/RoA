@@ -54,7 +54,7 @@ class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
     }
 
     public override bool CanExplode(int i, int j) {
-        if (!Main.hardMode) {
+        if (!NPC.downedBoss2) {
             return false;
         }
 
