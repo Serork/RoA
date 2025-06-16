@@ -16,7 +16,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Druid;
 
-[Autoload(Side = ModSide.Client)]
 sealed class ItemTooltipLeaves : GlobalItem {
     public const byte LEAVESCOUNT = 8;
 

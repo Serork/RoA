@@ -1,6 +1,6 @@
 ﻿namespace RoA.Core.Data;
 
-enum GemType {
+enum GemType : byte {
     Amethyst,
     Topaz,
     Sapphire,

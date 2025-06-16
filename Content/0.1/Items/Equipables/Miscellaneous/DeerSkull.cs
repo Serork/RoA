@@ -26,7 +26,7 @@ sealed class DeerSkull : ModItem {
         Item.value = Item.sellPrice(0, 0, 30, 0);
     }
 
-    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;
+    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.Nature) += 4;
 
     //public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
     //	if (drawPlayer.active) {

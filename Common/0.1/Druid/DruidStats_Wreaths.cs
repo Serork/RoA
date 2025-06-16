@@ -159,6 +159,6 @@ sealed partial class DruidStats : ModPlayer {
             return;
         }
 
-        target.GetCritChance(DruidClass.NatureDamage) += 8;
+        target.GetCritChance(DruidClass.Nature) += 8;
     }
 }

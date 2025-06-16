@@ -141,11 +141,11 @@ sealed class FlederForm : BaseForm {
                         Rectangle rect = nPC.getRect();
                         if (rectangle.Intersects(rect) && (nPC.noTileCollide || Player.CanHit(nPC))) {
                             int damage = 40;
-                            float num = Player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(damage);
+                            float num = Player.GetTotalDamage(DruidClass.Nature).ApplyTo(damage);
                             float num2 = 3f;
                             bool crit = false;
 
-                            if (Main.rand.Next(100) < (4 + Player.GetTotalCritChance(DruidClass.NatureDamage)))
+                            if (Main.rand.Next(100) < (4 + Player.GetTotalCritChance(DruidClass.Nature)))
                                 crit = true;
 
                             int num3 = Player.direction;
@@ -156,7 +156,7 @@ sealed class FlederForm : BaseForm {
                                 num3 = 1;
 
                             if (Player.whoAmI == Main.myPlayer)
-                                Player.ApplyDamageToNPC(nPC, (int)num, num2, num3, crit, DruidClass.NatureDamage, true);
+                                Player.ApplyDamageToNPC(nPC, (int)num, num2, num3, crit, DruidClass.Nature, true);
 
                             _dashTimer = DURATION;
                             _dashDelay = CD;
@@ -334,7 +334,7 @@ sealed class FlederForm : BaseForm {
             holdingLmb = false;
         }
         string context = "flederformattack";
-        int baseDamage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(30);
+        int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(30);
         if (player.releaseUseItem && Main.mouseLeftRelease) {
             if (shootCounter >= 40 && shootCounter < 70) {
                 BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);

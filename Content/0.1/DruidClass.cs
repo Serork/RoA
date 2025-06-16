@@ -60,7 +60,7 @@ sealed class DruidClass : DamageClass {
         }
     }
 
-    public static DruidClass NatureDamage => ModContent.GetInstance<DruidClass>();
+    public static DruidClass Nature => ModContent.GetInstance<DruidClass>();
 
     public override bool UseStandardCritCalcs => true;
 

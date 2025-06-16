@@ -29,7 +29,7 @@ sealed class LivingMahoganyHelmet : NatureItem {
         Item.defense = 1;
     }
 
-    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 3;
+    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.Nature) += 3;
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingMahoganyChestplate>() && legs.type == ModContent.ItemType<LivingMahoganyGreaves>();
 

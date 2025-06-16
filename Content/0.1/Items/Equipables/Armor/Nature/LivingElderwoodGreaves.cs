@@ -26,6 +26,6 @@ sealed class LivingElderwoodGreaves : NatureItem {
     }
 
     public override void UpdateEquip(Player player) {
-        player.GetDamage(DruidClass.NatureDamage) += 0.05f;
+        player.GetDamage(DruidClass.Nature) += 0.05f;
     }
 }

@@ -19,7 +19,7 @@ static class ItemDefaults {
         }
     }
 
-    public static void SetDefaultsToNatureWeapon(this Item item) => item.DamageType = DruidClass.NatureDamage;
+    public static void SetDefaultsToNatureWeapon(this Item item) => item.DamageType = DruidClass.Nature;
 
     public static void SetDefaultsToNatureWeapon(this Item item, int damage, float knockback = 0f) {
         item.SetDefaultsToNatureWeapon();

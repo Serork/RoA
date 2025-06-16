@@ -25,5 +25,5 @@ sealed class LivingBorealWoodChestplate : NatureItem {
         Item.defense = 2;
     }
 
-    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 4;
+    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.Nature) += 4;
 }

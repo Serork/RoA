@@ -34,7 +34,7 @@ sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap, IPostSetupCont
         Item.defense = 4;
     }
 
-    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 5;
+    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.Nature) += 5;
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<DreadheartCorruptionChestplate>() && legs.type == ModContent.ItemType<DreadheartCorruptionLeggings>();
 

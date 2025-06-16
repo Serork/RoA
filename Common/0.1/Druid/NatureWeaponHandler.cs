@@ -99,8 +99,8 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     }
 
     public static ushort GetFinalBaseDamage(Item item, Player player)
-        => (ushort)(Main.gameMenu || Main.InGameUI.IsVisible ? GetItemDamage(item, player) : player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(GetItemDamage(item, player)));
-    public static ushort GetFinalUseTime(Item item, Player player) => (ushort)(GetItemUseTime(item) / player.GetTotalAttackSpeed(DruidClass.NatureDamage));
+        => (ushort)(Main.gameMenu || Main.InGameUI.IsVisible ? GetItemDamage(item, player) : player.GetTotalDamage(DruidClass.Nature).ApplyTo(GetItemDamage(item, player)));
+    public static ushort GetFinalUseTime(Item item, Player player) => (ushort)(GetItemUseTime(item) / player.GetTotalAttackSpeed(DruidClass.Nature));
 
     public static ushort GetBasePotentialDamage(Item item, Player player) {
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();

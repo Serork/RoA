@@ -180,8 +180,8 @@ sealed class LilPhoenixForm : BaseForm {
                 MultiplayerSystem.SendPacket(new PhoenixFormPacket2(player));
             }
             ushort type = (ushort)ModContent.ProjectileType<LilPhoenixTrailFlame>();
-            int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(35f);
-            float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(0f);
+            int damage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(35f);
+            float knockBack = (int)player.GetTotalKnockback(DruidClass.Nature).ApplyTo(0f);
             for (int i = 0; i < 2; i++) {
                 Projectile.NewProjectile(player.GetSource_Misc("phoenixdash"), player.Center, Vector2.Zero, type, damage, knockBack, player.whoAmI, (float)i);
             }
@@ -289,20 +289,20 @@ sealed class LilPhoenixForm : BaseForm {
                     else if (Main.npc[i].velocity.X > 0f)
                         direction = 1;
                     bool crit = false;
-                    if (Main.rand.Next(100) < (4 + player.GetTotalCritChance(DruidClass.NatureDamage)))
+                    if (Main.rand.Next(100) < (4 + player.GetTotalCritChance(DruidClass.Nature)))
                         crit = true;
-                    int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(50f * value);
-                    float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(4f * value);
+                    int damage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(50f * value);
+                    float knockBack = (int)player.GetTotalKnockback(DruidClass.Nature).ApplyTo(4f * value);
                     if (player.whoAmI == Main.myPlayer)
-                        player.ApplyDamageToNPC(Main.npc[i], (int)damage, knockBack, direction, crit, DruidClass.NatureDamage, true);
+                        player.ApplyDamageToNPC(Main.npc[i], (int)damage, knockBack, direction, crit, DruidClass.Nature, true);
                 }
                 if (plr._charge3 >= LilPhoenixFormHandler.MAXCHARGE) {
                     player.immune = true;
                     player.immuneTime = 30;
                     player.immuneNoBlink = true;
                     SoundEngine.PlaySound(SoundID.Item14, player.position);
-                    int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(40f * value);
-                    int knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(4f * value);
+                    int damage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(40f * value);
+                    int knockBack = (int)player.GetTotalKnockback(DruidClass.Nature).ApplyTo(4f * value);
                     ushort projType = (ushort)ModContent.ProjectileType<LilPhoenixExplosion>();
                     int proj = Projectile.NewProjectile(player.GetSource_Misc("phoenixexplosion"), player.Center.X, player.Center.Y, 0f, 0f, projType, damage, knockBack, player.whoAmI);
                     if (Main.netMode != NetmodeID.SinglePlayer)
@@ -350,8 +350,8 @@ sealed class LilPhoenixForm : BaseForm {
             SoundEngine.PlaySound(SoundID.Item45, player.position);
             plr._phoenixJustJumped = plr._phoenixJustJumpedForAnimation = true;
             BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
-            int damage = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(50f);
-            float knockBack = (int)player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(2f);
+            int damage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(50f);
+            float knockBack = (int)player.GetTotalKnockback(DruidClass.Nature).ApplyTo(2f);
             ushort projType = (ushort)ModContent.ProjectileType<LilPhoenixFlames>();
             if (player.whoAmI == Main.myPlayer) {
                 for (int i = 0; i < 2; i++) {

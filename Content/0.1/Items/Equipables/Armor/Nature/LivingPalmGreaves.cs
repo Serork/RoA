@@ -24,6 +24,6 @@ sealed class LivingPalmGreaves : NatureItem {
     }
 
     public override void UpdateEquip(Player player) {
-        player.GetDamage(DruidClass.NatureDamage) += 0.03f;
+        player.GetDamage(DruidClass.Nature) += 0.03f;
     }
 }

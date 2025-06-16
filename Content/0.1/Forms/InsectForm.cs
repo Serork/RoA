@@ -121,8 +121,8 @@ abstract class InsectForm : BaseForm {
                     for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
                         int insectDamage = 20;
                         float insectKnockback = 3f;
-                        int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(insectDamage);
-                        insectKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(insectKnockback);
+                        int damage = (int)player.GetDamage(DruidClass.Nature).ApplyTo(insectDamage);
+                        insectKnockback = player.GetKnockback(DruidClass.Nature).ApplyTo(insectKnockback);
                         Vector2 spread = new Vector2(0, Main.rand.Next(-5, -2)).RotatedByRandom(MathHelper.ToRadians(90));
                         Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + 4), new Vector2(spread.X, spread.Y), InsectProjectileType, damage, insectKnockback, player.whoAmI);
                     }
@@ -181,14 +181,14 @@ abstract class InsectForm : BaseForm {
 
             //int shootDamage = modPlayer.DruidFormDamage(7, 25);
             float shootKnockback = 1.5f;
-            shootKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(shootKnockback);
+            shootKnockback = player.GetKnockback(DruidClass.Nature).ApplyTo(shootKnockback);
 
             int type = ModContent.ProjectileType<ToxicStream>();
-            int damage = (int)player.GetDamage(DruidClass.NatureDamage).ApplyTo(54);
+            int damage = (int)player.GetDamage(DruidClass.Nature).ApplyTo(54);
             Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, 0f), type, damage, shootKnockback, player.whoAmI, 0f, 0f, 2f);
             if (shootCounter >= 80) {
                 shootKnockback = 2.5f;
-                shootKnockback = player.GetKnockback(DruidClass.NatureDamage).ApplyTo(shootKnockback);
+                shootKnockback = player.GetKnockback(DruidClass.Nature).ApplyTo(shootKnockback);
                 Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, 1f), type, damage, shootKnockback, player.whoAmI, 0f, 0f, 2f);
                 Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, -1f), type, damage, shootKnockback, player.whoAmI, 0f, 0f);
                 shootCounter = -35;

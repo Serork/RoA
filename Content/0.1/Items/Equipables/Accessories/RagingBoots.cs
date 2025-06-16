@@ -123,7 +123,7 @@ sealed class RagingBoots : NatureItem {
                             Projectile.NewProjectile(Player.GetSource_Misc("ragingboots"), shootLocation, shootTo,
                                 ModContent.ProjectileType<RagingBootsWave>(),
                                 NatureWeaponHandler.GetNatureDamage(item, Player),
-                                Player.GetTotalKnockback(DruidClass.NatureDamage).ApplyTo(item.knockBack),
+                                Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(item.knockBack),
                                 Player.whoAmI,
                                 (int)(18 + count2 * 2f));
                         }

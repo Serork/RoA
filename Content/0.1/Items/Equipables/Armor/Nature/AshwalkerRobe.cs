@@ -32,7 +32,7 @@ sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask 
         Item.value = Item.sellPrice(0, 0, 60, 0);
     }
 
-    public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.NatureDamage) += 0.1f;
+    public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.Nature) += 0.1f;
 
     public void SetDrawSettings(Player player, ref Texture2D texture, ref Color color) {
         color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5;

@@ -27,7 +27,7 @@ sealed class LivingPalmHelmet : NatureItem {
         Item.defense = 1;
     }
 
-    public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.NatureDamage) += 0.03f;
+    public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.Nature) += 0.03f;
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<LivingPalmChestplate>() && legs.type == ModContent.ItemType<LivingPalmGreaves>();
 

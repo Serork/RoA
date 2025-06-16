@@ -26,6 +26,6 @@ sealed class LivingMahoganyChestplate : NatureItem {
     }
 
     public override void UpdateEquip(Player player) {
-        player.GetDamage(DruidClass.NatureDamage) += 0.04f;
+        player.GetDamage(DruidClass.Nature) += 0.04f;
     }
 }

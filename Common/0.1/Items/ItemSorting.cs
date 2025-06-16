@@ -129,7 +129,7 @@ sealed class ItemSorting {
             return indexesSortable35;
         });
         public static ItemSortingLayer WeaponsDruid = new ItemSortingLayer("Weapons - Druid", delegate (ItemSortingLayer layer, Item[] inv, List<int> itemsToSort) {
-            List<int> indexesSortable38 = itemsToSort.Where((i) => inv[i].maxStack == 1 && inv[i].damage > 0 && inv[i].ammo == 0 && inv[i].DamageType == DruidClass.NatureDamage && inv[i].pick < 1 && inv[i].hammer < 1 && inv[i].axe < 1).ToList();
+            List<int> indexesSortable38 = itemsToSort.Where((i) => inv[i].maxStack == 1 && inv[i].damage > 0 && inv[i].ammo == 0 && inv[i].DamageType == DruidClass.Nature && inv[i].pick < 1 && inv[i].hammer < 1 && inv[i].axe < 1).ToList();
             layer.Validate(ref indexesSortable38, inv);
             foreach (int item in indexesSortable38) {
                 itemsToSort.Remove(item);
@@ -905,7 +905,7 @@ sealed class ItemSorting {
             player.GetDamage(DamageClass.Ranged),
             player.GetDamage(DamageClass.Magic),
             player.GetDamage(DamageClass.Summon),
-            player.GetDamage(DruidClass.NatureDamage),
+            player.GetDamage(DruidClass.Nature),
         };
 
         /*
@@ -934,7 +934,7 @@ sealed class ItemSorting {
                 _layerList.Add(ItemSortingLayers.WeaponsMinions);
             }
 
-            if (!_layerList.Contains(ItemSortingLayers.WeaponsDruid) && player.GetDamage(DruidClass.NatureDamage) == list[0]) {
+            if (!_layerList.Contains(ItemSortingLayers.WeaponsDruid) && player.GetDamage(DruidClass.Nature) == list[0]) {
                 list.RemoveAt(0);
                 _layerList.Add(ItemSortingLayers.WeaponsDruid);
             }

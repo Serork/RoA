@@ -34,7 +34,7 @@ public class TinAcolyteHat : ModItem {
     public override void UpdateArmorSet(Player player) {
         player.setBonus = Language.GetText("Mods.RoA.Items.Tooltips.AcolyteSetBonus").Value;
         if (player.statMana <= 40) {
-            player.GetDamage(DruidClass.NatureDamage) += 0.4f;
+            player.GetDamage(DruidClass.Nature) += 0.4f;
         }
     }
 }

@@ -36,7 +36,7 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
         Item.defense = 4;
     }
 
-    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.NatureDamage) += 5;
+    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.Nature) += 5;
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<DreadheartCrimsonChestplate>() && legs.type == ModContent.ItemType<DreadheartCrimsonLeggings>();
 
@@ -88,8 +88,8 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
                 for (int i = 0; i < 3 + Main.rand.Next(1, 3); i++) {
                     int insectDamage = 25;
                     float insectKnockback = 3f;
-                    int damage = (int)Player.GetDamage(DruidClass.NatureDamage).ApplyTo(insectDamage);
-                    insectKnockback = Player.GetKnockback(DruidClass.NatureDamage).ApplyTo(insectKnockback);
+                    int damage = (int)Player.GetDamage(DruidClass.Nature).ApplyTo(insectDamage);
+                    insectKnockback = Player.GetKnockback(DruidClass.Nature).ApplyTo(insectKnockback);
                     Vector2 spread = new Vector2(0, Main.rand.Next(-5, -2)).RotatedByRandom(MathHelper.ToRadians(90));
                     Projectile.NewProjectile(Player.GetSource_OnHurt(modifiers.DamageSource), new Vector2(Player.position.X, Player.position.Y + 4), new Vector2(spread.X, spread.Y),
                         Player.HasSetBonusFrom<DreadheartCorruptionHelmet>() ? (ushort)ModContent.ProjectileType<CrimsonInsect>() : (ushort)ModContent.ProjectileType<CorruptionInsect>(), damage, insectKnockback, Player.whoAmI);

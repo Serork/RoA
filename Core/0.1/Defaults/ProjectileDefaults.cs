@@ -13,7 +13,7 @@ static class ProjectileDefaults {
 
     public static void SetSize(this Projectile projectile, int width) => projectile.width = projectile.height = width;
 
-    public static void SetDefaultsToNatureProjectile(this Projectile projectile) => projectile.DamageType = DruidClass.NatureDamage;
+    public static void SetDefaultsToNatureProjectile(this Projectile projectile) => projectile.DamageType = DruidClass.Nature;
 
     public static void MakeProjectileNature(this Projectile projectile) {
         if (projectile.IsDamageable() && projectile.friendly) {

@@ -26,7 +26,7 @@ sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
     public override void UpdateAccessory(Player player, bool hideVisual) {
         WreathHandler handler = player.GetModPlayer<WreathHandler>();
         if (handler.IsFull1) {
-            player.GetKnockback(DruidClass.NatureDamage) += 0.5f;
+            player.GetKnockback(DruidClass.Nature) += 0.5f;
         }
         player.GetModPlayer<FenethsBlazingWreathHandler>().IsEffectActive = true;
     }

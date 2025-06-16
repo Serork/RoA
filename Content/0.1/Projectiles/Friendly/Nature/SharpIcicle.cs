@@ -42,7 +42,7 @@ sealed class SharpIcicle : NatureProjectile {
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
         if (Projectile.Opacity < 1f) {
             Player player = Main.player[Projectile.owner];
-            int penalty = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(player.HeldItem.damage) / 2;
+            int penalty = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(player.HeldItem.damage) / 2;
             modifiers.FinalDamage *= penalty / (float)player.HeldItem.damage;
         }
     }
@@ -50,7 +50,7 @@ sealed class SharpIcicle : NatureProjectile {
     public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
         if (Projectile.Opacity < 1f) {
             Player player = Main.player[Projectile.owner];
-            int penalty = (int)player.GetTotalDamage(DruidClass.NatureDamage).ApplyTo(player.HeldItem.damage) / 2;
+            int penalty = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(player.HeldItem.damage) / 2;
             modifiers.FinalDamage *= penalty / (float)player.HeldItem.damage;
         }
     }
