@@ -219,6 +219,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
 
         const byte SWORDCOUNT = 4;
+        OpacityUpdatedInDraws += 0.035f;
         Texture2D swordTexture = damageClassNameVisualsInfo.Texture;
         for (byte i = 0; i < SWORDCOUNT; i++) {
             bool firstPair = i < SWORDCOUNT / 2;
@@ -253,15 +254,16 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 swordRotation = swordRotationBase + MathHelper.PiOver2 * pairDirection;
             }
             ulong seedForRandomness = (ulong)(i + 1);
-            float factor = MathHelper.WrapAngle(VisualTimer / 35f % MathHelper.TwoPi + (VisualRotation <= 0f ? GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType) : 0f));
-            float penalty = 1f - Utils.GetLerpValue(MathHelper.PiOver4, MathHelper.Pi, factor, true);
-            factor *= penalty;
-            float swordExtraRotation = MathF.Sin(factor + Utils.RandomFloat(ref seedForRandomness));
+            float factor0 = 1f - OpacityUpdatedInDraws;
+            //float factor = MathHelper.WrapAngle(factor0 / 35f % MathHelper.TwoPi + (VisualRotation <= 0f ? GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType) : 0f));
+            //float penalty = 1f - Utils.GetLerpValue(MathHelper.PiOver4, MathHelper.Pi, factor, true);
+            //factor *= penalty;
+            float swordExtraRotation = MathF.Sin(factor0 + Utils.RandomFloat(ref seedForRandomness));
             swordExtraRotation = Ease.ExpoIn(Ease.QuadOut(swordExtraRotation));
             swordExtraRotation = MathUtils.Clamp01(swordExtraRotation);
             swordExtraRotation *= swordExtraRotationDirection;
             swordExtraRotation *= MathHelper.PiOver2;
-            swordExtraRotation += AfterMainDrawRotation * swordExtraRotationDirection;
+            swordExtraRotation += AfterMainDrawRotation * swordExtraRotationDirection * 2f;
             swordRotation += swordExtraRotation;
             Rectangle swordSourceRectangle = swordTexture.Bounds;
             Color swordColor = Color.White * AfterMainDrawOpacity;
@@ -370,9 +372,8 @@ sealed class DamageClassVisualsInItemNameAfterTooltipDrawing() : InterfaceElemen
         void updateGlobalClassVisualsInfo() {
             OpacityUpdatedInDraws = 1f;
             if (_damageClassNameVisualsInfo.DamageClassType == DamageClassType.Melee) {
-                VisualTimer = 80f;
-                VisualRotation += 0.025f;
-                VisualOpacity = Ease.SineIn(Utils.GetLerpValue(0.4f, 1.25f, VisualRotation, true));
+                VisualRotation += 0.0275f;
+                VisualOpacity = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, VisualRotation, true));
             }
             else if (_damageClassNameVisualsInfo.DamageClassType == DamageClassType.Ranged) {
                 VisualRotation += 1.5f;
