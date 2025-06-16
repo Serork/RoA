@@ -162,7 +162,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                     swordPositionToDraw += new Vector2(tooltipLineSize.X + width, height / 2f);
                     break;
             }
-            swordPositionToDraw.X += 0.5f;
+            swordPositionToDraw.X += 1f;
             swordPositionToDraw.Y += height / 1.25f;
             int topDirection = topSwords.ToDirectionInt(),
                 pairDirection = firstPair.ToDirectionInt();
@@ -218,7 +218,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             if (rightArrows) {
                 arrowPositionToDraw += new Vector2(tooltipLineSize.X, 0f);
             }
-            arrowPositionToDraw.X += 0.5f;
+            arrowPositionToDraw.X += 1f;
             arrowPositionToDraw.Y += height / 2f;
             arrowPositionToDraw.Y -= 4f;
             float arrowRotation = MathHelper.PiOver2;
