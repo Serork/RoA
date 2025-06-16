@@ -102,21 +102,19 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
 
         Texture2D classUITexture = classUIAsset.Value;
         DamageClassType damageClassTypeOfThisItem = checkDamageClassTypeOfThisItem.Value;
+        DamageClassNameVisualsInfo damageClassVisualsInfo = new(damageClassTypeOfThisItem, classUITexture, itemType, originalSpot, tooltipLineSize);
         SpriteBatch batch = Batch;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
         batch.BeginBlendState(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, isUI: true);
         switch (damageClassTypeOfThisItem) {
             case DamageClassType.Melee:
-                DamageClassNameVisualsInfo meleeVisualsInfo = new(damageClassTypeOfThisItem, classUITexture, itemType, originalSpot, tooltipLineSize);
-                DrawSwords(batch, meleeVisualsInfo);
-                DamageClassVisualsInItemNameAfterTooltipDrawing.MatchData(meleeVisualsInfo);
+                DrawSwords(batch, damageClassVisualsInfo);
                 break;
             case DamageClassType.Ranged:
-                DamageClassNameVisualsInfo rangedVisualsInfo = new(damageClassTypeOfThisItem, classUITexture, itemType, originalSpot, tooltipLineSize);
-                DrawArrows(batch, rangedVisualsInfo);
-                DamageClassVisualsInItemNameAfterTooltipDrawing.MatchData(rangedVisualsInfo);
+                DrawArrows(batch, damageClassVisualsInfo);
                 break;
         }
+        DamageClassVisualsInItemNameAfterTooltipDrawing.MatchData(damageClassVisualsInfo);
         batch.End();
         batch.Begin(snapshot);
 
@@ -173,9 +171,8 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             if (topSwords) {
                 swordRotation = swordRotationBase + MathHelper.PiOver2 * pairDirection;
             }
-            ulong seedForRandomness = (ulong)(i + 1),
-                  seedForRandomness2 = damageClassNameVisualsInfo.ItemType;
-            float factor = MathHelper.WrapAngle(globalTimer / 35f % MathHelper.TwoPi + Utils.RandomInt(ref seedForRandomness2, 100));
+            ulong seedForRandomness = (ulong)(i + 1);
+            float factor = MathHelper.WrapAngle(globalTimer / 35f % MathHelper.TwoPi + (globalRotation <= 0f ? GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType) : 0f));
             float penalty = 1f - Utils.GetLerpValue(MathHelper.PiOver4, MathHelper.Pi, factor, true);
             factor *= penalty;
             float swordExtraRotation = MathF.Sin(factor + Utils.RandomFloat(ref seedForRandomness));
@@ -197,6 +194,11 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 Clip = swordSourceRectangle
             }, false);
         }
+    }
+
+    public static int GetRandomIntBasedOnItemType(ushort itemType) {
+        ulong seedForRandomness = itemType;
+        return Utils.RandomInt(ref seedForRandomness, 100);
     }
 
     public static void DrawArrows(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
