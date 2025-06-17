@@ -184,6 +184,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
 
     public static void DrawSlimes(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
         const byte SLIMECOUNT = 2;
+        const byte SLIMEFRAMECOUNT = 3;
         Texture2D slimeTexture = damageClassNameVisualsInfo.Texture;
         for (byte i = 0; i < SLIMECOUNT; i++) {
             byte half = SLIMECOUNT / 2;
@@ -212,8 +213,8 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             }
             slimePositionToDraw.X += 1f;
             slimePositionToDraw.Y += slimeHeight / 2f;
-            SpriteFrame spriteFrame = new(3, 1);
-            spriteFrame = spriteFrame.With((byte)(3 * frameFactor), 0);
+            SpriteFrame spriteFrame = new(SLIMEFRAMECOUNT, 1);
+            spriteFrame = spriteFrame.With((byte)(SLIMEFRAMECOUNT * frameFactor), 0);
             SpriteEffects flipStarDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             starColor *= PostMainDrawOpacity;
             float jumpHeight = 10f + 30f * randomValue4;
@@ -305,26 +306,26 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         for (byte i = 0; i < SWORDCOUNT; i++) {
             bool firstPair = i < SWORDCOUNT / 2;
             bool topSwords = (i + 1) % 2 != 0;
-            int width = swordTexture.Width,
-                height = swordTexture.Height;
+            int swordWidth = swordTexture.Width,
+                swordHeight = swordTexture.Height;
             Vector2 swordPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
             switch (i) {
                 case 0:
-                    swordPositionToDraw += new Vector2(-width, -height);
+                    swordPositionToDraw += new Vector2(-swordWidth, -swordHeight);
                     break;
                 case 1:
-                    swordPositionToDraw += new Vector2(-width, height / 2f);
+                    swordPositionToDraw += new Vector2(-swordWidth, swordHeight / 2f);
                     break;
                 case 2:
-                    swordPositionToDraw += new Vector2(tooltipLineSize.X + width, -height);
+                    swordPositionToDraw += new Vector2(tooltipLineSize.X + swordWidth, -swordHeight);
                     break;
                 case 3:
-                    swordPositionToDraw += new Vector2(tooltipLineSize.X + width, height / 2f);
+                    swordPositionToDraw += new Vector2(tooltipLineSize.X + swordWidth, swordHeight / 2f);
                     break;
             }
             swordPositionToDraw.X += 1f;
-            swordPositionToDraw.Y += height / 1.25f;
+            swordPositionToDraw.Y += swordHeight / 1.25f;
             int topDirection = topSwords.ToDirectionInt(),
                 pairDirection = firstPair.ToDirectionInt();
             swordPositionToDraw.Y += topDirection * 8f;
@@ -346,7 +347,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             Rectangle swordSourceRectangle = swordTexture.Bounds;
             Color swordColor = Color.White * PostMainDrawOpacity;
             SpriteEffects flipSwordDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 swordOrigin = new(firstPair ? 4f : width - 4f, height - 4f);
+            Vector2 swordOrigin = new(firstPair ? 4f : swordWidth - 4f, swordHeight - 4f);
             batch.Draw(swordTexture, swordPositionToDraw, DrawInfo.Default with {
                 Color = swordColor,
                 Rotation = swordRotation,
@@ -355,11 +356,6 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 Clip = swordSourceRectangle
             }, false);
         }
-    }
-
-    public static int GetRandomIntBasedOnItemType(ushort itemType) {
-        ulong seedForRandomness = itemType;
-        return Utils.RandomInt(ref seedForRandomness, 100);
     }
 
     public static void DrawArrows(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
@@ -416,6 +412,11 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 Clip = arrowSourceRectangle
             }, false);
         }
+    }
+
+    public static int GetRandomIntBasedOnItemType(ushort itemType) {
+        ulong seedForRandomness = itemType;
+        return Utils.RandomInt(ref seedForRandomness, 100);
     }
 }
 
