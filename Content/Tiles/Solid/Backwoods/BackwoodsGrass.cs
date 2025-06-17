@@ -129,7 +129,6 @@ sealed class BackwoodsGrass : ModTile, IPostSetupContent {
 
         TileMaterials.SetForTileId(Type, TileMaterials._materialsByName["Grass"]);
 
-        TransformTileSystem.OnKillActNormal[Type] = false;
         TransformTileSystem.ReplaceToTypeOnKill[Type] = TileID.Dirt;
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();
