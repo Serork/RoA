@@ -196,7 +196,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float offsetX = tooltipLineSize.X * 0.1f;
             int randomValue = GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType);
             float factor = MathHelper.WrapAngle(_mainDrawTimer / 20f % MathHelper.TwoPi + randomValue);
-            ulong seedForRandomness = (ulong)(i + 1 + randomValue);
+            ulong seedForRandomness = (ulong)((i + 1) * randomValue);
             float randomValue2 = Utils.RandomFloat(ref seedForRandomness) * 100f;
             float frameFactor = 1f - Math.Abs(MathF.Sin(factor + randomValue2 * MathHelper.Pi));
             Color starColor = Color.White;
