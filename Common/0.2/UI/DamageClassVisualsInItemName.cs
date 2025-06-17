@@ -10,12 +10,12 @@ using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
-using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -38,19 +38,14 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
 
     private static DamageClassType _previousDamageClassTypeDraw;
     private static float _opacityUpdatedInDraws;
+    private static float _mainDrawTimer;
+    private static float _postMainDrawTimer, _postMainDrawOpacityValue;
 
-    internal static SpriteBatch UsedBatch => Main.spriteBatch;
-
-    internal static float VisualTimer;
-    internal static float VisualRotation, VisualOpacity;
-    
-    internal static float OpacityUpdatedInDraws {
+    public static float OpacityUpdatedInDraws {
         get => _opacityUpdatedInDraws;
-        set => _opacityUpdatedInDraws = MathUtils.Clamp01(value);
+        internal set => _opacityUpdatedInDraws = MathUtils.Clamp01(value);
     }
-
-    public static float AfterMainDrawOpacity => 1f - MathUtils.Clamp01(VisualOpacity);
-    public static float AfterMainDrawRotation => Ease.CircOut(MathHelper.WrapAngle(VisualRotation));
+    public static float PostMainDrawOpacity => 1f - MathUtils.Clamp01(_postMainDrawOpacityValue);
 
     public override void Load() {
         LoadClassUITextures();
@@ -86,38 +81,75 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
         string tooltipLineText = line.Text;
         Vector2 tooltipLineSize = line.Font.MeasureString(tooltipLineText);
+        float sizeOffsetModifier = 0.05f;
+        tooltipLineSize.X *= 1f - sizeOffsetModifier * 2.25f;
         ushort itemType = (ushort)item.type;
-        Vector2 originalSpot = new(line.X, line.Y);
+        Vector2 originalSpot = new(line.X + tooltipLineSize.X * sizeOffsetModifier, line.Y);
         void resetGlobalClassVisualInfo() {
-            VisualTimer += 1f;
-            VisualRotation = 0f;
-            VisualOpacity = 0f;
+            _mainDrawTimer += 1f;
+            _postMainDrawTimer = 0f;
+            _postMainDrawOpacityValue = 0f;
         }
 
         if (!isItemValidToBeHandledForDamageClass(item, out DamageClassType? checkDamageClassTypeOfThisItem)) {
-            DamageClassVisualsInItemNameAfterTooltipDrawing.ResetData();
+            DamageClassVisualsInItemNamePostTooltipDrawing.ResetData();
 
             return base.PreDrawTooltipLine(item, line, ref yOffset);
         }
 
         resetGlobalClassVisualInfo();
 
-        DamageClassVisualsInItemNameAfterTooltipDrawing.ResetData();
+        DamageClassVisualsInItemNamePostTooltipDrawing.ResetData();
 
         Asset<Texture2D>? classUIAsset = _classTexturesMap[checkDamageClassTypeOfThisItem!.Value];
         if (classUIAsset?.IsLoaded != true) {
             return base.PreDrawTooltipLine(item, line, ref yOffset);
         }
 
+        DamageClassType damageClassTypeOfThisItem = checkDamageClassTypeOfThisItem.Value;
         if (checkDamageClassTypeOfThisItem != _previousDamageClassTypeDraw) {
             OpacityUpdatedInDraws = 0f;
-            VisualTimer = 0f;
+
+            if (NeedMainTimerReset(damageClassTypeOfThisItem)) {
+                _mainDrawTimer = 0f;
+            }
         }
 
         Texture2D classUITexture = classUIAsset.Value;
-        DamageClassType damageClassTypeOfThisItem = checkDamageClassTypeOfThisItem.Value;
-        DamageClassNameVisualsInfo damageClassVisualsInfo = new(damageClassTypeOfThisItem, classUITexture, itemType, originalSpot, tooltipLineSize);
-        SpriteBatch batch = UsedBatch;
+        DrawClassUIVisuals(new(damageClassTypeOfThisItem, classUITexture, itemType, originalSpot, tooltipLineSize));
+        DamageClassVisualsInItemNamePostTooltipDrawing.IsHoveringItem = true;
+
+        _previousDamageClassTypeDraw = damageClassTypeOfThisItem;
+
+        return base.PreDrawTooltipLine(item, line, ref yOffset);
+    }
+
+    public static bool NeedMainTimerReset(DamageClassType damageClassType) => damageClassType != DamageClassType.Summon;
+
+    public static void UpdateGlobalClassVisualsInfo(DamageClassType damageClassType) {
+        OpacityUpdatedInDraws = 1f;
+        if (damageClassType == DamageClassType.Melee) {
+            _postMainDrawTimer += 0.0275f;
+            _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+        }
+        else if (damageClassType == DamageClassType.Ranged) {
+            _postMainDrawTimer += 1.5f;
+            _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(40f, 85f, _postMainDrawTimer, true));
+        }
+        else if (damageClassType == DamageClassType.Magic) {
+            _postMainDrawTimer += 0.0275f;
+            _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+        }
+        if (damageClassType == DamageClassType.Summon) {
+            _mainDrawTimer += 1f;
+            _postMainDrawTimer += 0.0275f;
+            _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+        }
+    }
+
+    public static void DrawClassUIVisuals(in DamageClassNameVisualsInfo damageClassVisualsInfo) {
+        DamageClassType damageClassTypeOfThisItem = damageClassVisualsInfo.DamageClassType;
+        SpriteBatch batch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
         batch.BeginBlendState(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, isUI: true);
         switch (damageClassTypeOfThisItem) {
@@ -130,16 +162,13 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             case DamageClassType.Magic:
                 DrawStars(batch, damageClassVisualsInfo);
                 break;
+            case DamageClassType.Summon:
+                DrawSlimes(batch, damageClassVisualsInfo);
+                break;
         }
-        DamageClassVisualsInItemNameAfterTooltipDrawing.MatchData(damageClassVisualsInfo);
+        DamageClassVisualsInItemNamePostTooltipDrawing.MatchData(damageClassVisualsInfo);
         batch.End();
         batch.Begin(snapshot);
-
-        DamageClassVisualsInItemNameAfterTooltipDrawing.IsHoveringItem = true;
-
-        _previousDamageClassTypeDraw = damageClassTypeOfThisItem;
-
-        return base.PreDrawTooltipLine(item, line, ref yOffset);
     }
 
     private static void LoadClassUITextures() {
@@ -153,11 +182,59 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
     }
 
-    public static void DrawStars(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
-        if (damageClassNameVisualsInfo.DamageClassType != DamageClassType.Magic) {
-            return;
+    public static void DrawSlimes(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
+        const byte SLIMECOUNT = 2;
+        Texture2D slimeTexture = damageClassNameVisualsInfo.Texture;
+        for (byte i = 0; i < SLIMECOUNT; i++) {
+            byte half = SLIMECOUNT / 2;
+            bool firstPair = i < half;
+            int width = slimeTexture.Width,
+                height = slimeTexture.Height;
+            float slimeRotation = 0f;
+            Vector2 slimePositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
+            Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
+            float offsetX = tooltipLineSize.X * 0.1f;
+            int randomValue = GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType);
+            float factor = MathHelper.WrapAngle(_mainDrawTimer / 20f % MathHelper.TwoPi + randomValue);
+            int nextSlimeIndex = i + 1;
+            ulong seedForRandomness = (ulong)(nextSlimeIndex * randomValue);
+            float randomValue2 = Utils.RandomFloat(ref seedForRandomness) * 100f;
+            float frameFactor = 1f - Math.Abs(MathF.Sin(factor + randomValue2 * MathHelper.Pi));
+            Color starColor = Color.White;
+            float randomValue3 = randomValue / 100f;
+            float slimeColor = randomValue3;
+            starColor = Color.Lerp(starColor, new Color(slimeColor, slimeColor, slimeColor), randomValue2);
+            if (!firstPair) {
+                slimePositionToDraw += new Vector2(tooltipLineSize.X + offsetX, 0f);
+            }
+            else {
+                slimePositionToDraw -= Vector2.UnitX * offsetX;
+            }
+            slimePositionToDraw.X += 1f;
+            slimePositionToDraw.Y += height / 2f;
+            SpriteFrame spriteFrame = new(3, 1);
+            spriteFrame = spriteFrame.With((byte)(3 * frameFactor), 0);
+            SpriteEffects flipStarDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            starColor *= PostMainDrawOpacity;
+            float jumpHeight = 10f + 20f * randomValue2;
+            Vector2 bezierPoint1 = slimePositionToDraw, bezierPoint2 = bezierPoint1 - Vector2.UnitY * jumpHeight, bezierPoint3 = bezierPoint1 + Vector2.UnitY * jumpHeight * 0.5f;
+            float bezierFactor = 1f - _postMainDrawTimer;
+            Rectangle starSourceRectangle = spriteFrame.GetSourceRectangle(slimeTexture);
+            Vector2 slimeOrigin = starSourceRectangle.Size() / 2f;
+            Vector2 positionToDraw = MathF.Pow(1 - bezierFactor, 2) * bezierPoint1 + 2 * (1 - bezierFactor) * bezierFactor * bezierPoint2 + MathF.Pow(bezierFactor, 2) * bezierPoint3;
+            slimePositionToDraw = positionToDraw;
+            slimePositionToDraw -= Vector2.UnitY * jumpHeight * 0.5f;
+            batch.Draw(slimeTexture, slimePositionToDraw, DrawInfo.Default with {
+                Color = starColor,
+                Rotation = slimeRotation,
+                Origin = slimeOrigin,
+                ImageFlip = flipStarDrawing,
+                Clip = starSourceRectangle
+            }, false);
         }
+    }
 
+    public static void DrawStars(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
         const byte STARCOUNT = 2;
         OpacityUpdatedInDraws += 0.035f;
         Texture2D starTexture = damageClassNameVisualsInfo.Texture;
@@ -169,55 +246,60 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float starRotation = 0f;
             Vector2 starPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
+            float offsetX = tooltipLineSize.X * 0.07f;
             if (!firstPair) {
-                starPositionToDraw += new Vector2(tooltipLineSize.X, 0f);
+                starPositionToDraw += new Vector2(tooltipLineSize.X + offsetX, 0f);
+            }
+            else {
+                starPositionToDraw -= Vector2.UnitX * offsetX;
             }
             float starDirection = firstPair.ToDirectionInt();
             starPositionToDraw.X += 1f;
             starPositionToDraw.Y += height / 2f;
             starPositionToDraw.Y -= 2f;
-            float factor = MathHelper.WrapAngle(VisualTimer / 20f % MathHelper.TwoPi + GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
+            float factor = MathHelper.WrapAngle(_mainDrawTimer / 20f % MathHelper.TwoPi + GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
             float starProgress = 1f - OpacityUpdatedInDraws;
-            ulong seedForRandomess = damageClassNameVisualsInfo.ItemType;
-            Vector2 tooltipCenter = damageClassNameVisualsInfo.TooltipLinePosition + tooltipLineSize / 2f;
-            float randomValueForX = 1f - Utils.RandomFloat(ref seedForRandomess) + 0.5f;
-            randomValueForX *= starDirection;
-            Vector2 fallStartPosition = tooltipCenter + Vector2.UnitX * 100f * randomValueForX - Vector2.UnitY * 0f;
-            Vector2 starAngle = fallStartPosition.DirectionTo(starPositionToDraw).SafeNormalize();
-            Vector2 starVelocity = -starAngle.RotatedBy(starRotation);
             float sin = MathF.Sin(factor);
-            //starRotation = MathHelper.TwoPi * 0.25f * starProgress * starDirection;
-            //starProgress = Ease.QuartIn(starProgress);
-            //starPositionToDraw += starVelocity * 100f * starProgress;
             Rectangle starSourceRectangle = starTexture.Bounds;
-            Color starColor = Color.White * AfterMainDrawOpacity;
+            Color starColor = Color.White;
             SpriteEffects flipStarDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Vector2 starOrigin = starTexture.Size() / 2f;
-            starRotation += 0.2f * starDirection * sin;
-            if (AfterMainDrawOpacity == 1f) {
+            float extraScale = 0.2f * starDirection * sin;
+            starColor *= PostMainDrawOpacity;
+            Vector2 starScale = Vector2.One + Vector2.One * extraScale;
+            float pulseEffectStrength = 1f - 0.5f * OpacityUpdatedInDraws + Math.Abs(0.5f * sin) * OpacityUpdatedInDraws;
+            float alphaProgress = Ease.QuartIn(PostMainDrawOpacity);
+            batch.Draw(starTexture, starPositionToDraw, DrawInfo.Default with {
+                Color = starColor,
+                Rotation = starRotation,
+                Origin = starOrigin,
+                ImageFlip = flipStarDrawing,
+                Clip = starSourceRectangle,
+                Scale = starScale
+            }, false);
+            batch.Draw(starTexture, starPositionToDraw, DrawInfo.Default with {
+                Color = starColor.MultiplyAlpha(pulseEffectStrength),
+                Rotation = starRotation,
+                Origin = starOrigin,
+                ImageFlip = flipStarDrawing,
+                Clip = starSourceRectangle,
+                Scale = starScale
+            }, false);
+            starColor.A = (byte)(255 * Ease.QuartIn(1f - MathUtils.Clamp01(_postMainDrawTimer)));
+            for (int i2 = 0; i2 < 2; i2++) {
                 batch.Draw(starTexture, starPositionToDraw, DrawInfo.Default with {
-                    Color = starColor,
+                    Color = starColor.MultiplyAlpha(pulseEffectStrength) * PostMainDrawOpacity,
                     Rotation = starRotation,
                     Origin = starOrigin,
                     ImageFlip = flipStarDrawing,
-                    Clip = starSourceRectangle
-                }, false);
-                batch.Draw(starTexture, starPositionToDraw, DrawInfo.Default with {
-                    Color = starColor.MultiplyAlpha(1f - 0.5f * OpacityUpdatedInDraws + Math.Abs(0.5f * sin) * OpacityUpdatedInDraws),
-                    Rotation = starRotation,
-                    Origin = starOrigin,
-                    ImageFlip = flipStarDrawing,
-                    Clip = starSourceRectangle
+                    Clip = starSourceRectangle,
+                    Scale = starScale
                 }, false);
             }
         }
     }
 
     public static void DrawSwords(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
-        if (damageClassNameVisualsInfo.DamageClassType != DamageClassType.Melee) {
-            return;
-        }
-
         const byte SWORDCOUNT = 4;
         OpacityUpdatedInDraws += 0.035f;
         Texture2D swordTexture = damageClassNameVisualsInfo.Texture;
@@ -255,18 +337,15 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             }
             ulong seedForRandomness = (ulong)(i + 1);
             float factor0 = 1f - OpacityUpdatedInDraws;
-            //float factor = MathHelper.WrapAngle(factor0 / 35f % MathHelper.TwoPi + (VisualRotation <= 0f ? GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType) : 0f));
-            //float penalty = 1f - Utils.GetLerpValue(MathHelper.PiOver4, MathHelper.Pi, factor, true);
-            //factor *= penalty;
             float swordExtraRotation = MathF.Sin(factor0 + Utils.RandomFloat(ref seedForRandomness));
             swordExtraRotation = Ease.ExpoIn(Ease.QuadOut(swordExtraRotation));
             swordExtraRotation = MathUtils.Clamp01(swordExtraRotation);
             swordExtraRotation *= swordExtraRotationDirection;
             swordExtraRotation *= MathHelper.PiOver2;
-            swordExtraRotation += AfterMainDrawRotation * swordExtraRotationDirection * 2f;
+            swordExtraRotation += Ease.CircOut(MathHelper.WrapAngle(_postMainDrawTimer)) * swordExtraRotationDirection * 2f;
             swordRotation += swordExtraRotation;
             Rectangle swordSourceRectangle = swordTexture.Bounds;
-            Color swordColor = Color.White * AfterMainDrawOpacity;
+            Color swordColor = Color.White * PostMainDrawOpacity;
             SpriteEffects flipSwordDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Vector2 swordOrigin = new(firstPair ? 4f : width - 4f, height - 4f);
             batch.Draw(swordTexture, swordPositionToDraw, DrawInfo.Default with {
@@ -285,13 +364,9 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
     }
 
     public static void DrawArrows(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
-        if (damageClassNameVisualsInfo.DamageClassType != DamageClassType.Ranged) {
-            return;
-        }
-
         const byte ARROWCOUNT = 4;
         Texture2D arrowTexture = damageClassNameVisualsInfo.Texture;
-        OpacityUpdatedInDraws += 0.1f;
+        OpacityUpdatedInDraws += 0.075f;
         for (byte i = 0; i < ARROWCOUNT; i++) {
             byte half = ARROWCOUNT / 2;
             byte nextArrowIndex = (byte)(i + 1);
@@ -320,7 +395,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             ushort itemType = damageClassNameVisualsInfo.ItemType;
             ulong seedForRandomness = itemType,
                   seedForRandomness2 = nextArrowIndex;
-            float factor = MathHelper.WrapAngle(VisualTimer / 30f + Utils.RandomInt(ref seedForRandomness, 100));
+            float factor = MathHelper.WrapAngle(_mainDrawTimer / 30f + Utils.RandomInt(ref seedForRandomness, 100));
             float arrowExtraRotation = MathF.Sin(factor + Utils.RandomFloat(ref seedForRandomness) + Utils.RandomInt(ref seedForRandomness2, 100));
             float arrowProgress = 1f - OpacityUpdatedInDraws;
             arrowExtraRotation *= MathF.Max(0.25f, arrowProgress) * 1f;
@@ -330,9 +405,9 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             arrowRotation += arrowExtraRotation;
             Vector2 arrowVelocity = Vector2.UnitY.RotatedBy(arrowRotation);
             arrowPositionToDraw += arrowVelocity * 50f * Ease.QuadIn(arrowProgress);
-            arrowPositionToDraw += -arrowVelocity * Ease.QuadOut(MathUtils.Clamp01(VisualRotation / 60f)) * 100f;
+            arrowPositionToDraw += -arrowVelocity * Ease.QuadOut(MathUtils.Clamp01(_postMainDrawTimer / 60f)) * 100f;
             Rectangle arrowSourceRectangle = arrowTexture.Bounds;
-            Color arrowColor = Color.White * AfterMainDrawOpacity;
+            Color arrowColor = Color.White * PostMainDrawOpacity;
             SpriteEffects flipArrowDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Vector2 arrowOrigin = new(arrowTexture.Width / 2f, 0f);
             batch.Draw(arrowTexture, arrowPositionToDraw, DrawInfo.Default with {
@@ -346,8 +421,8 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
     }
 }
 
-sealed class DamageClassVisualsInItemNameAfterTooltipDrawing() : InterfaceElement(RoA.ModName + ": Damage Class Tooltip UI", InterfaceScaleType.UI) {
-    private static float CANPLAYINANIMATIONAGAINFOR => 0f;
+sealed class DamageClassVisualsInItemNamePostTooltipDrawing() : InterfaceElement(RoA.ModName + ": Damage Class Tooltip UI", InterfaceScaleType.UI) {
+    private static float CANPLAYINANIMATIONAGAINFOR => 10f;
 
     private static bool _shouldDraw;
     private static DamageClassNameVisualsInfo _damageClassNameVisualsInfo;
@@ -369,20 +444,6 @@ sealed class DamageClassVisualsInItemNameAfterTooltipDrawing() : InterfaceElemen
                 OpacityUpdatedInDraws = 0f;
             }
         }
-        void updateGlobalClassVisualsInfo() {
-            OpacityUpdatedInDraws = 1f;
-            if (_damageClassNameVisualsInfo.DamageClassType == DamageClassType.Melee) {
-                VisualRotation += 0.0275f;
-                VisualOpacity = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, VisualRotation, true));
-            }
-            else if (_damageClassNameVisualsInfo.DamageClassType == DamageClassType.Ranged) {
-                VisualRotation += 1.5f;
-                VisualOpacity = Ease.SineIn(Utils.GetLerpValue(40f, 85f, VisualRotation, true));
-            }
-            else if (_damageClassNameVisualsInfo.DamageClassType == DamageClassType.Magic) {
-                VisualOpacity = 1f;
-            }
-        }
 
         if (!IsHoveringItem) {
             resetGlobalClassVisualInfo();
@@ -396,11 +457,8 @@ sealed class DamageClassVisualsInItemNameAfterTooltipDrawing() : InterfaceElemen
             return true;
         }
 
-        updateGlobalClassVisualsInfo();
-
-        DrawSwords(UsedBatch, _damageClassNameVisualsInfo);
-        DrawArrows(UsedBatch, _damageClassNameVisualsInfo);
-        DrawStars(UsedBatch, _damageClassNameVisualsInfo);
+        UpdateGlobalClassVisualsInfo(_damageClassNameVisualsInfo.DamageClassType);
+        DrawClassUIVisuals(_damageClassNameVisualsInfo);
 
         return true;
     }
