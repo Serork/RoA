@@ -59,7 +59,6 @@ sealed class BackwoodsGreenMossBrick : ModTile, IPostSetupContent {
 
         TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
 
-        TransformTileSystem.OnKillActNormal[Type] = false;
         TransformTileSystem.ReplaceToTypeOnKill[Type] = (ushort)ModContent.TileType<BackwoodsStoneBrick>();
 
         DustType = ModContent.DustType<TealMossDust>();
