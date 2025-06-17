@@ -200,7 +200,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float randomValue2 = Utils.RandomFloat(ref seedForRandomness) * 100f;
             seedForRandomness = (ulong)randomValue;
             float randomValue4 = Utils.RandomFloat(ref seedForRandomness) * 100f;
-            float frameFactor = 1f - Math.Abs(MathF.Sin(factor + randomValue4 * MathHelper.Pi));
+            float frameFactor = 1f - Math.Abs(MathF.Sin(factor + randomValue2 * MathHelper.Pi));
             Color starColor = Color.White;
             float randomValue3 = randomValue / 100f;
             float slimeColor = randomValue3;
