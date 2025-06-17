@@ -188,8 +188,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         for (byte i = 0; i < SLIMECOUNT; i++) {
             byte half = SLIMECOUNT / 2;
             bool firstPair = i < half;
-            int width = slimeTexture.Width,
-                height = slimeTexture.Height;
+            int slimeHeight = slimeTexture.Height;
             float slimeRotation = 0f;
             Vector2 slimePositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
@@ -212,7 +211,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 slimePositionToDraw -= Vector2.UnitX * offsetX;
             }
             slimePositionToDraw.X += 1f;
-            slimePositionToDraw.Y += height / 2f;
+            slimePositionToDraw.Y += slimeHeight / 2f;
             SpriteFrame spriteFrame = new(3, 1);
             spriteFrame = spriteFrame.With((byte)(3 * frameFactor), 0);
             SpriteEffects flipStarDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
@@ -242,8 +241,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         for (byte i = 0; i < STARCOUNT; i++) {
             byte half = STARCOUNT / 2;
             bool firstPair = i < half;
-            int width = starTexture.Width,
-                height = starTexture.Height;
+            int starHeight = starTexture.Height;
             float starRotation = 0f;
             Vector2 starPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
@@ -256,7 +254,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             }
             float starDirection = firstPair.ToDirectionInt();
             starPositionToDraw.X += 1f;
-            starPositionToDraw.Y += height / 2f;
+            starPositionToDraw.Y += starHeight / 2f;
             starPositionToDraw.Y -= 2f;
             float factor = MathHelper.WrapAngle(_mainDrawTimer / 20f % MathHelper.TwoPi + GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
             float starProgress = 1f - OpacityUpdatedInDraws;
@@ -373,15 +371,14 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             byte nextArrowIndex = (byte)(i + 1);
             bool firstPair = i < half;
             bool rightArrows = nextArrowIndex > half;
-            int width = arrowTexture.Width,
-                height = arrowTexture.Height;
+            int arrowHeight = arrowTexture.Height;
             Vector2 arrowPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
             if (rightArrows) {
                 arrowPositionToDraw += new Vector2(tooltipLineSize.X, 0f);
             }
             arrowPositionToDraw.X += 1f;
-            arrowPositionToDraw.Y += height / 2f;
+            arrowPositionToDraw.Y += arrowHeight / 2f;
             arrowPositionToDraw.Y -= 4f;
             float arrowRotation = MathHelper.PiOver2;
             if (!firstPair) {
