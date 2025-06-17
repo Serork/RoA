@@ -198,7 +198,9 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float factor = MathHelper.WrapAngle(_mainDrawTimer / 20f % MathHelper.TwoPi + randomValue);
             ulong seedForRandomness = (ulong)((i + 1) * randomValue);
             float randomValue2 = Utils.RandomFloat(ref seedForRandomness) * 100f;
-            float frameFactor = 1f - Math.Abs(MathF.Sin(factor + randomValue2 * MathHelper.Pi));
+            seedForRandomness = (ulong)randomValue;
+            float randomValue4 = Utils.RandomFloat(ref seedForRandomness) * 100f;
+            float frameFactor = 1f - Math.Abs(MathF.Sin(factor + randomValue4 * MathHelper.Pi));
             Color starColor = Color.White;
             float randomValue3 = randomValue / 100f;
             float slimeColor = randomValue3;
@@ -215,7 +217,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             spriteFrame = spriteFrame.With((byte)(3 * frameFactor), 0);
             SpriteEffects flipStarDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             starColor *= PostMainDrawOpacity;
-            float jumpHeight = 10f + 30f * randomValue2;
+            float jumpHeight = 10f + 30f * randomValue4;
             Vector2 bezierPoint1 = slimePositionToDraw, bezierPoint2 = bezierPoint1 - Vector2.UnitY * jumpHeight, bezierPoint3 = bezierPoint1 + Vector2.UnitY * jumpHeight * 0.5f;
             float bezierFactor = 1f - _postMainDrawTimer;
             Rectangle starSourceRectangle = spriteFrame.GetSourceRectangle(slimeTexture);
