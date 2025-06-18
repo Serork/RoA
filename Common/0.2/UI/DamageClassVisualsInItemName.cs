@@ -307,15 +307,22 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
 
     public static void DrawSwords(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
         const byte SWORDCOUNT = 4;
+        const byte SWORDFRAMECOUNT = 3;
         OpacityUpdatedInDraws += 0.035f;
         Texture2D swordTexture = damageClassNameVisualsInfo.Texture;
         for (byte i = 0; i < SWORDCOUNT; i++) {
+            int nextSwordIndex = i + 1;
             bool firstPair = i < SWORDCOUNT / 2;
             bool topSwords = (i + 1) % 2 != 0;
-            int swordWidth = swordTexture.Width,
-                swordHeight = swordTexture.Height;
+            SpriteFrame spriteFrame = new(SWORDFRAMECOUNT, 1);
+            ulong seedForRandomness2 = (ulong)(nextSwordIndex * GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
+            spriteFrame = spriteFrame.With((byte)Utils.RandomInt(ref seedForRandomness2, SWORDFRAMECOUNT), 0);
+            Rectangle swordSourceRectangle = spriteFrame.GetSourceRectangle(swordTexture);
+            int swordWidth = swordSourceRectangle.Width,
+                swordHeight = swordSourceRectangle.Height;
             Vector2 swordPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
+            Vector2 offsetXToCenter = Vector2.UnitX * firstPair.ToDirectionInt() * 4f;
             switch (i) {
                 case 0:
                     swordPositionToDraw += new Vector2(-swordWidth, -swordHeight);
@@ -330,17 +337,19 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                     swordPositionToDraw += new Vector2(tooltipLineSize.X + swordWidth, swordHeight / 2f);
                     break;
             }
+            swordPositionToDraw += offsetXToCenter;
             swordPositionToDraw.Y += swordHeight / 1.25f;
             int topDirection = topSwords.ToDirectionInt(),
                 pairDirection = firstPair.ToDirectionInt();
-            swordPositionToDraw.Y += topDirection * 8f;
+            float offsetYPerSword = topDirection * 8f;
+            swordPositionToDraw.Y += offsetYPerSword;
             float swordExtraRotationDirection = pairDirection * topDirection * -1f;
             float swordRotationBase = 0f * swordExtraRotationDirection;
             float swordRotation = swordRotationBase;
             if (topSwords) {
                 swordRotation = swordRotationBase + MathHelper.PiOver2 * pairDirection;
             }
-            ulong seedForRandomness = (ulong)(i + 1);
+            ulong seedForRandomness = (ulong)nextSwordIndex;
             float factor0 = 1f - OpacityUpdatedInDraws;
             float swordExtraRotation = MathF.Sin(factor0 + Utils.RandomFloat(ref seedForRandomness));
             swordExtraRotation = Ease.ExpoIn(Ease.QuadOut(swordExtraRotation));
@@ -349,10 +358,9 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             swordExtraRotation *= MathHelper.PiOver2;
             swordExtraRotation += Ease.CircOut(MathHelper.WrapAngle(_postMainDrawTimer)) * swordExtraRotationDirection * 2f;
             swordRotation += swordExtraRotation;
-            Rectangle swordSourceRectangle = swordTexture.Bounds;
             Color swordColor = Color.White * PostMainDrawOpacity;
             SpriteEffects flipSwordDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 swordOrigin = new(firstPair ? 4f : swordWidth - 4f, swordHeight - 4f);
+            Vector2 swordOrigin = new(firstPair ? 6f : swordWidth - 6f, swordHeight - 4f);
             batch.Draw(swordTexture, swordPositionToDraw, DrawInfo.Default with {
                 Color = swordColor,
                 Rotation = swordRotation,
