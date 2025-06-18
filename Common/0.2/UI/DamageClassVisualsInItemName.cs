@@ -310,6 +310,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         const byte SWORDFRAMECOUNT = 3;
         OpacityUpdatedInDraws += 0.035f;
         Texture2D swordTexture = damageClassNameVisualsInfo.Texture;
+        float swordOriginOriginFactor = 6f;
         for (byte i = 0; i < SWORDCOUNT; i++) {
             int nextSwordIndex = i + 1;
             bool firstPair = i < SWORDCOUNT / 2;
@@ -360,7 +361,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             swordRotation += swordExtraRotation;
             Color swordColor = Color.White * PostMainDrawOpacity;
             SpriteEffects flipSwordDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 swordOrigin = new(firstPair ? 6f : swordWidth - 6f, swordHeight - 4f);
+            Vector2 swordOrigin = new(firstPair ? swordOriginOriginFactor : swordWidth - swordOriginOriginFactor, swordHeight - (swordOriginOriginFactor - 2f));
             batch.Draw(swordTexture, swordPositionToDraw, DrawInfo.Default with {
                 Color = swordColor,
                 Rotation = swordRotation,
