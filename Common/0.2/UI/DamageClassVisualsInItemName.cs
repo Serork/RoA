@@ -6,17 +6,19 @@ using ReLogic.Content;
 using RoA.Common.Cache;
 using RoA.Common.Configs;
 using RoA.Common.InterfaceElements;
-using RoA.Content;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -24,20 +26,200 @@ using static RoA.Common.UI.DamageClassVisualsInItemName;
 
 namespace RoA.Common.UI;
 
-sealed class DamageClassVisualsInItemName : GlobalItem {
-    private static byte DAMAGECLASSAMOUNT => (byte)DamageClassType.Count;
+sealed class DamageClassItemsStorage : IPostSetupContent {
+    private static Player? _testPlayer;
 
-    public readonly struct DamageClassNameVisualsInfo(DamageClassType damageClassType, Texture2D texture, ushort itemType, Vector2 tooltipLinePosition, Vector2 tooltipLineSize) {
-        public readonly DamageClassType DamageClassType = damageClassType;
+    public static Dictionary<DamageClass, HashSet<int>>? ItemsPerDamageClass;
+
+    public static IEnumerable<DamageClass> AllSupportedDamageClasses => DamageClassUtils.GetNotGenericDamagesClasses();
+    public static IEnumerable<DamageClass> VanillaSupportedDamageClasses => DamageClassUtils.GetVanillaNotGenericDamagesClasses();
+
+    public static bool IsItemValid(Item item, out DamageClass? damageClassOfItem) {
+        foreach (DamageClass damageClass in AllSupportedDamageClasses) {
+            if (ItemsPerDamageClass![damageClass].Contains(item.type)) {
+                damageClassOfItem = damageClass;
+                return true;
+            }
+        }
+        damageClassOfItem = null;
+        return false;
+    }
+
+    public static bool IsHybridItem(Item item) {
+        bool repeat = false;
+        bool result = false;
+        foreach (DamageClass damageClass in AllSupportedDamageClasses) {
+            if (result) {
+                return true;
+            }
+            if (ItemsPerDamageClass![damageClass].Contains(item.type)) {
+                if (repeat) {
+                    result = true;
+                }
+                repeat = true;
+            }
+        }
+        return result;
+    }
+
+    private static void AddItem(Item item, DamageClass damageClass) {
+        if (damageClass == DamageClass.SummonMeleeSpeed) {
+            damageClass = DamageClass.Summon;
+        }
+        else if (damageClass == DamageClass.MeleeNoSpeed) {
+            damageClass = DamageClass.MeleeNoSpeed;
+        }
+        if (!ItemsPerDamageClass!.TryGetValue(damageClass, out HashSet<int>? value)) {
+            value = [];
+            ItemsPerDamageClass[damageClass] = value;
+        }
+        if (value.Contains(item.type)) {
+            return;
+        }
+        value.Add(item.type);
+    }
+
+    void IPostSetupContent.PostSetupContent() {
+        foreach (DamageClass damageClass in AllSupportedDamageClasses) {
+            ItemsPerDamageClass![damageClass] = [];
+        }
+    }
+
+    public void Load(Mod mod) {
+        On_Item.SetDefaults_int_bool_ItemVariant += On_Item_SetDefaults_int_bool_ItemVariant;
+    }
+
+    public void Unload() { }
+
+    private void On_Item_SetDefaults_int_bool_ItemVariant(On_Item.orig_SetDefaults_int_bool_ItemVariant orig, Item self, int Type, bool noMatCheck, Terraria.GameContent.Items.ItemVariant variant) {
+        orig(self, Type, noMatCheck, variant);
+
+        void generateItemsListAndPopulate() {
+            if (self.type >= ItemID.CopperCoin && self.type <= ItemID.PlatinumCoin) {
+                return;
+            }
+
+            void checkForDamageClassEquips(DamageClass damageClass) {
+                Player testPlayer = _testPlayer!;
+                List<object> classValuesBefore = [], classValuesAfter = [];
+                void setupClassValues(List<object> values) {
+                    values.Add(testPlayer.GetDamage(damageClass));
+                    values.Add(testPlayer.GetCritChance(damageClass));
+                    values.Add(testPlayer.GetAttackSpeed(damageClass));
+                    values.Add(testPlayer.GetArmorPenetration(damageClass));
+                    values.Add(testPlayer.GetKnockback(damageClass));
+
+                    if (damageClass == DamageClass.Magic) {
+                        values.Add(testPlayer.manaMagnet);
+                        values.Add(testPlayer.magicCuffs);
+                        values.Add(testPlayer.statManaMax2);
+                        values.Add(testPlayer.manaCost);
+                        values.Add(testPlayer.manaFlower);
+                        values.Add(testPlayer.manaRegen);
+                    }
+                    else if (damageClass == DamageClass.Melee) {
+                        values.Add(testPlayer.autoReuseGlove);
+                        values.Add(testPlayer.meleeScaleGlove);
+                        values.Add(testPlayer.magmaStone);
+                        values.Add(testPlayer.kbGlove);
+                        values.Add(testPlayer.yoyoGlove);
+                        values.Add(testPlayer.yoyoString);
+                    }
+                    else if (damageClass == DamageClass.Summon) {
+                        values.Add(testPlayer.maxMinions);
+                        values.Add(testPlayer.dd2Accessory);
+                        values.Add(testPlayer.whipRangeMultiplier);
+                    }
+                    else if (damageClass == DamageClass.Ranged) {
+                        values.Add(testPlayer.magicQuiver);
+                        values.Add(testPlayer.hasMoltenQuiver);
+                        values.Add(testPlayer.arrowDamage);
+                        values.Add(testPlayer.bulletDamage);
+                        values.Add(testPlayer.specialistDamage);
+                        values.Add(testPlayer.ammoCost75);
+                        values.Add(testPlayer.ammoCost80);
+                    }
+                }
+                try {
+                    setupClassValues(classValuesBefore);
+                    if (self.buffType > 0) {
+                        testPlayer.AddBuff(self.buffType, 2);
+                        testPlayer.UpdateBuffs(self.whoAmI);
+                    }
+                    testPlayer.ApplyEquipFunctional(self, true);
+                    testPlayer.GrantArmorBenefits(self);
+                    setupClassValues(classValuesAfter);
+
+                    testPlayer.ResetEffects();
+                }
+                catch {
+                    return;
+                }
+                int lengthOfCheckValues = classValuesBefore.Count;
+                for (int i = 0; i < lengthOfCheckValues; i++) {
+                    object checkValueBefore = classValuesBefore[i], checkValueAfter = classValuesAfter[i];
+                    var value1 = checkValueBefore;
+                    if (value1 is StatModifier v11) {
+                        value1 = v11.Additive;
+                    }
+                    var value2 = checkValueAfter;
+                    if (value2 is StatModifier v22) {
+                        value2 = v22.Additive;
+                    }
+                    if (checkValueBefore is bool v && v != (bool)checkValueAfter) {
+                        AddItem(self, damageClass);
+                    }
+                    if (checkValueBefore is StatModifier v2 && (v2.Additive != ((StatModifier)checkValueAfter).Additive || v2.Multiplicative != ((StatModifier)checkValueAfter).Multiplicative)) {
+                        AddItem(self, damageClass);
+                    }
+                    if (checkValueBefore is int v3 && v3 != (int)checkValueAfter) {
+                        AddItem(self, damageClass);
+                    }
+                    if (checkValueBefore is float v4 && v4 != (float)checkValueAfter) {
+                        AddItem(self, damageClass);
+                    }
+                }
+            }
+
+            IEnumerable<DamageClass> damageClasses = self.type < ItemID.Count ? VanillaSupportedDamageClasses : AllSupportedDamageClasses;
+
+            if (ItemsPerDamageClass == null) {
+                ItemsPerDamageClass = [];
+                foreach (DamageClass damageClass in damageClasses) {
+                    ItemsPerDamageClass[damageClass] = [];
+                }
+            }
+
+            _testPlayer ??= new Player {
+                whoAmI = 255
+            };
+
+            if (self.IsAWeapon()) {
+                AddItem(self, self.DamageType);
+            }
+            if (self.accessory || self.buffType > 0 || self.headSlot != -1 || self.bodySlot != -1 || self.legSlot != -1) {
+                foreach (DamageClass damageClass in damageClasses) {
+                    checkForDamageClassEquips(damageClass);
+                }
+            }
+        }
+
+        generateItemsListAndPopulate();
+    }
+}
+
+sealed class DamageClassVisualsInItemName : GlobalItem {
+    public readonly struct DamageClassNameVisualsInfo(DamageClass damageClass, Texture2D texture, ushort itemType, Vector2 tooltipLinePosition, Vector2 tooltipLineSize) {
+        public readonly DamageClass DamageClass = damageClass;
         public readonly Texture2D Texture = texture;
         public readonly ushort ItemType = itemType;
         public readonly Vector2 TooltipLinePosition = tooltipLinePosition;
         public readonly Vector2 TooltipLineSize = tooltipLineSize;
     }
 
-    private static readonly Dictionary<DamageClassType, Asset<Texture2D>?> _classTexturesMap = [];
+    private static readonly Dictionary<DamageClass, Asset<Texture2D>?> _classTexturesMap = [];
 
-    private static DamageClassType _previousDamageClassTypeDraw;
+    private static DamageClass? _previousDamageClassDraw;
     private static float _opacityUpdatedInDraws;
     private static float _mainDrawTimer;
     private static float _postMainDrawTimer, _postMainDrawOpacityValue;
@@ -64,58 +246,40 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             return base.PreDrawTooltipLine(item, line, ref yOffset);
         }   
 
-        bool isItemValidToBeHandledForDamageClass(Item item, out DamageClassType? damageClassType) {
-            damageClassType = null;
-            if (item.IsAWeapon()) {
-                if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed) {
-                    damageClassType = DamageClassType.Melee;
-                }
-                else if (item.DamageType == DamageClass.Ranged) {
-                    damageClassType = DamageClassType.Ranged;
-                }
-                else if (item.DamageType == DamageClass.Magic) {
-                    damageClassType = DamageClassType.Magic;
-                }
-                else if (item.DamageType == DamageClass.Summon || item.DamageType == DamageClass.SummonMeleeSpeed) {
-                    damageClassType = DamageClassType.Summon;
-                }
-                else if (item.DamageType == DruidClass.Nature) {
-                    damageClassType = DamageClassType.Nature;
-                }
-            }
-
-            return damageClassType != null;
-        }
         string tooltipLineText = line.Text;
         Vector2 tooltipLineSize = line.Font.MeasureString(tooltipLineText);
         float sizeOffsetModifier = 0.025f;
         tooltipLineSize.X *= 1f - sizeOffsetModifier * 2.25f;
         ushort itemType = (ushort)item.type;
         Vector2 originalSpot = new(line.X + tooltipLineSize.X * sizeOffsetModifier, line.Y);
-        originalSpot.X += 0.5f;
-        void resetGlobalClassVisualInfo() {
-            _mainDrawTimer += 1f;
-            _postMainDrawTimer = 0f;
-            _postMainDrawOpacityValue = 0f;
-        }
+        originalSpot.X += 1f;
 
-        if (!isItemValidToBeHandledForDamageClass(item, out DamageClassType? checkDamageClassTypeOfThisItem)) {
+        if (!DamageClassItemsStorage.IsItemValid(item, out DamageClass? itemDamageClass)) {
             DamageClassVisualsInItemNamePostTooltipDrawing.ResetData();
 
             return base.PreDrawTooltipLine(item, line, ref yOffset);
         }
 
-        resetGlobalClassVisualInfo();
+        if (DamageClassItemsStorage.IsHybridItem(item)) {
+            return base.PreDrawTooltipLine(item, line, ref yOffset);
+        }
+
+        _mainDrawTimer += 1f;
+        _postMainDrawTimer = 0f;
+        _postMainDrawOpacityValue = 0f;
 
         DamageClassVisualsInItemNamePostTooltipDrawing.ResetData();
 
-        Asset<Texture2D>? classUIAsset = _classTexturesMap[checkDamageClassTypeOfThisItem!.Value];
+        DamageClass damageClassTypeOfThisItem = itemDamageClass!;
+        if (!_classTexturesMap.TryGetValue(damageClassTypeOfThisItem, out Asset<Texture2D>? classUIAsset)) {
+            return base.PreDrawTooltipLine(item, line, ref yOffset);
+        }
+
         if (classUIAsset?.IsLoaded != true) {
             return base.PreDrawTooltipLine(item, line, ref yOffset);
         }
 
-        DamageClassType damageClassTypeOfThisItem = checkDamageClassTypeOfThisItem.Value;
-        if (checkDamageClassTypeOfThisItem != _previousDamageClassTypeDraw) {
+        if (itemDamageClass != _previousDamageClassDraw) {
             OpacityUpdatedInDraws = 0f;
 
             if (NeedMainTimerReset(damageClassTypeOfThisItem)) {
@@ -127,52 +291,54 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         DrawClassUIVisuals(new(damageClassTypeOfThisItem, classUITexture, itemType, originalSpot, tooltipLineSize));
         DamageClassVisualsInItemNamePostTooltipDrawing.IsHoveringItem = true;
 
-        _previousDamageClassTypeDraw = damageClassTypeOfThisItem;
+        _previousDamageClassDraw = damageClassTypeOfThisItem;
 
         return base.PreDrawTooltipLine(item, line, ref yOffset);
     }
 
-    public static bool NeedMainTimerReset(DamageClassType damageClassType) => damageClassType != DamageClassType.Summon;
+    public static bool NeedMainTimerReset(DamageClass damageClass) => damageClass != DamageClass.Summon;
 
-    public static void UpdateGlobalClassVisualsInfo(DamageClassType damageClassType) {
-        OpacityUpdatedInDraws = 1f;
-        if (damageClassType == DamageClassType.Melee) {
-            _postMainDrawTimer += 0.0275f;
-            _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+    public static void DrawClassUIVisuals(in DamageClassNameVisualsInfo damageClassVisualsInfo, bool mainDraw = true) {
+        if (!mainDraw) {
+            OpacityUpdatedInDraws = 1f;
         }
-        else if (damageClassType == DamageClassType.Ranged) {
-            _postMainDrawTimer += 1.5f;
-            _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(40f, 85f, _postMainDrawTimer, true));
-        }
-        else if (damageClassType == DamageClassType.Magic) {
-            _postMainDrawTimer += 0.0275f;
-            _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
-        }
-        if (damageClassType == DamageClassType.Summon) {
-            _mainDrawTimer += 1f;
-            _postMainDrawTimer += 0.0275f;
-            _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
-        }
-    }
 
-    public static void DrawClassUIVisuals(in DamageClassNameVisualsInfo damageClassVisualsInfo) {
-        DamageClassType damageClassTypeOfThisItem = damageClassVisualsInfo.DamageClassType;
+        DamageClass damageClassTypeOfThisItem = damageClassVisualsInfo.DamageClass;
         SpriteBatch batch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
         batch.BeginBlendState(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, isUI: true);
-        switch (damageClassTypeOfThisItem) {
-            case DamageClassType.Melee:
-                DrawSwords(batch, damageClassVisualsInfo);
-                break;
-            case DamageClassType.Ranged:
-                DrawArrows(batch, damageClassVisualsInfo);
-                break;
-            case DamageClassType.Magic:
-                DrawStars(batch, damageClassVisualsInfo);
-                break;
-            case DamageClassType.Summon:
-                DrawSlimes(batch, damageClassVisualsInfo);
-                break;
+        if (damageClassTypeOfThisItem == DamageClass.Melee || damageClassTypeOfThisItem == DamageClass.MeleeNoSpeed) {
+            if (!mainDraw) {
+                _postMainDrawTimer += 0.0275f;
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+            }
+
+            DrawSwords(batch, damageClassVisualsInfo);
+        }
+        else if (damageClassTypeOfThisItem == DamageClass.Ranged) {
+            if (!mainDraw) {
+                _postMainDrawTimer += 1.5f;
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(40f, 85f, _postMainDrawTimer, true));
+            }
+
+            DrawArrows(batch, damageClassVisualsInfo);
+        }
+        else if (damageClassTypeOfThisItem == DamageClass.Magic) {
+            if (!mainDraw) {
+                _postMainDrawTimer += 0.0275f;
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+            }
+
+            DrawStars(batch, damageClassVisualsInfo);
+        }
+        else if (damageClassTypeOfThisItem == DamageClass.Summon) {
+            if (!mainDraw) {
+                _mainDrawTimer += 1f;
+                _postMainDrawTimer += 0.0275f;
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+            }
+
+            DrawSlimes(batch, damageClassVisualsInfo);
         }
         DamageClassVisualsInItemNamePostTooltipDrawing.MatchData(damageClassVisualsInfo);
         batch.End();
@@ -184,9 +350,18 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             return;
         }
 
-        for (int i = 0; i < DAMAGECLASSAMOUNT; i++) {
-            DamageClassType damageClassType = (DamageClassType)i;
-            _classTexturesMap[damageClassType] = ModContent.Request<Texture2D>(ResourceManager.UITextures + $"ClassUI_{damageClassType}");
+        foreach (DamageClass damageClass in DamageClassItemsStorage.AllSupportedDamageClasses) {
+            string classDamageTypeName = damageClass.Name.Replace("DamageClass", string.Empty);
+            if (classDamageTypeName.Contains("Summon")) {
+                classDamageTypeName = "Summon";
+            }
+            else if (classDamageTypeName.Contains("Melee")) {
+                classDamageTypeName = "Melee";
+            }
+            string classUITextureName = ResourceManager.UITextures + $"ClassUI_{classDamageTypeName}";
+            if (ModContent.RequestIfExists(classUITextureName, out Asset<Texture2D> classUITextureAsset)) {
+                _classTexturesMap[damageClass] = classUITextureAsset;
+            }
         }
     }
 
@@ -427,7 +602,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
     }
 
-    public static int GetRandomIntBasedOnItemType(ushort itemType) {
+    private static int GetRandomIntBasedOnItemType(ushort itemType) {
         ulong seedForRandomness = itemType;
         return Utils.RandomInt(ref seedForRandomness, 100);
     }
@@ -473,8 +648,7 @@ sealed class DamageClassVisualsInItemNamePostTooltipDrawing() : InterfaceElement
             return true;
         }
 
-        UpdateGlobalClassVisualsInfo(_damageClassNameVisualsInfo.DamageClassType);
-        DrawClassUIVisuals(_damageClassNameVisualsInfo);
+        DrawClassUIVisuals(_damageClassNameVisualsInfo, false);
 
         return true;
     }

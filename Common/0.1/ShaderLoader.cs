@@ -124,7 +124,6 @@ sealed class ShaderLoader : ModSystem {
                     string shaderKey = RemoveDirectory(shaderPath, shaderDirectory);
                     if (shaderKey != "Vignette") {
                         _loadedShaders.Add(shaderKey, Mod.Assets.Request<Effect>(shaderPath, AssetRequestMode.ImmediateLoad).Value);
-                        Console.WriteLine("LOADED SHADER: " + shaderKey);
                     }
                 }
             }
