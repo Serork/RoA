@@ -92,7 +92,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         tooltipLineSize.X *= 1f - sizeOffsetModifier * 2.25f;
         ushort itemType = (ushort)item.type;
         Vector2 originalSpot = new(line.X + tooltipLineSize.X * sizeOffsetModifier, line.Y);
-        originalSpot.X += 0.5f;
+        originalSpot.X += 1f;
         void resetGlobalClassVisualInfo() {
             _mainDrawTimer += 1f;
             _postMainDrawTimer = 0f;
