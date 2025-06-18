@@ -92,6 +92,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         tooltipLineSize.X *= 1f - sizeOffsetModifier * 2.25f;
         ushort itemType = (ushort)item.type;
         Vector2 originalSpot = new(line.X + tooltipLineSize.X * sizeOffsetModifier, line.Y);
+        originalSpot.X += 1f;
         void resetGlobalClassVisualInfo() {
             _mainDrawTimer += 1f;
             _postMainDrawTimer = 0f;
@@ -218,7 +219,6 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             else {
                 slimePositionToDraw -= Vector2.UnitX * offsetX;
             }
-            slimePositionToDraw.X += 1f;
             slimePositionToDraw.Y += slimeHeight / 2f;
             SpriteFrame spriteFrame = new(SLIMEFRAMECOUNT, 1);
             spriteFrame = spriteFrame.With((byte)(SLIMEFRAMECOUNT * frameFactor), 0);
@@ -261,7 +261,6 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 starPositionToDraw -= Vector2.UnitX * offsetX;
             }
             float starDirection = firstPair.ToDirectionInt();
-            starPositionToDraw.X += 1f;
             starPositionToDraw.Y += starHeight / 2f;
             starPositionToDraw.Y -= 2f;
             float factor = MathHelper.WrapAngle(_mainDrawTimer / 20f % MathHelper.TwoPi + GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
@@ -331,7 +330,6 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                     swordPositionToDraw += new Vector2(tooltipLineSize.X + swordWidth, swordHeight / 2f);
                     break;
             }
-            swordPositionToDraw.X += 1f;
             swordPositionToDraw.Y += swordHeight / 1.25f;
             int topDirection = topSwords.ToDirectionInt(),
                 pairDirection = firstPair.ToDirectionInt();
@@ -380,7 +378,6 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             if (rightArrows) {
                 arrowPositionToDraw += new Vector2(tooltipLineSize.X, 0f);
             }
-            arrowPositionToDraw.X += 1f;
             arrowPositionToDraw.Y += arrowHeight / 2f;
             arrowPositionToDraw.Y -= 4f;
             float arrowRotation = MathHelper.PiOver2;
