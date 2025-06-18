@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Configs;
 using RoA.Common.InterfaceElements;
+using RoA.Common.UI;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
@@ -85,7 +86,7 @@ sealed class ItemTooltipLeaves : GlobalItem {
                 }
             }
 
-            if (Main.gameMenu || Main.InGameUI.IsVisible ? BooleanElement.Value2 : ModContent.GetInstance<RoAClientConfig>().DruidLeaves) {
+            if (DamageClassVisualsInItemName.CanDrawClassUIVisuals) {
                 ulong seed = (ulong)item.type;
                 drawTooltipLineLeaves(line, LEAVESCOUNT, seed);
             }

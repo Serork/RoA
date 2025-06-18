@@ -18,9 +18,9 @@ WreathDrawingModes: {
 RoAClientConfig: {
 	DisplayName: Client Configuration
 
-	DruidLeaves: {
-		Label: Druid Tooltip Graphics
-		Tooltip: Adds a leaf visual to druid item names
+	ClassUIVisuals: {
+		Label: Damage Class Tooltip Graphics
+		Tooltip: Adds a damage class visual to weapon names
 	}
 
 	HighlightMode: {

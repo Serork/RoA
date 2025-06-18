@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Cache;
+using RoA.Common.Configs;
 using RoA.Common.InterfaceElements;
 using RoA.Content;
 using RoA.Core;
@@ -47,11 +48,17 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
     }
     public static float PostMainDrawOpacity => 1f - MathUtils.Clamp01(_postMainDrawOpacityValue);
 
+    public static bool CanDrawClassUIVisuals => Main.gameMenu || Main.InGameUI.IsVisible ? BooleanElement.Value2 : ModContent.GetInstance<RoAClientConfig>().ClassUIVisuals;
+
     public override void Load() {
         LoadClassUITextures();
     }
 
     public override bool PreDrawTooltipLine(Item item, DrawableTooltipLine line, ref int yOffset) {
+        if (!CanDrawClassUIVisuals) {
+            return base.PreDrawTooltipLine(item, line, ref yOffset);
+        }
+
         bool isNameLine = line.Name.Contains("Name");
         if (!isNameLine) {
             return base.PreDrawTooltipLine(item, line, ref yOffset);
@@ -81,7 +88,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
         string tooltipLineText = line.Text;
         Vector2 tooltipLineSize = line.Font.MeasureString(tooltipLineText);
-        float sizeOffsetModifier = 0.05f;
+        float sizeOffsetModifier = 0.025f;
         tooltipLineSize.X *= 1f - sizeOffsetModifier * 2.25f;
         ushort itemType = (ushort)item.type;
         Vector2 originalSpot = new(line.X + tooltipLineSize.X * sizeOffsetModifier, line.Y);
@@ -438,6 +445,10 @@ sealed class DamageClassVisualsInItemNamePostTooltipDrawing() : InterfaceElement
     }
 
     protected override bool DrawSelf() {
+        if (!CanDrawClassUIVisuals) {
+            return true;
+        }
+
         void resetGlobalClassVisualInfo() {
             if (_canResetGlobalVisualInfoTimer-- <= 0f) {
                 OpacityUpdatedInDraws = 0f;

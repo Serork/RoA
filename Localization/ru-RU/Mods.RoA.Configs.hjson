@@ -18,9 +18,9 @@ WreathDrawingModes: {
 RoAClientConfig: {
 	DisplayName: Настройки клиента
 
-	DruidLeaves: {
-		Label: Графика описаний предметов класса 'Друид'
-		Tooltip: Добавляет листья около названий предметов класса 'Друид'
+	ClassUIVisuals: {
+		Label: Графика описаний классовых оружий
+		Tooltip: Добавляет визуальное обозначение класса урона к названиям оружия
 	}
 
 	HighlightMode: {
