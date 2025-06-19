@@ -35,8 +35,6 @@ class BackwoodsVines : ModTile {
         AddMapEntry(new Color(46, 130, 69));
     }
 
-    public override bool CanDrop(int i, int j) => false;
-
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         if (!TileDrawing.IsVisible(Main.tile[i, j])) {
             return false;
@@ -66,7 +64,7 @@ class BackwoodsVines : ModTile {
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
         Tile tile = Framing.GetTileSafely(i, j + 1);
         if (tile.HasTile && tile.TileType == Type) {
-            WorldGen.KillTile(i, j + 1);
+            //WorldGen.KillTile(i, j + 1, noItem: true);
         }
     }
 

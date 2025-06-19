@@ -30,6 +30,151 @@ sealed class TransformTileSystem : ILoadable {
         //On_Player.PlaceThing_ValidTileForReplacement += On_Player_PlaceThing_ValidTileForReplacement;
 
         On_WorldGen.KillTile += On_WorldGen_KillTile;
+        On_Player.GetPickaxeDamage += On_Player_GetPickaxeDamage;
+    }
+
+    private int On_Player_GetPickaxeDamage(On_Player.orig_GetPickaxeDamage orig, Player self, int x, int y, int pickPower, int hitBufferIndex, Tile tileTarget) {
+        int num = 0;
+        if (Main.tileNoFail[tileTarget.TileType])
+            num = 100;
+
+        if (TileLoader.GetTile(tileTarget.TileType) is ModTile modTile) {
+            num += (int)(pickPower / modTile.MineResist);
+            goto skipVanillaPickPower;
+        }
+
+        num = ((!Main.tileDungeon[tileTarget.TileType] && tileTarget.TileType != 25 && tileTarget.TileType != 58 && tileTarget.TileType != 117 && tileTarget.TileType != 203) ? ((tileTarget.TileType == 85) ? ((!Main.getGoodWorld) ? (num + pickPower / 3) : (num + pickPower / 4)) : ((tileTarget.TileType != 48 && tileTarget.TileType != 232) ? ((tileTarget.TileType == 226) ? (num + pickPower / 4) : ((tileTarget.TileType != 107 && tileTarget.TileType != 221) ? ((tileTarget.TileType != 108 && tileTarget.TileType != 222) ? ((tileTarget.TileType == 111 || tileTarget.TileType == 223) ? (num + pickPower / 4) : ((tileTarget.TileType != 211) ? (num + pickPower) : (num + pickPower / 5))) : (num + pickPower / 3)) : (num + pickPower / 2))) : (num + pickPower * 2))) : (num + pickPower / 2));
+    skipVanillaPickPower:
+
+        if (tileTarget.TileType == 211 && pickPower < 200)
+            num = 0;
+
+        if ((tileTarget.TileType == 25 || tileTarget.TileType == 203) && pickPower < 65) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 117 && pickPower < 65) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 37 && pickPower < 50) {
+            num = 0;
+        }
+        else if ((tileTarget.TileType == 22 || tileTarget.TileType == 204) && (double)y > Main.worldSurface && pickPower < 55) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 56 && pickPower < 55) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 77 && pickPower < 65 && y >= Main.UnderworldLayer) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 58 && pickPower < 65) {
+            num = 0;
+        }
+        else if ((tileTarget.TileType == 226 || tileTarget.TileType == 237) && pickPower < 210) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 137 && pickPower < 210) {
+            int num2 = tileTarget.TileFrameY / 18;
+            if ((uint)(num2 - 1) <= 3u)
+                num = 0;
+        }
+        else if (Main.tileDungeon[tileTarget.TileType] && pickPower < 100 && (double)y > Main.worldSurface) {
+            if ((double)x < (double)Main.maxTilesX * 0.35 || (double)x > (double)Main.maxTilesX * 0.65)
+                num = 0;
+        }
+        else if (tileTarget.TileType == 107 && pickPower < 100) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 108 && pickPower < 110) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 111 && pickPower < 150) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 221 && pickPower < 100) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 222 && pickPower < 110) {
+            num = 0;
+        }
+        else if (tileTarget.TileType == 223 && pickPower < 150) {
+            num = 0;
+        }
+        else {
+            TileLoader.PickPowerCheck(tileTarget, pickPower, ref num);
+        }
+
+        if (tileTarget.TileType == 147 || tileTarget.TileType == 0 || tileTarget.TileType == 40 || tileTarget.TileType == 53 || tileTarget.TileType == 57 || tileTarget.TileType == 59 || tileTarget.TileType == 123 || tileTarget.TileType == 224 || tileTarget.TileType == 397)
+            num += pickPower;
+
+        if (tileTarget.TileType == 404)
+            num += 5;
+
+        ushort replaceTo = ReplaceToTypeOnKill[tileTarget.TileType];
+        if (tileTarget.TileType == 165 || Main.tileRope[tileTarget.TileType] || tileTarget.TileType == 199)
+            num = 100;
+
+        if (replaceTo != TileID.Count) {
+            num = 0;
+        }
+
+        if (tileTarget.TileType == 128 || tileTarget.TileType == 269) {
+            if (tileTarget.TileFrameX == 18 || tileTarget.TileFrameX == 54) {
+                x--;
+                tileTarget = Main.tile[x, y];
+                self.hitTile.UpdatePosition(hitBufferIndex, x, y);
+            }
+
+            if (tileTarget.TileFrameX >= 100) {
+                num = 0;
+                Main.blockMouse = true;
+            }
+        }
+
+        if (tileTarget.TileType == 334) {
+            if (tileTarget.TileFrameY == 0) {
+                y++;
+                tileTarget = Main.tile[x, y];
+                self.hitTile.UpdatePosition(hitBufferIndex, x, y);
+            }
+
+            if (tileTarget.TileFrameY == 36) {
+                y--;
+                tileTarget = Main.tile[x, y];
+                self.hitTile.UpdatePosition(hitBufferIndex, x, y);
+            }
+
+            int frameX = tileTarget.TileFrameX;
+            bool flag = frameX >= 5000;
+            bool flag2 = false;
+            if (!flag) {
+                int num3 = frameX / 18;
+                num3 %= 3;
+                x -= num3;
+                tileTarget = Main.tile[x, y];
+                if (tileTarget.TileFrameX >= 5000)
+                    flag = true;
+            }
+
+            if (flag) {
+                frameX = tileTarget.TileFrameX;
+                int num4 = 0;
+                while (frameX >= 5000) {
+                    frameX -= 5000;
+                    num4++;
+                }
+
+                if (num4 != 0)
+                    flag2 = true;
+            }
+
+            if (flag2) {
+                num = 0;
+                Main.blockMouse = true;
+            }
+        }
+
+        return num;
     }
 
     private void On_WorldGen_KillTile(On_WorldGen.orig_KillTile orig, int i, int j, bool fail, bool effectOnly, bool noItem) {
@@ -78,25 +223,25 @@ sealed class TransformTileSystem : ILoadable {
             //WorldGen.AttemptFossilShattering(i, j, tile, fail);
             if (fail) {
                 tile.TileType = replaceTo;
-                //if (tile.type == 2 || tile.type == 23 || tile.type == 109 || tile.type == 199 || tile.type == 477 || tile.type == 492)
-                //    tile.type = 0;
 
-                //if (tile.type == 633)
-                //    tile.type = 57;
+                //if (tile.TileType == 2 || tile.TileType == 23 || tile.TileType == 109 || tile.TileType == 199 || tile.TileType == 477 || tile.TileType == 492)
+                //    tile.TileType = 0;
 
-                //if (tile.type == 60 || tile.type == 661 || tile.type == 662 || tile.type == 70)
-                //    tile.type = 59;
+                //if (tile.TileType == 633)
+                //    tile.TileType = 57;
 
-                //if (Main.tileMoss[tile.type])
-                //    tile.type = 1;
+                //if (tile.TileType == 60 || tile.TileType == 661 || tile.TileType == 662 || tile.TileType == 70)
+                //    tile.TileType = 59;
 
-                //if (TileID.Sets.tileMossBrick[tile.type])
-                //    tile.type = 38;
+                //if (Main.tileMoss[tile.TileType])
+                //    tile.TileType = 1;
+
+                //if (TileID.Sets.tileMossBrick[tile.TileType])
+                //    tile.TileType = 38;
 
                 WorldGen.SquareTileFrame(i, j);
                 return;
             }
-            Main.NewText(2);
 
             if (WorldGen.CheckTileBreakability2_ShouldTileSurvive(i, j))
                 return;
