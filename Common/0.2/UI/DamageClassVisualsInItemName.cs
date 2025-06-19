@@ -697,9 +697,10 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float newSizeX = tooltipLineSize.X;
             multiclassPositionToDraw.X += newSizeX / 2f;
             float multiclassDirection = firstPair.ToDirectionInt();
-            float multiclassProgress = Ease.CircOut(OpacityUpdatedInDraws) * MathF.Pow(_postMainDrawTimer + PostMainDrawOpacity, 0.5f);
-            float multiclassRotation = MathHelper.TwoPi * 2f * multiclassProgress * -multiclassDirection;
-            multiclassPositionToDraw.X -= multiclassDirection * (newSizeX / 2f + offsetX / 2f) * multiclassProgress;
+            float multiclassProgress = Ease.CircOut(OpacityUpdatedInDraws),
+                  multiclassProgress2 = multiclassProgress * MathF.Pow(_postMainDrawTimer + PostMainDrawOpacity, 0.5f);
+            float multiclassRotation = MathHelper.TwoPi * 2f * multiclassProgress2 * -multiclassDirection;
+            multiclassPositionToDraw.X -= multiclassDirection * (newSizeX / 2f + offsetX / 2f) * multiclassProgress2;
             multiclassPositionToDraw.Y += multiclassHeight / 1.25f;
             multiclassPositionToDraw.Y -= 3f;
             Color multiclassColor = Color.White * PostMainDrawOpacity;
