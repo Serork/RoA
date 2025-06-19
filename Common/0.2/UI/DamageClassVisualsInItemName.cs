@@ -30,7 +30,7 @@ sealed class DamageClassItemsStorage : IInitializer {
 
     public static Dictionary<DamageClass, HashSet<int>>? ItemsPerDamageClass { get; private set; }
 
-    public static IEnumerable<DamageClass> AllSupportedDamageClasses => DamageClassUtils.GetNotGenericDamagesClasses();
+    public static IEnumerable<DamageClass> AllSupportedDamageClasses => DamageClassUtils.GetDamagesClasses();
 
     public static bool IsItemValid(Item item, out DamageClass? damageClassOfItem) {
         foreach (DamageClass damageClass in AllSupportedDamageClasses) {
@@ -174,7 +174,7 @@ sealed class DamageClassItemsStorage : IInitializer {
                     //    testPlayer.tileInteractAttempted = false;
                     //    testPlayer.releaseUseTile = false;
                     //}
-                    if (!ItemID.Sets.IsFood[self.type] && self.buffType > 0) {
+                    if ((!ItemID.Sets.IsFood[self.type] || damageClass == DamageClass.Generic) && self.buffType > 0) {
                         testPlayer.AddBuff(self.buffType, 2);
                         testPlayer.UpdateBuffs(self.whoAmI);
                     }
@@ -327,7 +327,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         SpriteBatch batch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
         batch.BeginBlendState(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, isUI: true);
-        bool shouldDrawNeutralIcon = damageClassesTypeOfThisItem.Count > 2;
+        bool shouldDrawNeutralIcon = damageClassesTypeOfThisItem.Contains(DamageClass.Generic) || damageClassesTypeOfThisItem.Count > 2;
         if (shouldDrawNeutralIcon || damageClassesTypeOfThisItem.Count == 2) {
             if (!mainDraw) {
                 _postMainDrawTimer += 0.0275f;
@@ -386,6 +386,9 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             }
             else if (classDamageTypeName.Contains("Melee")) {
                 classDamageTypeName = "Melee";
+            }
+            else if (classDamageTypeName.Contains("Generic")) {
+                classDamageTypeName = "Neutral";
             }
             string classUITextureName = ResourceManager.UITextures + $"ClassUI_{classDamageTypeName}";
             if (ModContent.RequestIfExists(classUITextureName, out Asset<Texture2D> classUITextureAsset)) {
@@ -649,7 +652,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
 
         List<DamageClass> damageClassesOfItem = damageClassNameVisualsInfo.DamageClasses;
-        if (damageClassesOfItem.Count < 2) {
+        if (!neutralClass && damageClassesOfItem.Count < 2) {
             return;
         }
 
@@ -657,8 +660,8 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         const byte SPRITESHEETCOLUMNS = 5;
         const byte SPRITESHEETROWS = 5;
         Texture2D multiclassTexture = neutralClass ? _neutralClassTexture.Value : _multiclassTexture.Value;
-        DamageClass firstDamageClass = damageClassesOfItem[0],
-                    secondDamageClass = damageClassesOfItem[1];
+        DamageClass firstDamageClass = damageClassesOfItem[0];
+        DamageClass? secondDamageClass = neutralClass ? null : damageClassesOfItem[1];
         byte usedRow = 0;
         if (!neutralClass) {
             if (firstDamageClass == DamageClass.Melee || firstDamageClass == DamageClass.MeleeNoSpeed) {

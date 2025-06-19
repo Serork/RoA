@@ -21,21 +21,16 @@ static class DamageClassUtils {
                damageClass == DamageClass.Throwing;
     }
 
-    public static IEnumerable<DamageClass> GetNotGenericDamagesClasses() {
+    public static IEnumerable<DamageClass> GetDamagesClasses(Predicate<DamageClass>? check = null) {
         for (int i = 0; i < DamageClassLoader.DamageClassCount; i++) {
             DamageClass damageClass = DamageClassLoader.GetDamageClass(i);
-            if (IsNotGeneric(damageClass)) {
+            if (check == null || check(damageClass)) {
                 yield return damageClass;
             }
         }
     }
 
-    public static IEnumerable<DamageClass> GetVanillaNotGenericDamagesClasses() {
-        for (int i = 0; i < DamageClassLoader.DamageClassCount; i++) {
-            DamageClass damageClass = DamageClassLoader.GetDamageClass(i);
-            if (IsVanilla(damageClass) && IsNotGeneric(damageClass)) {
-                yield return damageClass;
-            }
-        }
-    }
+    public static IEnumerable<DamageClass> GetNotGenericDamagesClasses() => GetDamagesClasses(IsNotGeneric);
+
+    public static IEnumerable<DamageClass> GetVanillaNotGenericDamagesClasses() => GetDamagesClasses((damageClass) => IsVanilla(damageClass) && IsNotGeneric(damageClass));
 }
