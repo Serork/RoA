@@ -1,7 +1,12 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Microsoft.Xna.Framework;
+
+using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Achievements;
+using Terraria.Graphics.Renderers;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -10,6 +15,12 @@ namespace RoA.Common.Tiles;
 sealed class TransformTileSystem : ILoadable {
     [UnsafeAccessor(UnsafeAccessorKind.StaticField, Name = "stopDrops")]
     public extern static ref bool WorldGen_stopDrops(WorldGen self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "KillTile_DropBait")]
+    public extern static void WorldGen_KillTile_DropBait(WorldGen self, int i, int j, Tile tileCache);
+
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "KillTile_DropItems")]
+    public extern static void WorldGen_KillTile_DropItems(WorldGen self, int x, int y, Tile tileCache, bool includeLargeObjectDrops = false, bool includeAllModdedLargeObjectDrops = false);
 
     //public static bool[] OnKillActNormal = TileID.Sets.Factory.CreateBoolSet(true);
     public static ushort[] ReplaceToTypeOnKill = TileID.Sets.Factory.CreateUshortSet(TileID.Count);
@@ -84,6 +95,36 @@ sealed class TransformTileSystem : ILoadable {
 
                 WorldGen.SquareTileFrame(i, j);
                 return;
+            }
+            Main.NewText(2);
+
+            if (WorldGen.CheckTileBreakability2_ShouldTileSurvive(i, j))
+                return;
+
+            if (!noItem && !WorldGen_stopDrops(null) && Main.netMode != NetmodeID.MultiplayerClient) {
+                WorldGen_KillTile_DropBait(null, i, j, tile);
+                WorldGen_KillTile_DropItems(null, i, j, tile);
+            }
+
+            if (Main.netMode != NetmodeID.Server)
+                AchievementsHelper.NotifyTileDestroyed(Main.player[Main.myPlayer], tile.TileType);
+
+            tile.HasTile = false;
+            tile.IsHalfBlock = false;
+            tile.TileFrameX = -1;
+            tile.TileFrameY = -1;
+            tile.ClearBlockPaintAndCoating();
+            tile.TileFrameNumber = 0;
+
+            tile.TileType = 0;
+            tile.IsActuated = false;
+            WorldGen.SquareTileFrame(i, j);
+            while (!WorldGen.destroyObject && WorldGen.ExploitDestroyQueue.Count > 0) {
+                Point point = WorldGen.ExploitDestroyQueue.Dequeue();
+                if (Framing.GetTileSafely(point.X, point.Y).HasTile) {
+                    WorldGen.SquareTileFrame(point.X, point.Y);
+                    NetMessage.SendTileSquare(-1, point.X, point.Y);
+                }
             }
 
             return;

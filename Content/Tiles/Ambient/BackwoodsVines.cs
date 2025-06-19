@@ -35,6 +35,8 @@ class BackwoodsVines : ModTile {
         AddMapEntry(new Color(46, 130, 69));
     }
 
+    public override bool CanDrop(int i, int j) => false;
+
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         if (!TileDrawing.IsVisible(Main.tile[i, j])) {
             return false;
