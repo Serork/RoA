@@ -61,7 +61,7 @@ sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip 
 
             float maxX = 5f * Ease.SineOut(counter), speedX = 2.5f;
             float offsetY = 30f;
-            Vector2 velocity = new(Helper.Wave(-maxX, maxX, speedX, (fallingLeafData.Index + 1) * ItemTooltipLeaves.LEAVESCOUNT), offsetY * Ease.QuadOut(counter));
+            Vector2 velocity = new(Helper.Wave(-maxX, maxX, speedX, (fallingLeafData.Index + 1) * 8), offsetY * Ease.QuadOut(counter));
             float oscMultiplier = (1f - counter) * 5f;
             velocity.X *= oscMultiplier;
 

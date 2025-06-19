@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
 
-static class ItemExtensions {
+static partial class ItemExtensions {
     public static bool IsAWeapon(this Item item) => item.damage > 0;
 
     public static bool IsEmpty(this Item item) => item == null || item.stack <= 0 || item.type <= ItemID.None || item.IsAir;

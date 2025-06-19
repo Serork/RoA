@@ -6,15 +6,14 @@ using ReLogic.Content;
 using RoA.Common.Cache;
 using RoA.Common.Configs;
 using RoA.Common.InterfaceElements;
+using RoA.Content;
 using RoA.Core;
-using RoA.Core.Data;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -23,13 +22,14 @@ using Terraria.ModLoader;
 using Terraria.UI;
 
 using static RoA.Common.UI.DamageClassVisualsInItemName;
+using static Terraria.GameContent.Animations.Actions.Sprites;
 
 namespace RoA.Common.UI;
 
-sealed class DamageClassItemsStorage : IPostSetupContent {
+sealed class DamageClassItemsStorage : IInitializer {
     private static Player? _testPlayer;
 
-    public static Dictionary<DamageClass, HashSet<int>>? ItemsPerDamageClass;
+    public static Dictionary<DamageClass, HashSet<int>>? ItemsPerDamageClass { get; private set; }
 
     public static IEnumerable<DamageClass> AllSupportedDamageClasses => DamageClassUtils.GetNotGenericDamagesClasses();
     public static IEnumerable<DamageClass> VanillaSupportedDamageClasses => DamageClassUtils.GetVanillaNotGenericDamagesClasses();
@@ -45,44 +45,54 @@ sealed class DamageClassItemsStorage : IPostSetupContent {
         return false;
     }
 
+    public static List<DamageClass> GetDamageClasses(Item item) {
+        List<DamageClass> damageClassOfItem = [];
+        foreach (DamageClass damageClass in AllSupportedDamageClasses) {
+            if (ItemsPerDamageClass![damageClass].Contains(item.type)) {
+                damageClassOfItem.Add(damageClass);
+            }
+        }
+        return damageClassOfItem;
+    }
+
     public static bool IsHybridItem(Item item) {
         bool repeat = false;
+        List<DamageClass> countedDamageClasses = [];
         bool result = false;
         foreach (DamageClass damageClass in AllSupportedDamageClasses) {
             if (result) {
                 return true;
             }
             if (ItemsPerDamageClass![damageClass].Contains(item.type)) {
-                if (repeat) {
+                bool checkForCanRepeat(DamageClass checkDamageClass1, DamageClass checkDamageClass2) 
+                    => (damageClass == checkDamageClass1 && !countedDamageClasses.Contains(checkDamageClass2)) || (damageClass == checkDamageClass2 && !countedDamageClasses.Contains(checkDamageClass1));
+                bool canRepeat = checkForCanRepeat(DamageClass.Summon, DamageClass.SummonMeleeSpeed) ||
+                                 checkForCanRepeat(DamageClass.Melee, DamageClass.MeleeNoSpeed);
+                if (canRepeat && repeat) {
                     result = true;
                 }
                 repeat = true;
+                countedDamageClasses.Add(damageClass);
             }
         }
         return result;
     }
 
-    private static void AddItem(Item item, DamageClass damageClass) {
-        if (damageClass == DamageClass.SummonMeleeSpeed) {
-            damageClass = DamageClass.Summon;
+    public static bool IsAlreadyAdded(Item item) {
+        foreach (DamageClass damageClass in AllSupportedDamageClasses) {
+            if (ItemsPerDamageClass![damageClass].Contains(item.type)) {
+                return true;
+            }
         }
-        else if (damageClass == DamageClass.MeleeNoSpeed) {
-            damageClass = DamageClass.MeleeNoSpeed;
-        }
-        if (!ItemsPerDamageClass!.TryGetValue(damageClass, out HashSet<int>? value)) {
-            value = [];
-            ItemsPerDamageClass[damageClass] = value;
-        }
-        if (value.Contains(item.type)) {
-            return;
-        }
-        value.Add(item.type);
+        return false;
     }
 
-    void IPostSetupContent.PostSetupContent() {
-        foreach (DamageClass damageClass in AllSupportedDamageClasses) {
-            ItemsPerDamageClass![damageClass] = [];
+    private static void AddItem(Item item, DamageClass damageClass) {
+        if (!ItemsPerDamageClass!.TryGetValue(damageClass, out HashSet<int>? damageClassItemIDSet)) {
+            return;
         }
+
+        damageClassItemIDSet.Add(item.type);
     }
 
     public void Load(Mod mod) {
@@ -93,6 +103,14 @@ sealed class DamageClassItemsStorage : IPostSetupContent {
 
     private void On_Item_SetDefaults_int_bool_ItemVariant(On_Item.orig_SetDefaults_int_bool_ItemVariant orig, Item self, int Type, bool noMatCheck, Terraria.GameContent.Items.ItemVariant variant) {
         orig(self, Type, noMatCheck, variant);
+
+        IEnumerable<DamageClass> damageClasses = AllSupportedDamageClasses;
+        if (ItemsPerDamageClass == null) {
+            ItemsPerDamageClass = [];
+            foreach (DamageClass damageClass in damageClasses) {
+                ItemsPerDamageClass[damageClass] = [];
+            }
+        }
 
         void generateItemsListAndPopulate() {
             if (self.type >= ItemID.CopperCoin && self.type <= ItemID.PlatinumCoin) {
@@ -123,12 +141,13 @@ sealed class DamageClassItemsStorage : IPostSetupContent {
                         values.Add(testPlayer.magmaStone);
                         values.Add(testPlayer.kbGlove);
                         values.Add(testPlayer.yoyoGlove);
-                        values.Add(testPlayer.yoyoString);
+                        values.Add(testPlayer.stringColor);
                     }
                     else if (damageClass == DamageClass.Summon) {
                         values.Add(testPlayer.maxMinions);
                         values.Add(testPlayer.dd2Accessory);
                         values.Add(testPlayer.whipRangeMultiplier);
+                        values.Add(testPlayer.maxTurrets);
                     }
                     else if (damageClass == DamageClass.Ranged) {
                         values.Add(testPlayer.magicQuiver);
@@ -142,62 +161,50 @@ sealed class DamageClassItemsStorage : IPostSetupContent {
                 }
                 try {
                     setupClassValues(classValuesBefore);
-                    if (self.buffType > 0) {
+                    if (!ItemID.Sets.IsFood[self.type] && self.buffType > 0) {
                         testPlayer.AddBuff(self.buffType, 2);
                         testPlayer.UpdateBuffs(self.whoAmI);
                     }
-                    testPlayer.ApplyEquipFunctional(self, true);
+                    if (self.accessory) {
+                        testPlayer.ApplyEquipFunctional(self, true);
+                    }
                     testPlayer.GrantArmorBenefits(self);
                     setupClassValues(classValuesAfter);
 
                     testPlayer.ResetEffects();
                 }
-                catch {
+                catch (Exception exception) {
+                    Main.NewText(exception.Message);
                     return;
                 }
                 int lengthOfCheckValues = classValuesBefore.Count;
                 for (int i = 0; i < lengthOfCheckValues; i++) {
                     object checkValueBefore = classValuesBefore[i], checkValueAfter = classValuesAfter[i];
-                    var value1 = checkValueBefore;
-                    if (value1 is StatModifier v11) {
-                        value1 = v11.Additive;
-                    }
-                    var value2 = checkValueAfter;
-                    if (value2 is StatModifier v22) {
-                        value2 = v22.Additive;
-                    }
                     if (checkValueBefore is bool v && v != (bool)checkValueAfter) {
                         AddItem(self, damageClass);
                     }
-                    if (checkValueBefore is StatModifier v2 && (v2.Additive != ((StatModifier)checkValueAfter).Additive || v2.Multiplicative != ((StatModifier)checkValueAfter).Multiplicative)) {
+                    else if (checkValueBefore is StatModifier v2 && (v2.Additive != ((StatModifier)checkValueAfter).Additive || v2.Multiplicative != ((StatModifier)checkValueAfter).Multiplicative)) {
                         AddItem(self, damageClass);
                     }
-                    if (checkValueBefore is int v3 && v3 != (int)checkValueAfter) {
+                    else if (checkValueBefore is int v3 && v3 != (int)checkValueAfter) {
                         AddItem(self, damageClass);
                     }
-                    if (checkValueBefore is float v4 && v4 != (float)checkValueAfter) {
+                    else if (checkValueBefore is float v4 && v4 != (float)checkValueAfter) {
                         AddItem(self, damageClass);
                     }
                 }
             }
 
-            IEnumerable<DamageClass> damageClasses = self.type < ItemID.Count ? VanillaSupportedDamageClasses : AllSupportedDamageClasses;
-
-            if (ItemsPerDamageClass == null) {
-                ItemsPerDamageClass = [];
-                foreach (DamageClass damageClass in damageClasses) {
-                    ItemsPerDamageClass[damageClass] = [];
-                }
-            }
-
-            _testPlayer ??= new Player {
-                whoAmI = 255
-            };
+            _testPlayer ??= new Player();
+            _testPlayer.dead = false;
+            _testPlayer.statLife = _testPlayer.statLifeMax = 100;
+            _testPlayer.statMana = _testPlayer.statManaMax = 20;
+            _testPlayer.immune = true;
 
             if (self.IsAWeapon()) {
                 AddItem(self, self.DamageType);
             }
-            if (self.accessory || self.buffType > 0 || self.headSlot != -1 || self.bodySlot != -1 || self.legSlot != -1) {
+            else if (self.accessory || self.buffType > 0 || self.headSlot != -1 || self.bodySlot != -1 || self.legSlot != -1) {
                 foreach (DamageClass damageClass in damageClasses) {
                     checkForDamageClassEquips(damageClass);
                 }
@@ -209,8 +216,8 @@ sealed class DamageClassItemsStorage : IPostSetupContent {
 }
 
 sealed class DamageClassVisualsInItemName : GlobalItem {
-    public readonly struct DamageClassNameVisualsInfo(DamageClass damageClass, Texture2D texture, ushort itemType, Vector2 tooltipLinePosition, Vector2 tooltipLineSize) {
-        public readonly DamageClass DamageClass = damageClass;
+    public readonly struct DamageClassNameVisualsInfo(List<DamageClass> damageClasses, Texture2D texture, ushort itemType, Vector2 tooltipLinePosition, Vector2 tooltipLineSize) {
+        public readonly List<DamageClass> DamageClasses = damageClasses;
         public readonly Texture2D Texture = texture;
         public readonly ushort ItemType = itemType;
         public readonly Vector2 TooltipLinePosition = tooltipLinePosition;
@@ -218,6 +225,8 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
     }
 
     private static readonly Dictionary<DamageClass, Asset<Texture2D>?> _classTexturesMap = [];
+
+    private static Asset<Texture2D>? _multiclassTexture, _neutralClassTexture;
 
     private static DamageClass? _previousDamageClassDraw;
     private static float _opacityUpdatedInDraws;
@@ -260,9 +269,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             return base.PreDrawTooltipLine(item, line, ref yOffset);
         }
 
-        if (DamageClassItemsStorage.IsHybridItem(item)) {
-            return base.PreDrawTooltipLine(item, line, ref yOffset);
-        }
+        List<DamageClass> damageClassesOfThisItem = DamageClassItemsStorage.GetDamageClasses(item);
 
         _mainDrawTimer += 1f;
         _postMainDrawTimer = 0f;
@@ -288,7 +295,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
 
         Texture2D classUITexture = classUIAsset.Value;
-        DrawClassUIVisuals(new(damageClassTypeOfThisItem, classUITexture, itemType, originalSpot, tooltipLineSize));
+        DrawClassUIVisuals(new(damageClassesOfThisItem, classUITexture, itemType, originalSpot, tooltipLineSize));
         DamageClassVisualsInItemNamePostTooltipDrawing.IsHoveringItem = true;
 
         _previousDamageClassDraw = damageClassTypeOfThisItem;
@@ -303,11 +310,21 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             OpacityUpdatedInDraws = 1f;
         }
 
-        DamageClass damageClassTypeOfThisItem = damageClassVisualsInfo.DamageClass;
+        List<DamageClass> damageClassesTypeOfThisItem = damageClassVisualsInfo.DamageClasses;
         SpriteBatch batch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
         batch.BeginBlendState(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, isUI: true);
-        if (damageClassTypeOfThisItem == DamageClass.Melee || damageClassTypeOfThisItem == DamageClass.MeleeNoSpeed) {
+        bool shouldDrawNeutralIcon = damageClassesTypeOfThisItem.Count > 2;
+        shouldDrawNeutralIcon = true;
+        if (shouldDrawNeutralIcon || damageClassesTypeOfThisItem.Count == 2) {
+            if (!mainDraw) {
+                _postMainDrawTimer += 0.0275f;
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+            }
+
+            DrawMulticlassIcon(batch, damageClassVisualsInfo, shouldDrawNeutralIcon);
+        }
+        else if (damageClassesTypeOfThisItem.Contains(DamageClass.Melee) || damageClassesTypeOfThisItem.Contains(DamageClass.MeleeNoSpeed)) {
             if (!mainDraw) {
                 _postMainDrawTimer += 0.0275f;
                 _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
@@ -315,7 +332,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
 
             DrawSwords(batch, damageClassVisualsInfo);
         }
-        else if (damageClassTypeOfThisItem == DamageClass.Ranged) {
+        else if (damageClassesTypeOfThisItem.Contains(DamageClass.Ranged)) {
             if (!mainDraw) {
                 _postMainDrawTimer += 1.5f;
                 _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(40f, 85f, _postMainDrawTimer, true));
@@ -323,7 +340,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
 
             DrawArrows(batch, damageClassVisualsInfo);
         }
-        else if (damageClassTypeOfThisItem == DamageClass.Magic) {
+        else if (damageClassesTypeOfThisItem.Contains(DamageClass.Magic)) {
             if (!mainDraw) {
                 _postMainDrawTimer += 0.0275f;
                 _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
@@ -331,7 +348,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
 
             DrawStars(batch, damageClassVisualsInfo);
         }
-        else if (damageClassTypeOfThisItem == DamageClass.Summon) {
+        else if (damageClassesTypeOfThisItem.Contains(DamageClass.Summon) || damageClassesTypeOfThisItem.Contains(DamageClass.SummonMeleeSpeed)) {
             if (!mainDraw) {
                 _mainDrawTimer += 1f;
                 _postMainDrawTimer += 0.0275f;
@@ -363,6 +380,9 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 _classTexturesMap[damageClass] = classUITextureAsset;
             }
         }
+
+        _multiclassTexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "ClassUI_Multiclass");
+        _neutralClassTexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "ClassUI_Neutral");
     }
 
     public static void DrawSlimes(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
@@ -376,7 +396,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float slimeRotation = 0f;
             Vector2 slimePositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
-            float offsetX = tooltipLineSize.X * 0.1f;
+            float offsetX = 10f;
             int randomValue = GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType);
             float factor = MathHelper.WrapAngle(_mainDrawTimer / 20f % MathHelper.TwoPi + randomValue);
             ulong seedForRandomness = (ulong)((i + 1) * randomValue);
@@ -395,14 +415,14 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 slimePositionToDraw -= Vector2.UnitX * offsetX;
             }
             slimePositionToDraw.Y += slimeHeight / 2f;
-            SpriteFrame spriteFrame = new(SLIMEFRAMECOUNT, 1);
-            spriteFrame = spriteFrame.With((byte)(SLIMEFRAMECOUNT * frameFactor), 0);
-            SpriteEffects flipStarDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            SpriteFrame slimeSpriteFrame = new(SLIMEFRAMECOUNT, 1);
+            slimeSpriteFrame = slimeSpriteFrame.With((byte)(SLIMEFRAMECOUNT * frameFactor), 0);
+            SpriteEffects flipSlimeDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             starColor *= PostMainDrawOpacity;
             float jumpHeight = 10f + 30f * randomValue4;
             Vector2 bezierPoint1 = slimePositionToDraw, bezierPoint2 = bezierPoint1 - Vector2.UnitY * jumpHeight, bezierPoint3 = bezierPoint1 + Vector2.UnitY * jumpHeight * 0.5f;
             float bezierFactor = 1f - _postMainDrawTimer;
-            Rectangle starSourceRectangle = spriteFrame.GetSourceRectangle(slimeTexture);
+            Rectangle starSourceRectangle = slimeSpriteFrame.GetSourceRectangle(slimeTexture);
             Vector2 slimeOrigin = starSourceRectangle.Size() / 2f;
             Vector2 positionToDraw = MathF.Pow(1 - bezierFactor, 2) * bezierPoint1 + 2 * (1 - bezierFactor) * bezierFactor * bezierPoint2 + MathF.Pow(bezierFactor, 2) * bezierPoint3;
             slimePositionToDraw = positionToDraw;
@@ -411,7 +431,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 Color = starColor,
                 Rotation = slimeRotation,
                 Origin = slimeOrigin,
-                ImageFlip = flipStarDrawing,
+                ImageFlip = flipSlimeDrawing,
                 Clip = starSourceRectangle
             }, false);
         }
@@ -428,7 +448,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float starRotation = 0f;
             Vector2 starPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
-            float offsetX = tooltipLineSize.X * 0.07f;
+            float offsetX = 8f;
             if (!firstPair) {
                 starPositionToDraw += new Vector2(tooltipLineSize.X + offsetX, 0f);
             }
@@ -486,14 +506,15 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         OpacityUpdatedInDraws += 0.035f;
         Texture2D swordTexture = damageClassNameVisualsInfo.Texture;
         float swordOriginOriginFactor = 6f;
+        ulong seedForRandomness2 = (ulong)(GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
+        byte usedFrame = (byte)Utils.RandomInt(ref seedForRandomness2, SWORDFRAMECOUNT);
         for (byte i = 0; i < SWORDCOUNT; i++) {
             int nextSwordIndex = i + 1;
             bool firstPair = i < SWORDCOUNT / 2;
             bool topSwords = (i + 1) % 2 != 0;
-            SpriteFrame spriteFrame = new(SWORDFRAMECOUNT, 1);
-            ulong seedForRandomness2 = (ulong)(nextSwordIndex * GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
-            spriteFrame = spriteFrame.With((byte)Utils.RandomInt(ref seedForRandomness2, SWORDFRAMECOUNT), 0);
-            Rectangle swordSourceRectangle = spriteFrame.GetSourceRectangle(swordTexture);
+            SpriteFrame swordSpriteFrame = new(SWORDFRAMECOUNT, 1);
+            swordSpriteFrame = swordSpriteFrame.With(usedFrame, 0);
+            Rectangle swordSourceRectangle = swordSpriteFrame.GetSourceRectangle(swordTexture);
             int swordWidth = swordSourceRectangle.Width,
                 swordHeight = swordSourceRectangle.Height;
             Vector2 swordPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
@@ -549,8 +570,12 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
 
     public static void DrawArrows(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo) {
         const byte ARROWCOUNT = 4;
+        const byte ARROWFRAMECOUNT = 2;
         Texture2D arrowTexture = damageClassNameVisualsInfo.Texture;
         OpacityUpdatedInDraws += 0.075f;
+        ushort itemType = damageClassNameVisualsInfo.ItemType;
+        ulong seedForRandomness3 = itemType;
+        int usedFrame = (int)MathF.Min(Utils.RandomInt(ref seedForRandomness3, ARROWFRAMECOUNT + 1), ARROWFRAMECOUNT - 1);
         for (byte i = 0; i < ARROWCOUNT; i++) {
             byte half = ARROWCOUNT / 2;
             byte nextArrowIndex = (byte)(i + 1);
@@ -574,9 +599,13 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             arrowPositionToDraw.Y += arrowOffsetY;
             int rightDirection = (!firstPair).ToDirectionInt();
             arrowRotation += arrowOffsetY * 0.05f * rightDirection;
-            ushort itemType = damageClassNameVisualsInfo.ItemType;
             ulong seedForRandomness = itemType,
                   seedForRandomness2 = nextArrowIndex;
+            SpriteFrame arrowSpriteFrame = new(ARROWFRAMECOUNT, 1);
+            arrowSpriteFrame = arrowSpriteFrame.With((byte)(!firstPair ? ARROWFRAMECOUNT - usedFrame - 1 : usedFrame), 0);
+            if (++usedFrame >= ARROWFRAMECOUNT) {
+                usedFrame = 0;
+            }
             float factor = MathHelper.WrapAngle(_mainDrawTimer / 30f + Utils.RandomInt(ref seedForRandomness, 100));
             float arrowExtraRotation = MathF.Sin(factor + Utils.RandomFloat(ref seedForRandomness) + Utils.RandomInt(ref seedForRandomness2, 100));
             float arrowProgress = 1f - OpacityUpdatedInDraws;
@@ -588,16 +617,102 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             Vector2 arrowVelocity = Vector2.UnitY.RotatedBy(arrowRotation);
             arrowPositionToDraw += arrowVelocity * 50f * Ease.QuadIn(arrowProgress);
             arrowPositionToDraw += -arrowVelocity * Ease.QuadOut(MathUtils.Clamp01(_postMainDrawTimer / 60f)) * 100f;
-            Rectangle arrowSourceRectangle = arrowTexture.Bounds;
+            Rectangle arrowSourceRectangle = arrowSpriteFrame.GetSourceRectangle(arrowTexture);
             Color arrowColor = Color.White * PostMainDrawOpacity;
             SpriteEffects flipArrowDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 arrowOrigin = new(arrowTexture.Width / 2f, 0f);
+            Vector2 arrowOrigin = new(arrowSourceRectangle.Width / 2f, 0f);
             batch.Draw(arrowTexture, arrowPositionToDraw, DrawInfo.Default with {
                 Color = arrowColor,
                 Rotation = arrowRotation,
                 Origin = arrowOrigin,
                 ImageFlip = flipArrowDrawing,
                 Clip = arrowSourceRectangle
+            }, false);
+        }
+    }
+
+    public static void DrawMulticlassIcon(SpriteBatch batch, in DamageClassNameVisualsInfo damageClassNameVisualsInfo, bool neutralClass = false) {
+        if (_neutralClassTexture?.IsLoaded != true || _multiclassTexture?.IsLoaded != true) {
+            return;
+        }
+
+        List<DamageClass> damageClassesOfItem = damageClassNameVisualsInfo.DamageClasses;
+        if (damageClassesOfItem.Count < 2) {
+            return;
+        }
+
+        const byte MULTICLASSICONCOUNT = 2;
+        const byte SPRITESHEETCOLUMNS = 5;
+        const byte SPRITESHEETROWS = 5;
+        Texture2D multiclassTexture = neutralClass ? _neutralClassTexture.Value : _multiclassTexture.Value;
+        DamageClass firstDamageClass = damageClassesOfItem[0],
+                    secondDamageClass = damageClassesOfItem[1];
+        byte usedRow = 0;
+        if (!neutralClass) {
+            if (firstDamageClass == DamageClass.Melee || firstDamageClass == DamageClass.MeleeNoSpeed) {
+                usedRow = 0;
+            }
+            else if (firstDamageClass == DamageClass.Ranged) {
+                usedRow = 1;
+            }
+            else if (firstDamageClass == DamageClass.Magic) {
+                usedRow = 2;
+            }
+            else if (firstDamageClass == DamageClass.Summon || firstDamageClass == DamageClass.SummonMeleeSpeed) {
+                usedRow = 3;
+            }
+            else if (firstDamageClass == DruidClass.Nature) {
+                usedRow = 4;
+            }
+        }
+        byte usedColumn = 0;
+        if (!neutralClass) {
+            if (secondDamageClass == DamageClass.Melee || secondDamageClass == DamageClass.MeleeNoSpeed) {
+                usedColumn = 0;
+            }
+            else if (secondDamageClass == DamageClass.Ranged) {
+                usedColumn = 1;
+            }
+            else if (secondDamageClass == DamageClass.Magic) {
+                usedColumn = 2;
+            }
+            else if (secondDamageClass == DamageClass.Summon || secondDamageClass == DamageClass.SummonMeleeSpeed) {
+                usedColumn = 3;
+            }
+            else if (secondDamageClass == DruidClass.Nature) {
+                usedColumn = 4;
+            }
+        }
+        OpacityUpdatedInDraws += 0.035f;
+        for (byte i = 0; i < MULTICLASSICONCOUNT; i++) {
+            byte half = MULTICLASSICONCOUNT / 2;
+            bool firstPair = i < half;
+            SpriteFrame multiclassSpriteFrame = neutralClass ? new(1, 1) : new(SPRITESHEETCOLUMNS, SPRITESHEETROWS);
+            multiclassSpriteFrame = multiclassSpriteFrame.With(usedRow, usedColumn);
+            Rectangle multiclassSourceRectangle = multiclassSpriteFrame.GetSourceRectangle(multiclassTexture);
+            int multiclassHeight = multiclassSourceRectangle.Height,
+                multiclassWidth = multiclassSourceRectangle.Width;
+            Vector2 multiclassPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
+            Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
+            float offsetX = 20f;
+            float newSizeX = tooltipLineSize.X;
+            multiclassPositionToDraw.X += newSizeX / 2f;
+            float multiclassDirection = firstPair.ToDirectionInt();
+            float multiclassProgress = Ease.CircOut(OpacityUpdatedInDraws) * MathF.Pow(_postMainDrawTimer + PostMainDrawOpacity, 0.5f);
+            float multiclassRotation = MathHelper.TwoPi * 2f * multiclassProgress * -multiclassDirection;
+            multiclassPositionToDraw.X -= multiclassDirection * (newSizeX / 2f + offsetX / 2f) * multiclassProgress;
+            multiclassPositionToDraw.Y += multiclassHeight / 1.25f;
+            multiclassPositionToDraw.Y -= 3f;
+            Color multiclassColor = Color.White * PostMainDrawOpacity;
+            SpriteEffects flipMulticlassDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            Vector2 starOrigin = multiclassSourceRectangle.Size() / 2f;
+            multiclassColor *= PostMainDrawOpacity;
+            batch.Draw(multiclassTexture, multiclassPositionToDraw, DrawInfo.Default with {
+                Color = multiclassColor,
+                Rotation = multiclassRotation,
+                Origin = starOrigin,
+                ImageFlip = flipMulticlassDrawing,
+                Clip = multiclassSourceRectangle
             }, false);
         }
     }

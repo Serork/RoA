@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Druid;
 
 sealed class ItemTooltipLeaves : GlobalItem {
-    public const byte LEAVESCOUNT = 8;
+    public const byte LEAVESCOUNT = 6;
 
     private static SpriteData _leavesSpriteData;
 
