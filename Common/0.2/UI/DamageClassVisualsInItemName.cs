@@ -22,7 +22,6 @@ using Terraria.ModLoader;
 using Terraria.UI;
 
 using static RoA.Common.UI.DamageClassVisualsInItemName;
-using static Terraria.GameContent.Animations.Actions.Sprites;
 
 namespace RoA.Common.UI;
 
