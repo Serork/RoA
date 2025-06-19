@@ -703,7 +703,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             multiclassPositionToDraw.Y += multiclassHeight / 1.25f;
             multiclassPositionToDraw.Y -= 3f;
             Color multiclassColor = Color.White * PostMainDrawOpacity;
-            SpriteEffects flipMulticlassDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            SpriteEffects flipMulticlassDrawing = !firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             Vector2 starOrigin = multiclassSourceRectangle.Size() / 2f;
             multiclassColor *= PostMainDrawOpacity;
             batch.Draw(multiclassTexture, multiclassPositionToDraw, DrawInfo.Default with {
