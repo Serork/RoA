@@ -315,7 +315,6 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
         batch.BeginBlendState(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, isUI: true);
         bool shouldDrawNeutralIcon = damageClassesTypeOfThisItem.Count > 2;
-        shouldDrawNeutralIcon = true;
         if (shouldDrawNeutralIcon || damageClassesTypeOfThisItem.Count == 2) {
             if (!mainDraw) {
                 _postMainDrawTimer += 0.0275f;
