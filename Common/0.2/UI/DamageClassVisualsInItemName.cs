@@ -157,35 +157,39 @@ sealed class DamageClassItemsStorage : IInitializer {
                         values.Add(testPlayer.ammoCost80);
                     }
                 }
+                try {
+                    setupClassValues(classValuesBefore);
+                    //if (self.createTile > -1) {
+                    //    Tile tile = Main.tile[-1, -1];
+                    //    bool active = tile.HasTile;
+                    //    ushort tileType = tile.TileType;
+                    //    tile.HasTile = true;
+                    //    tile.TileType = (ushort)self.createTile;
+                    //    testPlayer.tileInteractAttempted = true;
+                    //    testPlayer.releaseUseTile = true;
+                    //    testPlayer.TileInteractionsCheck(-1, -1);
+                    //    tile.HasTile = active;
+                    //    tile.TileType = tileType;
+                    //    testPlayer.UpdateBuffs(self.whoAmI);
+                    //    testPlayer.tileInteractAttempted = false;
+                    //    testPlayer.releaseUseTile = false;
+                    //}
+                    if (!ItemID.Sets.IsFood[self.type] && self.buffType > 0) {
+                        testPlayer.AddBuff(self.buffType, 2);
+                        testPlayer.UpdateBuffs(self.whoAmI);
+                    }
+                    if (self.accessory) {
+                        testPlayer.ApplyEquipFunctional(self, true);
+                    }
+                    testPlayer.GrantArmorBenefits(self);
+                    setupClassValues(classValuesAfter);
 
-                setupClassValues(classValuesBefore);
-                //if (self.createTile > -1) {
-                //    Tile tile = Main.tile[-1, -1];
-                //    bool active = tile.HasTile;
-                //    ushort tileType = tile.TileType;
-                //    tile.HasTile = true;
-                //    tile.TileType = (ushort)self.createTile;
-                //    testPlayer.tileInteractAttempted = true;
-                //    testPlayer.releaseUseTile = true;
-                //    testPlayer.TileInteractionsCheck(-1, -1);
-                //    tile.HasTile = active;
-                //    tile.TileType = tileType;
-                //    testPlayer.UpdateBuffs(self.whoAmI);
-                //    testPlayer.tileInteractAttempted = false;
-                //    testPlayer.releaseUseTile = false;
-                //}
-                if (!ItemID.Sets.IsFood[self.type] && self.buffType > 0) {
-                    testPlayer.AddBuff(self.buffType, 2);
-                    testPlayer.UpdateBuffs(self.whoAmI);
+                    testPlayer.ResetEffects();
                 }
-                if (self.accessory) {
-                    testPlayer.ApplyEquipFunctional(self, true);
+                catch (Exception exception) {
+                    Console.WriteLine(exception.Message);
+                    return;
                 }
-                testPlayer.GrantArmorBenefits(self);
-                setupClassValues(classValuesAfter);
-
-                testPlayer.ResetEffects();
-
                 int lengthOfCheckValues = classValuesBefore.Count;
                 for (int i = 0; i < lengthOfCheckValues; i++) {
                     object checkValueBefore = classValuesBefore[i], checkValueAfter = classValuesAfter[i];
@@ -213,7 +217,7 @@ sealed class DamageClassItemsStorage : IInitializer {
             if (self.IsAWeapon()) {
                 AddItem(self, self.DamageType);
             }
-            else if (self.accessory || self.buffType > 0 || self.headSlot != -1 || self.bodySlot != -1 || self.legSlot != -1) {
+            else if (self.createTile > -1 || self.accessory || self.buffType > 0 || self.headSlot != -1 || self.bodySlot != -1 || self.legSlot != -1) {
                 foreach (DamageClass damageClass in damageClasses) {
                     checkForDamageClassEquips(damageClass);
                 }
