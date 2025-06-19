@@ -31,7 +31,6 @@ sealed class DamageClassItemsStorage : IInitializer {
     public static Dictionary<DamageClass, HashSet<int>>? ItemsPerDamageClass { get; private set; }
 
     public static IEnumerable<DamageClass> AllSupportedDamageClasses => DamageClassUtils.GetNotGenericDamagesClasses();
-    public static IEnumerable<DamageClass> VanillaSupportedDamageClasses => DamageClassUtils.GetVanillaNotGenericDamagesClasses();
 
     public static bool IsItemValid(Item item, out DamageClass? damageClassOfItem) {
         foreach (DamageClass damageClass in AllSupportedDamageClasses) {
@@ -158,24 +157,35 @@ sealed class DamageClassItemsStorage : IInitializer {
                         values.Add(testPlayer.ammoCost80);
                     }
                 }
-                try {
-                    setupClassValues(classValuesBefore);
-                    if (!ItemID.Sets.IsFood[self.type] && self.buffType > 0) {
-                        testPlayer.AddBuff(self.buffType, 2);
-                        testPlayer.UpdateBuffs(self.whoAmI);
-                    }
-                    if (self.accessory) {
-                        testPlayer.ApplyEquipFunctional(self, true);
-                    }
-                    testPlayer.GrantArmorBenefits(self);
-                    setupClassValues(classValuesAfter);
 
-                    testPlayer.ResetEffects();
+                setupClassValues(classValuesBefore);
+                //if (self.createTile > -1) {
+                //    Tile tile = Main.tile[-1, -1];
+                //    bool active = tile.HasTile;
+                //    ushort tileType = tile.TileType;
+                //    tile.HasTile = true;
+                //    tile.TileType = (ushort)self.createTile;
+                //    testPlayer.tileInteractAttempted = true;
+                //    testPlayer.releaseUseTile = true;
+                //    testPlayer.TileInteractionsCheck(-1, -1);
+                //    tile.HasTile = active;
+                //    tile.TileType = tileType;
+                //    testPlayer.UpdateBuffs(self.whoAmI);
+                //    testPlayer.tileInteractAttempted = false;
+                //    testPlayer.releaseUseTile = false;
+                //}
+                if (!ItemID.Sets.IsFood[self.type] && self.buffType > 0) {
+                    testPlayer.AddBuff(self.buffType, 2);
+                    testPlayer.UpdateBuffs(self.whoAmI);
                 }
-                catch (Exception exception) {
-                    Main.NewText(exception.Message);
-                    return;
+                if (self.accessory) {
+                    testPlayer.ApplyEquipFunctional(self, true);
                 }
+                testPlayer.GrantArmorBenefits(self);
+                setupClassValues(classValuesAfter);
+
+                testPlayer.ResetEffects();
+
                 int lengthOfCheckValues = classValuesBefore.Count;
                 for (int i = 0; i < lengthOfCheckValues; i++) {
                     object checkValueBefore = classValuesBefore[i], checkValueAfter = classValuesAfter[i];
