@@ -19,6 +19,9 @@ sealed class FlederSlayerDecoration : ModItem {
         Item.createTile = ModContent.TileType<Tiles.Decorations.FlederSlayerDecoration>();
         Item.placeStyle = 0;
 
+        Item.accessory = false;
+        Item.vanity = false;
+
         Item.rare = ItemRarityID.LightRed;
 
         Item.value = Item.sellPrice(0, 3, 50, 0);

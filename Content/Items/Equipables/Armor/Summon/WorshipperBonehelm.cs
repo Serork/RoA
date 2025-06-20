@@ -68,7 +68,10 @@ sealed class WorshipperBonehelm : ModItem {
             }
 
             SoundEngine.PlaySound(SoundID.Item25, player.Center);
-
+            
+            if (!handler.IsInIdle) {
+                handler.AddCD();
+            }
             handler.IsInIdle = !handler.IsInIdle;
             if (handler.StateTimer <= 0) {
                 handler.StateTimer = STATETIME;
