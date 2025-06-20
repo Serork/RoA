@@ -326,7 +326,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         List<DamageClass> damageClassesTypeOfThisItem = damageClassVisualsInfo.DamageClasses;
         SpriteBatch batch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
-        batch.BeginBlendState(BlendState.AlphaBlend, SamplerState.AnisotropicClamp, isUI: true);
+        batch.BeginBlendState(BlendState.AlphaBlend, isUI: true);
         bool shouldDrawNeutralIcon = damageClassesTypeOfThisItem.Contains(DamageClass.Generic) || damageClassesTypeOfThisItem.Count > 2;
         if (shouldDrawNeutralIcon || damageClassesTypeOfThisItem.Count == 2) {
             if (!mainDraw) {
