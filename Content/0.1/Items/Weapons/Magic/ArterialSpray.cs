@@ -16,6 +16,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static RoA.Common.Players.DruidPlayerShouldersFix;
 using static Terraria.Player;
 
 namespace RoA.Content.Items.Weapons.Magic;
@@ -167,7 +168,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
     }
 }
 
-sealed class ArterialSprayProjectile : ModProjectile {
+sealed class ArterialSprayProjectile : ModProjectile, IProjectileFixShoulderWhileActive {
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override void SetDefaults() {
