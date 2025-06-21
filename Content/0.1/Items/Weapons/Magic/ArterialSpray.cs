@@ -135,7 +135,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         }
         Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
         player.heldProj = Projectile.whoAmI;
-        player.bodyFrame.Y = 56;
+        player.bodyFrame.Y = 168;
         //player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
         float num36 = (float)Projectile.timeLeft / _useTimeMax;
         float f = num36 < 0.5f ? num36 : (1f - num36);
