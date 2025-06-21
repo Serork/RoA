@@ -28,6 +28,7 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
     private static Dictionary<CoralType, Asset<Texture2D>?>? _coralTextures;
 
     private static readonly HashSet<Vector2> _coralPositions = [];
+
     public static IReadOnlyCollection<Vector2> AllCoralsPositions => _coralPositions;
 
     private enum CoralType : byte {
