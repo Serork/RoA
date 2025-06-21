@@ -47,7 +47,7 @@ sealed class ArterialSpray : ModItem {
     }
 }
 
-sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
+sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem, IProjectileFixShoulderWhileActive {
     private int _direction, _useTimeMax;
 
     public override string Texture => ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray_Small";
@@ -168,7 +168,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
     }
 }
 
-sealed class ArterialSprayProjectile : ModProjectile, IProjectileFixShoulderWhileActive {
+sealed class ArterialSprayProjectile : ModProjectile {
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override void SetDefaults() {
