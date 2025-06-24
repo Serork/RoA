@@ -54,14 +54,14 @@ sealed class Spore : NatureProjectile {
         Player owner = Projectile.GetOwnerAsPlayer();
 
         void init() {
-            SporeValues sporeValues = new(Projectile);
-            if (!sporeValues.Init) {
-                sporeValues.Init = true;
+            //SporeValues sporeValues = new(Projectile);
+            //if (!sporeValues.Init) {
+            //    sporeValues.Init = true;
 
-                if (owner.IsLocal()) {
-                    sporeValues.FacedRight = Main.rand.NextBool();
-                }
-            }
+            //    if (owner.IsLocal()) {
+            //        sporeValues.FacedRight = Main.rand.NextBool();
+            //    }
+            //}
         }    
         void moveTowardsCursor() {
             if (owner.IsLocal()) {
@@ -75,6 +75,9 @@ sealed class Spore : NatureProjectile {
 
                 owner.SyncMousePosition();
             }
+
+            SporeValues sporeValues = new(Projectile);
+            sporeValues.FacedRight = Projectile.velocity.X < 0f;
         }
         void fadeOut() {
             Projectile.alpha = (byte)Utils.Remap(Projectile.timeLeft, TIMELEFT / 3, 0, 0, 255);
