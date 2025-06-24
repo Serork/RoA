@@ -11,12 +11,14 @@ namespace RoA.Content.Items.Equipables.Wreaths;
 
 abstract class WreathItem : NatureItem {
     public override bool? PrefixChance(int pre, UnifiedRandom rand) {
-        if (pre == -3) {
+        if (pre == -3 || pre == -1) {
             return false;
         }
 
         return base.PrefixChance(pre, rand);
     }
+
+    public override bool AllowPrefix(int pre) => false;
 
     protected void DefaultsToTier3Wreath() {
         Item.maxStack = 1;
