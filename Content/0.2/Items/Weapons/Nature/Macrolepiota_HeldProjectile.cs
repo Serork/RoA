@@ -1,0 +1,287 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
+
+using RoA.Common.Druid.Wreath;
+using RoA.Common.Players;
+using RoA.Common.Projectiles;
+using RoA.Content.Projectiles.Friendly.Nature;
+using RoA.Core.Defaults;
+using RoA.Core.Graphics.Data;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
+
+using System;
+
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Items.Weapons.Nature.Hardmode;
+
+sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, DruidPlayerShouldersFix.IProjectileFixShoulderWhileActive {
+    private const byte FRAMECOUNT = 4;
+
+    private static byte ANIMATIONSPEEDINTICKS => 4;
+    private static byte SPORESPAWNCOOLDOWN => 10;
+
+    private static Asset<Texture2D>? _holdTexture;
+
+    private enum MacrolepiotaFrame : byte {
+        Idle,
+        Shrivel1,
+        Shrivel2,
+        PuffUp1,
+        Count
+    }
+
+    private ref struct MacrolepiotaValues(Projectile projectile) {
+        public ref float InitOnSpawnValue = ref projectile.localAI[0];
+
+        public ref float ScaleX = ref projectile.scale;
+        public ref float ScaleY = ref projectile.localAI[1];
+        public ref float SpeedX = ref projectile.ai[0];
+
+        public ref float SporeSpawnTimerValue = ref projectile.ai[1];
+
+        public bool Init {
+            readonly get => InitOnSpawnValue == 1f;
+            set => InitOnSpawnValue = value.ToInt();
+        }
+
+        public readonly MacrolepiotaFrame Frame {
+            get => (MacrolepiotaFrame)projectile.frame;
+            set => projectile.frame = (int)value;
+        }
+
+        public readonly Vector2 Scale => new(ScaleX, ScaleY);
+
+        public readonly bool CanSpawnSpore {
+            get {
+                bool result = false;
+                if (--SporeSpawnTimerValue < 0) {
+                    result = true;
+                    SporeSpawnTimerValue = SPORESPAWNCOOLDOWN;
+                }
+                return result;
+            }
+        }
+    }
+
+    protected override void SafeSetDefaults() {
+        SetNatureValues(Projectile, shouldChargeWreath: false, shouldApplyAttachedItemDamage: false);
+
+        Projectile.SetSize(10);
+
+        Projectile.aiStyle = -1;
+        Projectile.tileCollide = false;
+    }
+
+    public override void Load() {
+        LoadMacrolepiotaTextures();
+    }
+
+    public override void AI() {
+        Player owner = Projectile.GetOwnerAsPlayer();
+
+        void init() {
+            MacrolepiotaValues macrolepiotaValues = new(Projectile);
+            if (!macrolepiotaValues.Init) {
+                macrolepiotaValues.Init = true;
+
+                macrolepiotaValues.ScaleX = macrolepiotaValues.ScaleY = 1f;
+            }
+        }
+        void checkActive() {
+            owner.heldProj = Projectile.whoAmI;
+
+            Projectile.timeLeft = 2;
+
+            if (!owner.Holding<Macrolepiota>()) {
+                Projectile.Kill();
+            }
+            if (!owner.IsAliveAndFree()) {
+                Projectile.Kill();
+            }
+
+            owner.UseBodyFrame(Core.Data.PlayerFrame.Use2);
+
+            Vector2 baseCenter = owner.MountedCenter + new Vector2(owner.direction == -1 ? 4f : 0f, 0f);
+            Projectile.Center = owner.RotatedRelativePoint(baseCenter, true);
+            Projectile.Center = Utils.Floor(Projectile.Center);
+
+            owner.GetModPlayer<WreathHandler>().YAdjustAmountInPixels = -40;
+        }
+        void playShrivelAnimation() {
+            MacrolepiotaValues macrolepiotaValues = new(Projectile);
+            if (++Projectile.frameCounter > ANIMATIONSPEEDINTICKS) {
+                Projectile.frameCounter = 0;
+                if (++macrolepiotaValues.Frame > MacrolepiotaFrame.Shrivel2) {
+                    macrolepiotaValues.Frame = MacrolepiotaFrame.Shrivel2;
+                }
+            }
+        }
+        void playPuffUpAnimation() {
+            MacrolepiotaValues macrolepiotaValues = new(Projectile);
+            if (Projectile.frame > 0) {
+                if (++Projectile.frameCounter > ANIMATIONSPEEDINTICKS) {
+                    Projectile.frameCounter = 0;
+                    if (++macrolepiotaValues.Frame > MacrolepiotaFrame.PuffUp1) {
+                        macrolepiotaValues.Frame = MacrolepiotaFrame.Idle;
+                    }
+                }
+            }
+        }
+        float velocityFactor = owner.velocity.X;
+        MacrolepiotaValues macrolepiotaValues = new(Projectile);
+        if (MathF.Abs(macrolepiotaValues.SpeedX - velocityFactor) > 0.2f) {
+            macrolepiotaValues.SpeedX = velocityFactor;
+        }
+        velocityFactor = macrolepiotaValues.SpeedX;
+        float maxSpeedX = 5f;
+        float maxRotation = 0.35f;
+        float macrolepiotaRotation = Utils.Remap(-velocityFactor, -maxSpeedX, maxSpeedX, -maxRotation, maxRotation);
+        void setRotationAndScale() {
+            float approachSpeed = MathHelper.Pi;
+            ref float projectileRotation = ref Projectile.rotation;
+            MacrolepiotaValues macrolepiotaValues = new(Projectile);
+            projectileRotation = Helper.Approach(projectileRotation, Utils.Remap(-velocityFactor, -maxSpeedX, maxSpeedX, -maxRotation, maxRotation), approachSpeed);
+            Vector2 desiredScale = Vector2.One;
+            approachSpeed = 0.06f;
+            if (owner.velocity.Y < -0.1f) {
+                desiredScale.X = 1.2f;
+                desiredScale.Y = 0.8f;
+
+                approachSpeed *= 0.5f;
+            }
+            if (IsOwnerFalling()) {
+                desiredScale.X = 0.9f;
+                desiredScale.Y = 1.1f;
+
+                approachSpeed *= 0.5f;
+
+                playShrivelAnimation();
+            }
+            else {
+                playPuffUpAnimation();
+            }
+            macrolepiotaValues.ScaleX = Helper.Approach(macrolepiotaValues.ScaleX, desiredScale.X, approachSpeed);
+            macrolepiotaValues.ScaleY = Helper.Approach(macrolepiotaValues.ScaleY, desiredScale.Y, approachSpeed);
+        }
+        void directArm() {
+            float armRotation = MathHelper.Pi + macrolepiotaRotation;
+            owner.SetCompositeBothArms(armRotation);
+        }
+        void spawnSporeDusts() {
+            if (!IsOwnerFalling()) {
+                return;
+            }
+
+            if (!Main.rand.NextBool(5)) {
+                return;
+            }
+
+            bool shouldUseGlowingMushroomDust = Main.rand.NextBool(4);
+            int dustType = shouldUseGlowingMushroomDust ? DustID.GlowingMushroom : DustID.MushroomSpray;
+            Vector2 dustVelocity = -new Vector2(Main.rand.NextFloatRange(0.5f), 1f).RotatedBy(Projectile.rotation) * Main.rand.NextFloat(1f, owner.velocity.Y) + Main.rand.NextVector2Circular(4f, 4f);
+            Dust dust = Dust.NewDustPerfect(GetShrivelPosition(), dustType, dustVelocity);
+            dust.noGravity = true;
+            dust.noLightEmittence = true;
+            dust.scale = Main.rand.NextFloat(1f, 2f);
+            if (shouldUseGlowingMushroomDust) {
+                dust.noLight = true;
+            }
+        }
+        void lightUp() {
+            DelegateMethods.v3_1 = new Vector3(0.1f, 0.4f, 1f);
+            Utils.PlotTileLine(Vector2.Lerp(Projectile.Center, GetShrivelPosition(), 0.25f), GetShrivelPosition(), 4f, DelegateMethods.CastLightOpen);
+        }
+        void spawnSpores() {
+            if (!owner.IsLocal()) {
+                return;
+            }
+
+            if (!IsOwnerFalling()) {
+                return;
+            }
+
+            MacrolepiotaValues macrolepiotaValues = new(Projectile);
+            if (!macrolepiotaValues.CanSpawnSpore) {
+                return;
+            }
+
+            float sporeSpawnSpeed = 2f;
+            ProjectileHelper.SpawnPlayerOwnedProjectile<Spore>(new ProjectileHelper.SpawnProjectileArgs(owner, Projectile.GetSource_NaturalSpawn()) with {
+                Position = GetShrivelPosition(),
+                Velocity = -new Vector2(Main.rand.NextFloatRange(0.5f), 1f).RotatedBy(Projectile.rotation) * owner.velocity.Y * sporeSpawnSpeed
+            });
+        }
+
+        init();
+        checkActive();
+        setRotationAndScale();
+        directArm();
+        spawnSporeDusts();
+        lightUp();
+        spawnSpores();
+    }
+
+    protected override void Draw(ref Color lightColor) {
+        if (_holdTexture?.IsLoaded != true) {
+            return;
+        }
+
+        Texture2D holdTexture = _holdTexture.Value;
+        SpriteFrame spriteFrame = new SpriteFrame(1, FRAMECOUNT).With(0, (byte)Projectile.frame);
+        Vector2 position = Projectile.Center;
+        Color color = Color.White;
+        Rectangle clip = spriteFrame.GetSourceRectangle(holdTexture);
+        float rotation = Projectile.rotation;
+        MacrolepiotaValues macrolepiotaValues = new(Projectile);
+        Vector2 scale = macrolepiotaValues.Scale;
+        Main.spriteBatch.Draw(holdTexture, position, DrawInfo.Default with {
+            Origin = new Vector2(clip.Width / 2f, clip.Height),
+            Scale = scale,
+            Color = color,
+            Rotation = rotation,
+            Clip = clip
+        });
+    }
+
+    public override void OnKill(int timeLeft) {
+
+    }
+
+    private void LoadMacrolepiotaTextures() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _holdTexture = ModContent.Request<Texture2D>(ItemUtils.GetTexturePath<Macrolepiota>() + "_Hold");
+    }
+
+    private bool IsOwnerFalling() => Projectile.GetOwnerAsPlayer().velocity.Y > 0f;
+
+    private Vector2 GetShrivelPosition() {
+        Vector2 result = Projectile.Center;
+        MacrolepiotaValues macrolepiotaValues = new(Projectile);
+        float macrolepiotaSize = 64f;
+        switch (macrolepiotaValues.Frame) {
+            case MacrolepiotaFrame.Idle:
+                macrolepiotaSize *= 1f;
+                break;
+            case MacrolepiotaFrame.Shrivel1 or MacrolepiotaFrame.PuffUp1:
+                macrolepiotaSize *= 1.07f;
+                break;
+            case MacrolepiotaFrame.Shrivel2:
+                macrolepiotaSize *= 1f;
+                break;
+        }
+        macrolepiotaSize *= macrolepiotaValues.ScaleY;
+        result += (-Vector2.UnitY.RotatedBy(Projectile.rotation)) * macrolepiotaSize;
+        return result;
+    }
+}

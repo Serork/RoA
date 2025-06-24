@@ -147,12 +147,16 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
         void drawBaseAndAddLight() {
             SunflowerValues sunflowerValues = new(Projectile);
             Texture2D baseTexture = _baseTexture!.Value;
+            Rectangle clip = baseTexture.Bounds;
+            Vector2 origin = baseTexture.Size() / 2f;
+            float rotation = Projectile.rotation;
+            Vector2 scale = Vector2.One * (Projectile.scale + sunflowerValues.BaseExtraScale * baseOpacity) * 1.35f;
             Main.spriteBatch.Draw(baseTexture, Projectile.Center, DrawInfo.Default with {
-                Rotation = Projectile.rotation,
+                Rotation = rotation,
                 Color = baseColor,
-                Origin = baseTexture.Size() / 2f,
-                Scale = Vector2.One * (Projectile.scale + sunflowerValues.BaseExtraScale * baseOpacity) * 1.35f,
-                Clip = baseTexture.Bounds
+                Origin = origin,
+                Scale = scale,
+                Clip = clip
             });
 
             Lighting.AddLight(Projectile.Center, Vector3.One * 0.25f * baseOpacity);
@@ -162,16 +166,18 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
             Rectangle clip = petalTexture.Bounds;
             for (int i = 0; i < PETALCOUNT; i++) {
                 float petalFill = petalFills[i] * Projectile.Opacity;
-                float petalRotation = Projectile.rotation + i * MathHelper.TwoPi / PETALCOUNT + 0.6f;
+                float rotation = Projectile.rotation + i * MathHelper.TwoPi / PETALCOUNT + 0.6f;
                 float offsetValue = -5f;
-                Vector2 offset = Vector2.UnitY.RotatedBy(petalRotation) * offsetValue;
+                Vector2 offset = Vector2.UnitY.RotatedBy(rotation) * offsetValue;
                 float extraScale = _petalData![i].ExtraScale * petalFill;
+                Vector2 origin = Utils.Bottom(clip);
+                Vector2 scale = new(Ease.CircOut(petalFill), petalFill + MathF.Sin(extraScale * 6f) / 6f);
                 Main.spriteBatch.Draw(petalTexture, Projectile.Center + offset, DrawInfo.Default with {
                     Color = petalColor,
-                    Rotation = petalRotation,
-                    Origin = Utils.Bottom(clip),
+                    Rotation = rotation,
+                    Origin = origin,
                     Clip = clip,
-                    Scale = new Vector2(Ease.CircOut(petalFill), petalFill + MathF.Sin(extraScale * 6f) / 6f)
+                    Scale = scale
                 });
             }
         }

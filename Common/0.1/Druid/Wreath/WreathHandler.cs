@@ -33,6 +33,8 @@ sealed class WreathHandler : ModPlayer {
     public static bool IsWreathCharged(Player player) => GetWreathStats(player).IsFull1;
     public static float GetWreathChargeProgress(Player player) => GetWreathStats(player).ActualProgress4;
 
+    public short YAdjustAmountInPixels;
+
     public enum WreathType : byte {
         Normal,
         Phoenix
@@ -636,6 +638,8 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void PreUpdate() {
+        YAdjustAmountInPixels = 0;
+
         AddLight();
 
         MaxResource = 100;

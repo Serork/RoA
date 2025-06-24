@@ -2,7 +2,6 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Players;
-using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Data;
@@ -17,7 +16,6 @@ using System.Linq;
 using Terraria;
 using Terraria.Enums;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 
@@ -25,7 +23,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(42);
         Item.SetWeaponValues(60, 4f);
-        Item.SetUsageValues(ItemUseStyleID.HiddenAnimation, 30, useSound: SoundID.Item7);
+        Item.SetUsageValues(ItemUseStyleID.None, 30, useSound: SoundID.Item7);
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice());
 
         NatureWeaponHandler.SetPotentialDamage(Item, 100);

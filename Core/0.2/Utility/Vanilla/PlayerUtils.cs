@@ -4,23 +4,12 @@ namespace RoA.Core.Utility.Vanilla;
 
 static class PlayerUtils {
     public static bool UpdateEquips_CanItemGrantBenefits(int itemSlot, Item item) {
-        switch (itemSlot) {
-            default:
-                return true;
-            case 0:
-                return item.headSlot > -1;
-            case 1:
-                return item.bodySlot > -1;
-            case 2:
-                return item.legSlot > -1;
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                return item.accessory;
-        }
+        return itemSlot switch {
+            0 => item.headSlot > -1,
+            1 => item.bodySlot > -1,
+            2 => item.legSlot > -1,
+            3 or 4 or 5 or 6 or 7 or 8 or 9 => item.accessory,
+            _ => true,
+        };
     }
 }

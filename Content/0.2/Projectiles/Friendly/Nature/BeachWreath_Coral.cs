@@ -24,6 +24,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class Coral : NatureProjectile_NoTextureLoad {
     private static byte CORALTEXTUREAMOUNT => 4;
     private static ushort TIMELEFT => 300;
+    private static byte PENETRATEAMOUNT => 5;
 
     private static Dictionary<CoralType, Asset<Texture2D>?>? _coralTextures;
 
@@ -32,7 +33,7 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
     public static IReadOnlyCollection<Vector2> AllCoralsPositions => _coralPositions;
 
     private enum CoralType : byte {
-        None = 0,
+        None,
         Blue,
         Red,
         Pink,
@@ -77,7 +78,7 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.friendly = true;
-        Projectile.penetrate = 5;
+        Projectile.penetrate = PENETRATEAMOUNT;
     }
 
     public override void AI() {
@@ -106,7 +107,7 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
         void makeBubbleDusts() {
             float chance = MathF.Max(0.15f, MathUtils.Clamp01(Projectile.velocity.Length() / 10f));
             chance /= 5f;
-            ushort bubbleDustType = (ushort)ModContent.DustType<Bubble>();
+            int bubbleDustType = ModContent.DustType<Bubble>();
             Vector2 dustSpawnPosition = Projectile.position - new Vector2(8f, 0f);
             int spawnAreaWidth = Projectile.width + 4,
                 spawnAreaHeight = 4;
@@ -116,9 +117,10 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
                 Dust.NewDustDirect(dustSpawnPosition, spawnAreaWidth, spawnAreaHeight, bubbleDustType, SpeedX: dustVelocity.X, SpeedY: dustVelocity.Y);
             }
             int waterDustAmount = (int)(1 + chance * 11.25f);
+            int waterDustType = DustID.Water;
             for (int i = 0; i < waterDustAmount; i++) {
                 if (Main.rand.NextChance(chance * 5f)) {
-                    Dust.NewDustDirect(dustSpawnPosition, spawnAreaWidth, spawnAreaHeight, DustID.Water, SpeedX: dustVelocity.X, SpeedY: dustVelocity.Y - 10f * Main.rand.NextFloat(), Alpha: 0, Scale: 1.25f - 0.25f * Main.rand.NextFloat());
+                    Dust.NewDustDirect(dustSpawnPosition, spawnAreaWidth, spawnAreaHeight, waterDustType, SpeedX: dustVelocity.X, SpeedY: dustVelocity.Y - 10f * Main.rand.NextFloat(), Alpha: 0, Scale: 1.25f - 0.25f * Main.rand.NextFloat());
                 }
             }
         }
@@ -154,11 +156,14 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
             float scaleY = Ease.QuartIn(valueIn) * Ease.QuartOut(valueOut),
                   scaleX = Ease.SineIn(valueIn) * Ease.SineOut(valueOut);
             Rectangle clip = coralTexture.Bounds;
+            Vector2 origin = Utils.Bottom(clip);
+            float rotation = Projectile.rotation;
+            Vector2 scale = new(scaleX, scaleY);
             batch.Draw(coralTexture, Projectile.Center, DrawInfo.Default with {
-                Rotation = Projectile.rotation,
-                Origin = Utils.Bottom(clip),
+                Rotation = rotation,
+                Origin = origin,
                 Clip = clip,
-                Scale = new Vector2(scaleX, scaleY)
+                Scale = scale
             });
         });
     }

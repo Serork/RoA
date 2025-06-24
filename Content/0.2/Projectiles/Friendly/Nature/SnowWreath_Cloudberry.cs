@@ -15,7 +15,6 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -206,15 +205,18 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
         Texture2D cloudberryTexture = _cloudberryTexture.Value;
         int cloudberryWidth = cloudberryTexture.Width,
             cloudberryHeight = cloudberryTexture.Height / FRAMECOUNT;
-        float cloudberryRotation = Projectile.rotation;
         Texture2D snowBlockTexture = _snowBlockTexture.Value;
         void drawSelf() {
             CloudberryValues cloudberryValues = new(Projectile);
-            Main.spriteBatch.Draw(cloudberryTexture, Projectile.Center, DrawInfo.Default with {
+            Vector2 position = Projectile.Center;
+            Vector2 origin = new Vector2(cloudberryWidth, cloudberryHeight) / 2f;
+            Rectangle clip = new(0, cloudberryValues.UsedFrame * cloudberryHeight, cloudberryWidth, cloudberryHeight);
+            float rotation = Projectile.rotation;
+            Main.spriteBatch.Draw(cloudberryTexture, position, DrawInfo.Default with {
                 Color = color,
-                Rotation = cloudberryRotation,
-                Origin = new Vector2(cloudberryWidth, cloudberryHeight) / 2f,
-                Clip = new Rectangle(0, cloudberryValues.UsedFrame * cloudberryHeight, cloudberryWidth, cloudberryHeight)
+                Rotation = rotation,
+                Origin = origin,
+                Clip = clip
             });
         }
         void drawCopies() {
@@ -237,7 +239,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
                 for (int i = 0; i < MAXSNOWBLOCKS; i++) {
                     SnowBlockInfo tileInfo = _snowBlockData![i];
                     Color tileColor = color * MathUtils.Clamp01(tileInfo.Opacity);
-                    DrawHelper.DrawSingleTile(new DrawHelper.SingleTileDrawInfo(_snowBlockTexture!.Value, tileInfo.Position, tileInfo.Clip, tileColor, tileInfo.Slope, tileInfo.HalfBlock));    
+                    DrawHelper.DrawSingleTile(new DrawHelper.SingleTileDrawInfo(snowBlockTexture, tileInfo.Position, tileInfo.Clip, tileColor, tileInfo.Slope, tileInfo.HalfBlock));    
                 }
             }
 

@@ -72,6 +72,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         if (formHandler.IsInADruidicForm && currentForm != null) {
             playerPosition += currentForm.BaseForm.WreathOffset;
         }
+        playerPosition.Y += stats.YAdjustAmountInPixels;
         playerPosition.Y -= 12f;
         Vector2 position;
         bool breathUI = player.breath < player.breathMax || player.lavaTime < player.lavaMax;
