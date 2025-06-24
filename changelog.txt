@@ -1,1 +1,2 @@
-- 
+- Arterial spray no longer breaks the shoulder animation if used while wearing a cape
+- Fixed some weapon attack animations displaying incorrectly when the player is moving

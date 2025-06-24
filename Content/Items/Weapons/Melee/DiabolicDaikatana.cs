@@ -356,7 +356,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         }
         else {
             handPosition += Projectile.rotation.ToRotationVector2() * (Projectile.direction == 1 ? -5f + (player.gravDir == -1 ? 2.5f : 0f) : -3f * player.gravDir);
-            handPosition.X -= 1f * player.direction;
+            handPosition.X -= 2f * player.direction;
             if (player.direction == 1) {
                 handPosition.X -= 1;
             }
