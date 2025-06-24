@@ -5,6 +5,7 @@ using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Projectiles;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.IO;
@@ -100,7 +101,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     protected float PenaltyProgress => (float)_penaltyTime / _maxPenaltyTime;
     protected ushort ShootType => (ushort)Projectile.ai[1];
 
-    public virtual bool IsInUse => !Owner.CCed;
+    public virtual bool IsInUse => Owner.IsAliveAndFree();
 
     protected virtual float OffsetPositionMult { get; } = 0f;
 
@@ -336,7 +337,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     protected byte GetTimeAfterShootToExist() => (byte)(AttachedNatureWeapon!.IsEmpty() ? 0 : TimeAfterShootToExist(Owner));
 
     private void ActiveCheck() {
-        if (!(!Owner.frozen && !Owner.stoned)) {
+        if (!Owner.IsAliveAndFree()) {
             Projectile.Kill();
         }
 
@@ -392,6 +393,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     private void SetPosition() {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
         Projectile.Center = center;
+        Projectile.Center = Utils.Floor(Projectile.Center);
         //bool flag = !ShouldStopUpdatingRotationAndDirection();
         bool flag = true;
         if (Projectile.IsOwnerLocal() && flag) {

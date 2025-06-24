@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
 
-static class PlayerExtensions {
+static partial class PlayerExtensions {
     public static bool WithinPlacementRange(this Player player, int x, int y) =>
         player.position.X / 16f - Player.tileRangeX - player.inventory[player.selectedItem].tileBoost - player.blockRange <= x
         && (player.position.X + player.width) / 16f + Player.tileRangeX + player.inventory[player.selectedItem].tileBoost - 1f + player.blockRange >= x

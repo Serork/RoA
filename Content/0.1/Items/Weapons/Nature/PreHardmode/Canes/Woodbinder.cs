@@ -7,6 +7,7 @@ using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.IO;
@@ -46,7 +47,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        public override bool IsInUse => !Owner.CCed && Owner.controlUseItem;
+        public override bool IsInUse => Owner.IsAliveAndFree() && Owner.controlUseItem;
 
         protected override ushort TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 3);
 

@@ -8,6 +8,7 @@ using RoA.Common.Players;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.IO;
@@ -224,11 +225,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         bool turnOnAvailable = false;
         bool flag3 = _timeLeft > min;
 
-        if (!(!player.frozen && !player.stoned)) {
-            Projectile.Kill();
-        }
-
-        if (player.dead || !player.active) {
+        if (!player.IsAliveAndFree()) {
             Projectile.Kill();
         }
         else {

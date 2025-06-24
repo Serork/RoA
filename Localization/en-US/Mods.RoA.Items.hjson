@@ -1958,3 +1958,8 @@ CavernCane: {
 	DisplayName: Cavern Cane
 	Tooltip: ""
 }
+
+Macrolepiota: {
+	DisplayName: Macrolepiota
+	Tooltip: ""
+}

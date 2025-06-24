@@ -1,0 +1,12 @@
+﻿using Terraria;
+using Terraria.ModLoader;
+
+namespace RoA.Core.Utility.Extensions;
+
+static partial class PlayerExtensions {
+    public static bool HasProjectile<T>(this Player player) where T : ModProjectile => player.ownedProjectileCounts[ModContent.ProjectileType<T>()] >= 1;
+
+    public static bool IsAliveAndFree(this Player player) => player.active && !player.CCed && !player.dead;
+
+    public static bool Holding<T>(this Player player) where T : ModItem => player.HeldItem.type == ModContent.ItemType<T>();
+}

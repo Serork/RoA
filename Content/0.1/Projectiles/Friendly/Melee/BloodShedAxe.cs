@@ -11,6 +11,7 @@ using RoA.Content.Dusts;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.IO;
@@ -224,7 +225,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         player.heldProj = Projectile.whoAmI;
         int itemAnimationMax = 50;
 
-        if (!(!player.frozen && !player.stoned)) {
+        if (!player.IsAliveAndFree()) {
             Projectile.Kill();
         }
 
@@ -233,6 +234,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 _time = itemAnimationMax;
                 _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
                 Projectile.Center = player.MountedCenter;
+                Projectile.Center = Utils.Floor(Projectile.Center);
                 Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
                 _init = true;
                 Projectile.netUpdate = true;

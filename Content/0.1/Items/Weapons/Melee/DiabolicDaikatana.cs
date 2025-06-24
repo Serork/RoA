@@ -8,6 +8,7 @@ using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -142,8 +143,8 @@ sealed class DiabolicDaikatana : ModItem {
             offset.Y += (int)(player.height / 3f);
             if (player.gravDir == -1f) {
                 if (player.direction > 0) {
-                    offset.X += 1;
-                    offset.X -= 2;
+                    offset.X -= 1f;
+                    offset.Y -= 1f;
                 }
                 else {
                     offset.X -= 2;
@@ -153,6 +154,16 @@ sealed class DiabolicDaikatana : ModItem {
             }
             if (player.gravDir == -1f) {
             }
+
+            if (player.gravDir != 1) {
+                if (player.direction == 1) {
+                    position += new Vector2(-0.75f, -0.75f);
+                }
+                else {
+                    position += new Vector2(0.5f, -0.5f);
+                }
+            }
+
             position += offset * scale;
             position.Y -= (texture.Height / 2f + 8f) * (scale - 1f);
             position.X -= texture.Width / 6f * (scale - 1f) * player.direction;
@@ -161,7 +172,6 @@ sealed class DiabolicDaikatana : ModItem {
             bool gravReversed = player.gravDir == -1f;
             for (int i = 0; i < 2; i++) {
                 Color color = drawInfo.itemColor;
-                position = position.Floor();
                 if (i != 0) {
                     texture = _daikatanaTextureGlow.Value;
                     color = Color.Lerp(Color.Blue * 0.7f, Lighting.GetColor((int)position.X / 16, (int)position.Y / 16), Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
@@ -254,7 +264,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             }
         }
         player.heldProj = Projectile.whoAmI;
-        if (!player.frozen && !player.stoned) {
+        if (player.IsAliveAndFree()) {
             float progress = Progress;
             Projectile.direction = player.direction;
             BaseAngleVector = new Vector2(0.88f * Projectile.direction, 0.47f);
@@ -305,6 +315,9 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         handPosition += AngleVector;
         Player player = Main.player[Projectile.owner];
         handPosition += -Vector2.UnitX * (Progress > 0.5f ? (player.direction != 1 ? 4 : -2) : 0);
+        if (player.gravDir == -1f) {
+            handPosition.Y += 2;
+        }
         for (int i = 0; i < 2; i++) {
             Color drawColor = Lighting.GetColor((int)((double)player.position.X + (double)player.width * 0.5) / 16, (int)(((double)player.position.Y + (double)player.height * 0.5) / 16.0));
             if (i != 0) {
@@ -322,20 +335,32 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         texture = TextureAssets.Projectile[Type].Value;
         Player player = Main.player[Projectile.owner];
         handPosition = DiabolicDaikatana.GetPlayerArmPosition(Projectile);
-        if (player.gravDir == -1f) {
-            handPosition.Y -= 1;
-        }
+        handPosition = Utils.Floor(handPosition);
         if (Progress <= 0.5f) {
-            handPosition += new Vector2(11f * player.direction, 1f).Floor();
+            handPosition += new Vector2(11f * player.direction, 1f);
             if (player.direction > 0) {
-                handPosition.X += 1;
+                handPosition.X += 0.75f;
+                if (player.gravDir != 1) {
+                    handPosition.Y += -3f;
+                }
             }
             else {
-                handPosition.Y -= 1;
+                handPosition.Y -= 2;
+                if (player.gravDir != 1) {
+                    handPosition.Y += 1f;
+                    handPosition.X += 0.5f;
+                }
+            }
+            if (player.gravDir == 1) {
+                handPosition.Y += -0.5f;
             }
         }
-        if (Progress > 0.6f) {
-            handPosition += Projectile.rotation.ToRotationVector2() * -3f;
+        else {
+            handPosition += Projectile.rotation.ToRotationVector2() * (Projectile.direction == 1 ? -5f + (player.gravDir == -1 ? 2.5f : 0f) : -3f * player.gravDir);
+            handPosition.X -= 1f * player.direction;
+            if (player.direction == 1) {
+                handPosition.X -= 1;
+            }
         }
         if (player.gravDir == -1) {
             if (player.direction == -1) {
@@ -348,7 +373,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             //handPosition -26;
         }
         rotationOffset = 0f;
-        int direction = 1;
+        int direction = 1; 
         if (AngleVector.X < 0f) {
             direction = -1;
         }

@@ -7,6 +7,7 @@ using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -189,12 +190,12 @@ sealed class MercuriumZipper_Effect : ModProjectile {
         Player player = Main.player[Projectile.owner];
         NPC target = Main.npc[(int)Projectile.ai[0]];
 
-        if (!(!player.frozen && !player.stoned)) {
+        if (!player.IsAliveAndFree()) {
             Projectile.Kill();
 
             return;
         }
-        if (!target.active || player.dead) {
+        if (!target.active) {
             Projectile.Kill();
 
             return;

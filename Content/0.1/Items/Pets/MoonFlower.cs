@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -132,7 +133,7 @@ sealed class MoonFlowerUseGlow : PlayerDrawLayer {
 
         Player player = drawInfo.drawPlayer;
         Texture2D texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<MoonFlower>()).Texture + "_Glow").Value;
-        if (drawInfo.shadow != 0f || player.dead || player.frozen || player.itemAnimation <= 0)
+        if (drawInfo.shadow != 0f || !player.IsAliveAndFree() || player.itemAnimation <= 0)
             return;
         Color color = player.GetModPlayer<SmallMoonPlayer>().smallMoonColor;
         color.A = 80;

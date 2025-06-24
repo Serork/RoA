@@ -4,6 +4,7 @@ using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.IO;
@@ -49,7 +50,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
         private int PerShoot => (int)(_attackTime * 0.4f);
         private bool MinPassed => _attackTimer >= Min;
 
-        public override bool IsInUse => !Owner.CCed && (Owner.controlUseItem || !MinPassed);
+        public override bool IsInUse => Owner.IsAliveAndFree() && (Owner.controlUseItem || !MinPassed);
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 

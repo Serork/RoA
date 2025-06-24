@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 
+using RoA.Core.Utility.Extensions;
+
 using System;
 using System.Collections.Generic;
 
@@ -109,7 +111,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     private static void DrawUsableItemGlowMask(ref PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
         Item item = player.HeldItem;
-        if (player.frozen || ((player.itemAnimation <= 0 || item.useStyle == ItemUseStyleID.None) && (item.holdStyle <= 0 || player.pulley)) || player.dead || item.noUseGraphic || (player.wet && item.noWet)) {
+        if (!player.IsAliveAndFree() || ((player.itemAnimation <= 0 || item.useStyle == ItemUseStyleID.None) && (item.holdStyle <= 0 || player.pulley)) || player.dead || item.noUseGraphic || (player.wet && item.noWet)) {
             return;
         }
 
