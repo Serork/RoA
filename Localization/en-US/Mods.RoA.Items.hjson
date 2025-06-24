@@ -1963,3 +1963,8 @@ Macrolepiota: {
 	DisplayName: Macrolepiota
 	Tooltip: ""
 }
+
+DruidEmblem: {
+	DisplayName: Druid Emblem
+	Tooltip: ""
+}

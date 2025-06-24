@@ -1,4 +1,5 @@
-﻿using RoA.Content.Items.Equipables.Wreaths.Tier2;
+﻿using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Wreaths.Tier2;
 using RoA.Content.Items.Equipables.Wreaths.Tier3;
 
 using Terraria;
@@ -10,6 +11,17 @@ namespace RoA.Common.Recipes;
 sealed partial class RoARecipes : ModSystem {
     private static void V02Recipes() {
         V02AddWreaths();
+        AddDruidEmblem();
+    }
+
+    private static void AddDruidEmblem() {
+        Recipe.Create(ModContent.ItemType<DruidEmblem>())
+            .AddIngredient(ItemID.SoulofMight, 5)
+            .AddIngredient(ItemID.SoulofSight, 5)
+            .AddIngredient(ItemID.SoulofFright, 5)
+            .AddTile(TileID.TinkerersWorkbench)
+            .SortAfterFirstRecipesOf(ItemID.SummonerEmblem)
+            .Register();
     }
 
     private static void V02AddWreaths() {
