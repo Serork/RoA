@@ -1,3 +1,1 @@
-- Fixed Fleder Slayer Decorum being able to be equipped as an accessory
-- Bone Harpy attack cooldown is now applied correctly when switching states 
-- Fixed a game crash when entering the Backwoods in multiplayer (hopefully)
+- 
