@@ -546,8 +546,8 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                 float rocksOpacity = currentRocksData.Opacity;
                 for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
                     bool firstRock = j == 0;
-                    Vector2 rockPositionToDraw = GetRockPosition(i, firstRock, out float rockProgress);
-                    Color color = Lighting.GetColor(rockPositionToDraw.ToTileCoordinates());
+                    Vector2 rockdrawPosition = GetRockPosition(i, firstRock, out float rockProgress);
+                    Color color = Lighting.GetColor(rockdrawPosition.ToTileCoordinates());
                     color *= rocksOpacity;
                     color *= forcedOpacity;
                     int width = rocksTexture.Width / FRAMECOUNT;
@@ -555,21 +555,21 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                     float xScaleFactor = Ease.CircOut(rockProgress) * 0.75f * Ease.CircOut(1f - MathUtils.Clamp01(currentRocksData.Progress));
                     xScaleFactor *= 1f - currentRocksData.Gravity / MAXGRAVITY;
                     Vector2 rockScale = currentRocksData.Scale * new Vector2(1f + xScaleFactor, 1f);
-                    float rockRotation = rockPositionToDraw.DirectionTo(Projectile.Center).ToRotation();
+                    float rockRotation = rockdrawPosition.DirectionTo(Projectile.Center).ToRotation();
                     Vector2 rockOrigin = sourceRectangle.Size() / 2f;
                     // trails
                     for (int k = RocksInfo.TRAILLENGTH - 1; k > 0; k--) {
                         currentRocksData.TrailPositions[k] = currentRocksData.TrailPositions[k - 1];
                     }
-                    currentRocksData.TrailPositions[0] = rockPositionToDraw;
+                    currentRocksData.TrailPositions[0] = rockdrawPosition;
                     for (int k = 0; k < RocksInfo.TRAILLENGTH; k++) {
-                        Vector2 trailPositionToDraw = currentRocksData.TrailPositions[k];
-                        if (trailPositionToDraw == Vector2.Zero) {
+                        Vector2 traildrawPosition = currentRocksData.TrailPositions[k];
+                        if (traildrawPosition == Vector2.Zero) {
                             continue;
                         }
                         float trailOpacity = 0.75f;
-                        Color trailColor = Lighting.GetColor(trailPositionToDraw.ToTileCoordinates()) * ((float)k / RocksInfo.TRAILLENGTH * trailOpacity) * rocksOpacity * forcedOpacity;
-                        Main.spriteBatch.Draw(rocksTexture, trailPositionToDraw, DrawInfo.Default with {
+                        Color trailColor = Lighting.GetColor(traildrawPosition.ToTileCoordinates()) * ((float)k / RocksInfo.TRAILLENGTH * trailOpacity) * rocksOpacity * forcedOpacity;
+                        Main.spriteBatch.Draw(rocksTexture, traildrawPosition, DrawInfo.Default with {
                             Color = trailColor,
                             Rotation = rockRotation,
                             Origin = rockOrigin,
@@ -578,7 +578,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
                         });
                     }
                     // rock
-                    Main.spriteBatch.Draw(rocksTexture, rockPositionToDraw, DrawInfo.Default with {
+                    Main.spriteBatch.Draw(rocksTexture, rockdrawPosition, DrawInfo.Default with {
                         Color = color,
                         Rotation = rockRotation,
                         Origin = rockOrigin,

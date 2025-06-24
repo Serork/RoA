@@ -407,9 +407,9 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         for (byte i = 0; i < SLIMECOUNT; i++) {
             byte half = SLIMECOUNT / 2;
             bool firstPair = i < half;
-            int slimeHeight = slimeTexture.Height;
-            float slimeRotation = 0f;
-            Vector2 slimePositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
+            int height = slimeTexture.Height;
+            float rotation = 0f;
+            Vector2 position = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
             float offsetX = 10f;
             int randomValue = GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType);
@@ -419,33 +419,32 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             seedForRandomness = (ulong)randomValue;
             float randomValue4 = Utils.RandomFloat(ref seedForRandomness) * 100f;
             float frameFactor = 1f - Math.Abs(MathF.Sin(factor + randomValue2 * MathHelper.Pi));
-            Color starColor = Color.White;
+            Color color = Color.White;
             float randomValue3 = randomValue / 100f;
-            float slimeColor = randomValue3;
-            starColor = Color.Lerp(starColor, new Color(slimeColor, slimeColor, slimeColor), randomValue2);
+            float colorRGB = randomValue3;
+            color = Color.Lerp(color, new Color(colorRGB, colorRGB, colorRGB), randomValue2);
             if (!firstPair) {
-                slimePositionToDraw += new Vector2(tooltipLineSize.X + offsetX, 0f);
+                position += new Vector2(tooltipLineSize.X + offsetX, 0f);
             }
             else {
-                slimePositionToDraw -= Vector2.UnitX * offsetX;
+                position -= Vector2.UnitX * offsetX;
             }
-            slimePositionToDraw.Y += slimeHeight / 2f;
-            SpriteFrame slimeSpriteFrame = new(SLIMEFRAMECOUNT, 1);
-            slimeSpriteFrame = slimeSpriteFrame.With((byte)(SLIMEFRAMECOUNT * frameFactor), 0);
+            position.Y += height / 2f;
+            SpriteFrame spriteFrame = new SpriteFrame(SLIMEFRAMECOUNT, 1).With((byte)(SLIMEFRAMECOUNT * frameFactor), 0);
             SpriteEffects flipSlimeDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            starColor *= PostMainDrawOpacity;
+            color *= PostMainDrawOpacity;
             float jumpHeight = 10f + 30f * randomValue4;
-            Vector2 bezierPoint1 = slimePositionToDraw, bezierPoint2 = bezierPoint1 - Vector2.UnitY * jumpHeight, bezierPoint3 = bezierPoint1 + Vector2.UnitY * jumpHeight * 0.5f;
+            Vector2 bezierPoint1 = position, bezierPoint2 = bezierPoint1 - Vector2.UnitY * jumpHeight, bezierPoint3 = bezierPoint1 + Vector2.UnitY * jumpHeight * 0.5f;
             float bezierFactor = 1f - _postMainDrawTimer;
-            Rectangle starSourceRectangle = slimeSpriteFrame.GetSourceRectangle(slimeTexture);
-            Vector2 slimeOrigin = starSourceRectangle.Size() / 2f;
-            Vector2 positionToDraw = MathF.Pow(1 - bezierFactor, 2) * bezierPoint1 + 2 * (1 - bezierFactor) * bezierFactor * bezierPoint2 + MathF.Pow(bezierFactor, 2) * bezierPoint3;
-            slimePositionToDraw = positionToDraw;
-            slimePositionToDraw -= Vector2.UnitY * jumpHeight * 0.5f;
-            batch.Draw(slimeTexture, slimePositionToDraw, DrawInfo.Default with {
-                Color = starColor,
-                Rotation = slimeRotation,
-                Origin = slimeOrigin,
+            Rectangle starSourceRectangle = spriteFrame.GetSourceRectangle(slimeTexture);
+            Vector2 origin = starSourceRectangle.Size() / 2f;
+            Vector2 finalPosition = MathF.Pow(1 - bezierFactor, 2) * bezierPoint1 + 2 * (1 - bezierFactor) * bezierFactor * bezierPoint2 + MathF.Pow(bezierFactor, 2) * bezierPoint3;
+            position = finalPosition;
+            position -= Vector2.UnitY * jumpHeight * 0.5f;
+            batch.Draw(slimeTexture, position, DrawInfo.Default with {
+                Color = color,
+                Rotation = rotation,
+                Origin = origin,
                 ImageFlip = flipSlimeDrawing,
                 Clip = starSourceRectangle
             }, false);
@@ -459,57 +458,57 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         for (byte i = 0; i < STARCOUNT; i++) {
             byte half = STARCOUNT / 2;
             bool firstPair = i < half;
-            int starHeight = starTexture.Height;
-            float starRotation = 0f;
-            Vector2 starPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
+            int height = starTexture.Height;
+            float rotation = 0f;
+            Vector2 position = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
             float offsetX = 8f;
             if (!firstPair) {
-                starPositionToDraw += new Vector2(tooltipLineSize.X + offsetX, 0f);
+                position += new Vector2(tooltipLineSize.X + offsetX, 0f);
             }
             else {
-                starPositionToDraw -= Vector2.UnitX * offsetX;
+                position -= Vector2.UnitX * offsetX;
             }
-            float starDirection = firstPair.ToDirectionInt();
-            starPositionToDraw.Y += starHeight / 2f;
-            starPositionToDraw.Y -= 2f;
+            float direction = firstPair.ToDirectionInt();
+            position.Y += height / 2f;
+            position.Y -= 2f;
             float factor = MathHelper.WrapAngle(_mainDrawTimer / 20f % MathHelper.TwoPi + GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
-            float starProgress = 1f - OpacityUpdatedInDraws;
+            float progress = 1f - OpacityUpdatedInDraws;
             float sin = MathF.Sin(factor);
-            Rectangle starSourceRectangle = starTexture.Bounds;
-            Color starColor = Color.White;
-            SpriteEffects flipStarDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 starOrigin = starTexture.Size() / 2f;
-            float extraScale = 0.2f * starDirection * sin;
-            starColor *= PostMainDrawOpacity;
-            Vector2 starScale = Vector2.One + Vector2.One * extraScale;
+            Rectangle clip = starTexture.Bounds;
+            Color color = Color.White;
+            SpriteEffects flip = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            Vector2 origin = starTexture.Size() / 2f;
+            float extraScale = 0.2f * direction * sin;
+            color *= PostMainDrawOpacity;
+            Vector2 scale = Vector2.One + Vector2.One * extraScale;
             float pulseEffectStrength = 1f - 0.5f * OpacityUpdatedInDraws + Math.Abs(0.5f * sin) * OpacityUpdatedInDraws;
             float alphaProgress = Ease.QuartIn(PostMainDrawOpacity);
-            batch.Draw(starTexture, starPositionToDraw, DrawInfo.Default with {
-                Color = starColor,
-                Rotation = starRotation,
-                Origin = starOrigin,
-                ImageFlip = flipStarDrawing,
-                Clip = starSourceRectangle,
-                Scale = starScale
+            batch.Draw(starTexture, position, DrawInfo.Default with {
+                Color = color,
+                Rotation = rotation,
+                Origin = origin,
+                ImageFlip = flip,
+                Clip = clip,
+                Scale = scale
             }, false);
-            batch.Draw(starTexture, starPositionToDraw, DrawInfo.Default with {
-                Color = starColor.MultiplyAlpha(pulseEffectStrength),
-                Rotation = starRotation,
-                Origin = starOrigin,
-                ImageFlip = flipStarDrawing,
-                Clip = starSourceRectangle,
-                Scale = starScale
+            batch.Draw(starTexture, position, DrawInfo.Default with {
+                Color = color.MultiplyAlpha(pulseEffectStrength),
+                Rotation = rotation,
+                Origin = origin,
+                ImageFlip = flip,
+                Clip = clip,
+                Scale = scale
             }, false);
-            starColor.A = (byte)(255 * Ease.QuartIn(1f - MathUtils.Clamp01(_postMainDrawTimer)));
+            color.A = (byte)(255 * Ease.QuartIn(1f - MathUtils.Clamp01(_postMainDrawTimer)));
             for (int i2 = 0; i2 < 2; i2++) {
-                batch.Draw(starTexture, starPositionToDraw, DrawInfo.Default with {
-                    Color = starColor.MultiplyAlpha(pulseEffectStrength) * PostMainDrawOpacity,
-                    Rotation = starRotation,
-                    Origin = starOrigin,
-                    ImageFlip = flipStarDrawing,
-                    Clip = starSourceRectangle,
-                    Scale = starScale
+                batch.Draw(starTexture, position, DrawInfo.Default with {
+                    Color = color.MultiplyAlpha(pulseEffectStrength) * PostMainDrawOpacity,
+                    Rotation = rotation,
+                    Origin = origin,
+                    ImageFlip = flip,
+                    Clip = clip,
+                    Scale = scale
                 }, false);
             }
         }
@@ -520,65 +519,64 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         const byte SWORDFRAMECOUNT = 3;
         OpacityUpdatedInDraws += 0.035f;
         Texture2D swordTexture = damageClassNameVisualsInfo.Texture;
-        float swordOriginOriginFactor = 6f;
+        float originOffsetFactor = 6f;
         ulong seedForRandomness2 = (ulong)(GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
         byte usedFrame = (byte)Utils.RandomInt(ref seedForRandomness2, SWORDFRAMECOUNT);
         for (byte i = 0; i < SWORDCOUNT; i++) {
             int nextSwordIndex = i + 1;
             bool firstPair = i < SWORDCOUNT / 2;
             bool topSwords = (i + 1) % 2 != 0;
-            SpriteFrame swordSpriteFrame = new(SWORDFRAMECOUNT, 1);
-            swordSpriteFrame = swordSpriteFrame.With(usedFrame, 0);
-            Rectangle swordSourceRectangle = swordSpriteFrame.GetSourceRectangle(swordTexture);
-            int swordWidth = swordSourceRectangle.Width,
-                swordHeight = swordSourceRectangle.Height;
-            Vector2 swordPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
+            SpriteFrame spriteFrame = new SpriteFrame(SWORDFRAMECOUNT, 1).With(usedFrame, 0);
+            Rectangle clip = spriteFrame.GetSourceRectangle(swordTexture);
+            int width = clip.Width,
+                height = clip.Height;
+            Vector2 position = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
             Vector2 offsetXToCenter = Vector2.UnitX * firstPair.ToDirectionInt() * 4f;
             switch (i) {
                 case 0:
-                    swordPositionToDraw += new Vector2(-swordWidth, -swordHeight);
+                    position += new Vector2(-width, -height);
                     break;
                 case 1:
-                    swordPositionToDraw += new Vector2(-swordWidth, swordHeight / 2f);
+                    position += new Vector2(-width, height / 2f);
                     break;
                 case 2:
-                    swordPositionToDraw += new Vector2(tooltipLineSize.X + swordWidth, -swordHeight);
+                    position += new Vector2(tooltipLineSize.X + width, -height);
                     break;
                 case 3:
-                    swordPositionToDraw += new Vector2(tooltipLineSize.X + swordWidth, swordHeight / 2f);
+                    position += new Vector2(tooltipLineSize.X + width, height / 2f);
                     break;
             }
-            swordPositionToDraw += offsetXToCenter;
-            swordPositionToDraw.Y += swordHeight / 1.25f;
+            position += offsetXToCenter;
+            position.Y += height / 1.25f;
             int topDirection = topSwords.ToDirectionInt(),
                 pairDirection = firstPair.ToDirectionInt();
             float offsetYPerSword = topDirection * 8f;
-            swordPositionToDraw.Y += offsetYPerSword;
-            float swordExtraRotationDirection = pairDirection * topDirection * -1f;
-            float swordRotationBase = 0f * swordExtraRotationDirection;
-            float swordRotation = swordRotationBase;
+            position.Y += offsetYPerSword;
+            float extraRotationDirection = pairDirection * topDirection * -1f;
+            float rotationBase = 0f * extraRotationDirection;
+            float rotation = rotationBase;
             if (topSwords) {
-                swordRotation = swordRotationBase + MathHelper.PiOver2 * pairDirection;
+                rotation = rotationBase + MathHelper.PiOver2 * pairDirection;
             }
             ulong seedForRandomness = (ulong)nextSwordIndex;
             float factor0 = 1f - OpacityUpdatedInDraws;
-            float swordExtraRotation = MathF.Sin(factor0 + Utils.RandomFloat(ref seedForRandomness));
-            swordExtraRotation = Ease.ExpoIn(Ease.QuadOut(swordExtraRotation));
-            swordExtraRotation = MathUtils.Clamp01(swordExtraRotation);
-            swordExtraRotation *= swordExtraRotationDirection;
-            swordExtraRotation *= MathHelper.PiOver2;
-            swordExtraRotation += Ease.CircOut(MathHelper.WrapAngle(_postMainDrawTimer)) * swordExtraRotationDirection * 2f;
-            swordRotation += swordExtraRotation;
-            Color swordColor = Color.White * PostMainDrawOpacity;
-            SpriteEffects flipSwordDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 swordOrigin = new(firstPair ? swordOriginOriginFactor : swordWidth - swordOriginOriginFactor, swordHeight - (swordOriginOriginFactor - 2f));
-            batch.Draw(swordTexture, swordPositionToDraw, DrawInfo.Default with {
-                Color = swordColor,
-                Rotation = swordRotation,
-                Origin = swordOrigin,
-                ImageFlip = flipSwordDrawing,
-                Clip = swordSourceRectangle
+            float extraRotation = MathF.Sin(factor0 + Utils.RandomFloat(ref seedForRandomness));
+            extraRotation = Ease.ExpoIn(Ease.QuadOut(extraRotation));
+            extraRotation = MathUtils.Clamp01(extraRotation);
+            extraRotation *= extraRotationDirection;
+            extraRotation *= MathHelper.PiOver2;
+            extraRotation += Ease.CircOut(MathHelper.WrapAngle(_postMainDrawTimer)) * extraRotationDirection * 2f;
+            rotation += extraRotation;
+            Color color = Color.White * PostMainDrawOpacity;
+            SpriteEffects flip = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            Vector2 origin = new(firstPair ? originOffsetFactor : width - originOffsetFactor, height - (originOffsetFactor - 2f));
+            batch.Draw(swordTexture, position, DrawInfo.Default with {
+                Color = color,
+                Rotation = rotation,
+                Origin = origin,
+                ImageFlip = flip,
+                Clip = clip
             }, false);
         }
     }
@@ -596,52 +594,51 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             byte nextArrowIndex = (byte)(i + 1);
             bool firstPair = i < half;
             bool rightArrows = nextArrowIndex > half;
-            int arrowHeight = arrowTexture.Height;
-            Vector2 arrowPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
+            int height = arrowTexture.Height;
+            Vector2 position = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
             if (rightArrows) {
-                arrowPositionToDraw += new Vector2(tooltipLineSize.X, 0f);
+                position += new Vector2(tooltipLineSize.X, 0f);
             }
-            arrowPositionToDraw.Y += arrowHeight / 2f;
-            arrowPositionToDraw.Y -= 4f;
-            float arrowRotation = MathHelper.PiOver2;
+            position.Y += height / 2f;
+            position.Y -= 4f;
+            float rotation = MathHelper.PiOver2;
             if (!firstPair) {
-                arrowRotation -= MathHelper.Pi;
+                rotation -= MathHelper.Pi;
             }
             int checkIndex = nextArrowIndex % half;
             float offsetYValue = 2f;
-            float arrowOffsetY = offsetYValue * (checkIndex % 2 == 0).ToDirectionInt() + offsetYValue * (checkIndex % 3 == 0).ToDirectionInt();
-            arrowPositionToDraw.Y += arrowOffsetY;
+            float offsetY = offsetYValue * (checkIndex % 2 == 0).ToDirectionInt() + offsetYValue * (checkIndex % 3 == 0).ToDirectionInt();
+            position.Y += offsetY;
             int rightDirection = (!firstPair).ToDirectionInt();
-            arrowRotation += arrowOffsetY * 0.05f * rightDirection;
+            rotation += offsetY * 0.05f * rightDirection;
             ulong seedForRandomness = itemType,
                   seedForRandomness2 = nextArrowIndex;
-            SpriteFrame arrowSpriteFrame = new(ARROWFRAMECOUNT, 1);
-            arrowSpriteFrame = arrowSpriteFrame.With((byte)(!firstPair ? ARROWFRAMECOUNT - usedFrame - 1 : usedFrame), 0);
+            SpriteFrame spriteFrame = new SpriteFrame(ARROWFRAMECOUNT, 1).With((byte)(!firstPair ? ARROWFRAMECOUNT - usedFrame - 1 : usedFrame), 0);
             if (++usedFrame >= ARROWFRAMECOUNT) {
                 usedFrame = 0;
             }
             float factor = MathHelper.WrapAngle(_mainDrawTimer / 30f + Utils.RandomInt(ref seedForRandomness, 100));
-            float arrowExtraRotation = MathF.Sin(factor + Utils.RandomFloat(ref seedForRandomness) + Utils.RandomInt(ref seedForRandomness2, 100));
-            float arrowProgress = 1f - OpacityUpdatedInDraws;
-            arrowExtraRotation *= MathF.Max(0.25f, arrowProgress) * 1f;
-            arrowExtraRotation *= rightDirection;
-            arrowExtraRotation *= 0.2f;
-            arrowExtraRotation *= (nextArrowIndex % 2 == 0).ToDirectionInt();
-            arrowRotation += arrowExtraRotation;
-            Vector2 arrowVelocity = Vector2.UnitY.RotatedBy(arrowRotation);
-            arrowPositionToDraw += arrowVelocity * 50f * Ease.QuadIn(arrowProgress);
-            arrowPositionToDraw += -arrowVelocity * Ease.QuadOut(MathUtils.Clamp01(_postMainDrawTimer / 60f)) * 100f;
-            Rectangle arrowSourceRectangle = arrowSpriteFrame.GetSourceRectangle(arrowTexture);
-            Color arrowColor = Color.White * PostMainDrawOpacity;
-            SpriteEffects flipArrowDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 arrowOrigin = new(arrowSourceRectangle.Width / 2f, 0f);
-            batch.Draw(arrowTexture, arrowPositionToDraw, DrawInfo.Default with {
-                Color = arrowColor,
-                Rotation = arrowRotation,
-                Origin = arrowOrigin,
-                ImageFlip = flipArrowDrawing,
-                Clip = arrowSourceRectangle
+            float extraRotation = MathF.Sin(factor + Utils.RandomFloat(ref seedForRandomness) + Utils.RandomInt(ref seedForRandomness2, 100));
+            float progress = 1f - OpacityUpdatedInDraws;
+            extraRotation *= MathF.Max(0.25f, progress) * 1f;
+            extraRotation *= rightDirection;
+            extraRotation *= 0.2f;
+            extraRotation *= (nextArrowIndex % 2 == 0).ToDirectionInt();
+            rotation += extraRotation;
+            Vector2 velocity = Vector2.UnitY.RotatedBy(rotation);
+            position += velocity * 50f * Ease.QuadIn(progress);
+            position += -velocity * Ease.QuadOut(MathUtils.Clamp01(_postMainDrawTimer / 60f)) * 100f;
+            Rectangle clip = spriteFrame.GetSourceRectangle(arrowTexture);
+            Color color = Color.White * PostMainDrawOpacity;
+            SpriteEffects flip = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            Vector2 origin = new(clip.Width / 2f, 0f);
+            batch.Draw(arrowTexture, position, DrawInfo.Default with {
+                Color = color,
+                Rotation = rotation,
+                Origin = origin,
+                ImageFlip = flip,
+                Clip = clip
             }, false);
         }
     }
@@ -702,33 +699,32 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         for (byte i = 0; i < MULTICLASSICONCOUNT; i++) {
             byte half = MULTICLASSICONCOUNT / 2;
             bool firstPair = i < half;
-            SpriteFrame multiclassSpriteFrame = neutralClass ? new(1, 1) : new(SPRITESHEETCOLUMNS, SPRITESHEETROWS);
-            multiclassSpriteFrame = multiclassSpriteFrame.With(usedRow, usedColumn);
-            Rectangle multiclassSourceRectangle = multiclassSpriteFrame.GetSourceRectangle(multiclassTexture);
-            int multiclassHeight = multiclassSourceRectangle.Height,
-                multiclassWidth = multiclassSourceRectangle.Width;
-            Vector2 multiclassPositionToDraw = damageClassNameVisualsInfo.TooltipLinePosition;
+            SpriteFrame spriteFrame = neutralClass ? new(1, 1) : new SpriteFrame(SPRITESHEETCOLUMNS, SPRITESHEETROWS).With(usedRow, usedColumn);
+            Rectangle clip = spriteFrame.GetSourceRectangle(multiclassTexture);
+            int height = clip.Height,
+                width = clip.Width;
+            Vector2 position = damageClassNameVisualsInfo.TooltipLinePosition;
             Vector2 tooltipLineSize = damageClassNameVisualsInfo.TooltipLineSize;
             float offsetX = 20f;
             float newSizeX = tooltipLineSize.X;
-            multiclassPositionToDraw.X += newSizeX / 2f;
-            float multiclassDirection = firstPair.ToDirectionInt();
-            float multiclassProgress = Ease.CircOut(OpacityUpdatedInDraws),
-                  multiclassProgress2 = multiclassProgress * MathF.Pow(_postMainDrawTimer + PostMainDrawOpacity, 0.5f);
-            float multiclassRotation = MathHelper.TwoPi * 2f * multiclassProgress2 * -multiclassDirection;
-            multiclassPositionToDraw.X -= multiclassDirection * (newSizeX / 2f + offsetX / 2f) * multiclassProgress2;
-            multiclassPositionToDraw.Y += multiclassHeight / 1.25f;
-            multiclassPositionToDraw.Y -= 3f;
-            Color multiclassColor = Color.White * PostMainDrawOpacity;
-            SpriteEffects flipMulticlassDrawing = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Vector2 starOrigin = multiclassSourceRectangle.Size() / 2f;
-            multiclassColor *= PostMainDrawOpacity;
-            batch.Draw(multiclassTexture, multiclassPositionToDraw, DrawInfo.Default with {
-                Color = multiclassColor,
-                Rotation = multiclassRotation,
-                Origin = starOrigin,
-                ImageFlip = flipMulticlassDrawing,
-                Clip = multiclassSourceRectangle
+            position.X += newSizeX / 2f;
+            float direction = firstPair.ToDirectionInt();
+            float progress = Ease.CircOut(OpacityUpdatedInDraws),
+                  progress2 = progress * MathF.Pow(_postMainDrawTimer + PostMainDrawOpacity, 0.5f);
+            float rotation = MathHelper.TwoPi * 2f * progress2 * -direction;
+            position.X -= direction * (newSizeX / 2f + offsetX / 2f) * progress2;
+            position.Y += height / 1.25f;
+            position.Y -= 3f;
+            Color color = Color.White * PostMainDrawOpacity;
+            SpriteEffects flip = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            Vector2 origin = clip.Size() / 2f;
+            color *= PostMainDrawOpacity;
+            batch.Draw(multiclassTexture, position, DrawInfo.Default with {
+                Color = color,
+                Rotation = rotation,
+                Origin = origin,
+                ImageFlip = flip,
+                Clip = clip
             }, false);
         }
     }

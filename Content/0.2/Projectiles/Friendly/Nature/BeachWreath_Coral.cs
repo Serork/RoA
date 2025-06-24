@@ -153,10 +153,11 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
                   valueOut = Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
             float scaleY = Ease.QuartIn(valueIn) * Ease.QuartOut(valueOut),
                   scaleX = Ease.SineIn(valueIn) * Ease.SineOut(valueOut);
+            Rectangle clip = coralTexture.Bounds;
             batch.Draw(coralTexture, Projectile.Center, DrawInfo.Default with {
                 Rotation = Projectile.rotation,
-                Origin = new Vector2(coralTexture.Width / 2f, coralTexture.Height),
-                Clip = coralTexture.Bounds,
+                Origin = Utils.Bottom(clip),
+                Clip = clip,
                 Scale = new Vector2(scaleX, scaleY)
             });
         });

@@ -168,11 +168,12 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
         DoOnSegmentIteration((segmentIterationArgs) => {
             int currentSegmentHeight = (int)(segmentHeight * segmentIterationArgs.Info.Progress);
             float segmentRotation = segmentIterationArgs.Velocity.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi;
+            Rectangle clip = new(0, segmentIterationArgs.Info.FrameToUse * segmentHeight, segmentWidth, currentSegmentHeight);
             Main.spriteBatch.Draw(segmentTexture, segmentIterationArgs.Position, DrawInfo.Default with {
                 Color = Lighting.GetColor(segmentIterationArgs.Position.ToTileCoordinates()),
                 Rotation = segmentRotation,
-                Origin = new Vector2(segmentWidth, segmentHeight) / 2f,
-                Clip = new Rectangle(0, segmentIterationArgs.Info.FrameToUse * segmentHeight, segmentWidth, currentSegmentHeight)
+                Origin = clip.Centered(),
+                Clip = clip
             });
         });
     }

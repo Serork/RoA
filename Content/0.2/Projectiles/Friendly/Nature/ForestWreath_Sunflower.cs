@@ -159,6 +159,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
         }
         void drawPetals() {
             Texture2D petalTexture = _petalTexture!.Value;
+            Rectangle clip = petalTexture.Bounds;
             for (int i = 0; i < PETALCOUNT; i++) {
                 float petalFill = petalFills[i] * Projectile.Opacity;
                 float petalRotation = Projectile.rotation + i * MathHelper.TwoPi / PETALCOUNT + 0.6f;
@@ -168,8 +169,8 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
                 Main.spriteBatch.Draw(petalTexture, Projectile.Center + offset, DrawInfo.Default with {
                     Color = petalColor,
                     Rotation = petalRotation,
-                    Origin = new Vector2(petalTexture.Width / 2f, petalTexture.Height),
-                    Clip = petalTexture.Bounds,
+                    Origin = Utils.Bottom(clip),
+                    Clip = clip,
                     Scale = new Vector2(Ease.CircOut(petalFill), petalFill + MathF.Sin(extraScale * 6f) / 6f)
                 });
             }

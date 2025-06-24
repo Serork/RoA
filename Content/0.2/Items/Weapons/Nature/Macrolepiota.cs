@@ -85,13 +85,14 @@ sealed class Macrolepiota_Hold : NatureProjectile_NoTextureLoad {
         }
 
         Texture2D holdTexture = _holdTexture.Value;
-        SpriteFrame drawFrame = new(1, FRAMECOUNT);
-        Vector2 drawPosition = Projectile.Center;
-        Color drawColor = lightColor;
-        Rectangle sourceRectangle = drawFrame.GetSourceRectangle(holdTexture);
-        Main.spriteBatch.Draw(holdTexture, drawPosition, DrawInfo.Default with {
-            Color = drawColor,
-            Clip = sourceRectangle
+        SpriteFrame spriteFrame = new(1, FRAMECOUNT);
+        Vector2 position = Projectile.Center;
+        Color color = lightColor;
+        Rectangle clip = spriteFrame.GetSourceRectangle(holdTexture);
+        Main.spriteBatch.Draw(holdTexture, position, DrawInfo.Default with {
+            Origin = Utils.Bottom(clip),
+            Color = color,
+            Clip = clip
         });
     }
 
