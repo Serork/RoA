@@ -9,6 +9,8 @@ using static Terraria.GameContent.Creative.ItemFilters.AAccessories;
 namespace RoA.Content.Items.Equipables.Wreaths;
 
 abstract class WreathItem : NatureItem {
+    public override bool AllowPrefix(int pre) => false;
+
     protected void DefaultsToTier3Wreath() {
         Item.maxStack = 1;
         Item.rare = ItemRarityID.LightRed;
