@@ -51,10 +51,10 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
     private static void LoadWreathsOutfitTextures() {
         for (int i = ItemID.Count; i < ItemLoader.ItemCount; i++) {
             ModItem item = ItemLoader.GetItem(i);
-            if (item is WreathItem) {
+            if (item is BaseWreathItem) {
                 _wreathsOutfitTextures.Add(item.Name, ModContent.Request<Texture2D>(item.Texture + REQUIREMENT));
 
-                if (item is WreathItem.IWreathGlowMask) {
+                if (item is BaseWreathItem.IWreathGlowMask) {
                     _wreathsOutfitGlowmaskTextures.Add(item.Name, ModContent.Request<Texture2D>(item.Texture + REQUIREMENT + "_Glow"));
                 }
             }
@@ -104,7 +104,7 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
             shader = wreathItemToShowHandler.DyeItem.dye
         };
         drawInfo.DrawDataCache.Add(drawData);
-        if (wreathItem.ModItem is WreathItem.IWreathGlowMask wreathGlowMask) {
+        if (wreathItem.ModItem is BaseWreathItem.IWreathGlowMask wreathGlowMask) {
             asset = _wreathsOutfitGlowmaskTextures[WeaponOverlay.GetItemNameForTexture(wreathItem)];
             if (asset?.IsLoaded != true) {
                 return;
