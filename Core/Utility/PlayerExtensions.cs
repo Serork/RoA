@@ -10,6 +10,8 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static class PlayerExtensions {
+    public static bool IsAliveAndFree(this Player player) => player.active && !player.CCed && !player.dead;
+
     public static bool WithinPlacementRange(this Player player, int x, int y) =>
         player.position.X / 16f - Player.tileRangeX - player.inventory[player.selectedItem].tileBoost - player.blockRange <= x
         && (player.position.X + player.width) / 16f + Player.tileRangeX + player.inventory[player.selectedItem].tileBoost - 1f + player.blockRange >= x

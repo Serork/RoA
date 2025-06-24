@@ -81,7 +81,7 @@ abstract class BaseRodProjectile : DruidicProjectile {
 
     protected float OffsetRotation => FacedLeft ? -0.2f : 0.2f;
 
-    protected virtual bool IsInUse => !Owner.CCed;
+    protected virtual bool IsInUse => Owner.IsAliveAndFree();
     protected float UseTime => Math.Clamp(CurrentUseTime / _maxUseTime, 0f, 1f);
     protected float Step => Math.Clamp(1f - UseTime, 0f, 1f);
 
@@ -299,11 +299,11 @@ abstract class BaseRodProjectile : DruidicProjectile {
     }
 
     private void ActiveCheck() {
-        if (!(!Owner.frozen && !Owner.stoned)) {
+        if (!Owner.IsAliveAndFree()) {
             Projectile.Kill();
         }
 
-        if (!Owner.active || Owner.dead || Owner.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
+        if (Owner.GetModPlayer<BaseFormHandler>().IsInDruidicForm) {
             Projectile.Kill();
         }
         bool haveProjsActive = Owner.ownedProjectileCounts[ShootType] >= ProjActiveCount();

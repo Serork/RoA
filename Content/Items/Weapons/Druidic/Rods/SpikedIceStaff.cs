@@ -49,7 +49,7 @@ sealed class SpikedIceStaff : BaseRodItem<SpikedIceStaff.SpikedIceStaffBase> {
         private int PerShoot => (int)(_attackTime * 0.4f);
         private bool MinPassed => _attackTimer >= Min;
 
-        protected override bool IsInUse => !Owner.CCed && (Owner.controlUseItem || !MinPassed);
+        protected override bool IsInUse => Owner.IsAliveAndFree() && (Owner.controlUseItem || !MinPassed);
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 

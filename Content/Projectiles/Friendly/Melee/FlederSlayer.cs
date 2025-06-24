@@ -98,7 +98,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         //DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
         //Utils.TileActionAttempt plot = new Utils.TileActionAttempt(DelegateMethods.CutTiles);
         //Vector2 center = Projectile.Center;
-        //Utils.PlotTileLine(center + Projectile.rotation.ToRotationVector2() * 30f, center + Projectile.rotation.ToRotationVector2() * 150f, Projectile.width * Projectile.scale, plot);
+        //Utils.PlotTileLine(center + Projectile._rotation.ToRotationVector2() * 30f, center + Projectile._rotation.ToRotationVector2() * 150f, Projectile.width * Projectile.scale, plot);
     }
 
     public override bool? CanCutTiles() => false;
@@ -224,11 +224,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         bool turnOnAvailable = false;
         bool flag3 = _timeLeft > min;
 
-        if (!(!player.frozen && !player.stoned)) {
-            Projectile.Kill();
-        }
-
-        if (player.dead || !player.active) {
+        if (!player.IsAliveAndFree()) {
             Projectile.Kill();
         }
         else {
@@ -611,7 +607,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                                 0f);
             spriteBatch.EndBlendState();
             spriteBatch.Draw(bladeTexture2D,
-                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f * charge % 1f)) * 3f * charge + shiftFix,
+                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f * charge % 1f * player.direction)) * 3f * charge + shiftFix,
                             glowRectangle,
                             color * Projectile.Opacity * 0.3f * charge,
                             Projectile.rotation + 0.78f,

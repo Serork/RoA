@@ -16,6 +16,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static RoA.Common.Players.DruidPlayerShouldersFix;
 using static Terraria.Player;
 
 namespace RoA.Content.Items.Weapons.Magic;
@@ -26,11 +27,11 @@ sealed class ArterialSpray : ModItem {
     }
 
     public override void SetDefaults() {
-        Item.SetSize(42);
+        Item.SetSizeValues(42);
 
         Item.DefaultToMagicWeapon(ModContent.ProjectileType<ArterialSprayProjectile3>(), 0, 1f);
 
-        Item.SetDefaultToUsable(ItemUseStyleID.Swing, 20);
+        Item.SetUsageValues(ItemUseStyleID.Swing, 20);
 
         Item.damage = 16;
         Item.crit = 4;
@@ -46,7 +47,7 @@ sealed class ArterialSpray : ModItem {
     }
 }
 
-sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem {
+sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLikeHeldItem, IProjectileFixShoulderWhileActive {
     private int _direction, _useTimeMax;
 
     public override string Texture => ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray_Small";
@@ -121,6 +122,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true);
+        Projectile.Center = Utils.Floor(Projectile.Center);
         if (Projectile.owner == Main.myPlayer) {
             if (Projectile.ai[0] == 0f) {
                 Projectile.ai[0] = 1f;
@@ -134,7 +136,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         }
         Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
         player.heldProj = Projectile.whoAmI;
-        player.bodyFrame.Y = 56;
+        player.bodyFrame.Y = 168;
         //player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, armRotation);
         float num36 = (float)Projectile.timeLeft / _useTimeMax;
         float f = num36 < 0.5f ? num36 : (1f - num36);
@@ -272,7 +274,7 @@ sealed class ArterialSprayProjectile2 : ModProjectile {
             Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
             Main.EntitySpriteDraw(texture, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
             texture2 = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray3").Value;
-            //Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
+            //Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile._rotation, origin, Projectile.scale, effects);
         }
 
         return false;

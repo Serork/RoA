@@ -189,12 +189,12 @@ sealed class MercuriumZipper_Effect : ModProjectile {
         Player player = Main.player[Projectile.owner];
         NPC target = Main.npc[(int)Projectile.ai[0]];
 
-        if (!(!player.frozen && !player.stoned)) {
+        if (!player.IsAliveAndFree()) {
             Projectile.Kill();
 
             return;
         }
-        if (!target.active || player.dead) {
+        if (!target.active) {
             Projectile.Kill();
 
             return;
@@ -564,8 +564,8 @@ sealed class MercuriumZipperProjectile : ModProjectile {
                 offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
             dust.position = points[pointIndex] + offset;
             dust.fadeIn = 0.3f;
-            dust.alpha = 100;
             Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
+            dust.scale *= 1.25f;
             dust.noGravity = true;
             dust.velocity *= 0.5f;
             // This math causes these dust to spawn with a velocity perpendicular to the direction of the whip segments, giving the impression of the dust flying off like sparks.
@@ -703,7 +703,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
                 frame.Height = 18;
             }
 
-            float rotation = diff.ToRotation() - MathHelper.PiOver2; // This projectile's sprite faces down, so PiOver2 is used to correct rotation.
+            float rotation = diff.ToRotation() - MathHelper.PiOver2; // This projectile's sprite faces down, so PiOver2 is used to correct _rotation.
             Color color = Lighting.GetColor(element.ToTileCoordinates());
 
             Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);

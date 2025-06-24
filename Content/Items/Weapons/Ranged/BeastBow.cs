@@ -145,12 +145,13 @@ sealed class BeastProj : ModProjectile {
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
         }
-        if (player.frozen || player.stoned) {
+        if (!player.IsAliveAndFree()) {
             Projectile.Kill();
+            return;
         }
         float offset = (player.direction != 1 ? 3f : 4f) * -player.direction;
         if (Main.myPlayer == Projectile.owner) {
-            if (player.noItems || player.CCed || player.itemAnimation <= 0 || player.itemTime <= 0) {
+            if (player.noItems || player.itemAnimation <= 0 || player.itemTime <= 0) {
                 Projectile.Kill();
                 return;
             }

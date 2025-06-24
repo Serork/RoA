@@ -46,7 +46,7 @@ sealed class Woodbinder : BaseRodItem<Woodbinder.WoodbinderBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        protected override bool IsInUse => !Owner.CCed && Owner.controlUseItem;
+        protected override bool IsInUse => Owner.IsAliveAndFree() && Owner.controlUseItem;
 
         protected override byte TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 3);
 

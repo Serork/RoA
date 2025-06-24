@@ -5,6 +5,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -112,9 +113,12 @@ abstract class Wave : DruidicProjectile {
         if (Projectile.Opacity == 0f) {
             Projectile.Opacity = 1f;
         }
+        if (!player.IsAliveAndFree()) {
+            Projectile.Kill();
+        }
         player.heldProj = Projectile.whoAmI;
         if (Main.myPlayer == Projectile.owner) {
-            if (player.noItems || player.CCed) {
+            if (player.noItems) {
                 Projectile.Kill();
                 return;
             }
