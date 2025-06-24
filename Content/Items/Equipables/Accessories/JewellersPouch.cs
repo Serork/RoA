@@ -11,13 +11,13 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 sealed class JewellersBelt : ModItem {
     public override void SetDefaults() {
-        int width = 32; int height = 3244;
+        int width = 32; int height = 24;
         Item.Size = new Vector2(width, height);
 
         Item.rare = ItemRarityID.Blue;
         Item.accessory = true;
 
-        //Item.value = Item.sellPrice(0, 1, 0, 0);
+        Item.value = Item.sellPrice(0, 0, 10, 0);
     }
 
     private class JewellersBeltHandler : ModPlayer {
