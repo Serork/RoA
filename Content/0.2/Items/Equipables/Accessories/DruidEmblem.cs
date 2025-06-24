@@ -1,4 +1,5 @@
-﻿using RoA.Core.Defaults;
+﻿using RoA.Common.Druid;
+using RoA.Core.Defaults;
 
 using Terraria;
 using Terraria.ID;
@@ -23,5 +24,6 @@ sealed class DruidEmblem : NatureItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetDamage(DruidClass.Nature) += 0.15f;
+        player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.15f;
     }
 }
