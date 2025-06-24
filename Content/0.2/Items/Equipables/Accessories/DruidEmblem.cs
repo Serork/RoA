@@ -9,6 +9,9 @@ sealed class DruidEmblem : NatureItem {
     public override void SetStaticDefaults() {
         ItemID.Sets.ShimmerTransformToItem[ItemID.SummonerEmblem] = Type;
         ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.SorcererEmblem;
+        ItemID.Sets.ShimmerTransformToItem[ItemID.SorcererEmblem] = ItemID.RangerEmblem;
+        ItemID.Sets.ShimmerTransformToItem[ItemID.RangerEmblem] = ItemID.WarriorEmblem;
+        ItemID.Sets.ShimmerTransformToItem[ItemID.WarriorEmblem] = ItemID.SummonerEmblem;
     }
 
     protected override void SafeSetDefaults() {
