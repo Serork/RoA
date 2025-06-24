@@ -1,4 +1,6 @@
-﻿using RoA.Common.Druid;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Druid;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -10,6 +12,8 @@ using Terraria.ID;
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
 sealed class Macrolepiota : NatureItem {
+    public override Color? GetAlpha(Color lightColor) => Color.White;
+
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(28, 40);
         Item.SetWeaponValues(60, 4f);

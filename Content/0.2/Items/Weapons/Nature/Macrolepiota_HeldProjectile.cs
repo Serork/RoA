@@ -28,7 +28,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
     private static byte ANIMATIONSPEEDINTICKS => 4;
     private static byte SPORESPAWNCOOLDOWN => 10;
 
-    private static Asset<Texture2D>? _holdTexture;
+    private static Asset<Texture2D>? _holdTexture, _holdGlowMaskTexture;
 
     private enum MacrolepiotaFrame : byte {
         Idle,
@@ -45,11 +45,18 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
         public ref float ScaleY = ref projectile.localAI[1];
         public ref float SpeedX = ref projectile.ai[0];
 
+        public ref float GlowMaskOpacityValue = ref projectile.localAI[2];
+
         public ref float SporeSpawnTimerValue = ref projectile.ai[1];
 
         public bool Init {
             readonly get => InitOnSpawnValue == 1f;
             set => InitOnSpawnValue = value.ToInt();
+        }
+
+        public float GlowMaskOpacity {
+            readonly get => GlowMaskOpacityValue;
+            set => GlowMaskOpacityValue = MathUtils.Clamp01(value);
         }
 
         public readonly MacrolepiotaFrame Frame {
@@ -151,7 +158,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
             projectileRotation = Helper.Approach(projectileRotation, Utils.Remap(-velocityFactor, -maxSpeedX, maxSpeedX, -maxRotation, maxRotation), approachSpeed);
             Vector2 desiredScale = Vector2.One;
             approachSpeed = 0.06f;
-            if (owner.velocity.Y < -0.1f) {
+            if (IsOwnerJumping()) {
                 desiredScale.X = 1.2f;
                 desiredScale.Y = 0.8f;
 
@@ -198,6 +205,13 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
         void lightUp() {
             DelegateMethods.v3_1 = new Vector3(0.1f, 0.4f, 1f);
             Utils.PlotTileLine(Vector2.Lerp(Projectile.Center, GetShrivelPosition(), 0.25f), GetShrivelPosition(), 4f, DelegateMethods.CastLightOpen);
+
+            MacrolepiotaValues macrolepiotaValues = new(Projectile);
+            float desiredGlowMaskOpacity = 0f;
+            if (IsActive()) {
+                desiredGlowMaskOpacity = 1f;
+            }
+            macrolepiotaValues.GlowMaskOpacity = MathHelper.Lerp(macrolepiotaValues.GlowMaskOpacity, desiredGlowMaskOpacity, 0.1f);
         }
         void spawnSpores() {
             if (!owner.IsLocal()) {
@@ -230,40 +244,51 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
     }
 
     protected override void Draw(ref Color lightColor) {
-        if (_holdTexture?.IsLoaded != true) {
+        if (_holdTexture?.IsLoaded != true || _holdGlowMaskTexture?.IsLoaded != true) {
             return;
         }
 
-        Texture2D holdTexture = _holdTexture.Value;
+        Texture2D holdTexture = _holdTexture.Value, holdGlowMaskTexture = _holdGlowMaskTexture.Value;
         SpriteFrame spriteFrame = new SpriteFrame(1, FRAMECOUNT).With(0, (byte)Projectile.frame);
         Vector2 position = Projectile.Center;
-        Color color = Color.White;
+        MacrolepiotaValues macrolepiotaValues = new(Projectile);
+        Color color = Color.Lerp(lightColor, Color.White, macrolepiotaValues.GlowMaskOpacity);
         Rectangle clip = spriteFrame.GetSourceRectangle(holdTexture);
         float rotation = Projectile.rotation;
-        MacrolepiotaValues macrolepiotaValues = new(Projectile);
         Vector2 scale = macrolepiotaValues.Scale;
+        Vector2 origin = new(clip.Width / 2f, clip.Height);
         Main.spriteBatch.Draw(holdTexture, position, DrawInfo.Default with {
-            Origin = new Vector2(clip.Width / 2f, clip.Height),
+            Origin = origin,
             Scale = scale,
             Color = color,
             Rotation = rotation,
             Clip = clip
         });
+        Color glowMaskColor = Color.Lerp(Color.White, Color.Transparent, macrolepiotaValues.GlowMaskOpacity);
+        Main.spriteBatch.Draw(holdGlowMaskTexture, position, DrawInfo.Default with {
+            Origin = origin,
+            Scale = scale,
+            Color = glowMaskColor,
+            Rotation = rotation,
+            Clip = clip
+        });
     }
 
-    public override void OnKill(int timeLeft) {
-
-    }
+    public override void OnKill(int timeLeft) { }
 
     private void LoadMacrolepiotaTextures() {
         if (Main.dedServ) {
             return;
         }
 
-        _holdTexture = ModContent.Request<Texture2D>(ItemUtils.GetTexturePath<Macrolepiota>() + "_Hold");
+        string texturePath = ItemUtils.GetTexturePath<Macrolepiota>() + "_Hold";
+        _holdTexture = ModContent.Request<Texture2D>(texturePath);
+        _holdGlowMaskTexture = ModContent.Request<Texture2D>(texturePath + "_Glow");
     }
 
+    private bool IsActive() => IsOwnerFalling() || IsOwnerJumping();
     private bool IsOwnerFalling() => Projectile.GetOwnerAsPlayer().velocity.Y > 0f;
+    private bool IsOwnerJumping() => Projectile.GetOwnerAsPlayer().velocity.Y < -0.1f;
 
     private Vector2 GetShrivelPosition() {
         Vector2 result = Projectile.Center;
