@@ -10,3 +10,4 @@ LothorEnrageMonolith: Mods.RoA.Conditions.LothorEnrageMonolith
 HasPeegeonSet: Mods.RoA.Conditions.HasPeegeonSet
 HasNFASet: Mods.RoA.Conditions.HasNFASet
 HasHas2rSet: Mods.RoA.Conditions.HasHas2rSet
+"": "Mods.RoA.Conditions."//Actual Conditions

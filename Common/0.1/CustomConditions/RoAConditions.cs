@@ -13,6 +13,8 @@ using Terraria.ModLoader;
 namespace RoA.Common.CustomConditions;
 
 static class RoAConditions {
+    public static string ConditionLang => "Mods.RoA.Conditions.";
+
     private static bool HasDevItem(params int[] devSetItems) {
         bool result = false;
         Player player = Main.LocalPlayer;
