@@ -341,7 +341,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             Projectile.Kill();
         }
 
-        if (!Owner.active || Owner.dead || Owner.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (Owner.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             Projectile.Kill();
         }
         bool haveProjsActive = Owner.ownedProjectileCounts[ShootType] >= ProjActiveCount();
