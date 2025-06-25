@@ -18,7 +18,9 @@ sealed class Macrolepiota_PlayerSlowFallHandler : ModPlayer {
 
         Player.fallStart = (int)(Player.position.Y / 16f);
         Player.jumpSpeedBoost += 1.6f;
-        Player.gravity *= 0.9f;
+        if (!Player.controlDown) {
+            Player.gravity *= 0.9f;
+        }
         float maxYSpeed = 3f;
         if (Player.gravDir == -1f) {
             if (Player.velocity.Y < -maxYSpeed && !Player.controlDown)
