@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
+using RoA.Common.GlowMasks;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -11,9 +13,8 @@ using Terraria.ID;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
+[AutoloadGlowMask]
 sealed class Macrolepiota : NatureItem {
-    public override Color? GetAlpha(Color lightColor) => Color.White;
-
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(28, 40);
         Item.SetWeaponValues(60, 4f);
@@ -24,7 +25,13 @@ sealed class Macrolepiota : NatureItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.5f);
     }
 
+    public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) => Lighting.AddLight(Item.Center, new Vector3(0.1f, 0.4f, 1f));
+
     public override void HoldItem(Player player) {
+        SpawnHeldMacrolepiota(player);
+    }
+
+    private void SpawnHeldMacrolepiota(Player player) {
         if (!player.IsLocal()) {
             return;
         }

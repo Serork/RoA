@@ -208,9 +208,9 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
 
             MacrolepiotaValues macrolepiotaValues = new(Projectile);
             float desiredGlowMaskOpacity = 0f;
-            if (IsActive()) {
-                desiredGlowMaskOpacity = 1f;
-            }
+            //if (IsActive()) {
+            //    desiredGlowMaskOpacity = 1f;
+            //}
             macrolepiotaValues.GlowMaskOpacity = MathHelper.Lerp(macrolepiotaValues.GlowMaskOpacity, desiredGlowMaskOpacity, 0.1f);
         }
         void spawnSpores() {

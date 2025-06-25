@@ -59,6 +59,9 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
     private static float MAXPROGRESS => 1.35f;
     private static float MAXGRAVITY => 5f;
 
+    private static Asset<Texture2D>? _rocksTexture;
+    private static BlendState? _multiplyBlendState;
+
     private struct RocksInfo {
         public const byte ROCKSCOUNT = 2;
 
@@ -165,9 +168,6 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
 
     private RocksInfo[]? _rocks;
     private ushort[][]? _immunityFramesPerNPC;
-
-    private static Asset<Texture2D>? _rocksTexture;
-    private static BlendState? _multiplyBlendState;
 
     public override void Load() {
         LoadRocksTexture();
