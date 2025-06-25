@@ -5,6 +5,9 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Terraria.GameContent;
 
 namespace RoA.Core.Utility.Vanilla;
 
@@ -64,5 +67,50 @@ static class ProjectileUtils {
         }
 
         ProjectileLoader.CutTiles(projectileThatCuts);
+    }
+
+    public static void DrawSpearProjectile(Projectile projectile, Texture2D? texture = null, Texture2D? glowMaskTexture = null) {
+        Projectile proj = projectile;
+        texture ??= TextureAssets.Projectile[projectile.type].Value;
+        SpriteEffects dir = SpriteEffects.None;
+        float num = (float)Math.Atan2(proj.velocity.Y, proj.velocity.X) + 2.355f;
+        Player player = Main.player[proj.owner];
+        Microsoft.Xna.Framework.Rectangle value = texture.Frame();
+        Microsoft.Xna.Framework.Rectangle rect = proj.getRect();
+        Vector2 vector = Vector2.Zero;
+        if (player.direction > 0) {
+            dir = SpriteEffects.FlipHorizontally;
+            vector.X = texture.Width;
+            num -= (float)Math.PI / 2f;
+        }
+
+        if (player.gravDir == -1f) {
+            if (proj.direction == 1) {
+                dir = SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically;
+                vector = new Vector2(texture.Width, texture.Height);
+                num -= (float)Math.PI / 2f;
+            }
+            else if (proj.direction == -1) {
+                dir = SpriteEffects.FlipVertically;
+                vector = new Vector2(0f, texture.Height);
+                num += (float)Math.PI / 2f;
+            }
+        }
+
+        Vector2.Lerp(vector, value.Center.ToVector2(), 0.25f);
+        float num2 = 0f;
+        Vector2 vector2 = proj.Center;
+        Color color = Lighting.GetColor((int)proj.Center.X / 16, (int)proj.Center.Y / 16);
+        Main.EntitySpriteDraw(texture, vector2 - Main.screenPosition, value, color, num, vector, proj.scale, dir);
+        color = Color.White * (1f - proj.alpha / 255f);
+
+        if (projectile.type == ProjectileID.MushroomSpear) {
+            DelegateMethods.v3_1 = new Vector3(0.1f, 0.4f, 1f);
+            Utils.PlotTileLine(vector2, vector2 + Vector2.UnitY.RotatedBy(num) * value.Width, 4, DelegateMethods.CastLightOpen);
+        }
+
+        if (glowMaskTexture != null) {
+            Main.EntitySpriteDraw(glowMaskTexture, vector2 - Main.screenPosition, value, color, num, vector, proj.scale, dir);
+        }
     }
 }
