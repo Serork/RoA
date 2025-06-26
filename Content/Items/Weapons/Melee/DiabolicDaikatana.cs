@@ -372,7 +372,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             //handPosition -26;
         }
         rotationOffset = 0f;
-        int direction = 1; 
+        int direction = 1;
         if (AngleVector.X < 0f) {
             direction = -1;
         }
