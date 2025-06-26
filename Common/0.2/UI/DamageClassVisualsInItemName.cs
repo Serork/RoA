@@ -186,11 +186,9 @@ sealed class DamageClassItemsStorage : IInitializer {
                     //    testPlayer.tileInteractAttempted = false;
                     //    testPlayer.releaseUseTile = false;
                     //}
-                    if (damageClass is VanillaDamageClass) {
-                        if ((!ItemID.Sets.IsFood[self.type] || damageClass == DamageClass.Generic) && self.buffType > 0) {
-                            testPlayer.AddBuff(self.buffType, 2);
-                            testPlayer.UpdateBuffs(self.whoAmI);
-                        }
+                    if ((!ItemID.Sets.IsFood[self.type] || damageClass == DamageClass.Generic) && self.buffType > 0) {
+                        testPlayer.AddBuff(self.buffType, 2);
+                        testPlayer.UpdateBuffs(self.whoAmI);
                     }
                     if (self.accessory) {
                         testPlayer.ApplyEquipFunctional(self, true);
