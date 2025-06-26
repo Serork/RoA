@@ -4,19 +4,23 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Text;
+using RoA.Content.Buffs;
 using RoA.Content.Items.Weapons.Druidic.Rods;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameInput;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config.UI;
+using Terraria.ModLoader.Core;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
 using Terraria.UI.Chat;
@@ -240,6 +244,70 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
         numLines++;
     }
 
+    public static List<TooltipLine> ModifyTooltips(Item item, ref int numTooltips, string[] names, ref string[] text, ref bool[] modifier, ref bool[] badModifier, ref int oneDropLogo, out Color?[] overrideColor, int prefixlineIndex) {
+        var tooltips = new List<TooltipLine>();
+
+        for (int k = 0; k < numTooltips; k++) {
+            TooltipLine tooltip = new TooltipLine(RoA.Instance, names[k], text[k]);
+            tooltip.IsModifier = modifier[k];
+            tooltip.IsModifierBad = badModifier[k];
+
+            //if (k == oneDropLogo) {
+            //    tooltip.OneDropLogo = true;
+            //}
+
+            tooltips.Add(tooltip);
+        }
+
+        if (item.prefix >= PrefixID.Count && prefixlineIndex != -1) {
+            var tooltipLines = PrefixLoader.GetPrefix(item.prefix)?.GetTooltipLines(item);
+            if (tooltipLines != null) {
+                foreach (var line in tooltipLines) {
+                    tooltips.Insert(prefixlineIndex, line);
+                    prefixlineIndex++;
+                }
+            }
+        }
+
+        item.ModItem?.ModifyTooltips(tooltips);
+
+        var HookModifyTooltips = typeof(ItemLoader).GetField("HookModifyTooltips",
+                            BindingFlags.Static |
+                            BindingFlags.NonPublic);
+
+        if (!item.IsAir) { // Prevents dummy items used in Main.HoverItem from getting unrelated tooltips
+            foreach (var g in (HookModifyTooltips.GetValue(null) as Terraria.ModLoader.Core.GlobalHookList<Terraria.ModLoader.GlobalItem>).Enumerate(item)) {
+                if (g.Mod != RoA.Instance) {
+                    continue;
+                }
+                g.ModifyTooltips(item, tooltips);
+            }
+        }
+
+        tooltips.RemoveAll(x => !x.Visible);
+
+        numTooltips = tooltips.Count;
+        text = new string[numTooltips];
+        modifier = new bool[numTooltips];
+        badModifier = new bool[numTooltips];
+        oneDropLogo = -1;
+        overrideColor = new Color?[numTooltips];
+
+        for (int k = 0; k < numTooltips; k++) {
+            text[k] = tooltips[k].Text;
+            modifier[k] = tooltips[k].IsModifier;
+            badModifier[k] = tooltips[k].IsModifierBad;
+
+            //if (tooltips[k].OneDropLogo) {
+            //    oneDropLogo = k;
+            //}
+
+            overrideColor[k] = tooltips[k].OverrideColor;
+        }
+
+        return tooltips;
+    }
+
     private void MouseText_DrawItemTooltip(int rare, byte diff, int X, int Y, out int numLines2) {
         bool settingsEnabled_OpaqueBoxBehindTooltips = Main.SettingsEnabled_OpaqueBoxBehindTooltips;
         ref byte mouseTextColor = ref Main.mouseTextColor;
@@ -283,174 +351,179 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
         Vector2 zero = Vector2.Zero;
 
         // TML's abstractions over tooltip arrays.
-        List<TooltipLine> lines = ItemLoader.ModifyTooltips(_hoverItem, ref numLines, tooltipNames, ref array, ref array2, ref array3, ref yoyoLogo, out Color?[] overrideColor, prefixlineIndex);
-        List<DrawableTooltipLine> drawableLines = lines.Select((TooltipLine x, int i) => new DrawableTooltipLine(x, i, 0, 0, Color.White)).ToList();
-        int num0 = -(!Main.gameMenu ? 1 : 0);
-        numLines2 = numLines + num0;
-        int num12 = 0;
-        for (int j = 0; j < numLines + num0; j++) {
-            Vector2 stringSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, array[j], Vector2.One);
-            if (stringSize.X > zero.X)
-                zero.X = stringSize.X;
+        try {
+            List<TooltipLine> lines = ModifyTooltips(_hoverItem, ref numLines, tooltipNames, ref array, ref array2, ref array3, ref yoyoLogo, out Color?[] overrideColor, prefixlineIndex);
+            List<DrawableTooltipLine> drawableLines = lines.Select((TooltipLine x, int i) => new DrawableTooltipLine(x, i, 0, 0, Color.White)).ToList();
+            int num0 = -(!Main.gameMenu ? 1 : 0);
+            numLines2 = numLines + num0;
+            int num12 = 0;
+            for (int j = 0; j < numLines + num0; j++) {
+                Vector2 stringSize = ChatManager.GetStringSize(FontAssets.MouseText.Value, array[j], Vector2.One);
+                if (stringSize.X > zero.X)
+                    zero.X = stringSize.X;
 
-            zero.Y += stringSize.Y + (float)num12;
-        }
-
-        if (yoyoLogo != -1)
-            zero.Y += 24f;
-
-        X += 6;
-        Y += 6;
-        int num13 = 4;
-        if (settingsEnabled_OpaqueBoxBehindTooltips) {
-            X += 8;
-            Y += 2;
-            num13 = 18;
-        }
-
-        int num14 = Main.screenWidth;
-        int num15 = Main.screenHeight;
-        if ((float)X + zero.X + (float)num13 > (float)num14)
-            X = (int)((float)num14 - zero.X - (float)num13);
-
-        if ((float)Y + zero.Y + (float)num13 > (float)num15)
-            Y = (int)((float)num15 - zero.Y - (float)num13);
-
-        int num16 = 0;
-        num3 = (float)(int)mouseTextColor / 255f;
-        if (settingsEnabled_OpaqueBoxBehindTooltips) {
-            num3 = MathHelper.Lerp(num3, 1f, 1f);
-            int num17 = 14;
-            int num18 = 9;
-            Utils.DrawInvBG(Main.spriteBatch, new Microsoft.Xna.Framework.Rectangle(X - num17, Y - num18, (int)zero.X + num17 * 2, (int)zero.Y + num18 + num18 / 2), new Microsoft.Xna.Framework.Color(23, 25, 81, 255) * 0.925f);
-        }
-
-        bool globalCanDraw = ItemLoader.PreDrawTooltip(_hoverItem, lines.AsReadOnly(), ref X, ref Y);
-        for (int k = 0; k < numLines; k++) {
-            int x = X;
-            int y = Y + num16;
-            drawableLines[k].X = x;
-            drawableLines[k].Y = y;
-
-            /*
-			if (k == yoyoLogo) {
-			*/
-
-            {
-                Microsoft.Xna.Framework.Color black = Microsoft.Xna.Framework.Color.Black;
-                black = new Microsoft.Xna.Framework.Color(num4, num4, num4, num4);
-                /*
-				if (k == 0) {
-				*/
-                if (drawableLines[k].Mod == "Terraria" && drawableLines[k].Name == "ItemName") {
-                    /*
-					if (rare == -13)
-						black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(masterColor * 200f * num4), 0, a);
-					*/
-
-                    if (rare == -11)
-                        black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(175f * num4), (byte)(0f * num4), a);
-
-                    if (rare == -1)
-                        black = new Microsoft.Xna.Framework.Color((byte)(130f * num4), (byte)(130f * num4), (byte)(130f * num4), a);
-
-                    if (rare == 1)
-                        black = new Microsoft.Xna.Framework.Color((byte)(150f * num4), (byte)(150f * num4), (byte)(255f * num4), a);
-
-                    if (rare == 2)
-                        black = new Microsoft.Xna.Framework.Color((byte)(150f * num4), (byte)(255f * num4), (byte)(150f * num4), a);
-
-                    if (rare == 3)
-                        black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(200f * num4), (byte)(150f * num4), a);
-
-                    if (rare == 4)
-                        black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(150f * num4), (byte)(150f * num4), a);
-
-                    if (rare == 5)
-                        black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(150f * num4), (byte)(255f * num4), a);
-
-                    if (rare == 6)
-                        black = new Microsoft.Xna.Framework.Color((byte)(210f * num4), (byte)(160f * num4), (byte)(255f * num4), a);
-
-                    if (rare == 7)
-                        black = new Microsoft.Xna.Framework.Color((byte)(150f * num4), (byte)(255f * num4), (byte)(10f * num4), a);
-
-                    if (rare == 8)
-                        black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(255f * num4), (byte)(10f * num4), a);
-
-                    if (rare == 9)
-                        black = new Microsoft.Xna.Framework.Color((byte)(5f * num4), (byte)(200f * num4), (byte)(255f * num4), a);
-
-                    if (rare == 10)
-                        black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(40f * num4), (byte)(100f * num4), a);
-
-                    /*
-					if (rare >= 11)
-					*/
-                    if (rare == 11)
-                        black = new Microsoft.Xna.Framework.Color((byte)(180f * num4), (byte)(40f * num4), (byte)(255f * num4), a);
-                    if (rare > 11)
-                        black = RarityLoader.GetRarity(rare).RarityColor * num4;
-                    if (diff == 1)
-                        black = new Microsoft.Xna.Framework.Color((byte)((float)(int)Main.mcColor.R * num4), (byte)((float)(int)Main.mcColor.G * num4), (byte)((float)(int)Main.mcColor.B * num4), a);
-                    if (diff == 2)
-                        black = new Microsoft.Xna.Framework.Color((byte)((float)(int)Main.hcColor.R * num4), (byte)((float)(int)Main.hcColor.G * num4), (byte)((float)(int)Main.hcColor.B * num4), a);
-
-                    if (hoverItem.expert || rare == -12)
-                        black = new Microsoft.Xna.Framework.Color((byte)((float)Main.DiscoR * num4), (byte)((float)Main.DiscoG * num4), (byte)((float)Main.DiscoB * num4), a);
-
-                    // Handle new master mode field.
-                    if (hoverItem.master || rare == -13)
-                        black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(Main.masterColor * 200f * num4), 0, a);
-                }
-                else if (array2[k]) {
-                    black = ((!array3[k]) ? new Microsoft.Xna.Framework.Color((byte)(120f * num4), (byte)(190f * num4), (byte)(120f * num4), a) : new Microsoft.Xna.Framework.Color((byte)(190f * num4), (byte)(120f * num4), (byte)(120f * num4), a));
-                }
-                /*
-				else if (k == numLines - 1) {
-				*/
-                else if (drawableLines[k].Mod == "Terraria" && drawableLines[k].Name == "Price") {
-                    black = color;
-                }
-
-                /*
-				if (k == researchLine)
-				*/
-                if (drawableLines[k].Mod == "Terraria" && drawableLines[k].Name == "JourneyResearch")
-                    black = Terraria.ID.Colors.JourneyMode;
-
-                /*
-				ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, array[k], new Vector2(X, Y + num16), black, 0f, Vector2.Zero, Vector2.One);
-				*/
-                //drawableLines[k].Color = black;
-                Color realLineColor = black;
-
-                if (overrideColor[k].HasValue) {
-                    // TODO: Some way for mods to bypass mouseTextColor pulsing for a TooltipLine. Apply to UnloadedPrefix once implemented.
-                    realLineColor = overrideColor[k].Value * num4;
-                    //drawableLines[k].OverrideColor = realLineColor;
-                }
-
-                ItemLoader.PreDrawTooltipLine(_hoverItem, drawableLines[k], ref num12);
-
-                if (drawableLines[k].Name != "ItemName" &&
-                    drawableLines[k].Name != "Damage_Druid" &&
-                    drawableLines[k].Name != "DruidDamageTip" &&
-                    drawableLines[k].Name != "PotentialDamage") {
-                    continue;
-                }
-
-                ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, drawableLines[k].Font, drawableLines[k].Text,
-                    new Vector2(drawableLines[k].X, drawableLines[k].Y), realLineColor, drawableLines[k].Rotation, drawableLines[k].Origin, drawableLines[k].BaseScale, drawableLines[k].MaxWidth, drawableLines[k].Spread);
+                zero.Y += stringSize.Y + (float)num12;
             }
 
-        PostDraw:
-            ItemLoader.PostDrawTooltipLine(_hoverItem, drawableLines[k]);
+            if (yoyoLogo != -1)
+                zero.Y += 24f;
 
-            num16 += (int)(FontAssets.MouseText.Value.MeasureString(drawableLines[k].Text).Y + (float)num12);
+            X += 6;
+            Y += 6;
+            int num13 = 4;
+            if (settingsEnabled_OpaqueBoxBehindTooltips) {
+                X += 8;
+                Y += 2;
+                num13 = 18;
+            }
+
+            int num14 = Main.screenWidth;
+            int num15 = Main.screenHeight;
+            if ((float)X + zero.X + (float)num13 > (float)num14)
+                X = (int)((float)num14 - zero.X - (float)num13);
+
+            if ((float)Y + zero.Y + (float)num13 > (float)num15)
+                Y = (int)((float)num15 - zero.Y - (float)num13);
+
+            int num16 = 0;
+            num3 = (float)(int)mouseTextColor / 255f;
+            if (settingsEnabled_OpaqueBoxBehindTooltips) {
+                num3 = MathHelper.Lerp(num3, 1f, 1f);
+                int num17 = 14;
+                int num18 = 9;
+                Utils.DrawInvBG(Main.spriteBatch, new Microsoft.Xna.Framework.Rectangle(X - num17, Y - num18, (int)zero.X + num17 * 2, (int)zero.Y + num18 + num18 / 2), new Microsoft.Xna.Framework.Color(23, 25, 81, 255) * 0.925f);
+            }
+
+            bool globalCanDraw = ItemLoader.PreDrawTooltip(_hoverItem, lines.AsReadOnly(), ref X, ref Y);
+            for (int k = 0; k < numLines; k++) {
+                int x = X;
+                int y = Y + num16;
+                drawableLines[k].X = x;
+                drawableLines[k].Y = y;
+
+                /*
+                if (k == yoyoLogo) {
+                */
+
+                {
+                    Microsoft.Xna.Framework.Color black = Microsoft.Xna.Framework.Color.Black;
+                    black = new Microsoft.Xna.Framework.Color(num4, num4, num4, num4);
+                    /*
+                    if (k == 0) {
+                    */
+                    if (drawableLines[k].Mod == "Terraria" && drawableLines[k].Name == "ItemName") {
+                        /*
+                        if (rare == -13)
+                            black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(masterColor * 200f * num4), 0, a);
+                        */
+
+                        if (rare == -11)
+                            black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(175f * num4), (byte)(0f * num4), a);
+
+                        if (rare == -1)
+                            black = new Microsoft.Xna.Framework.Color((byte)(130f * num4), (byte)(130f * num4), (byte)(130f * num4), a);
+
+                        if (rare == 1)
+                            black = new Microsoft.Xna.Framework.Color((byte)(150f * num4), (byte)(150f * num4), (byte)(255f * num4), a);
+
+                        if (rare == 2)
+                            black = new Microsoft.Xna.Framework.Color((byte)(150f * num4), (byte)(255f * num4), (byte)(150f * num4), a);
+
+                        if (rare == 3)
+                            black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(200f * num4), (byte)(150f * num4), a);
+
+                        if (rare == 4)
+                            black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(150f * num4), (byte)(150f * num4), a);
+
+                        if (rare == 5)
+                            black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(150f * num4), (byte)(255f * num4), a);
+
+                        if (rare == 6)
+                            black = new Microsoft.Xna.Framework.Color((byte)(210f * num4), (byte)(160f * num4), (byte)(255f * num4), a);
+
+                        if (rare == 7)
+                            black = new Microsoft.Xna.Framework.Color((byte)(150f * num4), (byte)(255f * num4), (byte)(10f * num4), a);
+
+                        if (rare == 8)
+                            black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(255f * num4), (byte)(10f * num4), a);
+
+                        if (rare == 9)
+                            black = new Microsoft.Xna.Framework.Color((byte)(5f * num4), (byte)(200f * num4), (byte)(255f * num4), a);
+
+                        if (rare == 10)
+                            black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(40f * num4), (byte)(100f * num4), a);
+
+                        /*
+                        if (rare >= 11)
+                        */
+                        if (rare == 11)
+                            black = new Microsoft.Xna.Framework.Color((byte)(180f * num4), (byte)(40f * num4), (byte)(255f * num4), a);
+                        if (rare > 11)
+                            black = RarityLoader.GetRarity(rare).RarityColor * num4;
+                        if (diff == 1)
+                            black = new Microsoft.Xna.Framework.Color((byte)((float)(int)Main.mcColor.R * num4), (byte)((float)(int)Main.mcColor.G * num4), (byte)((float)(int)Main.mcColor.B * num4), a);
+                        if (diff == 2)
+                            black = new Microsoft.Xna.Framework.Color((byte)((float)(int)Main.hcColor.R * num4), (byte)((float)(int)Main.hcColor.G * num4), (byte)((float)(int)Main.hcColor.B * num4), a);
+
+                        if (hoverItem.expert || rare == -12)
+                            black = new Microsoft.Xna.Framework.Color((byte)((float)Main.DiscoR * num4), (byte)((float)Main.DiscoG * num4), (byte)((float)Main.DiscoB * num4), a);
+
+                        // Handle new master mode field.
+                        if (hoverItem.master || rare == -13)
+                            black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(Main.masterColor * 200f * num4), 0, a);
+                    }
+                    else if (array2[k]) {
+                        black = ((!array3[k]) ? new Microsoft.Xna.Framework.Color((byte)(120f * num4), (byte)(190f * num4), (byte)(120f * num4), a) : new Microsoft.Xna.Framework.Color((byte)(190f * num4), (byte)(120f * num4), (byte)(120f * num4), a));
+                    }
+                    /*
+                    else if (k == numLines - 1) {
+                    */
+                    else if (drawableLines[k].Mod == "Terraria" && drawableLines[k].Name == "Price") {
+                        black = color;
+                    }
+
+                    /*
+                    if (k == researchLine)
+                    */
+                    if (drawableLines[k].Mod == "Terraria" && drawableLines[k].Name == "JourneyResearch")
+                        black = Terraria.ID.Colors.JourneyMode;
+
+                    /*
+                    ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, array[k], new Vector2(X, Y + num16), black, 0f, Vector2.Zero, Vector2.One);
+                    */
+                    //drawableLines[k].Color = black;
+                    Color realLineColor = black;
+
+                    if (overrideColor[k].HasValue) {
+                        // TODO: Some way for mods to bypass mouseTextColor pulsing for a TooltipLine. Apply to UnloadedPrefix once implemented.
+                        realLineColor = overrideColor[k].Value * num4;
+                        //drawableLines[k].OverrideColor = realLineColor;
+                    }
+
+                    ItemLoader.PreDrawTooltipLine(_hoverItem, drawableLines[k], ref num12);
+
+                    if (drawableLines[k].Name != "ItemName" &&
+                        drawableLines[k].Name != "Damage_Druid" &&
+                        drawableLines[k].Name != "DruidDamageTip" &&
+                        drawableLines[k].Name != "PotentialDamage") {
+                        continue;
+                    }
+
+                    ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, drawableLines[k].Font, drawableLines[k].Text,
+                        new Vector2(drawableLines[k].X, drawableLines[k].Y), realLineColor, drawableLines[k].Rotation, drawableLines[k].Origin, drawableLines[k].BaseScale, drawableLines[k].MaxWidth, drawableLines[k].Spread);
+                }
+
+            PostDraw:
+                ItemLoader.PostDrawTooltipLine(_hoverItem, drawableLines[k]);
+
+                num16 += (int)(FontAssets.MouseText.Value.MeasureString(drawableLines[k].Text).Y + (float)num12);
+            }
+
+            ItemLoader.PostDrawTooltip(_hoverItem, drawableLines.AsReadOnly());
         }
-
-        ItemLoader.PostDrawTooltip(_hoverItem, drawableLines.AsReadOnly());
+        catch {
+            numLines2 = 0;
+        }
     }
 
     public override void Draw(SpriteBatch spriteBatch) {
