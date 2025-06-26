@@ -355,6 +355,7 @@ abstract class BaseRodProjectile : DruidicProjectile {
     private void SetPosition() {
         Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
         Projectile.Center = center;
+        Projectile.Center = Utils.Floor(Projectile.Center);
         bool flag = !AttachedNatureWeapon.IsEmpty() && !ShouldntUpdateRotationAndDirection();
         if (Projectile.IsOwnerMyPlayer(Owner) && flag) {
             Vector2 pointPosition = Owner.GetViableMousePosition();
