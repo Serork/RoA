@@ -1,2 +1,4 @@
+- Fixed a crash when opening the Rise of Ages config with certain mods enabled
+- Slightly reduced Luminous Flower spawn rate
 - Arterial spray no longer breaks the shoulder animation if used while wearing a cape
 - Fixed some weapon attack animations displaying incorrectly when the player is moving
