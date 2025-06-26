@@ -132,6 +132,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             if (!_init) {
                 _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
                 Projectile.Center = player.MountedCenter;
+                Projectile.Center = Utils.Floor(Projectile.Center);
                 Projectile.direction = Projectile.spriteDirection = _direction;
                 player.ChangeDir(Projectile.spriteDirection);
                 _timeLeft = Projectile.timeLeft;
