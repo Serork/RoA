@@ -4,8 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Text;
-using RoA.Content.Buffs;
-using RoA.Content.Items.Weapons.Druidic.Rods;
+using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +19,6 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config.UI;
-using Terraria.ModLoader.Core;
 using Terraria.ModLoader.UI;
 using Terraria.UI;
 using Terraria.UI.Chat;
