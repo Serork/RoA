@@ -228,8 +228,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             Projectile.Kill();
         }
         else {
-            Projectile.Center = player.MountedCenter + Vector2.Normalize(Projectile.velocity);
-            Projectile.Center = Utils.Floor(Projectile.Center);
+            Projectile.Center = Utils.Floor(player.MountedCenter) + Vector2.Normalize(Projectile.velocity);
             float dir = (float)(Math.PI / 2.0 + (double)playerDirection * 1.0);
             float offset = MathHelper.Pi / 1.15f * playerDirection;
             SoundStyle style = new SoundStyle(ResourceManager.ItemSounds + "Whisper") { Volume = 1.15f };
