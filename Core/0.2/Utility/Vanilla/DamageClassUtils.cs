@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RoA.Core.Utility.Extensions;
+
+using System;
 using System.Collections.Generic;
 
 using Terraria.ModLoader;

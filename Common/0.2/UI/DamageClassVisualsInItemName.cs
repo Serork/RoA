@@ -10,6 +10,7 @@ using RoA.Content;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -102,14 +103,25 @@ sealed class DamageClassItemsStorage : IInitializer {
     private void On_Item_SetDefaults_int_bool_ItemVariant(On_Item.orig_SetDefaults_int_bool_ItemVariant orig, Item self, int Type, bool noMatCheck, Terraria.GameContent.Items.ItemVariant variant) {
         orig(self, Type, noMatCheck, variant);
 
+        if (self.type == ItemID.SporeSac) {
+            return;
+        }
+
         IEnumerable<DamageClass> damageClasses = AllSupportedDamageClasses;
         if (ItemsPerDamageClass == null) {
             ItemsPerDamageClass = [];
             foreach (DamageClass damageClass in damageClasses) {
                 ItemsPerDamageClass[damageClass] = [];
             }
+
+            _testPlayer ??= new Player();
+            _testPlayer.dead = false;
+            _testPlayer.statLife = _testPlayer.statLifeMax = 100;
+            _testPlayer.statMana = _testPlayer.statManaMax = 20;
+            _testPlayer.immune = true;
         }
 
+        bool exit = false;
         void generateItemsListAndPopulate() {
             if (self.type >= ItemID.CopperCoin && self.type <= ItemID.PlatinumCoin) {
                 return;
@@ -174,9 +186,11 @@ sealed class DamageClassItemsStorage : IInitializer {
                     //    testPlayer.tileInteractAttempted = false;
                     //    testPlayer.releaseUseTile = false;
                     //}
-                    if ((!ItemID.Sets.IsFood[self.type] || damageClass == DamageClass.Generic) && self.buffType > 0) {
-                        testPlayer.AddBuff(self.buffType, 2);
-                        testPlayer.UpdateBuffs(self.whoAmI);
+                    if (damageClass is VanillaDamageClass) {
+                        if ((!ItemID.Sets.IsFood[self.type] || damageClass == DamageClass.Generic) && self.buffType > 0) {
+                            testPlayer.AddBuff(self.buffType, 2);
+                            testPlayer.UpdateBuffs(self.whoAmI);
+                        }
                     }
                     if (self.accessory) {
                         testPlayer.ApplyEquipFunctional(self, true);
@@ -186,8 +200,8 @@ sealed class DamageClassItemsStorage : IInitializer {
 
                     testPlayer.ResetEffects();
                 }
-                catch (Exception exception) {
-                    Console.WriteLine(exception.Message);
+                catch {
+                    exit = true;
                     return;
                 }
                 int lengthOfCheckValues = classValuesBefore.Count;
@@ -208,17 +222,14 @@ sealed class DamageClassItemsStorage : IInitializer {
                 }
             }
 
-            _testPlayer ??= new Player();
-            _testPlayer.dead = false;
-            _testPlayer.statLife = _testPlayer.statLifeMax = 100;
-            _testPlayer.statMana = _testPlayer.statManaMax = 20;
-            _testPlayer.immune = true;
-
             if (self.IsAWeapon()) {
                 AddItem(self, self.DamageType);
             }
             else if (self.createTile > -1 || self.accessory || self.buffType > 0 || self.headSlot != -1 || self.bodySlot != -1 || self.legSlot != -1) {
                 foreach (DamageClass damageClass in damageClasses) {
+                    if (exit) {
+                        return;
+                    }
                     checkForDamageClassEquips(damageClass);
                 }
             }
