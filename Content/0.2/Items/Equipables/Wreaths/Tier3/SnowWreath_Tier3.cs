@@ -96,7 +96,7 @@ sealed class SnowWreathTier3 : WreathItem {
                 cloudberryVelocity += cloudberryVelocity.RotatedByRandom(MathHelper.PiOver4);
                 cloudberryVelocity *= Main.rand.NextFloat(0.75f, 1f);
                 cloudberryVelocity *= 0.5f;
-                ProjectileHelper.SpawnPlayerOwnedProjectile<Cloudberry>(new ProjectileHelper.SpawnProjectileArgs(Player, Player.GetSource_ItemUse(heldItem)) with {
+                ProjectileHelper.SpawnPlayerOwnedProjectile<SnowWreath_Cloudberry>(new ProjectileHelper.SpawnProjectileArgs(Player, Player.GetSource_ItemUse(heldItem)) with {
                     Position = cloudberrySpawnPosition,
                     Velocity = cloudberryVelocity,
                     Damage = damage,

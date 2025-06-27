@@ -21,7 +21,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(40);
-        Item.SetUsageValues(-1, 25, useSound: SoundID.Item7);
+        Item.SetUsableValues(-1, 25, useSound: SoundID.Item7);
         Item.SetWeaponValues(14, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 26);

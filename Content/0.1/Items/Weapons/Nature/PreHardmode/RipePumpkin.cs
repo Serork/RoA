@@ -18,7 +18,7 @@ sealed class RipePumpkin : NatureItem {
         Item.SetSizeValues(30, 28);
         Item.SetWeaponValues(4, 6f);
         Item.SetDefaultsToUsable(ItemUseStyleID.Swing, 45, 20, false, useSound: SoundID.Item7);
-        Item.SetDefaultsToShootable((ushort)ModContent.ProjectileType<Projectiles.Friendly.Nature.RipePumpkin>());
+        Item.SetShootableValues((ushort)ModContent.ProjectileType<Projectiles.Friendly.Nature.RipePumpkin>());
         Item.SetOtherValues(Item.sellPrice(silver: 20), ItemRarityID.Blue);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 24);

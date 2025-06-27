@@ -22,7 +22,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(36);
-        Item.SetUsageValues(ItemUseStyleID.Shoot, 24, useSound: SoundID.Item7);
+        Item.SetUsableValues(ItemUseStyleID.Shoot, 24, useSound: SoundID.Item7);
         Item.SetWeaponValues(6, 4f);
         Item.SetOtherValues(Item.sellPrice(silver: 15), ItemRarityID.Blue);
 

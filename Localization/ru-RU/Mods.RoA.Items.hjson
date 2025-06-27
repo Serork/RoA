@@ -1984,3 +1984,8 @@ DruidEmblem: {
 	// DisplayName: Druid Emblem
 	// Tooltip: 15% increased nature damage
 }
+
+LeafySeahorse: {
+	// DisplayName: Leafy Seahorse
+	// Tooltip: ""
+}

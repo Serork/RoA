@@ -24,7 +24,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class Rocks : NatureProjectile_NoTextureLoad {
+sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
     public static Color GetGeodeColor(GemType gemType) {
         return gemType switch {
             GemType.Amethyst => Color.Purple,
@@ -54,7 +54,7 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
     private const byte FRAMECOUNT = 3;
 
     private static byte ROCKATTACKCOUNT => 3;
-    private static ushort TIMELEFT => 360;
+    private static ushort MAXTIMELEFT => 360;
     private static ushort MAXROCKDISTANCE => 300;
     private static float MAXPROGRESS => 1.35f;
     private static float MAXGRAVITY => 5f;
@@ -176,11 +176,11 @@ sealed class Rocks : NatureProjectile_NoTextureLoad {
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: true);
 
-        Projectile.SetSize(16);
+        Projectile.SetSizeValues(16);
 
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
-        Projectile.timeLeft = TIMELEFT;
+        Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
         Projectile.penetrate = -1;

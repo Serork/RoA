@@ -20,8 +20,8 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class Cloudberry : NatureProjectile_NoTextureLoad {
-    private static ushort TIMELEFT => 260;
+sealed class SnowWreath_Cloudberry : NatureProjectile_NoTextureLoad {
+    private static ushort MAXTIMELEFT => 260;
     private static byte FRAMECOUNT => 4;
     private static float STARTFRAMINGSPEED => 0.05f;
     private static byte MAXCOPIES => 10;
@@ -108,10 +108,10 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: false, shouldApplyAttachedItemDamage: false);
 
-        Projectile.SetSize(16);
+        Projectile.SetSizeValues(16);
 
         Projectile.aiStyle = -1;
-        Projectile.timeLeft = TIMELEFT;
+        Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
         Projectile.penetrate = 1;
@@ -127,7 +127,7 @@ sealed class Cloudberry : NatureProjectile_NoTextureLoad {
             }
         }
         void makeSmoothDisappearOnDeath() {
-            Projectile.Opacity = Utils.GetLerpValue(0, TIMELEFT / 3, Projectile.timeLeft, true);
+            Projectile.Opacity = Utils.GetLerpValue(0, MAXTIMELEFT / 3, Projectile.timeLeft, true);
         }
         void initTrailInfoAndAccelerate() {
             CloudberryValues cloudberryValues = new(Projectile);

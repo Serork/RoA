@@ -22,7 +22,7 @@ sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(32);
-        Item.SetUsageValues(-1, 27, useSound: SoundID.Item7);
+        Item.SetUsableValues(-1, 27, useSound: SoundID.Item7);
         Item.SetWeaponValues(8, 1f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 23);

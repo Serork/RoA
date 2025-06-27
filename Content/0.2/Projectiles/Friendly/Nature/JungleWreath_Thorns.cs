@@ -18,8 +18,8 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class Thorns : NatureProjectile_NoTextureLoad {
-    private static ushort TIMELEFT => 180;
+sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
+    private static ushort MAXTIMELEFT => 180;
     private static byte FRAMECOUNT => 5;
     private static byte BASELENGTH => 10;
     private static byte SEGMENTHEIGHT => 18;
@@ -83,11 +83,11 @@ sealed class Thorns : NatureProjectile_NoTextureLoad {
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: false, shouldApplyAttachedItemDamage: false);
 
-        Projectile.SetSize(10);
+        Projectile.SetSizeValues(10);
 
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
-        Projectile.timeLeft = TIMELEFT;
+        Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
         Projectile.penetrate = 5;

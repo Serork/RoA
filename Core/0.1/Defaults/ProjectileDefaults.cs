@@ -11,7 +11,7 @@ static class ProjectileDefaults {
         projectile.height = height;
     }
 
-    public static void SetSize(this Projectile projectile, int width) => projectile.width = projectile.height = width;
+    public static void SetSizeValues(this Projectile projectile, int width) => projectile.width = projectile.height = width;
 
     public static void SetDefaultsToNatureProjectile(this Projectile projectile) => projectile.DamageType = DruidClass.Nature;
 

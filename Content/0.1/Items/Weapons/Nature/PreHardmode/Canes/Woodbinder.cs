@@ -24,7 +24,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(36, 42);
-        Item.SetUsageValues(-1, 24, useSound: SoundID.Item1);
+        Item.SetUsableValues(-1, 24, useSound: SoundID.Item1);
         Item.SetWeaponValues(10, 2f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 22);

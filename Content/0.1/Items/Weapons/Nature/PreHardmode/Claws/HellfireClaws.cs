@@ -25,7 +25,7 @@ sealed class HellfireClaws : ClawsBaseItem {
 
         Item.value = Item.sellPrice(0, 2, 50, 0);
 
-        Item.SetUsageValues(ItemUseStyleID.Swing, 18, false, autoReuse: true);
+        Item.SetUsableValues(ItemUseStyleID.Swing, 18, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 34);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);

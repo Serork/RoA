@@ -69,7 +69,7 @@ sealed class BookwormsProjectile : ModProjectile {
 
     public override string Texture => ResourceManager.EmptyTexture;
 
-    private static int MaxTimeLeft => 90;
+    private static ushort MAXTIMELEFT => 90;
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.NeedsUUID[Type] = true;
@@ -87,7 +87,7 @@ sealed class BookwormsProjectile : ModProjectile {
 
         Projectile.tileCollide = false;
 
-        Projectile.timeLeft = MaxTimeLeft;
+        Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.penetrate = -1;
     }
@@ -155,7 +155,7 @@ sealed class BookwormsProjectile : ModProjectile {
     public override void AI() {
         Player player = Main.player[Projectile.owner];
         int timeLeftExtra = (int)Projectile.ai[2] * 2;
-        int timeLeft = MaxTimeLeft - timeLeftExtra;
+        int timeLeft = MAXTIMELEFT - timeLeftExtra;
         if (Projectile.timeLeft < timeLeft - 5) {
             if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
                 Projectile.timeLeft -= 1;

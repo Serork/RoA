@@ -15,9 +15,9 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 sealed class MushroomStaff : NatureItem {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(38);
-        Item.SetUsageValues(ItemUseStyleID.Swing, 55, useSound: SoundID.Item156);
+        Item.SetUsableValues(ItemUseStyleID.Swing, 55, useSound: SoundID.Item156);
         Item.SetWeaponValues(3, 2f);
-        Item.SetDefaultsToShootable((ushort)ModContent.ProjectileType<MushroomSpore>(), 4f);
+        Item.SetShootableValues((ushort)ModContent.ProjectileType<MushroomSpore>(), 4f);
         Item.SetOtherValues(Item.sellPrice(silver: 10), ItemRarityID.Blue);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 16);

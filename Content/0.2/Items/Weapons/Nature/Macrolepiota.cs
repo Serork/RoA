@@ -18,7 +18,7 @@ sealed class Macrolepiota : NatureItem {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(28, 40);
         Item.SetWeaponValues(60, 4f);
-        Item.SetUsageValues(ItemUseStyleID.None, 30, useSound: SoundID.Item7);
+        Item.SetUsableValues(ItemUseStyleID.None, 30, useSound: SoundID.Item7);
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice());
 
         NatureWeaponHandler.SetPotentialDamage(Item, 100);

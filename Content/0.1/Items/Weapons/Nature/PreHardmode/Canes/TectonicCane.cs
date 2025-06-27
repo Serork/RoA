@@ -24,7 +24,7 @@ sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(36, 38);
-        Item.SetUsageValues(-1, 40, useSound: SoundID.Item7);
+        Item.SetUsableValues(-1, 40, useSound: SoundID.Item7);
         Item.SetWeaponValues(12, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 30);

@@ -20,7 +20,7 @@ sealed class ShadewoodStaff : CaneBaseItem<ShadewoodStaff.ShadewoodStaffBase> {
 
     public static void SetDefaultsInner(Item item) {
         item.SetSizeValues(36);
-        item.SetUsageValues(-1, 44, useSound: SoundID.Item7);
+        item.SetUsableValues(-1, 44, useSound: SoundID.Item7);
         item.SetWeaponValues(8, 4f);
 
         NatureWeaponHandler.SetPotentialDamage(item, 28);

@@ -76,7 +76,7 @@ sealed class JungleWreathTier3 : WreathItem {
             }
             float knockBack = 4f;
 
-            ProjectileHelper.SpawnPlayerOwnedProjectile<Thorns>(new ProjectileHelper.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(info.DamageSource)) with {
+            ProjectileHelper.SpawnPlayerOwnedProjectile<JungleWreath_Thorns>(new ProjectileHelper.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(info.DamageSource)) with {
                 Position = thornsSpawnPosition,
                 Velocity = thornsVelocity,
                 Damage = damage,

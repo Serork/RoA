@@ -71,7 +71,7 @@ sealed class BeachWreathTier3 : WreathItem {
                 return;
             }
 
-            ushort coralType = (ushort)ModContent.ProjectileType<Coral>();
+            ushort coralType = (ushort)ModContent.ProjectileType<BeachWreath_Coral>();
             int activeCoralCountAllowed = 5;
             int activeCoralCount = Player.ownedProjectileCounts[coralType];
             bool enoughCoralsActive = activeCoralCount > activeCoralCountAllowed - 1;
@@ -80,7 +80,7 @@ sealed class BeachWreathTier3 : WreathItem {
             }
 
             float maxDistance = 110f;
-            IReadOnlyCollection<Vector2> allCoralsPositions = Coral.AllCoralsPositions;
+            IReadOnlyCollection<Vector2> allCoralsPositions = BeachWreath_Coral.AllCoralsPositions;
             Vector2 getRandomazedOffsetValue() => (Vector2.UnitY * maxDistance * Main.rand.NextFloat(0.5f, 1f)).RotatedByRandom(MathHelper.TwoPi);
             Vector2 spawnPositionOffset = getRandomazedOffsetValue();
             Vector2 getFinalDestinationPosition() => Player.Center + spawnPositionOffset;
@@ -103,7 +103,7 @@ sealed class BeachWreathTier3 : WreathItem {
             int denom = 3;
             damage /= denom;
 
-            ProjectileHelper.SpawnPlayerOwnedProjectile<Coral>(new ProjectileHelper.SpawnProjectileArgs(Player, Player.GetSource_Misc(nameof(BeachWreathTier3))) with {
+            ProjectileHelper.SpawnPlayerOwnedProjectile<BeachWreath_Coral>(new ProjectileHelper.SpawnProjectileArgs(Player, Player.GetSource_Misc(nameof(BeachWreathTier3))) with {
                 Position = coralSpawnPosition,
                 AI1 = spawnPositionOffset.X,
                 AI2 = spawnPositionOffset.Y,

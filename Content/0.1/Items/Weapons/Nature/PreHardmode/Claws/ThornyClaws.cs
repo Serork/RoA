@@ -25,7 +25,7 @@ sealed class ThornyClaws : ClawsBaseItem {
 
         Item.value = Item.sellPrice(0, 0, 50, 0);
 
-        Item.SetUsageValues(ItemUseStyleID.Swing, 20, false, autoReuse: true);
+        Item.SetUsableValues(ItemUseStyleID.Swing, 20, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 28);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);

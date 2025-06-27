@@ -203,7 +203,7 @@ sealed class ExoticTulip : NatureItem {
 //sealed class ExoticTulip : TulipBaseItem<ExoticTulip.ExoticTulipBase> {
 //    protected override void SafeSetDefaults() {
 //        Item.SetWeaponValues(6, 1.5f);
-//        Item.SetUsageValues(-1, 60, useSound: SoundID.Item65);
+//        Item.SetUsableValues(-1, 60, useSound: SoundID.Item65);
 
 //        NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
@@ -220,7 +220,7 @@ sealed class ExoticTulip : NatureItem {
 //sealed class SweetTulip : TulipBaseItem<SweetTulip.SweepTulipBase> {
 //    protected override void SafeSetDefaults() {
 //        Item.SetWeaponValues(6, 1.5f);
-//        Item.SetUsageValues(-1, 60, useSound: SoundID.Item65);
+//        Item.SetUsableValues(-1, 60, useSound: SoundID.Item65);
 
 //        NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
@@ -237,7 +237,7 @@ sealed class ExoticTulip : NatureItem {
 //sealed class WeepingTulip : TulipBaseItem<WeepingTulip.WeepingTulipBase> {
 //    protected override void SafeSetDefaults() {
 //        Item.SetWeaponValues(6, 1.5f);
-//        Item.SetUsageValues(-1, 45, useSound: SoundID.Item65);
+//        Item.SetUsableValues(-1, 45, useSound: SoundID.Item65);
 
 //        NatureWeaponHandler.SetPotentialDamage(Item, 20);
 

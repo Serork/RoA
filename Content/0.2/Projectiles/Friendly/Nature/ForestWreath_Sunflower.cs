@@ -17,9 +17,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class Sunflower : NatureProjectile_NoTextureLoad {
+sealed class ForestWreath_Sunflower : NatureProjectile_NoTextureLoad {
     private static byte PETALCOUNT => 10;
-    private static ushort TIMELEFT => 360;
+    private static ushort MAXTIMELEFT => 360;
 
     private static Asset<Texture2D>? _baseTexture, _petalTexture, _rayTexture;
 
@@ -50,11 +50,11 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: false, shouldApplyAttachedItemDamage: false);
 
-        Projectile.SetSize(10);
+        Projectile.SetSizeValues(10);
 
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
-        Projectile.timeLeft = TIMELEFT;
+        Projectile.timeLeft = MAXTIMELEFT;
     }
 
     public override void AI() {
@@ -67,7 +67,7 @@ sealed class Sunflower : NatureProjectile_NoTextureLoad {
             }
         }
         void makeSmoothDisappearOnDeath() {
-            Projectile.Opacity = Ease.SineInOut(Utils.GetLerpValue(0, TIMELEFT / 3, Projectile.timeLeft, true));
+            Projectile.Opacity = Ease.SineInOut(Utils.GetLerpValue(0, MAXTIMELEFT / 3, Projectile.timeLeft, true));
         }
         void initPetalsAndRandomRotation() {
             SunflowerValues sunflowerValues = new(Projectile);

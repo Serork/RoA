@@ -21,7 +21,7 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
     protected override void SafeSetDefaults() {
         Item.SetWeaponValues(12, 1.5f);
-        Item.SetUsageValues(-1, 60, useSound: SoundID.Item7);
+        Item.SetUsableValues(-1, 60, useSound: SoundID.Item7);
         Item.SetSizeValues(36, 38);
 
         Item.rare = ItemRarityID.Orange;
@@ -236,7 +236,7 @@ abstract class TulipBase : CaneBaseProjectile {
 //sealed class SweetTulip : TulipBaseItem<SweetTulip.SweepTulipBase> {
 //    protected override void SafeSetDefaults() {
 //        Item.SetWeaponValues(6, 1.5f);
-//        Item.SetUsageValues(-1, 60, useSound: SoundID.Item65);
+//        Item.SetUsableValues(-1, 60, useSound: SoundID.Item65);
 
 //        NatureWeaponHandler.SetPotentialDamage(Item, 20);
 
@@ -253,7 +253,7 @@ abstract class TulipBase : CaneBaseProjectile {
 //sealed class WeepingTulip : TulipBaseItem<WeepingTulip.WeepingTulipBase> {
 //    protected override void SafeSetDefaults() {
 //        Item.SetWeaponValues(6, 1.5f);
-//        Item.SetUsageValues(-1, 45, useSound: SoundID.Item65);
+//        Item.SetUsableValues(-1, 45, useSound: SoundID.Item65);
 
 //        NatureWeaponHandler.SetPotentialDamage(Item, 20);
 

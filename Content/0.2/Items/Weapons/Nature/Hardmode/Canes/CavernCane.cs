@@ -23,7 +23,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(42);
         Item.SetWeaponValues(60, 4f);
-        Item.SetUsageValues(ItemUseStyleID.None, 30, useSound: SoundID.Item7);
+        Item.SetUsableValues(ItemUseStyleID.None, 30, useSound: SoundID.Item7);
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice());
 
         NatureWeaponHandler.SetPotentialDamage(Item, 100);
@@ -75,7 +75,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                         while (maxChecks-- > 0 && !WorldGenHelper.SolidTile(spawnPosition.ToTileCoordinates())) {
                             spawnPosition += spawnPosition.DirectionTo(Owner.GetMousePosition()) * WorldGenHelper.TILESIZE;
                         }
-                        ProjectileHelper.SpawnPlayerOwnedProjectile<Rocks>(new ProjectileHelper.SpawnProjectileArgs(owner, Projectile.GetSource_Misc("caneattack")) {
+                        ProjectileHelper.SpawnPlayerOwnedProjectile<CavernCane_Rocks>(new ProjectileHelper.SpawnProjectileArgs(owner, Projectile.GetSource_Misc("caneattack")) {
                             Position = spawnPosition,
                             AI0 = (byte)geodeType,
                             AI1 = UseTime
@@ -126,9 +126,9 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                         List<GemType> gemTypes = [.. Enum.GetValues(typeof(GemType)).Cast<GemType>()];
                         int gemCount = gemTypes.Count;
                         ref Color gemColor = ref _gemColor[i];
-                        gemColor = Color.Lerp(gemColor, Rocks.GetGeodeColor(GeodeType), 0.1f);
+                        gemColor = Color.Lerp(gemColor, CavernCane_Rocks.GetGeodeColor(GeodeType), 0.1f);
                         Color dustColor = gemColor * (1f - visualProgress);
-                        int dustType = Rocks.GetGeodeDustType(GeodeType);
+                        int dustType = CavernCane_Rocks.GetGeodeDustType(GeodeType);
                         float dustScale = Main.rand.NextFloat(1.25f, 1.5f) * 1f * MathF.Max(0.6f, 1f - visualProgress2);
                         Dust dust = Dust.NewDustPerfect(dustSpawnPosition,
                                                         dustType,

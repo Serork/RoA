@@ -20,13 +20,13 @@ sealed class ElderwoodClaws : ClawsBaseItem {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(26);
         Item.SetWeaponValues(14, 4f);
-        Item.SetDefaultsToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
+        Item.SetShootableValues((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
 
         Item.rare = ItemRarityID.Blue;
 
         Item.value = Item.sellPrice(0, 0, 22, 0);
 
-        Item.SetUsageValues(ItemUseStyleID.Swing, 18, false, autoReuse: true);
+        Item.SetUsableValues(ItemUseStyleID.Swing, 18, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 16);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);

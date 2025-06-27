@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Common.Players;
-using RoA.Content.Dusts;
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -11,15 +10,15 @@ using RoA.Core.Utility;
 using System;
 
 using Terraria;
-using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class Spore : NatureProjectile {
-    private static ushort TIMELEFT => 200;
+sealed class Macrolepiota_Spore : NatureProjectile {
+    public override string Texture => ResourceManager.NatureProjectileTextures + "Spore";
+
+    private static ushort MAXTIMELEFT => 200;
 
     private ref struct SporeValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
@@ -45,7 +44,7 @@ sealed class Spore : NatureProjectile {
 
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
-        Projectile.timeLeft = TIMELEFT;
+        Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
     }
@@ -80,7 +79,7 @@ sealed class Spore : NatureProjectile {
             sporeValues.FacedRight = Projectile.velocity.X < 0f;
         }
         void fadeOut() {
-            Projectile.alpha = (byte)Utils.Remap(Projectile.timeLeft, TIMELEFT / 3, 0, 0, 255);
+            Projectile.alpha = (byte)Utils.Remap(Projectile.timeLeft, MAXTIMELEFT / 3, 0, 0, 255);
             if (Projectile.alpha >= 255) {
                 Projectile.Kill();
             }

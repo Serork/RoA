@@ -7,7 +7,7 @@ using Terraria.ID;
 
 namespace RoA.Core.Defaults;
 
-static class ItemDefaults {
+static partial class ItemDefaults {
     public static void SetSizeValues(this Item item, int width, int? height = null) {
         item.width = width;
         item.height = height ?? width;
@@ -43,15 +43,15 @@ static class ItemDefaults {
         }
     }
 
-    public static void SetUsageValues(this Item item, int vanillaUseStyleID, int timeToUse, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) => item.SetDefaultsToUsable(vanillaUseStyleID, timeToUse, timeToUse, showItemOnUse, useTurn, autoReuse, useSound);
+    public static void SetUsableValues(this Item item, int vanillaUseStyleID, int timeToUse, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) => item.SetDefaultsToUsable(vanillaUseStyleID, timeToUse, timeToUse, showItemOnUse, useTurn, autoReuse, useSound);
 
     public static void SetOtherValues(this Item item, int value, int rare = ItemRarityID.White) {
         item.value = value;
         item.rare = rare;
     }
 
-    public static void SetDefaultsToShootable(this Item item, ushort shootType, float shootSpeed = 0f, bool noMelee = true) {
-        item.shoot = shootType;
+    public static void SetShootableValues(this Item item, ushort shootType = 0, float shootSpeed = 1f, bool noMelee = true) {
+        item.shoot = shootType == 0 ? (ushort)ProjectileID.WoodenArrowFriendly : shootType;
         item.shootSpeed = shootSpeed;
         item.noMelee = noMelee;
     }

@@ -24,7 +24,7 @@ sealed class HorrorPincers : ClawsBaseItem {
 
         Item.value = Item.sellPrice(0, 0, 54, 0);
 
-        Item.SetUsageValues(ItemUseStyleID.Swing, 16, false, autoReuse: true);
+        Item.SetUsableValues(ItemUseStyleID.Swing, 16, false, autoReuse: true);
 
         NatureWeaponHandler.SetPotentialDamage(Item, 27);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.8f);

@@ -15,7 +15,7 @@ namespace RoA.Content.Items.Weapons.Nature;
 [WeaponOverlay(WeaponType.Claws)]
 abstract class ClawsBaseItem : NatureItem {
     protected sealed override void SafeSetDefaults2() {
-        Item.SetDefaultsToShootable((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
+        Item.SetShootableValues((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
     }
 
     public virtual void OnHit(Player player, float progress) { }

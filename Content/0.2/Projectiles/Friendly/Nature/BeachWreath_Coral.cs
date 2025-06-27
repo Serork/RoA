@@ -21,9 +21,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class Coral : NatureProjectile_NoTextureLoad {
+sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
     private static byte CORALTEXTUREAMOUNT => 4;
-    private static ushort TIMELEFT => 300;
+    private static ushort MAXTIMELEFT => 300;
     private static byte PENETRATEAMOUNT => 5;
 
     private static Dictionary<CoralType, Asset<Texture2D>?>? _coralTextures;
@@ -71,11 +71,11 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: false, shouldApplyAttachedItemDamage: false);
 
-        Projectile.SetSize(20);
+        Projectile.SetSizeValues(20);
 
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
-        Projectile.timeLeft = TIMELEFT;
+        Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
         Projectile.penetrate = PENETRATEAMOUNT;
@@ -151,7 +151,7 @@ sealed class Coral : NatureProjectile_NoTextureLoad {
         ShaderLoader.WavyShader.DrawColor = color;
         ShaderLoader.WavyShader.Apply(batch, () => {
             Texture2D coralTexture = coralAsset.Value;
-            float valueIn = Utils.GetLerpValue(TIMELEFT, TIMELEFT - 22, Projectile.timeLeft, true),
+            float valueIn = Utils.GetLerpValue(MAXTIMELEFT, MAXTIMELEFT - 22, Projectile.timeLeft, true),
                   valueOut = Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
             float scaleY = Ease.QuartIn(valueIn) * Ease.QuartOut(valueOut),
                   scaleX = Ease.SineIn(valueIn) * Ease.SineOut(valueOut);
