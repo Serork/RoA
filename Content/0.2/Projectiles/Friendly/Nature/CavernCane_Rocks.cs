@@ -433,7 +433,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
             RocksValues rocksValues = new(Projectile);
             for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                 RocksInfo rocksData = _rocks![i];
-                bool canDamage = rocksData.Progress != MAXPROGRESS && getGeneralProgressForVariousPurposes(rocksData) >= 0.25f;
+                bool canDamage = rocksData.Progress != MAXPROGRESS && getGeneralProgressForVariousPurposes(rocksData) >= 0.1f;
                 if (!canDamage) {
                     continue;
                 }
