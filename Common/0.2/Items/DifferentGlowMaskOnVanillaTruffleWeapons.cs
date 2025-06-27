@@ -25,6 +25,24 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeapons_GlowMaskInWorld : GlobalIt
         LoadMushroomSpearTextures();
     }
 
+    public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+        bool hammush = item.type == ItemID.Hammush;
+        if (item.type == ItemID.MushroomSpear || hammush) {
+            if (_mushroomSpearTexture?.IsLoaded != true || _mushroomSpearGlowMaskTexture?.IsLoaded != true) {
+                return;
+            }
+
+            if (hammush) {
+                ItemUtils.DrawItem(item, itemColor, 0f, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushTexture!.Value);
+                ItemUtils.DrawItem(item, Color.White, 0f, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushGlowMaskTexture!.Value);
+            }
+            else {
+                ItemUtils.DrawItem(item, itemColor, 0f, _mushroomSpearTexture.Value);
+                ItemUtils.DrawItem(item, Color.White, 0f, _mushroomSpearGlowMaskTexture.Value);
+            }
+        }
+    }
+
     public override bool PreDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI) {
         bool hammush = item.type == ItemID.Hammush;
         if (item.type == ItemID.MushroomSpear || hammush) {

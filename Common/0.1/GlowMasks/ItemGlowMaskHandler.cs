@@ -13,6 +13,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace RoA.Common.GlowMasks;
 
@@ -37,7 +38,24 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     internal static Dictionary<int, ModItem> ArmorGlowMasks { get; private set; } = [];
 
     private class ItemGlowMaskWorld : GlobalItem {
+        public override void Load() {
+            On_Main.DrawItemIcon += On_Main_DrawItemIcon;
+        }
+
+        private void On_Main_DrawItemIcon(On_Main.orig_DrawItemIcon orig, SpriteBatch spriteBatch, Item theItem, Vector2 screenPositionForItemCenter, Color itemLightColor, float sizeLimit) {
+            orig(spriteBatch, theItem, screenPositionForItemCenter, itemLightColor, sizeLimit);
+            DrawGlowMask(theItem, spriteBatch, itemLightColor, 0f);
+        }
+
+        public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+            DrawGlowMask(item, spriteBatch, itemColor, 0f);
+        }
+
         public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
+            DrawGlowMask(item, spriteBatch, lightColor, rotation);
+        }
+
+        private static void DrawGlowMask(Item item, SpriteBatch spriteBatch, Color lightColor, float rotation) {
             if (item.type >= ItemID.Count && GlowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo)) {
                 Texture2D glowMaskTexture = glowMaskInfo.GlowMask.Value;
                 Vector2 origin = glowMaskTexture.Size() / 2f;
