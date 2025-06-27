@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.NPCs;
 
-sealed class AddExtraEmblemInWOFDropSystem : IInitialize {
+sealed class AddExtraEmblemInWOFDrop : IInitialize {
     void IInitialize.Initialize() {
         On_ItemDropDatabase.RegisterBoss_WOF += On_ItemDropDatabase_RegisterBoss_WOF;
     }

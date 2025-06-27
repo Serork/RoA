@@ -18,7 +18,7 @@ using Terraria.UI;
 namespace RoA.Common.Items;
 
 // TODO: separate
-sealed class DifferentGlowMaskOnVanillaTruffleWeaponsSystem_GlowMaskInWorld : GlobalItem {
+sealed class DifferentGlowMaskOnVanillaTruffleWeapons_GlowMaskInWorld : GlobalItem {
     private static Asset<Texture2D>? _mushroomSpearTexture, _mushroomSpearGlowMaskTexture;
 
     public override void Load() {
@@ -35,8 +35,8 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeaponsSystem_GlowMaskInWorld : Gl
             Lighting.AddLight(item.Center + Main.screenPosition, new Vector3(0.1f, 0.4f, 1f));
 
             if (hammush) {
-                ItemUtils.DrawItem(item, lightColor, rotation, DifferentGlowMaskOnVanillaTruffleWeaponsSystem_Hammush.HammushTexture!.Value);
-                ItemUtils.DrawItem(item, Color.White, rotation, DifferentGlowMaskOnVanillaTruffleWeaponsSystem_Hammush.HammushGlowMaskTexture!.Value);
+                ItemUtils.DrawItem(item, lightColor, rotation, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushTexture!.Value);
+                ItemUtils.DrawItem(item, Color.White, rotation, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushGlowMaskTexture!.Value);
             }
             else {
                 ItemUtils.DrawItem(item, lightColor, rotation, _mushroomSpearTexture.Value);
@@ -60,7 +60,7 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeaponsSystem_GlowMaskInWorld : Gl
     }
 }
 
-sealed class DifferentGlowMaskOnVanillaTruffleWeaponsSystem_Hammush : IInitializer {
+sealed class DifferentGlowMaskOnVanillaTruffleWeapons_Hammush : IInitializer {
     public static Asset<Texture2D>? HammushTexture, HammushGlowMaskTexture;
 
     void ILoadable.Load(Mod mod) {
@@ -98,7 +98,7 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeaponsSystem_Hammush : IInitializ
     }
 }
 
-sealed class DifferentGlowMaskOnVanillaTruffleWeaponsSystem_MushroomSpear : GlobalProjectile {
+sealed class DifferentGlowMaskOnVanillaTruffleWeapons_MushroomSpear : GlobalProjectile {
     private static Asset<Texture2D>? _mushroomSpearTexture, _mushroomSpearGlowMaskTexture;
 
     public override void Load() {

@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Projectiles;
 
-sealed class StopVanillaFromLoadingProjectileTextureSystem : IInitializer {
+sealed class StopVanillaFromLoadingProjectileTexture : IInitializer {
     void ILoadable.Load(Mod mod) {
         On_Main.LoadProjectile += On_Main_LoadProjectile;
     }

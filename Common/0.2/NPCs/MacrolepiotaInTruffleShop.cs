@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.NPCs;
 
-sealed class MacrolepiotaInTruffleShopSystem : GlobalNPC {
+sealed class MacrolepiotaInTruffleShop : GlobalNPC {
     public override void ModifyShop(NPCShop shop) {
         if (shop.NpcType != NPCID.Truffle) {
             return;
