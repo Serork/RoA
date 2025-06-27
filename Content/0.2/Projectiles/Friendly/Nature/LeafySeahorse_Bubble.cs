@@ -315,7 +315,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
         SoundEngine.PlaySound(BubbleHit, Projectile.position);
 
         float sizeFactor = MathF.Max(1, bubbleValues.SizeTypeValue + 1);
-        for (int num269 = 0; num269 < 10 + 5 * sizeFactor; num269++) {
+        for (int num269 = 0; num269 < 5 + 8 * sizeFactor; num269++) {
             int type = Utils.IsPowerOfTwo(num269) ? DustID.Water_Jungle : DustID.BubbleBurst_Green;
             int num270 = (int)(3f * sizeFactor);
             int num271 = Dust.NewDust(Projectile.Center - Vector2.One * num270, num270 * 2, num270 * 2, type);
