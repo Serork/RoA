@@ -342,6 +342,8 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
+    public override bool OnTileCollide(Vector2 oldVelocity) => new BubbleValues(Projectile).SizeType == BubbleSizeType.Small;
+
     private void LoadBubbleTextures() {
         if (Main.dedServ) {
             return;
