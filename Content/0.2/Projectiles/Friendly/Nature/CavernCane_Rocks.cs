@@ -456,7 +456,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
             RocksValues rocksValues = new(Projectile);
             for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                 RocksInfo rocksData = _rocks![i];
-                bool canCutTiles = getGeneralProgressForVariousPurposes(rocksData) >= 0.5f;
+                bool canCutTiles = getGeneralProgressForVariousPurposes(rocksData) >= 0.1f;
                 if (!canCutTiles) {
                     continue;
                 }
