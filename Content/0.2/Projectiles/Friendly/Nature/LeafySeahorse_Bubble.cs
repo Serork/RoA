@@ -124,26 +124,45 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
                 SizeType++;
                 onAbsorb?.Invoke();
 
+                SetSizeBasedOnType();
+
                 projectile.timeLeft = MAXTIMELEFT;
             }
         }
 
-        public void SetDamageAndSizeBasedOnType() {
-            float damageScale = 1f;
+        public void SetSizeBasedOnType(bool onSpawn = false) {
             switch (SizeType) {
                 case BubbleSizeType.Small:
                     projectile.SetSizeValues(14);
                     break;
                 case BubbleSizeType.Medium:
                     projectile.SetSizeValues(20);
-                    damageScale = 2.5f;
                     break;
                 case BubbleSizeType.Large:
                     projectile.SetSizeValues(30);
-                    damageScale = 5f;
                     break;
                 case BubbleSizeType.ExtraLarge:
                     projectile.SetSizeValues(44);
+                    break;
+            }
+            if (!onSpawn) {
+                Vector2 positionOffsetOnChangingSize = projectile.Size / 6f;
+                projectile.position -= positionOffsetOnChangingSize;
+            }
+        }
+
+        public void SetDamageBasedOnType() {
+            float damageScale = 1f;
+            switch (SizeType) {
+                case BubbleSizeType.Small:
+                    break;
+                case BubbleSizeType.Medium:
+                    damageScale = 2.5f;
+                    break;
+                case BubbleSizeType.Large:
+                    damageScale = 5f;
+                    break;
+                case BubbleSizeType.ExtraLarge:
                     damageScale = 10f;
                     break;
             }
@@ -170,26 +189,20 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
     }
 
     public override void AI() {
-        bool onSpawn = false;
         void damageUp() {
             BubbleValues bubbleValues = new(Projectile) {
                 BaseDamage = AttachedNatureWeaponDamage
             };
-            bubbleValues.SetDamageAndSizeBasedOnType();
+            bubbleValues.SetDamageBasedOnType();
         }
         void setStartVelocityAndSizeOnInit() {
             BubbleValues bubbleValues = new(Projectile);
             if (!bubbleValues.Init) {
                 bubbleValues.Init = true;
 
-                onSpawn = true;
-
                 Projectile.velocity = Projectile.velocity.SafeNormalize() * STARTSPEED;
 
-                if (!onSpawn) {
-                    Vector2 positionOffsetOnChangingSize = Projectile.Size / 6f;
-                    Projectile.position -= positionOffsetOnChangingSize;
-                }
+                bubbleValues.SetSizeBasedOnType(true);
             }
         }
         void slowDownOverTime() {
