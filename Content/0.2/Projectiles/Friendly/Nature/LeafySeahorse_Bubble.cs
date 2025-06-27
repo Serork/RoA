@@ -336,9 +336,8 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-        int padding = 4;
-        width = Projectile.width - padding;
-        height = Projectile.height - padding;
+        width = Projectile.width / 2;
+        height = Projectile.height / 2;
 
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
