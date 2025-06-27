@@ -47,7 +47,7 @@ sealed class LothorSpike : ModProjectile {
         Projectile.hide = true;
     }
 
-    public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
+    //public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
         if (Projectile.ai[1] == 0f) {

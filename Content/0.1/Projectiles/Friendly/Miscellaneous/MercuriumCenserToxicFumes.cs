@@ -37,7 +37,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
         Projectile.aiStyle = -1;
     }
 
-    public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
+    //public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
         Projectile.Opacity -= 0.1f;

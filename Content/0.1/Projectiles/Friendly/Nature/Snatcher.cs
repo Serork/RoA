@@ -161,7 +161,7 @@ sealed class Snatcher : NatureProjectile {
 
     public override bool? CanCutTiles() => false;
 
-    private bool IsValid => Projectile.alpha == 0 || Projectile.Opacity <= 0f;
+    private bool IsValid => true/*Projectile.alpha == 0 || Projectile.Opacity <= 0f*/;
 
     private void SnatcherCutTiles() {
         if (!IsValid) {

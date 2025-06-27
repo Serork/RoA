@@ -118,7 +118,7 @@ sealed class Macrolepiota_Spore : NatureProjectile {
         return false;
     }
 
-    public override bool? CanDamage() => Projectile.Opacity > 0.35f;
+    //public override bool? CanDamage() => Projectile.Opacity > 0.1f;
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         Vector2 hitPoint = Projectile.Center + Projectile.DirectionTo(target.Center) * 10f;

@@ -251,7 +251,7 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
         Projectile.penetrate = 2;
     }
 
-    public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
+    //public override bool? CanDamage() => Projectile.Opacity >= 0.5f;
 
     public override bool? CanCutTiles() => false;
 

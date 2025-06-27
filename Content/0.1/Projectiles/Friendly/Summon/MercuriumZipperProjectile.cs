@@ -49,7 +49,7 @@ sealed class MercuriumZipper_MercuriumCenserToxicFumes : ModProjectile {
         Projectile.scale = 1.25f;
     }
 
-    public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
+    //public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
         Projectile.Opacity -= 0.1f;

@@ -792,7 +792,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
 
         public override bool? CanCutTiles() => true;
 
-        public override bool? CanDamage() => Projectile.Opacity >= 0.25f;
+        //public override bool? CanDamage() => Projectile.Opacity >= 0.25f;
 
         public override void CutTiles() {
             Utils.PlotTileLine(Projectile.position,

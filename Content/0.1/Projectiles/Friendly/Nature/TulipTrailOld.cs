@@ -35,7 +35,7 @@ sealed class TulipTrailOld : NatureProjectile {
         Projectile.idStaticNPCHitCooldown = 10;
     }
 
-    public override bool? CanDamage() => Projectile.Opacity >= 0.45f;
+    //public override bool? CanDamage() => Projectile.Opacity >= 0.45f;
 
     public override void AI() {
         if (!_initialize) {

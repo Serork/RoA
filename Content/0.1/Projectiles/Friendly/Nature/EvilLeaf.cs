@@ -67,7 +67,7 @@ sealed class EvilLeaf : NatureProjectile {
 
     public override bool ShouldUpdatePosition() => false;
 
-    public override bool? CanDamage() => Projectile.Opacity >= 0.35f;
+    //public override bool? CanDamage() => Projectile.Opacity >= 0.35f;
 
     private void SetPosition(Projectile parent, Vector2? scale = null) {
         Vector2 parentScale = scale != null ? Vector2.One : new(parent.ai[0], parent.ai[1]);

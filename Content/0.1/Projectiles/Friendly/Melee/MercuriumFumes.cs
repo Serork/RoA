@@ -28,7 +28,7 @@ sealed class MercuriumFumes : ModProjectile {
         Projectile.aiStyle = -1;
     }
 
-    public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
+    //public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
 
     public override void AI() {
         if (Projectile.owner == Main.myPlayer) {
