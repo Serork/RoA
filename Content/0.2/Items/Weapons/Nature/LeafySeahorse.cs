@@ -27,8 +27,10 @@ sealed class LeafySeahorse : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        position -= Vector2.UnitY.RotatedBy(velocity.ToRotation()) * 6f * player.direction;
-        velocity = velocity.RotatedByRandom(0.075f);
+        Vector2 yOffset = Vector2.UnitY.RotatedBy(velocity.ToRotation()) * 6f * player.direction;
+        position -= yOffset;
+        float randomAngle = 0.075f;
+        velocity = velocity.RotatedByRandom(randomAngle);
         TrackedProjectilesSystem.SpawnTrackedProjectile<LeafySeahorse_Bubble>(source, position, velocity, damage, knockback, player.whoAmI);
 
         return false;

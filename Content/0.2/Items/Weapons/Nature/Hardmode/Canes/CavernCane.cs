@@ -130,9 +130,10 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                         Color dustColor = gemColor * (1f - visualProgress);
                         int dustType = CavernCane_Rocks.GetGeodeDustType(GeodeType);
                         float dustScale = Main.rand.NextFloat(1.25f, 1.5f) * 1f * MathF.Max(0.6f, 1f - visualProgress2);
+                        Vector2 dustVelocity = Vector2.Zero;
                         Dust dust = Dust.NewDustPerfect(dustSpawnPosition,
                                                         dustType,
-                                                        Vector2.Zero,
+                                                        dustVelocity,
                                                         Scale: dustScale);
                         dust.noGravity = true;
                         //dust.color = gemColor;

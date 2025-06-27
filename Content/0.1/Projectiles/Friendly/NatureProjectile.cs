@@ -28,6 +28,8 @@ sealed class CrossmodNatureProjectileHandler : GlobalProjectile {
     public bool ShouldChargeWreathOnDamage { get; internal set; } = true;
     public bool ShouldApplyAttachedNatureWeaponCurrentDamage { get; internal set; } = true;
 
+    public int AttachedNatureWeaponDamage { get; internal set; }
+
     public float WreathFillingFine {
         get => _wreathFillingFine;
         internal set {
@@ -64,6 +66,8 @@ abstract class NatureProjectile : ModProjectile {
 
     public bool ShouldChargeWreathOnDamage { get; protected set; } = true;
     public bool ShouldApplyAttachedNatureWeaponCurrentDamage { get; protected set; } = true;
+
+    protected int AttachedNatureWeaponDamage;
 
     public float WreathFillingFine {
         get => _wreathFillingFine;
@@ -221,9 +225,11 @@ abstract class NatureProjectile : ModProjectile {
         if (projectile.ModProjectile is NatureProjectile natureProjectile) {
             if (natureProjectile.ShouldChargeWreathOnDamage && natureProjectile is not FormProjectile) {
                 if (!natureProjectile.AttachedNatureWeapon.IsEmpty()) {
+                    int attachedWeaponCurrentDamage = NatureWeaponHandler.GetNatureDamage(natureProjectile.AttachedNatureWeapon, Main.player[projectile.owner]);
                     if (natureProjectile.ShouldApplyAttachedNatureWeaponCurrentDamage) {
-                        projectile.damage = NatureWeaponHandler.GetNatureDamage(natureProjectile.AttachedNatureWeapon, Main.player[projectile.owner]);
+                        projectile.damage = attachedWeaponCurrentDamage;
                     }
+                    natureProjectile.AttachedNatureWeaponDamage = attachedWeaponCurrentDamage;
                     if (natureProjectile._syncAttachedNatureWeapon) {
                         projectile.netUpdate = true;
                     }
@@ -245,9 +251,11 @@ abstract class NatureProjectile : ModProjectile {
         CrossmodNatureProjectileHandler handler = projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
         if (handler.ShouldChargeWreathOnDamage) {
             if (!handler.AttachedNatureWeapon.IsEmpty()) {
+                int attachedWeaponCurrentDamage = NatureWeaponHandler.GetNatureDamage(handler.AttachedNatureWeapon, Main.player[projectile.owner]);
                 if (handler.ShouldApplyAttachedNatureWeaponCurrentDamage) {
-                    projectile.damage = NatureWeaponHandler.GetNatureDamage(handler.AttachedNatureWeapon, Main.player[projectile.owner]);
+                    projectile.damage = attachedWeaponCurrentDamage;
                 }
+                handler.AttachedNatureWeaponDamage = attachedWeaponCurrentDamage;
                 if (handler._syncAttachedNatureWeapon) {
                     projectile.netUpdate = true;
                 }
@@ -266,9 +274,13 @@ abstract class NatureProjectile : ModProjectile {
         SafePostAI();
 
         NatureProjectilePostAI(Projectile);
+
+        SafePostAI2();
     }
 
     public virtual void SafePostAI() { }
+
+    protected virtual void SafePostAI2() { }
 
     protected virtual void SafeOnSpawn(IEntitySource source) { }
 

@@ -159,26 +159,23 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
     }
 
     protected override void SafeSetDefaults() {
-        SetNatureValues(Projectile);
+        SetNatureValues(Projectile, shouldApplyAttachedItemDamage: false);
 
         Projectile.aiStyle = -1;
         Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
-        Projectile.DamageType = DamageClass.Magic;
 
         Projectile.Opacity = 0f;
     }
 
     public override void AI() {
         bool onSpawn = false;
-        void setHitboxSizeByBubbleTypeAndDamageUp() {
-            BubbleValues bubbleValues = new(Projectile);
+        void damageUp() {
+            BubbleValues bubbleValues = new(Projectile) {
+                BaseDamage = AttachedNatureWeaponDamage
+            };
             bubbleValues.SetDamageAndSizeBasedOnType();
-            if (!onSpawn) {
-                Vector2 positionOffsetOnChangingSize = Projectile.Size / 6f;
-                Projectile.position -= positionOffsetOnChangingSize;
-            }
         }
         void setStartVelocityAndSizeOnInit() {
             BubbleValues bubbleValues = new(Projectile);
@@ -187,11 +184,12 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
 
                 onSpawn = true;
 
-                bubbleValues.BaseDamage = Projectile.damage;
-
                 Projectile.velocity = Projectile.velocity.SafeNormalize() * STARTSPEED;
 
-                setHitboxSizeByBubbleTypeAndDamageUp();
+                if (!onSpawn) {
+                    Vector2 positionOffsetOnChangingSize = Projectile.Size / 6f;
+                    Projectile.position -= positionOffsetOnChangingSize;
+                }
             }
         }
         void slowDownOverTime() {
@@ -217,7 +215,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
                 }
 
                 if (size != BubbleSizeType.ExtraLarge && new BubbleValues(otherBubble).SizeType == BubbleSizeType.Small) {
-                    bubbleValues.AbsorbBubbleAndIncreaseInSize(otherBubble, setHitboxSizeByBubbleTypeAndDamageUp);
+                    bubbleValues.AbsorbBubbleAndIncreaseInSize(otherBubble);
                 }
                 else if (size != BubbleSizeType.Small) {
                     Projectile.velocity += Projectile.DirectionFrom(otherBubble.Center);
@@ -270,6 +268,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
         absorbBubbles();
         setScaleAndRotation();
         goUpInWater();
+        damageUp();
     }
 
     protected override void Draw(ref Color lightColor) {
