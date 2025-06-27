@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 
+using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System;
@@ -38,28 +39,30 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     internal static Dictionary<int, ModItem> ArmorGlowMasks { get; private set; } = [];
 
     private class ItemGlowMaskWorld : GlobalItem {
-        public override void Load() {
-            On_Main.DrawItemIcon += On_Main_DrawItemIcon;
-        }
-
-        private void On_Main_DrawItemIcon(On_Main.orig_DrawItemIcon orig, SpriteBatch spriteBatch, Item theItem, Vector2 screenPositionForItemCenter, Color itemLightColor, float sizeLimit) {
-            orig(spriteBatch, theItem, screenPositionForItemCenter, itemLightColor, sizeLimit);
-            DrawGlowMask(theItem, spriteBatch, itemLightColor, 0f);
-        }
-
         public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
-            DrawGlowMask(item, spriteBatch, itemColor, 0f);
+            if (!TileHelper.DrawingTiles) {
+                return;
+            }
+
+            DrawGlowMask(item, spriteBatch, itemColor, 0f, scale, position);
         }
 
         public override void PostDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
             DrawGlowMask(item, spriteBatch, lightColor, rotation);
         }
 
-        private static void DrawGlowMask(Item item, SpriteBatch spriteBatch, Color lightColor, float rotation) {
+        private static void DrawGlowMask(Item item, SpriteBatch spriteBatch, Color lightColor, float rotation, float scale = 1f, Vector2? position = null) {
             if (item.type >= ItemID.Count && GlowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo)) {
                 Texture2D glowMaskTexture = glowMaskInfo.GlowMask.Value;
                 Vector2 origin = glowMaskTexture.Size() / 2f;
-                Color color = Color.Lerp(glowMaskInfo.GlowColor, lightColor, Lighting.Brightness((int)item.Center.X / 16, (int)item.Center.Y / 16));
+                Vector2 colorPosition = position ?? item.Center;
+                if (position != null) {
+                    colorPosition -= TileHelper.ScreenOffset;
+                    colorPosition -= new Point(1, 1).ToWorldCoordinates();
+                    colorPosition += Main.screenPosition;
+                }
+                float brightnessFactor = Lighting.Brightness((int)colorPosition.X / 16, (int)colorPosition.Y / 16);
+                Color color = Color.Lerp(glowMaskInfo.GlowColor, lightColor, brightnessFactor);
                 if (item.shimmered) {
                     color.R = (byte)(255f * (1f - item.shimmerTime));
                     color.G = (byte)(255f * (1f - item.shimmerTime));
@@ -73,11 +76,12 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     color.A = (byte)((float)(int)color.A * (1f - item.shimmerTime));
                 }
 
-                spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null,
+                position ??= item.Center - Main.screenPosition;
+                spriteBatch.Draw(glowMaskTexture, position.Value, null,
                     glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.GlowColor,
-                    rotation, origin, 1f, SpriteEffects.None, 0f);
+                    rotation, origin, scale, SpriteEffects.None, 0f);
                 if (item.shimmered)
-                    spriteBatch.Draw(glowMaskTexture, item.Center - Main.screenPosition, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, 1f, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(glowMaskTexture, position.Value, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, scale, SpriteEffects.None, 0f);
             }
         }
     }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Core;
+using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -25,22 +26,32 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeapons_GlowMaskInWorld : GlobalIt
         LoadMushroomSpearTextures();
     }
 
-    public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+    public override bool PreDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+        if (!TileHelper.DrawingTiles) {
+            return base.PreDrawInInventory(item, spriteBatch, position, frame, drawColor, itemColor, origin, scale);
+        }
+        
         bool hammush = item.type == ItemID.Hammush;
         if (item.type == ItemID.MushroomSpear || hammush) {
             if (_mushroomSpearTexture?.IsLoaded != true || _mushroomSpearGlowMaskTexture?.IsLoaded != true) {
-                return;
+                return base.PreDrawInInventory(item, spriteBatch, position, frame, drawColor, itemColor, origin, scale);
             }
 
+            Vector2 itemPosition = position + Main.screenPosition - TileHelper.ScreenOffset;
+            Color color = Lighting.GetColor(itemPosition.ToTileCoordinates());
             if (hammush) {
-                ItemUtils.DrawItem(item, itemColor, 0f, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushTexture!.Value);
-                ItemUtils.DrawItem(item, Color.White, 0f, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushGlowMaskTexture!.Value);
+                ItemUtils.DrawItem(item, color, 0f, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushTexture!.Value, scale, position);
+                ItemUtils.DrawItem(item, Color.White, 0f, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushGlowMaskTexture!.Value, scale, position);
             }
             else {
-                ItemUtils.DrawItem(item, itemColor, 0f, _mushroomSpearTexture.Value);
-                ItemUtils.DrawItem(item, Color.White, 0f, _mushroomSpearGlowMaskTexture.Value);
+                ItemUtils.DrawItem(item, color, 0f, _mushroomSpearTexture.Value, scale, position);
+                ItemUtils.DrawItem(item, Color.White, 0f, _mushroomSpearGlowMaskTexture.Value, scale, position);
             }
+
+            return false;
         }
+
+        return base.PreDrawInInventory(item, spriteBatch, position, frame, drawColor, itemColor, origin, scale);
     }
 
     public override bool PreDrawInWorld(Item item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI) {

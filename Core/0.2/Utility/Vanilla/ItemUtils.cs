@@ -99,7 +99,7 @@ static class ItemUtils {
         }
     }
     
-    public static void DrawItem(Item item, Color color, float rotation = 0f, Texture2D? texture = null) {
+    public static void DrawItem(Item item, Color color, float rotation = 0f, Texture2D? texture = null, float scale = 1f, Vector2? position = null) {
         texture ??= TextureAssets.Item[item.type].Value;
 
         Vector2 origin = texture.Size() / 2f;
@@ -119,16 +119,16 @@ static class ItemUtils {
         var frame = texture.Frame();
         Vector2 vector = frame.Size() / 2f;
         Vector2 vector2 = new Vector2((float)(item.width / 2) - vector.X, item.height - frame.Height);
-        Vector2 vector3 = item.position - Main.screenPosition + vector + vector2;
+        position ??= item.position - Main.screenPosition + vector + vector2;
 
-        Main.spriteBatch.Draw(texture, vector3, null,
+        Main.spriteBatch.Draw(texture, position.Value, null,
             color,
-            rotation, origin, 1f, SpriteEffects.None, 0f);
+            rotation, origin, scale, SpriteEffects.None, 0f);
 
-        Lighting.AddLight(vector3 + Main.screenPosition, new Vector3(0.1f, 0.4f, 1f));
+        Lighting.AddLight(position.Value + Main.screenPosition, new Vector3(0.1f, 0.4f, 1f));
 
         if (item.shimmered) {
-            Main.spriteBatch.Draw(texture, vector3, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, 1f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, position.Value, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, scale, SpriteEffects.None, 0f);
         }
     }
 }

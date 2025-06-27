@@ -30,6 +30,18 @@ static class TileHelper {
         }
     }
 
+    public static bool DrawingTiles { get; private set; }
+
+    public static Vector2 ScreenOffset {
+        get {
+            Vector2 vector = new(Main.offScreenRange, Main.offScreenRange);
+            if (Main.drawToScreen) {
+                vector = Vector2.Zero;
+            }
+            return vector;
+        }
+    }
+
     public static int MossConversion(int thisType, int otherType) {
         if ((thisType == TileID.GreenMoss || thisType == TileID.GreenMossBrick) && otherType == ModContent.TileType<BackwoodsStone>())
             return ModContent.TileType<BackwoodsGreenMoss>();
@@ -148,6 +160,9 @@ static class TileHelper {
     public static void RemovePostPlayerDrawPoint(int i, int j) => PostPlayerDrawPoints.RemoveAll(x => x.Item2.X == i && x.Item2.Y == j);
 
     public static void Load() {
+        On_TileDrawing.PreDrawTiles += On_TileDrawing_PreDrawTiles;
+        On_TileDrawing.PostDrawTiles += On_TileDrawing_PostDrawTiles;
+
         _addSpecialPointSpecialPositions = (Point[][])typeof(TileDrawing).GetFieldValue("_specialPositions", Main.instance.TilesRenderer);
         _addSpecialPointSpecialsCount = (int[])typeof(TileDrawing).GetFieldValue("_specialsCount", Main.instance.TilesRenderer);
         _addVineRootsPositions = (List<Point>)typeof(TileDrawing).GetFieldValue("_vineRootsPositions", Main.instance.TilesRenderer);
@@ -177,6 +192,16 @@ static class TileHelper {
         On_Main.DrawPlayers_AfterProjectiles += On_Main_DrawPlayers_AfterProjectiles;
 
         On_Main.DrawTiles += On_Main_DrawTiles;
+    }
+
+    private static void On_TileDrawing_PostDrawTiles(On_TileDrawing.orig_PostDrawTiles orig, TileDrawing self, bool solidLayer, bool forRenderTargets, bool intoRenderTargets) {
+        orig(self, solidLayer, forRenderTargets, intoRenderTargets);
+        DrawingTiles = false;
+    }
+
+    private static void On_TileDrawing_PreDrawTiles(On_TileDrawing.orig_PreDrawTiles orig, TileDrawing self, bool solidLayer, bool forRenderTargets, bool intoRenderTargets) {
+        orig(self, solidLayer, forRenderTargets, intoRenderTargets);
+        DrawingTiles = true;
     }
 
     private static void On_Main_DrawTiles(On_Main.orig_DrawTiles orig, Main self, bool solidLayer, bool forRenderTargets, bool intoRenderTargets, int waterStyleOverride) {
