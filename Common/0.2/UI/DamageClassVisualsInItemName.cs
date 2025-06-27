@@ -339,8 +339,10 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         bool shouldDrawNeutralIcon = damageClassesTypeOfThisItem.Contains(DamageClass.Generic) || damageClassesTypeOfThisItem.Count > 2;
         if (shouldDrawNeutralIcon || damageClassesTypeOfThisItem.Count == 2) {
             if (!mainDraw) {
+                float max = 1.35f;
                 _postMainDrawTimer += 0.0275f;
-                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+                _postMainDrawTimer = MathF.Min(max, _postMainDrawTimer);
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, max, _postMainDrawTimer, true));
             }
 
             DrawMulticlassIcon(batch, damageClassVisualsInfo, shouldDrawNeutralIcon);
