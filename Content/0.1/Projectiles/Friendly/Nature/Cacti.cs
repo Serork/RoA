@@ -55,7 +55,7 @@ sealed class Cacti : NatureProjectile {
     }
 
     //public override bool? CanDamage() => Projectile.Opacity > 0.5f;
-    //public override bool? CanCutTiles() => Projectile.Opacity > 0.75f;
+    public override bool? CanCutTiles() => _state == State.Enchanted;
 
     protected override void SafeOnSpawn(IEntitySource source) {
         int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[1]);
