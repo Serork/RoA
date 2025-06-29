@@ -153,7 +153,8 @@ sealed class BloodbathLocket : ModItem {
         }
 
         SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-        Main.spriteBatch.BeginBlendState(BlendState.Additive);
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(snapshot.sortMode, BlendState.Additive, Main.DefaultSamplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
         for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
             Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
             Vector2 origin2 = glowMaskTexture.Size() / 2f;
