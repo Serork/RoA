@@ -35,6 +35,17 @@ sealed class NaturesHeart : ModItem {
         Item.value = Item.sellPrice(0, 0, 50, 0);
     }
 
+    public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+        if (TileHelper.DrawingTiles) {
+            int slot = Item.whoAmI;
+            int gameFramesPerSpriteFrame = Main.itemAnimations[Item.type].TicksPerFrame;
+            int spriteFramesAmount = Main.itemAnimations[Item.type].FrameCount;
+            if (++Main.itemFrameCounter[slot] >= gameFramesPerSpriteFrame * spriteFramesAmount)
+                Main.itemFrameCounter[slot] = 0;
+            DrawGlowMask(spriteBatch, itemColor, 0f, Item.whoAmI, scale, position + new Vector2(0f, -1f));
+        }
+    }
+
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
         float value = 0.2f;
         int frame = Main.itemAnimations[Type].GetFrame(TextureAssets.Item[Type].Value, Main.itemFrameCounter[whoAmI]).Y / Item.height;
@@ -77,10 +88,16 @@ sealed class NaturesHeart : ModItem {
             }
         }
 
+        DrawGlowMask(spriteBatch, lightColor, rotation, whoAmI);
+    }
+
+    private void DrawGlowMask(SpriteBatch spriteBatch, Color lightColor, float rotation, int whoAmI, float scale = 1f, Vector2? position = null) {
+        int frame = Main.itemAnimations[Type].GetFrame(TextureAssets.Item[Type].Value, Main.itemFrameCounter[whoAmI]).Y / Item.height;
         Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
         Vector2 origin = new Vector2(22, 32) / 2f;
         Color color = Color.Lerp(lightColor, Color.White, 0.5f);
-        spriteBatch.Draw(glowMaskTexture, Item.Center - Main.screenPosition + Vector2.UnitY * 2f,
-            new Rectangle(0, frame * 32, 22, 32), color, rotation, origin, 1f, SpriteEffects.None, 0f);
+        position ??= Item.Center - Main.screenPosition;
+        spriteBatch.Draw(glowMaskTexture, position.Value + Vector2.UnitY * 2f,
+            new Rectangle(0, frame * 32, 22, 32), color, rotation, origin, scale, SpriteEffects.None, 0f);
     }
 }

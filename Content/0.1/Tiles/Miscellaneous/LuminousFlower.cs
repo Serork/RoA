@@ -118,7 +118,7 @@ sealed class LuminousFlower : ModTile {
         LuminiousFlowerLightUp(i, j, out float _, modTile: TileLoader.GetTile(Type));
     }
 
-    public static void LuminiousFlowerLightUp(int i, int j, out float progress, ModTile modTile = null) {
+    public static void LuminiousFlowerLightUp(int i, int j, out float progress, ModTile modTile = null, bool shouldLightUp = true) {
         if (!Helper.OnScreenWorld(i, j)) {
             progress = 0f;
             return;
@@ -141,7 +141,9 @@ sealed class LuminousFlower : ModTile {
             float r = 0.9f * progress;
             float g = 0.7f * progress;
             float b = 0.3f * progress;
-            Lighting.AddLight(i, j, r, g, b);
+            if (shouldLightUp) {
+                Lighting.AddLight(i, j, r, g, b);
+            }
             if (modTile != null) {
                 Tile tile = Main.tile[i, j];
                 Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);

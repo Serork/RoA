@@ -147,6 +147,25 @@ sealed class BloodbathLocket : ModItem {
         Main.spriteBatch.Begin(in snapshot);
     }
 
+    public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+        if (!TileHelper.DrawingTiles) {
+            return;
+        }
+
+        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+        Main.spriteBatch.BeginBlendState(BlendState.Additive);
+        for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
+            Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+            Vector2 origin2 = glowMaskTexture.Size() / 2f;
+            Color color = Color.White;
+            spriteBatch.Draw(glowMaskTexture, position +
+                    Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                    * Helper.Wave(0f, 3f, 12f, 0.5f + Item.whoAmI), null, color * 0.5f, 0f + Main.rand.NextFloatRange(0.05f), origin2, scale, SpriteEffects.None, 0f);
+        }
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(in snapshot);
+    }
+
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetModPlayer<BloodbathLocketPlayer>().bloodbathLocket = true;
         if (!hideVisual) player.GetModPlayer<BloodbathLocketPlayer>().theWildEye = true;

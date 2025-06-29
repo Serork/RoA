@@ -40,6 +40,10 @@ sealed class LuminousFlowerHat : ModItem {
         LuminousFlower.LightUp(Item, spriteBatch, Texture, rotation);
     }
 
+    public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+        LuminousFlower.LightUp(Item, spriteBatch, Texture, 0f, position, scale, Color.White, shouldLightUp: false);
+    }
+
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Luminous Flower Hat");
         //Tooltip.SetDefault("Provides light when moving\n'It no more smells... but still brights the area around you'");
