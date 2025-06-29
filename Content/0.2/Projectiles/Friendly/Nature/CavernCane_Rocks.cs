@@ -646,7 +646,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
         Vector2 resultRockPosition = Projectile.Center + rockPosition + rockExtraPosition;
         Vector2 movementOffset = rockCollisionProgress * Vector2.One.RotatedBy(rocksAngle);
         resultRockPosition += movementOffset;
-        float shakeStrength = 1f;
+        float shakeStrength = 1f - GetGeodeProgress();
         Vector2 onCollisionShakeOffset = rockCollisionProgress * Vector2.One.RotatedBy(collisionAngle) * shakeStrength;
         resultRockPosition += onCollisionShakeOffset;
         return resultRockPosition;
