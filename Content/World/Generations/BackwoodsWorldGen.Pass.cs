@@ -2600,7 +2600,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         for (int x2 = baseX - distance; x2 < baseX + distance; x2++) {
             for (int y2 = baseY - distance; y2 < baseY + distance; y2++) {
                 if (WorldGenHelper.ActiveTile(x2, y2, placeholderTileType)) {
-                    WorldGenHelper.ReplaceTile(x2, y2, _elderwoodTileType, clearEverything: true);
+                    WorldGenHelper.ReplaceTile(x2, y2, _elderwoodTileType);
                 }
             }
         }

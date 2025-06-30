@@ -3,11 +3,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.NPCs;
+using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Pets;
 using RoA.Content.Items.Special.Lothor;
+using RoA.Content.Items.Weapons.Druidic;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -15,6 +18,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Achievements;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -23,6 +27,20 @@ using Terraria.UI;
 namespace RoA;
 
 sealed partial class RoA : Mod {
+    private void DoRecipeBrowserIntergration() {
+        if (ModLoader.TryGetMod("RecipeBrowser", out Mod mod) && !Main.dedServ) {
+            mod.Call([
+                "AddItemCategory",
+                "Nature",
+                "Weapons",
+                Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<BrilliantBouquet>()).Texture), 24, 24),
+			    (Predicate<Item>)((Item item) => {
+                    return item.ModItem is NatureItem;
+                })
+            ]);
+        }
+    }
+
     private void DoMusicDisplayIntegration() {
         if (!ModLoader.TryGetMod("MusicDisplay", out Mod musicDisplay)) {
             return;
