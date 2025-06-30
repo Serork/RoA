@@ -1,1 +1,1 @@
-- Fixed some weapon attack animations displaying incorrectly when the player is moving
+- Added Recipe Browser compatibility (druid class categories)

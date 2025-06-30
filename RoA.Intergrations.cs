@@ -1,10 +1,13 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.NPCs;
 using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Pets;
 using RoA.Content.Items.Special.Lothor;
 using RoA.Content.Items.Weapons.Druidic;
@@ -27,15 +30,27 @@ using Terraria.UI;
 namespace RoA;
 
 sealed partial class RoA : Mod {
+    private static Asset<Texture2D> _brilliantBouquetTextureForRecipeBrowser, _fenethsWreathTextureForRecipeBrowser;
+
     private void DoRecipeBrowserIntergration() {
         if (ModLoader.TryGetMod("RecipeBrowser", out Mod mod) && !Main.dedServ) {
             mod.Call([
                 "AddItemCategory",
                 "Nature",
                 "Weapons",
-                Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<BrilliantBouquet>()).Texture), 24, 24),
+                _brilliantBouquetTextureForRecipeBrowser,
 			    (Predicate<Item>)((Item item) => {
-                    return item.ModItem is NatureItem;
+                    return item.damage > 0 && item.ModItem is NatureItem;
+                })
+            ]);
+
+            mod.Call([
+                "AddItemCategory",
+                "Wreaths",
+                "Accessories",
+                _fenethsWreathTextureForRecipeBrowser,
+                (Predicate<Item>)((Item item) => {
+                    return item.accessory && item.ModItem is BaseWreathItem;
                 })
             ]);
         }

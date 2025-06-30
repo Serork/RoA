@@ -1,10 +1,15 @@
+using Microsoft.Xna.Framework.Graphics;
+
 using MonoMod.RuntimeDetour;
 
 using ReLogic.Content.Sources;
 
 using RoA.Common.Crossmod;
 using RoA.Common.Networking;
+using RoA.Content.Items.Equipables.Wreaths;
+using RoA.Content.Items.Weapons.Druidic;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System.IO;
 using System.Reflection;
@@ -31,6 +36,15 @@ sealed partial class RoA : Mod {
 
     public override void HandlePacket(BinaryReader reader, int sender) {
         MultiplayerSystem.HandlePacket(reader, sender);
+    }
+
+    public override void Load() {
+        if (!Main.dedServ) {
+            Main.RunOnMainThread(() => {
+                _brilliantBouquetTextureForRecipeBrowser = Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<BrilliantBouquet>()).Texture), 24, 24);
+                _fenethsWreathTextureForRecipeBrowser = Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<FenethsBlazingWreath>()).Texture), 24, 24);
+            });
+        }
     }
 
     public override void PostSetupContent() {
