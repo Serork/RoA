@@ -49,12 +49,12 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
             Point16 topLeft = TileHelper.GetTileTopLeft<TreeDryad>(i, j);
             if (topLeft == tilePosition) {
                 Vector2 emotePosition = TileHelper.GetTileTopLeft<TreeDryad>(i, j).ToWorldCoordinates() + new Vector2(8f, -16f);
-                if (Helper.OnScreenWorld(emotePosition)) {
+                if (Main.LocalPlayer.Distance(tileWorldPosition) < 200f/*Helper.OnScreenWorld(emotePosition)*/) {
                     if (!_hammerEmoteShown) {
                         _hammerEmoteShown = true;
 
                         int emoteType = ModContent.EmoteBubbleType<HammerEmote>();
-                        EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(emotePosition), 360);
+                        EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(emotePosition), 180);
                     }
                 }
                 else {
@@ -181,8 +181,6 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
     }
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        TileHelper.RemovePostPlayerDrawPoint(i, j);
-
         Vector2 position = new Point(i, j).ToWorldCoordinates();
         {
             int dustType = DustID.WoodFurniture;
@@ -199,7 +197,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         int whoAmI = NPC.NewNPC(NPC.GetSource_TownSpawn(), (int)position.X + 10, (int)position.Y + 40, NPCID.Dryad);
         Main.npc[whoAmI].ai[0] = -20f;
         Main.npc[whoAmI].ai[1] = 150f;
-        Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = Main.tile[i, j].TileFrameX < 72 ? 1 : -1;
+        Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = Main.tile[i, j].TileFrameX < 72 ? -1 : 1;
         Main.npc[whoAmI].homeless = true;
         Main.npc[whoAmI].homeTileX = Main.npc[whoAmI].homeTileY = -1;
         Main.npc[whoAmI].netUpdate = true;
