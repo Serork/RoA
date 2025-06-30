@@ -2406,7 +2406,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             WorldGenHelper.ReplaceWall(x2, y2, WallID.DirtUnsafe);
                         }
                         else {
-                            WorldGen.KillWall(x2, y2);
+                            //WorldGen.KillWall(x2, y2);
                         }
                     }
                 }
