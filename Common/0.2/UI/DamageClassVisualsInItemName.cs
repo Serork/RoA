@@ -10,7 +10,6 @@ using RoA.Content;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
-using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -63,7 +62,7 @@ sealed class DamageClassItemsStorage : IInitializer {
                 return true;
             }
             if (ItemsPerDamageClass![damageClass].Contains(item.type)) {
-                bool checkForCanRepeat(DamageClass checkDamageClass1, DamageClass checkDamageClass2) 
+                bool checkForCanRepeat(DamageClass checkDamageClass1, DamageClass checkDamageClass2)
                     => (damageClass == checkDamageClass1 && !countedDamageClasses.Contains(checkDamageClass2)) || (damageClass == checkDamageClass2 && !countedDamageClasses.Contains(checkDamageClass1));
                 bool canRepeat = checkForCanRepeat(DamageClass.Summon, DamageClass.SummonMeleeSpeed) ||
                                  checkForCanRepeat(DamageClass.Melee, DamageClass.MeleeNoSpeed);
@@ -275,7 +274,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         bool isNameLine = line.Name.Contains("Name");
         if (!isNameLine) {
             return base.PreDrawTooltipLine(item, line, ref yOffset);
-        }   
+        }
 
         string tooltipLineText = line.Text;
         Vector2 tooltipLineSize = line.Font.MeasureString(tooltipLineText);

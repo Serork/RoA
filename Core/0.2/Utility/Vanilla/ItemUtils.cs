@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RoA.Common.Items;
-using System;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -98,7 +96,7 @@ static class ItemUtils {
             drawinfo.DrawDataCache.Add(item);
         }
     }
-    
+
     public static void DrawItem(Item item, Color color, float rotation = 0f, Texture2D? texture = null, float scale = 1f, Vector2? position = null) {
         texture ??= TextureAssets.Item[item.type].Value;
 

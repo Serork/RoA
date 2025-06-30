@@ -1,21 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using ReLogic.Content;
 
 using RoA.Common;
-using RoA.Core.Utility;
 
-using System;
 using System.Collections.Generic;
 
 using Terraria;
 using Terraria.GameContent.UI;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace RoA.Content.Emotes;
 
@@ -32,7 +27,7 @@ sealed class HammerEmote : ModEmoteBubble, IRequestAsset {
         [((byte)HammerEmoteRequstedTextureType.Bubble, "Terraria/Images/Extra_" + (short)48),
          ((byte)HammerEmoteRequstedTextureType.Hammer, EmoteBubbleLoader.GetEmoteBubble(ModContent.EmoteBubbleType<HammerEmote>()).Texture),
          ((byte)HammerEmoteRequstedTextureType.Border, "Terraria/Images/UI/EmoteBubbleBorder")];
-    
+
     public override void SetStaticDefaults() {
         AddToCategory(EmoteID.Category.Items);
     }

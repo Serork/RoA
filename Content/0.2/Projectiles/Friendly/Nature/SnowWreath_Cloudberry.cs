@@ -239,7 +239,7 @@ sealed class SnowWreath_Cloudberry : NatureProjectile_NoTextureLoad {
                 for (int i = 0; i < MAXSNOWBLOCKS; i++) {
                     SnowBlockInfo tileInfo = _snowBlockData![i];
                     Color tileColor = color * MathUtils.Clamp01(tileInfo.Opacity);
-                    DrawHelper.DrawSingleTile(new DrawHelper.SingleTileDrawInfo(snowBlockTexture, tileInfo.Position, tileInfo.Clip, tileColor, tileInfo.Slope, tileInfo.HalfBlock));    
+                    DrawHelper.DrawSingleTile(new DrawHelper.SingleTileDrawInfo(snowBlockTexture, tileInfo.Position, tileInfo.Clip, tileColor, tileInfo.Slope, tileInfo.HalfBlock));
                 }
             }
 

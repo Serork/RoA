@@ -61,7 +61,7 @@ sealed class Macrolepiota_Spore : NatureProjectile {
             //        sporeValues.FacedRight = Main.rand.NextBool();
             //    }
             //}
-        }    
+        }
         void moveTowardsCursor() {
             if (owner.IsLocal()) {
                 Vector2 destination = owner.GetMousePosition();

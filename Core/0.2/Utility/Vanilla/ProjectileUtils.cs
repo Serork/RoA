@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using System;
+
+using Terraria;
 using Terraria.Enums;
+using Terraria.GameContent;
 using Terraria.GameContent.Achievements;
 using Terraria.ID;
-using Terraria;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using ReLogic.Content;
-using Terraria.GameContent;
 
 namespace RoA.Core.Utility.Vanilla;
 
@@ -37,7 +38,7 @@ static class ProjectileUtils {
         AchievementsHelper.CurrentlyMining = false;
     }
 
-    public static void CutTilesAt(Projectile projectileThatCuts, Vector2 checkBoxPosition, int checkBoxWidth, int checkBoxHeight) { 
+    public static void CutTilesAt(Projectile projectileThatCuts, Vector2 checkBoxPosition, int checkBoxWidth, int checkBoxHeight) {
         int num = (int)(checkBoxPosition.X / 16f);
         int num2 = (int)((checkBoxPosition.X + (float)checkBoxWidth) / 16f) + 1;
         int num3 = (int)(checkBoxPosition.Y / 16f);

@@ -5,8 +5,6 @@ using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Achievements;
-using Terraria.Graphics.Renderers;
-using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 

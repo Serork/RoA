@@ -1,12 +1,7 @@
-﻿using Microsoft.CodeAnalysis.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 using ReLogic.Utilities;
 
-using RoA.Common.Items;
-using RoA.Content.Dusts.Backwoods;
-using RoA.Content.Items.Equipables.Accessories;
-using RoA.Content.NPCs.Enemies.Sap;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Miscellaneous;
 using RoA.Content.Tiles.Solid.Backwoods;

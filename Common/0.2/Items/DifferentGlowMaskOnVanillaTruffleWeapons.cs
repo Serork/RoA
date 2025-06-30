@@ -7,14 +7,10 @@ using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
-using System;
-
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace RoA.Common.Items;
 
@@ -30,7 +26,7 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeapons_GlowMaskInWorld : GlobalIt
         if (!TileHelper.DrawingTiles) {
             return base.PreDrawInInventory(item, spriteBatch, position, frame, drawColor, itemColor, origin, scale);
         }
-        
+
         bool hammush = item.type == ItemID.Hammush;
         if (item.type == ItemID.MushroomSpear || hammush) {
             if (_mushroomSpearTexture?.IsLoaded != true || _mushroomSpearGlowMaskTexture?.IsLoaded != true) {
@@ -111,7 +107,7 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeapons_Hammush : IInitializer {
     private void On_PlayerDrawLayers_DrawPlayer_27_HeldItem(On_PlayerDrawLayers.orig_DrawPlayer_27_HeldItem orig, ref PlayerDrawSet drawinfo) {
         Item heldItem = drawinfo.heldItem;
         int num = heldItem.type;
-        
+
         if (num == ItemID.Hammush) {
             if (HammushTexture?.IsLoaded != true || HammushGlowMaskTexture?.IsLoaded != true) {
                 orig(ref drawinfo);

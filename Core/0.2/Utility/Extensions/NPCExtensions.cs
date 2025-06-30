@@ -1,6 +1,6 @@
 ﻿using Terraria;
 
-namespace RoA.Core.Utility.Extensions; 
+namespace RoA.Core.Utility.Extensions;
 
 static class NPCExtensions {
     public static void SetFrameCount(this NPC npc, byte frameCount) => Main.npcFrameCount[npc.type] = frameCount;

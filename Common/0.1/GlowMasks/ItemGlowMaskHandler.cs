@@ -14,7 +14,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace RoA.Common.GlowMasks;
 

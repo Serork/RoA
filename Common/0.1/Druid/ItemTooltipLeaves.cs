@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Configs;
 using RoA.Common.InterfaceElements;
 using RoA.Common.UI;
 using RoA.Core;

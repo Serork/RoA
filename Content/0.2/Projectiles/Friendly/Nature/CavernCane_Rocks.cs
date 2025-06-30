@@ -442,9 +442,9 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
                     bool firstRock = j == 0;
                     Vector2 rockPositionToHandleCollision = GetRockPosition(i, firstRock, out _);
                     foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
-                        if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile, 
+                        if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
                                                                          ref GetImmuneTime(i, j, npcForCollisionCheck.whoAmI),
-                                                                         damageSourceHitbox: GeometryUtils.CenteredSquare(rockPositionToHandleCollision, RocksInfo.HITBOXSIZE), 
+                                                                         damageSourceHitbox: GeometryUtils.CenteredSquare(rockPositionToHandleCollision, RocksInfo.HITBOXSIZE),
                                                                          direction: MathF.Sign(rockPositionToHandleCollision.X - npcForCollisionCheck.Center.X))) {
                             continue;
                         }
