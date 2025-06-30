@@ -54,7 +54,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
                         _hammerEmoteShown = true;
 
                         int emoteType = ModContent.EmoteBubbleType<HammerEmote>();
-                        EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(emotePosition), 180);
+                        EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(emotePosition), 360);
                     }
                 }
                 else {
