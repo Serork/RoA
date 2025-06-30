@@ -1,13 +1,19 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.NPCs;
+using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Pets;
 using RoA.Content.Items.Special.Lothor;
+using RoA.Content.Items.Weapons.Nature.PreHardmode;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -23,6 +29,41 @@ using Terraria.UI;
 namespace RoA;
 
 sealed partial class RoA : Mod {
+    private static Asset<Texture2D> _brilliantBouquetTextureForRecipeBrowser, _fenethsWreathTextureForRecipeBrowser;
+
+    public override void Load() {
+        if (!Main.dedServ) {
+            Main.RunOnMainThread(() => {
+                _brilliantBouquetTextureForRecipeBrowser = DrawUtils.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<BrilliantBouquet>()).Texture), 24, 24);
+                _fenethsWreathTextureForRecipeBrowser = DrawUtils.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<FenethsBlazingWreath>()).Texture), 24, 24);
+            });
+        }
+    }
+
+    private void DoRecipeBrowserIntergration() {
+        if (ModLoader.TryGetMod("RecipeBrowser", out Mod mod) && !Main.dedServ) {
+            mod.Call([
+                "AddItemCategory",
+                "Nature",
+                "Weapons",
+                _brilliantBouquetTextureForRecipeBrowser,
+                (Predicate<Item>)((Item item) => {
+                    return item.damage > 0 && item.ModItem is NatureItem;
+                })
+            ]);
+
+            mod.Call([
+                "AddItemCategory",
+                "Wreaths",
+                "Accessories",
+                _fenethsWreathTextureForRecipeBrowser,
+                (Predicate<Item>)((Item item) => {
+                    return item.accessory && item.ModItem is WreathItem;
+                })
+            ]);
+        }
+    }
+
     private void DoMusicDisplayIntegration() {
         if (!ModLoader.TryGetMod("MusicDisplay", out Mod musicDisplay)) {
             return;

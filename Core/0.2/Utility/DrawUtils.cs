@@ -1,15 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+
+using System.IO;
 
 using Terraria;
 using Terraria.ID;
 
 namespace RoA.Core;
 
-static class DrawHelper {
+static class DrawUtils {
     public readonly struct SingleTileDrawInfo(Texture2D texture, Point position, Rectangle clip, Color? color = null, SlopeType slope = SlopeType.Solid, bool isHalfBlock = false) {
         public readonly Texture2D Texture = texture;
         public readonly Point Position = position;
@@ -19,7 +23,7 @@ static class DrawHelper {
         public readonly bool IsHalfBlock = isHalfBlock;
     }
 
-    // vanilla adapted
+    // adapted vanilla
     public static void DrawSingleTile(in SingleTileDrawInfo singleTileInfo) {
         int num12 = (int)singleTileInfo.Slope;
         bool halfBlock = singleTileInfo.IsHalfBlock;
@@ -75,5 +79,53 @@ static class DrawHelper {
                 Clip = new Rectangle(singleTileInfo.Clip.X, singleTileInfo.Clip.Y + num18, 16, 2)
             });
         }
+    }
+
+    // recipe browser
+    public static Asset<Texture2D> ToAsset(this Texture2D texture) {
+        using MemoryStream stream = new();
+
+        if (!Program.IsMainThread) {
+            Main.RunOnMainThread(() => {
+                texture.SaveAsPng(stream, texture.Width, texture.Height);
+                stream.Position = 0;
+            }).GetAwaiter().GetResult();
+        }
+        else {
+            texture.SaveAsPng(stream, texture.Width, texture.Height);
+            stream.Position = 0;
+        }
+
+        return Main.Assets.CreateUntracked<Texture2D>(stream, texture.Name ?? "NoName.png");
+    }
+
+    // recipe browser
+    internal static Asset<Texture2D> ResizeImage(Asset<Texture2D> texture2D, int desiredWidth, int desiredHeight) {
+        texture2D.Wait();
+        RenderTarget2D renderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, desiredWidth, desiredHeight);
+        Main.instance.GraphicsDevice.SetRenderTarget(renderTarget);
+        Main.instance.GraphicsDevice.Clear(Color.Transparent);
+        Main.spriteBatch.Begin();
+
+        float scale = 1;
+        if (texture2D.Value.Width > desiredWidth || texture2D.Value.Height > desiredHeight) {
+            if (texture2D.Value.Height > texture2D.Value.Width)
+                scale = (float)desiredWidth / texture2D.Value.Height;
+            else
+                scale = (float)desiredWidth / texture2D.Value.Width;
+        }
+
+        //new Vector2(texture2D.Width / 2 * scale, texture2D.Height / 2 * scale) desiredWidth/2, desiredHeight/2
+        Main.spriteBatch.Draw(texture2D.Value, new Vector2(desiredWidth / 2, desiredHeight / 2), null, Color.White, 0f, new Vector2(texture2D.Value.Width / 2, texture2D.Value.Height / 2), scale, SpriteEffects.None, 0f);
+
+        Main.spriteBatch.End();
+        Main.instance.GraphicsDevice.SetRenderTarget(null);
+
+        Texture2D mergedTexture = new Texture2D(Main.instance.GraphicsDevice, desiredWidth, desiredHeight);
+        Color[] content = new Color[desiredWidth * desiredHeight];
+        renderTarget.GetData<Color>(content);
+        mergedTexture.SetData<Color>(content);
+
+        return mergedTexture.ToAsset();
     }
 }

@@ -42,6 +42,7 @@ sealed partial class RoA : Mod {
 
         DoBossChecklistIntegration();
         DoMusicDisplayIntegration();
+        DoRecipeBrowserIntergration();
     }
 
     public override object Call(params object[] args) => DruidModCalls.Call(args);
