@@ -9,6 +9,7 @@ using RoA.Core.Utility;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.Graphics.Capture;
@@ -18,7 +19,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Crafting;
 
-partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
+partial class Tapper : ModTile, TileHooks.IPostDraw {
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
         tileFrameX = tileFrameY = 0;
     }
@@ -67,7 +68,7 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
         return false;
     }
 
-    void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+    void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X;
         int j = pos.Y;
         int type = Main.tile[i, j].TileType;

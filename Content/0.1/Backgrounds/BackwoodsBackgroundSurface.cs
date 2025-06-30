@@ -184,7 +184,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             int close2Offset = 600;
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
-                    //Main.EntitySpriteDraw(ModContent.Request<Texture2D>(ResourceManager.Textures + "BackwoodsBackground").Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset + close.Height * 3 - 186), new Rectangle(0, 0, close.Width, 300), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None);
+                    //Main.EntitySpriteDraw(ModContent.Request<Texture2D>(ResourceManager.TexturesPerType + "BackwoodsBackground").Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset + close.Height * 3 - 186), new Rectangle(0, 0, close.Width, 300), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None);
                     //Main.spriteBatch.Draw(close2, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + close2Offset + captureOffset), new Rectangle(0, 0, close2.Width, close2.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
                 }
             }
@@ -203,7 +203,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
-                    //Main.EntitySpriteDraw(ModContent.Request<Texture2D>(ResourceManager.Textures + "BackwoodsBackground").Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset + close.Height * 3 - 186), new Rectangle(0, 0, close.Width, 300), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None);
+                    //Main.EntitySpriteDraw(ModContent.Request<Texture2D>(ResourceManager.TexturesPerType + "BackwoodsBackground").Value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset + close.Height * 3 - 186), new Rectangle(0, 0, close.Width, 300), backgroundColor, 0f, default(Vector2), bgScale, SpriteEffects.None);
                     Main.spriteBatch.Draw(close, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + CloseOffset + captureOffset), new Rectangle(0, 0, close.Width, close.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
                 }
             }

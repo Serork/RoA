@@ -353,7 +353,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
             if (bubbleType > BubbleSizeType.ExtraLarge) {
                 continue;
             }
-            string texturePath = ResourceManager.MagicProjectileTextures + nameof(LeafySeahorse_Bubble);
+            string texturePath = ResourceManager.NatureProjectileTextures + nameof(LeafySeahorse_Bubble);
             _texturesPerBubbleType[bubbleType] = ModContent.Request<Texture2D>(texturePath + ((byte)bubbleType + 1));
         }
     }

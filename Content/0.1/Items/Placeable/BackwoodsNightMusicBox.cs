@@ -10,7 +10,7 @@ namespace RoA.Content.Items.Placeable;
 //        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight"), ModContent.ItemType<BackwoodsNightMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsNightMusicBox>());
 //    }
 
-//    public override void SetDefaults() {
+//    public override void SetAdvancedNPCDefaults() {
 //        Item.useStyle = 1;
 //        Item.useTurn = true;
 //        Item.useAnimation = 15;

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.IO;
@@ -1961,8 +1962,13 @@ static class WorldGenHelper {
         }
     }
 
+    public static Func<float> TopSizeFactor = () => 1f;
+    public static Func<float> BottomSizeFactor = () => 1f;
+    public static Func<float> LeftSizeFactor = () => 1f;
+    public static Func<float> RightSizeFactor = () => 1f;
+
     // adapted vanilla
-    public static void ModifiedTileRunner(int i, int j, double strength, int steps, int type, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int[] ignoreTileTypes = null, bool applySeedSettings = false) {
+    public static void ModifiedTileRunner(int i, int j, double strength, int steps, int type = 0, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int[] ignoreTileTypes = null, bool applySeedSettings = false, Action? onIteration = null, Predicate<Point16>? onTilePlacement = null, ushort? wallType = null) {
         if (applySeedSettings) {
             if (!GenVars.mudWall) {
                 if (WorldGen.drunkWorldGen) {
@@ -2009,10 +2015,11 @@ static class WorldGenHelper {
 
             num = strength * (num2 / (double)steps);
             num2 -= 1.0;
-            int num3 = (int)(vector2D.X - num * 0.5);
-            int num4 = (int)(vector2D.X + num * 0.5);
-            int num5 = (int)(vector2D.Y - num * 0.5);
-            int num6 = (int)(vector2D.Y + num * 0.5);
+            onIteration?.Invoke();
+            int num3 = (int)(vector2D.X - num * 0.5 * LeftSizeFactor());
+            int num4 = (int)(vector2D.X + num * 0.5 * RightSizeFactor());
+            int num5 = (int)(vector2D.Y - num * 0.5 * TopSizeFactor());
+            int num6 = (int)(vector2D.Y + num * 0.5 * BottomSizeFactor());
             if (num3 < 1)
                 num3 = 1;
 
@@ -2112,14 +2119,24 @@ static class WorldGenHelper {
                                 break;
                         }
 
-                        if (!flag3)
-                            tile.TileType = (ushort)type;
+                        if (!flag3) {
+                            if (wallType == null) {
+                                if (onTilePlacement == null || onTilePlacement(new Point16(k, l))) {
+                                    tile.TileType = (ushort)type;
+                                }
+                            }
+                            else {
+                                tile.WallType = wallType.Value;
+                            }
+                        }
                     }
 
                     if (addTile) {
-                        Tile tile = Main.tile[k, l];
-                        tile.HasTile = true;
-                        tile.LiquidAmount = 0;
+                        if (onTilePlacement == null || onTilePlacement(new Point16(k, l))) {
+                            Tile tile = Main.tile[k, l];
+                            tile.HasTile = true;
+                            tile.LiquidAmount = 0;
+                        }
                     }
 
                     if (noYChange && (double)l < Main.worldSurface && type != 59)
@@ -2246,6 +2263,11 @@ static class WorldGenHelper {
                     vector2D2.Y = -1.0;
             }
         }
+
+        TopSizeFactor = () => 1f;
+        BottomSizeFactor = () => 1f;
+        LeftSizeFactor = () => 1f;
+        RightSizeFactor = () => 1f;
     }
 
     // adapted vanilla

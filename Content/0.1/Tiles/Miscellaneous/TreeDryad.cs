@@ -1,23 +1,106 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
+using RoA.Common;
 using RoA.Common.NPCs;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
+using RoA.Content.Emotes;
 using RoA.Content.World.Generations;
+using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
-sealed class TreeDryad : ModTile {
+sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.IPostDraw {
+    private static byte RAYCOUNT => 8;
+
+    private static bool _hammerEmoteShown;
+
+    private enum TreeDryadRequstedTextureType : byte {
+        Ray
+    }
+
+    (byte, string)[] IRequestAsset.IndexedPathsToTexture => [((byte)TreeDryadRequstedTextureType.Ray, ResourceManager.Textures + "Ray")];
+
+    void TileHooks.IPreDraw.PreDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition) {
+        if (AbleToBeDestroyed) {
+            DrawRays(tilePosition, 0.1f);
+        }
+    }
+
+    void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition) {
+        if (AbleToBeDestroyed) {
+            Vector2 tileWorldPosition = tilePosition.ToWorldCoordinates();
+            int i = tilePosition.X, j = tilePosition.Y;
+            Point16 topLeft = TileHelper.GetTileTopLeft<TreeDryad>(i, j);
+            if (topLeft == tilePosition) {
+                Vector2 emotePosition = TileHelper.GetTileTopLeft<TreeDryad>(i, j).ToWorldCoordinates() + new Vector2(8f, -16f);
+                if (Helper.OnScreenWorld(emotePosition)) {
+                    if (!_hammerEmoteShown) {
+                        _hammerEmoteShown = true;
+
+                        int emoteType = ModContent.EmoteBubbleType<HammerEmote>();
+                        EmoteBubble.NewBubble(emoteType, new WorldUIAnchor(emotePosition), 180);
+                    }
+                }
+                else {
+                    _hammerEmoteShown = false;
+                }
+            }
+            uint seedForPseudoRandomness = (uint)(tilePosition.GetHashCode() + tilePosition.GetHashCode());
+            float lightStrengthFactor = Helper.Wave(0.75f, 1f, 2f, MathUtils.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
+            Lighting.AddLight(tileWorldPosition, Color.Lerp(Color.Green, Color.White, MathUtils.PseudoRandRange(ref seedForPseudoRandomness, 1f) * lightStrengthFactor).ToVector3() * 0.45f * lightStrengthFactor);
+
+            DrawRays(tilePosition, 0.075f);
+        }
+    }
+
+    private static void DrawRays(Point16 tilePosition, float colorOpacity) {
+        int i = tilePosition.X, j = tilePosition.Y;
+        Point16 topLeft = TileHelper.GetTileTopLeft<TreeDryad>(i, j);
+        if (topLeft == tilePosition && AssetInitializer.TryGetTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Ray, out Asset<Texture2D>? textureAsset)) {
+            Texture2D rayTexture = textureAsset!.Value;
+            Vector2 rayPosition = TileHelper.GetTileTopLeft<TreeDryad>(i, j).ToWorldCoordinates() + new Vector2(8f, 4f);
+            bool turnedLeft = Main.tile[topLeft.X, topLeft.Y].TileFrameX <= 18;
+            if (turnedLeft) {
+                rayPosition.X -= 16f;
+            }
+            Rectangle rayClip = rayTexture.Bounds;
+            Vector2 rayOrigin = Utils.Top(rayClip);
+            for (int k = 0; k < RAYCOUNT; k++) {
+                uint seedForPseudoRandomness = (uint)((tilePosition.GetHashCode() + tilePosition.GetHashCode()) * (k + 1));
+                float rayRotation = (float)k / RAYCOUNT * MathHelper.TwoPi + MathUtils.PseudoRandRange(ref seedForPseudoRandomness, -MathHelper.TwoPi, MathHelper.TwoPi);
+                float maxRayExtraScale = 0.3f;
+                float opacityFactor = Helper.Wave(0.5f, 1f, 2f, MathUtils.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
+                Vector2 rayScale = new(0.5f + MathUtils.PseudoRandRange(ref seedForPseudoRandomness, -maxRayExtraScale, maxRayExtraScale), 0.8f + MathUtils.PseudoRandRange(ref seedForPseudoRandomness, -maxRayExtraScale * 2f, maxRayExtraScale * 2f));
+                rayScale.Y *= opacityFactor;
+                Color rayColor = Color.Lerp(Color.Green, Color.White, MathUtils.PseudoRandRange(ref seedForPseudoRandomness, 1f)) * colorOpacity;
+                rayColor *= opacityFactor;
+                Main.spriteBatch.Draw(rayTexture, rayPosition, DrawInfo.Default with {
+                    Scale = rayScale,
+                    Clip = rayClip,
+                    Origin = rayOrigin,
+                    Color = rayColor,
+                    Rotation = rayRotation
+                });
+            }
+        }
+    }
+
     public static bool AbleToBeDestroyed => NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3;
 
     public override void Load() {
@@ -92,10 +175,14 @@ sealed class TreeDryad : ModTile {
                               new Rectangle(frameX, frameY, 16, height),
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
+        TileHelper.AddPostSolidTileDrawPoint(this, i, j);
+
         return false;
     }
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
+        TileHelper.RemovePostPlayerDrawPoint(i, j);
+
         Vector2 position = new Point(i, j).ToWorldCoordinates();
         {
             int dustType = DustID.WoodFurniture;

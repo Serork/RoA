@@ -22,7 +22,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Furniture;
 
-sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
+sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
     // separate
     private static List<Point> _drawPoints = [];
     private static float _rotationOffset, _scaleOffset;
@@ -91,7 +91,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.ITileHaveExtraDraws {
         return true;
     }
 
-    void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+    void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X;
         int j = pos.Y;
         ulong speed = ((ulong)j << 32) | (ulong)i;

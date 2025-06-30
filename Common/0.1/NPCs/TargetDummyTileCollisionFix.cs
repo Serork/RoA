@@ -1,7 +1,7 @@
 ﻿//namespace RoA.Common.NPCs;
 
 //sealed class TargetDummyTileCollisionFix : GlobalNPC {
-//    public override void SetDefaults(NPC entity) {
+//    public override void SetAdvancedNPCDefaults(NPC entity) {
 //        if (entity.type == NPCID.TargetDummy) {
 //            entity.width = 18;
 //            entity.height = 40;

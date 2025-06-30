@@ -190,7 +190,7 @@ sealed class CaptureBiomeSettings : ModSystem {
             return 0; //otherwise return 0 to not offset
         });
 
-        //Modify Textures
+        //Modify TexturesPerType
         //here mods modify their assets, text and their frame X position of the image, frame X is included for any mod that was to string their icons in a row like Extra 130
         c.GotoNext(MoveType.After, i => i.MatchCall<Color>("get_White"), i => i.MatchPop()); //go after the unused color local variable
         c.EmitLdloc(3); //num2

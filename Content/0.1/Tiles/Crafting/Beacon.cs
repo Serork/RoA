@@ -24,7 +24,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Crafting;
 
-sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
+sealed class Beacon : ModTile, TileHooks.IPostDraw {
     private static int _variantToShow;
 
     public static readonly short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
@@ -123,7 +123,7 @@ sealed class Beacon : ModTile, TileHooks.ITileHaveExtraDraws {
         }
     }
 
-    void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+    void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X;
         int j = pos.Y;
         if (!(WorldGenHelper.GetTileSafely(i, j + 1).TileType == Type &&

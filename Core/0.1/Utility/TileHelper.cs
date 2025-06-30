@@ -23,22 +23,10 @@ using static RoA.Common.Tiles.TileHooks;
 
 namespace RoA.Core.Utility;
 
-static class TileHelper {
+static partial class TileHelper {
     public readonly record struct HangingTileInfo(int? X, int? Y) {
         public static implicit operator HangingTileInfo(int value) {
             return new(null, value);
-        }
-    }
-
-    public static bool DrawingTiles { get; private set; }
-
-    public static Vector2 ScreenOffset {
-        get {
-            Vector2 vector = new(Main.offScreenRange, Main.offScreenRange);
-            if (Main.drawToScreen) {
-                vector = Vector2.Zero;
-            }
-            return vector;
         }
     }
 
@@ -118,8 +106,8 @@ static class TileHelper {
     private static List<(ModTile, Point)> _fluentTiles = [];
 
     public static Dictionary<int, HangingTileInfo> HangingTile { get; private set; } = [];
-    public static List<(ModTile, Point)> PostSolidTileDrawPoints { get; private set; } = [];
-    public static List<(ModTile, Point)> PostPlayerDrawPoints { get; private set; } = [];
+    public static List<(ModTile, Point16)> SolidTileDrawPoints { get; private set; } = [];
+    public static List<(ModTile, Point16)> PostPlayerDrawPoints { get; private set; } = [];
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_sunflowerWindCounter")]
     public extern static ref double TileDrawing_sunflowerWindCounter(TileDrawing tileDrawing);
@@ -144,25 +132,22 @@ static class TileHelper {
     }
 
     public static void AddPostSolidTileDrawPoint(ModTile modTile, int i, int j) {
-        if (PostSolidTileDrawPoints.Contains((modTile, new Point(i, j)))) {
+        if (SolidTileDrawPoints.Contains((modTile, new Point16(i, j)))) {
             return;
         }
-        PostSolidTileDrawPoints.Add((modTile, new Point(i, j)));
+        SolidTileDrawPoints.Add((modTile, new Point16(i, j)));
     }
 
     public static void AddPostPlayerDrawPoint(ModTile modTile, int i, int j) {
-        if (PostPlayerDrawPoints.Contains((modTile, new Point(i, j)))) {
+        if (PostPlayerDrawPoints.Contains((modTile, new Point16(i, j)))) {
             return;
         }
-        PostPlayerDrawPoints.Add((modTile, new Point(i, j)));
+        PostPlayerDrawPoints.Add((modTile, new Point16(i, j)));
     }
 
     public static void RemovePostPlayerDrawPoint(int i, int j) => PostPlayerDrawPoints.RemoveAll(x => x.Item2.X == i && x.Item2.Y == j);
 
     public static void Load() {
-        On_TileDrawing.PreDrawTiles += On_TileDrawing_PreDrawTiles;
-        On_TileDrawing.PostDrawTiles += On_TileDrawing_PostDrawTiles;
-
         _addSpecialPointSpecialPositions = (Point[][])typeof(TileDrawing).GetFieldValue("_specialPositions", Main.instance.TilesRenderer);
         _addSpecialPointSpecialsCount = (int[])typeof(TileDrawing).GetFieldValue("_specialsCount", Main.instance.TilesRenderer);
         _addVineRootsPositions = (List<Point>)typeof(TileDrawing).GetFieldValue("_vineRootsPositions", Main.instance.TilesRenderer);
@@ -192,27 +177,37 @@ static class TileHelper {
         On_Main.DrawPlayers_AfterProjectiles += On_Main_DrawPlayers_AfterProjectiles;
 
         On_Main.DrawTiles += On_Main_DrawTiles;
+
+        LoadImpl();
     }
 
-    private static void On_TileDrawing_PostDrawTiles(On_TileDrawing.orig_PostDrawTiles orig, TileDrawing self, bool solidLayer, bool forRenderTargets, bool intoRenderTargets) {
-        orig(self, solidLayer, forRenderTargets, intoRenderTargets);
-        DrawingTiles = false;
-    }
-
-    private static void On_TileDrawing_PreDrawTiles(On_TileDrawing.orig_PreDrawTiles orig, TileDrawing self, bool solidLayer, bool forRenderTargets, bool intoRenderTargets) {
-        orig(self, solidLayer, forRenderTargets, intoRenderTargets);
-        DrawingTiles = true;
-    }
+    static partial void LoadImpl();
 
     private static void On_Main_DrawTiles(On_Main.orig_DrawTiles orig, Main self, bool solidLayer, bool forRenderTargets, bool intoRenderTargets, int waterStyleOverride) {
+        if (CaptureManager.Instance.IsCapturing) {
+            SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            foreach ((ModTile modTile, Point16 position) in SolidTileDrawPoints) {
+                if (modTile is IPreDraw tileHaveExtras && modTile is not null) {
+                    if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
+                        continue;
+                    }
+                    tileHaveExtras.PreDrawExtra(Main.spriteBatch, position);
+                }
+            }
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(in snapshot);
+        }
+
         orig(self, solidLayer, forRenderTargets, intoRenderTargets, waterStyleOverride);
 
         if (CaptureManager.Instance.IsCapturing) {
             SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-            foreach ((ModTile modTile, Point position) in PostSolidTileDrawPoints) {
-                if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null) {
+            foreach ((ModTile modTile, Point16 position) in SolidTileDrawPoints) {
+                if (modTile is IPostDraw tileHaveExtras && modTile is not null) {
                     if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
                         continue;
                     }
@@ -228,7 +223,7 @@ static class TileHelper {
         orig(self);
 
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        foreach ((ModTile modTile, Point tilePosition) in PostPlayerDrawPoints) {
+        foreach ((ModTile modTile, Point16 tilePosition) in PostPlayerDrawPoints) {
             if (modTile is ITileAfterPlayerDraw tileHaveExtras && modTile is not null) {
                 if (!TileDrawing.IsVisible(Main.tile[tilePosition.X, tilePosition.Y])) {
                     continue;
@@ -240,12 +235,25 @@ static class TileHelper {
     }
 
     private static void On_Main_DoDraw_Tiles_Solid(On_Main.orig_DoDraw_Tiles_Solid orig, Main self) {
+        if (!CaptureManager.Instance.IsCapturing) {
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+            foreach ((ModTile modTile, Point16 position) in SolidTileDrawPoints) {
+                if (modTile is IPreDraw tileHaveExtras && modTile is not null) {
+                    if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
+                        continue;
+                    }
+                    tileHaveExtras.PreDrawExtra(Main.spriteBatch, position);
+                }
+            }
+            Main.spriteBatch.End();
+        }
+
         orig(self);
 
         if (!CaptureManager.Instance.IsCapturing) {
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-            foreach ((ModTile modTile, Point position) in PostSolidTileDrawPoints) {
-                if (modTile is ITileHaveExtraDraws tileHaveExtras && modTile is not null) {
+            foreach ((ModTile modTile, Point16 position) in SolidTileDrawPoints) {
+                if (modTile is IPostDraw tileHaveExtras && modTile is not null) {
                     if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
                         continue;
                     }
@@ -259,7 +267,7 @@ static class TileHelper {
     private static void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
         orig(self);
 
-        PostSolidTileDrawPoints.Clear();
+        SolidTileDrawPoints.Clear();
         //PostPlayerDrawPoints.Clear();
     }
 
@@ -274,8 +282,8 @@ static class TileHelper {
         HangingTile.Clear();
         HangingTile = null;
 
-        PostSolidTileDrawPoints.Clear();
-        PostSolidTileDrawPoints = null;
+        SolidTileDrawPoints.Clear();
+        SolidTileDrawPoints = null;
 
         PostPlayerDrawPoints.Clear();
         PostPlayerDrawPoints = null;

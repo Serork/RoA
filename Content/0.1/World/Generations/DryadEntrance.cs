@@ -1,9 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.CodeAnalysis.Text;
+using Microsoft.Xna.Framework;
 
 using ReLogic.Utilities;
 
 using RoA.Common.Items;
+using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.NPCs.Enemies.Sap;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Miscellaneous;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -30,7 +33,6 @@ namespace RoA.Content.World.Generations;
 sealed class DryadEntrance : ModSystem {
     private static int _dryadEntranceX, _dryadEntranceY, _dryadEntrancemCave;
     private static Point _bigRubblePosition = Point.Zero;
-    private static bool _loomPlacedInWorld;
     internal static bool _dryadStructureGenerated;
 
     public override void ClearWorld() {
@@ -58,204 +60,11 @@ sealed class DryadEntrance : ModSystem {
         _dryadStructureGenerated = flags[0];
     }
 
-    public override void Load() {
-        On_WorldGen.GrowLivingTreePassageRoom += On_WorldGen_GrowLivingTreePassageRoom;
-    }
-
-    private void On_WorldGen_GrowLivingTreePassageRoom(On_WorldGen.orig_GrowLivingTreePassageRoom orig, int minl, int minr, int Y) {
-        var genRand = WorldGen.genRand;
-        int num = genRand.Next(2);
-        if (num == 0)
-            num = -1;
-
-        int num2 = Y - 2;
-        int num3 = (minl + minr) / 2;
-        if (num < 0)
-            num3--;
-
-        if (num > 0)
-            num3++;
-
-        int num4 = genRand.Next(15, 30);
-        int num5 = num3 + num4;
-        if (num < 0) {
-            num5 = num3;
-            num3 -= num4;
-        }
-
-        for (int i = num3; i < num5; i++) {
-            for (int j = Y - 20; j < Y + 10; j++) {
-                if (Main.tile[i, j].WallType == 0 && !Main.tile[i, j].HasTile && (double)j < Main.worldSurface)
-                    return;
-            }
-        }
-
-        GenVars.dMinX = num3;
-        GenVars.dMaxX = num5;
-        if (num < 0)
-            GenVars.dMinX -= 40;
-        else
-            GenVars.dMaxX += 40;
-
-        for (int k = num3; k <= num5; k++) {
-            for (int l = num2 - 2; l <= Y + 2; l++) {
-                if (Main.tile[k - 1, l].TileType == 40)
-                    Main.tile[k - 1, l].TileType = 0;
-
-                if (Main.tile[k + 1, l].TileType == 40)
-                    Main.tile[k + 1, l].TileType = 0;
-
-                if (Main.tile[k, l - 1].TileType == 40)
-                    Main.tile[k, l - 1].TileType = 0;
-
-                if (Main.tile[k, l + 1].TileType == 40)
-                    Main.tile[k, l + 1].TileType = 0;
-
-                if (Main.tile[k, l].WallType != 244 && Main.tile[k, l].TileType != 19) {
-                    Tile tile = Main.tile[k, l];
-                    tile.HasTile = true;
-                    tile.TileType = 191;
-                    tile.IsHalfBlock = false;
-                }
-
-                if (l >= num2 && l <= Y) {
-                    Tile tile = Main.tile[k, l];
-                    tile.LiquidAmount = 0;
-                    tile.WallType = 244;
-                    tile.HasTile = false;
-                }
-            }
-        }
-
-        int i2 = (minl + minr) / 2 + 3 * num;
-        WorldGen.PlaceTile(i2, Y, 10, mute: true, forced: false, -1, 7);
-        int num6 = genRand.Next(5, 9);
-        int num7 = genRand.Next(4, 6);
-        if (num < 0) {
-            num5 = num3 + num6;
-            num3 -= num6;
-        }
-        else {
-            num3 = num5 - num6;
-            num5 += num6;
-        }
-
-        num2 = Y - num7;
-        for (int m = num3 - 2; m <= num5 + 2; m++) {
-            for (int n = num2 - 2; n <= Y + 2; n++) {
-                if (Main.tile[m - 1, n].TileType == 40)
-                    Main.tile[m - 1, n].TileType = 40;
-
-                if (Main.tile[m + 1, n].TileType == 40)
-                    Main.tile[m + 1, n].TileType = 40;
-
-                if (Main.tile[m, n - 1].TileType == 40)
-                    Main.tile[m, n - 1].TileType = 40;
-
-                if (Main.tile[m, n + 1].TileType == 40)
-                    Main.tile[m, n + 1].TileType = 40;
-
-                if (Main.tile[m, n].WallType != 244 && Main.tile[m, n].TileType != 19) {
-                    Tile tile = Main.tile[m, n];
-                    tile.HasTile = true;
-                    tile.TileType = 191;
-                    tile.IsHalfBlock = false;
-                }
-
-                if (n >= num2 && n <= Y && m >= num3 && m <= num5) {
-                    Tile tile = Main.tile[m, n];
-                    tile.LiquidAmount = 0;
-                    tile.WallType = 244;
-                    tile.HasTile = false;
-                }
-            }
-        }
-
-        i2 = num3 - 2;
-        if (num < 0)
-            i2 = num5 + 2;
-
-        WorldGen.PlaceTile(i2, Y, 10, mute: true, forced: false, -1, 7);
-        int num8 = num5;
-        if (num < 0)
-            num8 = num3;
-
-        int num9 = 2;
-        if (genRand.Next(num9) == 0) {
-            num9 += 2;
-            WorldGen.PlaceTile(num8, Y, 15, mute: true, forced: false, -1, 5);
-            if (num < 0) {
-                Main.tile[num8, Y - 1].TileFrameX += 18;
-                Main.tile[num8, Y].TileFrameX += 18;
-            }
-        }
-
-        num8 = num5 - 2;
-        if (num < 0)
-            num8 = num3 + 2;
-
-        WorldGen.PlaceTile(num8, Y, 304, mute: true);
-        if (Main.tile[num8, Y].TileType == 304) {
-            _loomPlacedInWorld = true;
-        }
-        num8 = num5 - 4;
-        if (num < 0)
-            num8 = num3 + 4;
-
-        if (genRand.Next(num9) == 0) {
-            WorldGen.PlaceTile(num8, Y, 15, mute: true, forced: false, -1, 5);
-            if (num > 0) {
-                Main.tile[num8, Y - 1].TileFrameX += 18;
-                Main.tile[num8, Y].TileFrameX += 18;
-            }
-        }
-
-        num8 = num5 - 7;
-        if (num < 0)
-            num8 = num3 + 8;
-
-        int contain = 832;
-        bool summonStaffAdded = false;
-        if (genRand.Next(3) == 0) {
-            contain = 4281;
-            summonStaffAdded = true;
-        }
-        if (genRand.Next(5) == 0) {
-            contain = ModContent.ItemType<GiantTreeSapling>();
-        }
-        if (!summonStaffAdded && !ExtraVanillaChestItems._giantTreeSaplingAdded) {
-            ExtraVanillaChestItems._giantTreeSaplingAdded = true;
-            contain = ModContent.ItemType<GiantTreeSapling>();
-        }
-
-        if (WorldGen.remixWorldGen) {
-            int num10 = genRand.Next(1, 3);
-            for (int num11 = 0; num11 < num10; num11++) {
-                bool flag = false;
-                while (!flag) {
-                    int num12 = genRand.Next(Main.maxTilesX / 8, Main.maxTilesX - Main.maxTilesX / 8);
-                    int num13 = genRand.Next((int)Main.rockLayer, Main.maxTilesY - 350);
-                    if (!WorldGen.IsTileNearby(num12, num13, 53, 20) && !WorldGen.IsTileNearby(num12, num13, 147, 20) && !WorldGen.IsTileNearby(num12, num13, 59, 20))
-                        flag = WorldGen.AddBuriedChest(num12, num13, contain, notNearOtherChests: false, 12, trySlope: false, 0);
-                }
-            }
-
-            if (WorldGen.crimson)
-                WorldGen.AddBuriedChest(num8, Y, 0, notNearOtherChests: false, 14, trySlope: false, 0);
-            else
-                WorldGen.AddBuriedChest(num8, Y, 0, notNearOtherChests: false, 7, trySlope: false, 0);
-        }
-        else {
-            WorldGen.AddBuriedChest(num8, Y, contain, notNearOtherChests: false, 12, trySlope: false, 0);
-        }
-    }
-
     private static ushort PlaceholderTileType => (ushort)ModContent.TileType<LivingElderwood>();
     private static ushort PlaceholderWallType => (ushort)ModContent.WallType<ElderwoodWall3>();
 
     public override void PostWorldGen() {
         _bigRubblePosition = Point.Zero;
-        _loomPlacedInWorld = false;
     }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
@@ -270,11 +79,92 @@ sealed class DryadEntrance : ModSystem {
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mountain Caves"));
         tasks.RemoveAt(genIndex);
 
+        int genIndex2 = tasks.FindIndex(genpass => genpass.Name.Equals("Grass Wall"));
+        tasks.RemoveAt(genIndex2);
+        tasks.Insert(genIndex2, new PassLegacy("Grass Wall", GrassWallUpdated, 512.8323f));
+
         pass = hasRemnants ? "Mountain Caves, Dryad Entrance" : "Mountain Caves";
         tasks.Insert(genIndex, new PassLegacy(pass, DryadEntranceGenerator, 14.2958f));
 
         tasks.Add(new PassLegacy("Dryad Entrance", DryadEntranceCleanUp));
         tasks.Add(new PassLegacy("Dryad Entrance Loom Placement", DryadEntranceLoomPlacement));
+    }
+
+    private void GrassWallUpdated(GenerationProgress progress, GameConfiguration configuration) {
+        WorldGen.maxTileCount = 3500;
+        progress.Set(1.0);
+        for (int num298 = 50; num298 < Main.maxTilesX - 50; num298++) {
+            for (int num299 = 0; (double)num299 < Main.worldSurface - 10.0; num299++) {
+                if (WorldGen.genRand.Next(4) == 0) {
+                    bool flag8 = false;
+                    int num300 = -1;
+                    int num301 = -1;
+                    if (Main.tile[num298, num299].HasTile && Main.tile[num298, num299].TileType == 2 && (Main.tile[num298, num299].WallType == 2 || Main.tile[num298, num299].WallType == 63)) {
+                        for (int num302 = num298 - 1; num302 <= num298 + 1; num302++) {
+                            for (int num303 = num299 - 1; num303 <= num299 + 1; num303++) {
+                                if (Main.tile[num302, num303].WallType == 0 && !WorldGen.SolidTile(num302, num303))
+                                    flag8 = true;
+                            }
+                        }
+
+                        if (flag8) {
+                            for (int num304 = num298 - 1; num304 <= num298 + 1; num304++) {
+                                for (int num305 = num299 - 1; num305 <= num299 + 1; num305++) {
+                                    if ((Main.tile[num304, num305].WallType == 2 || Main.tile[num304, num305].WallType == 15) && !WorldGen.SolidTile(num304, num305)) {
+                                        num300 = num304;
+                                        num301 = num305;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (flag8 && num300 > -1 && num301 > -1 && WorldGen.countDirtTiles(num300, num301) < WorldGen.maxTileCount) {
+                        bool flag48 = false;
+                        if (Math.Abs(num300 - GenVars.mCaveX[_dryadEntrancemCave]) < 300) {
+                            flag48 = true;
+                        }
+                        if (!flag48) {
+                            try {
+                                ushort wallType = 63;
+                                if (WorldGen.dontStarveWorldGen && WorldGen.genRand.Next(3) != 0)
+                                    wallType = 62;
+
+                                WorldGen.Spread.Wall2(num300, num301, wallType);
+                            }
+                            catch {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int num306 = 5; num306 < Main.maxTilesX - 5; num306++) {
+            for (int num307 = 10; (double)num307 < Main.worldSurface - 1.0; num307++) {
+                if (Main.tile[num306, num307].WallType == 63 && WorldGen.genRand.Next(10) == 0)
+                    Main.tile[num306, num307].WallType = 65;
+
+                if (Main.tile[num306, num307].HasTile && Main.tile[num306, num307].TileType == 0) {
+                    bool flag9 = false;
+                    for (int num308 = num306 - 1; num308 <= num306 + 1; num308++) {
+                        for (int num309 = num307 - 1; num309 <= num307 + 1; num309++) {
+                            if (Main.tile[num308, num309].WallType == 63 || Main.tile[num308, num309].WallType == 65) {
+                                flag9 = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    bool flag48 = false;
+                    if (Math.Abs(num306 - GenVars.mCaveX[_dryadEntrancemCave]) < 300) {
+                        flag48 = true;
+                    }
+                    if (!flag48 && flag9)
+                        WorldGen.SpreadGrass(num306, num307);
+                }
+            }
+        }
     }
 
     private void DryadEntranceLoomPlacement(GenerationProgress progress, GameConfiguration configuration) {
@@ -311,6 +201,15 @@ sealed class DryadEntrance : ModSystem {
                 }
                 if (Main.tile[x2, y2].WallType == PlaceholderWallType) {
                     Main.tile[x2, y2].WallType = WallID.LivingWoodUnsafe;
+                }
+                if (Main.tile[x2, y2].TileType == TileID.LeafBlock) {
+                    for (int grassX = x2 - 2; grassX < x2 + 3; grassX++) {
+                        for (int grassY = y2 - 2; grassY < y2 + 3; grassY++) {
+                            if (Main.tile[grassX, grassY].TileType == TileID.Grass) {
+                                Main.tile[grassX, grassY].TileType = TileID.Dirt;
+                            }
+                        }
+                    }
                 }
                 //if (Main.tile[x2, y2].WallType == ModContent.WallType<LivingBackwoodsLeavesWall2>()) {
                 //    Main.tile[x2, y2].WallType = WallID.LivingWoodUnsafe;
@@ -693,12 +592,60 @@ sealed class DryadEntrance : ModSystem {
 
     private void BuildDryadEntrance(int i, int j) {
         UnifiedRandom genRand = WorldGen.genRand;
-        double num = 10;
+        double num = 50;
         double num2 = num;
-        int num3 = 1;
         Vector2D vector2D = default(Vector2D);
         vector2D.X = i;
         vector2D.Y = j;
+        ushort tileType = PlaceholderTileType;
+        ushort wallType = PlaceholderWallType;
+        WorldGenHelper.ModifiedTileRunner(i, j, num, (int)num / 3, TileID.LeafBlock, onIteration: () => {
+            WorldGenHelper.TopSizeFactor = () => 0.55f;
+            WorldGenHelper.BottomSizeFactor = () => 0.55f;
+        }, onTilePlacement: (tilePosition) => {
+            int checkX = tilePosition.X, checkY = tilePosition.Y;
+            int length = genRand.Next(2, 5);
+            for (int grassX = checkX - 2; grassX < checkX + 3; grassX++) {
+                for (int grassY = checkY - 2; grassY < checkY + 3; grassY++) {
+                    if (Main.tile[grassX, grassY].TileType == TileID.Grass) {
+                        Main.tile[grassX, grassY].TileType = TileID.Dirt;
+                    }
+                }
+            }
+            if (TileHelper.GetDistanceToFirstEmptyTileAround(checkX, checkY, checkDistance: (ushort)num, startCheckAngle: new Vector2(checkX, checkY).DirectionTo(new Vector2(i, j)).ToRotation()) > length) {
+                Main.tile[checkX, checkY].TileType = TileID.Dirt;
+                return false;
+            }
+            if (TileHelper.HasNoDuplicateNeighbors(checkX, checkY, TileID.LeafBlock)) {
+                Vector2D startPosition = tilePosition.ToVector2D(),
+                         destination = new Point16(i, j).ToVector2D();
+                startPosition = Vector2D.Lerp(startPosition, destination, 0.9f);
+                while (Vector2D.Distance(startPosition, destination) > 2) {
+                    startPosition = Vector2D.Lerp(startPosition, destination, 0.1f);
+                    WorldGenHelper.ModifiedTileRunner((int)startPosition.X, (int)startPosition.Y, 4, 10, wallType: WallID.FlowerUnsafe);
+                }
+            }
+            return true;
+        });
+
+        int vinenum5 = (int)(vector2D.X - num * 0.5);
+        int vinenum6 = (int)(vector2D.X + num * 0.5);
+        int vinenum7 = (int)(vector2D.Y - num * 0.5);
+        int vinenum8 = (int)(vector2D.Y + num * 0.5);
+        for (int vineX = vinenum5; vineX < vinenum6; vineX++) {
+            for (int vineY = vinenum7; vineY < vinenum8; vineY++) {
+                if (Main.tile[vineX, vineY].TileType == TileID.LeafBlock) {
+                    if (!Main.tile[vineX, vineY + 1].HasTile && genRand.NextBool(3)) {
+                        WorldGenHelper.PlaceVines(vineX, vineY, genRand.Next(3, 6), TileID.Vines);
+                    }
+                }
+            }
+        }
+
+        num = 10;
+        num2 = num;
+        int num3 = 1;
+
         int size = 20;
         int num4 = size;
         Vector2D vector2D2 = default(Vector2D);
@@ -709,8 +656,6 @@ sealed class DryadEntrance : ModSystem {
         Vector2D vector2D3 = default(Vector2D);
         vector2D3.X = i;
         vector2D3.Y = j;
-        ushort tileType = PlaceholderTileType;
-        ushort wallType = PlaceholderWallType;
         List<Point> killTiles2 = [];
         while (num4 > 0) {
             num4--;
@@ -753,9 +698,7 @@ sealed class DryadEntrance : ModSystem {
                         Tile tile = Main.tile[k, l];
                         tile.TileType = tileType;
                         if (flag2) {
-                            if (Vector2.Distance(new Vector2(i, j), new Vector2(k, l)) > 5) {
-                                tile.WallType = wallType;
-                            }
+                            tile.WallType = wallType;
                         }
                         if (flag3) {
                             killTiles2.Add(new Point(k, l));
