@@ -29,7 +29,7 @@ using Terraria.UI;
 namespace RoA;
 
 sealed partial class RoA : Mod {
-    private static Asset<Texture2D> _brilliantBouquetTextureForRecipeBrowser, _fenethsWreathTextureForRecipeBrowser;
+    private static Asset<Texture2D>? _brilliantBouquetTextureForRecipeBrowser, _fenethsWreathTextureForRecipeBrowser;
 
     public override void Load() {
         if (!Main.dedServ) {
