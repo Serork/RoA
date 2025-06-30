@@ -116,7 +116,7 @@ sealed class DryadEntrance : ModSystem {
 
                     if (flag8 && num300 > -1 && num301 > -1 && WorldGen.countDirtTiles(num300, num301) < WorldGen.maxTileCount) {
                         bool flag48 = false;
-                        if (Math.Abs(num300 - GenVars.mCaveX[_dryadEntrancemCave]) < 300) {
+                        if (Math.Abs(num300 - GenVars.mCaveX[_dryadEntrancemCave]) < 200) {
                             flag48 = true;
                         }
                         if (!flag48) {
@@ -152,7 +152,7 @@ sealed class DryadEntrance : ModSystem {
                     }
 
                     bool flag48 = false;
-                    if (Math.Abs(num306 - GenVars.mCaveX[_dryadEntrancemCave]) < 300) {
+                    if (Math.Abs(num306 - GenVars.mCaveX[_dryadEntrancemCave]) < 200) {
                         flag48 = true;
                     }
                     if (!flag48 && flag9)
