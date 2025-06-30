@@ -80,7 +80,7 @@ sealed class HammerEmote : ModEmoteBubble, IRequestAsset {
             if (!flag) {
                 int num = _frameCounter / 8;
                 spriteBatch.Draw(emoteTexture, position, emoteTexture.Frame(4, 1, num, 0), white, 0f, origin, 1f, spriteEffects, 0f);
-                spriteBatch.Draw(borderTexture, position - Vector2.One * 2f, null, color, 0f, origin, 1f, spriteEffects, 0f);
+                //spriteBatch.Draw(borderTexture, position - Vector2.One * 2f, null, color, 0f, origin, 1f, spriteEffects, 0f);
             }
             return false;
         }
