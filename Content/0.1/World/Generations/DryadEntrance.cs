@@ -631,7 +631,7 @@ sealed class DryadEntrance : ModSystem {
             for (int vineY = vinenum7; vineY < vinenum8; vineY++) {
                 if (Main.tile[vineX, vineY].TileType == TileID.LeafBlock) {
                     if (!Main.tile[vineX, vineY + 1].HasTile && genRand.NextBool(3)) {
-                        WorldGenHelper.PlaceVines(vineX, vineY, genRand.Next(3, 6), TileID.Vines);
+                        WorldGenHelper.PlaceVines(vineX, vineY, genRand.Next(2, 5), TileID.Vines);
                     }
                 }
             }
