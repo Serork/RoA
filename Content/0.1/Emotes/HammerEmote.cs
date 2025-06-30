@@ -79,10 +79,14 @@ sealed class HammerEmote : ModEmoteBubble, IRequestAsset {
             Rectangle value = bubbleTexture.Frame(8, 39, 1, 0);
             Color white = Color.White;
             Color color = Color.Black;
-            spriteBatch.Draw(bubbleTexture, position, value, white, 0f, origin, 1f, spriteEffects, 0f);
-            int num = _frameCounter / 8;
-            spriteBatch.Draw(emoteTexture, position, emoteTexture.Frame(4, 1, num, 0), white, 0f, origin, 1f, spriteEffects, 0f);
-            spriteBatch.Draw(borderTexture, position - Vector2.One * 2f, null, color, 0f, origin, 1f, spriteEffects, 0f);
+            bool flag = EmoteBubble.lifeTime < 6 || EmoteBubble.lifeTimeStart - EmoteBubble.lifeTime < 6;
+            Rectangle value2 = bubbleTexture.Frame(8, EmoteBubble.EMOTE_SHEET_VERTICAL_FRAMES, (!flag) ? 1 : 0);
+            spriteBatch.Draw(bubbleTexture, position, value2, white, 0f, origin, 1f, spriteEffects, 0f);
+            if (!flag) {
+                int num = _frameCounter / 8;
+                spriteBatch.Draw(emoteTexture, position, emoteTexture.Frame(4, 1, num, 0), white, 0f, origin, 1f, spriteEffects, 0f);
+                spriteBatch.Draw(borderTexture, position - Vector2.One * 2f, null, color, 0f, origin, 1f, spriteEffects, 0f);
+            }
             return false;
         }
 
