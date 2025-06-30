@@ -134,7 +134,6 @@ partial class Tapper : ModTile, TileHooks.IPostDraw {
 
         public override void Load() {
             On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
-            On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
 
             On_Main.DrawTiles += On_Main_DrawTiles;
         }
@@ -173,11 +172,6 @@ partial class Tapper : ModTile, TileHooks.IPostDraw {
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(in snapshot);
             }
-        }
-
-        private void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
-            orig(self);
-            DrawPoints.Clear();
         }
 
         // separate
@@ -221,9 +215,17 @@ partial class Tapper : ModTile, TileHooks.IPostDraw {
 
         public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
             if (type == TileID.Trees) {
+                ushort tapperTileType = (ushort)ModContent.TileType<Tapper>();
                 Point position = new(i, j);
-                if (!DrawPoints.Contains(position)) {
-                    DrawPoints.Add(position);
+                bool flag = WorldGenHelper.GetTileSafely(i - 1, j).TileType == tapperTileType;
+                bool flag2 = WorldGenHelper.GetTileSafely(i + 1, j).TileType == tapperTileType;
+                if (flag2 || flag) {
+                    if (!DrawPoints.Contains(position)) {
+                        DrawPoints.Add(position);
+                    }
+                }
+                else {
+                    DrawPoints.Remove(position);
                 }
             }
         }
