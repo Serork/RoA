@@ -50,26 +50,26 @@ sealed class BackwoodsWorldGen : ModSystem {
 
         if (hasRemnants) {
             genIndex += 22;
-            tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
+            tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
             genIndex++;
-            tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
+            tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
 
             genIndex++;
-            tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
+            tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
 
-            tasks.Insert(tasks.Count - 4, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
-            tasks.Insert(tasks.Count - 4, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements2, 1000f));
-            tasks.Insert(tasks.Count - 3, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsTilesReplacement));
-            tasks.Insert(tasks.Count - 2, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast0));
-            tasks.Insert(tasks.Count - 1, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast));
+            tasks.Insert(tasks.Count - 4, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
+            tasks.Insert(tasks.Count - 4, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements2, 1000f));
+            tasks.Insert(tasks.Count - 3, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
+            tasks.Insert(tasks.Count - 2, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast0));
+            tasks.Insert(tasks.Count - 1, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast));
 
-            tasks.Add(new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast1));
+            tasks.Add(new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast1));
 
             return;
         }
 
         genIndex += 3;
-        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
+        tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
 
         //if (!hasSpirit) {
         //    genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));
@@ -79,13 +79,13 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Jungle Chests"));
         genIndex += 2;
         //}
-        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
+        tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
 
         //if (hasSpirit) {
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Jungle Chests"));
         genIndex += 2;
 
-        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
+        tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
         //}
 
         //genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Spreading Grass"));
@@ -95,17 +95,17 @@ sealed class BackwoodsWorldGen : ModSystem {
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex -= 3;
-        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
-        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements2, 1000f));
+        tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
+        tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements2, 1000f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex += 1;
-        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsTilesReplacement));
+        tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
 
-        tasks.Insert(tasks.Count - 4, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast0));
-        tasks.Insert(tasks.Count - 2, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast));
+        tasks.Insert(tasks.Count - 4, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast0));
+        tasks.Insert(tasks.Count - 2, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast));
 
-        tasks.Add(new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast1));
+        tasks.Add(new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast1));
     }
 
     public override void PostWorldGen() {
