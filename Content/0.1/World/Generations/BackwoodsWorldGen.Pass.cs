@@ -2762,11 +2762,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom + EdgeY + 10; y++) {
                 Tile tile = WorldGenHelper.GetTileSafely(x, y);
                 if (tile.HasTile) {
-                    for (int x2 = x - 1; x2 < x + 2; x2++) {
-                        for (int y2 = y - 1; y2 < y + 2; y2++) {
-                            WorldGen.SquareTileFrame(x2, y2);
-                        }
-                    }
+                    //for (int x2 = x - 1; x2 < x + 2; x2++) {
+                    //    for (int y2 = y - 1; y2 < y + 2; y2++) {
+                    //        WorldGen.SquareTileFrame(x2, y2);
+                    //    }
+                    //}
                     if (tile.TileType == TileID.WaterDrip && _random.NextChance(0.8)) {
                         tile.HasTile = false;
                     }
@@ -3121,9 +3121,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddWebs();
     }
 
-    public void BackwoodsOtherPlacements(GenerationProgress progress, GameConfiguration config) {
-        progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods2").Value;
-
+    private void cleanUp() {
         void cleanUp() {
             int num1047 = 0;
             int num1048 = 0;
@@ -3223,6 +3221,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
         }
+    }
+
+    public void BackwoodsOtherPlacements(GenerationProgress progress, GameConfiguration config) {
+        progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods2").Value;    
 
         progress.Set(0.1f);
         cleanUp();
@@ -3382,6 +3384,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         progress.Set(1f);
         Step16_PlaceAltar();
+    }
+
+    public void BackwoodsOtherPlacements2(GenerationProgress progress, GameConfiguration config) {
+        progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods5").Value;
 
         // place plants
         for (int i = Left - 50; i <= Right + 50; i++) {
@@ -3494,7 +3500,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         double count = (WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055)) */* * 0.5f */1f;
         for (int num555 = 0; num555 < count; num555++) {
-            //progress.Set((float)(i + 1) / roomCount);
+            progress.Set((float)(num555 + 1) / count);
             GenerateLootRoom1();
         }
 

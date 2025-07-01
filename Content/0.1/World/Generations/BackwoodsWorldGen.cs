@@ -58,6 +58,7 @@ sealed class BackwoodsWorldGen : ModSystem {
             tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
 
             tasks.Insert(tasks.Count - 4, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
+            tasks.Insert(tasks.Count - 4, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements2, 1000f));
             tasks.Insert(tasks.Count - 3, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsTilesReplacement));
             tasks.Insert(tasks.Count - 2, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast0));
             tasks.Insert(tasks.Count - 1, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOnLast));
@@ -95,6 +96,7 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex -= 3;
         tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
+        tasks.Insert(genIndex, new PassLegacy("Backwoods", BackwoodsWorldGenPass.BackwoodsOtherPlacements2, 1000f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex += 1;

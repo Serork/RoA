@@ -202,6 +202,7 @@ sealed class DryadEntrance : ModSystem {
                         for (int grassY = y2 - 2; grassY < y2 + 3; grassY++) {
                             if (Main.tile[grassX, grassY].TileType == TileID.Grass) {
                                 Main.tile[grassX, grassY].TileType = TileID.Dirt;
+                                WorldGen.SquareTileFrame(grassX, grassY);
                             }
                         }
                     }
