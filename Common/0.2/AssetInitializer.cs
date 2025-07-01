@@ -70,7 +70,7 @@ sealed class AssetInitializer : IPostSetupContent {
                     indexedTextureAssets = [];
                     TexturesPerType.Add(type, indexedTextureAssets);
                 }
-                indexedTextureAssets!.Add(indexedPath.Item1, ModContent.Request<Texture2D>(indexedPath.Item2));
+                indexedTextureAssets!.Add(indexedPath.Item1, ModContent.Request<Texture2D>(indexedPath.Item2, AssetRequestMode.ImmediateLoad));
             }
         }
     }
