@@ -40,15 +40,6 @@ sealed partial class RoA : Mod {
         }
     }
 
-    public override void Unload() {
-        if (!Main.dedServ) {
-            Main.RunOnMainThread(() => {
-                _brilliantBouquetTextureForRecipeBrowser!.Dispose();
-                _fenethsWreathTextureForRecipeBrowser!.Dispose();
-            });
-        }
-    }
-
     private void DoRecipeBrowserIntergration() {
         if (ModLoader.TryGetMod("RecipeBrowser", out Mod mod) && !Main.dedServ) {
             mod.Call([
