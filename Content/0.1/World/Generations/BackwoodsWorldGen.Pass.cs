@@ -3496,7 +3496,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         double count = (WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055)) */* * 0.5f */1f;
         for (int num555 = 0; num555 < count; num555++) {
-            progress.Set((float)(num555 + 1) / count);
+            //progress.Set((float)(num555 + 1) / count);
             GenerateLootRoom1();
         }
 
