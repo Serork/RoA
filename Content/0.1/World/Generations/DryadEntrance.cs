@@ -510,7 +510,7 @@ sealed class DryadEntrance : ModSystem {
             WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
         }
 
-        BuildDryadEntrance(_dryadEntranceX, _dryadEntranceY);
+        BuildDryadEntrance(_dryadEntranceX, _dryadEntranceY, progress);
     }
 
     private void Samples(int i, int j, out int result, out Vector2D result2) {
@@ -586,7 +586,7 @@ sealed class DryadEntrance : ModSystem {
         }
     }
 
-    private void BuildDryadEntrance(int i, int j) {
+    private void BuildDryadEntrance(int i, int j, GenerationProgress progress) {
         UnifiedRandom genRand = WorldGen.genRand;
         double num = 50;
         double num2 = num;
@@ -595,10 +595,14 @@ sealed class DryadEntrance : ModSystem {
         vector2D.Y = j;
         ushort tileType = PlaceholderTileType;
         ushort wallType = PlaceholderWallType;
+        int progressNum = 0;
         WorldGenHelper.ModifiedTileRunner(i, j, num, (int)num / 3, TileID.LeafBlock, onIteration: () => {
             WorldGenHelper.TopSizeFactor = () => 0.55f;
             WorldGenHelper.BottomSizeFactor = () => 0.55f;
         }, onTilePlacement: (tilePosition) => {
+            progressNum++;
+            progress.Set((float)progressNum / num);
+
             int checkX = tilePosition.X, checkY = tilePosition.Y;
             int length = genRand.Next(2, 5);
             for (int grassX = checkX - 2; grassX < checkX + 3; grassX++) {

@@ -20,7 +20,7 @@ sealed class BackwoodsWorldGen : ModSystem {
 
     internal static bool _extraModSupport;
 
-    public static BackwoodsBiomePass BackwoodsWorldGenPass { get; private set; }
+    public static BackwoodsBiomePass? BackwoodsWorldGenPass { get; private set; }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         bool hasSpirit = ModLoader.HasMod("SpiritMod");
@@ -58,9 +58,8 @@ sealed class BackwoodsWorldGen : ModSystem {
             tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
 
             tasks.Insert(tasks.Count - 4, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
-            tasks.Insert(tasks.Count - 3, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements2, 1000f));
             tasks.Insert(tasks.Count - 3, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
-            tasks.Insert(tasks.Count - 1, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast0));
+            tasks.Insert(tasks.Count - 2, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast0));
             tasks.Insert(tasks.Count - 1, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast));
 
             tasks.Add(new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast1));
@@ -96,7 +95,6 @@ sealed class BackwoodsWorldGen : ModSystem {
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex -= 3;
         tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
-        tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements2, 1000f));
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
         genIndex += 1;
