@@ -81,8 +81,8 @@ sealed class DryadEntrance : ModSystem {
         pass = hasRemnants ? "Mountain Caves, Dryad Entrance" : "Mountain Caves";
         tasks.Insert(genIndex, new PassLegacy(pass, DryadEntranceGenerator, 14.2958f));
 
-        tasks.Add(new PassLegacy("Dryad Entrance", DryadEntranceCleanUp));
-        tasks.Add(new PassLegacy("Dryad Entrance Loom Placement", DryadEntranceLoomPlacement));
+        tasks.Add(new PassLegacy(string.Empty, DryadEntranceCleanUp));
+        tasks.Add(new PassLegacy(string.Empty, DryadEntranceLoomPlacement));
     }
 
     private void GrassWallUpdated(GenerationProgress progress, GameConfiguration configuration) {

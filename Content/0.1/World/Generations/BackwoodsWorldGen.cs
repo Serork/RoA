@@ -59,9 +59,9 @@ sealed class BackwoodsWorldGen : ModSystem {
 
             tasks.Insert(tasks.Count - 4, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
             tasks.Insert(tasks.Count - 3, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements2, 1000f));
-            tasks.Insert(tasks.Count - 2, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
+            tasks.Insert(tasks.Count - 3, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
             tasks.Insert(tasks.Count - 1, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast0));
-            tasks.Insert(tasks.Count, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast));
+            tasks.Insert(tasks.Count - 1, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast));
 
             tasks.Add(new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast1));
 
