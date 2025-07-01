@@ -33,12 +33,16 @@ sealed class DamageClassItemsStorage : IInitializer {
     public static IEnumerable<DamageClass> AllSupportedDamageClasses => DamageClassUtils.GetDamagesClasses();
 
     public static bool IsItemValid(Item item, out DamageClass? damageClassOfItem) {
+        if (ItemsPerDamageClass == null) {
+            goto End;
+        }
         foreach (DamageClass damageClass in AllSupportedDamageClasses) {
             if (ItemsPerDamageClass![damageClass].Contains(item.type)) {
                 damageClassOfItem = damageClass;
                 return true;
             }
         }
+        End:
         damageClassOfItem = null;
         return false;
     }
@@ -93,11 +97,9 @@ sealed class DamageClassItemsStorage : IInitializer {
         damageClassItemIDSet.Add(item.type);
     }
 
-    public void Load(Mod mod) {
+    void ILoadable.Load(Mod mod) {
         On_Item.SetDefaults_int_bool_ItemVariant += On_Item_SetDefaults_int_bool_ItemVariant;
     }
-
-    public void Unload() { }
 
     private void On_Item_SetDefaults_int_bool_ItemVariant(On_Item.orig_SetDefaults_int_bool_ItemVariant orig, Item self, int Type, bool noMatCheck, Terraria.GameContent.Items.ItemVariant variant) {
         orig(self, Type, noMatCheck, variant);
@@ -222,7 +224,7 @@ sealed class DamageClassItemsStorage : IInitializer {
             if (self.IsAWeapon()) {
                 AddItem(self, self.DamageType);
             }
-            else if (self.createTile > -1 || self.accessory || self.buffType > 0 || self.headSlot != -1 || self.bodySlot != -1 || self.legSlot != -1) {
+            else if (self.createTile > -1 || self.accessory || (self.buffType > 0 && self.buffTime >= 1800) || self.headSlot != -1 || self.bodySlot != -1 || self.legSlot != -1) {
                 foreach (DamageClass damageClass in damageClasses) {
                     if (exit) {
                         return;
@@ -348,8 +350,10 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
         else if (damageClassesTypeOfThisItem.Contains(DamageClass.Melee) || damageClassesTypeOfThisItem.Contains(DamageClass.MeleeNoSpeed)) {
             if (!mainDraw) {
+                float max = 1.35f;
                 _postMainDrawTimer += 0.0275f;
-                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+                _postMainDrawTimer = MathF.Min(max, _postMainDrawTimer);
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, max, _postMainDrawTimer, true));
             }
 
             DrawSwords(batch, damageClassVisualsInfo);
@@ -364,17 +368,21 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
         else if (damageClassesTypeOfThisItem.Contains(DamageClass.Magic)) {
             if (!mainDraw) {
+                float max = 1.35f;
                 _postMainDrawTimer += 0.0275f;
-                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+                _postMainDrawTimer = MathF.Min(max, _postMainDrawTimer);
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, max, _postMainDrawTimer, true));
             }
 
             DrawStars(batch, damageClassVisualsInfo);
         }
         else if (damageClassesTypeOfThisItem.Contains(DamageClass.Summon) || damageClassesTypeOfThisItem.Contains(DamageClass.SummonMeleeSpeed)) {
             if (!mainDraw) {
+                float max = 1.35f;
                 _mainDrawTimer += 1f;
                 _postMainDrawTimer += 0.0275f;
-                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, 1.35f, _postMainDrawTimer, true));
+                _postMainDrawTimer = MathF.Min(max, _postMainDrawTimer);
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, max, _postMainDrawTimer, true));
             }
 
             DrawSlimes(batch, damageClassVisualsInfo);
