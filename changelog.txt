@@ -1,0 +1,5 @@
+- Changed the Dryad Cocoon structure entrance generation. The additional blocks should make it easier to discover.
+- Dryad Coccoon now glows when breakable and displays a hammer emote when approached by a player
+- Improved generation speed for all RoA structures
+- RoA structures now generate correctly in Spirit Reforged's Savannah seed
+- Fixed certain cave structures from Spirit Reforged getting broken
