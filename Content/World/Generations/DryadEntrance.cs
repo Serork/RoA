@@ -1255,7 +1255,8 @@ sealed class DryadEntrance : ModSystem {
             progress.Set((float)progressNum / num);
 
             int checkX = tilePosition.X, checkY = tilePosition.Y;
-            int length = genRand.Next(2, 5);
+            int length = WorldGen.genRand.Next(2, 4);
+            WorldGen.genRand.Next();
             for (int grassX = checkX - 2; grassX < checkX + 3; grassX++) {
                 for (int grassY = checkY - 2; grassY < checkY + 3; grassY++) {
                     if (Main.tile[grassX, grassY].TileType == TileID.Grass || (hasSpiritModAndSavannahSeed && Main.tile[grassX, grassY].TileType == GetSavannaGrassTileType())) {
