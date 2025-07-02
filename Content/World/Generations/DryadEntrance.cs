@@ -765,13 +765,11 @@ sealed class DryadEntrance : ModSystem {
         progress.Message = Lang.gen[21].Value;
         bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
         if (!ModLoader.HasMod("Remnants")) {
-            if (!ModLoader.HasMod("SpiritReforged")) {
-                for (int num749 = 0; num749 < GenVars.numMCaves; num749++) {
-                    int i3 = GenVars.mCaveX[num749];
-                    int j5 = GenVars.mCaveY[num749];
-                    WorldGen.CaveOpenater(i3, j5);
-                    WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
-                }
+            for (int num749 = 0; num749 < GenVars.numMCaves; num749++) {
+                int i3 = GenVars.mCaveX[num749];
+                int j5 = GenVars.mCaveY[num749];
+                WorldGen.CaveOpenater(i3, j5);
+                WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
             }
         }
         else if (!hasSpiritModAndSavannahSeed) {
