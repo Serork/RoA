@@ -82,7 +82,7 @@ sealed class GrimDruid : DruidNPC {
     public override void HitEffect(NPC.HitInfo hit) {
         int type = ModContent.NPCType<DruidSoul>();
         if (NPC.life <= 0 && NPC.downedBoss2 && Main.rand.NextBool(5) && !NPC.AnyNPCs(type)) {
-            if (NPC.Center.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 25) {
+            if (NPC.Center.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 50) {
                 bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
                 if (!flag6 && Main.netMode != NetmodeID.MultiplayerClient) {
                     int npc = NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.Center.X, (int)NPC.Center.Y, type);
