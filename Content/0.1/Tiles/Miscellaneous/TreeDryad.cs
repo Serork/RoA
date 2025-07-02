@@ -10,6 +10,7 @@ using RoA.Common.Tiles;
 using RoA.Content.Emotes;
 using RoA.Content.World.Generations;
 using RoA.Core;
+using RoA.Core.Data;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
@@ -29,6 +30,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
     private static byte RAYCOUNT => 8;
 
     private static bool _hammerEmoteShown;
+    private static short _frameX;
 
     private enum TreeDryadRequstedTextureType : byte {
         Ray
@@ -48,7 +50,12 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
             int i = tilePosition.X, j = tilePosition.Y;
             Point16 topLeft = TileHelper.GetTileTopLeft<TreeDryad>(i, j);
             if (topLeft == tilePosition) {
+                _frameX = Main.tile[topLeft.X, topLeft.Y].TileFrameX;
                 Vector2 emotePosition = TileHelper.GetTileTopLeft<TreeDryad>(i, j).ToWorldCoordinates() + new Vector2(8f, -16f);
+                bool turnedLeft = _frameX <= 18;
+                if (!turnedLeft) {
+                    emotePosition.X += 16f;
+                }
                 if (Main.LocalPlayer.Distance(tileWorldPosition) < 200f/*Helper.OnScreenWorld(emotePosition)*/) {
                     if (!_hammerEmoteShown) {
                         _hammerEmoteShown = true;
@@ -197,7 +204,9 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         int whoAmI = NPC.NewNPC(NPC.GetSource_TownSpawn(), (int)position.X + 10, (int)position.Y + 40, NPCID.Dryad);
         Main.npc[whoAmI].ai[0] = -20f;
         Main.npc[whoAmI].ai[1] = 150f;
-        Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = Main.tile[i, j].TileFrameX < 72 ? -1 : 1;
+        Main.npc[whoAmI].ai[2] = _frameX >= 72 ? -1 : 1;
+        Main.npc[whoAmI].ai[2] = -Main.npc[whoAmI].ai[2];
+        Main.npc[whoAmI].direction = Main.npc[whoAmI].spriteDirection = (int)Main.npc[whoAmI].ai[2];
         Main.npc[whoAmI].homeless = true;
         Main.npc[whoAmI].homeTileX = Main.npc[whoAmI].homeTileY = -1;
         Main.npc[whoAmI].netUpdate = true;
