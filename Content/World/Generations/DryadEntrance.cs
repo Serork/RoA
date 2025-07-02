@@ -245,23 +245,12 @@ sealed class DryadEntrance : ModSystem {
                 for (int vineY = vinenum7; vineY < vinenum8; vineY++) {
                     int x2 = vineX, y2 = vineY;
                     var genRand = WorldGen.genRand;
-                    if (Main.tile[x2, y2].HasTile && Main.tile[x2, y2].TileType == TileID.LeafBlock && WorldGen.GrowMoreVines(x2, y2) &&
-                        !Main.tile[x2, y2 + 1].HasTile && genRand.NextBool(3)) {
+                    if (Main.tile[x2, y2].HasTile && Main.tile[x2, y2].TileType == TileID.LeafBlock &&
+                        !Main.tile[x2, y2 + 1].HasTile && genRand.NextBool(2)) {
                         bool flag5 = true;
                         ushort type7 = Main.tile[x2, y2].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines;
-                        for (int num35 = y2; num35 > y2 - 10; num35--) {
-                            if (Main.tile[x2, num35].BottomSlope) {
-                                flag5 = false;
-                                break;
-                            }
-
-                            if (Main.tile[x2, num35].HasTile && Main.tile[x2, num35].TileType == TileID.LeafBlock && !Main.tile[x2, num35].BottomSlope) {
-                                flag5 = true;
-                                break;
-                            }
-                        }
                         if (flag5) {
-                            int height = genRand.Next(3, 8);
+                            int height = genRand.Next(4, 9);
                             for (int num35 = y2; num35 < y2 + height; num35++) {
                                 int num36 = num35 + 1;
                                 Tile tile = Main.tile[x2, num36];
