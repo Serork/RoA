@@ -234,39 +234,41 @@ sealed class DryadEntrance : ModSystem {
             }
         }
 
-        Point16 vector2D = new(_dryadEntranceX, _dryadEntranceY);
-        double num = 50;
-        int vinenum5 = (int)(vector2D.X - num * 1);
-        int vinenum6 = (int)(vector2D.X + num * 1);
-        int vinenum7 = (int)(vector2D.Y - num * 0.5);
-        int vinenum8 = (int)(vector2D.Y + num * 0.5);
-        for (int vineX = vinenum5; vineX < vinenum6; vineX++) {
-            for (int vineY = vinenum7; vineY < vinenum8; vineY++) {
-                int x2 = vineX, y2 = vineY;
-                var genRand = WorldGen.genRand;
-                if (Main.tile[x2, y2].HasTile && Main.tile[x2, y2].TileType == TileID.LeafBlock && WorldGen.GrowMoreVines(x2, y2) &&
-                !Main.tile[x2, y2 + 1].HasTile && genRand.NextBool(4)) {
-                    bool flag5 = true;
-                    ushort type7 = Main.tile[x2, y2].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines;
-                    for (int num35 = y2; num35 > y2 - 10; num35--) {
-                        if (Main.tile[x2, num35].BottomSlope) {
-                            flag5 = false;
-                            break;
-                        }
+        {
+            Point16 vector2D = new(_dryadEntranceX, _dryadEntranceY);
+            double num = 50;
+            int vinenum5 = (int)(vector2D.X - num * 1);
+            int vinenum6 = (int)(vector2D.X + num * 1);
+            int vinenum7 = (int)(vector2D.Y - num * 0.5);
+            int vinenum8 = (int)(vector2D.Y + num * 0.5);
+            for (int vineX = vinenum5; vineX < vinenum6; vineX++) {
+                for (int vineY = vinenum7; vineY < vinenum8; vineY++) {
+                    int x2 = vineX, y2 = vineY;
+                    var genRand = WorldGen.genRand;
+                    if (Main.tile[x2, y2].HasTile && Main.tile[x2, y2].TileType == TileID.LeafBlock && WorldGen.GrowMoreVines(x2, y2) &&
+                    !Main.tile[x2, y2 + 1].HasTile && genRand.NextBool(4)) {
+                        bool flag5 = true;
+                        ushort type7 = Main.tile[x2, y2].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines;
+                        for (int num35 = y2; num35 > y2 - 10; num35--) {
+                            if (Main.tile[x2, num35].BottomSlope) {
+                                flag5 = false;
+                                break;
+                            }
 
-                        if (Main.tile[x2, num35].HasTile && Main.tile[x2, num35].TileType == TileID.LeafBlock && !Main.tile[x2, num35].BottomSlope) {
-                            flag5 = true;
-                            break;
+                            if (Main.tile[x2, num35].HasTile && Main.tile[x2, num35].TileType == TileID.LeafBlock && !Main.tile[x2, num35].BottomSlope) {
+                                flag5 = true;
+                                break;
+                            }
                         }
-                    }
-                    if (flag5) {
-                        int height = genRand.NextBool() ? genRand.Next(2, 6) : genRand.NextBool() ? genRand.Next(3, 6) : genRand.Next(1, 6);
-                        for (int num35 = y2; num35 < y2 + height; num35++) {
-                            int num36 = num35 + 1;
-                            Tile tile = Main.tile[x2, num36];
-                            if (!tile.HasTile) {
-                                tile.TileType = type7;
-                                tile.HasTile = true;
+                        if (flag5) {
+                            int height = genRand.NextBool() ? genRand.Next(2, 6) : genRand.NextBool() ? genRand.Next(3, 6) : genRand.Next(1, 6);
+                            for (int num35 = y2; num35 < y2 + height; num35++) {
+                                int num36 = num35 + 1;
+                                Tile tile = Main.tile[x2, num36];
+                                if (!tile.HasTile) {
+                                    tile.TileType = type7;
+                                    tile.HasTile = true;
+                                }
                             }
                         }
                     }
