@@ -1255,7 +1255,7 @@ sealed class DryadEntrance : ModSystem {
             progress.Set((float)progressNum / num);
 
             int checkX = tilePosition.X, checkY = tilePosition.Y;
-            int length = WorldGen.genRand.Next(2, 4);
+            int length = WorldGen.genRand.Next(1, 3);
             WorldGen.genRand.Next();
             for (int grassX = checkX - 2; grassX < checkX + 3; grassX++) {
                 for (int grassY = checkY - 2; grassY < checkY + 3; grassY++) {
