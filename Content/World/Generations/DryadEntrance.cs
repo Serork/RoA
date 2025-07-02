@@ -234,6 +234,24 @@ sealed class DryadEntrance : ModSystem {
             }
         }
 
+        if (!hasSpiritModAndSavannahSeed) {
+            Point16 vector2D = new(_dryadEntranceX, _dryadEntranceY);
+            double num = 50;
+            int vinenum5 = (int)(vector2D.X - num * 1);
+            int vinenum6 = (int)(vector2D.X + num * 1);
+            int vinenum7 = (int)(vector2D.Y - num * 0.5);
+            int vinenum8 = (int)(vector2D.Y + num * 0.5);
+            for (int vineX = vinenum5; vineX < vinenum6; vineX++) {
+                for (int vineY = vinenum7; vineY < vinenum8; vineY++) {
+                    if (Main.tile[vineX, vineY].TileType == TileID.LeafBlock) {
+                        if (!Main.tile[vineX, vineY + 1].HasTile && WorldGen.genRand.NextBool(3)) {
+                            WorldGenHelper.PlaceVines(vineX, vineY, WorldGen.genRand.Next(3, 6), Main.tile[vineX, vineY].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines);
+                        }
+                    }
+                }
+            }
+        }
+
         if (!hasSpiritModAndSavannahSeed && WorldGen.tenthAnniversaryWorldGen) {
             byte livingTreePaintColor = 12, livingTreeWallPaintColor = 12;
             ushort treeDryad = (ushort)ModContent.TileType<TreeDryad>();
@@ -766,10 +784,12 @@ sealed class DryadEntrance : ModSystem {
         bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
         if (!ModLoader.HasMod("Remnants")) {
             for (int num749 = 0; num749 < GenVars.numMCaves; num749++) {
-                int i3 = GenVars.mCaveX[num749];
-                int j5 = GenVars.mCaveY[num749];
-                WorldGen.CaveOpenater(i3, j5);
-                WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
+                if (!ModLoader.HasMod("SpiritReforged") || num749 == _dryadEntrancemCave) {
+                    int i3 = GenVars.mCaveX[num749];
+                    int j5 = GenVars.mCaveY[num749];
+                    WorldGen.CaveOpenater(i3, j5);
+                    WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
+                }
             }
         }
         else if (!hasSpiritModAndSavannahSeed) {
@@ -1245,20 +1265,6 @@ sealed class DryadEntrance : ModSystem {
             }
             return true;
         });
-
-        int vinenum5 = (int)(vector2D.X - num * 0.5);
-        int vinenum6 = (int)(vector2D.X + num * 0.5);
-        int vinenum7 = (int)(vector2D.Y - num * 0.5);
-        int vinenum8 = (int)(vector2D.Y + num * 0.5);
-        for (int vineX = vinenum5; vineX < vinenum6; vineX++) {
-            for (int vineY = vinenum7; vineY < vinenum8; vineY++) {
-                if (Main.tile[vineX, vineY].TileType == TileID.LeafBlock) {
-                    if (!Main.tile[vineX, vineY + 1].HasTile && genRand.NextBool(3)) {
-                        WorldGenHelper.PlaceVines(vineX, vineY, genRand.Next(3, 6), TileID.Vines);
-                    }
-                }
-            }
-        }
 
         num = 10;
         num2 = num;
