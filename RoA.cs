@@ -41,8 +41,8 @@ sealed partial class RoA : Mod {
     public override void Load() {
         if (!Main.dedServ) {
             Main.RunOnMainThread(() => {
-                _brilliantBouquetTextureForRecipeBrowser = Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<BrilliantBouquet>()).Texture), 24, 24);
-                _fenethsWreathTextureForRecipeBrowser = Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<FenethsBlazingWreath>()).Texture), 24, 24);
+                _brilliantBouquetTextureForRecipeBrowser = Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<BrilliantBouquet>()).Texture, ReLogic.Content.AssetRequestMode.ImmediateLoad), 24, 24);
+                _fenethsWreathTextureForRecipeBrowser = Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<FenethsBlazingWreath>()).Texture, ReLogic.Content.AssetRequestMode.ImmediateLoad), 24, 24);
             });
         }
     }

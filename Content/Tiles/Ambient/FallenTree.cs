@@ -18,7 +18,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.ITileHaveExtraDraws {
+sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.IPostDraw {
     int TileHooks.IRequireMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
 
     public override void SetStaticDefaults() {
@@ -70,7 +70,7 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.ITil
         return true;
     }
 
-    void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+    void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X, j = pos.Y;
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,

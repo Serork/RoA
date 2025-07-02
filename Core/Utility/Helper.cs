@@ -23,6 +23,21 @@ using Terraria.UI.Gamepad;
 namespace RoA.Core.Utility;
 
 static class Helper {
+    public static float Clamp01(float value) => value <= 0f ? 0f : value >= 1f ? 1f : value;
+    public static double Clamp01(double value) => value <= 0.0 ? 0.0 : value >= 1.0 ? 1.0 : value;
+
+    public static bool Approximately(float a, float b, float tolerance = 1E-06f) => Math.Abs(a - b) < tolerance;
+    public static bool Approximately(Vector2 a, Vector2 b, float tolerance = 1E-06f) => Approximately(a.X, b.X, tolerance) && Approximately(a.Y, b.Y, tolerance);
+
+    public static uint PseudoRand(ref uint seed) {
+        seed ^= seed << 13;
+        seed ^= seed >> 17;
+        return seed;
+    }
+
+    public static float PseudoRandRange(ref uint seed, float min, float max) => min + (float)((double)(PseudoRand(ref seed) & 1023U) / 1024.0 * ((double)max - (double)min));
+    public static float PseudoRandRange(ref uint seed, float max) => PseudoRandRange(ref seed, max > 0f ? 0f : -max, max > 0f ? max : 0f);
+
     // recipe browser
     public static Asset<Texture2D> ToAsset(this Texture2D texture) {
         // TODO: Is this inefficient? Is there a way to make an Asset from an actual Texture2D instead of this?

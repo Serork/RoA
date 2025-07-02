@@ -13,7 +13,6 @@ using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
 using Terraria.GameContent;
@@ -28,7 +27,6 @@ sealed class PrimordialTreeGlow : GlobalTile {
 
     public override void Load() {
         On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
-        On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
     }
 
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
@@ -36,14 +34,15 @@ sealed class PrimordialTreeGlow : GlobalTile {
         SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);
-        foreach (Point position in PrimordialTreeDrawPoints.ToList()) {
+        for (int k = PrimordialTreeDrawPoints.Count - 1; k >= 0; k--) {
+            Point position = PrimordialTreeDrawPoints[k];
             if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
                 continue;
             }
 
             int i = position.X, j = position.Y;
             if (!PrimordialTree.IsPrimordialTree(i, j)) {
-                PrimordialTreeDrawPoints.Remove(position);
+                PrimordialTreeDrawPoints.RemoveAt(k);
             }
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
             bool bluePart = tile.TileFrameX == 88 && tile.TileFrameY == 22;
@@ -78,12 +77,6 @@ sealed class PrimordialTreeGlow : GlobalTile {
         spriteBatch.Begin(in snapshot);
 
         orig(self);
-    }
-
-    private static void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
-        orig(self);
-
-        PrimordialTreeDrawPoints.Clear();
     }
 
     public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {

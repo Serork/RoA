@@ -2762,11 +2762,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int y = BackwoodsVars.FirstTileYAtCenter - 30; y < Bottom + EdgeY + 10; y++) {
                 Tile tile = WorldGenHelper.GetTileSafely(x, y);
                 if (tile.HasTile) {
-                    for (int x2 = x - 1; x2 < x + 2; x2++) {
-                        for (int y2 = y - 1; y2 < y + 2; y2++) {
-                            WorldGen.SquareTileFrame(x2, y2);
-                        }
-                    }
+                    //for (int x2 = x - 1; x2 < x + 2; x2++) {
+                    //    for (int y2 = y - 1; y2 < y + 2; y2++) {
+                    //        WorldGen.SquareTileFrame(x2, y2);
+                    //    }
+                    //}
                     if (tile.TileType == TileID.WaterDrip && _random.NextChance(0.8)) {
                         tile.HasTile = false;
                     }
@@ -3383,6 +3383,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         progress.Set(1f);
         Step16_PlaceAltar();
 
+        progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods5").Value;
+
         // place plants
         for (int i = Left - 50; i <= Right + 50; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 20; j++) {
@@ -3494,7 +3496,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         double count = (WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055)) */* * 0.5f */1f;
         for (int num555 = 0; num555 < count; num555++) {
-            //progress.Set((float)(i + 1) / roomCount);
+            //progress.Set((float)(num555 + 1) / count);
             GenerateLootRoom1();
         }
 

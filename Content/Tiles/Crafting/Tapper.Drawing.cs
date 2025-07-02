@@ -9,6 +9,7 @@ using RoA.Core.Utility;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.Graphics.Capture;
@@ -18,7 +19,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Crafting;
 
-partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
+partial class Tapper : ModTile, TileHooks.IPostDraw {
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
         tileFrameX = tileFrameY = 0;
     }
@@ -67,7 +68,7 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
         return false;
     }
 
-    void TileHooks.ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+    void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X;
         int j = pos.Y;
         int type = Main.tile[i, j].TileType;
@@ -133,7 +134,6 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
 
         public override void Load() {
             On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
-            On_Main.ClearCachedTileDraws += On_Main_ClearCachedTileDraws;
 
             On_Main.DrawTiles += On_Main_DrawTiles;
         }
@@ -172,11 +172,6 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(in snapshot);
             }
-        }
-
-        private void On_Main_ClearCachedTileDraws(On_Main.orig_ClearCachedTileDraws orig, Main self) {
-            orig(self);
-            DrawPoints.Clear();
         }
 
         // separate
@@ -220,12 +215,19 @@ partial class Tapper : ModTile, TileHooks.ITileHaveExtraDraws {
 
         public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
             if (type == TileID.Trees) {
+                ushort tapperTileType = (ushort)ModContent.TileType<Tapper>();
                 Point position = new(i, j);
-                if (!DrawPoints.Contains(position)) {
-                    DrawPoints.Add(position);
+                bool flag = WorldGenHelper.GetTileSafely(i - 1, j).TileType == tapperTileType;
+                bool flag2 = WorldGenHelper.GetTileSafely(i + 1, j).TileType == tapperTileType;
+                if (flag2 || flag) {
+                    if (!DrawPoints.Contains(position)) {
+                        DrawPoints.Add(position);
+                    }
+                }
+                else {
+                    DrawPoints.Remove(position);
                 }
             }
         }
     }
 }
-

@@ -25,9 +25,9 @@ sealed class DryadAIChanges : GlobalNPC {
             return;
         }
         int num237 = Main.npcFrameCount[npc.type] - NPCID.Sets.AttackFrameCount[npc.type];
-        npc.ai[2]++;
+        npc.localAI[2]++;
         int num269 = 0;
-        num269 = (npc.ai[2] % 16.0 < 8.0) ? (num237 - 2) : 0;
+        num269 = (npc.localAI[2] % 16.0 < 8.0) ? (num237 - 2) : 0;
         npc.frame.Y = frameHeight * num269;
     }
 
@@ -61,6 +61,7 @@ sealed class DryadAIChanges : GlobalNPC {
 
             if (npc.ai[1] > 50f) {
                 npc.ai[1] -= 1;
+                npc.spriteDirection = npc.direction = (int)npc.ai[2];
             }
             else {
                 if (npc.ai[1] == 49f) {
@@ -72,7 +73,7 @@ sealed class DryadAIChanges : GlobalNPC {
         else {
             npc.ai[1] = 80;
             npc.ai[0] = -25f;
-            npc.ai[2] = 0f;
+            npc.ai[2] = npc.localAI[2] = 0f;
             npc.frameCounter = 0.0;
             npc.netUpdate = true;
 

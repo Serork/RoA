@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 
 namespace RoA.Common.Tiles;
@@ -43,12 +44,16 @@ sealed class TileHooks {
         void FluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing);
     }
 
-    public interface ITileHaveExtraDraws {
-        void PostDrawExtra(SpriteBatch spriteBatch, Point pos);
+    public interface IPostDraw {
+        void PostDrawExtra(SpriteBatch spriteBatch, Point16 pos);
+    }
+
+    public interface IPreDraw {
+        void PreDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition);
     }
 
     public interface ITileAfterPlayerDraw {
-        void PostPlayerDraw(SpriteBatch spriteBatch, Point pos);
+        void PostPlayerDraw(SpriteBatch spriteBatch, Point16 pos);
     }
 
     public interface ITileFlameData {

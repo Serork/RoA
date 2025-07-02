@@ -1,1 +1,0 @@
-- Added Recipe Browser compatibility (druid class categories)

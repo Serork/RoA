@@ -36,7 +36,7 @@ using static RoA.Common.Tiles.TileHooks;
 
 namespace RoA.Content.Tiles.Ambient.LargeTrees;
 
-sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePower, IResistToAxe {
+sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResistToAxe {
     public override void PostTileFrame(int i, int j, int up, int down, int left, int right, int upLeft, int upRight, int downLeft, int downRight) {
         //if (IsStart(i, j) && !WorldGenHelper.GetTileSafely(i, j + 1).ActiveTile(ModContent.TileType<BackwoodsGrass>())) {
         //    WorldGen.KillTile(i, j);
@@ -674,8 +674,8 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {
         orig(self);
 
-        foreach ((ModTile modTile, Point position) in TileHelper.PostSolidTileDrawPoints.OrderBy(x => x.Item2.X + x.Item2.Y)) {
-            if (modTile is ITileHaveExtraDraws && modTile is not null && modTile is BackwoodsBigTree) {
+        foreach ((ModTile modTile, Point16 position) in TileHelper.SolidTileDrawPoints.OrderBy(x => x.Item2.X + x.Item2.Y)) {
+            if (modTile is IPostDraw && modTile is not null && modTile is BackwoodsBigTree) {
                 int i = position.X, j = position.Y;
                 if (!IsTop(i, j)) {
                     DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
@@ -693,7 +693,7 @@ sealed class BackwoodsBigTree : ModTile, ITileHaveExtraDraws, IRequireMinAxePowe
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_rand")]
     public extern static ref UnifiedRandom TileDrawing_rand(TileDrawing self);
 
-    void ITileHaveExtraDraws.PostDrawExtra(SpriteBatch spriteBatch, Point pos) {
+    void IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X, j = pos.Y;
         Tile tile = Main.tile[i, j];
         //Vector2 zero = Vector2.Zero;
