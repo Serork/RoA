@@ -1,4 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Iced.Intel;
+
+using Microsoft.VisualBasic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 using ReLogic.Utilities;
 
@@ -20,6 +24,7 @@ using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.ObjectData;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
@@ -65,14 +70,22 @@ sealed class DryadEntrance : ModSystem {
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         bool hasRemnants = ModLoader.HasMod("Remnants");
 
+        bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
+        int indexOffset = hasSpiritModAndSavannahSeed ? 36 : 0;
+
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mount Caves"));
         tasks.RemoveAt(genIndex);
 
         string pass = hasRemnants ? "Mount Caves, Dryad Entrance" : "Mount Caves";
         tasks.Insert(genIndex, new PassLegacy(pass, ExtraMountCavesGenerator, 49.9993f));
+        if (hasSpiritModAndSavannahSeed) {
+            tasks.Insert(genIndex + indexOffset, new PassLegacy(pass, ExtraMountCavesGenerator2, 49.9993f));
+        }
 
         genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Mountain Caves"));
-        tasks.RemoveAt(genIndex);
+        if (!ModLoader.HasMod("SpiritReforged")) {
+            tasks.RemoveAt(genIndex);
+        }
 
         int genIndex2 = tasks.FindIndex(genpass => genpass.Name.Equals("Grass Wall"));
         tasks.RemoveAt(genIndex2);
@@ -80,6 +93,9 @@ sealed class DryadEntrance : ModSystem {
 
         pass = hasRemnants ? "Mountain Caves, Dryad Entrance" : "Mountain Caves";
         tasks.Insert(genIndex, new PassLegacy(pass, DryadEntranceGenerator, 14.2958f));
+        if (hasSpiritModAndSavannahSeed) {
+            tasks.Insert(genIndex + indexOffset / 2, new PassLegacy(pass, DryadEntranceGenerator2, 14.2958f));
+        }
 
         tasks.Add(new PassLegacy(string.Empty, DryadEntranceCleanUp));
         tasks.Add(new PassLegacy(string.Empty, DryadEntranceLoomPlacement));
@@ -189,19 +205,24 @@ sealed class DryadEntrance : ModSystem {
 
     private void DryadEntranceCleanUp(GenerationProgress progress, GameConfiguration configuration) {
         int distance = 100;
+        bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
+        ushort woodTileType = TileID.LivingWood;
+        ushort woodWallType = WallID.LivingWoodUnsafe;
+        ushort leafBlockTileType = TileID.LeafBlock;
+        ushort dirtTileType = hasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
         for (int x2 = _dryadEntranceX - distance / 2; x2 < _dryadEntranceX + distance / 2; x2++) {
             for (int y2 = _dryadEntranceY - distance / 2; y2 < _dryadEntranceY + distance / 2; y2++) {
                 if (Main.tile[x2, y2].TileType == PlaceholderTileType) {
-                    Main.tile[x2, y2].TileType = TileID.LivingWood;
+                    Main.tile[x2, y2].TileType = woodTileType;
                 }
                 if (Main.tile[x2, y2].WallType == PlaceholderWallType) {
-                    Main.tile[x2, y2].WallType = WallID.LivingWoodUnsafe;
+                    Main.tile[x2, y2].WallType = woodWallType;
                 }
-                if (Main.tile[x2, y2].TileType == TileID.LeafBlock) {
+                if (Main.tile[x2, y2].TileType == leafBlockTileType) {
                     for (int grassX = x2 - 2; grassX < x2 + 3; grassX++) {
                         for (int grassY = y2 - 2; grassY < y2 + 3; grassY++) {
-                            if (Main.tile[grassX, grassY].TileType == TileID.Grass) {
-                                Main.tile[grassX, grassY].TileType = TileID.Dirt;
+                            if (Main.tile[grassX, grassY].TileType == TileID.Grass || (hasSpiritModAndSavannahSeed && Main.tile[grassX, grassY].TileType == GetSavannaGrassTileType())) {
+                                Main.tile[grassX, grassY].TileType = dirtTileType;
                                 WorldGen.SquareTileFrame(grassX, grassY);
                             }
                         }
@@ -213,7 +234,7 @@ sealed class DryadEntrance : ModSystem {
             }
         }
 
-        if (WorldGen.tenthAnniversaryWorldGen) {
+        if (!hasSpiritModAndSavannahSeed && WorldGen.tenthAnniversaryWorldGen) {
             byte livingTreePaintColor = 12, livingTreeWallPaintColor = 12;
             ushort treeDryad = (ushort)ModContent.TileType<TreeDryad>();
             for (int i = _dryadEntranceX - distance / 2; i < _dryadEntranceX + distance / 2; i++) {
@@ -256,59 +277,120 @@ sealed class DryadEntrance : ModSystem {
         }
     }
 
-    private void ExtraMountCavesGenerator(GenerationProgress progress, GameConfiguration configuration) {
-        GenVars.numMCaves = 0;
-        progress.Message = Lang.gen[2].Value;
-
-        bool flag = true;
-        while (flag) {
-            int num1052 = 0;
-            bool flag59 = false;
-            bool flag60 = false;
-            int fluff = 120/* * WorldGenHelper.WorldSize*/;
-            int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
-            while (!flag60) {
-                flag60 = true;
-                while ((num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) ||
-                    Math.Abs(GenVars.UndergroundDesertLocation.Center.X - num1053) < GenVars.UndergroundDesertLocation.Width ||
-                    (num1053 < GenVars.jungleMaxX + 50 && num1053 > GenVars.jungleMinX - 50)) {
-                    num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
+    private void ExtraMountCavesGenerator2(GenerationProgress progress, GameConfiguration configuration) {
+        bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
+        if (hasSpiritModAndSavannahSeed) {
+            bool flag = true;
+            while (flag) {
+                int num1052 = 0;
+                bool flag59 = false;
+                bool flag60 = false;
+                int fluff = 250/* * WorldGenHelper.WorldSize*/;
+                if (ModLoader.TryGetMod("SpiritReforged", out Mod mod)) {
+                    Rectangle savannaArea = (Rectangle)mod.Call("GetSavannaArea");
+                    fluff = savannaArea.Width / 2 - 20;
                 }
+                int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
+                while (!flag60) {
+                    flag60 = true;
+                    while ((num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) ||
+                        Math.Abs(GenVars.UndergroundDesertLocation.Center.X - num1053) < GenVars.UndergroundDesertLocation.Width ||
+                        (num1053 < GenVars.jungleMaxX + 50 && num1053 > GenVars.jungleMinX - 50)) {
+                        num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
+                    }
 
-                for (int num1054 = 0; num1054 < GenVars.numMCaves; num1054++) {
-                    if (Math.Abs(num1053 - GenVars.mCaveX[num1054]) < 100) {
-                        num1052++;
-                        flag60 = false;
+                    for (int num1054 = 0; num1054 < GenVars.numMCaves; num1054++) {
+                        if (Math.Abs(num1053 - GenVars.mCaveX[num1054]) < 100) {
+                            num1052++;
+                            flag60 = false;
+                            break;
+                        }
+                    }
+
+                    if (num1052 >= Main.maxTilesX / 5) {
+                        flag59 = true;
                         break;
                     }
                 }
 
-                if (num1052 >= Main.maxTilesX / 5) {
-                    flag59 = true;
-                    break;
-                }
-            }
-
-            if (!flag59) {
-                for (int num1055 = 0; (double)num1055 < Main.worldSurface; num1055++) {
-                    if (Main.tile[num1053, num1055].HasTile) {
-                        for (int num1056 = num1053 - 50; num1056 < num1053 + 50; num1056++) {
-                            for (int num1057 = num1055 - 25; num1057 < num1055 + 25; num1057++) {
-                                if (Main.tile[num1056, num1057].HasTile && (Main.tile[num1056, num1057].TileType == 53 || Main.tile[num1056, num1057].TileType == 151 || Main.tile[num1056, num1057].TileType == 274))
-                                    flag59 = true;
+                if (!flag59) {
+                    for (int num1055 = 150; (double)num1055 < Main.worldSurface; num1055++) {
+                        if (Main.tile[num1053, num1055].HasTile) {
+                            if (!flag59) {
+                                Mountinater2_Savanna(num1053, num1055);
+                                GenVars.mCaveX[GenVars.numMCaves] = num1053;
+                                GenVars.mCaveY[GenVars.numMCaves] = num1055;
+                                _dryadEntranceX = num1053;
+                                _dryadEntranceY = num1055;
+                                _dryadEntrancemCave = GenVars.numMCaves;
+                                GenVars.numMCaves++;
+                                flag = false;
+                                break;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
 
-                        if (!flag59) {
-                            Mountinater2(num1053, num1055);
-                            GenVars.mCaveX[GenVars.numMCaves] = num1053;
-                            GenVars.mCaveY[GenVars.numMCaves] = num1055;
-                            _dryadEntranceX = num1053;
-                            _dryadEntranceY = num1055;
-                            _dryadEntrancemCave = GenVars.numMCaves;
-                            GenVars.numMCaves++;
-                            flag = false;
+    private void ExtraMountCavesGenerator(GenerationProgress progress, GameConfiguration configuration) {
+        GenVars.numMCaves = 0;
+        progress.Message = Lang.gen[2].Value;
+
+        bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
+
+        if (!hasSpiritModAndSavannahSeed) {
+            bool flag = true;
+            while (flag) {
+                int num1052 = 0;
+                bool flag59 = false;
+                bool flag60 = false;
+                int fluff = 120/* * WorldGenHelper.WorldSize*/;
+                int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
+                while (!flag60) {
+                    flag60 = true;
+                    while ((num1053 > Main.maxTilesX / 2 - 90 && num1053 < Main.maxTilesX / 2 + 90) ||
+                        Math.Abs(GenVars.UndergroundDesertLocation.Center.X - num1053) < GenVars.UndergroundDesertLocation.Width ||
+                        (num1053 < GenVars.jungleMaxX + 50 && num1053 > GenVars.jungleMinX - 50)) {
+                        num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
+                    }
+
+                    for (int num1054 = 0; num1054 < GenVars.numMCaves; num1054++) {
+                        if (Math.Abs(num1053 - GenVars.mCaveX[num1054]) < 100) {
+                            num1052++;
+                            flag60 = false;
                             break;
+                        }
+                    }
+
+                    if (num1052 >= Main.maxTilesX / 5) {
+                        flag59 = true;
+                        break;
+                    }
+                }
+
+                if (!flag59) {
+                    for (int num1055 = 0; (double)num1055 < Main.worldSurface; num1055++) {
+                        if (Main.tile[num1053, num1055].HasTile) {
+                            for (int num1056 = num1053 - 50; num1056 < num1053 + 50; num1056++) {
+                                for (int num1057 = num1055 - 25; num1057 < num1055 + 25; num1057++) {
+                                    if (Main.tile[num1056, num1057].HasTile && (Main.tile[num1056, num1057].TileType == 53 || Main.tile[num1056, num1057].TileType == 151 || Main.tile[num1056, num1057].TileType == 274))
+                                        flag59 = true;
+                                }
+                            }
+
+                            if (!flag59) {
+                                Mountinater2(num1053, num1055);
+                                GenVars.mCaveX[GenVars.numMCaves] = num1053;
+                                GenVars.mCaveY[GenVars.numMCaves] = num1055;
+                                _dryadEntranceX = num1053;
+                                _dryadEntranceY = num1055;
+                                _dryadEntrancemCave = GenVars.numMCaves;
+                                GenVars.numMCaves++;
+                                flag = false;
+                                break;
+                            }
                         }
                     }
                 }
@@ -372,6 +454,117 @@ sealed class DryadEntrance : ModSystem {
         }
     }
 
+    private static void Mountinater2_Savanna(int i, int j) {
+        double num = WorldGen.genRand.Next(100, 120);
+        double num2 = num;
+        double num3 = 55;
+
+        Vector2D vector2D = default(Vector2D);
+        vector2D.X = i;
+        vector2D.Y = (double)j + num3 / 2.0;
+        Vector2D vector2D2 = default(Vector2D);
+        vector2D2.X = (double)WorldGen.genRand.Next(-10, 11) * 0.1;
+        vector2D2.Y = (double)WorldGen.genRand.Next(-20, -10) * 0.1;
+        while (num > 0.0 && num3 > 0.0) {
+            num -= (double)WorldGen.genRand.Next(4);
+            num3 -= 1.0;
+            int num4 = (int)(vector2D.X - num * 0.5);
+            int num5 = (int)(vector2D.X + num * 0.5);
+            int num6 = (int)(vector2D.Y - num * 0.5);
+            int num7 = (int)(vector2D.Y + num * 0.5);
+            if (num4 < 0)
+                num4 = 0;
+
+            if (num5 > Main.maxTilesX)
+                num5 = Main.maxTilesX;
+
+            if (num6 < 0)
+                num6 = 0;
+
+            if (num7 > Main.maxTilesY)
+                num7 = Main.maxTilesY;
+
+            num2 = num * (double)WorldGen.genRand.Next(80, 120) * 0.01;
+            for (int k = num4; k < num5; k++) {
+                for (int l = num6; l < num7; l++) {
+                    double num8 = Math.Abs((double)k - vector2D.X);
+                    double num9 = Math.Abs((double)l - vector2D.Y);
+                    if (Math.Sqrt(num8 * num8 + num9 * num9) < num2 * 0.4 && !Main.tile[k, l].HasTile) {
+                        Tile tile = Main.tile[k, l];
+                        tile.HasTile = true;
+                        ushort savannaDirtTileType = GetSavannaDirtTileType();
+                        Main.tile[k, l].TileType = savannaDirtTileType;
+                        //bool flag = false;
+                        //for (int checkX = k - 1; checkX < k + 2; checkX++) {
+                        //    if (flag) {
+                        //        break;
+                        //    }
+                        //    for (int checkY = l - 1; checkY < l + 2; checkY++) {
+                        //        if (!Main.tile[checkX, checkY].HasTile) {
+                        //            flag = true;
+                        //            break;
+                        //        }
+                        //    }
+                        //}
+                        //if (!flag) {
+                        //    Main.tile[k, l].WallType = savannaDirtWallType;
+                        //}
+                        //else {
+                        //    Main.tile[k, l].TileType = savannaGrassTileType;
+                        //}
+                    }
+                }
+            }
+
+            vector2D += vector2D2;
+            vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+            vector2D2.Y += (double)WorldGen.genRand.Next(-10, 6) * 0.05;
+            if (vector2D2.X > 0.5)
+                vector2D2.X = 0.5;
+
+            if (vector2D2.X < -0.5)
+                vector2D2.X = -0.5;
+
+            if (vector2D2.Y > -0.5)
+                vector2D2.Y = -0.5;
+
+            if (vector2D2.Y < -1.5)
+                vector2D2.Y = -1.5;
+        }
+    }
+
+    private static ushort GetSavannaGrassTileType() {
+        ushort tileType = TileID.HardenedSand;
+        if (ModLoader.GetMod("SpiritReforged").TryFind<ModTile>("SavannaGrass", out ModTile SavannaGrass)) {
+            tileType = SavannaGrass.Type;
+        }
+        return tileType;
+    }
+
+    private static ushort GetSavannaDirtTileType() {
+        ushort tileType = TileID.Sand;
+        if (ModLoader.GetMod("SpiritReforged").TryFind<ModTile>("SavannaDirt", out ModTile SavannaDirt)) {
+            tileType = SavannaDirt.Type;
+        }
+        return tileType;
+    }
+
+    private static ushort GetSavannaDirtWallType() {
+        ushort wallType = WallID.HardenedSandEcho;
+        if (ModLoader.GetMod("SpiritReforged").TryFind<ModWall>("SavannaDirtWallUnsafe", out ModWall SavannaDirtWallUnsafe)) {
+            wallType = SavannaDirtWallUnsafe.Type;
+        }
+        return wallType;
+    }
+
+    private static ushort GetSpiritTileType(string name) {
+        ushort tileType = TileID.Adamantite;
+        if (ModLoader.GetMod("SpiritReforged").TryFind<ModTile>(name, out ModTile spiritTile)) {
+            tileType = spiritTile.Type;
+        }
+        return tileType;
+    }
+
     private static void Mountinater2(int i, int j) {
         double num = WorldGen.genRand.Next(100, 120);
         double num2 = num;
@@ -433,6 +626,81 @@ sealed class DryadEntrance : ModSystem {
     }
 
     private static void Mountinater3(int i, int j, int denom = 4, int[] ignoreWalls = null) {
+        bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
+        if (!hasSpiritModAndSavannahSeed) {
+            Mountinater3_Inner(i, j, denom, ignoreWalls);
+            return;
+        }
+        Mountinater3_Inner_Savanna(i, j, denom, ignoreWalls);
+    }
+
+    private static void Mountinater3_Inner_Savanna(int i, int j, int denom = 4, int[] ignoreWalls = null) {
+        double num = WorldGen.genRand.Next(100, 120) / denom;
+        double num2 = num;
+        double num3 = 55 / denom;
+
+        Vector2D vector2D = default(Vector2D);
+        vector2D.X = i;
+        vector2D.Y = (double)j + num3 / 2.0;
+        Vector2D vector2D2 = default(Vector2D);
+        vector2D2.X = (double)WorldGen.genRand.Next(-10, 11) * 0.1;
+        vector2D2.Y = (double)WorldGen.genRand.Next(-20, -10) * 0.1;
+        while (num > 0.0 && num3 > 0.0) {
+            num -= (double)WorldGen.genRand.Next(4);
+            num3 -= 1.0;
+            int num4 = (int)(vector2D.X - num * 0.5);
+            int num5 = (int)(vector2D.X + num * 0.5);
+            int num6 = (int)(vector2D.Y - num * 0.5);
+            int num7 = (int)(vector2D.Y + num * 0.5);
+            if (num4 < 0)
+                num4 = 0;
+
+            if (num5 > Main.maxTilesX)
+                num5 = Main.maxTilesX;
+
+            if (num6 < 0)
+                num6 = 0;
+
+            if (num7 > Main.maxTilesY)
+                num7 = Main.maxTilesY;
+
+            num2 = num * (double)WorldGen.genRand.Next(80, 120) * 0.01;
+            for (int k = num4; k < num5; k++) {
+                for (int l = num6; l < num7; l++) {
+                    double num8 = Math.Abs((double)k - vector2D.X);
+                    double num9 = Math.Abs((double)l - vector2D.Y);
+                    if (Math.Sqrt(num8 * num8 + num9 * num9) < num2 * 0.4 && !Main.tile[k, l].HasTile &&
+                        (ignoreWalls == null || !ignoreWalls.Contains(Main.tile[k, l].WallType))) {
+                        Tile tile = Main.tile[k, l];
+                        tile.HasTile = true;
+                        ushort tileType = GetSavannaDirtTileType();
+                        ushort wallType = GetSavannaDirtWallType();
+                        Main.tile[k, l].TileType = tileType;
+                        if (!TileHelper.HasNoDuplicateNeighbors(k, l, tileType)) {
+                            Main.tile[k, l].WallType = wallType;
+                        }
+                    }
+                }
+            }
+
+            vector2D += vector2D2;
+            vector2D2.X += (double)WorldGen.genRand.Next(-10, 11) * 0.05;
+            vector2D2.Y += (double)WorldGen.genRand.Next(-10, 6) * 0.05;
+            if (vector2D2.X > 0.5)
+                vector2D2.X = 0.5;
+
+            if (vector2D2.X < -0.5)
+                vector2D2.X = -0.5;
+
+            if (vector2D2.Y > -0.5)
+                vector2D2.Y = -0.5;
+
+            if (vector2D2.Y < -1.5)
+                vector2D2.Y = -1.5;
+        }
+    }
+
+    private static void Mountinater3_Inner(int i, int j, int denom = 4, int[] ignoreWalls = null) {
         double num = WorldGen.genRand.Next(100, 120) / denom;
         double num2 = num;
         double num3 = 55 / denom;
@@ -495,22 +763,371 @@ sealed class DryadEntrance : ModSystem {
 
     private void DryadEntranceGenerator(GenerationProgress progress, GameConfiguration configuration) {
         progress.Message = Lang.gen[21].Value;
+        bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
         if (!ModLoader.HasMod("Remnants")) {
-            for (int num749 = 0; num749 < GenVars.numMCaves; num749++) {
-                int i3 = GenVars.mCaveX[num749];
-                int j5 = GenVars.mCaveY[num749];
-                WorldGen.CaveOpenater(i3, j5);
-                WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
+            if (!ModLoader.HasMod("SpiritReforged")) {
+                for (int num749 = 0; num749 < GenVars.numMCaves; num749++) {
+                    int i3 = GenVars.mCaveX[num749];
+                    int j5 = GenVars.mCaveY[num749];
+                    WorldGen.CaveOpenater(i3, j5);
+                    WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
+                }
             }
         }
-        else {
+        else if (!hasSpiritModAndSavannahSeed) {
             int i3 = GenVars.mCaveX[_dryadEntrancemCave];
             int j5 = GenVars.mCaveY[_dryadEntrancemCave];
             WorldGen.CaveOpenater(i3, j5);
             WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
         }
 
-        BuildDryadEntrance(_dryadEntranceX, _dryadEntranceY, progress);
+        if (!hasSpiritModAndSavannahSeed) {
+            BuildDryadEntrance(_dryadEntranceX, _dryadEntranceY, progress);
+        }
+    }
+
+    public static int FindGround(int i, ref int j) {
+        while (j > 20 && WorldGen.SolidOrSlopedTile(i, j - 1))
+            j--; //Up
+
+        while (j < Main.maxTilesY - 20 && !WorldGen.SolidOrSlopedTile(i, j))
+            j++; //Down
+
+        return j;
+    }
+
+    private void DryadEntranceGenerator2(GenerationProgress progress, GameConfiguration configuration) {
+        progress.Message = Lang.gen[21].Value;
+        bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
+        int i3 = GenVars.mCaveX[_dryadEntrancemCave];
+        int j5 = GenVars.mCaveY[_dryadEntrancemCave];
+        ushort savannaDirtTiletype = GetSavannaDirtTileType();
+        ushort savannaDirtWallType = GetSavannaDirtWallType();
+        ushort savannaGrassTileType = GetSavannaGrassTileType();
+
+        for (int k = i3 - 50; k < i3 + 51; k++) {
+            for (int l = j5 - 150; l < j5 + 20; l++) {
+                if (Main.tile[k, l].TileType == savannaDirtTiletype || Main.tile[k, l].TileType == savannaGrassTileType) {
+                    bool flag = false;
+                    for (int checkX = k - 1; checkX < k + 2; checkX++) {
+                        if (flag) {
+                            break;
+                        }
+                        for (int checkY = l - 1; checkY < l + 2; checkY++) {
+                            if (!Main.tile[checkX, checkY].HasTile) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!flag) {
+                        Main.tile[k, l].WallType = savannaDirtWallType;
+                    }
+                }
+            }
+        }
+
+        CaveOpenater2(i3, j5);
+        Cavinator2(i3, j5, WorldGen.genRand.Next(40, 50));
+
+        var _random = WorldGen.genRand;
+        for (int num696 = i3 - 50; num696 < i3 + 51; num696++) {
+            double num697 = (double)num696 / (double)Main.maxTilesX;
+            bool flag43 = true;
+            for (int num698 = 0; (double)num698 < Main.worldSurface; num698++) {
+                if (flag43) {
+                    if (Main.tile[num696, num698].WallType == savannaDirtWallType || Main.tile[num696, num698].WallType == 40 || Main.tile[num696, num698].WallType == 64 || Main.tile[num696, num698].WallType == 86)
+                        Main.tile[num696, num698].WallType = 0;
+
+                    if (Main.tile[num696, num698].TileType != 53 && Main.tile[num696, num698].TileType != 112 && Main.tile[num696, num698].TileType != 234) {
+                        if (Main.tile[num696 - 1, num698].WallType == savannaDirtWallType || Main.tile[num696 - 1, num698].WallType == 40 || Main.tile[num696 - 1, num698].WallType == 40)
+                            Main.tile[num696 - 1, num698].WallType = 0;
+
+                        if ((Main.tile[num696 - 2, num698].WallType == savannaDirtWallType || Main.tile[num696 - 2, num698].WallType == 40 || Main.tile[num696 - 2, num698].WallType == 40) && _random.Next(2) == 0)
+                            Main.tile[num696 - 2, num698].WallType = 0;
+
+                        if ((Main.tile[num696 - 3, num698].WallType == savannaDirtWallType || Main.tile[num696 - 3, num698].WallType == 40 || Main.tile[num696 - 3, num698].WallType == 40) && _random.Next(2) == 0)
+                            Main.tile[num696 - 3, num698].WallType = 0;
+
+                        if (Main.tile[num696 + 1, num698].WallType == savannaDirtWallType || Main.tile[num696 + 1, num698].WallType == 40 || Main.tile[num696 + 1, num698].WallType == 40)
+                            Main.tile[num696 + 1, num698].WallType = 0;
+
+                        if ((Main.tile[num696 + 2, num698].WallType == savannaDirtWallType || Main.tile[num696 + 2, num698].WallType == 40 || Main.tile[num696 + 2, num698].WallType == 40) && _random.Next(2) == 0)
+                            Main.tile[num696 + 2, num698].WallType = 0;
+
+                        if ((Main.tile[num696 + 3, num698].WallType == 2 || Main.tile[num696 + 3, num698].WallType == 40 || Main.tile[num696 + 3, num698].WallType == 40) && _random.Next(2) == 0)
+                            Main.tile[num696 + 3, num698].WallType = 0;
+
+                        if (Main.tile[num696, num698].HasTile)
+                            flag43 = false;
+                    }
+                }
+                else if (Main.tile[num696, num698].WallType == 0 && Main.tile[num696, num698 + 1].WallType == 0 && Main.tile[num696, num698 + 2].WallType == 0 && Main.tile[num696, num698 + 3].WallType == 0 && Main.tile[num696, num698 + 4].WallType == 0 && Main.tile[num696 - 1, num698].WallType == 0 && Main.tile[num696 + 1, num698].WallType == 0 && Main.tile[num696 - 2, num698].WallType == 0 && Main.tile[num696 + 2, num698].WallType == 0 && !Main.tile[num696, num698].HasTile && !Main.tile[num696, num698 + 1].HasTile && !Main.tile[num696, num698 + 2].HasTile && !Main.tile[num696, num698 + 3].HasTile) {
+                    flag43 = true;
+                }
+            }
+        }
+
+        for (int num699 = i3 + 51; num699 >= i3 - 51; num699--) {
+            double num700 = (double)num699 / (double)Main.maxTilesX;
+            bool flag44 = true;
+            for (int num701 = 0; (double)num701 < Main.worldSurface; num701++) {
+                if (flag44) {
+                    if (Main.tile[num699, num701].WallType == savannaDirtWallType || Main.tile[num699, num701].WallType == 40 || Main.tile[num699, num701].WallType == 64)
+                        Main.tile[num699, num701].WallType = 0;
+
+                    if (Main.tile[num699, num701].TileType != 53) {
+                        if (Main.tile[num699 - 1, num701].WallType == savannaDirtWallType || Main.tile[num699 - 1, num701].WallType == 40 || Main.tile[num699 - 1, num701].WallType == 40)
+                            Main.tile[num699 - 1, num701].WallType = 0;
+
+                        if ((Main.tile[num699 - 2, num701].WallType == savannaDirtWallType || Main.tile[num699 - 2, num701].WallType == 40 || Main.tile[num699 - 2, num701].WallType == 40) && _random.Next(2) == 0)
+                            Main.tile[num699 - 2, num701].WallType = 0;
+
+                        if ((Main.tile[num699 - 3, num701].WallType == savannaDirtWallType || Main.tile[num699 - 3, num701].WallType == 40 || Main.tile[num699 - 3, num701].WallType == 40) && _random.Next(2) == 0)
+                            Main.tile[num699 - 3, num701].WallType = 0;
+
+                        if (Main.tile[num699 + 1, num701].WallType == savannaDirtWallType || Main.tile[num699 + 1, num701].WallType == 40 || Main.tile[num699 + 1, num701].WallType == 40)
+                            Main.tile[num699 + 1, num701].WallType = 0;
+
+                        if ((Main.tile[num699 + 2, num701].WallType == savannaDirtWallType || Main.tile[num699 + 2, num701].WallType == 40 || Main.tile[num699 + 2, num701].WallType == 40) && _random.Next(2) == 0)
+                            Main.tile[num699 + 2, num701].WallType = 0;
+
+                        if ((Main.tile[num699 + 3, num701].WallType == savannaDirtWallType || Main.tile[num699 + 3, num701].WallType == 40 || Main.tile[num699 + 3, num701].WallType == 40) && _random.Next(2) == 0)
+                            Main.tile[num699 + 3, num701].WallType = 0;
+
+                        if (Main.tile[num699, num701].HasTile)
+                            flag44 = false;
+                    }
+                }
+                else if (Main.tile[num699, num701].WallType == 0 && Main.tile[num699, num701 + 1].WallType == 0 && Main.tile[num699, num701 + 2].WallType == 0 && Main.tile[num699, num701 + 3].WallType == 0 && Main.tile[num699, num701 + 4].WallType == 0 && Main.tile[num699 - 1, num701].WallType == 0 && Main.tile[num699 + 1, num701].WallType == 0 && Main.tile[num699 - 2, num701].WallType == 0 && Main.tile[num699 + 2, num701].WallType == 0 && !Main.tile[num699, num701].HasTile && !Main.tile[num699, num701 + 1].HasTile && !Main.tile[num699, num701 + 2].HasTile && !Main.tile[num699, num701 + 3].HasTile) {
+                    flag44 = true;
+                }
+            }
+        }
+
+        if (hasSpiritModAndSavannahSeed) {
+            BuildDryadEntrance(_dryadEntranceX, _dryadEntranceY, progress);
+        }
+
+        for (int k = i3 - 50; k < i3 + 51; k++) {
+            for (int l = j5 - 150; l < j5 + 20; l++) {
+                if (Main.tile[k, l].TileType == savannaDirtTiletype) {
+                    bool flag = false;
+                    for (int checkX = k - 1; checkX < k + 2; checkX++) {
+                        if (flag) {
+                            break;
+                        }
+                        for (int checkY = l - 1; checkY < l + 2; checkY++) {
+                            if (!Main.tile[checkX, checkY].HasTile) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!flag) {
+                    }
+                    else {
+                        Main.tile[k, l].TileType = savannaGrassTileType;
+                    }
+                }
+                if (Main.tile[k, l].TileType == savannaGrassTileType) {
+
+                }
+            }
+        }
+
+        for (int k = i3 - 50; k < i3 + 51; k++) {
+            for (int l = j5 - 150; l < j5 + 20; l++) {
+                if (Main.tile[k, l].TileType == savannaDirtTiletype) {
+                    bool flag = false;
+                    for (int checkX = k - 1; checkX < k + 2; checkX++) {
+                        if (flag) {
+                            break;
+                        }
+                        for (int checkY = l - 1; checkY < l + 2; checkY++) {
+                            if (!Main.tile[checkX, checkY].HasTile) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!flag) {
+                    }
+                    else {
+                        Main.tile[k, l].TileType = savannaGrassTileType;
+                    }
+                }
+                if (Main.tile[k, l].TileType == savannaGrassTileType) {
+                    int i = k, j = l - 1;
+                    if (WorldGen.genRand.NextBool(8)) //Surface pots
+                        WorldGen.PlaceTile(i, j, TileID.Pots, true, true, style: 7);
+
+                    if (WorldGen.genRand.NextBool(13)) //Elephant grass patch
+                        CreatePatch(WorldGen.genRand.Next(5, 11), 0, WorldGen.genRand.Next([0, 5]), GetSpiritTileType("ElephantGrass"));
+
+                    if (WorldGen.genRand.NextBool(9)) //Foliage patch
+                        CreatePatch(WorldGen.genRand.Next(6, 13), 2, types: GetSpiritTileType("SavannaFoliage"));
+
+                    if (WorldGen.genRand.NextBool(45)) //Termite mound
+                    {
+                        int type = WorldGen.genRand.NextFromList(GetSpiritTileType("TermiteMoundSmall"),
+                            GetSpiritTileType("TermiteMoundMedium"), GetSpiritTileType("TermiteMoundLarge"));
+                        int style = WorldGen.genRand.Next(TileObjectData.GetTileData(type, 0).RandomStyleRange);
+
+                        WorldGen.PlaceTile(i, j, type, true, true, style: style);
+                    }
+
+                    void CreatePatch(int size, int chance, int alt = 0, params int[] types) {
+                        for (int x = i - size / 2; x < i + size / 2; x++) {
+                            if (chance > 1 && !WorldGen.genRand.NextBool(chance))
+                                continue;
+
+                            int y = j;
+                            FindGround(x, ref y);
+
+                            int type = types[WorldGen.genRand.Next(types.Length)];
+                            int style = alt + WorldGen.genRand.Next(TileObjectData.GetTileData(type, 0, alt).RandomStyleRange);
+
+                            WorldGen.PlaceTile(x, y - 1, type, true, style: style);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static void Cavinator2(int i, int j, int steps) {
+        var genRand = WorldGen.genRand;
+        double num = genRand.Next(7, 15);
+        double num2 = num;
+        int num3 = 1;
+        if (genRand.Next(2) == 0)
+            num3 = -1;
+
+        Vector2D vector2D = default(Vector2D);
+        vector2D.X = i;
+        vector2D.Y = j;
+        int num4 = genRand.Next(20, 40);
+        Vector2D vector2D2 = default(Vector2D);
+        vector2D2.Y = (double)genRand.Next(10, 20) * 0.01;
+        vector2D2.X = num3;
+        while (num4 > 0) {
+            num4--;
+            int num5 = (int)(vector2D.X - num * 0.5);
+            int num6 = (int)(vector2D.X + num * 0.5);
+            int num7 = (int)(vector2D.Y - num * 0.5);
+            int num8 = (int)(vector2D.Y + num * 0.5);
+            if (num5 < 0)
+                num5 = 0;
+
+            if (num6 > Main.maxTilesX)
+                num6 = Main.maxTilesX;
+
+            if (num7 < 0)
+                num7 = 0;
+
+            if (num8 > Main.maxTilesY)
+                num8 = Main.maxTilesY;
+
+            num2 = num * (double)genRand.Next(80, 120) * 0.01;
+            for (int k = num5; k < num6; k++) {
+                for (int l = num7; l < num8; l++) {
+                    double num9 = Math.Abs((double)k - vector2D.X);
+                    double num10 = Math.Abs((double)l - vector2D.Y);
+                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.4) {
+                        Tile tile2 = Main.tile[k, l];
+                        tile2.HasTile = false;
+                    }
+                }
+            }
+
+            vector2D += vector2D2;
+            vector2D2.X += (double)genRand.Next(-10, 11) * 0.05;
+            vector2D2.Y += (double)genRand.Next(-10, 11) * 0.05;
+            if (vector2D2.X > (double)num3 + 0.5)
+                vector2D2.X = (double)num3 + 0.5;
+
+            if (vector2D2.X < (double)num3 - 0.5)
+                vector2D2.X = (double)num3 - 0.5;
+
+            if (vector2D2.Y > 2.0)
+                vector2D2.Y = 2.0;
+
+            if (vector2D2.Y < 0.0)
+                vector2D2.Y = 0.0;
+        }
+
+        if (steps > 0 && (double)(int)vector2D.Y < Main.rockLayer + 50.0)
+            Cavinator2((int)vector2D.X, (int)vector2D.Y, steps - 1);
+    }
+
+    public static void CaveOpenater2(int i, int j) {
+        var genRand = WorldGen.genRand;
+        double num = genRand.Next(7, 12);
+        double num2 = num;
+        int num3 = 1;
+        if (genRand.Next(2) == 0)
+            num3 = -1;
+
+        if (genRand.Next(10) != 0)
+            num3 = ((i < Main.maxTilesX / 2) ? 1 : (-1));
+
+        Vector2D vector2D = default(Vector2D);
+        vector2D.X = i;
+        vector2D.Y = j;
+        int num4 = 100;
+        Vector2D vector2D2 = default(Vector2D);
+        vector2D2.Y = 0.0;
+        vector2D2.X = num3;
+        while (num4 > 0) {
+            Tile tile = Main.tile[(int)vector2D.X, (int)vector2D.Y];
+            if (tile.WallType == 0 || (tile.HasTile && !TileID.Sets.CanBeClearedDuringGeneration[tile.TileType]))
+                num4 = 0;
+
+            num4--;
+            int num5 = (int)(vector2D.X - num * 0.5);
+            int num6 = (int)(vector2D.X + num * 0.5);
+            int num7 = (int)(vector2D.Y - num * 0.5);
+            int num8 = (int)(vector2D.Y + num * 0.5);
+            if (num5 < 0)
+                num5 = 0;
+
+            if (num6 > Main.maxTilesX)
+                num6 = Main.maxTilesX;
+
+            if (num7 < 0)
+                num7 = 0;
+
+            if (num8 > Main.maxTilesY)
+                num8 = Main.maxTilesY;
+
+            num2 = num * (double)genRand.Next(80, 120) * 0.01;
+            for (int k = num5; k < num6; k++) {
+                for (int l = num7; l < num8; l++) {
+                    double num9 = Math.Abs((double)k - vector2D.X);
+                    double num10 = Math.Abs((double)l - vector2D.Y);
+                    if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.4) {
+                        Tile tile2 = Main.tile[k, l];
+                        tile2.HasTile = false;
+                    }
+                }
+            }
+
+            vector2D += vector2D2;
+            vector2D2.X += (double)genRand.Next(-10, 11) * 0.05;
+            vector2D2.Y += (double)genRand.Next(-10, 11) * 0.05;
+            if (vector2D2.X > (double)num3 + 0.5)
+                vector2D2.X = (double)num3 + 0.5;
+
+            if (vector2D2.X < (double)num3 - 0.5)
+                vector2D2.X = (double)num3 - 0.5;
+
+            if (vector2D2.Y > 0.0)
+                vector2D2.Y = 0.0;
+
+            if (vector2D2.Y < -0.5)
+                vector2D2.Y = -0.5;
+        }
     }
 
     private void Samples(int i, int j, out int result, out Vector2D result2) {
@@ -596,7 +1213,10 @@ sealed class DryadEntrance : ModSystem {
         ushort tileType = PlaceholderTileType;
         ushort wallType = PlaceholderWallType;
         int progressNum = 0;
-        WorldGenHelper.ModifiedTileRunner(i, j, num, (int)num / 3, TileID.LeafBlock, onIteration: () => {
+        bool hasSpiritModAndSavannahSeed = ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
+        ushort leafBlockTileType = TileID.LeafBlock;
+        ushort dirtTileType = hasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
+        WorldGenHelper.ModifiedTileRunner(i, j, num, (int)num / 3, leafBlockTileType, onIteration: () => {
             WorldGenHelper.TopSizeFactor = () => 0.55f;
             WorldGenHelper.BottomSizeFactor = () => 0.55f;
         }, onTilePlacement: (tilePosition) => {
@@ -607,16 +1227,16 @@ sealed class DryadEntrance : ModSystem {
             int length = genRand.Next(2, 5);
             for (int grassX = checkX - 2; grassX < checkX + 3; grassX++) {
                 for (int grassY = checkY - 2; grassY < checkY + 3; grassY++) {
-                    if (Main.tile[grassX, grassY].TileType == TileID.Grass) {
-                        Main.tile[grassX, grassY].TileType = TileID.Dirt;
+                    if (Main.tile[grassX, grassY].TileType == TileID.Grass || (hasSpiritModAndSavannahSeed && Main.tile[grassX, grassY].TileType == GetSavannaGrassTileType())) {
+                        Main.tile[grassX, grassY].TileType = dirtTileType;
                     }
                 }
             }
-            if (TileHelper.GetDistanceToFirstEmptyTileAround(checkX, checkY, checkDistance: (ushort)num, startCheckAngle: new Vector2(checkX, checkY).DirectionTo(new Vector2(i, j)).ToRotation()) > length) {
-                Main.tile[checkX, checkY].TileType = TileID.Dirt;
+            if (TileHelper.GetDistanceToFirstEmptyTileAround(checkX, checkY, checkDistance: (ushort)num) > length) {
+                Main.tile[checkX, checkY].TileType = TileHelper.GetDistanceToFirstEmptyTileAround(checkX, checkY, checkDistance: (ushort)num) > length + 3 ? dirtTileType : TileID.Dirt;
                 return false;
             }
-            if (TileHelper.HasNoDuplicateNeighbors(checkX, checkY, TileID.LeafBlock)) {
+            if (TileHelper.HasNoDuplicateNeighbors(checkX, checkY, leafBlockTileType)) {
                 Vector2D startPosition = tilePosition.ToVector2D(),
                          destination = new Point16(i, j).ToVector2D();
                 startPosition = Vector2D.Lerp(startPosition, destination, 0.9f);
@@ -822,8 +1442,10 @@ sealed class DryadEntrance : ModSystem {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y3 - origin.Y);
                     if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 1.2f && !Main.tile[x2, y3].HasTile) {
-                        WorldGenHelper.ReplaceWall(x2, y3, WallID.DirtUnsafe);
-                        WorldGenHelper.ReplaceTile(x2, y3, TileID.Dirt);
+                        ushort dirtWall = hasSpiritModAndSavannahSeed ? GetSavannaDirtWallType() : WallID.DirtUnsafe;
+                        ushort dirtBlock = hasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
+                        WorldGenHelper.ReplaceWall(x2, y3, dirtWall);
+                        WorldGenHelper.ReplaceTile(x2, y3, dirtBlock);
                     }
                 }
             }

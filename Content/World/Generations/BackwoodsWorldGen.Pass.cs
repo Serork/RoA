@@ -4214,7 +4214,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         if (ModLoader.HasMod("SpiritReforged") || BackwoodsWorldGen._extraModSupport) {
-            for (int num696 = 3; num696 < Main.maxTilesX - 3; num696++) {
+            for (int num696 = Left - 100; num696 < Right + 100; num696++) {
                 double num697 = (double)num696 / (double)Main.maxTilesX;
                 bool flag43 = true;
                 for (int num698 = 0; (double)num698 < Main.worldSurface; num698++) {
@@ -4251,7 +4251,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 }
             }
 
-            for (int num699 = Main.maxTilesX - 5; num699 >= 5; num699--) {
+            for (int num699 = Right + 100; num699 >= Left - 100; num699--) {
                 double num700 = (double)num699 / (double)Main.maxTilesX;
                 bool flag44 = true;
                 for (int num701 = 0; (double)num701 < Main.worldSurface; num701++) {
