@@ -249,6 +249,17 @@ sealed class DryadEntrance : ModSystem {
                         !Main.tile[x2, y2 + 1].HasTile && genRand.NextBool(2)) {
                         bool flag5 = true;
                         ushort type7 = Main.tile[x2, y2].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines;
+                        for (int num35 = y2; num35 > y2 - 10; num35--) {
+                            if (Main.tile[x2, num35].BottomSlope) {
+                                flag5 = false;
+                                break;
+                            }
+
+                            if (Main.tile[x2, num35].HasTile && Main.tile[x2, num35].TileType == TileID.LeafBlock && !Main.tile[x2, num35].BottomSlope) {
+                                flag5 = true;
+                                break;
+                            }
+                        }
                         if (flag5) {
                             int height = genRand.Next(4, 9);
                             for (int num35 = y2; num35 < y2 + height; num35++) {
@@ -260,6 +271,12 @@ sealed class DryadEntrance : ModSystem {
                                 }
                             }
                         }
+                    }
+                    if (Main.tile[x2, y2].TileType == 192 && genRand.NextBool(3)) {
+                        WorldGen.PlaceTile(x2, y2 - 1, 187, mute: true, forced: false, -1, genRand.Next(50, 52));
+                    }
+                    if (genRand.NextBool(3)) {
+                        WorldGen.PlacePot(x2, y2 - 1, style: genRand.Next(4));
                     }
                 }
             }
