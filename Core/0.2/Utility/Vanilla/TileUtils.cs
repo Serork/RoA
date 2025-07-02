@@ -29,7 +29,7 @@ static partial class TileHelper {
     }
 
     public static Point16 GetTileTopLeft<T>(int i, int j) where T : ModTile {
-        ushort type = (ushort)ModContent.TileType<TreeDryad>();
+        ushort type = (ushort)ModContent.TileType<T>();
         int left = i;
         int top = j;
         while (Main.tile[i, top].TileFrameX != 0) {
@@ -47,18 +47,18 @@ static partial class TileHelper {
         return new Point16(i + 1, j + 1);
     }
 
-    public static ushort GetDistanceToFirstEmptyTileAround(int i, int j, ushort checkDistance = 10, float startCheckAngle = 0f, float defaultCheckAngle = MathHelper.PiOver4) {
-        float currentCheckAngle = 0f;
+    public static ushort GetDistanceToFirstEmptyTileAround(int i, int j, ushort checkDistance = 10, float startCheckAngle = 0f, float defaultCheckAngle = MathHelper.TwoPi / 10f) {
         if (startCheckAngle <= 0f) {
             startCheckAngle = defaultCheckAngle;
         }
-        float maxCheckAngle = MathHelper.TwoPi + startCheckAngle;
+        float currentCheckAngle = 0f;
+        float maxCheckAngle = MathHelper.TwoPi;
         List<ushort> distances = [];
         while (currentCheckAngle < maxCheckAngle) {
             ushort currentCheckDistance = 0;
             int checkX = i, checkY = j;
             while (currentCheckDistance++ < checkDistance) {
-                Vector2D velocity = Vector2D.UnitY.RotatedBy(currentCheckAngle);
+                Vector2D velocity = Vector2D.One.RotatedBy(currentCheckAngle);
                 checkX += (int)Math.Floor(velocity.X);
                 checkY += (int)Math.Floor(velocity.Y);
                 if (!WorldGenHelper.ActiveTile(checkX, checkY)) {
