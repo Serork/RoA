@@ -66,10 +66,10 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
                 else {
                     _hammerEmoteShown = false;
                 }
+                uint seedForPseudoRandomness = (uint)(tilePosition.GetHashCode() + tilePosition.GetHashCode());
+                float lightStrengthFactor = Helper.Wave(0.75f, 1f, 2f, Helper.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
+                Lighting.AddLight(tileWorldPosition, Color.Lerp(Color.Green, Color.White, Helper.PseudoRandRange(ref seedForPseudoRandomness, 1f) * lightStrengthFactor).ToVector3() * 0.45f * lightStrengthFactor);
             }
-            uint seedForPseudoRandomness = (uint)(tilePosition.GetHashCode() + tilePosition.GetHashCode());
-            float lightStrengthFactor = Helper.Wave(0.75f, 1f, 2f, Helper.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
-            Lighting.AddLight(tileWorldPosition, Color.Lerp(Color.Green, Color.White, Helper.PseudoRandRange(ref seedForPseudoRandomness, 1f) * lightStrengthFactor).ToVector3() * 0.45f * lightStrengthFactor);
 
             DrawRays(tilePosition, 0.075f);
         }
