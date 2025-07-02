@@ -132,7 +132,7 @@ sealed class DryadEntrance : ModSystem {
 
                     if (flag8 && num300 > -1 && num301 > -1 && WorldGen.countDirtTiles(num300, num301) < WorldGen.maxTileCount) {
                         bool flag48 = false;
-                        if (Math.Abs(num300 - GenVars.mCaveX[_dryadEntrancemCave]) < 200) {
+                        if (Math.Abs(num300 - GenVars.mCaveX[_dryadEntrancemCave]) < 100) {
                             flag48 = true;
                         }
                         if (!flag48) {
@@ -168,7 +168,7 @@ sealed class DryadEntrance : ModSystem {
                     }
 
                     bool flag48 = false;
-                    if (Math.Abs(num306 - GenVars.mCaveX[_dryadEntrancemCave]) < 200) {
+                    if (Math.Abs(num306 - GenVars.mCaveX[_dryadEntrancemCave]) < 100) {
                         flag48 = true;
                     }
                     if (!flag48 && flag9)
@@ -243,10 +243,38 @@ sealed class DryadEntrance : ModSystem {
             int vinenum8 = (int)(vector2D.Y + num * 0.5);
             for (int vineX = vinenum5; vineX < vinenum6; vineX++) {
                 for (int vineY = vinenum7; vineY < vinenum8; vineY++) {
-                    if (Main.tile[vineX, vineY].TileType == TileID.LeafBlock) {
-                        if (!Main.tile[vineX, vineY + 1].HasTile && WorldGen.genRand.NextBool(3)) {
-                            WorldGenHelper.PlaceVines(vineX, vineY, WorldGen.genRand.Next(3, 6), Main.tile[vineX, vineY].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines);
+                    int x2 = vineX, y2 = vineY;
+                    var genRand = WorldGen.genRand;
+                    if (Main.tile[x2, y2].HasTile && Main.tile[x2, y2].TileType == TileID.LeafBlock && WorldGen.GrowMoreVines(x2, y2) &&
+                    !Main.tile[x2, y2 + 1].HasTile && genRand.NextBool(4)) {
+                        bool flag5 = true;
+                        ushort type7 = Main.tile[x2, y2].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines;
+                        for (int num35 = y2; num35 > y2 - 10; num35--) {
+                            if (Main.tile[x2, num35].BottomSlope) {
+                                flag5 = false;
+                                break;
+                            }
+
+                            if (Main.tile[x2, num35].HasTile && Main.tile[x2, num35].TileType == TileID.LeafBlock && !Main.tile[x2, num35].BottomSlope) {
+                                flag5 = true;
+                                break;
+                            }
                         }
+                        if (flag5) {
+                            int height = genRand.NextBool() ? genRand.Next(2, 6) : genRand.NextBool() ? genRand.Next(3, 6) : genRand.Next(1, 6);
+                            for (int num35 = y2; num35 < y2 + height; num35++) {
+                                int num36 = num35 + 1;
+                                Tile tile = Main.tile[x2, num36];
+                                if (!tile.HasTile) {
+                                    tile.TileType = type7;
+                                    tile.HasTile = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!Main.tile[vineX, vineY + 1].HasTile && WorldGen.genRand.NextBool(3)) {
+                        WorldGenHelper.PlaceVines(vineX, vineY, WorldGen.genRand.Next(3, 6), Main.tile[vineX, vineY].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines);
                     }
                 }
             }
