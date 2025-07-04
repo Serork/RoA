@@ -20,7 +20,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-[TrackedEntitiesSystem<LeafySeahorse_Bubble>]
+[ProjectileTracked<LeafySeahorse_Bubble>]
 sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
     private static float STARTSPEED => 10f;
     private static ushort MAXTIMELEFT => 420;
