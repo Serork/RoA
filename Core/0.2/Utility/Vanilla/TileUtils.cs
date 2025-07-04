@@ -16,6 +16,8 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class TileHelper {
+    public static float TileSize => 16f;
+
     public static bool DrawingTiles { get; private set; }
 
     public static Vector2 ScreenOffset {

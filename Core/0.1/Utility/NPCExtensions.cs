@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
 
-static class NPCExtensions {
+static partial class NPCExtensions {
     public static bool FindBuff(this NPC npc, int type, out int index) {
         index = npc.FindBuffIndex(type);
         return index != -1;

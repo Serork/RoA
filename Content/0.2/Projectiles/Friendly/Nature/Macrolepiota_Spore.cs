@@ -58,7 +58,7 @@ sealed class Macrolepiota_Spore : NatureProjectile {
             //    sporeValues.Init = true;
 
             //    if (owner.IsLocal()) {
-            //        sporeValues.FacedRight = Main.rand.NextBool();
+            //        sporeValues.IsFacingRight = Main.rand.NextBool();
             //    }
             //}
         }

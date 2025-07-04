@@ -87,22 +87,22 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
             set => _progress = Utils.Clamp(value, 0f, MAXPROGRESS);
         }
 
-        public byte UsedFrame1 {
+        public byte Frame1 {
             readonly get => _usedFrame1;
             set => _usedFrame1 = Utils.Clamp<byte>(value, 0, FRAMECOUNT);
         }
-        public byte UsedFrame2 {
+        public byte Frame2 {
             readonly get => _usedFrame2;
             set => _usedFrame2 = Utils.Clamp<byte>(value, 0, FRAMECOUNT);
         }
 
         public readonly float Opacity => Utils.GetLerpValue(0f, 0.5f, Progress, true);
 
-        public readonly byte GetUsedFrame(bool first) => first ? UsedFrame1 : UsedFrame2;
+        public readonly byte GetUsedFrame(bool first) => first ? Frame1 : Frame2;
 
         public readonly float GetSizeByUsedFrame(bool first) {
             float result = 0.7f;
-            switch (first ? UsedFrame1 : UsedFrame2) {
+            switch (first ? Frame1 : Frame2) {
                 case 0:
                     result = 0.9f;
                     break;
@@ -242,8 +242,8 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
                         Angle = MathHelper.PiOver4 + angle,
                         Scale = Vector2.One,
                         StartDistance = MAXROCKDISTANCE,
-                        UsedFrame1 = getRandomizedFrame(),
-                        UsedFrame2 = getRandomizedFrame()
+                        Frame1 = getRandomizedFrame(),
+                        Frame2 = getRandomizedFrame()
                     };
                 }
             }

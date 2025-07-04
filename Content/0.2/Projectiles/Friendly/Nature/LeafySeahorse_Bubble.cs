@@ -20,23 +20,23 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-[Tracked<LeafySeahorse_Bubble>]
+[TrackedEntitiesSystem<LeafySeahorse_Bubble>]
 sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
     private static float STARTSPEED => 10f;
     private static ushort MAXTIMELEFT => 420;
 
-    private static readonly Dictionary<BubbleSizeType, Asset<Texture2D>?> _texturesPerBubbleType = [];
-
-    private enum BubbleSizeType : byte {
-        Small,
-        Medium,
-        Large,
-        ExtraLarge,
-        Count,
-        Mass
-    }
+    private static readonly Dictionary<BubbleValues.BubbleSizeType, Asset<Texture2D>?> _texturesPerBubbleType = [];
 
     private ref struct BubbleValues(Projectile projectile) {
+        public enum BubbleSizeType : byte {
+            Small,
+            Medium,
+            Large,
+            ExtraLarge,
+            Count,
+            Mass
+        }
+
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float BaseDamageValue = ref projectile.localAI[2];
         public ref float SizeTypeValue = ref projectile.ai[0];
@@ -212,8 +212,8 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
         }
         void absorbBubbles() {
             BubbleValues bubbleValues = new(Projectile);
-            BubbleSizeType size = bubbleValues.SizeType;
-            foreach (Projectile otherBubble in TrackedProjectilesSystem.GetTrackedProjectile<LeafySeahorse_Bubble>(Projectile.owner)) {
+            BubbleValues.BubbleSizeType size = bubbleValues.SizeType;
+            foreach (Projectile otherBubble in TrackedEntitiesSystem.GetTrackedProjectile<LeafySeahorse_Bubble>(Projectile.owner)) {
                 if (otherBubble.whoAmI == Projectile.whoAmI) {
                     continue;
                 }
@@ -227,10 +227,10 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
                     continue;
                 }
 
-                if (size != BubbleSizeType.ExtraLarge && new BubbleValues(otherBubble).SizeType == BubbleSizeType.Small) {
+                if (size != BubbleValues.BubbleSizeType.ExtraLarge && new BubbleValues(otherBubble).SizeType == BubbleValues.BubbleSizeType.Small) {
                     bubbleValues.AbsorbBubbleAndIncreaseInSize(otherBubble);
                 }
-                else if (size != BubbleSizeType.Small) {
+                else if (size != BubbleValues.BubbleSizeType.Small) {
                     Projectile.velocity += Projectile.DirectionFrom(otherBubble.Center);
                     float maxSpeedFromCollision = 1f;
                     if (Projectile.velocity.Length() > maxSpeedFromCollision) {
@@ -342,15 +342,15 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
-    public override bool OnTileCollide(Vector2 oldVelocity) => new BubbleValues(Projectile).SizeType == BubbleSizeType.Small;
+    public override bool OnTileCollide(Vector2 oldVelocity) => new BubbleValues(Projectile).SizeType == BubbleValues.BubbleSizeType.Small;
 
     private void LoadBubbleTextures() {
         if (Main.dedServ) {
             return;
         }
 
-        foreach (BubbleSizeType bubbleType in Enum.GetValues(typeof(BubbleSizeType))) {
-            if (bubbleType > BubbleSizeType.ExtraLarge) {
+        foreach (BubbleValues.BubbleSizeType bubbleType in Enum.GetValues(typeof(BubbleValues.BubbleSizeType))) {
+            if (bubbleType > BubbleValues.BubbleSizeType.ExtraLarge) {
                 continue;
             }
             string texturePath = ResourceManager.NatureProjectileTextures + nameof(LeafySeahorse_Bubble);

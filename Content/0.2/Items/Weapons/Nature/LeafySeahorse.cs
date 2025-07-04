@@ -31,7 +31,7 @@ sealed class LeafySeahorse : NatureItem {
         position -= yOffset;
         float randomAngle = 0.075f;
         velocity = velocity.RotatedByRandom(randomAngle);
-        TrackedProjectilesSystem.SpawnTrackedProjectile<LeafySeahorse_Bubble>(source, position, velocity, damage, knockback, player.whoAmI);
+        TrackedEntitiesSystem.SpawnTrackedProjectile<LeafySeahorse_Bubble>(source, position, velocity, damage, knockback, player.whoAmI);
 
         return false;
     }

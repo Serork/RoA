@@ -26,22 +26,22 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
     private static ushort MAXTIMELEFT => 300;
     private static byte PENETRATEAMOUNT => 5;
 
-    private static Dictionary<CoralType, Asset<Texture2D>?>? _coralTextures;
+    private static Dictionary<CoralValues.CoralType, Asset<Texture2D>?>? _coralTextures;
 
     private static readonly HashSet<Vector2> _coralPositions = [];
 
     public static IReadOnlyCollection<Vector2> AllCoralsPositions => _coralPositions;
 
-    private enum CoralType : byte {
-        None,
-        Blue,
-        Red,
-        Pink,
-        Green,
-        Count
-    }
-
     private ref struct CoralValues(Projectile projectile) {
+        public enum CoralType : byte {
+            None,
+            Blue,
+            Red,
+            Pink,
+            Green,
+            Count
+        }
+
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float WaveValue = ref projectile.localAI[1];
         public ref float CoralTypeValue = ref projectile.ai[0];
@@ -53,10 +53,10 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
             set => InitOnSpawnValue = value.ToInt();
         }
 
-        public CoralType CoralType {
+        public CoralType CurrentCoralType {
             readonly get => (CoralType)CoralTypeValue;
             set {
-                CoralTypeValue = Utils.Clamp<byte>((byte)value, (byte)CoralType.None + 1, (byte)CoralType.Count - 1);
+                CoralTypeValue = Utils.Clamp((byte)value, (byte)CoralType.None + 1, (byte)CoralType.Count - 1);
             }
         }
 
@@ -88,7 +88,7 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
                 coralValues.Init = true;
 
                 if (Projectile.IsOwnerLocal()) {
-                    coralValues.CoralType = Main.rand.GetRandomEnumValue<CoralType>();
+                    coralValues.CurrentCoralType = Main.rand.GetRandomEnumValue<CoralValues.CoralType>();
                     Projectile.netUpdate = true;
                 }
             }
@@ -137,8 +137,8 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
             return;
         }
 
-        Dictionary<CoralType, Asset<Texture2D>?> coralTextures = _coralTextures!;
-        Asset<Texture2D>? coralAsset = coralTextures[coralValues.CoralType];
+        Dictionary<CoralValues.CoralType, Asset<Texture2D>?> coralTextures = _coralTextures!;
+        Asset<Texture2D>? coralAsset = coralTextures[coralValues.CurrentCoralType];
         if (coralAsset?.IsLoaded != true) {
             return;
         }
@@ -182,7 +182,7 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
 
         _coralTextures = [];
         for (int i = 0; i < CORALTEXTUREAMOUNT; i++) {
-            _coralTextures.Add((CoralType)(i + 1), ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + $"Coral{i + 1}"));
+            _coralTextures.Add((CoralValues.CoralType)(i + 1), ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + $"Coral{i + 1}"));
         }
     }
 }
