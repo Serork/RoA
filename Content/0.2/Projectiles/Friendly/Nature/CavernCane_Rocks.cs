@@ -18,6 +18,7 @@ using RoA.Core.Utility.Vanilla;
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -37,7 +38,6 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
             _ => Color.Transparent
         };
     }
-
     public static short GetGeodeDustType(GemType gemType) {
         return gemType switch {
             GemType.Amethyst => DustID.GemAmethyst,
@@ -169,6 +169,9 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
     private RocksInfo[]? _rocks;
     private ushort[][]? _immunityFramesPerNPC;
 
+    public static SoundStyle GetStoneHitSound(float geodeProgress) => SoundID.DD2_MonkStaffGroundImpact with { Pitch = 1f - 0.5f * geodeProgress };
+    public static SoundStyle StoneExplosion => SoundID.Item89 with { Pitch = 1f };
+
     public override void Load() {
         LoadRocksTexture();
     }
@@ -286,6 +289,11 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
                     if (reachedPosition && !currentRocksData.Collided) {
                         currentRocksData.Collided = true;
                         makeDustOnRockCollision();
+
+                        void makeHitSounds() {
+                            SoundEngine.PlaySound(GetStoneHitSound(GetGeodeProgress()), Projectile.Center);
+                        }
+                        makeHitSounds();
                     }
                     float collisionAngleLerpValue = rockSpeed * 10f;
                     if (currentRocksData.Collided && !currentRocksData.Collided2) {
@@ -306,7 +314,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
                 }
             }
         }
-        void makeGeodeDustsAndGores() {
+        void makeGeodeDustsAndGoresAndSounds() {
             Vector2 getOffsetPosition(float value) {
                 float geodeSize = GetGeodeSize();
                 float iterationValue = 1f - 0.17f * geodeSize / MathF.Pow(ROCKATTACKCOUNT, 0.1f);
@@ -369,9 +377,13 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
                     }
                 }
             }
+            void makeSounds() {
+                SoundEngine.PlaySound(StoneExplosion, Projectile.Center);
+            }
 
             makeGores();
             makeDusts();
+            makeSounds();
         }
         void throwRocksWhenCharged() {
             RocksValues rocksValues = new(Projectile);
@@ -418,7 +430,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
 
             resetSomeRockInfo();
             makeDustOnRockCollision();
-            makeGeodeDustsAndGores();
+            makeGeodeDustsAndGoresAndSounds();
             resetDamageInfo();
         }
         float getGeneralProgressForVariousPurposes(RocksInfo rocksData) {
