@@ -584,7 +584,8 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             extraRotation = MathUtils.Clamp01(extraRotation);
             extraRotation *= extraRotationDirection;
             extraRotation *= MathHelper.PiOver2;
-            extraRotation += Ease.CircOut(MathHelper.WrapAngle(_postMainDrawTimer)) * extraRotationDirection * 2f;
+            float extraRotation2 = Ease.CircOut(MathHelper.WrapAngle(Utils.Clamp(_postMainDrawTimer, 0f, 1f))) * extraRotationDirection * 2f;
+            extraRotation += extraRotation2;
             rotation += extraRotation;
             Color color = Color.White * PostMainDrawOpacity;
             SpriteEffects flip = firstPair ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
@@ -728,7 +729,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             position.X += newSizeX / 2f;
             float direction = firstPair.ToDirectionInt();
             float progress = Ease.CircOut(OpacityUpdatedInDraws),
-                  progress2 = progress * MathF.Pow(_postMainDrawTimer + PostMainDrawOpacity, 0.5f);
+                  progress2 = progress * MathF.Pow(_postMainDrawTimer + PostMainDrawOpacity, 0.4f);
             float rotation = MathHelper.TwoPi * 2f * progress2 * -direction;
             position.X -= direction * (newSizeX / 2f + offsetX / 2f) * progress2;
             position.Y += height / 1.25f;
