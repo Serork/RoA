@@ -16,6 +16,95 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class TileHelper {
+    public static ushort GetTreeKillDustType(int i, int j) {
+        Tile tileCache = Main.tile[i, j];
+        int num = 0;
+        if (tileCache.TileType == 5) {
+            num = 7;
+            if (i > 5 && i < Main.maxTilesX - 5) {
+                int num15 = i;
+                int k = j;
+                if (tileCache.TileFrameX == 66 && tileCache.TileFrameY <= 45)
+                    num15++;
+
+                if (tileCache.TileFrameX == 88 && tileCache.TileFrameY >= 66 && tileCache.TileFrameY <= 110)
+                    num15--;
+
+                if (tileCache.TileFrameX == 22 && tileCache.TileFrameY >= 132 && tileCache.TileFrameY <= 176)
+                    num15--;
+
+                if (tileCache.TileFrameX == 44 && tileCache.TileFrameY >= 132 && tileCache.TileFrameY <= 176)
+                    num15++;
+
+                if (tileCache.TileFrameX == 44 && tileCache.TileFrameY >= 132 && tileCache.TileFrameY <= 176)
+                    num15++;
+
+                if (tileCache.TileFrameX == 44 && tileCache.TileFrameY >= 198)
+                    num15++;
+
+                if (tileCache.TileFrameX == 66 && tileCache.TileFrameY >= 198)
+                    num15--;
+
+                for (; Main.tile[num15, k] != null && (!Main.tile[num15, k].HasTile || !Main.tileSolid[Main.tile[num15, k].TileType]); k++) {
+                }
+
+                if (Main.tile[num15, k] != null) {
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 23)
+                        num = 77;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 661)
+                        num = 77;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 60)
+                        num = 78;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 70)
+                        num = 26;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 109)
+                        num = 79;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 199)
+                        num = 121;
+
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 662)
+                        num = 121;
+
+                    // Extra patch context.
+                    if (Main.tile[num15, k].HasTile && Main.tile[num15, k].TileType == 147)
+                        num = 122;
+
+                    TileLoader.TreeDust(Main.tile[num15, k], ref num);
+                }
+            }
+        }
+
+        if (tileCache.TileType == 323) {
+            num = 215;
+            if (i > 5 && i < Main.maxTilesX - 5) {
+                int l;
+                for (l = j; Main.tile[i, l] != null && (!Main.tile[i, l].HasTile || !Main.tileSolid[Main.tile[i, l].TileType]); l++) {
+                }
+
+                if (Main.tile[i, l] != null) {
+                    if (Main.tile[i, l].HasTile && Main.tile[i, l].TileType == 234)
+                        num = 121;
+
+                    if (Main.tile[i, l].HasTile && Main.tile[i, l].TileType == 116)
+                        num = 79;
+
+                    // Extra patch context.
+                    if (Main.tile[i, l].HasTile && Main.tile[i, l].TileType == 112)
+                        num = 77;
+
+                    TileLoader.PalmTreeDust(Main.tile[i, l], ref num);
+                }
+            }
+        }
+
+        return (ushort)num;
+    }
+
     public static float TileSize => 16f;
 
     public static bool DrawingTiles { get; private set; }

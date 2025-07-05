@@ -9,6 +9,10 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class NPCExtensions {
+    public static float SpeedX(this NPC npc) => MathF.Abs(npc.velocity.X);
+
+    public static bool HasJustChangedFrame(this NPC npc) => npc.frameCounter == 0.0;
+
     public static bool SameAs(this NPC npc, NPC checkNPC) => npc.whoAmI == checkNPC.whoAmI;
 
     public static bool IsModded(this NPC npc) => npc.ModNPC is not null;
@@ -252,39 +256,37 @@ static partial class NPCExtensions {
                         }
                         jumpIfPlayerAboveAndClose();
 
-                        bool JumpCheck(int tileX, int tileY) {
-                            if (NPC.height >= 32 && Main.tile[tileX, tileY - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 2].TileType]) {
-                                if (Main.tile[tileX, tileY - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 3].TileType]) {
-                                    NPC.velocity.Y = -8f;
-                                    NPC.netUpdate = true;
+                        void JumpCheck(int tileX, int tileY) {
+                            int num197 = npc.spriteDirection;
+                            int num194 = tileX, num195 = tileY;
+                            if ((npc.velocity.X < 0f && num197 == -1) || (npc.velocity.X > 0f && num197 == 1)) {
+                                if (npc.height >= 32 && Main.tile[num194, num195 - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 2].TileType]) {
+                                    if (Main.tile[num194, num195 - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 3].TileType]) {
+                                        npc.velocity.Y = -8f;
+                                        npc.netUpdate = true;
+                                    }
+                                    else {
+                                        npc.velocity.Y = -7f;
+                                        npc.netUpdate = true;
+                                    }
                                 }
-                                else {
-                                    NPC.velocity.Y = -7f;
-                                    NPC.netUpdate = true;
+                                else if (Main.tile[num194, num195 - 1].HasUnactuatedTile && Main.tileSolid[Main.tile[num194, num195 - 1].TileType]) {
+                                    npc.velocity.Y = -6f;
+                                    npc.netUpdate = true;
                                 }
-                                return true;
+                                else if (npc.position.Y + (float)npc.height - (float)(num195 * 16) > 20f && Main.tile[num194, num195].HasUnactuatedTile && !Main.tile[num194, num195].TopSlope && Main.tileSolid[Main.tile[num194, num195].TileType]) {
+                                    npc.velocity.Y = -5f;
+                                    npc.netUpdate = true;
+                                }
+                                else if (npc.directionY < 0 && (!Main.tile[num194, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194, num195 + 1].TileType]) && (!Main.tile[num194 + npc.direction, num195 + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num194 + npc.direction, num195 + 1].TileType])) {
+                                    npc.velocity.Y = -8f;
+                                    npc.velocity.X *= 1.5f;
+                                    npc.netUpdate = true;
+                                }
                             }
-                            else if (Main.tile[tileX, tileY - 1].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 1].TileType]) {
-                                NPC.velocity.Y = -6f;
-                                NPC.netUpdate = true;
-                                return true;
-                            }
-                            else if (NPC.position.Y + NPC.height - tileY * 16 > 20f && Main.tile[tileX, tileY].HasUnactuatedTile && !Main.tile[tileX, tileY].TopSlope && Main.tileSolid[Main.tile[tileX, tileY].TileType]) {
-                                NPC.velocity.Y = -5f;
-                                NPC.netUpdate = true;
-                                return true;
-                            }
-                            else if (NPC.directionY < 0 && (!Main.tile[tileX, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY + 1].TileType]) && (!Main.tile[tileX + NPC.direction, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX + NPC.direction, tileY + 1].TileType])) {
-                                NPC.velocity.Y = -8f;
-                                NPC.velocity.X *= 1.5f;
-                                NPC.netUpdate = true;
-                                return true;
-                            }
-                            return false;
                         }
 
-                        if (!JumpCheck(tileX, tileY)) {
-                        }
+                        JumpCheck(tileX, tileY);
                     }
                 }
             }
