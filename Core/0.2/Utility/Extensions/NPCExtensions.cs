@@ -35,7 +35,7 @@ static partial class NPCExtensions {
         npc.frameCounter += additionalCounter + 1.0;
 
         if (npc.frameCounter > animationSpeed) {
-            if (!resetAnimation || currentFrame < endFrame) {
+            if (resetAnimation || currentFrame < endFrame) {
                 currentFrame++;
             }
 

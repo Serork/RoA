@@ -19,8 +19,9 @@ namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
 [NPCTracked]
 sealed class Woodpecker : ModNPC {
-    private static byte FRAMECOUNT => 15;
+    private static byte FRAMECOUNT => 16;
     private static float PECKINGCHECKTIME => 20f;
+    private static float TONGUEATTACKCHECKTIME => 60f;
     private static ushort TRIGGERAREASIZE => 1000;
 
     private ref struct WoodpeckerValues(NPC npc) {
@@ -60,6 +61,7 @@ sealed class Woodpecker : ModNPC {
         public ref float CanGoToTreeAgainTimer = ref npc.localAI[3];
 
         public ref float StateValue = ref npc.ai[0];
+        public ref float TongueAttackTimer = ref npc.ai[1];
         public ref float ShouldBePeckingTimer = ref npc.ai[3];
         public ref float StartedPeckingValue = ref npc.ai[3];
         public ref float TargetClosestTimer = ref npc.ai[3];
@@ -80,6 +82,8 @@ sealed class Woodpecker : ModNPC {
         }
 
         public readonly bool IsPecking => State == AIState.GoingToTree || State == AIState.Pecking || (State == AIState.Idle && ShouldBePeckingTimer > 0f);
+
+        public void ResetAllTimers() => TongueAttackTimer = CanBeBusyWithActionTimer = CanGoToTreeAgainTimer = EncouragementTimer = TargetClosestTimer = 0f;
     }
 
     public Vector2 GoToTreePosition;
@@ -226,8 +230,14 @@ sealed class Woodpecker : ModNPC {
                                                         shouldTargetPlayer: shouldTargetPlayer,
                                                         xMovement: handleXMovement);
 
-            if (HaveFreeTreeNearby(out _, out _) && !shouldTargetPlayer && woodpeckerValues.CanGoToTreeAgainTimer-- <= 0f) {
-                woodpeckerValues.CanBeBusyWithActionTimer = woodpeckerValues.CanGoToTreeAgainTimer = woodpeckerValues.EncouragementTimer = woodpeckerValues.TargetClosestTimer = 0f;
+            bool shouldDoTongueAttack = woodpeckerValues.TongueAttackTimer++ > TONGUEATTACKCHECKTIME;
+            if (shouldTargetPlayer && shouldDoTongueAttack) {
+
+            }
+
+            bool canStartPeckingAgain = woodpeckerValues.CanGoToTreeAgainTimer-- <= 0f;
+            if (HaveFreeTreeNearby(out _, out _) && !shouldTargetPlayer && canStartPeckingAgain) {
+                woodpeckerValues.ResetAllTimers();
                 woodpeckerValues.State = WoodpeckerValues.AIState.Idle;
             }
         }
