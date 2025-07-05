@@ -9,6 +9,8 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class NPCExtensions {
+    public static Player GetTargetPlayer(this NPC npc) => Main.player[npc.target];
+
     public static float SpeedX(this NPC npc) => MathF.Abs(npc.velocity.X);
 
     public static bool HasJustChangedFrame(this NPC npc) => npc.frameCounter == 0.0;
@@ -77,8 +79,9 @@ static partial class NPCExtensions {
             ref float canBeBusyWithActionTimer,
             ref float encouragementTimer,
             ref float targetClosestTimer,
-            bool? shouldTargetPlayer = null, 
-            Action? xMovement = null) {
+            bool? shouldTargetPlayer = null,
+            Action? xMovement = null,
+            Predicate<NPC>? shouldBeBored = null) {
             NPC NPC = npc;
             NPC.aiStyle = NPC.ModNPC.AIType = -1;
 
@@ -113,6 +116,10 @@ static partial class NPCExtensions {
             if (!flag9 && flag10) {
                 if (npc.velocity.Y == 0f && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
                     flag7 = true;
+
+                if (shouldBeBored != null && shouldBeBored(npc)) {
+                    flag7 = true;
+                }
 
                 if (npc.position.X == npc.oldPosition.X || targetClosestTimer >= (float)num56 || flag7)
                     targetClosestTimer += 1f;
@@ -320,3 +327,4 @@ static partial class NPCExtensions {
         npc.knockBackResist = hitInfo.KnockBackResist;
     }
 }
+    

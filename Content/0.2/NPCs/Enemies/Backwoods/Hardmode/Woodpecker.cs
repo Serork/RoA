@@ -228,15 +228,14 @@ sealed class Woodpecker : ModNPC {
                                                         ref woodpeckerValues.EncouragementTimer, 
                                                         ref woodpeckerValues.TargetClosestTimer,
                                                         shouldTargetPlayer: shouldTargetPlayer,
-                                                        xMovement: handleXMovement);
+                                                        xMovement: handleXMovement,
+                                                        shouldBeBored: (npc) => npc.SpeedX() < 1f && npc.Center.DistanceX(npc.GetTargetPlayer().Center) < npc.width);
 
-            bool shouldDoTongueAttack = woodpeckerValues.TongueAttackTimer++ > TONGUEATTACKCHECKTIME;
-            if (shouldTargetPlayer && shouldDoTongueAttack) {
+            if (shouldTargetPlayer && woodpeckerValues.TongueAttackTimer++ > TONGUEATTACKCHECKTIME) {
 
             }
 
-            bool canStartPeckingAgain = woodpeckerValues.CanGoToTreeAgainTimer-- <= 0f;
-            if (HaveFreeTreeNearby(out _, out _) && !shouldTargetPlayer && canStartPeckingAgain) {
+            if (HaveFreeTreeNearby(out _, out _) && !shouldTargetPlayer && woodpeckerValues.CanGoToTreeAgainTimer-- <= 0f) {
                 woodpeckerValues.ResetAllTimers();
                 woodpeckerValues.State = WoodpeckerValues.AIState.Idle;
             }
