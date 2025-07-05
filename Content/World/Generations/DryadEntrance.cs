@@ -200,12 +200,17 @@ sealed class DryadEntrance : ModSystem {
             return;
         }
 
-        for (int x = -1; x < 2; x++) {
-            for (int y = -2; y < 0; y++) {
+        for (int x = 0; x < 3; x++) {
+            for (int y = -2; y <= 0; y++) {
                 WorldGen.KillTile(_bigRubblePosition.X + x, _bigRubblePosition.Y + y);
             }
         }
-        WorldGen.PlaceTile(_bigRubblePosition.X, _bigRubblePosition.Y, 304, mute: true);
+
+        for (int x = 0; x < 3; x++) {
+            for (int y = -2; y <= 0; y++) {
+                WorldGen.PlaceTile(_bigRubblePosition.X + x, _bigRubblePosition.Y + y, 304, mute: true);
+            }
+        }
     }
 
     private void DryadEntranceCleanUp(GenerationProgress progress, GameConfiguration configuration) {
@@ -280,7 +285,7 @@ sealed class DryadEntrance : ModSystem {
                         WorldGen.PlaceTile(x2, y2 - 1, 187, mute: true, forced: false, -1, genRand.Next(50, 52));
                     }
                     if (genRand.NextBool(3)) {
-                        WorldGen.PlacePot(x2, y2 - 1, style: WorldGen.notTheBees ? genRand.Next(8, 11) : genRand.Next(4));
+                        WorldGen.PlacePot(x2, y2 - 1, style: WorldGen.notTheBees ? genRand.Next(7, 10) : genRand.Next(4));
                     }
                 }
             }
