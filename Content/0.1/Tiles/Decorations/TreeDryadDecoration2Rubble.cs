@@ -11,6 +11,30 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Decorations;
 
+class TreeDryadDecoration2Rubble_Jungle : TreeDryadDecoration2Rubble {
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
+        Main.tileLavaDeath[Type] = true;
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
+        TileObjectData.newTile.DrawYOffset = 0;
+        TileObjectData.newTile.CoordinateHeights = [18];
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.addTile(Type);
+
+        FlexibleTileWand.RubblePlacementMedium.AddVariations(ModContent.ItemType<NaturesHeart>(), Type, 0, 1);
+
+        DustType = DustID.RichMahogany;
+        AddMapEntry(new Color(184, 118, 124));
+
+        RegisterItemDrop(ModContent.ItemType<NaturesHeart>());
+
+        MineResist = 0.01f;
+    }
+}
+
 class TreeDryadDecoration2Rubble_Spirit : TreeDryadDecoration2Rubble {
     public override bool IsLoadingEnabled(Mod mod) => ModLoader.HasMod("SpiritReforged");
 

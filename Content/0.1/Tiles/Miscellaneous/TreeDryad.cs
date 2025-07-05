@@ -85,7 +85,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
                     Rectangle glowClip = glowFrame.GetSourceRectangle(glowTexture);
                     Vector2 glowPosition = topLeft.ToWorldCoordinates() + new Vector2(9f, 1f);
                     Vector2 glowOrigin = glowClip.Size() / 2f;
-                    Color glowColor = Color.White;
+                    Color glowColor = Color.White * 0.8f;
                     bool turnedLeft = _frameX <= 18;
                     if (turnedLeft) {
                         glowPosition.X -= 18f;
@@ -170,13 +170,43 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         TileSets.PreventsSlopesBelow[Type] = true;
         CanBeSlopedTileSystem.Included[Type] = true;
 
-        AddMapEntry(new Color(191, 143, 111), CreateMapEntryName());
+        var mapText = CreateMapEntryName();
+        AddMapEntry(new Color(191, 143, 111), mapText);
+        AddMapEntry(new Color(168, 153, 136), mapText);
+        AddMapEntry(new Color(184, 118, 124), mapText);
 
         DustType = DustID.WoodFurniture;
     }
 
+    public override ushort GetMapOption(int i, int j) {
+        if (DryadEntrance.HasSpiritModAndSavannahSeed) {
+            return 1;
+        }
+        if (Main.notTheBeesWorld) {
+            return 2;
+        }
+
+        return 0;
+    }
+
     public override bool CreateDust(int i, int j, ref int type) {
-        if (Main.rand.NextBool(5)) {
+        if (DryadEntrance.HasSpiritModAndSavannahSeed) {
+            if (Main.rand.NextBool(5)) {
+                type = DustID.JunglePlants;
+            }
+            else {
+                type = DustID.t_PearlWood;
+            }
+        }
+        else if (Main.notTheBeesWorld) {
+            if (Main.rand.NextBool(5)) {
+                type = DustID.JungleGrass;
+            }
+            else {
+                type = DustID.RichMahogany;
+            }
+        }
+        else if (Main.rand.NextBool(5)) {
             type = DustID.Grass;
         }
 
@@ -198,6 +228,9 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         if (DryadEntrance.HasSpiritModAndSavannahSeed) {
             frameY += 58;
         }
+        if (Main.notTheBeesWorld) {
+            frameY += 118;
+        }
         int height = flag ? 22 : 16;
         int frameX = tile.TileFrameX;
         if (AbleToBeDestroyed) {
@@ -207,7 +240,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         texture ??= TextureAssets.Tile[Type].Value;
 
         Main.spriteBatch.Draw(texture,
-                              new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0)) + zero,
+                              new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0) + 2) + zero,
                               new Rectangle(frameX, frameY, 16, height),
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 

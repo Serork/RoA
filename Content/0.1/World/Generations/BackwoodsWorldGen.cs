@@ -113,6 +113,123 @@ sealed class BackwoodsWorldGen : ModSystem {
     public override void Load() {
         On_WorldGen.Convert += On_WorldGen_Convert;
         On_WorldGen.PaintTheLivingTrees += On_WorldGen_PaintTheLivingTrees;
+        On_WorldGen.NotTheBees += On_WorldGen_NotTheBees;
+    }
+
+    private void On_WorldGen_NotTheBees(On_WorldGen.orig_NotTheBees orig) {
+        int num = Main.maxTilesX / 7;
+        if (!WorldGen.notTheBees)
+            return;
+
+        var genRand = WorldGen.genRand;
+        for (int i = 0; i < Main.maxTilesX; i++) {
+            for (int j = 0; j < Main.maxTilesY - 180; j++) {
+                if (i > BackwoodsVars.BackwoodsStartX && i < BackwoodsVars.BackwoodsEndX) {
+                    continue;
+                }
+                if (j > WorldGenHelper.SafeFloatingIslandY && j < BackwoodsVars.BackwoodsEndY) {
+                    continue;
+                }
+
+                if (WorldGen.remixWorldGen && (i < num + genRand.Next(3) || i >= Main.maxTilesX - num - genRand.Next(3) || ((double)j > (Main.worldSurface * 2.0 + Main.rockLayer) / 3.0 + (double)genRand.Next(3) && j < Main.maxTilesY - 350 - genRand.Next(3))))
+                    continue;
+
+                if (Main.tile[i, j].TileType == 52)
+                    Main.tile[i, j].TileType = 62;
+
+                if ((WorldGen.SolidOrSlopedTile(i, j) || TileID.Sets.CrackedBricks[Main.tile[i, j].TileType]) && !TileID.Sets.Ore[Main.tile[i, j].TileType] && Main.tile[i, j].TileType != 123 && Main.tile[i, j].TileType != 40) {
+                    if (Main.tile[i, j].TileType == 191 || Main.tile[i, j].TileType == 383) {
+                        if (!WorldGen.remixWorldGen)
+                            Main.tile[i, j].TileType = 383;
+                    }
+                    else if (Main.tile[i, j].TileType == 192 || Main.tile[i, j].TileType == 384) {
+                        if (!WorldGen.remixWorldGen)
+                            Main.tile[i, j].TileType = 384;
+                    }
+                    else if (Main.tile[i, j].TileType != 151 && Main.tile[i, j].TileType != 662 && Main.tile[i, j].TileType != 661 && Main.tile[i, j].TileType != 189 && Main.tile[i, j].TileType != 196 && Main.tile[i, j].TileType != 120 && Main.tile[i, j].TileType != 158 && Main.tile[i, j].TileType != 175 && Main.tile[i, j].TileType != 45 && Main.tile[i, j].TileType != 119) {
+                        if (Main.tile[i, j].TileType >= 63 && Main.tile[i, j].TileType <= 68) {
+                            Main.tile[i, j].TileType = 230;
+                        }
+                        else if (Main.tile[i, j].TileType != 57 && Main.tile[i, j].TileType != 76 && Main.tile[i, j].TileType != 75 && Main.tile[i, j].TileType != 229 && Main.tile[i, j].TileType != 230 && Main.tile[i, j].TileType != 407 && Main.tile[i, j].TileType != 404) {
+                            if (Main.tile[i, j].TileType == 224) {
+                                Main.tile[i, j].TileType = 229;
+                            }
+                            else if (Main.tile[i, j].TileType == 53) {
+                                if (i < WorldGen.beachDistance + genRand.Next(3) || i > Main.maxTilesX - WorldGen.beachDistance - genRand.Next(3))
+                                    Main.tile[i, j].TileType = 229;
+                            }
+                            else if ((i <= WorldGen.beachDistance - genRand.Next(3) || i >= Main.maxTilesX - WorldGen.beachDistance + genRand.Next(3) || (Main.tile[i, j].TileType != 397 && Main.tile[i, j].TileType != 396)) && Main.tile[i, j].TileType != 10 && Main.tile[i, j].TileType != 203 && Main.tile[i, j].TileType != 25 && Main.tile[i, j].TileType != 137 && Main.tile[i, j].TileType != 138 && Main.tile[i, j].TileType != 141) {
+                                if (Main.tileDungeon[Main.tile[i, j].TileType] || TileID.Sets.CrackedBricks[Main.tile[i, j].TileType]) {
+                                    Tile tile = Main.tile[i, j];
+                                    tile.TileColor = 14;
+                                }
+                                else if (Main.tile[i, j].TileType == 226) {
+                                    Tile tile = Main.tile[i, j];
+                                    tile.TileColor = 15;
+                                }
+                                else if (Main.tile[i, j].TileType != 202 && Main.tile[i, j].TileType != 70 && Main.tile[i, j].TileType != 48 && Main.tile[i, j].TileType != 232) {
+                                    if (TileID.Sets.Conversion.Grass[Main.tile[i, j].TileType] || Main.tile[i, j].TileType == 60 || Main.tile[i, j].TileType == 70) {
+                                        if (j > GenVars.lavaLine + genRand.Next(-2, 3) + 2)
+                                            Main.tile[i, j].TileType = 70;
+                                        else
+                                            Main.tile[i, j].TileType = 60;
+                                    }
+                                    else if (Main.tile[i, j].TileType == 0 || Main.tile[i, j].TileType == 59) {
+                                        Main.tile[i, j].TileType = 59;
+                                    }
+                                    else if (Main.tile[i, j].TileType != 633) {
+                                        if (j > GenVars.lavaLine + genRand.Next(-2, 3) + 2)
+                                            Main.tile[i, j].TileType = 230;
+                                        else if (!WorldGen.remixWorldGen || (double)j > Main.worldSurface + (double)genRand.Next(-1, 2))
+                                            Main.tile[i, j].TileType = 225;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (Main.tile[i, j].WallType != 15 && Main.tile[i, j].WallType != 64 && Main.tile[i, j].WallType != 204 && Main.tile[i, j].WallType != 205 && Main.tile[i, j].WallType != 206 && Main.tile[i, j].WallType != 207 && Main.tile[i, j].WallType != 23 && Main.tile[i, j].WallType != 24 && Main.tile[i, j].WallType != 42 && Main.tile[i, j].WallType != 10 && Main.tile[i, j].WallType != 21 && Main.tile[i, j].WallType != 82 && Main.tile[i, j].WallType != 187 && Main.tile[i, j].WallType != 216 && Main.tile[i, j].WallType != 34 && Main.tile[i, j].WallType != 244) {
+                    if (Main.tile[i, j].WallType == 87) {
+                        Tile tile = Main.tile[i, j];
+                        tile.WallColor = 15;
+                    }
+                    else if (Main.wallDungeon[Main.tile[i, j].WallType]) {
+                        Tile tile = Main.tile[i, j];
+                        tile.WallColor = 14;
+                    }
+                    else if (Main.tile[i, j].WallType == 2)
+                        Main.tile[i, j].WallType = 2;
+                    else if (Main.tile[i, j].WallType == 196)
+                        Main.tile[i, j].WallType = 196;
+                    else if (Main.tile[i, j].WallType == 197)
+                        Main.tile[i, j].WallType = 197;
+                    else if (Main.tile[i, j].WallType == 198)
+                        Main.tile[i, j].WallType = 198;
+                    else if (Main.tile[i, j].WallType == 199)
+                        Main.tile[i, j].WallType = 199;
+                    else if (Main.tile[i, j].WallType == 63)
+                        Main.tile[i, j].WallType = 64;
+                    else if (Main.tile[i, j].WallType != 3 && Main.tile[i, j].WallType != 83 && Main.tile[i, j].WallType != 73 && Main.tile[i, j].WallType != 62 && Main.tile[i, j].WallType != 13 && Main.tile[i, j].WallType != 14 && Main.tile[i, j].WallType > 0 && (!WorldGen.remixWorldGen || (double)j > Main.worldSurface + (double)genRand.Next(-1, 2)))
+                        Main.tile[i, j].WallType = 86;
+                }
+
+                if (Main.tile[i, j].LiquidAmount > 0 && j <= GenVars.lavaLine + 2) {
+                    if ((double)j > Main.rockLayer && (i < WorldGen.beachDistance + 200 || i > Main.maxTilesX - WorldGen.beachDistance - 200)) {
+                        Tile tile = Main.tile[i, j];
+                        tile.LiquidType = LiquidID.Lava;
+                    }
+                    else if (Main.wallDungeon[Main.tile[i, j].WallType]) {
+                        Tile tile = Main.tile[i, j];
+                        tile.LiquidType = LiquidID.Lava;
+                    }
+                    else {
+                        Tile tile = Main.tile[i, j];
+                        tile.LiquidType = LiquidID.Honey;
+                    }
+                }
+            }
+        }
     }
 
     private void On_WorldGen_PaintTheLivingTrees(On_WorldGen.orig_PaintTheLivingTrees orig, byte livingTreePaintColor, byte livingTreeWallPaintColor) {

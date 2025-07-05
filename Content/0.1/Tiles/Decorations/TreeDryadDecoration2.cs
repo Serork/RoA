@@ -9,6 +9,29 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Decorations;
 
+class TreeDryadDecoration2_Jungle : TreeDryadDecoration2 {
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
+        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.LavaDeath = false;
+        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
+        TileObjectData.addAlternate(1);
+        TileObjectData.addTile(Type);
+
+        DustType = DustID.RichMahogany;
+        AddMapEntry(new Color(184, 118, 124));
+
+        MineResist = 0.01f;
+    }
+}
+
 class TreeDryadDecoration2_Spirit : TreeDryadDecoration2 {
     public override bool IsLoadingEnabled(Mod mod) => ModLoader.HasMod("SpiritReforged");
 
