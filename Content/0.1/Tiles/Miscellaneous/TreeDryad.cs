@@ -168,6 +168,9 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         }
         bool flag = tile.TileFrameY == 0;
         int frameY = !flag ? tile.TileFrameY + 4 : 0;
+        if (DryadEntrance.HasSpiritModAndSavannahSeed) {
+            frameY += 58;
+        }
         int height = flag ? 22 : 16;
         int frameX = tile.TileFrameX;
         if (AbleToBeDestroyed) {
