@@ -16,6 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class TileHelper {
+    public static ushort GetTreeKillDustType(Point16 position) => GetTreeKillDustType(position.X, position.Y);
     public static ushort GetTreeKillDustType(int i, int j) {
         Tile tileCache = Main.tile[i, j];
         int num = 0;

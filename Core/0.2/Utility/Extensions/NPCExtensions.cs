@@ -30,13 +30,16 @@ static partial class NPCExtensions {
         byte endFrame,
         byte animationSpeed,
         ushort frameHeight,
-        double additionalCounter = 0.0) {
+        double additionalCounter = 0.0,
+        bool resetAnimation = true) {
         npc.frameCounter += additionalCounter + 1.0;
 
         if (npc.frameCounter > animationSpeed) {
-            currentFrame++;
+            if (!resetAnimation || currentFrame < endFrame) {
+                currentFrame++;
+            }
 
-            if (currentFrame < startFrame || currentFrame > endFrame) {
+            if (currentFrame < startFrame || (resetAnimation && currentFrame > endFrame)) {
                 currentFrame = startFrame;
             }
 

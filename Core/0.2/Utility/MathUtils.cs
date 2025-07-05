@@ -19,4 +19,7 @@ static class MathUtils {
 
     public static float PseudoRandRange(ref uint seed, float min, float max) => min + (float)((double)(PseudoRand(ref seed) & 1023U) / 1024.0 * ((double)max - (double)min));
     public static float PseudoRandRange(ref uint seed, float max) => PseudoRandRange(ref seed, max > 0f ? 0f : -max, max > 0f ? max : 0f);
+
+    public static float DistanceX(this Vector2 a, Vector2 b) => MathF.Abs(a.X - b.X);
+    public static float DistanceY(this Vector2 a, Vector2 b) => MathF.Abs(a.Y - b.Y);
 }

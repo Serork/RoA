@@ -88,9 +88,7 @@ sealed class Woodpecker : ModNPC {
     public HashSet<Vector2> TreePositionsTaken = [];
 
     public int DirectionToTree => GoToTreePosition == Vector2.Zero ? 0 : (TreePosition.ToWorldCoordinates().X - NPC.Center.X).GetDirection();
-    public ushort TreeDustType => WorldGenHelper.GetTileSafely(TreePosition).TileType == ModContent.TileType<BackwoodsBigTree>() ? 
-           (ushort)TileLoader.GetTile(ModContent.TileType<BackwoodsBigTree>()).DustType
-         : TileHelper.GetTreeKillDustType(TreePosition.X, TreePosition.Y);
+    public ushort TreeDustType => WorldGenHelper.GetTileSafely(TreePosition).TileType == ModContent.TileType<BackwoodsBigTree>() ? (ushort)TileLoader.GetTile(ModContent.TileType<BackwoodsBigTree>()).DustType : TileHelper.GetTreeKillDustType(TreePosition);
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
@@ -153,7 +151,7 @@ sealed class Woodpecker : ModNPC {
         void directToTree() {
             handleXMovement();
             float stoppingDistance = 10f;
-            float distance = MathF.Abs(NPC.Center.X - GoToTreePosition.X);
+            float distance = NPC.Center.DistanceX(GoToTreePosition);
             if (distance < stoppingDistance * 2f) {
                 float velocityXFactor = distance / (stoppingDistance * 2f);
                 VelocityXFactor = Helper.Approach(VelocityXFactor, velocityXFactor, 0.025f);
@@ -163,11 +161,6 @@ sealed class Woodpecker : ModNPC {
                 }
                 NPC.position.X = Helper.Approach(NPC.position.X, GoToTreePosition.X - NPC.width / 2f, 0.5f * (1f - VelocityXFactor));
             }
-
-            //Dust dust = Dust.NewDustPerfect(TreePosition.ToWorldCoordinates(), DustID.Adamantite);
-            //dust.noGravity = true;
-            //dust.velocity *= 0f;
-
             NPC.DirectTo(GoToTreePosition, updateSpriteDirection: false);
             TreePositionsTaken.Add(GoToTreePosition);
             NPC.spriteDirection = DirectionToTree;
@@ -183,24 +176,23 @@ sealed class Woodpecker : ModNPC {
                 return;
             }
 
-            if (Vector2.Distance(GoToTreePosition, NPC.Center) > TileHelper.TileSize * 5) {
+            if (IsTooFarFromTree()) {
                 woodpeckerValues.CanGoToTreeAgainTimer = 60f;
                 woodpeckerValues.State = WoodpeckerValues.AIState.Walking;
             }
 
             directToTree();
 
-            if (shouldTargetPlayer || !NoOtherWoodpeckerNearby(GoToTreePosition) || !WorldGenHelper.ActiveTile(TreePosition - new Point16(0, 4))) {
+            if (shouldTargetPlayer || !NoOtherWoodpeckerNearby(GoToTreePosition) || IsTreeNotDestroyed()) {
                 woodpeckerValues.ShouldBePeckingTimer = 0f;
                 woodpeckerValues.State = WoodpeckerValues.AIState.Walking;
                 return;
             }
 
-            if (NPC.Center.X == GoToTreePosition.X && Helper.SinglePlayerOrServer && woodpeckerValues.ShouldBePeckingTimer++ >= PECKINGCHECKTIME) {
+            bool shouldBePecking = woodpeckerValues.ShouldBePeckingTimer++ >= PECKINGCHECKTIME;
+            if (IsNearTree() && shouldBePecking) {
                 woodpeckerValues.ShouldBePeckingTimer = 0f;
                 woodpeckerValues.State = WoodpeckerValues.AIState.Pecking;
-
-                NPC.netUpdate = true;
             }
         }
         void handleIdleState() {
@@ -209,7 +201,7 @@ sealed class Woodpecker : ModNPC {
                 return;
             }
 
-            if (HaveFreeTreeNearby(out Vector2 goToTreePosition, out Point16 treePosition) && !shouldTargetPlayer) {
+            if (!shouldTargetPlayer && HaveFreeTreeNearby(out Vector2 goToTreePosition, out Point16 treePosition)) {
                 GoToTreePosition = goToTreePosition;
                 TreePosition = treePosition;
                 woodpeckerValues.State = WoodpeckerValues.AIState.GoingToTree;
@@ -279,7 +271,7 @@ sealed class Woodpecker : ModNPC {
                             break;
                         }
                         byte walkingAnimationSpeed = 15;
-                        double additionalCounter = MathF.Max(1f, Math.Abs(NPC.velocity.Length()));
+                        double additionalCounter = MathF.Max(1f, NPC.velocity.Length());
                         woodpeckerValues.Frame = (WoodpeckerValues.AnimationFrame)NPC.AnimateFrame((byte)woodpeckerValues.Frame, (byte)WoodpeckerValues.AnimationFrame.Walking1, (byte)WoodpeckerValues.AnimationFrame.Walking6, walkingAnimationSpeed, (ushort)frameHeight, additionalCounter);
                     }
                     else {
@@ -307,6 +299,10 @@ sealed class Woodpecker : ModNPC {
         setDirection();
         animatePerState();
     }
+
+    private bool IsTooFarFromTree() => Vector2.Distance(GoToTreePosition, NPC.Center) > TileHelper.TileSize * 5;
+    private bool IsTreeNotDestroyed() => !WorldGenHelper.ActiveTile(TreePosition - new Point16(0, 4));
+    private bool IsNearTree() => NPC.Center.X == GoToTreePosition.X;
 
     private void HitTree() {
         SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
@@ -344,7 +340,7 @@ sealed class Woodpecker : ModNPC {
             }
 
             if (new WoodpeckerValues(woodpeckerCheckNPC).IsPecking &&
-                MathF.Abs(woodpeckerCheckNPC.Center.X - goToTreePosition.X) < TileHelper.TileSize * 2) {
+                woodpeckerCheckNPC.Center.DistanceX(goToTreePosition) < TileHelper.TileSize * 2) {
                 noOtherWoodpeckerNearby = false;
                 break;
             }
