@@ -32,10 +32,12 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
     private static short _frameX;
 
     private enum TreeDryadRequstedTextureType : byte {
-        Ray
+        Ray,
+        Glow
     }
 
-    (byte, string)[] IRequestAsset.IndexedPathsToTexture => [((byte)TreeDryadRequstedTextureType.Ray, ResourceManager.Textures + "Ray")];
+    (byte, string)[] IRequestAsset.IndexedPathsToTexture => [((byte)TreeDryadRequstedTextureType.Ray, ResourceManager.Textures + "Ray"),
+                                                             ((byte)TreeDryadRequstedTextureType.Glow, TileLoader.GetTile(ModContent.TileType<TreeDryad>()).Texture + "_Glow")];
 
     void TileHooks.IPreDraw.PreDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition) {
         if (AbleToBeDestroyed) {
@@ -44,11 +46,15 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
     }
 
     void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition) {
+        uint seedForPseudoRandomness = (uint)(tilePosition.GetHashCode() + tilePosition.GetHashCode());
+        float lightStrengthFactor = Helper.Wave(0.75f, 1f, 2f, Helper.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
+        float lightStrengthMainFactor = Helper.PseudoRandRange(ref seedForPseudoRandomness, 0.25f, 0.6f);
         if (AbleToBeDestroyed) {
             Vector2 tileWorldPosition = tilePosition.ToWorldCoordinates();
             int i = tilePosition.X, j = tilePosition.Y;
             Point16 topLeft = TileHelper.GetTileTopLeft<TreeDryad>(i, j);
-            if (topLeft == tilePosition) {
+            bool isOrigin = topLeft == tilePosition;
+            if (isOrigin) {
                 _frameX = Main.tile[topLeft.X, topLeft.Y].TileFrameX;
                 Vector2 emotePosition = TileHelper.GetTileTopLeft<TreeDryad>(i, j).ToWorldCoordinates() + new Vector2(8f, -16f);
                 bool turnedLeft = _frameX <= 18;
@@ -66,20 +72,41 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
                 else {
                     _hammerEmoteShown = false;
                 }
-                uint seedForPseudoRandomness = (uint)(tilePosition.GetHashCode() + tilePosition.GetHashCode());
-                float lightStrengthFactor = Helper.Wave(0.75f, 1f, 2f, Helper.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
-                Lighting.AddLight(tileWorldPosition, Color.Lerp(Color.Green, Color.White, Helper.PseudoRandRange(ref seedForPseudoRandomness, 1f) * lightStrengthFactor).ToVector3() * 0.45f * lightStrengthFactor);
+                Lighting.AddLight(tileWorldPosition, Color.Lerp(Color.Green, Color.White, lightStrengthMainFactor * lightStrengthFactor).ToVector3() * 0.45f * lightStrengthFactor);
             }
 
             DrawRays(tilePosition, 0.075f);
+
+            if (isOrigin) {
+                if (AssetInitializer.TryGetTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Glow, out Asset<Texture2D> glowTextureAsset)) {
+                    Texture2D glowTexture = glowTextureAsset!.Value;
+                    const byte GLOWFRAMECOUNT = 8;
+                    SpriteFrame glowFrame = new(1, GLOWFRAMECOUNT, 0, (byte)(Utils.Remap(lightStrengthFactor, 0.75f, 1f, 1f, 0f) * GLOWFRAMECOUNT));
+                    Rectangle glowClip = glowFrame.GetSourceRectangle(glowTexture);
+                    Vector2 glowPosition = topLeft.ToWorldCoordinates() + new Vector2(9f, 1f);
+                    Vector2 glowOrigin = glowClip.Size() / 2f;
+                    Color glowColor = Color.White;
+                    bool turnedLeft = _frameX <= 18;
+                    if (turnedLeft) {
+                        glowPosition.X -= 18f;
+                    }
+                    SpriteEffects glowFlip = !turnedLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    Main.spriteBatch.Draw(glowTexture, glowPosition, DrawInfo.Default with {
+                        Clip = glowClip,
+                        Origin = glowOrigin,
+                        Color = glowColor,
+                        ImageFlip = glowFlip
+                    });
+                }
+            }
         }
     }
 
     private static void DrawRays(Point16 tilePosition, float colorOpacity) {
         int i = tilePosition.X, j = tilePosition.Y;
         Point16 topLeft = TileHelper.GetTileTopLeft<TreeDryad>(i, j);
-        if (topLeft == tilePosition && AssetInitializer.TryGetTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Ray, out Asset<Texture2D>? textureAsset)) {
-            Texture2D rayTexture = textureAsset!.Value;
+        if (topLeft == tilePosition && AssetInitializer.TryGetTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Ray, out Asset<Texture2D> rayTextureAsset)) {
+            Texture2D rayTexture = rayTextureAsset!.Value;
             Vector2 rayPosition = TileHelper.GetTileTopLeft<TreeDryad>(i, j).ToWorldCoordinates() + new Vector2(8f, 4f);
             bool turnedLeft = Main.tile[topLeft.X, topLeft.Y].TileFrameX <= 18;
             if (turnedLeft) {
