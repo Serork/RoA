@@ -283,7 +283,7 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
 
     public static bool IsStart(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsBranch(i, j) && !WorldGenHelper.ActiveTile(i, j + 1, GetSelfType());
 
-    private static bool IsTrunk(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsStart(i, j) && !IsNormalBranch(i, j) && !IsBigBranch(i, j);
+    public static bool IsTrunk(int i, int j) => WorldGenHelper.ActiveTile(i, j, GetSelfType()) && !IsStart(i, j) && !IsNormalBranch(i, j) && !IsBigBranch(i, j);
 
     private static bool IsBranch(int i, int j) {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);

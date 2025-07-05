@@ -460,8 +460,11 @@ static class WorldGenHelper {
     public static Tile GetTileSafely(int i, int j) => !WorldGen.InWorld(i, j) ? Framing.GetTileSafely(1, 1) : Framing.GetTileSafely(i, j);
 
     public static Tile GetTileSafely(Point position) => GetTileSafely(position.X, position.Y);
+    public static Tile GetTileSafely(Point16 position) => GetTileSafely(position.X, position.Y);
 
     public static bool ActiveTile(int i, int j) => GetTileSafely(i, j).HasTile;
+
+    public static bool ActiveTile(Point16 position) => ActiveTile(position.X, position.Y);
 
     public static bool ActiveTile(this Tile tile, int tileType) => tile.HasTile && tile.TileType == tileType;
 
