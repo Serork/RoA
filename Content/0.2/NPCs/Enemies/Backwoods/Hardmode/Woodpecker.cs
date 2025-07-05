@@ -152,6 +152,7 @@ sealed class Woodpecker : ModNPC {
             }
 
             if (Vector2.Distance(GoToTreePosition, NPC.Center) > TileHelper.TileSize * 5) {
+                woodpeckerValues.CanGoToTreeAgainTimer = 60f;
                 woodpeckerValues.State = WoodpeckerValues.AIState.Walking;
             }
 
@@ -188,13 +189,14 @@ sealed class Woodpecker : ModNPC {
             }
 
             GoToTreePosition = Vector2.Zero;
+            TreePosition = Point16.Zero;
 
             NPCExtensions.FighterAI.ApplyFighterAI(NPC, ref woodpeckerValues.CanBeBusyWithActionTimer,
                                                         ref woodpeckerValues.EncouragementTimer, 
                                                         ref woodpeckerValues.TargetClosestTimer,
                                                         shouldTargetPlayer: shouldTargetPlayer,
                                                         xMovement: handleXMovement);
-            if (HaveFreeTreeNearby(out _, out _) && !shouldTargetPlayer && woodpeckerValues.CanGoToTreeAgainTimer++ >= 60f) {
+            if (HaveFreeTreeNearby(out _, out _) && !shouldTargetPlayer && woodpeckerValues.CanGoToTreeAgainTimer-- <= 0f) {
                 woodpeckerValues.CanBeBusyWithActionTimer = woodpeckerValues.CanGoToTreeAgainTimer = woodpeckerValues.EncouragementTimer = woodpeckerValues.TargetClosestTimer = 0f;
                 woodpeckerValues.State = WoodpeckerValues.AIState.Idle;
             }
@@ -239,7 +241,7 @@ sealed class Woodpecker : ModNPC {
                             break;
                         }
                         byte walkingAnimationSpeed = 15;
-                        double additionalCounter = Math.Abs(NPC.velocity.Length());
+                        double additionalCounter = MathF.Max(1f, Math.Abs(NPC.velocity.Length()));
                         woodpeckerValues.Frame = (WoodpeckerValues.AnimationFrame)NPC.AnimateFrame((byte)woodpeckerValues.Frame, (byte)WoodpeckerValues.AnimationFrame.Walking1, (byte)WoodpeckerValues.AnimationFrame.Walking6, walkingAnimationSpeed, (ushort)frameHeight, additionalCounter);
                     }
                     break;
