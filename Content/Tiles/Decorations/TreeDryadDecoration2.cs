@@ -9,7 +9,32 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Decorations;
 
-sealed class TreeDryadDecoration2 : ModTile {
+class TreeDryadDecoration2_Spirit : TreeDryadDecoration2 {
+    public override bool IsLoadingEnabled(Mod mod) => ModLoader.HasMod("SpiritReforged");
+
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
+        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.LavaDeath = false;
+        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
+        TileObjectData.addAlternate(1);
+        TileObjectData.addTile(Type);
+
+        DustType = DustID.t_PearlWood;
+        AddMapEntry(new Color(168, 153, 136));
+
+        MineResist = 0.01f;
+    }
+}
+
+class TreeDryadDecoration2 : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;

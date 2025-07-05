@@ -13,7 +13,39 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Decorations;
 
-sealed class TreeDryadDecoration1Rubble : ModTile {
+class TreeDryadDecoration1Rubble_Spirit : TreeDryadDecoration1Rubble {
+    public override bool IsLoadingEnabled(Mod mod) => ModLoader.HasMod("SpiritReforged");
+
+    public override void SetStaticDefaults() {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileObsidianKill[Type] = true;
+        Main.tileLavaDeath[Type] = true;
+
+        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.Width = 1;
+        TileObjectData.newTile.Height = 1;
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
+        TileObjectData.newTile.UsesCustomCanPlace = true;
+        TileObjectData.newTile.CoordinateHeights = [16];
+        TileObjectData.newTile.CoordinateWidth = 16;
+        TileObjectData.newTile.CoordinatePadding = 2;
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.LavaDeath = true;
+        TileObjectData.addTile(Type);
+
+        FlexibleTileWand.RubblePlacementSmall.AddVariations(ModContent.ItemType<NaturesHeart>(), Type, 0, 1);
+
+        DustType = DustID.t_PearlWood;
+        AddMapEntry(new Color(168, 153, 136));
+
+        RegisterItemDrop(ModContent.ItemType<NaturesHeart>());
+
+        MineResist = 0.01f;
+    }
+}
+
+class TreeDryadDecoration1Rubble : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
