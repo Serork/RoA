@@ -56,6 +56,10 @@ sealed class BackwoodsVars : ModSystem {
     public static int BackwoodsCenterY { get; internal set; }
     public static int BackwoodsHalfSizeX { get; internal set; }
 
+    public static int BackwoodsStartX => BackwoodsCenterX - BackwoodsHalfSizeX;
+    public static int BackwoodsEndX => BackwoodsCenterX + BackwoodsHalfSizeX;
+    public static int BackwoodsEndY => BackwoodsCenterY + BackwoodsSizeY;
+
     public static HashSet<ushort> BackwoodsTileTypes { get; } = [(ushort)ModContent.TileType<LivingElderwood>(), (ushort)ModContent.TileType<LivingElderwoodlLeaves>(), (ushort)ModContent.TileType<TreeBranch>(), (ushort)ModContent.TileType<BackwoodsGrass>(), (ushort)ModContent.TileType<BackwoodsGreenMoss>(), (ushort)ModContent.TileType<BackwoodsStone>(), TileID.Dirt];
     public static HashSet<ushort> BackwoodsWallTypes { get; } = [
         (ushort)ModContent.WallType<BackwoodsGrassWall>(),

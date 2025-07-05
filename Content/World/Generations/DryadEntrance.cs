@@ -98,8 +98,8 @@ sealed class DryadEntrance : ModSystem {
             tasks.Insert(genIndex + indexOffset / 2, new PassLegacy(pass, DryadEntranceGenerator2, 14.2958f));
         }
 
-        tasks.Add(new PassLegacy(string.Empty, DryadEntranceCleanUp));
-        tasks.Add(new PassLegacy(string.Empty, DryadEntranceLoomPlacement));
+        tasks.Insert(tasks.Count - 5, new PassLegacy(string.Empty, DryadEntranceCleanUp));
+        tasks.Insert(tasks.Count - 5, new PassLegacy(string.Empty, DryadEntranceLoomPlacement));
     }
 
     private void GrassWallUpdated(GenerationProgress progress, GameConfiguration configuration) {
@@ -192,6 +192,10 @@ sealed class DryadEntrance : ModSystem {
         //    _loomPlacedInWorld = false;
         //}
 
+        if (WorldGen.notTheBees) {
+            flag = false;
+        }
+
         if (flag/* || _bigRubblePosition == Point.Zero*/) {
             return;
         }
@@ -206,10 +210,10 @@ sealed class DryadEntrance : ModSystem {
 
     private void DryadEntranceCleanUp(GenerationProgress progress, GameConfiguration configuration) {
         int distance = 100;
-        ushort woodTileType = HasSpiritModAndSavannahSeed ? GetSavannaWoodTileType() : TileID.LivingWood;
-        ushort woodWallType = HasSpiritModAndSavannahSeed ? GetSavannaWoodWallType() : WallID.LivingWoodUnsafe;
-        ushort leafBlockTileType = HasSpiritModAndSavannahSeed ? GetSavannaLeafTileType() : TileID.LeafBlock;
-        ushort dirtTileType = HasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
+        ushort woodTileType = WorldGen.notTheBees ? TileID.LivingMahogany : HasSpiritModAndSavannahSeed ? GetSavannaWoodTileType() : TileID.LivingWood;
+        ushort woodWallType = WorldGen.notTheBees ? WallID.LivingWood : HasSpiritModAndSavannahSeed ? GetSavannaWoodWallType() : WallID.LivingWoodUnsafe;
+        ushort leafBlockTileType = WorldGen.notTheBees ? TileID.LivingMahoganyLeaves : HasSpiritModAndSavannahSeed ? GetSavannaLeafTileType() : TileID.LeafBlock;
+        ushort dirtTileType = WorldGen.notTheBees ? TileID.Mud : HasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
         for (int x2 = _dryadEntranceX - distance / 2; x2 < _dryadEntranceX + distance / 2; x2++) {
             for (int y2 = _dryadEntranceY - distance / 2; y2 < _dryadEntranceY + distance / 2; y2++) {
                 if (Main.tile[x2, y2].TileType == PlaceholderTileType) {
@@ -221,7 +225,7 @@ sealed class DryadEntrance : ModSystem {
                 if (Main.tile[x2, y2].TileType == leafBlockTileType) {
                     for (int grassX = x2 - 2; grassX < x2 + 3; grassX++) {
                         for (int grassY = y2 - 2; grassY < y2 + 3; grassY++) {
-                            if (Main.tile[grassX, grassY].TileType == TileID.Grass || (HasSpiritModAndSavannahSeed && Main.tile[grassX, grassY].TileType == GetSavannaGrassTileType())) {
+                            if (Main.tile[grassX, grassY].TileType == TileID.Grass || (WorldGen.notTheBees && Main.tile[grassX, grassY].TileType == TileID.JungleGrass) || (HasSpiritModAndSavannahSeed && Main.tile[grassX, grassY].TileType == GetSavannaGrassTileType())) {
                                 Main.tile[grassX, grassY].TileType = dirtTileType;
                                 WorldGen.SquareTileFrame(grassX, grassY);
                             }
@@ -248,7 +252,7 @@ sealed class DryadEntrance : ModSystem {
                     if (Main.tile[x2, y2].HasTile && Main.tile[x2, y2].TileType == leafBlockTileType &&
                         !Main.tile[x2, y2 + 1].HasTile && genRand.NextBool(2)) {
                         bool flag5 = true;
-                        ushort type7 = HasSpiritModAndSavannahSeed ? GetSavannaVinesTileType() : Main.tile[x2, y2].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines;
+                        ushort type7 = WorldGen.notTheBees ? (ushort)ModContent.TileType<MahoganyVines>() : HasSpiritModAndSavannahSeed ? GetSavannaVinesTileType() : Main.tile[x2, y2].WallType == WallID.FlowerUnsafe ? TileID.VineFlowers : TileID.Vines;
                         for (int num35 = y2; num35 > y2 - 10; num35--) {
                             if (Main.tile[x2, num35].BottomSlope) {
                                 flag5 = false;
@@ -276,7 +280,7 @@ sealed class DryadEntrance : ModSystem {
                         WorldGen.PlaceTile(x2, y2 - 1, 187, mute: true, forced: false, -1, genRand.Next(50, 52));
                     }
                     if (genRand.NextBool(3)) {
-                        WorldGen.PlacePot(x2, y2 - 1, style: genRand.Next(4));
+                        WorldGen.PlacePot(x2, y2 - 1, style: WorldGen.notTheBees ? genRand.Next(8, 11) : genRand.Next(4));
                     }
                 }
             }
@@ -1295,8 +1299,8 @@ sealed class DryadEntrance : ModSystem {
         ushort tileType = PlaceholderTileType;
         ushort wallType = PlaceholderWallType;
         int progressNum = 0;
-        ushort leafBlockTileType = HasSpiritModAndSavannahSeed ? GetSavannaLeafTileType() : TileID.LeafBlock;
-        ushort dirtTileType = HasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
+        ushort leafBlockTileType = WorldGen.notTheBees ? TileID.LivingMahoganyLeaves : HasSpiritModAndSavannahSeed ? GetSavannaLeafTileType() : TileID.LeafBlock;
+        ushort dirtTileType = WorldGen.notTheBees ? TileID.Mud : HasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
         WorldGenHelper.ModifiedTileRunner(i, j, num, (int)num / 3, leafBlockTileType, onIteration: () => {
             WorldGenHelper.TopSizeFactor = () => 0.55f;
             WorldGenHelper.BottomSizeFactor = () => 0.55f;
@@ -1309,7 +1313,7 @@ sealed class DryadEntrance : ModSystem {
             WorldGen.genRand.Next();
             for (int grassX = checkX - 2; grassX < checkX + 3; grassX++) {
                 for (int grassY = checkY - 2; grassY < checkY + 3; grassY++) {
-                    if (Main.tile[grassX, grassY].TileType == TileID.Grass || (HasSpiritModAndSavannahSeed && Main.tile[grassX, grassY].TileType == GetSavannaGrassTileType())) {
+                    if (Main.tile[grassX, grassY].TileType == TileID.Grass || (WorldGen.notTheBees && Main.tile[grassX, grassY].TileType == TileID.JungleGrass) || (HasSpiritModAndSavannahSeed && Main.tile[grassX, grassY].TileType == GetSavannaGrassTileType())) {
                         Main.tile[grassX, grassY].TileType = dirtTileType;
                     }
                 }
@@ -1325,7 +1329,7 @@ sealed class DryadEntrance : ModSystem {
                 while (Vector2D.Distance(startPosition, destination) > 2) {
                     startPosition = Vector2D.Lerp(startPosition, destination, 0.1f);
                     WorldGenHelper.ModifiedTileRunner((int)startPosition.X, (int)startPosition.Y, 4, 10, wallType:
-                        HasSpiritModAndSavannahSeed ? GetSavannaLeafWallType() : WallID.FlowerUnsafe);
+                        WorldGen.notTheBees ? WallID.JungleUnsafe : HasSpiritModAndSavannahSeed ? GetSavannaLeafWallType() : WallID.FlowerUnsafe);
                 }
             }
             return true;
@@ -1511,8 +1515,8 @@ sealed class DryadEntrance : ModSystem {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y3 - origin.Y);
                     if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 1.2f && !Main.tile[x2, y3].HasTile) {
-                        ushort dirtWall = HasSpiritModAndSavannahSeed ? GetSavannaDirtWallType() : WallID.DirtUnsafe;
-                        ushort dirtBlock = HasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
+                        ushort dirtWall = WorldGen.notTheBees ? WallID.MudUnsafe : HasSpiritModAndSavannahSeed ? GetSavannaDirtWallType() : WallID.DirtUnsafe;
+                        ushort dirtBlock = WorldGen.notTheBees ? TileID.Mud : HasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
                         WorldGenHelper.ReplaceWall(x2, y3, dirtWall);
                         WorldGenHelper.ReplaceTile(x2, y3, dirtBlock);
                     }
@@ -1556,8 +1560,8 @@ sealed class DryadEntrance : ModSystem {
                 }
             }
         }
-        ushort tileType2 = HasSpiritModAndSavannahSeed ? GetSavannaLeafTileType() : TileID.LeafBlock;
-        ushort wallType2 = HasSpiritModAndSavannahSeed ? GetSavannaLeafWallType() : WallID.LivingLeaf;
+        ushort tileType2 = WorldGen.notTheBees ? TileID.LivingMahoganyLeaves : HasSpiritModAndSavannahSeed ? GetSavannaLeafTileType() : TileID.LeafBlock;
+        ushort wallType2 = WorldGen.notTheBees ? WallID.LivingWood : HasSpiritModAndSavannahSeed ? GetSavannaLeafWallType() : WallID.LivingLeaf;
         num_ = 6;
         num2_ = 4;
         for (int k = 0; k < 2; k++) {
@@ -1617,7 +1621,7 @@ sealed class DryadEntrance : ModSystem {
                     if (Main.tile[x2, y2].HasTile && Main.tile[x2, y2].TileType == tileType2 && WorldGen.GrowMoreVines(x2, y2) &&
                         !Main.tile[x2, y2 + 1].HasTile && genRand.NextBool(4)) {
                         bool flag5 = true;
-                        ushort type7 = HasSpiritModAndSavannahSeed ? GetSavannaVinesTileType() : TileID.Vines;
+                        ushort type7 = WorldGen.notTheBees ? (ushort)ModContent.TileType<MahoganyVines>() : HasSpiritModAndSavannahSeed ? GetSavannaVinesTileType() : TileID.Vines;
                         for (int num35 = y2; num35 > y2 - 10; num35--) {
                             if (Main.tile[x2, num35].BottomSlope) {
                                 flag5 = false;
@@ -1655,7 +1659,15 @@ sealed class DryadEntrance : ModSystem {
                 }
                 int y3 = y2;
                 if (WorldGen.SolidTile2(x2, y3) && !Main.tile[x2, y3 - 1].HasTile && (Main.tile[x2, y3].TileType == tileType || Main.tile[x2, y3].TileType == tileType2)) {
-                    if (HasSpiritModAndSavannahSeed) {
+                    if (WorldGen.notTheBees) {
+                        int tileType3 = ModContent.TileType<TreeDryadDecoration3_Jungle>();
+                        WorldGen.PlaceTile(x2, y3 - 1, tileType3, mute: true, forced: false, -1, genRand.Next(0, 3));
+                        if (Main.tile[x2, y3 - 1].TileType == tileType3) {
+                            bigPlaced = true;
+                            _bigRubblePosition = new Point(x2, y3 - 1);
+                        }
+                    }
+                    else if (HasSpiritModAndSavannahSeed) {
                         int tileType3 = ModContent.TileType<TreeDryadDecoration3_Spirit>();
                         WorldGen.PlaceTile(x2, y3 - 1, tileType3, mute: true, forced: false, -1, genRand.Next(0, 3));
                         if (Main.tile[x2, y3 - 1].TileType == tileType3) {
@@ -1679,8 +1691,8 @@ sealed class DryadEntrance : ModSystem {
             for (int y2 = num6_; y2 < num7_; y2++) {
                 int y3 = y2;
                 if (WorldGen.SolidTile2(x2, y3) && (Main.tile[x2, y3].TileType == tileType || Main.tile[x2, y3].TileType == tileType2) && WorldGen.SolidTile2(x2 + 1, y3) && genRand.NextBool(3) && (Main.tile[x2 + 1, y3].TileType == tileType || Main.tile[x2 + 1, y3].TileType == tileType2) && !Main.tile[x2, y3 - 1].HasTile && !Main.tile[x2 + 1, y3 - 1].HasTile) {
-                    if (HasSpiritModAndSavannahSeed || (placedIndex % 2 == 0 && (!mediumPlaced1 || (genRand.NextBool(2) && mediumPlaced1)))) {
-                        ushort type = HasSpiritModAndSavannahSeed ? (ushort)ModContent.TileType<TreeDryadDecoration2_Spirit>() : (ushort)ModContent.TileType<TreeDryadDecoration2>();
+                    if ((HasSpiritModAndSavannahSeed || WorldGen.notTheBees) || (placedIndex % 2 == 0 && (!mediumPlaced1 || (genRand.NextBool(2) && mediumPlaced1)))) {
+                        ushort type = WorldGen.notTheBees ? (ushort)ModContent.TileType<TreeDryadDecoration2_Jungle>() : HasSpiritModAndSavannahSeed ? (ushort)ModContent.TileType<TreeDryadDecoration2_Spirit>() : (ushort)ModContent.TileType<TreeDryadDecoration2>();
                         Tile tile = Main.tile[x2, y3 - 1];
                         short frameX = (short)((0 + 2 * genRand.Next(0, 2)) * 18);
                         tile.HasTile = true;
@@ -1719,8 +1731,8 @@ sealed class DryadEntrance : ModSystem {
             for (int y2 = num6_; y2 < num7_; y2++) {
                 int y3 = y2;
                 if (WorldGen.SolidTile2(x2, y3) && (Main.tile[x2, y3].TileType == tileType || Main.tile[x2, y3].TileType == tileType2) && genRand.NextBool(4) && !Main.tile[x2, y3 - 1].HasTile) {
-                    if (HasSpiritModAndSavannahSeed || (placedIndex % 2 == 0 && (!smallPlaced1 || (genRand.NextBool(2) && smallPlaced1)))) {
-                        WorldGen.PlaceSmallPile(x2, y3 - 1, genRand.Next(2), 0, HasSpiritModAndSavannahSeed ? (ushort)ModContent.TileType<TreeDryadDecoration1_Spirit>() : (ushort)ModContent.TileType<TreeDryadDecoration1>());
+                    if ((HasSpiritModAndSavannahSeed || WorldGen.notTheBees) || (placedIndex % 2 == 0 && (!smallPlaced1 || (genRand.NextBool(2) && smallPlaced1)))) {
+                        WorldGen.PlaceSmallPile(x2, y3 - 1, genRand.Next(2), 0, WorldGen.notTheBees ? (ushort)ModContent.TileType<TreeDryadDecoration1_Jungle>() : HasSpiritModAndSavannahSeed ? (ushort)ModContent.TileType<TreeDryadDecoration1_Spirit>() : (ushort)ModContent.TileType<TreeDryadDecoration1>());
                         smallPlaced1 = true;
                         placedIndex++;
                     }
