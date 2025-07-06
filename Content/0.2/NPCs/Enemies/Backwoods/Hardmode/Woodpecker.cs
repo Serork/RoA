@@ -46,7 +46,6 @@ sealed class Woodpecker : ModNPC {
             Walking4,
             Walking5,
             Walking6,
-            Walking7,
             TongueAttack1,
             TongueAttack2,
             TongueAttack3,
@@ -73,7 +72,11 @@ sealed class Woodpecker : ModNPC {
 
         public AnimationFrame Frame {
             readonly get => (AnimationFrame)FrameValue;
-            set => FrameValue = Utils.Clamp<byte>((byte)value, (byte)AnimationFrame.Idle, (byte)AnimationFrame.Count);
+            set {
+                byte frameToSet = Utils.Clamp<byte>((byte)value, (byte)AnimationFrame.Idle, (byte)AnimationFrame.Count);
+                FrameValue = frameToSet;
+                npc.SetFrame(frameToSet, npc.GetFrameHeight());
+            }
         }
 
         public bool StartedPecking {
@@ -122,10 +125,10 @@ sealed class Woodpecker : ModNPC {
             hasClosePlayer = true;
         }
         bool shouldTargetPlayer = hasClosePlayer && (NPC.life < (int)(NPC.lifeMax * 0.8f) || closestPlayer.InModBiome<BackwoodsBiome>());
+        float maxSpeed = 2f + NPC.GetRemainingHealthPercentage() * 2f,
+              acceleration = 0.07f,
+              deceleration = 0.8f;
         void handleXMovement() {
-            float maxSpeed = 2f + NPC.GetRemainingHealthPercentage() * 2f,
-                  acceleration = 0.07f,
-                  deceleration = 0.8f;
             if (NPC.velocity.X < -maxSpeed || NPC.velocity.X > maxSpeed) {
                 if (NPC.IsGrounded()) {
                     NPC.velocity *= deceleration;
@@ -168,12 +171,20 @@ sealed class Woodpecker : ModNPC {
             NPC.DirectTo(GoToTreePosition, updateSpriteDirection: false);
             TreePositionsTaken.Add(GoToTreePosition);
             NPC.spriteDirection = DirectionToTree;
-            Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+            NPC.StepUp();
         }
         void resetTreeInfo() {
             GoToTreePosition = Vector2.Zero;
             TreePosition = Point16.Zero;
             VelocityXFactor = 1f;
+        }
+        void handleTongueAttackState() {
+            WoodpeckerValues woodpeckerValues = new(NPC);
+            if (woodpeckerValues.State != WoodpeckerValues.AIState.TongueAttack) {
+                return;
+            }
+
+            NPC.velocity.X *= deceleration;
         }
         void handleGoingToTreeState() {
             WoodpeckerValues woodpeckerValues = new(NPC);
@@ -232,13 +243,16 @@ sealed class Woodpecker : ModNPC {
                                                         xMovement: handleXMovement,
                                                         shouldBeBored: (npc) => npc.SpeedX() < 1f && npc.Center.DistanceX(npc.GetTargetPlayer().Center) < npc.width);
 
-            if (shouldTargetPlayer && woodpeckerValues.TongueAttackTimer++ > TONGUEATTACKCHECKTIME) {
+            if (NPC.IsGrounded()) {
+                if (shouldTargetPlayer && woodpeckerValues.TongueAttackTimer++ > TONGUEATTACKCHECKTIME) {
+                    woodpeckerValues.ResetAllTimers();
+                    woodpeckerValues.State = WoodpeckerValues.AIState.TongueAttack;
+                }
 
-            }
-
-            if (HaveFreeTreeNearby(out _, out _) && !shouldTargetPlayer && woodpeckerValues.CanGoToTreeAgainTimer-- <= 0f) {
-                woodpeckerValues.ResetAllTimers();
-                woodpeckerValues.State = WoodpeckerValues.AIState.Idle;
+                if (HaveFreeTreeNearby(out _, out _) && !shouldTargetPlayer && woodpeckerValues.CanGoToTreeAgainTimer-- <= 0f) {
+                    woodpeckerValues.ResetAllTimers();
+                    woodpeckerValues.State = WoodpeckerValues.AIState.Idle;
+                }
             }
         }
         void handlePeckingState() {
@@ -259,6 +273,7 @@ sealed class Woodpecker : ModNPC {
             }
         }
 
+        handleTongueAttackState();
         handleGoingToTreeState();
         handleIdleState();
         handleFighterState();
@@ -267,6 +282,21 @@ sealed class Woodpecker : ModNPC {
     }
 
     public override void FindFrame(int frameHeight) {
+        void walkingAnimation() {
+            WoodpeckerValues woodpeckerValues = new(NPC);
+            if (NPC.IsGrounded()) {
+                if (NPC.SpeedX() < 0.5f) {
+                    woodpeckerValues.Frame = WoodpeckerValues.AnimationFrame.Idle;
+                    return;
+                }
+                byte walkingAnimationSpeed = 15;
+                double additionalCounter = MathF.Max(1f, NPC.velocity.Length());
+                woodpeckerValues.Frame = (WoodpeckerValues.AnimationFrame)NPC.AnimateFrame((byte)woodpeckerValues.Frame, (byte)WoodpeckerValues.AnimationFrame.Walking1, (byte)WoodpeckerValues.AnimationFrame.Walking6, walkingAnimationSpeed, (ushort)frameHeight, additionalCounter);
+            }
+            else {
+                woodpeckerValues.Frame = WoodpeckerValues.AnimationFrame.Jump;
+            }
+        }
         void animatePerState() {
             WoodpeckerValues woodpeckerValues = new(NPC);
             switch (woodpeckerValues.State) {
@@ -275,18 +305,7 @@ sealed class Woodpecker : ModNPC {
                     break;
                 case WoodpeckerValues.AIState.Walking:
                 case WoodpeckerValues.AIState.GoingToTree:
-                    if (NPC.IsGrounded()) {
-                        if (NPC.SpeedX() < 0.5f) {
-                            woodpeckerValues.Frame = WoodpeckerValues.AnimationFrame.Idle;
-                            break;
-                        }
-                        byte walkingAnimationSpeed = 15;
-                        double additionalCounter = MathF.Max(1f, NPC.velocity.Length());
-                        woodpeckerValues.Frame = (WoodpeckerValues.AnimationFrame)NPC.AnimateFrame((byte)woodpeckerValues.Frame, (byte)WoodpeckerValues.AnimationFrame.Walking1, (byte)WoodpeckerValues.AnimationFrame.Walking6, walkingAnimationSpeed, (ushort)frameHeight, additionalCounter);
-                    }
-                    else {
-                        woodpeckerValues.Frame = WoodpeckerValues.AnimationFrame.Jump;
-                    }
+                    walkingAnimation();
                     break;
                 case WoodpeckerValues.AIState.Pecking:
                     byte peckingAnimationSpeed = 6;
@@ -296,6 +315,16 @@ sealed class Woodpecker : ModNPC {
                     }
                     if (woodpeckerValues.Frame == WoodpeckerValues.AnimationFrame.Pecking4 && NPC.HasJustChangedFrame()) {
                         HitTree();
+                    }
+                    break;
+                case WoodpeckerValues.AIState.TongueAttack:
+                    if (NPC.SpeedX() < 0.1f) {
+                        byte tongueAttackAnimationSpeed = 10;
+                        woodpeckerValues.Frame = (WoodpeckerValues.AnimationFrame)NPC.AnimateFrame((byte)woodpeckerValues.Frame, (byte)WoodpeckerValues.AnimationFrame.TongueAttack1, (byte)WoodpeckerValues.AnimationFrame.TongueAttack4, tongueAttackAnimationSpeed, (ushort)frameHeight,
+                            resetAnimation: false);
+                    }
+                    else {
+                        walkingAnimation();
                     }
                     break;
             }
@@ -333,13 +362,15 @@ sealed class Woodpecker : ModNPC {
         WoodpeckerValues woodpeckerValues = new(NPC);
         return woodpeckerValues.State != WoodpeckerValues.AIState.Walking &&
                woodpeckerValues.State != WoodpeckerValues.AIState.Pecking &&
-               woodpeckerValues.State != WoodpeckerValues.AIState.GoingToTree;
+               woodpeckerValues.State != WoodpeckerValues.AIState.GoingToTree &&
+               woodpeckerValues.State != WoodpeckerValues.AIState.TongueAttack;
     }
 
     private bool ShouldUpdateDirection() {
         WoodpeckerValues woodpeckerValues = new(NPC);
         return woodpeckerValues.State != WoodpeckerValues.AIState.GoingToTree &&
-               woodpeckerValues.State != WoodpeckerValues.AIState.Pecking;
+               woodpeckerValues.State != WoodpeckerValues.AIState.Pecking &&
+               woodpeckerValues.State != WoodpeckerValues.AIState.TongueAttack;
     }
 
     private bool NoOtherWoodpeckerNearby(Vector2 goToTreePosition) {

@@ -3,12 +3,15 @@
 using System;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
 
 static partial class NPCExtensions {
+    public static void StepUp(this NPC npc) => Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+
     public static Player GetTargetPlayer(this NPC npc) => Main.player[npc.target];
 
     public static float SpeedX(this NPC npc) => MathF.Abs(npc.velocity.X);
@@ -53,7 +56,9 @@ static partial class NPCExtensions {
     }
 
     public static ushort GetCurrentFrame(this NPC npc, ushort frameHeight) => (ushort)(npc.frame.Y / (float)frameHeight);
+    public static ushort GetFrameHeight(this NPC npc) => (ushort)(TextureAssets.Npc[npc.type].Height() / (float)Main.npcFrameCount[npc.type]);
     public static void SetFrame(this NPC npc, byte frame, ushort frameHeight) => npc.frame.Y = frame * frameHeight;
+    public static void SetFrameCount(this NPC npc, byte frameCount) => Main.npcFrameCount[npc.type] = frameCount;
 
     public static void UpdateDirectionBasedOnVelocity(this NPC npc, bool updateSpriteDirection = true) {
         npc.direction = npc.velocity.X.GetDirection();
@@ -303,8 +308,6 @@ static partial class NPCExtensions {
             Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
         }
     }
-
-    public static void SetFrameCount(this NPC npc, byte frameCount) => Main.npcFrameCount[npc.type] = frameCount;
 
     public readonly struct NPCHitInfo(ushort lifeMax = 5, ushort damage = 0, ushort defense = 0, float knockBackResist = 1f) {
         public readonly ushort LifeMax = lifeMax;
