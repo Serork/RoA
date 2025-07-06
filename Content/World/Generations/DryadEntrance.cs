@@ -30,7 +30,14 @@ using Terraria.WorldBuilding;
 
 namespace RoA.Content.World.Generations;
 
-sealed class DryadEntrance : ModSystem {
+sealed class DryadEntrance : ModSystem, IPostSetupContent {
+    void IPostSetupContent.PostSetupContent() {
+        TileHelper.MergeWith(TileID.Mud, TileID.LivingMahoganyLeaves);
+        if (ModLoader.HasMod("SpiritReforged")) {
+            TileHelper.MergeWith(GetSavannaLeafTileType(), GetSavannaDirtTileType());
+        }
+    }
+
     private static int _dryadEntranceX, _dryadEntranceY, _dryadEntrancemCave;
     private static Point _bigRubblePosition = Point.Zero;
     internal static bool _dryadStructureGenerated;
@@ -697,7 +704,8 @@ sealed class DryadEntrance : ModSystem {
                     if (Math.Sqrt(num8 * num8 + num9 * num9) < num2 * 0.4 && !Main.tile[k, l].HasTile) {
                         Tile tile = Main.tile[k, l];
                         tile.HasTile = true;
-                        Main.tile[k, l].TileType = 0;
+                        ushort dirtTileType = WorldGen.notTheBees ? TileID.Mud : HasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
+                        Main.tile[k, l].TileType = dirtTileType;
                     }
                 }
             }
@@ -844,7 +852,8 @@ sealed class DryadEntrance : ModSystem {
                         (ignoreWalls == null || !ignoreWalls.Contains(Main.tile[k, l].WallType))) {
                         Tile tile = Main.tile[k, l];
                         tile.HasTile = true;
-                        Main.tile[k, l].TileType = 0;
+                        ushort dirtTileType = WorldGen.notTheBees ? TileID.Mud : HasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
+                        Main.tile[k, l].TileType = dirtTileType;
                     }
                 }
             }
