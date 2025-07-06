@@ -769,7 +769,19 @@ sealed class DryadEntrance : ModSystem {
                         ushort tileType = GetSavannaDirtTileType();
                         ushort wallType = GetSavannaDirtWallType();
                         Main.tile[k, l].TileType = tileType;
-                        if (!TileHelper.HasNoDuplicateNeighbors(k, l, tileType)) {
+                        bool check = false;
+                        for (int grassX = k - 1; grassX < k + 2; grassX++) {
+                            if (check) {
+                                break;
+                            }
+                            for (int grassY = l - 1; grassY < l + 2; grassY++) {
+                                if (!Main.tile[grassX, grassY].HasTile) {
+                                    check = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!check) {
                             Main.tile[k, l].WallType = wallType;
                         }
                     }
@@ -1539,7 +1551,21 @@ sealed class DryadEntrance : ModSystem {
                     if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 1.2f && !Main.tile[x2, y3].HasTile) {
                         ushort dirtWall = WorldGen.notTheBees ? WallID.MudUnsafe : HasSpiritModAndSavannahSeed ? GetSavannaDirtWallType() : WallID.DirtUnsafe;
                         ushort dirtBlock = WorldGen.notTheBees ? TileID.Mud : HasSpiritModAndSavannahSeed ? GetSavannaDirtTileType() : TileID.Dirt;
-                        WorldGenHelper.ReplaceWall(x2, y3, dirtWall);
+                        bool check = false;
+                        for (int grassX = x2 - 1; grassX < x2 + 2; grassX++) {
+                            if (check) {
+                                break;
+                            }
+                            for (int grassY = y3 - 1; grassY < y3 + 2; grassY++) {
+                                if (!Main.tile[grassX, grassY].HasTile) {
+                                    check = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!check) {
+                            WorldGenHelper.ReplaceWall(x2, y3, dirtWall);
+                        }
                         WorldGenHelper.ReplaceTile(x2, y3, dirtBlock);
                     }
                 }
@@ -1552,7 +1578,21 @@ sealed class DryadEntrance : ModSystem {
                     double num9 = Math.Abs((double)x2 - origin.X);
                     double num10 = Math.Abs((double)y3 - origin.Y);
                     if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.8) {
-                        WorldGenHelper.ReplaceWall(x2, y3, wallType);
+                        bool check = false;
+                        for (int grassX = x2 - 1; grassX < x2 + 2; grassX++) {
+                            if (check) {
+                                break;
+                            }
+                            for (int grassY = y3 - 1; grassY < y3 + 2; grassY++) {
+                                if (!Main.tile[grassX, grassY].HasTile) {
+                                    check = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!check) {
+                            WorldGenHelper.ReplaceWall(x2, y3, wallType);
+                        }
                         WorldGenHelper.ReplaceTile(x2, y3, tileType);
                     }
                 }
