@@ -10,5 +10,3 @@ includeSource = true
 
 buildIgnore = *.csproj, *.sln, *.user, obj\*, bin\*, .vs\*, Properties\*, .git\*, .gitattributes, .gitignore
 includePDB = true
-
-modReferences = RoAMusic

@@ -5,7 +5,6 @@ using RoA.Common;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
 using RoA.Core;
-using RoA.Core.Utility;
 
 using System.Runtime.CompilerServices;
 
@@ -13,7 +12,6 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Personalities;
 using Terraria.Graphics.Capture;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Biomes.Backwoods;
@@ -133,9 +131,7 @@ sealed partial class BackwoodsBiome : ModBiome {
 
     public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface");
 
-    public override int Music => RoA.MusicAvailable ? MusicID.OverworldDay : 
-        BackwoodsFogHandler.IsFogActive ? Helper.GetMusicFromMusicMod("Fog").Value : /*Main.IsItDay() ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") :*/
-        Helper.GetMusicFromMusicMod("ThicketNight").Value;
+    public override int Music => BackwoodsFogHandler.IsFogActive ? MusicLoader.GetMusicSlot(ResourceManager.Music + "Fog") : /*Main.IsItDay() ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") :*/ MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight");
 
     public override string MapBackground => ResourceManager.BackwoodsTextures + "DruidBiomeMapBG";
 

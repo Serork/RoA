@@ -24,14 +24,9 @@ sealed partial class RoA : Mod {
 
     private static RoA? _instance;
 
-    internal Mod _musicMod = null;
-
     public RoA() {
         _instance = this;
     }
-
-    internal static Mod MusicMod => _instance._musicMod;
-    internal static bool MusicAvailable => MusicMod is not null;
 
     public static RoA Instance => _instance ??= ModContent.GetInstance<RoA>();
 
@@ -44,9 +39,6 @@ sealed partial class RoA : Mod {
     }
 
     public override void Load() {
-        _musicMod = null;
-        ModLoader.TryGetMod("RoAMusic", out _musicMod);
-
         if (!Main.dedServ) {
             Main.RunOnMainThread(() => {
                 _brilliantBouquetTextureForRecipeBrowser = Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<BrilliantBouquet>()).Texture, ReLogic.Content.AssetRequestMode.ImmediateLoad), 24, 24);

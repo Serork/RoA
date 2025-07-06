@@ -2,7 +2,6 @@
 
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
-using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Audio;
@@ -61,7 +60,7 @@ sealed partial class Lothor : ModNPC {
         NPC.value = Item.buyPrice(gold: 6);
 
         if (!Main.dedServ) {
-            Music = RoA.MusicAvailable ? Helper.GetMusicFromMusicMod("Lothor").Value : MusicID.Boss3;
+            Music = MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor");
         }
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
