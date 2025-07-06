@@ -1181,8 +1181,10 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                     double num9 = Math.Abs((double)k - vector2D.X);
                     double num10 = Math.Abs((double)l - vector2D.Y);
                     if (Math.Sqrt(num9 * num9 + num10 * num10) < num2 * 0.4) {
-                        Tile tile2 = Main.tile[k, l];
-                        tile2.HasTile = false;
+                        if (HasSpiritModAndSavannahSeed || (TileID.Sets.CanBeClearedDuringGeneration[Main.tile[k, l].TileType] && Main.tile[k, l].TileType != TileID.Sand)) {
+                            Tile tile2 = Main.tile[k, l];
+                            tile2.HasTile = false;
+                        }
                     }
                 }
             }

@@ -244,7 +244,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         texture ??= TextureAssets.Tile[Type].Value;
 
         Main.spriteBatch.Draw(texture,
-                              new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0) + 2) + zero,
+                              new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0)) + zero,
                               new Rectangle(frameX, frameY, 16, height),
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
