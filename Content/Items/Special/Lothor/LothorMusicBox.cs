@@ -1,4 +1,5 @@
 using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -14,7 +15,7 @@ sealed class LothorMusicBox : ModItem {
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor"), ModContent.ItemType<LothorMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.LothorMusicBox>());
+        MusicLoader.AddMusicBox(Mod, RoA.MusicAvailable ? Helper.GetMusicFromMusicMod("Lothor").Value : MusicID.Boss3, ModContent.ItemType<LothorMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.LothorMusicBox>());
     }
 
     public override void SetDefaults() {

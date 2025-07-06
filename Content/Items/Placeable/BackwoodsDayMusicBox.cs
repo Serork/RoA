@@ -1,4 +1,5 @@
 using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -14,7 +15,7 @@ sealed class BackwoodsDayMusicBox : ModItem {
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight"), ModContent.ItemType<BackwoodsDayMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>());
+        MusicLoader.AddMusicBox(Mod, RoA.MusicAvailable ? Helper.GetMusicFromMusicMod("ThicketNight").Value : MusicID.OverworldDay, ModContent.ItemType<BackwoodsDayMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>());
     }
 
     public override void SetDefaults() {
