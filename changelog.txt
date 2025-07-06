@@ -1,1 +1,1 @@
-- Added missing gore sprites specific to the Dryad Coccoon's Jungle and Savanna versions
+- Fixed the Dryad Cocoon cave destroying sand blocks
