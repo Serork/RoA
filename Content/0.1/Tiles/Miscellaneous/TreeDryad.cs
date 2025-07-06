@@ -89,7 +89,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
                     Rectangle glowClip = glowFrame.GetSourceRectangle(glowTexture);
                     Vector2 glowPosition = topLeft.ToWorldCoordinates() + new Vector2(9f, 1f);
                     Vector2 glowOrigin = glowClip.Size() / 2f;
-                    Color glowColor = Color.White * 0.8f;
+                    Color glowColor = Color.White * 0.4f;
                     bool turnedLeft = _frameX <= 18;
                     if (turnedLeft) {
                         glowPosition.X -= 18f;
