@@ -1077,7 +1077,7 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                         Main.tile[k, l].TileType = savannaGrassTileType;
                     }
                 }
-                if (Main.tile[k, l].TileType == savannaGrassTileType) {
+                if (Main.tile[k, l].TileType == savannaGrassTileType && WorldGen.genRand.NextBool(2)) {
                     int i = k, j = l - 1;
                     if (WorldGen.genRand.NextBool(8)) //Surface pots
                         WorldGen.PlaceTile(i, j, TileID.Pots, true, true, style: 7);
