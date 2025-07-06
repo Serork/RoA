@@ -1,1 +1,1 @@
-- Slightly changed the way Dryad Entrance cave generated
+- Added missing gore sprites specific to the Dryad Coccoon's Jungle and Savanna versions
