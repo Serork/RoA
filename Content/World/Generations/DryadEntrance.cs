@@ -38,6 +38,27 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
         }
     }
 
+    public override void Load() {
+        On_WorldGen.CaveOpenater += On_WorldGen_CaveOpenater;
+        On_WorldGen.Cavinator += On_WorldGen_Cavinator;
+    }
+
+    private void On_WorldGen_Cavinator(On_WorldGen.orig_Cavinator orig, int i, int j, int steps) {
+        if (ModLoader.HasMod("SpiritReforged") && i == GenVars.mCaveX[_dryadEntrancemCave] && j == GenVars.mCaveY[_dryadEntrancemCave]) {
+            return;
+        }
+
+        orig(i, j, steps);
+    }
+
+    private void On_WorldGen_CaveOpenater(On_WorldGen.orig_CaveOpenater orig, int i, int j) {
+        if (ModLoader.HasMod("SpiritReforged") && i == GenVars.mCaveX[_dryadEntrancemCave] && j == GenVars.mCaveY[_dryadEntrancemCave]) {
+            return;
+        }
+
+        orig(i, j);
+    }
+
     private static int _dryadEntranceX, _dryadEntranceY, _dryadEntrancemCave;
     private static Point _bigRubblePosition = Point.Zero;
     internal static bool _dryadStructureGenerated;
@@ -879,7 +900,7 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
         progress.Message = Lang.gen[21].Value;
         if (!ModLoader.HasMod("Remnants")) {
             for (int num749 = 0; num749 < GenVars.numMCaves; num749++) {
-                if (!ModLoader.HasMod("SpiritReforged")) {
+                if (!ModLoader.HasMod("SpiritReforged") || num749 == _dryadEntrancemCave) {
                     if (num749 == _dryadEntrancemCave) {
                         int i3 = GenVars.mCaveX[num749];
                         int j5 = GenVars.mCaveY[num749];

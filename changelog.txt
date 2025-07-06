@@ -1,6 +1,1 @@
-- Dryad Cocoon structure generation has been updated with extra foliage and pots around the entrance, making it easier to discover
-- Dryad Coccoon now glows when breakable and displays a hammer emote when approached by a player
-- Added support for the Not the bees! seed and the Spirit Reforged Savannah seed (including unique versions of the Dryad Coccoon)
-- Fixed certain cave structures from Spirit Reforged getting broken
-- Improved generation speed for all RoA structures
-- Increased the world depth limit for Druid Souls spawning from Grim Druids
+- Fixed not being to generate new Dryad Structure entrance in a default world with the Spirit Reforged enabled
