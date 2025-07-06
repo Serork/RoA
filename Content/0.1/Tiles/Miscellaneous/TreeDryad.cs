@@ -12,6 +12,7 @@ using RoA.Content.Emotes;
 using RoA.Content.World.Generations;
 using RoA.Core;
 using RoA.Core.Data;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using System;
@@ -50,8 +51,8 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
 
     void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition) {
         uint seedForPseudoRandomness = (uint)(tilePosition.GetHashCode() + tilePosition.GetHashCode());
-        float lightStrengthFactor = Helper.Wave(0.75f, 1f, 2f, Helper.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
-        float lightStrengthMainFactor = Helper.PseudoRandRange(ref seedForPseudoRandomness, 0.25f, 0.6f);
+        float lightStrengthFactor = Helper.Wave(0.75f, 1f, 2f, MathUtils.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
+        float lightStrengthMainFactor = MathUtils.PseudoRandRange(ref seedForPseudoRandomness, 0.25f, 0.6f);
         if (AbleToBeDestroyed) {
             Vector2 tileWorldPosition = tilePosition.ToWorldCoordinates();
             int i = tilePosition.X, j = tilePosition.Y;
@@ -119,12 +120,12 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
             Vector2 rayOrigin = Utils.Top(rayClip);
             for (int k = 0; k < RAYCOUNT; k++) {
                 uint seedForPseudoRandomness = (uint)((tilePosition.GetHashCode() + tilePosition.GetHashCode()) * (k + 1));
-                float rayRotation = (float)k / RAYCOUNT * MathHelper.TwoPi + Helper.PseudoRandRange(ref seedForPseudoRandomness, -MathHelper.TwoPi, MathHelper.TwoPi);
+                float rayRotation = (float)k / RAYCOUNT * MathHelper.TwoPi + MathUtils.PseudoRandRange(ref seedForPseudoRandomness, -MathHelper.TwoPi, MathHelper.TwoPi);
                 float maxRayExtraScale = 0.3f;
-                float opacityFactor = Helper.Wave(0.5f, 1f, 2f, Helper.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
-                Vector2 rayScale = new(0.5f + Helper.PseudoRandRange(ref seedForPseudoRandomness, -maxRayExtraScale, maxRayExtraScale), 0.8f + Helper.PseudoRandRange(ref seedForPseudoRandomness, -maxRayExtraScale * 2f, maxRayExtraScale * 2f));
+                float opacityFactor = Helper.Wave(0.5f, 1f, 2f, MathUtils.PseudoRandRange(ref seedForPseudoRandomness, 0f, MathHelper.Pi));
+                Vector2 rayScale = new(0.5f + MathUtils.PseudoRandRange(ref seedForPseudoRandomness, -maxRayExtraScale, maxRayExtraScale), 0.8f + MathUtils.PseudoRandRange(ref seedForPseudoRandomness, -maxRayExtraScale * 2f, maxRayExtraScale * 2f));
                 rayScale.Y *= opacityFactor;
-                Color rayColor = Color.Lerp(Color.Green, Color.White, Helper.PseudoRandRange(ref seedForPseudoRandomness, 1f)) * colorOpacity;
+                Color rayColor = Color.Lerp(Color.Green, Color.White, MathUtils.PseudoRandRange(ref seedForPseudoRandomness, 1f)) * colorOpacity;
                 rayColor *= opacityFactor;
                 Main.spriteBatch.Draw(rayTexture, rayPosition, DrawInfo.Default with {
                     Scale = rayScale,
