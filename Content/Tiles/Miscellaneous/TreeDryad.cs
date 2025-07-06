@@ -194,7 +194,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
 
     public override bool CreateDust(int i, int j, ref int type) {
         if (DryadEntrance.HasSpiritModAndSavannahSeed) {
-            if (Main.rand.NextBool(5)) {
+            if (Main.rand.NextBool(4) && AbleToBeDestroyed) {
                 type = DustID.JunglePlants;
             }
             else {
@@ -202,14 +202,14 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
             }
         }
         else if (Main.notTheBeesWorld) {
-            if (Main.rand.NextBool(5)) {
+            if (Main.rand.NextBool(4) && AbleToBeDestroyed) {
                 type = DustID.JungleGrass;
             }
             else {
                 type = DustID.RichMahogany;
             }
         }
-        else if (Main.rand.NextBool(5)) {
+        else if (Main.rand.NextBool(4) && AbleToBeDestroyed) {
             type = DustID.Grass;
         }
 
