@@ -858,19 +858,27 @@ sealed class DryadEntrance : ModSystem {
         progress.Message = Lang.gen[21].Value;
         if (!ModLoader.HasMod("Remnants")) {
             for (int num749 = 0; num749 < GenVars.numMCaves; num749++) {
-                if (!ModLoader.HasMod("SpiritReforged") || num749 == _dryadEntrancemCave) {
-                    int i3 = GenVars.mCaveX[num749];
-                    int j5 = GenVars.mCaveY[num749];
-                    WorldGen.CaveOpenater(i3, j5);
-                    WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
+                if (!ModLoader.HasMod("SpiritReforged")) {
+                    if (num749 == _dryadEntrancemCave) {
+                        int i3 = GenVars.mCaveX[num749];
+                        int j5 = GenVars.mCaveY[num749];
+                        CaveOpenater2(i3, j5);
+                        Cavinator2(i3, j5, WorldGen.genRand.Next(40, 50));
+                    }
+                    else {
+                        int i3 = GenVars.mCaveX[num749];
+                        int j5 = GenVars.mCaveY[num749];
+                        WorldGen.CaveOpenater(i3, j5);
+                        WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
+                    }
                 }
             }
         }
         else if (!HasSpiritModAndSavannahSeed) {
             int i3 = GenVars.mCaveX[_dryadEntrancemCave];
             int j5 = GenVars.mCaveY[_dryadEntrancemCave];
-            WorldGen.CaveOpenater(i3, j5);
-            WorldGen.Cavinator(i3, j5, WorldGen.genRand.Next(40, 50));
+            CaveOpenater2(i3, j5);
+            Cavinator2(i3, j5, WorldGen.genRand.Next(40, 50));
         }
 
         if (!HasSpiritModAndSavannahSeed) {
@@ -1091,14 +1099,13 @@ sealed class DryadEntrance : ModSystem {
         var genRand = WorldGen.genRand;
         double num = genRand.Next(7, 15);
         double num2 = num;
-        int num3 = 1;
-        if (genRand.Next(2) == 0)
-            num3 = -1;
+        int num3 = (i > Main.maxTilesX / 2).ToDirectionInt();
 
         Vector2D vector2D = default(Vector2D);
         vector2D.X = i;
         vector2D.Y = j;
         int num4 = genRand.Next(20, 40);
+        int num42 = num4;
         Vector2D vector2D2 = default(Vector2D);
         vector2D2.Y = (double)genRand.Next(10, 20) * 0.01;
         vector2D2.X = num3;
@@ -1134,7 +1141,11 @@ sealed class DryadEntrance : ModSystem {
 
             vector2D += vector2D2;
             vector2D2.X += (double)genRand.Next(-10, 11) * 0.05;
-            vector2D2.Y += (double)genRand.Next(-10, 11) * 0.05;
+            if (num4 < num42 * 0.75f) {
+                vector2D2.Y += (double)genRand.Next(-5, 11) * 0.1;
+            }
+            else {
+            }
             if (vector2D2.X > (double)num3 + 0.5)
                 vector2D2.X = (double)num3 + 0.5;
 
@@ -1167,6 +1178,7 @@ sealed class DryadEntrance : ModSystem {
         vector2D.X = i;
         vector2D.Y = j;
         int num4 = 100;
+        int num42 = num4;
         Vector2D vector2D2 = default(Vector2D);
         vector2D2.Y = 0.0;
         vector2D2.X = num3;
@@ -1206,7 +1218,12 @@ sealed class DryadEntrance : ModSystem {
 
             vector2D += vector2D2;
             vector2D2.X += (double)genRand.Next(-10, 11) * 0.05;
-            vector2D2.Y += (double)genRand.Next(-10, 11) * 0.05;
+            if (num4 < num42 * 0.75f) {
+                vector2D2.Y += (double)genRand.Next(-10, 11) * 0.05;
+            }
+            else {
+                vector2D2.Y += (double)genRand.Next(-10, 11) * 0.025;
+            }
             if (vector2D2.X > (double)num3 + 0.5)
                 vector2D2.X = (double)num3 + 0.5;
 
