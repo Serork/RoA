@@ -1137,11 +1137,17 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
         }
     }
 
-    public static void Cavinator2(int i, int j, int steps) {
+    public static void Cavinator2(int i, int j, int steps, bool randomDirection = false) {
         var genRand = WorldGen.genRand;
         double num = genRand.Next(7, 15);
         double num2 = num;
         int num3 = (i > Main.maxTilesX / 2).ToDirectionInt();
+
+        if (randomDirection) {
+            num3 = 1;
+            if (genRand.Next(2) == 0)
+                num3 = -1;
+        }
 
         Vector2D vector2D = default(Vector2D);
         vector2D.X = i;
@@ -1202,7 +1208,7 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
         }
 
         if (steps > 0 && (double)(int)vector2D.Y < Main.rockLayer + 50.0)
-            Cavinator2((int)vector2D.X, (int)vector2D.Y, steps - 1);
+            Cavinator2((int)vector2D.X, (int)vector2D.Y, steps - 1, true);
     }
 
     public static void CaveOpenater2(int i, int j) {
