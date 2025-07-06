@@ -168,6 +168,7 @@ sealed class Woodpecker : ModNPC {
             NPC.DirectTo(GoToTreePosition, updateSpriteDirection: false);
             TreePositionsTaken.Add(GoToTreePosition);
             NPC.spriteDirection = DirectionToTree;
+            Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
         }
         void resetTreeInfo() {
             GoToTreePosition = Vector2.Zero;
