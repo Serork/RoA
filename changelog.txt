@@ -1,1 +1,1 @@
-- Fixed not being to generate the new Dryad Structure entrance in a default world with the Spirit Reforged enabled
+- Fixed not being able to generate the new Dryad Structure entrance in a regular world with Spirit Reforged enabled
