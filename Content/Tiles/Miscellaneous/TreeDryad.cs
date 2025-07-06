@@ -232,7 +232,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
             frameY += 58;
         }
         if (Main.notTheBeesWorld) {
-            frameY += 118;
+            frameY += 116;
         }
         int height = flag ? 22 : 16;
         int frameX = tile.TileFrameX;
