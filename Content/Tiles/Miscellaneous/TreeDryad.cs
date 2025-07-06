@@ -28,28 +28,6 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
-class LightHack : GlobalWall {
-    public override void ModifyLight(int i, int j, int type, ref float r, ref float g, ref float b) {
-        float lightHack = Ease.SineOut((Utils.GetLerpValue(0f, 0.8f, LightHackSystem.LightHack, true)));
-        if (lightHack > 0f) {
-            r = Helper.Clamp01(lightHack);
-            g = Helper.Clamp01(lightHack);
-            b = Helper.Clamp01(lightHack);
-        }
-    }
-}
-
-class LightHackSystem : ModSystem {
-    public static float LightHack;
-
-    public override void PostUpdateWorld() {
-        if (Keyboard.GetState().IsKeyDown(Keys.F5)) {
-            LightHack = 1f;
-        }
-        LightHack = Helper.Approach(LightHack, 0f, 0.0035f);
-    }
-}
-
 sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.IPostDraw {
     private static byte RAYCOUNT => 8;
 
