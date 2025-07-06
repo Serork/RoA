@@ -257,14 +257,27 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         Vector2 position = new Point(i, j).ToWorldCoordinates();
         {
             int dustType = DustID.WoodFurniture;
+            if (DryadEntrance.HasSpiritModAndSavannahSeed) {
+                dustType = DustID.t_PearlWood;
+            }
+            else if (Main.notTheBeesWorld) {
+                dustType = DustID.RichMahogany;
+            }
             for (int k = 0; k < 20; k++) {
                 Dust.NewDust(position, 36, 54, dustType, 2.5f * Main.rand.NextFloatDirection(), 2.5f * Main.rand.NextFloatDirection());
             }
             if (!Main.dedServ) {
                 Vector2 offset = new(-12f, 4f);
-                Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset, Vector2.Zero, "TreeDryadGore1".GetGoreType());
-                Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset + new Vector2(8, 0), Vector2.Zero, "TreeDryadGore2".GetGoreType());
-                Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset + new Vector2(16, 0), Vector2.Zero, "TreeDryadGore3".GetGoreType());
+                int variant = 1;
+                if (DryadEntrance.HasSpiritModAndSavannahSeed) {
+                    variant = 2;
+                }
+                else if (Main.notTheBeesWorld) {
+                    variant = 3;
+                }
+                Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset, Vector2.Zero, $"TreeDryadGore1_{variant}".GetGoreType());
+                Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset + new Vector2(8, 0), Vector2.Zero, $"TreeDryadGore2_{variant}".GetGoreType());
+                Gore.NewGore(NPC.GetSource_TownSpawn(), position + offset + new Vector2(16, 0), Vector2.Zero, $"TreeDryadGore3_{variant}".GetGoreType());
             }
         }
         int whoAmI = NPC.NewNPC(NPC.GetSource_TownSpawn(), (int)position.X + 10, (int)position.Y + 40, NPCID.Dryad);
