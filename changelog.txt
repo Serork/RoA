@@ -1,1 +1,1 @@
-- Fixed the Dryad Cocoon cave destroying sand blocks
+- Fixed the Dryad Cocoon's cave destroying sand blocks
