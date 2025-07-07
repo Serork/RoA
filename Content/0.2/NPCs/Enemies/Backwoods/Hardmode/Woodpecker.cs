@@ -28,6 +28,7 @@ sealed class Woodpecker : ModNPC {
     private static float PECKINGCHECKTIME => 20f;
     private static float TONGUEATTACKCHECKTIME => 120f;
     private static ushort TRIGGERAREASIZE => 1000;
+    private static float MINDISTANCEREQUIREDTOSTARTONGUEATTACK => 600f;
 
     public ref struct WoodpeckerValues(NPC npc) {
         public enum AIState : byte {
@@ -181,7 +182,7 @@ sealed class Woodpecker : ModNPC {
                 }
             }
         }
-        void directToTree() {
+        void goToChosenTree() {
             handleXMovement();
             float stoppingDistance = 10f;
             float distance = NPC.Center.DistanceX(GoToTreePosition);
@@ -199,7 +200,7 @@ sealed class Woodpecker : ModNPC {
             NPC.spriteDirection = DirectionToTree;
             NPC.StepUp();
         }
-        void resetTreeInfo() {
+        void resetChosenTreeStoredData() {
             GoToTreePosition = Vector2.Zero;
             TreePosition = Point16.Zero;
             VelocityXFactor = 1f;
@@ -245,7 +246,7 @@ sealed class Woodpecker : ModNPC {
                 woodpeckerValues.State = WoodpeckerValues.AIState.Walking;
             }
 
-            directToTree();
+            goToChosenTree();
 
             if (shouldTargetPlayer || !NoOtherWoodpeckerNearby(GoToTreePosition) || IsTreeNotDestroyed()) {
                 woodpeckerValues.ShouldBePeckingTimer = 0f;
@@ -254,7 +255,7 @@ sealed class Woodpecker : ModNPC {
             }
 
             bool shouldBePecking = woodpeckerValues.ShouldBePeckingTimer++ >= PECKINGCHECKTIME;
-            if (IsNearTree() && shouldBePecking) {
+            if (ReachedTree() && shouldBePecking) {
                 woodpeckerValues.ShouldBePeckingTimer = 0f;
                 woodpeckerValues.State = WoodpeckerValues.AIState.Pecking;
             }
@@ -282,7 +283,7 @@ sealed class Woodpecker : ModNPC {
                 return;
             }
 
-            resetTreeInfo();
+            resetChosenTreeStoredData();
 
             NPCExtensions.FighterAI.ApplyFighterAI(NPC, ref woodpeckerValues.CanBeBusyWithActionTimer,
                                                         ref woodpeckerValues.EncouragementTimer, 
@@ -300,7 +301,7 @@ sealed class Woodpecker : ModNPC {
                     NPC.netUpdate = true;
                 }
 
-                if (shouldTargetPlayer && NPC.GetTargetPlayer().Distance(NPC.Center) < 600f && woodpeckerValues.TongueAttackTimer++ > TimeToAttack) {
+                if (shouldTargetPlayer && NPC.GetTargetPlayer().Distance(NPC.Center) < MINDISTANCEREQUIREDTOSTARTONGUEATTACK && woodpeckerValues.TongueAttackTimer++ > TimeToAttack) {
                     woodpeckerValues.ResetAllTimers();
                     woodpeckerValues.State = WoodpeckerValues.AIState.TongueAttack;
 
@@ -319,7 +320,7 @@ sealed class Woodpecker : ModNPC {
                 return;
             }
 
-            directToTree();
+            goToChosenTree();
             if (woodpeckerValues.StartedPecking && woodpeckerValues.Frame == WoodpeckerValues.AnimationFrame.Idle) {
                 woodpeckerValues.State = WoodpeckerValues.AIState.GoingToTree;
             }
@@ -422,7 +423,7 @@ sealed class Woodpecker : ModNPC {
 
     private bool IsTooFarFromTree() => Vector2.Distance(GoToTreePosition, NPC.Center) > TileHelper.TileSize * 5;
     private bool IsTreeNotDestroyed() => !WorldGenHelper.ActiveTile(TreePosition - new Point16(0, 4));
-    private bool IsNearTree() => NPC.Center.X == GoToTreePosition.X;
+    private bool ReachedTree() => NPC.Center.X == GoToTreePosition.X;
 
     private void HitTree() {
         SoundEngine.PlaySound(SoundID.Dig, NPC.Center);
@@ -482,7 +483,7 @@ sealed class Woodpecker : ModNPC {
             int x = (int)NPC.Center.X / 16 + checkX, y = (int)NPC.Center.Y / 16;
             Tile checkTile = WorldGenHelper.GetTileSafely(x, y);
             bool isBigTree = false;
-            bool isTrunk = (checkTile.ActiveTile(TileID.Trees) || checkTile.ActiveTile(TileID.PalmTree)) &&
+            bool isTrunk = (checkTile.ActiveTile(TileID.Trees) || checkTile.ActiveTile(TileID.PalmTree) || checkTile.ActiveTile(TileID.VanityTreeSakura) || checkTile.ActiveTile(TileID.VanityTreeYellowWillow)) &&
                            !(checkTile.TileFrameX >= 1 * 22 && checkTile.TileFrameX <= 2 * 22 &&
                              checkTile.TileFrameY >= 6 * 22 && checkTile.TileFrameY <= 8 * 22) &&
                            !(checkTile.TileFrameX == 3 * 22 &&
@@ -525,7 +526,7 @@ sealed class Woodpecker : ModNPC {
             }
         }
         else {
-            for (int checkX = -checkXDistance; checkX <= -checkXDistance; checkX++) {
+            for (int checkX = -checkXDistance; checkX <= checkXDistance; checkX++) {
                 if (anyTree(checkX, out goToTreePosition, out treePosition)) {
                     haveTreeNearby = true;
                     break;
