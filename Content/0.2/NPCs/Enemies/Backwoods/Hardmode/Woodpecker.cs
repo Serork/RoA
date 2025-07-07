@@ -690,12 +690,12 @@ sealed class WoodpeckerTongue : ModNPC {
     }
 
     private List<Vector2> GetRagPoints() {
+        List<Vector2> result = [];
         if (Rags == null) {
-            return [];
+            return result;
         }
 
         WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
-        List<Vector2> drawPoints = [];
         Vector2 previousPosition = Vector2.Zero;
         int count = Rags.points.Count;
         for (int index = 0; index < count; index++) {
@@ -713,11 +713,11 @@ sealed class WoodpeckerTongue : ModNPC {
                 Vector2 tongueStartPosition = point - velocity * 0.7f;
                 previousPosition = tongueStartPosition;
             }
-            drawPoints.Add(previousPosition);
+            result.Add(previousPosition);
             previousPosition += velocity;
         }
 
-        return drawPoints;
+        return result;
     }
     private Rectangle GetClipPerSegment(int index, int count) {
         Rectangle sourceRectangle;
