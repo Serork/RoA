@@ -103,11 +103,11 @@ sealed class TrackedEntitiesSystem : ModSystem {
         return whoAmI;
     }
 
-    public static IEnumerable<Projectile> GetTrackedProjectile<T>(int checkOwnerWhoAmI) where T : ModProjectile {
+    public static IEnumerable<Projectile> GetTrackedProjectile<T>(Predicate<Projectile>? filter = null) where T : ModProjectile {
         Type projectileType = typeof(T);
         if (TrackedEntitiesByType.TryGetValue(projectileType, out List<Entity>? value)) {
             foreach (Projectile trackedProjectile in value.Cast<Projectile>()) {
-                if (trackedProjectile.owner != checkOwnerWhoAmI) {
+                if (filter != null && filter.Invoke(trackedProjectile)) {
                     continue;
                 }
                 yield return trackedProjectile;
@@ -115,10 +115,13 @@ sealed class TrackedEntitiesSystem : ModSystem {
         }
     }
 
-    public static IEnumerable<NPC> GetTrackedNPC<T>() where T : ModNPC {
+    public static IEnumerable<NPC> GetTrackedNPC<T>(Predicate<NPC>? filter = null) where T : ModNPC {
         Type npcType = typeof(T);
         if (TrackedEntitiesByType.TryGetValue(npcType, out List<Entity>? value)) {
             foreach (NPC trackedNPC in value.Cast<NPC>()) {
+                if (filter != null && filter.Invoke(trackedNPC)) {
+                    continue;
+                }
                 yield return trackedNPC;
             }
         }

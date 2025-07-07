@@ -455,11 +455,7 @@ sealed class Woodpecker : ModNPC {
 
     private bool NoOtherWoodpeckerNearby(Vector2 goToTreePosition) {
         bool noOtherWoodpeckerNearby = true;
-        foreach (NPC woodpeckerCheckNPC in TrackedEntitiesSystem.GetTrackedNPC<Woodpecker>()) {
-            if (woodpeckerCheckNPC.SameAs(NPC)) {
-                continue;
-            }
-
+        foreach (NPC woodpeckerCheckNPC in TrackedEntitiesSystem.GetTrackedNPC<Woodpecker>((checkNPC) => checkNPC.SameAs(NPC))) {
             if (new WoodpeckerValues(woodpeckerCheckNPC).IsPecking &&
                 woodpeckerCheckNPC.Center.DistanceX(goToTreePosition) < TileHelper.TileSize * 2) {
                 noOtherWoodpeckerNearby = false;

@@ -32,6 +32,7 @@ sealed class WreathHandler : ModPlayer {
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
     public static bool IsWreathCharged(Player player) => GetWreathStats(player).IsFull1;
     public static float GetWreathChargeProgress(Player player) => GetWreathStats(player).ActualProgress4;
+    public static float GetWreathChargeProgress_ForArmorGlow(Player player) => GetWreathStats(player).ActualProgress5;
 
     public short YAdjustAmountInPixels;
 

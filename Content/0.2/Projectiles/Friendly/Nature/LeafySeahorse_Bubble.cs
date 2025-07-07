@@ -213,11 +213,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
         void absorbBubbles() {
             BubbleValues bubbleValues = new(Projectile);
             BubbleValues.BubbleSizeType size = bubbleValues.SizeType;
-            foreach (Projectile otherBubble in TrackedEntitiesSystem.GetTrackedProjectile<LeafySeahorse_Bubble>(Projectile.owner)) {
-                if (otherBubble.whoAmI == Projectile.whoAmI) {
-                    continue;
-                }
-
+            foreach (Projectile otherBubble in TrackedEntitiesSystem.GetTrackedProjectile<LeafySeahorse_Bubble>((checkProjectile) => checkProjectile.owner != Projectile.owner || checkProjectile.whoAmI == Projectile.whoAmI)) {
                 Rectangle otherBubbleHitBox = otherBubble.getRect();
                 otherBubbleHitBox.Inflate(2, 2);
                 Rectangle hitbox = Projectile.getRect();

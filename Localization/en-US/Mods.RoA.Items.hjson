@@ -1973,3 +1973,18 @@ LeafySeahorse: {
 	DisplayName: Leafy Seahorse
 	Tooltip: ""
 }
+
+FlamewardenHood: {
+	DisplayName: Flamewarden Hood
+	Tooltip: ""
+}
+
+FlamewardenMantle: {
+	DisplayName: Flamewarden Mantle
+	Tooltip: ""
+}
+
+FlamewardenPants: {
+	DisplayName: Flamewarden Pants
+	Tooltip: ""
+}

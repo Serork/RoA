@@ -90,7 +90,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 
     private static void LoadGlowMasks() {
         foreach (ModItem item in RoA.Instance.GetContent<ModItem>()) {
-            AutoloadGlowMaskAttribute attribute = item?.GetType().GetAttribute<AutoloadGlowMaskAttribute>();
+            AutoloadGlowMaskAttribute? attribute = item?.GetType().GetAttribute<AutoloadGlowMaskAttribute>();
             if (attribute != null) {
                 string modItemTexture = item.Texture;
                 Asset<Texture2D> texture = ModContent.Request<Texture2D>(modItemTexture + attribute.Requirement, AssetRequestMode.ImmediateLoad);
