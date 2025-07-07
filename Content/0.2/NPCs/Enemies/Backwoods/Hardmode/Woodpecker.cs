@@ -295,6 +295,9 @@ sealed class Woodpecker : ModNPC {
             if (NPC.IsGrounded()) {
                 if (Helper.SinglePlayerOrServer && TimeToAttack <= 0f) {
                     TimeToAttack = Main.rand.NextFloat(TONGUEATTACKCHECKTIME * 0.75f, TONGUEATTACKCHECKTIME * 1.5f);
+                    if (Main.expertMode) {
+                        TimeToAttack = MathHelper.Lerp(TimeToAttack, TimeToAttack * 0.5f, NPC.GetRemainingHealthPercentage());
+                    }
                     NPC.netUpdate = true;
                 }
 
