@@ -61,7 +61,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
         spriteBatch.Draw(Texture, position, null, color * 0.2f, MathHelper.PiOver2 + Rotation, origin, Scale * 0.6f, effects, 0f);
         spriteBatch.Draw(Texture, position, null, color * 0.2f, Rotation, origin, Scale * 0.6f, effects, 0f);
         //Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TexturesPerType + "Light").Value;
-        //spriteBatch.Draw(texture, position, null, color, Rotation, texture.Size() / 2f, Scale * 0.6f, effects, 0f);
+        //spriteBatch.DrawSelf(texture, position, null, color, Rotation, texture.Size() / 2f, Scale * 0.6f, effects, 0f);
         spriteBatch.EndBlendState();
     }
 }

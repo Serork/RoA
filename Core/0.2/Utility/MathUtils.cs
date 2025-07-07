@@ -5,6 +5,8 @@ using System;
 namespace RoA.Core.Utility;
 
 static class MathUtils {
+    public static int GetDirectionTo(this Vector2 vector2, Vector2 destination) => (destination.X - vector2.X).GetDirection();
+
     public static float SineBumpEasing(float amount, float degree = 1f) => (float)Math.Sin(amount * MathHelper.Pi);
 
     public static float Clamp01(float value) => value <= 0f ? 0f : value >= 1f ? 1f : value;

@@ -78,7 +78,7 @@ sealed class MoonFlower : ModItem {
         //foreach (Item item in player.miscEquips) {
         //    if (item.stack > 0 && item.type == type) {
         //        float scale_ = Main.inventoryScale;
-        //        spriteBatch.Draw(glowmask, position, null,
+        //        spriteBatch.DrawSelf(glowmask, position, null,
         //        color, 0f, glowmask.Size() / 2f, new Vector2(scale_ *= 1f), SpriteEffects.None, 0);
         //    }
         //}

@@ -2,6 +2,7 @@
 
 using ReLogic.Utilities;
 
+using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Miscellaneous;
 
 using System;
@@ -11,11 +12,27 @@ using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
 
 static partial class TileHelper {
+    public static ushort GetTreeDustType(Point16 position) {
+        ushort backwoodsBigTreeTileType = (ushort)ModContent.TileType<BackwoodsBigTree>();
+        return WorldGenHelper.GetTileSafely(position).TileType == backwoodsBigTreeTileType ? (ushort)TileLoader.GetTile(backwoodsBigTreeTileType).DustType : GetTreeKillDustType(position);
+    }
+
+    public static bool IsTreeTrunk(Tile tile) =>
+                            (tile.ActiveTile(TileID.Trees) || tile.ActiveTile(TileID.PalmTree) || tile.ActiveTile(TileID.VanityTreeSakura) || tile.ActiveTile(TileID.VanityTreeYellowWillow)) &&
+                           !(tile.TileFrameX >= 1 * 22 && tile.TileFrameX <= 2 * 22 &&
+                             tile.TileFrameY >= 6 * 22 && tile.TileFrameY <= 8 * 22) &&
+                           !(tile.TileFrameX == 3 * 22 &&
+                             tile.TileFrameY >= 0 && tile.TileFrameY <= 2 * 22) &&
+                           !(tile.TileFrameX == 4 * 22 &&
+                             tile.TileFrameY >= 3 * 22 && tile.TileFrameY <= 5 * 22) &&
+                             tile.TileFrameY <= 198;
+
     public static ushort GetTreeKillDustType(Point16 position) => GetTreeKillDustType(position.X, position.Y);
     public static ushort GetTreeKillDustType(int i, int j) {
         Tile tileCache = Main.tile[i, j];

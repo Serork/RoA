@@ -97,7 +97,7 @@ sealed class HereticHood : ModItem {
         //private class HereticVisualsLegsGlowing : PlayerDrawLayer {
         //    public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Torso);
 
-        //    protected override void Draw(ref PlayerDrawSet drawInfo) {
+        //    protected override void DrawSelf(ref PlayerDrawSet drawInfo) {
         //        if (drawInfo.hideEntirePlayer) {
         //            return;
         //        }

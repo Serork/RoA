@@ -427,7 +427,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
                 }
             }
             Draw(spriteBatch, items, -10, (LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player) as WreathSlot).Type, new Vector2(x, y), default, TextureAssets.InventoryBack8.Value);
-            //ItemSlot.Draw(spriteBatch, items, -10, WreathSlot.GetSlot(player).Type, new Vector2(x, y), default);
+            //ItemSlot.DrawSelf(spriteBatch, items, -10, WreathSlot.GetSlot(player).Type, new Vector2(x, y), default);
         }
         y = (int)(Main.instance.invBottom + (3 + 0.5f) * 56f * Main.inventoryScale);
         if (data.Dye != null) {

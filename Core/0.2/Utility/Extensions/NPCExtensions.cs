@@ -71,7 +71,7 @@ static partial class NPCExtensions {
     public static bool IsFacingRight(this NPC npc) => npc.direction > 0;
     public static bool IsGrounded(this NPC npc) => npc.velocity.Y == 0f;
 
-    public static void DirectTo(this NPC npc, Vector2 destination, bool updateSpriteDirection = true) => DirectTo(npc, (destination.X - npc.Center.X).GetDirection(), updateSpriteDirection);
+    public static void DirectTo(this NPC npc, Vector2 destination, bool updateSpriteDirection = true) => DirectTo(npc, destination.GetDirectionTo(npc.Center), updateSpriteDirection);
     public static void DirectTo(this NPC npc, int direction, bool updateSpriteDirection = true) {
         npc.direction = (direction > 0).ToDirectionInt();
         if (updateSpriteDirection) {

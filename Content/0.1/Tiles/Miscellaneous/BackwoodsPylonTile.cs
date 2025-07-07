@@ -171,7 +171,7 @@ sealed class BackwoodsPylonTile : ModPylon {
         color = Color.Lerp(color, Color.White, 0.8f);
         spriteBatch.Draw(crystalTexture.Value, drawingPosition - Main.screenPosition, crystalFrame, color * 0.7f, 0f, origin, 1f, SpriteEffects.None, 0f);
 
-        // Draw the shadow effect for the crystal
+        // DrawSelf the shadow effect for the crystal
         float scale = (float)Math.Sin(Main.GlobalTimeWrappedHourly * ((float)Math.PI * 2f) / 1f) * 0.2f + 0.8f;
         Color shadowColor = pylonShadowColor * scale;
         for (float shadowPos = 0f; shadowPos < 1f; shadowPos += 1f / 6f) {

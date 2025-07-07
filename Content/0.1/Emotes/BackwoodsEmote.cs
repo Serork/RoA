@@ -25,7 +25,7 @@ public class BackwoodsEmote : ModEmoteBubble {
         // This is the frame rectangle for the bubble in emotes texture.
         Rectangle bubbleFrame = bubbleTexture.Frame(8, 39, EmoteBubble.IsFullyDisplayed ? 1 : 0);
 
-        // Draw the bubble background.
+        // DrawSelf the bubble background.
         spriteBatch.Draw(bubbleTexture, position, bubbleFrame, Color.White, 0f, origin, 1f, spriteEffects, 0f);
 
         // If the emote bubble isn't fully displayed (bubble pop-up animation is being displayed),
@@ -34,7 +34,7 @@ public class BackwoodsEmote : ModEmoteBubble {
             return false;
         }
 
-        // Draw the emote.
+        // DrawSelf the emote.
         spriteBatch.Draw(texture, position, frame, Color.White, 0f, origin, 1f, spriteEffects, 0f);
 
         return false; // Stop vanilla drawing code.
@@ -50,7 +50,7 @@ public class BackwoodsEmote : ModEmoteBubble {
         // This is the frame rectangle for the bubble in emotes texture.
         Rectangle bubbleFrame = uiEmoteButton.BubbleTexture.Frame(8, 39, 1, 0);
 
-        // Draw everything
+        // DrawSelf everything
         spriteBatch.Draw(uiEmoteButton.BubbleTexture.Value, position, bubbleFrame, Color.White, 0f, origin, 1f, SpriteEffects.None, 0f);
         spriteBatch.Draw(uiEmoteButton.EmoteTexture.Value, position, frame, Color.White, 0f, origin, 1f, SpriteEffects.None, 0f);
         spriteBatch.Draw(uiEmoteButton.BorderTexture.Value, position - Vector2.One * 2f, null, borderColor, 0f, origin, 1f, SpriteEffects.None, 0f);

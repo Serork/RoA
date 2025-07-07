@@ -87,7 +87,7 @@
 //            Vector2 position = beaconPosition + Vector2.UnitX - origin - Vector2.UnitY * sourceRectangle.Height;
 //            Color color = Color.White;
 //            Vector2 drawPosition = position - Main.screenPosition;
-//            spriteBatch.Draw(texture, drawPosition, frame.GetSourceRectangle(texture), color);
+//            spriteBatch.DrawSelf(texture, drawPosition, frame.GetSourceRectangle(texture), color);
 //            texture = ModContent.Request<Texture2D>(ResourceManager.GUITextures + "Beacon_Icons_Gems").Value;
 //            Player player = Main.LocalPlayer;
 //            if (!hasGemInIt) {
@@ -95,7 +95,7 @@
 //                    Beacon.UpdateVariants();
 //                }
 //                frame = frame.With((byte)Beacon.VariantToShow, 0);
-//                spriteBatch.Draw(texture, drawPosition, frame.GetSourceRectangle(texture), color.MultiplyRGBA(Color.Black with { A = 100 }));
+//                spriteBatch.DrawSelf(texture, drawPosition, frame.GetSourceRectangle(texture), color.MultiplyRGBA(Color.Black with { A = 100 }));
 //            }
 //            gemType = beaconTE.GetItemID();
 //            Vector2 mousePosition = Main.MousePosition;

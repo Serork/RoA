@@ -242,7 +242,7 @@ sealed class LothorEnrageMonolith : ModTile {
                 Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
                 spriteBatch.Draw(highlightTexture, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f),
                     new Rectangle(frameX, frameY - (isOn ? frameHeight : 0), 16, height), highlightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                //Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, _rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+                //Main.spriteBatch.DrawSelf(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, _rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
             }
         }
 

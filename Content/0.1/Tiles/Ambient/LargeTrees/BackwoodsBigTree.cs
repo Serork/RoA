@@ -699,7 +699,7 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
         //Vector2 zero = Vector2.Zero;
         //Microsoft.Xna.Framework.Rectangle value = new Microsoft.Xna.Framework.Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16);
         //if (tile.TileType == GetSelfType()) {
-        //    Main.spriteBatch.Draw(TextureAssets.Tile[tile.TileType].Value, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, value, Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+        //    Main.spriteBatch.DrawSelf(TextureAssets.Tile[tile.TileType].Value, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, value, Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
         //}
 
         if (IsTop(i, j)) {
