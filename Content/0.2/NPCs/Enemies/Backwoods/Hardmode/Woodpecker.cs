@@ -20,8 +20,6 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WoodpeckerTongue;
-
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
 [NPCTracked]
@@ -112,6 +110,7 @@ sealed class Woodpecker : ModNPC {
     public int DirectionToTree => GoToTreePosition == Vector2.Zero ? 0 : (TreePosition.ToWorldCoordinates().X - NPC.Center.X).GetDirection();
     public ushort TreeDustType => WorldGenHelper.GetTileSafely(TreePosition).TileType == ModContent.TileType<BackwoodsBigTree>() ? (ushort)TileLoader.GetTile(ModContent.TileType<BackwoodsBigTree>()).DustType : TileHelper.GetTreeKillDustType(TreePosition);
 
+    public bool HasTongue => Tongue != null && Tongue.active;
     public bool IsTongueNotActive {
         get {
             if (Tongue == null) {
@@ -301,7 +300,7 @@ sealed class Woodpecker : ModNPC {
                     NPC.netUpdate = true;
                 }
 
-                if (shouldTargetPlayer && woodpeckerValues.TongueAttackTimer++ > TimeToAttack) {
+                if (shouldTargetPlayer && NPC.GetTargetPlayer().Distance(NPC.Center) < 600f && woodpeckerValues.TongueAttackTimer++ > TimeToAttack) {
                     woodpeckerValues.ResetAllTimers();
                     woodpeckerValues.State = WoodpeckerValues.AIState.TongueAttack;
 
@@ -338,6 +337,17 @@ sealed class Woodpecker : ModNPC {
         handleFighterState();
         handlePeckingState();
         handleAirborneState();
+    }
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        if (!HasTongue) {
+            goto End;
+        }
+
+        Tongue!.As<WoodpeckerTongue>().Draw(spriteBatch);
+
+        End:
+        return base.PreDraw(spriteBatch, screenPos, drawColor);
     }
 
     public override void FindFrame(int frameHeight) {
@@ -644,7 +654,22 @@ sealed class WoodpeckerTongue : ModNPC {
         setAttackTime();
     }
 
-    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) => false;
+
+    public override void SendExtraAI(BinaryWriter writer) => writer.Write(TimeToAttack);
+    public override void ReceiveExtraAI(BinaryReader reader) => TimeToAttack = reader.ReadSingle();
+
+    public override void HitEffect(NPC.HitInfo hit) {
+        WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
+        NPC woodpeckerThatIBelong = woodpeckerTongueValues.WoodpeckerThatIBelong!;
+        hit.Damage = (int)(hit.Damage * 1.5f);
+        woodpeckerThatIBelong.StrikeNPC(hit);
+        if (Main.netMode != NetmodeID.SinglePlayer) {
+            NetMessage.SendStrikeNPC(woodpeckerThatIBelong, hit);
+        }
+    }
+
+    public void Draw(SpriteBatch spriteBatch) {
         Texture2D texture = TextureAssets.Npc[Type].Value;
         WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
         NPC woodpeckerThatIBelong = woodpeckerTongueValues.WoodpeckerThatIBelong!;
@@ -660,27 +685,14 @@ sealed class WoodpeckerTongue : ModNPC {
             float rotation = position.DirectionTo(nextPosition).ToRotation() + MathHelper.PiOver2;
             Vector2 origin = new(sourceRectangle.Width / 2f, sourceRectangle.Height);
             SpriteEffects flip = woodpeckerThatIBelong.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            Main.spriteBatch.Draw(texture, position, DrawInfo.Default with {
+            Color color = Lighting.GetColor(position.ToTileCoordinates());
+            spriteBatch.Draw(texture, position, DrawInfo.Default with {
                 Clip = sourceRectangle,
                 Origin = origin,
                 Rotation = rotation,
-                ImageFlip = flip
+                ImageFlip = flip,
+                Color = color
             });
-        }
-
-        return false;
-    }
-
-    public override void SendExtraAI(BinaryWriter writer) => writer.Write(TimeToAttack);
-    public override void ReceiveExtraAI(BinaryReader reader) => TimeToAttack = reader.ReadSingle();
-
-    public override void HitEffect(NPC.HitInfo hit) {
-        WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
-        NPC woodpeckerThatIBelong = woodpeckerTongueValues.WoodpeckerThatIBelong!;
-        hit.Damage = (int)(hit.Damage * 1.5f);
-        woodpeckerThatIBelong.StrikeNPC(hit);
-        if (Main.netMode != NetmodeID.SinglePlayer) {
-            NetMessage.SendStrikeNPC(woodpeckerThatIBelong, hit);
         }
     }
 
