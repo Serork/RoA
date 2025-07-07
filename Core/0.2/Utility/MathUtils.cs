@@ -5,7 +5,7 @@ using System;
 namespace RoA.Core.Utility;
 
 static class MathUtils {
-    public static int GetDirectionTo(this Vector2 vector2, Vector2 destination) => (destination.X - vector2.X).GetDirection();
+    public static int GetDirectionTo(this Vector2 vector2, Vector2 destination) => (vector2.X - destination.X).GetDirection();
 
     public static float SineBumpEasing(float amount, float degree = 1f) => (float)Math.Sin(amount * MathHelper.Pi);
 
