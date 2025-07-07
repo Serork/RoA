@@ -1,19 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Projectiles;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Tiles.Ambient.LargeTrees;
+using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WoodpeckerTongue;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
@@ -21,10 +28,10 @@ namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 sealed class Woodpecker : ModNPC {
     private static byte FRAMECOUNT => 16;
     private static float PECKINGCHECKTIME => 20f;
-    private static float TONGUEATTACKCHECKTIME => 60f;
+    private static float TONGUEATTACKCHECKTIME => 120f;
     private static ushort TRIGGERAREASIZE => 1000;
 
-    private ref struct WoodpeckerValues(NPC npc) {
+    public ref struct WoodpeckerValues(NPC npc) {
         public enum AIState : byte {
             Idle,
             Pecking,
@@ -61,6 +68,7 @@ sealed class Woodpecker : ModNPC {
 
         public ref float StateValue = ref npc.ai[0];
         public ref float TongueAttackTimer = ref npc.ai[1];
+        public ref float TongueSpawnedValue = ref npc.ai[2];
         public ref float ShouldBePeckingTimer = ref npc.ai[3];
         public ref float StartedPeckingValue = ref npc.ai[3];
         public ref float TargetClosestTimer = ref npc.ai[3];
@@ -84,6 +92,11 @@ sealed class Woodpecker : ModNPC {
             set => StartedPeckingValue = value.ToInt();
         }
 
+        public bool ShouldTongueBeSpawned {
+            readonly get => TongueSpawnedValue == 1f;
+            set => TongueSpawnedValue = value.ToInt();
+        }
+
         public readonly bool IsPecking => State == AIState.GoingToTree || State == AIState.Pecking || (State == AIState.Idle && ShouldBePeckingTimer > 0f);
 
         public void ResetAllTimers() => TongueAttackTimer = CanBeBusyWithActionTimer = CanGoToTreeAgainTimer = EncouragementTimer = TargetClosestTimer = 0f;
@@ -93,9 +106,23 @@ sealed class Woodpecker : ModNPC {
     public Point16 TreePosition;
     public float VelocityXFactor = 1f;
     public HashSet<Vector2> TreePositionsTaken = [];
+    public NPC? Tongue;
+    public float TimeToAttack;
 
     public int DirectionToTree => GoToTreePosition == Vector2.Zero ? 0 : (TreePosition.ToWorldCoordinates().X - NPC.Center.X).GetDirection();
     public ushort TreeDustType => WorldGenHelper.GetTileSafely(TreePosition).TileType == ModContent.TileType<BackwoodsBigTree>() ? (ushort)TileLoader.GetTile(ModContent.TileType<BackwoodsBigTree>()).DustType : TileHelper.GetTreeKillDustType(TreePosition);
+
+    public bool IsTongueNotActive {
+        get {
+            if (Tongue == null) {
+                return false;
+            }
+            WoodpeckerTongue.WoodpeckerTongueValues woodpeckerTongueValues = new(Tongue);
+            return !Tongue.active || woodpeckerTongueValues.TongueAttackProgress > 0.5f && woodpeckerTongueValues.Progress < 0.625f;
+        }
+    }
+
+    public Vector2 TonguePosition => NPC.Top + new Vector2(0f, -16f);
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
@@ -125,7 +152,7 @@ sealed class Woodpecker : ModNPC {
             hasClosePlayer = true;
         }
         bool shouldTargetPlayer = hasClosePlayer && (NPC.life < (int)(NPC.lifeMax * 0.8f) || closestPlayer.InModBiome<BackwoodsBiome>());
-        float maxSpeed = 2f + NPC.GetRemainingHealthPercentage() * 2f,
+        float maxSpeed = 2f + NPC.GetRemainingHealthPercentage() * 1.5f,
               acceleration = 0.07f,
               deceleration = 0.8f;
         void handleXMovement() {
@@ -182,6 +209,28 @@ sealed class Woodpecker : ModNPC {
             WoodpeckerValues woodpeckerValues = new(NPC);
             if (woodpeckerValues.State != WoodpeckerValues.AIState.TongueAttack) {
                 return;
+            }
+
+            if (IsTongueNotActive) {
+                if (woodpeckerValues.Frame == WoodpeckerValues.AnimationFrame.TongueAttack1 && !woodpeckerValues.ShouldTongueBeSpawned) {
+                    Tongue = null;
+
+                    woodpeckerValues.ResetAllTimers();
+                    woodpeckerValues.State = WoodpeckerValues.AIState.Idle;
+                }
+            }
+            else {
+                if (woodpeckerValues.Frame == WoodpeckerValues.AnimationFrame.TongueAttack2 && !woodpeckerValues.ShouldTongueBeSpawned) {
+                    woodpeckerValues.ShouldTongueBeSpawned = true;
+                }
+            }
+
+            if (!NPC.HasValidTarget) {
+                woodpeckerValues.State = WoodpeckerValues.AIState.Idle;
+            }
+            else if (Helper.SinglePlayerOrServer && woodpeckerValues.Frame == WoodpeckerValues.AnimationFrame.TongueAttack3 && woodpeckerValues.ShouldTongueBeSpawned) {
+                Tongue = NPC.NewNPCDirect(NPC.GetSource_FromAI(), NPC.Center, (ushort)ModContent.NPCType<WoodpeckerTongue>(), ai0: NPC.whoAmI);
+                woodpeckerValues.ShouldTongueBeSpawned = false;
             }
 
             NPC.velocity.X *= deceleration;
@@ -244,9 +293,16 @@ sealed class Woodpecker : ModNPC {
                                                         shouldBeBored: (npc) => npc.SpeedX() < 1f && npc.Center.DistanceX(npc.GetTargetPlayer().Center) < npc.width);
 
             if (NPC.IsGrounded()) {
-                if (shouldTargetPlayer && woodpeckerValues.TongueAttackTimer++ > TONGUEATTACKCHECKTIME) {
+                if (Helper.SinglePlayerOrServer && TimeToAttack <= 0f) {
+                    TimeToAttack = Main.rand.NextFloat(TONGUEATTACKCHECKTIME * 0.75f, TONGUEATTACKCHECKTIME * 1.5f);
+                    NPC.netUpdate = true;
+                }
+
+                if (shouldTargetPlayer && woodpeckerValues.TongueAttackTimer++ > TimeToAttack) {
                     woodpeckerValues.ResetAllTimers();
                     woodpeckerValues.State = WoodpeckerValues.AIState.TongueAttack;
+
+                    TimeToAttack = 0f;
                 }
 
                 if (HaveFreeTreeNearby(out _, out _) && !shouldTargetPlayer && woodpeckerValues.CanGoToTreeAgainTimer-- <= 0f) {
@@ -285,7 +341,7 @@ sealed class Woodpecker : ModNPC {
         void walkingAnimation() {
             WoodpeckerValues woodpeckerValues = new(NPC);
             if (NPC.IsGrounded()) {
-                if (NPC.SpeedX() < 0.5f) {
+                if (NPC.SpeedX() < 0.1f) {
                     woodpeckerValues.Frame = WoodpeckerValues.AnimationFrame.Idle;
                     return;
                 }
@@ -293,7 +349,7 @@ sealed class Woodpecker : ModNPC {
                 double additionalCounter = MathF.Max(1f, NPC.velocity.Length());
                 woodpeckerValues.Frame = (WoodpeckerValues.AnimationFrame)NPC.AnimateFrame((byte)woodpeckerValues.Frame, (byte)WoodpeckerValues.AnimationFrame.Walking1, (byte)WoodpeckerValues.AnimationFrame.Walking6, walkingAnimationSpeed, (ushort)frameHeight, additionalCounter);
             }
-            else {
+            else if (NPC.velocity.Y < 0f || NPC.velocity.Y > 1f) {
                 woodpeckerValues.Frame = WoodpeckerValues.AnimationFrame.Jump;
             }
         }
@@ -318,10 +374,16 @@ sealed class Woodpecker : ModNPC {
                     }
                     break;
                 case WoodpeckerValues.AIState.TongueAttack:
-                    if (NPC.SpeedX() < 0.1f) {
+                    if (NPC.SpeedX() < 0.5f) {
                         byte tongueAttackAnimationSpeed = 10;
-                        woodpeckerValues.Frame = (WoodpeckerValues.AnimationFrame)NPC.AnimateFrame((byte)woodpeckerValues.Frame, (byte)WoodpeckerValues.AnimationFrame.TongueAttack1, (byte)WoodpeckerValues.AnimationFrame.TongueAttack4, tongueAttackAnimationSpeed, (ushort)frameHeight,
-                            resetAnimation: false);
+                        if (!woodpeckerValues.ShouldTongueBeSpawned && IsTongueNotActive) {
+                            woodpeckerValues.Frame = (WoodpeckerValues.AnimationFrame)NPC.AnimateFrame((byte)woodpeckerValues.Frame, (byte)WoodpeckerValues.AnimationFrame.TongueAttack4, (byte)WoodpeckerValues.AnimationFrame.TongueAttack1, tongueAttackAnimationSpeed, (ushort)frameHeight,
+                                resetAnimation: false);
+                        }
+                        else {
+                            woodpeckerValues.Frame = (WoodpeckerValues.AnimationFrame)NPC.AnimateFrame((byte)woodpeckerValues.Frame, (byte)WoodpeckerValues.AnimationFrame.TongueAttack1, (byte)WoodpeckerValues.AnimationFrame.TongueAttack4, tongueAttackAnimationSpeed, (ushort)frameHeight,
+                                resetAnimation: false);
+                        }
                     }
                     else {
                         walkingAnimation();
@@ -330,6 +392,9 @@ sealed class Woodpecker : ModNPC {
             }
         }
         void setDirection() {
+            if (new WoodpeckerValues(NPC).State == WoodpeckerValues.AIState.TongueAttack) {
+                NPC.DirectTo(Main.player[NPC.target].Center);
+            }
             if (ShouldUpdateDirection()) {
                 NPC.UpdateDirectionBasedOnVelocity();
             }
@@ -338,6 +403,9 @@ sealed class Woodpecker : ModNPC {
         setDirection();
         animatePerState();
     }
+
+    public override void SendExtraAI(BinaryWriter writer) => writer.Write(TimeToAttack);
+    public override void ReceiveExtraAI(BinaryReader reader) => TimeToAttack = reader.ReadSingle();
 
     private bool IsTooFarFromTree() => Vector2.Distance(GoToTreePosition, NPC.Center) > TileHelper.TileSize * 5;
     private bool IsTreeNotDestroyed() => !WorldGenHelper.ActiveTile(TreePosition - new Point16(0, 4));
@@ -365,7 +433,6 @@ sealed class Woodpecker : ModNPC {
                woodpeckerValues.State != WoodpeckerValues.AIState.GoingToTree &&
                woodpeckerValues.State != WoodpeckerValues.AIState.TongueAttack;
     }
-
     private bool ShouldUpdateDirection() {
         WoodpeckerValues woodpeckerValues = new(NPC);
         return woodpeckerValues.State != WoodpeckerValues.AIState.GoingToTree &&
@@ -388,7 +455,6 @@ sealed class Woodpecker : ModNPC {
         }
         return noOtherWoodpeckerNearby;
     }
-
     private bool HaveFreeTreeNearby(out Vector2 goToTreePosition, out Point16 treePosition) {
         bool result = false;
         bool haveTreeNearby = false;
@@ -465,5 +531,274 @@ sealed class Woodpecker : ModNPC {
             result = false;
         }
         return result;
+    }
+}
+
+// rags are taken from calamity fables
+sealed class WoodpeckerTongue : ModNPC {
+    public ref struct WoodpeckerTongueValues(NPC npc) {
+        public ref float InitOnSpawnValue = ref npc.localAI[0];
+
+        public ref float WoodpeckerWhoAmIValue = ref npc.ai[0];
+        public ref float RagsSine = ref npc.ai[1];
+        public ref float AttackTimer = ref npc.ai[2];
+        public ref float ProgressValue = ref npc.ai[3];
+
+        public bool Init {
+            readonly get => InitOnSpawnValue == 1f;
+            set => InitOnSpawnValue = value.ToInt();
+        }
+
+        public float Progress {
+            readonly get => ProgressValue;
+            set => ProgressValue = MathUtils.Clamp01(value);
+        }
+
+        public readonly int WoodpeckerWhoAmIThatIBelong => (int)WoodpeckerWhoAmIValue;
+        public readonly NPC? WoodpeckerThatIBelong => WoodpeckerWhoAmIThatIBelong >= 0 ? Main.npc[WoodpeckerWhoAmIThatIBelong] : null;
+
+        public readonly float TongueAttackProgress => Utils.Remap(AttackTimer, TimeToAttack / 3f, TimeToAttack, 0f, 1f) * Utils.Remap(AttackTimer, TimeToAttack * 1.115f, TimeToAttack * 1.445f, 1f, 0f);
+
+        private readonly float TimeToAttack => npc.As<WoodpeckerTongue>().TimeToAttack;
+    }
+
+    public VerletNet? Rags;
+    public float TimeToAttack;
+
+    public override void SetDefaults() {
+        NPC.SetSizeValues(40);
+        NPC.DefaultToEnemy(new NPCExtensions.NPCHitInfo(500, 40, 16, 0f));
+
+        NPC.aiStyle = -1;
+
+        NPC.immortal = true;
+        NPC.HideStrikeDamage = true;
+    }
+
+    public override void AI() {
+        void init() {
+            WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
+            if (!woodpeckerTongueValues.Init) {
+                woodpeckerTongueValues.Init = true;
+                NPC woodpeckerThatIBelong = woodpeckerTongueValues.WoodpeckerThatIBelong!;
+                NPC.defense = woodpeckerThatIBelong.defense / 2;
+                NPC.velocity = Vector2.One.RotatedBy(woodpeckerThatIBelong.direction == -1 ? MathHelper.Pi : -MathHelper.PiOver2) * 40f;
+            }
+        }
+        void checkActive() {
+            WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
+            NPC? woodpeckerThatIBelong = woodpeckerTongueValues.WoodpeckerThatIBelong;
+            if (woodpeckerThatIBelong == null || !woodpeckerThatIBelong.active) {
+                NPC.KillNPC();
+                return;
+            }
+
+            if (woodpeckerTongueValues.AttackTimer <= TimeToAttack) {
+                woodpeckerTongueValues.Progress = Helper.Approach(woodpeckerTongueValues.Progress, 1f, 0.05f);
+                if (woodpeckerTongueValues.Progress >= 1f) {
+                    woodpeckerTongueValues.AttackTimer += 1f;
+                }
+            }
+            else {
+                woodpeckerTongueValues.Progress = Helper.Approach(woodpeckerTongueValues.Progress, 0f, 0.05f);
+                if (woodpeckerTongueValues.Progress <= 0f) {
+                    NPC.KillNPC();
+                }
+            }
+
+            List<Vector2> ragPoints = GetRagPoints();
+            Vector2 lastPoint = ragPoints[ragPoints.Count - 1];
+            if (!Utils.HasNaNs(lastPoint)) {
+                NPC.Center = lastPoint - NPC.velocity;
+                return;
+            }
+
+            NPC.Center = woodpeckerThatIBelong.As<Woodpecker>().TonguePosition;
+        }
+        void setAttackTime() {
+            WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
+            if (Helper.SinglePlayerOrServer && TimeToAttack <= 0f) {
+                TimeToAttack = Main.rand.NextFloat(160f, 240f);
+                if (Main.expertMode) {
+                    TimeToAttack = MathHelper.Lerp(TimeToAttack, TimeToAttack * 0.5f, woodpeckerTongueValues.WoodpeckerThatIBelong!.GetRemainingHealthPercentage());
+                }
+                woodpeckerTongueValues.RagsSine = 30;
+                NPC.netUpdate = true;
+            }
+        }
+        void updateRags() {
+            if (Rags == null) {
+                Rags = new VerletNet();
+                InitializeRags();
+            }
+            else {
+                SimulateRags();
+            }
+        }
+        init();
+        updateRags();
+        checkActive();
+        setAttackTime();
+    }
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        Texture2D texture = TextureAssets.Npc[Type].Value;
+        WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
+        NPC woodpeckerThatIBelong = woodpeckerTongueValues.WoodpeckerThatIBelong!;
+        List<Vector2> drawPoints = GetRagPoints();
+        for (int index = 2; index < drawPoints.Count - 1; index++) {
+            Vector2 point = drawPoints[index];
+            Rectangle sourceRectangle = GetClipPerSegment(index, drawPoints.Count - 1);
+            if (index == 2) {
+                sourceRectangle = GetClipPerSegment(0, drawPoints.Count - 1);
+            }
+            Vector2 nextPosition = drawPoints[Math.Min(drawPoints.Count - 1, index + 1)];
+            Vector2 position = point;
+            float rotation = position.DirectionTo(nextPosition).ToRotation() + MathHelper.PiOver2;
+            Vector2 origin = new(sourceRectangle.Width / 2f, sourceRectangle.Height);
+            SpriteEffects flip = woodpeckerThatIBelong.direction == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            Main.spriteBatch.Draw(texture, position, DrawInfo.Default with {
+                Clip = sourceRectangle,
+                Origin = origin,
+                Rotation = rotation,
+                ImageFlip = flip
+            });
+        }
+
+        return false;
+    }
+
+    public override void SendExtraAI(BinaryWriter writer) => writer.Write(TimeToAttack);
+    public override void ReceiveExtraAI(BinaryReader reader) => TimeToAttack = reader.ReadSingle();
+
+    public override void HitEffect(NPC.HitInfo hit) {
+        WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
+        NPC woodpeckerThatIBelong = woodpeckerTongueValues.WoodpeckerThatIBelong!;
+        hit.Damage = (int)(hit.Damage * 1.5f);
+        woodpeckerThatIBelong.StrikeNPC(hit);
+        if (Main.netMode != NetmodeID.SinglePlayer) {
+            NetMessage.SendStrikeNPC(woodpeckerThatIBelong, hit);
+        }
+    }
+
+    private List<Vector2> GetRagPoints() {
+        if (Rags == null) {
+            return [];
+        }
+
+        WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
+        List<Vector2> drawPoints = [];
+        Vector2 previousPosition = Vector2.Zero;
+        int count = Rags.points.Count;
+        for (int index = 0; index < count; index++) {
+            Vector2 point = Rags.points[index];
+            int nextIndex = Math.Min(count - 1, index + 1);
+            Vector2 nextPosition = Rags.points[nextIndex];
+            Rectangle sourceRectangle = GetClipPerSegment(index, count);
+            float heightProgress = Utils.Remap(woodpeckerTongueValues.Progress / (index - 2), 1f / count, 1f / Math.Min(count - 1, index - 2 + 1), 0f, 1f);
+            if (index == count - 2) {
+                heightProgress = 1f;
+            }
+            sourceRectangle.Height = (int)(sourceRectangle.Height * heightProgress);
+            Vector2 velocity = point.DirectionTo(nextPosition) * sourceRectangle.Height;
+            if (previousPosition == Vector2.Zero) {
+                previousPosition = point - velocity * 0.65f;
+            }
+            drawPoints.Add(previousPosition);
+            previousPosition += velocity;
+        }
+
+        return drawPoints;
+    }
+    private Rectangle GetClipPerSegment(int index, int count) {
+        Rectangle sourceRectangle;
+        if (count < 2) {
+            sourceRectangle = new(0, 0, 20, 24);
+        }
+        else if (index != 0) {
+            if (index != count - 1) {
+                sourceRectangle = new(6, 26, 8, 12);
+            }
+            else {
+                sourceRectangle = new(0, 0, 20, 24);
+            }
+        }
+        else {
+            sourceRectangle = new(6, 40, 8, 14);
+        }
+        return sourceRectangle;
+    }
+
+    // calamity fables
+    private void InitializeRags() {
+        Rags!.Clear();
+        WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
+        NPC woodpeckerThatIBelong = woodpeckerTongueValues.WoodpeckerThatIBelong!;
+        Vector2 tonguePosition = woodpeckerThatIBelong.As<Woodpecker>().TonguePosition;
+        VerletPoint start = new(tonguePosition, true);
+        VerletPoint end = new(tonguePosition + NPC.velocity);
+        Rags.AddChain(start, end, 10, 2f);
+    }
+    private void SimulateRags() {
+        WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
+        NPC woodpeckerThatIBelong = woodpeckerTongueValues.WoodpeckerThatIBelong!;
+        ref float RagsSine = ref woodpeckerTongueValues.RagsSine;
+
+        Vector2 tonguePosition = woodpeckerThatIBelong.As<Woodpecker>().TonguePosition;
+        Rags!.extremities[0].position = tonguePosition;
+
+        if (woodpeckerTongueValues.TongueAttackProgress >= 0.5f && woodpeckerTongueValues.TongueAttackProgress < 0.75f) {
+            float progress = MathUtils.Clamp01((woodpeckerTongueValues.TongueAttackProgress - 0.5f) / 0.25f);
+            Rags.extremities[1].position = Vector2.SmoothStep(Rags.extremities[1].position, woodpeckerThatIBelong.GetTargetPlayer().Center, progress * 0.75f);
+
+            var point1 = Rags.extremities[0];
+            var point2 = Rags.extremities[1];
+            int count = Rags.segments.Count;
+            int length = Math.Min(30, (int)Vector2.Distance(woodpeckerThatIBelong.Center, woodpeckerThatIBelong.GetTargetPlayer().Center) / 10);
+            if (count < length) {
+                Rags.Clear();
+                Rags.AddChain(point1, point2, count + 1, 2f);
+            }
+        }
+
+        bool needsFlip = false;
+        bool falling = woodpeckerThatIBelong.velocity.Y > 5;
+
+        int indexAlongTrail = 0;
+        int ragIndex = 0;
+
+        foreach (VerletPoint point in Rags.points) {
+            float progressAlongTrail = indexAlongTrail / ((float)Rags.points.Count * woodpeckerTongueValues.Progress);
+
+            //A directional push towards the player's back. More or less strong depending on how fast the player is moving
+            Vector2 customGravity = Vector2.UnitX * woodpeckerThatIBelong.direction * ((needsFlip ? 1.4f : 0.3f));
+
+            switch (ragIndex) {
+                case 0:
+                    customGravity.Y -= 1.1f;
+                    float xFactor = (float)Math.Sin(progressAlongTrail * 4f - RagsSine * 0.10f) * (0.2f + 0.8f * (float)Math.Sin(progressAlongTrail * 2.4f));
+                    customGravity.X += 2f * xFactor * woodpeckerThatIBelong.direction * woodpeckerTongueValues.Progress;
+                    customGravity.Y += 0.9f * (float)Math.Sin(progressAlongTrail * 9.6f + RagsSine * 0.10f) * (0.2f + 0.8f * (float)Math.Sin(progressAlongTrail * 2.4f));
+
+                    break;
+            }
+
+            point.customGravity = customGravity;
+
+            indexAlongTrail++;
+            if (indexAlongTrail == 15) {
+                ragIndex++;
+                indexAlongTrail = 0;
+            }
+        }
+
+        int iterations = 2;
+
+        Rags.Update(iterations, 0f, 0.7f);
+
+        RagsSine += 1f;
+        if (Main.expertMode) {
+            RagsSine += 0.5f * woodpeckerTongueValues.WoodpeckerThatIBelong!.GetRemainingHealthPercentage();
+        }
     }
 }

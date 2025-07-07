@@ -30,7 +30,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
 
     private static Asset<Texture2D>? _holdTexture, _holdGlowMaskTexture;
 
-    private enum MacrolepiotaFrame : byte {
+    public enum MacrolepiotaFrame : byte {
         Idle,
         Shrivel1,
         Shrivel2,
@@ -38,7 +38,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
         Count
     }
 
-    private ref struct MacrolepiotaValues(Projectile projectile) {
+    public ref struct MacrolepiotaValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
 
         public ref float ScaleX = ref projectile.scale;

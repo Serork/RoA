@@ -63,7 +63,7 @@ sealed class SnowWreath_Cloudberry : NatureProjectile_NoTextureLoad {
         }
     }
 
-    private ref struct CloudberryValues(Projectile projectile) {
+    public ref struct CloudberryValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float ApplyGravityTimerValue = ref projectile.localAI[1];
         public ref float ShouldMakeCopyValue = ref projectile.localAI[2];

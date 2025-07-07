@@ -29,7 +29,7 @@ sealed class ForestWreath_Sunflower : NatureProjectile_NoTextureLoad {
         public bool ExtraScaleDirection;
     }
 
-    private ref struct SunflowerValues(Projectile projectile) {
+    public ref struct SunflowerValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float RandomRotationOnSpawn = ref projectile.ai[0];
         public ref float PetalSpawnTimer = ref projectile.localAI[1];

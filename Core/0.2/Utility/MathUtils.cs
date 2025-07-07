@@ -5,6 +5,8 @@ using System;
 namespace RoA.Core.Utility;
 
 static class MathUtils {
+    public static float SineBumpEasing(float amount, float degree = 1f) => (float)Math.Sin(amount * MathHelper.Pi);
+
     public static float Clamp01(float value) => value <= 0f ? 0f : value >= 1f ? 1f : value;
     public static double Clamp01(double value) => value <= 0.0 ? 0.0 : value >= 1.0 ? 1.0 : value;
 

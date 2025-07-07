@@ -128,7 +128,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
         }
     }
 
-    private ref struct RocksValues(Projectile projectile) {
+    public ref struct RocksValues(Projectile projectile) {
         public static float FORCEDOPACITYINCREASEVALUE => 0.015f;
 
         public ref float InitOnSpawnValue = ref projectile.localAI[0];

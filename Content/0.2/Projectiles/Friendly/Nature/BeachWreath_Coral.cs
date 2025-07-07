@@ -32,7 +32,7 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
 
     public static IReadOnlyCollection<Vector2> AllCoralsPositions => _coralPositions;
 
-    private ref struct CoralValues(Projectile projectile) {
+    public ref struct CoralValues(Projectile projectile) {
         public enum CoralType : byte {
             None,
             Blue,

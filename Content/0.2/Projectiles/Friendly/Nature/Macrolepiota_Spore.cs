@@ -20,7 +20,7 @@ sealed class Macrolepiota_Spore : NatureProjectile {
 
     private static ushort MAXTIMELEFT => 200;
 
-    private ref struct SporeValues(Projectile projectile) {
+    public ref struct SporeValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float DirectionValue = ref projectile.ai[1];
 

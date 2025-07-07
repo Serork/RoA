@@ -27,7 +27,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
 
     private static readonly Dictionary<BubbleValues.BubbleSizeType, Asset<Texture2D>?> _texturesPerBubbleType = [];
 
-    private ref struct BubbleValues(Projectile projectile) {
+    public ref struct BubbleValues(Projectile projectile) {
         public enum BubbleSizeType : byte {
             Small,
             Medium,

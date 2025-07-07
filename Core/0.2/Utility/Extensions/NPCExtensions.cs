@@ -40,11 +40,12 @@ static partial class NPCExtensions {
         npc.frameCounter += additionalCounter + 1.0;
 
         if (npc.frameCounter > animationSpeed) {
-            if (resetAnimation || currentFrame < endFrame) {
-                currentFrame++;
+            bool up = startFrame < endFrame;
+            if (resetAnimation || (up && currentFrame < endFrame) || (!up && currentFrame > endFrame)) {
+                currentFrame += (byte)up.ToDirectionInt();
             }
 
-            if (currentFrame < startFrame || (resetAnimation && currentFrame > endFrame)) {
+            if (((up && currentFrame < startFrame) || (!up && currentFrame > startFrame)) || (resetAnimation && ((up && currentFrame > endFrame) || (!up && currentFrame < endFrame)))) {
                 currentFrame = startFrame;
             }
 

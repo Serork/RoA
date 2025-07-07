@@ -57,7 +57,7 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
         public readonly bool IsEndSegment => SegmentType == SegmentTypeInfo.End;
     }
 
-    private ref struct ThornsValues(Projectile projectile) {
+    public ref struct ThornsValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float LengthValue = ref projectile.ai[0];
         public ref float WrapDirectionValue = ref projectile.ai[1];
