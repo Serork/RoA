@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 
 [AutoloadEquip(EquipType.Legs)]
-sealed class FlamewardenPants : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask {
+sealed class LivingPearlwoodGreaves : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask {
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
@@ -20,7 +20,7 @@ sealed class FlamewardenPants : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(22, 18);
-        Item.SetShopValues(Terraria.Enums.ItemRarityColor.Lime7, Item.sellPrice());
+        Item.SetShopValues(Terraria.Enums.ItemRarityColor.LightPurple6, Item.sellPrice());
     }
 
     public override void UpdateEquip(Player player) {

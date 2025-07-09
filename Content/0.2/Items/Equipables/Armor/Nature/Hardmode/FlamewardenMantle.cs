@@ -20,7 +20,7 @@ sealed class FlamewardenMantle : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowM
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(30, 24);
-        Item.SetShopValues(Terraria.Enums.ItemRarityColor.LightPurple6, Item.sellPrice());
+        Item.SetShopValues(Terraria.Enums.ItemRarityColor.Lime7, Item.sellPrice());
     }
 
     public override void UpdateEquip(Player player) {
