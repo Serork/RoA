@@ -93,9 +93,6 @@ sealed class WreathDrawing : PlayerDrawLayer {
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
 
-        position = oldPosition/*Vector2.Lerp(_oldPosition, playerPosition, 0.3f)*/;
-        position -= Main.screenPosition;
-        position -= new Vector2(1f, 0f);
         var phoenixHandler = player.GetModPlayer<LilPhoenixForm.LilPhoenixFormHandler>();
         float rotation = drawInfo.rotation + MathHelper.Pi;
         bool flag2 = phoenixHandler._dashed || phoenixHandler._dashed || phoenixHandler._isPreparing || player.sleeping.isSleeping;
@@ -113,6 +110,9 @@ sealed class WreathDrawing : PlayerDrawLayer {
             float offsetY2 = progress4 * (player.height / 2f + 10f);
             oldPosition.Y += offsetY2;
         }
+        position = oldPosition/*Vector2.Lerp(_oldPosition, playerPosition, 0.3f)*/;
+        position -= Main.screenPosition;
+        position -= new Vector2(1f, 0f);
 
         WreathDrawing2.DrawText(Vector2.UnitY * 15f);
 
