@@ -693,11 +693,11 @@ sealed class WoodpeckerTongue : ModNPC {
 
         WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
         Vector2 previousPosition = Vector2.Zero;
-        int count = Rags.points.Count;
+        int count = Rags.Points.Count;
         for (int index = 0; index < count; index++) {
-            Vector2 point = Rags.points[index];
+            Vector2 point = Rags.Points[index];
             int nextIndex = Math.Min(count - 1, index + 1);
-            Vector2 nextPosition = Rags.points[nextIndex];
+            Vector2 nextPosition = Rags.Points[nextIndex];
             Rectangle sourceRectangle = GetClipPerSegment(index, count);
             float heightProgress = Utils.Remap(woodpeckerTongueValues.Progress / (index - 2), 1f / count, 1f / Math.Min(count - 1, index - 2 + 1), 0f, 1f);
             if (index == count - 2) {
@@ -742,7 +742,7 @@ sealed class WoodpeckerTongue : ModNPC {
         Vector2 tonguePosition = woodpeckerThatIBelong.As<Woodpecker>().TonguePosition;
         VerletPoint start = new(tonguePosition, true);
         VerletPoint end = new(tonguePosition + NPC.velocity);
-        Rags.AddChain(start, end, 10, 2f);
+        Rags.AddChain(start, end, 10, 2f, (progress) => start.Position.DirectionTo(end.Position) * (1f - progress));
     }
     private void SimulateRags() {
         WoodpeckerTongueValues woodpeckerTongueValues = new(NPC);
@@ -750,15 +750,15 @@ sealed class WoodpeckerTongue : ModNPC {
         ref float RagsSine = ref woodpeckerTongueValues.RagsSine;
 
         Vector2 tonguePosition = woodpeckerThatIBelong.As<Woodpecker>().TonguePosition;
-        Rags!.extremities[0].position = tonguePosition;
+        Rags!.Extremities[0].Position = tonguePosition;
 
         if (woodpeckerTongueValues.TongueAttackProgress >= 0.5f && woodpeckerTongueValues.TongueAttackProgress < 0.75f) {
             float progress = MathUtils.Clamp01((woodpeckerTongueValues.TongueAttackProgress - 0.5f) / 0.25f);
-            Rags.extremities[1].position = Vector2.SmoothStep(Rags.extremities[1].position, woodpeckerThatIBelong.GetTargetPlayer().Center, progress * 0.75f);
+            Rags.Extremities[1].Position = Vector2.SmoothStep(Rags.Extremities[1].Position, woodpeckerThatIBelong.GetTargetPlayer().Center, progress * 0.75f);
 
-            var point1 = Rags.extremities[0];
-            var point2 = Rags.extremities[1];
-            int count = Rags.segments.Count;
+            var point1 = Rags.Extremities[0];
+            var point2 = Rags.Extremities[1];
+            int count = Rags.Segments.Count;
             int length = Math.Min(30, (int)Vector2.Distance(woodpeckerThatIBelong.Center, woodpeckerThatIBelong.GetTargetPlayer().Center) / 10);
             if (count < length) {
                 Rags.Clear();
@@ -772,8 +772,8 @@ sealed class WoodpeckerTongue : ModNPC {
         int indexAlongTrail = 0;
         int ragIndex = 0;
 
-        foreach (VerletPoint point in Rags.points) {
-            float progressAlongTrail = indexAlongTrail / ((float)Rags.points.Count * woodpeckerTongueValues.Progress);
+        foreach (VerletPoint point in Rags.Points) {
+            float progressAlongTrail = indexAlongTrail / ((float)Rags.Points.Count * woodpeckerTongueValues.Progress);
 
             //A directional push towards the player's back. More or less strong depending on how fast the player is moving
             Vector2 customGravity = Vector2.UnitX * woodpeckerThatIBelong.direction * ((needsFlip ? 1.4f : 0.3f));
@@ -788,7 +788,7 @@ sealed class WoodpeckerTongue : ModNPC {
                     break;
             }
 
-            point.customGravity = customGravity;
+            point.CustomGravity = customGravity;
 
             indexAlongTrail++;
             if (indexAlongTrail == 15) {
