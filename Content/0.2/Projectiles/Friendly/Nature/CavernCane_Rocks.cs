@@ -669,7 +669,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
         float geodeProgress = GetGeodeProgress(true);
         float maxProgress = MAXPROGRESS * ROCKATTACKCOUNT;
         float progress = geodeProgress / maxProgress;
-        return progress >= 0.96f;
+        return progress >= 0.955f;
     }
 
     private float GetGeodeSize() {
