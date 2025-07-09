@@ -1988,3 +1988,18 @@ FlamewardenPants: {
 	DisplayName: Flamewarden Pants
 	Tooltip: ""
 }
+
+LivingPearlwoodChestplate: {
+	DisplayName: Living Pearlwood Chestplate
+	Tooltip: ""
+}
+
+LivingPearlwoodGreaves: {
+	DisplayName: Living Pearlwood Greaves
+	Tooltip: ""
+}
+
+LivingPearlwoodHelmet: {
+	DisplayName: Living Pearlwood Helmet
+	Tooltip: ""
+}
