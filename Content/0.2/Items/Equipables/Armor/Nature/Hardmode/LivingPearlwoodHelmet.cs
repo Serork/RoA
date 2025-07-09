@@ -1,8 +1,3 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using RoA.Common.Druid.Wreath;
-using RoA.Common.GlowMasks;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
@@ -12,11 +7,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 
 [AutoloadEquip(EquipType.Head)]
-sealed class LivingPearlwoodHelmet : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask {
+sealed class LivingPearlwoodHelmet : NatureItem {
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
-
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.headSlot, this);
     }
 
     protected override void SafeSetDefaults() {
@@ -33,6 +26,4 @@ sealed class LivingPearlwoodHelmet : NatureItem, ItemGlowMaskHandler.IDrawArmorG
     public override void UpdateArmorSet(Player player) {
 
     }
-
-    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color) => color = Color.White * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
 }
