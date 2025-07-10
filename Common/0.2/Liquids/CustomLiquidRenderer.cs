@@ -2191,17 +2191,20 @@ sealed class CustomLiquidRenderer : IInitializer {
                         int num2 = ptr2->Type;
 
                         Lighting.GetCornerColors(i, j, out var vertices);
+                        bool tar = false, permafrost = false;
                         if (num2 == 4) {
                             num2 = 15;
                             int num3 = ptr2->X + drawArea.X - 2;
                             int num4 = ptr2->Y + drawArea.Y - 2;
                             SetPermafrostVertexColors(ref vertices, num, num3, num4);
+                            permafrost = true;
                         }
                         if (num2 == 5) {
                             num2 = 16;
                             int num3 = ptr2->X + drawArea.X - 2;
                             int num4 = ptr2->Y + drawArea.Y - 2;
                             SetTarVertexColors(ref vertices, num, num3, num4);
+                            tar = true;
                         }
 
                         switch (num2) {
@@ -2217,10 +2220,12 @@ sealed class CustomLiquidRenderer : IInitializer {
 
                         num = Math.Min(1f, num);
 
-                        //vertices.BottomLeftColor *= num;
-                        //vertices.BottomRightColor *= num;
-                        //vertices.TopLeftColor *= num;
-                        //vertices.TopRightColor *= num;
+                        if (!permafrost && !tar) {
+                            vertices.BottomLeftColor *= num;
+                            vertices.BottomRightColor *= num;
+                            vertices.TopLeftColor *= num;
+                            vertices.TopRightColor *= num;
+                        }
                         Main.DrawTileInWater(drawOffset, i, j);
 
                         Main.tileBatch.Draw(_liquidTextures[num2].Value, new Vector2(i << 4, j << 4) + drawOffset + liquidOffset, sourceRectangle, vertices, Vector2.Zero, 1f, SpriteEffects.None);
