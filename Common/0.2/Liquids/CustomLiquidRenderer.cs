@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Lavas;
+using RoA.Content.Dusts;
 using RoA.Core;
 
 using System;
@@ -12,9 +13,13 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.Liquid;
+using Terraria.GameContent.Shaders;
 using Terraria.Graphics;
+using Terraria.Graphics.Light;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -23,6 +28,37 @@ using Terraria.WorldBuilding;
 namespace RoA.Common.Liquids;
 
 public class CustomLiquidRenderer : IInitializer {
+    private static readonly int[] WATERFALL_LENGTH = new int[6] {
+        10,
+        3,
+        2,
+        10,
+
+        3,
+        3,
+    };
+    private static readonly float[] DEFAULT_OPACITY = new float[6] {
+        0.6f,
+        0.95f,
+        0.95f,
+        0.75f,
+
+        0.95f,
+        0.95f
+    };
+    private static readonly byte[] WAVE_MASK_STRENGTH = new byte[7];
+    private static readonly byte[] VISCOSITY_MASK = new byte[7] {
+        0,
+        200,
+        240,
+        0,
+
+        200,
+        240,
+
+        0
+    };
+
     void ILoadable.Load(Mod mod) {
         LoadContent();
 
@@ -45,11 +81,258 @@ public class CustomLiquidRenderer : IInitializer {
 
         On_TileDrawing.DrawPartialLiquid += On_TileDrawing_DrawPartialLiquid;
         On_TileDrawing.DrawTile_LiquidBehindTile += On_TileDrawing_DrawTile_LiquidBehindTile;
+
+        On_TileLightScanner.GetTileMask += On_TileLightScanner_GetTileMask;
+        On_TileLightScanner.ApplyLiquidLight += On_TileLightScanner_ApplyLiquidLight;
+
+        On_WaterShaderData.DrawWaves += On_WaterShaderData_DrawWaves;
+        On_WaterShaderData.QueueRipple_Vector2_Color_Vector2_RippleShape_float += On_WaterShaderData_QueueRipple_Vector2_Color_Vector2_RippleShape_float;
+    }
+
+    private static Ripple[] _rippleQueue = new Ripple[200];
+
+    private void On_WaterShaderData_QueueRipple_Vector2_Color_Vector2_RippleShape_float(On_WaterShaderData.orig_QueueRipple_Vector2_Color_Vector2_RippleShape_float orig, WaterShaderData self, Vector2 position, Color waveData, Vector2 size, RippleShape shape, float rotation) {
+        //orig(self, position, waveData, size, shape, rotation);
+
+        ref bool _useRippleWaves = ref WaterShaderData__useRippleWaves(self);
+        ref int _rippleQueueCount = ref WaterShaderData__rippleQueueCount(self);
+        if (!_useRippleWaves || Main.drawToScreen)
+            _rippleQueueCount = 0;
+        else if (_rippleQueueCount < _rippleQueue.Length)
+            _rippleQueue[_rippleQueueCount++] = new Ripple(position, waveData, size, shape, rotation);
+    }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_lastDistortionDrawOffset")]
+    public extern static ref Vector2 WaterShaderData__lastDistortionDrawOffset(WaterShaderData self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_useNPCWaves")]
+    public extern static ref bool WaterShaderData__useNPCWaves(WaterShaderData self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_usePlayerWaves")]
+    public extern static ref bool WaterShaderData__usePlayerWaves(WaterShaderData self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_useRippleWaves")]
+    public extern static ref bool WaterShaderData__useRippleWaves(WaterShaderData self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_rippleQueueCount")]
+    public extern static ref int WaterShaderData__rippleQueueCount(WaterShaderData self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_rippleShapeTexture")]
+    public extern static ref Asset<Texture2D> WaterShaderData__rippleShapeTexture(WaterShaderData self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_useCustomWaves")]
+    public extern static ref bool WaterShaderData__useCustomWaves(WaterShaderData self);
+
+    private void On_WaterShaderData_DrawWaves(On_WaterShaderData.orig_DrawWaves orig, WaterShaderData self) {
+        Vector2 screenPosition = Main.screenPosition;
+        Vector2 vector = (Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange, Main.offScreenRange));
+        var _lastDistortionDrawOffset = WaterShaderData__lastDistortionDrawOffset(self);
+        Vector2 vector2 = -_lastDistortionDrawOffset / 0.25f + vector;
+        TileBatch tileBatch = Main.tileBatch;
+        _ = Main.instance.GraphicsDevice;
+        Vector2 dimensions = new Vector2(Main.screenWidth, Main.screenHeight);
+        Vector2 vector3 = new Vector2(16f, 16f);
+        tileBatch.Begin();
+        GameShaders.Misc["WaterDistortionObject"].Apply();
+        var _useNPCWaves = WaterShaderData__useNPCWaves(self);
+        if (_useNPCWaves) {
+            for (int i = 0; i < 200; i++) {
+                if (Main.npc[i] == null || !Main.npc[i].active || (!Main.npc[i].wet && Main.npc[i].wetCount == 0) || !Collision.CheckAABBvAABBCollision(screenPosition, dimensions, Main.npc[i].position - vector3, Main.npc[i].Size + vector3))
+                    continue;
+
+                NPC nPC = Main.npc[i];
+                Vector2 vector4 = nPC.Center - vector2;
+                Vector2 vector5 = nPC.velocity.RotatedBy(0f - nPC.rotation) / new Vector2(nPC.height, nPC.width);
+                float num = vector5.LengthSquared();
+                num = num * 0.3f + 0.7f * num * (1024f / (float)(nPC.height * nPC.width));
+                num = Math.Min(num, 0.08f);
+                num += (nPC.velocity - nPC.oldVelocity).Length() * 0.5f;
+                vector5.Normalize();
+                Vector2 velocity = nPC.velocity;
+                velocity.Normalize();
+                vector4 -= velocity * 10f;
+                if (!self._useViscosityFilter && (nPC.honeyWet || nPC.lavaWet))
+                    num *= 0.3f;
+
+                if (nPC.wet)
+                    tileBatch.Draw(TextureAssets.MagicPixel.Value, new Vector4(vector4.X, vector4.Y, (float)nPC.width * 2f, (float)nPC.height * 2f) * 0.25f, null, new VertexColors(new Color(vector5.X * 0.5f + 0.5f, vector5.Y * 0.5f + 0.5f, 0.5f * num)), new Vector2((float)TextureAssets.MagicPixel.Width() / 2f, (float)TextureAssets.MagicPixel.Height() / 2f), SpriteEffects.None, nPC.rotation);
+
+                if (nPC.wetCount != 0) {
+                    num = nPC.velocity.Length();
+                    num = 0.195f * (float)Math.Sqrt(num);
+                    float num2 = 5f;
+                    if (!nPC.wet)
+                        num2 = -20f;
+
+                    self.QueueRipple(nPC.Center + velocity * num2, new Color(0.5f, (nPC.wet ? num : (0f - num)) * 0.5f + 0.5f, 0f, 1f) * 0.5f, new Vector2(nPC.width, (float)nPC.height * ((float)(int)nPC.wetCount / 9f)) * MathHelper.Clamp(num * 10f, 0f, 1f), RippleShape.Circle);
+                }
+            }
+        }
+        var _usePlayerWaves = WaterShaderData__usePlayerWaves(self);
+        if (_usePlayerWaves) {
+            for (int j = 0; j < 255; j++) {
+                if (Main.player[j] == null || !Main.player[j].active || (!Main.player[j].wet && Main.player[j].wetCount == 0) || !Collision.CheckAABBvAABBCollision(screenPosition, dimensions, Main.player[j].position - vector3, Main.player[j].Size + vector3))
+                    continue;
+
+                Player player = Main.player[j];
+                Vector2 vector6 = player.Center - vector2;
+                float num3 = player.velocity.Length();
+                num3 = 0.05f * (float)Math.Sqrt(num3);
+                Vector2 velocity2 = player.velocity;
+                velocity2.Normalize();
+                vector6 -= velocity2 * 10f;
+
+                var handler = player.GetModPlayer<CustomLiquidCollision_Player>();
+                if (!self._useViscosityFilter) {
+                    if (player.honeyWet || player.lavaWet || handler.permafrostWet || handler.tarWet) {
+                        num3 *= handler.tarWet ? 0.1f : 0.3f;
+                    }
+                }
+
+                if (handler.tarWet) {
+                    num3 *= 0.75f;
+                }
+
+                if (player.wet || handler.wet)
+                    tileBatch.Draw(TextureAssets.MagicPixel.Value, new Vector4(vector6.X - (float)player.width * 2f * 0.5f, vector6.Y - (float)player.height * 2f * 0.5f, (float)player.width * 2f, (float)player.height * 2f) * 0.25f, new VertexColors(new Color(velocity2.X * 0.5f + 0.5f, velocity2.Y * 0.5f + 0.5f, 0.5f * num3)));
+
+                if (player.wetCount != 0 || handler.wetCount != 0) {
+                    float num4 = 5f;
+                    if (!player.wet)
+                        num4 = -20f;
+
+                    num3 *= 3f;
+                    self.QueueRipple(player.Center + velocity2 * num4, player.wet ? num3 : (0f - num3), new Vector2(player.width, (float)player.height * ((float)(int)player.wetCount / 9f)) * MathHelper.Clamp(num3 * 10f, 0f, 1f), RippleShape.Circle);
+                }
+            }
+        }
+
+        if (self._useProjectileWaves) {
+            for (int k = 0; k < 1000; k++) {
+                Projectile projectile = Main.projectile[k];
+                if (projectile.wet && !projectile.lavaWet)
+                    _ = !projectile.honeyWet;
+                else
+                    _ = 0;
+
+                bool flag = projectile.lavaWet;
+                bool flag2 = projectile.honeyWet;
+                bool flag3 = projectile.wet;
+                if (projectile.ignoreWater)
+                    flag3 = true;
+
+                if (!(projectile != null && projectile.active && ProjectileID.Sets.CanDistortWater[projectile.type] && flag3) || ProjectileID.Sets.NoLiquidDistortion[projectile.type] || !Collision.CheckAABBvAABBCollision(screenPosition, dimensions, projectile.position - vector3, projectile.Size + vector3))
+                    continue;
+
+                if (projectile.ignoreWater) {
+                    bool num5 = Collision.LavaCollision(projectile.position, projectile.width, projectile.height);
+                    flag = Collision.WetCollision(projectile.position, projectile.width, projectile.height);
+                    flag2 = Collision.honey;
+                    if (!(num5 || flag || flag2))
+                        continue;
+                }
+
+                Vector2 vector7 = projectile.Center - vector2;
+                float num6 = projectile.velocity.Length();
+                num6 = 2f * (float)Math.Sqrt(0.05f * num6);
+                Vector2 velocity3 = projectile.velocity;
+                velocity3.Normalize();
+                if (!self._useViscosityFilter && (flag2 || flag))
+                    num6 *= 0.3f;
+
+                float num7 = Math.Max(12f, (float)projectile.width * 0.75f);
+                float num8 = Math.Max(12f, (float)projectile.height * 0.75f);
+                tileBatch.Draw(TextureAssets.MagicPixel.Value, new Vector4(vector7.X - num7 * 0.5f, vector7.Y - num8 * 0.5f, num7, num8) * 0.25f, new VertexColors(new Color(velocity3.X * 0.5f + 0.5f, velocity3.Y * 0.5f + 0.5f, num6 * 0.5f)));
+            }
+        }
+
+        tileBatch.End();
+
+        var _useRippleWaves = WaterShaderData__useRippleWaves(self);
+        ref int _rippleQueueCount = ref WaterShaderData__rippleQueueCount(self);
+        var _rippleShapeTexture = WaterShaderData__rippleShapeTexture(self);
+        if (_useRippleWaves) {
+            tileBatch.Begin();
+            for (int l = 0; l < _rippleQueueCount; l++) {
+                Vector2 vector8 = _rippleQueue[l].Position - vector2;
+                Vector2 size = _rippleQueue[l].Size;
+                Rectangle sourceRectangle = _rippleQueue[l].SourceRectangle;
+                Texture2D value = _rippleShapeTexture.Value;
+                tileBatch.Draw(value, new Vector4(vector8.X, vector8.Y, size.X, size.Y) * 0.25f, sourceRectangle,
+                    new VertexColors(_rippleQueue[l].WaveData), new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2), SpriteEffects.None,
+                    _rippleQueue[l].Rotation);
+            }
+
+            tileBatch.End();
+        }
+
+        _rippleQueueCount = 0;
+        //var _useCustomWaves = WaterShaderData__useCustomWaves(self);
+        //if (_useCustomWaves && self.OnWaveDraw != null) {
+        //    tileBatch.Begin();
+        //    self.OnWaveDraw(tileBatch);
+        //    tileBatch.End();
+        //}
+    }
+
+    private struct Ripple {
+        private static readonly Rectangle[] RIPPLE_SHAPE_SOURCE_RECTS = new Rectangle[3] {
+            new Rectangle(0, 0, 0, 0),
+            new Rectangle(1, 1, 62, 62),
+            new Rectangle(1, 65, 62, 62)
+        };
+        public readonly Vector2 Position;
+        public readonly Color WaveData;
+        public readonly Vector2 Size;
+        public readonly RippleShape Shape;
+        public readonly float Rotation;
+
+        public Rectangle SourceRectangle => RIPPLE_SHAPE_SOURCE_RECTS[(int)Shape];
+
+        public Ripple(Vector2 position, Color waveData, Vector2 size, RippleShape shape, float rotation) {
+            Position = position;
+            WaveData = waveData;
+            Size = size;
+            Shape = shape;
+            Rotation = rotation;
+        }
+    }
+
+    private void On_TileLightScanner_ApplyLiquidLight(On_TileLightScanner.orig_ApplyLiquidLight orig, TileLightScanner self, Tile tile, ref Vector3 lightColor) {
+        bool permafrost = tile.LiquidType == 4;
+        if (tile.LiquidAmount > 0 && (permafrost || tile.LiquidType == 5)) {
+            if (permafrost) {
+                float num = 0.55f;
+                num += (float)(270 - Main.mouseTextColor) / 900f;
+                if (lightColor.X < num)
+                    lightColor.X = num * 0.4f;
+
+                if (lightColor.Y < num)
+                    lightColor.Y = num * 0.9f;
+
+                if (lightColor.Z < num)
+                    lightColor.Z = num * 0.8f;
+            }
+
+            return;
+        }
+
+        orig(self, tile, ref lightColor);
+    }
+
+    private LightMaskMode On_TileLightScanner_GetTileMask(On_TileLightScanner.orig_GetTileMask orig, TileLightScanner self, Tile tile) {
+        if ((tile.LiquidType == 4 || tile.LiquidType == 5) && tile.LiquidAmount > 128) {
+            if (tile.LiquidType == 5) {
+                return LightMaskMode.Honey;
+            }
+            return LightMaskMode.None;
+        }
+
+        return orig(self, tile);
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawPartialLiquid")]
     public extern static void TileDrawing_DrawPartialLiquid(TileDrawing self, bool behindBlocks, Tile tileCache, ref Vector2 position, ref Rectangle liquidSize, int liquidType, ref VertexColors colors);
-
 
     private void On_TileDrawing_DrawTile_LiquidBehindTile(On_TileDrawing.orig_DrawTile_LiquidBehindTile orig, TileDrawing self, bool solidLayer, bool inFrontOfPlayers, int waterStyleOverride, Vector2 screenPosition, Vector2 screenOffset, int tileX, int tileY, Tile tileCache) {
         Tile tile = Main.tile[tileX + 1, tileY];
@@ -358,7 +641,11 @@ public class CustomLiquidRenderer : IInitializer {
 
         VertexColors colors = vertices;
         bool flag8 = false;
+        bool permafrost = false;
         if (num2 == 50 || num2 == 51) {
+            if (num2 == 50) {
+                permafrost = true;
+            }
             num2 -= 46;
             flag8 = true;
         }
@@ -368,7 +655,10 @@ public class CustomLiquidRenderer : IInitializer {
         colors.TopLeftColor *= num8;
         colors.TopRightColor *= num8;
         if (num2 == 14)
-            LiquidRenderer.SetShimmerVertexColors(ref colors, solidLayer ? 0.75f : 1f, tileX, tileY);
+            SetShimmerVertexColors(ref colors, solidLayer ? 0.75f : 1f, tileX, tileY);
+
+        if (permafrost)
+            SetPermafrostVertexColors(ref colors, 1f, tileX, tileY);
 
         TileDrawing_DrawPartialLiquid(self, !solidLayer, tileCache, ref position, ref liquidSize, flag8 ? num2 + 46 : num2, ref colors);
     }
@@ -600,12 +890,22 @@ public class CustomLiquidRenderer : IInitializer {
         if (tile5.LiquidType == 4 || tile5.LiquidType == 5) {
             LavaCheck(x, y, tile5.LiquidType);
             if (!Liquid.quickFall) {
-                if (self.delay < 5) {
-                    self.delay++;
-                    return;
-                }
+                if (tile5.LiquidType == 4) {
+                    if (self.delay < 7) {
+                        self.delay++;
+                        return;
+                    }
 
-                self.delay = 0;
+                    self.delay = 0;
+                }
+                if (tile5.LiquidType == 5) {
+                    if (self.delay < 13) {
+                        self.delay++;
+                        return;
+                    }
+
+                    self.delay = 0;
+                }
             }
         }
         else {
@@ -1196,6 +1496,8 @@ public class CustomLiquidRenderer : IInitializer {
         public byte Type;
         public bool IsSurfaceLiquid;
         public bool HasWall;
+        public int X;
+        public int Y;
     }
 
     private struct SpecialLiquidDrawCache {
@@ -1213,36 +1515,6 @@ public class CustomLiquidRenderer : IInitializer {
     private const int ANIMATION_FRAME_COUNT = 16;
     private const int CACHE_PADDING = 2;
     private const int CACHE_PADDING_2 = 4;
-    private static readonly int[] WATERFALL_LENGTH = new int[6] {
-        10,
-        3,
-        2,
-        10,
-
-        3,
-        3,
-    };
-    private static readonly float[] DEFAULT_OPACITY = new float[6] {
-        0.6f,
-        0.95f,
-        0.95f,
-        0.75f,
-
-        0.95f,
-        0.95f
-    };
-    private static readonly byte[] WAVE_MASK_STRENGTH = new byte[7];
-    private static readonly byte[] VISCOSITY_MASK = new byte[7] {
-        0,
-        200,
-        240,
-        0,
-
-        200,
-        200,
-
-        0
-    };
     public const float MIN_LIQUID_SIZE = 0.25f;
     public static CustomLiquidRenderer Instance;
     public Asset<Texture2D>[] _liquidTextures = new Asset<Texture2D>[15 + 2];
@@ -1607,6 +1879,8 @@ public class CustomLiquidRenderer : IInitializer {
                                 if (ptr2->IsHalfBrick && ptr2->IsSolid && num23 > 0.5f)
                                     num23 = 0.5f;
 
+                                ptr4->X = num18;
+                                ptr4->Y = num19;
                                 ptr4->IsVisible = ptr2->HasWall || !ptr2->IsHalfBrick || !ptr2->HasLiquid || !(ptr2->LiquidLevel < 1f);
                                 ptr4->SourceRectangle = new Rectangle((int)(16f - num21 * 16f) + ptr2->FrameOffset.X, (int)(16f - num23 * 16f) + ptr2->FrameOffset.Y, (int)Math.Ceiling((num21 - num20) * 16f), (int)Math.Ceiling((num23 - num22) * 16f));
                                 ptr4->IsSurfaceLiquid = ptr2->FrameOffset.X == 16 && ptr2->FrameOffset.Y == 0 && (double)(num19 + rectangle.Y) > Main.worldSurface - 40.0;
@@ -1716,6 +1990,18 @@ public class CustomLiquidRenderer : IInitializer {
                         Vector2 liquidOffset = ptr2->LiquidOffset;
                         float num = ptr2->Opacity * (isBackgroundDraw ? 1f : DEFAULT_OPACITY[ptr2->Type]);
                         int num2 = ptr2->Type;
+
+                        Lighting.GetCornerColors(i, j, out var vertices);
+                        if (num2 == 4) {
+                            num2 = 15;
+                            int num3 = ptr2->X + drawArea.X - 2;
+                            int num4 = ptr2->Y + drawArea.Y - 2;
+                            SetPermafrostVertexColors(ref vertices, num, num3, num4);
+                        }
+                        if (num2 == 5) {
+                            num2 = 16;
+                        }
+
                         switch (num2) {
                             case 0:
                                 num2 = waterStyle;
@@ -1726,16 +2012,9 @@ public class CustomLiquidRenderer : IInitializer {
                                 break;
                         }
 
-                        if (num2 == 4) {
-                            num2 = 15;
-                        }
-                        if (num2 == 5) {
-                            num2 = 16;
-                        }
 
                         num = Math.Min(1f, num);
 
-                        Lighting.GetCornerColors(i, j, out var vertices);
                         vertices.BottomLeftColor *= num;
                         vertices.BottomRightColor *= num;
                         vertices.TopLeftColor *= num;
@@ -1795,6 +2074,27 @@ public class CustomLiquidRenderer : IInitializer {
         Main.tileBatch.End();
     }
 
+    public static void SetPermafrostVertexColors(ref VertexColors colors, float opacity, int x, int y) {
+        colors.BottomLeftColor = Color.White;
+        colors.BottomRightColor = Color.White;
+        colors.TopLeftColor = Color.White;
+        colors.TopRightColor = Color.White;
+        colors.BottomLeftColor *= opacity;
+        colors.BottomRightColor *= opacity;
+        colors.TopLeftColor *= opacity;
+        colors.TopRightColor *= opacity;
+        colors.BottomLeftColor = new Color(colors.BottomLeftColor.ToVector4() * GetPermafrostBaseColor(x, y + 1));
+        colors.BottomRightColor = new Color(colors.BottomRightColor.ToVector4() * GetPermafrostBaseColor(x + 1, y + 1));
+        colors.TopLeftColor = new Color(colors.TopLeftColor.ToVector4() * GetPermafrostBaseColor(x, y));
+        colors.TopRightColor = new Color(colors.TopRightColor.ToVector4() * GetPermafrostBaseColor(x + 1, y));
+    }
+
+    public static Vector4 GetPermafrostBaseColor(float worldPositionX, float worldPositionY) {
+        float shimmerWave = GetPermaforstWave(ref worldPositionX, ref worldPositionY);
+        var output = Vector4.Lerp(new Vector4(0.25f, 0.9f, 1f, 0.9f), new Vector4(1f, 1f, 1f, 1f), shimmerWave);
+        return output * 0.75f;
+    }
+
     public static VertexColors SetShimmerVertexColors_Sparkle(ref VertexColors colors, float opacity, int x, int y, bool top) {
         colors.BottomLeftColor = GetShimmerGlitterColor(top, x, y + 1);
         colors.BottomRightColor = GetShimmerGlitterColor(top, x + 1, y + 1);
@@ -1823,6 +2123,9 @@ public class CustomLiquidRenderer : IInitializer {
     }
 
     public static float GetShimmerWave(ref float worldPositionX, ref float worldPositionY) => (float)Math.Sin(((double)((worldPositionX + worldPositionY / 6f) / 10f) - Main.timeForVisualEffects / 360.0) * 6.2831854820251465);
+
+    public static float GetPermaforstWave(ref float worldPositionX, ref float worldPositionY)
+       => (float)Math.Sin(((double)((Math.Cos(worldPositionX + Main.timeForVisualEffects / 180) + Math.Sin(worldPositionY + Main.timeForVisualEffects / 180))) - Main.timeForVisualEffects / 180) * 6.2831854820251465);
 
     public static Color GetShimmerGlitterColor(bool top, float worldPositionX, float worldPositionY) {
         Color color = Main.hslToRgb((float)(((double)(worldPositionX + worldPositionY / 6f) + Main.timeForVisualEffects / 30.0) / 6.0) % 1f, 1f, 0.5f);

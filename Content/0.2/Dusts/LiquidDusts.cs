@@ -8,7 +8,17 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class Permafrost : ModDust {
+sealed class Permafrost : LiquidDust {
+    protected override Vector3 LightColorRGB => new(0.4f, 0.9f, 0.8f);
+}
+
+sealed class Tar : LiquidDust {
+    protected override Vector3 LightColorRGB => Vector3.Zero;
+}
+
+abstract class LiquidDust : ModDust {
+    protected virtual Vector3 LightColorRGB { get; }
+
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         float num = (float)(255 - dust.alpha) / 255f;
         num = (num + 3f) / 4f;
@@ -39,7 +49,8 @@ sealed class Permafrost : ModDust {
         if (num100 > 1f)
             num100 = 1f;
 
-        Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), num100 * 0.4f, num100 * 0.9f, num100 * 0.8f);
+        float lightR = LightColorRGB.X, lightG = LightColorRGB.Y, lightB = LightColorRGB.Z;
+        Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), num100 * lightR, num100 * lightG, num100 * lightB);
 
         if (dust.noGravity) {
             dust.scale += 0.03f;
@@ -56,7 +67,7 @@ sealed class Permafrost : ModDust {
             if (num96 > 1f)
                 num96 = 1f;
 
-            Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f + 1f), num96 * 0.4f, num96 * 0.9f, num96 * 0.8f);
+            Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f + 1f), num96 * lightR, num96 * lightG, num96 * lightB);
         }
         else {
 
