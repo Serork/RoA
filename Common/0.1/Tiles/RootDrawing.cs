@@ -33,7 +33,7 @@ sealed class RootsDrawing : GlobalTile {
         }
         Color color = Lighting.GetColor(i, j);
         SpriteFrame frame = new(frameCount, 1);
-        Asset<Texture2D> texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "Roots");
+        Asset<Texture2D> texture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "Roots");
         Rectangle rectangle = frame.GetSourceRectangle(texture.Value);
         int width = texture.Width() / frameCount;
         ulong seedForRandomness = (ulong)((long)j << 32 | (long)(uint)i);

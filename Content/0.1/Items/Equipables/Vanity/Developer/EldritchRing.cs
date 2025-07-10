@@ -189,7 +189,7 @@ sealed class EldritchRing : ModItem {
                     if (!drawInfo.hideEntirePlayer && !player.dead) {
                         Vector2 position2 = handler.runePosition - Main.screenPosition;
                         Vector2 position = new(drawInfo.Center.X, drawInfo.Center.Y);
-                        var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "YellowSignRune");
+                        var asset = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "YellowSignRune");
                         Texture2D texture = asset.Value;
                         Vector2 origin = new(texture.Width * 0.5f, texture.Height * 0.5f);
                         Color color = new(255, 215, 50, 180);

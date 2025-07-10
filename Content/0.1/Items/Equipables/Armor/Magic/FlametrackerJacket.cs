@@ -42,7 +42,7 @@ sealed class FlametrackerJacketFlame : PlayerDrawLayer {
     private Asset<Texture2D> _jacketFlameTexture;
 
     public override void Load()
-        => _jacketFlameTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "FlametrackerJacket_Flame");
+        => _jacketFlameTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "FlametrackerJacket_Flame");
 
     public override void Unload()
         => _jacketFlameTexture = null;
@@ -85,7 +85,7 @@ sealed class FlametrackerJacketMask : PlayerDrawLayer {
     private Asset<Texture2D> _jacketMaskTexture;
 
     public override void Load()
-        => _jacketMaskTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "FlametrackerMask_Down");
+        => _jacketMaskTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "FlametrackerMask_Down");
 
     public override void Unload()
         => _jacketMaskTexture = null;

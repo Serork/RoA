@@ -11,7 +11,7 @@ namespace RoA.Common;
 
 sealed class RespriteLoader : ILoadable {
     public void Load(Mod mod) {
-        string texturePath = ResourceManager.ItemsTextures;
+        string texturePath = ResourceManager.ItemTextures;
         int id = 4;
         if (!ModContent.GetInstance<RoAClientConfig>().VanillaResprites) {
             UnloadInner();
@@ -19,7 +19,7 @@ sealed class RespriteLoader : ILoadable {
             return;
         }
 
-        texturePath = ResourceManager.ItemsTextures;
+        texturePath = ResourceManager.ItemTextures;
         TextureAssets.Item[ItemID.Daybloom] = ModContent.Request<Texture2D>(texturePath + "Daybloom");
         TextureAssets.Item[ItemID.Blinkroot] = ModContent.Request<Texture2D>(texturePath + "Blinkroot");
         TextureAssets.Item[ItemID.Deathweed] = ModContent.Request<Texture2D>(texturePath + "Deathweed");
@@ -28,7 +28,7 @@ sealed class RespriteLoader : ILoadable {
         TextureAssets.Item[ItemID.Shiverthorn] = ModContent.Request<Texture2D>(texturePath + "Shiverthorn");
         TextureAssets.Item[ItemID.Waterleaf] = ModContent.Request<Texture2D>(texturePath + "Waterleaf");
 
-        texturePath = ResourceManager.TilesTextures;
+        texturePath = ResourceManager.TileTextures;
         id = 4;
         TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>(texturePath + $"Tree_Branches_{id}");
         id = 12;

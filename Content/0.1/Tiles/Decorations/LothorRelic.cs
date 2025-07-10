@@ -6,7 +6,7 @@ namespace RoA.Content.Tiles.Decorations;
 // Your tile code would then inherit from the MinionBossRelic class (which you should make abstract) and should look like this:
 
 sealed class LothorRelic : BossRelic {
-    public override string RelicTextureName => ResourceManager.DecorationsTileTextures + nameof(LothorRelic);
+    public override string RelicTextureName => ResourceManager.DecorationTileTextures + nameof(LothorRelic);
 
     public override void SetStaticDefaults() {
         base.SetStaticDefaults();

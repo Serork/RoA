@@ -139,7 +139,7 @@ sealed class PeegeonHood : ModItem {
         private Asset<Texture2D> eyeTrailTexture, eyeTrailGlowTexture;
 
         public override void Load()
-            => eyeTrailTexture = eyeTrailGlowTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "PeegeonHood_Glow");
+            => eyeTrailTexture = eyeTrailGlowTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "PeegeonHood_Glow");
 
         public override void Unload()
             => eyeTrailTexture = null;

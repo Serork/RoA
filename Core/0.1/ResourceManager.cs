@@ -34,10 +34,10 @@ static class ResourceManager {
 
     public static string BestiaryTextures => Textures + "Bestiary/";
 
-    public static string ItemsTextures => Textures + "Items/";
-    public static string ItemsWeaponsTextures => ItemsTextures + "Weapons/";
-    public static string ItemsWeaponsMeleeTextures => ItemsWeaponsTextures + "Melee/";
-    public static string ItemsWeaponsMagicTextures => ItemsWeaponsTextures + "Magic/";
+    public static string ItemTextures => Textures + "Items/";
+    public static string WeaponTextures => ItemTextures + "Weapons/";
+    public static string MeleeWeaponTextures => WeaponTextures + "Melee/";
+    public static string MagicWeaponTextures => WeaponTextures + "Magic/";
 
     public static string ProjectileTextures => Textures + "Projectiles/";
     public static string EnemyProjectileTextures => ProjectileTextures + "Enemies/";
@@ -50,12 +50,13 @@ static class ResourceManager {
 
     public static string BuffTextures => Textures + "Buffs/";
 
-    public static string TilesTextures => Textures + "Tiles/";
-    public static string GlowTilesTextures => TilesTextures + "Glow/";
-    public static string DecorationsTileTextures => TilesTextures + "Decorations/";
+    public static string TileTextures => Textures + "Tiles/";
+    public static string WaterTextures => TileTextures + "Waters/";
+    public static string GlowMaskTileTextures => TileTextures + "Glow/";
+    public static string DecorationTileTextures => TileTextures + "Decorations/";
 
-    public static string BiomesTextures => Textures + "Biomes/";
-    public static string BackwoodsTextures => BiomesTextures + "Backwoods/";
+    public static string BiomeTextures => Textures + "Biomes/";
+    public static string BackwoodsTextures => BiomeTextures + "Backwoods/";
 
     public static string Sounds => RoA.ModName + $"/{SOUNDSPATH}/";
     public static string AmbientSounds => Sounds + "Ambient/";

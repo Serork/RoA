@@ -79,7 +79,7 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeapons_GlowMaskInWorld : GlobalIt
             return;
         }
 
-        string texturePath = ResourceManager.ItemsWeaponsMeleeTextures + "MushroomSpear";
+        string texturePath = ResourceManager.MeleeWeaponTextures + "MushroomSpear";
         _mushroomSpearTexture = ModContent.Request<Texture2D>(texturePath);
         _mushroomSpearGlowMaskTexture = ModContent.Request<Texture2D>(texturePath + "_Glow");
     }
@@ -99,7 +99,7 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeapons_Hammush : IInitializer {
             return;
         }
 
-        string texturePath = ResourceManager.ItemsWeaponsMeleeTextures + "Hammush";
+        string texturePath = ResourceManager.MeleeWeaponTextures + "Hammush";
         HammushTexture = ModContent.Request<Texture2D>(texturePath);
         HammushGlowMaskTexture = ModContent.Request<Texture2D>(texturePath + "_Glow");
     }

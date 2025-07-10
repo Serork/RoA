@@ -35,7 +35,7 @@ abstract class SimplePylonTile<T> : ModPylon where T : ModItem {
 
     public override void Load() {
         crystalTexture = ModContent.Request<Texture2D>(Texture + "_Crystal");
-        highlightTexture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "PylonHighlight");
+        highlightTexture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "PylonHighlight");
         mapIcon = ModContent.Request<Texture2D>(Texture + "_MapIcon");
     }
 

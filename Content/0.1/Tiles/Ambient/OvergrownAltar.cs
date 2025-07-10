@@ -299,7 +299,7 @@ sealed class OvergrownAltar : ModTile {
                 return false;
             }
 
-            texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "OvergrownAltar_Glow").Value;
+            texture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "OvergrownAltar_Glow").Value;
             Color color2 = new(255, 255, 200, 200);
             float mult = flag ? 1f : Helper.EaseInOut3(strength);
             float factor3 = flag ? 1f : AltarHandler.GetAltarFactor();

@@ -91,7 +91,7 @@ sealed class Has2rMask : ModItem {
                             shader = drawInfo.cLegs;
                         }
 
-                        var asset = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "Tentacle");
+                        var asset = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "Tentacle");
                         Texture2D _texture = asset.Value;
                         Vector2 _position2 = tentaclePosition - Main.screenPosition;
                         Vector2 _origin = new(_texture.Width * 0.5f, _texture.Height * 0.5f);

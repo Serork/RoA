@@ -83,7 +83,7 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
     private Asset<Texture2D> _hatFlameTexture;
 
     public override void Load()
-        => _hatFlameTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "FlametrackerHat_Flame");
+        => _hatFlameTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "FlametrackerHat_Flame");
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         => drawInfo.drawPlayer.CheckArmorSlot(ModContent.ItemType<FlametrackerHat>(), 0, 10) ||
@@ -127,7 +127,7 @@ sealed class FlametrackerHatMask : PlayerDrawLayer {
     private Asset<Texture2D> hatMaskTexture;
 
     public override void Load()
-        => hatMaskTexture = ModContent.Request<Texture2D>(ResourceManager.ItemsTextures + "FlametrackerMask_Up");
+        => hatMaskTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "FlametrackerMask_Up");
 
     public override void Unload()
         => hatMaskTexture = null;

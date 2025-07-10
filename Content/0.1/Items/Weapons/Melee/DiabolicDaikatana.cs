@@ -94,7 +94,7 @@ sealed class DiabolicDaikatana : ModItem {
                 return;
             }
 
-            string textureName = ResourceManager.ItemsWeaponsMeleeTextures + "DiabolicDaikatanaUse";
+            string textureName = ResourceManager.MeleeWeaponTextures + "DiabolicDaikatanaUse";
             _daikatanaTexture = ModContent.Request<Texture2D>(textureName);
             _daikatanaTextureGlow = ModContent.Request<Texture2D>(textureName + "_Glow");
         }
@@ -204,7 +204,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
 
     public float Progress => Math.Clamp(1f - _swingTime / (float)_swingTimeMax, 0f, 1f);
 
-    public override string Texture => ResourceManager.ItemsWeaponsMeleeTextures + "DiabolicDaikatanaUse";
+    public override string Texture => ResourceManager.MeleeWeaponTextures + "DiabolicDaikatanaUse";
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.AllowsContactDamageFromJellyfish[Type] = true;

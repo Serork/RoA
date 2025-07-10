@@ -678,7 +678,7 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
             if (modTile is IPostDraw && modTile is not null && modTile is BackwoodsBigTree) {
                 int i = position.X, j = position.Y;
                 if (!IsTop(i, j)) {
-                    DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
+                    DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TileTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
                 }
             }
         }
@@ -703,7 +703,7 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
         //}
 
         if (IsTop(i, j)) {
-            DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TilesTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
+            DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TileTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
         }
 
         tile = WorldGenHelper.GetTileSafely(i, j);

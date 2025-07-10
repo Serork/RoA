@@ -35,7 +35,7 @@ sealed class JungleWreathTier1 : WreathItem {
     //private class JungleWreathDamageAttackersHandler : ModPlayer {
     //    public bool poisonedSkin;
 
-    //    public override void ResetEffects() => poisonedSkin = false;
+    //    public override void ResetEffectsManager() => poisonedSkin = false;
 
     //    public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
     //        if (!poisonedSkin) {

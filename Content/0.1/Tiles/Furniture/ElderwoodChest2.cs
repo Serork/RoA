@@ -106,7 +106,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
         bool flag2 = modTile.IsLockedChest(i, j);
         if (flag2 && tile.TileFrameX == 36 && tile.TileFrameY == 0) {
             Vector2 zero = Vector2.Zero;
-            Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TilesTextures + "WoodbinderRune").Value;
+            Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "WoodbinderRune").Value;
             Vector2 origin = new Vector2(74, 74) / 2f;
             for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
                 Main.spriteBatch.Draw(texture,
