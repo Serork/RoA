@@ -92,17 +92,28 @@ public class CustomLiquidRenderer : IInitializer {
         On_TileLightScanner.ExportTo += On_TileLightScanner_ExportTo;
     }
 
-    private void On_TileLightScanner_ExportTo(On_TileLightScanner.orig_ExportTo orig, TileLightScanner self, Rectangle area, LightMap outputMap, TileLightScannerOptions options) {
-        orig(self, area, outputMap, options);
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_drawInvisibleWalls")]
+    public extern static ref bool TileLightScanner__drawInvisibleWalls(TileLightScanner self);
 
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "GetTileMask")]
+    public extern static LightMaskMode TileLightScanner_GetTileMask(TileLightScanner self, Tile tile);
+
+    private void On_TileLightScanner_ExportTo(On_TileLightScanner.orig_ExportTo orig, TileLightScanner self, Rectangle area, LightMap outputMap, TileLightScannerOptions options) {
+        ref bool _drawInvisibleWalls = ref TileLightScanner__drawInvisibleWalls(self);
+        _drawInvisibleWalls = options.DrawInvisibleWalls;
         FastParallel.For(area.Left, area.Right, delegate (int start, int end, object context) {
             for (int i = start; i < end; i++) {
                 for (int j = area.Top; j <= area.Bottom; j++) {
                     if (IsTileNullOrTouchingNull(i, j)) {
+                        outputMap.SetMaskAt(i - area.X, j - area.Y, LightMaskMode.None);
+                        outputMap[i - area.X, j - area.Y] = Vector3.Zero;
                     }
                     else {
-                        Tile tile = Main.tile[i, j];
-                        if (tile.LiquidType == 5) {
+                        LightMaskMode tileMask = TileLightScanner_GetTileMask(self, Main.tile[i, j]);
+                        outputMap.SetMaskAt(i - area.X, j - area.Y, tileMask);
+                        self.GetTileLight(i, j, out var outputColor);
+                        outputMap[i - area.X, j - area.Y] = outputColor;
+                        if (Main.tile[i, j].LiquidAmount > 0 && Main.tile[i, j].LiquidType == 5) {
                             _mask[LightMap_IndexOf(outputMap, i - area.X, j - area.Y)] = ExtraLightMaskMode.Tar;
                         }
                     }
@@ -126,7 +137,9 @@ public class CustomLiquidRenderer : IInitializer {
         orig(self);
 
         for (int i = 0; i < LightMap__colors(self).Length; i++) {
-            _mask[i] = ExtraLightMaskMode.None;
+            if (_mask[i] != ExtraLightMaskMode.None) {
+                _mask[i] = ExtraLightMaskMode.None;
+            }
         }
     }
 
