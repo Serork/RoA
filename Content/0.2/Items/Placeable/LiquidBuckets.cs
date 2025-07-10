@@ -10,9 +10,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable;
 
-sealed class PermafrostAbsorbantSponge : AbsorbantSponge {
-    protected override byte LiquidIDToSoakUp() => 4;
-}
+//sealed class PermafrostAbsorbantSponge : AbsorbantSponge {
+//    protected override byte LiquidIDToSoakUp() => 4;
+//}
 
 sealed class TarAbsorbantSponge : AbsorbantSponge {
     protected override byte LiquidIDToSoakUp() => 5;
@@ -22,9 +22,9 @@ sealed class TarBucket : LiquidBucket {
     protected override byte LiquidIDToSoakUp() => 5;
 }
 
-sealed class PermafrostBucket : LiquidBucket {
-    protected override byte LiquidIDToSoakUp() => 4;
-}
+//sealed class PermafrostBucket : LiquidBucket {
+//    protected override byte LiquidIDToSoakUp() => 4;
+//}
 
 abstract class AbsorbantSponge : LiquidBucket {
     public override void SetDefaults() {
