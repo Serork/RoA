@@ -2,13 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
+using ReLogic.Threading;
 
-using RoA.Common.Lavas;
-using RoA.Content.Dusts;
 using RoA.Core;
 
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -87,9 +85,183 @@ public class CustomLiquidRenderer : IInitializer {
 
         On_WaterShaderData.DrawWaves += On_WaterShaderData_DrawWaves;
         On_WaterShaderData.QueueRipple_Vector2_Color_Vector2_RippleShape_float += On_WaterShaderData_QueueRipple_Vector2_Color_Vector2_RippleShape_float;
+        On_LightMap.SetSize += On_LightMap_SetSize;
+        On_LightMap.SetMaskAt += On_LightMap_SetMaskAt;
+        On_LightMap.BlurLine += On_LightMap_BlurLine;
+        On_LightMap.Clear += On_LightMap_Clear;
+        On_TileLightScanner.ExportTo += On_TileLightScanner_ExportTo;
+    }
+
+    private void On_TileLightScanner_ExportTo(On_TileLightScanner.orig_ExportTo orig, TileLightScanner self, Rectangle area, LightMap outputMap, TileLightScannerOptions options) {
+        orig(self, area, outputMap, options);
+
+        FastParallel.For(area.Left, area.Right, delegate (int start, int end, object context) {
+            for (int i = start; i < end; i++) {
+                for (int j = area.Top; j <= area.Bottom; j++) {
+                    if (IsTileNullOrTouchingNull(i, j)) {
+                    }
+                    else {
+                        Tile tile = Main.tile[i, j];
+                        if (tile.LiquidType == 5) {
+                            _mask[LightMap_IndexOf(outputMap, i - area.X, j - area.Y)] = ExtraLightMaskMode.Tar;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private bool IsTileNullOrTouchingNull(int x, int y) {
+        if (WorldGen.InWorld(x, y, 1)) {
+            if (Main.tile[x, y] != null && Main.tile[x + 1, y] != null && Main.tile[x - 1, y] != null && Main.tile[x, y - 1] != null)
+                return Main.tile[x, y + 1] == null;
+
+            return true;
+        }
+
+        return true;
+    }
+
+    private void On_LightMap_Clear(On_LightMap.orig_Clear orig, LightMap self) {
+        orig(self);
+
+        for (int i = 0; i < LightMap__colors(self).Length; i++) {
+            _mask[i] = ExtraLightMaskMode.None;
+        }
+    }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_colors")]
+    public extern static ref Vector3[] LightMap__colors(LightMap self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_mask")]
+    public extern static ref LightMaskMode[] LightMap__masks(LightMap self);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_random")]
+    public extern static ref FastRandom LightMap__random(LightMap self);
+
+    public static Vector3 LightDecayThroughTar { get; set; } = new Vector3(0.88f, 0.96f, 1.015f) * 0.6f;
+
+    private void On_LightMap_BlurLine(On_LightMap.orig_BlurLine orig, LightMap self, int startIndex, int endIndex, int stride) {
+        Vector3 zero = Vector3.Zero;
+        bool flag = false;
+        bool flag2 = false;
+        bool flag3 = false;
+        ref Vector3[] _colors = ref LightMap__colors(self);
+        for (int i = startIndex; i != endIndex + stride; i += stride) {
+            if (zero.X < _colors[i].X) {
+                zero.X = _colors[i].X;
+                flag = false;
+            }
+            else if (!flag) {
+                if (zero.X < 0.0185f)
+                    flag = true;
+                else
+                    _colors[i].X = zero.X;
+            }
+
+            if (zero.Y < _colors[i].Y) {
+                zero.Y = _colors[i].Y;
+                flag2 = false;
+            }
+            else if (!flag2) {
+                if (zero.Y < 0.0185f)
+                    flag2 = true;
+                else
+                    _colors[i].Y = zero.Y;
+            }
+
+            if (zero.Z < _colors[i].Z) {
+                zero.Z = _colors[i].Z;
+                flag3 = false;
+            }
+            else if (!flag3) {
+                if (zero.Z < 0.0185f)
+                    flag3 = true;
+                else
+                    _colors[i].Z = zero.Z;
+            }
+
+            if (flag && flag3 && flag2)
+                continue;
+
+            bool flag4 = false;
+            switch (_mask[i]) {
+                case ExtraLightMaskMode.Tar:
+                    if (!flag)
+                        zero.X *= LightDecayThroughTar.X;
+                    if (!flag2)
+                        zero.Y *= LightDecayThroughTar.Y;
+                    if (!flag3)
+                        zero.Z *= LightDecayThroughTar.Z;
+                    flag4 = true;
+                    break;
+            }
+
+            if (!flag4) {
+                switch (LightMap__masks(self)[i]) {
+                    case LightMaskMode.None:
+                        if (!flag)
+                            zero.X *= self.LightDecayThroughAir;
+                        if (!flag2)
+                            zero.Y *= self.LightDecayThroughAir;
+                        if (!flag3)
+                            zero.Z *= self.LightDecayThroughAir;
+                        break;
+                    case LightMaskMode.Solid:
+                        if (!flag)
+                            zero.X *= self.LightDecayThroughSolid;
+                        if (!flag2)
+                            zero.Y *= self.LightDecayThroughSolid;
+                        if (!flag3)
+                            zero.Z *= self.LightDecayThroughSolid;
+                        break;
+                    case LightMaskMode.Water: {
+                        float num = (float)LightMap__random(self).WithModifier((ulong)i).Next(98, 100) / 100f;
+                        if (!flag)
+                            zero.X *= self.LightDecayThroughWater.X * num;
+
+                        if (!flag2)
+                            zero.Y *= self.LightDecayThroughWater.Y * num;
+
+                        if (!flag3)
+                            zero.Z *= self.LightDecayThroughWater.Z * num;
+
+                        break;
+                    }
+                    case LightMaskMode.Honey:
+                        if (!flag)
+                            zero.X *= self.LightDecayThroughHoney.X;
+                        if (!flag2)
+                            zero.Y *= self.LightDecayThroughHoney.Y;
+                        if (!flag3)
+                            zero.Z *= self.LightDecayThroughHoney.Z;
+                        break;
+                }
+            }
+        }
+    }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "IndexOf")]
+    public extern static int LightMap_IndexOf(LightMap self, int x, int y);
+
+    private void On_LightMap_SetMaskAt(On_LightMap.orig_SetMaskAt orig, LightMap self, int x, int y, LightMaskMode mode) {
+        orig(self, x, y, mode);
+    }
+
+    private void On_LightMap_SetSize(On_LightMap.orig_SetSize orig, LightMap self, int width, int height) {
+        orig(self, width, height);
+
+        int neededSize = (width + 1) * (height + 1);
+        _mask = new ExtraLightMaskMode[neededSize];
+    }
+
+    public enum ExtraLightMaskMode : byte {
+        None,
+        Tar
     }
 
     private static Ripple[] _rippleQueue = new Ripple[200];
+    private static ExtraLightMaskMode[] _mask = new ExtraLightMaskMode[41209]; // scary
 
     private void On_WaterShaderData_QueueRipple_Vector2_Color_Vector2_RippleShape_float(On_WaterShaderData.orig_QueueRipple_Vector2_Color_Vector2_RippleShape_float orig, WaterShaderData self, Vector2 position, Color waveData, Vector2 size, RippleShape shape, float rotation) {
         //orig(self, position, waveData, size, shape, rotation);
@@ -321,10 +493,10 @@ public class CustomLiquidRenderer : IInitializer {
     }
 
     private LightMaskMode On_TileLightScanner_GetTileMask(On_TileLightScanner.orig_GetTileMask orig, TileLightScanner self, Tile tile) {
-        if ((tile.LiquidType == 4 || tile.LiquidType == 5) && tile.LiquidAmount > 128) {
-            if (tile.LiquidType == 5) {
-                return LightMaskMode.Honey;
-            }
+        if ((tile.LiquidType == 4/* || tile.LiquidType == 5*/) && tile.LiquidAmount > 128) {
+            //if (tile.LiquidType == 5) {
+            //    return LightMaskMode.Honey;
+            //}
             return LightMaskMode.None;
         }
 
