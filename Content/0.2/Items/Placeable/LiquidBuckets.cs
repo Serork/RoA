@@ -89,8 +89,8 @@ abstract class LiquidBucket : ModItem {
 
                 int liquidType = Main.tile[x, y].LiquidType;
                 if (TileHelper.IsPermafrost(x, y)) {
-                    sItem.stack--;
-                    self.PutItemInInventoryFromItemUsage(ModContent.ItemType<PermafrostBucket>(), self.selectedItem);
+                    //sItem.stack--;
+                    //self.PutItemInInventoryFromItemUsage(ModContent.ItemType<PermafrostBucket>(), self.selectedItem);
                 }
                 else if (TileHelper.IsTar(x, y)) {
                     sItem.stack--;
