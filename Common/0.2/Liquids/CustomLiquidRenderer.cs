@@ -35,7 +35,7 @@ sealed class CustomLiquidRenderer : IInitializer {
         10,
 
         3,
-        3,
+        5,
     };
     private static readonly float[] DEFAULT_OPACITY = new float[6] {
         0.6f,
