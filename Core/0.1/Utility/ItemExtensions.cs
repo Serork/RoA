@@ -21,4 +21,13 @@ static partial class ItemExtensions {
     public static bool IsANatureWeapon(this Item item) => item.IsNature() && item.IsAWeapon();
 
     public static T As<T>(this Item item) where T : ModItem => item.ModItem as T;
+    public static bool Is<T>(this Item item) where T : ModItem => item.ModItem is T;
+    public static bool Is<T>(this Item item, out T? modItem) where T : ModItem {
+        modItem = null;
+        if (item.Is<T>()) {
+            modItem = item.As<T>();
+            return true;
+        }
+        return false;
+    }
 }

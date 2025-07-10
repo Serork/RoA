@@ -2003,3 +2003,28 @@ LivingPearlwoodHelmet: {
 	DisplayName: Living Pearlwood Helmet
 	Tooltip: ""
 }
+
+PerfafrostBucket: {
+	DisplayName: Perfafrost Bucket
+	Tooltip: ""
+}
+
+TarBucket: {
+	DisplayName: Tar Bucket
+	Tooltip: ""
+}
+
+PermafrostBucket: {
+	DisplayName: Permafrost Bucket
+	Tooltip: ""
+}
+
+PermafrostAbsorbantSponge: {
+	DisplayName: Permafrost Absorbant Sponge
+	Tooltip: ""
+}
+
+TarAbsorbantSponge: {
+	DisplayName: Tar Absorbant Sponge
+	Tooltip: ""
+}

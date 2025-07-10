@@ -18,6 +18,12 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class TileHelper {
+    public static bool IsHoney(int x, int y) => Main.tile[x, y].LiquidType == LiquidID.Honey;
+    public static bool IsLava(int x, int y) => Main.tile[x, y].LiquidType == LiquidID.Lava;
+    public static bool IsShimmer(int x, int y) => Main.tile[x, y].LiquidType == LiquidID.Shimmer;
+    public static bool IsPermafrost(int x, int y) => Main.tile[x, y].LiquidType == 4;
+    public static bool IsTar(int x, int y) => Main.tile[x, y].LiquidType == 5;
+
     public static ushort GetTreeDustType(Point16 position) {
         ushort backwoodsBigTreeTileType = (ushort)ModContent.TileType<BackwoodsBigTree>();
         return WorldGenHelper.GetTileSafely(position).TileType == backwoodsBigTreeTileType ? (ushort)TileLoader.GetTile(backwoodsBigTreeTileType).DustType : GetTreeKillDustType(position);
