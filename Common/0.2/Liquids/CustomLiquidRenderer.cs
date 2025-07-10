@@ -9,6 +9,7 @@ using RoA.Core;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.GameContent.Drawing;
@@ -43,10 +44,339 @@ public class CustomLiquidRenderer : IInitializer {
         On_LiquidRenderer.GetCachedDrawArea += On_LiquidRenderer_GetCachedDrawArea;
 
         On_TileDrawing.DrawPartialLiquid += On_TileDrawing_DrawPartialLiquid;
+        On_TileDrawing.DrawTile_LiquidBehindTile += On_TileDrawing_DrawTile_LiquidBehindTile;
+    }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawPartialLiquid")]
+    public extern static void TileDrawing_DrawPartialLiquid(TileDrawing self, bool behindBlocks, Tile tileCache, ref Vector2 position, ref Rectangle liquidSize, int liquidType, ref VertexColors colors);
+
+
+    private void On_TileDrawing_DrawTile_LiquidBehindTile(On_TileDrawing.orig_DrawTile_LiquidBehindTile orig, TileDrawing self, bool solidLayer, bool inFrontOfPlayers, int waterStyleOverride, Vector2 screenPosition, Vector2 screenOffset, int tileX, int tileY, Tile tileCache) {
+        Tile tile = Main.tile[tileX + 1, tileY];
+        Tile tile2 = Main.tile[tileX - 1, tileY];
+        Tile tile3 = Main.tile[tileX, tileY - 1];
+        Tile tile4 = Main.tile[tileX, tileY + 1];
+        //if (tile == null) {
+        //    tile = new Tile();
+        //    Main.tile[tileX + 1, tileY] = tile;
+        //}
+
+        //if (tile2 == null) {
+        //    tile2 = new Tile();
+        //    Main.tile[tileX - 1, tileY] = tile2;
+        //}
+
+        //if (tile3 == null) {
+        //    tile3 = new Tile();
+        //    Main.tile[tileX, tileY - 1] = tile3;
+        //}
+
+        //if (tile4 == null) {
+        //    tile4 = new Tile();
+        //    Main.tile[tileX, tileY + 1] = tile4;
+        //}
+
+        if (!tileCache.HasTile || tileCache.IsActuated || Main.tileSolidTop[tileCache.TileType] || (tileCache.IsHalfBlock && (tile2.LiquidAmount > 160 || tile.LiquidAmount > 160) && Main.instance.waterfallManager.CheckForWaterfall(tileX, tileY)) || (TileID.Sets.BlocksWaterDrawingBehindSelf[tileCache.TileType] && tileCache.Slope == 0))
+            return;
+
+        int num = 0;
+        bool flag = false;
+        bool flag2 = false;
+        bool flag3 = false;
+        bool flag4 = false;
+        bool flag5 = false;
+        int num2 = 0;
+        bool flag6 = false;
+        int num3 = (int)tileCache.Slope;
+        int num4 = (int)tileCache.BlockType;
+        if (tileCache.TileType == 546 && tileCache.LiquidAmount > 0) {
+            flag5 = true;
+            flag4 = true;
+            flag = true;
+            flag2 = true;
+            switch (tileCache.LiquidType) {
+                case 0:
+                    flag6 = true;
+                    break;
+                case 1:
+                    num2 = 1;
+                    break;
+                case 2:
+                    num2 = 11;
+                    break;
+                case 3:
+                    num2 = 14;
+                    break;
+
+                case 4:
+                    num2 = 50;
+                    break;
+                case 5:
+                    num2 = 51;
+                    break;
+            }
+
+            num = tileCache.LiquidAmount;
+        }
+        else {
+            if (tileCache.LiquidAmount > 0 && num4 != 0 && (num4 != 1 || tileCache.LiquidAmount > 160)) {
+                flag5 = true;
+                switch (tileCache.LiquidType) {
+                    case 0:
+                        flag6 = true;
+                        break;
+                    case 1:
+                        num2 = 1;
+                        break;
+                    case 2:
+                        num2 = 11;
+                        break;
+                    case 3:
+                        num2 = 14;
+                        break;
+
+                    case 4:
+                        num2 = 50;
+                        break;
+                    case 5:
+                        num2 = 51;
+                        break;
+                }
+
+                if (tileCache.LiquidAmount > num)
+                    num = tileCache.LiquidAmount;
+            }
+
+            if (tile2.LiquidAmount > 0 && num3 != 1 && num3 != 3) {
+                flag = true;
+                switch (tile2.LiquidType) {
+                    case 0:
+                        flag6 = true;
+                        break;
+                    case 1:
+                        num2 = 1;
+                        break;
+                    case 2:
+                        num2 = 11;
+                        break;
+                    case 3:
+                        num2 = 14;
+                        break;
+
+                    case 4:
+                        num2 = 50;
+                        break;
+                    case 5:
+                        num2 = 51;
+                        break;
+                }
+
+                if (tile2.LiquidAmount > num)
+                    num = tile2.LiquidAmount;
+            }
+
+            if (tile.LiquidAmount > 0 && num3 != 2 && num3 != 4) {
+                flag2 = true;
+                switch (tile.LiquidType) {
+                    case 0:
+                        flag6 = true;
+                        break;
+                    case 1:
+                        num2 = 1;
+                        break;
+                    case 2:
+                        num2 = 11;
+                        break;
+                    case 3:
+                        num2 = 14;
+                        break;
+
+                    case 4:
+                        num2 = 50;
+                        break;
+                    case 5:
+                        num2 = 51;
+                        break;
+                }
+
+                if (tile.LiquidAmount > num)
+                    num = tile.LiquidAmount;
+            }
+
+            if (tile3.LiquidAmount > 0 && num3 != 3 && num3 != 4) {
+                flag3 = true;
+                switch (tile3.LiquidType) {
+                    case 0:
+                        flag6 = true;
+                        break;
+                    case 1:
+                        num2 = 1;
+                        break;
+                    case 2:
+                        num2 = 11;
+                        break;
+                    case 3:
+                        num2 = 14;
+                        break;
+
+                    case 4:
+                        num2 = 50;
+                        break;
+                    case 5:
+                        num2 = 51;
+                        break;
+                }
+            }
+
+            if (tile4.LiquidAmount > 0 && num3 != 1 && num3 != 2) {
+                if (tile4.LiquidAmount > 240)
+                    flag4 = true;
+
+                switch (tile4.LiquidType) {
+                    case 0:
+                        flag6 = true;
+                        break;
+                    case 1:
+                        num2 = 1;
+                        break;
+                    case 2:
+                        num2 = 11;
+                        break;
+                    case 3:
+                        num2 = 14;
+                        break;
+
+                    case 4:
+                        num2 = 50;
+                        break;
+                    case 5:
+                        num2 = 51;
+                        break;
+                }
+            }
+        }
+
+        if (!flag3 && !flag4 && !flag && !flag2 && !flag5)
+            return;
+
+        if (waterStyleOverride != -1)
+            Main.waterStyle = waterStyleOverride;
+
+        if (num2 == 0)
+            num2 = Main.waterStyle;
+
+        Lighting.GetCornerColors(tileX, tileY, out var vertices);
+        Vector2 vector = new Vector2(tileX * 16, tileY * 16);
+        Rectangle liquidSize = new Rectangle(0, 4, 16, 16);
+        if (flag4 && (flag || flag2)) {
+            flag = true;
+            flag2 = true;
+        }
+
+        if (tileCache.HasTile && (Main.tileSolidTop[tileCache.TileType] || !Main.tileSolid[tileCache.TileType]))
+            return;
+
+        if ((!flag3 || !(flag || flag2)) && !(flag4 && flag3)) {
+            if (flag3) {
+                liquidSize = new Rectangle(0, 4, 16, 4);
+                if (tileCache.IsHalfBlock || tileCache.Slope != 0)
+                    liquidSize = new Rectangle(0, 4, 16, 12);
+            }
+            else if (flag4 && !flag && !flag2) {
+                vector = new Vector2(tileX * 16, tileY * 16 + 12);
+                liquidSize = new Rectangle(0, 4, 16, 4);
+            }
+            else {
+                float num5 = (float)(256 - num) / 32f;
+                int y = 4;
+                if (tile3.LiquidAmount == 0 && (num4 != 0 || !WorldGen.SolidTile(tileX, tileY - 1)))
+                    y = 0;
+
+                int num6 = (int)num5 * 2;
+                if (tileCache.Slope != 0) {
+                    vector = new Vector2(tileX * 16, tileY * 16 + num6);
+                    liquidSize = new Rectangle(0, num6, 16, 16 - num6);
+                }
+                else if ((flag && flag2) || tileCache.IsHalfBlock) {
+                    vector = new Vector2(tileX * 16, tileY * 16 + num6);
+                    liquidSize = new Rectangle(0, y, 16, 16 - num6);
+                }
+                else if (flag) {
+                    vector = new Vector2(tileX * 16, tileY * 16 + num6);
+                    liquidSize = new Rectangle(0, y, 4, 16 - num6);
+                }
+                else {
+                    vector = new Vector2(tileX * 16 + 12, tileY * 16 + num6);
+                    liquidSize = new Rectangle(0, y, 4, 16 - num6);
+                }
+            }
+        }
+
+        Vector2 position = vector - screenPosition + screenOffset;
+        float num7 = 0.5f;
+        switch (num2) {
+            case 1:
+                num7 = 1f;
+                break;
+            case 11:
+                num7 = Math.Max(num7 * 1.7f, 1f);
+                break;
+        }
+
+        if ((double)tileY <= Main.worldSurface || num7 > 1f) {
+            num7 = 1f;
+            if (tileCache.WallType == 21)
+                num7 = 0.9f;
+            else if (tileCache.WallType > 0)
+                num7 = 0.6f;
+        }
+
+        if (tileCache.IsHalfBlock && tile3.LiquidAmount > 0 && tileCache.WallType > 0)
+            num7 = 0f;
+
+        if (num3 == 4 && tile2.LiquidAmount == 0 && !WorldGen.SolidTile(tileX - 1, tileY))
+            num7 = 0f;
+
+        if (num3 == 3 && tile.LiquidAmount == 0 && !WorldGen.SolidTile(tileX + 1, tileY))
+            num7 = 0f;
+
+        vertices.BottomLeftColor *= num7;
+        vertices.BottomRightColor *= num7;
+        vertices.TopLeftColor *= num7;
+        vertices.TopRightColor *= num7;
+        bool flag7 = false;
+        if (flag6) {
+            int totalCount = (int)typeof(WaterStylesLoader).GetProperty("TotalCount", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(LoaderManager.Get<WaterStylesLoader>());/*TotalCount*/;
+            for (int i = 0; i < totalCount; i++) {
+                if (Main.IsLiquidStyleWater(i) && Main.liquidAlpha[i] > 0f && i != num2) {
+                    TileDrawing_DrawPartialLiquid(self, !solidLayer, tileCache, ref position, ref liquidSize, i, ref vertices);
+                    flag7 = true;
+                    break;
+                }
+            }
+        }
+
+        VertexColors colors = vertices;
+        bool flag8 = false;
+        if (num2 == 50 || num2 == 51) {
+            num2 -= 46;
+            flag8 = true;
+        }
+        float num8 = (!flag8 && flag7 ? Main.liquidAlpha[num2] : 1f);
+        colors.BottomLeftColor *= num8;
+        colors.BottomRightColor *= num8;
+        colors.TopLeftColor *= num8;
+        colors.TopRightColor *= num8;
+        if (num2 == 14)
+            LiquidRenderer.SetShimmerVertexColors(ref colors, solidLayer ? 0.75f : 1f, tileX, tileY);
+
+        TileDrawing_DrawPartialLiquid(self, !solidLayer, tileCache, ref position, ref liquidSize, flag8 ? num2 + 46 : num2, ref colors);
     }
 
     private void On_TileDrawing_DrawPartialLiquid(On_TileDrawing.orig_DrawPartialLiquid orig, TileDrawing self, bool behindBlocks, Tile tileCache, ref Vector2 position, ref Rectangle liquidSize, int liquidType, ref VertexColors colors) {
-        if (liquidType == 4 || liquidType == 5) {
+        if (liquidType == 50 || liquidType == 51) {
+            liquidType -= 46;
+
             int num = (int)tileCache.Slope;
             bool flag = !TileID.Sets.BlocksWaterDrawingBehindSelf[tileCache.TileType];
             if (!behindBlocks)
