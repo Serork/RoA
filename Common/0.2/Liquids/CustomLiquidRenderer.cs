@@ -35,7 +35,7 @@ sealed class CustomLiquidRenderer : IInitializer {
         10,
 
         3,
-        5,
+        2,
     };
     private static readonly float[] DEFAULT_OPACITY = new float[6] {
         0.6f,
@@ -2217,10 +2217,10 @@ sealed class CustomLiquidRenderer : IInitializer {
 
                         num = Math.Min(1f, num);
 
-                        vertices.BottomLeftColor *= num;
-                        vertices.BottomRightColor *= num;
-                        vertices.TopLeftColor *= num;
-                        vertices.TopRightColor *= num;
+                        //vertices.BottomLeftColor *= num;
+                        //vertices.BottomRightColor *= num;
+                        //vertices.TopLeftColor *= num;
+                        //vertices.TopRightColor *= num;
                         Main.DrawTileInWater(drawOffset, i, j);
 
                         Main.tileBatch.Draw(_liquidTextures[num2].Value, new Vector2(i << 4, j << 4) + drawOffset + liquidOffset, sourceRectangle, vertices, Vector2.Zero, 1f, SpriteEffects.None);
