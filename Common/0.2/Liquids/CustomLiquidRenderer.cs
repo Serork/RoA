@@ -19,13 +19,15 @@ using Terraria.Graphics;
 using Terraria.Graphics.Light;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.IO;
+using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
 namespace RoA.Common.Liquids;
 
-public class CustomLiquidRenderer : IInitializer {
+sealed class CustomLiquidRenderer : IInitializer {
     private static readonly int[] WATERFALL_LENGTH = new int[6] {
         10,
         3,
@@ -136,11 +138,11 @@ public class CustomLiquidRenderer : IInitializer {
     private void On_LightMap_Clear(On_LightMap.orig_Clear orig, LightMap self) {
         orig(self);
 
-        for (int i = 0; i < LightMap__colors(self).Length; i++) {
-            if (_mask[i] != ExtraLightMaskMode.None) {
-                _mask[i] = ExtraLightMaskMode.None;
-            }
-        }
+        //for (int i = 0; i < LightMap__colors(self).Length; i++) {
+        //    if (_mask[i] != ExtraLightMaskMode.None) {
+        //        _mask[i] = ExtraLightMaskMode.None;
+        //    }
+        //}
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_colors")]
@@ -356,7 +358,7 @@ public class CustomLiquidRenderer : IInitializer {
         var _usePlayerWaves = WaterShaderData__usePlayerWaves(self);
         if (_usePlayerWaves) {
             for (int j = 0; j < 255; j++) {
-                if (Main.player[j] == null || !Main.player[j].active || (!Main.player[j].wet && Main.player[j].wetCount == 0) || !Collision.CheckAABBvAABBCollision(screenPosition, dimensions, Main.player[j].position - vector3, Main.player[j].Size + vector3))
+                if (Main.player[j] == null || !Main.player[j].active || ((!Main.player[j].wet && Main.player[j].wetCount == 0) && (!Main.player[j].GetModPlayer<CustomLiquidCollision_Player>().wet && Main.player[j].GetModPlayer<CustomLiquidCollision_Player>().wetCount == 0)) || !Collision.CheckAABBvAABBCollision(screenPosition, dimensions, Main.player[j].position - vector3, Main.player[j].Size + vector3))
                     continue;
 
                 Player player = Main.player[j];
@@ -367,7 +369,7 @@ public class CustomLiquidRenderer : IInitializer {
                 velocity2.Normalize();
                 vector6 -= velocity2 * 10f;
 
-                var handler = player.GetModPlayer<CustomLiquidCollision_Player>();
+                var handler = Main.player[j].GetModPlayer<CustomLiquidCollision_Player>();
                 if (!self._useViscosityFilter) {
                     if (player.honeyWet || player.lavaWet || handler.permafrostWet || handler.tarWet) {
                         num3 *= handler.tarWet ? 0.1f : 0.3f;
@@ -375,7 +377,7 @@ public class CustomLiquidRenderer : IInitializer {
                 }
 
                 if (handler.tarWet) {
-                    num3 *= 0.75f;
+                    num3 *= 0.35f;
                 }
 
                 if (player.wet || handler.wet)
@@ -387,7 +389,12 @@ public class CustomLiquidRenderer : IInitializer {
                         num4 = -20f;
 
                     num3 *= 3f;
-                    self.QueueRipple(player.Center + velocity2 * num4, player.wet ? num3 : (0f - num3), new Vector2(player.width, (float)player.height * ((float)(int)player.wetCount / 9f)) * MathHelper.Clamp(num3 * 10f, 0f, 1f), RippleShape.Circle);
+                    float factor = ((float)(int)player.wetCount / 9f);
+                    if (handler.tarWet) {
+                        factor = ((float)(int)handler.wetCount / 9f);
+                        num3 += 0.25f * factor;
+                    }
+                    self.QueueRipple(player.Center + velocity2 * num4, player.wet ? num3 : (0f - num3), new Vector2(player.width, (float)player.height * factor) * MathHelper.Clamp(num3 * 10f, 0f, 1f), RippleShape.Circle);
                 }
             }
         }
@@ -827,9 +834,13 @@ public class CustomLiquidRenderer : IInitializer {
         VertexColors colors = vertices;
         bool flag8 = false;
         bool permafrost = false;
+        bool tar = false;
         if (num2 == 50 || num2 == 51) {
             if (num2 == 50) {
                 permafrost = true;
+            }
+            if (num2 == 51) {
+                tar = true;
             }
             num2 -= 46;
             flag8 = true;
@@ -844,6 +855,9 @@ public class CustomLiquidRenderer : IInitializer {
 
         if (permafrost)
             SetPermafrostVertexColors(ref colors, 1f, tileX, tileY);
+
+        if (tar)
+            SetTarVertexColors(ref colors, 1f, tileX, tileY);
 
         TileDrawing_DrawPartialLiquid(self, !solidLayer, tileCache, ref position, ref liquidSize, flag8 ? num2 + 46 : num2, ref colors);
     }
@@ -2185,6 +2199,9 @@ public class CustomLiquidRenderer : IInitializer {
                         }
                         if (num2 == 5) {
                             num2 = 16;
+                            int num3 = ptr2->X + drawArea.X - 2;
+                            int num4 = ptr2->Y + drawArea.Y - 2;
+                            SetTarVertexColors(ref vertices, num, num3, num4);
                         }
 
                         switch (num2) {
@@ -2259,6 +2276,21 @@ public class CustomLiquidRenderer : IInitializer {
         Main.tileBatch.End();
     }
 
+    public static void SetTarVertexColors(ref VertexColors colors, float opacity, int x, int y) {
+        colors.BottomLeftColor = Color.White;
+        colors.BottomRightColor = Color.White;
+        colors.TopLeftColor = Color.White;
+        colors.TopRightColor = Color.White;
+        colors.BottomLeftColor *= opacity;
+        colors.BottomRightColor *= opacity;
+        colors.TopLeftColor *= opacity;
+        colors.TopRightColor *= opacity;
+        colors.BottomLeftColor = new Color(colors.BottomLeftColor.ToVector4() * GetTarBaseColor(x, y + 1));
+        colors.BottomRightColor = new Color(colors.BottomRightColor.ToVector4() * GetTarBaseColor(x + 1, y + 1));
+        colors.TopLeftColor = new Color(colors.TopLeftColor.ToVector4() * GetTarBaseColor(x, y));
+        colors.TopRightColor = new Color(colors.TopRightColor.ToVector4() * GetTarBaseColor(x + 1, y));
+    }
+
     public static void SetPermafrostVertexColors(ref VertexColors colors, float opacity, int x, int y) {
         colors.BottomLeftColor = Color.White;
         colors.BottomRightColor = Color.White;
@@ -2272,6 +2304,17 @@ public class CustomLiquidRenderer : IInitializer {
         colors.BottomRightColor = new Color(colors.BottomRightColor.ToVector4() * GetPermafrostBaseColor(x + 1, y + 1));
         colors.TopLeftColor = new Color(colors.TopLeftColor.ToVector4() * GetPermafrostBaseColor(x, y));
         colors.TopRightColor = new Color(colors.TopRightColor.ToVector4() * GetPermafrostBaseColor(x + 1, y));
+    }
+
+    public static Vector4 GetTarBaseColor(float worldPositionX, float worldPositionY) {
+        float shimmerWave = GetTarWave(ref worldPositionX, ref worldPositionY);
+        float brightness = Lighting.Brightness((int)worldPositionX, (int)worldPositionY);
+        Vector4 brightColor1 = new(0.3f, 0.3f, 0.3f, 1f),
+                brightColor2 = new(1f, 1f, 1f, 1f);
+        Vector4 darkColor1 = new(0.2f, 0.2f, 0.2f, 1f),
+                darkColor2 = new(0.9f, 0.9f, 0.9f, 1f);
+        var output = Vector4.Lerp(Vector4.Lerp(darkColor1, darkColor2, brightness), Vector4.Lerp(brightColor1, brightColor2, brightness), shimmerWave);
+        return output * 1f;
     }
 
     public static Vector4 GetPermafrostBaseColor(float worldPositionX, float worldPositionY) {
@@ -2308,6 +2351,9 @@ public class CustomLiquidRenderer : IInitializer {
     }
 
     public static float GetShimmerWave(ref float worldPositionX, ref float worldPositionY) => (float)Math.Sin(((double)((worldPositionX + worldPositionY / 6f) / 10f) - Main.timeForVisualEffects / 360.0) * 6.2831854820251465);
+
+    public static float GetTarWave(ref float worldPositionX, ref float worldPositionY)
+       => (float)Math.Sin(((double)((Math.Cos(worldPositionX + Main.timeForVisualEffects / 180) + Math.Sin(worldPositionY + Main.timeForVisualEffects / 180))) - Main.timeForVisualEffects / 360) * 6.2831854820251465);
 
     public static float GetPermaforstWave(ref float worldPositionX, ref float worldPositionY)
        => (float)Math.Sin(((double)((Math.Cos(worldPositionX + Main.timeForVisualEffects / 180) + Math.Sin(worldPositionY + Main.timeForVisualEffects / 180))) - Main.timeForVisualEffects / 180) * 6.2831854820251465);
