@@ -10,7 +10,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
 
-namespace RoA.Content.Items.Weapons.Magic;
+namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
 sealed class LeafySeahorse : NatureItem {
     protected override void SafeSetDefaults() {

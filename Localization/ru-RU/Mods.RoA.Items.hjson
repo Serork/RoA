@@ -2044,3 +2044,8 @@ TarAbsorbantSponge: {
 	// DisplayName: Tar Absorbant Sponge
 	// Tooltip: ""
 }
+
+IceRod: {
+	// DisplayName: Ice Rod
+	// Tooltip: ""
+}

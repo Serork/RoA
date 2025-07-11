@@ -1,10 +1,9 @@
-﻿using RoA.Content.Items.Weapons.Nature.Hardmode;
-using RoA.Core.Utility.Extensions;
+﻿using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons;
+namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
 sealed class Macrolepiota_PlayerSlowFallHandler : ModPlayer {
     public override void PostUpdateEquips() {

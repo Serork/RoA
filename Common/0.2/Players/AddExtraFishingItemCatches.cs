@@ -1,5 +1,5 @@
 ﻿using RoA.Content.Biomes.Backwoods;
-using RoA.Content.Items.Weapons.Magic;
+using RoA.Content.Items.Weapons.Nature.Hardmode;
 
 using Terraria;
 using Terraria.DataStructures;
