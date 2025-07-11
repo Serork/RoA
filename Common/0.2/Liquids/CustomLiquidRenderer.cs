@@ -1,6 +1,4 @@
-﻿using Humanizer;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
@@ -148,18 +146,12 @@ sealed class CustomLiquidRenderer : IInitializer {
 
     private MapTile On_MapHelper_CreateMapTile(On_MapHelper.orig_CreateMapTile orig, int i, int j, byte Light) {
         Tile tile = Main.tile[i, j];
-
-        int num2 = Light;
-        int num7 = 0;
-
         if (tile.LiquidAmount > 32 && tile.LiquidType >= 4) {
-            num7 = tile.LiquidType - 4 + 10000;
+            return MapTile.Create((ushort)(tile.LiquidType - 4 + 10000), Light, (byte)0);
         }
         else {
             return orig(i, j, Light);
         }
-
-        return MapTile.Create((ushort)num7, (byte)num2, (byte)0);
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_drawInvisibleWalls")]
@@ -581,7 +573,10 @@ sealed class CustomLiquidRenderer : IInitializer {
     }
 
     private LightMaskMode On_TileLightScanner_GetTileMask(On_TileLightScanner.orig_GetTileMask orig, TileLightScanner self, Tile tile) {
-        if ((tile.LiquidType == 4/* || tile.LiquidType == 5*/) && tile.LiquidAmount > 128) {
+        if (LightIsBlocked(self, tile) && tile.TileType != 131 && !tile.IsActuated && tile.Slope == 0)
+            return LightMaskMode.Solid;
+
+        if (tile.LiquidAmount > 128 && (tile.LiquidType == 4/* || tile.LiquidType == 5*/)) {
             //if (tile.LiquidType == 5) {
             //    return LightMaskMode.Honey;
             //}
@@ -589,6 +584,17 @@ sealed class CustomLiquidRenderer : IInitializer {
         }
 
         return orig(self, tile);
+    }
+
+    private bool LightIsBlocked(TileLightScanner self, Tile tile) {
+        if (tile.HasTile && Main.tileBlockLight[tile.TileType]) {
+            if (tile.IsTileInvisible)
+                return TileLightScanner__drawInvisibleWalls(self);
+
+            return true;
+        }
+
+        return false;
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawPartialLiquid")]
