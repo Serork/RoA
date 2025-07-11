@@ -122,7 +122,7 @@ sealed class CustomLiquidCollision_Item : GlobalItem {
         if (handler.tarWet) {
             gravity = 0.05f;
             maxFallSpeed = 3f;
-            wetVelocity = self.velocity * 0.15f;
+            wetVelocity = self.velocity * 0.2f;
         }
 
         orig(self, gravity, maxFallSpeed, ref wetVelocity, i);
@@ -147,7 +147,7 @@ sealed class CustomLiquidCollision_Projectile : GlobalProjectile {
     private void On_Projectile_UpdatePosition(On_Projectile.orig_UpdatePosition orig, Projectile self, Vector2 wetVelocity) {
         var handler = self.GetGlobalProjectile<CustomLiquidCollision_Projectile>();
         if (handler.tarWet) {
-            wetVelocity *= 0.4f;
+            wetVelocity *= 0.45f;
         }
         else if (handler.permafrostWet) {
 
@@ -281,7 +281,7 @@ sealed class CustomLiquidCollision_NPC : GlobalNPC {
         var handler = self.GetGlobalNPC<CustomLiquidCollision_NPC>();
         if (Slowdown == self.waterMovementSpeed) {
             if (handler.tarWet || CustomLiquidCollision_Player.tarCollision) {
-                CustomLiquidCollision(self, oldDryVelocity, 0.15f);
+                CustomLiquidCollision(self, oldDryVelocity, 0.2f);
                 return;
             }
             else if (handler.permafrostWet || CustomLiquidCollision_Player.permafrostCollision) {
