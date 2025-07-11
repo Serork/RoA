@@ -384,7 +384,7 @@ sealed class CustomLiquidRenderer : IInitializer {
         var _useNPCWaves = WaterShaderData__useNPCWaves(self);
         if (_useNPCWaves) {
             for (int i = 0; i < 200; i++) {
-                if (Main.npc[i] == null || !Main.npc[i].active || (!Main.npc[i].wet && Main.npc[i].wetCount == 0) || !Collision.CheckAABBvAABBCollision(screenPosition, dimensions, Main.npc[i].position - vector3, Main.npc[i].Size + vector3))
+                if (Main.npc[i] == null || !Main.npc[i].active || ((!Main.npc[i].wet && Main.npc[i].wetCount == 0) && (!Main.npc[i].GetGlobalNPC<CustomLiquidCollision_NPC>().wet && Main.npc[i].GetGlobalNPC<CustomLiquidCollision_NPC>().wetCount == 0)) || !Collision.CheckAABBvAABBCollision(screenPosition, dimensions, Main.npc[i].position - vector3, Main.npc[i].Size + vector3))
                     continue;
 
                 NPC nPC = Main.npc[i];
@@ -398,20 +398,40 @@ sealed class CustomLiquidRenderer : IInitializer {
                 Vector2 velocity = nPC.velocity;
                 velocity.Normalize();
                 vector4 -= velocity * 10f;
-                if (!self._useViscosityFilter && (nPC.honeyWet || nPC.lavaWet))
-                    num *= 0.3f;
 
-                if (nPC.wet)
+                var handler = nPC.GetGlobalNPC<CustomLiquidCollision_NPC>();
+                if (!self._useViscosityFilter) {
+                    if (nPC.honeyWet || nPC.lavaWet || handler.permafrostWet || handler.tarWet) {
+                        num *= handler.tarWet ? 0.1f : 0.3f;
+                    }
+                }
+
+                if (handler.tarWet) {
+                    num *= 0.5f;
+                }
+
+                if (nPC.wet || handler.wet)
                     tileBatch.Draw(TextureAssets.MagicPixel.Value, new Vector4(vector4.X, vector4.Y, (float)nPC.width * 2f, (float)nPC.height * 2f) * 0.25f, null, new VertexColors(new Color(vector5.X * 0.5f + 0.5f, vector5.Y * 0.5f + 0.5f, 0.5f * num)), new Vector2((float)TextureAssets.MagicPixel.Width() / 2f, (float)TextureAssets.MagicPixel.Height() / 2f), SpriteEffects.None, nPC.rotation);
 
-                if (nPC.wetCount != 0) {
+                bool flag = handler.wetCount != 0;
+                if (nPC.wetCount != 0 || flag) {
                     num = nPC.velocity.Length();
                     num = 0.195f * (float)Math.Sqrt(num);
                     float num2 = 5f;
-                    if (!nPC.wet)
-                        num2 = -20f;
+                    if (!nPC.wet && !handler.wet)
+                        num2 = handler.wetCount > 0 ? -1f : -20f;
 
-                    self.QueueRipple(nPC.Center + velocity * num2, new Color(0.5f, (nPC.wet ? num : (0f - num)) * 0.5f + 0.5f, 0f, 1f) * 0.5f, new Vector2(nPC.width, (float)nPC.height * ((float)(int)nPC.wetCount / 9f)) * MathHelper.Clamp(num * 10f, 0f, 1f), RippleShape.Circle);
+                    float factor = ((float)(int)nPC.wetCount / 9f);
+                    if (flag || handler.tarWet) {
+                        factor = ((float)(int)handler.wetCount / 9f);
+                        num += (flag && !handler.tarWet ? 0.2f : 0.25f) * factor;
+                    }
+
+                    if (flag) {
+                        num *= 0.5f;
+                    }
+
+                    self.QueueRipple(nPC.Center + velocity * num2, new Color(0.5f, (nPC.wet || handler.wet ? num : (0f - num)) * 0.5f + 0.5f, 0f, 1f) * 0.5f, new Vector2(nPC.width, (float)nPC.height * factor) * MathHelper.Clamp(num * 10f, 0f, 1f), RippleShape.Circle);
                 }
             }
         }
@@ -437,24 +457,30 @@ sealed class CustomLiquidRenderer : IInitializer {
                 }
 
                 if (handler.tarWet) {
-                    num3 *= 0.35f;
+                    num3 *= 0.5f;
                 }
 
                 if (player.wet || handler.wet)
                     tileBatch.Draw(TextureAssets.MagicPixel.Value, new Vector4(vector6.X - (float)player.width * 2f * 0.5f, vector6.Y - (float)player.height * 2f * 0.5f, (float)player.width * 2f, (float)player.height * 2f) * 0.25f, new VertexColors(new Color(velocity2.X * 0.5f + 0.5f, velocity2.Y * 0.5f + 0.5f, 0.5f * num3)));
 
-                if (player.wetCount != 0 || handler.wetCount != 0) {
+                bool flag = handler.wetCount != 0;
+                if (player.wetCount != 0 || flag) {
                     float num4 = 5f;
-                    if (!player.wet)
-                        num4 = -20f;
+                    if (!player.wet && !handler.wet)
+                        num4 = handler.wetCount > 0 ? -1f : -20f;
 
                     num3 *= 3f;
                     float factor = ((float)(int)player.wetCount / 9f);
-                    if (handler.tarWet) {
+                    if (flag || handler.tarWet) {
                         factor = ((float)(int)handler.wetCount / 9f);
-                        num3 += 0.25f * factor;
+                        num3 += (flag && !handler.tarWet ? 0.2f : 0.5f) * factor;
                     }
-                    self.QueueRipple(player.Center + velocity2 * num4, player.wet ? num3 : (0f - num3), new Vector2(player.width, (float)player.height * factor) * MathHelper.Clamp(num3 * 10f, 0f, 1f), RippleShape.Circle);
+
+                    if (flag) {
+                        num3 *= 0.75f;
+                    }
+
+                    self.QueueRipple(player.Center + velocity2 * num4, player.wet || handler.wet ? num3 : (0f - num3), new Vector2(player.width, (float)player.height * factor) * MathHelper.Clamp(num3 * 10f, 0f, 1f), RippleShape.Circle);
                 }
             }
         }
@@ -473,14 +499,20 @@ sealed class CustomLiquidRenderer : IInitializer {
                 if (projectile.ignoreWater)
                     flag3 = true;
 
-                if (!(projectile != null && projectile.active && ProjectileID.Sets.CanDistortWater[projectile.type] && flag3) || ProjectileID.Sets.NoLiquidDistortion[projectile.type] || !Collision.CheckAABBvAABBCollision(screenPosition, dimensions, projectile.position - vector3, projectile.Size + vector3))
+                if (!(projectile != null && projectile.active && ProjectileID.Sets.CanDistortWater[projectile.type] && (flag3 || projectile.GetGlobalProjectile<CustomLiquidCollision_Projectile>().wet)) || ProjectileID.Sets.NoLiquidDistortion[projectile.type] || !Collision.CheckAABBvAABBCollision(screenPosition, dimensions, projectile.position - vector3, projectile.Size + vector3))
                     continue;
+
+                var handler = projectile.GetGlobalProjectile<CustomLiquidCollision_Projectile>();
+                bool flag4 = handler.tarWet;
+                bool flag5 = handler.permafrostWet;
 
                 if (projectile.ignoreWater) {
                     bool num5 = Collision.LavaCollision(projectile.position, projectile.width, projectile.height);
                     flag = Collision.WetCollision(projectile.position, projectile.width, projectile.height);
                     flag2 = Collision.honey;
-                    if (!(num5 || flag || flag2))
+                    flag4 = CustomLiquidCollision_Player.tarCollision;
+                    flag5 = CustomLiquidCollision_Player.permafrostCollision;
+                    if (!(num5 || flag || flag2 || flag4 || flag5))
                         continue;
                 }
 
@@ -489,8 +521,12 @@ sealed class CustomLiquidRenderer : IInitializer {
                 num6 = 2f * (float)Math.Sqrt(0.05f * num6);
                 Vector2 velocity3 = projectile.velocity;
                 velocity3.Normalize();
-                if (!self._useViscosityFilter && (flag2 || flag))
-                    num6 *= 0.3f;
+                if (!self._useViscosityFilter && (flag2 || flag || flag4 || flag5))
+                    num6 *= flag4 ? 0.1f : 0.3f;
+
+                if (flag4) {
+                    num6 *= 0.5f;
+                }
 
                 float num7 = Math.Max(12f, (float)projectile.width * 0.75f);
                 float num8 = Math.Max(12f, (float)projectile.height * 0.75f);
