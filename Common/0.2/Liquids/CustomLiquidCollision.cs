@@ -1,7 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
+
+using System;
+using System.Runtime.CompilerServices;
+
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -710,6 +716,10 @@ sealed class CustomLiquidCollision_Player : ModPlayer {
         if (tarWet) {
             Player.gravity = 0.1f;
             Player.maxFallSpeed = 3f;
+            /*if (Player.IsLocal()) */{
+                Player.jumpHeight = (int)(Player.jumpHeight * 0.75f);
+                Player.jumpSpeed *= 0.75f;
+            }
         }
     }
 
@@ -727,6 +737,11 @@ sealed class CustomLiquidCollision_Player : ModPlayer {
             Player.honeyWet = false;
             Player.shimmerWet = false;
         }
+
+        if (Player.mount.Active && Player.mount.Cart) {
+            float num107 = ((Player.ignoreWater || Player.merman) ? 1f : (tarWet ? 0.25f : ((!wet) ? 1f : 0.5f)));
+            Player.velocity *= num107;
+        }
     }
 
     public void TarCollision(Player self, bool fallThrough, bool ignorePlats) {
@@ -741,7 +756,7 @@ sealed class CustomLiquidCollision_Player : ModPlayer {
             vector2.Y = self.velocity.Y;
 
         self.position += vector2;
-        //self.TryFloatingInFluid();
+        Player_TryFloatingInFluid(self);
     }
 
     public void PermafrostCollision(Player self, bool fallThrough, bool ignorePlats) {
@@ -756,6 +771,9 @@ sealed class CustomLiquidCollision_Player : ModPlayer {
             vector2.Y = self.velocity.Y;
 
         self.position += vector2;
-        //self.TryFloatingInFluid();
+        Player_TryFloatingInFluid(self);
     }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "TryFloatingInFluid")]
+    public extern static void Player_TryFloatingInFluid(Player self);
 }
