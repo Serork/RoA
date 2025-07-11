@@ -704,7 +704,9 @@ sealed class CustomLiquidCollision_Player : ModPlayer {
 
         if (!tar)
             tarWet = false;
+    }
 
+    public override void PreUpdate() {
         if (tarWet) {
             Player.gravity = 0.1f;
             Player.maxFallSpeed = 3f;
@@ -730,9 +732,6 @@ sealed class CustomLiquidCollision_Player : ModPlayer {
     public void TarCollision(Player self, bool fallThrough, bool ignorePlats) {
         int num = ((!self.onTrack) ? self.height : (self.height - 20));
         Vector2 vector = self.velocity;
-        if (self.velocity.Y > self.gravity * 5f) {
-            self.velocity.Y = self.gravity * 5f;
-        }
         self.velocity = Collision.TileCollision(self.position, self.velocity, self.width, num, fallThrough, ignorePlats, (int)self.gravDir);
         Vector2 vector2 = self.velocity * 0.175f;
         if (self.velocity.X != vector.X)
