@@ -67,30 +67,30 @@ sealed class CustomLiquidCollision_Item : GlobalItem {
             if (handler.wetCount == 0) {
                 handler.wetCount = 20;
 
-                if (handler.tarWet) {
-                    for (int num15 = 0; num15 < 5; num15++) {
-                        int num16 = Dust.NewDust(new Vector2(self.position.X - 6f, self.position.Y + (float)(self.height / 2) - 8f), self.width + 12, 24, tarDustType);
-                        Main.dust[num16].velocity.Y -= 1.5f;
-                        Main.dust[num16].velocity.X *= 2.5f;
-                        Main.dust[num16].scale = 1.3f;
-                        Main.dust[num16].alpha = 100;
-                        Main.dust[num16].noGravity = true;
-                    }
+                //if (handler.tarWet) {
+                //    for (int num15 = 0; num15 < 5; num15++) {
+                //        int num16 = Dust.NewDust(new Vector2(self.position.X - 6f, self.position.Y + (float)(self.height / 2) - 8f), self.width + 12, 24, tarDustType);
+                //        Main.dust[num16].velocity.Y -= 1.5f;
+                //        Main.dust[num16].velocity.X *= 2.5f;
+                //        Main.dust[num16].scale = 1.3f;
+                //        Main.dust[num16].alpha = 100;
+                //        Main.dust[num16].noGravity = true;
+                //    }
 
-                    SoundEngine.PlaySound(SoundID.Splash, self.position);
-                }
-                else if (handler.permafrostWet) {
-                    for (int num15 = 0; num15 < 5; num15++) {
-                        int num16 = Dust.NewDust(new Vector2(self.position.X - 6f, self.position.Y + (float)(self.height / 2) - 8f), self.width + 12, 24, permafrostDustType);
-                        Main.dust[num16].velocity.Y -= 1.5f;
-                        Main.dust[num16].velocity.X *= 2.5f;
-                        Main.dust[num16].scale = 1.3f;
-                        Main.dust[num16].alpha = 100;
-                        Main.dust[num16].noGravity = true;
-                    }
+                //    SoundEngine.PlaySound(SoundID.Splash, self.position);
+                //}
+                //else if (handler.permafrostWet) {
+                //    for (int num15 = 0; num15 < 5; num15++) {
+                //        int num16 = Dust.NewDust(new Vector2(self.position.X - 6f, self.position.Y + (float)(self.height / 2) - 8f), self.width + 12, 24, permafrostDustType);
+                //        Main.dust[num16].velocity.Y -= 1.5f;
+                //        Main.dust[num16].velocity.X *= 2.5f;
+                //        Main.dust[num16].scale = 1.3f;
+                //        Main.dust[num16].alpha = 100;
+                //        Main.dust[num16].noGravity = true;
+                //    }
 
-                    SoundEngine.PlaySound(SoundID.Splash, self.position);
-                }
+                //    SoundEngine.PlaySound(SoundID.Splash, self.position);
+                //}
             }
         }
 
@@ -113,7 +113,7 @@ sealed class CustomLiquidCollision_Item : GlobalItem {
             handler.wetCount--;
         }
 
-        if (handler.tarWet || handler.permafrostWet) {
+        if (handler.tarWet || handler.permafrostWet || handler.wetCount > 0) {
             if (self.wetCount == 0) {
                 self.wetCount = 1;
             }
