@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
@@ -19,7 +21,6 @@ using Terraria.Graphics;
 using Terraria.Graphics.Light;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
-using Terraria.IO;
 using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -92,6 +93,73 @@ sealed class CustomLiquidRenderer : IInitializer {
         On_LightMap.BlurLine += On_LightMap_BlurLine;
         On_LightMap.Clear += On_LightMap_Clear;
         On_TileLightScanner.ExportTo += On_TileLightScanner_ExportTo;
+
+        On_MapHelper.CreateMapTile += On_MapHelper_CreateMapTile;
+        On_MapHelper.GetMapTileXnaColor += On_MapHelper_GetMapTileXnaColor;
+
+        MonoModHooks.Add(typeof(MapLegend).GetMethod("FromTile", BindingFlags.Instance | BindingFlags.Public), OnFromTile);
+    }
+
+    private delegate string orig_FromTile(MapLegend self, MapTile mapTile, int x, int y);
+
+    private string OnFromTile(orig_FromTile orig, MapLegend self, MapTile mapTile, int x, int y) {
+        Tile tile = Main.tile[x, y];
+        if (tile != null && tile.LiquidAmount > 32 && tile.LiquidType >= 4) {
+            return string.Empty;
+        }
+
+        return orig(self, mapTile, x, y);
+    }
+
+    [UnsafeAccessor(UnsafeAccessorKind.StaticMethod, Name = "MapColor")]
+    public extern static void MapHelper_MapColor(ushort type, ref Color oldColor, byte colorType);
+
+    private Color On_MapHelper_GetMapTileXnaColor(On_MapHelper.orig_GetMapTileXnaColor orig, ref MapTile tile) {
+        int actualID = 0;
+        if (tile.Type < 10000) {
+            return orig(ref tile);
+        }
+
+        actualID = tile.Type - 10000;
+
+        Color liquidColor;
+        if (actualID == 0) {
+            liquidColor = new Color(109, 234, 214);
+        }
+        else {
+            liquidColor = new Color(46, 34, 47);
+        }
+
+        byte color = tile.Color;
+        if (color > 0) {
+            MapHelper_MapColor(tile.Type, ref liquidColor, color);
+        }
+
+        if (tile.Light == byte.MaxValue) {
+            return liquidColor;
+        }
+
+        float num = (float)(int)tile.Light / 255f;
+        liquidColor.R = (byte)((float)(int)liquidColor.R * num);
+        liquidColor.G = (byte)((float)(int)liquidColor.G * num);
+        liquidColor.B = (byte)((float)(int)liquidColor.B * num);
+        return liquidColor;
+    }
+
+    private MapTile On_MapHelper_CreateMapTile(On_MapHelper.orig_CreateMapTile orig, int i, int j, byte Light) {
+        Tile tile = Main.tile[i, j];
+
+        int num2 = Light;
+        int num7 = 0;
+
+        if (tile.LiquidAmount > 32 && tile.LiquidType >= 4) {
+            num7 = tile.LiquidType - 4 + 10000;
+        }
+        else {
+            return orig(i, j, Light);
+        }
+
+        return MapTile.Create((ushort)num7, (byte)num2, (byte)0);
     }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_drawInvisibleWalls")]

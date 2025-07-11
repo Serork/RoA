@@ -30,11 +30,11 @@ sealed class CustomLiquidCollision_Player : ModPlayer {
 
     private void On_Player_WaterCollision(On_Player.orig_WaterCollision orig, Player self, bool fallThrough, bool ignorePlats) {
         var handler = self.GetModPlayer<CustomLiquidCollision_Player>();
-        if (handler.tarWet) {
+        if (handler.tarWet || tarCollision) {
             TarCollision(self, fallThrough, ignorePlats);
             return;
         }
-        else if (handler.permafrostWet) {
+        else if (handler.permafrostWet || permafrostCollision) {
             PermafrostCollision(self, fallThrough, ignorePlats);
             return;
         }
@@ -275,8 +275,11 @@ sealed class CustomLiquidCollision_Player : ModPlayer {
     public void TarCollision(Player self, bool fallThrough, bool ignorePlats) {
         int num = ((!self.onTrack) ? self.height : (self.height - 20));
         Vector2 vector = self.velocity;
+        if (self.velocity.Y > self.gravity * 5f) {
+            self.velocity.Y = self.gravity * 5f;
+        }
         self.velocity = Collision.TileCollision(self.position, self.velocity, self.width, num, fallThrough, ignorePlats, (int)self.gravDir);
-        Vector2 vector2 = self.velocity * 0.1f;
+        Vector2 vector2 = self.velocity * 0.25f;
         if (self.velocity.X != vector.X)
             vector2.X = self.velocity.X;
 

@@ -1,5 +1,4 @@
 ﻿using Terraria;
-using Terraria.GameContent.Liquid;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Lavas;
