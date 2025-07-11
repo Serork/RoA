@@ -203,30 +203,30 @@ sealed class CustomLiquidCollision_Projectile : GlobalProjectile {
                 }
                 else if (handler.wetCount == 0) {
                     handler.wetCount = 10;
-                    if (handler.tarWet) {
-                        for (int num15 = 0; num15 < 10; num15++) {
-                            int num16 = Dust.NewDust(new Vector2(projectile.position.X - 6f, projectile.position.Y + (float)(projectile.height / 2) - 8f), projectile.width + 12, 24, tarDustType);
-                            Main.dust[num16].velocity.Y -= 1.5f;
-                            Main.dust[num16].velocity.X *= 2.5f;
-                            Main.dust[num16].scale = 1.3f;
-                            Main.dust[num16].alpha = 100;
-                            Main.dust[num16].noGravity = true;
-                        }
+                    //if (handler.tarWet) {
+                    //    for (int num15 = 0; num15 < 10; num15++) {
+                    //        int num16 = Dust.NewDust(new Vector2(projectile.position.X - 6f, projectile.position.Y + (float)(projectile.height / 2) - 8f), projectile.width + 12, 24, tarDustType);
+                    //        Main.dust[num16].velocity.Y -= 1.5f;
+                    //        Main.dust[num16].velocity.X *= 2.5f;
+                    //        Main.dust[num16].scale = 1.3f;
+                    //        Main.dust[num16].alpha = 100;
+                    //        Main.dust[num16].noGravity = true;
+                    //    }
 
-                        SoundEngine.PlaySound(SoundID.Splash, projectile.position);
-                    }
-                    else if (handler.permafrostWet) {
-                        for (int num15 = 0; num15 < 10; num15++) {
-                            int num16 = Dust.NewDust(new Vector2(projectile.position.X - 6f, projectile.position.Y + (float)(projectile.height / 2) - 8f), projectile.width + 12, 24, permafrostDustType);
-                            Main.dust[num16].velocity.Y -= 1.5f;
-                            Main.dust[num16].velocity.X *= 2.5f;
-                            Main.dust[num16].scale = 1.3f;
-                            Main.dust[num16].alpha = 100;
-                            Main.dust[num16].noGravity = true;
-                        }
+                    //    SoundEngine.PlaySound(SoundID.Splash, projectile.position);
+                    //}
+                    //else if (handler.permafrostWet) {
+                    //    for (int num15 = 0; num15 < 10; num15++) {
+                    //        int num16 = Dust.NewDust(new Vector2(projectile.position.X - 6f, projectile.position.Y + (float)(projectile.height / 2) - 8f), projectile.width + 12, 24, permafrostDustType);
+                    //        Main.dust[num16].velocity.Y -= 1.5f;
+                    //        Main.dust[num16].velocity.X *= 2.5f;
+                    //        Main.dust[num16].scale = 1.3f;
+                    //        Main.dust[num16].alpha = 100;
+                    //        Main.dust[num16].noGravity = true;
+                    //    }
 
-                        SoundEngine.PlaySound(SoundID.Splash, projectile.position);
-                    }
+                    //    SoundEngine.PlaySound(SoundID.Splash, projectile.position);
+                    //}
                 }
             }
 
@@ -734,7 +734,7 @@ sealed class CustomLiquidCollision_Player : ModPlayer {
             self.velocity.Y = self.gravity * 5f;
         }
         self.velocity = Collision.TileCollision(self.position, self.velocity, self.width, num, fallThrough, ignorePlats, (int)self.gravDir);
-        Vector2 vector2 = self.velocity * 0.15f;
+        Vector2 vector2 = self.velocity * 0.175f;
         if (self.velocity.X != vector.X)
             vector2.X = self.velocity.X;
 
