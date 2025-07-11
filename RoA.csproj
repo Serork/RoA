@@ -125,7 +125,6 @@
 	<ItemGroup>
 	  <Folder Include="Content\0.1\Items\Weapons\Nature\Hardmode\" />
 	  <Folder Include="Content\0.2\Projectiles\Friendly\Magic\" />
-	  <Folder Include="Content\0.2\Tiles\" />
 	</ItemGroup>
 
 	<!-- References -->

@@ -21,8 +21,7 @@ sealed class IceRod : NatureItem {
         Item.shootSpeed = 12f;
         Item.shoot = ModContent.ProjectileType<IceBlock>();
         Item.UseSound = SoundID.Item28;
-        Item.useAnimation = 9;
-        Item.useTime = 9;
+        Item.useAnimation = Item.useTime = 30;
         Item.autoReuse = true;
         Item.noMelee = true;
         Item.knockBack = 0f;

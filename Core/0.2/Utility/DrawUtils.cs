@@ -14,13 +14,13 @@ using Terraria.ID;
 namespace RoA.Core;
 
 static class DrawUtils {
-    public readonly struct SingleTileDrawInfo(Texture2D texture, Point position, Rectangle clip, Color? color = null, SlopeType slope = SlopeType.Solid, bool isHalfBlock = false) {
-        public readonly Texture2D Texture = texture;
-        public readonly Point Position = position;
-        public readonly Rectangle Clip = clip;
-        public readonly Color Color = color ?? Color.White;
-        public readonly SlopeType Slope = slope;
-        public readonly bool IsHalfBlock = isHalfBlock;
+    public struct SingleTileDrawInfo(Texture2D texture, Point position, Rectangle clip, Color? color = null, SlopeType slope = SlopeType.Solid, bool isHalfBlock = false) {
+        public Texture2D Texture = texture;
+        public Point Position = position;
+        public Rectangle Clip = clip;
+        public Color Color = color ?? Color.White;
+        public SlopeType Slope = slope;
+        public bool IsHalfBlock = isHalfBlock;
     }
 
     // adapted vanilla
