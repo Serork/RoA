@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Common.Projectiles;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Core;
@@ -14,190 +15,13 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+[Tracked]
 sealed class TectonicCaneProjectile : NatureProjectile {
-    public override void Load() {
-        On_Collision.TileCollision += On_Collision_TileCollision;
-    }
-
-    private static Dictionary<Point, (Projectile, Vector2)> GeneratePositions() {
-        Dictionary<Point, (Projectile, Vector2)> tectonicPlatesPositions = [];
-        foreach (Projectile projectile in Main.ActiveProjectiles) {
-            if (projectile.type == ModContent.ProjectileType<TectonicCaneProjectile>()) {
-                List<Vector2> positions = [];
-                for (int i = -2; i < 3; i++) {
-                    Vector2 position = projectile.position - Vector2.UnitY * 120f * projectile.ai[0];
-                    position.X += i * 10f;
-                    bool flag2 = true;
-                    for (int i2 = 0; i2 < 2; i2++) {
-                        Point pos = position.ToTileCoordinates() + new Point(0, i2);
-                        if (WorldGenHelper.GetTileSafely(pos).HasTile &&
-                            Main.tileSolid[WorldGenHelper.GetTileSafely(pos).TileType]) {
-                            flag2 = false;
-                            break;
-                        }
-                    }
-                    bool flag = projectile.ai[0] > 0.1f;
-                    if ((flag2 && flag) || !flag) {
-                        positions.Add(position);
-                    }
-                }
-                foreach (Vector2 position in positions) {
-                    tectonicPlatesPositions.TryAdd(position.ToTileCoordinates(), (projectile, position));
-                }
-            }
-        }
-        return tectonicPlatesPositions;
-    }
-
-    private Vector2 On_Collision_TileCollision(On_Collision.orig_TileCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, int gravDir) {
-        Collision.up = false;
-        Collision.down = false;
-        Vector2 result = Velocity;
-        Vector2 vector = Velocity;
-        Vector2 vector2 = Position + Velocity;
-        Vector2 vector3 = Position;
-        int value = (int)(Position.X / 16f) - 1;
-        int value2 = (int)((Position.X + (float)Width) / 16f) + 2;
-        int value3 = (int)(Position.Y / 16f) - 1;
-        int value4 = (int)((Position.Y + (float)Height) / 16f) + 2;
-        int num = -1;
-        int num2 = -1;
-        int num3 = -1;
-        int num4 = -1;
-        int num5 = Utils.Clamp(value, 0, Main.maxTilesX - 1);
-        value2 = Utils.Clamp(value2, 0, Main.maxTilesX - 1);
-        value3 = Utils.Clamp(value3, 0, Main.maxTilesY - 1);
-        value4 = Utils.Clamp(value4, 0, Main.maxTilesY - 1);
-        Dictionary<Point, (Projectile, Vector2)> tectonicPlatesPositions = GeneratePositions();
-        float num6 = (value4 + 3) * 16;
-        Vector2 vector4 = default(Vector2);
-        bool flag12 = false;
-        for (int i = num5; i < value2; i++) {
-            for (int j = value3; j < value4; j++) {
-                int num1451 = TETrainingDummy.Find(i, j);
-                if (num1451 != -1) {
-                    flag12 = true;
-                }
-            }
-        }
-        for (int i = num5; i < value2; i++) {
-            for (int j = value3; j < value4; j++) {
-                bool flag3 = false;
-                if (tectonicPlatesPositions.TryGetValue(new Point(i, j), out (Projectile, Vector2) turple)) {
-                    flag3 = true;
-                }
-                if (flag12) {
-                    flag3 = false;
-                }
-                if (!flag3 && (Main.tile[i, j] == null || !Main.tile[i, j].HasTile || Main.tile[i, j].IsActuated || (!Main.tileSolid[Main.tile[i, j].TileType] && (!Main.tileSolidTop[Main.tile[i, j].TileType] || Main.tile[i, j].TileFrameY != 0))))
-                    continue;
-                vector4.X = i * 16;
-                vector4.Y = j * 16;
-                if (flag3) {
-                    vector4 = turple.Item2;
-                    vector4.Y -= 2f;
-                }
-                int num7 = 16;
-                if (Main.tile[i, j].IsHalfBlock) {
-                    vector4.Y += 8f;
-                    num7 -= 8;
-                }
-
-                bool flag4 = !flag3 || turple.Item1.ai[0] == 1f;
-                if (flag4) {
-                    if (!(vector2.X + (float)Width > vector4.X) ||
-                        !(vector2.X < vector4.X + 16f) ||
-                        !(vector2.Y + (float)Height > vector4.Y) ||
-                        !(vector2.Y < vector4.Y + (float)num7))
-                        continue;
-                }
-
-                bool flag = false;
-                bool flag2 = false;
-                if (Main.tile[i, j].Slope > (SlopeType)2) {
-                    if (Main.tile[i, j].Slope == (SlopeType)3 && vector3.Y + Math.Abs(Velocity.X) >= vector4.Y && vector3.X >= vector4.X)
-                        flag2 = true;
-
-                    if (Main.tile[i, j].Slope == (SlopeType)4 && vector3.Y + Math.Abs(Velocity.X) >= vector4.Y && vector3.X + (float)Width <= vector4.X + 16f)
-                        flag2 = true;
-                }
-                else if (Main.tile[i, j].Slope > 0) {
-                    flag = true;
-                    if (Main.tile[i, j].Slope == (SlopeType)1 && vector3.Y + (float)Height - Math.Abs(Velocity.X) <= vector4.Y + (float)num7 && vector3.X >= vector4.X)
-                        flag2 = true;
-
-                    if (Main.tile[i, j].Slope == (SlopeType)2 && vector3.Y + (float)Height - Math.Abs(Velocity.X) <= vector4.Y + (float)num7 && vector3.X + (float)Width <= vector4.X + 16f)
-                        flag2 = true;
-                }
-
-                if (flag2)
-                    continue;
-
-                if (vector3.Y + (float)Height <= vector4.Y) {
-                    Collision.down = true;
-                    bool flag10 = !Main.tileSolidTop[Main.tile[i, j].TileType] || flag3 || !fallThrough;
-                    bool flag11 = flag10 || !(Velocity.Y <= 1f || fall2);
-                    if (flag11 && num6 > vector4.Y) {
-                        num3 = i;
-                        num4 = j;
-                        if (num7 < 16)
-                            num4++;
-
-                        if (num3 != num && !flag) {
-                            result.Y = vector4.Y - (vector3.Y + (float)Height) + ((gravDir == -1) ? (-0.01f) : 0f);
-                            num6 = vector4.Y;
-                            if (flag3 && fallThrough) {
-                                result.Y += 0.01f;
-                            }
-                            if (!flag4) {
-                                result.Y -= 20f;
-                            }
-                        }
-                    }
-                }
-                else if (vector3.X + (float)Width <= vector4.X && !Main.tileSolidTop[Main.tile[i, j].TileType] && !flag3) {
-                    if (i < 1 || (Main.tile[i - 1, j].Slope != (SlopeType)2 && Main.tile[i - 1, j].Slope != (SlopeType)4)) {
-                        num = i;
-                        num2 = j;
-                        if (num2 != num4)
-                            result.X = vector4.X - (vector3.X + (float)Width);
-
-                        if (num3 == num)
-                            result.Y = vector.Y;
-                    }
-                }
-                else if (vector3.X >= vector4.X + 16f && !Main.tileSolidTop[Main.tile[i, j].TileType] && !flag3) {
-                    if (Main.tile[i + 1, j].Slope != (SlopeType)1 && Main.tile[i + 1, j].Slope != (SlopeType)3) {
-                        num = i;
-                        num2 = j;
-                        if (num2 != num4)
-                            result.X = vector4.X + 16f - vector3.X;
-
-                        if (num3 == num)
-                            result.Y = vector.Y;
-                    }
-                }
-                else if (vector3.Y >= vector4.Y + (float)num7 && !Main.tileSolidTop[Main.tile[i, j].TileType] && !flag3) {
-                    Collision.up = true;
-                    num3 = i;
-                    num4 = j;
-                    result.Y = vector4.Y + (float)num7 - vector3.Y + ((gravDir == 1) ? 0.01f : 0f);
-                    if (num4 == num2)
-                        result.X = vector.X;
-                }
-            }
-        }
-
-        return result;
-    }
-
-
     protected override void SafeSetDefaults() {
         Projectile.Size = Vector2.One;
         Projectile.aiStyle = -1;

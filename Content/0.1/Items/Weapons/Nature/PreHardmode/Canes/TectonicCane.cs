@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Projectiles;
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Nature;

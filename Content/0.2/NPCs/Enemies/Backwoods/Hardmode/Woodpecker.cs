@@ -22,7 +22,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
-[NPCTracked]
+[Tracked]
 sealed class Woodpecker : ModNPC {
     private static byte FRAMECOUNT => 16;
     private static float PECKINGCHECKTIME => 20f;

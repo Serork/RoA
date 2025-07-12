@@ -57,15 +57,15 @@ class BossRelic : ModTile {
         TileObjectData.newTile.StyleWrapLimit = 2;
         TileObjectData.newTile.styleLineSkipVisualOverride = 0; // This forces the tile preview to draw as if drawing the 1st style.
 
-        // Register an alternate tile data with flipped direction
+        // RegisterTrackedEntity an alternate tile data with flipped direction
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile); // Copy everything from above, saves us some code
         TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight; // Player faces to the right
         TileObjectData.addAlternate(1);
 
-        // Register the tile data itself
+        // RegisterTrackedEntity the tile data itself
         TileObjectData.addTile(Type);
 
-        // Register map name and color
+        // RegisterTrackedEntity map name and color
         // "MapObject.Relic" refers to the translation key for the vanilla "Relic" text
         AddMapEntry(new Color(233, 207, 94), Language.GetText("MapObject.Relic"));
     }

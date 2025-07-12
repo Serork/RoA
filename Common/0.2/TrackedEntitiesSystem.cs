@@ -17,13 +17,10 @@ namespace RoA.Common.Projectiles;
 class ProjectileTrackedAttribute<T> : Attribute where T : ModProjectile { }
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-class ProjectileTrackedAttribute : Attribute { }
-
-[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 class NPCTrackedAttribute<T> : Attribute where T : ModNPC { }
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-class NPCTrackedAttribute : Attribute { }
+class TrackedAttribute : Attribute { }
 
 sealed class TrackedEntitiesSystem : ModSystem {
     public static Dictionary<Type, List<Entity>> TrackedEntitiesByType { get; private set; } = [];
@@ -32,24 +29,36 @@ sealed class TrackedEntitiesSystem : ModSystem {
         On_NPC.NewNPC += On_NPC_NewNPC;
         On_Projectile.NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float += On_Projectile_NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float;
     }
+    
+    private static bool RegisterTrackedEntity<TEntity, TModType>(ModType<TEntity, TModType> modType) where TModType : ModType<TEntity, TModType> {
+        Type projectileType = modType.GetType();
+        TrackedAttribute? trackedAttribute = projectileType.GetCustomAttribute<TrackedAttribute>();
+
+        if (trackedAttribute == null) {
+            return false;
+        }
+
+        if (!projectileType.IsAbstract) {
+            if (!TrackedEntitiesByType.TryGetValue(projectileType, out List<Entity>? Projectiles)) {
+                Projectiles = [];
+                TrackedEntitiesByType.Add(projectileType, Projectiles);
+            }
+            Entity? entityToRegister = modType is ModProjectile modProjectile ? modProjectile.Projectile : modType is ModNPC modNPC ? modNPC.NPC : null;
+            if (entityToRegister == null) {
+                throw new Exception("Not supported");
+            }
+            Projectiles.Add(entityToRegister);
+
+            return true;
+        }
+
+        return false;
+    }
 
     private int On_Projectile_NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float(On_Projectile.orig_NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float orig, IEntitySource spawnSource, float X, float Y, float SpeedX, float SpeedY, int Type, int Damage, float KnockBack, int Owner, float ai0, float ai1, float ai2) {
         int whoAmI = orig(spawnSource, X, Y, SpeedX, SpeedY, Type, Damage, KnockBack, Owner, ai0, ai1, ai2);
         if (Main.projectile[whoAmI].IsModded(out ModProjectile modProjectile)) {
-            Type projectileType = modProjectile.GetType();
-            ProjectileTrackedAttribute? trackedAttribute = projectileType.GetCustomAttribute<ProjectileTrackedAttribute>();
-
-            if (trackedAttribute == null) {
-                return whoAmI;
-            }
-
-            if (!projectileType.IsAbstract) {
-                if (!TrackedEntitiesByType.TryGetValue(projectileType, out List<Entity>? Projectiles)) {
-                    Projectiles = [];
-                    TrackedEntitiesByType.Add(projectileType, Projectiles);
-                }
-                Projectiles.Add(modProjectile.Projectile);
-            }
+            RegisterTrackedEntity(modProjectile);
         }
 
         return whoAmI;
@@ -58,20 +67,7 @@ sealed class TrackedEntitiesSystem : ModSystem {
     private int On_NPC_NewNPC(On_NPC.orig_NewNPC orig, IEntitySource source, int X, int Y, int Type, int Start, float ai0, float ai1, float ai2, float ai3, int Target) {
         int whoAmI = orig(source, X, Y, Type, Start, ai0, ai1, ai2, ai3, Target);
         if (Main.npc[whoAmI].IsModded(out ModNPC modNPC)) {
-            Type npcType = modNPC.GetType();
-            NPCTrackedAttribute? trackedAttribute = npcType.GetCustomAttribute<NPCTrackedAttribute>();
-
-            if (trackedAttribute == null) {
-                return whoAmI;
-            }
-
-            if (!npcType.IsAbstract) {
-                if (!TrackedEntitiesByType.TryGetValue(npcType, out List<Entity>? NPCs)) {
-                    NPCs = [];
-                    TrackedEntitiesByType.Add(npcType, NPCs);
-                }
-                NPCs.Add(modNPC.NPC);
-            }
+            RegisterTrackedEntity(modNPC);
         }
 
         return whoAmI;
@@ -129,9 +125,10 @@ sealed class TrackedEntitiesSystem : ModSystem {
 
     public override void PostUpdateProjectiles() {
         foreach (List<Entity> trackedProjectiles in TrackedEntitiesByType.Values) {
-            for (int i = 0; i < trackedProjectiles.Count; i++) {
+            for (int i = trackedProjectiles.Count - 1; i >= 0; i--) {
                 if (!trackedProjectiles[i].active) {
-                    trackedProjectiles.RemoveAt(i);
+                    trackedProjectiles[i] = trackedProjectiles[^1];
+                    trackedProjectiles.RemoveAt(trackedProjectiles.Count - 1);
                 }
             }
         }

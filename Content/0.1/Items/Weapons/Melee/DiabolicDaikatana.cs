@@ -83,7 +83,7 @@ sealed class DiabolicDaikatana : ModItem {
     //        .AddIngredient(ItemID.Muramasa)
     //        .AddIngredient(ItemID.HellstoneBar, 10)
     //        .AddTile(TileID.DemonAltar)
-    //        .Register();
+    //        .RegisterTrackedEntity();
     //}
 
     private class DaikatanaLayer : PlayerDrawLayer {

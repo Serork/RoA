@@ -424,18 +424,18 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         bool flag = true;
         if (flag) {
             float rotation = Projectile.velocity.ToRotation() + OffsetRotation + (FacedLeft ? MathHelper.Pi : 0f);
-            float rotationLerp = Math.Clamp(Math.Abs(rotation - this._rotation), 0.16f, 0.24f) * 0.5f;
+            float rotationLerp = Math.Clamp(Math.Abs(rotation - _rotation), 0.16f, 0.24f) * 0.5f;
             if (!FacedLeft && rotation >= MathHelper.PiOver2) {
                 rotation = MathHelper.PiOver2;
             }
             if (FacedLeft && rotation <= 4.54f && rotation >= 4.51f) {
                 rotation = 4.55f;
             }
-            float mouseRotation = Helper.SmoothAngleLerp(this._rotation, rotation, rotationLerp, MathHelper.Lerp);
+            float mouseRotation = Helper.SmoothAngleLerp(_rotation, rotation, rotationLerp, MathHelper.Lerp);
             float min = MINROTATION;
             float max = MAXROTATION;
             Helper.SmoothClamp(ref mouseRotation, FacedLeft ? min : -max * 0.7f, FacedLeft ? max : -min, rotationLerp);
-            this._rotation = mouseRotation;
+            _rotation = mouseRotation;
         }
     }
 }
