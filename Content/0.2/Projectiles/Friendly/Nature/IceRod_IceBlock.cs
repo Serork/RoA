@@ -19,6 +19,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+// TODO: separate block mechanic (and collision)
 sealed class HittingIceBlocksWithPickaxeSupport : ModPlayer {
     public override void Load() {
         On_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
@@ -115,7 +116,6 @@ sealed class HittingIceBlocksWithPickaxeSupport : ModPlayer {
     }
 }
 
-// TODO: separate block mechanic
 [Tracked]
 sealed class IceBlock : NatureProjectile {
     public struct IceBlockInfo() {
