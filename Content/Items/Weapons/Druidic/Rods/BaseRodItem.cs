@@ -369,8 +369,10 @@ abstract class BaseRodProjectile : DruidicProjectile {
     private void SetDirection() {
         bool flag = !AttachedNatureWeapon.IsEmpty() && !ShouldntUpdateRotationAndDirection();
         if (flag) {
-            Projectile.spriteDirection = Owner.direction;
-            Owner.ChangeDir(Projectile.spriteDirection);
+            if (Projectile.velocity.X != 0f) {
+                Projectile.spriteDirection = Owner.direction;
+                Owner.ChangeDir(Math.Sign(Projectile.velocity.X));
+            }
         }
         float armRotation = Projectile.rotation - MathHelper.PiOver4 * Owner.direction;
         if (Owner.gravDir == -1) {

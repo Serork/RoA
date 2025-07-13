@@ -1,1 +1,1 @@
-- Multiplayer improvements
+- Small adjustments
