@@ -24,16 +24,13 @@ using static RoA.Common.Tiles.TileHooks;
 namespace RoA.Core.Utility;
 
 static partial class TileHelper {
-    public static bool ArePositionsAdjacent(Point16 point1, Point16 point2) => ArePositionsAdjacent(point1, point2, 1);
-
-    public static bool ArePositionsAdjacent(Point16 point1, Point16 point2, int check = 1) => ArePositionsAdjacent(point1.X, point1.Y, point2.X, point2.Y, check);
-
-    public static bool ArePositionsAdjacent(int x1, int y1, int x2, int y2) => ArePositionsAdjacent(x1, y1, x2, y2, 1);
-
-    public static bool ArePositionsAdjacent(int x1, int y1, int x2, int y2, int check = 1) {
+    public static bool ArePositionsAdjacent(Point16 point1, Point16 point2, bool checkDiagonal = true) => ArePositionsAdjacent(point1, point2, 1, checkDiagonal);
+    public static bool ArePositionsAdjacent(Point16 point1, Point16 point2, int check = 1, bool checkDiagonal = true) => ArePositionsAdjacent(point1.X, point1.Y, point2.X, point2.Y, check, checkDiagonal);
+    public static bool ArePositionsAdjacent(int x1, int y1, int x2, int y2, bool checkDiagonal = true) => ArePositionsAdjacent(x1, y1, x2, y2, 1, checkDiagonal);
+    public static bool ArePositionsAdjacent(int x1, int y1, int x2, int y2, int check = 1, bool checkDiagonal = true) {
         int dx = Math.Abs(x1 - x2);
         int dy = Math.Abs(y1 - y2);
-        return (dx <= check && dy <= check) && (dx != 0 || dy != 0);
+        return checkDiagonal ? (dx <= check && dy <= check && (dx != 0 || dy != 0)) : ((dx == 1 && dy == 0) || (dx == 0 && dy == 1));
     }
 
     public readonly record struct HangingTileInfo(int? X, int? Y) {

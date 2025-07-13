@@ -409,8 +409,10 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         //bool flag = !ShouldStopUpdatingRotationAndDirection();
         bool flag = true;
         if (flag) {
-            Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
-            Owner.ChangeDir(Projectile.spriteDirection);
+            if (Projectile.velocity.X != 0f) {
+                Projectile.spriteDirection = Owner.direction;
+                Owner.ChangeDir(Math.Sign(Projectile.velocity.X));
+            }
         }
         float armRotation = Projectile.rotation - MathHelper.PiOver4 * Owner.direction;
         if (Owner.gravDir == -1) {

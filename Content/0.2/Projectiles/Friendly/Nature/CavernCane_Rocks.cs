@@ -25,7 +25,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
+sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmunityFrames {
     public static Color GetGeodeColor(GemType gemType) {
         return gemType switch {
             GemType.Amethyst => Color.Purple,
@@ -127,7 +127,6 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
             ExtraPosition2 += Vector2.UnitY * Gravity;
         }
     }
-
     public ref struct RocksValues(Projectile projectile) {
         public static float FORCEDOPACITYINCREASEVALUE => 0.015f;
 
@@ -167,7 +166,6 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
     }
 
     private RocksInfo[]? _rocks;
-    private ushort[][]? _immunityFramesPerNPC;
 
     public static SoundStyle GetStoneHitSound(float geodeProgress) => SoundID.DD2_MonkStaffGroundImpact with { Pitch = 1f - 0.5f * geodeProgress };
     public static SoundStyle StoneExplosion => SoundID.Item89 with { Pitch = 1f };
@@ -218,10 +216,8 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
             if (!rocksValues.Init) {
                 rocksValues.Init = true;
 
-                _immunityFramesPerNPC = new ushort[ROCKATTACKCOUNT * 2][];
-                for (int i = 0; i < _immunityFramesPerNPC.Length; i++) {
-                    _immunityFramesPerNPC[i] = new ushort[Main.npc.Length];
-                }
+
+                CustomImmunityFramesHandler.Initialize(Projectile, (ushort)(ROCKATTACKCOUNT * 2));
 
                 //if (Projectile.IsOwnerLocal()) {
                 //    rocksValues.GeodeType = Main.rand.GetRandomEnumValue<GemType>();
@@ -627,7 +623,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad {
 
     public override bool? CanDamage() => false;
 
-    private ref ushort GetImmuneTime(byte rockIndex, byte pairIndex, int npcId) => ref _immunityFramesPerNPC![(byte)(rockIndex * 2 + pairIndex)][npcId];
+    private ref ushort GetImmuneTime(byte rockIndex, byte pairIndex, int npcId) => ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)(rockIndex * 2 + pairIndex), npcId);
 
     private void LoadRocksTexture() {
         if (Main.dedServ) {
