@@ -24,6 +24,9 @@ sealed class TectonicCaneProjectile2 : DruidicProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 20;
+
+        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
+        ShouldChargeWreathOnDamage = false;
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {

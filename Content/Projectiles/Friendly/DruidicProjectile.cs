@@ -8,6 +8,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -97,7 +98,11 @@ abstract class DruidicProjectile : ModProjectile {
                     writer.Write(natureProjectile._syncAttachedNatureWeapon);
                     if (natureProjectile._syncAttachedNatureWeapon) {
                         writer.Write(natureProjectile.WreathFillingFine);
-                        ItemIO.Send(natureProjectile.AttachedNatureWeapon, writer, true);
+                        bool flag = natureProjectile.AttachedNatureWeapon != null;
+                        writer.Write(flag);
+                        if (flag) {
+                            ItemIO.Send(natureProjectile.AttachedNatureWeapon, writer, true);
+                        }
                     }
                 }
             }
@@ -112,7 +117,11 @@ abstract class DruidicProjectile : ModProjectile {
             writer.Write(handler._syncAttachedNatureWeapon);
             if (handler._syncAttachedNatureWeapon) {
                 writer.Write(handler.WreathFillingFine);
-                ItemIO.Send(handler.AttachedNatureWeapon, writer, true);
+                bool flag = handler.AttachedNatureWeapon != null;
+                writer.Write(flag);
+                if (flag) {
+                    ItemIO.Send(handler.AttachedNatureWeapon, writer, true);
+                }
             }
         }
     }
@@ -124,7 +133,10 @@ abstract class DruidicProjectile : ModProjectile {
                     natureProjectile._syncAttachedNatureWeapon = reader.ReadBoolean();
                     if (natureProjectile._syncAttachedNatureWeapon) {
                         natureProjectile.WreathFillingFine = reader.ReadSingle();
-                        natureProjectile.AttachedNatureWeapon = ItemIO.Receive(reader, true);
+                        bool flag = reader.ReadBoolean();
+                        if (flag) {
+                            natureProjectile.AttachedNatureWeapon = ItemIO.Receive(reader, true);
+                        }
                     }
                 }
             }
@@ -139,7 +151,10 @@ abstract class DruidicProjectile : ModProjectile {
             handler._syncAttachedNatureWeapon = reader.ReadBoolean();
             if (handler._syncAttachedNatureWeapon) {
                 handler.WreathFillingFine = reader.ReadSingle();
-                handler.AttachedNatureWeapon = ItemIO.Receive(reader, true);
+                bool flag = reader.ReadBoolean();
+                if (flag) {
+                    handler.AttachedNatureWeapon = ItemIO.Receive(reader, true);
+                }
             }
         }
     }
