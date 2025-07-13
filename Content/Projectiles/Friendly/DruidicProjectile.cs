@@ -230,10 +230,10 @@ abstract class DruidicProjectile : ModProjectile {
                     natureProjectile._syncAttachedNatureWeapon = false;
                 }
                 else {
-                    if (!natureProjectile._syncAttachedNatureWeapon) {
-                        projectile.netUpdate = true;
-                    }
-                    natureProjectile._syncAttachedNatureWeapon = true;
+                    //if (!natureProjectile._syncAttachedNatureWeapon) {
+                    //    projectile.netUpdate = true;
+                    //}
+                    //natureProjectile._syncAttachedNatureWeapon = true;
                 }
             }
             return;
@@ -254,10 +254,10 @@ abstract class DruidicProjectile : ModProjectile {
                 handler._syncAttachedNatureWeapon = false;
             }
             else {
-                if (!handler._syncAttachedNatureWeapon) {
-                    projectile.netUpdate = true;
-                }
-                handler._syncAttachedNatureWeapon = true;
+                //if (!handler._syncAttachedNatureWeapon) {
+                //    projectile.netUpdate = true;
+                //}
+                //handler._syncAttachedNatureWeapon = true;
             }
         }
     }
