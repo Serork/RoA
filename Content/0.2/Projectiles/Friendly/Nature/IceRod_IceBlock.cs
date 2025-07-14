@@ -38,7 +38,7 @@ sealed class HittingIceBlocksWithPickaxeSupport : ModPlayer {
             num2 = (int)(self.position.Y - 0.1f) / 16;
 
         foreach (Point16 iceBlockPosition in EnumerateIceBlockPositions()) {
-            if (iceBlockPosition.X == num && iceBlockPosition.Y == num2) {
+            if (iceBlockPosition.X >= num - 1 && iceBlockPosition.X <= num + 1 && iceBlockPosition.Y == num2) {
                 self.slippy = true;
                 break;
             }
