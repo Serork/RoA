@@ -96,9 +96,11 @@ static class NPCUtils {
             damageSourceAsProjectile.numHits++;
 
             immuneTime = immuneTimeAfterHit;
+
+            return true;
         }
         target.position -= target.netOffset;
 
-        return true;
+        return false;
     }
 }

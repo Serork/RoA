@@ -215,7 +215,8 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
                     if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
                                                                      ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, i, npcForCollisionCheck.whoAmI),
                                                                      damageSourceHitbox: hitBox,
-                                                                     direction: MathF.Sign(hitBox.Center.X - npcForCollisionCheck.Center.X))) {
+                                                                     direction: MathF.Sign(hitBox.Center.X - npcForCollisionCheck.Center.X),
+                                                                     immuneTimeAfterHit: 30)) {
                         continue;
                     }
                 }
@@ -227,23 +228,21 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
                 if (iceBlockInfo.Invalid) {
                     continue;
                 }
-                if (!iceBlockInfo.CanDamage) {
-                    if (i < IceBlockPositions.Count) {
-                        if (IceBlockPositions[i] != Point16.Zero) {
-                            for (byte i2 = 0; i2 < IceBlockData.Length; i2++) {
-                                IceBlockData[i2].Opacity = 0.25f;
-                                IceBlockData[i2].FrameCoords = Point16.Zero;
-                            }
-                        }
-                        IceBlockPositions[i] = Point16.Zero;
-                    }
-                    continue;
-                }
                 for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
                     ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, i, npcId);
                     if (immuneTime > 0) {
                         if (immuneTime == 1) {
                             IceBlockData[i].Penetrate--;
+
+                            if (!IceBlockData[i].CanDamage) {
+                                if (IceBlockPositions[i] != Point16.Zero) {
+                                    for (byte i2 = 0; i2 < IceBlockData.Length; i2++) {
+                                        IceBlockData[i2].Opacity = 0.25f;
+                                        IceBlockData[i2].FrameCoords = Point16.Zero;
+                                    }
+                                }
+                                Kill(i);
+                            }
                         }
                         immuneTime--;
                     }
@@ -269,12 +268,6 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
                         iceBlockData.PixieSoundPlayed = false;
                     }
                 }
-                //else if (iceBlockData.Opacity >= 1f) {
-                //    if (!iceBlockData.CanDamage) {
-                //        ResetAdjIceBlocks(IceBlockPositions[i]);
-                //        IceBlockPositions[i] = Point16.Zero;
-                //    }
-                //}
                 if (currentSegmentIndex > 0 && previousSegmentInfo.Opacity < 0.5f) {
                     continue;
                 }
@@ -686,6 +679,9 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
     public void ResetAdjIceBlocks(Point16 iceBlockPosition) {
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
             var iceBlock = projectile.As<IceBlock>();
+            if (iceBlock.IceBlockData == null) {
+                continue;
+            }
             bool[] check = new bool[iceBlock.GetBlockCountToPlace()];
             for (int i = 0; i < iceBlock.IceBlockPositions.Count; i++) {
                 if (TileHelper.ArePositionsAdjacent(iceBlock.IceBlockPositions[i], iceBlockPosition, checkDiagonal: false)) {
