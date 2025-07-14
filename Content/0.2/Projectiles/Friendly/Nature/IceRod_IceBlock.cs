@@ -192,6 +192,11 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
     }
 
     public override void AI() {
+        if (Projectile.ai[0] < 0f && !IceBlockPositions.Any(x => x != Point16.Zero)) {
+            Projectile.Kill();
+            return;
+        }
+
         void damageNPCs() {
             if (!Projectile.IsOwnerLocal()) {
                 return;
@@ -219,31 +224,30 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
                                                                      immuneTimeAfterHit: 30)) {
                         continue;
                     }
+                    else {
+                        IceBlockData[i].Penetrate--;
+                        if (!IceBlockData[i].CanDamage) {
+                            if (IceBlockPositions[i] != Point16.Zero) {
+                                for (byte i2 = 0; i2 < IceBlockData.Length; i2++) {
+                                    IceBlockData[i2].Opacity = 0.25f;
+                                    IceBlockData[i2].FrameCoords = Point16.Zero;
+                                }
+                                Kill(i);
+                            }
+                        }
+                    }
                 }
             }
         }
         void resetDamageInfo() {
             for (byte i = 0; i < IceBlockData.Length; i++) {
                 var iceBlockInfo = IceBlockData[i];
-                if (iceBlockInfo.Invalid) {
+                if (iceBlockInfo.Invalid || !iceBlockInfo.CanDamage) {
                     continue;
                 }
                 for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
                     ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, i, npcId);
                     if (immuneTime > 0) {
-                        if (immuneTime == 1) {
-                            IceBlockData[i].Penetrate--;
-
-                            if (!IceBlockData[i].CanDamage) {
-                                if (IceBlockPositions[i] != Point16.Zero) {
-                                    for (byte i2 = 0; i2 < IceBlockData.Length; i2++) {
-                                        IceBlockData[i2].Opacity = 0.25f;
-                                        IceBlockData[i2].FrameCoords = Point16.Zero;
-                                    }
-                                }
-                                Kill(i);
-                            }
-                        }
                         immuneTime--;
                     }
                 }

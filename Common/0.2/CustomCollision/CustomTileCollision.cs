@@ -81,6 +81,18 @@ sealed class CustomTileCollision : IInitializer {
                 }
             }
         }
+        HashSet<Point16> iceBlockPositions = [];
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
+            foreach (Point16 iceBlockPosition in projectile.As<IceBlock>().IceBlockPositions) {
+                for (int i = num5; i < value2; i++) {
+                    for (int j = value3; j < value4; j++) {
+                        if (iceBlockPosition.X == i && iceBlockPosition.Y == j) {
+                            iceBlockPositions.Add(new Point16(i, j));
+                        }
+                    }
+                }
+            }
+        }
         for (int i = num5; i < value2; i++) {
             for (int j = value3; j < value4; j++) {
                 bool flag3 = false;
@@ -90,19 +102,7 @@ sealed class CustomTileCollision : IInitializer {
                 if (flag12) {
                     flag3 = false;
                 }
-                bool hasIceRodTiles = false;
-                foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
-                    if (hasIceRodTiles) {
-                        break;
-                    }
-                    foreach (Point16 iceBlockPosition in projectile.As<IceBlock>().IceBlockPositions) {
-                        if (iceBlockPosition.X == i && iceBlockPosition.Y == j) {
-                            hasIceRodTiles = true;
-                            break;
-                        }
-                    }
-                }
-                if (!flag3 && !hasIceRodTiles && (Main.tile[i, j] == null || !Main.tile[i, j].HasTile || Main.tile[i, j].IsActuated || (!Main.tileSolid[Main.tile[i, j].TileType] && (!Main.tileSolidTop[Main.tile[i, j].TileType] || Main.tile[i, j].TileFrameY != 0))))
+                if (!flag3 && !iceBlockPositions.Contains(new Point16(i, j)) && (Main.tile[i, j] == null || !Main.tile[i, j].HasTile || Main.tile[i, j].IsActuated || (!Main.tileSolid[Main.tile[i, j].TileType] && (!Main.tileSolidTop[Main.tile[i, j].TileType] || Main.tile[i, j].TileFrameY != 0))))
                     continue;
                 vector4.X = i * 16;
                 vector4.Y = j * 16;
