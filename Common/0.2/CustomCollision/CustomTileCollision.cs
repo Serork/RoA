@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Projectiles;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
@@ -18,12 +20,15 @@ using Terraria.ModLoader;
 namespace RoA.Common.CustomCollision;
 
 sealed class CustomTileCollision : IInitializer {
+    private static readonly Dictionary<Point, (Projectile, Vector2)> _tectonicPlatesPositions = [];
+    private static readonly HashSet<Point16> _iceBlockPositions = [];
+
     void ILoadable.Load(Mod mod) {
         On_Collision.TileCollision += On_Collision_TileCollision;
     }
 
-    private static Dictionary<Point, (Projectile, Vector2)> GeneratePositions() {
-        Dictionary<Point, (Projectile, Vector2)> tectonicPlatesPositions = [];
+    private static void GenerateTectonicCanePositions() {
+        _tectonicPlatesPositions.Clear();
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<TectonicCaneProjectile>()) {
             List<Vector2> positions = [];
             for (int i = -2; i < 3; i++) {
@@ -44,10 +49,24 @@ sealed class CustomTileCollision : IInitializer {
                 }
             }
             foreach (Vector2 position in positions) {
-                tectonicPlatesPositions.TryAdd(position.ToTileCoordinates(), (projectile, position));
+                _tectonicPlatesPositions.TryAdd(position.ToTileCoordinates(), (projectile, position));
             }
         }
-        return tectonicPlatesPositions;
+    }
+
+    private static void GenerateIceBlockPositions(int num5, int value2, int value3, int value4) {
+        _iceBlockPositions.Clear();
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
+            foreach (Point16 iceBlockPosition in projectile.As<IceBlock>().IceBlockPositions) {
+                for (int i = num5; i < value2; i++) {
+                    for (int j = value3; j < value4; j++) {
+                        if (iceBlockPosition.X == i && iceBlockPosition.Y == j) {
+                            _iceBlockPositions.Add(new Point16(i, j));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private Vector2 On_Collision_TileCollision(On_Collision.orig_TileCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, int gravDir) {
@@ -69,40 +88,31 @@ sealed class CustomTileCollision : IInitializer {
         value2 = Utils.Clamp(value2, 0, Main.maxTilesX - 1);
         value3 = Utils.Clamp(value3, 0, Main.maxTilesY - 1);
         value4 = Utils.Clamp(value4, 0, Main.maxTilesY - 1);
-        Dictionary<Point, (Projectile, Vector2)> tectonicPlatesPositions = GeneratePositions();
+        GenerateTectonicCanePositions();
         float num6 = (value4 + 3) * 16;
         Vector2 vector4 = default(Vector2);
         bool flag12 = false;
-        for (int i = num5; i < value2; i++) {
-            for (int j = value3; j < value4; j++) {
-                int num1451 = TETrainingDummy.Find(i, j);
-                if (num1451 != -1) {
-                    flag12 = true;
-                }
-            }
-        }
-        HashSet<Point16> iceBlockPositions = [];
-        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
-            foreach (Point16 iceBlockPosition in projectile.As<IceBlock>().IceBlockPositions) {
-                for (int i = num5; i < value2; i++) {
-                    for (int j = value3; j < value4; j++) {
-                        if (iceBlockPosition.X == i && iceBlockPosition.Y == j) {
-                            iceBlockPositions.Add(new Point16(i, j));
-                        }
+        if (_tectonicPlatesPositions.Count > 0) {
+            for (int i = num5; i < value2; i++) {
+                for (int j = value3; j < value4; j++) {
+                    int num1451 = TETrainingDummy.Find(i, j);
+                    if (num1451 != -1) {
+                        flag12 = true;
                     }
                 }
             }
         }
+        GenerateIceBlockPositions(num5, value2, value3, value4);
         for (int i = num5; i < value2; i++) {
             for (int j = value3; j < value4; j++) {
                 bool flag3 = false;
-                if (tectonicPlatesPositions.TryGetValue(new Point(i, j), out (Projectile, Vector2) turple)) {
+                if (_tectonicPlatesPositions.TryGetValue(new Point(i, j), out (Projectile, Vector2) turple)) {
                     flag3 = true;
                 }
                 if (flag12) {
                     flag3 = false;
                 }
-                if (!flag3 && !iceBlockPositions.Contains(new Point16(i, j)) && (Main.tile[i, j] == null || !Main.tile[i, j].HasTile || Main.tile[i, j].IsActuated || (!Main.tileSolid[Main.tile[i, j].TileType] && (!Main.tileSolidTop[Main.tile[i, j].TileType] || Main.tile[i, j].TileFrameY != 0))))
+                if (!flag3 && !_iceBlockPositions.Contains(new Point16(i, j)) && (Main.tile[i, j] == null || !Main.tile[i, j].HasTile || Main.tile[i, j].IsActuated || (!Main.tileSolid[Main.tile[i, j].TileType] && (!Main.tileSolidTop[Main.tile[i, j].TileType] || Main.tile[i, j].TileFrameY != 0))))
                     continue;
                 vector4.X = i * 16;
                 vector4.Y = j * 16;

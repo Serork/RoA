@@ -25,7 +25,24 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class HittingIceBlocksWithPickaxeSupport : ModPlayer {
     public override void Load() {
         On_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
-        On_SmartCursorHelper.Step_Pickaxe_MineSolids += On_SmartCursorHelper_Step_Pickaxe_MineSolids; ;
+        On_SmartCursorHelper.Step_Pickaxe_MineSolids += On_SmartCursorHelper_Step_Pickaxe_MineSolids;
+        On_Player.FloorVisuals += On_Player_FloorVisuals;
+    }
+
+    private void On_Player_FloorVisuals(On_Player.orig_FloorVisuals orig, Player self, bool Falling) {
+        orig(self, Falling);
+
+        int num = (int)((self.position.X + (float)(self.width / 2)) / 16f);
+        int num2 = (int)((self.position.Y + (float)self.height) / 16f);
+        if (self.gravDir == -1f)
+            num2 = (int)(self.position.Y - 0.1f) / 16;
+
+        foreach (Point16 iceBlockPosition in EnumerateIceBlockPositions()) {
+            if (iceBlockPosition.X == num && iceBlockPosition.Y == num2) {
+                self.slippy = true;
+                break;
+            }
+        }
     }
 
     private void On_SmartCursorHelper_Step_Pickaxe_MineSolids(On_SmartCursorHelper.orig_Step_Pickaxe_MineSolids orig, Player player, object providedInfo, List<Tuple<int, int>> grappleTargets, ref int focusedX, ref int focusedY) {
@@ -129,6 +146,8 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
     public readonly List<Point16> IceBlockPositions = [];
     public IceBlockInfo[] IceBlockData = null;
 
+    public bool IsCharged => Projectile.ai[0] < 0f;
+
     private byte GetBlockCountToPlace() {
         byte result = 5;
         string playerName = Projectile.GetOwnerAsPlayer().name;
@@ -153,7 +172,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
     public override bool? CanDamage() => false;
 
     public override bool PreDraw(ref Color lightColor) {
-        if (Projectile.ai[0] < 0f) {
+        if (IsCharged) {
             for (byte i = 0; i < IceBlockData.Length; i++) {
                 byte currentSegmentIndex = i;
                 ref IceBlockInfo iceBlockInfo = ref IceBlockData[currentSegmentIndex];
@@ -162,7 +181,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
                 }
                 Point16 tilePosition = IceBlockPositions[i];
                 HashSet<Point16> allIceBlockPositions = GetIceBlockPositions((iceBlockPosition) => TileHelper.ArePositionsAdjacent(iceBlockPosition, new Point16(tilePosition.X, tilePosition.Y), 1));
-                Color tileColor = Color.White * MathUtils.Clamp01(iceBlockInfo.Opacity);
+                Color tileColor = Lighting.GetColor(tilePosition.X, tilePosition.Y) * MathUtils.Clamp01(iceBlockInfo.Opacity);
                 Rectangle clip;
                 Point16 right = tilePosition + new Point16(1, 0);
                 Point16 left = tilePosition - new Point16(1, 0);
@@ -192,7 +211,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
     }
 
     public override void AI() {
-        if (Projectile.ai[0] < 0f && !IceBlockPositions.Any(x => x != Point16.Zero)) {
+        if (IsCharged && !IceBlockPositions.Any(x => x != Point16.Zero)) {
             Projectile.Kill();
             return;
         }
@@ -254,7 +273,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
             }
         }
 
-        if (Projectile.ai[0] < 0f) {
+        if (IsCharged) {
             damageNPCs();
             resetDamageInfo();
 
@@ -318,7 +337,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
         }
 
         // placed all tiles
-        if (Projectile.ai[0] < 0f) {
+        if (IsCharged) {
             if (Projectile.ai[0] == -1f) {
                 // first time placed all blocks
                 foreach (Point16 iceBlockPosition in IceBlockPositions) {
