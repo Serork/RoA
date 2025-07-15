@@ -145,6 +145,7 @@ sealed class DamageClassItemsStorage : IInitializer {
                         values.Add(testPlayer.manaCost);
                         values.Add(testPlayer.manaFlower);
                         values.Add(testPlayer.manaRegen);
+                        values.Add(testPlayer.manaRegenBuff);
                     }
                     else if (damageClass == DamageClass.Melee) {
                         values.Add(testPlayer.autoReuseGlove);
@@ -187,7 +188,7 @@ sealed class DamageClassItemsStorage : IInitializer {
                     //    testPlayer.tileInteractAttempted = false;
                     //    testPlayer.releaseUseTile = false;
                     //}
-                    if ((!ItemID.Sets.IsFood[self.type] || damageClass == DamageClass.Generic) && self.buffType > 0) {
+                    if (self.buffType > 0) {
                         testPlayer.AddBuff(self.buffType, 2);
                         testPlayer.UpdateBuffs(self.whoAmI);
                     }

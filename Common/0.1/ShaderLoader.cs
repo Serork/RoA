@@ -86,6 +86,10 @@ sealed class ShaderLoader : ModSystem {
     public static Effect VignetteEffectData { get; private set; }
 
     public override void OnModLoad() {
+        if (Main.dedServ) {
+            return;
+        }
+
         void load01Shaders() {
             Asset<Effect> vignetteShader = ModContent.Request<Effect>(ResourceManager.Effects + "Vignette", AssetRequestMode.ImmediateLoad);
             VignetteEffectData = vignetteShader.Value;
@@ -130,6 +134,10 @@ sealed class ShaderLoader : ModSystem {
     }
 
     public override void OnModUnload() {
+        if (Main.dedServ) {
+            return;
+        }
+
         _loadedShaders.Clear();
         _loadedShaders = new Dictionary<string, Effect>();
     }

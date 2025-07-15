@@ -67,7 +67,7 @@ sealed class VanillaGlowMaskHandler : GlobalItem {
 
         // Check all registered items in the mod
         foreach (var m in RoA.Instance.GetContent<ModItem>()) {
-            // Find GlowMask attribute from registered item
+            // Find Texture attribute from registered item
             var attr = m?.GetType().GetAttribute<AutoloadGlowMask2Attribute>();
             if (attr != null) {
                 string modItemTexture = m.Texture;
@@ -86,7 +86,7 @@ sealed class VanillaGlowMaskHandler : GlobalItem {
                 // Otherwise, get a _Glow texture using the item's Texture property
                 var texture = ModContent.Request<Texture2D>(modItemTexture + "_Glow", AssetRequestMode.ImmediateLoad); // ImmediateLoad so the asset can be given a name
                 texture.Value.Name = modItemTexture;
-                // Add the asset to the TextureAssets.GlowMask edit List
+                // Add the asset to the TextureAssets.Texture edit List
                 masks.Add(texture);
                 texturePathToGlowMaskID.Add(modItemTexture, (short)(masks.Count - 1));
 

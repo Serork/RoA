@@ -31,12 +31,12 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     }
 
     public readonly struct GlowMaskInfo(Asset<Texture2D> glowMask, Color glowColor, bool shouldApplyItemAlpha) {
-        public readonly Asset<Texture2D> GlowMask = glowMask;
-        public readonly Color GlowColor = glowColor;
+        public readonly Asset<Texture2D> Texture = glowMask;
+        public readonly Color Color = glowColor;
         public readonly bool ShouldApplyItemAlpha = shouldApplyItemAlpha;
     }
 
-    internal static Dictionary<int, GlowMaskInfo> GlowMasks { get; private set; } = [];
+    public static Dictionary<int, GlowMaskInfo> GlowMasks { get; private set; } = [];
     internal static Dictionary<int, ModItem> ArmorGlowMasks { get; private set; } = [];
 
     public override void Load() {
@@ -85,7 +85,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 
         private static void DrawGlowMask(Item item, SpriteBatch spriteBatch, Color lightColor, float rotation, float scale = 1f, Vector2? position = null) {
             if (item.type >= ItemID.Count && GlowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo)) {
-                Texture2D glowMaskTexture = glowMaskInfo.GlowMask.Value;
+                Texture2D glowMaskTexture = glowMaskInfo.Texture.Value;
                 Vector2 origin = glowMaskTexture.Size() / 2f;
                 Vector2 colorPosition = position ?? item.Center;
                 if (position != null) {
@@ -94,7 +94,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     colorPosition += Main.screenPosition;
                 }
                 float brightnessFactor = Lighting.Brightness((int)colorPosition.X / 16, (int)colorPosition.Y / 16);
-                Color color = Color.Lerp(glowMaskInfo.GlowColor, lightColor, brightnessFactor);
+                Color color = Color.Lerp(glowMaskInfo.Color, lightColor, brightnessFactor);
                 if (item.shimmered) {
                     color.R = (byte)(255f * (1f - item.shimmerTime));
                     color.G = (byte)(255f * (1f - item.shimmerTime));
@@ -110,7 +110,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 
                 position ??= item.Center - Main.screenPosition;
                 spriteBatch.Draw(glowMaskTexture, position.Value, null,
-                    glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.GlowColor,
+                    glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.Color,
                     rotation, origin, scale, SpriteEffects.None, 0f);
                 if (item.shimmered)
                     spriteBatch.Draw(glowMaskTexture, position.Value, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, scale, SpriteEffects.None, 0f);
@@ -171,7 +171,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         }
 
         if (item.type >= ItemID.Count && GlowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo)) {
-            Texture2D texture = glowMaskInfo.GlowMask.Value;
+            Texture2D texture = glowMaskInfo.Texture.Value;
             Vector2 offset = new();
             float rotOffset = 0f;
             Vector2 origin = new();
@@ -203,9 +203,9 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             }
 
             Vector2 position = (player.itemLocation + offset + new Vector2(0f, player.gfxOffY)).Floor();
-            Color color = Color.Lerp(glowMaskInfo.GlowColor, drawInfo.itemColor, Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
+            Color color = Color.Lerp(glowMaskInfo.Color, drawInfo.itemColor, Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
             drawInfo.DrawDataCache.Add(new DrawData(texture, position - Main.screenPosition, texture.Bounds,
-                                                     glowMaskInfo.ShouldApplyItemAlpha ? item.GetAlpha(color) : glowMaskInfo.GlowColor, player.itemRotation + rotOffset, origin, item.scale, drawInfo.itemEffect, 0));
+                                                     glowMaskInfo.ShouldApplyItemAlpha ? item.GetAlpha(color) : glowMaskInfo.Color, player.itemRotation + rotOffset, origin, item.scale, drawInfo.itemEffect, 0));
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
@@ -19,6 +20,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 
+[AutoloadGlowMask]
 sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(42);

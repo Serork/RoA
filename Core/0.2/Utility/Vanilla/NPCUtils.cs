@@ -97,6 +97,10 @@ static class NPCUtils {
 
             immuneTime = immuneTimeAfterHit;
 
+            if (Main.netMode != NetmodeID.SinglePlayer) {
+                NetMessage.SendStrikeNPC(target, strike);
+            }
+
             return true;
         }
         target.position -= target.netOffset;

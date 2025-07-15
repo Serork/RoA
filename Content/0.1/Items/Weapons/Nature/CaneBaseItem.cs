@@ -1,8 +1,11 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Utilities;
+
 using RoA.Common.Druid;
 using RoA.Common.Druid.Forms;
+using RoA.Common.GlowMasks;
 using RoA.Common.Projectiles;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -76,6 +79,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     private float _rotation;
     private Vector2 _positionOffset;
     private bool _shouldBeActive;
+    private bool _shouldDrawGlowMask;
 
     protected bool Shot, Shot2;
 
@@ -218,7 +222,17 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         }
         rotation += rotationOffset;
 
-        Main.EntitySpriteDraw(heldItemTexture, position + Vector2.UnitY * offsetY - Main.screenPosition, sourceRectangle, color, rotation, origin, scale, effects);
+        Vector2 drawPosition = position + Vector2.UnitY * offsetY - Main.screenPosition;
+        Main.EntitySpriteDraw(heldItemTexture, drawPosition, sourceRectangle, color, rotation, origin, scale, effects);
+
+        if (_shouldDrawGlowMask) {
+            var glowMaskInfo = ItemGlowMaskHandler.GlowMasks[AttachedNatureWeapon.type];
+            Texture2D heldItemGlowMaskTexture = glowMaskInfo.Texture.Value;
+            float brightnessFactor = Lighting.Brightness((int)drawPosition.X / 16, (int)drawPosition.Y / 16);
+            color = Color.Lerp(glowMaskInfo.Color, lightColor, brightnessFactor);
+            Color glowMaskColor = glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - Projectile.alpha / 255f) : glowMaskInfo.Color;
+            Main.EntitySpriteDraw(heldItemGlowMaskTexture, drawPosition, sourceRectangle, glowMaskColor, rotation, origin, scale, effects);
+        }
     }
 
     protected sealed override void SafeOnSpawn(IEntitySource source) {
@@ -248,15 +262,17 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     protected virtual void Initialize() { }
 
     public sealed override void AI() {
+        if (AttachedNatureWeapon.IsEmpty()) {
+            Projectile.Kill();
+            return;
+        }
+
         if (!_init) {
             _init = true;
 
             Initialize();
-        }
 
-        if (AttachedNatureWeapon.IsEmpty()) {
-            Projectile.Kill();
-            return;
+            _shouldDrawGlowMask = AttachedNatureWeapon.ModItem.GetType().GetAttribute<AutoloadGlowMaskAttribute>() != null;
         }
 
         if (Owner.whoAmI != Main.myPlayer && Projectile.localAI[2] == 0f && AttachedNatureWeapon != null) {

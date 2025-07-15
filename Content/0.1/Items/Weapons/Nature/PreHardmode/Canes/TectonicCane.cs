@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.GlowMasks;
 using RoA.Common.Projectiles;
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
@@ -20,6 +21,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
+[AutoloadGlowMask(requirement: "")]
 sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TectonicCaneProjectile>();
 

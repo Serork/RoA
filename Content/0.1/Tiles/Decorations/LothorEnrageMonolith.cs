@@ -40,6 +40,10 @@ sealed class EnragedVisuals : ModPlayer {
     }
 
     internal void UpdateVisuals() {
+        if (Main.dedServ) {
+            return;
+        }
+
         string shader = ShaderLoader.EnragedLothorSky;
         int type = ModContent.NPCType<Lothor>();
         if (!_isActive) {

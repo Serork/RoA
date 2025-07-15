@@ -29,6 +29,10 @@ sealed class LothorShake : ModSystem {
     }
 
     public override void PostUpdateNPCs() {
+        if (Main.dedServ) {
+            return;
+        }
+
         string shader = ShaderLoader.LothorSky;
         bool flag = NPC.AnyNPCs(ModContent.NPCType<Lothor>());
         if (flag && !shake) {
