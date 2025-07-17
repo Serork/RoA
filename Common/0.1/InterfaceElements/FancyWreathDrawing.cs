@@ -35,12 +35,12 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
 
     public override int GetInsertIndex(List<GameInterfaceLayer> layers) {
         int preferredIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Resource Bars");
-        return preferredIndex < 0 ? 0 : preferredIndex;
+        return preferredIndex < 0 ? 0 : preferredIndex + 1;
     }
 
     public override void Load(Mod mod) {
         On_Main.DrawInventory += On_Main_DrawInventory;
-        On_PlayerResourceSetsManager.Draw += On_PlayerResourceSetsManager_Draw; ;
+        On_PlayerResourceSetsManager.Draw += On_PlayerResourceSetsManager_Draw;
 
         if (Main.dedServ) {
             return;
@@ -209,14 +209,24 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
                 return;
             }
         }
-        if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Fancy2) {
-            Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
+        bool fancy2 = config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Fancy2;
+        bool onPlayer = wreathPosition == RoAClientConfig.WreathPositions.Player;
+        bool defaultResources = !onPlayer && Main.ResourceSetsManager.ActiveSetKeyName == "Default";
+        bool horizontalBarsWithText = !onPlayer && Main.ResourceSetsManager.ActiveSetKeyName == "HorizontalBarsWithText";
+        if (fancy2) {
+            Vector2 vector3 = new Vector2(Main.screenWidth - 300, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
-            if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+            if (onPlayer) {
                 vector3 = screenSize / 2f;
                 vector3.Y -= player.height * 1.5f;
 
                 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(0f, -40f);
+            }
+            if (defaultResources) {
+                vector.Y += 6f;
+            }
+            if (horizontalBarsWithText) {
+                vector.Y += 2f;
             }
             Player localPlayer = Main.LocalPlayer;
             Color textColor = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
@@ -231,10 +241,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             string text = text3 + text4 + stats.TotalResource + "/" + stats.TotalResource;
             Vector2 vector2 = FontAssets.MouseText.Value.MeasureString(text);
             if (flag2) {
-                vector2.X *= 0.9f;
+                vector2.X *= 0.93f;
             }
             else if (flag3) {
-                vector2.X *= 0.95f;
+                vector2.X *= 1f;
             }
             if (reversedGravity) {
                 vector.Y += 28f;
@@ -249,8 +259,11 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
                 reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2(vector2.X * 0.5f, 0f)) : (vector + new Vector2(vector2.X * 0.5f, 0f)), textColor, 0f,
                 new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f,
                 reversedGravity ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
-            position.Y += 6;
+            if (!defaultResources) {
+                position.Y += 6;
+            }
         }
+
         Rectangle frame = new(0, 0, width, height);
         int num5 = 255;
         int a = (int)((double)num5 * 1);
@@ -279,6 +292,12 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (formHandler.IsInADruidicForm && currentForm != null) {
             position += currentForm.BaseForm.WreathOffset2;
         }
+
+        position += new Vector2(defaultResources ? -4 : 0, defaultResources ? 18f : 0f);
+        if (horizontalBarsWithText) {
+            position.Y += 2f;
+        }
+
         spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);
 
         IsHoveringUI = false;
@@ -409,14 +428,24 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
         var formHandler = player.GetModPlayer<BaseFormHandler>();
         var currentForm = formHandler.CurrentForm;
-        if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Bars2) {
+        bool bars2 = config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Bars2;
+        bool onPlayer = wreathPosition == RoAClientConfig.WreathPositions.Player;
+        bool defaultResources = !onPlayer && Main.ResourceSetsManager.ActiveSetKeyName == "Default";
+        bool horizontalBarsWithText = !onPlayer && Main.ResourceSetsManager.ActiveSetKeyName == "HorizontalBarsWithText";
+        if (bars2) {
             Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
             Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
-            if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
+            if (onPlayer) {
                 vector3 = screenSize / 2f;
                 vector3.Y -= player.height * 1.5f;
 
                 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(0f, -40f);
+            }
+            if (defaultResources) {
+                vector.Y += 6f;
+            }
+            if (horizontalBarsWithText) {
+                vector.Y += 2f;
             }
             Player localPlayer = Main.LocalPlayer;
             Color textColor = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
@@ -431,10 +460,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             string text = text3 + text4 + stats.TotalResource + "/" + stats.TotalResource;
             Vector2 vector2 = FontAssets.MouseText.Value.MeasureString(text);
             if (flag2) {
-                vector2.X *= 0.9f;
+                vector2.X *= 0.93f;
             }
             else if (flag3) {
-                vector2.X *= 0.95f;
+                vector2.X *= 1f;
             }
             if (reversedGravity) {
                 vector.Y += 28f;
@@ -449,8 +478,11 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
                 reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2(vector2.X * 0.5f, 0f)) : (vector + new Vector2(vector2.X * 0.5f, 0f)), textColor, 0f,
                 new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f,
                 reversedGravity ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
-            position.Y += 6;
+            if (!defaultResources) {
+                position.Y += 6;
+            }
         }
+
         Rectangle frame = new(0, 0, width, height);
         int num5 = 255;
         int a = (int)((double)num5 * 1);
@@ -481,6 +513,12 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (formHandler.IsInADruidicForm && currentForm != null) {
             position += currentForm.BaseForm.WreathOffset2;
         }
+
+        position += new Vector2(defaultResources ? -4 : 0, defaultResources ? 18f : 0f);
+        if (horizontalBarsWithText) {
+            position.Y += 2f;
+        }
+
         spriteBatch.Draw(mainTexture, position, frame, color, rotation, origin, scale, effects, 0f);
 
         IsHoveringUI = false;

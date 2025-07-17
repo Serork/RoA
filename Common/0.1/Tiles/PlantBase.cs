@@ -307,9 +307,20 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
         }
 
         if (!IsGrown(i, j) && (Main.rand.NextBool(40) || flag)) {
-            WorldGenHelper.GetTileSafely(i, j).TileFrameX += FrameWidth;
-            if (Main.netMode != NetmodeID.SinglePlayer) {
-                NetMessage.SendTileSquare(-1, i, j, 1);
+            int x = i, y = j;
+            if (Main.tile[x, y].LiquidAmount > 0) {
+                WorldGen.KillTile(x, y);
+                if (Main.netMode == NetmodeID.Server) {
+                    NetMessage.SendTileSquare(-1, x, y);
+                }
+
+                WorldGen.SquareTileFrame(x, y);
+            }
+            else {
+                WorldGenHelper.GetTileSafely(i, j).TileFrameX += FrameWidth;
+                if (Main.netMode != NetmodeID.SinglePlayer) {
+                    NetMessage.SendTileSquare(-1, i, j, 1);
+                }
             }
         }
     }

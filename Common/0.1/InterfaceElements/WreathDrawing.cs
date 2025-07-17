@@ -10,6 +10,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Forms;
 using RoA.Core;
 using RoA.Core.Data;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,14 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.UI.ResourceSets;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+
+using static RoA.Common.Configs.RoAClientConfig;
+using static System.Formats.Asn1.AsnWriter;
+using static Terraria.GameContent.Animations.Actions.Sprites;
 
 namespace RoA.Common.InterfaceElements;
 
@@ -87,7 +93,6 @@ sealed class WreathDrawing : PlayerDrawLayer {
 
             return;
         }
-
 
         SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
         Main.spriteBatch.End();
@@ -223,65 +228,37 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
     private static Player Player => Main.LocalPlayer;
     private static WreathHandler Stats => Player.GetModPlayer<WreathHandler>();
 
-    public override int GetInsertIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Ingame Options"));
-
-    public static void DrawText(Vector2 position) {
-        Player player = Player;
-        var stats = Stats;
-        var config = ModContent.GetInstance<RoAClientConfig>();
-        var wreathPosition = config.WreathPosition;
-        if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal2) {
-            Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4, 15f);
-            Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
-            if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
-                vector3 = Main.ScreenSize.ToVector2() / 2f;
-                vector3.Y -= player.height * 1.5f;
-
-                vector = vector3 + new Vector2(-4f, 3f) + new Vector2(0f, -40f);
-            }
-            vector += position;
-            Player localPlayer = Main.LocalPlayer;
-            Color textColor = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
-            string text3 = Language.GetTextValue("Mods.RoA.WreathSlot") + ":";
-            string text4 = " ";
-            bool flag = stats.CurrentResource < 100;
-            bool flag2 = stats.CurrentResource < 10;
-            bool flag3 = stats.CurrentResource < 200;
-            if (flag) {
-                text4 = string.Empty;
-            }
-            string text = text3 + text4 + stats.TotalResource + "/" + stats.TotalResource;
-            Vector2 vector2 = FontAssets.MouseText.Value.MeasureString(text);
-            if (flag2) {
-                vector2.X *= 0.9f;
-            }
-            else if (flag3) {
-                vector2.X *= 0.95f;
-            }
-            SpriteBatch spriteBatch = Main.spriteBatch;
-            spriteBatch.DrawString(FontAssets.MouseText.Value, text3, vector + new Vector2((0f - vector2.X) * 0.5f, 0f), textColor, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(FontAssets.MouseText.Value, (stats.CurrentResource + "/" + stats.TotalResource).ToString(), vector + new Vector2(vector2.X * 0.5f, 0f), textColor, 0f,
-                new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f, SpriteEffects.None, 0f);
-        }
+    public override void Load(Mod mod) {
+        On_PlayerResourceSetsManager.Draw += On_PlayerResourceSetsManager_Draw;
     }
 
-    protected override bool DrawSelf() {
+    private void On_PlayerResourceSetsManager_Draw(On_PlayerResourceSetsManager.orig_Draw orig, PlayerResourceSetsManager self) {
+        orig(self);
+
         var config = ModContent.GetInstance<RoAClientConfig>();
         if (config.WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal &&
             config.WreathDrawingMode != RoAClientConfig.WreathDrawingModes.Normal2) {
-            return true;
+            return;
         }
 
         bool shouldDrawNearPlayer = config.WreathPosition == RoAClientConfig.WreathPositions.Player;
         if (shouldDrawNearPlayer) {
-            return true;
+            return;
         }
 
         Vector2 playerPosition = Utils.Floor(Player.Center - Vector2.UnitY * Player.height / 2f + Vector2.UnitY * Player.gfxOffY);
 
+        bool horizontalBarsWithText = Main.ResourceSetsManager.ActiveSetKeyName == "HorizontalBarsWithText";
+        bool normal2 = config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal2;
+
         int width = 44, height = 46;
-        int UI_ScreenAnchorX = Main.screenWidth - 870;
-        playerPosition = new Vector2(500 + UI_ScreenAnchorX + width / 2, 42f + height / 2);
+        float scale = 1f;
+        bool defaultResources = Main.ResourceSetsManager.ActiveSetKeyName == "Default";
+        int UI_ScreenAnchorX = Main.screenWidth - (870 + (defaultResources ? 4 : 0));
+        playerPosition = new Vector2(500 + UI_ScreenAnchorX + width / 2, 42f + (defaultResources ? Player.statLifeMax <= 100 ? 7f : 17f : 0f) + height / 2);
+        if (horizontalBarsWithText) {
+            playerPosition.Y += 2f;
+        }
 
         var _wreathSpriteData = WreathDrawing._wreathSpriteData;
         playerPosition.Y -= 12f;
@@ -297,7 +274,7 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         if (Player.ghost) {
             _oldPosition = playerPosition;
 
-            return true;
+            return;
         }
 
         if (!Player.mount.Active) {
@@ -311,6 +288,12 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         float rotation = MathHelper.Pi;
         _oldPosition = playerPosition;
 
+        if (!normal2 && !defaultResources) {
+            position.Y -= 6f;
+        }
+
+        //position -= new Vector2(350f, -54f) * (scale - 1f);
+
         DrawText(Vector2.Zero);
 
         var stats = Stats;
@@ -321,14 +304,17 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         Color color = stats.BaseColor;
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
         //position = position.Floor();
+
         // dark border
         SpriteData wreathSpriteData = _wreathSpriteData;
         wreathSpriteData.Color = color * opacity;
         wreathSpriteData.VisualPosition = position;
         wreathSpriteData.Rotation = rotation;
+        wreathSpriteData.Scale = scale;
         wreathSpriteData.DrawSelf();
         // filling
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed((byte)(0 + stats.IsPhoenixWreath.ToInt()), 1);
+        wreathSpriteData2.Scale = scale;
         int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
         void drawFilling(Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f) {
@@ -376,9 +362,9 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
             mainFactor = MathHelper.Lerp(mainFactor, factor, mainFactor < factor ? 0.1f : 0.025f);
             factor = mainFactor * stats.PulseIntensity;
             wreathSpriteData2.Color = color * factor * opacity * 2f;
-            wreathSpriteData2.Scale = factor + 0.475f;
+            wreathSpriteData2.Scale = scale * (factor + 0.475f);
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
-            wreathSpriteData2.Scale += 0.13f * progress * 2f;
+            wreathSpriteData2.Scale += scale * 0.13f * progress * 2f;
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
             SpriteData wreathSpriteData3 = wreathSpriteData.Framed(frameX, frameY);
             opacity = Math.Min(progress * 1.15f, 0.7f);
@@ -410,7 +396,66 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         else {
             WreathDrawing.JustDrawn = false;
         }
+    }
 
+    public override int GetInsertIndex(List<GameInterfaceLayer> layers) {
+        int preferredIndex = layers.FindIndex(layer => layer.Name == "Vanilla: Resource Bars");
+        return preferredIndex < 0 ? 0 : preferredIndex + 1;
+    }
+
+    public static void DrawText(Vector2 position) {
+        Player player = Player;
+        var stats = Stats;
+        var config = ModContent.GetInstance<RoAClientConfig>();
+        var wreathPosition = config.WreathPosition;
+        SpriteBatch batch = Main.spriteBatch;
+        SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
+        batch.End();
+        batch.Begin(snapshot with { transformationMatrix = Main.UIScaleMatrix });
+        bool onPlayer = wreathPosition == RoAClientConfig.WreathPositions.Player;
+        if (config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal2) {
+            bool horizontalBarsWithText = !onPlayer && Main.ResourceSetsManager.ActiveSetKeyName == "HorizontalBarsWithText";
+            bool defaultResources = !onPlayer && Main.ResourceSetsManager.ActiveSetKeyName == "Default";
+            Vector2 vector3 = new Vector2(Main.screenWidth - 300 + 4 - (defaultResources ? 4 : 0), 15f + (defaultResources ? 6f : 0f));
+
+            Vector2 vector = vector3 + new Vector2(-4f, 3f) + new Vector2(-48f, -18f);
+            if (onPlayer) {
+                vector3 = Main.ScreenSize.ToVector2() / 2f;
+                vector3.Y -= player.height * 1.5f;
+
+                vector = vector3 + new Vector2(-4f, 3f) + new Vector2(0f, -40f);
+            }
+            if (horizontalBarsWithText) {
+                vector.Y += 2f;
+            }
+            vector += position;
+            Player localPlayer = Main.LocalPlayer;
+            Color textColor = new Color(Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor, Main.mouseTextColor);
+            string text3 = Language.GetTextValue("Mods.RoA.WreathSlot") + ":";
+            string text4 = " ";
+            bool flag = stats.CurrentResource < 100;
+            bool flag2 = stats.CurrentResource < 10;
+            bool flag3 = stats.CurrentResource < 200;
+            if (flag) {
+                text4 = string.Empty;
+            }
+            string text = text3 + text4 + stats.TotalResource + "/" + stats.TotalResource;
+            Vector2 vector2 = FontAssets.MouseText.Value.MeasureString(text);
+            if (flag2) {
+                vector2.X *= 0.93f;
+            }
+            else if (flag3) {
+                vector2.X *= 1f;
+            }
+            SpriteBatch spriteBatch = Main.spriteBatch;
+            spriteBatch.DrawString(FontAssets.MouseText.Value, text3, vector + new Vector2((0f - vector2.X) * 0.5f, 0f), textColor, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(FontAssets.MouseText.Value, (stats.CurrentResource + "/" + stats.TotalResource).ToString(), vector + new Vector2(vector2.X * 0.5f, 0f), textColor, 0f,
+                new Vector2(FontAssets.MouseText.Value.MeasureString(stats.CurrentResource + "/" + stats.TotalResource).X, 0f), 1f, SpriteEffects.None, 0f);
+        }
+        batch.Begin(snapshot, true);
+    }
+
+    protected override bool DrawSelf() {
         return true;
     }
 }

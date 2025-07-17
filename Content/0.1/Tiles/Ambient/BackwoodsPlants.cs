@@ -28,7 +28,7 @@ sealed class BackwoodsPlants : ModTile {
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.CoordinatePadding = 2;
         TileObjectData.newTile.Style = 0;
-        //TileObjectData.newTile.AnchorValidTiles = [ModContent.TileType<BackwoodsGrass>()];
+        //TileObjectData.newTile.AnchorValidTileTypes = [ModContent.TileType<BackwoodsGrass>()];
         TileObjectData.addTile(Type);
 
         DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Grass>();

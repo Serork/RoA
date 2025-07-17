@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Plants;
 
-sealed class Bonerose : PlantBase, TileHooks.IGrowPlantRandom {
+sealed class Bonerose : PlantBase, TileHooks.IGrowAlchPlantRandom {
     protected override int PlantDrop => DropItem;
 
     protected override int[] AnchorValidTiles => [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
@@ -22,7 +22,7 @@ sealed class Bonerose : PlantBase, TileHooks.IGrowPlantRandom {
         RootsDrawing.ShouldDraw[Type] = true;
     }
 
-    void TileHooks.IGrowPlantRandom.OnGlobalRandomUpdate(int i, int j) {
+    void TileHooks.IGrowAlchPlantRandom.OnGlobalRandomUpdate(int i, int j) {
         if (j < Main.worldSurface && !WorldGen.remixWorldGen) {
             return;
         }

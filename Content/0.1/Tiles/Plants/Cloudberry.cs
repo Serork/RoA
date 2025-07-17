@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Plants;
 
-sealed class Cloudberry : PlantBase, TileHooks.IGrowPlantRandom {
+sealed class Cloudberry : PlantBase, TileHooks.IGrowAlchPlantRandom {
     protected override int PlantDrop => DropItem;
 
     protected override int[] AnchorValidTiles => [147, 163, 164, 161, 200];
@@ -20,7 +20,7 @@ sealed class Cloudberry : PlantBase, TileHooks.IGrowPlantRandom {
         DropItem = (ushort)ModContent.ItemType<Items.Materials.Cloudberry>();
     }
 
-    void TileHooks.IGrowPlantRandom.OnGlobalRandomUpdate(int i, int j) {
+    void TileHooks.IGrowAlchPlantRandom.OnGlobalRandomUpdate(int i, int j) {
         if (j >= Main.worldSurface) {
             return;
         }

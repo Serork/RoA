@@ -2049,3 +2049,13 @@ IceRod: {
 	// DisplayName: Ice Rod
 	// Tooltip: ""
 }
+
+PerfectedBouquet: {
+	// DisplayName: Perfected Bouquet
+	// Tooltip: ""
+}
+
+SacredAcalypha: {
+	// DisplayName: Sacred Acalypha
+	// Tooltip: ""
+}

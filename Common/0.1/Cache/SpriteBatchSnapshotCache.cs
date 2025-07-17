@@ -17,7 +17,10 @@ static class SpriteBatchSnapshotCache {
     internal static FieldInfo EffectField => _effectField ??= typeof(SpriteBatch).GetField("customEffect", SBBindingFlags);
     internal static FieldInfo TransformMatrixField => _transformMatrixField ??= typeof(SpriteBatch).GetField("transformMatrix", SBBindingFlags);
 
-    public static void Begin(this SpriteBatch spriteBatch, in SpriteBatchSnapshot snapshot) {
+    public static void Begin(this SpriteBatch spriteBatch, in SpriteBatchSnapshot snapshot, bool end = false) {
+        if (end) {
+            spriteBatch.End();
+        }
         spriteBatch.Begin(snapshot.sortMode, snapshot.blendState, snapshot.samplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
     }
 

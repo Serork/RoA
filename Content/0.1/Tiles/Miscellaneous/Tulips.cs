@@ -30,7 +30,7 @@ sealed class GrowTulips : ILoadable {
                 return;
 
             int num = 90;
-            num = 240;
+            num = 120;
 
             if (((double)j < Main.worldSurface && !WorldGen.remixWorldGen) && (!Main.tile[i, j - 1].HasTile ||
                 Main.tileCut[Main.tile[i, j - 1].TileType])) {
@@ -49,11 +49,16 @@ sealed class GrowTulips : ILoadable {
 
                 if (!flag) {
                     if (i < Main.maxTilesX / 3 + 100 || i > Main.maxTilesX - Main.maxTilesX / 3 - 100) {
-                        if (Main.tile[i, j].TileType == TileID.Grass || Main.tile[i, j].TileType == TileID.GolfGrass) {
+                        bool flag2 = true;
+                        if (Main.tile[i, j - 1].LiquidAmount > 0 && Main.tile[i, j - 1].LiquidType != LiquidID.Water) {
+                            flag2 = false;
+                        }
+                        if (flag2 && (Main.tile[i, j].TileType == TileID.Grass || Main.tile[i, j].TileType == TileID.GolfGrass)) {
                             if (/*!Main.tile[i, j - 1].AnyLiquid() && */
                                 (!Main.tile[i, j - 1].AnyWall() || Main.tile[i, j - 1].WallType == WallID.FlowerUnsafe || Main.tile[i, j - 1].WallType == WallID.GrassUnsafe)) {
                                 if (Main.tileCut[Main.tile[i, j - 1].TileType]) {
-                                    WorldGen.KillTile(i, j - 1);
+                                    Tile tile = Main.tile[i, j - 1];
+                                    tile.HasTile = false;
                                 }
                                 WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 0);
                             }
@@ -79,7 +84,8 @@ sealed class GrowTulips : ILoadable {
                     if (Main.tile[i, j].TileType == TileID.JungleGrass) {
                         if (!Main.tile[i, j - 1].AnyLiquid()) {
                             if (Main.tileCut[Main.tile[i, j - 1].TileType]) {
-                                WorldGen.KillTile(i, j - 1);
+                                Tile tile = Main.tile[i, j - 1];
+                                tile.HasTile = false;
                             }
                             WorldGen.PlaceTile(i, j - 1, tileType, mute: true, forced: true, style: 1);
                         }
@@ -171,7 +177,7 @@ sealed class ExoticTulip : ModTile {
 
     public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
-        if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
+        if (player.IsWithinSnappngRangeToTile(i, j, 40)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
 
             WorldGen.KillTile(i, j);
@@ -239,7 +245,7 @@ sealed class SweetTulip : ModTile {
 
     public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
-        if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
+        if (player.IsWithinSnappngRangeToTile(i, j, 40)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
 
             WorldGen.KillTile(i, j);
@@ -309,7 +315,7 @@ sealed class WeepingTulip : ModTile {
 
     public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
-        if (player.IsWithinSnappngRangeToTile(i, j, 85)) {
+        if (player.IsWithinSnappngRangeToTile(i, j, 40)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
 
             WorldGen.KillTile(i, j);

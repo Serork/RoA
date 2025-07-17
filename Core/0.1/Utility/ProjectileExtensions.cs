@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Core.Utility;
 
-static class ProjectileExtensions {
+static partial class ProjectileExtensions {
     public static bool IsModded(this Projectile projectile) => projectile.ModProjectile is not null;
     public static bool IsModded(this Projectile projectile, out ModProjectile modProjectile) {
         modProjectile = projectile.ModProjectile;

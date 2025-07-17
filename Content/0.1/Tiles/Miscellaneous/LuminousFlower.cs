@@ -29,7 +29,7 @@ sealed class LuminousFlower : ModTile {
     private void On_WorldGen_plantDye(On_WorldGen.orig_plantDye orig, int i, int j, bool exoticPlant) {
         orig(i, j, exoticPlant);
 
-        if (!exoticPlant) {
+        if (!Main.hardMode && !exoticPlant) {
             UnifiedRandom unifiedRandom = (WorldGen.gen ? WorldGen.genRand : Main.rand);
             if (!Main.tile[i, j].HasTile || i < 95 || i > Main.maxTilesX - 95 || j < 95 || j > Main.maxTilesY - 95)
                 return;

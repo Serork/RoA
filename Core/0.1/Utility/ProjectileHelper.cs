@@ -26,10 +26,11 @@ static class ProjectileHelper {
         public float AI0 = 0f;
         public float AI1 = 0f;
         public float AI2 = 0f;
+        public ushort? ProjectileType = null;
     }
 
     public static Projectile SpawnPlayerOwnedProjectile<T>(in SpawnProjectileArgs spawnProjectileArgs) where T : ModProjectile {
         Player player = spawnProjectileArgs.Player;
-        return Main.projectile[Projectile.NewProjectile(spawnProjectileArgs.Source, spawnProjectileArgs.Position ?? player.Center, spawnProjectileArgs.Velocity ?? Vector2.Zero, ModContent.ProjectileType<T>(), spawnProjectileArgs.Damage, spawnProjectileArgs.KnockBack, player.whoAmI, spawnProjectileArgs.AI0, spawnProjectileArgs.AI1, spawnProjectileArgs.AI2)];
+        return Main.projectile[Projectile.NewProjectile(spawnProjectileArgs.Source, spawnProjectileArgs.Position ?? player.Center, spawnProjectileArgs.Velocity ?? Vector2.Zero, spawnProjectileArgs.ProjectileType ?? ModContent.ProjectileType<T>(), spawnProjectileArgs.Damage, spawnProjectileArgs.KnockBack, player.whoAmI, spawnProjectileArgs.AI0, spawnProjectileArgs.AI1, spawnProjectileArgs.AI2)];
     }
 }

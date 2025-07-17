@@ -18,8 +18,8 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Plants;
 
-sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
-    void TileHooks.IGrowPlantRandom.OnGlobalRandomUpdate(int i, int j) {
+sealed class MiracleMint : PlantBase, TileHooks.IGrowAlchPlantRandom {
+    void TileHooks.IGrowAlchPlantRandom.OnGlobalRandomUpdate(int i, int j) {
         if (WorldGen.gen) {
             return;
         }
