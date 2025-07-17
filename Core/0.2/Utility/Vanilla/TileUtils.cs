@@ -2,6 +2,9 @@
 
 using ReLogic.Utilities;
 
+using RoA.Common.CustomCollision;
+using RoA.Common.Projectiles;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Content.Tiles.Miscellaneous;
 
@@ -18,6 +21,52 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class TileHelper {
+    public static bool CustomSolidCollision_CheckForIceBlocks(Vector2 Position, int Width, int Height, bool[] conditions = null, bool shouldDestroyIceBlock = false, params ushort[] extraTypes) {
+        int value = (int)(Position.X / 16f) - 1;
+        int value2 = (int)((Position.X + (float)Width) / 16f) + 2;
+        int value3 = (int)(Position.Y / 16f) - 1;
+        int value4 = (int)((Position.Y + (float)Height) / 16f) + 2;
+        int num = Utils.Clamp(value, 0, Main.maxTilesX - 1);
+        value2 = Utils.Clamp(value2, 0, Main.maxTilesX - 1);
+        value3 = Utils.Clamp(value3, 0, Main.maxTilesY - 1);
+        value4 = Utils.Clamp(value4, 0, Main.maxTilesY - 1);
+        CustomTileCollision.GenerateIceBlockPositions(num, value2, value3, value4);
+        Vector2 vector = default(Vector2);
+        for (int i = num; i < value2; i++) {
+            for (int j = value3; j < value4; j++) {
+                bool flag = false;
+                if (CustomTileCollision.IceBlockPositions.Contains(new Point16(i, j))) {
+                    flag = true;
+                }
+                if (flag || (Main.tile[i, j] != null && !Main.tile[i, j].IsActuated && Main.tile[i, j].HasTile && ((Main.tileSolid[Main.tile[i, j].TileType] && !Main.tileSolidTop[Main.tile[i, j].TileType]) || (conditions != null && conditions[Main.tile[i, j].TileType]) || extraTypes.Contains(Main.tile[i, j].TileType)))) {
+                    vector.X = i * 16;
+                    vector.Y = j * 16;
+                    int num2 = 16;
+                    if (Main.tile[i, j].IsHalfBlock) {
+                        vector.Y += 8f;
+                        num2 -= 8;
+                    }
+
+                    if (Position.X + (float)Width > vector.X && Position.X < vector.X + 16f && Position.Y + (float)Height > vector.Y && Position.Y < vector.Y + (float)num2) {
+                        if (flag && shouldDestroyIceBlock) {
+                            foreach (IceBlock.IceBlockEnumerateData iceBlockEnumerateData in IceBlock.EnumerateIceBlockPositions2()) {
+                                Point16 iceBlockPosition = iceBlockEnumerateData.IceBlockPosition;
+                                if (iceBlockPosition.X == i && iceBlockPosition.Y == j) {
+                                    iceBlockEnumerateData.Projectile.Kill(iceBlockEnumerateData.Index);
+                                    return true;
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static bool IsHoney(int x, int y) => Main.tile[x, y].LiquidType == LiquidID.Honey;
     public static bool IsLava(int x, int y) => Main.tile[x, y].LiquidType == LiquidID.Lava;
     public static bool IsShimmer(int x, int y) => Main.tile[x, y].LiquidType == LiquidID.Shimmer;

@@ -12,6 +12,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.DrawLayers;
@@ -54,7 +55,7 @@ sealed class LothorMaskGlowing : ModSystem {
                 if (!(player.dead || player.invis || player.ShouldNotDraw)) {
                     float lifeProgress = 1f - MathHelper.Clamp((float)player.statLife / player.statLifeMax2 * 0.5f, 0f, 1f);
                     SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-                    Main.spriteBatch.BeginBlendState(BlendState.Additive);
+                    Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
                     for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                         Rectangle bodyFrame = drawInfo.drawPlayer.bodyFrame;
                         bodyFrame.Width += 2;
@@ -62,15 +63,17 @@ sealed class LothorMaskGlowing : ModSystem {
                         Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(Color.White, drawInfo.shadow);
                         immuneAlphaPure *= drawInfo.drawPlayer.stealth;
                         Vector2 position = drawInfo.Position + new Vector2(-1f, 5f);
-                        Vector2 vector = drawInfo.Position + drawInfo.rotationOrigin;
-                        Matrix matrix = Matrix.CreateRotationZ(drawInfo.rotation);
-                        Vector2 newPosition = position - vector;
-                        newPosition = Vector2.Transform(newPosition, matrix);
-                        position.X = (newPosition + vector).X;
-                        float progress4 = Math.Abs(drawInfo.rotation) / MathHelper.Pi;
                         float drawDistance = 3f/*MathHelper.Lerp(5f, 0f, (float)player.statLife / (float)player.statLifeMax2)*/;
-                        position.X -= progress4 * (player.width / 2f + 12f) * player.direction;
-                        position.Y += progress4 * (player.height / 2f + 8f);
+                        if (drawInfo.isSitting) {
+                            Vector2 vector = drawInfo.Position + drawInfo.rotationOrigin;
+                            Matrix matrix = Matrix.CreateRotationZ(drawInfo.rotation);
+                            Vector2 newPosition = position - vector;
+                            newPosition = Vector2.Transform(newPosition, matrix);
+                            position.X = (newPosition + vector).X;
+                            float progress4 = Math.Abs(drawInfo.rotation) / MathHelper.Pi;
+                            position.X -= progress4 * (player.width / 2f + 12f) * player.direction;
+                            position.Y += progress4 * (player.height / 2f + 8f);
+                        }
                         Main.spriteBatch.Draw(_lothorGlowMaskTexture.Value,
                             helmetOffset + new Vector2((int)(position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
                             (float)(drawInfo.drawPlayer.width / 2)),

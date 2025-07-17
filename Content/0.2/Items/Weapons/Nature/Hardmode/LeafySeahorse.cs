@@ -4,6 +4,7 @@ using RoA.Common.Druid;
 using RoA.Common.Projectiles;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -31,7 +32,12 @@ sealed class LeafySeahorse : NatureItem {
         position -= yOffset;
         float randomAngle = 0.075f;
         velocity = velocity.RotatedByRandom(randomAngle);
-        TrackedEntitiesSystem.SpawnTrackedProjectile<LeafySeahorse_Bubble>(source, position, velocity, damage, knockback, player.whoAmI);
+        ProjectileHelper.SpawnPlayerOwnedProjectile<LeafySeahorse_Bubble>(new ProjectileHelper.SpawnProjectileArgs(player, source) {
+            Position = position,
+            Velocity = velocity,
+            Damage = damage,
+            KnockBack = knockback,
+        });
 
         return false;
     }

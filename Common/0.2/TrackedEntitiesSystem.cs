@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-
+﻿using RoA.Common.Networking;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
 using System;
@@ -9,15 +9,10 @@ using System.Reflection;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Projectiles;
-
-[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-class ProjectileTrackedAttribute<T> : Attribute where T : ModProjectile { }
-
-[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-class NPCTrackedAttribute<T> : Attribute where T : ModNPC { }
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 class TrackedAttribute : Attribute { }
@@ -29,8 +24,8 @@ sealed class TrackedEntitiesSystem : ModSystem {
         On_NPC.NewNPC += On_NPC_NewNPC;
         On_Projectile.NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float += On_Projectile_NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float;
     }
-    
-    private static bool RegisterTrackedEntity<TEntity, TModType>(ModType<TEntity, TModType> modType) where TModType : ModType<TEntity, TModType> {
+
+    public static bool RegisterTrackedEntity<TEntity, TModType>(ModType<TEntity, TModType> modType) where TModType : ModType<TEntity, TModType> {
         Type projectileType = modType.GetType();
         TrackedAttribute? trackedAttribute = projectileType.GetCustomAttribute<TrackedAttribute>();
 
@@ -58,7 +53,11 @@ sealed class TrackedEntitiesSystem : ModSystem {
     private int On_Projectile_NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float(On_Projectile.orig_NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float orig, IEntitySource spawnSource, float X, float Y, float SpeedX, float SpeedY, int Type, int Damage, float KnockBack, int Owner, float ai0, float ai1, float ai2) {
         int whoAmI = orig(spawnSource, X, Y, SpeedX, SpeedY, Type, Damage, KnockBack, Owner, ai0, ai1, ai2);
         if (Main.projectile[whoAmI].IsModded(out ModProjectile modProjectile)) {
-            RegisterTrackedEntity(modProjectile);
+            if (RegisterTrackedEntity(modProjectile)) {
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new RegisterTrackedProjectilePacket(Main.player[Owner], modProjectile.Projectile.identity));
+                }
+            }
         }
 
         return whoAmI;
@@ -68,32 +67,6 @@ sealed class TrackedEntitiesSystem : ModSystem {
         int whoAmI = orig(source, X, Y, Type, Start, ai0, ai1, ai2, ai3, Target);
         if (Main.npc[whoAmI].IsModded(out ModNPC modNPC)) {
             RegisterTrackedEntity(modNPC);
-        }
-
-        return whoAmI;
-    }
-
-    public static int SpawnTrackedProjectile<T>(IEntitySource spawnSource, Vector2 position, Vector2 velocity, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f) where T : ModProjectile => SpawnTrackedProjectile<T>(spawnSource, position.X, position.Y, velocity.X, velocity.Y, Damage, KnockBack, Owner, ai0, ai1, ai2);
-
-    public static int SpawnTrackedProjectile<T>(IEntitySource spawnSource, float X, float Y, float SpeedX, float SpeedY, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f) where T : ModProjectile {
-        ushort type = (ushort)ModContent.ProjectileType<T>();
-        int whoAmI = Projectile.NewProjectile(spawnSource, X, Y, SpeedX, SpeedY, type, Damage, KnockBack, Owner, ai0, ai1, ai2);
-
-        Projectile projectile = Main.projectile[whoAmI];
-
-        Type projectileType = typeof(T);
-        ProjectileTrackedAttribute<T>? trackedAttribute = projectileType.GetCustomAttribute<ProjectileTrackedAttribute<T>>();
-
-        if (trackedAttribute == null) {
-            return whoAmI;
-        }
-
-        if (!projectileType.IsAbstract) {
-            if (!TrackedEntitiesByType.TryGetValue(projectileType, out List<Entity>? projectiles)) {
-                projectiles = [];
-                TrackedEntitiesByType.Add(projectileType, projectiles);
-            }
-            projectiles.Add(projectile);
         }
 
         return whoAmI;

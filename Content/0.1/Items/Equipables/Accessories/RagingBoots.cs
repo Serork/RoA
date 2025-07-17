@@ -83,8 +83,10 @@ sealed class RagingBoots : NatureItem {
                 return;
             }
 
-            if (WorldGenHelper.CustomSolidCollision(Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms)) {
-                if (((Player.velocity.Y == 0f || Player.sliding) && _fallLength > 2) && !_onGround) {
+            bool enoughSpeed = _fallLength > 2;
+            bool land = ((Player.velocity.Y == 0f || Player.sliding) && enoughSpeed) && !_onGround;
+            if (TileHelper.CustomSolidCollision_CheckForIceBlocks(Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms, land)) {
+                if (land) {
                     SoundEngine.PlaySound(SoundID.Item167 with { PitchVariance = 0.1f }, Player.Bottom);
 
                     Vector2 velocity = _speedBeforeGround * 0.35f;

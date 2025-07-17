@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Networking;
 using RoA.Common.Projectiles;
-using RoA.Content.Items.Placeable.Seeds;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
@@ -9,7 +9,6 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 using Terraria;
@@ -21,102 +20,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-// TODO: separate block mechanic (and collision)
-sealed class HittingIceBlocksWithPickaxeSupport : ModPlayer {
-    public override void Load() {
-        On_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
-        On_SmartCursorHelper.Step_Pickaxe_MineSolids += On_SmartCursorHelper_Step_Pickaxe_MineSolids;
-        On_Player.FloorVisuals += On_Player_FloorVisuals;
-    }
-
-    private void On_Player_FloorVisuals(On_Player.orig_FloorVisuals orig, Player self, bool Falling) {
-        orig(self, Falling);
-
-        int num = (int)((self.position.X + (float)(self.width / 2)) / 16f);
-        int num2 = (int)((self.position.Y + (float)self.height) / 16f);
-        if (self.gravDir == -1f)
-            num2 = (int)(self.position.Y - 0.1f) / 16;
-
-        foreach (Point16 iceBlockPosition in EnumerateIceBlockPositions()) {
-            if (iceBlockPosition.X >= num - 1 && iceBlockPosition.X <= num + 1 && iceBlockPosition.Y == num2) {
-                self.slippy = true;
-                break;
-            }
-        }
-    }
-
-    private void On_SmartCursorHelper_Step_Pickaxe_MineSolids(On_SmartCursorHelper.orig_Step_Pickaxe_MineSolids orig, Player player, object providedInfo, List<Tuple<int, int>> grappleTargets, ref int focusedX, ref int focusedY) {
-        var SmartCursorUsageInfo = typeof(SmartCursorHelper).GetNestedType("SmartCursorUsageInfo", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-        Item item = (Item)SmartCursorUsageInfo.GetField("item", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
-        int reachableStartX = (int)SmartCursorUsageInfo.GetField("reachableStartX", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
-        int reachableEndX = (int)SmartCursorUsageInfo.GetField("reachableEndX", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
-        int reachableStartY = (int)SmartCursorUsageInfo.GetField("reachableStartY", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
-        int reachableEndY = (int)SmartCursorUsageInfo.GetField("reachableEndY", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
-        Vector2 mouse = (Vector2)SmartCursorUsageInfo.GetField("mouse", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
-        List<Tuple<int, int>> _targets = (List<Tuple<int, int>>)typeof(SmartCursorHelper).GetField("_targets", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).GetValue(null);
-
-        if (!(focusedX > -1 || focusedY > -1)) {
-            int type = item.type;
-            if (!(type < 0 || item.pick <= 0)) {
-                _targets.Clear();
-                for (int i = reachableStartX; i <= reachableEndX; i++) {
-                    for (int j = reachableStartY; j <= reachableEndY; j++) {
-                        foreach (Point16 iceBlockPosition in EnumerateIceBlockPositions()) {
-                            if (iceBlockPosition.X == i && iceBlockPosition.Y == j) {
-                                _targets.Add(new Tuple<int, int>(i, j));
-                            }
-                        }
-                    }
-                }
-
-                if (_targets.Count > 0) {
-                    float num = -1f;
-                    Tuple<int, int> tuple = _targets[0];
-                    for (int k = 0; k < _targets.Count; k++) {
-                        float num2 = Vector2.Distance(new Vector2(_targets[k].Item1, _targets[k].Item2) * 16f + Vector2.One * 8f, mouse);
-                        if (num == -1f || num2 < num) {
-                            num = num2;
-                            tuple = _targets[k];
-                        }
-                    }
-
-                    if (Collision.InTileBounds(tuple.Item1, tuple.Item2, reachableStartX, reachableStartY, reachableEndX, reachableEndY)) {
-                        focusedX = tuple.Item1;
-                        focusedY = tuple.Item2;
-                    }
-                }
-
-                _targets.Clear();
-            }
-        }
-
-        orig(player, providedInfo, grappleTargets, ref focusedX, ref focusedY);
-    }
-
-    private void On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool(On_Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, Player self, Item sItem, out bool canHitWalls, int x, int y) {
-        if (sItem.pick > 0) {
-            foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
-                var iceBlock = projectile.As<IceBlock>();
-                for (byte i = 0; i < iceBlock.IceBlockPositions.Count; i++) {
-                    if (iceBlock.IceBlockPositions[i] == Point16.Zero) {
-                        continue;
-                    }
-                    if (iceBlock.IceBlockPositions[i].X == x && iceBlock.IceBlockPositions[i].Y == y) {
-                        self.ApplyItemTime(sItem, self.pickSpeed);
-
-                        iceBlock.Kill(i);
-
-                        canHitWalls = true;
-                        return;
-                    }
-                }
-            }
-        }
-
-        orig(self, sItem, out canHitWalls, x, y);
-    }
-
-    private IEnumerable<Point16> EnumerateIceBlockPositions() {
+[Tracked]
+sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
+    public static IEnumerable<Point16> EnumerateIceBlockPositions() {
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
             var iceBlock = projectile.As<IceBlock>();
             for (int i = 0; i < iceBlock.IceBlockPositions.Count; i++) {
@@ -127,11 +33,26 @@ sealed class HittingIceBlocksWithPickaxeSupport : ModPlayer {
             }
         }
     }
-}
 
-[Tracked]
-sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
+    public static IEnumerable<IceBlockEnumerateData> EnumerateIceBlockPositions2() {
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
+            var iceBlock = projectile.As<IceBlock>();
+            for (byte i = 0; i < iceBlock.IceBlockPositions.Count; i++) {
+                if (iceBlock.IceBlockPositions[i] == Point16.Zero) {
+                    continue;
+                }
+                yield return new IceBlockEnumerateData(iceBlock, i, iceBlock.IceBlockPositions[i]);
+            }
+        }
+    }
+
     private static float MAXOPACITY => 1.25f;
+
+    public readonly struct IceBlockEnumerateData(IceBlock projectile, byte index, Point16 iceBlockPosition) {
+        public readonly IceBlock Projectile = projectile;
+        public readonly byte Index = index;
+        public readonly Point16 IceBlockPosition = iceBlockPosition;
+    }
 
     public struct IceBlockInfo() {
         public Point16 FrameCoords = Point16.Zero;
@@ -151,8 +72,9 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
     private byte GetBlockCountToPlace() {
         byte result = 5;
         string playerName = Projectile.GetOwnerAsPlayer().name;
-        if (playerName == "has2r" || playerName == "NFA") {
-            result = (byte)(playerName == "NFA" ? 17 : 13);
+        bool nfa = playerName == "NFA";
+        if (playerName == "has2r" || nfa) {
+            result = (byte)(nfa ? 17 : 13);
         }
         return result;
     }
@@ -210,12 +132,20 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
         return base.PreDraw(ref lightColor);
     }
 
-    public override void AI() {
-        if (IsCharged && !IceBlockPositions.Any(x => x != Point16.Zero)) {
-            Projectile.Kill();
-            return;
+    public void Damage(byte i) {
+        IceBlockData[i].Penetrate--;
+        if (!IceBlockData[i].CanDamage) {
+            if (IceBlockPositions[i] != Point16.Zero) {
+                for (byte i2 = 0; i2 < IceBlockData.Length; i2++) {
+                    IceBlockData[i2].Opacity = 0.25f;
+                    IceBlockData[i2].FrameCoords = Point16.Zero;
+                }
+                Kill(i);
+            }
         }
+    }
 
+    public override void AI() {
         void damageNPCs() {
             if (!Projectile.IsOwnerLocal()) {
                 return;
@@ -244,21 +174,18 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
                         continue;
                     }
                     else {
-                        IceBlockData[i].Penetrate--;
-                        if (!IceBlockData[i].CanDamage) {
-                            if (IceBlockPositions[i] != Point16.Zero) {
-                                for (byte i2 = 0; i2 < IceBlockData.Length; i2++) {
-                                    IceBlockData[i2].Opacity = 0.25f;
-                                    IceBlockData[i2].FrameCoords = Point16.Zero;
-                                }
-                                Kill(i);
-                            }
+                        Damage(i);
+                        if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            MultiplayerSystem.SendPacket(new IceBlockDamagePacket(Projectile.GetOwnerAsPlayer(), Projectile.identity, i));
                         }
                     }
                 }
             }
         }
         void resetDamageInfo() {
+            if (!Projectile.IsOwnerLocal()) {
+                return;
+            }
             for (byte i = 0; i < IceBlockData.Length; i++) {
                 var iceBlockInfo = IceBlockData[i];
                 if (iceBlockInfo.Invalid || !iceBlockInfo.CanDamage) {
@@ -313,28 +240,28 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
 
         Dust dust2;
 
-        // placed a few tiles
-        if (Projectile.ai[1] < 0f) {
-            if (Projectile.timeLeft > 60)
-                Projectile.timeLeft = 60;
+        //// placed a few tiles
+        //if (Projectile.ai[1] < 0f) {
+        //    if (Projectile.timeLeft > 60)
+        //        Projectile.timeLeft = 60;
 
-            if (Projectile.velocity.X > 0f)
-                Projectile.rotation += 0.3f;
-            else
-                Projectile.rotation -= 0.3f;
+        //    if (Projectile.velocity.X > 0f)
+        //        Projectile.rotation += 0.3f;
+        //    else
+        //        Projectile.rotation -= 0.3f;
 
-            checkForSolids();
+        //    checkForSolids();
 
-            Projectile.ai[0] = (int)((Projectile.position.X + (float)(Projectile.width / 2)) / 16f);
-            Projectile.ai[1] = (int)((Projectile.position.Y + (float)(Projectile.height / 2)) / 16f);
-            PlaceIceBlocks();
+        //    Projectile.ai[0] = (int)((Projectile.position.X + (float)(Projectile.width / 2)) / 16f);
+        //    Projectile.ai[1] = (int)((Projectile.position.Y + (float)(Projectile.height / 2)) / 16f);
+        //    PlaceIceBlocks();
 
-            int num192 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 67);
-            Main.dust[num192].noGravity = true;
-            dust2 = Main.dust[num192];
-            dust2.velocity *= 0.3f;
-            return;
-        }
+        //    int num192 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 67);
+        //    Main.dust[num192].noGravity = true;
+        //    dust2 = Main.dust[num192];
+        //    dust2.velocity *= 0.3f;
+        //    return;
+        //}
 
         // placed all tiles
         if (IsCharged) {
@@ -451,6 +378,8 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
             Dust.NewDust(new Vector2(worldPos.X, worldPos.Y), 18, 18, DustID.IceRod);
         }
         IceBlockPositions[i] = Point16.Zero;
+
+        Projectile.netUpdate = true;
     }
 
     private void PlaceIceBlocks(bool kill = false) {
@@ -727,6 +656,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
         Projectile.alpha = 255;
         Projectile.position.X = num209 * 16;
         Projectile.position.Y = num210 * 16;
+        //Projectile.netUpdate = true;
     }
 
     public override void OnKill(int timeLeft) {
@@ -749,5 +679,101 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
         if (IceBlockPositions.Count != 0) {
             IceBlockPositions.Clear();
         }
+    }
+}
+
+// TODO: separate block mechanic (and collision)
+sealed class HittingIceBlocksWithPickaxeSupport : ModPlayer {
+    public override void Load() {
+        On_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
+        On_SmartCursorHelper.Step_Pickaxe_MineSolids += On_SmartCursorHelper_Step_Pickaxe_MineSolids;
+        On_Player.FloorVisuals += On_Player_FloorVisuals;
+    }
+
+    private void On_Player_FloorVisuals(On_Player.orig_FloorVisuals orig, Player self, bool Falling) {
+        orig(self, Falling);
+
+        int num = (int)((self.position.X + (float)(self.width / 2)) / 16f);
+        int num2 = (int)((self.position.Y + (float)self.height) / 16f);
+        if (self.gravDir == -1f)
+            num2 = (int)(self.position.Y - 0.1f) / 16;
+
+        foreach (Point16 iceBlockPosition in IceBlock.EnumerateIceBlockPositions()) {
+            if (iceBlockPosition.X >= num - 1 && iceBlockPosition.X <= num + 1 && iceBlockPosition.Y == num2) {
+                self.slippy = true;
+                break;
+            }
+        }
+    }
+
+    private void On_SmartCursorHelper_Step_Pickaxe_MineSolids(On_SmartCursorHelper.orig_Step_Pickaxe_MineSolids orig, Player player, object providedInfo, List<Tuple<int, int>> grappleTargets, ref int focusedX, ref int focusedY) {
+        var SmartCursorUsageInfo = typeof(SmartCursorHelper).GetNestedType("SmartCursorUsageInfo", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+        Item item = (Item)SmartCursorUsageInfo.GetField("item", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableStartX = (int)SmartCursorUsageInfo.GetField("reachableStartX", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableEndX = (int)SmartCursorUsageInfo.GetField("reachableEndX", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableStartY = (int)SmartCursorUsageInfo.GetField("reachableStartY", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        int reachableEndY = (int)SmartCursorUsageInfo.GetField("reachableEndY", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        Vector2 mouse = (Vector2)SmartCursorUsageInfo.GetField("mouse", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance).GetValue(providedInfo);
+        List<Tuple<int, int>> _targets = (List<Tuple<int, int>>)typeof(SmartCursorHelper).GetField("_targets", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).GetValue(null);
+
+        if (!(focusedX > -1 || focusedY > -1)) {
+            int type = item.type;
+            if (!(type < 0 || item.pick <= 0)) {
+                _targets.Clear();
+                for (int i = reachableStartX; i <= reachableEndX; i++) {
+                    for (int j = reachableStartY; j <= reachableEndY; j++) {
+                        foreach (Point16 iceBlockPosition in IceBlock.EnumerateIceBlockPositions()) {
+                            if (iceBlockPosition.X == i && iceBlockPosition.Y == j) {
+                                _targets.Add(new Tuple<int, int>(i, j));
+                            }
+                        }
+                    }
+                }
+
+                if (_targets.Count > 0) {
+                    float num = -1f;
+                    Tuple<int, int> tuple = _targets[0];
+                    for (int k = 0; k < _targets.Count; k++) {
+                        float num2 = Vector2.Distance(new Vector2(_targets[k].Item1, _targets[k].Item2) * 16f + Vector2.One * 8f, mouse);
+                        if (num == -1f || num2 < num) {
+                            num = num2;
+                            tuple = _targets[k];
+                        }
+                    }
+
+                    if (Collision.InTileBounds(tuple.Item1, tuple.Item2, reachableStartX, reachableStartY, reachableEndX, reachableEndY)) {
+                        focusedX = tuple.Item1;
+                        focusedY = tuple.Item2;
+                    }
+                }
+
+                _targets.Clear();
+            }
+        }
+
+        orig(player, providedInfo, grappleTargets, ref focusedX, ref focusedY);
+    }
+
+    private void On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool(On_Player.orig_ItemCheck_UseMiningTools_ActuallyUseMiningTool orig, Player self, Item sItem, out bool canHitWalls, int x, int y) {
+        if (sItem.pick > 0) {
+            foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
+                var iceBlock = projectile.As<IceBlock>();
+                for (byte i = 0; i < iceBlock.IceBlockPositions.Count; i++) {
+                    if (iceBlock.IceBlockPositions[i] == Point16.Zero) {
+                        continue;
+                    }
+                    if (iceBlock.IceBlockPositions[i].X == x && iceBlock.IceBlockPositions[i].Y == y) {
+                        self.ApplyItemTime(sItem, self.pickSpeed);
+
+                        iceBlock.Kill(i);
+
+                        canHitWalls = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        orig(self, sItem, out canHitWalls, x, y);
     }
 }

@@ -12,6 +12,8 @@ using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -20,7 +22,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-[ProjectileTracked<LeafySeahorse_Bubble>]
+[Tracked]
 sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
     private static float STARTSPEED => 10f;
     private static ushort MAXTIMELEFT => 420;
@@ -63,7 +65,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
 
         public BubbleSizeType SizeType {
             readonly get => (BubbleSizeType)SizeTypeValue;
-            set => SizeTypeValue = Utils.Clamp<byte>((byte)value, (byte)BubbleSizeType.Small, (byte)BubbleSizeType.ExtraLarge + 1);
+            set => SizeTypeValue = Utils.Clamp<byte>((byte)value, (byte)BubbleSizeType.Small, (byte)BubbleSizeType.ExtraLarge);
         }
 
         public float DesiredScaleFactor {
@@ -96,6 +98,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
             _ = new BubbleValues(otherBubble) {
                 KilledNotNaturally = false
             };
+            otherBubble.netUpdate = true;
             otherBubble.Kill();
 
             //SoundEngine.PlaySound(BubbleHit, otherBubble.position);
@@ -118,19 +121,27 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
 
             SoundEngine.PlaySound(BubbleCollide, otherBubble.position);
 
-            AbsorbedBubblesCountValue++;
-            if (AbsorbedBubblesCountValue >= NeededBubbleCountToIncreaseInSize()) {
-                AbsorbedBubblesCountValue = 0;
-                SizeType++;
-                onAbsorb?.Invoke();
+            if (projectile.IsOwnerLocal()) {
+                AbsorbedBubblesCountValue++;
+                if (AbsorbedBubblesCountValue >= NeededBubbleCountToIncreaseInSize()) {
+                    AbsorbedBubblesCountValue = 0;
+                    SizeType++;
+                    onAbsorb?.Invoke();
 
-                SetSizeBasedOnType();
+                    SetSizeBasedOnType();
 
-                projectile.timeLeft = MAXTIMELEFT;
+                    projectile.timeLeft = MAXTIMELEFT;
+                }
+
+                projectile.netUpdate = true;
             }
         }
 
         public void SetSizeBasedOnType(bool onSpawn = false) {
+            if (!projectile.IsOwnerLocal()) {
+                return;
+            }
+
             switch (SizeType) {
                 case BubbleSizeType.Small:
                     projectile.SetSizeValues(14);
@@ -149,6 +160,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
                 Vector2 positionOffsetOnChangingSize = projectile.Size / 6f;
                 projectile.position -= positionOffsetOnChangingSize;
             }
+            projectile.netUpdate = true;
         }
 
         public void SetDamageBasedOnType() {
@@ -172,6 +184,16 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
 
     public static SoundStyle BubbleHit => SoundID.Item54 with { PitchVariance = 0.2f };
     public static SoundStyle BubbleCollide => SoundID.Item85 with { Pitch = 1f };
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        writer.Write(Projectile.width);
+        writer.Write(Projectile.timeLeft);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        Projectile.SetSizeValues(reader.ReadInt32());
+        Projectile.timeLeft = reader.ReadInt32();
+    }
 
     public override void Load() {
         LoadBubbleTextures();
@@ -213,7 +235,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
         void absorbBubbles() {
             BubbleValues bubbleValues = new(Projectile);
             BubbleValues.BubbleSizeType size = bubbleValues.SizeType;
-            foreach (Projectile otherBubble in TrackedEntitiesSystem.GetTrackedProjectile<LeafySeahorse_Bubble>((checkProjectile) => checkProjectile.owner != Projectile.owner || checkProjectile.whoAmI == Projectile.whoAmI)) {
+            foreach (Projectile otherBubble in TrackedEntitiesSystem.GetTrackedProjectile<LeafySeahorse_Bubble>((checkProjectile) => checkProjectile.owner != Projectile.owner || checkProjectile.identity == Projectile.identity)) {
                 Rectangle otherBubbleHitBox = otherBubble.getRect();
                 otherBubbleHitBox.Inflate(2, 2);
                 Rectangle hitbox = Projectile.getRect();

@@ -42,15 +42,19 @@ sealed class BloodbathLocketGlowGlowing : ModSystem {
         if (player.neck > 0) {
             var drawInfo = drawinfo;
             if (!(player.dead || player.invis || player.ShouldNotDraw)) {
+                bool wasSitting = player.sitting.isSitting;
+                if (drawInfo.isSitting) {
+                    player.sitting.isSitting = true;
+                }
+                player.sitting.GetSittingOffsetInfo(player, out Vector2 posOffset, out float seatYOffset);
+
                 SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-
-                Main.spriteBatch.BeginBlendState(BlendState.Additive);
+                Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
                 Color color = Color.White;
-
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
                     Main.spriteBatch.Draw(
                         _lothorGlowMaskTexture.Value,
-                        drawInfo.drawPlayer.position - Main.screenPosition + new Vector2(0f, drawInfo.drawPlayer.gfxOffY)
+                        drawInfo.drawPlayer.position + Vector2.UnitY * (-posOffset.Y + seatYOffset) - Main.screenPosition + new Vector2(0f, drawInfo.drawPlayer.gfxOffY)
                             +
                             Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                             * Helper.Wave(0f, 3f, 12f, 0.5f + i2),
@@ -65,6 +69,7 @@ sealed class BloodbathLocketGlowGlowing : ModSystem {
                 }
                 Main.spriteBatch.End();
                 Main.spriteBatch.Begin(in snapshot);
+                player.sitting.isSitting = wasSitting;
             }
         }
     }
