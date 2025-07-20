@@ -369,11 +369,10 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                 int num1052 = 0;
                 bool flag59 = false;
                 bool flag60 = false;
-                int minFluff = 250;
-                int fluff = minFluff/* * WorldGenHelper.WorldSize*/;
+                int fluff = 250/* * WorldGenHelper.WorldSize*/;
                 if (ModLoader.TryGetMod("SpiritReforged", out Mod mod)) {
                     Rectangle savannaArea = (Rectangle)mod.Call("GetSavannaArea");
-                    fluff = Math.Max(minFluff, savannaArea.Width / 2 - 50);
+                    fluff = Math.Clamp(savannaArea.Width / 2 - 50, 50, 250);
                 }
                 int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
                 while (!flag60) {
@@ -399,7 +398,7 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                 }
 
                 if (!flag59) {
-                    for (int num1055 = 150; (double)num1055 < Main.worldSurface; num1055++) {
+                    for (int num1055 = WorldGenHelper.SafeFloatingIslandY; (double)num1055 < Main.worldSurface; num1055++) {
                         if (Main.tile[num1053, num1055].HasTile) {
                             if (!flag59) {
                                 Mountinater2_Savanna(num1053, num1055);
