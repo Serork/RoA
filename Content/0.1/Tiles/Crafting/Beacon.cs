@@ -27,6 +27,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Crafting;
 
 sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
+    public static bool DoesBeaconHaveThoriumGem(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18;
+
     private static int _variantToShow;
 
     public static short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
@@ -114,9 +116,10 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
         AddMapEntry(new Color(223, 230, 238), Lang.GetItemName(ItemID.Diamond));
         AddMapEntry(new Color(207, 101, 0), Lang.GetItemName(ItemID.Amber));
         AddMapEntry(new Color(85, 84, 105), Language.GetOrRegister("Mods.RoA.Map.Beacon"));
-                if (RoA.TryGetThoriumMod(out Mod thoriumMod)) {
-            AddMapEntry(new Color(109, 255, 216), Lang.GetItemName(thoriumMod.Find<ModItem>("Aquamarine").Type));
-            AddMapEntry(new Color(255, 146, 163), Lang.GetItemName(thoriumMod.Find<ModItem>("Opal").Type));
+
+        if (RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            AddMapEntry(new Color(26, 236, 214), Lang.GetItemName(thoriumMod.Find<ModItem>("Aquamarine").Type));
+            AddMapEntry(new Color(239, 101, 154), Lang.GetItemName(thoriumMod.Find<ModItem>("Opal").Type));
         }
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1xX);
@@ -309,7 +312,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
             }
         }
         int style = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
-        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+        if (DoesBeaconHaveThoriumGem(i, j)) {
             style += 8;
         }
         dusts(player.getRect(), style);
@@ -325,7 +328,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
 
     public static short GetLargeGemItemID(int i, int j) {
         int value = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
-        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+        if (DoesBeaconHaveThoriumGem(i, j)) {
             value += 8;
         }
         switch (value) {
@@ -360,7 +363,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
 
     public static short GetLargeGemDustID(int i, int j) {
         int value = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
-        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+        if (DoesBeaconHaveThoriumGem(i, j)) {
             value += 8;
         }
         switch (value) {
@@ -399,10 +402,10 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
         bool flag = option == 8;
         if ((flag || option == 9) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
             if (flag) {
-                return new Color(109, 255, 216);
+                return new Color(26, 236, 214);
             }
             else {
-                return new Color(255, 146, 163);
+                return new Color(239, 101, 154);
             }
         }
         return option switch {
@@ -423,10 +426,10 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
         bool flag = option == 8;
         if ((flag || option == 9) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
             if (flag) {
-                return Lang.GetItemName((short)thoriumMod.Find<ModItem>("Aquamarine").Type);
+                return thoriumMod.Find<ModItem>("Aquamarine").DisplayName;
             }
             else {
-                return Lang.GetItemName((short)thoriumMod.Find<ModItem>("Opal").Type);
+                return thoriumMod.Find<ModItem>("Opal").DisplayName;
             }
         }
         switch (option) {
@@ -455,7 +458,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
         }
 
         int value = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
-        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+        if (DoesBeaconHaveThoriumGem(i, j)) {
             value += 8;
         }
         if ((value == 8 || value == 9) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
@@ -531,7 +534,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
             }
         }
     }
-    public static int GetGemDropID(int i, int j) => Gems[(WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18 ? 8 : 0) + WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1];
+    public static int GetGemDropID(int i, int j) => Gems[(DoesBeaconHaveThoriumGem(i, j) ? 8 : 0) + WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1];
 
     public static int GetGemItemID(int i, int j, bool forVisuals = false) {
         bool flag2 = HasGemInIt(i, j);
@@ -571,7 +574,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
         yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Beacon>());
     }
 
-    public static bool HasGemInIt(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18 || WorldGenHelper.GetTileSafely(i, j).TileFrameY >= 54;
+    public static bool HasGemInIt(int i, int j) => DoesBeaconHaveThoriumGem(i, j) || WorldGenHelper.GetTileSafely(i, j).TileFrameY >= 54;
 
     public static void ActionWithGem(int i, int j, bool remove = false, bool dropItem = true, bool makeDusts = false) {
         Player player = Main.LocalPlayer;
@@ -665,7 +668,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
         Vector2 gorePosition = position - new Vector2(4f, 0f);
         string name = string.Empty;
         int value = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
-        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+        if (DoesBeaconHaveThoriumGem(i, j)) {
             value += 8;
         }
         switch (value) {

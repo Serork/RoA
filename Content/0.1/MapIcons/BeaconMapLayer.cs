@@ -49,10 +49,13 @@ sealed class BeaconMapLayer : ModMapLayer {
                     color = Color.Gray * 0.5f;
                 }
                 int frameX = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1;
+                if (Beacon.DoesBeaconHaveThoriumGem(i, j)) {
+                    frameX += 8;
+                }
                 if (frameX < 0) {
                     continue;
                 }
-                SpriteFrame frame = new(8, 1, (byte)frameX, 0) {
+                SpriteFrame frame = new(10, 1, (byte)frameX, 0) {
                     PaddingY = 0
                 };
                 if (context.Draw(value, tilePosition.ToVector2() + new Vector2(1.5f, 2f),
