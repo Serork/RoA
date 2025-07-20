@@ -53,4 +53,7 @@ sealed partial class RoA : Mod {
 
         return hook;
     }
+
+    public static bool HasThorium() => ModLoader.HasMod("ThoriumMod");
+    public static bool TryGetThoriumMod(out Mod thoriumMod) => ModLoader.TryGetMod("ThoriumMod", out thoriumMod);
 }

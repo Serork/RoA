@@ -15,7 +15,7 @@ sealed class Tulip : ModDust {
 
     public override void OnSpawn(Dust dust) {
         int maxFramesY = 3;
-        dust.frame = (Texture2D?.Value?.Frame(5, maxFramesY, frameX: dust.alpha, frameY: Main.rand.Next(maxFramesY))).GetValueOrDefault();
+        dust.frame = (Texture2D?.Value?.Frame(8, maxFramesY, frameX: dust.alpha, frameY: Main.rand.Next(maxFramesY))).GetValueOrDefault();
 
         dust.noGravity = true;
         dust.noLight = false;

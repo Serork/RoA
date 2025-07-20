@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
@@ -24,10 +26,16 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Crafting;
 
-sealed class Beacon : ModTile, TileHooks.IPostDraw {
+sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
     private static int _variantToShow;
 
-    public static readonly short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
+    public static short[] Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber];
+
+    void IPostSetupContent.PostSetupContent() {
+        if (RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            Gems = [ItemID.Amethyst, ItemID.Topaz, ItemID.Sapphire, ItemID.Emerald, ItemID.Ruby, ItemID.Diamond, ItemID.Amber, (short)thoriumMod.Find<ModItem>("Aquamarine").Type, (short)thoriumMod.Find<ModItem>("Opal").Type];
+        }
+    }
 
     public override void Load() {
         On_Player.UpdateTeleportVisuals += On_Player_UpdateTeleportVisuals;
@@ -71,6 +79,16 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
                 break;
         }
 
+        bool flag = tileStyle == 7;
+        if ((flag || tileStyle == 8) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            if (flag) {
+                color = new Color(109, 255, 216);
+            }
+            else {
+                color = new Color(255, 146, 163);
+            }
+        }
+
         int dust = Dust.NewDust(dustBox.TopLeft(), dustBox.Width, dustBox.Height, 267, Scale: Main.rand.NextFloat(1.5f) * 0.85f, newColor: color, Alpha: 0);
         Main.dust[dust].noGravity = true;
         Main.dust[dust].color = color;
@@ -96,6 +114,10 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
         AddMapEntry(new Color(223, 230, 238), Lang.GetItemName(ItemID.Diamond));
         AddMapEntry(new Color(207, 101, 0), Lang.GetItemName(ItemID.Amber));
         AddMapEntry(new Color(85, 84, 105), Language.GetOrRegister("Mods.RoA.Map.Beacon"));
+                if (RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            AddMapEntry(new Color(109, 255, 216), Lang.GetItemName(thoriumMod.Find<ModItem>("Aquamarine").Type));
+            AddMapEntry(new Color(255, 146, 163), Lang.GetItemName(thoriumMod.Find<ModItem>("Opal").Type));
+        }
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1xX);
         TileObjectData.newTile.CoordinateHeights = [16, 16, 16];
@@ -287,6 +309,9 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
             }
         }
         int style = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
+        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+            style += 8;
+        }
         dusts(player.getRect(), style);
         player.Teleport(newPos, num2);
         player.velocity = Vector2.Zero;
@@ -299,7 +324,11 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
     }
 
     public static short GetLargeGemItemID(int i, int j) {
-        switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
+        int value = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
+        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+            value += 8;
+        }
+        switch (value) {
             case 1:
                 return ItemID.LargeAmethyst;
             case 2:
@@ -316,11 +345,25 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
                 return ItemID.LargeAmber;
         }
 
+        bool flag = value == 8;
+        if ((flag || value == 9) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            if (flag) {
+                return (short)thoriumMod.Find<ModItem>("LargeAquamarine").Type;
+            }
+            else {
+                return (short)thoriumMod.Find<ModItem>("LargeOpal").Type;
+            }
+        }
+
         return -1;
     }
 
     public static short GetLargeGemDustID(int i, int j) {
-        switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
+        int value = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
+        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+            value += 8;
+        }
+        switch (value) {
             case 1:
                 return DustID.GemAmethyst;
             case 2:
@@ -337,12 +380,31 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
                 return DustID.GemAmber;
         }
 
+        bool flag = value == 8;
+        if ((flag || value == 9) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            if (flag) {
+                return 92;
+            }
+            else {
+                return 86;
+            }
+        }
+
         return -1;
     }
 
     public static Color GetEffectsColor(int i, int j) {
         ModTile tile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType);
         ushort option = tile.GetMapOption(i, j);
+        bool flag = option == 8;
+        if ((flag || option == 9) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            if (flag) {
+                return new Color(109, 255, 216);
+            }
+            else {
+                return new Color(255, 146, 163);
+            }
+        }
         return option switch {
             0 => new Color(238, 51, 53),
             1 => new Color(13, 107, 216),
@@ -358,6 +420,15 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
     public static LocalizedText GetMapText(int i, int j) {
         ModTile tile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(i, j).TileType);
         ushort option = tile.GetMapOption(i, j);
+        bool flag = option == 8;
+        if ((flag || option == 9) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            if (flag) {
+                return Lang.GetItemName((short)thoriumMod.Find<ModItem>("Aquamarine").Type);
+            }
+            else {
+                return Lang.GetItemName((short)thoriumMod.Find<ModItem>("Opal").Type);
+            }
+        }
         switch (option) {
             case 0:
                 return Lang.GetItemName(ItemID.Ruby);
@@ -383,7 +454,14 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
             return 7;
         }
 
-        switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
+        int value = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
+        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+            value += 8;
+        }
+        if ((value == 8 || value == 9) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            return (ushort)value;
+        }
+        switch (value) {
             case 0:
                 return 7;
             case 1:
@@ -453,7 +531,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
             }
         }
     }
-    public static int GetGemDropID(int i, int j) => Gems[WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1];
+    public static int GetGemDropID(int i, int j) => Gems[(WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18 ? 8 : 0) + WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1];
 
     public static int GetGemItemID(int i, int j, bool forVisuals = false) {
         bool flag2 = HasGemInIt(i, j);
@@ -493,7 +571,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
         yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Beacon>());
     }
 
-    public static bool HasGemInIt(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameY >= 54;
+    public static bool HasGemInIt(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18 || WorldGenHelper.GetTileSafely(i, j).TileFrameY >= 54;
 
     public static void ActionWithGem(int i, int j, bool remove = false, bool dropItem = true, bool makeDusts = false) {
         Player player = Main.LocalPlayer;
@@ -515,9 +593,14 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
             Tile tile2 = WorldGenHelper.GetTileSafely(i, l);
             if (tile2.ActiveTile(Type)) {
                 short getTileFrameY(int usedVariant) {
-                    return (short)(num3 * 18 + 54 * usedVariant);
+                    if (usedVariant >= 8) {
+                        usedVariant -= 8;
+                    }
+                    short result = (short)(num3 * 18 + 54 * usedVariant);
+                    return result;
                 }
                 void setFrame(int usedVariant) {
+                    tile2.TileFrameX = (short)(usedVariant >= 8 ? 18 : 0);
                     tile2.TileFrameY = getTileFrameY(usedVariant);
                     WorldGen.SquareTileFrame(i, l);
                     NetMessage.SendTileSquare(-1, i, l, 1, 1);
@@ -555,8 +638,8 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
                         }
                     }
                 }
-                if (flag || (tile2.TileFrameY >= getTileFrameY(variant) &&
-                    tile2.TileFrameY < getTileFrameY(variant + 1))) {
+                bool hasGem = (variant < 8 ? tile2.TileFrameX == 0 : tile2.TileFrameX == 18) && tile2.TileFrameY >= getTileFrameY(variant) && tile2.TileFrameY < getTileFrameY(variant + 1);
+                if (flag || hasGem) {
                     flag = true;
                     setFrame(0);
                 }
@@ -581,7 +664,11 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
         }
         Vector2 gorePosition = position - new Vector2(4f, 0f);
         string name = string.Empty;
-        switch (WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54) {
+        int value = WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54;
+        if (WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18) {
+            value += 8;
+        }
+        switch (value) {
             case 1:
                 name = "Amethyst";
                 break;
@@ -603,6 +690,15 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw {
             case 7:
                 name = "Amber";
                 break;
+        }
+        bool flag = value == 8;
+        if ((flag || value == 9) && RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+            if (flag) {
+                name = "Aquamarine";
+            }
+            else {
+                name = "Opal";
+            }
         }
         if (!Main.dedServ) {
             if (name != string.Empty) {
