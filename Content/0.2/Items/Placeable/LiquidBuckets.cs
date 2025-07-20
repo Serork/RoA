@@ -15,6 +15,8 @@ namespace RoA.Content.Items.Placeable;
 //}
 
 sealed class TarAbsorbantSponge : AbsorbantSponge {
+    public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
+
     protected override byte LiquidIDToSoakUp() => 5;
 
     protected override void SafeSetDefaults2() {
@@ -23,6 +25,8 @@ sealed class TarAbsorbantSponge : AbsorbantSponge {
 }
 
 sealed class TarBucket : LiquidBucket {
+    public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
+
     protected override byte LiquidIDToSoakUp() => 5;
 
     protected override void SafeSetDefaults() {
@@ -31,6 +35,8 @@ sealed class TarBucket : LiquidBucket {
 }
 
 sealed class BottomlessTarBucket : LiquidBucket {
+    public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
+
     protected override byte LiquidIDToSoakUp() => 5;
 
     protected override bool IsEndless() => true;

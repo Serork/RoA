@@ -56,4 +56,6 @@ sealed partial class RoA : Mod {
 
     public static bool HasThorium() => ModLoader.HasMod("ThoriumMod");
     public static bool TryGetThoriumMod(out Mod thoriumMod) => ModLoader.TryGetMod("ThoriumMod", out thoriumMod);
+
+    public static bool HasRoALiquidMod() => ModLoader.HasMod("RoA");
 }
