@@ -2059,3 +2059,8 @@ SacredAcalypha: {
 	// DisplayName: Sacred Acalypha
 	// Tooltip: ""
 }
+
+BottomlessTarBucket: {
+	// DisplayName: Bottomless Tar Bucket
+	// Tooltip: ""
+}

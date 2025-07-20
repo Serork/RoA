@@ -16,10 +16,28 @@ namespace RoA.Content.Items.Placeable;
 
 sealed class TarAbsorbantSponge : AbsorbantSponge {
     protected override byte LiquidIDToSoakUp() => 5;
+
+    protected override void SafeSetDefaults() {
+        Item.SetSizeValues(30, 26);
+    }
 }
 
 sealed class TarBucket : LiquidBucket {
     protected override byte LiquidIDToSoakUp() => 5;
+
+    protected override void SafeSetDefaults() {
+        Item.SetSizeValues(24, 22);
+    }
+}
+
+sealed class BottomlessTarBucket : LiquidBucket {
+    protected override byte LiquidIDToSoakUp() => 5;
+
+    protected override bool IsEndless() => true;
+
+    protected override void SafeSetDefaults() {
+        Item.SetSizeValues(30, 28);
+    }
 }
 
 //sealed class PermafrostBucket : LiquidBucket {
@@ -27,7 +45,7 @@ sealed class TarBucket : LiquidBucket {
 //}
 
 abstract class AbsorbantSponge : LiquidBucket {
-    public override void SetDefaults() {
+    public sealed override void SetDefaults() {
         Item.width = 20;
         Item.height = 20;
 
@@ -39,7 +57,11 @@ abstract class AbsorbantSponge : LiquidBucket {
         Item.rare = 7;
         Item.value = Item.sellPrice(0, 10);
         Item.tileBoost += 2;
+
+        SafeSetDefaults();
     }
+
+    protected virtual void SafeSetDefaults() { }
 }
 
 abstract class LiquidBucket : ModItem {
@@ -260,5 +282,9 @@ abstract class LiquidBucket : ModItem {
         Item.useTime = 10;
         Item.maxStack = Item.CommonMaxStack;
         Item.autoReuse = true;
+
+        SafeSetDefaults();
     }
+
+    protected virtual void SafeSetDefaults() { }
 }
