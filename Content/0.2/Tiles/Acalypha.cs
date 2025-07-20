@@ -83,6 +83,23 @@ sealed class Acalypha : CollectableFlower, IGrowLikeTulip {
         offsetY -= 12;
     }
 
+    public override void RandomUpdate(int i, int j) {
+        ref short tileFrameY = ref WorldGenHelper.GetTileSafely(i, j).TileFrameY;
+        if (tileFrameY != 0) {
+            return;
+        }
+
+        bool flag = Main.rand.NextBool(40);
+        if (!flag) {
+            return;
+        }
+
+        tileFrameY += 30;
+        if (Main.netMode != NetmodeID.SinglePlayer) {
+            NetMessage.SendTileSquare(-1, i, j, 1);
+        }
+    }
+
     Predicate<Point16> IGrowLikeTulip.ShouldGrow => (tilePosition) => {
         int i = tilePosition.X, j = tilePosition.Y;
         Tile tile = Main.tile[i, j];
