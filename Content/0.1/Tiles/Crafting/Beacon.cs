@@ -118,8 +118,8 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
         AddMapEntry(new Color(85, 84, 105), Language.GetOrRegister("Mods.RoA.Map.Beacon"));
 
         if (RoA.TryGetThoriumMod(out Mod thoriumMod)) {
-            AddMapEntry(new Color(26, 236, 214), Lang.GetItemName(thoriumMod.Find<ModItem>("Aquamarine").Type));
-            AddMapEntry(new Color(239, 101, 154), Lang.GetItemName(thoriumMod.Find<ModItem>("Opal").Type));
+            AddMapEntry(new Color(26, 236, 214), thoriumMod.Find<ModItem>("Aquamarine").DisplayName);
+            AddMapEntry(new Color(239, 101, 154), thoriumMod.Find<ModItem>("Opal").DisplayName);
         }
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1xX);
