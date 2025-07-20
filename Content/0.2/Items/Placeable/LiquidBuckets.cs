@@ -17,7 +17,7 @@ namespace RoA.Content.Items.Placeable;
 sealed class TarAbsorbantSponge : AbsorbantSponge {
     protected override byte LiquidIDToSoakUp() => 5;
 
-    protected override void SafeSetDefaults() {
+    protected override void SafeSetDefaults2() {
         Item.SetSizeValues(30, 26);
     }
 }
@@ -45,7 +45,9 @@ sealed class BottomlessTarBucket : LiquidBucket {
 //}
 
 abstract class AbsorbantSponge : LiquidBucket {
-    public sealed override void SetDefaults() {
+    protected sealed override bool IsEndless() => true;
+
+    protected sealed override void SafeSetDefaults() {
         Item.width = 20;
         Item.height = 20;
 
@@ -58,10 +60,10 @@ abstract class AbsorbantSponge : LiquidBucket {
         Item.value = Item.sellPrice(0, 10);
         Item.tileBoost += 2;
 
-        SafeSetDefaults();
+        SafeSetDefaults2();
     }
 
-    protected virtual void SafeSetDefaults() { }
+    protected virtual void SafeSetDefaults2() { }
 }
 
 abstract class LiquidBucket : ModItem {
@@ -273,15 +275,27 @@ abstract class LiquidBucket : ModItem {
         return true;
     }
 
-    public override void SetDefaults() {
+    public sealed override void SetDefaults() {
         Item.SetSizeValues(24, 22);
 
-        Item.useStyle = 1;
-        Item.useTurn = true;
-        Item.useAnimation = 15;
-        Item.useTime = 10;
-        Item.maxStack = Item.CommonMaxStack;
-        Item.autoReuse = true;
+        if (IsEndless()) {
+            Item.useStyle = 1;
+            Item.useTurn = true;
+            Item.useAnimation = 12;
+            Item.useTime = 5;
+            Item.autoReuse = true;
+            Item.rare = 7;
+            Item.value = Item.sellPrice(0, 10);
+            Item.tileBoost += 2;
+        }
+        else {
+            Item.useStyle = 1;
+            Item.useTurn = true;
+            Item.useAnimation = 15;
+            Item.useTime = 10;
+            Item.maxStack = Item.CommonMaxStack;
+            Item.autoReuse = true;
+        }
 
         SafeSetDefaults();
     }
