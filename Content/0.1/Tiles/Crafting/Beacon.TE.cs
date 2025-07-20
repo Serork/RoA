@@ -69,6 +69,14 @@ sealed class BeaconTE : ModTileEntity {
                     gemType == ItemID.Sapphire ? Main.rand.NextChance(0.6) :
                     gemType == ItemID.Topaz ? Main.rand.NextChance(0.7) :
                     gemType != ItemID.Amethyst || Main.rand.NextChance(0.8);
+                if (RoA.TryGetThoriumMod(out Mod thoriumMod)) {
+                    if (gemType == (short)thoriumMod.Find<ModItem>("Aquamarine").Type) {
+                        flag = Main.rand.NextBool(3);
+                    }
+                    else if (gemType == (short)thoriumMod.Find<ModItem>("Opal").Type) {
+                        flag = Main.rand.NextBool(3);
+                    }
+                }
                 if (flag) {
                     Beacon.ActionWithGem(i, j, true, false, true);
                 }

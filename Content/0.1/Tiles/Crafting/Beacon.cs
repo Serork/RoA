@@ -289,6 +289,9 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
         if (num2 == 13) {
             num2 = 11;
         }
+        if (DoesBeaconHaveThoriumGem(i, j)) {
+            num2 -= 1;
+        }
         void dusts(Rectangle effectRect, int num4) {
             for (int k = 0; k < 50; k++) {
                 Color color = new Color(136, 219, 227);
@@ -534,6 +537,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
             }
         }
     }
+
     public static int GetGemDropID(int i, int j) => Gems[(DoesBeaconHaveThoriumGem(i, j) ? 8 : 0) + WorldGenHelper.GetTileSafely(i, j).TileFrameY / 54 - 1];
 
     public static int GetGemItemID(int i, int j, bool forVisuals = false) {
