@@ -2064,3 +2064,8 @@ BottomlessTarBucket: {
 	// DisplayName: Bottomless Tar Bucket
 	// Tooltip: ""
 }
+
+MagicTarDropper: {
+	// DisplayName: Magic Tar Dropper
+	// Tooltip: ""
+}

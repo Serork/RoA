@@ -10,10 +10,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable;
 
-//sealed class PermafrostAbsorbantSponge : AbsorbantSponge {
-//    protected override byte LiquidIDToSoakUp() => 4;
-//}
-
 sealed class TarAbsorbantSponge : AbsorbantSponge {
     public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
 
@@ -24,7 +20,7 @@ sealed class TarAbsorbantSponge : AbsorbantSponge {
     }
 }
 
-sealed class TarBucket : LiquidBucket {
+sealed class TarBucket : LiquidBucket  {
     public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
 
     protected override byte LiquidIDToSoakUp() => 5;
@@ -45,10 +41,6 @@ sealed class BottomlessTarBucket : LiquidBucket {
         Item.SetSizeValues(30, 28);
     }
 }
-
-//sealed class PermafrostBucket : LiquidBucket {
-//    protected override byte LiquidIDToSoakUp() => 4;
-//}
 
 abstract class AbsorbantSponge : LiquidBucket {
     protected sealed override bool IsEndless() => true;
@@ -71,7 +63,6 @@ abstract class AbsorbantSponge : LiquidBucket {
 
     protected virtual void SafeSetDefaults2() { }
 }
-
 abstract class LiquidBucket : ModItem {
     protected abstract byte LiquidIDToSoakUp();
 

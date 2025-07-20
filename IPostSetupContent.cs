@@ -2,7 +2,7 @@
 
 namespace RoA;
 
-internal interface IPostSetupContent : ILoadable {
+interface IPostSetupContent : ILoadable {
     void PostSetupContent();
 
     void ILoadable.Load(Mod mod) { }
