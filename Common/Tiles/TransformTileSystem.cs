@@ -176,6 +176,11 @@ sealed class TransformTileSystem : ILoadable {
     }
 
     private void On_WorldGen_KillTile(On_WorldGen.orig_KillTile orig, int i, int j, bool fail, bool effectOnly, bool noItem) {
+        if (WorldGen.gen) {
+            orig(i, j, fail, effectOnly, noItem);
+            return;
+        }
+
         Tile tile = Main.tile[i, j];
         ushort replaceTo = ReplaceToTypeOnKill[tile.TileType];
         if (replaceTo != TileID.Count) {

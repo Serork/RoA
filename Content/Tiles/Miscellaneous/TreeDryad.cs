@@ -145,7 +145,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
 
     private void On_Main_UpdateTime_SpawnTownNPCs(On_Main.orig_UpdateTime_SpawnTownNPCs orig) {
         orig();
-        if (DryadEntrance._dryadStructureGenerated && !DryadAwakeHandler.DryadAwake) {
+        if (DryadEntrance._dryadStructureGenerated && !DryadAwakeHandler.DryadAwake && !DryadAwakeHandler.DryadAwake2) {
             Main.townNPCCanSpawn[NPCID.Dryad] = false;
         }
     }
@@ -289,7 +289,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         Main.npc[whoAmI].homeTileX = Main.npc[whoAmI].homeTileY = -1;
         Main.npc[whoAmI].netUpdate = true;
 
-        DryadAwakeHandler.DryadAwake = true;
+        DryadAwakeHandler.DryadAwake = DryadAwakeHandler.DryadAwake2 = true;
 
         if (Main.netMode == NetmodeID.Server) {
             NetMessage.SendData(MessageID.WorldData);

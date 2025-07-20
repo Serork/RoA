@@ -35,5 +35,6 @@ sealed class ExtraDruidQuote : GlobalNPC {
 
         chat = Language.GetTextValue($"Mods.RoA.NPCs.Town.Dryad.IntroQuote");
         DryadAwakeHandler.DryadAwake = false;
+        DryadAwakeHandler.DryadAwake2 = true;
     }
 }
