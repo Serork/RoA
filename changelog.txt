@@ -1,1 +1,2 @@
-- 
+- Fixed Dryad not respawning under certain conditions
+- Fixed the minValue error when generating the Dryad Cocoon structure
