@@ -1,4 +1,5 @@
 ﻿using RoA.Core.Defaults;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -32,6 +33,12 @@ abstract class MagicDropper : ModItem {
         Item.value = Item.sellPrice(0, 0, 0, 40);
 
         SafeSetDefaults();
+    }
+
+    public override bool? UseItem(Player player) {
+        int i = Player.tileTargetX, j = Player.tileTargetY;
+        Tile tile = WorldGenHelper.GetTileSafely(i, j - 1);
+        return tile.HasTile && !tile.BottomSlope;
     }
 
     protected virtual void SafeSetDefaults() { }
