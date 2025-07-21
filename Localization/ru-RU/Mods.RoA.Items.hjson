@@ -1831,6 +1831,11 @@ HereticPants: {
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
+Her: {
+	// DisplayName: Her
+	// Tooltip: ""
+}
+
 IOU: {
 	DisplayName: Я. Т. Д.
 	Tooltip: "'Я тебе должен оружие класса 'Друид'"
@@ -2067,5 +2072,20 @@ BottomlessTarBucket: {
 
 MagicTarDropper: {
 	// DisplayName: Magic Tar Dropper
+	// Tooltip: ""
+}
+
+FourPixels: {
+	// DisplayName: Four Pixels
+	// Tooltip: ""
+}
+
+Him: {
+	// DisplayName: Him
+	// Tooltip: ""
+}
+
+NightsShroud: {
+	// DisplayName: Nights Shroud
 	// Tooltip: ""
 }

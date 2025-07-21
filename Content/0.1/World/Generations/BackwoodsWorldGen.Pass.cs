@@ -130,6 +130,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     protected override void ApplyPass(GenerationProgress progress, GameConfiguration configuration) {
+        ElderwoodHouseBuilder._nextPaintingIndex = (byte)WorldGen.genRand.Next(ElderwoodHouseBuilder.PAINTINGCOUNT);
+
         SetUpMessage(Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods0"), 0f, progress);
         Step0_Setup();
         Step1_FindPosition();
@@ -2245,15 +2247,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        if (!painting1) {
-            HouseBuilderCustom._painting1 = false;
-        }
-        if (!painting2) {
-            HouseBuilderCustom._painting2 = false;
-        }
-        if (!painting3) {
-            HouseBuilderCustom._painting3 = false;
-        }
         houseBuilder.ChestChance = origin.Y < Main.worldSurface ? 0.75 : 0.95;
         houseBuilder.Place(new HouseBuilderContext(), GenVars.structures);
     }
@@ -3484,8 +3477,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
         settleLiquids();
         WorldGen.gen = true;
-
-        HouseBuilderCustom._painting1 = HouseBuilderCustom._painting2 = HouseBuilderCustom._painting3 = false;
 
         Step14_ClearRockLayerWalls();
         cleanUp();

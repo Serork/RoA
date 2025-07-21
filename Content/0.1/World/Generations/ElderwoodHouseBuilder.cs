@@ -190,8 +190,9 @@ public class HouseBuilderCustom {
     public readonly HouseType Type;
     public readonly bool IsValid;
 
-    internal static bool _painting1, _painting2, _painting3;
     internal static byte _nextPaintingIndex;
+
+    public static int PAINTINGCOUNT => 10;
 
     protected ushort[] SkipTilesDuringWallAging = new ushort[5] {
         245,
@@ -319,81 +320,132 @@ public class HouseBuilderCustom {
                 int num4 = (i + 1) * num2 + room.X;
                 switch (i + num3 % 2) {
                     case 0: {
-                        int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
-                        bool flag2 = _random.NextBool(10);
-                        bool flag = !_painting1 || !_painting2 || !_painting3;
-                        if (flag || flag2) {
-                            int attempts = 1000;
-                            while (--attempts > 0) {
-                                int value = _random.Next(3);
-                                if (value == 0) {
-                                    if (!_painting1 || (!hasPainting1 && _painting1 && flag2)) {
-                                        if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
-                                            _painting1 = true;
-                                            hasPainting1 = true;
-                                            break;
-                                        }
+                            int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
+                            switch (_nextPaintingIndex) {
+                                case 0:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 6, 4, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
                                     }
-                                }
-                                else if (value == 1) {
-                                    if (!_painting2 || (!hasPainting2 && _painting2 && flag2)) {
-                                        if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
-                                            _painting2 = true;
-                                            hasPainting2 = true;
-                                            break;
-                                        }
+                                    break;
+                                case 1:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 4, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
                                     }
-                                }
-                                else if (value == 2) {
-                                    if (!_painting3 || (!hasPainting3 && _painting3 && flag2)) {
-                                        if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
-                                            _painting3 = true;
-                                            hasPainting3 = true;
-                                            break;
-                                        }
+                                    break;
+                                case 2:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 4, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
                                     }
-                                }
+                                    break;
+                                case 3:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Absolute>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
+                                    }
+                                    break;
+                                case 4:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 3, (ushort)ModContent.TileType<Them>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
+                                    }
+                                    break;
+                                case 5:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<Nihility>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
+                                    }
+                                    break;
+                                case 6:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<NightsShroud>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
+                                    }
+                                    break;
+                                case 7:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Her>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
+                                    }
+                                    break;
+                                case 8:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 6, 4, (ushort)ModContent.TileType<Him>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
+                                    }
+                                    break;
+                                case 9:
+                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 3, (ushort)ModContent.TileType<FourPixels>(), 0, WallType)) {
+                                        _nextPaintingIndex++;
+                                    }
+                                    break;
                             }
+                            //bool flag2 = _random.NextBool(10);
+                            //if (flag2) {
+                            //    int attempts = 1000;
+                            //    while (--attempts > 0) {
+                            //        int value = _random.Next(3);
+                            //        if (value == 0) {
+                            //            if (!_painting1 || (!hasPainting1 && _painting1 && flag2)) {
+                            //                if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
+                            //                    _painting1 = true;
+                            //                    hasPainting1 = true;
+                            //                    break;
+                            //                }
+                            //            }
+                            //        }
+                            //        else if (value == 1) {
+                            //            if (!_painting2 || (!hasPainting2 && _painting2 && flag2)) {
+                            //                if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
+                            //                    _painting2 = true;
+                            //                    hasPainting2 = true;
+                            //                    break;
+                            //                }
+                            //            }
+                            //        }
+                            //        else if (value == 2) {
+                            //            if (!_painting3 || (!hasPainting3 && _painting3 && flag2)) {
+                            //                if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
+                            //                    _painting3 = true;
+                            //                    hasPainting3 = true;
+                            //                    break;
+                            //                }
+                            //            }
+                            //        }
+                            //    }
+                            //}
+                            //else {
+                            //    PaintingEntry paintingEntry = WorldGen.RandHousePicture();
+                            //    if (_random.NextBool(4)) {
+                            //        WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
+                            //    }
+                            //    else {
+                            //        switch (_nextPaintingIndex) {
+                            //            case 0:
+                            //                if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Absolute>(), 0, WallType)) {
+                            //                    _nextPaintingIndex++;
+                            //                }
+                            //                break;
+                            //            case 1:
+                            //                if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 3, (ushort)ModContent.TileType<Them>(), 0, WallType)) {
+                            //                    _nextPaintingIndex++;
+                            //                }
+                            //                break;
+                            //            case 2:
+                            //                if (WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<Nihility>(), 0, WallType)) {
+                            //                    _nextPaintingIndex = 0;
+                            //                }
+                            //                break;
+                            //        }
+                            //    }
+                            //}
+                            //WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, 0);
+                            break;
                         }
-                        else {
-                            PaintingEntry paintingEntry = WorldGen.RandHousePicture();
-                            if (_random.NextBool(4)) {
-                                WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, paintingEntry.style);
-                            }
-                            else {
-                                switch (_nextPaintingIndex) {
-                                    case 0:
-                                        if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Absolute>(), 0, WallType)) {
-                                            _nextPaintingIndex++;
-                                        }
-                                        break;
-                                    case 1:
-                                        if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 3, (ushort)ModContent.TileType<Them>(), 0, WallType)) {
-                                            _nextPaintingIndex++;
-                                        }
-                                        break;
-                                    case 2:
-                                        if (WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<Nihility>(), 0, WallType)) {
-                                            _nextPaintingIndex = 0;
-                                        }
-                                        break;
-                                }
-                            }
-                        }
-                        //WorldGen.PlaceTile(num4, num5, paintingEntry.tileType, mute: true, forced: false, -1, 0);
-                        break;
-                    }
                     case 1: {
-                        int num5 = room.Y + 1;
-                        WorldGen.PlaceTile(num4, num5, ChandelierTileType, mute: true, forced: false, -1);
-                        for (int j = -1; j < 2; j++) {
-                            for (int k = 0; k < 3; k++) {
-                                _tiles[j + num4, k + num5].TileFrameX += 54;
+                            int num5 = room.Y + 1;
+                            WorldGen.PlaceTile(num4, num5, ChandelierTileType, mute: true, forced: false, -1);
+                            for (int j = -1; j < 2; j++) {
+                                for (int k = 0; k < 3; k++) {
+                                    _tiles[j + num4, k + num5].TileFrameX += 54;
+                                }
                             }
-                        }
 
-                        break;
-                    }
+                            break;
+                        }
                 }
             }
 
@@ -420,22 +472,22 @@ public class HouseBuilderCustom {
                         }
                         break;
                     case 2: {
-                        int num9 = _random.Next(2, GenVars.statueList.Length);
-                        WorldGen.PlaceTile(num7, num8, GenVars.statueList[num9].X, mute: true, forced: false, -1, GenVars.statueList[num9].Y);
-                        if (GenVars.StatuesWithTraps.Contains(num9))
-                            WorldGen.PlaceStatueTrap(num7, num8);
+                            int num9 = _random.Next(2, GenVars.statueList.Length);
+                            WorldGen.PlaceTile(num7, num8, GenVars.statueList[num9].X, mute: true, forced: false, -1, GenVars.statueList[num9].Y);
+                            if (GenVars.StatuesWithTraps.Contains(num9))
+                                WorldGen.PlaceStatueTrap(num7, num8);
 
-                        break;
-                    }
+                            break;
+                        }
                     case 3: {
-                        Point point = Utils.SelectRandom(_random, choices);
-                        WorldGen.PlaceTile(num7, num8, point.X, mute: true, forced: false, -1, point.Y);
-                        break;
-                    }
+                            Point point = Utils.SelectRandom(_random, choices);
+                            WorldGen.PlaceTile(num7, num8, point.X, mute: true, forced: false, -1, point.Y);
+                            break;
+                        }
                     case 4: {
-                        WorldGenHelper.Place3x2(num7, num8, (ushort)ModContent.TileType<BackwoodsRocks3x2>(), _random.Next(6));
-                        break;
-                    }
+                            WorldGenHelper.Place3x2(num7, num8, (ushort)ModContent.TileType<BackwoodsRocks3x2>(), _random.Next(6));
+                            break;
+                        }
                 }
 
                 num6--;

@@ -1815,6 +1815,11 @@ HereticPants: {
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
+Her: {
+	DisplayName: Her
+	Tooltip: ""
+}
+
 IOU: {
 	DisplayName: I.O.U.
 	Tooltip: "'I owe you a Druid weapon'"
@@ -2051,5 +2056,20 @@ BottomlessTarBucket: {
 
 MagicTarDropper: {
 	DisplayName: Magic Tar Dropper
+	Tooltip: ""
+}
+
+FourPixels: {
+	DisplayName: Four Pixels
+	Tooltip: ""
+}
+
+Him: {
+	DisplayName: Him
+	Tooltip: ""
+}
+
+NightsShroud: {
+	DisplayName: Nights Shroud
 	Tooltip: ""
 }

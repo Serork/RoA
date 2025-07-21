@@ -23,15 +23,13 @@ sealed class MillionDollarPainting : ModTile {
         TileObjectData.newTile.Height = 4;
         TileObjectData.newTile.Width = 6;
         TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16, 16 };
-        TileObjectData.newTile.Origin = new Point16(3, 3);
+        TileObjectData.newTile.Origin = new Point16(2, 2);
         TileObjectData.addTile(Type);
 
-        LocalizedText name = CreateMapEntryName();
-        // name.SetDefault("Million Dollar Painting");
-        AddMapEntry(Color.LightGray, name);
-
-        DustType = DustID.Shadewood;
+        AddMapEntry(new Microsoft.Xna.Framework.Color(99, 50, 30), Language.GetText("MapObject.Painting"));
     }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
     public override void KillMultiTile(int i, int j, int TileFrameX, int TileFrameY) {
         //int item = Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 34, 38, ModContent.ItemType<Items.Placeable.Decorations.MillionDollarPainting>(), 1, false, 0, false, false);

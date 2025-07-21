@@ -27,7 +27,8 @@ sealed class Absolute : ModTile {
         TileObjectData.newTile.Origin = new Terraria.DataStructures.Point16(1, 0);
         TileObjectData.addTile(Type);
 
-        LocalizedText name = CreateMapEntryName();
-        AddMapEntry(new Microsoft.Xna.Framework.Color(99, 50, 30), name);
+        AddMapEntry(new Microsoft.Xna.Framework.Color(99, 50, 30), Language.GetText("MapObject.Picture"));
     }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 }

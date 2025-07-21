@@ -25,15 +25,15 @@ sealed class TheLegend : ModTile {
         TileObjectData.newTile.Height = 4;
         TileObjectData.newTile.Width = 4;
         TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16, 16 };
-        TileObjectData.newTile.Origin = new Point16(2, 2);
+        TileObjectData.newTile.Origin = new Point16(1, 2);
         TileObjectData.addTile(Type);
 
-        LocalizedText name = CreateMapEntryName();
-        // name.SetDefault("The Legend");
-        AddMapEntry(new Color(65, 98, 168), name);
+        AddMapEntry(new Microsoft.Xna.Framework.Color(99, 50, 30), Language.GetText("MapObject.Painting"));
 
-        DustType = ModContent.DustType<TheLegendDust>();
+        //DustType = ModContent.DustType<TheLegendDust>();
     }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
     public override void PlaceInWorld(int i, int j, Item item) {
         //if (Main.rand.NextBool(1000))

@@ -27,14 +27,14 @@ sealed class Moss : ModTile {
         TileObjectData.newTile.Width = 4;
         TileObjectData.newTile.CoordinateHeights = new int[] { 16, 16, 16, 16 };
         TileObjectData.newTile.LavaDeath = true;
-        TileObjectData.newTile.Origin = new Point16(2, 2);
+        TileObjectData.newTile.Origin = new Point16(1, 2);
         TileObjectData.addTile(Type);
 
-        LocalizedText name = CreateMapEntryName();
-        DustType = (ushort)ModContent.DustType<Dusts.Backwoods.Furniture>();
         // name.SetDefault("MOX");
-        AddMapEntry(new Color(72, 139, 77), name);
+        AddMapEntry(new Microsoft.Xna.Framework.Color(99, 50, 30), Language.GetText("MapObject.Painting"));
     }
+
+    public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 
     public override void PlaceInWorld(int i, int j, Item item) {
         //if (Main.rand.NextBool(1000))
