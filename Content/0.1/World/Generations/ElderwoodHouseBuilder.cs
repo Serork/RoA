@@ -192,7 +192,7 @@ public class HouseBuilderCustom {
 
     internal static byte _nextPaintingIndex;
 
-    public static int PAINTINGCOUNT => 10;
+    public static int PAINTINGCOUNT => 16;
 
     protected ushort[] SkipTilesDuringWallAging = new ushort[5] {
         245,
@@ -322,43 +322,43 @@ public class HouseBuilderCustom {
                     case 0: {
                             int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
                             switch (_nextPaintingIndex) {
-                                case 0:
+                                case >= 0 and < 3:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 6, 4, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
                                     }
                                     break;
-                                case 1:
+                                case >= 3 and < 5:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 4, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
                                     }
                                     break;
-                                case 2:
+                                case >= 5 and < 7:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 4, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
                                     }
                                     break;
-                                case 3:
+                                case 7:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Absolute>(), 0, WallType)) {
                                     }
                                     break;
-                                case 4:
+                                case 8:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 3, (ushort)ModContent.TileType<Them>(), 0, WallType)) {
                                     }
                                     break;
-                                case 5:
+                                case 9:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<Nihility>(), 0, WallType)) {
                                     }
                                     break;
-                                case 6:
+                                case 10:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<NightsShroud>(), 0, WallType)) {
                                     }
                                     break;
-                                case 7:
+                                case 11:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Her>(), 0, WallType)) {
                                     }
                                     break;
-                                case 8:
+                                case >= 12 and < 15:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 6, 4, (ushort)ModContent.TileType<Him>(), 0, WallType)) {
                                     }
                                     break;
-                                case 9:
+                                case 15:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 3, (ushort)ModContent.TileType<FourPixels>(), 0, WallType)) {
                                     }
                                     break;
