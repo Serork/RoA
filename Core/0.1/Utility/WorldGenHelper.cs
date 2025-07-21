@@ -544,8 +544,8 @@ static class WorldGenHelper {
     }
 
     public static bool PlaceXxXWall(int x, int y, int sizeX, int sizeY, ushort type, int style, ushort? wallType = null) {
-        int num = x;
-        int num2 = y;
+        int num = x - 1;
+        int num2 = y - 1;
         bool flag = true;
         for (int i = num; i < num + sizeX; i++) {
             for (int j = num2; j < num2 + sizeY; j++) {
@@ -611,6 +611,45 @@ static class WorldGenHelper {
         }
         for (int k = num; k < num + 4; k++) {
             for (int l = num2; l < num2 + 4; l++) {
+                Tile tile = Main.tile[k, l];
+                tile.HasTile = true;
+                tile.TileType = type;
+                tile.TileFrameX = (short)(num4 + 18 * (k - num));
+                tile.TileFrameY = (short)(num5 + 18 * (l - num2));
+            }
+        }
+
+        return true;
+    }
+
+    public static bool Place4x3Wall(int x, int y, ushort type, int style, ushort? wallType = null) {
+        int num = x - 1;
+        int num2 = y - 1;
+        bool flag = true;
+        for (int i = num; i < num + 4; i++) {
+            for (int j = num2; j < num2 + 3; j++) {
+                if (Main.tile[i, j].HasTile || Main.tile[i, j].WallType == WallID.None) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+
+        if (!flag)
+            return false;
+
+        int num4 = 0;
+        int num5 = style * 72;
+        for (int k = num; k < num + 4; k++) {
+            for (int l = num2; l < num2 + 3; l++) {
+                Tile tile = Main.tile[k, l];
+                if (wallType.HasValue) {
+                    tile.WallType = wallType.Value;
+                }
+            }
+        }
+        for (int k = num; k < num + 4; k++) {
+            for (int l = num2; l < num2 + 3; l++) {
                 Tile tile = Main.tile[k, l];
                 tile.HasTile = true;
                 tile.TileType = type;

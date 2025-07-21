@@ -192,7 +192,7 @@ public class HouseBuilderCustom {
 
     internal static byte _nextPaintingIndex;
 
-    public static int PAINTINGCOUNT => 16;
+    public static int PAINTINGCOUNT => 18;
 
     protected ushort[] SkipTilesDuringWallAging = new ushort[5] {
         245,
@@ -323,15 +323,18 @@ public class HouseBuilderCustom {
                             int num5 = room.Y + Math.Min(room.Height / 2, room.Height - 5);
                             switch (_nextPaintingIndex) {
                                 case >= 0 and < 3:
-                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 6, 4, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
+                                    if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
+                                        _nextPaintingIndex = 3;
                                     }
                                     break;
                                 case >= 3 and < 5:
-                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 4, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
+                                    if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
+                                        _nextPaintingIndex = 5;
                                     }
                                     break;
                                 case >= 5 and < 7:
-                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 4, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
+                                    if (WorldGenHelper.Place4x4Wall(num4, num5, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
+                                        _nextPaintingIndex = 7;
                                     }
                                     break;
                                 case 7:
@@ -355,11 +358,13 @@ public class HouseBuilderCustom {
                                     }
                                     break;
                                 case >= 12 and < 15:
-                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 6, 4, (ushort)ModContent.TileType<Him>(), 0, WallType)) {
+                                    if (WorldGenHelper.Place6x4Wall(num4, num5, (ushort)ModContent.TileType<Him>(), 0, WallType)) {
+                                        _nextPaintingIndex = 15;
                                     }
                                     break;
-                                case 15:
-                                    if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 3, (ushort)ModContent.TileType<FourPixels>(), 0, WallType)) {
+                                case >= 15 and < 17:
+                                    if (WorldGenHelper.Place4x3Wall(num4, num5, (ushort)ModContent.TileType<FourPixels>(), 0, WallType)) {
+                                        _nextPaintingIndex = 17;
                                     }
                                     break;
                             }
