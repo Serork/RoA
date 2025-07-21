@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
@@ -45,7 +46,8 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
         spriteBatch.Draw(Texture, position, null, color, Rotation, origin, Scale, effects, 0f);
         spriteBatch.Draw(Texture, position, null, color, MathHelper.PiOver2 + Rotation, origin, Scale * 0.6f, effects, 0f);
         spriteBatch.Draw(Texture, position, null, color, Rotation, origin, Scale * 0.6f, effects, 0f);
-        spriteBatch.BeginBlendState(BlendState.Additive);
+        SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
+        spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
         Color shineColor = new(255, 200, 150);
         Color color3 = color * Scale * 0.5f;
         color3.A = (byte)(color3.A * (1.0 - (double)Scale));
@@ -62,6 +64,6 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
         spriteBatch.Draw(Texture, position, null, color * 0.2f, Rotation, origin, Scale * 0.6f, effects, 0f);
         //Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TexturesPerType + "Light").Value;
         //spriteBatch.DrawSelf(texture, position, null, color, Rotation, texture.Size() / 2f, Scale * 0.6f, effects, 0f);
-        spriteBatch.EndBlendState();
+        spriteBatch.Begin(snapshot, true);
     }
 }

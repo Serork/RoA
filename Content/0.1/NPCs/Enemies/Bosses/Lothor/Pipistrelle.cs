@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Common.Cache;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
@@ -109,7 +110,8 @@ sealed class Pipistrelle : ModNPC {
 
         NPC npc = Main.npc[(int)NPC.ai[0]];
         if (!(!npc.active || npc.ModNPC is null || npc.ModNPC is not Lothor)) {
-            spriteBatch.BeginBlendState(BlendState.Additive);
+            SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             float lifeProgress = _shouldEnrage ? 1f : npc.As<Lothor>().LifeProgress;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                 spriteBatch.Draw(GlowMask, position +
@@ -117,7 +119,7 @@ sealed class Pipistrelle : ModNPC {
                     * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
                     NPC.frame, glowColor.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
             }
-            spriteBatch.EndBlendState();
+            spriteBatch.Begin(snapshot, true);
         }
 
         return false;

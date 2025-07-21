@@ -28,7 +28,7 @@ sealed class LeafySeahorse : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        Vector2 yOffset = Vector2.UnitY.RotatedBy(velocity.ToRotation()) * 6f * player.direction;
+        Vector2 yOffset = Vector2.UnitY.RotatedBy(velocity.ToRotation()) * 6f * player.direction * player.gravDir;
         position -= yOffset;
         float randomAngle = 0.075f;
         velocity = velocity.RotatedByRandom(randomAngle);

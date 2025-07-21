@@ -51,19 +51,23 @@ sealed class BloodbathLocketGlowGlowing : ModSystem {
                 SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
                 Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
                 Color color = Color.White;
+                var spriteEffects = drawInfo.drawPlayer.direction == -1 ? SpriteEffects.None | SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                if (player.gravDir == -1f) {
+                    spriteEffects |= SpriteEffects.FlipVertically;
+                }
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
                     Main.spriteBatch.Draw(
                         _lothorGlowMaskTexture.Value,
-                        drawInfo.drawPlayer.position + Vector2.UnitY * (-posOffset.Y + seatYOffset) - Main.screenPosition + new Vector2(0f, drawInfo.drawPlayer.gfxOffY)
+                        drawInfo.drawPlayer.position + (player.gravDir != 1 ? Vector2.UnitY * 6f : Vector2.Zero) + Vector2.UnitY * (-posOffset.Y + seatYOffset) - Main.screenPosition + new Vector2(0f, drawInfo.drawPlayer.gfxOffY)
                             +
-                            Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
-                            * Helper.Wave(0f, 3f, 12f, 0.5f + i2),
+                            Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0 * player.gravDir, new Vector2())
+                            * Helper.Wave(0f, 3f, 12f, 0.5f),
                         drawInfo.drawPlayer.bodyFrame,
                         color * 0.5f,
                         0f,
                         new Vector2(10),
                         1f + Main.rand.NextFloatRange(0.05f),
-                        drawInfo.drawPlayer.direction == -1 ? SpriteEffects.None | SpriteEffects.FlipHorizontally : SpriteEffects.None,
+                        spriteEffects,
                         0
                     );
                 }
@@ -125,7 +129,7 @@ sealed class BloodbathLocket : ModItem {
 
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
         SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-        Main.spriteBatch.BeginBlendState(BlendState.Additive);
+        Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
         for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
             Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
             Vector2 origin = glowMaskTexture.Size() / 2f;
@@ -229,7 +233,8 @@ sealed class BloodbathLocket : ModItem {
                 }
             }
             SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-            Main.spriteBatch.BeginBlendState(BlendState.Additive);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive });
             for (int i = 0; i < eyesCount; i++) {
                 EyesData eyes = _eyes[i];
                 if (eyes is null) {

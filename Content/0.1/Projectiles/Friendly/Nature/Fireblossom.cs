@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Common.Cache;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Wreaths;
@@ -340,7 +341,8 @@ sealed class Fireblossom : NatureProjectile {
             Color.White * 0.5f
     * Projectile.Opacity, Projectile.rotation, offset, scale, effects, 0);
         if (CanExplode) {
-            sb.BeginBlendState(BlendState.Additive, SamplerState.LinearWrap);
+            SpriteBatchSnapshot snapshot = sb.CaptureSnapshot();
+            sb.Begin(snapshot with { blendState = BlendState.Additive, samplerState = SamplerState.LinearWrap }, true);
             for (float k = -3.14f; k <= 3.14f; k += 1.57f)
                 sb.Draw(texture, Projectile.Center - new Vector2(0f, Projectile.height) + new Vector2(0f, (float)Projectile.height) + Utils.RotatedBy(Utils.ToRotationVector2(k), (double)Main.GlobalTimeWrappedHourly, new Vector2())
                     * FireblossomWave(0f, 1.5f, speed: Speed) - Main.screenPosition, rectangle,
@@ -351,7 +353,7 @@ sealed class Fireblossom : NatureProjectile {
                     * FireblossomWave(0.25f, 1.5f, Speed, 0.5f) - Main.screenPosition, rectangle,
                     (Color.White * Projectile.localAI[1]).MultiplyAlpha(MathHelper.Lerp(0f, 1f, Projectile.ai[1])).MultiplyAlpha(0.35f).MultiplyAlpha(FireblossomWave(0.5f, 0.75f, Speed, 0.5f))
                     * Projectile.Opacity, Projectile.rotation + Main.rand.NextFloatRange(0.1f * Projectile.ai[1]), offset, scale, effects, 0);
-            sb.EndBlendState();
+            sb.Begin(snapshot, true);
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.WorldEvents;
 using RoA.Core;
 using RoA.Core.Data;
@@ -127,20 +128,22 @@ sealed partial class DruidSoul : RoANPC {
                 color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
                 spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
             }
-            spriteBatch.BeginBlendState(BlendState.NonPremultiplied, SamplerState.PointClamp);
+            SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.NonPremultiplied, samplerState = SamplerState.PointClamp }, true);
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
                 color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
                 spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
             }
-            spriteBatch.EndBlendState();
+            spriteBatch.Begin(snapshot, true);
             start += v * texture.Width;
         }
     }
 
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        spriteBatch.BeginBlendState(BlendState.NonPremultiplied, SamplerState.PointClamp);
+        SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+        spriteBatch.Begin(snapshot with { blendState = BlendState.NonPremultiplied, samplerState = SamplerState.PointClamp }, true);
         DrawTextureUnderCustomSoulEffect(spriteBatch, (Texture2D)ModContent.Request<Texture2D>(Texture), drawColor);
-        spriteBatch.EndBlendState();
+        spriteBatch.Begin(snapshot, true);
         DrawTextureUnderCustomSoulEffect(spriteBatch, ModContent.Request<Texture2D>(Texture + "_Eye").Value, drawColor);
     }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
 
@@ -91,7 +92,8 @@ sealed class LittleFleder : ModProjectile {
 
         if (_hasTarget) {
             texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
-            spriteBatch.BeginBlendState(BlendState.Additive);
+            SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
+            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             float lifeProgress = 1f;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                 spriteBatch.Draw(texture, position +
@@ -99,7 +101,7 @@ sealed class LittleFleder : ModProjectile {
                     * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
                    sourceRectangle, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, Projectile.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, Projectile.scale, spriteEffects, 0f);
             }
-            spriteBatch.EndBlendState();
+            spriteBatch.Begin(snapshot, true);
         }
 
         return false;

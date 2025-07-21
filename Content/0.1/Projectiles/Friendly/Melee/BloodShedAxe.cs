@@ -362,7 +362,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         Rectangle? rectangle = new Rectangle?(new Rectangle(66 * (Projectile.spriteDirection != 1 ? 1 : 0), 0, 66, 66));
         if (Projectile.ai[1] == 2 && Projectile.localAI[1] < 1f) Projectile.localAI[1] += 0.1f;
         SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-        Main.spriteBatch.BeginBlendState(BlendState.AlphaBlend);
+        Main.spriteBatch.Begin(snapshot with { blendState = BlendState.AlphaBlend }, true);
 
         if (_powerUp && Projectile.ai[1] != 100f) {
             for (int i = 0; i < 3; i++) {
@@ -395,8 +395,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                               Projectile.rotation + extraRotation + 0.78f,
                               new Vector2(0f, texture2D.Height),
                               Projectile.scale, SpriteEffects.None, 0f);
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(in snapshot);
+        Main.spriteBatch.Begin(snapshot, true);
         return false;
     }
 }

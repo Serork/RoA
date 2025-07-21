@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -37,7 +38,8 @@ sealed class LothorScream : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        spriteBatch.BeginBlendState(BlendState.AlphaBlend, SamplerState.PointClamp);
+        SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+        spriteBatch.Begin(snapshot with { blendState = BlendState.AlphaBlend, samplerState = SamplerState.PointClamp }, true);
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Vector2 position = Projectile.Center - Main.screenPosition;
         Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
@@ -50,7 +52,7 @@ sealed class LothorScream : ModProjectile {
                          Projectile.scale,
                          SpriteEffects.None,
                          0);
-        spriteBatch.EndBlendState();
+        spriteBatch.Begin(snapshot, true);
 
         return false;
     }

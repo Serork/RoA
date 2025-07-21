@@ -605,13 +605,13 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
                 AlphaDestinationBlend = Blend.One,
                 AlphaSourceBlend = Blend.SourceAlpha
             };
-            SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(Main.spriteBatch);
-            Main.spriteBatch.BeginBlendState(_multiplyBlendState);
+            SpriteBatch batch = Main.spriteBatch;
+            SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
+            batch.Begin(snapshot with { blendState = _multiplyBlendState }, true);
             drawGeodeGem(1f);
-            Main.spriteBatch.BeginBlendState(BlendState.Additive);
+            batch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             drawGeodeGem(1.5f);
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(snapshot);
+            batch.Begin(snapshot, true);
         }
 
         drawGeodeGem();

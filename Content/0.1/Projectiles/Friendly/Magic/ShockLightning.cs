@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.Cache;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -268,11 +269,12 @@ sealed class ShockLightning : ModProjectile {
             Vector2 middleScale = new((dest - source).Length(), thicknessScale);
             spriteBatch.Draw(_endTexture2.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.01f, SpriteEffects.None, 0f);
             if (random.NextChance(Math.Clamp(thicknessScale * 2f, 0f, 1f)) && (thicknessScale < 0.9f || (thicknessScale >= 0.9f && random.NextChance(0.75)))) {
-                spriteBatch.BeginBlendState(BlendState.Additive);
+                SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+                spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
                 spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color * 0.75f, rotation, middleOrigin, middleScale * 0.95f * 0.95f, SpriteEffects.None, 0f);
                 spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.015f * 1.1f, SpriteEffects.None, 0f);
                 spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.02f * 1.1f, SpriteEffects.None, 0f);
-                spriteBatch.EndBlendState();
+                spriteBatch.Begin(snapshot, true);
             }
             if (thicknessScale < 0.4f) {
                 spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color, rotation, middleOrigin, middleScale * 0.85f, SpriteEffects.None, 0f);

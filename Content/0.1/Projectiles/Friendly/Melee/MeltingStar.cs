@@ -148,7 +148,7 @@ sealed class MeltingStar : ModProjectile {
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
         float lifetime = Projectile.timeLeft < 15 ? Projectile.timeLeft / 15f : 1f;
-        spriteBatch.BeginBlendState(BlendState.AlphaBlend, isUI2: true);
+        spriteBatch.BeginBlendState(BlendState.AlphaBlend, shader: true);
         GameShaders.Misc["MagicMissile"].Apply();
         vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot, p => Color.Lerp(Color.OrangeRed.MultiplyAlpha(lifetime * (p <= 0.2 ? p / 0.2f : 1f)), Color.Yellow.MultiplyAlpha(0.5f), p), p => (float)(60.0 * Projectile.scale * (1.0 - p)), -Main.screenPosition + Projectile.Size / 2, true);
         vertexStrip.DrawTrail();

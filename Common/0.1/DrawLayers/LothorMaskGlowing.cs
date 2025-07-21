@@ -56,6 +56,10 @@ sealed class LothorMaskGlowing : ModSystem {
                     float lifeProgress = 1f - MathHelper.Clamp((float)player.statLife / player.statLifeMax2 * 0.5f, 0f, 1f);
                     SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
                     Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
+                    var spriteEffects = drawInfo.drawPlayer.direction == -1 ? SpriteEffects.None | SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    if (player.gravDir == -1f) {
+                        spriteEffects |= SpriteEffects.FlipVertically;
+                    }
                     for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                         Rectangle bodyFrame = drawInfo.drawPlayer.bodyFrame;
                         bodyFrame.Width += 2;
@@ -75,16 +79,16 @@ sealed class LothorMaskGlowing : ModSystem {
                             position.Y += progress4 * (player.height / 2f + 8f);
                         }
                         Main.spriteBatch.Draw(_lothorGlowMaskTexture.Value,
-                            helmetOffset + new Vector2((int)(position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
+                            helmetOffset + (player.gravDir != 1 ? Vector2.UnitY * 7f : Vector2.Zero) + new Vector2((int)(position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
                             (float)(drawInfo.drawPlayer.width / 2)),
                             (int)(position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height -
                             (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect +
-                            Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                            Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * player.gravDir * 10.0, new Vector2())
                             * Helper.Wave(0f, drawDistance, 12f, 0.5f) * lifeProgress +
                             Vector2.UnitY * (player.gravDir == -1f ? -6f : 0f),
                              bodyFrame, immuneAlphaPure.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress,
                              player.fullRotation + drawInfo.drawPlayer.headRotation + Main.rand.NextFloatRange(0.05f) * lifeProgress,
-                             new Vector2(40f, 56f) / 2f, 1f, drawInfo.drawPlayer.direction == -1 ? SpriteEffects.None | SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+                             new Vector2(40f, 56f) / 2f, 1f, spriteEffects, 0f);
                     }
                     Main.spriteBatch.End();
                     Main.spriteBatch.Begin(in snapshot);

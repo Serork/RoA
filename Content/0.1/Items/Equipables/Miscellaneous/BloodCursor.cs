@@ -48,7 +48,7 @@ sealed class BloodCursor : ModItem {
             else {
                 drawCursor(Vector2.Zero);
                 SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-                Main.spriteBatch.BeginBlendState(BlendState.Additive, isUI: true);
+                Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
                 for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                     drawCursor(Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                             * Helper.Wave(0f, 3f, 12f, 0.5f) * 1f,
@@ -128,7 +128,11 @@ sealed class BloodCursor : ModItem {
         Item.value = Item.sellPrice(0, 2, 0, 0);
     }
 
-    public override void UpdateEquip(Player player) => player.GetModPlayer<BloodCursorHandler>().IsEffectActive = true;
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        if (!hideVisual) {
+            player.GetModPlayer<BloodCursorHandler>().IsEffectActive = true;
+        }
+    }
 
     public override void UpdateVanity(Player player) => player.GetModPlayer<BloodCursorHandler>().IsEffectActive = true;
 

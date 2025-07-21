@@ -592,11 +592,11 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         offset += Projectile.rotation.ToRotationVector2() * (-30f * (MathHelper.Clamp(Projectile.scale - 1.25f, 0f, 1f)));
         Vector2 center = Projectile.Center;
         Player player = Main.player[Projectile.owner];
+        SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
         Vector2 position = center - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY) + offset;
-        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
         Vector2 shiftFix = -(Projectile.spriteDirection == -1 ? new Vector2(0, -2) : Vector2.Zero);
         if (flag) {
-            spriteBatch.BeginBlendState(BlendState.Additive);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             spriteBatch.Draw(glowBladeTexture2D,
                                 center - velocityTo * 10f + new Vector2(osc, osc) + offset - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY) + shiftFix,
                                 glowRectangle,
@@ -606,7 +606,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                                 Projectile.scale * 1.05f,
                                 SpriteEffects.None,
                                 0f);
-            spriteBatch.EndBlendState();
+            spriteBatch.Begin(snapshot, true);
             spriteBatch.Draw(bladeTexture2D,
                             position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f * charge % 1f * player.direction)) * 3f * charge + shiftFix,
                             glowRectangle,
@@ -618,7 +618,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                             0f);
         }
         else {
-            spriteBatch.BeginBlendState(BlendState.AlphaBlend);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             for (int i = 1; i < Projectile.oldPos.Length - 1; i += 2) {
                 spriteBatch.Draw(bladeTexture2D,
                             position - center + Projectile.oldPos[i],
@@ -630,9 +630,9 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                             SpriteEffects.None,
                             0f);
             }
-            spriteBatch.EndBlendState();
+            spriteBatch.Begin(snapshot, true);
         }
-        spriteBatch.BeginBlendState(BlendState.AlphaBlend);
+        spriteBatch.Begin(snapshot with { blendState = BlendState.AlphaBlend }, true);
         spriteBatch.Draw(texture2D,
                          position,
                          rectangle,
@@ -642,8 +642,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                          Projectile.scale,
                          SpriteEffects.None,
                          0f);
-        spriteBatch.EndBlendState();
-        spriteBatch.BeginBlendState(BlendState.Additive);
+        spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
         spriteBatch.Draw(glowTexture2D,
                          position + new Vector2(osc, osc),
                          glowRectangle,
@@ -653,9 +652,9 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                          Projectile.scale,
                          SpriteEffects.None,
                          0f);
-        spriteBatch.EndBlendState();
+        spriteBatch.Begin(snapshot, true);
         if (flag) {
-            spriteBatch.BeginBlendState(BlendState.Additive);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             spriteBatch.Draw(glowTexture2D,
                              position + velocityTo * 15f + shiftFix,
                              glowRectangle,
@@ -665,9 +664,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              Projectile.scale * 0.6f,
                              SpriteEffects.None,
                              0f);
-            spriteBatch.EndBlendState();
             Texture2D bloom = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "Bloom0");
-            spriteBatch.BeginBlendState(BlendState.Additive);
             spriteBatch.Draw(bloom,
                              center + shiftFix + offset + Vector2.Normalize(Projectile.velocity) * 110f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                              null,
@@ -677,11 +674,11 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              Projectile.scale * 1.05f,
                              SpriteEffects.None,
                              0f);
-            spriteBatch.EndBlendState();
+            spriteBatch.Begin(snapshot, true);
         }
         color = Color.White;
         if (!flag) {
-            spriteBatch.BeginBlendState(BlendState.Additive);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             spriteBatch.Draw(sparkTexture2D,
                              center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                              null,
@@ -700,14 +697,14 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              Projectile.scale * 0.8f,
                              SpriteEffects.None,
                              0f);
-            spriteBatch.EndBlendState();
+            spriteBatch.Begin(snapshot, true);
         }
 
         float opacity = MathHelper.Clamp(_timingProgress, 0f, 1f);
         if (_timingProgress > 1.5f) {
             opacity = MathHelper.Clamp(1f - (_timingProgress - 0.5f - 1f) * 2f, 0f, 1f);
         }
-        spriteBatch.BeginBlendState(BlendState.Additive);
+        spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
         Vector2 position2 = new Vector2(90 + (Projectile.direction == 1 ? -0 : 0), 90 + (Projectile.direction == 1 ? -4 : 0)).RotatedBy(Projectile.rotation - 0.78f);
         if (Projectile.direction == 1) {
             position2 += Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 3f;
@@ -730,8 +727,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                             Projectile.scale * 0.8f,
                             SpriteEffects.None,
                             0f);
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(in snapshot);
+        spriteBatch.Begin(snapshot, true);
 
         return false;
     }

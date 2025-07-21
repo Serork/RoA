@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.Cache;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
@@ -143,10 +144,10 @@ sealed class LothorClawsSlash : ModProjectile {
         float num12 = MathHelper.Clamp(Projectile.timeLeft / 2, 0f, 5f);
         if (CanFunction()) {
             SpriteBatch spriteBatch = Main.spriteBatch;
-            spriteBatch.BeginBlendState(BlendState.NonPremultiplied);
+            SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.NonPremultiplied }, true);
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2 * 0.35f, Projectile.rotation + (float)(Projectile.ai[2] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive, samplerState = SamplerState.LinearClamp }, true);
             //spriteBatch.DrawSelf(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, Projectile._rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             Color shineColor = new Color(255, 200, 150);
             Color color3 = lightColor * num2 * 0.5f;
@@ -160,7 +161,7 @@ sealed class LothorClawsSlash : ModProjectile {
             spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), shineColor * 0.6f * num2, Projectile.rotation + Projectile.ai[2] * 0.01f, origin, scale, effects, 0.0f);
             spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), shineColor * 0.5f * num2, Projectile.rotation + Projectile.ai[2] * -0.05f, origin, scale * 0.8f, effects, 0.0f);
             spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), shineColor * 0.4f * num2, Projectile.rotation + Projectile.ai[2] * -0.1f, origin, scale * 0.6f, effects, 0.0f);
-            spriteBatch.BeginBlendState(BlendState.Additive);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive, samplerState = Main.DefaultSamplerState }, true);
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f, Projectile.rotation + Projectile.ai[2] * 0.01f, origin, scale, effects, 0.0f);
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, Projectile.rotation + (float)(Projectile.ai[2] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
@@ -170,7 +171,7 @@ sealed class LothorClawsSlash : ModProjectile {
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f * 0.15f, Projectile.rotation + Projectile.ai[2] * 0.01f, origin, scale, effects, 0.0f);
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * 0.15f * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, Projectile.rotation + (float)(Projectile.ai[2] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
-            spriteBatch.EndBlendState();
+            spriteBatch.Begin(snapshot, true);
         }
     }
 

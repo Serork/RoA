@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Core;
@@ -141,12 +142,13 @@ abstract class Wave : NatureProjectile {
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
         Vector2 position = Projectile.Center - Main.screenPosition + Projectile.velocity * 50f;
         Color color = Projectile.GetAlpha(lightColor) * Projectile.Opacity;
-        spriteBatch.BeginBlendState(BlendState.NonPremultiplied, SamplerState.PointClamp);
+
+        SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
+        spriteBatch.Begin(snapshot with { blendState = BlendState.NonPremultiplied, samplerState = SamplerState.PointClamp }, true);
         spriteBatch.Draw(texture, position, null, color, Projectile.rotation, drawOrigin, 1f, SpriteEffects.None, 0f);
-        spriteBatch.EndBlendState();
-        spriteBatch.BeginBlendState(BlendState.Additive);
+        spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
         spriteBatch.Draw(texture, position, null, color.MultiplyAlpha((float)(1.0 - (double)(Projectile.Opacity - 0.5f))), Projectile.rotation, drawOrigin, 1f, SpriteEffects.None, 0f);
-        spriteBatch.EndBlendState();
+        spriteBatch.Begin(snapshot, true);
         return false;
     }
 }

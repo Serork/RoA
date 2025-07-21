@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.Cache;
 using RoA.Common.Projectiles;
 using RoA.Content.Buffs;
 using RoA.Core;
@@ -184,7 +185,9 @@ sealed class ForestWreath_Sunflower : NatureProjectile_NoTextureLoad {
         void drawRaysAndAddLights() {
             SunflowerValues sunflowerValues = new(Projectile);
             Texture2D rayTexture = _rayTexture!.Value;
-            Main.spriteBatch.BeginBlendState(BlendState.Additive);
+            SpriteBatch batch = Main.spriteBatch;
+            SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
+            batch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             int rayCount = 10;
             float maxScale = 0f;
             for (int i = 0; i < 6; i++) {
@@ -208,7 +211,7 @@ sealed class ForestWreath_Sunflower : NatureProjectile_NoTextureLoad {
                 DelegateMethods.v3_1 = Vector3.One * 0.25f * baseOpacity * extraScale;
                 Utils.PlotTileLine(Projectile.Center, Projectile.Center + offset * 0.5f, 10f * baseOpacity, DelegateMethods.CastLight);
             }
-            Main.spriteBatch.EndBlendState();
+            batch.Begin(snapshot, true);
         }
 
         drawRaysAndAddLights();
