@@ -683,7 +683,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
 }
 
 // TODO: separate block mechanic (and collision)
-sealed class HittingIceBlocksWithPickaxeSupport : ModPlayer {
+sealed class HittingIceBlocksWithPickaxeSupportAndMakeSlippy : ModPlayer {
     public override void Load() {
         On_Player.ItemCheck_UseMiningTools_ActuallyUseMiningTool += On_Player_ItemCheck_UseMiningTools_ActuallyUseMiningTool;
         On_SmartCursorHelper.Step_Pickaxe_MineSolids += On_SmartCursorHelper_Step_Pickaxe_MineSolids;

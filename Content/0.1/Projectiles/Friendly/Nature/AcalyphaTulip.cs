@@ -65,7 +65,7 @@ sealed class AcalyphaTulip : NatureProjectile {
 
     public override void AI() {
         if (Projectile.localAI[1] == 0f) {
-            Projectile.frame = Main.rand.NextBool().ToInt();
+            //Projectile.frame = Main.rand.NextBool().ToInt();
             if (Projectile.IsOwnerLocal()) {
                 _tulipColor = Color.Lerp(new Color(71, 167, 208), new Color(165, 18, 68), Main.rand.NextFloat()) * Main.rand.NextFloat(1f, 1.25f);
                 _tulipColor2 = new Color(246, 73, 112) * Main.rand.NextFloat(0.75f, 1f);
@@ -146,7 +146,7 @@ sealed class AcalyphaTulip : NatureProjectile {
         Microsoft.Xna.Framework.Color color66 = new Microsoft.Xna.Framework.Color(255, 21, 21, 127) * num245;
         Microsoft.Xna.Framework.Rectangle rectangle11 = value48.Frame(2);
         Vector2 origin16 = rectangle11.Bottom();
-        var frame = _acalyphaTulipTexture2.Value.Frame(2, frameX: Projectile.frame);
+        var frame = _acalyphaTulipTexture2.Value.Frame(1);
 
         for (int num354 = proj.oldPos.Length - 1; num354 > 0; num354--) {
             Vector2 vector85 = proj.oldPos[num354] + new Vector2(proj.width, proj.height) / 2f + Vector2.UnitY * proj.gfxOffY - Main.screenPosition;
@@ -158,7 +158,7 @@ sealed class AcalyphaTulip : NatureProjectile {
             Main.EntitySpriteDraw(value48, vector85 - proj.oldPos[num354].DirectionTo(proj.oldPos[num354 - 1]) * 10f, value48.Frame(2), Lighting.GetColor((vector85 + Main.screenPosition).ToTileCoordinates()).MultiplyRGB(color98) * (1f - (float)num354 / (float)proj.oldPos.Length), num355, origin16, scale14, dir);
         }
 
-        Main.EntitySpriteDraw(_acalyphaTulipTexture2.Value, Projectile.Center - Main.screenPosition, frame, lightColor, proj.rotation, frame.Size() / 2f, 1f, dir);
+        Main.EntitySpriteDraw(_acalyphaTulipTexture2.Value, Projectile.Center - Main.screenPosition, frame, lightColor, proj.rotation - MathHelper.PiOver4, frame.Size() / 2f, 1f, dir);
         Main.EntitySpriteDraw(value48, position13, rectangle11, lightColor.MultiplyRGBA(color65), proj.rotation, origin16, scale4, dir);
         rectangle11 = value48.Frame(2, 1, 1);
         Main.EntitySpriteDraw(value48, position13, rectangle11, lightColor.MultiplyRGBA(color66), proj.rotation, origin16, scale4, dir);
