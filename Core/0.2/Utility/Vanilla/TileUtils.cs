@@ -21,7 +21,7 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class TileHelper {
-    public static bool CustomSolidCollision_CheckForIceBlocks(Vector2 Position, int Width, int Height, bool[] conditions = null, bool shouldDestroyIceBlock = false, params ushort[] extraTypes) {
+    public static bool CustomSolidCollision_CheckForIceBlocks(Entity source, Vector2 Position, int Width, int Height, bool[] conditions = null, bool shouldDestroyIceBlock = false, Action<Player>? onDestroyingIceBlock = null, params ushort[] extraTypes) {
         int value = (int)(Position.X / 16f) - 1;
         int value2 = (int)((Position.X + (float)Width) / 16f) + 2;
         int value3 = (int)(Position.Y / 16f) - 1;
@@ -53,6 +53,9 @@ static partial class TileHelper {
                                 Point16 iceBlockPosition = iceBlockEnumerateData.IceBlockPosition;
                                 if (iceBlockPosition.X == i && iceBlockPosition.Y == j) {
                                     iceBlockEnumerateData.Projectile.Kill(iceBlockEnumerateData.Index);
+                                    if (source is Player player) {
+                                        onDestroyingIceBlock?.Invoke(player);
+                                    }
                                     return true;
                                 }
                             }
