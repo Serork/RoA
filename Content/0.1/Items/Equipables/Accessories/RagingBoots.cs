@@ -93,7 +93,7 @@ sealed class RagingBoots : NatureItem {
                     if (player.whoAmI == Main.myPlayer) {
                         float startAngle = Main.rand.NextFloat(MathHelper.TwoPi);
                         for (float i = 0; i < MathHelper.TwoPi; i += MathHelper.TwoPi / count2) {
-                            Projectile.NewProjectile(Player.GetSource_Accessory(item), Player.Bottom, _speedBeforeGround.RotatedBy(i + startAngle) * Main.rand.NextFloat(0.25f, 0.75f), ModContent.ProjectileType<IceShard>(), NatureWeaponHandler.GetNatureDamage(item, Player), Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(item.knockBack));
+                            Projectile.NewProjectile(Player.GetSource_Accessory(item), Player.Bottom, _speedBeforeGround.RotatedBy(i + startAngle) * Main.rand.NextFloat(0.25f, 0.75f), ModContent.ProjectileType<IceShard>(), NatureWeaponHandler.GetNatureDamage(item, Player) * 2, Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(item.knockBack) * 0.5f);
                         }
                     }
                 })) {
