@@ -88,6 +88,7 @@ sealed class RagingBoots : NatureItem {
             bool land = ((Player.velocity.Y == 0f || Player.sliding) && enoughSpeed) && !_onGround;
             int count = (int)_speedBeforeGround.Length();
             int count2 = (int)MathHelper.Clamp(_fallLength, 0, 20);
+            bool onIceBlock = false;
             if (TileHelper.CustomSolidCollision_CheckForIceBlocks(Player, Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms, land, 
                 onDestroyingIceBlock: (player) => {
                     if (player.whoAmI == Main.myPlayer) {
@@ -96,6 +97,7 @@ sealed class RagingBoots : NatureItem {
                             Projectile.NewProjectile(Player.GetSource_Accessory(item), Player.Bottom, _speedBeforeGround.RotatedBy(i + startAngle) * Main.rand.NextFloat(0.25f, 0.75f), ModContent.ProjectileType<IceShard>(), NatureWeaponHandler.GetNatureDamage(item, Player) * 2, Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(item.knockBack) * 0.5f);
                         }
                     }
+                    onIceBlock = true;
                 })) {
                 if (land) {
                     SoundEngine.PlaySound(SoundID.Item167 with { PitchVariance = 0.1f }, Player.Bottom);
@@ -118,9 +120,11 @@ sealed class RagingBoots : NatureItem {
                         }
                     }
 
-                    int dustType = TileHelper.GetKillTileDust((int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16, Main.tile[(int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16]);
-                    for (int k = 0; k < count2 * 2; k++) {
-                        Dust.NewDust(new Vector2(Player.position.X, Player.Bottom.Y), Player.width, 2, dustType, SpeedX: -velocity.X * 0.4f, SpeedY: -velocity.Y * 0.4f, Alpha: Main.rand.Next(255), Scale: Main.rand.NextFloat(1.5f) * 0.85f);
+                    if (!onIceBlock) {
+                        int dustType = TileHelper.GetKillTileDust((int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16, Main.tile[(int)Player.Bottom.X / 16, (int)Player.Bottom.Y / 16]);
+                        for (int k = 0; k < count2 * 2; k++) {
+                            Dust.NewDust(new Vector2(Player.position.X, Player.Bottom.Y), Player.width, 2, dustType, SpeedX: -velocity.X * 0.4f, SpeedY: -velocity.Y * 0.4f, Alpha: Main.rand.Next(255), Scale: Main.rand.NextFloat(1.5f) * 0.85f);
+                        }
                     }
 
                     var center = Player.Bottom;

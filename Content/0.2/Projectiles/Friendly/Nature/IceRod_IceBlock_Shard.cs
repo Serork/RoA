@@ -20,7 +20,7 @@ sealed class IceShard : ModProjectile {
         Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
-        Projectile.penetrate = -1;
+        Projectile.penetrate = 1;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
     }
