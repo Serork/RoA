@@ -76,7 +76,7 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
 
     private int GetThornsLength() => new ThornsValues(Projectile).Length;
 
-    public override void Load() {
+    public override void SetStaticDefaults() {
         LoadThornsTextures();
     }
 

@@ -364,6 +364,9 @@ public class HouseBuilderCustom {
                                     break;
                             }
                             _nextPaintingIndex++;
+                            if (_nextPaintingIndex >= PAINTINGCOUNT) {
+                                _nextPaintingIndex = 0;
+                            }
                             //bool flag2 = _random.NextBool(10);
                             //if (flag2) {
                             //    int attempts = 1000;

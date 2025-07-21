@@ -1,9 +1,15 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
+
+using RoA.Core.Utility;
 
 using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -22,7 +28,30 @@ sealed class NightsShroud : Painting {
 }
 
 sealed class Her : Painting {
+    private static Asset<Texture2D>? _glowTexture;
+
+    protected override void SafeSetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+    }
+
     protected override Point16 Size() => new(2, 2);
+
+    public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        if (_glowTexture?.IsLoaded != true) {
+            return;
+        }
+
+        Tile tile = Main.tile[i, j];
+        Texture2D texture = _glowTexture.Value;
+        spriteBatch.Draw(texture,
+                         new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + TileHelper.ScreenOffset,
+                         new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16),
+                         Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+    }
 }
 
 sealed class FourPixels : Painting {
@@ -72,7 +101,11 @@ abstract class Painting : ModTile {
 
         string key = IsPicture() ? "Picture" : "Painting";
         AddMapEntry(new Color(99, 50, 30), Language.GetText($"MapObject.{key}"));
+
+        SafeSetStaticDefaults();
     }
+
+    protected virtual void SafeSetStaticDefaults() { }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
 }

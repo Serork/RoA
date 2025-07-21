@@ -544,12 +544,13 @@ static class WorldGenHelper {
     }
 
     public static bool PlaceXxXWall(int x, int y, int sizeX, int sizeY, ushort type, int style, ushort? wallType = null) {
-        int num = x - 1;
-        int num2 = y - 1;
+        int num = x;
+        int num2 = y;
         bool flag = true;
         for (int i = num; i < num + sizeX; i++) {
-            for (int j = num2; j < num2 + 4; j++) {
-                if (Main.tile[i, j].HasTile || Main.tile[i, j].WallType == WallID.None) {
+            for (int j = num2; j < num2 + sizeY; j++) {
+                Tile tile = Main.tile[i, j];
+                if (tile.HasTile && Main.tileSolid[tile.TileType]) {
                     flag = false;
                     break;
                 }

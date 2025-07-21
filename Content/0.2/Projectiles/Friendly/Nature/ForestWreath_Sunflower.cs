@@ -44,7 +44,8 @@ sealed class ForestWreath_Sunflower : NatureProjectile_NoTextureLoad {
 
     private PetalInfo[]? _petalData;
 
-    public override void Load() {
+
+    public override void SetStaticDefaults() {
         LoadSunflowerTextures();
     }
 

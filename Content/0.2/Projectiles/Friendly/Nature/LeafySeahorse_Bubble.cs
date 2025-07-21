@@ -195,7 +195,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
         Projectile.timeLeft = reader.ReadInt32();
     }
 
-    public override void Load() {
+    public override void SetStaticDefaults() {
         LoadBubbleTextures();
     }
 

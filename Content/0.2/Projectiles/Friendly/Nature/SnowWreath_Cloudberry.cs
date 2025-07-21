@@ -95,14 +95,12 @@ sealed class SnowWreath_Cloudberry : NatureProjectile_NoTextureLoad {
     private byte _currentTileIndex;
     private Point _lastTilePosition;
 
-    public override void Load() {
-        LoadCloudberryTexture();
-    }
-
     public override void SetStaticDefaults() {
         ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
         ProjectileID.Sets.Explosive[Type] = true;
         ProjectileID.Sets.RocketsSkipDamageForPlayers[Type] = true;
+
+        LoadCloudberryTexture();
     }
 
     protected override void SafeSetDefaults() {
