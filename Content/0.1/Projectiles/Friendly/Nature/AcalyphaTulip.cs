@@ -12,13 +12,15 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class AcalyphaTulip : NatureProjectile {
-    private static ushort MAXTIMELEFT => 360;
+    private static ushort MAXTIMELEFT => 280;
 
     private static Asset<Texture2D>? _acalyphaTulipTexture2;
 
@@ -86,6 +88,9 @@ sealed class AcalyphaTulip : NatureProjectile {
             }
             //Projectile.localAI[0] += Projectile.localAI[0] / Projectile.localAI[1];
             float factor = Utils.Remap(Projectile.localAI[0] - num829, 0f, Projectile.ai[1], 1f, 0f);
+            if (Projectile.timeLeft <= MAXTIMELEFT / 2) {
+                Projectile.tileCollide = true;
+            }
             float angle = MathHelper.WrapAngle((Projectile.localAI[0] - num829) / MathHelper.TwoPi * -Projectile.direction * Projectile.ai[2] * factor);
             Projectile.position -= Projectile.velocity;
             Vector2 newVelocity = Projectile.velocity.RotatedBy(angle).SafeNormalize() * Projectile.velocity.Length();
@@ -99,17 +104,7 @@ sealed class AcalyphaTulip : NatureProjectile {
         int num830 = Projectile.owner;
 
         if (Main.rand.NextChance(0.05)) {
-            float offset2 = 10f;
-            Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
-                    spawnPosition = Projectile.Center - randomOffset / 2f + randomOffset;
-
-            //ushort dustType = CoreDustType();
-            Dust dust = Dust.NewDustPerfect(Projectile.Center,
-                                            ModContent.DustType<Dusts.Tulip>(),
-                                            (spawnPosition - Projectile.Center).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f) - Projectile.velocity * 0.1f,
-                                            Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f) * 1.5f,
-                                            Alpha: 4);
-            dust.customData = Main.rand.NextFloatRange(50f);
+            MakeTulipDust();
         }
 
         //Projectile.position -= Projectile.velocity;
@@ -118,6 +113,20 @@ sealed class AcalyphaTulip : NatureProjectile {
         //    Projectile.Kill();
         //    return;
         //}
+    }
+
+    private void MakeTulipDust() {
+        float offset2 = 10f;
+        Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
+                spawnPosition = Projectile.Center - randomOffset / 2f + randomOffset;
+
+        //ushort dustType = CoreDustType();
+        Dust dust = Dust.NewDustPerfect(Projectile.Center,
+                                        ModContent.DustType<Dusts.Tulip>(),
+                                        (spawnPosition - Projectile.Center).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f) - Projectile.velocity * 0.1f,
+                                        Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f) * 1.5f,
+                                        Alpha: 4);
+        dust.customData = Main.rand.NextFloatRange(50f);
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -164,5 +173,16 @@ sealed class AcalyphaTulip : NatureProjectile {
         Main.EntitySpriteDraw(value48, position13, rectangle11, lightColor.MultiplyRGBA(color66), proj.rotation, origin16, scale4, dir);
 
         return false;
+    }
+
+    public override void OnKill(int timeLeft) {
+        for (int i = 0; i < 5; i++) {
+            int whoAmI = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Sand, Projectile.velocity.X / 2f, Projectile.velocity.Y / 2f, 0, Color.Lerp(_tulipColor, _tulipColor2, Main.rand.NextFloat()), 1f);
+            Main.dust[whoAmI].velocity *= Main.rand.NextFloat(0.8f, 1.1f);
+            Main.dust[whoAmI].noGravity = true;
+
+            MakeTulipDust();
+        }
+        SoundEngine.PlaySound(SoundID.NPCHit7, Projectile.position);
     }
 }
