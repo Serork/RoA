@@ -324,55 +324,46 @@ public class HouseBuilderCustom {
                             switch (_nextPaintingIndex) {
                                 case 0:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 6, 4, (ushort)ModContent.TileType<MillionDollarPainting>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                                 case 1:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 4, (ushort)ModContent.TileType<Moss>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                                 case 2:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 4, (ushort)ModContent.TileType<TheLegend>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                                 case 3:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Absolute>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                                 case 4:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 3, (ushort)ModContent.TileType<Them>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                                 case 5:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<Nihility>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                                 case 6:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 3, 3, (ushort)ModContent.TileType<NightsShroud>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                                 case 7:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 2, 2, (ushort)ModContent.TileType<Her>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                                 case 8:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 6, 4, (ushort)ModContent.TileType<Him>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                                 case 9:
                                     if (WorldGenHelper.PlaceXxXWall(num4, num5, 4, 3, (ushort)ModContent.TileType<FourPixels>(), 0, WallType)) {
-                                        _nextPaintingIndex++;
                                     }
                                     break;
                             }
+                            _nextPaintingIndex++;
                             //bool flag2 = _random.NextBool(10);
                             //if (flag2) {
                             //    int attempts = 1000;
