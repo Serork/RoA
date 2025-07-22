@@ -12,6 +12,7 @@ using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Gores;
 using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Items.Placeable.Solid;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Trees;

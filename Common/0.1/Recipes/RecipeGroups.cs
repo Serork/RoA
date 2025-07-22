@@ -1,5 +1,6 @@
 ﻿using RoA.Content.Items.Food;
 using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Items.Placeable.Solid;
 
 using Terraria;
 using Terraria.ID;

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Tiles;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable.Crafting;
+using RoA.Content.Items.Placeable.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 

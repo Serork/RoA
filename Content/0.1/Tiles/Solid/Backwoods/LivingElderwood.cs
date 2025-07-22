@@ -56,7 +56,7 @@ class LivingElderwood : ModTile {
     public override bool CanExplode(int i, int j) => NPC.downedBoss2;
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
-        yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
+        yield return new Item(ModContent.ItemType<Items.Placeable.Solid.Elderwood>());
     }
 
     public override void ModifyFrameMerge(int i, int j, ref int up, ref int down, ref int left, ref int right, ref int upLeft, ref int upRight, ref int downLeft, ref int downRight) {

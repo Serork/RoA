@@ -132,7 +132,7 @@ sealed class PrimordialTree : ModTree {
 
     public override int CreateDust() => ModContent.DustType<WoodTrash>();
 
-    public override int DropWood() => ModContent.ItemType<Items.Placeable.Crafting.Elderwood>();
+    public override int DropWood() => ModContent.ItemType<Items.Placeable.Solid.Elderwood>();
 
     public override int SaplingGrowthType(ref int style) {
         style = 0;

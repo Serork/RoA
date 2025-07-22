@@ -27,6 +27,6 @@ sealed class Elderwood : ModTile {
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
-        yield return new Item(ModContent.ItemType<Items.Placeable.Crafting.Elderwood>());
+        yield return new Item(ModContent.ItemType<Items.Placeable.Solid.Elderwood>());
     }
 }
