@@ -39,14 +39,14 @@ sealed class PerfectedBouquet : NatureItem {
     }
 
     public override void UseStyle(Player player, Rectangle heldItemFrame) {
-        float num6 = (float)Main.rand.Next(90, 111) * 0.0075f;
+        float num6 = (float)Main.rand.Next(90, 111) * 0.01f;
         num6 *= Main.essScale;
         Color color = ColorUtils.GetLerpColor(ref _lerpColorProgress, ref _lerpColor, [new Color(0.1f, 0.1f, 0.6f), new Color(0.5f, 0.3f, 0.05f), new Color(0.1f, 0.5f, 0.2f)]);
         Lighting.AddLight((int)((player.itemLocation.X - 4) / 16f), (int)((player.itemLocation.Y) / 16f), color.R * num6 / 255f, color.G * num6 / 255f, color.B * num6 / 255f);
     }
 
     public override void PostUpdate() {
-        float num6 = (float)Main.rand.Next(90, 111) * 0.0075f;
+        float num6 = (float)Main.rand.Next(90, 111) * 0.01f;
         num6 *= Main.essScale;
         Color color = ColorUtils.GetLerpColor(ref _lerpColorProgress, ref _lerpColor, [new Color(0.1f, 0.1f, 0.6f), new Color(0.5f, 0.3f, 0.05f), new Color(0.1f, 0.5f, 0.2f)]);
         Lighting.AddLight((int)((Item.Center.X - 4) / 16f), (int)((Item.Center.Y) / 16f), color.R * num6 / 255f, color.G * num6 / 255f, color.B * num6 / 255f);
