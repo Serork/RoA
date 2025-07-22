@@ -5,6 +5,7 @@ using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable;
+using RoA.Content.Items.Placeable.Miscellaneous;
 using RoA.Content.Tiles.Ambient;
 using RoA.Core.Utility;
 

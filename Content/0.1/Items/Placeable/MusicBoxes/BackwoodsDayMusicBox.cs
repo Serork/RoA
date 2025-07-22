@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.MusicBoxes;
 
 // backwoods music box
 sealed class BackwoodsDayMusicBox : ModItem {

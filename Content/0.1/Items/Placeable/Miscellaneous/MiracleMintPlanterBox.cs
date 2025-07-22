@@ -3,7 +3,7 @@ using RoA.Content.Tiles.Crafting;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.Miscellaneous;
 
 sealed class MiracleMintPlanterBox : ModItem {
     public override void SetStaticDefaults() {

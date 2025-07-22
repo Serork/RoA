@@ -8,7 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.Miscellaneous;
 
 sealed class TealMoss : ModItem {
     public override void SetDefaults() {

@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Mono.Cecil;
 
+using RoA.Common.Projectiles;
+
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -308,6 +310,8 @@ static class ProjectileUtils {
 
         if (Main.netMode != 0 && Owner == Main.myPlayer)
             NetMessage.SendData(27, -1, -1, null, num);
+
+        TrackedEntitiesSystem.RegisterTrackedProjectile(projectile);
 
         return num;
     }

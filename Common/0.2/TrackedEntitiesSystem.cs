@@ -52,24 +52,32 @@ sealed class TrackedEntitiesSystem : ModSystem {
 
     private int On_Projectile_NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float(On_Projectile.orig_NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float orig, IEntitySource spawnSource, float X, float Y, float SpeedX, float SpeedY, int Type, int Damage, float KnockBack, int Owner, float ai0, float ai1, float ai2) {
         int whoAmI = orig(spawnSource, X, Y, SpeedX, SpeedY, Type, Damage, KnockBack, Owner, ai0, ai1, ai2);
-        if (Main.projectile[whoAmI].IsModded(out ModProjectile modProjectile)) {
-            if (RegisterTrackedEntity(modProjectile)) {
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new RegisterTrackedProjectilePacket(Main.player[Owner], modProjectile.Projectile.identity));
-                }
-            }
-        }
+        RegisterTrackedProjectile(Main.projectile[whoAmI]);
 
         return whoAmI;
     }
 
+    public static void RegisterTrackedProjectile(Projectile projectile) {
+        if (projectile.IsModded(out ModProjectile modProjectile)) {
+            if (RegisterTrackedEntity(modProjectile)) {
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new RegisterTrackedProjectilePacket(Main.player[projectile.owner], modProjectile.Projectile.identity));
+                }
+            }
+        }
+    }
+
     private int On_NPC_NewNPC(On_NPC.orig_NewNPC orig, IEntitySource source, int X, int Y, int Type, int Start, float ai0, float ai1, float ai2, float ai3, int Target) {
         int whoAmI = orig(source, X, Y, Type, Start, ai0, ai1, ai2, ai3, Target);
-        if (Main.npc[whoAmI].IsModded(out ModNPC modNPC)) {
-            RegisterTrackedEntity(modNPC);
-        }
+        RegisterTrackedNPC(Main.npc[whoAmI]);
 
         return whoAmI;
+    }
+
+    public static void RegisterTrackedNPC(NPC npc) {
+        if (npc.IsModded(out ModNPC modNPC)) {
+            RegisterTrackedEntity(modNPC);
+        }
     }
 
     public static IEnumerable<Projectile> GetTrackedProjectile<T>(Predicate<Projectile>? filter = null) where T : ModProjectile {

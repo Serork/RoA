@@ -3,7 +3,7 @@
 using Terraria.Enums;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.Miscellaneous;
 
 sealed class BackwoodsPylon : ModItem {
     public override void SetDefaults() {

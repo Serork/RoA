@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class BackwoodsFogMusicBox : MusicBox {
-    protected override int CursorItemType => ModContent.ItemType<Items.Placeable.BackwoodsFogMusicBox>();
+    protected override int CursorItemType => ModContent.ItemType<Items.Placeable.MusicBoxes.BackwoodsFogMusicBox>();
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         if (!TileDrawing.IsVisible(Main.tile[i, j])) {

@@ -5,7 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common.CustomConditions;
 using RoA.Content.Biomes.Backwoods;
-using RoA.Content.Items.Placeable;
+using RoA.Content.Items.Placeable.Miscellaneous;
 
 using System;
 

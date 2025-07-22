@@ -9,6 +9,7 @@ using RoA.Common.WorldEvents;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Placeable;
+using RoA.Content.Items.Placeable.Miscellaneous;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Magic;
 using RoA.Content.Items.Weapons.Melee;

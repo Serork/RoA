@@ -3,7 +3,7 @@
 using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.Miscellaneous;
 
 sealed class JawTrap : ModItem {
     public override void SetDefaults() {

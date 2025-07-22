@@ -124,6 +124,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Content\0.1\Items\Weapons\Nature\Hardmode\" />
+	  <Folder Include="Content\0.2\Items\Placeable\Miscellaneous\" />
 	</ItemGroup>
 
 	<!-- References -->

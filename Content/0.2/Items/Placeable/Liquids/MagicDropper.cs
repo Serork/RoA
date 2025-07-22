@@ -8,7 +8,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.Liquids;
 
 sealed class MagicTarDropper : MagicDropper {
     public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();

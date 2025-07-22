@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-using RoA.Core.Defaults;
+﻿using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -8,7 +6,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.Liquids;
 
 sealed class TarAbsorbantSponge : AbsorbantSponge {
     public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();

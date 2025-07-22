@@ -18,7 +18,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.Miscellaneous;
 
 sealed class BackwoodsCrate : ModItem {
     private class CatchThisCratePlayer : ModPlayer {

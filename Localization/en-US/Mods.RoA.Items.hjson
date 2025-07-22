@@ -2073,3 +2073,8 @@ NightsShroud: {
 	DisplayName: Night's Shroud
 	Tooltip: ""
 }
+
+TarfallBlock: {
+	DisplayName: Tarfall Block
+	Tooltip: ""
+}

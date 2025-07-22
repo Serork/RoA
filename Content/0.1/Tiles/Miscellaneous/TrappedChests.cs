@@ -3,6 +3,7 @@
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Items.Placeable;
+using RoA.Content.Items.Placeable.Wiring;
 
 using Terraria;
 using Terraria.Audio;

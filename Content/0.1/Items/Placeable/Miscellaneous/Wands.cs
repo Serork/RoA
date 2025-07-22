@@ -12,7 +12,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI.Chat;
 
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.Miscellaneous;
 
 sealed class LivingPrimordialWand : Wand {
     protected override ushort ItemToConsume => (ushort)ModContent.ItemType<Crafting.Elderwood>();

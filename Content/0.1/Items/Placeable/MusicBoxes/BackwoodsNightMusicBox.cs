@@ -1,4 +1,4 @@
-namespace RoA.Content.Items.Placeable;
+namespace RoA.Content.Items.Placeable.MusicBoxes;
 
 //sealed class BackwoodsNightMusicBox : ModItem {
 //    public override void SetStaticDefaults() {
