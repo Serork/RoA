@@ -364,7 +364,14 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
 
     public override bool ShouldUpdatePosition() => false;
 
-    public override void OnKill(int timeLeft) { }
+    public override void OnKill(int timeLeft) {
+        if (PseudoDestroyed) {
+            return;
+        }
+
+        MakeTulipDusts(true);
+        SoundEngine.PlaySound(SoundID.NPCHit7, Projectile.position);
+    }
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox) => hitbox = hitbox.AdjustPosition(-Projectile.Size / 2f);
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => HandleHitting();
