@@ -103,6 +103,9 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
 
         public void ApplySawEffect() {
             SawHit = true;
+
+            SoundEngine.PlaySound(SoundID.Item22 with { Pitch = 1f }, projectile.position);
+
             projectile.velocity *= 0.1f;
             projectile.netUpdate = true;
         }
@@ -321,9 +324,11 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                             CurrentType = new TulipPetalSoulValues(Projectile).CurrentType
                         };
                     });
-                    projectile.netUpdate = true;
+                    //projectile.netUpdate = true;
                 }
             }
+
+            SoundEngine.PlaySound(SoundID.Item7 with { Pitch = 1f }, Projectile.position);
 
             PseudoKill();
         }
