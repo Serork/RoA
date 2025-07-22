@@ -17,6 +17,7 @@ using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Decorations;
 using RoA.Content.Items.Placeable.Furniture;
 using RoA.Content.Items.Placeable.Miscellaneous;
+using RoA.Content.Items.Placeable.Solid;
 using RoA.Content.Items.Placeable.Walls;
 using RoA.Content.Items.Placeable.Wiring;
 using RoA.Content.Items.Potions;
@@ -78,31 +79,31 @@ sealed partial class RoARecipes : ModSystem {
 
     private static void V01AddWalls() {
         Recipe item = Recipe.Create(ModContent.ItemType<ElderwoodFence>(), 4);
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>();
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>();
         item.AddTile(TileID.WorkBenches);
         item.SortAfterFirstRecipesOf(ItemID.AshWoodFence);
         item.Register();
 
         item = Recipe.Create(ModContent.ItemType<ElderwoodWall>(), 4);
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>();
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>();
         item.AddTile(TileID.WorkBenches);
         item.SortAfterFirstRecipesOf(ItemID.AshWoodWall);
         item.Register();
 
         item = Recipe.Create(ModContent.ItemType<GrimstoneBrickWall>(), 4);
-        item.AddIngredient<Content.Items.Placeable.Crafting.GrimstoneBrick>();
+        item.AddIngredient<Content.Items.Placeable.Solid.GrimstoneBrick>();
         item.AddTile(TileID.WorkBenches);
         item.SortAfterFirstRecipesOf(ItemID.CrimtaneBrickWall);
         item.Register();
 
         item = Recipe.Create(ModContent.ItemType<GrimstoneWall>(), 4);
-        item.AddIngredient<Content.Items.Placeable.Crafting.Grimstone>();
+        item.AddIngredient<Content.Items.Placeable.Solid.Grimstone>();
         item.AddTile(TileID.WorkBenches);
         item.SortAfterFirstRecipesOf(ItemID.StoneWall);
         item.Register();
 
         item = Recipe.Create(ModContent.ItemType<LivingBackwoodsLeavesWall>(), 4);
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>();
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>();
         item.AddTile(TileID.LivingLoom);
         item.SortAfterFirstRecipesOf(ItemID.LivingLeafWall);
         item.Register();
@@ -1207,21 +1208,21 @@ sealed partial class RoARecipes : ModSystem {
         item.Register();
 
         item = Recipe.Create(ModContent.ItemType<ElderwoodHelmet>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(20);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(20);
         item.AddTile(TileID.WorkBenches);
         item.SortAfterFirstRecipesOf(ItemID.AshWoodToilet);
         item.Register();
 
         Recipe temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodChestplate>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(30);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(30);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodLeggings>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(25);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(25);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
         item.Register();
@@ -1249,28 +1250,28 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodSword>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(7);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(7);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodHammer>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(8);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(8);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodBow>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(10);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(10);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodClaws>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(10);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(10);
         item.AddRecipeGroup(RecipeGroupID.IronBar, 5);
         item.AddTile(TileID.Anvils);
         item.SortAfter(temp);
@@ -1278,7 +1279,7 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<Woodbinder>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(16);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(16);
         item.AddIngredient<NaturesHeart>(1);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
@@ -1294,14 +1295,14 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodBathtub>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(14);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(14);
         item.AddTile(TileID.Sawmill);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodBed>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(15);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(15);
         item.AddIngredient(ItemID.Silk, 5);
         item.AddTile(TileID.Sawmill);
         item.SortAfter(temp);
@@ -1309,7 +1310,7 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodBookcase>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(20);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(20);
         item.AddIngredient(ItemID.Book, 10);
         item.AddTile(TileID.Sawmill);
         item.SortAfter(temp);
@@ -1317,14 +1318,14 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodDresser>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(16);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(16);
         item.AddTile(TileID.Sawmill);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodCandelabra>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(5);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(5);
         item.AddIngredient(ItemID.Torch, 3);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
@@ -1332,7 +1333,7 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodCandle>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(4);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(4);
         item.AddIngredient(ItemID.Torch, 1);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
@@ -1340,14 +1341,14 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodChair>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(4);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(4);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodChandelier>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(4);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(4);
         item.AddIngredient(ItemID.Torch, 4);
         item.AddIngredient(ItemID.Chain, 1);
         item.AddTile(TileID.WorkBenches);
@@ -1356,7 +1357,7 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodChest>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(8);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(8);
         item.AddRecipeGroup(RecipeGroupID.IronBar, 2);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
@@ -1364,7 +1365,7 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodClock>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(10);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(10);
         item.AddRecipeGroup(RecipeGroupID.IronBar, 3);
         item.AddIngredient(ItemID.Glass, 6);
         item.AddTile(TileID.Sawmill);
@@ -1373,14 +1374,14 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodDoor>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(6);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(6);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodLamp>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(3);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(3);
         item.AddIngredient(ItemID.Torch, 1);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
@@ -1388,7 +1389,7 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodLantern>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(6);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(6);
         item.AddIngredient(ItemID.Torch, 1);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
@@ -1396,7 +1397,7 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodPiano>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(15);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(15);
         item.AddIngredient(ItemID.Bone, 4);
         item.AddIngredient(ItemID.Book, 1);
         item.AddTile(TileID.Sawmill);
@@ -1405,7 +1406,7 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodSink>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(6);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(6);
         item.AddIngredient(ItemID.WaterBucket, 1);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
@@ -1413,7 +1414,7 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodSofa>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(5);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(5);
         item.AddIngredient(ItemID.Silk, 2);
         item.AddTile(TileID.Sawmill);
         item.SortAfter(temp);
@@ -1421,20 +1422,20 @@ sealed partial class RoARecipes : ModSystem {
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodTable>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(8);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(8);
         item.AddTile(TileID.WorkBenches);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodWorkbench>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(10);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(10);
         item.SortAfter(temp);
         item.Register();
 
         temp = item;
         item = Recipe.Create(ModContent.ItemType<ElderwoodToilet>());
-        item.AddIngredient<Content.Items.Placeable.Crafting.Elderwood>(6);
+        item.AddIngredient<Content.Items.Placeable.Solid.Elderwood>(6);
         item.AddTile(TileID.Sawmill);
         item.SortAfter(temp);
         item.Register();

@@ -4,7 +4,7 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable.Crafting;
+namespace RoA.Content.Items.Placeable.Solid;
 
 sealed class Grimstone : ModItem {
     public override void SetStaticDefaults() {

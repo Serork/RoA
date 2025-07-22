@@ -15,7 +15,7 @@ using Terraria.UI.Chat;
 namespace RoA.Content.Items.Placeable.Miscellaneous;
 
 sealed class LivingPrimordialWand : Wand {
-    protected override ushort ItemToConsume => (ushort)ModContent.ItemType<Crafting.Elderwood>();
+    protected override ushort ItemToConsume => (ushort)ModContent.ItemType<Solid.Elderwood>();
     protected override ushort TileToPlace => (ushort)ModContent.TileType<LivingElderwood>();
 
     protected override void SafeSetDefaults() {
@@ -25,7 +25,7 @@ sealed class LivingPrimordialWand : Wand {
 }
 
 sealed class LivingPrimordialWand2 : Wand {
-    protected override ushort ItemToConsume => (ushort)ModContent.ItemType<Crafting.Elderwood>();
+    protected override ushort ItemToConsume => (ushort)ModContent.ItemType<Solid.Elderwood>();
     protected override ushort TileToPlace => (ushort)ModContent.TileType<LivingElderwoodlLeaves>();
 
     protected override void SafeSetDefaults() {

@@ -2,7 +2,7 @@
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable.Crafting;
+namespace RoA.Content.Items.Placeable.Solid;
 
 sealed class GrimstoneBrick : ModItem {
     public override void SetStaticDefaults() {
