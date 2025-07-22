@@ -28,7 +28,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
     private static ushort MAXTIMELEFT => 360;
     private static byte FRAMECOUNT => 3;
     private static byte TRAILCOUNT => 5;
-    private static ushort TRAILFRAMETIME => 20;
+    private static ushort TRAILFRAMETIME => 30;
     private static ushort SAWANIMATIONTIME => 10;
     private static float SAWANIMATIONSPEED => 0.5f;
     private static ushort LASERSPAWNTIME => 20;
@@ -178,7 +178,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                 float flySpeed = 9f;
                 Projectile.velocity = Projectile.velocity.SafeNormalize() * flySpeed;
 
-                tulipPetalSoulValues.SpawnLaserTimer = LASERSPAWNTIME;
+                tulipPetalSoulValues.SpawnLaserTimer = LASERSPAWNTIME / 2;
 
                 if (!hasStateAlready && tulipPetalSoulValues.NoActiveStates() && Projectile.IsOwnerLocal()) {
                     tulipPetalSoulValues.CurrentState = PetalState.Normal;
@@ -464,8 +464,8 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
 
     public override bool? CanDamage() => !DidEnoughDamage && !PseudoDestroyed;
 
-    private void MakeTulipDusts() {
-        int tulipDustCount = new TulipPetalSoulValues(Projectile).SawHit ? 6 : 3;
+    private void MakeTulipDusts(bool onKill = false) {
+        int tulipDustCount = new TulipPetalSoulValues(Projectile).SawHit ? (onKill ? 6 : 5) : (onKill ? 3 : 2);
         for (int i = 0; i < tulipDustCount; i++) {
             float offset2 = 10f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
@@ -526,6 +526,6 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
 
     private void PseudoKill() {
         Projectile.Opacity = MathF.Min(Projectile.Opacity, PSEUDODESTROYEDOPACITY - 0.01f);
-        MakeTulipDusts();
+        MakeTulipDusts(true);
     }
 }
