@@ -516,8 +516,10 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
         if (tulipPetalSoulValues.IsStateActive(PetalState.Saw) && !tulipPetalSoulValues.SawHit) {
             tulipPetalSoulValues.ApplySawEffect();
         }
-        if (tulipPetalSoulValues.IsStateActive(PetalState.Bouncy)) {
-            tulipPetalSoulValues.BouncyTimePassed = true;
+        if (DidEnoughDamage) {
+            if (tulipPetalSoulValues.IsStateActive(PetalState.Bouncy)) {
+                tulipPetalSoulValues.BouncyTimePassed = true;
+            }
         }
     }
 
