@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable.Crafting;
+namespace RoA.Content.Items.Placeable.Solid;
 
 sealed class TarfallBlock : ModItem {
     public override void SetDefaults() {

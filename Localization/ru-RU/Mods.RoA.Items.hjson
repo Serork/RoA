@@ -2094,3 +2094,8 @@ TarfallBlock: {
 	// DisplayName: Tarfall Block
 	// Tooltip: ""
 }
+
+TarfallWall: {
+	// DisplayName: Tarfall Wall
+	// Tooltip: ""
+}
