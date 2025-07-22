@@ -1,10 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility.Extensions;
+
 using System;
 
 namespace RoA.Core.Utility;
 
 static class MathUtils {
+    public static Vector2 NormalizeWithMaxLength(this Vector2 vector2, float maxSpeed) {
+        Vector2 result = vector2;
+        if (result.Length() > maxSpeed) {
+            result = result.SafeNormalize() * maxSpeed;
+        }
+
+        return result;
+    }
+
     public static int GetDirectionTo(this Vector2 vector2, Vector2 destination) => (vector2.X - destination.X).GetDirection();
 
     public static float SineBumpEasing(float amount, float degree = 1f) => (float)Math.Sin(amount * MathHelper.Pi);

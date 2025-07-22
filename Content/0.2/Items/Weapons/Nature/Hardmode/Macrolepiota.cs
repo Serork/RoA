@@ -6,6 +6,7 @@ using RoA.Common.GlowMasks;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Enums;
@@ -40,6 +41,6 @@ sealed class Macrolepiota : NatureItem {
             return;
         }
 
-        ProjectileHelper.SpawnPlayerOwnedProjectile<Macrolepiota_HeldProjectile>(new ProjectileHelper.SpawnProjectileArgs(player, player.GetSource_ItemUse(Item)));
+        ProjectileUtils.SpawnPlayerOwnedProjectile<Macrolepiota_HeldProjectile>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_ItemUse(Item)));
     }
 }

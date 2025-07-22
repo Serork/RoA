@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -35,7 +36,7 @@ sealed class SacredAcalypha : NatureItem {
         int max = 3;
         int count = (int)(max * MathUtils.Clamp01(WreathHandler.GetWreathChargeProgress(player) + 1f / max));
         for (int i = 0; i < count; i++) {
-            ProjectileHelper.SpawnPlayerOwnedProjectile<AcalyphaTulip>(new ProjectileHelper.SpawnProjectileArgs(player, source) {
+            ProjectileUtils.SpawnPlayerOwnedProjectile<AcalyphaTulip>(new ProjectileUtils.SpawnProjectileArgs(player, source) {
                 Position = position,
                 Velocity = velocity,
                 Damage = damage,

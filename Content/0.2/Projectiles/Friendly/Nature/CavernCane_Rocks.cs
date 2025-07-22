@@ -390,7 +390,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
 
             void resetSomeRockInfo() {
                 RocksValues rocksValues = new(Projectile);
-                for (byte i = 0; i < ROCKATTACKCOUNT; i++) {
+                for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                     ref RocksInfo currentRocksData = ref _rocks![i];
                     currentRocksData.Progress = 1f;
                     currentRocksData.StartDistance *= 0.7f;
@@ -412,10 +412,10 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
                 }
             }
             void resetDamageInfo() {
-                for (byte i = 0; i < ROCKATTACKCOUNT; i++) {
-                    for (byte j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
+                for (int i = 0; i < ROCKATTACKCOUNT; i++) {
+                    for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
                         for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
-                            ref ushort immuneTime = ref GetImmuneTime(i, j, npcId);
+                            ref ushort immuneTime = ref GetImmuneTime((byte)i, (byte)j, npcId);
                             if (immuneTime > 0) {
                                 immuneTime = 0;
                             }
@@ -439,19 +439,19 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
             }
 
             RocksValues rocksValues = new(Projectile);
-            for (byte i = 0; i < ROCKATTACKCOUNT; i++) {
+            for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                 RocksInfo rocksData = _rocks![i];
                 bool canDamage = rocksData.Progress != MAXPROGRESS && getGeneralProgressForVariousPurposes(rocksData) >= 0.01f;
                 if (!canDamage) {
                     continue;
                 }
 
-                for (byte j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
+                for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
                     bool firstRock = j == 0;
                     Vector2 rockPositionToHandleCollision = GetRockPosition(i, firstRock, out _);
                     foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
                         if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
-                                                                         ref GetImmuneTime(i, j, npcForCollisionCheck.whoAmI),
+                                                                         ref GetImmuneTime((byte)i, (byte)j, npcForCollisionCheck.whoAmI),
                                                                          damageSourceHitbox: GeometryUtils.CenteredSquare(rockPositionToHandleCollision, RocksInfo.HITBOXSIZE),
                                                                          direction: MathF.Sign(rockPositionToHandleCollision.X - npcForCollisionCheck.Center.X))) {
                             continue;
@@ -462,14 +462,14 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
         }
         void cutTiles() {
             RocksValues rocksValues = new(Projectile);
-            for (byte i = 0; i < ROCKATTACKCOUNT; i++) {
+            for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                 RocksInfo rocksData = _rocks![i];
                 bool canCutTiles = getGeneralProgressForVariousPurposes(rocksData) >= 0.01f;
                 if (!canCutTiles) {
                     continue;
                 }
 
-                for (byte j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
+                for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
                     ProjectileUtils.CutTilesAt(Projectile, GetRockPosition(i, j == 0, out _), RocksInfo.HITBOXSIZE, RocksInfo.HITBOXSIZE);
                 }
             }
@@ -486,7 +486,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
                 return;
             }
 
-            for (byte i = 0; i < ROCKATTACKCOUNT; i++) {
+            for (int i = 0; i < ROCKATTACKCOUNT; i++) {
                 RocksInfo rocksData = _rocks![i];
                 float geodeProgress = getGeneralProgressForVariousPurposes(rocksData);
                 if (Main.rand.NextChance(geodeProgress / ROCKATTACKCOUNT / 20f)) {
@@ -552,7 +552,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
                 }
 
                 float rocksOpacity = currentRocksData.Opacity;
-                for (byte j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
+                for (int j = 0; j < RocksInfo.ROCKSCOUNT; j++) {
                     bool firstRock = j == 0;
                     Vector2 rockdrawPosition = GetRockPosition(i, firstRock, out float rockProgress);
                     Color color = Lighting.GetColor(rockdrawPosition.ToTileCoordinates());

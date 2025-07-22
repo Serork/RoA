@@ -91,7 +91,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
 
         SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
         Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
+        Main.spriteBatch.Begin(snapshot.sortMode, null, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
 
         var phoenixHandler = player.GetModPlayer<LilPhoenixForm.LilPhoenixFormHandler>();
         float rotation = drawInfo.rotation + MathHelper.Pi;

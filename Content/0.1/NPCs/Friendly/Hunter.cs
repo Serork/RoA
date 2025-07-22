@@ -85,7 +85,7 @@ sealed class Hunter : ModNPC {
     public override List<string> SetNPCNameList() {
         string getName(byte index) => Language.GetTextValue($"Mods.RoA.NPCs.Town.{nameof(Hunter)}.Name{index}");
         List<string> names = [];
-        for (byte i = 0; i < MAXNAMES; i++) {
+        for (int i = 0; i < MAXNAMES; i++) {
             names.Add(getName((byte)(i + 1)));
         }
         return names;

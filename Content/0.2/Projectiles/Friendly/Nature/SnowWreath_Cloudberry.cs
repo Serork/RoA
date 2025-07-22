@@ -171,11 +171,11 @@ sealed class SnowWreath_Cloudberry : NatureProjectile_NoTextureLoad {
         }
         void updateCopies() {
             for (int i = 0; i < MAXCOPIES; i++) {
-                ref CopyInfo copyInfo = ref _copyData![i];
-                if (copyInfo.Opacity > 0f) {
-                    copyInfo.Scale -= 0.05f;
-                    copyInfo.Opacity -= 0.05f;
-                    copyInfo.Opacity = MathF.Max(0f, copyInfo.Opacity);
+                ref CopyInfo copyData = ref _copyData![i];
+                if (copyData.Opacity > 0f) {
+                    copyData.Scale -= 0.05f;
+                    copyData.Opacity -= 0.05f;
+                    copyData.Opacity = MathF.Max(0f, copyData.Opacity);
                 }
             }
         }

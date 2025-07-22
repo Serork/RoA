@@ -132,7 +132,7 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
                 if (currentSegmentIndex > 0 && previousSegmentData.Progress < 1f) {
                     continue;
                 }
-                //currentSegmentData.Progress += thornsLength / 50f;
+                //currentSegmentData.Opacity += thornsLength / 50f;
                 currentSegmentData.Progress += GROWTHSPEED;
                 currentSegmentData.Progress = MathF.Min(1f, currentSegmentData.Progress);
             }

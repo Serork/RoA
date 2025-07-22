@@ -5,6 +5,7 @@ using RoA.Common.Druid;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
@@ -95,6 +96,6 @@ sealed class ShepherdLeaves : NatureProjectile {
             dust.noGravity = true;
         }
 
-        ProjectileHelper.Animate(Projectile, 4);
+        ProjectileUtils.Animate(Projectile, 4);
     }
 }

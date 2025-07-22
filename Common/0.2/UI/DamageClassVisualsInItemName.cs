@@ -423,7 +423,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         const byte SLIMECOUNT = 2;
         const byte SLIMEFRAMECOUNT = 3;
         Texture2D slimeTexture = damageClassNameVisualsInfo.Texture;
-        for (byte i = 0; i < SLIMECOUNT; i++) {
+        for (int i = 0; i < SLIMECOUNT; i++) {
             byte half = SLIMECOUNT / 2;
             bool firstPair = i < half;
             int height = slimeTexture.Height;
@@ -474,7 +474,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         const byte STARCOUNT = 2;
         OpacityUpdatedInDraws += 0.035f;
         Texture2D starTexture = damageClassNameVisualsInfo.Texture;
-        for (byte i = 0; i < STARCOUNT; i++) {
+        for (int i = 0; i < STARCOUNT; i++) {
             byte half = STARCOUNT / 2;
             bool firstPair = i < half;
             int height = starTexture.Height;
@@ -541,7 +541,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         float originOffsetFactor = 6f;
         ulong seedForRandomness2 = (ulong)(GetRandomIntBasedOnItemType(damageClassNameVisualsInfo.ItemType));
         byte usedFrame = (byte)Utils.RandomInt(ref seedForRandomness2, SWORDFRAMECOUNT);
-        for (byte i = 0; i < SWORDCOUNT; i++) {
+        for (int i = 0; i < SWORDCOUNT; i++) {
             int nextSwordIndex = i + 1;
             bool firstPair = i < SWORDCOUNT / 2;
             bool topSwords = (i + 1) % 2 != 0;
@@ -609,7 +609,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         ushort itemType = damageClassNameVisualsInfo.ItemType;
         ulong seedForRandomness3 = itemType;
         int usedFrame = (int)MathF.Min(Utils.RandomInt(ref seedForRandomness3, ARROWFRAMECOUNT + 1), ARROWFRAMECOUNT - 1);
-        for (byte i = 0; i < ARROWCOUNT; i++) {
+        for (int i = 0; i < ARROWCOUNT; i++) {
             byte half = ARROWCOUNT / 2;
             byte nextArrowIndex = (byte)(i + 1);
             bool firstPair = i < half;
@@ -716,7 +716,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             }
         }
         OpacityUpdatedInDraws += 0.035f;
-        for (byte i = 0; i < MULTICLASSICONCOUNT; i++) {
+        for (int i = 0; i < MULTICLASSICONCOUNT; i++) {
             byte half = MULTICLASSICONCOUNT / 2;
             bool firstPair = i < half;
             SpriteFrame spriteFrame = neutralClass ? new(1, 1) : new SpriteFrame(SPRITESHEETCOLUMNS, SPRITESHEETROWS).With(usedRow, usedColumn);

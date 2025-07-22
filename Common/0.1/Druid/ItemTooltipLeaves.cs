@@ -42,7 +42,7 @@ sealed class ItemTooltipLeaves : GlobalItem {
                 string text = line.Text;
                 Vector2 size = line.Font.MeasureString(text);
 
-                for (byte i = 0; i < leavesCount; i++) {
+                for (int i = 0; i < leavesCount; i++) {
                     int mid = leavesCount / 2;
                     bool inFirstHalf = i < mid;
                     int inversed = i - mid;
@@ -75,7 +75,7 @@ sealed class ItemTooltipLeaves : GlobalItem {
                     _leavesSpriteData.Rotation = rotation;
 
                     TooltipFallingLeaves.FallingLeafData data;
-                    data.Index = i;
+                    data.Index = (byte)i;
                     data.SpriteInfo = _leavesSpriteData;
                     TooltipFallingLeaves.MatchData(data);
 

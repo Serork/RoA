@@ -35,7 +35,7 @@ sealed partial class Lothor : ModNPC {
     private byte PreviousColumnsFrameCount() {
         byte rowCountSum = 0;
         byte currentColumn = (byte)_currentColumn;
-        for (byte index = 0; index < currentColumn; index++) {
+        for (int index = 0; index < currentColumn; index++) {
             rowCountSum += _spriteSheet[index].RowCount;
         }
         return rowCountSum;
@@ -44,7 +44,7 @@ sealed partial class Lothor : ModNPC {
     private void GetFrameInfo(out ushort x, out ushort y, out ushort width, out ushort height) {
         byte currentColumn = (byte)_currentColumn;
         if (currentColumn >= 0 && currentColumn < _spriteSheet.Count - 1) {
-            for (byte index = currentColumn; index < currentColumn + 1; index++) {
+            for (int index = currentColumn; index < currentColumn + 1; index++) {
                 SpriteSheetLineInfo current = _spriteSheet[index];
                 byte rowCount = current.RowCount;
                 if (Math.Min(CurrentFrameInSpriteSheetLine, rowCount) / rowCount >= 1) {

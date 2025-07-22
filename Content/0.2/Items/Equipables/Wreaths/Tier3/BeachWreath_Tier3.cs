@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -103,7 +104,7 @@ sealed class BeachWreathTier3 : WreathItem {
             int denom = 3;
             damage /= denom;
 
-            ProjectileHelper.SpawnPlayerOwnedProjectile<BeachWreath_Coral>(new ProjectileHelper.SpawnProjectileArgs(Player, Player.GetSource_Misc(nameof(BeachWreathTier3))) with {
+            ProjectileUtils.SpawnPlayerOwnedProjectile<BeachWreath_Coral>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc(nameof(BeachWreathTier3))) with {
                 Position = coralSpawnPosition,
                 AI1 = spawnPositionOffset.X,
                 AI2 = spawnPositionOffset.Y,

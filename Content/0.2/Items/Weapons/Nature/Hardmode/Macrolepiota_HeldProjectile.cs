@@ -228,7 +228,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
             }
 
             float sporeSpawnSpeed = 2f;
-            ProjectileHelper.SpawnPlayerOwnedProjectile<Macrolepiota_Spore>(new ProjectileHelper.SpawnProjectileArgs(owner, Projectile.GetSource_NaturalSpawn()) with {
+            ProjectileUtils.SpawnPlayerOwnedProjectile<Spore>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_NaturalSpawn()) with {
                 Position = GetShrivelPosition(),
                 Velocity = -new Vector2(Main.rand.NextFloatRange(0.5f), 1f).RotatedBy(Projectile.rotation) * owner.velocity.Y * sporeSpawnSpeed
             });

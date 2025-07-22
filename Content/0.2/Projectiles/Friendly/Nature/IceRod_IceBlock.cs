@@ -37,11 +37,11 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
     public static IEnumerable<IceBlockEnumerateData> EnumerateIceBlockPositions2() {
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
             var iceBlock = projectile.As<IceBlock>();
-            for (byte i = 0; i < iceBlock.IceBlockPositions.Count; i++) {
+            for (int i = 0; i < iceBlock.IceBlockPositions.Count; i++) {
                 if (iceBlock.IceBlockPositions[i] == Point16.Zero) {
                     continue;
                 }
-                yield return new IceBlockEnumerateData(iceBlock, i, iceBlock.IceBlockPositions[i]);
+                yield return new IceBlockEnumerateData(iceBlock, (byte)i, iceBlock.IceBlockPositions[i]);
             }
         }
     }
@@ -95,8 +95,8 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
 
     public override bool PreDraw(ref Color lightColor) {
         if (IsCharged) {
-            for (byte i = 0; i < IceBlockData.Length; i++) {
-                byte currentSegmentIndex = i;
+            for (int i = 0; i < IceBlockData.Length; i++) {
+                byte currentSegmentIndex = (byte)i;
                 ref IceBlockInfo iceBlockInfo = ref IceBlockData[currentSegmentIndex];
                 if (!iceBlockInfo.CanDamage) {
                     continue;
@@ -136,7 +136,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
         IceBlockData[i].Penetrate--;
         if (!IceBlockData[i].CanDamage) {
             if (IceBlockPositions[i] != Point16.Zero) {
-                for (byte i2 = 0; i2 < IceBlockData.Length; i2++) {
+                for (int i2 = 0; i2 < IceBlockData.Length; i2++) {
                     IceBlockData[i2].Opacity = 0.25f;
                     IceBlockData[i2].FrameCoords = Point16.Zero;
                 }
@@ -151,14 +151,14 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
                 return;
             }
             float opacity = 0f;
-            for (byte i = 0; i < IceBlockData.Length; i++) {
+            for (int i = 0; i < IceBlockData.Length; i++) {
                 var iceBlockInfo = IceBlockData[i];
                 opacity += iceBlockInfo.Opacity;
             }
             if (opacity < MAXOPACITY * GetBlockCountToPlace()) {
                 return;
             }
-            for (byte i = 0; i < IceBlockData.Length; i++) {
+            for (int i = 0; i < IceBlockData.Length; i++) {
                 var iceBlockInfo = IceBlockData[i];
                 if (iceBlockInfo.Invalid || !iceBlockInfo.CanDamage) {
                     continue;
@@ -167,16 +167,16 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
                 foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
                     Rectangle hitBox = GeometryUtils.CenteredSquare(worldPosition, 18);
                     if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
-                                                                     ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, i, npcForCollisionCheck.whoAmI),
+                                                                     ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcForCollisionCheck.whoAmI),
                                                                      damageSourceHitbox: hitBox,
                                                                      direction: MathF.Sign(hitBox.Center.X - npcForCollisionCheck.Center.X),
                                                                      immuneTimeAfterHit: 30)) {
                         continue;
                     }
                     else {
-                        Damage(i);
+                        Damage((byte)i);
                         if (Main.netMode == NetmodeID.MultiplayerClient) {
-                            MultiplayerSystem.SendPacket(new IceBlockDamagePacket(Projectile.GetOwnerAsPlayer(), Projectile.identity, i));
+                            MultiplayerSystem.SendPacket(new IceBlockDamagePacket(Projectile.GetOwnerAsPlayer(), Projectile.identity, (byte)i));
                         }
                     }
                 }
@@ -186,13 +186,13 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
             if (!Projectile.IsOwnerLocal()) {
                 return;
             }
-            for (byte i = 0; i < IceBlockData.Length; i++) {
+            for (int i = 0; i < IceBlockData.Length; i++) {
                 var iceBlockInfo = IceBlockData[i];
                 if (iceBlockInfo.Invalid || !iceBlockInfo.CanDamage) {
                     continue;
                 }
                 for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
-                    ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, i, npcId);
+                    ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcId);
                     if (immuneTime > 0) {
                         immuneTime--;
                     }
@@ -204,8 +204,8 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
             damageNPCs();
             resetDamageInfo();
 
-            for (byte i = 0; i < IceBlockData.Length; i++) {
-                byte currentSegmentIndex = i,
+            for (int i = 0; i < IceBlockData.Length; i++) {
+                byte currentSegmentIndex = (byte)i,
                      previousSegmentIndex = (byte)Math.Max(0, i - 1);
                 var previousSegmentInfo = IceBlockData[previousSegmentIndex];
                 ref IceBlockInfo iceBlockData = ref IceBlockData[currentSegmentIndex];
@@ -758,14 +758,14 @@ sealed class HittingIceBlocksWithPickaxeSupportAndMakeSlippy : ModPlayer {
         if (sItem.pick > 0) {
             foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
                 var iceBlock = projectile.As<IceBlock>();
-                for (byte i = 0; i < iceBlock.IceBlockPositions.Count; i++) {
+                for (int i = 0; i < iceBlock.IceBlockPositions.Count; i++) {
                     if (iceBlock.IceBlockPositions[i] == Point16.Zero) {
                         continue;
                     }
                     if (iceBlock.IceBlockPositions[i].X == x && iceBlock.IceBlockPositions[i].Y == y) {
                         self.ApplyItemTime(sItem, self.pickSpeed);
 
-                        iceBlock.Kill(i);
+                        iceBlock.Kill((byte)i);
 
                         canHitWalls = true;
                         return;

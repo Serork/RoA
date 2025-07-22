@@ -9,6 +9,7 @@ using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -77,7 +78,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                         while (maxChecks-- > 0 && !WorldGenHelper.SolidTile(spawnPosition.ToTileCoordinates())) {
                             spawnPosition += spawnPosition.DirectionTo(Owner.GetMousePosition()) * WorldGenHelper.TILESIZE;
                         }
-                        ProjectileHelper.SpawnPlayerOwnedProjectile<CavernCane_Rocks>(new ProjectileHelper.SpawnProjectileArgs(owner, Projectile.GetSource_Misc("caneattack")) {
+                        ProjectileUtils.SpawnPlayerOwnedProjectile<CavernCane_Rocks>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_Misc("caneattack")) {
                             Position = spawnPosition,
                             AI0 = (byte)geodeType,
                             AI1 = UseTime

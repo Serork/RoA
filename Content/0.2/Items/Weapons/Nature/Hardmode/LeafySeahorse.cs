@@ -5,6 +5,7 @@ using RoA.Common.Projectiles;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -32,7 +33,7 @@ sealed class LeafySeahorse : NatureItem {
         position -= yOffset;
         float randomAngle = 0.075f;
         velocity = velocity.RotatedByRandom(randomAngle);
-        ProjectileHelper.SpawnPlayerOwnedProjectile<LeafySeahorse_Bubble>(new ProjectileHelper.SpawnProjectileArgs(player, source) {
+        ProjectileUtils.SpawnPlayerOwnedProjectile<LeafySeahorse_Bubble>(new ProjectileUtils.SpawnProjectileArgs(player, source) {
             Position = position,
             Velocity = velocity,
             Damage = damage,

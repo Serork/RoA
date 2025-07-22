@@ -3,6 +3,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -41,7 +42,7 @@ sealed class ForestWreathTier3 : WreathItem {
         if (!timerHandler.Counted) {
             return;
         }
-        ProjectileHelper.SpawnPlayerOwnedProjectile<ForestWreath_Sunflower>(new ProjectileHelper.SpawnProjectileArgs(player, player.GetSource_Accessory(Item)));
+        ProjectileUtils.SpawnPlayerOwnedProjectile<ForestWreath_Sunflower>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Accessory(Item)));
         timerHandler.Counted = false;
     }
 

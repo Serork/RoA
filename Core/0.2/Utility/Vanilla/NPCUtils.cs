@@ -8,11 +8,18 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Vanilla;
 
 static class NPCUtils {
-    public static NPC? FindClosestNPC(Vector2 checkPosition, int checkDistance, bool shouldCheckForCollisions = true) {
+    public static bool CanBeChasedBy(NPC npc, object attacker = null, bool ignoreDontTakeDamage = false, bool checkForImmortals = true) {
+        if (npc.active && npc.chaseable && npc.lifeMax > 5 && (!npc.dontTakeDamage || ignoreDontTakeDamage) && !npc.friendly)
+            return !checkForImmortals || !npc.immortal;
+
+        return false;
+    }
+
+    public static NPC? FindClosestNPC(Vector2 checkPosition, int checkDistance, bool shouldCheckForCollisions = true, bool shouldCheckForImmortals = true) {
         NPC? target = null;
         int neededDistance = checkDistance;
         foreach (NPC checkNPC in Main.ActiveNPCs) {
-            if (!checkNPC.CanBeChasedBy()) {
+            if (!CanBeChasedBy(checkNPC, checkForImmortals: shouldCheckForImmortals)) {
                 continue;
             }
             float distance = (checkPosition - checkNPC.Center).Length();

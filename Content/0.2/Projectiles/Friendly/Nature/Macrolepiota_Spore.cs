@@ -15,9 +15,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class Macrolepiota_Spore : NatureProjectile {
-    public override string Texture => ResourceManager.NatureProjectileTextures + "Spore";
-
+sealed class Spore : NatureProjectile {
     private static ushort MAXTIMELEFT => 200;
 
     public ref struct SporeValues(Projectile projectile) {
@@ -40,7 +38,7 @@ sealed class Macrolepiota_Spore : NatureProjectile {
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: true);
 
-        Projectile.SetSize(14, 18);
+        Projectile.SetSizeValues(14, 18);
 
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;

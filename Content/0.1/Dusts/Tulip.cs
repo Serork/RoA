@@ -11,11 +11,16 @@ namespace RoA.Content.Dusts;
 sealed class Tulip : ModDust {
     private Vector2 _velocity;
 
-    public override Color? GetAlpha(Dust dust, Color lightColor) => lightColor;
+    public const byte COLUMNCOUNT = 8;
+    public const byte ROWCOUNT = 3;
+    public const byte SOULORANGE = 5;
+    public const byte SOULBLUE = 6;
+    public const byte SOULGREEN = 7;
+
+    public override Color? GetAlpha(Dust dust, Color lightColor) => dust.alpha >= SOULORANGE ? TulipPetalSoul.SoulColor : lightColor;
 
     public override void OnSpawn(Dust dust) {
-        int maxFramesY = 3;
-        dust.frame = (Texture2D?.Value?.Frame(8, maxFramesY, frameX: dust.alpha, frameY: Main.rand.Next(maxFramesY))).GetValueOrDefault();
+        dust.frame = (Texture2D?.Value?.Frame(COLUMNCOUNT, ROWCOUNT, frameX: dust.alpha, frameY: Main.rand.Next(ROWCOUNT))).GetValueOrDefault();
 
         dust.noGravity = true;
         dust.noLight = false;
@@ -31,7 +36,7 @@ sealed class Tulip : ModDust {
         _velocity = Vector2.SmoothStep(_velocity, dust.velocity *= 0.9f, 1f);
         dust.position += _velocity *= 0.99f;
 
-        if (dust.alpha == 4) {
+        if (dust.alpha >= 4) {
             dust.scale *= 0.95f;
             if (dust.scale <= 0.1f) {
                 dust.active = false;

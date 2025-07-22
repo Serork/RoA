@@ -6,7 +6,7 @@ using Terraria;
 namespace RoA.Core.Defaults;
 
 static class ProjectileDefaults {
-    public static void SetSize(this Projectile projectile, int width, int height) {
+    public static void SetSizeValues(this Projectile projectile, int width, int height) {
         projectile.width = width;
         projectile.height = height;
     }

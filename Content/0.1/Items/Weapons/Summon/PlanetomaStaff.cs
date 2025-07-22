@@ -2,6 +2,7 @@
 
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
@@ -104,7 +105,7 @@ sealed class PlanetomaStaffProjectile : ModProjectile {
         _direction = reader.ReadInt32();
     }
 
-    public override void PostAI() => ProjectileHelper.Animate(Projectile, 6);
+    public override void PostAI() => ProjectileUtils.Animate(Projectile, 6);
 
     public override void AI() {
         if (Projectile.localAI[0] == 0f) {
@@ -255,7 +256,7 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
 
     public override bool? CanCutTiles() => false;
 
-    public override void PostAI() => ProjectileHelper.Animate(Projectile, 4);
+    public override void PostAI() => ProjectileUtils.Animate(Projectile, 4);
 
     public override void AI() {
         if (_previousCenter != Projectile.Center) {
