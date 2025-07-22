@@ -12,7 +12,7 @@ sealed class TarfallBlock : ModItem {
         Item.autoReuse = true;
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
-        Item.createTile = 345;
+        Item.createTile = ModContent.TileType<Tiles.Solid.TarfallBlock>();
         Item.width = 16;
         Item.height = 16;
     }
