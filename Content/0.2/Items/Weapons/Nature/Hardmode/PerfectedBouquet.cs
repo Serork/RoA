@@ -45,14 +45,20 @@ sealed class PerfectedBouquet : NatureItem {
         Vector2 itemSizeOffset = shootVelocityNormalized * Item.width;
         position += itemSizeOffset;
         Vector2 petalOffset;
-        if (petalType == TulipPetalSoul.PetalType.SkeletronPrime) {
+        bool isWreathCharged = WreathHandler.IsWreathCharged(player);
+        if (isWreathCharged) {
             petalOffset = new Vector2(10f, -5f * player.direction).RotatedBy(itemRotation);
         }
-        else if (petalType == TulipPetalSoul.PetalType.Destroyer) {
-            petalOffset = new Vector2(4f, -12f * player.direction).RotatedBy(itemRotation);
-        }
         else {
-            petalOffset = new Vector2(9f, 3f * player.direction).RotatedBy(itemRotation);
+            if (petalType == TulipPetalSoul.PetalType.SkeletronPrime) {
+                petalOffset = new Vector2(10f, -5f * player.direction).RotatedBy(itemRotation);
+            }
+            else if (petalType == TulipPetalSoul.PetalType.Destroyer) {
+                petalOffset = new Vector2(4f, -12f * player.direction).RotatedBy(itemRotation);
+            }
+            else {
+                petalOffset = new Vector2(9f, 3f * player.direction).RotatedBy(itemRotation);
+            }
         }
         petalOffset -= new Vector2(2f, 2f * player.direction).RotatedBy(itemRotation);
         position += petalOffset;
@@ -62,6 +68,17 @@ sealed class PerfectedBouquet : NatureItem {
                 CurrentType = petalType
             };
         }, centered: true);
+
+        float offset2 = 10f;
+        Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
+                spawnPosition = position - randomOffset / 2f + randomOffset;
+
+        Dust dust = Dust.NewDustPerfect(spawnPosition,
+                                        ModContent.DustType<Dusts.Tulip>(),
+                                        (spawnPosition - position).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f),
+                                        Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f),
+                                        Alpha: Dusts.Tulip.SOULORANGE + (isWreathCharged ? Main.rand.Next(3) : (byte)petalType));
+        dust.customData = Main.rand.NextFloatRange(50f);
 
         return false;
     }

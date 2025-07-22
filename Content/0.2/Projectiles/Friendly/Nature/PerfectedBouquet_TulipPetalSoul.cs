@@ -330,7 +330,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
 
             SoundEngine.PlaySound(SoundID.Item7 with { Pitch = 1f }, Projectile.position);
 
-            PseudoKill();
+            PseudoKill(false);
         }
         void handlePseudoKill() {
             if (!PseudoDestroyed) {
@@ -531,8 +531,8 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
         _sawEffectTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "TulipBuzzsaw");
     }
 
-    private void PseudoKill() {
+    private void PseudoKill(bool onKill = true) {
         Projectile.Opacity = MathF.Min(Projectile.Opacity, PSEUDODESTROYEDOPACITY - 0.01f);
-        MakeTulipDusts(true);
+        MakeTulipDusts(onKill);
     }
 }
