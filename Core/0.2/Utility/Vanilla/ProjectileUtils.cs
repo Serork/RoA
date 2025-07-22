@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Mono.Cecil;
+
 using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -48,7 +51,7 @@ static class ProjectileUtils {
 
     public static Projectile SpawnPlayerOwnedProjectile<T>(in SpawnProjectileArgs spawnProjectileArgs, Action<Projectile>? beforeNetSend = null, bool centered = false) where T : ModProjectile {
         Player player = spawnProjectileArgs.Player;
-        return Main.projectile[ProjectileUtils.NewProjectile(spawnProjectileArgs.Source, spawnProjectileArgs.Position ?? player.Center, spawnProjectileArgs.Velocity ?? Vector2.Zero, spawnProjectileArgs.ProjectileType ?? ModContent.ProjectileType<T>(), spawnProjectileArgs.Damage, spawnProjectileArgs.KnockBack, player.whoAmI, spawnProjectileArgs.AI0, spawnProjectileArgs.AI1, spawnProjectileArgs.AI2, beforeNetSend, centered)];
+        return Main.projectile[NewProjectile(spawnProjectileArgs.Source, spawnProjectileArgs.Position ?? player.Center, spawnProjectileArgs.Velocity ?? Vector2.Zero, spawnProjectileArgs.ProjectileType ?? ModContent.ProjectileType<T>(), spawnProjectileArgs.Damage, spawnProjectileArgs.KnockBack, player.whoAmI, spawnProjectileArgs.AI0, spawnProjectileArgs.AI1, spawnProjectileArgs.AI2, beforeNetSend, centered)];
     }
 
     public static Projectile SpawnPlayerOwnedProjectileCopy<T>(in SpawnCopyArgs spawnCopyArgs, Action<Projectile>? beforeNetSend = null, bool centered = false) where T : ModProjectile {
@@ -70,7 +73,7 @@ static class ProjectileUtils {
     public static int NewProjectile(IEntitySource spawnSource, Vector2 position, Vector2 velocity, int Type, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f, Action<Projectile>? beforeNetSend = null, bool centered = false) => NewProjectile(spawnSource, position.X, position.Y, velocity.X, velocity.Y, Type, Damage, KnockBack, Owner, ai0, ai1, ai2, beforeNetSend, centered);
 
     /// <summary>
-    /// FIX: <c>Projectile.OnSpawn</c> is not called
+    /// PROBLEM?: <c>Projectile.OnSpawn</c> is called through reflection
     /// </summary>
     public static int NewProjectile(IEntitySource spawnSource, float X, float Y, float SpeedX, float SpeedY, int Type, int Damage, float KnockBack, int Owner = -1, float ai0 = 0f, float ai1 = 0f, float ai2 = 0f, Action<Projectile>? beforeNetSend = null, bool centered = false) {
         if (Owner == -1)
@@ -286,6 +289,16 @@ static class ProjectileUtils {
 
         projectile.ApplyStatsFromSource(spawnSource);
         //ProjectileLoader.OnSpawn(projectile, spawnSource);
+
+        var HookOnSpawn = typeof(ProjectileLoader).GetField("HookOnSpawn",
+                    BindingFlags.Static |
+                    BindingFlags.NonPublic);
+
+        projectile.ModProjectile?.OnSpawn(spawnSource);
+
+        foreach (var g in (HookOnSpawn.GetValue(null) as Terraria.ModLoader.Core.GlobalHookList<Terraria.ModLoader.GlobalProjectile>).Enumerate(projectile)) {
+            g.OnSpawn(projectile, spawnSource);
+        }
 
         beforeNetSend?.Invoke(projectile);
 

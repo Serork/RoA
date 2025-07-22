@@ -349,6 +349,25 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                 SoundEngine.PlaySound(SoundID.NPCHit7, Projectile.position);
             }
         }
+        void addLight() {
+            TulipPetalSoulValues tulipPetalSoulValues = new(Projectile);
+            PetalType currentType = tulipPetalSoulValues.CurrentType;
+            if (currentType == PetalType.Destroyer) {
+                float num6 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num6 *= Main.essScale;
+                Lighting.AddLight((int)((Projectile.position.X + (float)(Projectile.width / 2)) / 16f), (int)((Projectile.position.Y + (float)(Projectile.height / 2)) / 16f), 0.1f * num6, 0.1f * num6, 0.6f * num6);
+            }
+            else if (currentType == PetalType.SkeletronPrime) {
+                float num5 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num5 *= Main.essScale;
+                Lighting.AddLight((int)((Projectile.position.X + (float)(Projectile.width / 2)) / 16f), (int)((Projectile.position.Y + (float)(Projectile.height / 2)) / 16f), 0.5f * num5, 0.3f * num5, 0.05f * num5);
+            }
+            else if (currentType == PetalType.Twins) {
+                float num8 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num8 *= Main.essScale;
+                Lighting.AddLight((int)((Projectile.position.X + (float)(Projectile.width / 2)) / 16f), (int)((Projectile.position.Y + (float)(Projectile.height / 2)) / 16f), 0.1f * num8, 0.5f * num8, 0.2f * num8);
+            }
+        }
         pickTulipOption();
         setFrame();
         handleMainMovement();
@@ -360,6 +379,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
             applyBouncyEffect();
         }
         handlePseudoKill();
+        addLight();
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -385,6 +405,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
             return false;
         }
         float sawSizeFactor = Utils.Remap(tulipPetalSoulValues.SawHitEnemyValue, 0f, SAWANIMATIONTIME, 0f, 1f);
+        SpriteEffects flip = Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         void drawTrails() {
             Texture2D texture = DustLoader.GetDust(ModContent.DustType<Dusts.Tulip>()).Texture2D.Value;
             for (int i = 0; i < TRAILCOUNT; i++) {
@@ -405,7 +426,8 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                     Rotation = rotation,
                     Scale = scale,
                     Origin = origin,
-                    Clip = clip
+                    Clip = clip,
+                    ImageFlip = flip
                 });
             }
         }
@@ -431,7 +453,8 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                 Rotation = rotation,
                 Scale = scale,
                 Clip = clip,
-                Origin = origin
+                Origin = origin,
+                ImageFlip = flip
             });
         }
         void drawSelf() {
@@ -451,7 +474,8 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                 Rotation = rotation,
                 Scale = scale,
                 Clip = clip,
-                Origin = origin
+                Origin = origin,
+                ImageFlip = flip
             });
         }
 

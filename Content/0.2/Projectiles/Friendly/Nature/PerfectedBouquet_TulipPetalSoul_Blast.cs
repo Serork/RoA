@@ -12,6 +12,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 
+using static RoA.Content.Projectiles.Friendly.Nature.TulipPetalSoul;
 using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
@@ -71,6 +72,22 @@ sealed class TulipBlast : NatureProjectile {
         Projectile.velocity = Projectile.velocity.NormalizeWithMaxLength(maxSpeedModifier * 10f);
 
         Projectile.frame = (int)Projectile.ai[1];
+
+        if (Projectile.frame == 1) {
+            float num6 = (float)Main.rand.Next(90, 111) * 0.01f;
+            num6 *= Main.essScale;
+            Lighting.AddLight((int)((Projectile.position.X + (float)(Projectile.width / 2)) / 16f), (int)((Projectile.position.Y + (float)(Projectile.height / 2)) / 16f), 0.1f * num6, 0.1f * num6, 0.6f * num6);
+        }
+        else if (Projectile.frame == 0) {
+            float num5 = (float)Main.rand.Next(90, 111) * 0.01f;
+            num5 *= Main.essScale;
+            Lighting.AddLight((int)((Projectile.position.X + (float)(Projectile.width / 2)) / 16f), (int)((Projectile.position.Y + (float)(Projectile.height / 2)) / 16f), 0.5f * num5, 0.3f * num5, 0.05f * num5);
+        }
+        else if (Projectile.frame == 2) {
+            float num8 = (float)Main.rand.Next(90, 111) * 0.01f;
+            num8 *= Main.essScale;
+            Lighting.AddLight((int)((Projectile.position.X + (float)(Projectile.width / 2)) / 16f), (int)((Projectile.position.Y + (float)(Projectile.height / 2)) / 16f), 0.1f * num8, 0.5f * num8, 0.2f * num8);
+        }
     }
 
     public override bool PreDraw(ref Color lightColor) {

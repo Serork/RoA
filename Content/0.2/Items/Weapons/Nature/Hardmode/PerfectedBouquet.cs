@@ -9,6 +9,9 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
+using System;
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -19,6 +22,9 @@ namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
 [AutoloadGlowMask]
 sealed class PerfectedBouquet : NatureItem {
+    private float _lerpColorProgress;
+    private Color _lerpColor;
+
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(32, 36);
         Item.SetWeaponValues(36, 2f, 6);
@@ -30,6 +36,37 @@ sealed class PerfectedBouquet : NatureItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
 
         Item.staff[Type] = true;
+    }
+
+    public override void UseStyle(Player player, Rectangle heldItemFrame) {
+        float num6 = (float)Main.rand.Next(90, 111) * 0.0075f;
+        num6 *= Main.essScale;
+        Color color = GetLerpColor([new Color(0.1f, 0.1f, 0.6f), new Color(0.5f, 0.3f, 0.05f), new Color(0.1f, 0.5f, 0.2f)]);
+        Lighting.AddLight((int)((player.itemLocation.X - 4) / 16f), (int)((player.itemLocation.Y) / 16f), color.R * num6 / 255f, color.G * num6 / 255f, color.B * num6 / 255f);
+    }
+
+    public override void PostUpdate() {
+        float num6 = (float)Main.rand.Next(90, 111) * 0.0075f;
+        num6 *= Main.essScale;
+        Color color = GetLerpColor([new Color(0.1f, 0.1f, 0.6f), new Color(0.5f, 0.3f, 0.05f), new Color(0.1f, 0.5f, 0.2f)]);
+        Lighting.AddLight((int)((Item.Center.X - 4) / 16f), (int)((Item.Center.Y) / 16f), color.R * num6 / 255f, color.G * num6 / 255f, color.B * num6 / 255f);
+    }
+
+    private Color GetLerpColor(List<Color> from) {
+        _lerpColorProgress += 0.005f;
+        int colorCount = from.Count;
+        for (int i = 0; i < colorCount; i++) {
+            float part = 1f / colorCount;
+            float min = part * i;
+            float max = part * (i + 1);
+            if (_lerpColorProgress >= min && _lerpColorProgress <= max) {
+                _lerpColor = Color.Lerp(from[i], from[i == colorCount - 1 ? 0 : (i + 1)], Utils.Remap(_lerpColorProgress, min, max, 0f, 1f, true));
+            }
+        }
+        if (_lerpColorProgress > 1f) {
+            _lerpColorProgress = 0f;
+        }
+        return _lerpColor;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
