@@ -24,6 +24,7 @@ namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 sealed class PerfectedBouquet : NatureItem {
     private float _lerpColorProgress;
     private Color _lerpColor;
+    private int _nextTulipTypeIndex;
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(32, 36);
@@ -59,7 +60,10 @@ sealed class PerfectedBouquet : NatureItem {
             return false;
         }
 
-        TulipPetalSoul.PetalType petalType = (TulipPetalSoul.PetalType)Main.rand.Next(3);
+        TulipPetalSoul.PetalType petalType = (TulipPetalSoul.PetalType)_nextTulipTypeIndex++;
+        if (_nextTulipTypeIndex > 2) {
+            _nextTulipTypeIndex = 0;
+        }
         Vector2 shootVelocityNormalized = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
         float itemRotation = shootVelocityNormalized.ToRotation();
         Vector2 itemSizeOffset = shootVelocityNormalized * Item.width;
