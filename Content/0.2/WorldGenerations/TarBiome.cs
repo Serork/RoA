@@ -26,8 +26,8 @@ sealed class TarBiome_AddPass : ModSystem {
             return;
         }
 
-        tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 10, new PassLegacy("Tar Biome", delegate (GenerationProgress progress, GameConfiguration passConfig) {
-            int num916 = 8 * WorldGenHelper.WorldSize;
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 5, new PassLegacy("Tar Biome", delegate (GenerationProgress progress, GameConfiguration passConfig) {
+            int num916 = 5 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
             int num918 = 0;
@@ -48,7 +48,7 @@ sealed class TarBiome_AddPass : ModSystem {
                     num919++;
                 }
                 else if (num918 > Main.maxTilesX * 20) {
-                    num916 = num919;
+                    //num916 = num919;
                     num919++;
                     num918 = 0;
                 }
@@ -99,7 +99,7 @@ sealed class TarBiome : MicroBiome {
     private static ushort TARWALLTYPE => (ushort)ModContent.WallType<SolidifiedTarWall>();
 
     public static bool CanPlace(Point origin, StructureMap structures) {
-        if (origin.X > GenVars.shimmerPosition.X - WorldGen.shimmerSafetyDistance && origin.X < GenVars.shimmerPosition.X + WorldGen.shimmerSafetyDistance) {
+        if (origin.X > GenVars.shimmerPosition.X - WorldGen.shimmerSafetyDistance - 100 && origin.X < GenVars.shimmerPosition.X + WorldGen.shimmerSafetyDistance + 100) {
             return false;
         }
         if (origin.X > GenVars.JungleX - Main.maxTilesX / 8 && origin.X < GenVars.JungleX + Main.maxTilesX / 8) {
@@ -276,7 +276,7 @@ sealed class TarBiome : MicroBiome {
                         tile.LiquidAmount = 0;
                     }
                     if (j > magmaMapArea.Bottom - 40 + y) {
-                        if (flag2 && j > magmaMapArea.Bottom - 30 - _random.Next(-5, 5)) {
+                        if (flag2 && j > magmaMapArea.Bottom - 30 - _random.Next(0, 5)) {
                             tile.LiquidAmount = 255;
                             tile.LiquidType = 5;
                         }
