@@ -14,6 +14,7 @@ using Terraria.GameContent.Biomes;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.IO;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
@@ -26,33 +27,35 @@ sealed class TarBiome_AddPass : ModSystem {
             return;
         }
 
-        tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 10, new PassLegacy("Tar Biome", delegate (GenerationProgress progress, GameConfiguration passConfig) {
-            int num916 = 6 * WorldGenHelper.WorldSize;
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 6, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
+            int num916 = 5 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
             int num918 = 0;
             int num919 = 0;
             while (num919 < num916) {
                 double num920 = (double)num919 / (double)num916;
-                //Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.rockLayer + 20, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
+                progress.Set(num920);
+                progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Tar").Value;
+                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
                 //if (remixWorldGen)
                 //    point3 = RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
-                Point point3 = new Point(WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance), WorldGen.genRand.Next((int)GenVars.worldSurface + 100, Main.maxTilesY - 500));
-                while ((double)point3.X < (double)Main.maxTilesX * 0.05 && (double)point3.X < (double)Main.maxTilesX * 0.95) {
-                    point3.X = WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
-                }
+                //Point point3 = new Point(WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance), WorldGen.genRand.Next((int)GenVars.worldSurface + 100, Main.maxTilesY - 500));
+                //while ((double)point3.X < (double)Main.maxTilesX * 0.05 && (double)point3.X < (double)Main.maxTilesX * 0.95) {
+                //    point3.X = WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
+                //}
 
                 num918++;
                 if (TarBiome.CanPlace(point3, GenVars.structures)) {
                     list2.Add(point3);
                     num919++;
                 }
-                //else if (num918 > Main.maxTilesX * 50) {
-                //    num916 = num919;
-                //    num919++;
-                //    num918 = 0;
-                //}
+                else if (num918 > 10000) {
+                    num916 = num919;
+                    num919++;
+                    num918 = 0;
+                }
             }
 
             TarBiome tarBiome = GenVars.configuration.CreateBiome<TarBiome>();
@@ -104,7 +107,7 @@ sealed class TarBiome : MicroBiome {
             origin.Y > GenVars.shimmerPosition.Y - WorldGen.shimmerSafetyDistance && origin.Y < GenVars.shimmerPosition.Y + WorldGen.shimmerSafetyDistance) {
             return false;
         }
-        if (origin.X > GenVars.JungleX - Main.maxTilesX / 8 && origin.X < GenVars.JungleX + Main.maxTilesX / 8) {
+        if (origin.X > GenVars.JungleX - Main.maxTilesX / 10 && origin.X < GenVars.JungleX + Main.maxTilesX / 10) {
             return false;
         }
 
@@ -137,9 +140,8 @@ sealed class TarBiome : MicroBiome {
             }
         }
 
-        num = 500;
-        for (int i = x - num; i <= x + num; i++) {
-            for (int j = y - num; j <= y + num; j++) {
+        for (int i = x - 300; i <= x + 300; i++) {
+            for (int j = y - 1000; j <= y + 1000; j++) {
                 if (!WorldGen.InWorld(i, j))
                     continue;
 
@@ -233,7 +235,7 @@ sealed class TarBiome : MicroBiome {
                         double num8 = zero.Length() / 8.0;
                         double val = Math.Max(num7 - num8 - magma.Pressure, 0.0) + num8 + magma.Pressure * 0.875 - magma.Resistance;
                         val = Math.Max(0.0, val);
-                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.0185));
+                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.02));
                     }
                 }
             }
@@ -304,7 +306,7 @@ sealed class TarBiome : MicroBiome {
                     //tile.WallType = wall;
 
                     if (num4 < 0.1f && _random.NextChance(0.01f)) {
-                        if (j < magmaMapArea.Bottom - 20) {
+                        if (j < magmaMapArea.Bottom - 25) {
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(20), _random.Next(5), -1);
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(5, 8), _random.Next(6, 9), -1, addTile: false, -2.0, -0.3);
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(5, 8), _random.Next(6, 9), -1, addTile: false, 2.0, -0.3);
