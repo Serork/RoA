@@ -1654,6 +1654,15 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                     int altered = genRand.NextBool() ? 2 : 0;
                     WorldGen.Place2xX(i, j, treeDryad, altered);
                     if (Main.tile[i, j].TileType == treeDryad) {
+                        Tile checkTile = Main.tile[i, j + 1];
+                        checkTile.Slope = 0;
+                        checkTile = Main.tile[i + 1, j + 1];
+                        checkTile.Slope = 0;
+                        checkTile = Main.tile[i - 1, j + 1];
+                        checkTile.Slope = 0;
+                        checkTile = Main.tile[i + 2, j + 1];
+                        checkTile.Slope = 0;
+
                         flag4 = true;
                         _dryadStructureGenerated = true;
                     }

@@ -289,7 +289,7 @@ sealed class TarBiome : MicroBiome {
                     //tile.WallType = wall;
 
                     if (num4 < 0.1f && _random.NextChance(0.01f)) {
-                        if (j < magmaMapArea.Bottom - 25) {
+                        if (j < magmaMapArea.Bottom - 20) {
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(20), _random.Next(5), -1);
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(5, 8), _random.Next(6, 9), -1, addTile: false, -2.0, -0.3);
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(5, 8), _random.Next(6, 9), -1, addTile: false, 2.0, -0.3);
@@ -328,6 +328,15 @@ sealed class TarBiome : MicroBiome {
                 if (!magma.IsActive)
                     continue;
 
+                Tile tile = GenBase._tiles[tileOrigin.X + i, tileOrigin.Y + j];
+                if (tile.LiquidAmount > 0 && _tiles[tileOrigin.X + i, tileOrigin.Y + j + 1].TileType != TARTILETYPE) {
+                    int checkJ = tileOrigin.Y + j;
+                    for (int checkY = checkJ; checkY > checkJ - 10; checkY--) {
+                        Tile checkTile = _tiles[tileOrigin.X + i, checkY];
+                        checkTile.LiquidAmount = 0;
+                    }
+                }
+
                 y += _random.Next(-1, 2);
                 int maxRandomY = 3;
                 if (y > maxRandomY) {
@@ -336,7 +345,6 @@ sealed class TarBiome : MicroBiome {
                 if (y < -maxRandomY) {
                     y = -maxRandomY;
                 }
-                Tile tile = GenBase._tiles[tileOrigin.X + i, tileOrigin.Y + j];
                 if (j > magmaMapArea.Bottom - 45 + y && j < magmaMapArea.Bottom - 30 + y) {
                     if (tile.HasTile) {
                         tile.ResetToType(type);
