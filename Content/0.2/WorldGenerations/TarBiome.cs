@@ -37,7 +37,7 @@ sealed class TarBiome_AddPass : ModSystem {
                 double num920 = (double)num919 / (double)num916;
                 progress.Set(num920);
                 progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Tar").Value;
-                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
+                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 200, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
                 //if (remixWorldGen)
                 //    point3 = RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
@@ -289,7 +289,7 @@ sealed class TarBiome : MicroBiome {
                     //tile.WallType = wall;
 
                     if (num4 < 0.1f && _random.NextChance(0.01f)) {
-                        if (j < magmaMapArea.Bottom - 20) {
+                        if (j < magmaMapArea.Bottom - 25) {
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(20), _random.Next(5), -1);
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(5, 8), _random.Next(6, 9), -1, addTile: false, -2.0, -0.3);
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(5, 8), _random.Next(6, 9), -1, addTile: false, 2.0, -0.3);
