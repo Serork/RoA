@@ -34,11 +34,11 @@ sealed class TarBiome_AddPass : ModSystem {
             int num919 = 0;
             while (num919 < num916) {
                 double num920 = (double)num919 / (double)num916;
-                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 100)) + 100, (int)GenVars.rockLayer + 20, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
+                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 100)) + 100, (int)GenVars.worldSurface, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
                 //if (remixWorldGen)
                 //    point3 = RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
-                while ((double)point3.X < (double)Main.maxTilesX * 0.1 && (double)point3.X < (double)Main.maxTilesX * 0.9) {
+                while ((double)point3.X < (double)Main.maxTilesX * 0.05 && (double)point3.X < (double)Main.maxTilesX * 0.95) {
                     point3.X = WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
                 }
 
@@ -212,7 +212,7 @@ sealed class TarBiome : MicroBiome {
                         double num8 = zero.Length() / 8.0;
                         double val = Math.Max(num7 - num8 - magma.Pressure, 0.0) + num8 + magma.Pressure * 0.875 - magma.Resistance;
                         val = Math.Max(0.0, val);
-                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.0185));
+                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.019));
                     }
                 }
             }
