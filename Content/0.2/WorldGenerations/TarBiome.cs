@@ -27,7 +27,7 @@ sealed class TarBiome_AddPass : ModSystem {
             return;
         }
 
-        tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 6, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Settle Liquids Again") + 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             int num916 = 5 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
