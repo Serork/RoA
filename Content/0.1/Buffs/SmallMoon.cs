@@ -98,6 +98,7 @@ sealed class SmallMoonPlayer : ModPlayer {
         SetContributorColor("Lion8cake", [Color.Orange, Color.White]);
         SetContributorColor("KaffaZ", [new Color(185, 0, 64), new Color(255, 195, 0), new Color(94, 0, 50)]);
         SetContributorColor("KaffaZ_Himself", [new Color(185, 0, 64), new Color(255, 195, 0), new Color(94, 0, 50)]);
+        SetContributorColor("gbf", [new Color(206, 68, 178), new Color(208, 33, 33)]);
 
         if (Player.name == string.Empty) smallMoonColor = Color.Transparent;
     }
