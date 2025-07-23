@@ -140,7 +140,7 @@ sealed class TarBiome : MicroBiome {
             }
         }
 
-        for (int i = x - 300; i <= x + 300; i++) {
+        for (int i = x - 500; i <= x + 500; i++) {
             for (int j = y - 1000; j <= y + 1000; j++) {
                 if (!WorldGen.InWorld(i, j))
                     continue;
