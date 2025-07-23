@@ -218,7 +218,7 @@ sealed class TarBiome : MicroBiome {
                         double num8 = zero.Length() / 8.0;
                         double val = Math.Max(num7 - num8 - magma.Pressure, 0.0) + num8 + magma.Pressure * 0.875 - magma.Resistance;
                         val = Math.Max(0.0, val);
-                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.02));
+                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.0185));
                     }
                 }
             }
@@ -280,7 +280,7 @@ sealed class TarBiome : MicroBiome {
                 double num3 = (magmaMapArea.Top - j) / (float)(magmaMapArea.Bottom - j);
                 double num = Math.Sin((double)(num3) * 0.25) * 0.7 + 0.8;
                 double num2 = 0.5 + 1 / Math.Sqrt(Math.Max(0.0, magma.Pressure - magma.Resistance));
-                if (Math.Max(1.0 - Math.Max(0.0, num * num2), magma.Pressure / 10.0) > num * 0.125 + (WorldGen.SolidTile(tileOrigin.X + i, tileOrigin.Y + j) ? 0 : 0.5)) {
+                if (Math.Max(1.0 - Math.Max(0.0, num * num2), magma.Pressure / 10.0) > num * 0.115 + (WorldGen.SolidTile(tileOrigin.X + i, tileOrigin.Y + j) ? 0 : 0.5)) {
                     //if (TileID.Sets.Ore[tile.TileType])
                     //    tile.ResetToType(tile.TileType);
                     //else
@@ -289,7 +289,7 @@ sealed class TarBiome : MicroBiome {
                     //tile.WallType = wall;
 
                     if (num4 < 0.1f && _random.NextChance(0.01f)) {
-                        if (j < magmaMapArea.Bottom - 25) {
+                        if (j < magmaMapArea.Bottom - 20) {
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(20), _random.Next(5), -1);
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(5, 8), _random.Next(6, 9), -1, addTile: false, -2.0, -0.3);
                             WorldGen.TileRunner(tileOrigin.X + i, tileOrigin.Y + j, _random.Next(5, 8), _random.Next(6, 9), -1, addTile: false, 2.0, -0.3);
