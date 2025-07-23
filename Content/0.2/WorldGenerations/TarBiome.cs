@@ -104,7 +104,7 @@ sealed class TarBiome : MicroBiome {
             origin.Y > GenVars.shimmerPosition.Y - WorldGen.shimmerSafetyDistance && origin.Y < GenVars.shimmerPosition.Y + WorldGen.shimmerSafetyDistance) {
             return false;
         }
-        if (origin.X > GenVars.JungleX - Main.maxTilesX / 7 && origin.X < GenVars.JungleX + Main.maxTilesX / 7) {
+        if (origin.X > GenVars.JungleX - Main.maxTilesX / 8 && origin.X < GenVars.JungleX + Main.maxTilesX / 8) {
             return false;
         }
 
@@ -114,9 +114,6 @@ sealed class TarBiome : MicroBiome {
         if (BiomeTileCheck2(origin.X, origin.Y)) {
             return false;
         }
-
-        if (GenBase._tiles[origin.X, origin.Y].HasTile)
-            return false;
 
         return true;
     }
@@ -140,7 +137,7 @@ sealed class TarBiome : MicroBiome {
             }
         }
 
-        num = 300;
+        num = 500;
         for (int i = x - num; i <= x + num; i++) {
             for (int j = y - num; j <= y + num; j++) {
                 if (!WorldGen.InWorld(i, j))
