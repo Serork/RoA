@@ -55,7 +55,7 @@ sealed class TarBiome_AddPass : ModSystem {
             }
 
             TarBiome tarBiome = GenVars.configuration.CreateBiome<TarBiome>();
-            for (int num921 = 0; num921 < num916; num921++) {
+            for (int num921 = 0; num921 < list2.Count; num921++) {
                 tarBiome.Place(list2[num921], GenVars.structures);
             }
         }));
