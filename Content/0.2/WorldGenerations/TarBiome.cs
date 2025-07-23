@@ -34,10 +34,11 @@ sealed class TarBiome_AddPass : ModSystem {
             int num919 = 0;
             while (num919 < num916) {
                 double num920 = (double)num919 / (double)num916;
-                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 100)) + 100, (int)GenVars.rockLayer + 20, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
+                //Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.rockLayer + 20, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
                 //if (remixWorldGen)
                 //    point3 = RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
+                Point point3 = new Point(WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance), WorldGen.genRand.Next((int)GenVars.worldSurface + 100, Main.maxTilesY - 500));
                 while ((double)point3.X < (double)Main.maxTilesX * 0.05 && (double)point3.X < (double)Main.maxTilesX * 0.95) {
                     point3.X = WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
                 }
@@ -47,11 +48,11 @@ sealed class TarBiome_AddPass : ModSystem {
                     list2.Add(point3);
                     num919++;
                 }
-                else if (num918 > Main.maxTilesX * 20) {
-                    num916 = num919;
-                    num919++;
-                    num918 = 0;
-                }
+                //else if (num918 > Main.maxTilesX * 50) {
+                //    num916 = num919;
+                //    num919++;
+                //    num918 = 0;
+                //}
             }
 
             TarBiome tarBiome = GenVars.configuration.CreateBiome<TarBiome>();
@@ -99,10 +100,11 @@ sealed class TarBiome : MicroBiome {
     private static ushort TARWALLTYPE => (ushort)ModContent.WallType<SolidifiedTarWall>();
 
     public static bool CanPlace(Point origin, StructureMap structures) {
-        if (origin.X > GenVars.shimmerPosition.X - WorldGen.shimmerSafetyDistance - 100 && origin.X < GenVars.shimmerPosition.X + WorldGen.shimmerSafetyDistance + 100) {
+        if (origin.X > GenVars.shimmerPosition.X - WorldGen.shimmerSafetyDistance && origin.X < GenVars.shimmerPosition.X + WorldGen.shimmerSafetyDistance &&
+            origin.Y > GenVars.shimmerPosition.Y - WorldGen.shimmerSafetyDistance && origin.Y < GenVars.shimmerPosition.Y + WorldGen.shimmerSafetyDistance) {
             return false;
         }
-        if (origin.X > GenVars.JungleX - Main.maxTilesX / 7 && origin.X < GenVars.JungleX + Main.maxTilesX / 7) {
+        if (origin.X > GenVars.jungleMinX - 100 && origin.X < GenVars.jungleMaxX + 100) {
             return false;
         }
 
@@ -124,12 +126,30 @@ sealed class TarBiome : MicroBiome {
 
                 if (Main.tile[i, j].HasTile) {
                     int type = Main.tile[i, j].TileType;
-                    if (type == TileID.Crimstone || type == TileID.Ebonstone || Main.tileDungeon[type] || type == TARTILETYPE)
+                    if (type == TileID.Crimstone || type == TileID.Ebonstone || Main.tileDungeon[type])
                         return true;
                 }
 
                 int wall = Main.tile[i, j].WallType;
-                if (wall == 187 || wall == 216 || Main.wallDungeon[wall] || wall == TARWALLTYPE)
+                if (wall == 187 || wall == 216 || Main.wallDungeon[wall])
+                    return true;
+            }
+        }
+
+        num = 300;
+        for (int i = x - num; i <= x + num; i++) {
+            for (int j = y - num; j <= y + num; j++) {
+                if (!WorldGen.InWorld(i, j))
+                    continue;
+
+                if (Main.tile[i, j].HasTile) {
+                    int type = Main.tile[i, j].TileType;
+                    if (type == TARTILETYPE)
+                        return true;
+                }
+
+                int wall = Main.tile[i, j].WallType;
+                if (wall == TARWALLTYPE)
                     return true;
             }
         }
