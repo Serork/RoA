@@ -34,7 +34,7 @@ sealed class TarBiome_AddPass : ModSystem {
             int num919 = 0;
             while (num919 < num916) {
                 double num920 = (double)num919 / (double)num916;
-                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 100)) + 100, (int)GenVars.worldSurface, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
+                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 100)) + 100, (int)GenVars.rockLayer, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
                 //if (remixWorldGen)
                 //    point3 = RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
