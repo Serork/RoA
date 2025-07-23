@@ -81,8 +81,8 @@ sealed class TarBiome : MicroBiome {
     }
 
     private const int MAX_MAGMA_ITERATIONS = 300;
-    private Magma[,] _sourceMagmaMap = new Magma[200, 200];
-    private Magma[,] _targetMagmaMap = new Magma[200, 200];
+    private Magma[,] _sourceMagmaMap;
+    private Magma[,] _targetMagmaMap;
     private static Vector2D[] _normalisedVectors = new Vector2D[9] {
         Vector2D.Normalize(new Vector2D(-1.0, -1.0)),
         Vector2D.Normalize(new Vector2D(-1.0, 0.0)),
@@ -108,8 +108,12 @@ sealed class TarBiome : MicroBiome {
             return false;
         }
 
-        if (WorldGen.BiomeTileCheck(origin.X, origin.Y) || BiomeTileCheck2(origin.X, origin.Y))
+        if (WorldGen.BiomeTileCheck(origin.X, origin.Y))
             return false;
+
+        if (BiomeTileCheck2(origin.X, origin.Y)) {
+            return false;
+        }
 
         if (GenBase._tiles[origin.X, origin.Y].HasTile)
             return false;
@@ -158,6 +162,8 @@ sealed class TarBiome : MicroBiome {
     }
 
     public override bool Place(Point origin, StructureMap structures) {
+        _sourceMagmaMap = new Magma[90, 70];
+        _targetMagmaMap = new Magma[90, 70];
         origin.X -= _sourceMagmaMap.GetLength(0) / 2;
         origin.Y -= _sourceMagmaMap.GetLength(1) / 2;
         BuildMagmaMap(origin);
@@ -170,8 +176,6 @@ sealed class TarBiome : MicroBiome {
     }
 
     private void BuildMagmaMap(Point tileOrigin) {
-        _sourceMagmaMap = new Magma[90, 70];
-        _targetMagmaMap = new Magma[90, 70];
         for (int i = 0; i < _sourceMagmaMap.GetLength(0); i++) {
             for (int j = 0; j < _sourceMagmaMap.GetLength(1); j++) {
                 int i2 = i + tileOrigin.X;
