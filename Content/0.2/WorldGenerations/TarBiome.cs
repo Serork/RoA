@@ -102,7 +102,7 @@ sealed class TarBiome : MicroBiome {
         if (origin.X > GenVars.shimmerPosition.X - WorldGen.shimmerSafetyDistance - 100 && origin.X < GenVars.shimmerPosition.X + WorldGen.shimmerSafetyDistance + 100) {
             return false;
         }
-        if (origin.X > GenVars.JungleX - Main.maxTilesX / 8 && origin.X < GenVars.JungleX + Main.maxTilesX / 8) {
+        if (origin.X > GenVars.JungleX - Main.maxTilesX / 7 && origin.X < GenVars.JungleX + Main.maxTilesX / 7) {
             return false;
         }
 
