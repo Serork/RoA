@@ -27,7 +27,7 @@ sealed class TarBiome_AddPass : ModSystem {
         }
 
         tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 10, new PassLegacy("Tar Biome", delegate (GenerationProgress progress, GameConfiguration passConfig) {
-            int num916 = 5 * WorldGenHelper.WorldSize;
+            int num916 = 6 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
             int num918 = 0;
@@ -116,7 +116,7 @@ sealed class TarBiome : MicroBiome {
     }
 
     public static bool BiomeTileCheck2(int x, int y) {
-        int num = 50;
+        int num = 100;
         for (int i = x - num; i <= x + num; i++) {
             for (int j = y - num; j <= y + num; j++) {
                 if (!WorldGen.InWorld(i, j))
@@ -124,12 +124,12 @@ sealed class TarBiome : MicroBiome {
 
                 if (Main.tile[i, j].HasTile) {
                     int type = Main.tile[i, j].TileType;
-                    if (type == TileID.Crimstone || type == TileID.Ebonstone || Main.tileDungeon[type])
+                    if (type == TileID.Crimstone || type == TileID.Ebonstone || Main.tileDungeon[type] || type == TARTILETYPE)
                         return true;
                 }
 
                 int wall = Main.tile[i, j].WallType;
-                if (wall == 187 || wall == 216 || Main.wallDungeon[wall])
+                if (wall == 187 || wall == 216 || Main.wallDungeon[wall] || wall == TARWALLTYPE)
                     return true;
             }
         }
@@ -212,7 +212,7 @@ sealed class TarBiome : MicroBiome {
                         double num8 = zero.Length() / 8.0;
                         double val = Math.Max(num7 - num8 - magma.Pressure, 0.0) + num8 + magma.Pressure * 0.875 - magma.Resistance;
                         val = Math.Max(0.0, val);
-                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.02));
+                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.0185));
                     }
                 }
             }
