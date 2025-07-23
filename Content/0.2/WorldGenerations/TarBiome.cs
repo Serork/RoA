@@ -329,10 +329,11 @@ sealed class TarBiome : MicroBiome {
                     continue;
 
                 Tile tile = GenBase._tiles[tileOrigin.X + i, tileOrigin.Y + j];
-                if (tile.LiquidAmount > 0 && _tiles[tileOrigin.X + i, tileOrigin.Y + j + 1].TileType != TARTILETYPE) {
+                Tile checkTile = _tiles[tileOrigin.X + i, tileOrigin.Y + j + 1];
+                if (tile.LiquidAmount > 0 && WorldGen.SolidTile(tileOrigin.X + i, tileOrigin.Y + j + 1) && checkTile.TileType != TARTILETYPE) {
                     int checkJ = tileOrigin.Y + j;
                     for (int checkY = checkJ; checkY > checkJ - 10; checkY--) {
-                        Tile checkTile = _tiles[tileOrigin.X + i, checkY];
+                        checkTile = _tiles[tileOrigin.X + i, checkY];
                         checkTile.LiquidAmount = 0;
                     }
                 }
