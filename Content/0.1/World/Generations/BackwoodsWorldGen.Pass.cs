@@ -48,7 +48,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     public static readonly ushort[] SandInvalidWallTypesToKill = { WallID.SandstoneBrick, 187, 220, 222, 221, 275, 308, 310, 309, 216, 217, 219, 218, 304, 305, 307, 306, 216, 187, 304, 275 };
     public static readonly ushort[] MidInvalidTileTypesToKill = { TileID.LihzahrdBrick, TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone, TileID.Marble, TileID.Granite };
     public static readonly ushort[] MidInvalidTileTypesToKill2 = { TileID.HardenedSand, TileID.Sandstone, TileID.Marble, TileID.Granite };
-    public static List<ushort> MidInvalidWallTypesToKill = { WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LihzahrdBrickUnsafe, WallID.SandstoneBrick, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] MidReplaceWallTypes = { WallID.MudUnsafe, WallID.MudWallEcho, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
     public static readonly ushort[] SkipBiomeInvalidTileTypeToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone };
     public static readonly ushort[] SkipBiomeInvalidWallTypeToKill = { WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite };
@@ -60,6 +59,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private static ushort AltarPlaceholderTileType => TileID.WoodBlock;
     private static ushort AltarPlaceholderTileType2 => TileID.StoneSlab;
     private static ushort CliffPlaceholderTileType => TileID.StoneSlab;
+
+    public static List<ushort> MidInvalidWallTypesToKill = [WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LihzahrdBrickUnsafe, WallID.SandstoneBrick, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble];
 
     private HashSet<ushort> _backwoodsPlants = [];
     private HashSet<Point> _biomeSurface = [], _altarTiles = [];
