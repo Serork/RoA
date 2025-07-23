@@ -26,7 +26,7 @@ sealed class TarBiome_AddPass : ModSystem {
             return;
         }
 
-        tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 5, new PassLegacy("Tar Biome", delegate (GenerationProgress progress, GameConfiguration passConfig) {
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 10, new PassLegacy("Tar Biome", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             int num916 = 5 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
@@ -276,7 +276,7 @@ sealed class TarBiome : MicroBiome {
                         tile.LiquidAmount = 0;
                     }
                     if (j > magmaMapArea.Bottom - 40 + y) {
-                        if (flag2 && j > magmaMapArea.Bottom - 30 - _random.Next(0, 5)) {
+                        if (flag2 && j > magmaMapArea.Bottom - 30 - _random.Next(10)) {
                             tile.LiquidAmount = 255;
                             tile.LiquidType = 5;
                         }
