@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Biomes;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
 using Terraria.IO;
@@ -26,7 +27,6 @@ sealed class TarBiome_AddPass : ModSystem {
         }
 
         tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 10, new PassLegacy("Tar Biome", delegate (GenerationProgress progress, GameConfiguration passConfig) {
-            TarBiome tarBiome = GenVars.configuration.CreateBiome<TarBiome>();
             int num916 = 8 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
@@ -43,7 +43,7 @@ sealed class TarBiome_AddPass : ModSystem {
                 //}
 
                 num918++;
-                if (tarBiome.Place(point3, GenVars.structures)) {
+                if (TarBiome.CanPlace(point3, GenVars.structures)) {
                     list2.Add(point3);
                     num919++;
                 }
@@ -52,6 +52,11 @@ sealed class TarBiome_AddPass : ModSystem {
                     num919++;
                     num918 = 0;
                 }
+            }
+
+            TarBiome tarBiome = GenVars.configuration.CreateBiome<TarBiome>();
+            for (int num921 = 0; num921 < num916; num921++) {
+                tarBiome.Place(list2[num921], GenVars.structures);
             }
         }));
     }
@@ -93,7 +98,7 @@ sealed class TarBiome : MicroBiome {
     private static ushort TARDRIPPINGTILETYPE => RoA.RoALiquidMod.Find<ModTile>("DrippingTar").Type;
     private static ushort TARWALLTYPE => (ushort)ModContent.WallType<SolidifiedTarWall>();
 
-    public override bool Place(Point origin, StructureMap structures) {
+    public static bool CanPlace(Point origin, StructureMap structures) {
         if (origin.X > GenVars.shimmerPosition.X - WorldGen.shimmerSafetyDistance && origin.X < GenVars.shimmerPosition.X + WorldGen.shimmerSafetyDistance) {
             return false;
         }
@@ -107,6 +112,10 @@ sealed class TarBiome : MicroBiome {
         if (GenBase._tiles[origin.X, origin.Y].HasTile)
             return false;
 
+        return true;
+    }
+
+    public override bool Place(Point origin, StructureMap structures) {
         origin.X -= _sourceMagmaMap.GetLength(0) / 2;
         origin.Y -= _sourceMagmaMap.GetLength(1) / 2;
         BuildMagmaMap(origin);
