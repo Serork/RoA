@@ -369,10 +369,10 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                 int num1052 = 0;
                 bool flag59 = false;
                 bool flag60 = false;
-                int fluff = 250/* * WorldGenHelper.WorldSize*/;
+                int fluff = 225/* * WorldGenHelper.WorldSize*/;
                 if (ModLoader.TryGetMod("SpiritReforged", out Mod mod)) {
                     Rectangle savannaArea = (Rectangle)mod.Call("GetSavannaArea");
-                    fluff = Math.Clamp(savannaArea.Width / 2 - 50, 50, 250);
+                    fluff = Math.Clamp(savannaArea.Width / 2 - 50, 50, 225);
                 }
                 int num1053 = WorldGen.genRand.Next((int)((double)Main.maxTilesX / 2 - fluff), (int)((double)Main.maxTilesX / 2 + fluff));
                 while (!flag60) {
