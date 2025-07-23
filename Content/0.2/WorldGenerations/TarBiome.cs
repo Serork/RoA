@@ -104,7 +104,7 @@ sealed class TarBiome : MicroBiome {
             origin.Y > GenVars.shimmerPosition.Y - WorldGen.shimmerSafetyDistance && origin.Y < GenVars.shimmerPosition.Y + WorldGen.shimmerSafetyDistance) {
             return false;
         }
-        if (origin.X > GenVars.jungleMinX - 100 && origin.X < GenVars.jungleMaxX + 100) {
+        if (origin.X > GenVars.JungleX - Main.maxTilesX / 7 && origin.X < GenVars.JungleX + Main.maxTilesX / 7) {
             return false;
         }
 
@@ -232,7 +232,7 @@ sealed class TarBiome : MicroBiome {
                         double num8 = zero.Length() / 8.0;
                         double val = Math.Max(num7 - num8 - magma.Pressure, 0.0) + num8 + magma.Pressure * 0.875 - magma.Resistance;
                         val = Math.Max(0.0, val);
-                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.019));
+                        _targetMagmaMap[j, k] = Magma.CreateFlow(val, Math.Max(0.0, magma.Resistance - val * 0.0185));
                     }
                 }
             }
