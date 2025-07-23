@@ -122,7 +122,7 @@ sealed class TarBiome : MicroBiome {
     }
 
     public static bool BiomeTileCheck2(int x, int y) {
-        int num = 100;
+        int num = 50;
         for (int i = x - num; i <= x + num; i++) {
             for (int j = y - num; j <= y + num; j++) {
                 if (!WorldGen.InWorld(i, j))
@@ -130,29 +130,12 @@ sealed class TarBiome : MicroBiome {
 
                 if (Main.tile[i, j].HasTile) {
                     int type = Main.tile[i, j].TileType;
-                    if (type == TileID.Crimstone || type == TileID.Ebonstone || Main.tileDungeon[type])
+                    if (type == TileID.Crimstone || type == TileID.Ebonstone || Main.tileDungeon[type] || type == TARTILETYPE)
                         return true;
                 }
 
                 int wall = Main.tile[i, j].WallType;
-                if (wall == 187 || wall == 216 || Main.wallDungeon[wall])
-                    return true;
-            }
-        }
-
-        for (int i = x - 500; i <= x + 500; i++) {
-            for (int j = y - 1000; j <= y + 1000; j++) {
-                if (!WorldGen.InWorld(i, j))
-                    continue;
-
-                if (Main.tile[i, j].HasTile) {
-                    int type = Main.tile[i, j].TileType;
-                    if (type == TARTILETYPE)
-                        return true;
-                }
-
-                int wall = Main.tile[i, j].WallType;
-                if (wall == TARWALLTYPE)
+                if (wall == WallID.CrimstoneUnsafe || wall == WallID.EbonstoneUnsafe || Main.wallDungeon[wall] || wall == TARWALLTYPE)
                     return true;
             }
         }
