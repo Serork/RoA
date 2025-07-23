@@ -25,7 +25,7 @@ sealed class TarBiome_AddPass : ModSystem {
             return;
         }
 
-        tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 10, new PassLegacy("Tar Biome", delegate (GenerationProgress progress, GameConfiguration passConfig) {
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Shimmer") - 1, new PassLegacy("Tar Biome", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             TarBiome tarBiome = GenVars.configuration.CreateBiome<TarBiome>();
             int num916 = 5;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
@@ -364,13 +364,16 @@ sealed class TarBiome : MicroBiome {
                 if (_tiles[num, num2].HasTile && _tiles[num, num2].TileType == TileID.WaterDrip) {
                     _tiles[num, num2].TileType = TARDRIPPINGTILETYPE;
                 }
+                if (_tiles[num, num2].LiquidType != 5) {
+                    _tiles[num, num2].LiquidAmount = 0;
+                }
                 //if (fastRandom2.Next(8) == 0 && GenBase._tiles[num, num2].HasTile) {
                 //    if (!GenBase._tiles[num, num2 + 1].HasTile)
                 //        WorldGen.PlaceUncheckedStalactite(num, num2 + 1, fastRandom2.Next(2) == 0, fastRandom2.Next(3), spiders: false);
 
-                    //    if (!GenBase._tiles[num, num2 - 1].HasTile)
-                    //        WorldGen.PlaceUncheckedStalactite(num, num2 - 1, fastRandom2.Next(2) == 0, fastRandom2.Next(3), spiders: false);
-                    //}
+                //    if (!GenBase._tiles[num, num2 - 1].HasTile)
+                //        WorldGen.PlaceUncheckedStalactite(num, num2 - 1, fastRandom2.Next(2) == 0, fastRandom2.Next(3), spiders: false);
+                //}
             }
         }
     }
