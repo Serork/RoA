@@ -34,7 +34,8 @@ sealed class TarBiome_AddPass : ModSystem {
             int num919 = 0;
             while (num919 < num916) {
                 double num920 = (double)num919 / (double)num916;
-                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.rockLayer + 20, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 500);
+                //Point point3 = WorldGen.RandomRectanglePoint(WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance), (int)GenVars.rockLayer + 20, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 500);
+                Point point3 = new Point(WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance), WorldGen.genRand.Next((int)Main.worldSurface + 50, Main.maxTilesY - 500));
                 //if (WorldGen.remixWorldGen)
                 //    point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
@@ -47,11 +48,11 @@ sealed class TarBiome_AddPass : ModSystem {
                     list2.Add(point3);
                     num919++;
                 }
-                else if (num918 > Main.maxTilesX * 20) {
-                    //num916 = num919;
-                    num919++;
-                    num918 = 0;
-                }
+                //else if (num918 > Main.maxTilesX * 20) {
+                //    //num916 = num919;
+                //    num919++;
+                //    num918 = 0;
+                //}
             }
 
             TarBiome tarBiome = GenVars.configuration.CreateBiome<TarBiome>();
