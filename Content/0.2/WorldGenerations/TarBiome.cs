@@ -38,9 +38,9 @@ sealed class TarBiome_AddPass : ModSystem {
                 //if (WorldGen.remixWorldGen)
                 //    point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
-                //while ((double)point3.X > (double)Main.maxTilesX * 0.45 && (double)point3.X < (double)Main.maxTilesX * 0.55) {
-                //    point3.X = WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
-                //}
+                while ((double)point3.X < (double)Main.maxTilesX * 0.1 && (double)point3.X < (double)Main.maxTilesX * 0.9) {
+                    point3.X = WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
+                }
 
                 num918++;
                 if (TarBiome.CanPlace(point3, GenVars.structures)) {
@@ -106,13 +106,35 @@ sealed class TarBiome : MicroBiome {
             return false;
         }
 
-        if (WorldGen.BiomeTileCheck(origin.X, origin.Y))
+        if (WorldGen.BiomeTileCheck(origin.X, origin.Y) || BiomeTileCheck2(origin.X, origin.Y))
             return false;
 
         if (GenBase._tiles[origin.X, origin.Y].HasTile)
             return false;
 
         return true;
+    }
+
+    public static bool BiomeTileCheck2(int x, int y) {
+        int num = 50;
+        for (int i = x - num; i <= x + num; i++) {
+            for (int j = y - num; j <= y + num; j++) {
+                if (!WorldGen.InWorld(i, j))
+                    continue;
+
+                if (Main.tile[i, j].HasTile) {
+                    int type = Main.tile[i, j].TileType;
+                    if (type == TileID.Crimstone || type == TileID.Ebonstone || Main.tileDungeon[type])
+                        return true;
+                }
+
+                int wall = Main.tile[i, j].WallType;
+                if (wall == 187 || wall == 216 || Main.wallDungeon[wall])
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     public override bool Place(Point origin, StructureMap structures) {
