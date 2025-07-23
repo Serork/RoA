@@ -47,7 +47,7 @@ sealed class TarBiome_AddPass : ModSystem {
                     list2.Add(point3);
                     num919++;
                 }
-                else if (num918 > Main.maxTilesX * 10) {
+                else if (num918 > Main.maxTilesX * 20) {
                     num916 = num919;
                     num919++;
                     num918 = 0;
@@ -97,7 +97,7 @@ sealed class TarBiome : MicroBiome {
         if (origin.X > GenVars.shimmerPosition.X - WorldGen.shimmerSafetyDistance && origin.X < GenVars.shimmerPosition.X + WorldGen.shimmerSafetyDistance) {
             return false;
         }
-        if (origin.X > GenVars.JungleX - Main.maxTilesX / 4 && origin.X < GenVars.JungleX + Main.maxTilesX / 4) {
+        if (origin.X > GenVars.JungleX - Main.maxTilesX / 6 && origin.X < GenVars.JungleX + Main.maxTilesX / 6) {
             return false;
         }
 
@@ -267,7 +267,7 @@ sealed class TarBiome : MicroBiome {
                         tile.LiquidAmount = 0;
                     }
                     if (j > magmaMapArea.Bottom - 40 + y) {
-                        if (flag2 && j > magmaMapArea.Bottom - 40) {
+                        if (flag2 && j > magmaMapArea.Bottom - 30 - _random.Next(5)) {
                             tile.LiquidAmount = 255;
                             tile.LiquidType = 5;
                         }
