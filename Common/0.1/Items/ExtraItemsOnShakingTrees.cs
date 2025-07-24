@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Food;
+using RoA.Content.Items.Placeable.Miscellaneous;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Tiles.Solid.Backwoods;
 
@@ -73,12 +74,14 @@ sealed class ExtraItemsOnShakingTrees : ILoadable {
         else if (Main.getGoodWorld && genRand.Next(17) == 0) {
             Projectile.NewProjectile(GetProjectileSource_ShakeTree(x, y), x * 16, y * 16, (float)Main.rand.Next(-100, 101) * 0.002f, 0f, 28, 0, 0f, Main.myPlayer, 16f, 16f);
         }
-        //else if (genRand.Next(300) == 0 && flag) {
-        //    Item.NewItem(GetItemSource_ShakeTree(x, y), x * 16, y * 16, 16, 16, ModContent.ItemType<LivingPrimordialWand>());
-        //}
-        //else if (genRand.Next(300) == 0 && flag) {
-        //    Item.NewItem(GetItemSource_ShakeTree(x, y), x * 16, y * 16, 16, 16, ModContent.ItemType<LivingPrimordialWand2>());
-        //}
+        else if (NPC.downedBoss2) {
+            if (genRand.Next(300) == 0 && flag) {
+                Item.NewItem(GetItemSource_ShakeTree(x, y), x * 16, y * 16, 16, 16, ModContent.ItemType<LivingPrimordialWand>());
+            }
+            else if (genRand.Next(300) == 0 && flag) {
+                Item.NewItem(GetItemSource_ShakeTree(x, y), x * 16, y * 16, 16, 16, ModContent.ItemType<LivingPrimordialWand2>());
+            }
+        }
         else if (genRand.Next(300) == 0 && treeType == TreeTypes.Forest) {
             Item.NewItem(GetItemSource_ShakeTree(x, y), x * 16, y * 16, 16, 16, 832);
         }
