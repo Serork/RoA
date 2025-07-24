@@ -21,13 +21,14 @@ using Terraria.WorldBuilding;
 
 namespace RoA.Content.WorldGenerations;
 
+// TODO: seeds support
 sealed class TarBiome_AddPass : ModSystem {
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         if (!RoA.HasRoALiquidMod()) {
             return;
         }
 
-        tasks.Insert(tasks.FindIndex(task => task.Name == "Buried Chests") - 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Life Crystals") - 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             int num916 = 5 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
@@ -37,7 +38,7 @@ sealed class TarBiome_AddPass : ModSystem {
                 double num920 = (double)num919 / (double)num916;
                 progress.Set(num920);
                 progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Tar").Value;
-                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 200, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
+                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 150, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 300);
                 //if (remixWorldGen)
                 //    point3 = RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
