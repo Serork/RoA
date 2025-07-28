@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Crossmod;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 
 using System;
@@ -23,6 +25,18 @@ sealed class MurkyCarcass : ModNPC {
 
         NPC.aiStyle = -1;
         NPC.noGravity = true;
+
+        Banner = Type;
+        BannerItem = ModContent.ItemType<MurkyCarcassBanner>();
+    }
+
+    public override void UpdateLifeRegen(ref int damage) {
+        if (NPC.wet && !RoALiquidsCompat.IsTarWet(NPC)) {
+            if (NPC.lifeRegen > 0)
+                NPC.lifeRegen = 0;
+
+            NPC.lifeRegen -= 50;
+        }
     }
 
     public override void AI() {
@@ -132,8 +146,36 @@ sealed class MurkyCarcass : ModNPC {
         //    }
         //}
 
+        NPC.ShowNameOnHover = NPC.chaseable;
+        NPC.chaseable = NPC.alpha < 50;
+        NPC.Opacity = Helper.Approach(NPC.Opacity, NPC.localAI[2], 0.1f);
+
+        if (NPC.HasValidTarget) {
+            float neededDistance = 100f;
+            float distance = NPC.GetTargetPlayer().Distance(NPC.Center);
+            bool flag = distance < neededDistance;
+            if (NPC.wet) {
+                if (flag) {
+                    NPC.localAI[2] = 1f;
+                }
+                else {
+                    NPC.localAI[2] = Utils.Remap(distance, 100f, 200f, 1f, 0f, true);
+                }
+            }
+            else {
+                NPC.localAI[2] = 1f;
+            }
+        }
+        else {
+            NPC.localAI[2] = NPC.wet ? 0f : 1f;
+        }
+
         if (NPC.wet) {
             NPC.OffsetTheSameNPC(0.1f);
+
+            //if (!RoALiquidsCompat.IsTarWet(NPC)) {
+            //    NPC.velocity *= 0.7f;
+            //}
 
             bool flag11 = false;
             if (NPC.type != 55 && NPC.type != 592 && NPC.type != 607 && NPC.type != 615) {
@@ -189,6 +231,10 @@ sealed class MurkyCarcass : ModNPC {
 
             if (NPC.type == 102)
                 Lighting.AddLight((int)(NPC.position.X + (float)(NPC.width / 2) + (float)(NPC.direction * (NPC.width + 8))) / 16, (int)(NPC.position.Y + 2f) / 16, 0.07f, 0.04f, 0.025f);
+
+            if (!RoALiquidsCompat.IsTarWet(NPC)) {
+                flag11 = false;
+            }
 
             if (flag11) {
                 NPC.TargetClosest();
