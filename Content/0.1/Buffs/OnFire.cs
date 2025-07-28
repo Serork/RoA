@@ -1,5 +1,7 @@
 ﻿using RoA.Core.Utility;
 
+using System;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -37,6 +39,20 @@ sealed class OnFireNPC : GlobalNPC {
 
     public override void UpdateLifeRegen(NPC npc, ref int damage) {
         if (onFire) {
+            bool flag = false;
+            if (RoA.HasRoALiquidMod() && npc.HasBuff(RoA.RoALiquidMod.Find<ModBuff>("TarDebuff").Type)) {
+                flag = true;
+            }
+            if (npc.oiled || flag) {
+                if (npc.lifeRegen > 0)
+                    npc.lifeRegen = 0;
+
+                npc.lifeRegen -= 50;
+                if (damage < 10)
+                    damage = 10;
+                return;
+            }
+
             if (npc.lifeRegen > 0)
                 npc.lifeRegen = 0;
 
