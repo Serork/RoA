@@ -425,9 +425,16 @@ sealed class TarBiome : MicroBiome {
                                 return false;
                         }
                     }
+                    for (int i = x - 1; i <= x + 2; i++) {
+                        for (int j = y - 1; j <= y + 2; j++) {
+                            if (!_tiles[i, j].HasTile && _tiles[i, j].WallType != TARWALLTYPE)
+                                return false;
+                        }
+                    }
                     return true;
                 });
-                if (distanceToFirstEmptyTile != 0 && distanceToFirstEmptyTile <= 2 && !BadSpotForHoneyFall(num, num2) && !SpotActuallyNotInHive(num, num2)) {
+                double num5_2 = (j - magmaMapArea.Top) / (float)(magmaMapArea.Bottom - magmaMapArea.Top);
+                if (_random.NextChance(1f - num5_2) && distanceToFirstEmptyTile != 0 && distanceToFirstEmptyTile <= 2 && !BadSpotForHoneyFall(num, num2) && !SpotActuallyNotInHive(num, num2)) {
                     CreateBlockedHoneyCube(num, num2);
                     CreateDentForHoneyFall(num, num2, num5);
                 }
