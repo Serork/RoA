@@ -228,7 +228,7 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
             return;
         }
 
-        for (int x = 0; x < 3; x++) {
+        for (int x = 0; x < 2; x++) {
             for (int y = -2; y <= 0; y++) {
                 WorldGen.KillTile(_bigRubblePosition.X + x, _bigRubblePosition.Y + y);
             }
