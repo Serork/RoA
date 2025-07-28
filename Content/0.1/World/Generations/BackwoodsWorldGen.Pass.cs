@@ -50,7 +50,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     public static readonly ushort[] MidInvalidTileTypesToKill2 = { TileID.HardenedSand, TileID.Sandstone, TileID.Marble, TileID.Granite };
     public static readonly ushort[] MidReplaceWallTypes = { WallID.MudUnsafe, WallID.MudWallEcho, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
     public static readonly ushort[] SkipBiomeInvalidTileTypeToKill = { TileID.HardenedSand, TileID.Sandstone, TileID.Ebonstone, TileID.Crimstone };
-    public static readonly ushort[] SkipBiomeInvalidWallTypeToKill = { WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite };
     public static readonly ushort[] MidMustKillTileTypes = { TileID.Ebonstone, TileID.Crimstone };
     public static readonly ushort[] MidMustSkipWallTypes = { WallID.SandstoneBrick, WallID.Granite, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble };
     public static readonly ushort[] MidMustKillWallTypes = { WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe };
@@ -61,6 +60,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private static ushort CliffPlaceholderTileType => TileID.StoneSlab;
 
     public static List<ushort> MidInvalidWallTypesToKill = [WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LihzahrdBrickUnsafe, WallID.SandstoneBrick, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble];
+    public static List<ushort> SkipBiomeInvalidWallTypeToKill = [WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite];
 
     private HashSet<ushort> _backwoodsPlants = [];
     private HashSet<Point> _biomeSurface = [], _altarTiles = [];
@@ -216,7 +216,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int max = (int)(_random.Next(1, 3) * 1.25);
         WorldUtils.Gen(new Point(i, j), new ShapeRoot(angle, k, min, max), Actions.Chain(
             new Modifiers.SkipWalls(_elderwoodWallType, WallID.LihzahrdBrickUnsafe),
-            new Modifiers.SkipWalls(SkipBiomeInvalidWallTypeToKill),
+            new Modifiers.SkipWalls(SkipBiomeInvalidWallTypeToKill.ToArray()),
             new Actions.PlaceWall((ushort)ModContent.WallType<Tiles.Walls.BackwoodsRootWall2>(), false)));
     }
 
@@ -4288,7 +4288,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _wandsAdded = false;
         _nextItemIndex = _nextItemIndex2 = 0;
 
-        MidInvalidWallTypesToKill.Add((ushort)ModContent.WallType<SolidifiedTarWall>());
+        ushort tarWallType = (ushort)ModContent.WallType<SolidifiedTarWall>();
+        MidInvalidWallTypesToKill.Add(tarWallType);
+        SkipBiomeInvalidWallTypeToKill.Add(tarWallType);
 
         _backwoodsPlants.Clear();
         _biomeSurface.Clear();

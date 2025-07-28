@@ -2088,3 +2088,8 @@ SolidifiedTarWall: {
 	DisplayName: Solidified Tar Wall
 	Tooltip: ""
 }
+
+MurkyCarcassBanner: {
+	DisplayName: Murky Carcass Banner
+	Tooltip: ""
+}

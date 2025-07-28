@@ -2,6 +2,7 @@
 
 using ReLogic.Utilities;
 
+using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
@@ -359,6 +360,19 @@ sealed class TarBiome : MicroBiome {
                         Tile.SmoothSlope(num, num2);
                 }
                 if (GenBase._tiles[num, num2].HasTile && !_tiles[num, num2].BottomSlope) {
+                    if (!GenBase._tiles[num, num2 - 1].HasTile)
+                        WorldGen.Place2x1(num, num2 - 1, (ushort)ModContent.TileType<TarRocks2>(), _random.Next(3));
+
+                    if (!GenBase._tiles[num, num2 - 1].HasTile) {
+                        ushort tarRocks1 = (ushort)ModContent.TileType<TarRocks1>();
+                        WorldGen.Place1x1(num, num2 - 1, tarRocks1);
+                        Tile tile = _tiles[num, num - 1];
+                        if (tile.TileType == tarRocks1) {
+                            tile.TileFrameX = (short)(18 * _random.Next(6));
+                            tile.TileFrameY = 0;
+                        }
+                    }
+
                     if (!GenBase._tiles[num, num2 + 1].HasTile && GenBase._tiles[num, num2 + 1].LiquidAmount <= 0)
                         WorldGen.PlaceTile(num, num2 + 1, TARDRIPPINGTILETYPE);
                 }

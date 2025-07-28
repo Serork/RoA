@@ -16,7 +16,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Ambient;
 
-sealed class BackwoodsRocks02 : BackwoodsRocks0 {
+class BackwoodsRocks02 : BackwoodsRocks0 {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
@@ -51,7 +51,7 @@ sealed class BackwoodsRocks02 : BackwoodsRocks0 {
     }
 }
 
-sealed class BackwoodsRocks01 : BackwoodsRocks0 {
+class BackwoodsRocks01 : BackwoodsRocks0 {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;

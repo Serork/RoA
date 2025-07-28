@@ -45,7 +45,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
 
     void TileHooks.IPreDraw.PreDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition) {
         if (AbleToBeDestroyed) {
-            DrawRays(tilePosition, 0.1f);
+            DrawRays(spriteBatch,tilePosition, 0.1f);
         }
     }
 
@@ -79,7 +79,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
                 Lighting.AddLight(tileWorldPosition, Color.Lerp(Color.Green, Color.White, lightStrengthMainFactor * lightStrengthFactor).ToVector3() * 0.45f * lightStrengthFactor);
             }
 
-            DrawRays(tilePosition, 0.075f);
+            DrawRays(spriteBatch, tilePosition, 0.075f);
 
             if (isOrigin) {
                 if (AssetInitializer.TryGetTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Glow, out Asset<Texture2D> glowTextureAsset)) {
@@ -95,7 +95,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
                         glowPosition.X -= 18f;
                     }
                     SpriteEffects glowFlip = !turnedLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    Main.spriteBatch.Draw(glowTexture, glowPosition, DrawInfo.Default with {
+                    spriteBatch.Draw(glowTexture, glowPosition, DrawInfo.Default with {
                         Clip = glowClip,
                         Origin = glowOrigin,
                         Color = glowColor,
@@ -106,7 +106,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         }
     }
 
-    private static void DrawRays(Point16 tilePosition, float colorOpacity) {
+    private static void DrawRays(SpriteBatch spriteBatch, Point16 tilePosition, float colorOpacity) {
         int i = tilePosition.X, j = tilePosition.Y;
         Point16 topLeft = TileHelper.GetTileTopLeft<TreeDryad>(i, j);
         if (topLeft == tilePosition && AssetInitializer.TryGetTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Ray, out Asset<Texture2D> rayTextureAsset)) {
@@ -127,7 +127,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
                 rayScale.Y *= opacityFactor;
                 Color rayColor = Color.Lerp(Color.Green, Color.White, MathUtils.PseudoRandRange(ref seedForPseudoRandomness, 1f)) * colorOpacity;
                 rayColor *= opacityFactor;
-                Main.spriteBatch.Draw(rayTexture, rayPosition, DrawInfo.Default with {
+                spriteBatch.Draw(rayTexture, rayPosition, DrawInfo.Default with {
                     Scale = rayScale,
                     Clip = rayClip,
                     Origin = rayOrigin,
