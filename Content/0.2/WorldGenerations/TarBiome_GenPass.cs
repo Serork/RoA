@@ -20,7 +20,7 @@ sealed class TarBiome_GenPass : ModSystem {
             return;
         }
 
-        tasks.Insert(tasks.FindIndex(task => task.Name == "Life Crystals") - 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Hives") - 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             int num916 = 5 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
@@ -45,7 +45,7 @@ sealed class TarBiome_GenPass : ModSystem {
                     num919++;
                 }
                 else if (num918 > 10000) {
-                    num916 = num919;
+                    //num916 = num919;
                     num919++;
                     num918 = 0;
                 }

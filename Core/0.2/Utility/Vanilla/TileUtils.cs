@@ -214,7 +214,7 @@ static partial class TileHelper {
         return new Point16(i + 1, j + 1);
     }
 
-    public static ushort GetDistanceToFirstEmptyTileAround(int i, int j, ushort checkDistance = 10, float startCheckAngle = 0f, float defaultCheckAngle = MathHelper.TwoPi / 10f) {
+    public static ushort GetDistanceToFirstEmptyTileAround(int i, int j, ushort checkDistance = 10, float startCheckAngle = 0f, float defaultCheckAngle = MathHelper.TwoPi / 10f, Predicate<Point16>? extraCondition = null) {
         if (startCheckAngle <= 0f) {
             startCheckAngle = defaultCheckAngle;
         }
@@ -228,7 +228,7 @@ static partial class TileHelper {
                 Vector2D velocity = Vector2D.One.RotatedBy(currentCheckAngle);
                 checkX += (int)Math.Floor(velocity.X);
                 checkY += (int)Math.Floor(velocity.Y);
-                if (!WorldGenHelper.ActiveTile(checkX, checkY)) {
+                if (!WorldGenHelper.ActiveTile(checkX, checkY) && (extraCondition == null || extraCondition(new Point16(checkX, checkY)))) {
                     distances.Add(currentCheckDistance);
                     break;
                 }

@@ -57,6 +57,10 @@ sealed class TarBiome : MicroBiome {
     private static ushort TARWALLTYPE => (ushort)ModContent.WallType<SolidifiedTarWall_Unsafe>();
 
     public static bool CanPlace(Point origin, StructureMap structures) {
+        if (TooCloseToImportantLocations(origin)) {
+            return false;
+        }
+
         if (origin.X > GenVars.shimmerPosition.X - WorldGen.shimmerSafetyDistance && origin.X < GenVars.shimmerPosition.X + WorldGen.shimmerSafetyDistance &&
             origin.Y > GenVars.shimmerPosition.Y - WorldGen.shimmerSafetyDistance && origin.Y < GenVars.shimmerPosition.Y + WorldGen.shimmerSafetyDistance) {
             return false;
@@ -108,7 +112,7 @@ sealed class TarBiome : MicroBiome {
         CleanupTiles(origin, effectedMapArea);
         PlaceDecorations(origin, effectedMapArea);
         if (WorldGen.gen) {
-            structures.AddStructure(effectedMapArea, 8);
+            structures.AddProtectedStructure(effectedMapArea, 8);
         }
         return true;
     }
@@ -122,6 +126,28 @@ sealed class TarBiome : MicroBiome {
                 _targetMagmaMap[i, j] = _sourceMagmaMap[i, j];
             }
         }
+    }
+
+    private static bool TooCloseToImportantLocations(Point origin) {
+        int x = origin.X;
+        int y = origin.Y;
+        int num = 150;
+        for (int i = x - num; i < x + num; i += 10) {
+            if (i <= 0 || i > Main.maxTilesX - 1)
+                continue;
+
+            for (int j = y - num; j < y + num; j += 10) {
+                if (j > 0 && j <= Main.maxTilesY - 1) {
+                    if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == 226)
+                        return true;
+
+                    if (Main.tile[i, j].WallType == 83 || Main.tile[i, j].WallType == 3 || Main.tile[i, j].WallType == 87)
+                        return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void SimulatePressure(out Rectangle effectedMapArea) {
@@ -388,6 +414,23 @@ sealed class TarBiome : MicroBiome {
                 if (_tiles[num, num2].LiquidType != 5) {
                     _tiles[num, num2].LiquidAmount = 0;
                 }
+                int num5 = 1;
+                if (_random.Next(2) == 0)
+                    num5 = -1;
+                ushort distanceToFirstEmptyTile = TileHelper.GetDistanceToFirstEmptyTileAround(num, num2, extraCondition: (tilePosition) => {
+                    int x = tilePosition.X, y = tilePosition.Y;
+                    for (int i = x - 5; i <= x + 6; i++) {
+                        for (int j = y - 5; j <= y + 6; j++) {
+                            if (_tiles[i, j].LiquidAmount > 0)
+                                return false;
+                        }
+                    }
+                    return true;
+                });
+                if (distanceToFirstEmptyTile != 0 && distanceToFirstEmptyTile <= 2 && !BadSpotForHoneyFall(num, num2) && !SpotActuallyNotInHive(num, num2)) {
+                    CreateBlockedHoneyCube(num, num2);
+                    CreateDentForHoneyFall(num, num2, num5);
+                }
                 //if (fastRandom2.Next(8) == 0 && GenBase._tiles[num, num2].HasTile) {
                 //    if (!GenBase._tiles[num, num2 + 1].HasTile)
                 //        WorldGen.PlaceUncheckedStalactite(num, num2 + 1, fastRandom2.Next(2) == 0, fastRandom2.Next(3), spiders: false);
@@ -395,6 +438,63 @@ sealed class TarBiome : MicroBiome {
                 //    if (!GenBase._tiles[num, num2 - 1].HasTile)
                 //        WorldGen.PlaceUncheckedStalactite(num, num2 - 1, fastRandom2.Next(2) == 0, fastRandom2.Next(3), spiders: false);
                 //}
+            }
+        }
+    }
+
+    private static bool BadSpotForHoneyFall(int x, int y) {
+        if (Main.tile[x, y].HasTile && Main.tile[x, y + 1].HasTile && Main.tile[x + 1, y].HasTile)
+            return !Main.tile[x + 1, y + 1].HasTile;
+
+        return true;
+    }
+
+
+    private static bool SpotActuallyNotInHive(int x, int y) {
+        for (int i = x - 1; i <= x + 2; i++) {
+            for (int j = y - 1; j <= y + 2; j++) {
+                if (i < 10 || i > Main.maxTilesX - 10)
+                    return true;
+
+                if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType != TARTILETYPE)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static void CreateDentForHoneyFall(int x, int y, int dir) {
+        dir *= -1;
+        y++;
+        int num = 0;
+        while ((num < 4 || WorldGen.SolidTile(x, y)) && x > 10 && x < Main.maxTilesX - 10) {
+            num++;
+            x += dir;
+            if (WorldGen.SolidTile(x, y)) {
+                WorldGen.PoundTile(x, y);
+                if (!Main.tile[x, y + 1].HasTile) {
+                    Tile tile = Main.tile[x, y + 1];
+                    tile.HasTile = true;
+                    tile.TileType = TARTILETYPE;
+                }
+            }
+        }
+    }
+
+    private static void CreateBlockedHoneyCube(int x, int y) {
+        for (int i = x - 1; i <= x + 2; i++) {
+            for (int j = y - 1; j <= y + 2; j++) {
+                Tile tile = Main.tile[i, j];
+                if (i >= x && i <= x + 1 && j >= y && j <= y + 1) {
+                    tile.HasTile = false;
+                    tile.LiquidAmount = 255;
+                    tile.LiquidType = 5;
+                }
+                else {
+                    tile.HasTile = true;
+                    tile.TileType = TARTILETYPE;
+                }
             }
         }
     }
