@@ -10,6 +10,6 @@ sealed class TarRocks1 : Rubble_1x1 {
     protected override void SafeSetStaticDefaults() {
         DustType = RoA.RoALiquidMod.Find<ModDust>("SolidifiedTar").Type;
 
-        AddMapEntry(new Microsoft.Xna.Framework.Color(88, 74, 91));
+        AddMapEntry(new Microsoft.Xna.Framework.Color(43, 31, 47));
     }
 }
