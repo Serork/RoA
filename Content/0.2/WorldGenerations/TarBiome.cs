@@ -437,7 +437,7 @@ sealed class TarBiome : MicroBiome {
                     for (int checkX = -1; checkX <= 2; checkX++) {
                         Tile checkTile = _tiles[num + checkX, num2 + 1];
                         if (checkTile.HasTile) {
-                            if ((!_tiles[num + checkX - 1, num2 + 1].HasTile && _tiles[num + checkX - 1, num2 + 1].LiquidAmount <= 0) || (!_tiles[num + checkX + 1, num2 + 1].HasTile && _tiles[num + checkX + 1, num2 + 1].LiquidAmount <= 0)) {
+                            if (!_tiles[num + checkX - 1, num2 + 1].HasTile || !_tiles[num + checkX + 1, num2 + 1].HasTile) {
                                 WorldGen.PoundTile(num + checkX, num2 + 1);
                             }
                             num5 = (checkX <= 0).ToDirectionInt();
@@ -487,7 +487,7 @@ sealed class TarBiome : MicroBiome {
             num++;
             x += dir;
             if (WorldGen.SolidTile(x, y)) {
-                //WorldGen.PoundTile(x, y);
+                WorldGen.PoundTile(x, y);
                 if (!Main.tile[x, y + 1].HasTile) {
                     Tile tile = Main.tile[x, y + 1];
                     tile.HasTile = true;
