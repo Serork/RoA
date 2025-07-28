@@ -52,7 +52,7 @@ sealed class TarBiome : MicroBiome {
 
     private static ushort TARTILETYPE => RoA.RoALiquidMod.Find<ModTile>("SolidifiedTar").Type;
     private static ushort TARDRIPPINGTILETYPE => RoA.RoALiquidMod.Find<ModTile>("DrippingTar").Type;
-    private static ushort TARWALLTYPE => (ushort)ModContent.WallType<SolidifiedTarWall>();
+    private static ushort TARWALLTYPE => (ushort)ModContent.WallType<SolidifiedTarWall_Unsafe>();
 
     public static bool CanPlace(Point origin, StructureMap structures) {
         if (origin.X > GenVars.shimmerPosition.X - WorldGen.shimmerSafetyDistance && origin.X < GenVars.shimmerPosition.X + WorldGen.shimmerSafetyDistance &&
