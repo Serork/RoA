@@ -366,7 +366,7 @@ sealed class TarBiome : MicroBiome {
                     if (!GenBase._tiles[num, num2 - 1].HasTile) {
                         ushort tarRocks1 = (ushort)ModContent.TileType<TarRocks1>();
                         WorldGen.Place1x1(num, num2 - 1, tarRocks1);
-                        Tile tile = _tiles[num, num - 1];
+                        Tile tile = _tiles[num, num2 - 1];
                         if (tile.TileType == tarRocks1) {
                             tile.TileFrameX = (short)(18 * _random.Next(6));
                             tile.TileFrameY = 0;
