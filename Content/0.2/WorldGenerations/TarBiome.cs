@@ -414,9 +414,7 @@ sealed class TarBiome : MicroBiome {
                 if (_tiles[num, num2].LiquidType != 5) {
                     _tiles[num, num2].LiquidAmount = 0;
                 }
-                int num5 = 1;
-                if (_random.Next(2) == 0)
-                    num5 = -1;
+                int num5 = -(num > tileOrigin.X + magmaMapArea.Width / 2).ToDirectionInt();
                 ushort distanceToFirstEmptyTile = TileHelper.GetDistanceToFirstEmptyTileAround(num, num2, extraCondition: (tilePosition) => {
                     int x = tilePosition.X, y = tilePosition.Y;
                     for (int i = x - 5; i <= x + 6; i++) {
