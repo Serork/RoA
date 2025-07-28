@@ -59,8 +59,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private static ushort AltarPlaceholderTileType2 => TileID.StoneSlab;
     private static ushort CliffPlaceholderTileType => TileID.StoneSlab;
 
-    public static List<ushort> MidInvalidWallTypesToKill = [WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LihzahrdBrickUnsafe, WallID.SandstoneBrick, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble];
-    public static List<ushort> SkipBiomeInvalidWallTypeToKill = [WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite];
+    public static List<ushort> MidInvalidWallTypesToKill;
+    public static List<ushort> SkipBiomeInvalidWallTypeToKill;
 
     private HashSet<ushort> _backwoodsPlants = [];
     private HashSet<Point> _biomeSurface = [], _altarTiles = [];
@@ -4287,6 +4287,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _oneChestPlacedInBigTree = false;
         _wandsAdded = false;
         _nextItemIndex = _nextItemIndex2 = 0;
+
+        MidInvalidWallTypesToKill = [WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LihzahrdBrickUnsafe, WallID.SandstoneBrick, WallID.EbonstoneEcho, WallID.EbonstoneUnsafe, WallID.CrimstoneEcho, WallID.CrimstoneUnsafe, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble];
+        SkipBiomeInvalidWallTypeToKill = [WallID.IridescentBrick, WallID.GoldBrick, WallID.RichMaogany, WallID.TinBrick, WallID.MudstoneBrick, WallID.LivingWoodUnsafe, WallID.SandstoneBrick, WallID.SmoothSandstone, WallID.HardenedSand, WallID.Sandstone, WallID.GraniteUnsafe, WallID.MarbleUnsafe, WallID.Marble, WallID.Granite];
 
         ushort tarWallType = (ushort)ModContent.WallType<SolidifiedTarWall>();
         MidInvalidWallTypesToKill.Add(tarWallType);
