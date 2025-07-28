@@ -414,7 +414,6 @@ sealed class TarBiome : MicroBiome {
                 if (_tiles[num, num2].LiquidType != 5) {
                     _tiles[num, num2].LiquidAmount = 0;
                 }
-                int num5 = -(num > tileOrigin.X + magmaMapArea.Width / 2).ToDirectionInt();
                 ushort distanceToFirstEmptyTile = TileHelper.GetDistanceToFirstEmptyTileAround(num, num2, extraCondition: (tilePosition) => {
                     int x = tilePosition.X, y = tilePosition.Y;
                     for (int i = x - 5; i <= x + 6; i++) {
@@ -434,7 +433,18 @@ sealed class TarBiome : MicroBiome {
                 double num5_2 = (j - magmaMapArea.Top) / (float)(magmaMapArea.Bottom - magmaMapArea.Top);
                 if (_random.NextChance(1f - num5_2) && distanceToFirstEmptyTile != 0 && distanceToFirstEmptyTile <= 2 && !BadSpotForHoneyFall(num, num2) && !SpotActuallyNotInHive(num, num2)) {
                     CreateBlockedHoneyCube(num, num2);
-                    CreateDentForHoneyFall(num, num2, num5);
+                    int num5 = (num > tileOrigin.X + magmaMapArea.Width / 2).ToDirectionInt();
+                    for (int checkX = -1; checkX <= 2; checkX++) {
+                        Tile checkTile = _tiles[num + checkX, num2 + 1];
+                        if (checkTile.HasTile) {
+                            if ((!_tiles[num + checkX - 1, num2 + 1].HasTile && _tiles[num + checkX - 1, num2 + 1].LiquidAmount <= 0) || (!_tiles[num + checkX + 1, num2 + 1].HasTile && _tiles[num + checkX + 1, num2 + 1].LiquidAmount <= 0)) {
+                                WorldGen.PoundTile(num + checkX, num2 + 1);
+                            }
+                            num5 = (checkX <= 0).ToDirectionInt();
+                            break;
+                        }
+                    }
+                    CreateDentForHoneyFall(num, num2, -num5);
                 }
                 //if (fastRandom2.Next(8) == 0 && GenBase._tiles[num, num2].HasTile) {
                 //    if (!GenBase._tiles[num, num2 + 1].HasTile)
@@ -477,7 +487,7 @@ sealed class TarBiome : MicroBiome {
             num++;
             x += dir;
             if (WorldGen.SolidTile(x, y)) {
-                WorldGen.PoundTile(x, y);
+                //WorldGen.PoundTile(x, y);
                 if (!Main.tile[x, y + 1].HasTile) {
                     Tile tile = Main.tile[x, y + 1];
                     tile.HasTile = true;
