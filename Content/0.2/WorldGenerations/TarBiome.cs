@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 using ReLogic.Utilities;
 
@@ -106,7 +107,9 @@ sealed class TarBiome : MicroBiome {
         PlaceGranite(origin, effectedMapArea);
         CleanupTiles(origin, effectedMapArea);
         PlaceDecorations(origin, effectedMapArea);
-        structures.AddStructure(effectedMapArea, 8);
+        if (WorldGen.gen) {
+            structures.AddStructure(effectedMapArea, 8);
+        }
         return true;
     }
 
@@ -360,16 +363,18 @@ sealed class TarBiome : MicroBiome {
                         Tile.SmoothSlope(num, num2);
                 }
                 if (GenBase._tiles[num, num2].HasTile && !_tiles[num, num2].BottomSlope) {
-                    if (!GenBase._tiles[num, num2 - 1].HasTile)
-                        WorldGen.Place2x1(num, num2 - 1, (ushort)ModContent.TileType<TarRocks2>(), _random.Next(3));
+                    if (_tiles[num, num2].TileType == TARTILETYPE) {
+                        if (!GenBase._tiles[num, num2 - 1].HasTile)
+                            WorldGen.Place2x1(num, num2 - 1, (ushort)ModContent.TileType<TarRocks2>(), _random.Next(3));
 
-                    if (!GenBase._tiles[num, num2 - 1].HasTile) {
-                        ushort tarRocks1 = (ushort)ModContent.TileType<TarRocks1>();
-                        WorldGen.Place1x1(num, num2 - 1, tarRocks1);
-                        Tile tile = _tiles[num, num2 - 1];
-                        if (tile.TileType == tarRocks1) {
-                            tile.TileFrameX = (short)(18 * _random.Next(6));
-                            tile.TileFrameY = 0;
+                        if (!GenBase._tiles[num, num2 - 1].HasTile) {
+                            ushort tarRocks1 = (ushort)ModContent.TileType<TarRocks1>();
+                            WorldGen.Place1x1(num, num2 - 1, tarRocks1);
+                            Tile tile = _tiles[num, num2 - 1];
+                            if (tile.TileType == tarRocks1) {
+                                tile.TileFrameX = (short)(18 * _random.Next(6));
+                                tile.TileFrameY = 0;
+                            }
                         }
                     }
 
