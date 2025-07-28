@@ -458,7 +458,7 @@ sealed class TarBiome : MicroBiome {
     }
 
     private static bool BadSpotForHoneyFall(int x, int y) {
-        if (Main.tile[x, y].HasTile && Main.tile[x, y + 1].HasTile && Main.tile[x + 1, y].HasTile)
+        if (Main.tile[x, y].TileType == TARTILETYPE && Main.tile[x, y + 1].TileType == TARTILETYPE && Main.tile[x + 1, y].TileType == TARTILETYPE)
             return !Main.tile[x + 1, y + 1].HasTile;
 
         return true;

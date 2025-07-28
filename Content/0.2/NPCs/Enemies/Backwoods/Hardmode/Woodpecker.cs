@@ -128,10 +128,11 @@ sealed class Woodpecker : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.SetSizeValues(28, 48);
+        NPC.SetSizeValues(28, 22);
         NPC.DefaultToEnemy(new NPCExtensions.NPCHitInfo(500, 40, 16, 0f));
 
         NPC.aiStyle = -1;
+        NPC.noGravity = true;
     }
 
     public override void AI() {
