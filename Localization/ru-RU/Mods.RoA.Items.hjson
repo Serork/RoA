@@ -2099,3 +2099,8 @@ TarfallWall: {
 	// DisplayName: Tarfall Wall
 	// Tooltip: ""
 }
+
+SolidifiedTarWall: {
+	// DisplayName: Solidified Tar Wall
+	// Tooltip: ""
+}
