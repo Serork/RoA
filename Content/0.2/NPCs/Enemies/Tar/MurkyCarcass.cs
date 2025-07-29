@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Crossmod;
+using RoA.Common.Projectiles;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 
@@ -8,12 +9,11 @@ using System;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Utilities;
 
 namespace RoA.Content.NPCs.Enemies.Tar;
 
+[Tracked]
 sealed class MurkyCarcass : ModNPC {
     private static Point16 _spawnPosition;
 
@@ -76,16 +76,28 @@ sealed class MurkyCarcass : ModNPC {
                         }
                     }
                     if (result) {
-                        liquidX = i;
-                        liquidY = j;
-                        num++;
+                        for (int i2 = i - 5; i2 <= i + 5; i2++) {
+                            for (int j2 = j - 5; j2 <= j + 5; j2++) {
+                                foreach (NPC activeMurkyCarcass in TrackedEntitiesSystem.GetTrackedNPC<MurkyCarcass>()) {
+                                    if (activeMurkyCarcass.Center.ToTileCoordinates16() == new Point16(i2, j2)) {
+                                        result = false;
+                                    }
+                                }
+                            }
+                        }
+                        if (result) {
+                            liquidX = i;
+                            liquidY = j;
+                            num++;
+                        }
                     }
                 }
             }
         }
 
-        if (liquidX != landX || liquidY != landY)
+        if (liquidX != landX || liquidY != landY) {
             return true;
+        }
 
         return false;
     }
