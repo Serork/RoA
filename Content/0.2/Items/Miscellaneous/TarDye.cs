@@ -5,6 +5,7 @@ using RoA.Common;
 using Terraria;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace RoA.Content.Items.Miscellaneous;
 
@@ -20,6 +21,6 @@ sealed class TarDye : ModItem {
         Item.height = 24;
         Item.maxStack = Item.CommonMaxStack;
         Item.value = Item.sellPrice();
-        Item.rare = 3;
+        Item.rare = ItemRarityID.Green;
     }
 }

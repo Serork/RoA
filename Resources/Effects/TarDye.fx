@@ -48,7 +48,7 @@ float4 Recolor(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
     float3 darkColor = liquidColor2;
     float3 output = lerp(brightColor, darkColor, shimmerWave) * baseColor.a * sampleColor.a;
     float3 returnColor = color.rgb * output.rgb;
-    float1 glow = step(0.95, rgbNoise.b) * lerp(brightColor, darkColor, shimmerWave);
+    float1 glow = step(0.95, rgbNoise.b) * uSecondaryColor;
     returnColor += glow;
     returnColor = lerp(baseColor.rgb, returnColor, min(uOpacity, 1));
     float opacity = baseColor.a * sampleColor.a;
