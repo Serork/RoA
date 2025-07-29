@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Crossmod;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Core.Utility;
 
 using System;
@@ -10,11 +11,14 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Tar;
 
 sealed class MurkyCarcass : ModNPC {
+    public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
+
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(6);
     }
@@ -25,9 +29,19 @@ sealed class MurkyCarcass : ModNPC {
 
         NPC.aiStyle = -1;
         NPC.noGravity = true;
+        NPC.npcSlots = 0.5f;
 
         Banner = Type;
         BannerItem = ModContent.ItemType<MurkyCarcassBanner>();
+    }
+
+    public override float SpawnChance(NPCSpawnInfo spawnInfo) {
+        bool result = false;
+        int num = spawnInfo.SpawnTileX, num2 = spawnInfo.SpawnTileY;
+        if (Main.tile[num, num2 - 1].LiquidAmount > 0 && Main.tile[num, num2 - 2].LiquidAmount > 0 && Main.tile[num, num2 - 1].LiquidType == 5) {
+            result = true;
+        }
+        return result.ToInt() * 10f;
     }
 
     public override void UpdateLifeRegen(ref int damage) {
@@ -39,9 +53,23 @@ sealed class MurkyCarcass : ModNPC {
         }
     }
 
+    private ref float Spawn => ref NPC.ai[2];
+
     public override void AI() {
         if (NPC.direction == 0)
             NPC.TargetClosest();
+
+        if (Spawn <= 0f) {
+            Spawn = 1f;
+            if (Main.netMode != NetmodeID.MultiplayerClient) {
+                for (int i = 0; i < 2; i++) {
+                    int npc = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, Type, NPC.whoAmI, ai2: 1f);
+                    if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+                        NetMessage.SendData(MessageID.SyncNPC, number: npc);
+                    }
+                }
+            }
+        }
 
         //if (type == 615) {
         //    if (this.ai[2] == 0f) {
@@ -147,7 +175,7 @@ sealed class MurkyCarcass : ModNPC {
         //}
 
         NPC.ShowNameOnHover = NPC.chaseable;
-        NPC.chaseable = NPC.alpha < 50;
+        NPC.chaseable = NPC.Opacity > 0.5f;
         NPC.Opacity = Helper.Approach(NPC.Opacity, NPC.localAI[2], 0.1f);
 
         if (NPC.HasValidTarget) {
@@ -408,10 +436,6 @@ sealed class MurkyCarcass : ModNPC {
             return;
 
         NPC.netSpam = 0;
-    }
-
-    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        return base.PreDraw(spriteBatch, screenPos, drawColor);
     }
 
     public override void FindFrame(int frameHeight) {
