@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using ReLogic.Utilities;
-
 using RoA.Common.Tiles;
 using RoA.Content.Items.Weapons.Nature.Hardmode;
 using RoA.Core.Utility;

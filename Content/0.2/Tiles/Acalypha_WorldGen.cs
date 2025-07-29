@@ -27,9 +27,11 @@ sealed partial class Acalypha : CollectableFlower, IGrowLikeTulip {
         ushort acalyphaTileType = (ushort)ModContent.TileType<Acalypha>();
         bool tryToGrowAcalypha(int k, int l) {
             if (Main.tile[k, l].HasTile && GrowPlantsOverTime.CanGrowAPlant(acalyphaTileType, k, l)) {
-                GrowPlantsOverTime.GrowAPlant(acalyphaTileType, k, l);
-                if (Main.tile[k, l - 1].TileType == acalyphaTileType && WorldGen.genRand.NextChance(0.01)) {
-                    return true;
+                if (GrowPlantsOverTime.CanGrowAPlant(acalyphaTileType, k, l) && WorldGen.genRand.NextChance(0.01)) {
+                    GrowPlantsOverTime.GrowAPlant(acalyphaTileType, k, l);
+                    if (Main.tile[k, l - 1].TileType == acalyphaTileType) {
+                        return true;
+                    }
                 }
             }
             return false;
