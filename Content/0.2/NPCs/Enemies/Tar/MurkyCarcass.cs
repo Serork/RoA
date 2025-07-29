@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
 using RoA.Common.Crossmod;
-using RoA.Common.Projectiles;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
 

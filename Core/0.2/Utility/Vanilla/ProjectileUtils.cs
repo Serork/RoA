@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Mono.Cecil;
-
-using RoA.Common.Projectiles;
+using RoA.Common;
 
 using System;
 using System.Reflection;
