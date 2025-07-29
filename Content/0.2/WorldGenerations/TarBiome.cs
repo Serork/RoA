@@ -80,7 +80,7 @@ sealed class TarBiome : MicroBiome {
     }
 
     public static bool BiomeTileCheck2(int x, int y) {
-        int num = 50;
+        int num = 100;
         for (int i = x - num; i <= x + num; i++) {
             for (int j = y - num; j <= y + num; j++) {
                 if (!WorldGen.InWorld(i, j))
