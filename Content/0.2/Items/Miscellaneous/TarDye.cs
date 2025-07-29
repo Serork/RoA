@@ -10,6 +10,8 @@ using Terraria.ID;
 namespace RoA.Content.Items.Miscellaneous;
 
 sealed class TarDye : ModItem {
+    public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
+
     public override void SetStaticDefaults() {
         if (!Main.dedServ) {
             GameShaders.Armor.BindShader(Type, new TarDyeArmorShaderData(ShaderLoader.TarDye, "TarDyePass"));
