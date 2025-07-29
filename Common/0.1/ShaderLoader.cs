@@ -61,7 +61,7 @@ sealed class ShaderLoader : ModSystem {
             set => WavyEffect?.Parameters["drawColor"].SetValue((_drawColor = value).ToVector4());
         }
 
-        public static Effect? WavyEffect => _loadedShaders["Wavy"];
+        public static Effect? WavyEffect => _loadedShaders["Wavy"].Value;
 
         public static void Apply(SpriteBatch batch, Action draw) {
             SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
@@ -74,7 +74,7 @@ sealed class ShaderLoader : ModSystem {
         }
     }
 
-    private static IDictionary<string, Effect> _loadedShaders = new Dictionary<string, Effect>();
+    private static IDictionary<string, Asset<Effect>> _loadedShaders = new Dictionary<string, Asset<Effect>>();
 
     public static readonly string BackwoodsSky = RoA.ModName + "Backwoods Sky";
     public static readonly string BackwoodsFog = RoA.ModName + "Backwoods Fog";
@@ -84,6 +84,8 @@ sealed class ShaderLoader : ModSystem {
 
     public static VignetteScreenShaderData VignetteShaderData { get; private set; }
     public static Effect VignetteEffectData { get; private set; }
+
+    public static Asset<Effect> TarDye => _loadedShaders["TarDye"];
 
     public override void OnModLoad() {
         if (Main.dedServ) {
@@ -123,7 +125,8 @@ sealed class ShaderLoader : ModSystem {
                     string shaderPath = RemoveExtension(kvp.Key, ".xnb");
                     string shaderKey = RemoveDirectory(shaderPath, shaderDirectory);
                     if (shaderKey != "Vignette") {
-                        _loadedShaders.Add(shaderKey, Mod.Assets.Request<Effect>(shaderPath, AssetRequestMode.ImmediateLoad).Value);
+                        Asset<Effect> shaderAssetToLoad = Mod.Assets.Request<Effect>(shaderPath, AssetRequestMode.ImmediateLoad);
+                        _loadedShaders.Add(shaderKey, shaderAssetToLoad);
                     }
                 }
             }
@@ -139,7 +142,7 @@ sealed class ShaderLoader : ModSystem {
         }
 
         _loadedShaders.Clear();
-        _loadedShaders = new Dictionary<string, Effect>();
+        _loadedShaders = new Dictionary<string, Asset<Effect>>();
     }
 
     private static string RemoveExtension(string input, string extensionType) => input[..^extensionType.Length];

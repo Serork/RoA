@@ -2093,3 +2093,8 @@ MurkyCarcassBanner: {
 	DisplayName: Murky Carcass Banner
 	Tooltip: ""
 }
+
+TarDye: {
+	DisplayName: Tar Dye
+	Tooltip: ""
+}

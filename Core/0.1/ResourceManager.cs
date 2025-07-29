@@ -2,6 +2,8 @@
 
 using ReLogic.Content;
 
+using SteelSeries.GameSense;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +15,8 @@ using Terraria.ModLoader;
 namespace RoA.Core;
 
 static class ResourceManager {
+    private static Asset<Texture2D> _noiseRGB;
+
     public const string RESOURCESPATH = "Resources";
     public const string TEXTURESPATH = RESOURCESPATH + "/Textures";
     public const string SOUNDSPATH = RESOURCESPATH + "/Sounds";
@@ -64,6 +68,13 @@ static class ResourceManager {
     public static string ItemSounds => Sounds + "Items/";
     public static string NPCSounds => Sounds + "NPCs/";
     public static string MiscSounds => Sounds + "Other/";
+
+    public static Asset<Texture2D> NoiseRGB {
+        get {
+            _noiseRGB ??= ModContent.Request<Texture2D>(Textures + "Noise3");
+            return _noiseRGB;
+        }
+    }
 
     public static IEnumerable<Asset<Texture2D>> GetAllTexturesInPath(string path, string? searchPattern = null) {
         string texturesPath = Path.Combine(RoA.ModSourcePath, RoA.ModName + path);
