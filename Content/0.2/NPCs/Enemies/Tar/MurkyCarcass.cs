@@ -1,22 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Crossmod;
 using RoA.Content.Items.Placeable.Banners;
-using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Core.Utility;
 
 using System;
-using System.IO;
 
 using Terraria;
-using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.Utilities;
 
 namespace RoA.Content.NPCs.Enemies.Tar;
 
 sealed class MurkyCarcass : ModNPC {
+    private static Point16 _spawnPosition;
+
     public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
 
     public override void SetStaticDefaults() {
@@ -33,15 +33,60 @@ sealed class MurkyCarcass : ModNPC {
 
         Banner = Type;
         BannerItem = ModContent.ItemType<MurkyCarcassBanner>();
+
+        NPC.Opacity = 0f;
+    }
+
+    public override int SpawnNPC(int tileX, int tileY) {
+        Vector2 spawnPosition = _spawnPosition.ToWorldCoordinates();
+        return NPC.NewNPC(new EntitySource_SpawnNPC(), (int)spawnPosition.X, (int)spawnPosition.Y, Type);
+    }
+
+    public static bool FindTarLiquid(int landX, int landY, out int liquidX, out int liquidY) {
+        liquidX = landX;
+        liquidY = landY;
+        if (!WorldGen.InWorld(landX, landY, 101))
+            return false;
+
+        int num = 1;
+        for (int i = landX - 100; i <= landX + 100; i++) {
+            for (int j = landY - 100; j <= landY + 100; j++) {
+                bool result = false;
+                if (Main.tile[i, j - 1].LiquidAmount > 0 && Main.tile[i, j - 2].LiquidAmount > 0 && Main.tile[i, j - 1].LiquidType == 5) {
+                    result = true;
+                }
+                if (result && Main.rand.Next(num) == 0) {
+                    for (int checkX = -1; checkX < 2; checkX++) {
+                        for (int checkY = -1; checkY < 2; checkY++) {
+                            if (Main.tile[i + checkX, j + checkY].HasTile) {
+                                result = false;
+                            }
+                        }
+                    }
+                    if (result) {
+                        liquidX = i;
+                        liquidY = j;
+                        num++;
+                    }
+                }
+            }
+        }
+
+        if (liquidX != landX || liquidY != landY)
+            return true;
+
+        return false;
     }
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo) {
-        bool result = false;
-        int num = spawnInfo.SpawnTileX, num2 = spawnInfo.SpawnTileY;
-        if (Main.tile[num, num2 - 1].LiquidAmount > 0 && Main.tile[num, num2 - 2].LiquidAmount > 0 && Main.tile[num, num2 - 1].LiquidType == 5) {
-            result = true;
+        if (spawnInfo.Invasion || spawnInfo.PlayerInTown)
+            return 0f;
+
+        if (FindTarLiquid(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY, out int liquidX, out int liquidY)) {
+            _spawnPosition = new Point16(liquidX, liquidY);
+            return 0.5f;
         }
-        return result.ToInt() * 10f;
+        return 0f;
     }
 
     public override void UpdateLifeRegen(ref int damage) {
@@ -59,17 +104,17 @@ sealed class MurkyCarcass : ModNPC {
         if (NPC.direction == 0)
             NPC.TargetClosest();
 
-        if (Spawn <= 0f) {
-            Spawn = 1f;
-            if (Main.netMode != NetmodeID.MultiplayerClient) {
-                for (int i = 0; i < 2; i++) {
-                    int npc = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, Type, NPC.whoAmI, ai2: 1f);
-                    if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
-                        NetMessage.SendData(MessageID.SyncNPC, number: npc);
-                    }
-                }
-            }
-        }
+        //if (Spawn <= 0f) {
+        //    Spawn = 1f;
+        //    if (Main.netMode != NetmodeID.MultiplayerClient) {
+        //        for (int i = 0; i < 2; i++) {
+        //            int npc = NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, Type, NPC.whoAmI, ai2: 1f);
+        //            if (Main.netMode == NetmodeID.Server && npc < Main.maxNPCs) {
+        //                NetMessage.SendData(MessageID.SyncNPC, number: npc);
+        //            }
+        //        }
+        //    }
+        //}
 
         //if (type == 615) {
         //    if (this.ai[2] == 0f) {
@@ -174,6 +219,7 @@ sealed class MurkyCarcass : ModNPC {
         //    }
         //}
 
+        //NPC.friendly = NPC.chaseable;
         NPC.ShowNameOnHover = NPC.chaseable;
         NPC.chaseable = NPC.Opacity > 0.5f;
         NPC.Opacity = Helper.Approach(NPC.Opacity, NPC.localAI[2], 0.1f);
@@ -182,7 +228,15 @@ sealed class MurkyCarcass : ModNPC {
             float neededDistance = 100f;
             float distance = NPC.GetTargetPlayer().Distance(NPC.Center);
             bool flag = distance < neededDistance;
-            if (NPC.wet) {
+            bool flag2 = false;
+            for (int checkY = -1; checkY <= 0; checkY++) {
+                Point16 positionInTiles = NPC.Center.ToTileCoordinates16();
+                if (WorldGenHelper.GetTileSafely(positionInTiles.X, positionInTiles.Y + checkY).LiquidAmount < 32) {
+                    flag2 = true;
+                    break;
+                }
+            }
+            if (NPC.wet && !flag2) {
                 if (flag) {
                     NPC.localAI[2] = 1f;
                 }
@@ -338,7 +392,7 @@ sealed class MurkyCarcass : ModNPC {
                         //    num264 = -0.2f;
 
                         NPC.velocity.Y -= 0.02f;
-                        if (NPC.velocity.Y < num264 || !NPC.wet || NPC.collideX || NPC.collideY)
+                        if (NPC.velocity.Y < num264 || !NPC.wet || (NPC.velocity.Length() > 1f && (NPC.collideX || NPC.collideY)))
                             NPC.ai[0] = 1f;
                     }
                     else {
@@ -350,7 +404,7 @@ sealed class MurkyCarcass : ModNPC {
                         //    num265 = 1f;
 
                         NPC.velocity.Y += 0.02f;
-                        if (NPC.velocity.Y > num265 || !NPC.wet || NPC.collideX || NPC.collideY)
+                        if (NPC.velocity.Y > num265 || !NPC.wet || (NPC.velocity.Length() > 1f && (NPC.collideX || NPC.collideY)))
                             NPC.ai[0] = -1f;
                     }
                 }
