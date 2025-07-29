@@ -1,5 +1,4 @@
 ﻿using RoA.Common.Networking;
-using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
 using System;
@@ -12,7 +11,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Common.Projectiles;
+namespace RoA.Common;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 class TrackedAttribute : Attribute { }

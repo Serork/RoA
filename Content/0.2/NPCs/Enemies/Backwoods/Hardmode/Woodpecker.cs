@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Projectiles;
+using RoA.Common;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Tiles.Ambient.LargeTrees;
 using RoA.Core;

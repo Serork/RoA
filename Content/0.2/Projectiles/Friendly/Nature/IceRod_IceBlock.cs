@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
 using RoA.Common.Networking;
 using RoA.Common.Projectiles;
 using RoA.Core;
