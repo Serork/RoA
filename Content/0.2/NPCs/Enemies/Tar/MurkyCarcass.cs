@@ -37,6 +37,18 @@ sealed class MurkyCarcass : ModNPC {
         NPC.Opacity = 0f;
     }
 
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        if (!NPC.chaseable) {
+            modifiers.FinalDamage *= 0f;
+        }
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        if (!NPC.chaseable) {
+            modifiers.FinalDamage *= 0f;
+        }
+    }
+
     public override int SpawnNPC(int tileX, int tileY) {
         Vector2 spawnPosition = _spawnPosition.ToWorldCoordinates();
         return NPC.NewNPC(new EntitySource_SpawnNPC(), (int)spawnPosition.X, (int)spawnPosition.Y, Type);
