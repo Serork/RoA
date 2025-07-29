@@ -91,7 +91,7 @@ sealed class MurkyCarcass : ModNPC {
     }
 
     public override float SpawnChance(NPCSpawnInfo spawnInfo) {
-        if (spawnInfo.Invasion || spawnInfo.PlayerInTown)
+        if (spawnInfo.Invasion)
             return 0f;
 
         if (FindTarLiquid(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY, out int liquidX, out int liquidY)) {
