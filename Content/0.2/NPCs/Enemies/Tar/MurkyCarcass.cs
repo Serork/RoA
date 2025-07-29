@@ -242,7 +242,7 @@ sealed class MurkyCarcass : ModNPC {
             bool flag = distance < neededDistance;
             bool flag2 = false;
             for (int checkY = -1; checkY <= 0; checkY++) {
-                Point16 positionInTiles = NPC.Center.ToTileCoordinates16();
+                Point16 positionInTiles = NPC.Bottom.ToTileCoordinates16();
                 if (WorldGenHelper.GetTileSafely(positionInTiles.X, positionInTiles.Y + checkY).LiquidAmount < 32) {
                     flag2 = true;
                     break;
