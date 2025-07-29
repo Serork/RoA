@@ -52,16 +52,28 @@ abstract class CollectableFlower : ModTile {
 
     public sealed override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) => spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
 
-    public sealed override IEnumerable<Item> GetItemDrops(int i, int j) => [new(DropItemType)];
+    public sealed override IEnumerable<Item> GetItemDrops(int i, int j) {
+        if (CanBeCollected(i, j)) {
+            yield return new(DropItemType);
+        }
+    }
 
     public sealed override void MouseOver(int i, int j) {
-        Player player = Main.player[Main.myPlayer];
+        if (!CanBeCollected(i, j)) {
+            return;
+        }
+
+        Player player = Main.LocalPlayer;
         player.noThrow = 2;
         player.cursorItemIconEnabled = true;
         player.cursorItemIconID = GetItemDrops(i, j).Single().type;
     }
 
     public sealed override bool RightClick(int i, int j) {
+        if (!CanBeCollected(i, j)) {
+            return false;
+        }
+
         Player player = Main.LocalPlayer;
         if (player.IsWithinSnappngRangeToTile(i, j, 40)) {
             Tile tile = WorldGenHelper.GetTileSafely(i, j);
@@ -75,4 +87,6 @@ abstract class CollectableFlower : ModTile {
 
         return false;
     }
+
+    protected virtual bool CanBeCollected(int i, int j) => true;
 }

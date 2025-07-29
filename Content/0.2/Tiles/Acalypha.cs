@@ -44,6 +44,8 @@ sealed partial class Acalypha : CollectableFlower, IGrowLikeTulip {
         }
     }
 
+    protected override bool CanBeCollected(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameY != 0;
+
     Predicate<Point16> IGrowLikeTulip.ShouldGrow => (tilePosition) => {
         int i = tilePosition.X, j = tilePosition.Y;
         Tile tile = Main.tile[i, j];
