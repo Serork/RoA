@@ -4,6 +4,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Placeable.Walls;
 
 sealed class SolidifiedTarWall : ModItem {
+    public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
+
     public override void SetDefaults() {
         Item.useStyle = 1;
         Item.useTurn = true;
