@@ -13,11 +13,13 @@ sealed partial class RecipeDuplicationSystem : ModSystem {
                 continue;
             }
 
-            Dictionary<ushort, HashSet<Recipe>> recipesByItemId = new();
+            int duplicateItemType = item.Type;
+            Dictionary<ushort, HashSet<Recipe>> recipesByItemId = [];
             foreach (ushort sourceItemId in duplicator.SourceItemTypes) {
                 bool IsIngredientSource(Item ingredient) => ingredient.type == sourceItemId;
-                for (int i = 0; i < Main.recipe.Length; i++) {
-                    Recipe recipe = Main.recipe[i];
+
+                // duplicate recipes
+                foreach (Recipe recipe in Main.recipe) {
                     if (recipe.requiredItem.Any(IsIngredientSource)) {
                         if (!recipesByItemId.TryGetValue(sourceItemId, out HashSet<Recipe>? recipes)) {
                             recipes = [];
@@ -32,6 +34,13 @@ sealed partial class RecipeDuplicationSystem : ModSystem {
                         int ingredientIndex = newRecipe.requiredItem.FindIndex(IsIngredientSource);
                         newRecipe.requiredItem[ingredientIndex].SetDefaults(item.Type);
                         newRecipe.Register();
+                    }
+                }
+
+                // add to recipe groups
+                foreach (RecipeGroup recipeGroup in RecipeGroup.recipeGroups.Values) {
+                    if (recipeGroup.ContainsItem(sourceItemId)) {
+                        recipeGroup.ValidItems.Add(duplicateItemType);
                     }
                 }
             }
