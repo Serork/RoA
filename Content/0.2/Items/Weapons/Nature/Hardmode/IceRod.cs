@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Recipes;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 
@@ -11,7 +12,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
-sealed class IceRod : NatureItem {
+sealed class IceRod : NatureItem, IRecipeDuplicatorItem {
+    ushort[] IRecipeDuplicatorItem.SourceItemTypes => [(ushort)ItemID.IceRod];
+
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(32);
 

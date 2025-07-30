@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Recipes;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -10,7 +11,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
-sealed class CrimsonRod : NatureItem {
+sealed class CrimsonRod : NatureItem, IRecipeDuplicatorItem {
+    ushort[] IRecipeDuplicatorItem.SourceItemTypes => [(ushort)ItemID.CrimsonRod];
+
     protected override void SafeSetDefaults() {
         Item.damage = 2;
         Item.useStyle = 1;
