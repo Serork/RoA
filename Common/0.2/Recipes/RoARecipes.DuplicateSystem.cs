@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -7,6 +9,24 @@ using Terraria.ModLoader;
 namespace RoA.Common.Recipes;
 
 sealed partial class RecipeDuplicationSystem : ModSystem {
+    public override void AddRecipeGroups() {
+        foreach (ModItem item in ModContent.GetContent<ModItem>()) {
+            if (item is not IRecipeDuplicatorItem duplicator) {
+                continue;
+            }
+
+            int duplicateItemType = item.Type;
+            ushort[] sourceItemTypes = duplicator.SourceItemTypes;
+            foreach (ushort sourceItemId in sourceItemTypes) {
+                foreach (RecipeGroup recipeGroup in RecipeGroup.recipeGroups.Values) {
+                    if (recipeGroup.ContainsItem(sourceItemId) && !recipeGroup.ValidItems.Contains(duplicateItemType)) {
+                        recipeGroup.ValidItems.Add(duplicateItemType);
+                    }
+                }
+            }
+        }
+    }
+
     public override void PostAddRecipes() {
         foreach (ModItem item in ModContent.GetContent<ModItem>()) {
             if (item is not IRecipeDuplicatorItem duplicator) {
@@ -15,10 +35,9 @@ sealed partial class RecipeDuplicationSystem : ModSystem {
 
             int duplicateItemType = item.Type;
             Dictionary<ushort, HashSet<Recipe>> recipesByItemId = [];
-            foreach (ushort sourceItemId in duplicator.SourceItemTypes) {
+            ushort[] sourceItemTypes = duplicator.SourceItemTypes;
+            foreach (ushort sourceItemId in sourceItemTypes) {
                 bool IsIngredientSource(Item ingredient) => ingredient.type == sourceItemId;
-
-                // duplicate recipes
                 foreach (Recipe recipe in Main.recipe) {
                     if (recipe.requiredItem.Any(IsIngredientSource)) {
                         if (!recipesByItemId.TryGetValue(sourceItemId, out HashSet<Recipe>? recipes)) {
@@ -34,13 +53,6 @@ sealed partial class RecipeDuplicationSystem : ModSystem {
                         int ingredientIndex = newRecipe.requiredItem.FindIndex(IsIngredientSource);
                         newRecipe.requiredItem[ingredientIndex].SetDefaults(item.Type);
                         newRecipe.Register();
-                    }
-                }
-
-                // add to recipe groups
-                foreach (RecipeGroup recipeGroup in RecipeGroup.recipeGroups.Values) {
-                    if (recipeGroup.ContainsItem(sourceItemId)) {
-                        recipeGroup.ValidItems.Add(duplicateItemType);
                     }
                 }
             }
