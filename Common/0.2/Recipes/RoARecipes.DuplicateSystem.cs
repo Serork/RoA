@@ -6,10 +6,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Recipes;
 
-interface IRecipeDuplicatorItem {
-    public ushort[] SourceItemTypes { get; }
-}
-
 sealed partial class RecipeDuplicationSystem : ModSystem {
     public override void PostAddRecipes() {
         foreach (ModItem item in ModContent.GetContent<ModItem>()) {
