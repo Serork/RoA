@@ -5,7 +5,9 @@ using RoA.Common.Druid;
 using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
 
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
@@ -16,8 +18,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
 sealed class ClingerStaff : NatureItem {
-    private static float SPAWNOFFSET => 100f;
-
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(38, 38);
         Item.SetWeaponValues(40, 2f);
@@ -30,13 +30,36 @@ sealed class ClingerStaff : NatureItem {
     }
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        Vector2 getOffset() => Vector2.One.RotatedByRandom(MathHelper.TwoPi) * SPAWNOFFSET;
+        //Vector2 getOffset() => Vector2.One.RotatedByRandom(MathHelper.TwoPi) * SPAWNOFFSET;
         Vector2 mousePosition = player.GetMousePosition();
-        position = mousePosition + getOffset();
-        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<ClingerHideway>((checkProjectile) => checkProjectile.owner != player.whoAmI)) {
-            while (projectile.Center.Distance(position) < SPAWNOFFSET) {
-                position = mousePosition + getOffset();
-            }
+        position = mousePosition /*+ getOffset()*/;
+        //foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<ClingerHideway>((checkProjectile) => checkProjectile.owner != player.whoAmI)) {
+        //    while (projectile.Center.Distance(position) < SPAWNOFFSET) {
+        //        position = mousePosition + getOffset();
+        //    }
+        //}
+
+        UpdateMaxClingers();
+    }
+
+    private void UpdateMaxClingers() {
+        IEnumerable<Projectile> list2 = TrackedEntitiesSystem.GetTrackedProjectile<ClingerHideway>();
+        List<Projectile> list = [];
+        foreach (Projectile projectile in list2) {
+            list.Add(projectile);
         }
+        int num = 0;
+        int count = list2.Count();
+        while (list.Count > ClingerHideway.MAXAVAILABLE - 1 && ++num < count) {
+            Projectile projectile = list[0];
+            for (int j = 1; j < list.Count; j++) {
+                if (list[j].timeLeft < projectile.timeLeft) {
+                    projectile = list[j];
+                }
+            }
+            projectile.Kill();
+            list.Remove(projectile);
+        }
+        TrackedEntitiesSystem.UpdateTrackedEntityLists();
     }
 }

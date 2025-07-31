@@ -103,12 +103,17 @@ sealed class TrackedEntitiesSystem : ModSystem {
         }
     }
 
-    public override void PostUpdateProjectiles() {
-        foreach (List<Entity> trackedProjectiles in TrackedEntitiesByType.Values) {
-            for (int i = trackedProjectiles.Count - 1; i >= 0; i--) {
-                if (!trackedProjectiles[i].active) {
-                    trackedProjectiles[i] = trackedProjectiles[^1];
-                    trackedProjectiles.RemoveAt(trackedProjectiles.Count - 1);
+    public override void PostUpdateEverything() {
+        UpdateTrackedEntityLists();
+    }
+
+    public static void UpdateTrackedEntityLists() {
+        foreach (List<Entity> trackedEntities in TrackedEntitiesByType.Values) {
+            for (int i = trackedEntities.Count - 1; i >= 0; i--) {
+                Entity trackedEntity = trackedEntities[i];
+                if (!trackedEntity.active) {
+                    trackedEntities[i] = trackedEntities[^1];
+                    trackedEntities.RemoveAt(trackedEntities.Count - 1);
                 }
             }
         }
