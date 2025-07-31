@@ -161,7 +161,7 @@ sealed class TulipPetal : NatureProjectile {
         //SpriteFrame frame = new(SEGMENTCOUNT, 1);
         //frame = frame.With(UsedFrameX, 0);
         //Rectangle sourceRectangle = frame.GetSourceRectangle(texture);
-        //Vector2 lightPosition = Projectile.position + Offset.RotatedBy(Projectile._rotation + MathHelper.Pi);
+        //Vector2 lightPosition = Projectile.position + Shake.RotatedBy(Projectile._rotation + MathHelper.Pi);
         //Main.EntitySpriteDraw(texture,
         //                      position - Main.screenPosition,
         //                      sourceRectangle,

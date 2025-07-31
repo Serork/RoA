@@ -9,14 +9,14 @@ using Terraria.ModLoader;
 
 namespace RoA.Common;
 
-interface IRequestAsset {
+interface IRequestAssets {
     (byte, string)[] IndexedPathsToTexture { get; }
 }
 
 sealed class AssetInitializer : IPostSetupContent {
     public static Dictionary<Type, Dictionary<byte, Asset<Texture2D>?>?> TexturesPerType { get; private set; } = [];
 
-    public static bool TryGetTextureAssets<T>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets) where T : IRequestAsset {
+    public static bool TryGetRequestedTextureAssets<T>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets) where T : IRequestAssets {
         Type requestedAssetsType = typeof(T);
         if (TexturesPerType!.TryGetValue(requestedAssetsType, out Dictionary<byte, Asset<Texture2D>?>? textures)) {
             if (textures == null) {
@@ -36,7 +36,7 @@ sealed class AssetInitializer : IPostSetupContent {
         return false;
     }
 
-    public static bool TryGetTextureAsset<T>(byte textureIndex, out Asset<Texture2D>? textureAsset) where T : IRequestAsset {
+    public static bool TryGetRequestedTextureAsset<T>(byte textureIndex, out Asset<Texture2D>? textureAsset) where T : IRequestAssets {
         Type requestedAssetsType = typeof(T);
         if (TexturesPerType!.TryGetValue(requestedAssetsType, out Dictionary<byte, Asset<Texture2D>?>? textures)) {
             if (textures == null) {
@@ -59,9 +59,9 @@ sealed class AssetInitializer : IPostSetupContent {
         LoadRequestedAssets();
     }
 
-    private void LoadRequestedAssets() {
+    private static void LoadRequestedAssets() {
         foreach (ILoadable loadableContent in RoA.Instance.GetContent()) {
-            if (loadableContent is not IRequestAsset requestAsset) {
+            if (loadableContent is not IRequestAssets requestAsset) {
                 continue;
             }
             foreach ((byte, string) indexedPath in requestAsset.IndexedPathsToTexture) {

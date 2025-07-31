@@ -29,7 +29,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Miscellaneous;
 
-sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.IPostDraw {
+sealed class TreeDryad : ModTile, IRequestAssets, TileHooks.IPreDraw, TileHooks.IPostDraw {
     private static byte RAYCOUNT => 8;
 
     private static bool _hammerEmoteShown;
@@ -40,7 +40,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         Glow
     }
 
-    (byte, string)[] IRequestAsset.IndexedPathsToTexture => [((byte)TreeDryadRequstedTextureType.Ray, ResourceManager.Textures + "Ray"),
+    (byte, string)[] IRequestAssets.IndexedPathsToTexture => [((byte)TreeDryadRequstedTextureType.Ray, ResourceManager.Textures + "Ray"),
                                                              ((byte)TreeDryadRequstedTextureType.Glow, TileLoader.GetTile(ModContent.TileType<TreeDryad>()).Texture + "_Glow")];
 
     void TileHooks.IPreDraw.PreDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition) {
@@ -82,7 +82,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
             DrawRays(spriteBatch, tilePosition, 0.075f);
 
             if (isOrigin) {
-                if (AssetInitializer.TryGetTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Glow, out Asset<Texture2D> glowTextureAsset)) {
+                if (AssetInitializer.TryGetRequestedTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Glow, out Asset<Texture2D> glowTextureAsset)) {
                     Texture2D glowTexture = glowTextureAsset!.Value;
                     const byte GLOWFRAMECOUNT = 8;
                     SpriteFrame glowFrame = new(1, GLOWFRAMECOUNT, 0, (byte)(Utils.Remap(lightStrengthFactor, 0.75f, 1f, 1f, 0f) * GLOWFRAMECOUNT));
@@ -109,7 +109,7 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
     private static void DrawRays(SpriteBatch spriteBatch, Point16 tilePosition, float colorOpacity) {
         int i = tilePosition.X, j = tilePosition.Y;
         Point16 topLeft = TileHelper.GetTileTopLeft<TreeDryad>(i, j);
-        if (topLeft == tilePosition && AssetInitializer.TryGetTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Ray, out Asset<Texture2D> rayTextureAsset)) {
+        if (topLeft == tilePosition && AssetInitializer.TryGetRequestedTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Ray, out Asset<Texture2D> rayTextureAsset)) {
             Texture2D rayTexture = rayTextureAsset!.Value;
             Vector2 rayPosition = TileHelper.GetTileTopLeft<TreeDryad>(i, j).ToWorldCoordinates() + new Vector2(8f, 4f);
             bool turnedLeft = Main.tile[topLeft.X, topLeft.Y].TileFrameX <= 18;

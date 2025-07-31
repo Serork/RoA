@@ -74,13 +74,13 @@ sealed class Woodpecker : ModNPC {
 
         public AIState State {
             readonly get => (AIState)StateValue;
-            set => StateValue = Utils.Clamp<byte>((byte)value, (byte)AIState.Idle, (byte)AIState.Count);
+            set => StateValue = Utils.Clamp((byte)value, (byte)AIState.Idle, (byte)AIState.Count);
         }
 
         public AnimationFrame Frame {
             readonly get => (AnimationFrame)FrameValue;
             set {
-                byte frameToSet = Utils.Clamp<byte>((byte)value, (byte)AnimationFrame.Idle, (byte)AnimationFrame.Count);
+                byte frameToSet = Utils.Clamp((byte)value, (byte)AnimationFrame.Idle, (byte)AnimationFrame.Count);
                 FrameValue = frameToSet;
                 npc.SetFrame(frameToSet, npc.GetFrameHeight());
             }

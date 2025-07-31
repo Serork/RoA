@@ -1,7 +1,7 @@
 ﻿namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 //ref struct ExecuteArgs {
-//    public byte Frame;
+//    public byte CurrentState;
 //    public double FrameCounter;
 //    public bool Reset;
 //}
@@ -29,14 +29,14 @@
 //        ExecuteArgs executeArgs;
 //        executeArgs.Reset = false;
 //        executeArgs.FrameCounter = NPC.frameCounter;
-//        executeArgs.Frame = Frame;
+//        executeArgs.CurrentState = CurrentState;
 //        _currentAnimation.Execute(ref executeArgs);
 //        NPC.frameCounter = executeArgs.FrameCounter;
 //        if (executeArgs.Reset) {
 //            _currentAnimation = null;
 //            return;
 //        }
-//        Frame = executeArgs.Frame;
+//        CurrentState = executeArgs.CurrentState;
 //    }
 
 //    partial void UnloadAnimations() {
@@ -55,7 +55,7 @@
 //        _currentColumn = _currentAnimation.UsedColumn;
 //        _isAnimationPlaying = true;
 //        NPC.frameCounter = 0.0;
-//        Frame = _currentAnimation.StartFrame;
+//        CurrentState = _currentAnimation.StartFrame;
 //    }
 //}
 
@@ -76,7 +76,7 @@
 //    public void Execute(ref ExecuteArgs executeArgs) {
 //        byte lastFrame = 6;
 //        double frameRate = 5.0;
-//        ref byte currentFrame = ref executeArgs.Frame;
+//        ref byte currentFrame = ref executeArgs.CurrentState;
 //        ref double frameCounter = ref executeArgs.FrameCounter;
 //        ref bool reset = ref executeArgs.Reset;
 //        if (++frameCounter > frameRate) {
@@ -96,7 +96,7 @@
 //    public void Execute(ref ExecuteArgs executeArgs) {
 //        byte lastFrame = 14;
 //        double frameRate = 5.0;
-//        ref byte currentFrame = ref executeArgs.Frame;
+//        ref byte currentFrame = ref executeArgs.CurrentState;
 //        ref double frameCounter = ref executeArgs.FrameCounter;
 //        ref bool reset = ref executeArgs.Reset;
 //        if (++frameCounter > frameRate) {
@@ -116,7 +116,7 @@
 //    public void Execute(ref ExecuteArgs executeArgs) {
 //        byte lastFrame = 18;
 //        double frameRate = 5.0;
-//        ref byte currentFrame = ref executeArgs.Frame;
+//        ref byte currentFrame = ref executeArgs.CurrentState;
 //        ref double frameCounter = ref executeArgs.FrameCounter;
 //        ref bool reset = ref executeArgs.Reset;
 //        if (++frameCounter > frameRate) {

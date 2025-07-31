@@ -154,7 +154,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
 
         public GemType GeodeType {
             readonly get => (GemType)GeodeTypeValue;
-            set => GeodeTypeValue = Utils.Clamp<byte>((byte)value, (byte)GemType.Amethyst, (byte)GemType.Amber + 1);
+            set => GeodeTypeValue = Utils.Clamp((byte)value, (byte)GemType.Amethyst, (byte)(GemType.Amber + 1));
         }
 
         public bool OwnerStoppedAttacking {
@@ -665,7 +665,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
         float geodeProgress = GetGeodeProgress(true);
         float maxProgress = MAXPROGRESS * ROCKATTACKCOUNT;
         float progress = geodeProgress / maxProgress;
-        return progress >= 0.955f;
+        return progress >= 0.95f;
     }
 
     private float GetGeodeSize() {

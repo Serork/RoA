@@ -2098,3 +2098,8 @@ TarDye: {
 	DisplayName: Tar Dye
 	Tooltip: ""
 }
+
+ClingerStaff: {
+	DisplayName: Clinger Staff
+	Tooltip: ""
+}

@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Emotes;
 
-sealed class HammerEmote : ModEmoteBubble, IRequestAsset {
+sealed class HammerEmote : ModEmoteBubble, IRequestAssets {
     private int _frameCounter;
 
     private enum HammerEmoteRequstedTextureType : byte {
@@ -23,7 +23,7 @@ sealed class HammerEmote : ModEmoteBubble, IRequestAsset {
         Border
     }
 
-    (byte, string)[] IRequestAsset.IndexedPathsToTexture =>
+    (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)HammerEmoteRequstedTextureType.Bubble, "Terraria/Images/Extra_" + (short)48),
          ((byte)HammerEmoteRequstedTextureType.Hammer, EmoteBubbleLoader.GetEmoteBubble(ModContent.EmoteBubbleType<HammerEmote>()).Texture),
          ((byte)HammerEmoteRequstedTextureType.Border, "Terraria/Images/UI/EmoteBubbleBorder")];
@@ -49,7 +49,7 @@ sealed class HammerEmote : ModEmoteBubble, IRequestAsset {
     }
 
     public override bool PreDrawInEmoteMenu(SpriteBatch spriteBatch, EmoteButton uiEmoteButton, Vector2 position, Rectangle frame, Vector2 origin) {
-        if (AssetInitializer.TryGetTextureAssets<HammerEmote>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets)) {
+        if (AssetInitializer.TryGetRequestedTextureAssets<HammerEmote>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets)) {
             Texture2D bubbleTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Bubble]!.Value,
                       emoteTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Hammer]!.Value,
                       borderTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Border]!.Value;
@@ -67,7 +67,7 @@ sealed class HammerEmote : ModEmoteBubble, IRequestAsset {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Texture2D texture, Vector2 position, Rectangle frame, Vector2 origin, SpriteEffects spriteEffects) {
-        if (AssetInitializer.TryGetTextureAssets<HammerEmote>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets)) {
+        if (AssetInitializer.TryGetRequestedTextureAssets<HammerEmote>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets)) {
             Texture2D bubbleTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Bubble]!.Value,
                       emoteTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Hammer]!.Value,
                       borderTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Border]!.Value;

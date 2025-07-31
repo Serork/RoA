@@ -42,7 +42,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
 
         private GemType GeodeType {
             get => (GemType)Projectile.ai[2];
-            set => Projectile.ai[2] = Utils.Clamp<byte>((byte)value, (byte)GemType.Amethyst, (byte)GemType.Amber + 1);
+            set => Projectile.ai[2] = Utils.Clamp((byte)value, (byte)GemType.Amethyst, (byte)(GemType.Amber + 1));
         }
 
         public override bool IsInUse => base.IsInUse && Owner.controlUseItem && AttackProgress01 < 1f;

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
-using RoA.Common.Projectiles;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;

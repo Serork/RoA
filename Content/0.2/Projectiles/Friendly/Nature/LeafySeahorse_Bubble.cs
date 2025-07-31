@@ -65,7 +65,7 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
 
         public BubbleSizeType SizeType {
             readonly get => (BubbleSizeType)SizeTypeValue;
-            set => SizeTypeValue = Utils.Clamp<byte>((byte)value, (byte)BubbleSizeType.Small, (byte)BubbleSizeType.ExtraLarge);
+            set => SizeTypeValue = Utils.Clamp((byte)value, (byte)BubbleSizeType.Small, (byte)BubbleSizeType.ExtraLarge);
         }
 
         public float DesiredScaleFactor {
