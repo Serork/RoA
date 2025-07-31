@@ -32,7 +32,12 @@ sealed class ClingerStaff : NatureItem {
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         //Vector2 getOffset() => Vector2.One.RotatedByRandom(MathHelper.TwoPi) * SPAWNOFFSET;
         Vector2 mousePosition = player.GetMousePosition();
-        position = mousePosition /*+ getOffset()*/;
+        Vector2 spawnPosition = player.Center;
+        int maxChecks = 30;
+        while (maxChecks-- > 0 && !WorldGenHelper.SolidTile(spawnPosition.ToTileCoordinates())) {
+            spawnPosition += spawnPosition.DirectionTo(mousePosition) * WorldGenHelper.TILESIZE;
+        }
+        position = spawnPosition;
         //foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<ClingerHideway>((checkProjectile) => checkProjectile.owner != player.whoAmI)) {
         //    while (projectile.Center.Distance(position) < SPAWNOFFSET) {
         //        position = mousePosition + getOffset();
