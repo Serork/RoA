@@ -182,6 +182,8 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.penetrate = -1;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
+
+        Projectile.manualDirectionChange = true;
     }
 
     public override void AI() {
