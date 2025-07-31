@@ -167,6 +167,7 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
     private Vector2 _clingerPosition = Vector2.Zero;
     private float _clingerWaveMovementFactor;
     private SegmentInfo[]? _segmentData;
+    private Vector2 _mousePosition;
 
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: true);
@@ -237,11 +238,12 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
                 _clingerPosition = center;
             }
             else {
-                Vector2 mousePosition = owner.GetMousePosition();
+                ref float clingerFollowCursorFactor = ref hidewayValues.ClingerFollowCursorFactor;
+                _mousePosition = Vector2.Lerp(_mousePosition, owner.GetMousePosition(), clingerFollowCursorFactor);
                 float maxOffset = CLINGERLENGTH;
-                float distance = mousePosition.Distance(Projectile.Center) * 0.5f;
+                float distance = _mousePosition.Distance(Projectile.Center) * 0.5f;
                 float offset = distance < maxOffset ? distance : maxOffset;
-                Vector2 mousePositionOffset = mousePosition.DirectionFrom(center) * offset;
+                Vector2 mousePositionOffset = _mousePosition.DirectionFrom(center) * offset;
                 Vector2 destination = center + mousePositionOffset;
                 if (hidewayValues.DidClingerAttackedEnough) {
                     destination = center;
@@ -251,11 +253,10 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
                         Projectile.Kill();
                     }
                 }
-                ref float clingerFollowCursorFactor = ref hidewayValues.ClingerFollowCursorFactor;
                 clingerFollowCursorFactor = Helper.Approach(clingerFollowCursorFactor, 0f, 0.01f);
-                _clingerPosition = Vector2.Lerp(_clingerPosition, destination, 0.15f * clingerFollowCursorFactor);
+                _clingerPosition = Vector2.Lerp(_clingerPosition, destination, 0.15f/* * clingerFollowCursorFactor*/);
                 float baseRotation = Projectile.DirectionTo(_clingerPosition).ToRotation() - MathHelper.PiOver2;
-                _clingerPosition += (Vector2.UnitY * Utils.Remap(1f - hidewayValues.ClingerAITimer / CLINGERTIMETOSPAWNINTICKS, 0f, 1f, 1.5f, 5f)).RotatedBy(baseRotation + Math.Sin(Projectile.whoAmI + Main.timeForVisualEffects / 10)) * clingerFollowCursorFactor;
+                _clingerPosition += (Vector2.UnitY * Utils.Remap(1f - hidewayValues.ClingerAITimer / CLINGERTIMETOSPAWNINTICKS, 0f, 1f, 1.5f, 5f)).RotatedBy(baseRotation + Math.Sin(Projectile.whoAmI + Main.timeForVisualEffects / 10))/* * clingerFollowCursorFactor*/;
             }
         }
         void handleClingerBody() {
