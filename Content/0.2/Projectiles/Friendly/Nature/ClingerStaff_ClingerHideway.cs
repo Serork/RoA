@@ -111,7 +111,7 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
         public readonly bool IsClingerSpawned => IsEmpty && !IsClingerSpawning;
         public readonly bool DidClingerAttackedEnough => projectile.timeLeft < TIMELEFTODISAPPEAR;
         public readonly bool DoesClingerNeedToHide => projectile.timeLeft < TIMELEFTOSTOPATTACKING;
-        public readonly bool CanClingerDamage => IsClingerSpawned && !DidClingerAttackedEnough;
+        public readonly bool CanClingerDamage => IsClingerSpawned && !DidClingerAttackedEnough && ClingerFollowCursorFactor < 0.95f;
 
         public void RandomShake(float modifier = 1f) {
             if (projectile.IsOwnerLocal()) {
@@ -244,6 +244,7 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
                 _mousePosition = Vector2.Lerp(_mousePosition, owner.GetMousePosition(), clingerFollowCursorFactor);
                 float maxOffset = CLINGERLENGTH;
                 float distance = _mousePosition.Distance(Projectile.Center) * 0.5f;
+                distance = MathF.Max(10f, distance);
                 float offset = distance < maxOffset ? distance : maxOffset;
                 Vector2 mousePositionOffset = _mousePosition.DirectionFrom(center) * offset;
                 Vector2 destination = center + mousePositionOffset;
