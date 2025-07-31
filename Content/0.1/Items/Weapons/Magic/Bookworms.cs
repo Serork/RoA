@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Recipes;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -15,7 +16,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-sealed class Bookworms : ModItem {
+sealed class Bookworms : ModItem, IRecipeDuplicatorItem {
+    ushort[] IRecipeDuplicatorItem.SourceItemTypes => [(ushort)ItemID.Vilethorn];
+
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
     }

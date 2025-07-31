@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Projectiles;
+using RoA.Common.Recipes;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -21,7 +22,9 @@ using static Terraria.Player;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-sealed class ArterialSpray : ModItem {
+sealed class ArterialSpray : ModItem, IRecipeDuplicatorItem {
+    ushort[] IRecipeDuplicatorItem.SourceItemTypes => [(ushort)ItemID.CrimsonRod];
+
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
     }

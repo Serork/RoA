@@ -1,6 +1,5 @@
 using RoA.Common.Configs;
 using RoA.Common.Druid;
-using RoA.Common.Recipes;
 
 using Terraria;
 using Terraria.ID;
@@ -8,9 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
-sealed class Vilethorn : NatureItem, IRecipeDuplicatorItem {
-    ushort[] IRecipeDuplicatorItem.SourceItemTypes => [(ushort)ItemID.Vilethorn];
-
+sealed class Vilethorn : NatureItem {
     public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? base.Texture : $"Terraria/Images/Item_{ItemID.Vilethorn}";
 
     protected override void SafeSetDefaults() {
