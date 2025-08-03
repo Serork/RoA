@@ -967,6 +967,16 @@ sealed partial class Lothor : ModNPC {
 
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             if (projectile.friendly && projectile.minion && NPC.Distance(projectile.Center) <= maxDist) {
+                bool holdingProj = false;
+                foreach (Player checkPlayer in Main.ActivePlayers) {
+                    if (checkPlayer.heldProj == projectile.whoAmI || checkPlayer.heldProj == projectile.identity) {
+                        holdingProj = true;
+                        break;
+                    }
+                }
+                if (holdingProj) {
+                    continue;
+                }
                 float dist = NPC.Distance(projectile.Center);
                 if (dist <= maxDist) {
                     Vector2 velocity = projectile.Center - NPC.Center;
