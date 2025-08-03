@@ -102,6 +102,17 @@ sealed partial class Lothor : ModNPC {
                 return;
             }
 
+            bool holdingProj = false;
+            foreach (Player checkPlayer in Main.ActivePlayers) {
+                if (checkPlayer.heldProj == projectile.whoAmI) {
+                    holdingProj = true;
+                    break;
+                }
+            }
+            if (holdingProj) {
+                return;
+            }
+
             projectile.velocity = _storedVelocity * 0.001f;
             projectile.rotation = _storedRotation;
             if (_effectTimer > 0f) {
