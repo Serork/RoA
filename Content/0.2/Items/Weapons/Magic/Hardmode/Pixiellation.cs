@@ -12,7 +12,7 @@ namespace RoA.Content.Items.Weapons.Magic.Hardmode;
 
 sealed class Pixiellation : ModItem {
     public override Color? GetAlpha(Color lightColor) {
-        int num5 = lightColor.A - Item.alpha;
+        int num5 = lightColor.A;
         int num2 = (int)((double)(int)lightColor.R * 1.5);
         int num3 = (int)((double)(int)lightColor.G * 1.5);
         int num4 = (int)((double)(int)lightColor.B * 1.5);
@@ -31,7 +31,7 @@ sealed class Pixiellation : ModItem {
         if (num5 > 255)
             num5 = 255;
 
-        return new Color(num2, num3, num4, num5);
+        return new Color(num2, num3, num4, num5) * (Item.alpha / 255f);
     }
 
     public override void SetDefaults() {
