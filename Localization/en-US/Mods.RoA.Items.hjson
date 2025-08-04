@@ -2113,3 +2113,8 @@ CrystalVileShard: {
 	DisplayName: Crystal Vile Shard
 	Tooltip: ""
 }
+
+NimbusRod: {
+	DisplayName: Nimbus Rod
+	Tooltip: ""
+}

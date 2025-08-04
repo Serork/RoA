@@ -184,3 +184,6 @@ PoisonBubble_Small.DisplayName: Ядовитый пузырь
 // Pixie.DisplayName: Pixie
 // CrystalSpike.DisplayName: Crystal Spike
 // CrystalSpikeTip.DisplayName: Crystal Spike Tip
+// Rain.DisplayName: Rain
+// RainCloudMoving.DisplayName: Rain Cloud Moving
+// RainCloudRaining.DisplayName: Rain Cloud Raining
