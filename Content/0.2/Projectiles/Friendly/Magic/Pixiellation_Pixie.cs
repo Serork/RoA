@@ -74,7 +74,7 @@ sealed class Pixie : ModProjectile {
     public override void AI() {
         int timeLeft = Projectile.timeLeft;
         int appearTime = 2;
-        Projectile.Opacity = Utils.GetLerpValue(timeLeft, TIMELEFT, TIMELEFT - appearTime, true) * Utils.GetLerpValue(timeLeft, 0f, appearTime, true);
+        Projectile.Opacity = Utils.GetLerpValue(timeLeft, TIMELEFT, TIMELEFT - appearTime, true) * Utils.GetLerpValue(timeLeft, 0f, appearTime * 2, true);
 
         if (InitValue == 0f) {
             InitValue = 1f;

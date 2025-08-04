@@ -399,7 +399,6 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
         Vector2 waveAnimationOffset(float baseRotation, int index) => Vector2.UnitY.RotatedBy(baseRotation + Math.Sin(index + Main.timeForVisualEffects / 10));
         float clingerRotation = _clingerPosition.DirectionFrom(Projectile.Center).ToRotation() + MathHelper.PiOver2;
-        Color clingerColor = color * Projectile.Opacity;
         void drawClinger() {
             HidewayValues hidewayValues = new(Projectile);
             if (hidewayValues.IsClingerSpawning) {
@@ -413,10 +412,11 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
             Rectangle clip = _clingerHead1Clip;
             Vector2 scale = Vector2.One;
             Vector2 origin = clip.Size() / 2f;
+            Color headColor = Lighting.GetColor(position.ToTileCoordinates()) * Projectile.Opacity;
             batch.Draw(texture, position, DrawInfo.Default with {
                 Origin = origin,
                 Clip = clip,
-                Color = clingerColor,
+                Color = headColor,
                 Scale = scale,
                 Rotation = clingerRotation
             });
@@ -458,10 +458,11 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
                 }
                 Vector2 scale = Vector2.One;
                 Vector2 origin = clip.Size() / 2f;
+                Color bodyColor = Lighting.GetColor(position.ToTileCoordinates()) * Projectile.Opacity;
                 batch.Draw(texture, position, DrawInfo.Default with {
                     Origin = origin,
                     Clip = clip,
-                    Color = clingerColor,
+                    Color = bodyColor,
                     Scale = scale,
                     Rotation = rotation
                 });

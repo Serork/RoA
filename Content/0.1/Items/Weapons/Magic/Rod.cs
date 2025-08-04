@@ -10,13 +10,14 @@ abstract class Rod : ShootingWeapon {
     protected virtual Color? LightingColor { get; } = null;
 
     public override void SetStaticDefaults() {
-        Item.staff[Item.type] = true;
     }
 
     public override void SetDefaults() {
         Item.useStyle = ItemUseStyleID.Shoot;
         Item.noMelee = true;
         Item.DamageType = DamageClass.Magic;
+
+        Item.staff[Item.type] = true;
     }
 
     public override void UseStyle(Player player, Rectangle heldItemFrame) {
