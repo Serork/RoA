@@ -346,7 +346,6 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
             Projectile.Opacity -= 0.025f;
             if (Projectile.Opacity <= 0f) {
                 Projectile.Kill();
-                SoundEngine.PlaySound(SoundID.NPCHit7, Projectile.position);
             }
         }
         void addLight() {
@@ -563,6 +562,9 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
     }
 
     private void PseudoKill(bool onKill = true) {
+        if (onKill) {
+            SoundEngine.PlaySound(SoundID.NPCHit7, Projectile.position);
+        }
         Projectile.Opacity = MathF.Min(Projectile.Opacity, PSEUDODESTROYEDOPACITY - 0.01f);
         MakeTulipDusts(onKill);
     }
