@@ -16,6 +16,8 @@ sealed class BloodCloudMoving : NatureProjectile {
         Projectile.height = 28;
         Projectile.aiStyle = -1;
         Projectile.penetrate = -1;
+
+        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {

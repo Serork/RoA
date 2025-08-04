@@ -16,11 +16,11 @@ sealed class BrilliantBouquet : NatureItem {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Brilliant Bouquet");
         //Tooltip.SetDefault("Launches a random tulip petal\nCombines all effects while Wreath is charged");
+
+        Item.staff[Item.type] = true;
     }
 
     protected override void SafeSetDefaults() {
-        Item.staff[Type] = true;
-
         NatureWeaponHandler.SetPotentialDamage(Item, 18);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.15f);
 

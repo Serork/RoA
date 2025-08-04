@@ -14,6 +14,10 @@ using Terraria.ID;
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
 sealed class LeafySeahorse : NatureItem {
+    public override void SetStaticDefaults() {
+        Item.staff[Type] = true;
+    }
+
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(32, 40);
         Item.SetWeaponValues(40, 2f);
@@ -23,8 +27,6 @@ sealed class LeafySeahorse : NatureItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 80);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
-
-        Item.staff[Type] = true;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

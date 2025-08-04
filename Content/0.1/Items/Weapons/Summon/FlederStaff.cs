@@ -13,13 +13,14 @@ sealed class FlederStaff : ModItem {
         ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
         Item.ResearchUnlockCount = 1;
         //ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<SoulOfTheWoods>();
+
+        Item.staff[Type] = true;
     }
 
     public override void SetDefaults() {
         int width = 34; int height = 38;
         Item.Size = new Vector2(width, height);
 
-        Item.staff[Item.type] = true;
         Item.DamageType = DamageClass.Summon;
         Item.damage = 19;
 

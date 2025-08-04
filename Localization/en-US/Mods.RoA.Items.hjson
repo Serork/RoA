@@ -2108,3 +2108,8 @@ Pixiellation: {
 	DisplayName: Pixiellation
 	Tooltip: ""
 }
+
+CrystalVileShard: {
+	DisplayName: Crystal Vile Shard
+	Tooltip: ""
+}

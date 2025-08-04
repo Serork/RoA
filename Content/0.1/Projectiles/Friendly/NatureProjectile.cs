@@ -62,7 +62,7 @@ abstract class NatureProjectile : ModProjectile {
     private float _wreathFillingFine;
     private bool _syncAttachedNatureWeapon;
 
-    public Item AttachedNatureWeapon { get; private set; } = null!;
+    public Item AttachedNatureWeapon { get; protected set; } = null!;
 
     public bool ShouldChargeWreathOnDamage { get; protected set; } = true;
     public bool ShouldApplyAttachedNatureWeaponCurrentDamage { get; protected set; } = true;
@@ -178,7 +178,7 @@ abstract class NatureProjectile : ModProjectile {
 
     protected virtual void SafeReceiveExtraAI(BinaryReader reader) { }
 
-    public static void NatureProjectileSetItem(Projectile projectile, Item item = null) {
+    public static void NatureProjectileSetItem(Projectile projectile, Item? item = null) {
         if (projectile.ModProjectile is NatureProjectile natureProjectile) {
             if (natureProjectile is not FormProjectile && projectile.owner == Main.myPlayer) {
                 if (!natureProjectile.AttachedNatureWeapon.IsEmpty()) {

@@ -26,6 +26,10 @@ sealed class PerfectedBouquet : NatureItem {
     private Color _lerpColor;
     private int _nextTulipTypeIndex;
 
+    public override void SetStaticDefaults() {
+        Item.staff[Type] = true;
+    }
+
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(32, 36);
         Item.SetWeaponValues(36, 2f, 6);
@@ -35,8 +39,6 @@ sealed class PerfectedBouquet : NatureItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 50);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
-
-        Item.staff[Type] = true;
     }
 
     public override void UseStyle(Player player, Rectangle heldItemFrame) {

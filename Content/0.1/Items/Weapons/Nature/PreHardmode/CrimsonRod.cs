@@ -5,12 +5,17 @@ using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Prefixes;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 sealed class CrimsonRod : NatureItem {
+    public override void SetStaticDefaults() {
+        PrefixLegacy.ItemSets.MagicAndSummon[Type] = true;
+    }
+
     protected override void SafeSetDefaults() {
         Item.damage = 2;
         Item.useStyle = 1;

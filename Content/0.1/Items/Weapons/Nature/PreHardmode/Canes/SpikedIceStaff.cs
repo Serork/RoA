@@ -20,6 +20,10 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
     protected override ushort ShootType() => (ushort)ModContent.ProjectileType<SharpIcicle>();
 
+    public override void SetStaticDefaults() {
+        Item.staff[Type] = true;
+    }
+
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(36);
         Item.SetUsableValues(ItemUseStyleID.Shoot, 24, useSound: SoundID.Item7);
@@ -33,8 +37,6 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         Item.value = Item.sellPrice(0, 1, 0, 0);
         //NatureWeaponHandler.SetPotentialUseSpeed(Item, 22);
-
-        Item.staff[Type] = true;
     }
 
     public sealed class SpikedIceStaffBase : CaneBaseProjectile {

@@ -31,6 +31,8 @@ sealed class RodOfTheCondor : ModItem {
         Item.ResearchUnlockCount = 1;
 
         //ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfCondor>();
+
+        Item.staff[Item.type] = true;
     }
 
     public override void SetDefaults() {
@@ -48,8 +50,6 @@ sealed class RodOfTheCondor : ModItem {
         Item.value = Item.sellPrice(0, 3, 50, 0);
         Item.rare = ItemRarityID.Orange;
         //Item.UseSound = new SoundStyle(ResourceManager.ItemSounds + "WhatTheFuckIsAKilometer") { Volume = 0.9f };
-
-        Item.staff[Item.type] = true;
     }
 
     public override void UseStyle(Player player, Rectangle heldItemFrame) {

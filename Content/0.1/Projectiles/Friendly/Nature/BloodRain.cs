@@ -18,6 +18,8 @@ sealed class BloodRain : NatureProjectile {
         Projectile.extraUpdates = 1;
         Projectile.usesIDStaticNPCImmunity = true;
         Projectile.idStaticNPCHitCooldown = 10;
+
+        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
     public override void AI() {

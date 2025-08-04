@@ -2,6 +2,7 @@ using RoA.Common.Configs;
 using RoA.Common.Druid;
 
 using Terraria;
+using Terraria.GameContent.Prefixes;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -9,6 +10,10 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 sealed class Vilethorn : NatureItem {
     public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? base.Texture : $"Terraria/Images/Item_{ItemID.Vilethorn}";
+
+    public override void SetStaticDefaults() {
+        PrefixLegacy.ItemSets.MagicAndSummon[Type] = true;
+    }
 
     protected override void SafeSetDefaults() {
         Item.damage = 2;

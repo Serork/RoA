@@ -36,14 +36,16 @@ sealed class Pixiellation : ModItem {
         return new Color(num2, num3, num4, num5) * (1f - (Item.alpha / 255f));
     }
 
+    public override void SetStaticDefaults() {
+        Item.staff[Type] = true;
+    }
+
     public override void SetDefaults() {
         Item.SetSizeValues(44);
         Item.SetWeaponValues(40, 5f, damageClass: DamageClass.Magic);
         Item.SetUsableValues(ItemUseStyleID.Shoot, 16, autoReuse: true);
         Item.SetShootableValues((ushort)ModContent.ProjectileType<Pixie>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice());
-
-        Item.staff[Type] = true;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

@@ -19,6 +19,8 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
         //DisplayName.SetDefault("Sacrificial Sickle Of The Moon");
         //Tooltip.SetDefault("Changes attacks depending on current moon phase");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        Item.staff[Type] = true;
     }
 
     public override Color? GetAlpha(Color lightColor) {
@@ -47,7 +49,6 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 
         Item.value = Item.sellPrice(0, 1, 50, 0);
 
-        Item.staff[Item.type] = true;
 
         NatureWeaponHandler.SetPotentialDamage(Item, 60);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);

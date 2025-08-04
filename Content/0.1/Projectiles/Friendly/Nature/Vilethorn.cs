@@ -27,6 +27,8 @@ class Vilethorn : NatureProjectile {
         Projectile.tileCollide = false;
         Projectile.alpha = 255;
         Projectile.ignoreWater = true;
+
+        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
     public override bool ShouldUpdatePosition() => false;

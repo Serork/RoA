@@ -17,11 +17,11 @@ sealed class RavensEye : ModItem {
         // Tooltip.SetDefault("");
 
         Item.ResearchUnlockCount = 1;
+
+        Item.staff[Item.type] = true;
     }
 
     public override void SetDefaults() {
-        Item.staff[Item.type] = true;
-
         int width = 38; int height = 40;
         Item.Size = new Vector2(width, height);
 

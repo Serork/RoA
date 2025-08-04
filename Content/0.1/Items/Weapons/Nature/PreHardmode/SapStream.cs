@@ -11,6 +11,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 sealed class SapStream : NatureItem {
+    public override void SetStaticDefaults() {
+        Item.staff[Type] = true;
+    }
+
     protected override void SafeSetDefaults() {
         int width = 38; int height = width;
         Item.Size = new Vector2(width, height);
@@ -33,8 +37,6 @@ sealed class SapStream : NatureItem {
         Item.shoot = ModContent.ProjectileType<GalipotStream>();
 
         Item.value = Item.sellPrice(silver: 20);
-
-        Item.staff[Item.type] = true;
     }
 
     public sealed override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {

@@ -17,6 +17,8 @@ sealed class WeepingTulip : NatureItem {
         //DisplayName.SetDefault("Weeping Tulip");
         //Tooltip.SetDefault("Launches an explosive enchanted petal");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        Item.staff[Type] = true;
     }
 
     protected override void SafeSetDefaults() {
@@ -27,7 +29,6 @@ sealed class WeepingTulip : NatureItem {
         Item.useTime = Item.useAnimation = 26;
         Item.autoReuse = false;
 
-        Item.staff[Item.type] = true;
         Item.noMelee = true;
 
         Item.damage = 10;
@@ -79,6 +80,8 @@ sealed class SweetTulip : NatureItem {
         //DisplayName.SetDefault("Sweet Tulip");
         //Tooltip.SetDefault("Launches a bee attracting petal");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        Item.staff[Type] = true;
     }
 
     protected override void SafeSetDefaults() {
@@ -89,7 +92,6 @@ sealed class SweetTulip : NatureItem {
         Item.useTime = Item.useAnimation = 30;
         Item.autoReuse = false;
 
-        Item.staff[Item.type] = true;
         Item.noMelee = true;
 
         Item.damage = 11;
@@ -142,6 +144,8 @@ sealed class ExoticTulip : NatureItem {
         //DisplayName.SetDefault("Exotic Tulip");
         //Tooltip.SetDefault("Launches a petal with a flowery trail");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        Item.staff[Type] = true;
     }
 
     protected override void SafeSetDefaults() {
@@ -152,7 +156,6 @@ sealed class ExoticTulip : NatureItem {
         Item.useTime = Item.useAnimation = 40;
         Item.autoReuse = false;
 
-        Item.staff[Item.type] = true;
         Item.noMelee = true;
 
         Item.damage = 4;
