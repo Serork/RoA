@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Players;
+using RoA.Common.Recipes;
 using RoA.Content.Projectiles.Friendly.Magic;
 using RoA.Core.Defaults;
 
@@ -12,7 +13,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic.Hardmode;
 
-sealed class Pixiellation : ModItem {
+sealed class Pixiellation : ModItem, IRecipeDuplicatorItem {
+    ushort[] IRecipeDuplicatorItem.SourceItemTypes => [(ushort)ItemID.CrystalVileShard];
+
     public override Color? GetAlpha(Color lightColor) {
         int num5 = lightColor.A;
         int num2 = (int)((double)(int)lightColor.R * 1.5);
