@@ -67,6 +67,10 @@ sealed class RainCloudMoving : NatureProjectile {
 }
 
 sealed class RainCloudRaining : NatureProjectile {
+    public override void SetStaticDefaults() {
+        Main.projFrames[Type] = 6;
+    }
+
     protected override void SafeSetDefaults() {
         Projectile.netImportant = true;
         Projectile.tileCollide = false;
