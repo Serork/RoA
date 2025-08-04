@@ -69,7 +69,7 @@ sealed class Pixie : ModProjectile {
 
         Projectile.manualDirectionChange = true;
 
-        Projectile.penetrate = 2;
+        Projectile.penetrate = -1;
     }
 
     public override bool ShouldUpdatePosition() => false;

@@ -37,7 +37,7 @@ sealed class Pixiellation : ModItem {
     public override void SetDefaults() {
         Item.SetSizeValues(44);
         Item.SetWeaponValues(40, 5f, damageClass: DamageClass.Magic);
-        Item.SetUsableValues(ItemUseStyleID.Shoot, 24, autoReuse: true);
+        Item.SetUsableValues(ItemUseStyleID.Shoot, 16, autoReuse: true);
         Item.SetShootableValues((ushort)ModContent.ProjectileType<Pixie>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice());
 
