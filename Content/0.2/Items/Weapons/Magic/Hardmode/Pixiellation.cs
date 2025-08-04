@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Magic;
 using RoA.Core.Defaults;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -31,7 +33,7 @@ sealed class Pixiellation : ModItem {
         if (num5 > 255)
             num5 = 255;
 
-        return new Color(num2, num3, num4, num5) * (Item.alpha / 255f);
+        return new Color(num2, num3, num4, num5) * (1f - (Item.alpha / 255f));
     }
 
     public override void SetDefaults() {
@@ -44,6 +46,21 @@ sealed class Pixiellation : ModItem {
         Item.staff[Type] = true;
     }
 
-    public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
+    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        float collisionCheckSize = Item.width * 1.4f;
+        Vector2 collisionCheckPosition = position + Vector2.Normalize(velocity) * collisionCheckSize;
+        if (!Collision.CanHit(player.Center, 0, 0, collisionCheckPosition, 0, 0)) {
+            return false;
+        }
+
+        Vector2 shootVelocityNormalized = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
+        float itemRotation = shootVelocityNormalized.ToRotation();
+        Vector2 itemSizeOffset = shootVelocityNormalized * Item.width;
+        position += itemSizeOffset;
+        velocity = position.DirectionTo(player.GetMousePosition());
+
+        Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI);
+
+        return false;
     }
 }

@@ -69,14 +69,20 @@ sealed class Pixie : ModProjectile {
 
         Projectile.manualDirectionChange = true;
 
-        Projectile.penetrate = -1;
+        Projectile.penetrate = 3;
     }
 
     public override bool ShouldUpdatePosition() => false;
 
     public override void AI() {
+        int timeLeft = Projectile.timeLeft;
+        int appearTime = 2;
+        Projectile.Opacity = Utils.GetLerpValue(timeLeft, TIMELEFT, TIMELEFT - appearTime, true) * Utils.GetLerpValue(timeLeft, 0f, appearTime, true);
+
         if (InitValue == 0f) {
             InitValue = 1f;
+
+            Projectile.Opacity = 0f;
 
             Projectile.direction = Projectile.velocity.X.GetDirection();
 
@@ -102,10 +108,6 @@ sealed class Pixie : ModProjectile {
             VelocityRotationValue = rotation;
             VelocitySlowFactor = 1f;
         }
-
-        int timeLeft = Projectile.timeLeft;
-        int appearTime = 4;
-        Projectile.Opacity = Utils.GetLerpValue(timeLeft, TIMELEFT, TIMELEFT - appearTime, true) * Utils.GetLerpValue(timeLeft, 0f, appearTime, true);
 
         float timeToSpawnAttack = TIMELEFT / 3;
         if (AttackTimer++ > timeToSpawnAttack) {

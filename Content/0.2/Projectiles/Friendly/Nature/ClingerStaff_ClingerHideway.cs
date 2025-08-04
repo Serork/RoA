@@ -482,4 +482,19 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
             dust.customData = 1;
         }
     }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        target.AddBuff(39, 420);
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        target.AddBuff(39, 420);
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        Main.NewText(target.aiStyle);
+        if (target.aiStyle == 6 || target.aiStyle == 37) {
+            modifiers.FinalDamage /= 2;
+        }
+    }
 }

@@ -319,6 +319,8 @@ public abstract class Worm : ModNPC {
     private bool _startDespawning;
 
     public sealed override bool PreAI() {
+        NPC.aiStyle = -1;
+
         if (NPC.localAI[1] == 0) {
             NPC.localAI[1] = 1f;
             Init();
@@ -335,7 +337,13 @@ public abstract class Worm : ModNPC {
             BodyTailAI();
         }
 
-        return true;
+        NPC.aiStyle = 6;
+
+        return false;
+    }
+
+    public override void PostAI() {
+        //NPC.aiStyle = 6;
     }
 
     internal virtual void HeadAI() { }
