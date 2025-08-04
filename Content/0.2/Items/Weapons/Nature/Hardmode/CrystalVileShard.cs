@@ -1,8 +1,10 @@
 ﻿using RoA.Common.Druid;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 
 using Terraria;
 using Terraria.GameContent.Prefixes;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
@@ -19,7 +21,7 @@ sealed class CrystalVileShard : NatureItem {
         Item.damage = 25;
         Item.useStyle = 5;
         Item.shootSpeed = 32f;
-        Item.shoot = 494;
+        Item.shoot = ModContent.ProjectileType<CrystalSpike>();
         //Item.width = 26;
         //Item.height = 28;
         Item.useAnimation = 33;
