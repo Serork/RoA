@@ -100,7 +100,7 @@ sealed class PerfectedBouquet : NatureItem {
         Dust dust = Dust.NewDustPerfect(spawnPosition,
                                         ModContent.DustType<Dusts.Tulip>(),
                                         (spawnPosition - position).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f),
-                                        Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f),
+                                        Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f) * 1.5f,
                                         Alpha: Dusts.Tulip.SOULORANGE + (isWreathCharged ? Main.rand.Next(3) : (byte)petalType));
         dust.customData = Main.rand.NextFloatRange(50f);
 
