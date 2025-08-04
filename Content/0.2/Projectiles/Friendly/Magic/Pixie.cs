@@ -34,7 +34,7 @@ sealed class Pixie : ModProjectile {
     public ref float VelocitySlowFactor => ref Projectile.ai[2];
 
     public override Color? GetAlpha(Color lightColor) {
-        int num5 = lightColor.A - Projectile.alpha;
+        int num5 = lightColor.A;
         int num2 = (int)((double)(int)lightColor.R * 1.5);
         int num3 = (int)((double)(int)lightColor.G * 1.5);
         int num4 = (int)((double)(int)lightColor.B * 1.5);
@@ -53,7 +53,7 @@ sealed class Pixie : ModProjectile {
         if (num5 > 255)
             num5 = 255;
 
-        return new Color(num2, num3, num4, num5);
+        return new Color(num2, num3, num4, num5) * Projectile.Opacity;
     }
 
     public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
