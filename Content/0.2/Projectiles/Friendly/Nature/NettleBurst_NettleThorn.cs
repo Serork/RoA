@@ -19,7 +19,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class NettleThorn : NatureProjectile_NoTextureLoad {
-    private static ushort MAXTIMELEFT => 90;
+    private static ushort MAXTIMELEFT => 92;
     private static byte FRAMECOUNT => 5;
     private static byte BASELENGTH => 30;
     private static byte SEGMENTHEIGHT => 18;
