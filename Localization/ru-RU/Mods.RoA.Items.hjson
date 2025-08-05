@@ -2134,3 +2134,8 @@ NimbusRod: {
 	// DisplayName: Nimbus Rod
 	// Tooltip: ""
 }
+
+NettleBurst: {
+	// DisplayName: Nettle Burst
+	// Tooltip: ""
+}

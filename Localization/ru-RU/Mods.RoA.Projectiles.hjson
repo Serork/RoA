@@ -187,3 +187,7 @@ PoisonBubble_Small.DisplayName: Ядовитый пузырь
 // Rain.DisplayName: Rain
 // RainCloudMoving.DisplayName: Rain Cloud Moving
 // RainCloudRaining.DisplayName: Rain Cloud Raining
+// NettleSpikeLeft.DisplayName: Nettle Spike Left
+// NettleSpikeRight.DisplayName: Nettle Spike Right
+// NettleSpikeTip.DisplayName: Nettle Spike Tip
+// NettleThorn.DisplayName: Nettle Thorn

@@ -18,12 +18,13 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
-    private static ushort MAXTIMELEFT => 180;
+sealed class NettleThorn : NatureProjectile_NoTextureLoad {
+    private static ushort MAXTIMELEFT => 95;
     private static byte FRAMECOUNT => 5;
-    private static byte BASELENGTH => 10;
+    private static byte BASELENGTH => 30;
     private static byte SEGMENTHEIGHT => 18;
-    private static float GROWTHSPEED => 0.3f; // this must be [0..1]
+    private static float GROWTHSPEED => 0.5f; // this must be [0..1]
+    private static float DISAPPEARSPEED => 0.0075f;
 
     private static Asset<Texture2D>? _thornsTexture;
 
@@ -31,6 +32,7 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
         public SegmentInfo Info;
         public byte Index;
         public byte Length;
+        public float Opacity;
         public Vector2 Position, PositionOffset;
         public Vector2 Velocity;
     }
@@ -43,10 +45,16 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
         }
 
         private float _progress = 0f;
+        private float _opacity = 1f;
 
         public float Progress {
             readonly get => _progress;
             set => _progress = MathUtils.Clamp01(value);
+        }
+
+        public float Opacity {
+            readonly get => _opacity;
+            set => _opacity = MathUtils.Clamp01(value);
         }
 
         public readonly byte FrameToUse = frameToUse;
@@ -59,7 +67,8 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
 
     public ref struct ThornsValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
-        public ref float LengthValue = ref projectile.ai[0];
+        public ref float LengthValue = ref projectile.localAI[1];
+        public ref float IndexValue = ref projectile.ai[0];
         public ref float WrapDirectionValue = ref projectile.ai[1];
         public ref float LostHPProcentValue = ref projectile.ai[2];
 
@@ -90,9 +99,11 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
         Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
-        Projectile.penetrate = 5;
+        Projectile.penetrate = -1;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
+
+        Projectile.ArmorPenetration = 10; // Added by TML.
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -103,12 +114,9 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
             if (!thornValues.Init) {
                 thornValues.Init = true;
 
-                if (Projectile.IsOwnerLocal()) {
-                    thornValues.LengthValue = BASELENGTH + thornValues.LostHPProcentValue * BASELENGTH;
-                    Vector2 checkPosition = Projectile.Center + Projectile.velocity;
-                    thornValues.WrapDirectionValue = Math.Sign(checkPosition.X - Projectile.Center.X) * (checkPosition.Y < Projectile.Center.Y).ToDirectionInt();
-                    Projectile.netUpdate = true;
-                }
+                thornValues.LengthValue = BASELENGTH + thornValues.LostHPProcentValue * BASELENGTH;
+                Vector2 checkPosition = Projectile.Center + Projectile.velocity;
+                thornValues.WrapDirectionValue = Math.Sign(checkPosition.X - Projectile.Center.X) * (checkPosition.Y < Projectile.Center.Y).ToDirectionInt();
 
                 int thornsLength = thornValues.Length;
                 _segmentData = new SegmentInfo[thornsLength];
@@ -132,9 +140,10 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
                 if (currentSegmentIndex > 0 && previousSegmentData.Progress < 1f) {
                     continue;
                 }
-                //currentSegmentData.Opacity += thornsLength / 50f;
                 currentSegmentData.Progress += GROWTHSPEED;
                 currentSegmentData.Progress = MathF.Min(1f, currentSegmentData.Progress);
+                currentSegmentData.Opacity -= DISAPPEARSPEED;
+                currentSegmentData.Opacity = MathF.Max(0f, currentSegmentData.Opacity);
             }
         }
         void makeDustsOnGrowth() {
@@ -168,9 +177,11 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
         DoOnSegmentIteration((segmentIterationArgs) => {
             int currentSegmentHeight = (int)(segmentHeight * segmentIterationArgs.Info.Progress);
             byte frameToUse = segmentIterationArgs.Info.FrameToUse;
+            byte index = segmentIterationArgs.Index;
             float segmentRotation = segmentIterationArgs.Velocity.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi;
             Rectangle clip = new(0, frameToUse * segmentHeight, segmentWidth, currentSegmentHeight);
             Color color = Lighting.GetColor(segmentIterationArgs.Position.ToTileCoordinates());
+            color *= segmentIterationArgs.Opacity;
             Vector2 origin = new Vector2(segmentWidth, segmentHeight) / 2;
             Main.spriteBatch.Draw(segmentTexture, segmentIterationArgs.Position, DrawInfo.Default with {
                 Color = color,
@@ -221,6 +232,7 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
             int currentSegmentHeight = (int)(segmentHeight * currentSegmentData.Progress);
             Vector2 segmentVelocityToMove = velocityToMove.SafeNormalize();
             Vector2 offset = segmentVelocityToMove * currentSegmentHeight;
+            float opacity = currentSegmentData.Opacity;
             onIteration(new SegmentIterationArgs() {
                 Info = currentSegmentData,
                 Index = (byte)currentSegmentIndex,
@@ -228,6 +240,7 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
                 Position = segmentPosition,
                 Velocity = velocityToMove,
                 PositionOffset = offset,
+                Opacity = opacity
             });
             if (currentSegmentData.IsStartSegment) {
                 segmentPosition -= segmentVelocityToMove * 4f;
@@ -242,12 +255,17 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
     }
 
     private void SpawnThornsDust(Vector2 dustSpawnPosition) {
-        float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
-        int segmentHeight = SEGMENTHEIGHT;
-        Dust dust = Main.dust[Dust.NewDust(dustSpawnPosition - Vector2.One * segmentHeight / 2f, segmentHeight, segmentHeight, DustID.JunglePlants, 0f, 0f, 0, default, dustScale)];
-        dust.noGravity = true;
-        dust.fadeIn = 0.5f;
-        dust.noLight = true;
+        for (int i = 0; i < 2; i++) {
+            if (Main.rand.NextBool()) {
+                float dustScale = 1.3f + 0.15f * Main.rand.NextFloat();
+                int segmentHeight = SEGMENTHEIGHT - 2;
+                Dust dust = Main.dust[Dust.NewDust(dustSpawnPosition - Vector2.One * segmentHeight / 2f, segmentHeight, segmentHeight, DustID.WoodFurniture, 0f, 0f, 200, default, dustScale)];
+                dust.noGravity = true;
+                dust.fadeIn = 0.5f;
+                dust.noLight = true;
+                dust.velocity *= 0.5f;
+            }
+        }
     }
 
     private void LoadThornsTextures() {
@@ -255,15 +273,27 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
             return;
         }
 
-        _thornsTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "JungleThorn");
+        _thornsTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "NettleThorn");
     }
 
     private void UpdateSegmentVelocity(ref Vector2 velocityToMove, int segmentIndex) {
         ThornsValues thornValues = new(Projectile);
+        int length = thornValues.Length;
         static float smoothStep(float t) => t * t * (3f - 2f * t);
-        float strength = MathF.Pow(smoothStep(segmentIndex / (float)thornValues.Length), 0.5f);
-        float angle = MathHelper.WrapAngle(MathF.Sin(segmentIndex - MathHelper.PiOver4) * strength);
-        velocityToMove += velocityToMove.RotatedBy(angle);
-        velocityToMove += velocityToMove.RotatedBy(segmentIndex / MathF.Pow(MathHelper.TwoPi, 2f) * thornValues.WrapDirection);
+        float strength = MathF.Pow(smoothStep(segmentIndex / (float)length), 0.5f);
+        bool second = (thornValues.IndexValue + 1) % 2 == 0;
+        Func<float, float> func = second ? MathF.Cos : MathF.Sin;
+        float offset = 0;
+        if (second) {
+            segmentIndex /= 2;
+            strength *= 2f;
+            offset -= length;
+        }
+        float angle = func(MathHelper.WrapAngle(segmentIndex * 0.5f * strength + offset) + Projectile.identity % 2);
+        float angleOffset = 0.3f;
+        if (second) {
+            angleOffset = -0.3f;
+        }
+        velocityToMove = Projectile.velocity.SafeNormalize().RotatedBy(angle - angleOffset) * 50f;
     }
 }

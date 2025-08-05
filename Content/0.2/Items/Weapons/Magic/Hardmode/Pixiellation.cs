@@ -49,6 +49,8 @@ sealed class Pixiellation : ModItem, IRecipeDuplicatorItem {
         Item.SetUsableValues(ItemUseStyleID.Shoot, 16, autoReuse: true);
         Item.SetShootableValues((ushort)ModContent.ProjectileType<Pixie>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice());
+
+        Item.mana = 10;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {

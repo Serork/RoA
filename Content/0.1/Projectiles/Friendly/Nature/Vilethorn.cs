@@ -47,6 +47,8 @@ class Vilethorn : NatureProjectile {
 
         Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + 1.57f;
         if (Projectile.ai[0] == 0f) {
+            Init();
+
             Projectile.alpha -= AppearAlphaValue;
 
             if (Projectile.alpha > 0)
@@ -97,4 +99,6 @@ class Vilethorn : NatureProjectile {
 
         Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, 14, 0f, 0f, 170, default, 1.1f);
     }
+
+    protected virtual void Init() { }
 }
