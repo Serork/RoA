@@ -26,7 +26,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
     private static byte SEGMENTHEIGHT => 18;
     private static float GROWTHSPEED => 0.5f;
     private static float DISAPPEARSPEED => 0.011f;
-    private static float MAXOFFSETFACTOR => 0.1f;
+    private static float MAXOFFSETFACTOR => 0.2f;
 
     private static Asset<Texture2D>? _thornsTexture;
 
