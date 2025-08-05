@@ -102,7 +102,7 @@ sealed class BaneSpell : ModProjectile {
 
     public override void OnKill(int timeLeft) {
         for (int k = 0; k < 20; ++k) {
-            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height,
+            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y) - Projectile.velocity * 2f, Projectile.width, Projectile.height,
                 DustID.Shadowflame, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 100, Color.DarkViolet, 1.6f);
             Main.dust[dust].noGravity = true;
             Main.dust[dust].alpha = 0;
