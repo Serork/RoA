@@ -274,7 +274,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                 return;
             }
 
-            NPC? target = NPCUtils.FindClosestNPC(Projectile.position, 12 * 16, shouldCheckForImmortals: false);
+            NPC? target = NPCUtils.FindClosestNPC(Projectile.position, 12 * 16);
             if (target == null) {
                 return;
             }
