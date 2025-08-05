@@ -11,6 +11,7 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.ID;
@@ -19,12 +20,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class NettleThorn : NatureProjectile_NoTextureLoad {
-    private static ushort MAXTIMELEFT => 92;
+    private static ushort MAXTIMELEFT => 120;
     private static byte FRAMECOUNT => 5;
     private static byte BASELENGTH => 30;
     private static byte SEGMENTHEIGHT => 18;
     private static float GROWTHSPEED => 0.5f;
-    private static float DISAPPEARSPEED => 0.01f;
+    private static float DISAPPEARSPEED => 0.011f;
 
     private static Asset<Texture2D>? _thornsTexture;
 
@@ -82,6 +83,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
     }
 
     private SegmentInfo[]? _segmentData;
+    private int _seed;
 
     private int GetThornsLength() => new ThornsValues(Projectile).Length;
 
@@ -113,6 +115,11 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
             ThornsValues thornValues = new(Projectile);
             if (!thornValues.Init) {
                 thornValues.Init = true;
+
+                if (Projectile.IsOwnerLocal()) {
+                    _seed = Main.rand.Next(int.MaxValue);
+                    Projectile.netUpdate = true;
+                }
 
                 thornValues.LengthValue = BASELENGTH + thornValues.LostHPProcentValue * BASELENGTH;
                 Vector2 checkPosition = Projectile.Center + Projectile.velocity;
@@ -147,10 +154,15 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
         }
         void makeDustsOnGrowth() {
             DoOnSegmentIteration((segmentIterationArgs) => {
-                if (Main.rand.NextChance(1.5f - segmentIterationArgs.Index / (float)segmentIterationArgs.Length)) {
-                    if (segmentIterationArgs.Info.Progress < 1f) {
-                        SpawnThornsDust(segmentIterationArgs.Position);
-                    }
+                //if (Main.rand.NextChance(1.5f - segmentIterationArgs.Index / (float)segmentIterationArgs.Length)) {
+                //    if (segmentIterationArgs.Info.Progress < 1f) {
+                //        SpawnThornsDust(segmentIterationArgs.Position);
+                //    }
+                //}
+                float opacity = segmentIterationArgs.Opacity * 255;
+                byte min = 90;
+                if (opacity >= min && opacity <= min + 10) {
+                    SpawnThornsDust(segmentIterationArgs.Position);
                 }
             });
         }
@@ -202,16 +214,24 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
     }
 
     public override void OnKill(int timeLeft) {
-        void makeKillDusts() {
-            DoOnSegmentIteration((segmentIterationArgs) => {
-                int dustCount = 4;
-                for (int j = 0; j < dustCount; j++) {
-                    SpawnThornsDust(segmentIterationArgs.Position);
-                }
-            });
-        }
+        //void makeKillDusts() {
+        //    DoOnSegmentIteration((segmentIterationArgs) => {
+        //        int dustCount = 4;
+        //        for (int j = 0; j < dustCount; j++) {
+        //            SpawnThornsDust(segmentIterationArgs.Position);
+        //        }
+        //    });
+        //}
 
-        makeKillDusts();
+        //makeKillDusts();
+    }
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        writer.Write(_seed);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        _seed = reader.ReadInt32();
     }
 
     private void DoOnSegmentIteration(Action<SegmentIterationArgs> onIteration) {
@@ -254,17 +274,25 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
     }
 
     private void SpawnThornsDust(Vector2 dustSpawnPosition) {
-        for (int i = 0; i < 2; i++) {
-            if (Main.rand.NextBool()) {
-                float dustScale = 1.3f + 0.15f * Main.rand.NextFloat();
-                int segmentHeight = SEGMENTHEIGHT - 2;
-                Dust dust = Main.dust[Dust.NewDust(dustSpawnPosition - Vector2.One * segmentHeight / 2f, segmentHeight, segmentHeight, DustID.WoodFurniture, 0f, 0f, 200, default, dustScale)];
-                dust.noGravity = true;
-                dust.fadeIn = 0.5f;
-                dust.noLight = true;
-                dust.velocity *= 0.5f;
-            }
+        for (int num78 = 0; num78 < 2; num78++) {
+            int segmentHeight = SEGMENTHEIGHT;
+            int num79 = Dust.NewDust(dustSpawnPosition - Vector2.One * segmentHeight / 2f, segmentHeight, segmentHeight, 7, Projectile.velocity.X * 0.025f, Projectile.velocity.Y * 0.025f, 200, default, 1.3f);
+            Main.dust[num79].noGravity = true;
+            Dust dust2 = Main.dust[num79];
+            dust2.velocity *= 0.5f;
         }
+
+        //for (int i = 0; i < 2; i++) {
+        //    if (Main.rand.NextBool()) {
+        //        float dustScale = 1.3f + 0.15f * Main.rand.NextFloat();
+        //        int segmentHeight = SEGMENTHEIGHT - 2;
+        //        Dust dust = Main.dust[Dust.NewDust(dustSpawnPosition - Vector2.One * segmentHeight / 2f, segmentHeight, segmentHeight, DustID.WoodFurniture, 0f, 0f, 200, default, dustScale)];
+        //        dust.noGravity = true;
+        //        dust.fadeIn = 0.5f;
+        //        dust.noLight = true;
+        //        dust.velocity *= 0.5f;
+        //    }
+        //}
     }
 
     private void LoadThornsTextures() {
@@ -288,7 +316,8 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
             strength *= 2f;
             offset -= length;
         }
-        float angle = func(MathHelper.WrapAngle(segmentIndex * 0.5f * strength + offset) + Projectile.identity % 2);
+        ulong seed = (ulong)(_seed);
+        float angle = func(MathHelper.WrapAngle(segmentIndex * 0.5f * strength + offset) + Utils.RandomFloat(ref seed) % MathHelper.Pi + Projectile.identity % 2);
         float angleOffset = 0.3f;
         if (second) {
             angleOffset = -0.3f;
