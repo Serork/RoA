@@ -307,7 +307,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
         ThornsValues thornValues = new(Projectile);
         int length = thornValues.Length;
         static float smoothStep(float t) => t * t * (3f - 2f * t);
-        float strength = MathF.Pow(smoothStep(segmentIndex / (float)length), 0.5f);
+        float strength = MathF.Pow(smoothStep(segmentIndex / (float)length), 0.1f);
         bool second = (thornValues.IndexValue + 1) % 2 == 0;
         Func<float, float> func = second ? MathF.Cos : MathF.Sin;
         float offset = 0;
