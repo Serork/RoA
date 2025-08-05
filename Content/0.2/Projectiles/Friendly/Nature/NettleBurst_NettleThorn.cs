@@ -23,7 +23,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
     private static byte FRAMECOUNT => 5;
     private static byte BASELENGTH => 30;
     private static byte SEGMENTHEIGHT => 18;
-    private static float GROWTHSPEED => 0.5f; // this must be [0..1]
+    private static float GROWTHSPEED => 0.5f;
     private static float DISAPPEARSPEED => 0.01f;
 
     private static Asset<Texture2D>? _thornsTexture;
@@ -141,7 +141,6 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
                     continue;
                 }
                 currentSegmentData.Progress += GROWTHSPEED;
-                currentSegmentData.Progress = MathF.Min(1f, currentSegmentData.Progress);
                 currentSegmentData.Opacity -= DISAPPEARSPEED;
                 currentSegmentData.Opacity = MathF.Max(0f, currentSegmentData.Opacity);
             }
