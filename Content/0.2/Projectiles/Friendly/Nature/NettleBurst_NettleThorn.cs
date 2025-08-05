@@ -206,7 +206,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         bool result = false;
         DoOnSegmentIteration((segmentIterationArgs) => {
-            if (GeometryUtils.CenteredSquare(segmentIterationArgs.Position, SEGMENTHEIGHT).Intersects(targetHitbox)) {
+            if (segmentIterationArgs.Opacity > 0f && GeometryUtils.CenteredSquare(segmentIterationArgs.Position, SEGMENTHEIGHT).Intersects(targetHitbox)) {
                 result = true;
             }
         });
@@ -316,8 +316,8 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
             strength *= 2f;
             offset -= length;
         }
-        ulong seed = (ulong)(_seed);
-        float angle = func(MathHelper.WrapAngle(segmentIndex * 0.5f * strength + offset) + Utils.RandomFloat(ref seed) % MathHelper.Pi + Projectile.identity % 2);
+        ulong seed = (ulong)_seed;
+        float angle = func(MathHelper.WrapAngle(segmentIndex * 0.5f * strength + offset) + Utils.RandomFloat(ref seed) % MathHelper.Pi + seed % 2);
         float angleOffset = 0.3f;
         if (second) {
             angleOffset = -0.3f;
