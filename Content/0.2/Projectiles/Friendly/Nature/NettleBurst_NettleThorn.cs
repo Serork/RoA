@@ -26,6 +26,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
     private static byte SEGMENTHEIGHT => 18;
     private static float GROWTHSPEED => 0.5f;
     private static float DISAPPEARSPEED => 0.011f;
+    private static float MAXOFFSETFACTOR => 0.1f;
 
     private static Asset<Texture2D>? _thornsTexture;
 
@@ -307,7 +308,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
         ThornsValues thornValues = new(Projectile);
         int length = thornValues.Length;
         static float smoothStep(float t) => t * t * (3f - 2f * t);
-        float strength = MathF.Pow(smoothStep(segmentIndex / (float)length), 0.1f);
+        float strength = MathF.Pow(smoothStep(segmentIndex / (float)length), MAXOFFSETFACTOR);
         bool second = (thornValues.IndexValue + 1) % 2 == 0;
         Func<float, float> func = second ? MathF.Cos : MathF.Sin;
         float offset = 0;
