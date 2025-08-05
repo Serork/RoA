@@ -41,7 +41,7 @@ sealed class PineCone : NatureProjectile {
         Projectile.netUpdate = true;
     }
 
-    public override bool ShouldUpdatePosition() => false;
+    public override bool ShouldUpdatePosition() => true;
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
         modifiers.FinalDamage *= 0.5f + 0.5f * Math.Min(10f, Projectile.velocity.Y) * 0.2f;
@@ -55,6 +55,8 @@ sealed class PineCone : NatureProjectile {
 
     public override void AI() {
         Projectile.Opacity = Utils.GetLerpValue(240, 235, Projectile.timeLeft, true);
+
+        Projectile.velocity.X = 0f;
 
         Player player = Projectile.GetOwnerAsPlayer();
         if (Projectile.localAI[0] > 0f) {
@@ -87,7 +89,7 @@ sealed class PineCone : NatureProjectile {
                         Projectile.velocity.Y += 0.35f;
                         Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
 
-                        Projectile.position.Y += Projectile.velocity.Y;
+                        //Projectile.position.Y += Projectile.velocity.Y;
 
                         Projectile.netUpdate = true;
                     }

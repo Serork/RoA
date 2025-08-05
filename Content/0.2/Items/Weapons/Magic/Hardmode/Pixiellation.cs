@@ -3,9 +3,11 @@
 using RoA.Common.Players;
 using RoA.Common.Recipes;
 using RoA.Content.Projectiles.Friendly.Magic;
+using RoA.Core;
 using RoA.Core.Defaults;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
@@ -46,7 +48,7 @@ sealed class Pixiellation : ModItem, IRecipeDuplicatorItem {
     public override void SetDefaults() {
         Item.SetSizeValues(44);
         Item.SetWeaponValues(40, 5f, damageClass: DamageClass.Magic);
-        Item.SetUsableValues(ItemUseStyleID.Shoot, 16, autoReuse: true);
+        Item.SetUsableValues(ItemUseStyleID.Shoot, 16, autoReuse: true, useSound: new SoundStyle(ResourceManager.ItemSounds + "Pixiellation") with { Pitch = 0f });
         Item.SetShootableValues((ushort)ModContent.ProjectileType<Pixie>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice());
 

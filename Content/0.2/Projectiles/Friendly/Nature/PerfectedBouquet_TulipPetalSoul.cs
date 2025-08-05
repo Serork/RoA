@@ -208,7 +208,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                 if (tulipPetalSoulValues.ShouldMakeNormalTrails()) {
                     MakeTrails(-Projectile.velocity.RotatedByRandom(MathHelper.PiOver4 * 0.25f) * 0.1f);
                 }
-                Projectile.position += Projectile.velocity;
+                //Projectile.position += Projectile.velocity;
             }
         }
         void rotate() {
@@ -381,7 +381,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
         addLight();
     }
 
-    public override bool ShouldUpdatePosition() => false;
+    public override bool ShouldUpdatePosition() => true;
 
     public override void OnKill(int timeLeft) {
         if (PseudoDestroyed) {

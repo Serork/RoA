@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -9,6 +10,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -29,6 +31,8 @@ sealed class Pixie : ModProjectile {
     public ref float AttackTimer => ref Projectile.ai[0];
     public ref float VelocityRotationValue => ref Projectile.ai[1];
     public ref float VelocitySlowFactor => ref Projectile.ai[2];
+
+    private static readonly SoundStyle PixieDeath = new SoundStyle(ResourceManager.ItemSounds + "Pixie");
 
     public override Color? GetAlpha(Color lightColor) {
         int num5 = lightColor.A;
@@ -69,7 +73,7 @@ sealed class Pixie : ModProjectile {
         Projectile.penetrate = 3;
     }
 
-    public override bool ShouldUpdatePosition() => false;
+    public override bool ShouldUpdatePosition() => true;
 
     public override void AI() {
         int timeLeft = Projectile.timeLeft;
@@ -137,7 +141,8 @@ sealed class Pixie : ModProjectile {
         _positionVsMagnet += _velocityVsMagnet;
         float x2 = 3f * Projectile.direction;
         Projectile.velocity = new Vector2(x2, 0f) + _velocityVsMagnet;
-        Projectile.position += Projectile.velocity.RotatedBy(VelocityRotationValue) * VelocitySlowFactor;
+        Projectile.velocity = Projectile.velocity.RotatedBy(VelocityRotationValue) * VelocitySlowFactor;
+        //Projectile.position += Projectile.velocity.RotatedBy(VelocityRotationValue) * VelocitySlowFactor;
 
         ProjectileUtils.Animate(Projectile, 4);
 
@@ -164,7 +169,8 @@ sealed class Pixie : ModProjectile {
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-        width = height = 8;
+        width = height = 10;
+        hitboxCenterFrac = Vector2.One * 0.5f;
 
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
@@ -173,6 +179,8 @@ sealed class Pixie : ModProjectile {
         if (Projectile.Opacity < 0.5f) {
             return;
         }
+
+        SoundEngine.PlaySound(PixieDeath with { PitchVariance = 0.1f }, Projectile.Center);
 
         int num11 = Projectile.width / 2;
         for (float num17 = 0f; num17 < 1f; num17 += 0.15f) {
