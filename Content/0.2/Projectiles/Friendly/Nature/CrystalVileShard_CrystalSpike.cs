@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using System;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -21,16 +23,29 @@ class CrystalSpike : Vilethorn {
         Projectile.ArmorPenetration = 10; // Added by TML.
     }
 
+    public override void SafePostAI() {
+        float num = 0.2f;
+        float num2 = 0.2f;
+        float num3 = 0.2f;
+
+        num2 *= 0.3f;
+
+        Lighting.AddLight((int)((Projectile.position.X + (float)(Projectile.width / 2)) / 16f), (int)((Projectile.position.Y + (float)(Projectile.height / 2)) / 16f), num, num2, num3);
+    }
+
     protected override void SpawnBody() {
         int num73 = Type;
+        ushort tipType = (ushort)ModContent.ProjectileType<CrystalSpikeTip>();
         if (Projectile.ai[1] >= (float)(7 + Main.rand.Next(2))) {
-            num73 = ModContent.ProjectileType<CrystalSpikeTip>();
+            num73 = tipType;
         }
 
         int num74 = Projectile.damage;
         float num75 = Projectile.knockBack;
-        num74 = (int)((double)Projectile.damage * 1.25);
-        num75 = Projectile.knockBack * 1.25f;
+        if (num73 == tipType) {
+            num74 = (int)((double)Projectile.damage * 1.25);
+            num75 = Projectile.knockBack * 1.25f;
+        }
 
         int number = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position.X + Projectile.velocity.X + (float)(Projectile.width / 2), Projectile.position.Y + Projectile.velocity.Y + (float)(Projectile.height / 2), Projectile.velocity.X, Projectile.velocity.Y, num73, num74, num75, Projectile.owner, 0f, Projectile.ai[1] + 1f);
         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, number);
