@@ -12,6 +12,9 @@ sealed class SlipperyDynamite : ModItem {
         //DisplayName.SetDefault("Slippery Dynamite");
         //Tooltip.SetDefault("A large explosion that will destroy most tiles\nSlips through solid tiles");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
+
+        ItemID.Sets.ItemsThatCountAsBombsForDemolitionistToSpawn[Type] = true;
+        ItemID.Sets.CanBePlacedOnWeaponRacks[Type] = true;
     }
 
     public override void SetDefaults() {

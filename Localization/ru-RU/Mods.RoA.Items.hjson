@@ -2139,3 +2139,8 @@ NettleBurst: {
 	// DisplayName: Nettle Burst
 	// Tooltip: ""
 }
+
+TarBomb: {
+	// DisplayName: Tar Bomb
+	// Tooltip: ""
+}

@@ -12,6 +12,9 @@ sealed class SlipperyGrenade : ModItem {
         //DisplayName.SetDefault("Slippery Grenade");
         //Tooltip.SetDefault("A small explosion that will not destroy tiles\nSlips through solid tiles");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
+
+        ItemID.Sets.ItemsThatCountAsBombsForDemolitionistToSpawn[Type] = true;
+        ItemID.Sets.CanBePlacedOnWeaponRacks[Type] = true;
     }
 
     public override void SetDefaults() {
