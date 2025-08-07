@@ -2144,3 +2144,8 @@ TarBomb: {
 	// DisplayName: Tar Bomb
 	// Tooltip: ""
 }
+
+TarRocket: {
+	// DisplayName: Tar Rocket
+	// Tooltip: ""
+}

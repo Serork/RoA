@@ -6,7 +6,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Projectiles.Friendly.Ranged;
+namespace RoA.Content.Projectiles.Friendly.Ranged.Ammo;
 
 sealed class TarRocket : ModProjectile {
     public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();

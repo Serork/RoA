@@ -9,7 +9,7 @@ sealed class TarRocket : ModItem {
 	public override void SetStaticDefaults() {
 		AmmoID.Sets.IsSpecialist[Type] = true;
 
-		AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.RocketLauncher].Add(Type, ModContent.ProjectileType<Projectiles.Friendly.Ranged.TarRocket>());
+		AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.RocketLauncher].Add(Type, ModContent.ProjectileType<Projectiles.Friendly.Ranged.Ammo.TarRocket>());
 		//AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.GrenadeLauncher].Add(Type, ModContent.ProjectileType<ExampleLiquidGrenade>());
 		//AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.ProximityMineLauncher].Add(Type, ModContent.ProjectileType<ExampleLiquidMine>());
 		//AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.SnowmanCannon].Add(Type, ModContent.ProjectileType<ExampleLiquidSnowmanRocket>());
