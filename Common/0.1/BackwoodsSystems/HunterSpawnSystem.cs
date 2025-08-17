@@ -413,7 +413,7 @@ sealed class HunterSpawnSystem : ModSystem {
 
             if (tile.LiquidAmount <= 0 &&
                 (num49 == ModContent.TileType<BackwoodsGrass>() || num49 == ModContent.TileType<LivingElderwood>() || num49 == ModContent.TileType<BackwoodsGreenMoss>()) &&
-                num2 < BackwoodsVars.FirstTileYAtCenter + 10) {
+                num2 < BackwoodsVars.FirstTileYAtCenter + 15) {
                 //Main.LocalPlayer.position = new Vector2(num, num2).ToWorldCoordinates();
                 int newNPC = NPC.NewNPC(new EntitySource_SpawnNPC(), num * 16 + 8, num2 * 16, ModContent.NPCType<Hunter>(), 1);
                 ShouldSpawnHunter = false;
