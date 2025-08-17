@@ -411,9 +411,9 @@ sealed class TarBiome : MicroBiome {
                 if (_tiles[num, num2].HasTile && _tiles[num, num2].TileType == TileID.WaterDrip) {
                     _tiles[num, num2].TileType = TARDRIPPINGTILETYPE;
                 }
-                if (_tiles[num, num2].LiquidType != 5) {
-                    _tiles[num, num2].LiquidAmount = 0;
-                }
+                //if (_tiles[num, num2].LiquidType != 5) {
+                //    _tiles[num, num2].LiquidAmount = 0;
+                //}
                 ushort distanceToFirstEmptyTile = TileHelper.GetDistanceToFirstEmptyTileAround(num, num2, extraCondition: (tilePosition) => {
                     int x = tilePosition.X, y = tilePosition.Y;
                     for (int i = x - 5; i <= x + 6; i++) {
