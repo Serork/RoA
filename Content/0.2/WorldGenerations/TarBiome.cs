@@ -405,11 +405,6 @@ sealed class TarBiome : MicroBiome {
                         }
                     }
 
-                    if (!GenBase._tiles[num, num2 + 1].HasTile && GenBase._tiles[num, num2 + 1].LiquidAmount <= 0)
-                        WorldGen.PlaceTile(num, num2 + 1, TARDRIPPINGTILETYPE);
-                }
-                if (_tiles[num, num2].HasTile && _tiles[num, num2].TileType == TileID.WaterDrip) {
-                    _tiles[num, num2].TileType = TARDRIPPINGTILETYPE;
                 }
                 if (_tiles[num, num2].LiquidType != 5) {
                     _tiles[num, num2].LiquidAmount = 0;
@@ -448,6 +443,30 @@ sealed class TarBiome : MicroBiome {
                         }
                         CreateDentForHoneyFall(num, num2, -num5);
                     }
+                }
+                //if (fastRandom2.Next(8) == 0 && GenBase._tiles[num, num2].HasTile) {
+                //    if (!GenBase._tiles[num, num2 + 1].HasTile)
+                //        WorldGen.PlaceUncheckedStalactite(num, num2 + 1, fastRandom2.Next(2) == 0, fastRandom2.Next(3), spiders: false);
+
+                //    if (!GenBase._tiles[num, num2 - 1].HasTile)
+                //        WorldGen.PlaceUncheckedStalactite(num, num2 - 1, fastRandom2.Next(2) == 0, fastRandom2.Next(3), spiders: false);
+                //}
+            }
+        }
+
+        for (int i = magmaMapArea.Left; i < magmaMapArea.Right; i++) {
+            for (int j = magmaMapArea.Top; j < magmaMapArea.Bottom; j++) {
+                Magma magma = _sourceMagmaMap[i, j];
+                int num = i + tileOrigin.X;
+                int num2 = j + tileOrigin.Y;
+
+                FastRandom fastRandom2 = fastRandom.WithModifier(num, num2);
+                if (GenBase._tiles[num, num2].HasTile && !_tiles[num, num2].BottomSlope) {
+                    if (!GenBase._tiles[num, num2 + 1].HasTile && GenBase._tiles[num, num2 + 1].LiquidAmount <= 0)
+                        WorldGen.PlaceTile(num, num2 + 1, TARDRIPPINGTILETYPE);
+                }
+                if (_tiles[num, num2].HasTile && _tiles[num, num2].TileType == TileID.WaterDrip) {
+                    _tiles[num, num2].TileType = TARDRIPPINGTILETYPE;
                 }
                 //if (fastRandom2.Next(8) == 0 && GenBase._tiles[num, num2].HasTile) {
                 //    if (!GenBase._tiles[num, num2 + 1].HasTile)
