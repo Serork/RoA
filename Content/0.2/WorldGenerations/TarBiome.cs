@@ -411,9 +411,9 @@ sealed class TarBiome : MicroBiome {
                 if (_tiles[num, num2].HasTile && _tiles[num, num2].TileType == TileID.WaterDrip) {
                     _tiles[num, num2].TileType = TARDRIPPINGTILETYPE;
                 }
-                //if (_tiles[num, num2].LiquidType != 5) {
-                //    _tiles[num, num2].LiquidAmount = 0;
-                //}
+                if (_tiles[num, num2].LiquidType != 5) {
+                    _tiles[num, num2].LiquidAmount = 0;
+                }
                 ushort distanceToFirstEmptyTile = TileHelper.GetDistanceToFirstEmptyTileAround(num, num2, extraCondition: (tilePosition) => {
                     int x = tilePosition.X, y = tilePosition.Y;
                     for (int i = x - 5; i <= x + 6; i++) {
@@ -431,20 +431,23 @@ sealed class TarBiome : MicroBiome {
                     return true;
                 });
                 double num5_2 = (j - magmaMapArea.Top) / (float)(magmaMapArea.Bottom - magmaMapArea.Top);
-                if (_random.NextChance(1f - num5_2) && distanceToFirstEmptyTile != 0 && distanceToFirstEmptyTile <= 2 && !BadSpotForHoneyFall(num, num2) && !SpotActuallyNotInHive(num, num2)) {
-                    CreateBlockedHoneyCube(num, num2);
-                    int num5 = (num > tileOrigin.X + magmaMapArea.Width / 2).ToDirectionInt();
-                    for (int checkX = -1; checkX <= 2; checkX++) {
-                        Tile checkTile = _tiles[num + checkX, num2 + 1];
-                        if (checkTile.HasTile) {
-                            if (!_tiles[num + checkX - 1, num2 + 1].HasTile || !_tiles[num + checkX + 1, num2 + 1].HasTile) {
-                                WorldGen.PoundTile(num + checkX, num2 + 1);
+                if (i > magmaMapArea.Left + 10 && i < magmaMapArea.Right - 10 &&
+                    j > magmaMapArea.Top + 10 && j < magmaMapArea.Bottom - 10) {
+                    if (_random.NextChance(1f - num5_2) && distanceToFirstEmptyTile != 0 && distanceToFirstEmptyTile <= 2 && !BadSpotForHoneyFall(num, num2) && !SpotActuallyNotInHive(num, num2)) {
+                        CreateBlockedHoneyCube(num, num2);
+                        int num5 = (num > tileOrigin.X + magmaMapArea.Width / 2).ToDirectionInt();
+                        for (int checkX = -1; checkX <= 2; checkX++) {
+                            Tile checkTile = _tiles[num + checkX, num2 + 1];
+                            if (checkTile.HasTile) {
+                                if (!_tiles[num + checkX - 1, num2 + 1].HasTile || !_tiles[num + checkX + 1, num2 + 1].HasTile) {
+                                    WorldGen.PoundTile(num + checkX, num2 + 1);
+                                }
+                                num5 = (checkX <= 0).ToDirectionInt();
+                                break;
                             }
-                            num5 = (checkX <= 0).ToDirectionInt();
-                            break;
                         }
+                        CreateDentForHoneyFall(num, num2, -num5);
                     }
-                    CreateDentForHoneyFall(num, num2, -num5);
                 }
                 //if (fastRandom2.Next(8) == 0 && GenBase._tiles[num, num2].HasTile) {
                 //    if (!GenBase._tiles[num, num2 + 1].HasTile)
