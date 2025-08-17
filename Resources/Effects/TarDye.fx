@@ -50,7 +50,6 @@ float4 Recolor(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
     float3 returnColor = color.rgb * output.rgb;
     float1 glow = step(0.975, rgbNoise.b) * uSecondaryColor * output;
     returnColor += glow;
-    returnColor = lerp(baseColor.rgb, returnColor, min(uOpacity, 1));
     float opacity = baseColor.a * sampleColor.a;
     return float4(returnColor * sampleColor.rgb * opacity, opacity);
 }
