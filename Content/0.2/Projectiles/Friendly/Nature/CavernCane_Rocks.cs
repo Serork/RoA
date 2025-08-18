@@ -367,7 +367,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
                             Vector2 gorePosition = Projectile.Center + gorePositionOffset;
                             int gore = Gore.NewGore(Projectile.GetSource_Misc("caverncanehit"),
                                 gorePosition,
-                                Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/{name}").Type, 1f);
+                                Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/{name}2").Type, 1f);
                             Main.gore[gore].velocity *= 0.5f;
                         }
                     }
