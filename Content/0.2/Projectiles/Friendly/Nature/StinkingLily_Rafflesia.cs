@@ -52,6 +52,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     private Vector2 _spawnPosition;
     private int _flySpawnedCount;
+    private float[] _rotations;
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.NeedsUUID[Type] = true;
@@ -81,14 +82,12 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], 0f, 0.1f);
         }
 
-        Projectile.direction = Projectile.rotation.GetDirection();
-
         //Projectile.localAI[1] = MathHelper.Lerp(Projectile.localAI[1], 1f, 0.05f);
         if (Projectile.frameCounter++ > Main.rand.Next(3, 6)) {
             Projectile.frameCounter = 0;
 
             Dust dust = Dust.NewDustPerfect(Projectile.Center - (Vector2.UnitY * 10f + Main.rand.RandomPointInArea(5f)).RotatedBy(Projectile.rotation), ModContent.DustType<Rot>());
-            dust.velocity = new Vector2(0.5f * Main.rand.NextFloatRange(1f), 1f).RotatedBy(Projectile.rotation) * -Main.rand.NextFloat(0.5f, 1f);
+            dust.velocity = new Vector2((0.5f + Main.WindForVisuals) * Main.rand.NextFloatRange(1f), 1f).RotatedBy(Projectile.rotation) * -Main.rand.NextFloat(0.5f, 1f);
             dust.scale *= Main.rand.NextFloat(0.8f, 1.2f);
         }
 
@@ -98,6 +97,11 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
                 rafflesiaValues.Init = true;
 
                 Projectile.localAI[2] = 0.75f;
+
+                _rotations = new float[TULIPCOUNT + 1];
+                for (int i = 0; i < _rotations.Length; i++) {
+                    _rotations[i] = float.MaxValue;
+                }
 
                 if (Projectile.IsOwnerLocal()) {
                     Player owner = Projectile.GetOwnerAsPlayer();
@@ -151,7 +155,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     protected override void Draw(ref Color lightColor) {
-        if (!AssetInitializer.TryGetRequestedTextureAssets<Rafflesia>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+        if (!AssetInitializer.TryGetRequestedTextureAssets<Rafflesia>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets) || _rotations == null) {
             return;
         }
 
@@ -168,7 +172,12 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Rectangle clip = tulipTexture.Bounds;
             Color color = lightColor;
             float progress = (float)i / MathHelper.Lerp(tulipCount, tulipCount + 1, Projectile.ai[0]);
-            float rotation = (MathHelper.Pi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction;
+            ref float rotation = ref _rotations[i];
+            float desiredRotation = (MathHelper.Pi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction;
+            if (rotation == float.MaxValue) {
+                rotation = desiredRotation;
+            }
+            rotation = Utils.AngleLerp(rotation, desiredRotation, 1f);
             rotation = Utils.AngleLerp(rotation, (MathHelper.TwoPi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction, Projectile.ai[0]);
             if (Projectile.direction < 0) {
                 rotation -= MathHelper.PiOver4 / 4f;

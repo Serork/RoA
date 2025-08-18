@@ -842,7 +842,9 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             float acc = Math.Clamp(Projectile.velocity.Length() / 5f, 0.5f, 1.25f);
             if (Projectile.velocity.Length() > 2f && Main.rand.NextBool(amt + 2)) {
                 for (int i = 0; i < amt; i++) {
-                    Dust.NewDustPerfect(Projectile.Center + Projectile.velocity + new Vector2(Main.rand.Next(-i, i) * Projectile.width, Main.rand.NextFloat(Projectile.height)), ModContent.DustType<Steam>(), new Vector2(0.6f * -Projectile.direction, -Main.rand.NextFloat(0.7f, 1.6f) * Main.rand.NextFloat(2f, 4f) * Main.rand.NextFloat(0.9f, 1.5f)) * Projectile.Opacity * acc, 0, Color.White, Main.rand.NextFloat(0.2f, 0.5f) * Main.rand.NextFloat(1.1f, 2f) * Main.rand.NextFloat(1.1f, 2f) * Main.rand.NextFloat(1.1f, 2f) / 2f * acc);
+                    Dust.NewDustPerfect(Projectile.Center + Projectile.velocity + new Vector2(Main.rand.Next(-i, i) * Projectile.width, Main.rand.NextFloat(Projectile.height)),
+                        ModContent.DustType<Steam>(),
+                        Vector2.UnitX * Main.WindForVisuals + new Vector2(0.6f * -Projectile.direction, -Main.rand.NextFloat(0.7f, 1.6f) * Main.rand.NextFloat(2f, 4f) * Main.rand.NextFloat(0.9f, 1.5f)) * Projectile.Opacity * acc, 0, Color.White, Main.rand.NextFloat(0.2f, 0.5f) * Main.rand.NextFloat(1.1f, 2f) * Main.rand.NextFloat(1.1f, 2f) * Main.rand.NextFloat(1.1f, 2f) / 2f * acc);
                 }
             }
             Dust d = Dust.NewDustPerfect(Projectile.BottomRight - new Vector2(0f, Projectile.height / 3f + 6f), ModContent.DustType<Slash>(), new Vector2(0.6f * -Projectile.direction, -Main.rand.NextFloat(0.7f, 1.6f) * Main.rand.NextFloat(2f, 4f) * Main.rand.NextFloat(0.9f, 1.5f)) * Projectile.Opacity * acc, Main.rand.Next(120, 200), Color.White * Main.rand.NextFloat(0.4f, 0.9f) * 0.4f, 3f - Main.rand.NextFloat(0.2f, 0.5f) * Main.rand.NextFloat(1.1f, 2f) * Main.rand.NextFloat(1.1f, 2f) * Main.rand.NextFloat(1.1f, 2f) * 1.5f * acc);
