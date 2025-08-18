@@ -140,7 +140,7 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
             Origin = origin,
             Color = lightColor,
             ImageFlip = Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-            Scale = Vector2.One * 0.875f
+            Scale = Vector2.One * 0.75f
         });
     }
 }
