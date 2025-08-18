@@ -1706,26 +1706,26 @@ EldritchRing: {
 }
 
 NFAHorns: {
-	DisplayName: Рога Н. Ф. А.
+	DisplayName: Рога NotFurryAlex
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 NFAJacket: {
-	DisplayName: Рубашка Н. Ф. А.
+	DisplayName: Рубашка NotFurryAlex
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Указом моего мессера я обязан носить рубашку.'
+		'Не самой последней свежести...'
 		'''
 }
 
 NFAPants: {
-	DisplayName: Штаны Н. Ф. А.
+	DisplayName: Штаны NotFurryAlex
 	// Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 NFAWings: {
-	DisplayName: Крылья Н. Ф. А.
+	DisplayName: Крылья NotFurryAlex
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
@@ -1832,8 +1832,8 @@ HereticPants: {
 }
 
 Her: {
-	// DisplayName: Her
-	// Tooltip: ""
+	DisplayName: '''"Она"'''
+	Tooltip: "'Н. Ф. А."
 }
 
 IOU: {
@@ -1976,52 +1976,52 @@ SnowWreathTier3: {
 }
 
 CavernCane: {
-	// DisplayName: Cavern Cane
+	DisplayName: Пещерная трость
 	// Tooltip: ""
 }
 
 Macrolepiota: {
-	// DisplayName: Macrolepiota
+	DisplayName: Макролепиота
 	// Tooltip: ""
 }
 
 DruidEmblem: {
-	// DisplayName: Druid Emblem
-	// Tooltip: 15% increased nature damage
+	DisplayName: Эмблема друида
+	Tooltip: 15%-ное увеличения природного урона
 }
 
 LeafySeahorse: {
-	// DisplayName: Leafy Seahorse
+	DisplayName: Лиственный морской конёк
 	// Tooltip: ""
 }
 
 FlamewardenHood: {
-	// DisplayName: Flamewarden Hood
+	DisplayName: Капюшон огнестража
 	// Tooltip: ""
 }
 
 FlamewardenMantle: {
-	// DisplayName: Flamewarden Mantle
+	DisplayName: Мантия огнестража
 	// Tooltip: ""
 }
 
 FlamewardenPants: {
-	// DisplayName: Flamewarden Pants
+	DisplayName: Штаны огнестража
 	// Tooltip: ""
 }
 
 LivingPearlwoodChestplate: {
-	// DisplayName: Living Pearlwood Chestplate
+	DisplayName: Живой жемчужный нагрудник
 	// Tooltip: ""
 }
 
 LivingPearlwoodGreaves: {
-	// DisplayName: Living Pearlwood Greaves
+	DisplayName: Живые жемчужные поножи
 	// Tooltip: ""
 }
 
 LivingPearlwoodHelmet: {
-	// DisplayName: Living Pearlwood Helmet
+	DisplayName: Живой жемчужный шлем
 	// Tooltip: ""
 }
 
@@ -2046,106 +2046,115 @@ PermafrostAbsorbantSponge: {
 }
 
 TarAbsorbantSponge: {
-	// DisplayName: Tar Absorbant Sponge
-	// Tooltip: ""
+	DisplayName: Впитывающая смолу губка
+	Tooltip:
+		'''
+		+2 ед. к дальности
+		Может впитать бесконечное множество смолы
+		'''
 }
 
 IceRod: {
-	// DisplayName: Ice Rod
+	DisplayName: Ледяной жезл
 	// Tooltip: ""
 }
 
 PerfectedBouquet: {
-	// DisplayName: Perfected Bouquet
+	DisplayName: Идеальный букет
 	// Tooltip: ""
 }
 
 SacredAcalypha: {
-	// DisplayName: Sacred Acalypha
+	DisplayName: Святая акалифа
 	// Tooltip: ""
 }
 
 BottomlessTarBucket: {
-	// DisplayName: Bottomless Tar Bucket
-	// Tooltip: ""
+	DisplayName: Бездонное ведро смолы
+	Tooltip:
+		'''
+		+2 ед. к дальности
+		Содержит бесконечный запас смолы
+		Можно вылить
+		'''
 }
 
 MagicTarDropper: {
-	// DisplayName: Magic Tar Dropper
+	DisplayName: Волшебная пипетка со смолой
 	// Tooltip: ""
 }
 
 FourPixels: {
-	// DisplayName: Four Pixels
-	// Tooltip: ""
+	DisplayName: '''"Четыре пикселя"'''
+	Tooltip: "'Н. Ф. А.'"
 }
 
 Him: {
-	// DisplayName: Him
-	// Tooltip: ""
+	DisplayName: '''"Он"'''
+	Tooltip: "'Н. Ф. А.'"
 }
 
 NightsShroud: {
-	// DisplayName: Night's Shroud
-	// Tooltip: ""
+	DisplayName: '''"Ночной саван"'''
+	Tooltip: "'Н. Ф. А.'"
 }
 
 TarfallBlock: {
-	// DisplayName: Tarfall Block
-	// Tooltip: ""
+	DisplayName: Блок со смолопадом
+	Tooltip: "Здесь могут быть ваши предки"
 }
 
 TarfallWall: {
-	// DisplayName: Tarfall Wall
-	// Tooltip: ""
+	DisplayName: Стена со смолопадом
+	Tooltip: "Здесь могут быть ваши предки"
 }
 
 SolidifiedTarWall: {
-	// DisplayName: Solidified Tar Wall
+	DisplayName: Стена сжиженой смолы
 	// Tooltip: ""
 }
 
 MurkyCarcassBanner: {
-	// DisplayName: Murky Carcass Banner
+	DisplayName: Знамя мерзких останков
 	// Tooltip: ""
 }
 
 TarDye: {
-	// DisplayName: Tar Dye
+	DisplayName: Смоляной краситель
 	// Tooltip: ""
 }
 
 ClingerStaff: {
-	// DisplayName: Clinger Staff
+	DisplayName: Посох цеплятеля
 	// Tooltip: ""
 }
 
 Pixiellation: {
-	// DisplayName: Pixiellation
+	DisplayName: '''"Офеевание"'''
 	// Tooltip: ""
 }
 
 CrystalVileShard: {
-	// DisplayName: Crystal Vile Shard
+	DisplayName: Кристальный осколок мерзости
 	// Tooltip: ""
 }
 
 NimbusRod: {
-	// DisplayName: Nimbus Rod
+	DisplayName: Жезл тучи
 	// Tooltip: ""
 }
 
 NettleBurst: {
-	// DisplayName: Nettle Burst
+	DisplayName: '''"Крапивный взрыв"'''
 	// Tooltip: ""
 }
 
 TarBomb: {
-	// DisplayName: Tar Bomb
-	// Tooltip: ""
+	DisplayName: Смоляная бомба
+	Tooltip: "Небольшой взрыв, разбрызгивающий лаву"
 }
 
 TarRocket: {
-	// DisplayName: Tar Rocket
-	// Tooltip: ""
+	DisplayName: Смоляная ракета
+	Tooltip: "Разбрызгивает смолу при контакте"
 }
