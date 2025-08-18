@@ -4,6 +4,8 @@ using RoA.Core.Utility.Extensions;
 
 using System;
 
+using Terraria;
+
 namespace RoA.Core.Utility;
 
 static class MathUtils {

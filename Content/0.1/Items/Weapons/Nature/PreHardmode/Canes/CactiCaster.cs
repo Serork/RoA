@@ -15,7 +15,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
 sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
-    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<Cacti>();
+    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<Cacti>();
 
     protected override ushort TimeToCastAttack(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
 

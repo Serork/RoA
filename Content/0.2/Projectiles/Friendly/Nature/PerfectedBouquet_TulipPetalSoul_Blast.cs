@@ -12,9 +12,6 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 
-using static RoA.Content.Projectiles.Friendly.Nature.TulipPetalSoul;
-using static tModPorter.ProgressUpdate;
-
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class TulipBlast : NatureProjectile {

@@ -61,17 +61,15 @@ sealed class Spore : NatureProjectile {
             //}
         }
         void moveTowardsCursor() {
-            if (owner.IsLocal()) {
-                Vector2 destination = owner.GetMousePosition();
-                float distanceToDestination = Vector2.Distance(Projectile.position, destination);
-                float minDistance = 60f;
-                float inertiaValue = 30, extraInertiaValue = inertiaValue * 5;
-                float extraInertiaFactor = 1f - MathUtils.Clamp01(distanceToDestination / minDistance);
-                float inertia = inertiaValue + extraInertiaValue * extraInertiaFactor;
-                Helper.InertiaMoveTowards(ref Projectile.velocity, Projectile.position, destination, inertia: inertia);
+            Vector2 destination = owner.GetWorldMousePosition();
+            float distanceToDestination = Vector2.Distance(Projectile.position, destination);
+            float minDistance = 60f;
+            float inertiaValue = 30, extraInertiaValue = inertiaValue * 5;
+            float extraInertiaFactor = 1f - MathUtils.Clamp01(distanceToDestination / minDistance);
+            float inertia = inertiaValue + extraInertiaValue * extraInertiaFactor;
+            Helper.InertiaMoveTowards(ref Projectile.velocity, Projectile.position, destination, inertia: inertia);
 
-                owner.SyncMousePosition();
-            }
+            owner.SyncMousePosition();
 
             SporeValues sporeValues = new(Projectile);
             sporeValues.FacedRight = Projectile.velocity.X < 0f;

@@ -23,7 +23,7 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
 [AutoloadGlowMask(requirement: "")]
 sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
-    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TectonicCaneProjectile>();
+    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<TectonicCaneProjectile>();
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(36, 38);

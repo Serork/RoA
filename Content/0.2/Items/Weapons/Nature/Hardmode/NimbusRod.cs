@@ -44,7 +44,7 @@ sealed class NimbusRod : NatureItem {
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         if (player.whoAmI == Main.myPlayer) {
-            Vector2 mousePosition = player.GetMousePosition();
+            Vector2 mousePosition = player.GetWorldMousePosition();
             Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, mousePosition.X, mousePosition.Y);
         }
 

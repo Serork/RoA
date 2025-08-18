@@ -2149,3 +2149,8 @@ TarRocket: {
 	// DisplayName: Tar Rocket
 	// Tooltip: ""
 }
+
+StinkingLily: {
+	// DisplayName: Stinking Lily
+	// Tooltip: ""
+}

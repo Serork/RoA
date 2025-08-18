@@ -43,7 +43,7 @@ sealed class BloomingDoom : TulipBaseItem<BloomingDoom.BloomingDoomBase> {
 }
 
 abstract class TulipBaseItem<T> : CaneBaseItem<T> where T : CaneBaseProjectile {
-    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TulipFlower>();
+    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<TulipFlower>();
 
     protected override void SafeSetDefaults() {
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.12f);

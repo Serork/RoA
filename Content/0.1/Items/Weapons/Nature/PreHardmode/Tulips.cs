@@ -255,7 +255,7 @@ sealed class ExoticTulip : NatureItem {
 //}
 
 //abstract class TulipBaseItem<T> : CaneBaseItem<T> where T : CaneBaseProjectile {
-//    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<TulipFlower>();
+//    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<TulipFlower>();
 
 //    protected override void SafeSetDefaults() {
 //        Item.SetSizeValues(34);

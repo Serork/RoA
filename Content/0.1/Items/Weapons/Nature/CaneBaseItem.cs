@@ -39,7 +39,7 @@ abstract class CaneBaseItem<T> : NatureItem where T : CaneBaseProjectile {
             self.releaseUseItem = true;
     }
 
-    protected virtual ushort ShootType() => (ushort)ProjectileID.WoodenArrowFriendly;
+    protected virtual ushort ProjectileTypeToCreate() => (ushort)ProjectileID.WoodenArrowFriendly;
 
     protected virtual ushort TimeToCastAttack(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
 
@@ -59,7 +59,7 @@ abstract class CaneBaseItem<T> : NatureItem where T : CaneBaseProjectile {
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         ushort baseRodProjectileType = (ushort)ModContent.ProjectileType<T>();
         if (player.ownedProjectileCounts[baseRodProjectileType] < 1) {
-            Projectile.NewProjectileDirect(source, player.Center, default, baseRodProjectileType, NatureWeaponHandler.GetNatureDamage(Item, player), knockback, player.whoAmI, TimeToCastAttack(player), ShootType());
+            Projectile.NewProjectileDirect(source, player.Center, default, baseRodProjectileType, NatureWeaponHandler.GetNatureDamage(Item, player), knockback, player.whoAmI, TimeToCastAttack(player), ProjectileTypeToCreate());
         }
 
         return false;

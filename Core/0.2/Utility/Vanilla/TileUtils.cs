@@ -238,6 +238,30 @@ static partial class TileHelper {
         return (ushort)(distances.Count == 0 ? 0 : distances.Min());
     }
 
+    public static ushort GetDistanceToFirstTile(int i, int j, ushort checkDistance = 10, float startCheckAngle = 0f, float defaultCheckAngle = MathHelper.TwoPi / 10f, Predicate<Point16>? extraCondition = null) {
+        if (startCheckAngle <= 0f) {
+            startCheckAngle = defaultCheckAngle;
+        }
+        float currentCheckAngle = 0f;
+        float maxCheckAngle = MathHelper.TwoPi;
+        List<ushort> distances = [];
+        while (currentCheckAngle < maxCheckAngle) {
+            ushort currentCheckDistance = 0;
+            int checkX = i, checkY = j;
+            while (currentCheckDistance++ < checkDistance) {
+                Vector2D velocity = Vector2D.One.RotatedBy(currentCheckAngle);
+                checkX += (int)Math.Floor(velocity.X);
+                checkY += (int)Math.Floor(velocity.Y);
+                if (WorldGenHelper.ActiveTile(checkX, checkY) && (extraCondition == null || extraCondition(new Point16(checkX, checkY)))) {
+                    distances.Add(currentCheckDistance);
+                    break;
+                }
+            }
+            currentCheckAngle += startCheckAngle;
+        }
+        return (ushort)(distances.Count == 0 ? 0 : distances.Min());
+    }
+
     public static bool HasNoDuplicateNeighbors(int i, int j, ushort checkTileType) {
         bool result = false;
         for (int k = 0; k < 4; k++) {

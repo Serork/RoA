@@ -6,7 +6,9 @@ using ReLogic.Content;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
+using RoA.Content.Items.Weapons.Nature.Hardmode;
 using RoA.Content.Projectiles.Friendly.Nature;
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -20,7 +22,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Weapons.Nature.Hardmode;
+namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, DruidPlayerShouldersFix.IProjectileFixShoulderWhileActive {
     private const byte FRAMECOUNT = 4;
@@ -107,7 +109,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
 
             Projectile.timeLeft = 2;
 
-            if (!owner.Holding<Macrolepiota>()) {
+            if (!owner.IsHolding<Macrolepiota>()) {
                 Projectile.Kill();
             }
             if (!owner.IsAliveAndFree()) {
@@ -281,7 +283,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
             return;
         }
 
-        string texturePath = ItemUtils.GetTexturePath<Macrolepiota>() + "_Hold";
+        string texturePath = ResourceManager.NatureProjectileTextures + "Macrolepiota_Hold";
         _holdTexture = ModContent.Request<Texture2D>(texturePath);
         _holdGlowMaskTexture = ModContent.Request<Texture2D>(texturePath + "_Glow");
     }

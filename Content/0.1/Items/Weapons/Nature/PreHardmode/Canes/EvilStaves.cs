@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
 sealed class ShadewoodStaff : CaneBaseItem<ShadewoodStaff.ShadewoodStaffBase> {
-    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<EvilBranch>();
+    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<EvilBranch>();
 
     public static void SetDefaultsInner(Item item) {
         item.SetSizeValues(36);
@@ -43,7 +43,7 @@ sealed class ShadewoodStaff : CaneBaseItem<ShadewoodStaff.ShadewoodStaffBase> {
 }
 
 sealed class EbonwoodStaff : CaneBaseItem<EbonwoodStaff.EbonwoodStaffBase> {
-    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<EvilBranch>();
+    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<EvilBranch>();
 
     protected override void SafeSetDefaults() {
         ShadewoodStaff.SetDefaultsInner(Item);

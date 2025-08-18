@@ -20,7 +20,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
 sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
-    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<ProtectiveRoots>();
+    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<ProtectiveRoots>();
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(36, 42);

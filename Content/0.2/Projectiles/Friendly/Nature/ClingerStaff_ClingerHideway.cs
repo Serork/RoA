@@ -241,7 +241,7 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
             else {
                 ref float clingerFollowCursorFactor = ref hidewayValues.ClingerFollowCursorFactor;
-                _mousePosition = Vector2.Lerp(_mousePosition, owner.GetMousePosition(), clingerFollowCursorFactor);
+                _mousePosition = Vector2.Lerp(_mousePosition, owner.GetWorldMousePosition(), clingerFollowCursorFactor);
                 float maxOffset = CLINGERLENGTH;
                 float distance = _mousePosition.Distance(Projectile.Center) * 0.5f;
                 distance = MathF.Max(10f, distance);

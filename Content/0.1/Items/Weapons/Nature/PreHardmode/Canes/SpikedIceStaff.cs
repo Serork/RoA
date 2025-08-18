@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
 sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
-    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<SharpIcicle>();
+    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<SharpIcicle>();
 
     public override void SetStaticDefaults() {
         Item.staff[Type] = true;
