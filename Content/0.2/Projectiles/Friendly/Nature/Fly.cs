@@ -58,6 +58,7 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
 
         Vector2 destination = parent.Center - Vector2.UnitY.RotatedBy(parent.rotation) * 10f;
+        destination -= Projectile.Size / 2f;
         float distanceToDestination = Vector2.Distance(Projectile.position, destination);
         float minDistance = 100f;
         float inertiaValue = 30, extraInertiaValue = inertiaValue * 5;
