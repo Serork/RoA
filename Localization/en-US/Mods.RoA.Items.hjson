@@ -1690,26 +1690,26 @@ EldritchRing: {
 }
 
 NFAHorns: {
-	DisplayName: N.F.A.'s Horns
+	DisplayName: NotFurryAlex's Horns
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 NFAJacket: {
-	DisplayName: N.F.A.'s Dress Shirt
+	DisplayName: NotFurryAlex's Dress Shirt
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'By the order of my master I'm mandated to wear a shirt.'
+		'Not the latest of freshness...'
 		'''
 }
 
 NFAPants: {
-	DisplayName: N.F.A.'s Pants
+	DisplayName: NotFurryAlex's Pants
 	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 NFAWings: {
-	DisplayName: N.F.A.'s Wings
+	DisplayName: NotFurryAlex's Wings
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
