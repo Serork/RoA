@@ -49,10 +49,10 @@ sealed class HammerEmote : ModEmoteBubble, IRequestAssets {
     }
 
     public override bool PreDrawInEmoteMenu(SpriteBatch spriteBatch, EmoteButton uiEmoteButton, Vector2 position, Rectangle frame, Vector2 origin) {
-        if (AssetInitializer.TryGetRequestedTextureAssets<HammerEmote>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets)) {
-            Texture2D bubbleTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Bubble]!.Value,
-                      emoteTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Hammer]!.Value,
-                      borderTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Border]!.Value;
+        if (AssetInitializer.TryGetRequestedTextureAssets<HammerEmote>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+            Texture2D bubbleTexture = indexedTextureAssets[(byte)HammerEmoteRequstedTextureType.Bubble].Value,
+                      emoteTexture = indexedTextureAssets[(byte)HammerEmoteRequstedTextureType.Hammer].Value,
+                      borderTexture = indexedTextureAssets[(byte)HammerEmoteRequstedTextureType.Border].Value;
             Rectangle value = bubbleTexture.Frame(8, 39, 1, 0);
             Color white = Color.White;
             Color color = Color.Black;
@@ -67,10 +67,10 @@ sealed class HammerEmote : ModEmoteBubble, IRequestAssets {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Texture2D texture, Vector2 position, Rectangle frame, Vector2 origin, SpriteEffects spriteEffects) {
-        if (AssetInitializer.TryGetRequestedTextureAssets<HammerEmote>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets)) {
-            Texture2D bubbleTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Bubble]!.Value,
-                      emoteTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Hammer]!.Value,
-                      borderTexture = indexedTextureAssets![(byte)HammerEmoteRequstedTextureType.Border]!.Value;
+        if (AssetInitializer.TryGetRequestedTextureAssets<HammerEmote>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+            Texture2D bubbleTexture = indexedTextureAssets[(byte)HammerEmoteRequstedTextureType.Bubble].Value,
+                      emoteTexture = indexedTextureAssets[(byte)HammerEmoteRequstedTextureType.Hammer].Value,
+                      borderTexture = indexedTextureAssets[(byte)HammerEmoteRequstedTextureType.Border].Value;
             Rectangle value = bubbleTexture.Frame(8, 39, 1, 0);
             Color white = Color.White;
             Color color = Color.Black;

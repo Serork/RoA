@@ -372,12 +372,12 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     protected override void Draw(ref Color lightColor) {
-        if (!AssetInitializer.TryGetRequestedTextureAssets<ClingerHideway>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets)) {
+        if (!AssetInitializer.TryGetRequestedTextureAssets<ClingerHideway>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return;
         }
 
-        Texture2D hidewayTexture = indexedTextureAssets![(byte)ClingerHidewayRequstedTextureType.Hideway]!.Value,
-                  clingerTexture = indexedTextureAssets![(byte)ClingerHidewayRequstedTextureType.Clinger]!.Value;
+        Texture2D hidewayTexture = indexedTextureAssets[(byte)ClingerHidewayRequstedTextureType.Hideway].Value,
+                  clingerTexture = indexedTextureAssets[(byte)ClingerHidewayRequstedTextureType.Clinger].Value;
         SpriteBatch batch = Main.spriteBatch;
         Color color = lightColor;
         void drawHideway() {

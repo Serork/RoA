@@ -14,11 +14,11 @@ interface IRequestAssets {
 }
 
 sealed class AssetInitializer : IPostSetupContent {
-    public static Dictionary<Type, Dictionary<byte, Asset<Texture2D>?>?> TexturesPerType { get; private set; } = [];
+    public static Dictionary<Type, Dictionary<byte, Asset<Texture2D>>> TexturesPerType { get; private set; } = [];
 
-    public static bool TryGetRequestedTextureAssets<T>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets) where T : IRequestAssets {
+    public static bool TryGetRequestedTextureAssets<T>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets) where T : IRequestAssets {
         Type requestedAssetsType = typeof(T);
-        if (TexturesPerType!.TryGetValue(requestedAssetsType, out Dictionary<byte, Asset<Texture2D>?>? textures)) {
+        if (TexturesPerType!.TryGetValue(requestedAssetsType, out Dictionary<byte, Asset<Texture2D>> textures)) {
             if (textures == null) {
                 throw new Exception($"{requestedAssetsType} assets are not loaded!");
             }
@@ -38,7 +38,7 @@ sealed class AssetInitializer : IPostSetupContent {
 
     public static bool TryGetRequestedTextureAsset<T>(byte textureIndex, out Asset<Texture2D>? textureAsset) where T : IRequestAssets {
         Type requestedAssetsType = typeof(T);
-        if (TexturesPerType!.TryGetValue(requestedAssetsType, out Dictionary<byte, Asset<Texture2D>?>? textures)) {
+        if (TexturesPerType!.TryGetValue(requestedAssetsType, out Dictionary<byte, Asset<Texture2D>> textures)) {
             if (textures == null) {
                 throw new Exception($"{requestedAssetsType} assets are not loaded!");
             }
@@ -66,7 +66,7 @@ sealed class AssetInitializer : IPostSetupContent {
             }
             foreach ((byte, string) indexedPath in requestAsset.IndexedPathsToTexture) {
                 Type type = loadableContent.GetType();
-                if (!TexturesPerType.TryGetValue(type, out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets)) {
+                if (!TexturesPerType.TryGetValue(type, out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
                     indexedTextureAssets = [];
                     TexturesPerType.Add(type, indexedTextureAssets);
                 }

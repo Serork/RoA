@@ -163,12 +163,12 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     protected override void Draw(ref Color lightColor) {
-        if (!AssetInitializer.TryGetRequestedTextureAssets<Rafflesia>(out Dictionary<byte, Asset<Texture2D>?>? indexedTextureAssets)) {
+        if (!AssetInitializer.TryGetRequestedTextureAssets<Rafflesia>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return;
         }
 
-        Texture2D tulipTexture = indexedTextureAssets![(byte)RafflesiaRequstedTextureType.Tulip]!.Value,
-                  stemTexture = indexedTextureAssets![(byte)RafflesiaRequstedTextureType.Stem]!.Value;
+        Texture2D tulipTexture = indexedTextureAssets[(byte)RafflesiaRequstedTextureType.Tulip].Value,
+                  stemTexture = indexedTextureAssets[(byte)RafflesiaRequstedTextureType.Stem].Value;
 
         Vector2 center = Projectile.Center;
         DrawStem(stemTexture, center, _spawnPosition);

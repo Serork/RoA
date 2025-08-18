@@ -2101,12 +2101,12 @@ NightsShroud: {
 
 TarfallBlock: {
 	DisplayName: Блок со смолопадом
-	Tooltip: "Здесь могут быть ваши предки"
+	Tooltip: Здесь могут быть ваши предки
 }
 
 TarfallWall: {
 	DisplayName: Стена со смолопадом
-	Tooltip: "Здесь могут быть ваши предки"
+	Tooltip: Здесь могут быть ваши предки
 }
 
 SolidifiedTarWall: {
@@ -2151,12 +2151,12 @@ NettleBurst: {
 
 TarBomb: {
 	DisplayName: Смоляная бомба
-	Tooltip: "Небольшой взрыв, разбрызгивающий лаву"
+	Tooltip: Небольшой взрыв, разбрызгивающий лаву
 }
 
 TarRocket: {
 	DisplayName: Смоляная ракета
-	Tooltip: "Разбрызгивает смолу при контакте"
+	Tooltip: Разбрызгивает смолу при контакте
 }
 
 StinkingLily: {
