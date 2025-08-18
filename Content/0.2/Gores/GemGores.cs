@@ -19,7 +19,7 @@ class Amethyst2 : ModGore {
     public override string Texture => base.Texture[..^1];
 
     public override bool Update(Gore gore) {
-        gore.alpha += 5;
+        gore.alpha += 2;
         if (gore.alpha >= 255) {
             gore.alpha = 255;
             gore.active = false;
