@@ -468,6 +468,13 @@ sealed class TarBiome : MicroBiome {
                 if (_tiles[num, num2].HasTile && _tiles[num, num2].TileType == TileID.WaterDrip) {
                     _tiles[num, num2].TileType = TARDRIPPINGTILETYPE;
                 }
+                if (i > magmaMapArea.Left + 10 && i < magmaMapArea.Right - 10 &&
+                    j > magmaMapArea.Top + 10 && j < magmaMapArea.Bottom - 10) {
+                    if (_tiles[num, num2].LiquidType != 5) {
+                        Tile tile = _tiles[num, num2];
+                        tile.LiquidType = 5;
+                    }
+                }
                 //if (fastRandom2.Next(8) == 0 && GenBase._tiles[num, num2].HasTile) {
                 //    if (!GenBase._tiles[num, num2 + 1].HasTile)
                 //        WorldGen.PlaceUncheckedStalactite(num, num2 + 1, fastRandom2.Next(2) == 0, fastRandom2.Next(3), spiders: false);
