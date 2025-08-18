@@ -93,13 +93,6 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         Texture2D wingsTexture = indexedTextureAssets[0].Value;
         Rectangle clip = new SpriteFrame(1, 4, 0, (byte)Projectile.frame).GetSourceRectangle(wingsTexture);
         Vector2 origin = clip.Size() / 2f;
-        Main.spriteBatch.Draw(wingsTexture, Projectile.Center - origin / 2f, DrawInfo.Default with {
-            Clip = clip,
-            Origin = origin,
-            Color = lightColor,
-            ImageFlip = Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-            Scale = Vector2.One * 0.875f
-        });
 
         Texture2D texture = ResourceManager.Pixel;
         int length = ProjectileID.Sets.TrailCacheLength[Projectile.type];
@@ -140,5 +133,13 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
                 }
             }
         }
+
+        Main.spriteBatch.Draw(wingsTexture, Projectile.Center - origin / 2f, DrawInfo.Default with {
+            Clip = clip,
+            Origin = origin,
+            Color = lightColor,
+            ImageFlip = Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
+            Scale = Vector2.One * 0.875f
+        });
     }
 }
