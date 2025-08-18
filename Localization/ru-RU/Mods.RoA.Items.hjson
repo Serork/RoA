@@ -2158,3 +2158,8 @@ TarRocket: {
 	DisplayName: Смоляная ракета
 	Tooltip: "Разбрызгивает смолу при контакте"
 }
+
+StinkingLily: {
+	// DisplayName: Stinking Lily
+	// Tooltip: ""
+}

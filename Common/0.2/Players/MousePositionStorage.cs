@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Core.Utility;
-
-using System.IO;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -12,15 +11,14 @@ namespace RoA.Common.Players;
 
 static class MousePositionStorageExtensions {
     public static void SyncMousePosition(this Player player) => player.GetModPlayer<MousePositionStorage>().ShouldSyncMousePosition = true;
-    public static Vector2 GetMousePosition(this Player player) => player.GetModPlayer<MousePositionStorage>().MousePosition;
+    public static Vector2 GetWorldMousePosition(this Player player) => player.GetModPlayer<MousePositionStorage>().MousePosition;
 }
 
 sealed class MousePositionStorage : ModPlayer {
     private Vector2 _oldMouseWorld;
 
     internal bool ShouldSyncMousePosition;
-
-    public Vector2 MousePosition { get; private set; }
+    internal Vector2 MousePosition;
 
     public override void PreUpdate() {
         void updateAndSyncMousePosition() {
@@ -31,7 +29,7 @@ sealed class MousePositionStorage : ModPlayer {
             MousePosition = Player.GetViableMousePosition();
 
             bool syncControls = false;
-            if (ShouldSyncMousePosition && MathUtils.Approximately(MousePosition, _oldMouseWorld, 1E+1f)) {
+            if (ShouldSyncMousePosition && MousePosition.Distance(_oldMouseWorld) > 10f) {
                 _oldMouseWorld = MousePosition;
 
                 syncControls = true;
@@ -39,27 +37,10 @@ sealed class MousePositionStorage : ModPlayer {
             }
 
             if (syncControls) {
-                MultiplayerSystem.SendPacket(new SyncMousePositionHandler(Player, MousePosition));
+                MultiplayerSystem.SendPacket(new SyncMousePositionPacket(Player, MousePosition));
             }
         }
 
         updateAndSyncMousePosition();
-    }
-
-    private class SyncMousePositionHandler : NetPacket {
-        public SyncMousePositionHandler(Player player, Vector2 mousePosition) {
-            Writer.TryWriteSenderPlayer(player);
-            Writer.WriteVector2(mousePosition);
-        }
-
-        public override void Read(BinaryReader reader, int sender) {
-            if (!reader.TryReadSenderPlayer(sender, out Player player)) {
-                return;
-            }
-
-            Vector2 mousePosition = reader.ReadVector2();
-            MousePositionStorage mousePositionStorage = player.GetModPlayer<MousePositionStorage>();
-            mousePositionStorage.MousePosition = mousePosition;
-        }
-    }
+    } 
 }

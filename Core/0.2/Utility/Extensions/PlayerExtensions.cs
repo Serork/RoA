@@ -10,7 +10,7 @@ static partial class PlayerExtensions {
 
     public static bool IsAliveAndFree(this Player player) => player.active && !player.CCed && !player.dead;
 
-    public static bool Holding<T>(this Player player) where T : ModItem => player.HeldItem.type == ModContent.ItemType<T>();
+    public static bool IsHolding<T>(this Player player) where T : ModItem => player.HeldItem.type == ModContent.ItemType<T>();
 
     public static void UseBodyFrame(this Player player, PlayerFrame frameToUse) => player.bodyFrame.Y = 56 * (int)frameToUse;
 }

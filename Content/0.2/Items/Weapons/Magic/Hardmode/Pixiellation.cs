@@ -66,7 +66,7 @@ sealed class Pixiellation : ModItem, IRecipeDuplicatorItem {
         float itemRotation = shootVelocityNormalized.ToRotation();
         Vector2 itemSizeOffset = shootVelocityNormalized * Item.width;
         position += itemSizeOffset;
-        velocity = position.DirectionTo(player.GetMousePosition());
+        velocity = position.DirectionTo(player.GetWorldMousePosition());
 
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI);
 

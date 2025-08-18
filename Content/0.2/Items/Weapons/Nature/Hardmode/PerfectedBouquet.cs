@@ -88,7 +88,7 @@ sealed class PerfectedBouquet : NatureItem {
         }
         petalOffset -= new Vector2(2f, 2f * player.direction).RotatedBy(itemRotation);
         position += petalOffset;
-        velocity = position.DirectionTo(player.GetMousePosition());
+        velocity = position.DirectionTo(player.GetWorldMousePosition());
         int whoAmI = ProjectileUtils.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, beforeNetSend: (projectile) => {
             _ = new TulipPetalSoul.TulipPetalSoulValues(projectile) {
                 CurrentType = petalType

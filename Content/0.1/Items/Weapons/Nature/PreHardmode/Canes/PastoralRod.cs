@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
 sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
-    protected override ushort ShootType() => (ushort)ModContent.ProjectileType<ShepherdLeaves>();
+    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<ShepherdLeaves>();
 
     protected override ushort TimeToCastAttack(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2 - NatureWeaponHandler.GetUseSpeed(Item, player) / 3);
 
