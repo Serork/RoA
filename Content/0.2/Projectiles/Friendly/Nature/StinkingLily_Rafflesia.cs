@@ -29,7 +29,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static float MINLENGTH => 100f;
     private static byte STEMFRAMECOUNT => 4;
     private static byte TULIPCOUNT => 6;
-    private static byte FLYCOUNTTOSPAWN => 10;
+    private static byte FLYCOUNTTOSPAWN => 5;
 
     private enum RafflesiaRequstedTextureType : byte {
         Tulip,

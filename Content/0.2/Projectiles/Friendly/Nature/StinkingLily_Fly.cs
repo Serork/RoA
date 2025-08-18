@@ -52,13 +52,36 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override void AI() {
         Projectile parent = Main.projectile[(int)Projectile.ai[0]];
 
-        if (!parent.active || parent.type != ModContent.ProjectileType<Rafflesia>()) {
-            Projectile.Kill();
-            return;
+        bool flag = Projectile.ai[1] == 1f;
+        if (!flag) {
+            if (!parent.active || parent.type != ModContent.ProjectileType<Rafflesia>()) {
+                Projectile.Kill();
+                return;
+            }
         }
 
-        Vector2 destination = parent.Center - Vector2.UnitY.RotatedBy(parent.rotation) * 10f;
-        destination -= Projectile.Size / 2f;
+        Projectile.OffsetTheSameProjectile(0.1f);
+
+        Vector2 destination = Projectile.Center;
+
+        Vector2 getParentGoToPosition() {
+            Vector2 result = parent.Center - Vector2.UnitY.RotatedBy(parent.rotation) * 10f;
+            result -= Projectile.Size / 2f;
+            return result;
+        }
+        if (flag) {
+            NPC? target = NPCUtils.FindClosestNPC(Projectile.Center, 300);
+            if (target != null) {
+                destination = target.Center;
+                destination -= Projectile.Size / 2f;
+            }
+            else {
+                destination = getParentGoToPosition();
+            }
+        }
+        else {
+            destination = getParentGoToPosition();
+        }
         float distanceToDestination = Vector2.Distance(Projectile.position, destination);
         float minDistance = 100f;
         float inertiaValue = 30, extraInertiaValue = inertiaValue * 5;
@@ -69,6 +92,7 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         float minLength = 1f;
         if (length < minLength) {
             Projectile.velocity = Projectile.velocity.SafeNormalize() * minLength;
+            Projectile.ai[1] = 1f;
         }
 
         if (Projectile.localAI[0] == 0f) {
