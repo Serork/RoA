@@ -87,6 +87,8 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
 
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
+
+        Projectile.netImportant = true;
     }
 
     public override void Load() {
