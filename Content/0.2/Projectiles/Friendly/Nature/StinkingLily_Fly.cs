@@ -23,7 +23,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static ushort MAXTIMELEFT => 1000;
+    private static ushort MAXTIMELEFT => 360;
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture => [(0, ResourceManager.NatureProjectileTextures + "Fly")];
 
@@ -47,10 +47,15 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Projectile.friendly = true;
         Projectile.penetrate = 1;
+
+        Projectile.Opacity = 0f;
     }
 
     public override void AI() {
         Projectile parent = Main.projectile[(int)Projectile.ai[0]];
+
+        float timeToAppear = 30f;
+        Projectile.Opacity = Utils.GetLerpValue(0f, timeToAppear / 2f, Projectile.timeLeft, true) * Utils.GetLerpValue(MAXTIMELEFT, MAXTIMELEFT - timeToAppear, Projectile.timeLeft, true);
 
         bool flag = Projectile.ai[1] == 1f;
         if (!flag) {
@@ -95,6 +100,8 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.ai[1] = 1f;
         }
 
+        Projectile.rotation = Projectile.velocity.X * 0.1f;
+
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
@@ -129,7 +136,7 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
             float progress = 1f - (float)i / length;
             if (Vector2.Distance(vector6, vector7) % 3f != 0f)
                 num5++;
-            Color color = _color.MultiplyRGB(lightColor);
+            Color color = _color.MultiplyRGB(lightColor) * Projectile.Opacity;
             //color.A += (byte)(MathF.Abs(MathF.Sin((float)Main.timeForVisualEffects * i) * 10));
             for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
                 Vector2 position = Vector2.Lerp(vector7, vector6, num6 / (float)num5);
@@ -160,9 +167,10 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         Main.spriteBatch.Draw(wingsTexture, Projectile.Center - origin / 2f, DrawInfo.Default with {
             Clip = clip,
             Origin = origin,
-            Color = lightColor,
+            Color = lightColor * Projectile.Opacity,
             ImageFlip = Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None,
-            Scale = Vector2.One * 0.75f
+            Scale = Vector2.One * 0.75f,
+            Rotation = Projectile.rotation
         });
     }
 }

@@ -24,7 +24,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static ushort TIMELEFT => 1000;
+    private static ushort TIMELEFT => 360;
     private static float MAXLENGTH => 150f;
     private static float MINLENGTH => 100f;
     private static byte STEMFRAMECOUNT => 4;
@@ -86,6 +86,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
 
             Dust dust = Dust.NewDustPerfect(Projectile.Center - (Vector2.UnitY * 10f + Main.rand.RandomPointInArea(5f)).RotatedBy(Projectile.rotation), ModContent.DustType<Rot>());
             dust.velocity = new Vector2(0.5f * Main.rand.NextFloatRange(1f), 1f).RotatedBy(Projectile.rotation) * -Main.rand.NextFloat(0.5f, 1f);
+            dust.scale *= Main.rand.NextFloat(0.8f, 1.2f);
         }
 
         void setLengthAndSpawnPosition() {
@@ -111,7 +112,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
         }
 
-        if (Projectile.localAI[1]++ >= 10f && _flySpawnedCount < FLYCOUNTTOSPAWN) {
+        if (Projectile.localAI[1]++ >= 20f && _flySpawnedCount < FLYCOUNTTOSPAWN) {
             if (Projectile.IsOwnerLocal()) {
                 Player owner = Projectile.GetOwnerAsPlayer();
                 Vector2 spawnPosition = owner.GetWorldMousePosition();
@@ -141,25 +142,6 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 goToPosition = GetMoveTowardsPosition();
         float lerpValue = 0.05f * Projectile.localAI[2];
         Projectile.Center = Vector2.Lerp(Projectile.Center, goToPosition, lerpValue);
-    }
-
-    private Vector2 GetMoveTowardsPosition() {
-        Player owner = Projectile.GetOwnerAsPlayer();
-        Vector2 mousePosition = owner.GetWorldMousePosition();
-        Vector2 destination = new(_spawnPosition.X + _spawnPosition.DirectionTo(mousePosition).X * 50f, _spawnPosition.Y - 100f);
-        float length = (destination - _spawnPosition).Length() * Projectile.ai[1];
-        length = Utils.Clamp(length, MINLENGTH, MAXLENGTH) ;
-        length *= MathUtils.Clamp01(Projectile.Opacity * 2f);
-        Projectile.ai[0] = length;
-        float rotation = Projectile.Center.DirectionTo(destination).ToRotation() + MathHelper.PiOver2;
-        float maxRotation = MathHelper.PiOver4 / 2f;
-        rotation = Utils.Clamp(rotation, -maxRotation, maxRotation);
-        float lerpValue = 0.05f * Projectile.localAI[2];
-        if (Projectile.Center.Y > destination.Y) {
-            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, rotation, lerpValue);
-        }
-        owner.SyncMousePosition();
-        return _spawnPosition + _spawnPosition.DirectionTo(destination) * length;
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -206,11 +188,28 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         _spawnPosition = reader.ReadVector2();
     }
 
+    private Vector2 GetMoveTowardsPosition() {
+        Player owner = Projectile.GetOwnerAsPlayer();
+        Vector2 mousePosition = owner.GetWorldMousePosition();
+        Vector2 destination = new(_spawnPosition.X + _spawnPosition.DirectionTo(mousePosition).X * 50f, _spawnPosition.Y - 100f);
+        float length = (destination - _spawnPosition).Length() * Projectile.ai[1];
+        length = Utils.Clamp(length, MINLENGTH, MAXLENGTH);
+        length *= MathUtils.Clamp01(Projectile.Opacity * 2f);
+        float rotation = Projectile.Center.DirectionTo(destination).ToRotation() + MathHelper.PiOver2;
+        float maxRotation = MathHelper.PiOver4 / 2f;
+        rotation = Utils.Clamp(rotation, -maxRotation, maxRotation);
+        float lerpValue = 0.05f * Projectile.localAI[2];
+        if (Projectile.Center.Y > destination.Y) {
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, rotation, lerpValue);
+        }
+        owner.SyncMousePosition();
+        return _spawnPosition + _spawnPosition.DirectionTo(destination) * length;
+    }
+
     private void DrawStem(Texture2D textureToDraw, Vector2 currentPosition, Vector2 endPosition) {
         float progress = 0f;
         int count = 500;
         float maxLength = (endPosition - currentPosition).Length();
-        float lengthProgress = Projectile.ai[0] / MAXLENGTH;
         float sinOffsetX = 50f;
         for (int i = 0; i < count; i++) {
             Vector2 between = endPosition - currentPosition;
@@ -235,9 +234,10 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
 
             Vector2 scale = Vector2.One * scaleProgress;
             ulong seedForRandomness = (ulong)i;
+            int frameToUse = i == 0 ? STEMFRAMECOUNT - 1 : Utils.RandomInt(ref seedForRandomness, STEMFRAMECOUNT);
             Main.EntitySpriteDraw(textureToDraw,
                                   position - Main.screenPosition,
-                                  new Rectangle(0, 10 * Utils.RandomInt(ref seedForRandomness, STEMFRAMECOUNT), 18, height),
+                                  new Rectangle(0, 10 * frameToUse, 18, height),
                                   Lighting.GetColor(position.ToTileCoordinates()),
                                   velocityToAdd.ToRotation() + MathHelper.PiOver2,
                                   new Vector2(9, height / 2),
