@@ -71,6 +71,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.Opacity = 0f;
 
         Projectile.timeLeft = TIMELEFT;
+        Projectile.manualDirectionChange = true;
     }
 
     public override void AI() {
@@ -79,6 +80,8 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         if (Projectile.Opacity >= 0.9f) {
             Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], 0f, 0.1f);
         }
+
+        Projectile.direction = Projectile.rotation.GetDirection();
 
         //Projectile.localAI[1] = MathHelper.Lerp(Projectile.localAI[1], 1f, 0.05f);
         if (Projectile.frameCounter++ > Main.rand.Next(3, 6)) {
@@ -112,7 +115,8 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
         }
 
-        if (Projectile.localAI[1]++ >= 20f && _flySpawnedCount < FLYCOUNTTOSPAWN) {
+        bool flag = _flySpawnedCount >= FLYCOUNTTOSPAWN;
+        if (Projectile.localAI[1]++ >= 20f && !flag) {
             if (Projectile.IsOwnerLocal()) {
                 Player owner = Projectile.GetOwnerAsPlayer();
                 Vector2 spawnPosition = owner.GetWorldMousePosition();
@@ -131,6 +135,8 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.localAI[1] = 0f;
             _flySpawnedCount++;
         }
+
+        Projectile.ai[0] = MathHelper.SmoothStep(Projectile.ai[0], 1f, 0.1f * (float)_flySpawnedCount / FLYCOUNTTOSPAWN);
 
         setLengthAndSpawnPosition();
 
@@ -161,11 +167,15 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 position = center;
             Rectangle clip = tulipTexture.Bounds;
             Color color = lightColor;
-            float progress = (float)i / tulipCount;
-            float rotation = MathHelper.Pi * progress + Projectile.rotation - MathHelper.PiOver2;
+            float progress = (float)i / MathHelper.Lerp(tulipCount, tulipCount + 1, Projectile.ai[0]);
+            float rotation = (MathHelper.Pi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction;
+            rotation = Utils.AngleLerp(rotation, (MathHelper.TwoPi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction, Projectile.ai[0]);
+            if (Projectile.direction < 0) {
+                rotation -= MathHelper.PiOver4 / 4f;
+            }
             float mid = tulipCount / 2f;
             float progress2 = MathF.Abs(i - mid) / mid;
-            Vector2 scale = Vector2.One * Utils.Remap(1f - progress2, 0f, 1f, 0.5f, 1f, true) * 1.25f;
+            Vector2 scale = Vector2.One * MathHelper.Lerp(Utils.Remap(1f - progress2, 0f, 1f, 0.5f, 1f, true) * 1.25f, 1f, Projectile.ai[0]);
             Main.spriteBatch.Draw(tulipTexture, position, DrawInfo.Default with {
                 Clip = clip,
                 Color = color,
