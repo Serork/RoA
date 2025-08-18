@@ -77,8 +77,6 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
             _color = new Color((float)(Main.rand.NextDouble() * 0.20000000298023224), (float)(Main.rand.NextDouble() * 0.20000000298023224), (float)(Main.rand.NextDouble() * 0.20000000298023224));
         }
 
-        Lighting.AddLight(Projectile.position, _color.ToVector3() * 0.5f);
-
         ProjectileUtils.Animate(Projectile, 4);
     }
 
