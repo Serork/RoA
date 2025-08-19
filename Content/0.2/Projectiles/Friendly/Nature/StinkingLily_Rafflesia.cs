@@ -148,7 +148,6 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.Center = Vector2.Lerp(Projectile.Center, goToPosition, lerpValue);
         if (Projectile.Opacity < 0.5f) {
             Projectile.direction = (goToPosition.X - _spawnPosition.X).GetDirection();
-            Main.NewText(Projectile.direction);
         }
     }
 
