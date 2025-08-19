@@ -52,7 +52,6 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     private Vector2 _spawnPosition;
     private int _flySpawnedCount;
-    private float[] _rotations;
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.NeedsUUID[Type] = true;
@@ -97,11 +96,6 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
                 rafflesiaValues.Init = true;
 
                 Projectile.localAI[2] = 0.75f;
-
-                _rotations = new float[TULIPCOUNT + 1];
-                for (int i = 0; i < _rotations.Length; i++) {
-                    _rotations[i] = float.MaxValue;
-                }
 
                 if (Projectile.IsOwnerLocal()) {
                     Player owner = Projectile.GetOwnerAsPlayer();
@@ -152,10 +146,14 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 goToPosition = GetMoveTowardsPosition();
         float lerpValue = 0.05f * Projectile.localAI[2];
         Projectile.Center = Vector2.Lerp(Projectile.Center, goToPosition, lerpValue);
+        if (Projectile.Opacity < 0.5f) {
+            Projectile.direction = (goToPosition.X - _spawnPosition.X).GetDirection();
+            Main.NewText(Projectile.direction);
+        }
     }
 
     protected override void Draw(ref Color lightColor) {
-        if (!AssetInitializer.TryGetRequestedTextureAssets<Rafflesia>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets) || _rotations == null) {
+        if (!AssetInitializer.TryGetRequestedTextureAssets<Rafflesia>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return;
         }
 
@@ -172,12 +170,8 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Rectangle clip = tulipTexture.Bounds;
             Color color = lightColor;
             float progress = (float)i / MathHelper.Lerp(tulipCount, tulipCount + 1, Projectile.ai[0]);
-            ref float rotation = ref _rotations[i];
             float desiredRotation = (MathHelper.Pi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction;
-            if (rotation == float.MaxValue) {
-                rotation = desiredRotation;
-            }
-            rotation = Utils.AngleLerp(rotation, desiredRotation, 1f);
+            float rotation = desiredRotation;
             rotation = Utils.AngleLerp(rotation, (MathHelper.TwoPi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction, Projectile.ai[0]);
             if (Projectile.direction < 0) {
                 rotation -= MathHelper.PiOver4 / 4f;
