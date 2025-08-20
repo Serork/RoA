@@ -97,8 +97,8 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         float progress = (float)Projectile.timeLeft / _useTimeMax;
         float f = progress < 0.5f ? progress : (1f - progress);
         Vector2 offset2 = new Vector2(0f, 5f - 3f * f).RotatedBy(Projectile.ai[1]);
-        if (progress > 0.5f && Main.rand.NextChance(0.75f)) {
-            Dust obj13 = Main.dust[Dust.NewDust(Projectile.position, 2, 2, 5, Projectile.velocity.X, Projectile.velocity.Y, 100)];
+        if (progress > 0.5f && Main.rand.NextChance(0.65f)) {
+            Dust obj13 = Main.dust[Dust.NewDust(Projectile.position, 2, 2, ModContent.DustType<Dusts.Blood>(), Projectile.velocity.X, Projectile.velocity.Y, 100)];
             obj13.velocity = (Main.rand.NextFloatDirection() * (float)Math.PI).ToRotationVector2() * 2f;
             obj13.scale = 0.9f;
             obj13.fadeIn = 1.1f;

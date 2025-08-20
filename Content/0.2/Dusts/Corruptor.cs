@@ -13,7 +13,7 @@ sealed class Corruptor : ModDust {
         DustHelper.BasicDust(dust);
 
         if (dust.customData is bool value && value == true) {
-            if (Collision.SolidCollision(dust.position - Vector2.One * 5f, 10, 10) && dust.fadeIn == 0f) {
+            if (Collision.SolidCollision(dust.position - Vector2.One * 3, 6, 6)) {
                 dust.scale *= 0.9f;
                 dust.velocity *= 0.25f;
             }
