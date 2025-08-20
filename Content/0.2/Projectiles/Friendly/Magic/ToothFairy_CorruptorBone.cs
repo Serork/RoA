@@ -19,6 +19,7 @@ namespace RoA.Content.Projectiles.Friendly.Magic;
 sealed class CorruptorBone : ModProjectile {
     private static byte FRAMECOUNT => 5;
     private static ushort TIMELEFT => 300;
+    private static byte BONECOUNTTOSPAWNCORRUPTOR => 5;
 
     public ref struct CorruptorBoneValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
@@ -117,7 +118,7 @@ sealed class CorruptorBone : ModProjectile {
             maxAttractionDistance *= maxAttractionDistance;
             fuseDistance *= fuseDistance;
             float attractionSpeed = 0.05f;
-            int boneCountNeeded = 4;
+            int boneCountNeeded = BONECOUNTTOSPAWNCORRUPTOR - 1;
             float minVelocityNeeded = 1f;
             foreach (Projectile corruptorBoneProjectile in corruptorBoneProjectiles) {
                 foreach (Projectile checkCorruptorBoneProjectile in corruptorBoneProjectiles) {
