@@ -34,6 +34,15 @@ sealed class Corruptor : ModProjectile {
     }
 
     public override void AI() {
+        Projectile.Opacity = Utils.GetLerpValue(0, 7, Projectile.timeLeft, true);
+
+        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
+        if (Main.rand.NextBool(10)) {
+            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
+            dust.noGravity = true;
+            dust.velocity *= -Projectile.velocity * Main.rand.NextFloat();
+        }
+
         ref float initValue = ref Projectile.localAI[0];
         if (initValue == 0f) {
             initValue = 1f;
@@ -41,7 +50,6 @@ sealed class Corruptor : ModProjectile {
             int areaSize = 7;
             for (int i = 0; i < dustCount; i++) {
                 Vector2 dustVelocity = Main.rand.NextVector2CircularEdge(1f, 1f) * Main.rand.NextFloat(areaSize);
-                ushort type = (ushort)ModContent.DustType<Dusts.Corruptor>();
                 Dust dust = Dust.NewDustPerfect(Projectile.Center, type, dustVelocity);
                 dust.scale = Main.rand.NextFloat(1f, 1.5f);
                 dust.velocity *= Main.rand.NextFloat();
@@ -57,8 +65,8 @@ sealed class Corruptor : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDrawShadowTrails(lightColor, 0.5f, 1, Projectile.rotation);
-        Projectile.QuickDraw(lightColor, 0f);
+        Projectile.QuickDrawShadowTrails(lightColor * Projectile.Opacity, 0.5f, 1, Projectile.rotation);
+        Projectile.QuickDraw(lightColor * Projectile.Opacity, 0f);
 
         return false;
     }

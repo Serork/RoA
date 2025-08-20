@@ -56,6 +56,8 @@ sealed class CorruptorBone : ModProjectile {
     }
 
     public override void AI() {
+        Projectile.Opacity = Utils.GetLerpValue(0, 7, Projectile.timeLeft, true);
+
         void init() {
             CorruptorBoneValues corruptorBoneValues = new(Projectile);
             if (!corruptorBoneValues.Init) {

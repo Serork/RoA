@@ -48,14 +48,15 @@ sealed class ToothFairy : ModItem, IRecipeDuplicatorItem {
 
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI);
 
-        position += new Vector2(-17f, 0f).RotatedBy(shootVelocityNormalized.ToRotation());
+        position += new Vector2(-17.5f, 0f).RotatedBy(shootVelocityNormalized.ToRotation());
 
         Dust dust = Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(1f, 1f) * Main.rand.NextFloat(10f), ModContent.DustType<Dusts.Corruptor>(), Vector2.Zero);
         dust.velocity.X *= Main.rand.NextFloat(1.5f);
         dust.velocity.Y *= Main.rand.NextFloat(0.5f, 1f);
         dust.scale *= Main.rand.NextFloat(0.5f, 0.75f);
         dust.scale *= 1.25f;
-        dust.customData = 1;
+        dust.customData = true;
+        dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
 
         return false;
     }
