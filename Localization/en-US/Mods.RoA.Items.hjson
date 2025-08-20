@@ -2138,3 +2138,8 @@ StinkingLily: {
 	DisplayName: Stinking Lily
 	Tooltip: ""
 }
+
+ToothFairy: {
+	DisplayName: Tooth Fairy
+	Tooltip: ""
+}
