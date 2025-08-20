@@ -34,10 +34,8 @@ sealed class Corruptor : ModProjectile {
     }
 
     public override void AI() {
-        Projectile.Opacity = Utils.GetLerpValue(0, 7, Projectile.timeLeft, true);
-
         ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
-        if (Main.rand.NextBool(10)) {
+        if (Main.rand.NextBool(7)) {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
             dust.noGravity = true;
             dust.scale *= Main.rand.NextFloat(1f, 1.5f);
@@ -62,6 +60,15 @@ sealed class Corruptor : ModProjectile {
         velocity += velocity.RotatedBy(MathHelper.PiOver2).SafeNormalize() * 0.25f;
 
         Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
+    }
+
+    public override void OnKill(int timeLeft) {
+        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
+        for (int i = 0; i < 14; i++) {
+            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
+            dust.noGravity = true;
+            dust.scale *= Main.rand.NextFloat(1f, 1.5f);
+        }
     }
 
     public override bool PreDraw(ref Color lightColor) {
