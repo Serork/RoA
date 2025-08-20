@@ -10,6 +10,7 @@ using RoA.Core.Utility.Vanilla;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Magic;
@@ -98,19 +99,21 @@ sealed class CorruptorBone : ModProjectile {
         offsetSame();
     }
 
-    public override void OnKill(int timeLeft) {
+    public override bool OnTileCollide(Vector2 oldVelocity) {
         ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
         for (int i = 0; i < 2; i++) {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
             dust.noGravity = true;
         }
+
+        return base.OnTileCollide(oldVelocity);
     }
 
     private class ConnectBones : ModSystem {
         public override void PreUpdateProjectiles() {
             IEnumerable<Projectile> corruptorBoneProjectiles = TrackedEntitiesSystem.GetTrackedProjectile<CorruptorBone>();
             float maxAttractionDistance = 200f;
-            float fuseDistance = 16f;
+            float fuseDistance = 20f;
             maxAttractionDistance *= maxAttractionDistance;
             fuseDistance *= fuseDistance;
             float attractionSpeed = 0.05f;
