@@ -117,7 +117,7 @@ sealed class CorruptorBone : ModProjectile {
             maxAttractionDistance *= maxAttractionDistance;
             fuseDistance *= fuseDistance;
             float attractionSpeed = 0.05f;
-            int boneCountNeeded = 5;
+            int boneCountNeeded = 4;
             float minVelocityNeeded = 1f;
             foreach (Projectile corruptorBoneProjectile in corruptorBoneProjectiles) {
                 foreach (Projectile checkCorruptorBoneProjectile in corruptorBoneProjectiles) {
@@ -134,7 +134,7 @@ sealed class CorruptorBone : ModProjectile {
                                     continue;
                                 }
                                 if (countCorruptorBoneProjectile.velocity.Length() <= minVelocityNeeded) {
-                                    if (corruptorBoneProjectile.DistanceSQ(checkCorruptorBoneProjectile.Center) < fuseDistance) {
+                                    if (corruptorBoneProjectile.DistanceSQ(countCorruptorBoneProjectile.Center) < fuseDistance) {
                                         countNearby++;
                                         countedBoneProjectiles.Add(countCorruptorBoneProjectile);
                                     }
@@ -159,7 +159,8 @@ sealed class CorruptorBone : ModProjectile {
                         }
                     }
                     else if (distance < maxAttractionDistance) {
-                        corruptorBoneProjectile.velocity += corruptorBoneProjectile.DirectionTo(checkCorruptorBoneProjectile.Center) * (1f - distance / maxAttractionDistance) * attractionSpeed;
+                        Vector2 velocity = corruptorBoneProjectile.DirectionTo(checkCorruptorBoneProjectile.Center) * (1f - distance / maxAttractionDistance) * attractionSpeed;
+                        corruptorBoneProjectile.velocity += velocity;
                     }
                 }
             }
