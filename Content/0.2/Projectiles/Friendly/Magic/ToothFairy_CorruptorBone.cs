@@ -41,7 +41,7 @@ sealed class CorruptorBone : ModProjectile {
     public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
 
     public override void SetDefaults() {
-        Projectile.SetSizeValues(10);
+        Projectile.SetSizeValues(14);
 
         Projectile.aiStyle = -1;
         Projectile.timeLeft = TIMELEFT;
@@ -56,7 +56,7 @@ sealed class CorruptorBone : ModProjectile {
     }
 
     public override void AI() {
-        Projectile.Opacity = Utils.GetLerpValue(0, 7, Projectile.timeLeft, true) * Utils.GetLerpValue(TIMELEFT, TIMELEFT - 2, Projectile.timeLeft, true);
+        Projectile.Opacity = Utils.GetLerpValue(0, 7, Projectile.timeLeft, true) * Utils.GetLerpValue(TIMELEFT, TIMELEFT - 1, Projectile.timeLeft, true);
 
         void init() {
             CorruptorBoneValues corruptorBoneValues = new(Projectile);
@@ -99,7 +99,11 @@ sealed class CorruptorBone : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        
+        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
+        for (int i = 0; i < 2; i++) {
+            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
+            dust.noGravity = true;
+        }
     }
 
     private class ConnectBones : ModSystem {

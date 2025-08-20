@@ -34,7 +34,7 @@ sealed class ToothFairy : ModItem, IRecipeDuplicatorItem {
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         float modifier = 1f;
-        float collisionCheckSize = Item.width * modifier;
+        float collisionCheckSize = Item.width * modifier * 0.9f;
         Vector2 collisionCheckPosition = position + Vector2.Normalize(velocity) * collisionCheckSize;
         if (!Collision.CanHit(player.Center, 0, 0, collisionCheckPosition, 0, 0)) {
             return false;
