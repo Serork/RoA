@@ -44,7 +44,7 @@ sealed class ToothFairy : ModItem, IRecipeDuplicatorItem {
         Vector2 itemSizeOffset = shootVelocityNormalized * Item.width * (modifier - 0.4f);
         position += itemSizeOffset;
 
-        position += new Vector2(7f, -8f * player.direction).RotatedBy(shootVelocityNormalized.ToRotation());
+        position += new Vector2(7f, -8f * player.direction * player.gravDir + (player.gravDir == -1f ? -8f * player.direction : 0f)).RotatedBy(shootVelocityNormalized.ToRotation());
 
         velocity = position.DirectionTo(player.GetWorldMousePosition());
 
