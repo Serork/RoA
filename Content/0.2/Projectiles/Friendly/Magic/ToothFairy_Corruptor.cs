@@ -40,7 +40,7 @@ sealed class Corruptor : ModProjectile {
         if (Main.rand.NextBool(10)) {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
             dust.noGravity = true;
-            dust.velocity *= -Projectile.velocity * Main.rand.NextFloat();
+            dust.scale *= Main.rand.NextFloat(1f, 1.5f);
         }
 
         ref float initValue = ref Projectile.localAI[0];
