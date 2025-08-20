@@ -22,7 +22,7 @@ sealed class ToothFairy : ModItem, IRecipeDuplicatorItem {
 
     public override void SetDefaults() {
         Item.SetSizeValues(56, 30);
-        Item.SetWeaponValues(40, 5f, damageClass: DamageClass.Magic);
+        Item.SetWeaponValues(18, 5f, damageClass: DamageClass.Magic);
         Item.SetUsableValues(ItemUseStyleID.Shoot, 8, autoReuse: true, useSound: new SoundStyle(ResourceManager.ItemSounds + "SkullCrusher") with { Pitch = 0.5f });
         Item.SetShootableValues((ushort)ModContent.ProjectileType<CorruptorBone>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice());

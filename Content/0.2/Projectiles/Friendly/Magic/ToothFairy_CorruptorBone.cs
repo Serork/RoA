@@ -65,8 +65,8 @@ sealed class CorruptorBone : ModProjectile {
 
                 Projectile.frame = Main.rand.Next(FRAMECOUNT);
 
-                Projectile.damage /= 5;
-                Projectile.knockBack /= 5;
+                //Projectile.damage /= 5;
+                //Projectile.knockBack /= 5;
 
                 float startSpeed = 7.5f;
                 Projectile.velocity = Projectile.velocity.SafeNormalize() * startSpeed;
