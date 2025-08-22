@@ -101,7 +101,7 @@ sealed class CorruptorBone : ModProjectile {
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
+        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor>();
         for (int i = 0; i < 2; i++) {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
             dust.noGravity = true;

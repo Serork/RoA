@@ -34,7 +34,7 @@ sealed class Corruptor : ModProjectile {
     }
 
     public override void AI() {
-        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
+        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor>();
         if (Main.rand.NextBool(8)) {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
             dust.noGravity = true;
@@ -63,7 +63,7 @@ sealed class Corruptor : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
+        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor>();
         for (int i = 0; i < 14; i++) {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
             dust.noGravity = true;
