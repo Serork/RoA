@@ -28,7 +28,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static float MAXLENGTH => 150f;
     private static float MINLENGTH => 100f;
     private static byte STEMFRAMECOUNT => 4;
-    private static byte TULIPCOUNT => 6;
+    private static byte TULIPCOUNT => 4;
     private static byte FLYCOUNTTOSPAWN => 5;
 
     private enum RafflesiaRequstedTextureType : byte {
@@ -75,10 +75,12 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void AI() {
-        Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f);
+        float attackSpeedModifier = 0.15f;
+
+        Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, attackSpeedModifier);
 
         if (Projectile.Opacity >= 0.9f) {
-            Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], 0f, 0.1f);
+            Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], 0f, attackSpeedModifier);
         }
 
         //Projectile.localAI[1] = MathHelper.Lerp(Projectile.localAI[1], 1f, 0.05f);
@@ -113,11 +115,19 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
         }
 
+        Player owner = Projectile.GetOwnerAsPlayer();
         bool flag = _flySpawnedCount >= FLYCOUNTTOSPAWN;
+        Vector2 spawnPosition = owner.GetWorldMousePosition();
+        if (!flag && Projectile.IsOwnerLocal()) {
+            Vector2 areaSize = Projectile.Size / 2f;
+            Vector2 areaCenter = spawnPosition - areaSize / 2f;
+            if (Main.rand.NextChance(0.1f)) {
+                Fly.CreateFlyDust(areaCenter, areaCenter.DirectionTo(Projectile.Center) * Main.rand.NextFloat(0.5f, 1f) * 5f, (int)areaSize.X, (int)areaSize.Y);
+                owner.SyncMousePosition();
+            }
+        }
         if (Projectile.localAI[1]++ >= 20f && !flag) {
             if (Projectile.IsOwnerLocal()) {
-                Player owner = Projectile.GetOwnerAsPlayer();
-                Vector2 spawnPosition = owner.GetWorldMousePosition();
                 Vector2 velocity = spawnPosition.DirectionTo(Projectile.Center) * 5f;
                 velocity = velocity.RotatedByRandom(MathHelper.PiOver2);
                 spawnPosition += velocity;
@@ -129,12 +139,17 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Velocity = velocity,
                     AI0 = uuid
                 });
+                Vector2 areaSize = Projectile.Size / 2f;
+                Vector2 areaCenter = spawnPosition - areaSize / 2f;
+                for (int i = 0; i < 3; i++) {
+                    Fly.CreateFlyDust(areaCenter, areaCenter.DirectionTo(Projectile.Center) * Main.rand.NextFloat(0.5f, 1f) * 5f, (int)areaSize.X, (int)areaSize.Y);
+                }
             }
             Projectile.localAI[1] = 0f;
             _flySpawnedCount++;
         }
 
-        Projectile.ai[0] = MathHelper.SmoothStep(Projectile.ai[0], 1f, 0.1f * (float)_flySpawnedCount / FLYCOUNTTOSPAWN);
+        Projectile.ai[0] = MathHelper.SmoothStep(Projectile.ai[0], 1f, attackSpeedModifier);
 
         setLengthAndSpawnPosition();
 
@@ -162,6 +177,22 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 center = Projectile.Center;
         DrawStem(stemTexture, center, _spawnPosition);
 
+        float angle = MathHelper.PiOver4;
+        float angleOffsetLength = 30f;
+        Vector2 angleOffset = _spawnPosition.DirectionFrom(center).RotatedBy(angle) * angleOffsetLength;
+        float lengthOffsetAmount = 20f * Projectile.ai[0];
+        Vector2 lengthOffset = center.DirectionTo(_spawnPosition) * lengthOffsetAmount;
+        DrawStem(stemTexture, center + angleOffset + lengthOffset, _spawnPosition, 0.1f, 0.85f);
+        angleOffset = _spawnPosition.DirectionFrom(center).RotatedBy(-angle) * angleOffsetLength;
+        DrawStem(stemTexture, center + angleOffset + lengthOffset, _spawnPosition, -0.1f, 0.85f);
+        angleOffsetLength = 50f;
+        lengthOffsetAmount = 30f * Projectile.ai[0];
+        angleOffset = _spawnPosition.DirectionFrom(center).RotatedBy(angle) * angleOffsetLength;
+        lengthOffset = center.DirectionTo(_spawnPosition) * lengthOffsetAmount;
+        DrawStem(stemTexture, center + angleOffset + lengthOffset, _spawnPosition, 0.2f, 0.75f);
+        angleOffset = _spawnPosition.DirectionFrom(center).RotatedBy(-angle) * angleOffsetLength;
+        DrawStem(stemTexture, center + angleOffset + lengthOffset, _spawnPosition, -0.2f, 0.75f);
+
         center += center.DirectionFrom(_spawnPosition) * 4f;
         float tulipCount = TULIPCOUNT;
         for (int i = 0; i < tulipCount + 1; i++) {
@@ -169,6 +200,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Rectangle clip = tulipTexture.Bounds;
             Color color = lightColor;
             float progress = (float)i / MathHelper.Lerp(tulipCount, tulipCount + 1, Projectile.ai[0]);
+            float progress3 = (float)(i + 1) / MathHelper.Lerp(tulipCount, tulipCount + 1, Projectile.ai[0]);
             float desiredRotation = (MathHelper.Pi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction;
             float rotation = desiredRotation;
             rotation = Utils.AngleLerp(rotation, (MathHelper.TwoPi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction, Projectile.ai[0]);
@@ -218,7 +250,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         return _spawnPosition + _spawnPosition.DirectionTo(destination) * length;
     }
 
-    private void DrawStem(Texture2D textureToDraw, Vector2 currentPosition, Vector2 endPosition) {
+    private void DrawStem(Texture2D textureToDraw, Vector2 currentPosition, Vector2 endPosition, float sinOffset = 0f, float extraScale = 1f) {
         float progress = 0f;
         int count = 500;
         float maxLength = (endPosition - currentPosition).Length();
@@ -227,11 +259,11 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 between = endPosition - currentPosition;
             float length = between.Length();
             float currentProgress = length / maxLength;
-            float scaleProgress = Utils.Clamp(currentProgress, 0.35f, 1f);
+            float scaleProgress = Utils.Clamp(currentProgress, 0.35f, 1f) * extraScale;
             int height = 8;
             Vector2 velocity = (endPosition - currentPosition).SafeNormalize(Vector2.UnitY) * height * scaleProgress;
             Vector2 velocityToAdd = velocity;
-            velocityToAdd = velocityToAdd.RotatedBy(Math.Sin(i * sinOffsetX + Projectile.ai[2]) * scaleProgress) * 0.75f;
+            velocityToAdd = velocityToAdd.RotatedBy(Math.Sin(i * sinOffsetX + Projectile.ai[2] + sinOffset) * scaleProgress) * 0.75f;
             progress += Main.rand.NextFloat(0.0001f, 0.00033f);
 
             if (length <= 0.1f) {

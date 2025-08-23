@@ -43,14 +43,14 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.friendly = true;
         Projectile.penetrate = 1;
 
-        Projectile.Opacity = 0f;
+        Projectile.Opacity = 1f;
     }
 
     public override void AI() {
         Projectile parent = Main.projectile[(int)Projectile.ai[0]];
 
-        float timeToAppear = 30f;
-        Projectile.Opacity = Utils.GetLerpValue(0f, timeToAppear / 2f, Projectile.timeLeft, true) * Utils.GetLerpValue(MAXTIMELEFT, MAXTIMELEFT - timeToAppear, Projectile.timeLeft, true);
+        //float timeToAppear = 30f;
+        //projectile.Opacity = Utils.GetLerpValue(0f, timeToAppear / 2f, projectile.timeLeft, true)/* * Utils.GetLerpValue(MAXTIMELEFT, MAXTIMELEFT - timeToAppear, projectile.timeLeft, true)*/;
 
         bool flag = Projectile.ai[1] == 1f;
         if (!flag) {
@@ -106,8 +106,23 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         ProjectileUtils.Animate(Projectile, 4);
     }
 
+    public static void CreateFlyDust(Vector2 position, Vector2 velocity, int width, int height) {
+        Dust dust3 = Dust.NewDustDirect(position, width, height, DustID.BorealWood, 0f, 0f, 0, default, 0.8f + Main.rand.NextFloatRange(0.1f));
+        dust3.noGravity = true;
+        dust3.velocity += velocity;
+        Dust dust2 = dust3;
+        dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
+        dust3 = Dust.NewDustDirect(position, width, height, DustID.BorealWood, 0f, 0f, 0, default, 0.8f + Main.rand.NextFloatRange(0.1f));
+        dust2 = dust3;
+        dust2.velocity += velocity;
+        dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
+        dust3.noGravity = true;
+    }
+
     public override void OnKill(int timeLeft) {
- 
+        for (int j = 0; j < 2; j++) {
+            CreateFlyDust(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
+        }
     }
 
     protected override void Draw(ref Color lightColor) {
