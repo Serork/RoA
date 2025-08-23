@@ -116,7 +116,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
 
         protected override float MinUseTimeToShootFactor() => 0.61f;
 
-        protected override Vector2 CorePositionOffsetFactor() => new(0.135f, 0.15f);
+        protected override Vector2 CorePositionOffsetFactor() => new(0.1f, 0.15f);
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
@@ -133,7 +133,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
             float offset = 10f;
             float reversed = 1f - step;
             if (step > 0.025f) {
-                Vector2 spawnPosition = corePosition + (Vector2.UnitY * offset * reversed).RotatedBy(step * MathHelper.Pi * 5f * player.direction);
+                Vector2 spawnPosition = corePosition - Vector2.One * 1f + (Vector2.UnitY * offset * reversed).RotatedBy(step * MathHelper.Pi * 5f * player.direction);
 
                 for (int i = 0; i < 4; i++) {
                     Dust dust = Dust.NewDustPerfect(spawnPosition,

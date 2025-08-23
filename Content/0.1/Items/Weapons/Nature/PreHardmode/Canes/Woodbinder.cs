@@ -124,7 +124,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
             int count = (int)(16 * Ease.QuadOut(1f - AttackTimeLeftProgress));
             for (int i = 0; i < count; i++) {
                 int type = Main.rand.NextBool(4) ? ModContent.DustType<Dusts.Woodbinder>() : ModContent.DustType<WoodTrash>();
-                Vector2 position = corePosition + new Vector2(0, -6) + new Vector2(20f, 0).RotatedBy(i * Math.PI * 2 / 16f) - new Vector2(8f, 4f);
+                Vector2 position = corePosition - Vector2.One * 1f + new Vector2(0, -6) + new Vector2(20f, 0).RotatedBy(i * Math.PI * 2 / 16f) - new Vector2(8f, 4f);
                 int dust = Dust.NewDust(position, 0, 0, type, 0, 0, 0, default(Color), Scale: Main.rand.NextFloat(1.25f, 1.5f));
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].fadeIn = 1.25f;
@@ -140,7 +140,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
             }
             float offset = 10f;
             if (step > 0f) {
-                Vector2 spawnPosition = corePosition + (Vector2.UnitY * offset).RotatedBy(step * MathHelper.TwoPi * Utils.Remap(step, 0f, 1f, 2f, 5f) * -player.direction);
+                Vector2 spawnPosition = corePosition - Vector2.One * 1f + (Vector2.UnitY * offset).RotatedBy(step * MathHelper.TwoPi * Utils.Remap(step, 0f, 1f, 2f, 5f) * -player.direction);
 
                 for (int i = 0; i < 3; i++) {
                     Dust dust = Dust.NewDustPerfect(spawnPosition,

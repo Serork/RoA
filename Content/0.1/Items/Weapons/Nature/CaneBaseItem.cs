@@ -93,8 +93,10 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     public float AttackProgress01 => Math.Clamp(1f - AttackTimeLeftProgress, 0f, 1f);
 
     protected Vector2 GravityOffset => Owner.gravDir == -1 ? (-Vector2.UnitY * 10f) : Vector2.Zero;
-    protected Vector2 Offset => AttachedNatureWeapon.IsEmpty() ? default : (new Vector2(0f + CorePositionOffsetFactor().X * Owner.direction, 1f + CorePositionOffsetFactor().Y) * new Vector2(AttachedNatureWeapon.width, AttachedNatureWeapon.height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
+    protected Vector2 Offset => GetCorePositionOffset(CorePositionOffsetFactor());
     public Vector2 CorePosition => Projectile.Center + Offset + GravityOffset;
+
+    public Vector2 GetCorePositionOffset(Vector2 corePositionOffsetFactor) => AttachedNatureWeapon.IsEmpty() ? default : (new Vector2(0f + corePositionOffsetFactor.X * Owner.direction, 1f + corePositionOffsetFactor.Y) * new Vector2(AttachedNatureWeapon.width, AttachedNatureWeapon.height)).RotatedBy(Projectile.rotation + OffsetRotation + (FacedLeft ? MathHelper.PiOver2 : -MathHelper.PiOver2));
 
     public bool PreparingAttack => !Shot;
 

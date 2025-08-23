@@ -81,7 +81,7 @@ abstract class TulipBase : CaneBaseProjectile {
 
     protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
         float offset = 10f;
-        Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition + randomOffset;
+        Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition - Vector2.One * 1f + randomOffset;
         ushort dustType = CoreDustType();
 
         bool flag = false/*Main.rand.NextBool()*/;
@@ -139,7 +139,7 @@ abstract class TulipBase : CaneBaseProjectile {
         for (int i = 0; i < 12; i++) {
             float offset = 10f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset),
-                    spawnPosition = corePosition + randomOffset;
+                    spawnPosition = corePosition + randomOffset - Vector2.One * 1f;
 
             //ushort dustType = CoreDustType();
             byte frameX = DustFrameXUsed();

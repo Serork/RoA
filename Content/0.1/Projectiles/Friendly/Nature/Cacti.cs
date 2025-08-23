@@ -19,6 +19,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+// TODO: rewrite
 sealed class Cacti : NatureProjectile {
     private enum State {
         Normal,
@@ -202,7 +203,7 @@ sealed class Cacti : NatureProjectile {
                     _parent = Main.projectile.FirstOrDefault(x => x.active && x.owner == Projectile.owner && x.type == baseType);
                 }
                 bool flag = _parent == null || (!_parent.active && _parent.ModProjectile != null && _parent.As<CactiCaster.CactiCasterBase>() != null);
-                Vector2 corePosition = flag ? Main.player[Projectile.owner].Center : _parent.As<CactiCaster.CactiCasterBase>().CorePosition;
+                Vector2 corePosition = flag ? Main.player[Projectile.owner].Center : _parent.As<CactiCaster.CactiCasterBase>().CorePosition - Vector2.One * 1f + _parent.As<CactiCaster.CactiCasterBase>().GetCorePositionOffset(new Vector2(0.15f, Projectile.GetOwnerAsPlayer().direction < 0 ? -0.9f : -1.075f));
 
                 if (Main.rand.NextBool(2)) {
                     int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.OasisCactus, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 80, default, 1.4f + Main.rand.NextFloat(0f, 0.075f));

@@ -61,7 +61,7 @@ sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
                 float areaSize = step * 2f;
                 float speed = step;
                 float scale = Math.Clamp(step, 0.1f, 0.8f) * 1.125f;
-                Dust dust = Dust.NewDustPerfect(corePosition + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
+                Dust dust = Dust.NewDustPerfect(corePosition - Vector2.One * 1f + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
                                                 ModContent.DustType<PastoralRodDust>(),
                                                 randomPosition.RotatedBy(player.direction * -MathHelper.PiOver2) * speed,
                                                 Scale: scale);

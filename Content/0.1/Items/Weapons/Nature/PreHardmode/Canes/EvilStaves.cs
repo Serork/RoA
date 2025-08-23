@@ -117,7 +117,7 @@ abstract class EvilStaffBase : CaneBaseProjectile {
             float speed = step;
             float scale = Math.Clamp(step * 1.25f, 0.35f, 0.85f) * 1.15f;
             bool flag = !Main.rand.NextBool(3);
-            Dust dust = Dust.NewDustPerfect(corePosition + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
+            Dust dust = Dust.NewDustPerfect(corePosition - Vector2.One * 1f + randomPosition * Main.rand.NextFloat(areaSize, areaSize + 2f),
                                             flag ? Dust1Type : Dust2Type,
                                             randomPosition.RotatedBy(player.direction * -MathHelper.PiOver2) * speed,
                                             Scale: scale);

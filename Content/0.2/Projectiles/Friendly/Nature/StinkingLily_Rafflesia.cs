@@ -222,7 +222,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 scale = Vector2.One * MathHelper.Lerp(Utils.Remap(1f - progress2, 0f, 1f, 0.5f, 1f, true) * 1.25f, 1f, Projectile.ai[0]);
             Main.spriteBatch.Draw(tulipTexture, position, DrawInfo.Default with {
                 Clip = clip,
-                Color = color,
+                Color = color * Utils.GetLerpValue(0f, 15f, Projectile.timeLeft, true),
                 Rotation = rotation,
                 Origin = Utils.Bottom(clip),
                 Scale = scale * Projectile.Opacity
@@ -269,14 +269,14 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 between = endPosition - currentPosition;
             float length = between.Length();
             float currentProgress = length / maxLength;
-            float scaleProgress = Utils.Clamp(currentProgress, 0.35f, 1f) * extraScale;
+            float scaleProgress = Utils.Clamp(currentProgress, sinOffset == 0f ? 0.35f : 0f, 1f) * extraScale;
             int height = 8;
             Vector2 velocity = (endPosition - currentPosition).SafeNormalize(Vector2.UnitY) * height * scaleProgress;
             Vector2 velocityToAdd = velocity;
-            velocityToAdd = velocityToAdd.RotatedBy(Math.Sin(i * sinOffsetX + Projectile.ai[2] + sinOffset) * scaleProgress) * 0.75f;
+            velocityToAdd = velocityToAdd.RotatedBy(Math.Sin(i * sinOffsetX + Projectile.ai[2] + sinOffset) * scaleProgress) * 0.85f;
             progress += Main.rand.NextFloat(0.0001f, 0.00033f);
 
-            if (length <= 0.05f) {
+            if (length <= 1f) {
                 break;
             }
 
@@ -292,7 +292,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Main.EntitySpriteDraw(textureToDraw,
                                   position - Main.screenPosition,
                                   new Rectangle(0, 10 * frameToUse, 18, height),
-                                  Lighting.GetColor(position.ToTileCoordinates()),
+                                  Lighting.GetColor(position.ToTileCoordinates()) * Utils.GetLerpValue(0f, 15f, Projectile.timeLeft, true),
                                   velocityToAdd.ToRotation() + MathHelper.PiOver2,
                                   new Vector2(9, height / 2),
                                   scale,

@@ -9,7 +9,6 @@ using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using System;
@@ -17,7 +16,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
