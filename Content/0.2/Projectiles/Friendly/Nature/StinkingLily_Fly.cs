@@ -120,7 +120,7 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void OnKill(int timeLeft) {
-        for (int j = 0; j < 2; j++) {
+        for (int j = 0; j < 1; j++) {
             CreateFlyDust(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
         }
     }

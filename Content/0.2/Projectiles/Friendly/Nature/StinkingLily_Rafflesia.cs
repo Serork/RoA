@@ -28,11 +28,11 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static ushort TIMELEFT => 360;
     private static float MAXLENGTH => 150f;
     private static float MINLENGTH => 100f;
-    private static byte STEMFRAMECOUNT => 4;
+    public static byte STEMFRAMECOUNT => 4;
     private static byte TULIPCOUNT => 4;
     private static byte FLYCOUNTTOSPAWN => 5;
 
-    private enum RafflesiaRequstedTextureType : byte {
+    public enum RafflesiaRequstedTextureType : byte {
         Tulip,
         Stem,
     }
@@ -276,7 +276,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             velocityToAdd = velocityToAdd.RotatedBy(Math.Sin(i * sinOffsetX + Projectile.ai[2] + sinOffset) * scaleProgress) * 0.75f;
             progress += Main.rand.NextFloat(0.0001f, 0.00033f);
 
-            if (length <= 0.1f) {
+            if (length <= 0.05f) {
                 break;
             }
 

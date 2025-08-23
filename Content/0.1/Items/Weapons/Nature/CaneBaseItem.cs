@@ -190,10 +190,14 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         _positionOffset = reader.ReadVector2();
     }
 
+    protected virtual void SafePreDraw() { }
+
     protected sealed override void Draw(ref Color lightColor) {
         if (AttachedNatureWeapon.IsEmpty()) {
             return;
         }
+
+        SafePreDraw();
 
         Texture2D heldItemTexture = TextureAssets.Item[AttachedNatureWeapon.type].Value;
 
@@ -267,6 +271,8 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             return;
         }
 
+        SetPosition();
+
         if (!_init) {
             _init = true;
 
@@ -282,7 +288,6 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         }
 
         ActiveCheck();
-        SetPosition();
         SetDirection();
         SetRotation();
 
