@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -103,6 +104,14 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Player owner = Projectile.GetOwnerAsPlayer();
                     Vector2 mousePosition = owner.GetWorldMousePosition();
                     _spawnPosition = TulipBase.GetTilePosition(owner, mousePosition, false).ToWorldCoordinates();
+                    Point spawnPositionInTiles = _spawnPosition.ToTileCoordinates();
+                    while (!WorldGen.SolidTile3(spawnPositionInTiles.X, spawnPositionInTiles.Y)) {
+                        spawnPositionInTiles.Y--;
+                        if (!WorldGenHelper.ActiveTile(spawnPositionInTiles.X, spawnPositionInTiles.Y)) {
+                            break;
+                        }
+                    }
+                    _spawnPosition = spawnPositionInTiles.ToWorldCoordinates();
 
                     Projectile.Center = GetMoveTowardsPosition();
 
@@ -118,15 +127,16 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         Player owner = Projectile.GetOwnerAsPlayer();
         bool flag = _flySpawnedCount >= FLYCOUNTTOSPAWN;
         Vector2 spawnPosition = owner.GetWorldMousePosition();
-        if (!flag && Projectile.IsOwnerLocal()) {
+        if (!flag) {
+            owner.SyncMousePosition();
             Vector2 areaSize = Projectile.Size / 2f;
-            Vector2 areaCenter = spawnPosition - areaSize / 2f;
+            Vector2 areaCenter = owner.GetWorldMousePosition() - areaSize / 2f;
             if (Main.rand.NextChance(0.1f)) {
                 Fly.CreateFlyDust(areaCenter, areaCenter.DirectionTo(Projectile.Center) * Main.rand.NextFloat(0.5f, 1f) * 5f, (int)areaSize.X, (int)areaSize.Y);
-                owner.SyncMousePosition();
             }
         }
         if (Projectile.localAI[1]++ >= 20f && !flag) {
+            owner.SyncMousePosition();
             if (Projectile.IsOwnerLocal()) {
                 Vector2 velocity = spawnPosition.DirectionTo(Projectile.Center) * 5f;
                 velocity = velocity.RotatedByRandom(MathHelper.PiOver2);
@@ -139,17 +149,17 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Velocity = velocity,
                     AI0 = uuid
                 });
-                Vector2 areaSize = Projectile.Size / 2f;
-                Vector2 areaCenter = spawnPosition - areaSize / 2f;
-                for (int i = 0; i < 3; i++) {
-                    Fly.CreateFlyDust(areaCenter, areaCenter.DirectionTo(Projectile.Center) * Main.rand.NextFloat(0.5f, 1f) * 5f, (int)areaSize.X, (int)areaSize.Y);
-                }
+            }
+            Vector2 areaSize = Projectile.Size / 2f;
+            Vector2 areaCenter = owner.GetWorldMousePosition() - areaSize / 2f;
+            for (int i = 0; i < 3; i++) {
+                Fly.CreateFlyDust(areaCenter, areaCenter.DirectionTo(Projectile.Center) * Main.rand.NextFloat(0.5f, 1f) * 5f, (int)areaSize.X, (int)areaSize.Y);
             }
             Projectile.localAI[1] = 0f;
             _flySpawnedCount++;
         }
 
-        Projectile.ai[0] = MathHelper.SmoothStep(Projectile.ai[0], 1f, attackSpeedModifier);
+        Projectile.ai[0] = MathHelper.SmoothStep(Projectile.ai[0], 1f, attackSpeedModifier * 1.25f);
 
         setLengthAndSpawnPosition();
 

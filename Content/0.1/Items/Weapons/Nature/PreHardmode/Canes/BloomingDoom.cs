@@ -210,7 +210,7 @@ abstract class TulipBase : CaneBaseProjectile {
 
         targetSpot = center + vectorTowardsTarget.SafeNormalize(Vector2.Zero) * num;
         point = targetSpot.ToTileCoordinates();
-        while (!WorldGen.SolidTile2(point.X, point.Y)) {
+        while (!WorldGen.SolidTile3(point.X, point.Y)) {
             point.Y++;
         }
         point.Y -= 1;
@@ -222,7 +222,7 @@ abstract class TulipBase : CaneBaseProjectile {
         List<Point> list = new List<Point>();
         for (int j = value.Left; j <= value.Right; j++) {
             for (int k = value.Top; k <= value.Bottom; k++) {
-                if (!WorldGen.SolidTile2(j, k)) {
+                if (!WorldGen.SolidTile3(j, k)) {
                     continue;
                 }
                 list.Add(new Point(j, k));
