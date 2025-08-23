@@ -152,7 +152,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
             Vector2 areaSize = Projectile.Size / 2f;
             Vector2 areaCenter = owner.GetWorldMousePosition() - areaSize / 2f;
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 Fly.CreateFlyDust(areaCenter, areaCenter.DirectionTo(Projectile.Center) * Main.rand.NextFloat(0.5f, 1f) * 5f, (int)areaSize.X, (int)areaSize.Y);
             }
             Projectile.localAI[1] = 0f;
