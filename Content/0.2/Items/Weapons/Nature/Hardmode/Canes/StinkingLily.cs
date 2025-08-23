@@ -13,7 +13,7 @@ sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
     protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<Rafflesia>();
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(32);
+        Item.SetSizeValues(38);
         Item.SetWeaponValues(30, 4f);
         Item.SetUsableValues(ItemUseStyleID.None, 30, useSound: SoundID.Item7);
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice());

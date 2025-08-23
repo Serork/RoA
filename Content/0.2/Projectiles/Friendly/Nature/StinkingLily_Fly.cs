@@ -100,7 +100,7 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
-            _color = new Color((float)(Main.rand.NextDouble() * 0.20000000298023224), (float)(Main.rand.NextDouble() * 0.20000000298023224), (float)(Main.rand.NextDouble() * 0.20000000298023224));
+            _color = new Color(0.4f, 0.25f, 0.25f);
         }
 
         ProjectileUtils.Animate(Projectile, 4);
@@ -118,6 +118,8 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         Texture2D wingsTexture = indexedTextureAssets[0].Value;
         Rectangle clip = new SpriteFrame(1, 4, 0, (byte)Projectile.frame).GetSourceRectangle(wingsTexture);
         Vector2 origin = clip.Size() / 2f;
+		
+		Projectile.frame++;
 
         Texture2D texture = ResourceManager.Pixel;
         int length = ProjectileID.Sets.TrailCacheLength[Projectile.type];
