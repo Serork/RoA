@@ -48,7 +48,6 @@ sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
             public bool ShouldBeShowed;
             public byte Index;
             public byte Frame;
-            public float Opacity;
         }
 
         private ChargeInfo[]? _chargeData;
@@ -65,7 +64,6 @@ sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
                     ShouldBeShowed = false,
                     Frame = (byte)Main.rand.Next(CHARGEFRAMECOUNT),
                     Position = CorePosition + Main.rand.NextVector2CircularEdge(30f, 30f),
-                    Opacity = 0f
                 };
             }
         }
@@ -130,8 +128,6 @@ sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
             for (int i = 0; i < _chargeData!.Length; i++) {
                 ref ChargeInfo chargeData = ref _chargeData[i];
                 if (chargeData.ShouldBeShowed) {
-                    ref float opacity = ref chargeData.Opacity;
-                    opacity = Helper.Approach(opacity, 1f, 0.1f);
                     ref Vector2 position = ref chargeData.Position;
                     position = Vector2.Lerp(position, CorePosition + Vector2.UnitY.RotatedBy(MathHelper.Pi * direction + i * (float)chargeCount / MathHelper.TwoPi * 1.5f * -direction) * (30f * AttackProgress01), 1f);
                     if (AttackProgress01 < 1f) {
@@ -195,7 +191,7 @@ sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
                         Main.EntitySpriteDraw(textureToDraw,
                                               position2 - scale / 2f - Main.screenPosition,
                                               new Rectangle(0, 10 * frameToUse, 18, height),
-                                              Lighting.GetColor(position2.ToTileCoordinates()) * chargeData.Opacity,
+                                              Lighting.GetColor(position2.ToTileCoordinates()),
                                               velocityToAdd.ToRotation() + MathHelper.PiOver2,
                                               new Vector2(9, height / 2),
                                               scale,
