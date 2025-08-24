@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.VisualEffects;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Graphics.Renderers;
@@ -57,7 +58,7 @@ sealed class Fog : VisualEffect<Fog> {
         if (FadeIn <= 0.3f)
             flag = true;
 
-        Velocity.X = 0.2f * Main.WindForVisuals;
+        Helper.ApplyWindPhysics(Position, ref Velocity);
         Velocity.Y = 0f;
         if (!flag) {
             if (Alpha > 200) {

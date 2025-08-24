@@ -23,6 +23,8 @@ sealed class Rot : ModDust {
     }
 
     public override bool Update(Dust dust) {
+        Helper.ApplyWindPhysics(dust.position, ref dust.velocity);
+
         dust.position += dust.velocity;
         float velocity = dust.velocity.Y / 40f * (dust.alpha > 7 ? -1 : 1);
         Vector2 center = dust.position + Vector2.One.RotatedBy(dust.rotation) * 18f * dust.scale;

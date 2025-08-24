@@ -40,9 +40,8 @@ sealed class MushroomSpore : NatureProjectile {
     }
 
     public override void AI() {
-        if (Main.windPhysics) {
-            Projectile.velocity.X += Main.windSpeedCurrent * Main.windPhysicsStrength;
-        }
+        //Helper.ApplyWindPhysics(Projectile.Center, ref Projectile.velocity);
+
         float speed = 0.05f;
         switch (_state) {
             case State.Direct:

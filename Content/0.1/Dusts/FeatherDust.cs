@@ -21,6 +21,8 @@ sealed class FeatherDust : ModDust {
     }
 
     public override bool Update(Dust dust) {
+        Helper.ApplyWindPhysics(dust.position, ref dust.velocity);
+
         bool flag = dust.customData is null || dust.customData is not float v;
         float randomness = 0f;
         if (!flag) {

@@ -3,6 +3,8 @@
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
+using System;
+
 using Terraria;
 using Terraria.ModLoader;
 
@@ -44,6 +46,8 @@ sealed class Tulip : ModDust {
         }
 
         if (!Collision.SolidCollision(dust.position, 4, 4)) {
+            Helper.ApplyWindPhysics(dust.position, ref dust.velocity);
+
             dust.rotation += Helper.Wave(-0.1f, 0.1f, 0.5f, randomness);
 
             dust.position.X += Helper.Wave(-1f, 1f, 4f, randomness);

@@ -61,7 +61,8 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
         else {
             Velocity *= 0.98f;
             if (ShouldDrop) {
-                Velocity += new Vector2(Main.windSpeedCurrent * 0.1f, 0.21f * Scale * 0.1f);
+                Velocity += new Vector2(0f, 0.21f * Scale * 0.1f);
+                Helper.ApplyWindPhysics(Position, ref Velocity);
             }
             else {
                 Velocity = Vector2.Zero;

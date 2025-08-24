@@ -22,6 +22,8 @@ sealed class StinkingLily : ModDust {
 }
 
 sealed class StinkingLily2 : ModDust {
+    private Vector2 _windVelocity = Vector2.Zero;
+
     public override void OnSpawn(Dust dust) {
         dust.frame = (Texture2D?.Value?.Frame(1, 3, frameX: dust.alpha, frameY: Main.rand.Next(3))).GetValueOrDefault();
 
@@ -41,6 +43,7 @@ sealed class StinkingLily2 : ModDust {
         }
         dust.velocity = dust.velocity.SafeNormalize() * MathF.Sin(dust.fadeIn) * 1f;
         dust.velocity += Vector2.UnitX * MathF.Sin(dust.fadeIn) * 1f;
+        Helper.ApplyWindPhysics(dust.position, ref _windVelocity);
 
         if (Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4)) {
             dust.alpha += 2;
@@ -51,6 +54,7 @@ sealed class StinkingLily2 : ModDust {
         }
         else {
             dust.position += dust.velocity;
+            dust.position += _windVelocity * 0.001f;
             dust.position.Y += 1f;
             dust.rotation = dust.velocity.X * 0.25f + MathHelper.Pi;
         }

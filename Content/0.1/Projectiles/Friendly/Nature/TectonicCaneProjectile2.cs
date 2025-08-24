@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
+using RoA.Core.Utility;
 
 using System;
 
@@ -31,9 +32,8 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
     }
 
     public override void AI() {
-        if (Main.windPhysics) {
-            Projectile.velocity.X += Main.windSpeedCurrent * Main.windPhysicsStrength;
-        }
+        //Helper.ApplyWindPhysics(Projectile.Center, ref Projectile.velocity);
+
         float value = Projectile.velocity.Length();
         Projectile.direction = (int)Projectile.ai[0];
         Projectile.rotation += value * 0.05f * Projectile.direction;

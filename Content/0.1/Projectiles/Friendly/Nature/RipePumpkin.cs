@@ -54,9 +54,8 @@ sealed class RipePumpkin : NatureProjectile {
     }
 
     public override void AI() {
-        if (Main.windPhysics) {
-            Projectile.velocity.X += Main.windSpeedCurrent * Main.windPhysicsStrength;
-        }
+        //Helper.ApplyWindPhysics(Projectile.Center, ref Projectile.velocity);
+
         Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.03f * Projectile.direction;
         float f = Math.Clamp(Projectile.ai[2] / 6f, 0f, 1f);
         Projectile.ai[0] += 1f;

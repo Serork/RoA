@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.ModLoader;
 
@@ -15,6 +17,8 @@ sealed class GhostLeaf : ModDust {
     }
 
     public override bool Update(Dust dust) {
+        Helper.ApplyWindPhysics(dust.position, ref dust.velocity);
+
         dust.position += dust.velocity;
         dust.rotation += dust.velocity.X * 0.15f;
         dust.alpha += 5;
