@@ -166,6 +166,8 @@ sealed class AerialConcussion : WhipBase {
                 return;
             }
 
+            _timer = 0;
+
             if (_enduranceTier > 0) {
                 _enduranceTier = 0;
             }
