@@ -2168,3 +2168,8 @@ ToothFairy: {
 	// DisplayName: Tooth Fairy
 	// Tooltip: "'Rip and tear'"
 }
+
+AerialConcussion: {
+	// DisplayName: Aerial Concussion
+	// Tooltip: ""
+}

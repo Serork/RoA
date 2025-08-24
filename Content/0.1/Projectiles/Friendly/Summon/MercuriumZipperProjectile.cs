@@ -440,7 +440,6 @@ sealed class MercuriumZipperProjectile : ModProjectile {
     }
 
     public override void SetDefaults() {
-        Projectile.DefaultToWhip();
         Projectile.width = 18;
         Projectile.height = 18;
         Projectile.friendly = true;
@@ -451,7 +450,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
 
-        Projectile.WhipSettings.Segments = 17;
+        Projectile.WhipSettings.Segments = 14;
         Projectile.WhipSettings.RangeMultiplier = 1.1f;
     }
 
@@ -514,6 +513,30 @@ sealed class MercuriumZipperProjectile : ModProjectile {
     }
 
     public override void AI() {
+        Player owner = Main.player[Projectile.owner];
+        Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2; // Without PiOver2, the rotation would be off by 90 degrees counterclockwise.
+
+        Projectile.Center = Main.GetPlayerArmPosition(Projectile) + Projectile.velocity * Timer;
+        // Vanilla uses Vector2.Dot(Projectile.velocity, Vector2.UnitX) here. Dot Product returns the difference between two vectors, 0 meaning they are perpendicular.
+        // However, the use of UnitX basically turns it into a more complicated way of checking if the projectile's velocity is above or equal to zero on the X axis.
+        Projectile.spriteDirection = Projectile.velocity.X >= 0f ? 1 : -1;
+
+        Timer++;
+
+        float swingTime = owner.itemAnimationMax * Projectile.MaxUpdates;
+        if (Timer >= swingTime || owner.itemAnimation <= 0) {
+            Projectile.Kill();
+            return;
+        }
+
+        owner.heldProj = Projectile.whoAmI;
+        if (Timer == swingTime / 2) {
+            // Plays a whipcrack sound at the tip of the whip.
+            List<Vector2> points = Projectile.WhipPointsForCollision;
+            FillWhipControlPoints(Projectile, points);
+            SoundEngine.PlaySound(SoundID.Item153, points[points.Count - 1]);
+        }
+
         if (Projectile.ai[2] == 0f) {
             Projectile.ai[2] = 1f;
 
@@ -526,7 +549,6 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             }
         }
 
-        float swingTime = Main.player[Projectile.owner].itemAnimationMax * Projectile.MaxUpdates;
         // Spawn Dust along the whip path
         // This is the dust code used by Durendal. Consult the Terraria source code for even more examples, found in Projectile.AI_165_Whip.
         float swingProgress = Timer / swingTime;
@@ -706,7 +728,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
 
             float rotation = diff.ToRotation() - MathHelper.PiOver2; // This projectile's sprite faces down, so PiOver2 is used to correct _rotation.
             Color color = Lighting.GetColor(element.ToTileCoordinates());
-
+            
             Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);
 
             pos += diff;

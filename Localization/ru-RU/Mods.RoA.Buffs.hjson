@@ -260,3 +260,8 @@ SunflowerBuff: {
 	// DisplayName: Sunflower Buff
 	// Description: Mods.RoA.Buffs.SunflowerBuff.Description
 }
+
+AerialConcussion: {
+	// DisplayName: Mods.RoA.Buffs.AerialConcussion.DisplayName
+	// Description: Mods.RoA.Buffs.AerialConcussion.Description
+}
