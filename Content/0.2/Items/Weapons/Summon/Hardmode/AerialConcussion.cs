@@ -16,6 +16,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 using Terraria;
+using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -138,6 +139,9 @@ sealed class AerialConcussion : WhipBase {
                 _timer++;
             }
 
+            if (_enduranceTier <= 0) {
+                return;
+            }
             switch (_enduranceTier) {
                 case 1:
                     Player.DelBuff<EnduranceCloud2>();
