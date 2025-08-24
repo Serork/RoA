@@ -171,6 +171,14 @@ sealed class AerialConcussion : WhipBase {
             if (_enduranceTier > 0) {
                 _enduranceTier = 0;
             }
+
+            Player.DelBuff<EnduranceCloud3>();
+            Player.DelBuff<EnduranceCloud2>();
+            Player.DelBuff<EnduranceCloud1>();
+
+            foreach (Projectile trackedCloud in TrackedEntitiesSystem.GetTrackedProjectile<EnduranceCloud>(checkProjectile => checkProjectile.owner != Player.whoAmI)) {
+                trackedCloud.Kill();
+            }
         }
 
         public void ConsumeStack() {
