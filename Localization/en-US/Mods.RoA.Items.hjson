@@ -2146,5 +2146,9 @@ ToothFairy: {
 
 AerialConcussion: {
 	DisplayName: Aerial Concussion
-	Tooltip: ""
+	Tooltip:
+		'''
+		{$CommonItemTooltip.SummonTagDamage}
+		{$CommonItemTooltip.Whips}
+		'''
 }

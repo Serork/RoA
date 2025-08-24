@@ -20,6 +20,8 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static tModPorter.ProgressUpdate;
+
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
 sealed class MercuriumZipper_MercuriumCenserToxicFumes : ModProjectile {
@@ -573,19 +575,17 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             dust.velocity *= 0.5f;
         }*/
 
-        if (Utils.GetLerpValue(0.1f, 0.7f, swingProgress, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, swingProgress, clamped: true) > 0.8f && !Main.rand.NextBool(4)) {
+        float t6 = Projectile.ai[0] / swingTime;
+        float num8 = Utils.GetLerpValue(0.1f, 0.7f, t6, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, t6, clamped: true);
+        if (num8 > 0.1f && Main.rand.NextFloat() < num8 / 2f && Main.rand.NextChance(0.8f)) {
             List<Vector2> points = Projectile.WhipPointsForCollision;
             points.Clear();
-            Projectile.FillWhipControlPoints(Projectile, points);
-            int pointIndex = Main.rand.Next(points.Count - 10, points.Count);
-            Rectangle spawnArea = Utils.CenteredRectangle(points[pointIndex], new Vector2(30f, 30f));
-            int dustType = ModContent.DustType<MercuriumDust2>();
-
-            // After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
-            Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 50f;
-            Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() +
-                offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
-            dust.position = points[pointIndex] + offset;
+            FillWhipControlPoints(Projectile, points);
+            Rectangle r7 = Utils.CenteredRectangle(points[points.Count - 1], new Vector2(30f, 30f));
+            Vector2 vector6 = points[points.Count - 2].DirectionTo(points[points.Count - 1]).SafeNormalize(Vector2.Zero);
+            int pointIndex = Main.rand.Next(points.Count - 5, points.Count);
+            Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 20f;
+            Dust dust = Dust.NewDustDirect(r7.TopLeft() + offset, r7.Width, r7.Height, ModContent.DustType<MercuriumDust2>(), 0f, 0f, 0, default(Color), 1.2f);
             dust.fadeIn = 0.3f;
             Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
             dust.scale *= 1.25f;
@@ -595,6 +595,29 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             dust.velocity += spinningPoint.RotatedBy(Main.player[Projectile.owner].direction * ((float)Math.PI / 2f));
             dust.velocity *= 0.5f;
         }
+
+        //if (Utils.GetLerpValue(0.3f, 0.7f, swingProgress, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, swingProgress, clamped: true) > 0.3f && !Main.rand.NextBool(3)) {
+        //    List<Vector2> points = Projectile.WhipPointsForCollision;
+        //    points.Clear();
+        //    Projectile.FillWhipControlPoints(Projectile, points);
+        //    int pointIndex = Main.rand.Next(points.Count - 10, points.Count);
+        //    Rectangle spawnArea = Utils.CenteredRectangle(points[pointIndex], new Vector2(15f, 15f));
+        //    int dustType = ModContent.DustType<MercuriumDust2>();
+
+        //    // After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
+        //    Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 50f;
+        //    Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() +
+        //        offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
+        //    dust.position = points[pointIndex] + offset;
+        //    dust.fadeIn = 0.3f;
+        //    Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
+        //    dust.scale *= 1.25f;
+        //    dust.noGravity = true;
+        //    dust.velocity *= 0.5f;
+        //    // This math causes these dust to spawn with a velocity perpendicular to the direction of the whip segments, giving the impression of the dust flying off like sparks.
+        //    dust.velocity += spinningPoint.RotatedBy(Main.player[Projectile.owner].direction * ((float)Math.PI / 2f));
+        //    dust.velocity *= 0.5f;
+        //}
 
         Player player = Main.player[Projectile.owner];
         player.heldProj = Projectile.whoAmI;
@@ -678,13 +701,21 @@ sealed class MercuriumZipperProjectile : ModProjectile {
 
         Vector2 pos = list[0];
 
-        for (int i = 0; i < list.Count - 1; i++) {
+        float count = list.Count - 1;
+        for (int i = 0; i < count; i++) {
+            float progress = (float)i / count;
             // These two values are set to suit this projectile's sprite, but won't necessarily work for your own.
             // You can change them if they don't!
 
             Rectangle frame = new Rectangle(14, 2, 10, 22); // The size of the Handle (measured in pixels)
             var origin = new Vector2(frame.Width / 2, 2f);
             float scale = 1;
+
+            if (i != 0) {
+                Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
+                float t = Timer / timeToFlyOut;
+                scale = MathHelper.Lerp(0.5f, MathHelper.Lerp(1f, 1.5f, progress), Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true));
+            }
 
             Vector2 element = list[i];
             Vector2 diff = list[i + 1] - element;

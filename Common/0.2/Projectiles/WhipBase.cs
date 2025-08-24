@@ -22,6 +22,9 @@ using Terraria.ModLoader;
 namespace RoA.Common.Items;
 
 abstract class WhipBase : ModItem {
+    public delegate float ScaleDelegate(Player player, int index, float attackProgress, float lengthProgress);
+    public delegate void OnUseDelegate(Player player, float swingProgress, List<Vector2> points);
+
     public static WhipBase_TagDamageDebuff? Debuff { get; private set; }
     public static WhipBase_Projectile? Whip { get; private set; }
 
@@ -37,7 +40,7 @@ abstract class WhipBase : ModItem {
     public override void Load() {
         Debuff = new WhipBase_TagDamageDebuff(this, TagDamage);
         Mod.AddContent(Debuff);
-        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip, FlipWhip()));
+        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip, Flip(), Scale, OnUse));
         Mod.AddContent(Whip);
     }
 
@@ -59,7 +62,11 @@ abstract class WhipBase : ModItem {
 
     public override bool MeleePrefix() => true;
 
-    protected virtual bool FlipWhip() => false;
+    protected virtual bool Flip() => false;
+
+    protected virtual float Scale(Player player,int index, float attackProgress, float lengthProgress) => 1f;
+
+    protected virtual void OnUse(Player player, float swingProgress, List<Vector2> points) { }
 }
 
 sealed class WhipBase_TagDamageDebuff(WhipBase attachedWhip, int tagDamage, string nameSuffix = "") : InstancedBuff($"{attachedWhip.Name}{nameSuffix}", ResourceManager.BuffTextures + "BuffTemplate") {
@@ -82,7 +89,9 @@ readonly record struct WhipBase_ProjectileArgs(WhipBase AttachedWhip, WhipBase_T
                                                Rectangle? Body2Clip = null,
                                                Rectangle? Body3Clip = null,
                                                Rectangle? TipClip = null,
-                                               bool Flip = false);
+                                               bool Flip = false,
+                                               WhipBase.ScaleDelegate? ScaleFunction = null,
+                                               WhipBase.OnUseDelegate? OnUseFunction = null);
 
 sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjectile($"{args.AttachedWhip.Name}{args.NameSuffix}", ResourceManager.SummonProjectileTextures + $"{args.AttachedWhip.Name}Whip") {
     [CloneByReference]
@@ -203,30 +212,14 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
             dust.velocity *= 0.5f;
         }*/
 
-        if (Utils.GetLerpValue(0.1f, 0.7f, swingProgress, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, swingProgress, clamped: true) > 0.8f && !Main.rand.NextBool(4)) {
-            //List<Vector2> points = Projectile.WhipPointsForCollision;
-            //points.Clear();
-            //Projectile.FillWhipControlPoints(Projectile, points);
-            //int pointIndex = Main.rand.Next(points.Count - 10, points.Count);
-            //Rectangle spawnArea = Utils.CenteredRectangle(points[pointIndex], new Vector2(30f, 30f));
-            //int dustType = ModContent.DustType<MercuriumDust2>();
-
-            //// After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
-            //Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 50f;
-            //Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() +
-            //    offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
-            //dust.position = points[pointIndex] + offset;
-            //dust.fadeIn = 0.3f;
-            //Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
-            //dust.scale *= 1.25f;
-            //dust.noGravity = true;
-            //dust.velocity *= 0.5f;
-            //// This math causes these dust to spawn with a velocity perpendicular to the direction of the whip segments, giving the impression of the dust flying off like sparks.
-            //dust.velocity += spinningPoint.RotatedBy(Main.player[Projectile.owner].direction * ((float)Math.PI / 2f));
-            //dust.velocity *= 0.5f;
+        Player player = Main.player[Projectile.owner];
+        if (args.OnUseFunction != null) {
+            List<Vector2> points = Projectile.WhipPointsForCollision;
+            points.Clear();
+            Projectile.FillWhipControlPoints(Projectile, points);
+            args.OnUseFunction(player, swingProgress, points);
         }
 
-        Player player = Main.player[Projectile.owner];
         player.heldProj = Projectile.whoAmI;
         player.MatchItemTimeToItemAnimation();
 
@@ -293,7 +286,10 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
 
         Vector2 pos = list[0];
 
-        for (int i = 0; i < list.Count - 1; i++) {
+        float count = list.Count - 1;
+        for (int i = 0; i < count; i++) {
+            float progress = (float)i / count;
+
             // These two values are set to suit this projectile's sprite, but won't necessarily work for your own.
             // You can change them if they don't!
 
@@ -312,6 +308,13 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
 
             // These statements determine what part of the spritesheet to draw for the current segment.
             // They can also be changed to suit your sprite.
+
+            Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
+            float t = Timer / timeToFlyOut;
+            if (args.ScaleFunction != null) {
+                scale = args.ScaleFunction(Main.player[Projectile.owner], i, t, progress);
+            }
+
             int segmentVariant = i == 0 ? 0 : GetSegmentVariant(i);
             if (i == list.Count - 2) {
                 if (args.TipClip != null) {
@@ -326,9 +329,6 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
                 }
 
                 // For a more impactful look, this scales the tip of the whip up when fully extended, and down when curled up.
-                //Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
-                //float t = Timer / timeToFlyOut;
-                //scale = MathHelper.Lerp(0.5f, 1.5f, Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true));
             }
             else if (segmentVariant == 3) {
                 if (args.Body3Clip != null) {
