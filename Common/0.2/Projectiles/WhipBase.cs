@@ -37,7 +37,7 @@ abstract class WhipBase : ModItem {
     public override void Load() {
         Debuff = new WhipBase_TagDamageDebuff(this, TagDamage);
         Mod.AddContent(Debuff);
-        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip));
+        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip, FlipWhip()));
         Mod.AddContent(Whip);
     }
 
@@ -58,6 +58,8 @@ abstract class WhipBase : ModItem {
     protected virtual void SafeSetDefaults() { }
 
     public override bool MeleePrefix() => true;
+
+    protected virtual bool FlipWhip() => false;
 }
 
 sealed class WhipBase_TagDamageDebuff(WhipBase attachedWhip, int tagDamage, string nameSuffix = "") : InstancedBuff($"{attachedWhip.Name}{nameSuffix}", ResourceManager.BuffTextures + "BuffTemplate") {
@@ -79,7 +81,8 @@ readonly record struct WhipBase_ProjectileArgs(WhipBase AttachedWhip, WhipBase_T
                                                Rectangle? Body1Clip = null,
                                                Rectangle? Body2Clip = null,
                                                Rectangle? Body3Clip = null,
-                                               Rectangle? TipClip = null);
+                                               Rectangle? TipClip = null,
+                                               bool Flip = false);
 
 sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjectile($"{args.AttachedWhip.Name}{args.NameSuffix}", ResourceManager.SummonProjectileTextures + $"{args.AttachedWhip.Name}Whip") {
     [CloneByReference]
@@ -147,7 +150,7 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
         Projectile.extraUpdates = 1;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
-        Projectile.WhipSettings.Segments = args.SegmentCount;
+        Projectile.WhipSettings.Segments = 19;
         Projectile.WhipSettings.RangeMultiplier = args.RangeMultiplier;
     }
 
@@ -201,26 +204,26 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
         }*/
 
         if (Utils.GetLerpValue(0.1f, 0.7f, swingProgress, clamped: true) * Utils.GetLerpValue(0.9f, 0.7f, swingProgress, clamped: true) > 0.8f && !Main.rand.NextBool(4)) {
-            List<Vector2> points = Projectile.WhipPointsForCollision;
-            points.Clear();
-            Projectile.FillWhipControlPoints(Projectile, points);
-            int pointIndex = Main.rand.Next(points.Count - 10, points.Count);
-            Rectangle spawnArea = Utils.CenteredRectangle(points[pointIndex], new Vector2(30f, 30f));
-            int dustType = ModContent.DustType<MercuriumDust2>();
+            //List<Vector2> points = Projectile.WhipPointsForCollision;
+            //points.Clear();
+            //Projectile.FillWhipControlPoints(Projectile, points);
+            //int pointIndex = Main.rand.Next(points.Count - 10, points.Count);
+            //Rectangle spawnArea = Utils.CenteredRectangle(points[pointIndex], new Vector2(30f, 30f));
+            //int dustType = ModContent.DustType<MercuriumDust2>();
 
-            // After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
-            Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 50f;
-            Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() +
-                offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
-            dust.position = points[pointIndex] + offset;
-            dust.fadeIn = 0.3f;
-            Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
-            dust.scale *= 1.25f;
-            dust.noGravity = true;
-            dust.velocity *= 0.5f;
-            // This math causes these dust to spawn with a velocity perpendicular to the direction of the whip segments, giving the impression of the dust flying off like sparks.
-            dust.velocity += spinningPoint.RotatedBy(Main.player[Projectile.owner].direction * ((float)Math.PI / 2f));
-            dust.velocity *= 0.5f;
+            //// After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
+            //Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 50f;
+            //Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() +
+            //    offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
+            //dust.position = points[pointIndex] + offset;
+            //dust.fadeIn = 0.3f;
+            //Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
+            //dust.scale *= 1.25f;
+            //dust.noGravity = true;
+            //dust.velocity *= 0.5f;
+            //// This math causes these dust to spawn with a velocity perpendicular to the direction of the whip segments, giving the impression of the dust flying off like sparks.
+            //dust.velocity += spinningPoint.RotatedBy(Main.player[Projectile.owner].direction * ((float)Math.PI / 2f));
+            //dust.velocity *= 0.5f;
         }
 
         Player player = Main.player[Projectile.owner];
@@ -282,6 +285,9 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
         // However, you must adhere to how they draw if you do.
 
         SpriteEffects flip = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        if (args.Flip) {
+            flip = (flip == SpriteEffects.None) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        }
 
         Texture2D texture = TextureAssets.Projectile[Type].Value;
 
@@ -299,7 +305,6 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
                 frame = new Rectangle(14, 2, 10, 22);
             }
             float scale = 1;
-            Vector2 origin = new Vector2(frame.Width / 2, 2f);
 
             Vector2 element = list[i];
             Vector2 diff = list[i + 1] - element;
@@ -308,9 +313,6 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
             // These statements determine what part of the spritesheet to draw for the current segment.
             // They can also be changed to suit your sprite.
             int segmentVariant = i == 0 ? 0 : GetSegmentVariant(i);
-            if (i != 0) {
-                continue;
-            }
             if (i == list.Count - 2) {
                 if (args.TipClip != null) {
                     frame = args.TipClip.Value;
@@ -365,10 +367,17 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
                 }
             }
 
+            Vector2 origin = frame.Size() / 2f;
+            origin.Y = 2f;
+
             float rotation = diff.ToRotation() - MathHelper.PiOver2; // This projectile's sprite faces down, so PiOver2 is used to correct _rotation.
             Color color = Lighting.GetColor(element.ToTileCoordinates());
 
             Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);
+
+            if (i == 0) {
+                pos += diff * 0.25f;
+            }
 
             pos += diff;
         }
