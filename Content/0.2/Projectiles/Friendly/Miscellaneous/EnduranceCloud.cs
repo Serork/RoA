@@ -44,6 +44,9 @@ sealed class EnduranceCloud : ModProjectile {
         Projectile.tileCollide = false;
     }
 
+    public override bool? CanDamage() => false;
+    public override bool? CanCutTiles() => false;
+
     public override void AI() {
         ref float opacityFactor = ref Projectile.localAI[0];
         opacityFactor++;
