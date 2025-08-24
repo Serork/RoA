@@ -265,3 +265,18 @@ AerialConcussion: {
 	// DisplayName: Mods.RoA.Buffs.AerialConcussion.DisplayName
 	// Description: Mods.RoA.Buffs.AerialConcussion.Description
 }
+
+EnduranceCloud1: {
+	// DisplayName: Endurance Cloud1
+	// Description: Mods.RoA.Buffs.EnduranceCloud1.Description
+}
+
+EnduranceCloud2: {
+	// DisplayName: Endurance Cloud2
+	// Description: Mods.RoA.Buffs.EnduranceCloud2.Description
+}
+
+EnduranceCloud3: {
+	// DisplayName: Endurance Cloud3
+	// Description: Mods.RoA.Buffs.EnduranceCloud3.Description
+}

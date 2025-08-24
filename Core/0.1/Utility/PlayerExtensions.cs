@@ -156,4 +156,10 @@ static partial class PlayerExtensions {
     public static void AddBuff<T>(this Player player, int timeToAdd) where T : ModBuff {
         player.AddBuff(ModContent.BuffType<T>(), timeToAdd);
     }
+
+    public static void DelBuff<T>(this Player player) where T : ModBuff {
+        if (player.FindBuff(ModContent.BuffType<T>(), out int buffIndex)) {
+            player.DelBuff(buffIndex);
+        }
+    }
 }

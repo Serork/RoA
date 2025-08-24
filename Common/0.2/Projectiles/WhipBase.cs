@@ -24,6 +24,7 @@ namespace RoA.Common.Items;
 abstract class WhipBase : ModItem {
     public delegate float ScaleDelegate(Player player, int index, float attackProgress, float lengthProgress);
     public delegate void OnUseDelegate(Player player, float swingProgress, List<Vector2> points);
+    public delegate void OnHitDelegate(Player player, NPC target);
 
     public static WhipBase_TagDamageDebuff? Debuff { get; private set; }
     public static WhipBase_Projectile? Whip { get; private set; }
@@ -40,7 +41,7 @@ abstract class WhipBase : ModItem {
     public override void Load() {
         Debuff = new WhipBase_TagDamageDebuff(this, TagDamage);
         Mod.AddContent(Debuff);
-        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip, Flip(), Scale, OnUse));
+        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip, Flip(), Scale, OnUse, OnHit));
         Mod.AddContent(Whip);
     }
 
@@ -67,6 +68,8 @@ abstract class WhipBase : ModItem {
     protected virtual float Scale(Player player,int index, float attackProgress, float lengthProgress) => 1f;
 
     protected virtual void OnUse(Player player, float swingProgress, List<Vector2> points) { }
+
+    protected virtual void OnHit(Player player, NPC target) { }
 }
 
 sealed class WhipBase_TagDamageDebuff(WhipBase attachedWhip, int tagDamage, string nameSuffix = "") : InstancedBuff($"{attachedWhip.Name}{nameSuffix}", ResourceManager.BuffTextures + "BuffTemplate") {
@@ -91,7 +94,8 @@ readonly record struct WhipBase_ProjectileArgs(WhipBase AttachedWhip, WhipBase_T
                                                Rectangle? TipClip = null,
                                                bool Flip = false,
                                                WhipBase.ScaleDelegate? ScaleFunction = null,
-                                               WhipBase.OnUseDelegate? OnUseFunction = null);
+                                               WhipBase.OnUseDelegate? OnUseFunction = null,
+                                               WhipBase.OnHitDelegate? OnHitFunction = null);
 
 sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjectile($"{args.AttachedWhip.Name}{args.NameSuffix}", ResourceManager.SummonProjectileTextures + $"{args.AttachedWhip.Name}Whip") {
     [CloneByReference]
@@ -102,6 +106,8 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
     }
 
     private void RoANPC_ModifyHitByProjectileEvent(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers) {
+        args.OnHitFunction?.Invoke(projectile.GetOwnerAsPlayer(), npc);
+
         if (projectile.npcProj || projectile.trap || !projectile.IsMinionOrSentryRelated) {
             return;
         }

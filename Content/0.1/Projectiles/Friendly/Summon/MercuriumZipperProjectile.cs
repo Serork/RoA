@@ -732,7 +732,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
 
                 // For a more impactful look, this scales the tip of the whip up when fully extended, and down when curled up.
                 //Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
-                //float t = Timer / timeToFlyOut;
+                //float t = _timer / timeToFlyOut;
                 //scale = MathHelper.Lerp(0.5f, 1.5f, Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true));
             }
             else if (i > 10) {

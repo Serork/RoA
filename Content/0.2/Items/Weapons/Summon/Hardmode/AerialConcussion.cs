@@ -1,12 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
 using RoA.Common.Items;
+using RoA.Content.Buffs;
 using RoA.Content.Dusts;
+using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 using Terraria;
 using Terraria.ID;
@@ -52,6 +59,122 @@ sealed class AerialConcussion : WhipBase {
             // This math causes these dust to spawn with a velocity perpendicular to the direction of the whip segments, giving the impression of the dust flying off like sparks.
             dust.velocity += spinningPoint.RotatedBy(player.direction * ((float)Math.PI / 2f));
             dust.velocity *= 0.375f;
+        }
+    }
+
+    protected override void OnHit(Player player, NPC target) {
+        player.GetModPlayer<AerialConcussion_TimerHandler>().ConsumeStack();
+    }
+
+    public static void SpawnCloud(Player player, int maxClouds) {
+        maxClouds += 1;
+        List<Projectile> trackedClouds = TrackedEntitiesSystem.GetTrackedProjectile<EnduranceCloud>(checkProjectile => checkProjectile.owner != player.whoAmI).ToList();
+        bool shouldSpawnCloud = false;
+        int count = trackedClouds.Count;
+        if (count <= maxClouds) {
+            if (count == 0) {
+                shouldSpawnCloud = true;
+            }
+            else {
+                List<Projectile> sortedClouds = trackedClouds.OrderBy(c => c.localAI[0]).ToList();
+                if (maxClouds >= 2) {
+                    if (count == 1) {
+                        if (sortedClouds[0].localAI[0] >= (maxClouds <= 2 ? EnduranceCloud.TIMETOREPLACE : EnduranceCloud.TIMETOSPAWNANOTHER)) {
+                            shouldSpawnCloud = true;
+                        }
+                    }
+                }
+                if (maxClouds >= 3) {
+                    bool onlyTree = maxClouds <= 3;
+                    if (count == 2) {
+                        if (sortedClouds[1].localAI[0] >= (onlyTree ? EnduranceCloud.TIMETOREPLACE : (EnduranceCloud.TIMETOSPAWNANOTHER * 2f))) {
+                            shouldSpawnCloud = true;
+                        }
+                        if (onlyTree) {
+                            if (sortedClouds[0].localAI[0] >= EnduranceCloud.TIMETOREPLACE) {
+                                shouldSpawnCloud = true;
+                            }
+                        }
+                    }
+                }
+                if (maxClouds >= 4) {
+                    if (count == 3) {
+                        if (sortedClouds[2].localAI[0] >= EnduranceCloud.TIMETOREPLACE) {
+                            shouldSpawnCloud = true;
+                        }
+                        if (sortedClouds[1].localAI[0] >= EnduranceCloud.TIMETOREPLACE) {
+                            shouldSpawnCloud = true;
+                        }
+                        if (sortedClouds[0].localAI[0] >= EnduranceCloud.TIMETOREPLACE) {
+                            shouldSpawnCloud = true;
+                        }
+                    }
+                }
+            }
+        }
+        if (shouldSpawnCloud) {
+            ProjectileUtils.SpawnPlayerOwnedProjectile<EnduranceCloud>(
+                new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("endurancecloud"))
+            );
+        }
+    }
+
+    private class AerialConcussion_TimerHandler : ModPlayer {
+        private static ushort TIMEFORSTACK => 300;
+
+        private int _timer;
+        private ushort _enduranceTier;
+
+        public bool CanGainStack => _timer >= TIMEFORSTACK;
+
+        public bool IsEffectActive => Player.HasItem(ModContent.ItemType<AerialConcussion>());
+
+        public override void PostUpdate() {
+            if (!IsEffectActive) {
+                return;
+            }
+
+            if (!CanGainStack) {
+                _timer++;
+            }
+
+            switch (_enduranceTier) {
+                case 1:
+                    Player.DelBuff<EnduranceCloud2>();
+                    Player.DelBuff<EnduranceCloud3>();
+                    Player.AddBuff<EnduranceCloud1>(5);
+                    break;
+                case 2:
+                    Player.DelBuff<EnduranceCloud1>();
+                    Player.DelBuff<EnduranceCloud3>();
+                    Player.AddBuff<EnduranceCloud2>(5);
+                    break;
+                case >= 3:
+                    Player.DelBuff<EnduranceCloud2>();
+                    Player.DelBuff<EnduranceCloud1>();
+                    Player.AddBuff<EnduranceCloud3>(5);
+                    break;
+            }
+        }
+
+        public override void OnHurt(Player.HurtInfo info) {
+            if (!IsEffectActive) {
+                return;
+            }
+
+            if (_enduranceTier > 0) {
+                _enduranceTier = 0;
+            }
+        }
+
+        public void ConsumeStack() {
+            if (!CanGainStack) {
+                return;
+            }
+
+            _enduranceTier++;
+
+            _timer = 0;
         }
     }
 }
