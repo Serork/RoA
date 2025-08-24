@@ -75,6 +75,9 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.manualDirectionChange = true;
     }
 
+    public override bool? CanCutTiles() => false;
+    public override bool? CanDamage() => false;
+
     public override void AI() {
         float attackSpeedModifier = 0.15f;
 
@@ -155,6 +158,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             for (int i = 0; i < 2; i++) {
                 Fly.CreateFlyDust(areaCenter, areaCenter.DirectionTo(Projectile.Center) * Main.rand.NextFloat(0.5f, 1f) * 5f, (int)areaSize.X, (int)areaSize.Y);
             }
+
             Projectile.localAI[1] = 0f;
             _flySpawnedCount++;
         }
@@ -203,6 +207,8 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         angleOffset = _spawnPosition.DirectionFrom(center).RotatedBy(-angle) * angleOffsetLength;
         DrawStem(stemTexture, center + angleOffset + lengthOffset, _spawnPosition, -0.2f, 0.75f);
 
+        //CreateTulipDusts();
+
         center += center.DirectionFrom(_spawnPosition) * 4f;
         float tulipCount = TULIPCOUNT;
         for (int i = 0; i < tulipCount + 1; i++) {
@@ -222,7 +228,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 scale = Vector2.One * MathHelper.Lerp(Utils.Remap(1f - progress2, 0f, 1f, 0.5f, 1f, true) * 1.25f, 1f, Projectile.ai[0]);
             Main.spriteBatch.Draw(tulipTexture, position, DrawInfo.Default with {
                 Clip = clip,
-                Color = color * Utils.GetLerpValue(0f, 15f, Projectile.timeLeft, true),
+                Color = color,
                 Rotation = rotation,
                 Origin = Utils.Bottom(clip),
                 Scale = scale * Projectile.Opacity
@@ -231,7 +237,46 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void OnKill(int timeLeft) {
+        CreateTulipDusts();
 
+        Vector2 center = Projectile.Center;
+        CreateStemDusts(center, _spawnPosition);
+
+        float angle = MathHelper.PiOver4;
+        float angleOffsetLength = 30f;
+        Vector2 angleOffset = _spawnPosition.DirectionFrom(center).RotatedBy(angle) * angleOffsetLength;
+        float lengthOffsetAmount = 20f * Projectile.ai[0];
+        Vector2 lengthOffset = center.DirectionTo(_spawnPosition) * lengthOffsetAmount;
+        CreateStemDusts(center + angleOffset + lengthOffset, _spawnPosition, 0.1f, 0.85f);
+        angleOffset = _spawnPosition.DirectionFrom(center).RotatedBy(-angle) * angleOffsetLength;
+        CreateStemDusts(center + angleOffset + lengthOffset, _spawnPosition, -0.1f, 0.85f);
+        angleOffsetLength = 50f;
+        lengthOffsetAmount = 30f * Projectile.ai[0];
+        angleOffset = _spawnPosition.DirectionFrom(center).RotatedBy(angle) * angleOffsetLength;
+        lengthOffset = center.DirectionTo(_spawnPosition) * lengthOffsetAmount;
+        CreateStemDusts(center + angleOffset + lengthOffset, _spawnPosition, 0.2f, 0.75f);
+        angleOffset = _spawnPosition.DirectionFrom(center).RotatedBy(-angle) * angleOffsetLength;
+        CreateStemDusts(center + angleOffset + lengthOffset, _spawnPosition, -0.2f, 0.75f);
+    }
+    
+    private void CreateTulipDusts() {
+        float tulipCount = TULIPCOUNT * 1;
+        Vector2 center = Projectile.Center;
+        for (int i = 0; i < tulipCount + 1; i++) {
+            Vector2 position = center;
+            float progress = (float)i / MathHelper.Lerp(tulipCount, tulipCount + 1, Projectile.ai[0]);
+            float progress3 = (float)(i + 1) / MathHelper.Lerp(tulipCount, tulipCount + 1, Projectile.ai[0]);
+            float desiredRotation = (MathHelper.Pi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction;
+            float rotation = desiredRotation;
+            rotation = Utils.AngleLerp(rotation, (MathHelper.TwoPi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction, Projectile.ai[0]);
+            if (Projectile.direction < 0) {
+                rotation -= MathHelper.PiOver4 / 4f;
+            }
+            rotation += MathHelper.PiOver4 * 0.75f;
+            position = position - Vector2.UnitY * 10f + Vector2.UnitY.RotatedBy(rotation) * Main.rand.NextFloat(20f);
+            Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<StinkingLily2>());
+            dust.customData = Main.rand.NextFloat(1f, 2.5f);
+        }
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
@@ -292,11 +337,59 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Main.EntitySpriteDraw(textureToDraw,
                                   position - Main.screenPosition,
                                   new Rectangle(0, 10 * frameToUse, 18, height),
-                                  Lighting.GetColor(position.ToTileCoordinates()) * Utils.GetLerpValue(0f, 15f, Projectile.timeLeft, true),
+                                  Lighting.GetColor(position.ToTileCoordinates()),
                                   velocityToAdd.ToRotation() + MathHelper.PiOver2,
                                   new Vector2(9, height / 2),
                                   scale,
                                   SpriteEffects.None);
+
+            endPosition -= velocityToAdd;
+        }
+    }
+
+    private void CreateStemDusts(Vector2 currentPosition, Vector2 endPosition, float sinOffset = 0f, float extraScale = 1f) {
+        float progress = 0f;
+        int count = 500;
+        float maxLength = (endPosition - currentPosition).Length();
+        float sinOffsetX = 50f;
+        for (int i = 0; i < count; i++) {
+            Vector2 between = endPosition - currentPosition;
+            float length = between.Length();
+            float currentProgress = length / maxLength;
+            float scaleProgress = Utils.Clamp(currentProgress, sinOffset == 0f ? 0.35f : 0f, 1f) * extraScale;
+            int height = 8;
+            Vector2 velocity = (endPosition - currentPosition).SafeNormalize(Vector2.UnitY) * height * scaleProgress;
+            Vector2 velocityToAdd = velocity;
+            velocityToAdd = velocityToAdd.RotatedBy(Math.Sin(i * sinOffsetX + Projectile.ai[2] + sinOffset) * scaleProgress) * 0.85f;
+            progress += Main.rand.NextFloat(0.0001f, 0.00033f);
+
+            if (length <= height / 4) {
+                break;
+            }
+
+            Vector2 position = endPosition;
+
+            //if (WorldGen.SolidTile(position.ToTileCoordinates())) {
+            //    continue;
+            //}
+
+            if (!Main.rand.NextBool(3)) {
+                Dust obj2 = Dust.NewDustPerfect(position + Main.rand.RandomPointInArea(4f), ModContent.DustType<Dusts.StinkingLily3>(), Vector2.Zero, Scale: 1.5f * scaleProgress + 0.15f * Main.rand.NextFloat());
+                obj2.noGravity = true;
+                obj2.fadeIn = 0.5f;
+            }
+
+            //Vector2 scale = Vector2.One * scaleProgress;
+            //ulong seedForRandomness = (ulong)i;
+            //int frameToUse = i == 0 ? STEMFRAMECOUNT - 1 : Utils.RandomInt(ref seedForRandomness, STEMFRAMECOUNT);
+            //Main.EntitySpriteDraw(textureToDraw,
+            //                      position - Main.screenPosition,
+            //                      new Rectangle(0, 10 * frameToUse, 18, height),
+            //                      Lighting.GetColor(position.ToTileCoordinates()),
+            //                      velocityToAdd.ToRotation() + MathHelper.PiOver2,
+            //                      new Vector2(9, height / 2),
+            //                      scale,
+            //                      SpriteEffects.None);
 
             endPosition -= velocityToAdd;
         }

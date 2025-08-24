@@ -3,7 +3,7 @@
 namespace RoA.Core.Utility;
 
 static class DustHelper {
-    public static void BasicDust(this Dust dust, bool applyGravity = true) {
+    public static void ApplyDustScale(this Dust dust) {
         if (dust.position.Y > Main.screenPosition.Y + (float)Main.screenHeight)
             dust.active = false;
 
@@ -40,6 +40,10 @@ static class DustHelper {
 
         if (dust.scale < num113)
             dust.active = false;
+    }
+
+    public static void BasicDust(this Dust dust, bool applyGravity = true) {
+        ApplyDustScale(dust);
 
         if (applyGravity && !dust.noGravity) {
             dust.velocity.Y += 0.1f;
