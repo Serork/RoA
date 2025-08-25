@@ -43,7 +43,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
         private static byte CHARGECOUNT => 5;
         private static byte CHARGEFRAMECOUNT => 3;
 
-        public static float CAPPEDMOUSEPOSITIONWIDTH => 600f;
+        public static float CAPPEDMOUSEPOSITIONWIDTH => 800f;
         public static float CAPPEDMOUSEPOSITIONHEIGHT => 600f;
 
         private struct ChargeInfo {
@@ -96,7 +96,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
         public void SpawnGroundDusts(Player player, ushort dustType, float velocityFactor) {
             player.SyncCappedMousePosition();
             Vector2 mousePosition = player.GetCappedWorldMousePosition(CAPPEDMOUSEPOSITIONWIDTH, CAPPEDMOUSEPOSITIONHEIGHT);
-            Vector2 position = GetTilePosition(player, mousePosition, false).ToWorldCoordinates(),
+            Vector2 position = GetTilePosition(player, mousePosition, false, cappedWidth: (int)CAPPEDMOUSEPOSITIONWIDTH, cappedHeight: (int)CAPPEDMOUSEPOSITIONHEIGHT).ToWorldCoordinates(),
                     velocity = (mousePosition + Main.rand.NextVector2Circular(8f, 8f) - position).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.PiOver2) * 3f * velocityFactor;
             Vector2 dustPos = position + Vector2.UnitY * 4f + Main.rand.NextVector2Circular(8f, 8f).RotatedByRandom(MathHelper.Pi);
             //int x = (int)dustPos.X / 16, y = (int)dustPos.Y / 16;
@@ -238,7 +238,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
         }
 
         // adapted vanilla
-        public static Point GetTilePosition(Player player, Vector2 targetSpot, bool randomlySelected = true, int adjustYForPlatformAmount = 0) {
+        public static Point GetTilePosition(Player player, Vector2 targetSpot, bool randomlySelected = true, int adjustYForPlatformAmount = 0, int cappedWidth = 0, int cappedHeight = 0) {
             Point point;
             Vector2 center = player.Center;
             Vector2 endPoint = targetSpot;
@@ -269,6 +269,17 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                         continue;
                     }
                     Point checkPosition = new(j, k);
+                    Vector2 checkPositionWorld = checkPosition.ToWorldCoordinates();
+                    if (cappedWidth != 0) {
+                        if (MathF.Abs(checkPositionWorld.X - center.X) > cappedWidth) {
+                            continue;
+                        }
+                    }
+                    if (cappedHeight != 0) {
+                        if (MathF.Abs(checkPositionWorld.Y - center.Y) > cappedHeight) {
+                            continue;
+                        }
+                    }
                     if (WorldGenHelper.IsPlatform(checkPosition) || WorldGenHelper.IsPlatform(checkPosition + new Point(0, 1))) {
                         checkPosition.Y += adjustYForPlatformAmount;
                     }
