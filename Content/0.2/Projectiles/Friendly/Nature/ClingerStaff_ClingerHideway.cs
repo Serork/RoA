@@ -25,7 +25,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 [Tracked]
 sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
     public static ushort MAXAVAILABLE => 2;
-    private static ushort MAXTIMELEFT => 36000;
+    private static ushort MAXTIMELEFT => 900;
     private static ushort MINTIMELEFT => 220;
     private static float TIMELEFTODISAPPEAR => MAXTIMELEFT * 0.15f;
     private static float TIMELEFTOSTOPATTACKING => TIMELEFTODISAPPEAR;

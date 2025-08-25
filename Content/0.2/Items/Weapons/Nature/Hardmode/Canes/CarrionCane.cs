@@ -20,12 +20,11 @@ using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static RoA.Content.Items.Weapons.Nature.PreHardmode.Canes.TulipBase;
 using static RoA.Content.Projectiles.Friendly.Nature.Rafflesia;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 
-sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
+sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
     protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<Rafflesia>();
 
     protected override void SafeSetDefaults() {
@@ -38,7 +37,7 @@ sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.5f);
     }
 
-    public sealed class StinkingLilyBase : CaneBaseProjectile, IRequestAssets {
+    public sealed class CarrionCaneBase : CaneBaseProjectile, IRequestAssets {
         private static byte CHARGECOUNT => 5;
         private static byte CHARGEFRAMECOUNT => 3;
 
@@ -83,7 +82,7 @@ sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
         protected override void SpawnDustsWhenReady(Player player, Vector2 corePosition) {
             int dustCount = 10;
             for (int i = 0; i < dustCount; i++) {
-                Dust dust = Dust.NewDustPerfect(corePosition + Main.rand.NextVector2CircularEdge(20f + 5f * Main.rand.NextFloat(), 20f + 5f * Main.rand.NextFloat()), ModContent.DustType<Dusts.StinkingLily>());
+                Dust dust = Dust.NewDustPerfect(corePosition + Main.rand.NextVector2CircularEdge(20f + 5f * Main.rand.NextFloat(), 20f + 5f * Main.rand.NextFloat()), ModContent.DustType<Dusts.CarrionCane>());
                 dust.velocity = Vector2.UnitY.RotatedBy(i * MathHelper.TwoPi / dustCount) * Owner.direction;
                 dust.scale *= Main.rand.NextFloat(1f, 1.5f);
             }
@@ -140,7 +139,7 @@ sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
         protected override Vector2 CorePositionOffsetFactor() => new(0.15f, Owner.direction == 1 ? -0.1f : 0f);
 
         protected override void SafePreDraw() {
-            if (!AssetInitializer.TryGetRequestedTextureAssets<StinkingLilyBase>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets) ||
+            if (!AssetInitializer.TryGetRequestedTextureAssets<CarrionCaneBase>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets) ||
                 !AssetInitializer.TryGetRequestedTextureAssets<Rafflesia>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets2)) {
                 return;
             }
@@ -226,6 +225,45 @@ sealed class StinkingLily : CaneBaseItem<StinkingLily.StinkingLilyBase> {
         }
 
         public override void PostDraw(Color lightColor) {
+        }
+
+        // adapted vanilla
+        public static Point GetTilePosition(Player player, Vector2 targetSpot, bool randomlySelected = true) {
+            Point point;
+            Vector2 center = player.Center;
+            Vector2 endPoint = targetSpot;
+            int samplesToTake = 3;
+            float samplingWidth = 4f;
+            Collision.AimingLaserScan(center, endPoint, samplingWidth, samplesToTake, out Vector2 vectorTowardsTarget, out float[] samples);
+            float num = float.PositiveInfinity;
+            for (int i = 0; i < samples.Length; i++) {
+                if (samples[i] < num) {
+                    num = samples[i];
+                }
+            }
+
+            targetSpot = center + vectorTowardsTarget.SafeNormalize(Vector2.Zero) * num;
+            point = targetSpot.ToTileCoordinates();
+            while (!WorldGenHelper.SolidTile(point.X, point.Y)) {
+                point.Y++;
+            }
+            point.Y -= 1;
+            Rectangle value = new Rectangle(point.X, point.Y, 1, 1);
+            value.Inflate(1, 1);
+            Rectangle value2 = new Rectangle(0, 0, Main.maxTilesX, Main.maxTilesY);
+            value2.Inflate(-40, -40);
+            value = Rectangle.Intersect(value, value2);
+            List<Point> list = new List<Point>();
+            for (int j = value.Left; j <= value.Right; j++) {
+                for (int k = value.Top; k <= value.Bottom; k++) {
+                    if (!WorldGenHelper.SolidTile(j, k)) {
+                        continue;
+                    }
+                    list.Add(new Point(j, k));
+                }
+            }
+            int index = Main.rand.Next(list.Count);
+            return randomlySelected ? list[index] : list[list.Count / 2];
         }
     }
 }

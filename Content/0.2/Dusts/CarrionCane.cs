@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class StinkingLily : ModDust {
+sealed class CarrionCane : ModDust {
     public override bool Update(Dust dust) {
         DustHelper.BasicDust(dust);
 
@@ -21,7 +21,7 @@ sealed class StinkingLily : ModDust {
     }
 }
 
-sealed class StinkingLily2 : ModDust {
+sealed class CarrionCane2 : ModDust {
     private Vector2 _windVelocity = Vector2.Zero;
 
     public override void OnSpawn(Dust dust) {
@@ -63,7 +63,7 @@ sealed class StinkingLily2 : ModDust {
     }
 }
 
-sealed class StinkingLily3 : ModDust {
+sealed class CarrionCane3 : ModDust {
     public override void SetStaticDefaults() => UpdateType = DustID.Plantera_Green;
 }
 

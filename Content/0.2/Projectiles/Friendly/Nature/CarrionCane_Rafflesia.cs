@@ -6,7 +6,7 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
-using RoA.Content.Dusts;
+using RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
@@ -91,7 +91,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         if (Projectile.frameCounter++ > Main.rand.Next(3, 6)) {
             Projectile.frameCounter = 0;
 
-            Dust dust = Dust.NewDustPerfect(Projectile.Center - (Vector2.UnitY * 10f + Main.rand.RandomPointInArea(5f)).RotatedBy(Projectile.rotation), ModContent.DustType<Rot>());
+            Dust dust = Dust.NewDustPerfect(Projectile.Center - (Vector2.UnitY * 10f + Main.rand.RandomPointInArea(5f)).RotatedBy(Projectile.rotation), ModContent.DustType<Dusts.Rot>());
             dust.velocity = new Vector2((0.5f + Main.WindForVisuals) * Main.rand.NextFloatRange(1f), 1f).RotatedBy(Projectile.rotation) * -Main.rand.NextFloat(0.5f, 1f);
             dust.scale *= Main.rand.NextFloat(0.8f, 1.2f);
         }
@@ -106,7 +106,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
                 if (Projectile.IsOwnerLocal()) {
                     Player owner = Projectile.GetOwnerAsPlayer();
                     Vector2 mousePosition = owner.GetWorldMousePosition();
-                    _spawnPosition = TulipBase.GetTilePosition(owner, mousePosition, false).ToWorldCoordinates();
+                    _spawnPosition = CarrionCane.CarrionCaneBase.GetTilePosition(owner, mousePosition, false).ToWorldCoordinates();
                     Point spawnPositionInTiles = _spawnPosition.ToTileCoordinates();
                     while (!WorldGen.SolidTile3(spawnPositionInTiles.X, spawnPositionInTiles.Y)) {
                         spawnPositionInTiles.Y--;
@@ -274,7 +274,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
             rotation += MathHelper.PiOver4 * 0.75f;
             position = position - Vector2.UnitY * 10f + Vector2.UnitY.RotatedBy(rotation) * Main.rand.NextFloat(20f);
-            Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<StinkingLily2>());
+            Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<Dusts.CarrionCane2>());
             dust.customData = Main.rand.NextFloat(1f, 2.5f);
         }
     }
@@ -374,7 +374,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             //}
 
             if (!Main.rand.NextBool(3)) {
-                Dust obj2 = Dust.NewDustPerfect(position + Main.rand.RandomPointInArea(4f), ModContent.DustType<Dusts.StinkingLily3>(), Vector2.Zero, Scale: 1.5f * scaleProgress + 0.15f * Main.rand.NextFloat());
+                Dust obj2 = Dust.NewDustPerfect(position + Main.rand.RandomPointInArea(4f), ModContent.DustType<Dusts.CarrionCane3>(), Vector2.Zero, Scale: 1.5f * scaleProgress + 0.15f * Main.rand.NextFloat());
                 obj2.noGravity = true;
                 obj2.fadeIn = 0.5f;
             }
