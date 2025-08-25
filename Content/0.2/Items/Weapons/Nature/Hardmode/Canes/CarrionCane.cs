@@ -17,6 +17,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.Enums;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -51,7 +52,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
 
         private ChargeInfo[]? _chargeData;
 
-        (byte, string)[] IRequestAssets.IndexedPathsToTexture => [(0, ResourceManager.DustTextures + "StinkingLily")];
+        (byte, string)[] IRequestAssets.IndexedPathsToTexture => [(0, ResourceManager.DustTextures + "CarrionCane")];
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 

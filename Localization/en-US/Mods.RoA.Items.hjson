@@ -2134,7 +2134,7 @@ TarRocket: {
 	Tooltip: ""
 }
 
-StinkingLily: {
+CarrionCane: {
 	DisplayName: Carrion Cane
 	Tooltip: Grows a stinking flower that attracts flies
 }

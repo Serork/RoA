@@ -19,13 +19,14 @@ using System.IO;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
     public static ushort MAXAVAILABLE => 2;
-    private static ushort MAXTIMELEFT => 900;
+    private static ushort MAXTIMELEFT => 9000;
     private static ushort MINTIMELEFT => 220;
     private static float TIMELEFTODISAPPEAR => MAXTIMELEFT * 0.15f;
     private static float TIMELEFTOSTOPATTACKING => TIMELEFTODISAPPEAR;
@@ -332,12 +333,18 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
                 }
             }
         }
+        void emitDusts() {
+            if (Main.rand.NextBool(50)) {
+                Dust.NewDust(Projectile.Center - Vector2.One * 10f, 20, 20, DustID.Demonite);
+            }
+        }
 
         init();
         handleShakes();
         handleClinger();
         handleClingerBody();
         spawnCursedDusts();
+        emitDusts();
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
