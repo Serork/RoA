@@ -1,4 +1,5 @@
 ﻿using RoA.Common;
+using RoA.Common.Players;
 using RoA.Content.Items.Weapons.Summon.Hardmode;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility.Vanilla;
@@ -20,6 +21,12 @@ class EnduranceCloud1 : ModBuff {
         player.endurance += 0.08f;
 
         AerialConcussion.SpawnCloud(player, 1);
+    }
+
+    public override bool RightClick(int buffIndex) {
+        Main.LocalPlayer.GetModPlayer<AerialConcussionEffect>().Reset();
+
+        return base.RightClick(buffIndex);
     }
 }
 

@@ -2,6 +2,7 @@
 
 using RoA.Common;
 using RoA.Common.Items;
+using RoA.Common.Players;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
@@ -64,7 +65,7 @@ sealed class AerialConcussion : WhipBase {
     }
 
     protected override void OnHit(Player player, NPC target) {
-        player.GetModPlayer<AerialConcussion_TimerHandler>().ConsumeStack();
+        player.GetModPlayer<AerialConcussionEffect>().ConsumeStack();
     }
 
     public static void SpawnCloud(Player player, int maxClouds) {
@@ -118,77 +119,5 @@ sealed class AerialConcussion : WhipBase {
                 new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("endurancecloud"))
             );
         }
-    }
-
-    private class AerialConcussion_TimerHandler : ModPlayer {
-        private static ushort TIMEFORSTACK => 300;
-
-        private int _timer;
-        private ushort _enduranceTier;
-
-        public bool CanGainStack => _timer >= TIMEFORSTACK;
-
-        public bool IsEffectActive => Player.HasItem(ModContent.ItemType<AerialConcussion>());
-
-        public override void PostUpdate() {
-            if (!IsEffectActive) {
-                return;
-            }
-
-            if (!CanGainStack) {
-                _timer++;
-            }
-
-            if (_enduranceTier <= 0) {
-                return;
-            }
-            switch (_enduranceTier) {
-                case 1:
-                    Player.DelBuff<EnduranceCloud2>();
-                    Player.DelBuff<EnduranceCloud3>();
-                    Player.AddBuff<EnduranceCloud1>(5);
-                    break;
-                case 2:
-                    Player.DelBuff<EnduranceCloud1>();
-                    Player.DelBuff<EnduranceCloud3>();
-                    Player.AddBuff<EnduranceCloud2>(5);
-                    break;
-                case >= 3:
-                    Player.DelBuff<EnduranceCloud2>();
-                    Player.DelBuff<EnduranceCloud1>();
-                    Player.AddBuff<EnduranceCloud3>(5);
-                    break;
-            }
-        }
-
-        public override void OnHurt(Player.HurtInfo info) {
-            if (!IsEffectActive) {
-                return;
-            }
-
-            _timer = 0;
-
-            if (_enduranceTier > 0) {
-                _enduranceTier = 0;
-            }
-
-            Player.DelBuff<EnduranceCloud3>();
-            Player.DelBuff<EnduranceCloud2>();
-            Player.DelBuff<EnduranceCloud1>();
-
-            foreach (Projectile trackedCloud in TrackedEntitiesSystem.GetTrackedProjectile<EnduranceCloud>(checkProjectile => checkProjectile.owner != Player.whoAmI)) {
-                trackedCloud.Kill();
-            }
-        }
-
-        public void ConsumeStack() {
-            if (!CanGainStack) {
-                return;
-            }
-
-            _enduranceTier++;
-
-            _timer = 0;
-        }
-    }
+    }  
 }

@@ -449,7 +449,8 @@ sealed class Hunter : ModNPC {
     public override void SetChatButtons(ref string button, ref string button2) {
         button = Language.GetTextValue($"Mods.RoA.NPCs.Town.{nameof(Hunter)}.Button1");
         int variant = 1;
-        if (HasPlayerEnoughLeatherInInventory()) {
+        //if (HasPlayerEnoughLeatherInInventory())
+        {
             variant = 2;
         }
         button2 = Language.GetTextValue($"Mods.RoA.NPCs.Town.{nameof(Hunter)}.Button2_{variant}");
@@ -576,7 +577,7 @@ sealed class Hunter : ModNPC {
         }
     }
 
-    private bool HasPlayerEnoughLeatherInInventory() => Main.LocalPlayer.CountItem(ItemID.Leather) > 0/*Main.LocalPlayer.CountItem(ItemID.Leather) >= LEATHERAMOOUNTNEEDED*/;
+    private bool HasPlayerEnoughLeatherInInventory() => Main.LocalPlayer.CountItem(ItemID.Leather) >= LEATHERAMOOUNTNEEDED;
     private bool ShouldGiveFireLighter() => Main.LocalPlayer.GetModPlayer<DropHunterRewardHandler>().TradeCount == TRADEAMOUNTTODROPFIRELIGHTER;
 
     private bool ConsumePlayerLeatherAndDropCoins() {
