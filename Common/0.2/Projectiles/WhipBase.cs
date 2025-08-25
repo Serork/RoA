@@ -42,7 +42,7 @@ abstract class WhipBase : ModItem {
     public override void Load() {
         Debuff = new WhipBase_TagDamageDebuff(this, TagDamage);
         Mod.AddContent(Debuff);
-        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, DamagePenalty, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip, Flip(), Scale, OnUse, OnHit));
+        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, DamagePenalty, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip, Flip(), DrawLine(), Scale, OnUse, OnHit));
         Mod.AddContent(Whip);
     }
 
@@ -65,6 +65,8 @@ abstract class WhipBase : ModItem {
     public override bool MeleePrefix() => true;
 
     protected virtual bool Flip() => false;
+
+    protected virtual bool DrawLine() => true;
 
     protected virtual float Scale(Player player,int index, float attackProgress, float lengthProgress) => 1f;
 
@@ -94,6 +96,7 @@ readonly record struct WhipBase_ProjectileArgs(WhipBase AttachedWhip, WhipBase_T
                                                Rectangle? Body3Clip = null,
                                                Rectangle? TipClip = null,
                                                bool Flip = false,
+                                               bool DrawLine = true,
                                                WhipBase.ScaleDelegate? ScaleFunction = null,
                                                WhipBase.OnUseDelegate? OnUseFunction = null,
                                                WhipBase.OnHitDelegate? OnHitFunction = null);
@@ -119,8 +122,6 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
         }
 
         if (TryGetActiveWhip(projectile.GetOwnerAsPlayer(), out Projectile heldProjectile, out WhipBase_Projectile heldWhip)) {
-            args.OnHitFunction?.Invoke(projectile.GetOwnerAsPlayer(), npc);
-            Main.NewText(123);
             WhipBase_TagDamageDebuff whipBuff = heldWhip.TagDebuff;
             if (npc.HasBuff(whipBuff.Type)) {
                 float tagDamageMultiplier = ProjectileID.Sets.SummonTagDamageMultiplier[projectile.type];
@@ -161,6 +162,7 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.IsAWhip[Type] = true;
+        //ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
     }
 
     public override void SetDefaults() {
@@ -284,7 +286,9 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
         List<Vector2> list = new List<Vector2>();
         FillWhipControlPoints(Projectile, list);
 
-        DrawLine(list);
+        if (args.DrawLine) {
+            DrawLine(list);
+        }
 
         //Main.DrawWhip_WhipBland(Projectile, list);
         // The code below is for custom drawing.

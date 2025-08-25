@@ -35,6 +35,8 @@ sealed class AerialConcussion : WhipBase {
 
     protected override bool Flip() => true;
 
+    protected override bool DrawLine() => false;
+
     protected override float Scale(Player player, int index, float attackProgress, float lengthProgress) => index == 0 ? 1f : MathHelper.Lerp(0.5f, MathHelper.Lerp(1f, 1.5f, lengthProgress), Utils.GetLerpValue(0.1f, 0.7f, attackProgress, true) * Utils.GetLerpValue(0.9f, 0.7f, attackProgress, true));
 
     protected override void OnUse(Player player, float swingProgress, List<Vector2> points) {

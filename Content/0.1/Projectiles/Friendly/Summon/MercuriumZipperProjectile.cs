@@ -439,6 +439,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.IsAWhip[Type] = true;
+        //ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
     }
 
     public override void SetDefaults() {
@@ -688,7 +689,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
         List<Vector2> list = new List<Vector2>();
         FillWhipControlPoints(Projectile, list);
 
-        DrawLine(list);
+        //DrawLine(list);
 
         //Main.DrawWhip_WhipBland(Projectile, list);
         // The code below is for custom drawing.
