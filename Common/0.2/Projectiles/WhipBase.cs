@@ -30,6 +30,7 @@ abstract class WhipBase : ModItem {
     public static WhipBase_Projectile? Whip { get; private set; }
 
     protected abstract int TagDamage { get; }
+    protected abstract float DamagePenalty { get; }
     protected abstract int SegmentCount { get; }
     protected abstract float RangeMultiplier { get; }
     protected virtual Rectangle TailClip { get; }
@@ -41,7 +42,7 @@ abstract class WhipBase : ModItem {
     public override void Load() {
         Debuff = new WhipBase_TagDamageDebuff(this, TagDamage);
         Mod.AddContent(Debuff);
-        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip, Flip(), Scale, OnUse, OnHit));
+        Whip = new WhipBase_Projectile(new WhipBase_ProjectileArgs(this, Debuff, SegmentCount, RangeMultiplier, DamagePenalty, string.Empty, TailClip, Body1Clip, Body2Clip, Body3Clip, TipClip, Flip(), Scale, OnUse, OnHit));
         Mod.AddContent(Whip);
     }
 
@@ -86,7 +87,7 @@ sealed class WhipBase_TagDamageDebuff(WhipBase attachedWhip, int tagDamage, stri
     }
 }
 
-readonly record struct WhipBase_ProjectileArgs(WhipBase AttachedWhip, WhipBase_TagDamageDebuff TagDebuff, int SegmentCount, float RangeMultiplier, string NameSuffix = "",
+readonly record struct WhipBase_ProjectileArgs(WhipBase AttachedWhip, WhipBase_TagDamageDebuff TagDebuff, int SegmentCount, float RangeMultiplier, float DamagePenalty, string NameSuffix = "",
                                                Rectangle? TailClip = null,
                                                Rectangle? Body1Clip = null,
                                                Rectangle? Body2Clip = null,
@@ -242,11 +243,11 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
             return;
         }
 
-        target.AddBuff(ModContent.BuffType<MercuriumZipperDebuff>(), 240);
+        target.AddBuff(args.TagDebuff.Type, 240);
 
         Player player = Main.player[Projectile.owner];
         player.MinionAttackTargetNPC = target.whoAmI;
-        Projectile.damage = (int)(Projectile.damage * 0.6f);
+        Projectile.damage = (int)(Projectile.damage * args.DamagePenalty);
     }
 
     // This method draws a line between all points of the whip, in case there's empty space between the sprites.

@@ -25,6 +25,7 @@ namespace RoA.Content.Items.Weapons.Summon.Hardmode;
 
 sealed class AerialConcussion : WhipBase {
     protected override int TagDamage => 10;
+    protected override float DamagePenalty => 0.7f;
     protected override int SegmentCount => 15;
     protected override float RangeMultiplier => 1.5f;
     protected override Rectangle TailClip => new(14, 0, 14, 24);
