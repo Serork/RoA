@@ -103,7 +103,7 @@ sealed class ChemicalFlask : ModProjectile {
                 if (randomPro == 1) _type = (ushort)ModContent.ProjectileType<ToxicCrystal1>();
                 if (randomPro == 2) _type = (ushort)ModContent.ProjectileType<ToxicCrystal2>();
                 if (randomPro == 3) _type = (ushort)ModContent.ProjectileType<ToxicCrystal3>();
-                Projectile.NewProjectile(Projectile.GetSource_Death(), new Vector2(Projectile.Center.X + _velocityX, Projectile.Center.Y + _velocityY), new Vector2(_velocityX, _velocityY), _type, (int)(Projectile.damage * 0.4f), 1f, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_Death(), new Vector2(Projectile.Center.X + _velocityX, Projectile.Center.Y + _velocityY), new Vector2(_velocityX, _velocityY), _type, (int)(Projectile.damage * 0.6f), Projectile.knockBack / 2f, Projectile.owner);
             }
         }
     }
