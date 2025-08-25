@@ -120,9 +120,9 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
 
             owner.UseBodyFrame(Core.Data.PlayerFrame.Use2);
 
-            Vector2 baseCenter = owner.MountedCenter + new Vector2(owner.direction == -1 ? 4f : 0f, 0f);
-            Projectile.Center = owner.RotatedRelativePoint(baseCenter, true);
-            Projectile.Center = Utils.Floor(Projectile.Center);
+            Vector2 baseCenter = owner.MountedCenter;
+            Projectile.Center = baseCenter + Vector2.UnitY * owner.gfxOffY;
+            Projectile.Center = Utils.Floor(Projectile.Center) + new Vector2(owner.direction == -1 ? 4f : 0f, 0f);
 
             owner.GetModPlayer<WreathHandler>().YAdjustAmountInPixels = -40;
         }

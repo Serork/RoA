@@ -76,6 +76,8 @@ sealed class Hunter : ModNPC {
         NPCProfile = new Profiles.StackedNPCProfile(
             new Profiles.DefaultNPCProfile(Texture, -1)
         );
+
+        NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
     }
 
     public override bool UsesPartyHat() => false;
