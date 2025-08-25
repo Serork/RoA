@@ -13,6 +13,7 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 using Terraria;
@@ -21,6 +22,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -73,14 +75,17 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
     public readonly List<Point16> IceBlockPositions = [];
     public IceBlockInfo[] IceBlockData = null;
 
+    private List<Point16>? _extraRandomIceBlocks = null;
+
     public bool IsCharged => Projectile.ai[0] < 0f;
 
+    private bool UseExtraPattern1 => Projectile.GetOwnerAsPlayer().name.Equals("NFA", StringComparison.CurrentCultureIgnoreCase);
+    private bool UseExtraPattern2 => Projectile.GetOwnerAsPlayer().name.Equals("has2r", StringComparison.CurrentCultureIgnoreCase);
+
     private byte GetBlockCountToPlace() {
-        byte result = 5;
-        string playerName = Projectile.GetOwnerAsPlayer().name;
-        bool nfa = playerName == "NFA";
-        if (playerName == "has2r" || nfa) {
-            result = (byte)(nfa ? 17 : 13);
+        byte result = (byte)(5 + _extraRandomIceBlocks.Count);
+        if (UseExtraPattern2 || UseExtraPattern1) {
+            result = (byte)(UseExtraPattern1 ? 17 : 13);
         }
         return result;
     }
@@ -95,6 +100,27 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
         //Projectile.light = 0.5f;
         Projectile.coldDamage = true;
         Projectile.penetrate = -1;
+    }
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        if (_extraRandomIceBlocks == null) {
+            return;
+        }
+        writer.Write(_extraRandomIceBlocks.Count); 
+        foreach (var item in _extraRandomIceBlocks) {
+            writer.Write(item.X);
+            writer.Write(item.Y);
+        }
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        int count = reader.ReadInt32();
+        if (count > 0) {
+            _extraRandomIceBlocks ??= new List<Point16>(count);
+            for (int i = 0; i < count; i++) {
+                _extraRandomIceBlocks.Add(new Point16(reader.ReadInt16(), reader.ReadInt16()));
+            }
+        }
     }
 
     public override bool? CanDamage() => false;
@@ -208,6 +234,23 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
                     }
                 }
             }
+        }
+
+        if (Projectile.IsOwnerLocal() && _extraRandomIceBlocks == null) {
+            _extraRandomIceBlocks = new List<Point16>(4);
+            if (Main.rand.NextBool(5)) {
+                _extraRandomIceBlocks.Add(new Point16(-1, -1));
+            }
+            if (Main.rand.NextBool(5)) {
+                _extraRandomIceBlocks.Add(new Point16(1, -1));
+            }
+            if (Main.rand.NextBool(5)) {
+                _extraRandomIceBlocks.Add(new Point16(-1, 1));
+            }
+            if (Main.rand.NextBool(5)) {
+                _extraRandomIceBlocks.Add(new Point16(1, 1));
+            }
+            Projectile.netUpdate = true;
         }
 
         if (IsCharged) {
@@ -460,10 +503,10 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
             num210 = num207;
             HashSet<Point16> allIceBlockPositions = GetIceBlockPositions();
             if (WorldGen.InWorld(num209, num210) && allIceBlockPositions.Contains(new Point16(num209, num210))) {
-                Point16[] shapePattern;
+                List<Point16> shapePattern;
 
                 byte blockCount = GetBlockCountToPlace();
-                if (blockCount == 13) {
+                if (UseExtraPattern2) {
                     shapePattern = [
                         new(0, -1),
                         new(0, 1),
@@ -479,7 +522,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
                         new(-2, -1)
                     ];
                 }
-                else if (blockCount == 17) {
+                else if (UseExtraPattern1) {
                     shapePattern = [
                         new(0, -1),
                         new(0, -2),
@@ -506,6 +549,9 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
                         new(-1, 0),
                         new(1, 0)
                     ];
+                    foreach (var randomPosition in _extraRandomIceBlocks) {
+                        shapePattern.Add(randomPosition);
+                    }
                 }
                 
                 foreach (Point16 offset in shapePattern) {
