@@ -238,7 +238,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
         }
 
         // adapted vanilla
-        public static Point GetTilePosition(Player player, Vector2 targetSpot, bool randomlySelected = true) {
+        public static Point GetTilePosition(Player player, Vector2 targetSpot, bool randomlySelected = true, int adjustYForPlatformAmount = 0) {
             Point point;
             Vector2 center = player.Center;
             Vector2 endPoint = targetSpot;
@@ -251,16 +251,12 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                     num = samples[i];
                 }
             }
-
+            float distanceToTarget = targetSpot.Distance(center);
             targetSpot = center + vectorTowardsTarget.SafeNormalize(Vector2.Zero) * num;
             point = targetSpot.ToTileCoordinates();
             while (!WorldGenHelper.SolidTile(point.X, point.Y)) {
-                if (point.ToWorldCoordinates().Distance(center) > targetSpot.Distance(center)) {
-                    break;
-                }
                 point.Y++;
             }
-            point.Y -= 1;
             Rectangle value = new Rectangle(point.X, point.Y, 1, 1);
             value.Inflate(1, 1);
             Rectangle value2 = new Rectangle(0, 0, Main.maxTilesX, Main.maxTilesY);
@@ -272,11 +268,15 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                     if (!WorldGenHelper.SolidTile(j, k)) {
                         continue;
                     }
-                    list.Add(new Point(j, k));
+                    Point checkPosition = new(j, k);
+                    if (WorldGenHelper.IsPlatform(checkPosition) || WorldGenHelper.IsPlatform(checkPosition + new Point(0, 1))) {
+                        checkPosition.Y += adjustYForPlatformAmount;
+                    }
+                    list.Add(checkPosition);
                 }
             }
             if (list.Count == 0) {
-                list.Add(player.Center.ToTileCoordinates().ToVector2().ToPoint());
+                list.Add((center + Vector2.UnitY * 6f).ToTileCoordinates().ToVector2().ToPoint());
             }
             int index = Main.rand.Next(list.Count);
             return randomlySelected ? list[index] : list[list.Count / 2];

@@ -54,7 +54,7 @@ sealed class CarrionCane2 : ModDust {
         }
         else {
             dust.position += dust.velocity;
-            dust.position += _windVelocity * 0.001f;
+            dust.position += _windVelocity * 0.00025f;
             dust.position.Y += 1f;
             dust.rotation = dust.velocity.X * 0.25f + MathHelper.Pi;
         }

@@ -106,15 +106,8 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
                 if (Projectile.IsOwnerLocal()) {
                     Player owner = Projectile.GetOwnerAsPlayer();
                     Vector2 mousePosition = owner.GetCappedWorldMousePosition(CarrionCane.CarrionCaneBase.CAPPEDMOUSEPOSITIONWIDTH, CarrionCane.CarrionCaneBase.CAPPEDMOUSEPOSITIONHEIGHT);
-                    _spawnPosition = CarrionCane.CarrionCaneBase.GetTilePosition(owner, mousePosition, false).ToWorldCoordinates();
-                    Point spawnPositionInTiles = _spawnPosition.ToTileCoordinates();
-                    while (!WorldGen.SolidTile3(spawnPositionInTiles.X, spawnPositionInTiles.Y)) {
-                        spawnPositionInTiles.Y--;
-                        if (!WorldGenHelper.ActiveTile(spawnPositionInTiles.X, spawnPositionInTiles.Y)) {
-                            break;
-                        }
-                    }
-                    _spawnPosition = spawnPositionInTiles.ToWorldCoordinates();
+                    Vector2 position = CarrionCane.CarrionCaneBase.GetTilePosition(owner, mousePosition, false, 0).ToWorldCoordinates();
+                    _spawnPosition = position;
 
                     Projectile.Center = GetMoveTowardsPosition();
 
