@@ -100,7 +100,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
     public override bool? CanDamage() => false;
 
     public override bool PreDraw(ref Color lightColor) {
-        if (!AssetInitializer.TryGetRequestedTextureAssets<ClingerHideway>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+        if (!AssetInitializer.TryGetRequestedTextureAssets<IceBlock>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return false;
         }
 
