@@ -100,6 +100,9 @@ readonly record struct WhipBase_ProjectileArgs(WhipBase AttachedWhip, WhipBase_T
 
 sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjectile($"{args.AttachedWhip.Name}{args.NameSuffix}", ResourceManager.SummonProjectileTextures + $"{args.AttachedWhip.Name}Whip") {
     [CloneByReference]
+    private readonly WhipBase.OnHitDelegate? _onHitFunction = args.OnHitFunction;
+
+    [CloneByReference]
     public WhipBase_TagDamageDebuff TagDebuff { get; init; } = args.TagDebuff;
 
     public override void Load() {
@@ -107,13 +110,17 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
     }
 
     private void RoANPC_ModifyHitByProjectileEvent(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers) {
-        args.OnHitFunction?.Invoke(projectile.GetOwnerAsPlayer(), npc);
+        if (projectile.ModProjectile is WhipBase_Projectile whip && !npc.immortal && npc.lifeMax > 5) {
+            whip._onHitFunction?.Invoke(projectile.GetOwnerAsPlayer(), npc);
+        }
 
         if (projectile.npcProj || projectile.trap || !projectile.IsMinionOrSentryRelated) {
             return;
         }
 
         if (TryGetActiveWhip(projectile.GetOwnerAsPlayer(), out Projectile heldProjectile, out WhipBase_Projectile heldWhip)) {
+            args.OnHitFunction?.Invoke(projectile.GetOwnerAsPlayer(), npc);
+            Main.NewText(123);
             WhipBase_TagDamageDebuff whipBuff = heldWhip.TagDebuff;
             if (npc.HasBuff(whipBuff.Type)) {
                 float tagDamageMultiplier = ProjectileID.Sets.SummonTagDamageMultiplier[projectile.type];
