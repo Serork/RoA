@@ -576,7 +576,7 @@ sealed class Hunter : ModNPC {
         }
     }
 
-    private bool HasPlayerEnoughLeatherInInventory() => Main.LocalPlayer.CountItem(ItemID.Leather) >= LEATHERAMOOUNTNEEDED;
+    private bool HasPlayerEnoughLeatherInInventory() => Main.LocalPlayer.CountItem(ItemID.Leather) > 0/*Main.LocalPlayer.CountItem(ItemID.Leather) >= LEATHERAMOOUNTNEEDED*/;
     private bool ShouldGiveFireLighter() => Main.LocalPlayer.GetModPlayer<DropHunterRewardHandler>().TradeCount == TRADEAMOUNTTODROPFIRELIGHTER;
 
     private bool ConsumePlayerLeatherAndDropCoins() {
