@@ -12,6 +12,7 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -42,8 +43,8 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
         private static byte CHARGECOUNT => 5;
         private static byte CHARGEFRAMECOUNT => 3;
 
-        public static float CAPPEDMOUSEPOSITIONWIDTH => 480f;
-        public static float CAPPEDMOUSEPOSITIONHEIGHT => 300f;
+        public static float CAPPEDMOUSEPOSITIONWIDTH => 600f;
+        public static float CAPPEDMOUSEPOSITIONHEIGHT => 600f;
 
         private struct ChargeInfo {
             public Vector2 Position;
@@ -103,7 +104,12 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
             bool flag = true;
             if (flag) {
                 Point tileCoords = position.ToTileCoordinates();
-                dustType = (ushort)TileHelper.GetKillTileDust(tileCoords.X, tileCoords.Y, WorldGenHelper.GetTileSafely(tileCoords.X, tileCoords.Y));
+                if (!WorldGenHelper.ActiveTile(tileCoords)) {
+                    dustType = (ushort)ModContent.DustType<Dusts.CarrionCane3>();
+                }
+                else {
+                    dustType = (ushort)TileHelper.GetKillTileDust(tileCoords.X, tileCoords.Y, WorldGenHelper.GetTileSafely(tileCoords.X, tileCoords.Y));
+                }
             }
 
             if (!Main.rand.NextChance(AttackProgress01 * 0.8f)) {
@@ -249,6 +255,9 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
             targetSpot = center + vectorTowardsTarget.SafeNormalize(Vector2.Zero) * num;
             point = targetSpot.ToTileCoordinates();
             while (!WorldGenHelper.SolidTile(point.X, point.Y)) {
+                if (point.ToWorldCoordinates().Distance(center) > targetSpot.Distance(center)) {
+                    break;
+                }
                 point.Y++;
             }
             point.Y -= 1;
@@ -265,6 +274,9 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                     }
                     list.Add(new Point(j, k));
                 }
+            }
+            if (list.Count == 0) {
+                list.Add(player.Center.ToTileCoordinates().ToVector2().ToPoint());
             }
             int index = Main.rand.Next(list.Count);
             return randomlySelected ? list[index] : list[list.Count / 2];

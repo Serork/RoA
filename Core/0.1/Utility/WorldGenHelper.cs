@@ -465,6 +465,7 @@ static class WorldGenHelper {
     public static bool ActiveTile(int i, int j) => GetTileSafely(i, j).HasTile;
 
     public static bool ActiveTile(Point16 position) => ActiveTile(position.X, position.Y);
+    public static bool ActiveTile(Point position) => ActiveTile(position.X, position.Y);
 
     public static bool ActiveTile(this Tile tile, int tileType) => tile.HasTile && tile.TileType == tileType;
 
