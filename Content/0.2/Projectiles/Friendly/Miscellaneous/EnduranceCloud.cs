@@ -59,7 +59,8 @@ sealed class EnduranceCloud : ModProjectile {
             int attempts = 100;
             while (shouldReRandom && attempts-- > 0) {
                 shouldReRandom = false;
-                Vector2 randomOffset = Main.rand.NextVector2(owner.width * 0.25f, owner.height * 0.25f, owner.width * 2.25f, owner.height * 1.75f);
+                bool facedRight = owner.FacedRight();
+                Vector2 randomOffset = Main.rand.NextVector2(facedRight ? owner.width * 1.5f : owner.width * 0.25f, owner.height * 0.25f, facedRight ? owner.width * 2.25f : owner.width * 1f, owner.height * 1.75f);
                 offsetX = randomOffset.X;
                 offsetY = randomOffset.Y;
                 Projectile.Center = owner.RotatedRelativePoint(owner.MountedCenter);
@@ -87,10 +88,13 @@ sealed class EnduranceCloud : ModProjectile {
 
         Projectile.Opacity = 0.65f * Utils.GetLerpValue(0f, 30f, opacityFactor, true) * Utils.GetLerpValue(TIMELEFT, TIMELEFT - 30f, opacityFactor, true);
 
-        Projectile.Center = owner.RotatedRelativePoint(owner.MountedCenter);
-        Projectile.Center = Utils.Floor(Projectile.Center) + new Vector2(offsetX, offsetY) - owner.Size + Projectile.velocity;
-        Projectile.velocity.X -= 0.01f * -owner.direction;
+        Projectile.Center = owner.MountedCenter + Vector2.UnitY * owner.gfxOffY;
+        Projectile.Center = Utils.Floor(Projectile.Center) + new Vector2(offsetX, offsetY) - owner.Size;
+        Projectile.Center = Vector2.Lerp(Projectile.Center, Projectile.Center + Projectile.velocity, 0.05f);
+        Projectile.velocity.X -= 1f * owner.direction;
     }
+
+    public override bool ShouldUpdatePosition() => false;
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
         if (ShouldBeRenderedOverPlayer) {
