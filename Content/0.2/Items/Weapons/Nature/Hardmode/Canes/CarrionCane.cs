@@ -96,7 +96,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
         public void SpawnGroundDusts(Player player, ushort dustType, float velocityFactor) {
             player.SyncCappedMousePosition();
             Vector2 mousePosition = player.GetCappedWorldMousePosition(CAPPEDMOUSEPOSITIONWIDTH, CAPPEDMOUSEPOSITIONHEIGHT);
-            Vector2 position = GetTilePosition(player, mousePosition, false, cappedWidth: (int)CAPPEDMOUSEPOSITIONWIDTH, cappedHeight: (int)CAPPEDMOUSEPOSITIONHEIGHT).ToWorldCoordinates(),
+            Vector2 position = GetTilePosition(player, mousePosition, false, cappedWidth: (int)CAPPEDMOUSEPOSITIONWIDTH, cappedHeight: (int)CAPPEDMOUSEPOSITIONHEIGHT).ToWorldCoordinates() - Vector2.UnitY * 4f,
                     velocity = (mousePosition + Main.rand.NextVector2Circular(8f, 8f) - position).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.PiOver2) * 3f * velocityFactor;
             Vector2 dustPos = position + Vector2.UnitY * 4f + Main.rand.NextVector2Circular(8f, 8f).RotatedByRandom(MathHelper.Pi);
             //int x = (int)dustPos.X / 16, y = (int)dustPos.Y / 16;
