@@ -30,6 +30,8 @@ sealed class CarrionCane2 : ModDust {
         dust.fadeIn = Main.rand.NextFloat(10f);
 
         dust.velocity = Vector2.One.RotateRandom(MathHelper.TwoPi);
+
+        _windVelocity = Vector2.Zero;
     }
 
     public override bool Update(Dust dust) {
@@ -43,7 +45,6 @@ sealed class CarrionCane2 : ModDust {
         }
         dust.velocity = dust.velocity.SafeNormalize() * MathF.Sin(dust.fadeIn) * 1f;
         dust.velocity += Vector2.UnitX * MathF.Sin(dust.fadeIn) * 1f;
-        Helper.ApplyWindPhysics(dust.position, ref _windVelocity);
 
         if (Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4)) {
             dust.alpha += 2;
@@ -53,8 +54,9 @@ sealed class CarrionCane2 : ModDust {
             dust.velocity *= 0.25f;
         }
         else {
+            Helper.ApplyWindPhysics(dust.position, ref _windVelocity);
             dust.position += dust.velocity;
-            dust.position += _windVelocity * 0.001f;
+            dust.position += _windVelocity * 0.1f;
             dust.position.Y += 1f;
             dust.rotation = dust.velocity.X * 0.25f + MathHelper.Pi;
         }
