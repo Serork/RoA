@@ -20,8 +20,6 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static tModPorter.ProgressUpdate;
-
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
 sealed class MercuriumZipper_MercuriumCenserToxicFumes : ModProjectile {

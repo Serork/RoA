@@ -48,7 +48,7 @@ sealed class AerialConcussion : WhipBase {
             int dustType = ModContent.DustType<Dusts.AerialConcussion>();
 
             // After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
-            Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 70f;
+            Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 70f * swingProgress;
             Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() +
                 offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, Main.rand.Next(25, 75), Color.Lerp(default, Color.White, Main.rand.NextFloat()));
             dust.position = points[pointIndex] + offset;
