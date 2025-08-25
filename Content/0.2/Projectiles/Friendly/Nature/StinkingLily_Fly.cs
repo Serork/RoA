@@ -41,9 +41,12 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
-        Projectile.penetrate = 1;
+        Projectile.penetrate = 3;
 
         Projectile.Opacity = 1f;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 30;
     }
 
     public override void AI() {
