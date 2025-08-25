@@ -268,7 +268,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             rotation += MathHelper.PiOver4 * 0.75f;
             position = position - Vector2.UnitY * 10f + Vector2.UnitY.RotatedBy(rotation) * Main.rand.NextFloat(20f);
             Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<Dusts.CarrionCane2>());
-            dust.customData = Main.rand.NextFloat(1f, 2.5f);
+            //dust.customData = Main.rand.NextFloat(1f, 2.5f);
         }
     }
 

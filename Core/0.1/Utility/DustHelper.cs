@@ -3,9 +3,13 @@
 namespace RoA.Core.Utility;
 
 static class DustHelper {
-    public static void ApplyDustScale(this Dust dust) {
+    public static void KillDustThatOutOfScreen(this Dust dust) {
         if (dust.position.Y > Main.screenPosition.Y + (float)Main.screenHeight)
             dust.active = false;
+    }
+
+    public static void ApplyDustScale(this Dust dust, bool killDust = true) {
+        KillDustThatOutOfScreen(dust);
 
         float num113 = 0.1f;
         if ((double)Dust.dCount == 0.5)
@@ -38,7 +42,7 @@ static class DustHelper {
         if ((double)Dust.dCount == 0.9)
             num113 = 0.25f;
 
-        if (dust.scale < num113)
+        if (killDust && dust.scale < num113)
             dust.active = false;
     }
 

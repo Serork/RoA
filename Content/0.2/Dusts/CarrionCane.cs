@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -30,19 +31,12 @@ sealed class CarrionCane2 : ModDust {
         dust.fadeIn = Main.rand.NextFloat(10f);
 
         dust.velocity = Vector2.One.RotateRandom(MathHelper.TwoPi);
-
-        _windVelocity = Vector2.Zero;
     }
 
     public override bool Update(Dust dust) {
-        DustHelper.ApplyDustScale(dust);
+        DustHelper.KillDustThatOutOfScreen(dust);
 
         dust.fadeIn += 0.05f;
-        float sinOffsetX = 1f;
-        if (dust.customData is float value) {
-            sinOffsetX += value;
-            dust.customData = Helper.Approach((float)dust.customData, 0f, 0.01f);
-        }
         dust.velocity = dust.velocity.SafeNormalize() * MathF.Sin(dust.fadeIn) * 1f;
         dust.velocity += Vector2.UnitX * MathF.Sin(dust.fadeIn) * 1f;
 
@@ -54,11 +48,28 @@ sealed class CarrionCane2 : ModDust {
             dust.velocity *= 0.25f;
         }
         else {
-            Helper.ApplyWindPhysics(dust.position, ref _windVelocity);
+            Helper.ApplyWindPhysicsX(dust.position, ref dust.scale);
             dust.position += dust.velocity;
-            dust.position += _windVelocity * 0.1f;
+            dust.position.X += dust.scale * 0.15f;
             dust.position.Y += 1f;
             dust.rotation = dust.velocity.X * 0.25f + MathHelper.Pi;
+        }
+
+        return false;
+    }
+
+    public override bool PreDraw(Dust dust) {
+        Microsoft.Xna.Framework.Color newColor = Lighting.GetColor((int)((double)dust.position.X + 4.0) / 16, (int)((double)dust.position.Y + 4.0) / 16);
+        if (dust.type == 6 || dust.type == 15 || (dust.type >= 59 && dust.type <= 64))
+            newColor = Microsoft.Xna.Framework.Color.White;
+
+        newColor = dust.GetAlpha(newColor);
+
+        Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, newColor, dust.GetVisualRotation(), new Vector2(4f, 4f), 1f, SpriteEffects.None, 0f);
+        if (dust.color.PackedValue != 0) {
+            Microsoft.Xna.Framework.Color color6 = dust.GetColor(newColor);
+            if (color6.PackedValue != 0)
+                Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color6, dust.GetVisualRotation(), new Vector2(4f, 4f), 1f, SpriteEffects.None, 0f);
         }
 
         return false;
