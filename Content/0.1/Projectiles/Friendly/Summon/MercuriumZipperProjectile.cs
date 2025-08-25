@@ -479,7 +479,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
         num7 = (float)(ContentSamples.ItemsByType[heldItem.type].useAnimation * 2) * num * player.whipRangeMultiplier;
         float num8 = proj.velocity.Length() * num7 * num5 * rangeMultiplier / (float)segments;
         float num9 = 1f;
-        Vector2 playerArmPosition = Main.GetPlayerArmPosition(proj);
+        Vector2 playerArmPosition = Main.GetPlayerArmPosition(proj) - new Vector2(0f, player.gfxOffY);
         Vector2 vector = playerArmPosition;
         float num10 = 0f - (float)Math.PI / 2f;
         Vector2 vector2 = vector;
