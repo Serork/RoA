@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Networking;
@@ -22,7 +25,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
-sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
+sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAssets {
+    (byte, string)[] IRequestAssets.IndexedPathsToTexture => [(0, ResourceManager.NatureProjectileTextures + "MagicalIceBlock")];
+
     public static IEnumerable<Point16> EnumerateIceBlockPositions() {
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<IceBlock>()) {
             var iceBlock = projectile.As<IceBlock>();
@@ -95,6 +100,10 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
     public override bool? CanDamage() => false;
 
     public override bool PreDraw(ref Color lightColor) {
+        if (!AssetInitializer.TryGetRequestedTextureAssets<ClingerHideway>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+            return false;
+        }
+
         if (IsCharged) {
             for (int i = 0; i < IceBlockData.Length; i++) {
                 byte currentSegmentIndex = (byte)i;
@@ -122,7 +131,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames {
                     clip.X = 18;
                     clip.Y = 18;
                 }
-                DrawUtils.SingleTileDrawInfo info = new(TextureAssets.Tile[TileID.MagicalIceBlock].Value, tilePosition.ToPoint(), clip, tileColor, 0, false);
+                DrawUtils.SingleTileDrawInfo info = new(indexedTextureAssets[0].Value, tilePosition.ToPoint(), clip, tileColor, 0, false);
                 DrawUtils.DrawSingleTile(info);
                 DrawUtils.DrawSingleTile(info with { Color = Color.White.MultiplyAlpha(Utils.Remap(iceBlockInfo.Opacity, 0f, 1f, 1f, 0f)) * Utils.Remap(iceBlockInfo.Opacity, 0f, 1f, 0f, 1f) * Utils.Remap(iceBlockInfo.Opacity, 1f, 1.25f, 1f, 0f) });
             }

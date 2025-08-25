@@ -25,10 +25,30 @@ sealed class SyncMousePositionPacket : NetPacket {
         MousePositionStorage mousePositionStorage = player.GetModPlayer<MousePositionStorage>();
         mousePositionStorage.MousePosition = mousePosition;
 
-        Helper.NewMessage(mousePositionStorage.MousePosition);
-
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new SyncMousePositionPacket(player, mousePosition), ignoreClient: sender);
         }
     }
 }
+
+sealed class SyncMousePositionPacket2 : NetPacket {
+    public SyncMousePositionPacket2(Player player, Vector2 cappedMousePosition) {
+        Writer.TryWriteSenderPlayer(player);
+        Writer.WriteVector2(cappedMousePosition);
+    }
+
+    public override void Read(BinaryReader reader, int sender) {
+        if (!reader.TryReadSenderPlayer(sender, out Player player)) {
+            return;
+        }
+
+        Vector2 cappedMousePosition = reader.ReadVector2();
+        MousePositionStorage mousePositionStorage = player.GetModPlayer<MousePositionStorage>();
+        mousePositionStorage.CappedMousePosition = cappedMousePosition;
+
+        if (Main.netMode == NetmodeID.Server) {
+            MultiplayerSystem.SendPacket(new SyncMousePositionPacket2(player, cappedMousePosition), ignoreClient: sender);
+        }
+    }
+}
+
