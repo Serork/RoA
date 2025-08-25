@@ -3,8 +3,6 @@
 using RoA.Common;
 using RoA.Common.Items;
 using RoA.Common.Players;
-using RoA.Content.Buffs;
-using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -13,12 +11,9 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 using Terraria;
-using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Summon.Hardmode;
