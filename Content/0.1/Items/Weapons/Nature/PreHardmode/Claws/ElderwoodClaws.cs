@@ -57,7 +57,6 @@ sealed class ElderwoodClaws : ClawsBaseItem {
             Owner = Item,
             SpawnProjectile = (Player player) => {
                 SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ClawsRoot") { Volume = 2.5f }, player.Center);
-
                 for (int k = 0; k < 2; k++) {
                     switch (k) {
                         case 0:
@@ -67,8 +66,8 @@ sealed class ElderwoodClaws : ClawsBaseItem {
                                        position,
                                        Vector2.Zero,
                                        type,
-                                       player.GetWeaponDamage(Item),
-                                       player.GetWeaponKnockback(Item),
+                                       NatureWeaponHandler.GetNatureDamage(Item, player),
+                                       player.GetTotalKnockback(DruidClass.Nature).ApplyTo(Item.knockBack),
                                        player.whoAmI,
                                        5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
                                        2f);
@@ -81,8 +80,8 @@ sealed class ElderwoodClaws : ClawsBaseItem {
                                        position,
                                        Vector2.Zero,
                                        type,
-                                       player.GetWeaponDamage(Item),
-                                       player.GetWeaponKnockback(Item),
+                                       NatureWeaponHandler.GetNatureDamage(Item, player),
+                                       player.GetTotalKnockback(DruidClass.Nature).ApplyTo(Item.knockBack),
                                        player.whoAmI,
                                        5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
                                        2f);

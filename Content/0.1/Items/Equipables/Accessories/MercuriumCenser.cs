@@ -36,7 +36,7 @@ sealed class MercuriumCenser : NatureItem {
 
                 ushort type = (ushort)ModContent.ProjectileType<Projectiles.Friendly.Miscellaneous.MercuriumCenserToxicFumes>();
                 IEntitySource source = Player.GetSource_FromThis();
-                int damage = 8;
+                int damage = (int)Player.GetTotalDamage(DruidClass.Nature).ApplyTo(8);
                 float knockback = 0f;
                 Vector2 spawnPosition = Player.Center;
 

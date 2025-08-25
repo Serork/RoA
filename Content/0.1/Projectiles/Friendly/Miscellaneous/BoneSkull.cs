@@ -32,7 +32,7 @@ sealed class BoneSkull : ModProjectile {
     public override void OnKill(int timeLeft) {
         SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.position);
         ushort _type = (ushort)ModContent.ProjectileType<BoneSkull_Back>();
-        Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center.X, Projectile.Center.Y, 0, 0, _type, Projectile.damage, 1f, Projectile.owner);
+        Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center.X, Projectile.Center.Y, 0, 0, _type, Projectile.damage, Projectile.knockBack * 0.5f, Projectile.owner);
     }
 }
 

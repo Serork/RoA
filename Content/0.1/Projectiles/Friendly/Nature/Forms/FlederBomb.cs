@@ -69,7 +69,7 @@ sealed class FlederBomb : FormProjectile {
                     for (int index = 0; index < 3; ++index) {
                         float num3 = -Projectile.velocity.X * Main.rand.Next(10, 30) * 0.01f + Main.rand.Next(-20, 21) * 0.06f;
                         float num4 = -Math.Abs(Projectile.velocity.Y) * Main.rand.Next(10, 30) * 0.01f + Main.rand.Next(-20, 21) * 0.06f;
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, num3, num4, ModContent.ProjectileType<FlederFlame>(), (int)(Projectile.damage * 0.3f), 1f, Projectile.owner, 0f, 0f);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center.X, Projectile.Center.Y, num3, num4, ModContent.ProjectileType<FlederFlame>(), (int)(Projectile.damage * 0.3f), Projectile.knockBack * 0.3f, Projectile.owner, 0f, 0f);
                     }
                 }
             }
