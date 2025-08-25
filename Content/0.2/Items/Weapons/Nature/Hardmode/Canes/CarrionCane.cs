@@ -283,6 +283,9 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                     if (WorldGenHelper.IsPlatform(checkPosition) || WorldGenHelper.IsPlatform(checkPosition + new Point(0, 1))) {
                         checkPosition.Y += adjustYForPlatformAmount;
                     }
+                    while (WorldGenHelper.SolidTile(checkPosition - new Point(0, 1))) {
+                        checkPosition.Y--;
+                    }
                     list.Add(checkPosition);
                 }
             }
