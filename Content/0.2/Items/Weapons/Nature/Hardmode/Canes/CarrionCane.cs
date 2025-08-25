@@ -42,6 +42,9 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
         private static byte CHARGECOUNT => 5;
         private static byte CHARGEFRAMECOUNT => 3;
 
+        public static float CAPPEDMOUSEPOSITIONWIDTH => 480f;
+        public static float CAPPEDMOUSEPOSITIONHEIGHT => 300f;
+
         private struct ChargeInfo {
             public Vector2 Position;
             public float Rotation;
@@ -90,12 +93,8 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
         }
 
         public void SpawnGroundDusts(Player player, ushort dustType, float velocityFactor) {
-            if (!Main.rand.NextChance(AttackProgress01 * 0.8f)) {
-                return;
-            }
-
-            player.SyncMousePosition();
-            Vector2 mousePosition = player.GetWorldMousePosition();
+            player.SyncCappedMousePosition();
+            Vector2 mousePosition = player.GetCappedWorldMousePosition(CAPPEDMOUSEPOSITIONWIDTH, CAPPEDMOUSEPOSITIONHEIGHT);
             Vector2 position = GetTilePosition(player, mousePosition, false).ToWorldCoordinates(),
                     velocity = (mousePosition + Main.rand.NextVector2Circular(8f, 8f) - position).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.PiOver2) * 3f * velocityFactor;
             Vector2 dustPos = position + Vector2.UnitY * 4f + Main.rand.NextVector2Circular(8f, 8f).RotatedByRandom(MathHelper.Pi);
@@ -105,6 +104,10 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
             if (flag) {
                 Point tileCoords = position.ToTileCoordinates();
                 dustType = (ushort)TileHelper.GetKillTileDust(tileCoords.X, tileCoords.Y, WorldGenHelper.GetTileSafely(tileCoords.X, tileCoords.Y));
+            }
+
+            if (!Main.rand.NextChance(AttackProgress01 * 0.8f)) {
+                return;
             }
 
             Dust dust = Dust.NewDustPerfect(dustPos,
