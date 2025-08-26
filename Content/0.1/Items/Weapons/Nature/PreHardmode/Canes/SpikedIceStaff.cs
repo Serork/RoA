@@ -44,8 +44,8 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         private bool _shouldShoot;
         private bool _stopCounting;
-        private byte _shootCount = MAXSHOOTCOUNT;
-        private float _attackTimer, _attackTime;
+        private byte _shootCount = 255;
+        private float _attackTimer, _attackTimer2, _attackTime;
         private Vector2 _mousePos;
 
         private int Min => (int)(_attackTime * 0.4f);
@@ -56,7 +56,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         protected override bool ShouldWaitUntilProjDespawns() => false;
 
-        protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.08f);
+        protected override Vector2 CorePositionOffsetFactor() => new(0.07f, 0.08f);
 
         protected override bool DespawnWithProj() => false;
 
@@ -98,11 +98,13 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
         public override void SafePostAI() {
             //Main.NewText(CurrentUseTime);
             if (_shouldShoot) {
-                if (_attackTimer >= Min - PerShoot && _shootCount > 0) {
-                    if (_attackTimer % PerShoot == 0f) {
+                if (_shootCount > 0) {
+                    _attackTimer2++;
+                    if (_attackTimer2 >= PerShoot) {
                         if (_shootCount == MAXSHOOTCOUNT) {
                             SoundEngine.PlaySound(SoundID.Item28, Projectile.Center);
                         }
+                        _attackTimer2 = 0;
 
                         ShootProjectile();
                         _shootCount--;
@@ -144,6 +146,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
             else {
                 if (!_stopCounting) {
                     _attackTimer++;
+                    _shootCount = (byte)(_attackTimer / PerShoot - 1);
                     if (!IsInUse) {
                         SpawnDustsOnShoot(Owner, CorePosition);
                         _stopCounting = true;
@@ -204,12 +207,12 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
         }
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
-            if (_shootCount < MAXSHOOTCOUNT || !PreparingAttack) {
+            if (/*_shootCount < MAXSHOOTCOUNT || */!PreparingAttack) {
                 return;
             }
             if (Main.rand.NextChance(MathHelper.Clamp(step * 2f, 0f, 0.75f))) {
                 for (int i = 0; i < (int)(2 * step + step); i++) {
-                    Dust dust = Dust.NewDustPerfect(corePosition - Vector2.One * 1f, 176, Scale: 1f);
+                    Dust dust = Dust.NewDustPerfect(corePosition, 176, Scale: 1f);
                     dust.noGravity = true;
                     dust.fadeIn = 0.9f;
                 }
