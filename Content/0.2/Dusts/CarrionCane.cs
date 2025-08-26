@@ -48,9 +48,11 @@ sealed class CarrionCane2 : ModDust {
             dust.velocity *= 0.25f;
         }
         else {
-            Helper.ApplyWindPhysicsX(dust.position, ref dust.scale);
+            if (Helper.CanApplyWindPhysics(dust.position, dust.scale)) {
+                dust.scale = Main.WindForVisuals * 1.5f;
+            }
             dust.position += dust.velocity;
-            dust.position.X += dust.scale * 0.15f;
+            dust.position.X += dust.scale;
             dust.position.Y += 1f;
             dust.rotation = dust.velocity.X * 0.25f + MathHelper.Pi;
         }
