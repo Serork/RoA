@@ -233,6 +233,9 @@ sealed class LeafySeahorse_Bubble : NatureProjectile_NoTextureLoad {
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Zero, Ease.SineOut(timeLeftProgress));
         }
         void absorbBubbles() {
+            if (Projectile.Opacity < 0.5f) {
+                return;
+            }
             BubbleValues bubbleValues = new(Projectile);
             BubbleValues.BubbleSizeType size = bubbleValues.SizeType;
             foreach (Projectile otherBubble in TrackedEntitiesSystem.GetTrackedProjectile<LeafySeahorse_Bubble>((checkProjectile) => checkProjectile.owner != Projectile.owner || checkProjectile.identity == Projectile.identity)) {
