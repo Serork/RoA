@@ -17,6 +17,10 @@ sealed class Blood : ModDust {
             dust.velocity *= 0.25f;
         }
 
+        if (dust.scale < 0.75f) {
+            dust.scale *= 0.9f;
+        }
+
         dust.scale -= 0.04f;
 
         return false;
