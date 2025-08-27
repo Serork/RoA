@@ -10,9 +10,9 @@ sealed class TarRocket : ModItem {
         AmmoID.Sets.IsSpecialist[Type] = true;
 
         AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.RocketLauncher].Add(Type, ModContent.ProjectileType<Projectiles.LiquidsSpecific.TarRocket>());
-        //AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.GrenadeLauncher].Add(Type, ModContent.ProjectileType<ExampleLiquidGrenade>());
-        //AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.ProximityMineLauncher].Add(Type, ModContent.ProjectileType<ExampleLiquidMine>());
-        //AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.SnowmanCannon].Add(Type, ModContent.ProjectileType<ExampleLiquidSnowmanRocket>());
+        AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.GrenadeLauncher].Add(Type, ModContent.ProjectileType<Projectiles.LiquidsSpecific.TarGrenade>());
+        AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.ProximityMineLauncher].Add(Type, ModContent.ProjectileType<Projectiles.LiquidsSpecific.TarProximityMine>());
+        AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.SnowmanCannon].Add(Type, ModContent.ProjectileType<Projectiles.LiquidsSpecific.TarSnowmanRocket>());
         AmmoID.Sets.SpecificLauncherAmmoProjectileMatches[ItemID.Celeb2].Add(Type, ProjectileID.Celeb2Rocket);
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 99;
