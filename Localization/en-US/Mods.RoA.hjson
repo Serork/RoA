@@ -13,3 +13,4 @@ LifeWords: life;health
 WreathWords: wreath
 ExpireLeather1: Expires in {0} minutes
 ExpireLeather2: Expires in {0} minute
+Liquids.Tar.MapEntry: Tar

@@ -16,10 +16,6 @@ namespace RoA.Content.WorldGenerations;
 // TODO: seeds support
 sealed class TarBiome_GenPass : ModSystem {
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
-        if (!RoA.HasRoALiquidMod()) {
-            return;
-        }
-
         tasks.Insert(tasks.FindIndex(task => task.Name == "Hives") - 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             int num916 = 5 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;

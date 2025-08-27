@@ -1,14 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 
+using ModLiquidLib.ModLoader;
+using ModLiquidLib.Utils;
+
 using RoA.Common;
 using RoA.Common.Crossmod;
 using RoA.Content.Items.Placeable.Banners;
+using RoA.Content.Liquids;
 using RoA.Core.Utility;
 
 using System;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Tar;
@@ -16,8 +21,6 @@ namespace RoA.Content.NPCs.Enemies.Tar;
 [Tracked]
 sealed class MurkyCarcass : ModNPC {
     private static Point16 _spawnPosition;
-
-    public override bool IsLoadingEnabled(Mod mod) => RoA.HasRoALiquidMod();
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(6);
@@ -64,7 +67,7 @@ sealed class MurkyCarcass : ModNPC {
         for (int i = landX - 100; i <= landX + 100; i++) {
             for (int j = landY - 100; j <= landY + 100; j++) {
                 bool result = false;
-                if (Main.tile[i, j - 1].LiquidAmount > 0 && Main.tile[i, j - 2].LiquidAmount > 0 && Main.tile[i, j - 1].LiquidType == 5) {
+                if (Main.tile[i, j - 1].LiquidAmount > 0 && Main.tile[i, j - 2].LiquidAmount > 0 && Main.tile[i, j - 1].LiquidType == LiquidLoader.LiquidType<Liquids.Tar>()) {
                     result = true;
                 }
                 if (result && Main.rand.Next(num) == 0) {
@@ -114,7 +117,7 @@ sealed class MurkyCarcass : ModNPC {
     }
 
     public override void UpdateLifeRegen(ref int damage) {
-        if (NPC.wet && !RoALiquidsCompat.IsTarWet(NPC)) {
+        if (NPC.wet && !NPC.GetModdedWetArray()[LiquidLoader.LiquidType<Liquids.Tar>() - LiquidID.Count]) {
             if (NPC.lifeRegen > 0)
                 NPC.lifeRegen = 0;
 
@@ -338,7 +341,7 @@ sealed class MurkyCarcass : ModNPC {
             if (NPC.type == 102)
                 Lighting.AddLight((int)(NPC.position.X + (float)(NPC.width / 2) + (float)(NPC.direction * (NPC.width + 8))) / 16, (int)(NPC.position.Y + 2f) / 16, 0.07f, 0.04f, 0.025f);
 
-            if (!RoALiquidsCompat.IsTarWet(NPC)) {
+            if (!NPC.GetModdedWetArray()[LiquidLoader.LiquidType<Liquids.Tar>() - LiquidID.Count]) {
                 flag11 = false;
             }
 

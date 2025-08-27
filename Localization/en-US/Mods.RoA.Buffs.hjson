@@ -280,3 +280,8 @@ EnduranceCloud3: {
 	DisplayName: Endurance Cloud3
 	Description: Mods.RoA.Buffs.EnduranceCloud3.Description
 }
+
+TarDebuff: {
+	DisplayName: Tar Debuff
+	Description: Mods.RoA.Buffs.TarDebuff.Description
+}

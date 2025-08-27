@@ -40,9 +40,9 @@ abstract class Wand : ModItem {
 
     private class ExtraLoader : ILoadable {
         public void Load(Mod mod) {
-            //On_Player.PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate += On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate;
-            On_WorldGen.ReplaceTile += On_WorldGen_ReplaceTile;
-            On_Player.PlaceThing_Tiles_PlaceIt_KillGrassForSolids += On_Player_PlaceThing_Tiles_PlaceIt_KillGrassForSolids;
+            On_Player.PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate += On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate;
+            //On_WorldGen.ReplaceTile += On_WorldGen_ReplaceTile;
+            //On_Player.PlaceThing_Tiles_PlaceIt_KillGrassForSolids += On_Player_PlaceThing_Tiles_PlaceIt_KillGrassForSolids;
         }
 
         private void On_Player_PlaceThing_Tiles_PlaceIt_KillGrassForSolids(On_Player.orig_PlaceThing_Tiles_PlaceIt_KillGrassForSolids orig, Player self) {
@@ -82,7 +82,7 @@ abstract class Wand : ModItem {
         }
 
         private void On_Player_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate(On_Player.orig_PlaceThing_Tiles_PlaceIt_AutoPaintAndActuate orig, Player self, int[,] typeCaches, int tileToCreate, Point topLeft) {
-            orig(self, typeCaches, tileToCreate);
+            orig(self, typeCaches, tileToCreate, topLeft);
 
             int selectedItemType = self.GetSelectedItem().type;
             ModItem modItem = ItemLoader.GetItem(selectedItemType);

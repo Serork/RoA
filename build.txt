@@ -9,3 +9,5 @@ hideResources = true
 includeSource = true
 
 includePDB = true
+
+modReferences = ModLiquidLib

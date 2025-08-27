@@ -18,6 +18,7 @@ using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
+using RoA.Content.Tiles.LiquidsSpecific;
 using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;

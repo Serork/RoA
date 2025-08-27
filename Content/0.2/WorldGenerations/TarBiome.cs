@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using ReLogic.Utilities;
 
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.LiquidsSpecific;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
@@ -52,8 +53,8 @@ sealed class TarBiome : MicroBiome {
         Vector2D.Normalize(new Vector2D(1.0, 1.0))
     };
 
-    private static ushort TARTILETYPE => RoA.RoALiquidMod.Find<ModTile>("SolidifiedTar").Type;
-    private static ushort TARDRIPPINGTILETYPE => RoA.RoALiquidMod.Find<ModTile>("DrippingTar").Type;
+    private static ushort TARTILETYPE => (ushort)ModContent.TileType<SolidifiedTar>();
+    private static ushort TARDRIPPINGTILETYPE => (ushort)ModContent.TileType<DrippingTar>();
     private static ushort TARWALLTYPE => (ushort)ModContent.WallType<SolidifiedTarWall_Unsafe>();
 
     public static bool CanPlace(Point origin, StructureMap structures) {

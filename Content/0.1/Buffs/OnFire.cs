@@ -40,7 +40,7 @@ sealed class OnFireNPC : GlobalNPC {
     public override void UpdateLifeRegen(NPC npc, ref int damage) {
         if (onFire) {
             bool flag = false;
-            if (RoA.HasRoALiquidMod() && npc.HasBuff(RoA.RoALiquidMod.Find<ModBuff>("TarDebuff").Type)) {
+            if (npc.HasBuff(ModContent.BuffType<TarDebuff>())) {
                 flag = true;
             }
             if (npc.oiled || flag) {

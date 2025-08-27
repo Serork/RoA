@@ -2114,6 +2114,11 @@ SolidifiedTarWall: {
 	// Tooltip: ""
 }
 
+SolidifiedTar: {
+	// DisplayName: Solidified Tar
+	// Tooltip: ""
+}
+
 MurkyCarcassBanner: {
 	DisplayName: Знамя мерзких останков
 	// Tooltip: ""

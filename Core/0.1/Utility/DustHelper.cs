@@ -46,11 +46,13 @@ static class DustHelper {
             dust.active = false;
     }
 
-    public static void BasicDust(this Dust dust, bool applyGravity = true) {
+    public static void BasicDust(this Dust dust, bool applyGravity = true, bool onlyScale = false) {
         ApplyDustScale(dust);
 
-        if (applyGravity && !dust.noGravity) {
-            dust.velocity.Y += 0.1f;
+        if (!onlyScale) {
+            if (applyGravity && !dust.noGravity) {
+                dust.velocity.Y += 0.1f;
+            }
         }
         dust.position += dust.velocity;
         dust.rotation += dust.velocity.X * 0.5f;
@@ -64,7 +66,9 @@ static class DustHelper {
         }
 
         if (dust.noGravity) {
-            dust.velocity *= 0.92f;
+            if (!onlyScale) {
+                dust.velocity *= 0.92f;
+            }
             if (dust.fadeIn == 0f)
                 dust.scale -= 0.04f;
         }
