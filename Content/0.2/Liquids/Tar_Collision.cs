@@ -4,9 +4,11 @@ using ModLiquidLib.ModLoader;
 using ModLiquidLib.Utils;
 
 using RoA.Common.Players;
+using RoA.Content.Buffs;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Liquids;
 sealed partial class Tar : ModLiquid {
@@ -33,6 +35,7 @@ sealed partial class Tar : ModLiquid {
         }
         player.position += vector2;
         player.TryFloatingInFluid();
+        player.AddBuff(ModContent.BuffType<TarDebuff>(), 420);
         return false; //We return false as we do not want the normal liquid movement to execute after this hook/method
     }
 
