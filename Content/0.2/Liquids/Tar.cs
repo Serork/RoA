@@ -96,6 +96,8 @@ sealed partial class Tar : ModLiquid {
         StopWatchMPHMultiplier = PlayerMovementMultiplier; //We set stopwatch to the same multiplier as we don't want a different between whats felt and what the player can read their movement as.
     }
 
+    public override int ChooseWaterfallStyle(int i, int j) => ModContent.GetInstance<TarFall>().Slot;
+
     public override void Load() {
         CollisionLoad();
     }
@@ -306,9 +308,9 @@ sealed partial class Tar : ModLiquid {
         return false;
     }
 
-    private static float GetTarWave(ref float worldPositionX, ref float worldPositionY) => (float)Math.Sin(((double)((Math.Cos(worldPositionX + Main.timeForVisualEffects / 180) + Math.Sin(worldPositionY + Main.timeForVisualEffects / 180))) - Main.timeForVisualEffects / 360) * 6.2831854820251465);
+    public static float GetTarWave(ref float worldPositionX, ref float worldPositionY) => (float)Math.Sin(((double)((Math.Cos(worldPositionX + Main.timeForVisualEffects / 180) + Math.Sin(worldPositionY + Main.timeForVisualEffects / 180))) - Main.timeForVisualEffects / 360) * 6.2831854820251465);
 
-    private static Vector4 GetTarBaseColor(float worldPositionX, float worldPositionY) {
+    public static Vector4 GetTarBaseColor(float worldPositionX, float worldPositionY) {
         float shimmerWave = GetTarWave(ref worldPositionX, ref worldPositionY);
         float brightness = Lighting.Brightness((int)worldPositionX, (int)worldPositionY);
         Vector4 brightColor1 = new(0.3f, 0.3f, 0.3f, 1f),
@@ -319,7 +321,7 @@ sealed partial class Tar : ModLiquid {
         return output * 1f;
     }
 
-    private static void SetTarVertexColors(ref VertexColors colors, float opacity, int x, int y) {
+    public static void SetTarVertexColors(ref VertexColors colors, float opacity, int x, int y) {
         float brightness = Lighting.Brightness(x, y) * 1f;
         brightness = MathF.Pow(brightness, 0.1f);
         brightness = MathHelper.Clamp(brightness, 0f, 1f);
