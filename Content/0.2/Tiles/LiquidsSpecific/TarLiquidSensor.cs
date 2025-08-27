@@ -21,6 +21,6 @@ sealed class TarLiquidSensor : ModTile {
 		TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<TarLiquidSensorTE>().Hook_AfterPlacement, -1, 0, processedCoordinates: true);
 		TileObjectData.addTile(Type);
 
-		AddMapEntry(new Color(200, 200, 200));
+		AddMapEntry(new Color(49, 45, 64), CreateMapEntryName());
 	}
 }
