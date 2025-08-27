@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using ModLiquidLib.ModLoader;
+using ModLiquidLib.Utils;
 using ModLiquidLib.Utils.Structs;
 
+using RoA.Common.Players;
 using RoA.Core;
 
 using System;
@@ -18,7 +20,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Liquids;
 
-sealed class Tar : ModLiquid {
+sealed partial class Tar : ModLiquid {
     private static int _animationFrame;
     private static float _frameState;
 
@@ -88,8 +90,17 @@ sealed class Tar : ModLiquid {
 
         //We can add a map entry to our liquid, by doing so we can show where our liquid is on the map.
         //Unlike vanilla, we can also add a map entry name, which will display a name if the liquid is being selected on the map.
-        AddMapEntry(new Color(46, 34, 47), CreateMapEntryName());
+        AddMapEntry(new Color(46, 34, 47));
+
+        PlayerMovementMultiplier = 0.175f;
+        StopWatchMPHMultiplier = PlayerMovementMultiplier; //We set stopwatch to the same multiplier as we don't want a different between whats felt and what the player can read their movement as.
     }
+
+    public override void Load() {
+        CollisionLoad();
+    }
+
+    public partial void CollisionLoad();
 
     public override LightMaskMode LiquidLightMaskMode(int i, int j) => LightMaskMode.None;
 
