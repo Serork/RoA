@@ -2159,6 +2159,6 @@ AerialConcussion: {
 }
 
 TarLiquidSensor: {
-	DisplayName: Tar Liquid Sensor
+	DisplayName: Liquid Sensor (Tar)
 	Tooltip: ""
 }
