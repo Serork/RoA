@@ -6,12 +6,14 @@ using ModLiquidLib.Utils;
 using ModLiquidLib.Utils.Structs;
 
 using RoA.Common.Players;
+using RoA.Content.Projectiles.LiquidsSpecific;
 using RoA.Core;
 
 using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent.Liquid;
 using Terraria.Graphics;
 using Terraria.Graphics.Light;
@@ -103,6 +105,42 @@ sealed partial class Tar : ModLiquid {
     }
 
     public partial void CollisionLoad();
+
+    public override int LiquidMerge(int i, int j, int otherLiquid) {
+        ushort tarTile = (ushort)ModContent.TileType<Tiles.LiquidsSpecific.SolidifiedTar>();
+        if (otherLiquid == LiquidID.Water) {
+            return tarTile; //When the liquid collides with water. Blue team block is created
+        }
+        else if (otherLiquid == LiquidID.Lava) {
+            return -1; //When the liquid collides with lava. Red team block is created
+        }
+        else if (otherLiquid == LiquidID.Honey) {
+            return tarTile; //When the liquid collides with honey. Yellow team block is created
+        }
+        else if (otherLiquid == LiquidID.Shimmer) {
+            return TileID.ShimmerBlock; //When the liquid collides with shimmer. Pink team block is created
+        }
+        //The base return is what
+        return tarTile;
+    }
+
+    public override bool PreLiquidMerge(int liquidX, int liquidY, int tileX, int tileY, int otherLiquid) {
+        if (otherLiquid == LiquidID.Lava) {
+            int x = tileX, y = tileY;
+            Tile tile = Main.tile[x - 1, y];
+            Tile tile2 = Main.tile[x + 1, y];
+            Tile tile3 = Main.tile[x, y - 1];
+            Tile tile4 = Main.tile[x, y + 1];
+            Tile tile5 = Main.tile[x, y];
+            tile.LiquidAmount = tile2.LiquidAmount = tile3.LiquidAmount = 0;
+            Projectile.NewProjectile(null, new Point16(tileX, tileY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<TarExplosion>(), 100, 0f);
+                             WorldGen.SquareTileFrame(x, y);
+
+            return false;
+        }
+
+        return base.PreLiquidMerge(liquidX, liquidY, tileX, tileY, otherLiquid);
+    }
 
     public override LightMaskMode LiquidLightMaskMode(int i, int j) => LightMaskMode.None;
 
