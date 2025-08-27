@@ -2182,3 +2182,8 @@ AerialConcussion: {
 		{$CommonItemTooltip.Whips}
 		''' */
 }
+
+TarLiquidSensor: {
+	// DisplayName: Tar Liquid Sensor
+	// Tooltip: ""
+}

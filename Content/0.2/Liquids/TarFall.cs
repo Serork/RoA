@@ -6,6 +6,7 @@ using ModLiquidLib.ModLoader;
 using ReLogic.Content;
 
 using Terraria;
+using Terraria.Graphics;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Liquids;
@@ -68,9 +69,9 @@ sealed class TarFall : ModLiquidFall {
     private void On_WaterfallManager_DrawWaterfall_int_int_int_float_Vector2_Rectangle_Color_SpriteEffects(On_WaterfallManager.orig_DrawWaterfall_int_int_int_float_Vector2_Rectangle_Color_SpriteEffects orig, WaterfallManager self, int waterfallType, int x, int y, float opacity, Vector2 position, Rectangle sourceRect, Color color, SpriteEffects effects) {
         if (_waterFallTexture?.IsLoaded == true && waterfallType == ModContent.GetInstance<TarFall>().Slot) {
             Texture2D value = _waterFallTexture!.Value;
-            Lighting.GetCornerColors(x, y, out var vertices);
+            Lighting.GetCornerColors(x, y, out VertexColors vertices);
             Tar.SetTarVertexColors(ref vertices, opacity, x, y);
-            Main.tileBatch.Draw(value, position + new Vector2(0f, 0f), sourceRect, vertices, default(Vector2), 1f, effects);
+            Main.tileBatch.Draw(value, position + new Vector2(0f, 0f), sourceRect, vertices, default, 1f, effects);
 
             return;
         }

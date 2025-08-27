@@ -343,7 +343,7 @@ sealed partial class Tar : ModLiquid {
             }
         }
 
-        return false;
+        return true;
     }
 
     public static float GetTarWave(ref float worldPositionX, ref float worldPositionY) => (float)Math.Sin(((double)((Math.Cos(worldPositionX + Main.timeForVisualEffects / 180) + Math.Sin(worldPositionY + Main.timeForVisualEffects / 180))) - Main.timeForVisualEffects / 360) * 6.2831854820251465);
