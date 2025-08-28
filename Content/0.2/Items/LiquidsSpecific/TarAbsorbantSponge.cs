@@ -26,8 +26,8 @@ sealed class TarAbsorbantSponge : ModItem {
         Item.useTurn = true;
         Item.useAnimation = 12;
         Item.useTime = 5;
-        Item.width = 20;
-        Item.height = 20;
+        Item.width = 30;
+        Item.height = 26;
         Item.autoReuse = true;
         Item.rare = ItemRarityID.Lime;
         Item.value = Item.sellPrice(0, 10);

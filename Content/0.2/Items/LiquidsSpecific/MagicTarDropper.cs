@@ -21,8 +21,8 @@ sealed class MagicTarDropper : ModItem {
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
         Item.createTile = ModContent.TileType<DrippingTar>();
-        Item.width = 24;
-        Item.height = 24;
+        Item.width = 32;
+        Item.height = 32;
         Item.value = Item.sellPrice(0, 0, 0, 40);
     }
 }

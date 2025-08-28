@@ -19,8 +19,8 @@ sealed class TarBomb : ModItem {
         Item.useStyle = ItemUseStyleID.Swing;
         Item.shootSpeed = 5f;
         Item.shoot = ModContent.ProjectileType<Projectiles.LiquidsSpecific.TarBomb>();
-        Item.width = 20;
-        Item.height = 20;
+        Item.width = 22;
+        Item.height = 26;
         Item.maxStack = Item.CommonMaxStack;
         Item.UseSound = SoundID.Item1;
         Item.consumable = true;

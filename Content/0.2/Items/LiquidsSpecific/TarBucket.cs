@@ -32,8 +32,8 @@ sealed class TarBucket : ModItem {
 
 	//The normal SetDefaults for a bucket
 	public override void SetDefaults() {
-		Item.width = 20;
-		Item.height = 24;
+		Item.width = 24;
+		Item.height = 22;
 		Item.maxStack = Item.CommonMaxStack;
 		Item.useTurn = true;
 		Item.autoReuse = true;

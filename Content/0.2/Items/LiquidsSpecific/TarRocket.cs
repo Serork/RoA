@@ -20,8 +20,8 @@ sealed class TarRocket : ModItem {
 
     public override void SetDefaults() {
         Item.damage = 40;
-        Item.width = 20;
-        Item.height = 14;
+        Item.width = 26;
+        Item.height = 16;
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
         Item.ammo = AmmoID.Rocket;
