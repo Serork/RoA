@@ -2,10 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using ModLiquidLib.ModLoader;
-using ModLiquidLib.Utils;
 using ModLiquidLib.Utils.Structs;
 
-using RoA.Common.Players;
 using RoA.Content.Projectiles.LiquidsSpecific;
 using RoA.Core;
 
@@ -101,13 +99,13 @@ sealed partial class Tar : ModLiquid {
     }
 
     public override void PlayerRippleModifier(Player player, ref float rippleStrength, ref float rippleOffset) {
-        rippleStrength *= 0.5f;
-        rippleOffset *= 0.5f;
+        rippleStrength *= 0.75f;
+        rippleOffset *= 0.75f;
     }
 
     public override void NPCRippleModifier(NPC npc, ref float rippleStrength, ref float rippleOffset) {
-        rippleStrength *= 0.5f;
-        rippleOffset *= 0.5f;
+        rippleStrength *= 0.75f;
+        rippleOffset *= 0.75f;
     }
 
     public override int ChooseWaterfallStyle(int i, int j) => ModContent.GetInstance<TarFall>().Slot;
