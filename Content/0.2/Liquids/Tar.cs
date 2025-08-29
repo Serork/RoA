@@ -86,7 +86,7 @@ sealed partial class Tar : ModLiquid {
         FallDelay = 13; //The delay when liquids are falling. Liquids will wait this extra amount of frames before falling again.
 
         ChecksForDrowning = true; //If the player can drown in this liquid
-        PlayersEmitBreathBubbles = false; //Bubbles will come out of the player's mouth normally when drowning, here we can stop that by setting it to false.
+        AllowEmitBreathBubbles = false;  //Bubbles will come out of the player's mouth normally when drowning, here we can stop that by setting it to false.
 
         FishingPoolSizeMultiplier = 2f; //The multiplier used for calculating the size of a fishing pool of this liquid. Here, each liquid tile counts as 2 for every tile in a fished pool.
 
@@ -96,6 +96,18 @@ sealed partial class Tar : ModLiquid {
 
         PlayerMovementMultiplier = 0.175f;
         StopWatchMPHMultiplier = PlayerMovementMultiplier; //We set stopwatch to the same multiplier as we don't want a different between whats felt and what the player can read their movement as.
+
+        LiquidfallOpacityMultiplier = 0.5f;
+    }
+
+    public override void PlayerRippleModifier(Player player, ref float rippleStrength, ref float rippleOffset) {
+        rippleStrength *= 0.5f;
+        rippleOffset *= 0.5f;
+    }
+
+    public override void NPCRippleModifier(NPC npc, ref float rippleStrength, ref float rippleOffset) {
+        rippleStrength *= 0.5f;
+        rippleOffset *= 0.5f;
     }
 
     public override int ChooseWaterfallStyle(int i, int j) => ModContent.GetInstance<TarFall>().Slot;

@@ -2187,3 +2187,8 @@ TarLiquidSensor: {
 	// DisplayName: Liquid Sensor (Tar)
 	// Tooltip: ""
 }
+
+NixieTube: {
+	// DisplayName: Nixie Tube
+	// Tooltip: ""
+}
