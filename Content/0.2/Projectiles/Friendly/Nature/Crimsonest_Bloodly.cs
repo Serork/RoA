@@ -121,7 +121,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     public override void OnKill(int timeLeft) {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 15; i++) {
             Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
         }
     }
@@ -148,12 +148,13 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
         SpawnIchorStreams();
+        Projectile.Kill();
 
         return base.OnTileCollide(oldVelocity);
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-        width = height = 10;
+        width = height = 20;
 
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
