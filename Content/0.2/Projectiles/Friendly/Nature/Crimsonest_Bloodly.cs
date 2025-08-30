@@ -72,7 +72,6 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.friendly = true;
-        Projectile.tileCollide = false;
     }
 
     public override void AI() {
@@ -145,6 +144,12 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 KnockBack = Projectile.knockBack * damageMult
             });
         }
+    }
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        SpawnIchorStreams();
+
+        return base.OnTileCollide(oldVelocity);
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
