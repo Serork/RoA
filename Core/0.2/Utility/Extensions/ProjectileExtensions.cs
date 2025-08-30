@@ -26,7 +26,7 @@ static partial class ProjectileExtensions {
         return false;
     }
 
-    public static void OffsetNPC(this Projectile projectile, Projectile checkProjectile, float offsetSpeed = 0.05f) {
+    public static void OffsetTheSameProjectile(this Projectile projectile, Projectile checkProjectile, float offsetSpeed = 0.05f) {
         if (projectile.position.X < checkProjectile.position.X) {
             projectile.velocity.X -= offsetSpeed;
         }
@@ -43,7 +43,7 @@ static partial class ProjectileExtensions {
 
     public static void OffsetTheSameProjectile(this Projectile checkProjectile, float offsetSpeed = 0.05f) {
         if (checkProjectile.NearestTheSame(out Projectile npc2)) {
-            checkProjectile.OffsetNPC(npc2, offsetSpeed);
+            checkProjectile.OffsetTheSameProjectile(npc2, offsetSpeed);
         }
     }
 }

@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Vanilla;
 
 static class ProjectileUtils {
-    public static void QuickDraw(this Projectile projectile, Color lightColor, float exRot) {
+    public static void QuickDraw(this Projectile projectile, Color lightColor, float exRot = 0f) {
         Texture2D mainTex = projectile.GetTexture();
 
         Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, null, lightColor, projectile.rotation + exRot,
@@ -37,6 +37,16 @@ static class ProjectileUtils {
 
         Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, lightColor, projectile.rotation + exRot,
             frameBox.Size() / 2, projectile.scale, 0, 0);
+    }
+
+    public static void QuickDrawAnimated(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null) {
+        Texture2D mainTex = texture ?? projectile.GetTexture();
+
+        int frameSize = mainTex.Height / Main.projFrames[projectile.type];
+        Rectangle frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
+        SpriteEffects effects = projectile.spriteDirection.ToSpriteEffects();
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, lightColor, projectile.rotation + exRot,
+            frameBox.Size() / 2, projectile.scale, effects, 0);
     }
 
     public static void QuickDrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, int start, float extraRot = 0, float scale = -1) {
@@ -128,7 +138,7 @@ static class ProjectileUtils {
                 drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, frameBox.Size() / 2, scale, 0, 0);
     }
 
-    public static void Animate(Projectile projectile, int frameCounter) {
+    public static void Animate(this Projectile projectile, byte frameCounter) {
         if (++projectile.frameCounter >= frameCounter) {
             projectile.frameCounter = 0;
             if (++projectile.frame >= Main.projFrames[projectile.type]) {

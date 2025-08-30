@@ -2167,3 +2167,8 @@ NixieTube: {
 	DisplayName: Nixie Tube
 	Tooltip: ""
 }
+
+Crimsonest: {
+	DisplayName: Crimsonest
+	Tooltip: ""
+}

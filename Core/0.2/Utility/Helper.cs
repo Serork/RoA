@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using System;
 
@@ -9,6 +10,8 @@ namespace RoA.Core.Utility;
 
 static partial class Helper {
     public static bool SinglePlayerOrServer => Main.netMode != NetmodeID.MultiplayerClient;
+
+    public static SpriteEffects ToSpriteEffects(this int direction) => direction > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
     
     public static void ApplyWindPhysics(Vector2 center, ref Vector2 velocity) {
         /*if (Main.windPhysics) */ {
