@@ -128,23 +128,21 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        for (int i = 0; i < 3; i++) {
-            ProjectileUtils.SpawnPlayerOwnedProjectile<IchorStream>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
-                Position = Projectile.Bottom - Vector2.UnitY * Projectile.height * 0.25f + Main.rand.NextVector2Circular(Projectile.width, Projectile.height * 0.25f),
-                Velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f,
-                Damage = Projectile.damage,
-                KnockBack = Projectile.knockBack
-            });
-        }
+        SpawnIchorStreams();
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        SpawnIchorStreams();
+    }
+
+    private void SpawnIchorStreams() {
+        float damageMult = 0.5f;
         for (int i = 0; i < 3; i++) {
             ProjectileUtils.SpawnPlayerOwnedProjectile<IchorStream>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
-                Position = Projectile.Bottom - Vector2.UnitY * Projectile.height * 0.25f + Main.rand.NextVector2Circular(Projectile.width, Projectile.height * 0.25f),
+                Position = Projectile.Bottom - Vector2.UnitY * Projectile.height * 0.15f + Main.rand.NextVector2Circular(Projectile.width * 0.4f, Projectile.height * 0.4f),
                 Velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f,
-                Damage = Projectile.damage,
-                KnockBack = Projectile.knockBack
+                Damage = (int)(Projectile.damage * damageMult),
+                KnockBack = Projectile.knockBack * damageMult
             });
         }
     }

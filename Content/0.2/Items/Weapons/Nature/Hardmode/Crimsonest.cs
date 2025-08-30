@@ -13,7 +13,7 @@ sealed class Crimsonest : NatureItem {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(30, 36);
         Item.SetWeaponValues(30, 5f);
-        Item.SetUsableValues(ItemUseStyleID.Shoot, 20, autoReuse: true);
+        Item.SetUsableValues(ItemUseStyleID.Shoot, 30, autoReuse: true);
         Item.SetShootableValues((ushort)ModContent.ProjectileType<Bloodly>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice());
 
