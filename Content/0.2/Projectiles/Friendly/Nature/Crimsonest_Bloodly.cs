@@ -135,10 +135,14 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     private void SpawnIchorStreams() {
+        Vector2 getBlisterPosition() => Projectile.Bottom - Vector2.UnitY * Projectile.height * 0.15f + Main.rand.NextVector2Circular(Projectile.width * 0.4f, Projectile.height * 0.4f);
+        for (int i = 0; i < 3; i++) {
+            Dust.NewDustPerfect(getBlisterPosition(), DustID.Ichor);
+        }
         float damageMult = 0.5f;
         for (int i = 0; i < 3; i++) {
             ProjectileUtils.SpawnPlayerOwnedProjectile<IchorStream>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
-                Position = Projectile.Bottom - Vector2.UnitY * Projectile.height * 0.15f + Main.rand.NextVector2Circular(Projectile.width * 0.4f, Projectile.height * 0.4f),
+                Position = getBlisterPosition(),
                 Velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f,
                 Damage = (int)(Projectile.damage * damageMult),
                 KnockBack = Projectile.knockBack * damageMult
