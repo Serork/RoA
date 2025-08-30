@@ -121,7 +121,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     public override void OnKill(int timeLeft) {
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 18; i++) {
             Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
         }
     }
