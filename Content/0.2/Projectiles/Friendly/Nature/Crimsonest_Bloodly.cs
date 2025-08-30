@@ -13,13 +13,14 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Bloodly : NatureProjectile, IRequestAssets {
     private static byte FRAMECOUNT => 6;
     private static byte FRAMECOUNTER => 4;
-    private static ushort TIMELEFT => 300;
+    private static ushort TIMELEFT => 180;
     private static float MOVELENGTHMIN => 300f;
     private static float MOVELENGTHMAX => 500f;
     private static float SINEOFFSET => 2f;
@@ -71,6 +72,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.friendly = true;
+        Projectile.tileCollide = false;
     }
 
     public override void AI() {
@@ -120,7 +122,31 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     public override void OnKill(int timeLeft) {
+        for (int i = 0; i < 20; i++) {
+            Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
+        }
+    }
 
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        for (int i = 0; i < 3; i++) {
+            ProjectileUtils.SpawnPlayerOwnedProjectile<IchorStream>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
+                Position = Projectile.Bottom - Vector2.UnitY * Projectile.height * 0.25f + Main.rand.NextVector2Circular(Projectile.width, Projectile.height * 0.25f),
+                Velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f,
+                Damage = Projectile.damage,
+                KnockBack = Projectile.knockBack
+            });
+        }
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        for (int i = 0; i < 3; i++) {
+            ProjectileUtils.SpawnPlayerOwnedProjectile<IchorStream>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
+                Position = Projectile.Bottom - Vector2.UnitY * Projectile.height * 0.25f + Main.rand.NextVector2Circular(Projectile.width, Projectile.height * 0.25f),
+                Velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f,
+                Damage = Projectile.damage,
+                KnockBack = Projectile.knockBack
+            });
+        }
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
