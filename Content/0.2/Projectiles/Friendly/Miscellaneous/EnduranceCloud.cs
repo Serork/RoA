@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Content.Buffs;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -86,7 +87,19 @@ sealed class EnduranceCloud : ModProjectile {
             Projectile.netUpdate = true;
         }
 
-        Projectile.Opacity = 0.65f * Utils.GetLerpValue(0f, 30f, opacityFactor, true) * Utils.GetLerpValue(TIMELEFT, TIMELEFT - 30f, opacityFactor, true);
+        ref float checkForBuffTimer = ref Projectile.localAI[1];
+        const float CHECKFORBUFFSTIME = 10f;
+        float opacityFluffMin = TIMELEFT - 30f;
+        if (!owner.HasBuff<EnduranceCloud1>() && !owner.HasBuff<EnduranceCloud2>() && !owner.HasBuff<EnduranceCloud3>()) {
+            checkForBuffTimer++;
+            if (checkForBuffTimer > CHECKFORBUFFSTIME && opacityFactor < opacityFluffMin) {
+                opacityFactor = opacityFluffMin;
+            }
+        }
+        else {
+            checkForBuffTimer = 0f;
+        }
+        Projectile.Opacity = 0.65f * Utils.GetLerpValue(0f, 30f, opacityFactor, true) * Utils.GetLerpValue(TIMELEFT, opacityFluffMin, opacityFactor, true);
 
         Projectile.Center = owner.MountedCenter + Vector2.UnitY * owner.gfxOffY;
         Projectile.Center = Utils.Floor(Projectile.Center) + new Vector2(offsetX, offsetY) - owner.Size;

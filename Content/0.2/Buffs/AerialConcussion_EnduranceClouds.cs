@@ -1,20 +1,17 @@
-﻿using RoA.Common;
-using RoA.Common.Players;
+﻿using RoA.Common.Players;
 using RoA.Content.Items.Weapons.Summon.Hardmode;
-using RoA.Content.Projectiles.Friendly.Miscellaneous;
-using RoA.Core.Utility.Vanilla;
-
-using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
 
 class EnduranceCloud1 : ModBuff {
     public override void SetStaticDefaults() {
-        Main.buffNoTimeDisplay[Type] = true;
+        Main.buffNoTimeDisplay[Type] = false;
+
+        BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
     }
 
     public override void Update(Player player, ref int buffIndex) {

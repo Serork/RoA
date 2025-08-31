@@ -14,7 +14,7 @@ sealed class AerialConcussionEffect : ModPlayer {
 
     private ushort _timer;
     private byte _enduranceTier;
-    private ushort _battleTimer;
+    private bool _buffApplied;
 
     public bool CanGainStack => _timer >= TIMEFORSTACK;
 
@@ -32,29 +32,27 @@ sealed class AerialConcussionEffect : ModPlayer {
         if (_enduranceTier <= 0) {
             return;
         }
-        if (_battleTimer > 0) {
-            _battleTimer--;
-        }
-        else {
-            Reset();
+        if (_buffApplied) {
+            return;
         }
         switch (_enduranceTier) {
             case 1:
                 Player.DelBuff<EnduranceCloud2>();
                 Player.DelBuff<EnduranceCloud3>();
-                Player.AddBuff<EnduranceCloud1>(5);
+                Player.AddBuff<EnduranceCloud1>(INBATTLETIMER);
                 break;
             case 2:
                 Player.DelBuff<EnduranceCloud1>();
                 Player.DelBuff<EnduranceCloud3>();
-                Player.AddBuff<EnduranceCloud2>(5);
+                Player.AddBuff<EnduranceCloud2>(INBATTLETIMER);
                 break;
             case >= 3:
                 Player.DelBuff<EnduranceCloud2>();
                 Player.DelBuff<EnduranceCloud1>();
-                Player.AddBuff<EnduranceCloud3>(5);
+                Player.AddBuff<EnduranceCloud3>(INBATTLETIMER);
                 break;
         }
+        _buffApplied = true;
     }
 
     public override void OnHurt(Player.HurtInfo info) {
@@ -85,7 +83,7 @@ sealed class AerialConcussionEffect : ModPlayer {
         _timer = 0;
     }
 
-    public void ResetBattleTimer() => _battleTimer = INBATTLETIMER;
+    public void ResetBattleTimer() => _buffApplied = false;
 
     public void Reset() {
         _enduranceTier = 0;
@@ -97,8 +95,8 @@ sealed class AerialConcussionEffect : ModPlayer {
         Player.DelBuff<EnduranceCloud2>();
         Player.DelBuff<EnduranceCloud1>();
 
-        foreach (Projectile trackedCloud in TrackedEntitiesSystem.GetTrackedProjectile<EnduranceCloud>(checkProjectile => checkProjectile.owner != Player.whoAmI)) {
-            trackedCloud.Kill();
-        }
+        //foreach (Projectile trackedCloud in TrackedEntitiesSystem.GetTrackedProjectile<EnduranceCloud>(checkProjectile => checkProjectile.owner != Player.whoAmI)) {
+        //    trackedCloud.Kill();
+        //}
     }
 }
