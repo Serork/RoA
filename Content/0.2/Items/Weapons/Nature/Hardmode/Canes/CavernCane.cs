@@ -75,7 +75,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                         GeodeType = geodeType;
                         Vector2 spawnPosition = owner.Center;
                         int maxChecks = 40;
-                        while (maxChecks-- > 0 && !WorldGenHelper.SolidTile(spawnPosition.ToTileCoordinates())) {
+                        while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
                             spawnPosition += spawnPosition.DirectionTo(Owner.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
                         }
                         ProjectileUtils.SpawnPlayerOwnedProjectile<CavernCane_Rocks>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_Misc("caneattack")) {
