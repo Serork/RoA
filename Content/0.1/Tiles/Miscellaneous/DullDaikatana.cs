@@ -16,7 +16,7 @@ sealed class DullDaikatana : ModTile {
 
         Main.tileSpelunker[Type] = true;
         Main.tileShine2[Type] = true;
-        Main.tileShine[Type] = 1200;
+        Main.tileShine[Type] = 2000;
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;
         TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
