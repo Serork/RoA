@@ -87,9 +87,11 @@ sealed class AerialConcussionEffect : ModPlayer {
 
     public void ResetBattleTimer() => _buffApplied = false;
 
-    public void Reset() {
+    public void Reset(bool onlyTier = false) {
         _enduranceTier = 0;
-        _timer = 0;
+        if (!onlyTier) {
+            _timer = 0;
+        }
 
         ResetBattleTimer();
 

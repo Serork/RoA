@@ -24,7 +24,7 @@ class EnduranceCloud1 : ModBuff {
 
     protected void ResetTier(Player player, int buffIndex) {
         if (player.buffTime[buffIndex] < 10) {
-            player.GetModPlayer<AerialConcussionEffect>().Reset();
+            player.GetModPlayer<AerialConcussionEffect>().Reset(true);
         }
     }
 
