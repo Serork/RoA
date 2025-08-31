@@ -113,7 +113,7 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
     }
 
     private void RoANPC_ModifyHitByProjectileEvent(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers) {
-        if (projectile.ModProjectile is WhipBase_Projectile whip && !npc.immortal && npc.lifeMax > 5) {
+        if (projectile.ModProjectile is WhipBase_Projectile whip/* && !npc.immortal && npc.lifeMax > 5*/) {
             whip._onHitFunction?.Invoke(projectile.GetOwnerAsPlayer(), npc);
         }
 

@@ -22,6 +22,8 @@ sealed class AerialConcussionEffect : ModPlayer {
 
     public override void PostUpdate() {
         if (!IsEffectActive) {
+            _timer = TIMEFORSTACK;
+
             return;
         }
 
