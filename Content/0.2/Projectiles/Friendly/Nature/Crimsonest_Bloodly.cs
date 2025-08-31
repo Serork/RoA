@@ -20,7 +20,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class Bloodly : NatureProjectile, IRequestAssets {
     private static byte FRAMECOUNT => 6;
     private static byte FRAMECOUNTER => 4;
-    private static ushort TIMELEFT => 180;
+    private static ushort TIMELEFT => 150;
     private static float MOVELENGTHMIN => 300f;
     private static float MOVELENGTHMAX => 500f;
     private static float SINEOFFSET => 2f;
@@ -96,7 +96,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         }
         void handleMovement() {
             BloodlyValues bloodlyValues = new(Projectile);
-            float speed = 7.5f, inertia = 20f;
+            float speed = 10f, inertia = 20f;
             Projectile.SlightlyMoveTo(bloodlyValues.GoToPosition, speed, inertia);
             Projectile.position += Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation()) * Projectile.direction * MathF.Sin(bloodlyValues.SineYOffset++ * 0.1f) * SINEOFFSET;
         }
