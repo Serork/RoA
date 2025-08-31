@@ -143,7 +143,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         for (int i = 0; i < 3; i++) {
             Dust.NewDustPerfect(getBlisterPosition(), DustID.Ichor);
         }
-        float damageMult = 0.5f;
+        float damageMult = 1f;
         for (int i = 0; i < 3; i++) {
             ProjectileUtils.SpawnPlayerOwnedProjectile<IchorStream>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
                 Position = getBlisterPosition(),
