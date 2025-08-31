@@ -83,6 +83,9 @@ sealed class TrackedEntitiesSystem : ModSystem {
         Type projectileType = typeof(T);
         if (TrackedEntitiesByType.TryGetValue(projectileType, out List<Entity>? value)) {
             foreach (Projectile trackedProjectile in value.Cast<Projectile>()) {
+                if (trackedProjectile.type != ModContent.ProjectileType<T>()) {
+                    continue;
+                }
                 if (filter != null && filter.Invoke(trackedProjectile)) {
                     continue;
                 }
@@ -95,6 +98,9 @@ sealed class TrackedEntitiesSystem : ModSystem {
         Type npcType = typeof(T);
         if (TrackedEntitiesByType.TryGetValue(npcType, out List<Entity>? value)) {
             foreach (NPC trackedNPC in value.Cast<NPC>()) {
+                if (trackedNPC.type != ModContent.NPCType<T>()) {
+                    continue;
+                }
                 if (filter != null && filter.Invoke(trackedNPC)) {
                     continue;
                 }
