@@ -99,6 +99,7 @@ sealed class MercuriumOre : ModTile {
 
     public override void SetStaticDefaults() {
         TileID.Sets.Ore[Type] = true;
+        TileID.Sets.OreMergesWithMud[Type] = true;
 
         Main.tileSpelunker[Type] = true;
         Main.tileOreFinderPriority[Type] = 410;
@@ -110,8 +111,6 @@ sealed class MercuriumOre : ModTile {
         Main.tileSolid[Type] = true;
 
         Main.tileBlockLight[Type] = true;
-
-        TileHelper.MergeWith(Type, TileID.Mud);
 
         AddMapEntry(new Color(141, 163, 171), CreateMapEntryName());
 
