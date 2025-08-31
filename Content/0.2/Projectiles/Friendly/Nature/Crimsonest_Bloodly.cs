@@ -125,6 +125,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         void slowOnHit() {
             if (_hitTimer > 0f) {
                 _hitTimer--;
+                Projectile.timeLeft--;
                 Projectile.velocity *= ONHITSLOWMODIFIER;
             }
         }
