@@ -72,6 +72,9 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.friendly = true;
+        Projectile.penetrate = -1;
+        Projectile.usesIDStaticNPCImmunity = true;
+        Projectile.idStaticNPCHitCooldown = 10;
     }
 
     public override void AI() {
@@ -121,17 +124,18 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     public override void OnKill(int timeLeft) {
+        SpawnIchorStreams();
         for (int i = 0; i < 18; i++) {
             Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
         }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        SpawnIchorStreams();
+        //SpawnIchorStreams();
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        SpawnIchorStreams();
+        //SpawnIchorStreams();
     }
 
     private void SpawnIchorStreams() {
@@ -151,10 +155,10 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        SpawnIchorStreams();
-        Projectile.Kill();
+        //SpawnIchorStreams();
+        //Projectile.Kill();
 
-        return base.OnTileCollide(oldVelocity);
+        return false;
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
