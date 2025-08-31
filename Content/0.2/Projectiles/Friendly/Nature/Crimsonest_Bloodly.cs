@@ -75,6 +75,8 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         Projectile.penetrate = -1;
         Projectile.usesIDStaticNPCImmunity = true;
         Projectile.idStaticNPCHitCooldown = 10;
+
+        Projectile.tileCollide = false;
     }
 
     public override void AI() {
