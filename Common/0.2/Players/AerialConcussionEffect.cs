@@ -91,6 +91,8 @@ sealed class AerialConcussionEffect : ModPlayer {
         _enduranceTier = 0;
         _timer = 0;
 
+        ResetBattleTimer();
+
         Player.DelBuff<EnduranceCloud3>();
         Player.DelBuff<EnduranceCloud2>();
         Player.DelBuff<EnduranceCloud1>();
