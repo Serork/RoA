@@ -111,6 +111,8 @@ sealed class MercuriumOre : ModTile {
 
         Main.tileBlockLight[Type] = true;
 
+        TileHelper.MergeWith(Type, TileID.Mud);
+
         AddMapEntry(new Color(141, 163, 171), CreateMapEntryName());
 
         DustType = ModContent.DustType<ToxicFumes>();
