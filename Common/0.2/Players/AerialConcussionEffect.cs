@@ -10,9 +10,11 @@ namespace RoA.Common.Players;
 
 sealed class AerialConcussionEffect : ModPlayer {
     private static ushort TIMEFORSTACK => 300;
+    private static ushort INBATTLETIMER => 900;
 
-    private int _timer;
-    private ushort _enduranceTier;
+    private ushort _timer;
+    private byte _enduranceTier;
+    private ushort _battleTimer;
 
     public bool CanGainStack => _timer >= TIMEFORSTACK;
 
@@ -29,6 +31,12 @@ sealed class AerialConcussionEffect : ModPlayer {
 
         if (_enduranceTier <= 0) {
             return;
+        }
+        if (_battleTimer > 0) {
+            _battleTimer--;
+        }
+        else {
+            Reset();
         }
         switch (_enduranceTier) {
             case 1:
@@ -66,6 +74,8 @@ sealed class AerialConcussionEffect : ModPlayer {
     }
 
     public void ConsumeStack() {
+        ResetBattleTimer();
+
         if (!CanGainStack) {
             return;
         }
@@ -74,6 +84,8 @@ sealed class AerialConcussionEffect : ModPlayer {
 
         _timer = 0;
     }
+
+    public void ResetBattleTimer() => _battleTimer = INBATTLETIMER;
 
     public void Reset() {
         _enduranceTier = 0;

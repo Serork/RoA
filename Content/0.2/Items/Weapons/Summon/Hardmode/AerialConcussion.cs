@@ -63,10 +63,6 @@ sealed class AerialConcussion : WhipBase {
     }
 
     protected override void OnHit(Player player, NPC target) {
-        if (target.immortal) {
-            return;
-        }
-
         player.GetModPlayer<AerialConcussionEffect>().ConsumeStack();
     }
 
