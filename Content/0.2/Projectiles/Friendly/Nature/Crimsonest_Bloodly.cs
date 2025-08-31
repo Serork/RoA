@@ -11,6 +11,7 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.ID;
@@ -24,6 +25,8 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     private static float MOVELENGTHMIN => 300f;
     private static float MOVELENGTHMAX => 500f;
     private static float SINEOFFSET => 2f;
+    private static ushort HITTIMERCHECK => 10;
+    private static float ONHITSLOWMODIFIER => 0.5f;
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture => [(0, Texture + "_Glow")];
 
@@ -62,6 +65,8 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             }
         }
     }
+
+    private ushort _hitTimer;
 
     public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
 
@@ -117,12 +122,27 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         void moveFromOthers() {
             Projectile.OffsetTheSameProjectile(0.1f);
         }
+        void slowOnHit() {
+            if (_hitTimer > 0f) {
+                _hitTimer--;
+                Projectile.velocity *= ONHITSLOWMODIFIER;
+            }
+        }
 
         init();
         animate();
         handleMovement();
         resetGoToPosition();
         moveFromOthers();
+        slowOnHit();
+    }
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        writer.Write(_hitTimer);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        _hitTimer = reader.ReadUInt16();
     }
 
     public override void OnKill(int timeLeft) {
@@ -133,11 +153,18 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        HitEnemyForSlow();
         //SpawnIchorStreams();
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        HitEnemyForSlow();
         //SpawnIchorStreams();
+    }
+
+    private void HitEnemyForSlow() {
+        _hitTimer = (ushort)Projectile.idStaticNPCHitCooldown;
+        Projectile.netUpdate = true;
     }
 
     private void SpawnIchorStreams() {
