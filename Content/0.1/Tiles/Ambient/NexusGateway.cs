@@ -27,6 +27,8 @@ sealed class NexusGateway : ModTile {
         TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
         TileID.Sets.PreventsSandfall[Type] = true;
 
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
         TileObjectData.newTile.LavaDeath = false;
         int width = 7, height = 8;

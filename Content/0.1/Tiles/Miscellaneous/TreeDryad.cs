@@ -158,6 +158,8 @@ sealed class TreeDryad : ModTile, IRequestAssets, TileHooks.IPreDraw, TileHooks.
         Main.tileLighted[Type] = true;
         Main.tileHammer[Type] = true;
 
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 2;

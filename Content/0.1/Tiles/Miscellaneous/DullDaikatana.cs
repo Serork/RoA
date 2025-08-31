@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -12,6 +13,14 @@ sealed class DullDaikatana : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileLavaDeath[Type] = true;
         Main.tileNoAttach[Type] = true;
+
+        Main.tileSpelunker[Type] = true;
+        Main.tileShine2[Type] = true;
+        Main.tileShine[Type] = 1200;
+
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
+        Main.tileOreFinderPriority[Type] = 550;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
         TileObjectData.newTile.CoordinateHeights = [16, 16];

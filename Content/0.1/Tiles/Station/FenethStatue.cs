@@ -155,6 +155,9 @@ sealed class FenethStatue : ModTile {
         Main.tileLighted[Type] = true;
 
         Main.tileSpelunker[Type] = true;
+
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+
         Main.tileOreFinderPriority[Type] = 750;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
