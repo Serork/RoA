@@ -94,7 +94,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.15f * (chance - 0.5f));
                     if (notBranch) {
                         var ent = ModContent.NPCType<EntLegs>();
-                        if (/*!NPC.AnyNPCs(ent) && */surface && notBranch) {
+                        if (/*!NPC.AnyNPCs(ent) && */surface) {
                             pool.Add(ent, 0.02f);
                         }
                     }
