@@ -48,14 +48,15 @@ sealed class BackwoodsNPCs : GlobalNPC {
 
             Tile tile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY);
             Tile belowTile = WorldGenHelper.GetTileSafely(spawnInfo.SpawnTileX, spawnInfo.SpawnTileY + 1);
-            bool trulySurface = !belowTile.AnyWall() || belowTile.WallType == ModContent.WallType<LivingBackwoodsLeavesWall>();
+            bool trulySurface = !belowTile.AnyWall() || belowTile.WallType == ModContent.WallType<LivingBackwoodsLeavesWall2>();
             bool flag = false;
             for (int i = spawnInfo.SpawnTileX - 1; i < spawnInfo.SpawnTileX + 1; i++) {
                 if (flag) {
                     break;
                 }
                 for (int j = spawnInfo.SpawnTileY - 1; j < spawnInfo.SpawnTileY + 1; j++) {
-                    if (WorldGenHelper.GetTileSafely(i, j).WallType == ModContent.WallType<ElderwoodWall>()) {
+                    ushort wall = WorldGenHelper.GetTileSafely(i, j).WallType;
+                    if (wall == ModContent.WallType<ElderwoodWall3>()) {
                         flag = true;
                         break;
                     }
@@ -94,7 +95,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.15f * (chance - 0.5f));
                     if (notBranch) {
                         var ent = ModContent.NPCType<EntLegs>();
-                        if (/*!NPC.AnyNPCs(ent) && */surface && notBranch) {
+                        if (/*!NPC.AnyNPCs(ent) && */surface) {
                             pool.Add(ent, 0.02f);
                         }
                     }
@@ -118,5 +119,4 @@ sealed class BackwoodsNPCs : GlobalNPC {
             }
         }
     }
-
 }
