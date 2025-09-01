@@ -1,1 +1,1 @@
-- Updated to the new tModloader monthly build
+- Updated to the new tModLoader monthly build

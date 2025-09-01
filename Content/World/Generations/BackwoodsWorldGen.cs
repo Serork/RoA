@@ -111,9 +111,35 @@ sealed class BackwoodsWorldGen : ModSystem {
     }
 
     public override void Load() {
-        On_WorldGen.Convert += On_WorldGen_Convert;
+        On_WorldGen.Convert_int_int_int_int += On_WorldGen_Convert_int_int_int_int; ;
         On_WorldGen.PaintTheLivingTrees += On_WorldGen_PaintTheLivingTrees;
         On_WorldGen.NotTheBees += On_WorldGen_NotTheBees;
+    }
+
+    private void On_WorldGen_Convert_int_int_int_int(On_WorldGen.orig_Convert_int_int_int_int orig, int i, int j, int conversionType, int size) {
+        if (WorldGen.gen) {
+            for (int k = i - size; k <= i + size; k++) {
+                for (int l = j - size; l <= j + size; l++) {
+                    if (!WorldGen.InWorld(k, l, 1) || Math.Abs(k - i) + Math.Abs(l - j) >= 6)
+                        continue;
+
+                    Tile tile = Main.tile[k, l];
+                    int type = tile.TileType;
+                    int wall = tile.TileType;
+                    if (i > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 50 && i < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 50) {
+                        return;
+                    }
+                    if (tile.TileType != TileID.Dirt && BackwoodsVars.BackwoodsTileTypes.Contains(tile.TileType)) {
+                        return;
+                    }
+                    if (BackwoodsVars.BackwoodsWallTypes.Contains(tile.WallType)) {
+                        return;
+                    }
+                }
+            }
+        }
+
+        orig(i, j, conversionType, size);
     }
 
     private void On_WorldGen_NotTheBees(On_WorldGen.orig_NotTheBees orig) {
@@ -272,32 +298,6 @@ sealed class BackwoodsWorldGen : ModSystem {
                     tile.WallColor = livingTreePaintColor;
             }
         }
-    }
-
-    private void On_WorldGen_Convert(On_WorldGen.orig_Convert orig, int i, int j, int conversionType, int size) {
-        if (WorldGen.gen) {
-            for (int k = i - size; k <= i + size; k++) {
-                for (int l = j - size; l <= j + size; l++) {
-                    if (!WorldGen.InWorld(k, l, 1) || Math.Abs(k - i) + Math.Abs(l - j) >= 6)
-                        continue;
-
-                    Tile tile = Main.tile[k, l];
-                    int type = tile.TileType;
-                    int wall = tile.TileType;
-                    if (i > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 50 && i < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 50) {
-                        return;
-                    }
-                    if (tile.TileType != TileID.Dirt && BackwoodsVars.BackwoodsTileTypes.Contains(tile.TileType)) {
-                        return;
-                    }
-                    if (BackwoodsVars.BackwoodsWallTypes.Contains(tile.WallType)) {
-                        return;
-                    }
-                }
-            }
-        }
-
-        orig(i, j, conversionType, size);
     }
 
     //private void SpreadingGrass(GenerationProgress progress, GameConfiguration config) {
