@@ -63,13 +63,17 @@ sealed class BackwoodsNPCs : GlobalNPC {
             }
             pool.Add(ModContent.NPCType<Content.NPCs.Friendly.Hedgehog>(), 0.05f);
             float chance = surface ? 1f : 0.5f;
-            if (!surface2 && !NPC.AnyNPCs(ModContent.NPCType<GrimDefender>())) {
-                pool.Add(ModContent.NPCType<GrimDefender>(), 0.1f);
+            ushort grimDefenderType = (ushort)ModContent.NPCType<GrimDefender>();
+            if (!surface2 && NPC.CountNPCS(grimDefenderType) < 3) {
+                pool.Add(grimDefenderType, 0.1f);
             }
+            bool notBranch = tile.TileType != ModContent.TileType<TreeBranch>();
+            //bool notLeaves = tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>();
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {
-                if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
-                    if (!tile.AnyLiquid() && trulySurface/* && !NPC.AnyNPCs(ModContent.NPCType<CrowdRaven>())*/) {
-                        pool.Add(ModContent.NPCType<CrowdRaven>(), 1f);
+                if (notBranch) {
+                    ushort crowdRavenType = (ushort)ModContent.NPCType<CrowdRaven>();
+                    if (!tile.AnyLiquid() && trulySurface && !NPC.AnyNPCs(crowdRavenType)) {
+                        pool.Add(crowdRavenType, 1f);
                     }
                     if (surface) {
                         if (!Main.IsItDay()) {
@@ -88,20 +92,26 @@ sealed class BackwoodsNPCs : GlobalNPC {
                 if (NPC.downedBoss2) {
                     pool.Add(ModContent.NPCType<Fleder>(), 1f * chance);
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.15f * (chance - 0.5f));
-                    var ent = ModContent.NPCType<EntLegs>();
-                    if (/*!NPC.AnyNPCs(ent) && */surface) {
-                        pool.Add(ent, 0.02f);
+                    if (notBranch) {
+                        var ent = ModContent.NPCType<EntLegs>();
+                        if (/*!NPC.AnyNPCs(ent) && */surface && notBranch) {
+                            pool.Add(ent, 0.02f);
+                        }
                     }
                     if (BackwoodsFogHandler.IsFogActive && surface) {
-                        pool.Add(ModContent.NPCType<Ravencaller>(), 0.2f);
+                        if (notBranch) {
+                            pool.Add(ModContent.NPCType<Ravencaller>(), 0.2f);
+                        }
                         pool.Add(ModContent.NPCType<DeerSkullHead>(), 0.2f);
                     }
-                    var moonPhase = Main.GetMoonPhase();
-                    if (moonPhase == Terraria.Enums.MoonPhase.Full ||
-                        moonPhase == Terraria.Enums.MoonPhase.Empty) {
-                        var archdruid = ModContent.NPCType<Archdruid>();
-                        /*if (!NPC.AnyNPCs(archdruid)) */{
-                            pool.Add(archdruid, 0.01f);
+                    if (notBranch) {
+                        var moonPhase = Main.GetMoonPhase();
+                        if (moonPhase == Terraria.Enums.MoonPhase.Full ||
+                            moonPhase == Terraria.Enums.MoonPhase.Empty) {
+                            var archdruid = ModContent.NPCType<Archdruid>();
+                            if (!NPC.AnyNPCs(archdruid)) {
+                                pool.Add(archdruid, 0.01f);
+                            }
                         }
                     }
                 }
