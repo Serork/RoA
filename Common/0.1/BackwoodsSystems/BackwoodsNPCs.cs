@@ -68,7 +68,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
             }
             if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {
                 if (tile.TileType != ModContent.TileType<TreeBranch>() && tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>()) {
-                    if (!tile.AnyLiquid() && trulySurface && !NPC.AnyNPCs(ModContent.NPCType<CrowdRaven>())) {
+                    if (!tile.AnyLiquid() && trulySurface/* && !NPC.AnyNPCs(ModContent.NPCType<CrowdRaven>())*/) {
                         pool.Add(ModContent.NPCType<CrowdRaven>(), 1f);
                     }
                     if (surface) {
@@ -89,7 +89,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     pool.Add(ModContent.NPCType<Fleder>(), 1f * chance);
                     pool.Add(ModContent.NPCType<FlederSachem>(), 0.15f * (chance - 0.5f));
                     var ent = ModContent.NPCType<EntLegs>();
-                    if (!NPC.AnyNPCs(ent) && surface) {
+                    if (/*!NPC.AnyNPCs(ent) && */surface) {
                         pool.Add(ent, 0.02f);
                     }
                     if (BackwoodsFogHandler.IsFogActive && surface) {
@@ -100,7 +100,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
                     if (moonPhase == Terraria.Enums.MoonPhase.Full ||
                         moonPhase == Terraria.Enums.MoonPhase.Empty) {
                         var archdruid = ModContent.NPCType<Archdruid>();
-                        if (!NPC.AnyNPCs(archdruid)) {
+                        /*if (!NPC.AnyNPCs(archdruid)) */{
                             pool.Add(archdruid, 0.01f);
                         }
                     }
