@@ -1,1 +1,2 @@
-- Updated to the new tModLoader monthly build
+- Backwoods enemies now correctly check for certain walls for spawning
+- Fixed a bug that prevented certain rare enemies from spawning more than once
