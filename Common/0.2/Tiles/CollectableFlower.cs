@@ -64,9 +64,11 @@ abstract class CollectableFlower : ModTile {
         }
 
         Player player = Main.LocalPlayer;
-        player.noThrow = 2;
-        player.cursorItemIconEnabled = true;
-        player.cursorItemIconID = GetItemDrops(i, j).Single().type;
+        if (player.IsWithinSnappngRangeToTile(i, j, 40)) {
+            player.noThrow = 2;
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = GetItemDrops(i, j).Single().type;
+        }
     }
 
     public sealed override bool RightClick(int i, int j) {

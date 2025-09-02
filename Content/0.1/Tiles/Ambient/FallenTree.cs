@@ -76,7 +76,7 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.IPos
         Vector2 drawPosition = new(i * 16 - (int)Main.screenPosition.X - 18,
                                    j * 16 - (int)Main.screenPosition.Y);
         Color color = Lighting.GetColor(i, j);
-        if (BackwoodsFogHandler.Opacity > 0f) {
+        if (BackwoodsFogHandler.Opacity > 0f && TileDrawing.IsVisible(tile)) {
             SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);

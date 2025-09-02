@@ -16,6 +16,30 @@ namespace RoA.Content.Tiles.Miscellaneous;
 sealed class BackwoodsFogMusicBox : MusicBox {
     protected override int CursorItemType => ModContent.ItemType<Items.Placeable.MusicBoxes.BackwoodsFogMusicBox>();
 
+    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
+        Tile tile = Main.tile[i, j];
+        bool flag = tile.TileFrameX == 36;
+        if (flag) {
+            float value = 0.2f;
+            int frame = Main.tileFrame[Type];
+            switch (frame) {
+                case 1 or 5:
+                    value = 0.4f;
+                    break;
+                case 2 or 4:
+                    value = 0.6f;
+                    break;
+                case 3:
+                    value = 0.8f;
+                    break;
+            }
+            Color color = Color.Green * 0.75f;
+            r = color.R * value / 255f;
+            g = color.G * value / 255f;
+            b = color.B * value / 255f;
+        }
+    }
+
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         if (!TileDrawing.IsVisible(Main.tile[i, j])) {
             return false;
@@ -81,8 +105,6 @@ sealed class BackwoodsFogMusicBox : MusicBox {
                         value = 0.8f;
                         break;
                 }
-                Lighting.AddLight(position,
-                    (Color.Green * value).ToVector3() * 0.75f);
 
                 int type = ModContent.DustType<NaturesHeartDust>();
                 if (!WorldGenHelper.GetTileSafely(i, j + 1).ActiveTile(Type)) {

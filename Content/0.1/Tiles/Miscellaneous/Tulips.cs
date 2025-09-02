@@ -170,9 +170,11 @@ sealed class ExoticTulip : ModTile {
 
     public override void MouseOver(int i, int j) {
         Player player = Main.player[Main.myPlayer];
-        player.noThrow = 2;
-        player.cursorItemIconEnabled = true;
-        player.cursorItemIconID = GetItemDrops(i, j).Single().type;
+        if (player.IsWithinSnappngRangeToTile(i, j, 40)) {
+            player.noThrow = 2;
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = GetItemDrops(i, j).Single().type;
+        }
     }
 
     public override bool RightClick(int i, int j) {
@@ -238,9 +240,11 @@ sealed class SweetTulip : ModTile {
 
     public override void MouseOver(int i, int j) {
         Player player = Main.player[Main.myPlayer];
-        player.noThrow = 2;
-        player.cursorItemIconEnabled = true;
-        player.cursorItemIconID = GetItemDrops(i, j).Single().type;
+        if (player.IsWithinSnappngRangeToTile(i, j, 40)) {
+            player.noThrow = 2;
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = GetItemDrops(i, j).Single().type;
+        }
     }
 
     public override bool RightClick(int i, int j) {
@@ -308,9 +312,11 @@ sealed class WeepingTulip : ModTile {
 
     public override void MouseOver(int i, int j) {
         Player player = Main.player[Main.myPlayer];
-        player.noThrow = 2;
-        player.cursorItemIconEnabled = true;
-        player.cursorItemIconID = GetItemDrops(i, j).Single().type;
+        if (player.IsWithinSnappngRangeToTile(i, j, 40)) {
+            player.noThrow = 2;
+            player.cursorItemIconEnabled = true;
+            player.cursorItemIconID = GetItemDrops(i, j).Single().type;
+        }
     }
 
     public override bool RightClick(int i, int j) {

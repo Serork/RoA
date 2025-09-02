@@ -201,13 +201,13 @@ static partial class TileHelper {
         ushort type = (ushort)ModContent.TileType<T>();
         int left = i;
         int top = j;
-        while (Main.tile[i, top].TileFrameX != 0) {
+        while (true) {
             if (!WorldGen.InWorld(i, top) || !Main.tile[i, top].ActiveTile(type)) {
                 break;
             }
             --i;
         }
-        while (Main.tile[left, j].TileFrameY != 0) {
+        while (true) {
             if (!WorldGen.InWorld(left, j) || !Main.tile[left, j].ActiveTile(type)) {
                 break;
             }

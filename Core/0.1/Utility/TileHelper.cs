@@ -244,9 +244,9 @@ static partial class TileHelper {
                 PostPlayerDrawPoints.RemoveAt(i);
             }
             if (modTile is ITileAfterPlayerDraw tileHaveExtras && modTile is not null) {
-                if (!TileDrawing.IsVisible(Main.tile[tilePosition.X, tilePosition.Y])) {
-                    continue;
-                }
+                //if (!TileDrawing.IsVisible(Main.tile[tilePosition.X, tilePosition.Y])) {
+                //    continue;
+                //}
                 if (!Main.tile[tilePosition.X, tilePosition.Y].HasTile) {
                     PostPlayerDrawPoints.Remove((modTile, tilePosition));
                 }
@@ -264,9 +264,9 @@ static partial class TileHelper {
                 SolidTileDrawPoints.RemoveAt(i);
             }
             if (modTile is IPreDraw tileHaveExtras && modTile is not null) {
-                if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
-                    continue;
-                }
+                //if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
+                //    continue;
+                //}
                 tileHaveExtras.PreDrawExtra(Main.spriteBatch, position);
             }
         }
@@ -281,9 +281,6 @@ static partial class TileHelper {
                 SolidTileDrawPoints.RemoveAt(i);
             }
             if (modTile is IPostDraw tileHaveExtras && modTile is not null) {
-                if (!TileDrawing.IsVisible(Main.tile[tilePosition.X, tilePosition.Y])) {
-                    continue;
-                }
                 tileHaveExtras.PostDrawExtra(Main.spriteBatch, tilePosition);
             }
         }

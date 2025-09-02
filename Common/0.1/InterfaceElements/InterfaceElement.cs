@@ -17,15 +17,17 @@ abstract class InterfaceElement(string name, InterfaceScaleType scaleType) : Gam
     public virtual void Unload() { }
 
     public virtual bool ShouldDrawSelfInMenu() => false;
+
+    public virtual void Update() { }
 }
 
 [Autoload(Side = ModSide.Client)]
 sealed class InterfaceElementsSystem : ModSystem {
-    private static readonly Dictionary<Type, InterfaceElement> _interfaceElements = [];
+    public static Dictionary<Type, InterfaceElement> InterfaceElements { get; private set; } = [];
 
-    public static IEnumerable<InterfaceElement> GetElements() => _interfaceElements.Values;
+    public static IEnumerable<InterfaceElement> GetElements() => InterfaceElements.Values;
 
-    public static void Register(InterfaceElement element) => _interfaceElements.Add(element.GetType(), element);
+    public static void Register(InterfaceElement element) => InterfaceElements.Add(element.GetType(), element);
 
     public override void Load() {
         foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(InterfaceElement)))) {
@@ -43,6 +45,14 @@ sealed class InterfaceElementsSystem : ModSystem {
             int index = element.GetInsertIndex(layers);
             if (index != -1) {
                 layers.Insert(index, element);
+            }
+        }
+    }
+
+    public override void PostUpdatePlayers() {
+        foreach (InterfaceElement element in GetElements()) {
+            if (element.Active) {
+                element.Update();
             }
         }
     }

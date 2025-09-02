@@ -15,16 +15,27 @@ sealed class LothorMusicBox : MusicBox {
 
     protected override int GoreOffsetX => 4;
 
+    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
+        Tile tile = Main.tile[i, j];
+        if (tile.TileFrameX > 18) {
+            float value = 1f;
+            Color color = new Color(1f, 0.2f, 0.2f) * value * 0.75f;
+            r = color.R / 255f * 0.75f;
+            g = color.G / 255f * 0.75f;
+            b = color.B / 255f * 0.75f;
+        }
+    }
+
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
         if (!TileDrawing.IsVisible(Main.tile[i, j])) {
             return false;
         }
 
         Tile tile = Main.tile[i, j];
-        if (tile.TileFrameX > 18) {
-            float value = 1f;
-            Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), new Vector3(1f, 0.2f, 0.2f) * value * 0.75f);
-        }
+        //if (tile.TileFrameX > 18) {
+        //    float value = 1f;
+        //    Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), new Vector3(1f, 0.2f, 0.2f) * value * 0.75f);
+        //}
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
         if (Main.drawToScreen) {
             zero = Vector2.Zero;

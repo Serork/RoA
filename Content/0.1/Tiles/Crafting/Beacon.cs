@@ -147,7 +147,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
             }
         }
     }
-
+    
     void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X;
         int j = pos.Y;
@@ -171,9 +171,11 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
             drawPos.Y -= 4f;
             Color color = GetEffectsColor(i, j).MultiplyRGB(new Color(250, 250, 250));
             Vector2 scale = beaconTE.IsUsed ? beaconTE.Scale : new(0.2f, 1f);
-            for (float k = -MathHelper.Pi; k <= MathHelper.Pi; k += MathHelper.PiOver2) {
-                spriteBatch.Draw(texture, drawPos + zero + beaconTE.OffsetPosition,
-                    null, color.MultiplyAlpha(Helper.Wave(0.3f, 0.9f, 4f, k)) * 0.3f, 0f, new(texture.Width / 2f, texture.Height), scale * Helper.Wave(0.85f, 1.15f, speed: 2f), SpriteEffects.None, 0f);
+            if (TileDrawing.IsVisible(Main.tile[i, j])) {
+                for (float k = -MathHelper.Pi; k <= MathHelper.Pi; k += MathHelper.PiOver2) {
+                    spriteBatch.Draw(texture, drawPos + zero + beaconTE.OffsetPosition,
+                        null, color.MultiplyAlpha(Helper.Wave(0.3f, 0.9f, 4f, k)) * 0.3f, 0f, new(texture.Width / 2f, texture.Height), scale * Helper.Wave(0.85f, 1.15f, speed: 2f), SpriteEffects.None, 0f);
+                }
             }
 
             Vector2 spinningpoint4 = Vector2.UnitX * 14f;

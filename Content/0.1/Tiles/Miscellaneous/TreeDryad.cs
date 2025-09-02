@@ -83,24 +83,26 @@ sealed class TreeDryad : ModTile, IRequestAssets, TileHooks.IPreDraw, TileHooks.
 
             if (isOrigin) {
                 if (AssetInitializer.TryGetRequestedTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Glow, out Asset<Texture2D> glowTextureAsset)) {
-                    Texture2D glowTexture = glowTextureAsset!.Value;
-                    const byte GLOWFRAMECOUNT = 8;
-                    SpriteFrame glowFrame = new(1, GLOWFRAMECOUNT, 0, (byte)(Utils.Remap(lightStrengthFactor, 0.75f, 1f, 1f, 0f) * GLOWFRAMECOUNT));
-                    Rectangle glowClip = glowFrame.GetSourceRectangle(glowTexture);
-                    Vector2 glowPosition = topLeft.ToWorldCoordinates() + new Vector2(9f, 1f);
-                    Vector2 glowOrigin = glowClip.Size() / 2f;
-                    Color glowColor = Color.White * 0.4f;
-                    bool turnedLeft = _frameX <= 18;
-                    if (turnedLeft) {
-                        glowPosition.X -= 18f;
+                    if (TileDrawing.IsVisible(Main.tile[tilePosition.X, tilePosition.Y])) {
+                        Texture2D glowTexture = glowTextureAsset!.Value;
+                        const byte GLOWFRAMECOUNT = 8;
+                        SpriteFrame glowFrame = new(1, GLOWFRAMECOUNT, 0, (byte)(Utils.Remap(lightStrengthFactor, 0.75f, 1f, 1f, 0f) * GLOWFRAMECOUNT));
+                        Rectangle glowClip = glowFrame.GetSourceRectangle(glowTexture);
+                        Vector2 glowPosition = topLeft.ToWorldCoordinates() + new Vector2(9f, 1f);
+                        Vector2 glowOrigin = glowClip.Size() / 2f;
+                        Color glowColor = Color.White * 0.4f;
+                        bool turnedLeft = _frameX <= 18;
+                        if (turnedLeft) {
+                            glowPosition.X -= 18f;
+                        }
+                        SpriteEffects glowFlip = !turnedLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                        spriteBatch.Draw(glowTexture, glowPosition, DrawInfo.Default with {
+                            Clip = glowClip,
+                            Origin = glowOrigin,
+                            Color = glowColor,
+                            ImageFlip = glowFlip
+                        });
                     }
-                    SpriteEffects glowFlip = !turnedLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                    spriteBatch.Draw(glowTexture, glowPosition, DrawInfo.Default with {
-                        Clip = glowClip,
-                        Origin = glowOrigin,
-                        Color = glowColor,
-                        ImageFlip = glowFlip
-                    });
                 }
             }
         }
@@ -108,6 +110,9 @@ sealed class TreeDryad : ModTile, IRequestAssets, TileHooks.IPreDraw, TileHooks.
 
     private static void DrawRays(SpriteBatch spriteBatch, Point16 tilePosition, float colorOpacity) {
         int i = tilePosition.X, j = tilePosition.Y;
+        if (!TileDrawing.IsVisible(Main.tile[tilePosition.X, tilePosition.Y])) {
+            return;
+        }
         Point16 topLeft = TileHelper.GetTileTopLeft<TreeDryad>(i, j);
         if (topLeft == tilePosition && AssetInitializer.TryGetRequestedTextureAsset<TreeDryad>((byte)TreeDryadRequstedTextureType.Ray, out Asset<Texture2D> rayTextureAsset)) {
             Texture2D rayTexture = rayTextureAsset!.Value;

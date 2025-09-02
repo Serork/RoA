@@ -703,7 +703,7 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
         //    Main.spriteBatch.DrawSelf(TextureAssets.Tile[tile.TileType].Value, new Vector2(i * 16, j * 16) - Main.screenPosition + zero, value, Lighting.GetColor(i, j), 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
         //}
 
-        if (IsTop(i, j)) {
+        if (IsTop(i, j) && TileDrawing.IsVisible(tile)) {
             DrawItselfParts(i, j, Main.spriteBatch, ResourceManager.TileTextures + "Ambient/LargeTrees/BackwoodsBigTree", ModContent.TileType<BackwoodsBigTree>());
         }
 
@@ -729,7 +729,7 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
                 spriteBatch.Draw(extraTexture, drawPosition + Vector2.UnitX * 14f + new Vector2(left ? 0f : 3f, 3f),
                     new Rectangle(left ? 21 : 0, usedFrame * height, 21, height), color, 0f, Vector2.Zero, 1f, effects, 0);
 
-                if (flag && BackwoodsFogHandler.Opacity > 0f) {
+                if (flag && BackwoodsFogHandler.Opacity > 0f && TileDrawing.IsVisible(tile)) {
                     SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
                     spriteBatch.End();
                     spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Main.Transform);

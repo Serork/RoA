@@ -72,6 +72,9 @@ partial class Tapper : ModTile, TileHooks.IPostDraw {
         int i = pos.X;
         int j = pos.Y;
         int type = Main.tile[i, j].TileType;
+        if (!TileDrawing.IsVisible(Main.tile[i, j])) {
+            return;
+        }
         if (type == ModContent.TileType<Tapper>()) {
             int tileType = WorldGenHelper.GetTileSafely(i, j).TileType;
             TileObjectData tileData = TileObjectData.GetTileData(tileType, 0);

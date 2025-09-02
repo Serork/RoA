@@ -217,12 +217,18 @@ sealed class FenethStatue : ModTile {
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
+        Tile tile = Main.tile[i, j];
+        if (tile.TileFrameY == 0 && (tile.TileFrameX == 72 || tile.TileFrameX == 36)) {
+            Color color = Color.Orange;
+            color *= 0.4f;
+            Lighting.AddLight(new Point(i, j).ToWorldCoordinates() - Vector2.One * 8f, new Vector3(color.R / 255f, color.G / 255f, color.B / 255f));
+        }
+
         if (!TileDrawing.IsVisible(Main.tile[i, j])) {
             return false;
         }
 
         // not cool 
-        Tile tile = Main.tile[i, j];
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
         if (Main.drawToScreen) {
             zero = Vector2.Zero;
@@ -263,12 +269,6 @@ sealed class FenethStatue : ModTile {
                               new Vector2(i * 16 - (int)Main.screenPosition.X + offsetX, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0)) + zero,
                               new Rectangle(frameX, frameY, width, height),
                               Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-
-        if (tile.TileFrameY == 0 && (tile.TileFrameX == 72 || tile.TileFrameX == 36)) {
-            Color color = Color.Orange;
-            color *= 0.4f;
-            Lighting.AddLight(new Point(i, j).ToWorldCoordinates() - Vector2.One * 8f, new Vector3(color.R / 255f, color.G / 255f, color.B / 255f));
-        }
 
         return false;
     }

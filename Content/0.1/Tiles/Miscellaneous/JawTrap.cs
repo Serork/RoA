@@ -176,6 +176,9 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
     void TileHooks.ITileAfterPlayerDraw.PostPlayerDraw(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X; int j = pos.Y;
         Tile tile = Main.tile[i, j];
+        if (!TileDrawing.IsVisible(tile)) {
+            return;
+        }
         int type = ModContent.TileType<JawTrap>();
         if (tile.TileType != type) {
             return;

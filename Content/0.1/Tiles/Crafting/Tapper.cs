@@ -71,7 +71,7 @@ partial class Tapper : ModTile {
 
     public override void MouseOver(int i, int j) {
         Player player = Main.LocalPlayer;
-        if (player.IsWithinSnappngRangeToTile(i, j, 40)) {
+        if (player.IsWithinSnappngRangeToTile(i, j, 80)) {
             player.noThrow = 2;
             player.cursorItemIconEnabled = true;
             TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
@@ -180,7 +180,7 @@ partial class Tapper : ModTile {
         }
 
         Player player = Main.LocalPlayer;
-        if (player.IsWithinSnappngRangeToTile(i, j, 40) && !player.ItemAnimationActive) {
+        if (player.IsWithinSnappngRangeToTile(i, j, 80) && !player.ItemAnimationActive) {
             TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
             Vector2 position = new Vector2(i, j).ToWorldCoordinates();
             void dropItem(ushort itemType) {
