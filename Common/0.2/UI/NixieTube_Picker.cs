@@ -91,6 +91,9 @@ sealed class NixieTubePicker : InterfaceElement {
         int num17 = SIZEX;
         int num18 = SIZEY;
         Rectangle box = new((int)(x - num17), (int)(y - num18), (int)zero.X + num17 * 2, (int)zero.Y + num18 + num18 / 2);
+        if (box.Contains(Main.MouseScreen.ToPoint())) {
+            Main.LocalPlayer.mouseInterface = true;
+        }
         Color color = new Color(33, 43, 79) * 0.8f;
         Utils.DrawInvBG(batch, box, color);
 
@@ -180,7 +183,6 @@ sealed class NixieTubePicker : InterfaceElement {
                     if (Main.mouseLeft && Main.mouseLeftRelease) {
                         ChangeNixieTubeSymbol(index);
                     }
-                    Main.LocalPlayer.mouseInterface = true;
                 }
             }
             else {
@@ -200,6 +202,7 @@ sealed class NixieTubePicker : InterfaceElement {
         int width = clip.Width + 2,
             height = clip.Height + 2;
         startPosition.X += width / 2;
+        startPosition.X -= SIZEX / 2;
         for (int i = 0; i < LENGTH; i++) {
             GetColumnAndRow((byte)i, out byte column, out byte row);
             Vector2 position = startPosition;
@@ -226,7 +229,7 @@ sealed class NixieTubePicker : InterfaceElement {
             clip = frame.GetSourceRectangle(texture);
             clip.Width += 1;
             clip.Height += 2;
-            position.X -= width * columnsPerRow[rowCount] / 2f;
+            //position.X -= width * columnsPerRow[rowCount] / 2f;
             GetColumnAndRowFromTile(out byte column2, out byte row2);
             drawPickIcon((byte)i, batch, position, clip, column2 == column && row2 == row);
             startPosition.X += width;
@@ -239,6 +242,7 @@ sealed class NixieTubePicker : InterfaceElement {
         int width = tileData.Width;
         int height = tileData.Height;
         GetColumnAndRow(index, out byte column, out byte row);
+        NixieTube.GetTE(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y).Activate();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Tile tile = Main.tile[_nixieTubeTilePosition.X + i, _nixieTubeTilePosition.Y + j];
