@@ -74,7 +74,7 @@ sealed class NixieTubePicker : InterfaceElement {
             }
         }
     BreakLoops:
-        if (tooFar || _attachedPosition == Vector2.Zero) {
+        if (tooFar || _attachedPosition == Vector2.Zero || WorldGenHelper.GetTileSafely(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y).TileType != ModContent.TileType<NixieTube>()) {
             Active = false;
         }
     }
