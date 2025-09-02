@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.InterfaceElements;
+using RoA.Common.Items;
 using RoA.Content.Tiles.Decorations;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
@@ -17,7 +18,10 @@ using System.Reflection;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.UI;
@@ -27,15 +31,13 @@ namespace RoA.Content.UI;
 sealed class NixieTubePicker : InterfaceElement {
     private static byte SYMBOLCOUNTMAXINAROW => 26;
     private static byte SYMBOLCOUNTMAXINACOLUMN => 3;
-    private static ushort SIZEX => 326;
-    private static ushort SIZEY => 58;
     private static byte NUMBERCOUNT => 10;
     private static byte ENGSYMCOUNT => 26;
     private static byte MISCSYMCOUNT => 4;
     private static int LENGTH => NUMBERCOUNT + ENGSYMCOUNT + MISCSYMCOUNT;
 
     private static Vector2 _attachedPosition;
-    private static Point16 _nixieTubeTilePosition;
+    private static Point16 _nixieTubeTilePosition = Point16.Zero;
     private static Asset<Texture2D>? _pickButton, _borderButton;
     private static bool[]? _soundPlayed, _mouseHovering;
     private static byte[]? _columnsPerRow;
@@ -74,7 +76,7 @@ sealed class NixieTubePicker : InterfaceElement {
             }
         }
     BreakLoops:
-        if (tooFar || _attachedPosition == Vector2.Zero || WorldGenHelper.GetTileSafely(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y).TileType != ModContent.TileType<NixieTube>()) {
+        if (!Main.playerInventory || tooFar || _attachedPosition == Vector2.Zero || WorldGenHelper.GetTileSafely(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y).TileType != ModContent.TileType<NixieTube>()) {
             Active = false;
         }
     }
@@ -82,33 +84,153 @@ sealed class NixieTubePicker : InterfaceElement {
     protected override bool DrawSelf() {
         SpriteBatch batch = Main.spriteBatch;
         Vector2 position = _attachedPosition;
+        int sizeX = _columnsPerRow!.Max() * 12 + 16;
+        int sizeY = SYMBOLCOUNTMAXINACOLUMN * 12 + 24;
         position.X -= 8f;
         position.Y -= 16f * 6f;
-        position.Y += SIZEY / 2;
+        position.Y += sizeY / 2;
         position -= Main.screenPosition;
         Vector2 zero = Vector2.Zero;
         float x = position.X, y = position.Y;
-        int num17 = SIZEX;
-        int num18 = SIZEY;
+        int num17 = sizeX;
+        int num18 = sizeY;
         Rectangle box = new((int)(x - num17), (int)(y - num18), (int)zero.X + num17 * 2, (int)zero.Y + num18 + num18 / 2);
         if (box.Contains(Main.MouseScreen.ToPoint())) {
             Main.LocalPlayer.mouseInterface = true;
         }
         Color color = new Color(33, 43, 79) * 0.8f;
-        Utils.DrawInvBG(batch, box, color);
 
         Vector2 startPosition = position + Main.screenPosition;
-        startPosition.Y -= SIZEY / 2;
-        startPosition.Y -= 11 - 2;
+
+        DrawDyeSlot(batch, position, sizeY);
+
+        Utils.DrawInvBG(batch, box, color);
+
+        startPosition.Y -= sizeY / 2;
+        startPosition.Y -= 10;
         DrawPickIcons(batch, startPosition);
 
+
         return true;
+    }
+
+    private static void DrawDyeSlot(SpriteBatch batch, Vector2 position, float sizeY) {
+        if (_nixieTubeTilePosition == Point16.Zero) {
+            return;
+        }
+        NixieTubeTE? te = NixieTube.GetTE(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y);
+        if (te is null) {
+            return;
+        }
+        ref Item? item = ref te.Dye;
+        if (item is null) {
+            return;
+        }
+        Main.inventoryScale = 0.6f;
+        Item[] items = [item];
+        Vector2 dyeSlotPosition = position - new Vector2(14, sizeY * 2f - 20);
+        float x = dyeSlotPosition.X, y = dyeSlotPosition.Y;
+        Player player = Main.LocalPlayer;
+        if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, x, y, TextureAssets.InventoryBack.Width() * Main.inventoryScale, TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface) {
+            player.mouseInterface = true;
+            int context = -10;
+            int slot = 0;
+            //Main.armorHide = true;
+            ItemSlot.OverrideHover(items, Math.Abs(context), slot);
+
+            bool flag = Main.mouseLeftRelease && Main.mouseLeft;
+            if (flag) {
+                bool needSync = false;
+                BeltButton.ToggleTo(true);
+                if (ItemSlot.ShiftInUse && !item.IsEmpty()) {
+                    item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, item, GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                    SoundEngine.PlaySound(SoundID.Grab);
+                    needSync = true;
+                }
+                else if (!item.IsEmpty() && !Main.mouseItem.IsAir && item.stack == Main.mouseItem.stack) {
+                    if (item.type != Main.mouseItem.type) {
+                        (item, Main.mouseItem) = (Main.mouseItem, item);
+                        SoundEngine.PlaySound(SoundID.Grab);
+                        needSync = true;
+                    }
+                }
+                else {
+                    if (!Main.mouseItem.IsAir && Main.mouseItem.dye > 0) {
+                        if (Main.mouseItem.stack == 1) {
+                            item = ItemLoader.TransferWithLimit(Main.mouseItem, 1);
+                            SoundEngine.PlaySound(SoundID.Grab);
+                            needSync = true;
+                        }
+                        else if (item.IsEmpty()) {
+                            item.type = Main.mouseItem.type;
+                            item.stack = 1;
+                            Main.mouseItem.stack -= 1;
+                            SoundEngine.PlaySound(SoundID.Grab);
+                            needSync = true;
+                        }
+                    }
+                    else if (!item.IsEmpty()) {
+                        Main.mouseItem = ItemLoader.TransferWithLimit(item, 1);
+                        SoundEngine.PlaySound(SoundID.Grab);
+                        needSync = true;
+                    }
+                }
+                //if (needSync && Main.netMode == NetmodeID.MultiplayerClient) {
+                //    MultiplayerSystem.SendPacket(new ExtraMannequinInfoItemsPacket(Main.LocalPlayer, MannequinsInWorldSystem.MannequinsInWorld.FindIndex(a => a.Position == data.Position), false));
+                //}
+            }
+
+            var inv = items;
+            if (inv[slot].type > 0 && inv[slot].stack > 0) {
+                //_customCurrencyForSavings = inv[slot].shopSpecialCurrency;
+                Main.hoverItemName = inv[slot].Name;
+                if (inv[slot].stack > 1)
+                    Main.hoverItemName = Main.hoverItemName + " (" + inv[slot].stack + ")";
+
+                Main.HoverItem = inv[slot].Clone();
+                Main.HoverItem.tooltipContext = context;
+                if (context == 8 && slot <= 2) {
+                    Main.HoverItem.wornArmor = true;
+                    return;
+                }
+
+                switch (context) {
+                    case 9:
+                    case 11:
+                        Main.HoverItem.social = true;
+                        break;
+                    case 15:
+                        Main.HoverItem.buy = true;
+                        break;
+                }
+            }
+            else {
+                Main.hoverItemName = Lang.inter[57].Value;
+            }
+        }
+        MannequinWreathSlotSupport.Draw(batch, items, 12, 0, dyeSlotPosition);
     }
 
     public static void Activate(Point16 tilePosition) {
         ref bool active = ref InterfaceElementsSystem.InterfaceElements[typeof(NixieTubePicker)].Active;
         if (IsAtAttachedPosition(tilePosition)) {
             active = !active;
+            if (!active) {
+                SoundEngine.PlaySound(SoundID.MenuClose);
+
+            }
+        }
+        else {
+            active = true;
+            SoundEngine.PlaySound(SoundID.MenuOpen);
+
+        }
+
+        Main.npcChatText = "";
+        Main.SetNPCShopIndex(-1);
+
+        if (!Main.playerInventory) {
+            Main.playerInventory = true;
         }
 
         Point16 nixieTubeTopLeft = GetTopLeftOfNixieTube(tilePosition);

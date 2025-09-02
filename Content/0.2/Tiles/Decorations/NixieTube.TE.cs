@@ -12,8 +12,11 @@ sealed class NixieTubeTE : ModTileEntity {
     public bool Activated;
     public int DeactivatedTimer, DeactivatedTimer2, ActivatedForTimer;
     public bool Active => DeactivatedTimer <= ACTIVATIONTIME / 3;
+    public Item? Dye = null;
 
     public override void Update() {
+        Dye ??= new Item();
+
         if (!Activated) {
             return;
         }

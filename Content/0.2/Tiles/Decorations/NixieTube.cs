@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -97,15 +98,24 @@ sealed class NixieTube : ModTile {
         int height = WorldGenHelper.GetTileSafely(i, j + 1).TileType != Type ? 18 : 16;
 
         Color color = Lighting.GetColor(i, j);
-        Main.spriteBatch.Draw(texture,
+        spriteBatch.Draw(texture,
                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                               new Rectangle(frameX % 36, frameY % 56, 16, height),
                               color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-        if (flag && GetTE(i, j).Active) {
-            Main.spriteBatch.Draw(texture,
-                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                                  new Rectangle(frameX, frameY, 16, height),
-                                  Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        NixieTubeTE te = GetTE(i, j);
+        if (flag && te.Active) {
+            SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+            spriteBatch.End();
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, snapshot.transformationMatrix);
+            DrawData drawData = new(TextureAssets.Tile[Type].Value,
+                                    new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                                    new Rectangle(frameX, frameY, 16, height),
+                                    Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            if (te.Dye is not null && !te.Dye.IsEmpty()) {
+                GameShaders.Armor.GetShaderFromItemId(te.Dye.type).Apply(null, drawData);
+            }
+            drawData.Draw(spriteBatch);
+            spriteBatch.Begin(snapshot, true);
 
             _multiplyBlendState ??= new() {
                 ColorBlendFunction = BlendFunction.ReverseSubtract,
@@ -115,19 +125,23 @@ sealed class NixieTube : ModTile {
                 AlphaDestinationBlend = Blend.One,
                 AlphaSourceBlend = Blend.SourceAlpha
             };
-            SpriteBatch batch = Main.spriteBatch;
-            SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
-            batch.Begin(snapshot with { blendState = _multiplyBlendState }, true);
-            Main.spriteBatch.Draw(texture,
+            snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+            spriteBatch.Begin(snapshot with { blendState = _multiplyBlendState }, true);
+            spriteBatch.Draw(texture,
                                   new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                                   new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
-                                  color * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            batch.Begin(snapshot with { blendState = BlendState.Additive }, true);
-            Main.spriteBatch.Draw(texture,
+                                  color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
+            spriteBatch.Draw(texture,
                                   new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                                   new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
-                                  color * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            batch.Begin(snapshot, true);
+                                  color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Begin(snapshot, true);
+
+            spriteBatch.Draw(texture,
+                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                                  new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
+                                  color * 0.25f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
 
         return false;
@@ -137,9 +151,10 @@ sealed class NixieTube : ModTile {
         while (TileHelper.GetTE<NixieTubeTE>(i, j) == null) {
             j++;
             if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<NixieTube>()) {
-                bool flag = TileHelper.GetTE<NixieTubeTE>(i - 1, j) != null && WorldGenHelper.GetTileSafely(i - 1, j).TileFrameX % 36 == 0;
-                if (flag || (TileHelper.GetTE<NixieTubeTE>(i + 1, j) != null && WorldGenHelper.GetTileSafely(i + 1, j).TileFrameX % 18 == 0)) {
-                    i += flag.ToDirectionInt() * -1;
+                bool teLeft = TileHelper.GetTE<NixieTubeTE>(i, j) != null;
+                bool teRight = TileHelper.GetTE<NixieTubeTE>(i + 1, j) != null && WorldGenHelper.GetTileSafely(i + 1, j).TileFrameX % 18 == 0;
+                if (teLeft || teRight) {
+                    i += teLeft.ToDirectionInt() * -1;
                     break;
                 }
             }
