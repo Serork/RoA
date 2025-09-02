@@ -106,7 +106,19 @@ sealed class NixieTubePicker : InterfaceElement {
         ref bool active = ref InterfaceElementsSystem.InterfaceElements[typeof(NixieTubePicker)].Active;
         active = !active;
 
-        Point16 nixieTubeTopLeft = TileHelper.GetTileTopLeft<NixieTube>(tilePosition.X, tilePosition.Y);
+        int left = tilePosition.X;
+        int top = tilePosition.Y;
+        Tile tile = Main.tile[left, top];
+        if (tile.TileFrameX % 36 != 0) {
+            left--;
+        }
+        if (tile.TileFrameY % 56 != 0) {
+            top--;
+        }
+        if (WorldGenHelper.GetTileSafely(left, top + 2).TileType != ModContent.TileType<NixieTube>()) {
+            top -= 1;
+        }
+        Point16 nixieTubeTopLeft = new(left, top);
         _attachedPosition = (nixieTubeTopLeft + new Point16(1, 1)).ToWorldCoordinates();
         _nixieTubeTilePosition = nixieTubeTopLeft;
     }
