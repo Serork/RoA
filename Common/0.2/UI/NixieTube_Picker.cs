@@ -104,8 +104,24 @@ sealed class NixieTubePicker : InterfaceElement {
 
     public static void Activate(Point16 tilePosition) {
         ref bool active = ref InterfaceElementsSystem.InterfaceElements[typeof(NixieTubePicker)].Active;
-        active = !active;
+        if (IsAtAttachedPosition(tilePosition)) {
+            active = !active;
+        }
 
+        Point16 nixieTubeTopLeft = GetTopLeftOfNixieTube(tilePosition);
+        _attachedPosition = (nixieTubeTopLeft + new Point16(1, 1)).ToWorldCoordinates();
+        _nixieTubeTilePosition = nixieTubeTopLeft;
+    }
+
+    public static void Deactivate(Point16 tilePosition) {
+        if (IsAtAttachedPosition(tilePosition)) {
+            _attachedPosition = Vector2.Zero;
+        }
+    }
+
+    private static bool IsAtAttachedPosition(Point16 tilePosition) => GetTopLeftOfNixieTube(tilePosition) == _nixieTubeTilePosition;
+
+    private static Point16 GetTopLeftOfNixieTube(Point16 tilePosition) {
         int left = tilePosition.X;
         int top = tilePosition.Y;
         Tile tile = Main.tile[left, top];
@@ -118,12 +134,8 @@ sealed class NixieTubePicker : InterfaceElement {
         if (WorldGenHelper.GetTileSafely(left, top + 2).TileType != ModContent.TileType<NixieTube>()) {
             top -= 1;
         }
-        Point16 nixieTubeTopLeft = new(left, top);
-        _attachedPosition = (nixieTubeTopLeft + new Point16(1, 1)).ToWorldCoordinates();
-        _nixieTubeTilePosition = nixieTubeTopLeft;
+        return new Point16(left, top);
     }
-
-    public static void Deactivate() => _attachedPosition = Vector2.Zero;
 
     private static void DrawPickIcons(SpriteBatch batch, Vector2 startPosition) {
         if (_pickButton?.IsLoaded != true || _borderButton?.IsLoaded != true) {

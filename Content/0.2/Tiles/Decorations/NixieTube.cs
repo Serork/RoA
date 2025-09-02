@@ -38,7 +38,7 @@ sealed class NixieTube : ModTile {
     }
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        NixieTubePicker.Deactivate();
+        NixieTubePicker.Deactivate(new Point16(i, j));
     }
 
     public override void MouseOver(int i, int j) {
