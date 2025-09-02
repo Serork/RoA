@@ -142,14 +142,14 @@ sealed class NixieTubePicker : InterfaceElement {
             return;
         }
 
-        void drawPickIcon(byte index, SpriteBatch batch, Vector2 position, Rectangle clip) {
+        void drawPickIcon(byte index, SpriteBatch batch, Vector2 position, Rectangle clip, bool highligted = false) {
             Texture2D texture = _pickButton!.Value,
                       borderTexture = _borderButton!.Value;
             Vector2 mousePosition = Main.MouseWorld + Vector2.One * clip.Width / 2f;
             bool mouseOver = mousePosition.Between(position, position + clip.Size());
             string hoverText = GetHoverText(index);
             Color color = Color.White;
-            if (!mouseOver) {
+            if (!mouseOver && !highligted) {
                 color *= 0.6f;
             }
             Vector2 origin = clip.Centered();
@@ -160,25 +160,28 @@ sealed class NixieTubePicker : InterfaceElement {
             });
             ref bool mouseHovering = ref _mouseHovering![index];
             ref bool soundPlayed = ref _soundPlayed![index];
-            if (mouseOver) {
+            if (mouseOver || highligted) {
+                bool flag = !highligted || mouseOver;
                 mouseHovering = true;
                 batch.Draw(borderTexture, position, DrawInfo.Default with {
                     Color = color,
                     Clip = borderTexture.Bounds,
                     Origin = origin
                 });
-                if (!Main.mouseText) {
-                    Main.instance.MouseText(hoverText, 0, 0);
-                    Main.mouseText = true;
+                if (flag) {
+                    if (!Main.mouseText) {
+                        Main.instance.MouseText(hoverText, 0, 0);
+                        Main.mouseText = true;
+                    }
+                    if (!soundPlayed) {
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                        soundPlayed = true;
+                    }
+                    if (Main.mouseLeft && Main.mouseLeftRelease) {
+                        ChangeNixieTubeSymbol(index);
+                    }
+                    Main.LocalPlayer.mouseInterface = true;
                 }
-                if (!soundPlayed) {
-                    SoundEngine.PlaySound(SoundID.MenuTick);
-                    soundPlayed = true;
-                }
-                if (Main.mouseLeft && Main.mouseLeftRelease) {
-                    ChangeNixieTubeSymbol(index);
-                }
-                Main.LocalPlayer.mouseInterface = true;
             }
             else {
                 if (mouseHovering && soundPlayed) {
@@ -224,7 +227,8 @@ sealed class NixieTubePicker : InterfaceElement {
             clip.Width += 1;
             clip.Height += 2;
             position.X -= width * columnsPerRow[rowCount] / 2f;
-            drawPickIcon((byte)i, batch, position, clip);
+            GetColumnAndRowFromTile(out byte column2, out byte row2);
+            drawPickIcon((byte)i, batch, position, clip, column2 == column && row2 == row);
             startPosition.X += width;
         }
     }
@@ -243,6 +247,12 @@ sealed class NixieTubePicker : InterfaceElement {
                 tile.TileFrameY = (short)((tileData.CoordinateHeights.Sum() + 2 * height) * row + frameYOffset * j);
             }
         }
+    }
+
+    private static void GetColumnAndRowFromTile(out byte column, out byte row) {
+        Tile tile = WorldGenHelper.GetTileSafely(_nixieTubeTilePosition);
+        column = (byte)(tile.TileFrameX / 36);
+        row = (byte)(tile.TileFrameY / 56);
     }
 
     private static string GetHoverText(byte index) {
