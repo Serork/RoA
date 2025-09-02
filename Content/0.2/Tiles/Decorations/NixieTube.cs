@@ -152,9 +152,9 @@ sealed class NixieTube : ModTile {
             j++;
             if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<NixieTube>()) {
                 bool teLeft = TileHelper.GetTE<NixieTubeTE>(i, j) != null;
-                bool teRight = TileHelper.GetTE<NixieTubeTE>(i + 1, j) != null && WorldGenHelper.GetTileSafely(i + 1, j).TileFrameX % 18 == 0;
+                bool teRight = TileHelper.GetTE<NixieTubeTE>(i + 1, j) != null;
                 if (teLeft || teRight) {
-                    i += teLeft.ToDirectionInt() * -1;
+                    i += teRight.ToInt();
                     break;
                 }
             }
