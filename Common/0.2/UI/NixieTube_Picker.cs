@@ -17,7 +17,6 @@ using System.Reflection;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent.UI.Elements;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -203,7 +202,6 @@ sealed class NixieTubePicker : InterfaceElement {
         int width = clip.Width + 2,
             height = clip.Height + 2;
         startPosition.X += width / 2;
-        startPosition.X -= SIZEX / 2;
         for (int i = 0; i < LENGTH; i++) {
             GetColumnAndRow((byte)i, out byte column, out byte row);
             Vector2 position = startPosition;
