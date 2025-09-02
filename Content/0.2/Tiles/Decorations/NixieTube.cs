@@ -102,8 +102,8 @@ sealed class NixieTube : ModTile {
                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                               new Rectangle(frameX % 36, frameY % 56, 16, height),
                               color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-        NixieTubeTE te = GetTE(i, j);
-        if (flag && te.Active) {
+        NixieTubeTE? te = GetTE(i, j);
+        if (te is not null && flag && te.Active) {
             SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, snapshot.transformationMatrix);
@@ -147,18 +147,29 @@ sealed class NixieTube : ModTile {
         return false;
     }
 
-    public static NixieTubeTE GetTE(int i, int j) {
-        while (TileHelper.GetTE<NixieTubeTE>(i, j) == null) {
+    public static NixieTubeTE? GetTE(int i, int j) {
+        ushort nixieTubeTileType = (ushort)ModContent.TileType<NixieTube>();
+        if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != nixieTubeTileType) {
+            bool teLeft = TileHelper.GetTE<NixieTubeTE>(i, j) != null;
+            bool teRight = TileHelper.GetTE<NixieTubeTE>(i + 1, j) != null;
+            if (teLeft || teRight) {
+                i += teRight.ToInt();
+                return TileHelper.GetTE<NixieTubeTE>(i, j);
+            }
+        }
+
+        while (WorldGenHelper.GetTileSafely(i, j + 1).TileType == nixieTubeTileType) {
             j++;
-            if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != ModContent.TileType<NixieTube>()) {
+            if (WorldGenHelper.GetTileSafely(i, j + 1).TileType != nixieTubeTileType) {
                 bool teLeft = TileHelper.GetTE<NixieTubeTE>(i, j) != null;
                 bool teRight = TileHelper.GetTE<NixieTubeTE>(i + 1, j) != null;
                 if (teLeft || teRight) {
                     i += teRight.ToInt();
-                    break;
+                    return TileHelper.GetTE<NixieTubeTE>(i, j);
                 }
             }
         }
-        return TileHelper.GetTE<NixieTubeTE>(i, j);
+
+        return null;
     }
 }
