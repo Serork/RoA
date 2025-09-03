@@ -62,7 +62,7 @@ sealed class NixieTube : ModTile {
         Player player = Main.LocalPlayer;
         if (player.IsWithinSnappngRangeToTile(i, j, 80)) {
             //NixieTubePicker.Activate(new Point16(i, j));
-            NixieTubePicker_Remade.Toggle(i, j);
+            NixieTubePicker_RemadePicker.Toggle(i, j);
         }
 
         return true;

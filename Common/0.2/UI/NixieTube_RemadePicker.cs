@@ -20,7 +20,7 @@ using Terraria.UI;
 
 namespace RoA.Common.UI;
 
-sealed class NixieTubePicker_DisableInventoryButtons : IInitializer {
+sealed class NixieTubePicker_DisableOnTalk : IInitializer {
     void ILoadable.Load(Mod mod) {
         On_Player.SetTalkNPC += On_Player_SetTalkNPC;
     }
@@ -28,29 +28,32 @@ sealed class NixieTubePicker_DisableInventoryButtons : IInitializer {
     private void On_Player_SetTalkNPC(On_Player.orig_SetTalkNPC orig, Player self, int npcIndex, bool fromNet) {
         orig(self, npcIndex, fromNet);
         if (npcIndex != -1) {
-            NixieTubePicker_Remade.Active = false;
+            NixieTubePicker_RemadePicker.Active = false;
         }
     }
 }
 
-sealed class NixieTubePicker_Remade : SmartUIState {
+sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public const byte NUMCOUNT = 11;
     public const byte ENGCOUNT = 26;
     public const byte MISCCOUNT = 4;
 
-    private readonly UIElement _mainContainer;
-    private readonly UINixieTubePanel numGrid;
-    private readonly UINixieTubePanel engGrid;
-    private readonly UINixieTubePanel miscGrid;
+    private UIElement _mainContainer;
+    private UINixieTubePanel numGrid;
+    private UINixieTubePanel engGrid;
+    private UINixieTubePanel miscGrid;
 
-    private bool _calculated;
     private Point16 _nixieTubeTilePosition;
 
     public static int PickedIndex { get; private set; }
 
     public static bool Active;
 
-    public NixieTubePicker_Remade() {
+    public override bool Visible => Active;
+
+    public override int InsertionIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
+
+    public override void OnInitialize() {
         RemoveAllChildren();
         _mainContainer = new UIElement {
             Width = StyleDimension.FromPixels(700),
@@ -120,10 +123,6 @@ sealed class NixieTubePicker_Remade : SmartUIState {
         PopulateLists();
     }
 
-    public override bool Visible => Active;
-
-    public override int InsertionIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-
     private void UIText_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
         ChangeNixieTubeSymbol(0);
         SoundEngine.PlaySound(SoundID.MenuTick);
@@ -135,7 +134,7 @@ sealed class NixieTubePicker_Remade : SmartUIState {
     }
 
     private void PopulateLists() {
-        numGrid!.RemoveAllChildren();
+        numGrid.RemoveAllChildren();
         List<NixieTubeInfo> buttons = [];
         int last = 0;
         for (int i = 1; i < NUMCOUNT; i++) {
@@ -145,7 +144,7 @@ sealed class NixieTubePicker_Remade : SmartUIState {
         numGrid.Append(numEntries);
         last += NUMCOUNT;
 
-        engGrid!.RemoveAllChildren();
+        engGrid.RemoveAllChildren();
         buttons = [];
         for (int i = last; i < last + ENGCOUNT; i++) {
             buttons.Add(new NixieTubeInfo((byte)i));
@@ -211,7 +210,7 @@ sealed class NixieTubePicker_Remade : SmartUIState {
             index -= 1;
         }
         GetColumnAndRow(index, out byte column, out byte row);
-        var getState = UILoader.GetUIState<NixieTubePicker_Remade>();
+        var getState = UILoader.GetUIState<NixieTubePicker_RemadePicker>();
         var tilePos = getState._nixieTubeTilePosition;
         NixieTube.GetTE(tilePos.X, tilePos.Y).Activate();
         for (int i = 0; i < width; i++) {
@@ -257,9 +256,9 @@ sealed class NixieTubePicker_Remade : SmartUIState {
             Main.playerInventory = true;
             Main.recBigList = false;
             Main.hidePlayerCraftingMenu = true;
-            var getState = UILoader.GetUIState<NixieTubePicker_Remade>();
+            var getState = UILoader.GetUIState<NixieTubePicker_RemadePicker>();
             getState._nixieTubeTilePosition = GetTopLeftOfNixieTube(new Point16(i, j));
-            getState.PopulateLists();
+            //getState.PopulateLists();
         }
         Active = !Active;
     }
@@ -281,7 +280,7 @@ sealed class NixieTubePicker_Remade : SmartUIState {
     }
 
     private static void GetColumnAndRowFromTile(out byte column, out byte row) {
-        var getState = UILoader.GetUIState<NixieTubePicker_Remade>();
+        var getState = UILoader.GetUIState<NixieTubePicker_RemadePicker>();
         Tile tile = WorldGenHelper.GetTileSafely(getState._nixieTubeTilePosition);
         column = (byte)(tile.TileFrameX / 36);
         row = (byte)(tile.TileFrameY / 56);

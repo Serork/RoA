@@ -13,7 +13,7 @@ class UINixieTubeImage : UIFramedImage {
     }
 
     protected override void DrawSelf(SpriteBatch spriteBatch) {
-        if (NixieTubePicker_Remade.PickedIndex == _myIndex || IsMouseHovering) {
+        if (NixieTubePicker_RemadePicker.PickedIndex == _myIndex || IsMouseHovering) {
             Color = Color.White;
         }
         else {

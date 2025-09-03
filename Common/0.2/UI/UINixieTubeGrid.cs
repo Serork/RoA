@@ -21,6 +21,10 @@ sealed class UINixieTubeGrid : UIElement {
         Width = new StyleDimension(0f, 1f);
         Height = new StyleDimension(0f, 1f);
         _workingButtons = workingSet;
+    }
+
+    public override void OnInitialize() {
+        Recalculate();
         SetPadding(0f);
         UpdateEntries();
         FillBestiarySpaceWithEntries();
