@@ -319,6 +319,9 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
 
     public static string GetHoverText(byte index) {
         if (index < NUMCOUNT) {
+            if (index < NUMCOUNT) {
+                index -= 1;
+            }
             return index.ToString();
         }
         if (index < ENGCOUNT + NUMCOUNT) {
