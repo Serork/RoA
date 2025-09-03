@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
+using RoA.Common.Networking;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 using RoA.Core;
@@ -216,6 +217,9 @@ sealed class Cacti : NatureProjectile {
                     Projectile.localAI[0] = 1f;
 
                     if (!flag) {
+                        if (Main.netMode == NetmodeID.MultiplayerClient) {
+                            MultiplayerSystem.SendPacket(new CactiCasterDustsPacket(Projectile.GetOwnerAsPlayer(), corePosition));
+                        }
                         for (int i = 0; i < 15; i++) {
                             int dust = Dust.NewDust(corePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
                             Main.dust[dust].noGravity = true;
