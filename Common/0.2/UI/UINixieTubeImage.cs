@@ -10,7 +10,7 @@ namespace RoA.Common.UI;
 class UINixieTubeImage : UIFramedImage {
     private byte _myIndex;
 
-    public UINixieTubeImage(Asset<Texture2D> texture, Asset<Texture2D> borderTexture, Rectangle frame, byte index) : base(texture, frame) {
+    public UINixieTubeImage(Asset<Texture2D> texture, Rectangle frame, byte index, Asset<Texture2D>? borderTexture = null) : base(texture, frame, borderTexture) {
         _myIndex = index;
     }
 
