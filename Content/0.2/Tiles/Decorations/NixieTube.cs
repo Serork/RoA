@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
+using RoA.Common.UI;
 using RoA.Content.UI;
 using RoA.Core.Utility;
 
@@ -41,7 +42,7 @@ sealed class NixieTube : ModTile {
     }
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        NixieTubePicker.Deactivate(new Point16(i, j));
+        //NixieTubePicker.Deactivate(new Point16(i, j));
     }
 
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<NixieTubeTE>().Kill(i, j);
@@ -60,7 +61,8 @@ sealed class NixieTube : ModTile {
     public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
         if (player.IsWithinSnappngRangeToTile(i, j, 80)) {
-            NixieTubePicker.Activate(new Point16(i, j));
+            //NixieTubePicker.Activate(new Point16(i, j));
+            NixieTubePicker_Remade.Toggle(i, j);
         }
 
         return true;
