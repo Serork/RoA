@@ -102,10 +102,10 @@ sealed class NixieTube : ModTile {
 
         Color color = Lighting.GetColor(i, j);
         spriteBatch.Draw(texture,
-                              new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                              new Rectangle(frameX % 36, frameY % 56, 16, height),
-                              color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-        if (flag && TryGetTE(out NixieTubeTE? nixieTubeTE, i, j) && nixieTubeTE!.Active) {
+                         new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                         new Rectangle(frameX % 36, frameY % 56, 16, height),
+                         color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        if (flag && TryGetTE(out NixieTubeTE? nixieTubeTE, i, j)) {
             SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, snapshot.transformationMatrix);
@@ -116,7 +116,9 @@ sealed class NixieTube : ModTile {
             if (!nixieTubeTE.Dye1.IsEmpty()) {
                 GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye1.type).Apply(null, drawData);
             }
-            drawData.Draw(spriteBatch);
+            if (nixieTubeTE!.Active) {
+                //drawData.Draw(spriteBatch);
+            }
             spriteBatch.Begin(snapshot, true);
 
             _multiplyBlendState ??= new() {
