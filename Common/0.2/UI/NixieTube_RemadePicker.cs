@@ -203,6 +203,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
 
         if (_mainContainer.GetDimensions().ToRectangle().Contains(Main.MouseScreen.ToPoint())) {
             Main.LocalPlayer.mouseInterface = true;
+            Main.LocalPlayer.releaseUseItem = false;
         }
 
         Recalculate();
