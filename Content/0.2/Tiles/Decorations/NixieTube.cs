@@ -117,7 +117,7 @@ sealed class NixieTube : ModTile {
                 GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye1.type).Apply(null, drawData);
             }
             if (nixieTubeTE!.Active) {
-                //drawData.Draw(spriteBatch);
+                drawData.Draw(spriteBatch);
             }
             spriteBatch.Begin(snapshot, true);
 

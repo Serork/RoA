@@ -36,7 +36,7 @@ sealed class NixieTubePicker_DisableOnTalk : IInitializer {
 sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public const byte NUMCOUNT = 11;
     public const byte ENGCOUNT = 26;
-    public const byte MISCCOUNT = 4;
+    public const byte MISCCOUNT = 21;
 
     private readonly UIElement _mainContainer;
     private readonly UINixieTubePanel numGrid;
@@ -44,6 +44,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     private readonly UINixieTubePanel miscGrid;
 
     private static Point16 _nixieTubeTilePosition;
+    private static readonly char[] _miscSymbols = [':', '!', '?', '.', '(', ')', '/', '|', '\u005c', '+', '-', '=', '#', '%', '&', '<', '>', '[', ']', '"', '\u0027'];
 
     public UINixieTubeDyeSlot DyeSlot1 { get; init; }
     public UINixieTubeDyeSlot DyeSlot2 { get; init; }
@@ -331,13 +332,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         }
         if (index < MISCCOUNT + ENGCOUNT + NUMCOUNT) {
             int checkIndex = index - ENGCOUNT - NUMCOUNT;
-            return checkIndex switch {
-                0 => ":",
-                1 => "!",
-                2 => "?",
-                3 => ".",
-                _ => string.Empty
-            };
+            return _miscSymbols[checkIndex].ToString();
         }
         return string.Empty;
     }
