@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using Terraria;
+using Terraria.GameContent.Drawing;
 using Terraria.UI;
 
 namespace RoA.Common.UI;

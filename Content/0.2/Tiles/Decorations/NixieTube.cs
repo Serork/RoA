@@ -35,7 +35,7 @@ sealed class NixieTube : ModTile {
         TileObjectData.newTile.StyleWrapLimit = 36;
         TileObjectData.addTile(Type);
 
-        DustType = DustID.WoodFurniture;
+        DustType = -1;
 
         AddMapEntry(new Color(153, 38, 0), CreateMapEntryName());
     }
