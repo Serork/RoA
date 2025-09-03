@@ -122,7 +122,7 @@ sealed class NixieTubePicker : InterfaceElement {
         if (te is null) {
             return;
         }
-        ref Item? item = ref te.Dye;
+        ref Item? item = ref te.Dye1;
         if (item is null) {
             return;
         }

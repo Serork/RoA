@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
 using RoA.Common.UI;
-using RoA.Content.UI;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -42,7 +41,9 @@ sealed class NixieTube : ModTile {
     }
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        //NixieTubePicker.Deactivate(new Point16(i, j));
+        if (frameX != 0 && frameY != 0) {
+            Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j) * 16, ModContent.ItemType<Items.Placeable.Decorations.NixieTube>());
+        }
     }
 
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<NixieTubeTE>().Kill(i, j);
@@ -104,8 +105,7 @@ sealed class NixieTube : ModTile {
                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                               new Rectangle(frameX % 36, frameY % 56, 16, height),
                               color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-        NixieTubeTE? te = GetTE(i, j);
-        if (te is not null && flag && te.Active) {
+        if (flag && TryGetTE(out NixieTubeTE? nixieTubeTE, i, j) && nixieTubeTE!.Active) {
             SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, snapshot.transformationMatrix);
@@ -113,8 +113,8 @@ sealed class NixieTube : ModTile {
                                     new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                                     new Rectangle(frameX, frameY, 16, height),
                                     Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            if (te.Dye is not null && !te.Dye.IsEmpty()) {
-                GameShaders.Armor.GetShaderFromItemId(te.Dye.type).Apply(null, drawData);
+            if (!nixieTubeTE.Dye1.IsEmpty()) {
+                GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye1.type).Apply(null, drawData);
             }
             drawData.Draw(spriteBatch);
             spriteBatch.Begin(snapshot, true);
@@ -127,25 +127,53 @@ sealed class NixieTube : ModTile {
                 AlphaDestinationBlend = Blend.One,
                 AlphaSourceBlend = Blend.SourceAlpha
             };
-            snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
-            spriteBatch.Begin(snapshot with { blendState = _multiplyBlendState }, true);
-            spriteBatch.Draw(texture,
-                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                                  new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
-                                  color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
-            spriteBatch.Draw(texture,
-                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                                  new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
-                                  color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-            spriteBatch.Begin(snapshot, true);
 
-            spriteBatch.Draw(texture,
-                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                                  new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
-                                  color * 0.25f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+            spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate, blendState = _multiplyBlendState }, true);
+            drawData = new(texture,
+                           new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                           new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
+                           color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            if (!nixieTubeTE.Dye2.IsEmpty()) {
+                GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
+            }
+            drawData.Draw(spriteBatch);
+
+            spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate, blendState = BlendState.Additive }, true);
+            drawData = new(texture,
+                           new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                           new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
+                           color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            if (!nixieTubeTE.Dye2.IsEmpty()) {
+                GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
+            }
+            drawData.Draw(spriteBatch);
+
+            spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate }, true);
+            drawData = new(texture,
+                           new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                           new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
+                           color * 0.25f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            if (!nixieTubeTE.Dye2.IsEmpty()) {
+                GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
+            }
+            drawData.Draw(spriteBatch);
+
+            spriteBatch.Begin(snapshot, true);
         }
 
+        return false;
+    }
+
+
+    public static bool TryGetTE(out NixieTubeTE? nixieTubeTE, int i, int j) {
+        NixieTubeTE? result = GetTE(i, j);
+        if (result is not null) {
+            nixieTubeTE = result;
+            return true;
+        }
+
+        nixieTubeTE = null;
         return false;
     }
 

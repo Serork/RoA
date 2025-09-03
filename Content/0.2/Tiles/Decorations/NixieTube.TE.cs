@@ -1,6 +1,9 @@
-﻿using RoA.Core.Utility;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -12,11 +15,15 @@ sealed class NixieTubeTE : ModTileEntity {
     public bool Activated;
     public int DeactivatedTimer, DeactivatedTimer2, ActivatedForTimer;
     public bool Active => DeactivatedTimer <= ACTIVATIONTIME / 3;
-    public Item? Dye = null;
+    public Item? Dye1 = null;
+    public Item? Dye2 = null;
+
+    public NixieTubeTE() {
+        Dye1 ??= new Item();
+        Dye2 ??= new Item();
+    }
 
     public override void Update() {
-        Dye ??= new Item();
-
         if (!Activated) {
             return;
         }
@@ -31,6 +38,16 @@ sealed class NixieTubeTE : ModTileEntity {
         Activated = true;
 
         DeactivatedTimer = DeactivatedTimer2 = ACTIVATIONTIME;
+    }
+
+    public override void OnKill() {
+        int i = Position.X, j = Position.Y;
+        if (!Dye1.IsEmpty()) {
+            Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j) * 16, Dye1.type);
+        }
+        if (!Dye2.IsEmpty()) {
+            Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j) * 16, Dye2.type);
+        }
     }
 
     public override bool IsTileValidForEntity(int x, int y) {

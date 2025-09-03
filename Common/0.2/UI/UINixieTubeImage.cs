@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using Terraria;
+
 namespace RoA.Common.UI;
 
 class UINixieTubeImage : UIFramedImage {
@@ -18,6 +20,10 @@ class UINixieTubeImage : UIFramedImage {
         }
         else {
             Color = Color.White * 0.5f;
+        }
+
+        if (IsMouseHovering) {
+            Main.hoverItemName = NixieTubePicker_RemadePicker.GetHoverText(_myIndex);
         }
 
         base.DrawSelf(spriteBatch);

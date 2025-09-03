@@ -38,12 +38,15 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public const byte ENGCOUNT = 26;
     public const byte MISCCOUNT = 4;
 
-    private UIElement _mainContainer;
-    private UINixieTubePanel numGrid;
-    private UINixieTubePanel engGrid;
-    private UINixieTubePanel miscGrid;
+    private static UIElement _mainContainer;
+    private static UINixieTubePanel numGrid;
+    private static UINixieTubePanel engGrid;
+    private static UINixieTubePanel miscGrid;
 
-    private Point16 _nixieTubeTilePosition;
+    private static Point16 _nixieTubeTilePosition;
+
+    public static UINixieTubeDyeSlot DyeSlot1 { get; private set; }
+    public static UINixieTubeDyeSlot DyeSlot2 { get; private set; }
 
     public static int PickedIndex { get; private set; }
 
@@ -121,7 +124,27 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         _mainContainer.Append(uIText2);
 
         PopulateLists();
+
+        DyeSlot1 = new UINixieTubeDyeSlot(true, ItemSlot.Context.EquipMiscDye) {
+            Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Top = StyleDimension.FromPercent(0.2f + 0.01f),
+            Left = StyleDimension.FromPercent(1f - 0.095f),
+            Scale = 0.85f
+        };
+        _mainContainer.Append(DyeSlot1);
+
+        DyeSlot2 = new UINixieTubeDyeSlot(false, ItemSlot.Context.EquipMiscDye) {
+            Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Top = StyleDimension.FromPercent(0.5f - 0.06f + 0.03f),
+            Left = StyleDimension.FromPercent(1f - 0.095f),
+            Scale = 0.85f
+        };
+        _mainContainer.Append(DyeSlot2);
     }
+
+    public static NixieTubeTE? GetTE() => NixieTube.GetTE(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y);
 
     private void UIText_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
         ChangeNixieTubeSymbol(0);
@@ -177,6 +200,10 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
 
         Recalculate();
 
+        if (Keyboard.GetState().IsKeyDown(Keys.F5)) {
+            OnInitialize();
+        }
+
         Point16 attachedPositionInTile = _nixieTubeTilePosition;
         Player player = Main.LocalPlayer;
         int distance = 80;
@@ -211,8 +238,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             index -= 1;
         }
         GetColumnAndRow(index, out byte column, out byte row);
-        var getState = UILoader.GetUIState<NixieTubePicker_RemadePicker>();
-        var tilePos = getState._nixieTubeTilePosition;
+        var tilePos = _nixieTubeTilePosition;
         NixieTube.GetTE(tilePos.X, tilePos.Y).Activate();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -257,8 +283,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             Main.playerInventory = true;
             Main.recBigList = false;
             Main.hidePlayerCraftingMenu = true;
-            var getState = UILoader.GetUIState<NixieTubePicker_RemadePicker>();
-            getState._nixieTubeTilePosition = GetTopLeftOfNixieTube(new Point16(i, j));
+            _nixieTubeTilePosition = GetTopLeftOfNixieTube(new Point16(i, j));
         }
         else {
             SoundEngine.PlaySound(SoundID.MenuClose);
@@ -283,9 +308,28 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     }
 
     private static void GetColumnAndRowFromTile(out byte column, out byte row) {
-        var getState = UILoader.GetUIState<NixieTubePicker_RemadePicker>();
-        Tile tile = WorldGenHelper.GetTileSafely(getState._nixieTubeTilePosition);
+        Tile tile = WorldGenHelper.GetTileSafely(_nixieTubeTilePosition);
         column = (byte)(tile.TileFrameX / 36);
         row = (byte)(tile.TileFrameY / 56);
+    }
+
+    public static string GetHoverText(byte index) {
+        if (index < NUMCOUNT) {
+            return index.ToString();
+        }
+        if (index < ENGCOUNT + NUMCOUNT) {
+            return ((char)('A' + (index - NUMCOUNT))).ToString();
+        }
+        if (index < MISCCOUNT + ENGCOUNT + NUMCOUNT) {
+            int checkIndex = index - ENGCOUNT - NUMCOUNT;
+            return checkIndex switch {
+                0 => ":",
+                1 => "!",
+                2 => "?",
+                3 => ".",
+                _ => string.Empty
+            };
+        }
+        return string.Empty;
     }
 }
