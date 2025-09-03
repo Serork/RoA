@@ -136,8 +136,8 @@ public class ItemSlotUIElement : UIElement {
                     SoundEngine.PlaySound(SoundID.MenuTick);
             }
         }
-        else if (Main.cursorOverride == CursorOverrideID.Magnifiers) {
-            Main.cursorOverride = CursorOverrideID.FavoriteStar;
-        }
+        //else if (Main.cursorOverride == CursorOverrideID.Magnifiers) {
+        //    Main.cursorOverride = CursorOverrideID.FavoriteStar;
+        //}
     }
 }
