@@ -9,7 +9,7 @@ using Terraria.UI;
 namespace RoA.Common.UI;
 
 class UIFramedImage : UIElement {
-    private Asset<Texture2D> _texture;
+    private Asset<Texture2D> _texture, _borderTexture;
     public float ImageScale = 1f;
     public float Rotation;
     public bool ScaleToFit;
@@ -20,8 +20,10 @@ class UIFramedImage : UIElement {
     private Texture2D _nonReloadingTexture;
     private Rectangle _frame;
 
-    public UIFramedImage(Asset<Texture2D> texture, Rectangle frame) {
-        SetImage(texture);
+    protected virtual bool ShouldDrawBorder() => true;
+
+    public UIFramedImage(Asset<Texture2D> texture, Rectangle frame, Asset<Texture2D>? borderTexture = null) {
+        SetImage(texture, borderTexture);
         _frame = frame;
     }
 
@@ -30,8 +32,11 @@ class UIFramedImage : UIElement {
         _frame = frame;
     }
 
-    public void SetImage(Asset<Texture2D> texture) {
+    public void SetImage(Asset<Texture2D> texture, Asset<Texture2D>? borderTexture = null) {
         _texture = texture;
+        if (borderTexture != null) {
+            _borderTexture = borderTexture;
+        }
         _nonReloadingTexture = null;
         if (AllowResizingDimensions) {
             Width.Set(_texture.Width(), 0f);
@@ -57,6 +62,10 @@ class UIFramedImage : UIElement {
         if (_nonReloadingTexture != null)
             texture2D = _nonReloadingTexture;
 
+        Texture2D borderTexture2D = null;
+        if (_borderTexture != null)
+            borderTexture2D = _borderTexture.Value;
+
         if (ScaleToFit) {
             spriteBatch.Draw(texture2D, dimensions.ToRectangle(), Color);
             return;
@@ -70,5 +79,8 @@ class UIFramedImage : UIElement {
         Color color = Color;
 
         spriteBatch.Draw(texture2D, vector2, _frame, color, Rotation, vector * NormalizedOrigin, ImageScale, SpriteEffects.None, 0f);
+        if (ShouldDrawBorder() && borderTexture2D != null) {
+            spriteBatch.Draw(borderTexture2D, vector2, _frame, color, Rotation, vector * NormalizedOrigin, ImageScale, SpriteEffects.None, 0f);
+        }
     }
 }

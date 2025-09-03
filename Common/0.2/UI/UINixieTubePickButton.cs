@@ -31,9 +31,10 @@ sealed class UINixieTubePickButton : UIElement {
         };
         uIElement.SetPadding(0f);
         var texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2");
+        var borderTexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2_Border");
         SpriteFrame spriteFrame = new(41, 2, nixieTubeInfo.Index, 0);
         Rectangle frame = spriteFrame.GetSourceRectangle(texture.Value);
-        _image = new UINixieTubeImage(texture, frame, _nixieTubeInfo.Index) {
+        _image = new UINixieTubeImage(texture, borderTexture, frame, _nixieTubeInfo.Index) {
             VAlign = 0.5f,
             HAlign = 0.5f,
             ImageScale = 0.75f
