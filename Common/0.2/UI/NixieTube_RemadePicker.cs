@@ -277,18 +277,22 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     }
 
     public static void Toggle(int i, int j) {
-        if (!Active) {
+        Point16 checkPos = GetTopLeftOfNixieTube(new Point16(i, j));
+        bool flag = Active && checkPos != _nixieTubeTilePosition;
+        if (!Active || flag) {
             SoundEngine.PlaySound(SoundID.MenuOpen);
             Main.LocalPlayer.SetTalkNPC(-1);
             Main.playerInventory = true;
             Main.recBigList = false;
             Main.hidePlayerCraftingMenu = true;
-            _nixieTubeTilePosition = GetTopLeftOfNixieTube(new Point16(i, j));
+            _nixieTubeTilePosition = checkPos;
         }
         else {
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
-        Active = !Active;
+        if (!flag) {
+            Active = !Active;
+        }
     }
 
     private static Point16 GetTopLeftOfNixieTube(Point16 tilePosition) {
