@@ -38,25 +38,21 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public const byte ENGCOUNT = 26;
     public const byte MISCCOUNT = 4;
 
-    private static UIElement _mainContainer;
-    private static UINixieTubePanel numGrid;
-    private static UINixieTubePanel engGrid;
-    private static UINixieTubePanel miscGrid;
+    private readonly UIElement _mainContainer;
+    private readonly UINixieTubePanel numGrid;
+    private readonly UINixieTubePanel engGrid;
+    private readonly UINixieTubePanel miscGrid;
 
     private static Point16 _nixieTubeTilePosition;
 
-    public static UINixieTubeDyeSlot DyeSlot1 { get; private set; }
-    public static UINixieTubeDyeSlot DyeSlot2 { get; private set; }
+    public UINixieTubeDyeSlot DyeSlot1 { get; init; }
+    public UINixieTubeDyeSlot DyeSlot2 { get; init; }
 
     public static int PickedIndex { get; private set; }
 
     public static bool Active;
 
-    public override bool Visible => Active;
-
-    public override int InsertionIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
-
-    public override void OnInitialize() {
+    public NixieTubePicker_RemadePicker() {
         RemoveAllChildren();
         _mainContainer = new UIElement {
             Width = StyleDimension.FromPixels(700),
@@ -142,7 +138,17 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             Scale = 0.85f
         };
         _mainContainer.Append(DyeSlot2);
+
+        Recalculate();
     }
+
+    public override void OnInitialize() {
+        Recalculate();
+    }
+
+    public override bool Visible => Active;
+
+    public override int InsertionIndex(List<GameInterfaceLayer> layers) => layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
 
     public static NixieTubeTE? GetTE() => NixieTube.GetTE(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y);
 
@@ -199,10 +205,6 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         }
 
         Recalculate();
-
-        if (Keyboard.GetState().IsKeyDown(Keys.F5)) {
-            OnInitialize();
-        }
 
         Point16 attachedPositionInTile = _nixieTubeTilePosition;
         Player player = Main.LocalPlayer;
