@@ -14,5 +14,5 @@ WreathWords: wreath
 ExpireLeather1: Expires in {0} minutes
 ExpireLeather2: Expires in {0} minute
 Liquids.Tar.MapEntry: Tar
-NixieTubeDyeSlot1: Symbol Dye
-NixieTubeDyeSlot2: Coverage Dye
+NixieTubeDyeSlot1: Fill Dye
+NixieTubeDyeSlot2: Casing Dye

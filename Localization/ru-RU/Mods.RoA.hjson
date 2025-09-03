@@ -14,3 +14,5 @@ WreathWords: венок;венка;венку;венком;венке
 ExpireLeather1: Сгниет через {0} мин.
 ExpireLeather2: Сгниет через {0} мин.
 // Liquids.Tar.MapEntry: Tar
+// NixieTubeDyeSlot1: Symbol Dye
+// NixieTubeDyeSlot2: Coverage Dye
