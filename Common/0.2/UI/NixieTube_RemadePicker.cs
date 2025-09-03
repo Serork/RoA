@@ -193,6 +193,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     BreakLoops:
         if (!Main.playerInventory || tooFar || _nixieTubeTilePosition == Point16.Zero || WorldGenHelper.GetTileSafely(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y).TileType != ModContent.TileType<NixieTube>()) {
             Active = false;
+            SoundEngine.PlaySound(SoundID.MenuClose);
         }
 
         PickedIndex = GetIndex();
@@ -258,7 +259,9 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             Main.hidePlayerCraftingMenu = true;
             var getState = UILoader.GetUIState<NixieTubePicker_RemadePicker>();
             getState._nixieTubeTilePosition = GetTopLeftOfNixieTube(new Point16(i, j));
-            //getState.PopulateLists();
+        }
+        else {
+            SoundEngine.PlaySound(SoundID.MenuClose);
         }
         Active = !Active;
     }
