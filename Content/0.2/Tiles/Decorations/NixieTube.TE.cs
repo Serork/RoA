@@ -2,10 +2,13 @@
 
 using RoA.Core.Utility;
 
+using System.IO;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Tiles.Decorations;
 
@@ -47,6 +50,24 @@ sealed class NixieTubeTE : ModTileEntity {
         }
         if (!Dye2.IsEmpty()) {
             Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j) * 16, Dye2.type);
+        }
+    }
+
+    public override void SaveData(TagCompound tag) {
+        if (Dye1 is not null) {
+            tag.Add(RoA.ModName + nameof(Dye1), ItemIO.Save(Dye1));
+        }
+        if (Dye2 is not null) {
+            tag.Add(RoA.ModName + nameof(Dye2), ItemIO.Save(Dye2));
+        }
+    }
+
+    public override void LoadData(TagCompound tag) {
+        if (tag.TryGet(RoA.ModName + nameof(Dye1), out TagCompound dye1)) {
+            Dye1 = ItemIO.Load(dye1);
+        }
+        if (tag.TryGet(RoA.ModName + nameof(Dye2), out TagCompound dye2)) {
+            Dye1 = ItemIO.Load(dye2);
         }
     }
 
