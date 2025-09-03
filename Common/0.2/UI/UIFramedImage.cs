@@ -78,9 +78,9 @@ class UIFramedImage : UIElement {
 
         Color color = Color;
 
-        spriteBatch.Draw(texture2D, vector2, _frame, color, Rotation, vector * NormalizedOrigin, ImageScale, SpriteEffects.None, 0f);
+        spriteBatch.Draw(texture2D, vector2.Floor(), _frame, color, Rotation, vector * NormalizedOrigin, ImageScale, SpriteEffects.None, 0f);
         if (ShouldDrawBorder() && borderTexture2D != null) {
-            spriteBatch.Draw(borderTexture2D, vector2, null, color, Rotation, vector * NormalizedOrigin, ImageScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(borderTexture2D, vector2.Floor(), null, color, Rotation, vector * NormalizedOrigin, ImageScale, SpriteEffects.None, 0f);
         }
     }
 }
