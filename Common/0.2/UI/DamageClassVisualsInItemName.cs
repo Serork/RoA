@@ -605,7 +605,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         const byte ARROWCOUNT = 4;
         const byte ARROWFRAMECOUNT = 2;
         Texture2D arrowTexture = damageClassNameVisualsInfo.Texture;
-        OpacityUpdatedInDraws += 0.075f;
+        OpacityUpdatedInDraws = 1f;
         ushort itemType = damageClassNameVisualsInfo.ItemType;
         ulong seedForRandomness3 = itemType;
         int usedFrame = (int)MathF.Min(Utils.RandomInt(ref seedForRandomness3, ARROWFRAMECOUNT + 1), ARROWFRAMECOUNT - 1);
