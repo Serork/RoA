@@ -74,7 +74,7 @@ sealed class NixieTube : ModTile {
         int frameY = tile.TileFrameY;
         int frameX = tile.TileFrameX;
         bool flag = frameY >= 56;
-        if (flag) {
+        if (flag && TryGetTE(out NixieTubeTE? nixieTubeTE, i, j) && nixieTubeTE!.Active) {
             r = 224 / 255f;
             g = 74 / 255f;
             b = 0 / 255f;
