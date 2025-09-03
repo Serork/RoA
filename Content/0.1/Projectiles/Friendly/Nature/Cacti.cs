@@ -21,12 +21,12 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 // TODO: rewrite
 sealed class Cacti : NatureProjectile {
-    private enum State {
+    public enum State {
         Normal,
         Enchanted
     }
 
-    private State _state = State.Normal;
+    internal State _state = State.Normal;
     private Projectile _parent = null;
     private float _useTimeFactor;
 

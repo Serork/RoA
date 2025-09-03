@@ -67,6 +67,11 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
                     Projectile.netUpdate = true;
                 }
             }
+
+            if (Projectile.IsOwnerLocal() && Shot && (!LastShotProjectile.active || LastShotProjectile?.As<Cacti>()._state == Cacti.State.Enchanted)) {
+                Projectile.Kill();
+                Projectile.netUpdate = true;
+            }
         }
 
         public override void PostDraw(Color lightColor) {
@@ -114,13 +119,13 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
 
         //protected override bool ShouldStopUpdatingRotationAndDirection() => Shot && _penaltyTime < TimeAfterShootToExist(Owner) / 5f;
 
+        protected override ushort TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedNatureWeapon, player) * 4);
+
         protected override float MinUseTimeToShootFactor() => 0.61f;
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.1f, 0.15f);
 
-        protected override bool ShouldWaitUntilProjDespawns() => false;
-
-        protected override ushort TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedNatureWeapon, player) * 3);
+        protected override bool ShouldWaitUntilProjDespawns() => true;
 
         protected override bool DespawnWithProj() => true;
 

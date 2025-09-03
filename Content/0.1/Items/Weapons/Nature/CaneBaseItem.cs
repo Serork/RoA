@@ -80,6 +80,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     private Vector2 _positionOffset;
     private bool _shouldBeActive;
     private bool _shouldDrawGlowMask;
+    protected Projectile LastShotProjectile { get; private set; }
 
     protected bool Shot, Shot2;
 
@@ -158,7 +159,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             for (int i = 0; i < count; i++) {
                 SetSpawnProjectileSettings(Owner, ref spawnPosition, ref velocity, ref count, ref ai0, ref ai1, ref ai2);
                 SetSpawnProjectileSettings2(Owner, ref damage, ref knockBack);
-                Projectile.NewProjectileDirect(Owner.GetSource_ItemUse(Owner.GetSelectedItem()), spawnPosition, velocity, ShootType, damage, knockBack, Owner.whoAmI, ai0, ai1, ai2);
+                LastShotProjectile = Projectile.NewProjectileDirect(Owner.GetSource_ItemUse(Owner.GetSelectedItem()), spawnPosition, velocity, ShootType, damage, knockBack, Owner.whoAmI, ai0, ai1, ai2);
             }
         }
     }
