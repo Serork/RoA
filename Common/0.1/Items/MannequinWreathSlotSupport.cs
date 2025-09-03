@@ -19,6 +19,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Tile_Entities;
+using Terraria.GameContent.UI.Chat;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Localization;
@@ -351,12 +352,22 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             Item[] items = [data.Wreath];
             if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, x, y, TextureAssets.InventoryBack.Width() * Main.inventoryScale, TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface) {
                 player.mouseInterface = true;
+                bool favouriteHover = false;
+                if (Main.keyState.IsKeyDown(Main.FavoriteKey) && !data.Wreath.IsAir && Main.drawingPlayerChat) {
+                    Main.cursorOverride = CursorOverrideID.Magnifiers;
+
+                    if (Main.mouseLeft && Main.mouseLeftRelease) {
+                        if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(data.Wreath), Vector2.One))
+                            SoundEngine.PlaySound(SoundID.MenuTick);
+                    }
+                    favouriteHover = true;
+                }
                 int context = -10;
                 int slot = 0;
                 //Main.armorHide = true;
                 ItemSlot.OverrideHover(items, Math.Abs(context), slot);
 
-                bool flag = Main.mouseLeftRelease && Main.mouseLeft;
+                bool flag = Main.mouseLeftRelease && Main.mouseLeft && !favouriteHover;
                 if (flag) {
                     bool needSync = false;
                     BeltButton.ToggleTo(true);
@@ -434,9 +445,19 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             Item[] items = [data.Dye];
             if (Utils.FloatIntersect(Main.mouseX, Main.mouseY, 0f, 0f, x, y, TextureAssets.InventoryBack.Width() * Main.inventoryScale, TextureAssets.InventoryBack.Height() * Main.inventoryScale) && !PlayerInput.IgnoreMouseInterface) {
                 player.mouseInterface = true;
+                bool favouriteHover = false;
+                if (Main.keyState.IsKeyDown(Main.FavoriteKey) && !data.Dye.IsAir && Main.drawingPlayerChat) {
+                    Main.cursorOverride = CursorOverrideID.Magnifiers;
+
+                    if (Main.mouseLeft && Main.mouseLeftRelease) {
+                        if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(data.Dye), Vector2.One))
+                            SoundEngine.PlaySound(SoundID.MenuTick);
+                    }
+                    favouriteHover = true;
+                }
                 int slot = 0;
                 int context = 25;
-                bool flag = Main.mouseLeftRelease && Main.mouseLeft;
+                bool flag = Main.mouseLeftRelease && Main.mouseLeft && !favouriteHover;
                 if (flag) {
                     bool needSync = false;
                     BeltButton.ToggleTo(true);
