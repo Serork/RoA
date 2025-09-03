@@ -129,7 +129,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
             Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
             Top = StyleDimension.FromPercent(0.2f + 0.01f),
-            Left = StyleDimension.FromPercent(1f - 0.095f),
+            Left = StyleDimension.FromPercent(1f - 0.0875f),
             Scale = 0.85f
         };
         _mainContainer.Append(DyeSlot1);
@@ -138,7 +138,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
             Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
             Top = StyleDimension.FromPercent(0.5f - 0.06f + 0.03f),
-            Left = StyleDimension.FromPercent(1f - 0.095f),
+            Left = StyleDimension.FromPercent(1f - 0.0875f),
             Scale = 0.85f
         };
         _mainContainer.Append(DyeSlot2);
