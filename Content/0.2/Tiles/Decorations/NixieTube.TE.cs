@@ -26,6 +26,9 @@ sealed class NixieTubeTE : ModTileEntity {
         Dye2 ??= new Item();
     }
 
+    public void SetDye1(Item item) => Dye1 = item;
+    public void SetDye2(Item item) => Dye2 = item;
+
     public override void Update() {
         if (!Activated) {
             return;

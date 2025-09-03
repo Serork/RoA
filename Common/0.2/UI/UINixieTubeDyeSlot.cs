@@ -25,10 +25,10 @@ sealed class UINixieTubeDyeSlot : ItemSlotUIElement {
         }
         set {
             if (First) {
-                NixieTubePicker_RemadePicker.GetTE()?.Dye1 = value;
+                NixieTubePicker_RemadePicker.GetTE()?.SetDye1(value!);
             }
             else {
-                NixieTubePicker_RemadePicker.GetTE()?.Dye2 = value;
+                NixieTubePicker_RemadePicker.GetTE()?.SetDye2(value!);
             }
         }
     }
