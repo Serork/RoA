@@ -73,8 +73,6 @@ public class ItemSlotUIElement : UIElement {
         Context = context;
         Scale = scale;
 
-        Width.Set(TextureAssets.InventoryBack9.Width() * Scale, 0f);
-        Height.Set(TextureAssets.InventoryBack9.Height() * Scale, 0f);
     }
 
     protected virtual Item? GetStoredItem {
@@ -84,11 +82,12 @@ public class ItemSlotUIElement : UIElement {
 
     protected virtual string HoverText => string.Empty;
 
-    protected override void DrawSelf(SpriteBatch spriteBatch) {
-        if (GetStoredItem == null) {
-            return;
-        }
+    public override void Update(GameTime gameTime) {
+        Width.Set(TextureAssets.InventoryBack9.Width() * Scale, 0f);
+        Height.Set(TextureAssets.InventoryBack9.Height() * Scale, 0f);
+    }
 
+    protected override void DrawSelf(SpriteBatch spriteBatch) {
         float oldScale = Main.inventoryScale;
         Main.inventoryScale = Scale;
 
@@ -98,8 +97,10 @@ public class ItemSlotUIElement : UIElement {
 
         IgnoreNextInteraction = false;
 
-        _dummyItemArray[10] = GetStoredItem;
-        ItemSlot.Draw(spriteBatch, _dummyItemArray, Context, 10, GetDimensions().Position().Floor());
+        if (GetStoredItem != null) {
+            _dummyItemArray[10] = GetStoredItem;
+            ItemSlot.Draw(spriteBatch, _dummyItemArray, Context, 10, GetDimensions().Position().Floor());
+        }
 
         Main.inventoryScale = oldScale;
     }
@@ -107,6 +108,9 @@ public class ItemSlotUIElement : UIElement {
     private void HandleMouseInteraction() {
         Main.LocalPlayer.mouseInterface = true;
 
+        if (GetStoredItem == null) {
+            return;
+        }
         Item item = GetStoredItem!;
         Item oldItem = item.Clone();
         _dummyItemArray[10] = item;
@@ -126,7 +130,11 @@ public class ItemSlotUIElement : UIElement {
     }
 
     private void HandleShareInteraction() {
-        Item item = GetStoredItem!;
+        if (GetStoredItem == null) {
+            return;
+        }
+
+        Item item = GetStoredItem;
 
         if (CanShareItemToChat && Main.keyState.IsKeyDown(Main.FavoriteKey) && !item.IsAir && Main.drawingPlayerChat) {
             Main.cursorOverride = CursorOverrideID.Magnifiers;

@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using ReLogic.Content;
 
 using RoA.Common.UI.UILoading;
 using RoA.Content.Tiles.Decorations;
@@ -33,15 +36,37 @@ sealed class NixieTubePicker_DisableOnTalk : IInitializer {
     }
 }
 
+sealed class NixieTubePicker_TextureLoader : IInitializer {
+    public static Asset<Texture2D> NixieTubeLanguageButton { get; private set; }
+    public static Asset<Texture2D> NixieTubeLanguageButtonBorder { get; private set; }
+    public static Asset<Texture2D> NixieTubePickButton { get; private set; }
+    public static Asset<Texture2D> NixieTubePickButtonBorder { get; private set; }
+
+    void ILoadable.Load(Mod mod) {
+        if (Main.dedServ) {
+            return;
+        }
+
+        NixieTubeLanguageButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LanguageButton");
+        NixieTubeLanguageButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LanguageButton_Border");
+        NixieTubePickButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2");
+        NixieTubePickButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2_Border");
+    }
+}
+
 sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public const byte NUMCOUNT = 11;
     public const byte ENGCOUNT = 26;
+    public const byte RUSCOUNT = 32;
     public const byte MISCCOUNT = 21;
 
     private readonly UIElement _mainContainer;
-    private readonly UINixieTubePanel numGrid;
-    private readonly UINixieTubePanel engGrid;
-    private readonly UINixieTubePanel miscGrid;
+    private readonly UINixieTubePanel _numGrid;
+    private readonly UINixieTubePanel _engRusGrid;
+    private readonly UINixieTubePanel _miscGrid;
+    private readonly UINixieTubeLanguageButton _languageButton;
+
+    public static bool IsRussian { get; private set; }
 
     private static Point16 _nixieTubeTilePosition;
     private static readonly char[] _miscSymbols = [':', '!', '?', '.', '(', ')', '/', '|', '\u005c', '+', '-', '=', '#', '%', '&', '<', '>', '[', ']', '"', '\u0027'];
@@ -73,30 +98,30 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         mainPanel.SetPadding(0f);
         _mainContainer.Append(mainPanel);
 
-        numGrid = new UINixieTubePanel {
+        _numGrid = new UINixieTubePanel {
             Width = StyleDimension.FromPercent(0.2f),
             Height = StyleDimension.FromPercent(0.75f),
             Top = StyleDimension.FromPercent(0.065f),
             Left = StyleDimension.FromPercent(0.02f)
         };
 
-        _mainContainer.Append(numGrid);
+        _mainContainer.Append(_numGrid);
 
-        engGrid = new UINixieTubePanel {
+        _engRusGrid = new UINixieTubePanel {
             Width = StyleDimension.FromPercent(0.35f),
             Height = StyleDimension.FromPercent(0.75f),
             Top = StyleDimension.FromPercent(0.065f),
             Left = StyleDimension.FromPercent(0.23f)
         };
-        _mainContainer.Append(engGrid);
+        _mainContainer.Append(_engRusGrid);
 
-        miscGrid = new UINixieTubePanel {
+        _miscGrid = new UINixieTubePanel {
             Width = StyleDimension.FromPercent(0.3f),
             Height = StyleDimension.FromPercent(0.75f),
             Top = StyleDimension.FromPercent(0.065f),
             Left = StyleDimension.FromPercent(0.59f)
         };
-        _mainContainer.Append(miscGrid);
+        _mainContainer.Append(_miscGrid);
 
         UIClickableNPCButton uIText = new UIClickableNPCButton("Reset", 0.82f) {
             Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
@@ -122,10 +147,20 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
 
         PopulateLists();
 
+        _languageButton = new UINixieTubeLanguageButton(NixieTubePicker_TextureLoader.NixieTubeLanguageButton) {
+            Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Top = StyleDimension.FromPercent(0.65f),
+            Left = StyleDimension.FromPercent(1f - 0.0785f),
+            Scale = 0.75f
+        };
+        _languageButton.SetHoverImage(NixieTubePicker_TextureLoader.NixieTubeLanguageButtonBorder);
+        _languageButton.OnLeftClick += _languageButton_OnLeftClick;
+
         DyeSlot1 = new UINixieTubeDyeSlot(true, ItemSlot.Context.EquipMiscDye) {
             Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
             Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
-            Top = StyleDimension.FromPercent(0.2f + 0.01f),
+            Top = StyleDimension.FromPercent(0.2f + 0.01f - 0.115f),
             Left = StyleDimension.FromPercent(1f - 0.0875f),
             Scale = 0.85f
         };
@@ -134,13 +169,21 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         DyeSlot2 = new UINixieTubeDyeSlot(false, ItemSlot.Context.EquipMiscDye) {
             Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
             Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
-            Top = StyleDimension.FromPercent(0.5f - 0.06f + 0.03f),
+            Top = StyleDimension.FromPercent(0.5f - 0.06f + 0.03f - 0.115f),
             Left = StyleDimension.FromPercent(1f - 0.0875f),
             Scale = 0.85f
         };
         _mainContainer.Append(DyeSlot2);
 
+        _mainContainer.Append(_languageButton);
+
         Recalculate();
+    }
+
+    private void _languageButton_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
+        IsRussian = !IsRussian;
+        PopulateLists();
+        SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
     public override void OnInitialize() {
@@ -164,32 +207,40 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     }
 
     private void PopulateLists() {
-        numGrid.RemoveAllChildren();
+        _numGrid.RemoveAllChildren();
         List<NixieTubeInfo> buttons = [];
         int last = 0;
         for (int i = 1; i < NUMCOUNT; i++) {
             buttons.Add(new NixieTubeInfo((byte)i));
         }
         UINixieTubeGrid numEntries = new UINixieTubeGrid(buttons);
-        numGrid.Append(numEntries);
+        _numGrid.Append(numEntries);
         last += NUMCOUNT;
 
-        engGrid.RemoveAllChildren();
+        _engRusGrid.RemoveAllChildren();
         buttons = [];
-        for (int i = last; i < last + ENGCOUNT; i++) {
-            buttons.Add(new NixieTubeInfo((byte)i));
+        if (IsRussian) {
+            for (int i = last; i < last + RUSCOUNT; i++) {
+                buttons.Add(new NixieTubeInfo((byte)i));
+            }
+            last += RUSCOUNT;
         }
-        UINixieTubeGrid engEntries = new UINixieTubeGrid(buttons);
-        engGrid.Append(engEntries);
-        last += ENGCOUNT;
+        else {
+            for (int i = last; i < last + ENGCOUNT; i++) {
+                buttons.Add(new NixieTubeInfo((byte)i));
+            }
+            last += ENGCOUNT;
+        }
+        UINixieTubeGrid engEntries = new UINixieTubeGrid(buttons, true);
+        _engRusGrid.Append(engEntries);
 
-        miscGrid!.RemoveAllChildren();
+        _miscGrid!.RemoveAllChildren();
         buttons = [];
         for (int i = last; i < last + MISCCOUNT; i++) {
             buttons.Add(new NixieTubeInfo((byte)i));
         }
         UINixieTubeGrid miscEntries = new UINixieTubeGrid(buttons);
-        miscGrid.Append(miscEntries);
+        _miscGrid.Append(miscEntries);
         last += MISCCOUNT;
     }
 
@@ -242,6 +293,9 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             index -= 1;
         }
         GetColumnAndRow(index, out byte column, out byte row);
+        if (index >= NUMCOUNT && index < NUMCOUNT + RUSCOUNT && IsRussian) {
+            row += 2;
+        }
         var tilePos = _nixieTubeTilePosition;
         NixieTube.GetTE(tilePos.X, tilePos.Y).Activate();
         for (int i = 0; i < width; i++) {
@@ -259,6 +313,9 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         row = 0;
 
         int[] groupSizes = { NUMCOUNT, ENGCOUNT, MISCCOUNT };
+        if (IsRussian) {
+            groupSizes = [NUMCOUNT, RUSCOUNT, MISCCOUNT];
+        }
         int cumulativeSum = 0;
         for (byte currentRow = 1; currentRow <= groupSizes.Length; currentRow++) {
             if (index < cumulativeSum + groupSizes[currentRow - 1]) {
@@ -272,7 +329,10 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
 
     private static byte GetIndex() {
         GetColumnAndRowFromTile(out byte column, out byte row);
-        int[] groupSizes = { NUMCOUNT, ENGCOUNT, MISCCOUNT };
+        int[] groupSizes = [NUMCOUNT, ENGCOUNT, MISCCOUNT];
+        if (IsRussian) {
+            groupSizes = [NUMCOUNT, RUSCOUNT, MISCCOUNT];
+        }
         int cumulativeSum = 0;
         for (int i = 0; i < row - 1; i++) {
             cumulativeSum += groupSizes[i];
@@ -328,11 +388,12 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             }
             return index.ToString();
         }
-        if (index < ENGCOUNT + NUMCOUNT) {
-            return ((char)('A' + (index - NUMCOUNT))).ToString();
+        int count = IsRussian ? RUSCOUNT : ENGCOUNT;
+        if (index < count + NUMCOUNT) {
+            return ((char)((IsRussian ? 'А' : 'A') + (index - NUMCOUNT))).ToString();
         }
-        if (index < MISCCOUNT + ENGCOUNT + NUMCOUNT) {
-            int checkIndex = index - ENGCOUNT - NUMCOUNT;
+        if (index < MISCCOUNT + count + NUMCOUNT) {
+            int checkIndex = index - count - NUMCOUNT;
             return _miscSymbols[checkIndex].ToString();
         }
         return string.Empty;

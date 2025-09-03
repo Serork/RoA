@@ -16,11 +16,15 @@ sealed class UINixieTubeGrid : UIElement {
     private int _atEntryIndex;
     private int _lastEntry;
     private bool _calculated;
+    private bool _engRusGrid;
 
-    public UINixieTubeGrid(List<NixieTubeInfo> workingSet) {
+    private bool IsRussian => _engRusGrid && NixieTubePicker_RemadePicker.IsRussian;
+
+    public UINixieTubeGrid(List<NixieTubeInfo> workingSet, bool engRusGrid = false) {
         Width = new StyleDimension(0f, 1f);
         Height = new StyleDimension(0f, 1f);
         _workingButtons = workingSet;
+        _engRusGrid = engRusGrid;
     }
 
     public override void OnInitialize() {
@@ -54,11 +58,11 @@ sealed class UINixieTubeGrid : UIElement {
                 if (num2 >= list.Count)
                     break;
 
-                UIElement uIElement = new UINixieTubePickButton(list[num2]);
+                UIElement uIElement = new UINixieTubePickButton(list[num2], IsRussian ? 0.9f : 1f);
                 num2++;
                 uIElement.VAlign = (uIElement.HAlign = 0.5f);
-                uIElement.Left.Set(0f, (float)k / (float)maxEntriesWidth - 0.5f + num3);
-                uIElement.Top.Set(0f, (float)j / (float)maxEntriesHeight - 0.5f + num4);
+                uIElement.Left.Set(0f, (float)k / (float)maxEntriesWidth - 0.5f + num3 - (IsRussian ? 0.005f : 0f));
+                uIElement.Top.Set(0f, (float)j / (float)maxEntriesHeight - 0.5f + num4 - (IsRussian ? 0.02f : 0f));
                 uIElement.SetSnapPoint("Entries", num2, new Vector2(0.2f, 0.7f));
                 Append(uIElement);
             }
@@ -67,8 +71,13 @@ sealed class UINixieTubeGrid : UIElement {
 
     public void GetEntriesToShow(out int maxEntriesWidth, out int maxEntriesHeight, out int maxEntriesToHave) {
         Rectangle rectangle = GetDimensions().ToRectangle();
-        maxEntriesWidth = rectangle.Width / 24;
-        maxEntriesHeight = rectangle.Height / 44;
+        int width = 24, height = 44;
+        if (IsRussian) {
+            width = (int)(width * 1f);
+            height = (int)(height * 0.85f);
+        }
+        maxEntriesWidth = rectangle.Width / width;
+        maxEntriesHeight = rectangle.Height / height;
         int num = 0;
         maxEntriesToHave = maxEntriesWidth * maxEntriesHeight - num;
     }
