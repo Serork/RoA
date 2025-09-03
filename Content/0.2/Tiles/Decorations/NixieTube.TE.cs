@@ -67,7 +67,7 @@ sealed class NixieTubeTE : ModTileEntity {
             Dye1 = ItemIO.Load(dye1);
         }
         if (tag.TryGet(RoA.ModName + nameof(Dye2), out TagCompound dye2)) {
-            Dye1 = ItemIO.Load(dye2);
+            Dye2 = ItemIO.Load(dye2);
         }
     }
 
