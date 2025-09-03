@@ -41,6 +41,8 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
 
         private float Strength => Ease.SineIn(Ease.CubeOut(_strength));
 
+        private static float GetCubicBezierEaseInForCavernCaneVisuals(float t, float control) => 3f * control * t * t * (1f - t) + t * t * t;
+
         protected override float OffsetPositionMult => -2.5f;
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.275f, 0f);
@@ -49,7 +51,15 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
 
         public override bool IsInUse => Owner.IsAliveAndFree() && Owner.controlUseItem;
 
-        protected override ushort TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(player.GetSelectedItem(), player) * 3);
+        protected override ushort TimeAfterShootToExist(Player player) {
+            byte result = (byte)(UseTime * 1f);
+            float bezierControlValue = 0.7f;
+            float attackProgress = GetCubicBezierEaseInForCavernCaneVisuals(AttackProgress01, bezierControlValue);
+            float minPenaltyFactor = 0.65f,
+                  maxPenaltyFactor = 1f;
+            result = (byte)(result * (Utils.Clamp(attackProgress, minPenaltyFactor, maxPenaltyFactor)));
+            return result;
+        }
 
         protected override bool ShouldPlayShootSound() => false;
 
