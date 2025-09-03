@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 
 using Terraria;
+using Terraria.Localization;
 using Terraria.UI;
 
 namespace RoA.Common.UI;
@@ -8,7 +9,7 @@ namespace RoA.Common.UI;
 sealed class UINixieTubeDyeSlot : ItemSlotUIElement {
     public bool First { get; init; }
 
-    protected override string HoverText => First ? "Symbol Dye" : "Coverage Dye";
+    protected override string HoverText => First ? Language.GetTextValue("Mods.RoA.NixieTubeDyeSlot1") : Language.GetTextValue("Mods.RoA.NixieTubeDyeSlot2");
 
     public UINixieTubeDyeSlot(bool first, int context = ItemSlot.Context.InventoryItem, float scale = 1f) : base(context, scale) {
         First = first;
