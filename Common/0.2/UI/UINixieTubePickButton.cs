@@ -34,7 +34,7 @@ sealed class UINixieTubePickButton : UIElement {
         var borderTexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2_Border");
         SpriteFrame spriteFrame = new(41, 2, nixieTubeInfo.Index, 0);
         if (nixieTubeInfo.Index > 41) {
-            spriteFrame.CurrentColumn = 0;
+            spriteFrame.CurrentColumn -= 42;
             spriteFrame.CurrentRow = 1;
         }
         Rectangle frame = spriteFrame.GetSourceRectangle(texture.Value);
