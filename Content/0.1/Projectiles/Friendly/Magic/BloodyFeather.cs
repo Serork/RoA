@@ -14,7 +14,7 @@ sealed class BloodyFeather : ModProjectile {
     public override void SetDefaults() {
         //Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 
-        int width = 10; int height = 20;
+        int width = 20, height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.aiStyle = -1;
@@ -41,7 +41,7 @@ sealed class BloodyFeather : ModProjectile {
         Projectile.ai[0] += 1 * direction;
         if (Math.Abs(Projectile.ai[0]) % 8 == 0 && Projectile.velocity.Length() > 6f) {
             bool flag = Main.rand.NextBool(3);
-            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 1, 1, flag ? 60 : 96, Projectile.velocity.X, Projectile.velocity.Y, 0, default, flag ? 1.2f : 0.8f);
+            int dust = Dust.NewDust(Projectile.Center - Vector2.One * 2 - Projectile.velocity * 3f, 4, 4, flag ? 60 : 96, Projectile.velocity.X, Projectile.velocity.Y, 0, default, flag ? 1.2f : 0.8f);
             Main.dust[dust].velocity *= 0.75f;
         }
         Projectile.velocity.X = (float)(Math.Cos(60) * Projectile.ai[0] / 8);
@@ -58,13 +58,13 @@ sealed class BloodyFeather : ModProjectile {
     public override void OnKill(int timeLeft) {
         for (int i = 0; i < 4; i++) {
             bool flag = Main.rand.NextBool(3);
-            int dust2 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 1, 1, flag ? 60 : 96, 0, 0, 0, default, Main.rand.NextFloat(1f, 1.2f) * (flag ? 1.5f : 1.25f));
+            int dust2 = Dust.NewDust(Projectile.Center - Vector2.One * 2, 4, 4, flag ? 60 : 96, 0, 0, 0, default, Main.rand.NextFloat(1f, 1.2f) * (flag ? 1.5f : 1.25f));
             Main.dust[dust2].noGravity = true;
             Main.dust[dust2].fadeIn = 0.75f;
 
             if (Main.rand.NextBool()) {
                 flag = Main.rand.NextBool(3);
-                int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 1, 1, flag ? 60 : 96, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, Main.rand.NextFloat(1f, 1.2f) * (flag ? 1.25f : 1f));
+                int dust = Dust.NewDust(Projectile.Center - Vector2.One * 2, 4, 4, flag ? 60 : 96, Projectile.velocity.X * 0.5f, Projectile.velocity.Y * 0.5f, 0, default, Main.rand.NextFloat(1f, 1.2f) * (flag ? 1.25f : 1f));
                 Main.dust[dust].velocity *= 0.75f;
             }
         }
