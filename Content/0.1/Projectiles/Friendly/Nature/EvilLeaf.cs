@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -13,6 +14,7 @@ using System.Linq;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -227,6 +229,22 @@ sealed class EvilLeaf : NatureProjectile {
         }
         Projectile.hide = false;
         behindNPCsAndTiles.Remove(index);
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        for (int i = 0; i < 5; i++) {
+            int ind4 = Dust.NewDust(Projectile.Center - Vector2.One * 4, 8, 8, _crimson ? (ushort)ModContent.DustType<EvilStaff1>() : (ushort)ModContent.DustType<EvilStaff2>(), 0f, 0f, 0, default, 1f);
+            Main.dust[ind4].velocity *= 0.95f;
+            Main.dust[ind4].noGravity = true;
+        }
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        for (int i = 0; i < 5; i++) {
+            int ind4 = Dust.NewDust(Projectile.Center - Vector2.One * 4, 8, 8, _crimson ? (ushort)ModContent.DustType<EvilStaff1>() : (ushort)ModContent.DustType<EvilStaff2>(), 0f, 0f, 0, default, 1f);
+            Main.dust[ind4].velocity *= 0.95f;
+            Main.dust[ind4].noGravity = true;
+        }
     }
 
     public override bool PreDraw(ref Color lightColor) {
