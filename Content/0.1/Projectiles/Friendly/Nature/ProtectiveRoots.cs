@@ -72,11 +72,6 @@ sealed class ProtectiveRoots : NatureProjectile {
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-        float value3 = Ease.QuadIn(Math.Min(1f, Projectile.ai[1] * 0.012f));
-        int width2 = Math.Min(40, Math.Max(14, (int)(60 * value3))); int height2 = width;
-        Vector2 size = new(width, height);
-        width = (int)(width2 * 0.75f);
-        height = (int)(height2 * 0.75f);
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
@@ -89,9 +84,9 @@ sealed class ProtectiveRoots : NatureProjectile {
 
     public override void AI() {
         float value3 = Ease.QuadIn(Math.Min(1f, Projectile.ai[1] * 0.012f));
-        int width = Math.Min(40, Math.Max(5, (int)(40 * value3))); int height = width;
-        Vector2 size = new(width, height);
-        if (Collision.SolidTiles(Projectile.position, width, height)) {
+        int width = Math.Min(40, Math.Max(14, (int)(60 * value3))); int height = width;
+        Vector2 size = new Vector2(width, height) * 0.5f;
+        if (Collision.SolidTiles(Projectile.Center - size / 2, (int)size.X, (int)size.Y)) {
             Projectile.Kill();
         }
         float value4 = Ease.CubeIn(Math.Min(1f, Projectile.ai[1] * 0.02f));
