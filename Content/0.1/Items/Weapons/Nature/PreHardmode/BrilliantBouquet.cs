@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
@@ -82,6 +83,7 @@ sealed class BrilliantBouquet : NatureItem {
             amount = player.direction == 1 ? 30 : 37;
         }
         position += velocity2 * amount;
+        velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, petalType);
 
         position += velocity2 * amount / 7f;
