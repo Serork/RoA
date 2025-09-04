@@ -47,6 +47,10 @@ sealed class EvilLeaf : NatureProjectile {
         Projectile.localNPCHitCooldown = 10;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Inflate(12, 12);
+    }
+
     internal void SetUpTwigPosition(Vector2 position) {
         _twigPosition = position;
     }
