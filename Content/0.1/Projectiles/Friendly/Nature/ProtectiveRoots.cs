@@ -73,9 +73,9 @@ sealed class ProtectiveRoots : NatureProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         float value3 = Ease.QuadIn(Math.Min(1f, Projectile.ai[1] * 0.012f));
-        int width = Math.Min(40, Math.Max(5, (int)(40 * value3))); int height = width;
+        int width = Math.Min(40, Math.Max(14, (int)(60 * value3))); int height = width;
         Vector2 size = new(width, height);
-        return Collision.CheckAABBvAABBCollision(Projectile.position, size, targetHitbox.Location.ToVector2(), targetHitbox.Size());
+        return Collision.CheckAABBvAABBCollision(Projectile.Center - Vector2.One * size / 2f, size, targetHitbox.Location.ToVector2(), targetHitbox.Size());
     }
 
     public override void AI() {
