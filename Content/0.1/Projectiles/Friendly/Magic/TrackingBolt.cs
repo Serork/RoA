@@ -45,6 +45,10 @@ sealed class TrackingBolt : ModProjectile {
         Projectile.Opacity = 0f;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Inflate(6, 6);
+    }
+
     public override void AI() {
         if (Projectile.Opacity < 1f) {
             Projectile.Opacity += 0.1f;
