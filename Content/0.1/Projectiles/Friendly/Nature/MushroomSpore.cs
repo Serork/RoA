@@ -23,7 +23,7 @@ sealed class MushroomSpore : NatureProjectile {
     public override void SetStaticDefaults() => Main.projFrames[Type] = 3;
 
     protected override void SafeSetDefaults() {
-        int width = 10; int height = width;
+        int width = 16; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.penetrate = 1;
@@ -36,7 +36,7 @@ sealed class MushroomSpore : NatureProjectile {
     public override void SafePostAI() => ProjectileUtils.Animate(Projectile, 4);
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        return Collision.CheckAABBvAABBCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.position + Projectile.Size / 2f, Projectile.Size);
+        return base.Colliding(projHitbox, targetHitbox);
     }
 
     public override void AI() {
@@ -76,6 +76,12 @@ sealed class MushroomSpore : NatureProjectile {
         float lerp = Math.Abs(Projectile.rotation) * Math.Max(0.5f, minSpeed - 1f - Projectile.velocity.Length()) * TimeSystem.LogicDeltaTime;
         Projectile.rotation = Helper.SmoothAngleLerp(Projectile.rotation, 0f, lerp * minSpeed);
         Projectile.rotation += -Projectile.ai[2] * 0.0125f;
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 10;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
