@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -25,6 +26,8 @@ sealed class NixieTube : ModTile {
         Main.tileLavaDeath[Type] = true;
         //Main.tileSolidTop[Type] = true;
         Main.tileLighted[Type] = true;
+
+        TileID.Sets.HasOutlines[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.CoordinateHeights = [16, 16, 18];
@@ -44,6 +47,10 @@ sealed class NixieTube : ModTile {
         if (frameX != 0 && frameY != 0) {
             Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j) * 16, ModContent.ItemType<Items.Placeable.Decorations.NixieTube>());
         }
+    }
+
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
+        return true;
     }
 
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<NixieTubeTE>().Kill(i, j);
@@ -162,6 +169,19 @@ sealed class NixieTube : ModTile {
             drawData.Draw(spriteBatch);
 
             spriteBatch.Begin(snapshot, true);
+        }
+
+        if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
+            int num = (color.R + color.G + color.B) / 3;
+            if (num > 10) {
+                Texture2D highlightTexture = TextureAssets.HighlightMask[Type].Value;
+                Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
+                spriteBatch.Draw(highlightTexture,
+                                 new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                                 new Rectangle(frameX % 36, frameY % 56, 16, height),
+                                 highlightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                //Main.spriteBatch.DrawSelf(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, _rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+            }
         }
 
         return false;
