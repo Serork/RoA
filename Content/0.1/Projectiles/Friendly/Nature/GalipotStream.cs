@@ -25,8 +25,8 @@ sealed class GalipotStream : NatureProjectile {
     }
 
     protected override void SafeSetDefaults() {
-        Projectile.width = 14;
-        Projectile.height = 18;
+        Projectile.width = 16;
+        Projectile.height = 16;
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
         Projectile.ignoreWater = false;
