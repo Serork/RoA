@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
@@ -57,6 +58,7 @@ sealed class WeepingTulip : NatureItem {
         }
 
         position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * offset;
+        velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 2);
         if (Main.rand.NextChance(0.6)) {
             float offset2 = 10f;
@@ -121,6 +123,7 @@ sealed class SweetTulip : NatureItem {
         }
 
         position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * offset;
+        velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 1);
         if (Main.rand.NextChance(0.6)) {
             float offset2 = 10f;
@@ -185,6 +188,7 @@ sealed class ExoticTulip : NatureItem {
         }
 
         position += Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero) * offset;
+        velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 0);
         if (Main.rand.NextChance(0.6)) {
             float offset2 = 10f;

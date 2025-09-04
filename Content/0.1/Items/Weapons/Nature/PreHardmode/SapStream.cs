@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 
 using Terraria;
@@ -51,6 +52,7 @@ sealed class SapStream : NatureItem {
         }
 
         if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
+            velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
             Vector2 vector2 = (velocity + Utils.RotatedByRandom(velocity, 0.25f) * Main.rand.NextFloat(0.8f, 1.4f) * Main.rand.NextFloat(0.75f, 1.35f)) * Main.rand.NextFloat(1.25f, 2f);
             Projectile.NewProjectileDirect(source, position + vector2, vector2, type, damage, knockback, player.whoAmI);
         }
