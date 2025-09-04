@@ -55,8 +55,8 @@ sealed class TulipPetalOld : NatureProjectile {
         int width = 16; int height = width;
         Projectile.Size = new Vector2(width, height);
 
-        DrawOffsetX = -4;
-        DrawOriginOffsetY = -4;
+        //DrawOffsetX = -4;
+        //DrawOriginOffsetY = -4;
 
         Projectile.penetrate = -1;
         Projectile.aiStyle = -1;
