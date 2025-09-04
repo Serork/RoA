@@ -71,6 +71,15 @@ sealed class ProtectiveRoots : NatureProjectile {
         Projectile.netUpdate = true;
     }
 
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        float value3 = Ease.QuadIn(Math.Min(1f, Projectile.ai[1] * 0.012f));
+        int width2 = Math.Min(40, Math.Max(14, (int)(60 * value3))); int height2 = width;
+        Vector2 size = new(width, height);
+        width = (int)(width2 * 0.75f);
+        height = (int)(height2 * 0.75f);
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         float value3 = Ease.QuadIn(Math.Min(1f, Projectile.ai[1] * 0.012f));
         int width = Math.Min(40, Math.Max(14, (int)(60 * value3))); int height = width;

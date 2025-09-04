@@ -227,6 +227,11 @@ sealed class GastroIntestinalMalletProjectile2 : ModProjectile {
         hitbox.Inflate(4, 4);
     }
 
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 10;
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     public override void AI() {
         if (Projectile.localAI[0] == 0f) {
             SoundEngine.PlaySound(SoundID.Item171, Projectile.Center);

@@ -42,7 +42,7 @@ sealed class BaneSpell : ModProjectile {
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-        width = height = 4;
+        width = height = 6;
         return true;
     }
 
