@@ -18,7 +18,7 @@ sealed class BoneHarpyFeather : ModProjectile {
     }
 
     public override void SetDefaults() {
-        int width = 14; int height = 24;
+        int width = 20; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.friendly = true;
@@ -48,6 +48,12 @@ sealed class BoneHarpyFeather : ModProjectile {
         Projectile.Opacity = Utils.GetLerpValue(MAXTIMELEFT, MAXTIMELEFT - 10f, Projectile.timeLeft, clamped: true) * Utils.GetLerpValue(0f, 10f, Projectile.timeLeft, clamped: true);
         Projectile.rotation = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X) + (float)Math.PI / 2f;
         Projectile.position += Projectile.velocity;
+    }
+
+    public override void OnKill(int timeLeft) {
+        int ind4 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Bone, 0f, 0f, 0, default, 1f);
+        Main.dust[ind4].velocity *= 0.95f;
+        Main.dust[ind4].noGravity = true;
     }
 
     public override bool PreDraw(ref Color lightColor) {
