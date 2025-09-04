@@ -9,7 +9,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class PumpkinSeed : NatureProjectile {
     protected override void SafeSetDefaults() {
-        int width = 10, height = 16;
+        int width = 16, height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.ignoreWater = true;
