@@ -15,7 +15,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class PineCone : NatureProjectile {
     protected override void SafeSetDefaults() {
-        Projectile.Size = new Vector2(18, 26);
+        Projectile.Size = new Vector2(30);
 
         Projectile.ignoreWater = true;
         Projectile.friendly = true;
@@ -146,6 +146,10 @@ sealed class PineCone : NatureProjectile {
         SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
 
         return base.OnTileCollide(oldVelocity);
+    }
+
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox = hitbox.AdjustX(-4);
     }
 
     public override void OnKill(int timeLeft) {
