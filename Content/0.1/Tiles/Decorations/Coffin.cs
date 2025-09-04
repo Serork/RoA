@@ -15,7 +15,6 @@ sealed class Coffin : ModTile {
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
-        TileObjectData.newTile.DrawYOffset = 2;
 
         TileObjectData.newTile.StyleWrapLimit = 2;
         TileObjectData.newTile.StyleMultiplier = 2;
