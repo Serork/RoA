@@ -21,7 +21,6 @@ sealed class Coffin : ModTile {
         TileObjectData.newTile.StyleHorizontal = true;
 
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
