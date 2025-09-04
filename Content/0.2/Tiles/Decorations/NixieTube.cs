@@ -23,7 +23,7 @@ sealed class NixieTube : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileLavaDeath[Type] = true;
-        Main.tileSolidTop[Type] = true;
+        //Main.tileSolidTop[Type] = true;
         Main.tileLighted[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
