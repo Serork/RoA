@@ -52,7 +52,7 @@ sealed class TulipPetalOld : NatureProjectile {
     protected override void SafeSetDefaults() {
         //Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 
-        int width = 6; int height = width;
+        int width = 14; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         DrawOffsetX = -4;
@@ -300,6 +300,12 @@ sealed class TulipPetalOld : NatureProjectile {
             }
             SoundEngine.PlaySound(SoundID.NPCHit7, Projectile.position);
         }
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 10;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
     private class WeepingTulipExplosion : NatureProjectile {
