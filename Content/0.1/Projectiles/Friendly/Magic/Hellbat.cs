@@ -20,7 +20,7 @@ sealed class Hellbat : ModProjectile {
     }
 
     public override void SetDefaults() {
-        int width = 44; int height = 40;
+        int width = 34, height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.friendly = true;
