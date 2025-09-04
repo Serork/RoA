@@ -37,6 +37,12 @@ sealed class NixieTubeTE : ModTileEntity {
         if ((DeactivatedTimer -= 5) < 0) {
             DeactivatedTimer = DeactivatedTimer2 / 2;
             DeactivatedTimer2 /= 2;
+
+            if (!Active) {
+                Dust dust = Dust.NewDustPerfect(new Point16(Position.X - 1, Position.Y - 2).ToWorldCoordinates() + Main.rand.Random2(-8f, 16f + 8f, 8f, 32f), ModContent.DustType<Dusts.NixieTube>(), newColor: Color.Yellow);
+                dust.velocity *= 0.5f;
+                dust.alpha = 100;
+            }
         }
     }
 
