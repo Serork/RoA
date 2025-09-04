@@ -20,7 +20,7 @@ sealed class BaneSpell : ModProjectile {
     }
 
     public override void SetDefaults() {
-        int width = 4; int height = width;
+        int width = 14; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.aiStyle = 1;
