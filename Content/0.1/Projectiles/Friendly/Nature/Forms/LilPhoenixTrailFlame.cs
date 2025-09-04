@@ -29,7 +29,9 @@ sealed class LilPhoenixTrailFlame : FormProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         foreach (Vector2 trailPosition in _positions) {
-            if (targetHitbox.Contains(trailPosition.ToPoint())) {
+            var checkHitbox = targetHitbox;
+            checkHitbox.Inflate(4, 4);
+            if (checkHitbox.Contains(trailPosition.ToPoint())) {
                 return true;
             }
         }

@@ -25,6 +25,10 @@ sealed class LilPhoenixFlames : FormProjectile {
         Projectile.localNPCHitCooldown = 30;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Inflate(4, 4);
+    }
+
     public override void AI() {
         if (Main.rand.NextBool(Projectile.localAI[2] == 10f ? 2 : 1)) {
             int dust = Dust.NewDust(Projectile.position + Projectile.velocity, 2, 2, 6, 0f, -0.5f, 0, default, 2f);
