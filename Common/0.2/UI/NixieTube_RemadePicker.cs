@@ -298,18 +298,16 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
 
         Point16 attachedPositionInTile = _nixieTubeTilePosition;
         Player player = Main.LocalPlayer;
-        int distance = 80;
+        int distance = 100;
         bool tooFar = true;
         for (int i = -1; i < 1; i++) {
             int x = attachedPositionInTile.X + i;
             for (int j = -1; j < 2; j++) {
                 if (player.IsWithinSnappngRangeToTile(x, attachedPositionInTile.Y + j, distance)) {
                     tooFar = false;
-                    goto BreakLoops;
                 }
             }
         }
-    BreakLoops:
         if (!Main.playerInventory || tooFar || _nixieTubeTilePosition == Point16.Zero || WorldGenHelper.GetTileSafely(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y).TileType != ModContent.TileType<NixieTube>()) {
             Active = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
