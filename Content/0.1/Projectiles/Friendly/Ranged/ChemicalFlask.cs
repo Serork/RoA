@@ -23,7 +23,7 @@ sealed class ChemicalFlask : ModProjectile {
     public override void SetDefaults() {
         //Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 
-        int width = 14; int height = 20;
+        int width = 18; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.aiStyle = 68;
