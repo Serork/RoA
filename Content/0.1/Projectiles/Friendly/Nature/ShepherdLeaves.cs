@@ -40,7 +40,7 @@ sealed class ShepherdLeaves : NatureProjectile {
     public override void SetStaticDefaults() => Main.projFrames[Type] = 5;
 
     protected override void SafeSetDefaults() {
-        Projectile.Size = 8 * Vector2.One;
+        Projectile.Size = 16 * Vector2.One;
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
         Projectile.tileCollide = false;
@@ -78,7 +78,7 @@ sealed class ShepherdLeaves : NatureProjectile {
 
     public override void OnKill(int timeLeft) {
         for (int i = 0; i < 4; i++) {
-            int dust = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 8, 8, ModContent.DustType<PastoralRodDust>(), Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), 0, default, Scale: Main.rand.NextFloat(1f, 1.3f));
+            int dust = Dust.NewDust(Projectile.Center - Vector2.One * 5, 10, 10, ModContent.DustType<PastoralRodDust>(), Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-1f, 1f), 0, default, Scale: Main.rand.NextFloat(1f, 1.3f));
             Main.dust[dust].velocity *= 0.5f;
             Main.dust[dust].noLight = true;
             Main.dust[dust].color = _color;
@@ -89,7 +89,7 @@ sealed class ShepherdLeaves : NatureProjectile {
 
     public override void SafePostAI() {
         if (Main.rand.NextBool(5)) {
-            Dust dust = Main.dust[Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(3f, 3f), 0, 0, ModContent.DustType<PastoralRodDust>(), Scale: Main.rand.NextFloat(1f, 1.3f))];
+            Dust dust = Main.dust[Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(4f, 4f), 0, 0, ModContent.DustType<PastoralRodDust>(), Scale: Main.rand.NextFloat(1f, 1.3f))];
             dust.velocity *= 0.4f;
             dust.color = _color;
             dust.noLight = true;
