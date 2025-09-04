@@ -52,7 +52,7 @@ sealed class TulipPetalOld : NatureProjectile {
     protected override void SafeSetDefaults() {
         //Projectile.CloneDefaults(ProjectileID.WoodenArrowFriendly);
 
-        int width = 14; int height = width;
+        int width = 16; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         DrawOffsetX = -4;

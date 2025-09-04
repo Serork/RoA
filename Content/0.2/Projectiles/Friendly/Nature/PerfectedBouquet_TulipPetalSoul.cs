@@ -24,7 +24,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
-    private static byte BASESIZE => 12;
+    private static byte BASESIZE => 16;
     private static ushort MAXTIMELEFT => 360;
     private static byte FRAMECOUNT => 3;
     private static byte TRAILCOUNT => 5;

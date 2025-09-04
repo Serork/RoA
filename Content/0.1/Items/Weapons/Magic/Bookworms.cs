@@ -79,7 +79,7 @@ sealed class BookwormsProjectile : ModProjectile {
     }
 
     public override void SetDefaults() {
-        Projectile.Size = Vector2.One * 10f;
+        Projectile.Size = Vector2.One * 16;
 
         Projectile.aiStyle = -1;
         Projectile.friendly = true;

@@ -38,7 +38,7 @@ sealed class Spore : NatureProjectile {
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: true);
 
-        Projectile.SetSizeValues(14, 18);
+        Projectile.SetSizeValues(20);
 
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
@@ -92,6 +92,10 @@ sealed class Spore : NatureProjectile {
         fadeOut();
         rotate();
         lightUp();
+    }
+
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox = hitbox.AdjustY(4);
     }
 
     public override bool PreDraw(ref Color lightColor) {
