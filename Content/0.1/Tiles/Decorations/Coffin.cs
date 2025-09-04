@@ -15,12 +15,15 @@ sealed class Coffin : ModTile {
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
+        TileObjectData.newTile.DrawYOffset = 2;
 
         TileObjectData.newTile.StyleWrapLimit = 2;
         TileObjectData.newTile.StyleMultiplier = 2;
         TileObjectData.newTile.StyleHorizontal = true;
 
         TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
+        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newAlternate.DrawYOffset = 2;
         TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
