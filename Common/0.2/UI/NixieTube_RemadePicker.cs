@@ -87,10 +87,10 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public NixieTubePicker_RemadePicker() {
         RemoveAllChildren();
         _mainContainer = new UIElement {
-            Width = StyleDimension.FromPixels(700),
+            Width = StyleDimension.FromPixels(800),
             Height = StyleDimension.FromPixels(230),
             Top = StyleDimension.FromPixels(100f),
-            HAlign = 0.5f,
+            HAlign = 0.55f,
             VAlign = 0f
         };
 
@@ -105,7 +105,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         _mainContainer.Append(mainPanel);
 
         _numGrid = new UINixieTubePanel {
-            Width = StyleDimension.FromPercent(0.2f),
+            Width = StyleDimension.FromPercent(0.2f - 0.015f),
             Height = StyleDimension.FromPercent(0.75f),
             Top = StyleDimension.FromPercent(0.065f),
             Left = StyleDimension.FromPercent(0.02f)
@@ -114,10 +114,10 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         _mainContainer.Append(_numGrid);
 
         _engRusGrid = new UINixieTubePanel {
-            Width = StyleDimension.FromPercent(0.35f),
+            Width = StyleDimension.FromPercent(0.35f + 0.0175f),
             Height = StyleDimension.FromPercent(0.75f),
             Top = StyleDimension.FromPercent(0.065f),
-            Left = StyleDimension.FromPercent(0.23f)
+            Left = StyleDimension.FromPercent(0.23f - 0.016f)
         };
         _mainContainer.Append(_engRusGrid);
 
