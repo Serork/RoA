@@ -223,6 +223,10 @@ sealed class GastroIntestinalMalletProjectile2 : ModProjectile {
         Projectile.hide = true;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Inflate(4, 4);
+    }
+
     public override void AI() {
         if (Projectile.localAI[0] == 0f) {
             SoundEngine.PlaySound(SoundID.Item171, Projectile.Center);
