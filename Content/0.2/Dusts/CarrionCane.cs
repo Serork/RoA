@@ -41,7 +41,7 @@ sealed class CarrionCane2 : ModDust {
         dust.velocity += Vector2.UnitX * MathF.Sin(dust.fadeIn) * 1f;
 
         if (Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4)) {
-            dust.alpha += 2;
+            dust.alpha += 3;
             if (dust.alpha >= 255) {
                 dust.active = false;
             }
