@@ -44,7 +44,7 @@ sealed class Moth : ModProjectile {
     }
 
     public override void SetDefaults() {
-        int width = 36; int height = 24;
+        int width = 30; int height = 30;
         Projectile.Size = new Vector2(width, height);
         DrawOriginOffsetY = -16;
 
