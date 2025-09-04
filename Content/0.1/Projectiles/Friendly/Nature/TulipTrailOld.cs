@@ -20,7 +20,7 @@ sealed class TulipTrailOld : NatureProjectile {
     }
 
     protected override void SafeSetDefaults() {
-        int width = 10; int height = width;
+        int width = 20; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.penetrate = 1;
@@ -55,7 +55,7 @@ sealed class TulipTrailOld : NatureProjectile {
         int frameHeight = projectileTexture.Height / Main.projFrames[Type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, projectileTexture.Width, frameHeight);
         Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, projectileTexture.Height / Main.projFrames[Projectile.type] * 0.5f);
-        Vector2 drawPos = Projectile.oldPos[0] - Main.screenPosition + new Vector2(DrawOffsetX + 5, Projectile.gfxOffY + 5);
+        Vector2 drawPos = Projectile.oldPos[0] - Main.screenPosition + new Vector2(DrawOffsetX + 5, Projectile.gfxOffY + 5) + Projectile.Size / 4f;
         Color color = Projectile.GetAlpha(lightColor);
         spriteBatch.Draw(projectileTexture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, _drawScale, SpriteEffects.None, 0f);
 
