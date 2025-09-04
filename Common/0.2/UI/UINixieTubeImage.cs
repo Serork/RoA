@@ -8,16 +8,16 @@ using Terraria;
 namespace RoA.Common.UI;
 
 class UINixieTubeImage : UIFramedImage {
-    private byte _myIndex;
+    private NixieTubeInfo _nixieTubeInfo;
 
-    public UINixieTubeImage(Asset<Texture2D> texture, Rectangle frame, byte index, Asset<Texture2D>? borderTexture = null) : base(texture, frame, borderTexture) {
-        _myIndex = index;
+    public UINixieTubeImage(Asset<Texture2D> texture, Rectangle frame, NixieTubeInfo nixieTubeInfo, Asset<Texture2D>? borderTexture = null) : base(texture, frame, borderTexture) {
+        _nixieTubeInfo = nixieTubeInfo;
     }
 
     protected override bool ShouldDrawBorder() => IsMouseHovering;
 
     protected override void DrawSelf(SpriteBatch spriteBatch) {
-        if (NixieTubePicker_RemadePicker.PickedIndex == _myIndex || IsMouseHovering) {
+        if (NixieTubePicker_RemadePicker.PickedIndex == _nixieTubeInfo.Index || IsMouseHovering) {
             Color = Color.White;
         }
         else {
@@ -25,7 +25,7 @@ class UINixieTubeImage : UIFramedImage {
         }
 
         if (IsMouseHovering) {
-            Main.hoverItemName = NixieTubePicker_RemadePicker.GetHoverText(_myIndex);
+            Main.hoverItemName = NixieTubePicker_RemadePicker.GetHoverText(_nixieTubeInfo.Index);
         }
 
         base.DrawSelf(spriteBatch);

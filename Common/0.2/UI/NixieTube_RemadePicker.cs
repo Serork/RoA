@@ -66,6 +66,8 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     private readonly UINixieTubePanel _miscGrid;
     private readonly UINixieTubeLanguageButton _languageButton;
 
+    public static bool ShouldUpdateIndex = false;
+
     public static bool IsRussian { get; private set; }
 
     private static Point16 _nixieTubeTilePosition;
@@ -181,6 +183,11 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     }
 
     private void _languageButton_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
+        //ChangeNixieTubeSymbol(0);
+        if (PickedIndex > NUMCOUNT && PickedIndex <= (IsRussian ? RUSCOUNT : ENGCOUNT) + NUMCOUNT) {
+            PickedIndex = 0;
+            ShouldUpdateIndex = false;
+        }
         IsRussian = !IsRussian;
         PopulateLists();
         SoundEngine.PlaySound(SoundID.MenuTick);
@@ -278,10 +285,17 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             SoundEngine.PlaySound(SoundID.MenuClose);
         }
 
-        PickedIndex = GetIndex();
-        if (PickedIndex != 0 && PickedIndex < NUMCOUNT) {
-            PickedIndex += 1;
+        if (ShouldUpdateIndex) {
+            PickedIndex = GetIndex();
+            if (PickedIndex != 0 && PickedIndex < NUMCOUNT) {
+                PickedIndex += 1;
+            }
         }
+    }
+
+    public static void ResetPickedIndex() {
+        PickedIndex = 0;
+        ShouldUpdateIndex = true;
     }
 
     public static void ChangeNixieTubeSymbol(byte index) {
@@ -379,6 +393,9 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         Tile tile = WorldGenHelper.GetTileSafely(_nixieTubeTilePosition);
         column = (byte)(tile.TileFrameX / 36);
         row = (byte)(tile.TileFrameY / 56);
+        if (IsRussian && tile.TileFrameY / 56 >= 4) {
+            row -= 2;
+        }
     }
 
     public static string GetHoverText(byte index) {

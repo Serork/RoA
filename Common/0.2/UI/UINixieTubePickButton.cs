@@ -59,7 +59,7 @@ sealed class UINixieTubePickButton : UIElement {
             spriteFrame.CurrentRow = 1;
         }
         Rectangle frame = spriteFrame.GetSourceRectangle(texture.Value);
-        _image = new UINixieTubeImage(texture, frame, _nixieTubeInfo.Index, borderTexture) {
+        _image = new UINixieTubeImage(texture, frame, _nixieTubeInfo, borderTexture) {
             VAlign = 0.5f,
             HAlign = 0.5f,
             ImageScale = 0.75f * _scale
@@ -87,6 +87,7 @@ sealed class UINixieTubePickButton : UIElement {
     }
 
     private void UINixieTubePickButton_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
+        NixieTubePicker_RemadePicker.ResetPickedIndex();
         SoundEngine.PlaySound(SoundID.MenuTick);
         NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(_nixieTubeInfo.Index);
     }

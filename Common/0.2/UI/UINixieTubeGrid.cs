@@ -8,8 +8,7 @@ using Terraria.UI;
 
 namespace RoA.Common.UI;
 
-readonly record struct NixieTubeInfo(byte Index) {
-}
+readonly record struct NixieTubeInfo(byte Index) { }
 
 sealed class UINixieTubeGrid : UIElement {
     private List<NixieTubeInfo> _workingButtons;
