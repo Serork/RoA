@@ -233,7 +233,7 @@ sealed class EvilLeaf : NatureProjectile {
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         for (int i = 0; i < 5; i++) {
-            int ind4 = Dust.NewDust(Projectile.Center - Vector2.One * 4, 8, 8, _crimson ? (ushort)ModContent.DustType<EvilStaff1>() : (ushort)ModContent.DustType<EvilStaff2>(), 0f, 0f, 0, default, 1f);
+            int ind4 = Dust.NewDust(Projectile.Center - Vector2.One * 4, 8, 8, _crimson ? (ushort)ModContent.DustType<EvilStaff1>() : (ushort)ModContent.DustType<EvilStaff2>(), 0f, 0f, 0, Color.Lerp(default, Color.Black, 0.25f), 1f);
             Main.dust[ind4].velocity *= 0.95f;
             Main.dust[ind4].noGravity = true;
         }
@@ -241,7 +241,7 @@ sealed class EvilLeaf : NatureProjectile {
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
         for (int i = 0; i < 5; i++) {
-            int ind4 = Dust.NewDust(Projectile.Center - Vector2.One * 4, 8, 8, _crimson ? (ushort)ModContent.DustType<EvilStaff1>() : (ushort)ModContent.DustType<EvilStaff2>(), 0f, 0f, 0, default, 1f);
+            int ind4 = Dust.NewDust(Projectile.Center - Vector2.One * 4, 8, 8, _crimson ? (ushort)ModContent.DustType<EvilStaff1>() : (ushort)ModContent.DustType<EvilStaff2>(), 0f, 0f, 0, Color.Lerp(default, Color.Black, 0.25f), 1f);
             Main.dust[ind4].velocity *= 0.95f;
             Main.dust[ind4].noGravity = true;
         }
