@@ -69,6 +69,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public static bool ShouldUpdateIndex = false;
 
     public static bool IsRussian { get; private set; }
+    public static byte ENGRUSCOUNT => IsRussian ? RUSCOUNT : ENGCOUNT;
 
     private static Point16 _nixieTubeTilePosition;
     private static readonly char[] _miscSymbols = [':', '!', '?', '.', '(', ')', '/', '|', '\u005c', '+', '-', '=', '#', '%', '&', '<', '>', '[', ']', '"', '\u0027'];
@@ -184,7 +185,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
 
     private void _languageButton_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
         //ChangeNixieTubeSymbol(0);
-        if (PickedIndex > NUMCOUNT && PickedIndex <= (IsRussian ? RUSCOUNT : ENGCOUNT) + NUMCOUNT) {
+        if (PickedIndex > NUMCOUNT && PickedIndex <= ENGRUSCOUNT + NUMCOUNT) {
             PickedIndex = 0;
             ShouldUpdateIndex = false;
         }
@@ -405,7 +406,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             }
             return index.ToString();
         }
-        int count = IsRussian ? RUSCOUNT : ENGCOUNT;
+        int count = ENGRUSCOUNT;
         if (index < count + NUMCOUNT) {
             return ((char)((IsRussian ? 'А' : 'A') + (index - NUMCOUNT))).ToString();
         }
