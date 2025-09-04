@@ -223,7 +223,7 @@ sealed class ShockLightning : ModProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Vector2 lineEnd = Projectile.position + (new Vector2(0f, 8f) * Main.player[Projectile.owner].direction).RotatedBy(Projectile.velocity.ToRotation()) + Vector2.Normalize(Projectile.velocity) * _lightningLength;
-        return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 26f);
+        return Helper.DeathrayHitbox(Projectile.position, lineEnd, targetHitbox, 40f);
     }
 
     public override bool? CanCutTiles() => false;
