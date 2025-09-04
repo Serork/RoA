@@ -15,7 +15,7 @@ sealed class OvergrownBolt : ModProjectile {
     private sbyte _dustAmount = 2;
 
     public override void SetDefaults() {
-        int width = 16; int height = width;
+        int width = 32; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.DamageType = DamageClass.Melee;
@@ -46,7 +46,7 @@ sealed class OvergrownBolt : ModProjectile {
         for (int i = 0; i < _dustAmount; i++) {
             float velX = Projectile.velocity.X / 3f * i;
             float velY = Projectile.velocity.Y / 3f * i;
-            int dust = Dust.NewDust(new Vector2(Projectile.Center.X - _dustSpread / 2, Projectile.Center.Y - _dustSpread / 2), 6 + _dustSpread, 6 + _dustSpread, ModContent.DustType<OvergrownSpearDust>(), 0f, -6f, 120, default(Color), Main.rand.NextFloat(0.8f, 1.6f));
+            int dust = Dust.NewDust(new Vector2(Projectile.Center.X - 3 - _dustSpread / 2, Projectile.Center.Y - 3 - _dustSpread / 2), 6 + _dustSpread, 6 + _dustSpread, ModContent.DustType<OvergrownSpearDust>(), 0f, -6f, 120, default(Color), Main.rand.NextFloat(0.8f, 1.6f));
             Main.dust[dust].noGravity = true;
             Main.dust[dust].velocity *= 0.1f;
             Main.dust[dust].velocity += Projectile.velocity * 0.5f;
