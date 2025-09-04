@@ -31,6 +31,10 @@ sealed class FlederBomb : FormProjectile {
         DrawOriginOffsetY = -11;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Inflate(6, 6);
+    }
+
     public override void AI() {
         if (!initialize) {
             switch (Projectile.ai[0]) {

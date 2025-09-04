@@ -23,6 +23,10 @@ sealed class ToxicStream : FormProjectile {
         Projectile.alpha = 0;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Inflate(4, 4);
+    }
+
     public override void AI() {
         if (Projectile.localAI[0] == 0f && Projectile.ai[2] == 2f) {
             Projectile.localAI[0] = 1f;
