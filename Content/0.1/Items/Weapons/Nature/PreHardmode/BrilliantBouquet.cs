@@ -67,14 +67,14 @@ sealed class BrilliantBouquet : NatureItem {
         }
         //petalType2 = 1;
         float rot = velocity2.ToRotation();
-        if (player.direction == 1) {
-            rot -= MathHelper.PiOver4 / 4f;
-        }
+        //if (player.direction == 1) {
+        //    rot -= MathHelper.PiOver4 / 4f;
+        //}
         float size = 0.15f * petalType2;
         Vector2 offset = new(size, -size);
         offset *= player.direction;
         position += (Item.Size * offset).RotatedBy(rot);
-        position += new Vector2(6f, 0f * player.direction).RotatedBy(rot);
+        //position += new Vector2(6f, 0f * player.direction).RotatedBy(rot);
         int amount = 27;
         if (petalType == 1) {
             amount = 32;
