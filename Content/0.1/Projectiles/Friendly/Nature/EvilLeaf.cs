@@ -50,7 +50,7 @@ sealed class EvilLeaf : NatureProjectile {
     }
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox) {
-        hitbox.Inflate(12, 12);
+        hitbox.Inflate(10, 10);
     }
 
     internal void SetUpTwigPosition(Vector2 position) {

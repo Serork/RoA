@@ -55,6 +55,10 @@ sealed class AcalyphaTulip : NatureProjectile {
         Projectile.localNPCHitCooldown = 10;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Inflate(4, 4);
+    }
+
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         writer.WriteRGB(_tulipColor);
         writer.WriteRGB(_tulipColor2);
