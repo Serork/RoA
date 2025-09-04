@@ -43,6 +43,8 @@ sealed class NixieTubePicker_TextureLoader : IInitializer {
     public static Asset<Texture2D> NixieTubePickButtonBorder { get; private set; }
 
     void ILoadable.Load(Mod mod) {
+        On_Player.Spawn += On_Player_Spawn;
+
         if (Main.dedServ) {
             return;
         }
@@ -51,6 +53,13 @@ sealed class NixieTubePicker_TextureLoader : IInitializer {
         NixieTubeLanguageButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LanguageButton_Border");
         NixieTubePickButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2");
         NixieTubePickButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2_Border");
+    }
+
+    private void On_Player_Spawn(On_Player.orig_Spawn orig, Player self, PlayerSpawnContext context) {
+        orig(self, context);
+        if (context == PlayerSpawnContext.SpawningIntoWorld) {
+            UILoader.GetUIState<NixieTubePicker_RemadePicker>().Recalculate();
+        }
     }
 }
 
@@ -215,7 +224,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     }
 
     public override void OnInitialize() {
-        //Recalculate();
+        Recalculate();
     }
 
     public override bool Visible => Active;
