@@ -21,7 +21,7 @@ class UINixieTubeImage : UIFramedImage {
             Color = Color.White;
         }
         else {
-            Color = Color.White * 0.4f;
+            Color = Color.White * 0.5f;
         }
 
         if (IsMouseHovering) {
