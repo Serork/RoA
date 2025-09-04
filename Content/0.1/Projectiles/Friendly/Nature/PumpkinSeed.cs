@@ -35,6 +35,12 @@ sealed class PumpkinSeed : NatureProjectile {
 
     protected override void SafeOnSpawn(IEntitySource source) => Projectile.scale = Main.rand.NextFloat(0.8f, 1.2f);
 
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 8;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     public override bool OnTileCollide(Vector2 oldVelocity) {
         SoundEngine.PlaySound(SoundID.Dig with { Pitch = 1.1f, Volume = 0.5f }, Projectile.Center);
 
