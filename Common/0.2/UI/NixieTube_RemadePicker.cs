@@ -66,7 +66,10 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     private readonly UINixieTubePanel _miscGrid;
     private readonly UINixieTubeLanguageButton _languageButton;
 
+    private static int _oldPickedIndexRussian, _oldPickedIndexEnglish;
+
     public static bool ShouldUpdateIndex = false;
+    public static bool CurrentEnglish = false;
 
     public static bool IsRussian { get; private set; }
     public static byte ENGRUSCOUNT => IsRussian ? RUSCOUNT : ENGCOUNT;
@@ -184,8 +187,25 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     }
 
     private void _languageButton_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
-        //ChangeNixieTubeSymbol(0);
-        if (PickedIndex > NUMCOUNT && PickedIndex <= ENGRUSCOUNT + NUMCOUNT) {
+        bool previousRussian = IsRussian;
+        if (PickedIndex != 0) {
+            if (previousRussian) {
+                _oldPickedIndexRussian = PickedIndex;
+            }
+            else {
+                _oldPickedIndexEnglish = PickedIndex;
+            }
+        }
+        bool flag = false;
+        if (CurrentEnglish && previousRussian) {
+            PickedIndex = _oldPickedIndexEnglish;
+            flag = true;
+        }
+        if (!CurrentEnglish && previousRussian) {
+            PickedIndex = _oldPickedIndexRussian;
+            flag = true;
+        }
+        if (!flag && PickedIndex > NUMCOUNT && PickedIndex <= ENGRUSCOUNT + NUMCOUNT) {
             PickedIndex = 0;
             ShouldUpdateIndex = false;
         }
@@ -229,7 +249,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         buttons = [];
         if (IsRussian) {
             for (int i = last; i < last + RUSCOUNT; i++) {
-                buttons.Add(new NixieTubeInfo((byte)i));
+                buttons.Add(new NixieTubeInfo((byte)i, true));
             }
             last += RUSCOUNT;
         }
@@ -292,6 +312,8 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
                 PickedIndex += 1;
             }
         }
+
+        GetColumnAndRowFromTile(out _, out _);
     }
 
     public static void ResetPickedIndex() {
@@ -395,8 +417,11 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         column = (byte)(tile.TileFrameX / 36);
         row = (byte)(tile.TileFrameY / 56);
         if (IsRussian && tile.TileFrameY / 56 >= 4) {
+            CurrentEnglish = false;
             row -= 2;
+            return;
         }
+        CurrentEnglish = true;
     }
 
     public static string GetHoverText(byte index) {
