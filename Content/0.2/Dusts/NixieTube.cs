@@ -9,10 +9,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class NixieTube : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White * (dust.alpha / 255f);
+    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White.MultiplyRGB(dust.color) * (dust.alpha / 255f);
 
     public override bool Update(Dust dust) {
         DustHelper.BasicDust(dust);
+
+        Lighting.AddLight(dust.position, new Vector3(224 / 255f, 74 / 255f, 0f));
 
         if (Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4)) {
             dust.scale *= 0.9f;
