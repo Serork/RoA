@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Content.Items.Weapons.Nature.Hardmode;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -12,6 +13,7 @@ using RoA.Core.Utility.Vanilla;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 using Terraria;
 using Terraria.ID;
@@ -35,7 +37,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     private static float SPEED => 12.5f;
     private static float SINEOFFSET => 2f;
     private static ushort HITTIMERCHECK => 10;
-    private static float ONHITSLOWMODIFIER => 0.625f;
+    private static float ONHITSLOWMODIFIER => 0.5f;
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture => [((byte)ExtraBloodlyTextureType.Glow, Texture + "_Glow"), ((byte)ExtraBloodlyTextureType.Cocoon, Texture + "_Cocoon")];
 
@@ -92,8 +94,8 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
 
         Projectile.friendly = true;
         Projectile.penetrate = -1;
-        Projectile.usesIDStaticNPCImmunity = true;
-        Projectile.idStaticNPCHitCooldown = 10;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
 
         Projectile.tileCollide = false;
 
@@ -114,6 +116,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     public override bool? CanCutTiles() => !InCocoon;
 
     public override void AI() {
+        float TIMELEFT = Projectile.GetOwnerAsPlayer().itemTimeMax * 5f;
         void init() {
             BloodlyValues bloodlyValues = new(Projectile);
             if (!bloodlyValues.Init) {
@@ -121,10 +124,12 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
 
                 bloodlyValues.SineYOffset = Main.rand.NextFloatRange(MathHelper.TwoPi) * 10f;
 
+                Projectile.timeLeft = (int)TIMELEFT;
+
                 if (Projectile.IsOwnerLocal()) {
                     _directedLeft = Main.rand.NextBool();
 
-                    _cooconAngle = Main.rand.NextFloatRange(MathHelper.PiOver4 * 0.75f);
+                    //_cooconAngle = Main.rand.NextFloatRange(MathHelper.PiOver4 * 0.75f);
 
                     Projectile.netUpdate = true;
                 }
@@ -175,11 +180,18 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         }
         void handleCocoon() {
             Player owner = Projectile.GetOwnerAsPlayer();
+            AI_GetMyGroupIndexAndFillBlackList(out int index, out _);
+            _cooconAngle = (float)index / 3 * MathHelper.PiOver4;
+            if (index == 2) {
+                _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4;
+            }
             Projectile.Center = owner.Top;
-            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * -25f + (Vector2.UnitY * 25f).RotatedBy(_cooconAngle);
+            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * -25f + (Vector2.UnitY * (index == 1 ? 30f : index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle);
             Projectile.direction = _directedLeft.ToDirectionInt();
             Projectile.rotation = MathHelper.TwoPi - _cooconAngle;
-            Projectile.Opacity = Utils.GetLerpValue(TIMELEFT, TIMELEFT - TIMELEFT * COCOONTIMELEFTMODIFIER / 6, Projectile.timeLeft, true);
+            int timeLeft = Projectile.timeLeft;
+            float revealTime = TIMELEFT - TIMELEFT * COCOONTIMELEFTMODIFIER / 5;
+            Projectile.Opacity = Utils.GetLerpValue(TIMELEFT, revealTime, timeLeft, true);
             if (!Main.dedServ && Projectile.timeLeft == LastCocoonTime + 1) {
                 for (int i = 0; i < 18; i++) {
                     Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
@@ -194,6 +206,9 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                     Main.gore[gore].velocity *= 0.5f;
                 }
             }
+            if (timeLeft <= revealTime && !owner.GetModPlayer<Crimsonest_AttackEncounter>().CanReveal) {
+                Projectile.timeLeft++;
+            }
         }
 
         init();
@@ -206,6 +221,22 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         }
         else {
             handleCocoon();
+        }
+    }
+
+    private void AI_GetMyGroupIndexAndFillBlackList(out int index, out int totalIndexesInGroup) {
+        index = 0;
+        totalIndexesInGroup = 0;
+        for (int i = 0; i < 1000; i++) {
+            Projectile projectile = Main.projectile[i];
+            if (projectile.active && projectile.owner == Projectile.owner && projectile.type == Projectile.type) {
+                if (projectile.As<Bloodly>().InCocoon) {
+                    if (Projectile.whoAmI > i)
+                        index++;
+
+                    totalIndexesInGroup++;
+                }
+            }
         }
     }
 
@@ -251,7 +282,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     private void HitEnemyForSlow() {
-        _hitTimer = (ushort)Projectile.idStaticNPCHitCooldown;
+        _hitTimer = (ushort)Projectile.localNPCHitCooldown;
         Projectile.netUpdate = true;
     }
 
