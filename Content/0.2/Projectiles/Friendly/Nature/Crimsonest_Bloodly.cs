@@ -13,7 +13,6 @@ using RoA.Core.Utility.Vanilla;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 using Terraria;
 using Terraria.ID;
