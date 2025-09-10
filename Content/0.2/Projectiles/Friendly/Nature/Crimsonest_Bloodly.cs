@@ -195,7 +195,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 for (int i = 0; i < 18; i++) {
                     Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
                 }
-                int goreCount = 2;
+                int goreCount = 1;
                 for (int i = 0; i < goreCount; i++) {
                     int currentIndex = i + 1;
                     Vector2 gorePosition = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 2f;
