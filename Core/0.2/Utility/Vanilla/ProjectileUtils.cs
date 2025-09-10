@@ -39,14 +39,20 @@ static class ProjectileUtils {
             frameBox.Size() / 2, projectile.scale, 0, 0);
     }
 
-    public static void QuickDrawAnimated(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null) {
+    public static void QuickDrawAnimated(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null, byte maxFrames = 0, Vector2? scale = null) {
         Texture2D mainTex = texture ?? projectile.GetTexture();
 
-        int frameSize = mainTex.Height / Main.projFrames[projectile.type];
+        int frameSize = mainTex.Height / (maxFrames != 0 ? maxFrames : Main.projFrames[projectile.type]);
         Rectangle frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
         SpriteEffects effects = projectile.spriteDirection.ToSpriteEffects();
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, lightColor, projectile.rotation + exRot,
-            frameBox.Size() / 2, projectile.scale, effects, 0);
+        if (scale != null) {
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, lightColor, projectile.rotation + exRot,
+                frameBox.Size() / 2, scale.Value, effects, 0);
+        }
+        else {
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, lightColor, projectile.rotation + exRot,
+                frameBox.Size() / 2, projectile.scale, effects, 0);
+        }
     }
 
     public static void QuickDrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, int start, float extraRot = 0, float scale = -1) {
@@ -138,10 +144,10 @@ static class ProjectileUtils {
                 drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, frameBox.Size() / 2, scale, 0, 0);
     }
 
-    public static void Animate(this Projectile projectile, byte frameCounter) {
+    public static void Animate(this Projectile projectile, byte frameCounter, byte maxFrames = 0) {
         if (++projectile.frameCounter >= frameCounter) {
             projectile.frameCounter = 0;
-            if (++projectile.frame >= Main.projFrames[projectile.type]) {
+            if (++projectile.frame >= (maxFrames > 0 ? maxFrames : Main.projFrames[projectile.type])) {
                 projectile.frame = 0;
             }
         }

@@ -15,20 +15,29 @@ using System.IO;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Bloodly : NatureProjectile, IRequestAssets {
+    private enum ExtraBloodlyTextureType : byte {
+        Glow,
+        Cocoon
+    }
+
     private static byte FRAMECOUNT => 6;
+    private static byte COCOONFRAMECOUNT => 4;
     private static byte FRAMECOUNTER => 4;
-    private static ushort TIMELEFT => 150;
-    private static float MOVELENGTHMIN => 300f;
+    private static ushort TIMELEFT => 200;
+    private static float COCOONTIMELEFTMODIFIER => 0.2f;
+    private static float MOVELENGTHMIN => 400f;
     private static float MOVELENGTHMAX => 500f;
+    private static float SPEED => 12.5f;
     private static float SINEOFFSET => 2f;
     private static ushort HITTIMERCHECK => 10;
-    private static float ONHITSLOWMODIFIER => 0.5f;
+    private static float ONHITSLOWMODIFIER => 0.625f;
 
-    (byte, string)[] IRequestAssets.IndexedPathsToTexture => [(0, Texture + "_Glow")];
+    (byte, string)[] IRequestAssets.IndexedPathsToTexture => [((byte)ExtraBloodlyTextureType.Glow, Texture + "_Glow"), ((byte)ExtraBloodlyTextureType.Cocoon, Texture + "_Cocoon")];
 
     public ref struct BloodlyValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
@@ -67,6 +76,11 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     }
 
     private ushort _hitTimer;
+    private bool _directedLeft;
+    private float _cooconAngle;
+
+    private bool InCocoon => Projectile.timeLeft > LastCocoonTime;
+    private ushort LastCocoonTime => (ushort)(TIMELEFT - TIMELEFT * COCOONTIMELEFTMODIFIER);
 
     public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
 
@@ -82,7 +96,22 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         Projectile.idStaticNPCHitCooldown = 10;
 
         Projectile.tileCollide = false;
+
+        Projectile.hide = true;
     }
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+        //if (_directedLeft && InCocoon) {
+        //    overPlayers.Add(index);
+        //}
+        //else
+        {
+            behindProjectiles.Add(index);
+        }
+    }
+
+    public override bool? CanDamage() => !InCocoon;
+    public override bool? CanCutTiles() => !InCocoon;
 
     public override void AI() {
         void init() {
@@ -92,16 +121,31 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
 
                 bloodlyValues.SineYOffset = Main.rand.NextFloatRange(MathHelper.TwoPi) * 10f;
 
+                if (Projectile.IsOwnerLocal()) {
+                    _directedLeft = Main.rand.NextBool();
+
+                    _cooconAngle = Main.rand.NextFloatRange(MathHelper.PiOver4 * 0.75f);
+
+                    Projectile.netUpdate = true;
+                }
+
                 bloodlyValues.SetGoToPosition(true);
             }
         }
         void animate() {
+            Projectile.manualDirectionChange = InCocoon;
             Projectile.spriteDirection = Projectile.direction;
-            Projectile.Animate(FRAMECOUNTER);
+            if (!InCocoon) {
+                Projectile.Animate(FRAMECOUNTER);
+            }
+            else {
+                Projectile.Animate(FRAMECOUNTER, COCOONFRAMECOUNT);
+            }
         }
         void handleMovement() {
             BloodlyValues bloodlyValues = new(Projectile);
-            float speed = 10f, inertia = 20f;
+            float speed = SPEED, inertia = 20f;
+            Projectile.rotation = Projectile.velocity.X * 0.025f;
             Projectile.SlightlyMoveTo(bloodlyValues.GoToPosition, speed, inertia);
             Projectile.position += Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation()) * Projectile.direction * MathF.Sin(bloodlyValues.SineYOffset++ * 0.1f) * SINEOFFSET;
         }
@@ -129,27 +173,70 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 Projectile.velocity *= ONHITSLOWMODIFIER;
             }
         }
+        void handleCocoon() {
+            Player owner = Projectile.GetOwnerAsPlayer();
+            Projectile.Center = owner.Top;
+            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * -25f + (Vector2.UnitY * 25f).RotatedBy(_cooconAngle);
+            Projectile.direction = _directedLeft.ToDirectionInt();
+            Projectile.rotation = MathHelper.TwoPi - _cooconAngle;
+            Projectile.Opacity = Utils.GetLerpValue(TIMELEFT, TIMELEFT - TIMELEFT * COCOONTIMELEFTMODIFIER / 6, Projectile.timeLeft, true);
+            if (!Main.dedServ && Projectile.timeLeft == LastCocoonTime + 1) {
+                for (int i = 0; i < 18; i++) {
+                    Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
+                }
+                int goreCount = 2;
+                for (int i = 0; i < goreCount; i++) {
+                    int currentIndex = i + 1;
+                    Vector2 gorePosition = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 2f;
+                    int gore = Gore.NewGore(Projectile.GetSource_Misc("crimsonest"),
+                        gorePosition,
+                        Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{1 + Main.rand.NextBool().ToInt()}").Type, 1f);
+                    Main.gore[gore].velocity *= 0.5f;
+                }
+            }
+        }
 
         init();
         animate();
-        handleMovement();
-        resetGoToPosition();
-        moveFromOthers();
-        slowOnHit();
+        if (!InCocoon) {
+            handleMovement();
+            resetGoToPosition();
+            moveFromOthers();
+            slowOnHit();
+        }
+        else {
+            handleCocoon();
+        }
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         writer.Write(_hitTimer);
+        writer.Write(_cooconAngle);
+        writer.Write(_directedLeft);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
         _hitTimer = reader.ReadUInt16();
+        _cooconAngle = reader.ReadSingle();
+        _directedLeft = reader.ReadBoolean();
     }
 
     public override void OnKill(int timeLeft) {
         SpawnIchorStreams();
         for (int i = 0; i < 18; i++) {
             Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
+        }
+        if (!Main.dedServ) {
+            int goreCount = 2;
+            for (int i = 0; i < goreCount; i++) {
+                int currentIndex = i + 1;
+                Vector2 gorePosition = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 2f;
+                int gore = Gore.NewGore(Projectile.GetSource_Misc("crimsonest"),
+                    gorePosition + Projectile.velocity,
+                    Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{3 + Main.rand.Next(3)}").Type, 1f);
+                Main.gore[gore].velocity = Projectile.velocity;
+                Main.gore[gore].velocity *= 0.5f;
+            }
         }
     }
 
@@ -202,8 +289,15 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             return false;
         }
 
-        Projectile.QuickDrawAnimated(lightColor);
-        Projectile.QuickDrawAnimated(Color.White, texture: indexedTextureAssets[0].Value);
+        lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
+        if (InCocoon) {
+            Projectile.QuickDrawAnimated(lightColor, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Cocoon].Value, maxFrames: COCOONFRAMECOUNT, 
+                scale: new Vector2(MathUtils.Clamp01(Projectile.Opacity * 2f), MathUtils.Clamp01(Projectile.Opacity * 1.5f)));
+        }
+        else {
+            Projectile.QuickDrawAnimated(lightColor);
+            Projectile.QuickDrawAnimated(Color.White, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Glow].Value);
+        }
 
         return false;
     }
