@@ -185,7 +185,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4;
             }
             Projectile.Center = owner.Top;
-            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * -25f + (Vector2.UnitY * (index == 1 ? 30f : index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle);
+            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitY * -25f + (Vector2.UnitY * (index == 1 ? 30f : index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle);
             Projectile.direction = _directedLeft.ToDirectionInt();
             Projectile.rotation = MathHelper.TwoPi - _cooconAngle;
             int timeLeft = Projectile.timeLeft;
