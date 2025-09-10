@@ -141,14 +141,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step2_ClearZone();
         SetUpMessage(Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods"));
         Step3_GenerateBase();
-        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX, true) + 15;
+        BackwoodsVars.FirstTileYAtCenter = (ushort)(WorldGenHelper.GetFirstTileY(CenterX, true) + 15);
         Step4_CleanUp();
         Step5_CleanUp();
-        BackwoodsVars.FirstTileYAtCenter = WorldGenHelper.GetFirstTileY(CenterX, true) + 5;
-        BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true) + 2;
+        BackwoodsVars.FirstTileYAtCenter = (ushort)(WorldGenHelper.GetFirstTileY(CenterX, true) + 5);
+        BackwoodsVars.BackwoodsTileForBackground = (ushort)(WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true) + 2);
         CenterY = BackwoodsVars.BackwoodsTileForBackground + _biomeHeight / 2;
-        BackwoodsVars.BackwoodsSizeY = _biomeHeight;
-        BackwoodsVars.BackwoodsCenterY = CenterY;
+        BackwoodsVars.BackwoodsSizeY = (ushort)_biomeHeight;
+        BackwoodsVars.BackwoodsCenterY = (ushort)CenterY;
         SetUpMessage(Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods4"), 1f);
         Step11_AddOre();
         Step8_AddCaves();
@@ -1346,7 +1346,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        BackwoodsVars.BackwoodsTileForBackground = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
+        BackwoodsVars.BackwoodsTileForBackground = (ushort)WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
     }
 
     private void Platform(int x, int y) {
@@ -4399,10 +4399,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         while (CenterX <= mid && CenterX > mid - _biomeWidth * checkWidthMultiplier) {
             CenterX--;
         }
-        BackwoodsVars.BackwoodsCenterX = CenterX;
+        BackwoodsVars.BackwoodsCenterX = (ushort)CenterX;
         CenterY = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
         CenterY += _biomeHeight / 2;
-        BackwoodsVars.BackwoodsHalfSizeX = _biomeWidth / 2;
+        BackwoodsVars.BackwoodsHalfSizeX = (ushort)(_biomeWidth / 2);
     }
 
     private void Step2_ClearZone() {

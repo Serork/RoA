@@ -117,7 +117,7 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
     private void On_WorldGen_smCallBack(On_WorldGen.orig_smCallBack orig, object threadContext) {
         orig(threadContext);
 
-        foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
+        foreach (Point16 position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
             bool flag = false;
             for (int checkX = -10; checkX < 11; checkX++) {
                 if (WorldGenHelper.GetTileSafely(position.X + checkX, position.Y).TileType == GetSelfType()) {
@@ -129,8 +129,8 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
                 TryGrowBigTree(position.X, position.Y + 1, placeRand: WorldGen.genRand, ignoreAcorns: true, ignoreTrees: true, gen: true);
             }
         }
-        foreach (Point position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
-            BackwoodsVars.AllTreesWorldPositions.Remove(new Point(position.X, position.Y));
+        foreach (Point16 position in BackwoodsVars.AllTreesWorldPositions.ToList()) {
+            BackwoodsVars.AllTreesWorldPositions.Remove(new Point16(position.X, position.Y));
             BackwoodsVars.BackwoodsTreeCountInWorld--;
         }
 
