@@ -100,6 +100,8 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         Projectile.penetrate = -1;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
+
+        Projectile.tileCollide = false;
     }
 
     public override bool? CanDamage() => !InCocoon;
