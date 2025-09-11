@@ -26,10 +26,11 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         Cocoon
     }
 
+    public static byte AMOUNTNEEDFORATTACK => 3;
     private static byte FRAMECOUNT => 6;
     private static byte COCOONFRAMECOUNT => 4;
     private static byte FRAMECOUNTER => 4;
-    private static ushort TIMELEFT => 200;
+    private static byte COCOONFRAMECOUNTER => 6;
     private static float COCOONTIMELEFTMODIFIER => 0.2f;
     private static float MOVELENGTHMIN => 400f;
     private static float MOVELENGTHMAX => 500f;
@@ -43,6 +44,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     public ref struct BloodlyValues(Projectile projectile) {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float ReversedValue = ref projectile.localAI[1];
+        public ref float ScaleValue = ref projectile.localAI[2];
 
         public ref float SineYOffset = ref projectile.ai[0];
         public ref float GotPositionX = ref projectile.ai[1];
@@ -79,9 +81,11 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     private ushort _hitTimer;
     private bool _directedLeft;
     private float _cooconAngle;
+    private int _index;
 
+    private float AttackTime => Projectile.GetOwnerAsPlayer().itemTimeMax * 5f;
     private bool InCocoon => Projectile.timeLeft > LastCocoonTime;
-    private ushort LastCocoonTime => (ushort)(TIMELEFT - TIMELEFT * COCOONTIMELEFTMODIFIER);
+    private ushort LastCocoonTime => (ushort)(AttackTime - AttackTime * COCOONTIMELEFTMODIFIER);
 
     public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
 
@@ -89,33 +93,20 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         Projectile.SetSizeValues(40);
 
         Projectile.aiStyle = -1;
-        Projectile.timeLeft = TIMELEFT;
+
+        Projectile.timeLeft = 3600;
 
         Projectile.friendly = true;
         Projectile.penetrate = -1;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
-
-        Projectile.tileCollide = false;
-
-        Projectile.hide = true;
-    }
-
-    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
-        //if (_directedLeft && InCocoon) {
-        //    overPlayers.Add(index);
-        //}
-        //else
-        {
-            behindProjectiles.Add(index);
-        }
     }
 
     public override bool? CanDamage() => !InCocoon;
     public override bool? CanCutTiles() => !InCocoon;
+    public override bool ShouldUpdatePosition() => !InCocoon;
 
     public override void AI() {
-        float TIMELEFT = Projectile.GetOwnerAsPlayer().itemTimeMax * 5f;
         void init() {
             BloodlyValues bloodlyValues = new(Projectile);
             if (!bloodlyValues.Init) {
@@ -123,7 +114,18 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
 
                 bloodlyValues.SineYOffset = Main.rand.NextFloatRange(MathHelper.TwoPi) * 10f;
 
-                Projectile.timeLeft = (int)TIMELEFT;
+                //AI_GetMyGroupIndexAndFillBlackList(out int index, out _);
+                Player owner = Projectile.GetOwnerAsPlayer();
+                _index = owner.GetModPlayer<Crimsonest_AttackEncounter>().AttackCount;
+                if (_index > AMOUNTNEEDFORATTACK - 1) {
+                    _index = 0;
+                }
+                _cooconAngle = (float)_index / 3 * MathHelper.PiOver4 * owner.direction;
+                if (_index == 2) {
+                    _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4 * owner.direction;
+                }
+
+                Projectile.timeLeft = (int)AttackTime;
 
                 if (Projectile.IsOwnerLocal()) {
                     _directedLeft = Main.rand.NextBool();
@@ -143,7 +145,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 Projectile.Animate(FRAMECOUNTER);
             }
             else {
-                Projectile.Animate(FRAMECOUNTER, COCOONFRAMECOUNT);
+                Projectile.Animate(COCOONFRAMECOUNTER, COCOONFRAMECOUNT);
             }
         }
         void handleMovement() {
@@ -178,19 +180,15 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             }
         }
         void handleCocoon() {
+            BloodlyValues bloodlyValues = new(Projectile);
             Player owner = Projectile.GetOwnerAsPlayer();
-            AI_GetMyGroupIndexAndFillBlackList(out int index, out _);
-            _cooconAngle = (float)index / 3 * MathHelper.PiOver4;
-            if (index == 2) {
-                _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4;
-            }
             Projectile.Center = owner.Top;
-            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitY * -25f + (Vector2.UnitY * (index == 1 ? 30f : index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle);
+            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitY * -25f + (Vector2.UnitY * (_index == 1 ? 30f : _index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle);
             Projectile.direction = _directedLeft.ToDirectionInt();
             Projectile.rotation = MathHelper.TwoPi - _cooconAngle;
             int timeLeft = Projectile.timeLeft;
-            float revealTime = TIMELEFT - TIMELEFT * COCOONTIMELEFTMODIFIER / 5;
-            Projectile.Opacity = Utils.GetLerpValue(TIMELEFT, revealTime, timeLeft, true);
+            float revealTime = AttackTime - AttackTime * COCOONTIMELEFTMODIFIER / 2;
+            bloodlyValues.ScaleValue = Utils.GetLerpValue(AttackTime, revealTime, timeLeft, true);
             if (!Main.dedServ && Projectile.timeLeft == LastCocoonTime + 1) {
                 for (int i = 0; i < 18; i++) {
                     Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
@@ -206,7 +204,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 }
             }
             if (timeLeft <= revealTime && !owner.GetModPlayer<Crimsonest_AttackEncounter>().CanReveal) {
-                Projectile.timeLeft++;
+                Projectile.timeLeft = (int)revealTime;
             }
         }
 
@@ -319,10 +317,11 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             return false;
         }
 
+        BloodlyValues bloodlyValues = new(Projectile);
         lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
         if (InCocoon) {
             Projectile.QuickDrawAnimated(lightColor, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Cocoon].Value, maxFrames: COCOONFRAMECOUNT, 
-                scale: new Vector2(MathUtils.Clamp01(Projectile.Opacity * 2f), MathUtils.Clamp01(Projectile.Opacity * 1.5f)));
+                scale: new Vector2(MathUtils.Clamp01(bloodlyValues.ScaleValue * 2f), MathUtils.Clamp01(bloodlyValues.ScaleValue * 1.5f)));
         }
         else {
             Projectile.QuickDrawAnimated(lightColor);

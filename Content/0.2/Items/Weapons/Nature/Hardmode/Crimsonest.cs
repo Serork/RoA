@@ -23,8 +23,7 @@ sealed class Crimsonest : NatureItem {
 
     public override bool? UseItem(Player player) {
         if (player.ItemAnimationJustStarted) {
-            Crimsonest_AttackEncounter handler = player.GetModPlayer<Crimsonest_AttackEncounter>();
-            handler.AttackCount++;
+            player.GetModPlayer<Crimsonest_AttackEncounter>().AttackCount++;
         }
 
         return base.UseItem(player);
@@ -32,13 +31,17 @@ sealed class Crimsonest : NatureItem {
 }
 
 sealed class Crimsonest_AttackEncounter : ModPlayer {
-    public byte AttackCount;
+    public int AttackCount;
     public bool CanReveal;
 
     public override void ResetEffects() {
-        CanReveal = AttackCount >= 2;
-        if (AttackCount >= 3) {
+        CanReveal = AttackCount >= Bloodly.AMOUNTNEEDFORATTACK - 1;
+        if (AttackCount >= Bloodly.AMOUNTNEEDFORATTACK) {
             AttackCount = 0;
         }
+    }
+
+    public override void OnEnterWorld() {
+        AttackCount = -1;
     }
 }
