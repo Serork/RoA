@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Common.Players;
 using RoA.Content.Items.Weapons.Nature.Hardmode;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -199,18 +200,25 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 Projectile.active = false;
                 return;
             }
-            if (!Main.dedServ && Projectile.timeLeft == LastCocoonTime + 1) {
-                for (int i = 0; i < 18; i++) {
-                    Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
+            if (Projectile.timeLeft == LastCocoonTime + 1) {
+                if (Projectile.IsOwnerLocal()) {
+                    Projectile.velocity = Projectile.Center.DirectionTo(owner.GetWorldMousePosition()) * Projectile.velocity.Length();
+                    bloodlyValues.SetGoToPosition(true);
+                    Projectile.netUpdate = true;
                 }
-                int goreCount = 1;
-                for (int i = 0; i < goreCount; i++) {
-                    int currentIndex = i + 1;
-                    Vector2 gorePosition = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 2f;
-                    int gore = Gore.NewGore(Projectile.GetSource_Misc("crimsonest"),
-                        gorePosition,
-                        Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{1 + Main.rand.NextBool().ToInt()}").Type, 1f);
-                    Main.gore[gore].velocity *= 0.5f;
+                if (!Main.dedServ) {
+                    for (int i = 0; i < 18; i++) {
+                        Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
+                    }
+                    int goreCount = 1;
+                    for (int i = 0; i < goreCount; i++) {
+                        int currentIndex = i + 1;
+                        Vector2 gorePosition = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 2f;
+                        int gore = Gore.NewGore(Projectile.GetSource_Misc("crimsonest"),
+                            gorePosition,
+                            Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{1 + Main.rand.NextBool().ToInt()}").Type, 1f);
+                        Main.gore[gore].velocity *= 0.5f;
+                    }
                 }
             }
             bool canReveal = true;
