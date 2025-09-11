@@ -22,7 +22,10 @@ sealed class Crimsonest : NatureItem {
     }
 
     public override bool? UseItem(Player player) {
-        player.GetModPlayer<Crimsonest_AttackEncounter>().AttackCount++;
+        if (player.ItemAnimationJustStarted) {
+            Crimsonest_AttackEncounter handler = player.GetModPlayer<Crimsonest_AttackEncounter>();
+            handler.AttackCount++;
+        }
 
         return base.UseItem(player);
     }
