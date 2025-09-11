@@ -39,7 +39,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     private static float SPEED => 12.5f;
     private static float SINEOFFSET => 2f;
     private static ushort HITTIMERCHECK => 10;
-    private static float ONHITSLOWMODIFIER => 0.5f;
+    private static float ONHITSLOWMODIFIER => 0.625f;
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture => [((byte)ExtraBloodlyTextureType.Glow, Texture + "_Glow"), ((byte)ExtraBloodlyTextureType.Cocoon, Texture + "_Cocoon")];
 
