@@ -203,7 +203,17 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                     Main.gore[gore].velocity *= 0.5f;
                 }
             }
-            if (timeLeft <= revealTime && !owner.GetModPlayer<Crimsonest_AttackEncounter>().CanReveal) {
+            bool canReveal = true;
+            for (int i = 0; i < 1000; i++) {
+                Projectile projectile = Main.projectile[i];
+                if (projectile.active && projectile.owner == Projectile.owner && projectile.type == Projectile.type) {
+                    if (projectile.As<Bloodly>().InCocoon && projectile.timeLeft > revealTime) {
+                        canReveal = false;
+                        break;
+                    }
+                }
+            }
+            if (timeLeft <= revealTime && (!canReveal || !owner.GetModPlayer<Crimsonest_AttackEncounter>().CanReveal)) {
                 Projectile.timeLeft = (int)revealTime;
             }
         }
