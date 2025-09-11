@@ -79,11 +79,11 @@ sealed class TrackedEntitiesSystem : ModSystem {
         }
     }
 
-    public static IEnumerable<Projectile> GetTrackedProjectile<T>(Predicate<Projectile>? filter = null) where T : ModProjectile {
+    public static IEnumerable<Projectile> GetTrackedProjectile<T>(Predicate<Projectile>? filter = null, bool checkForType = true) where T : ModProjectile {
         Type projectileType = typeof(T);
         if (TrackedEntitiesByType.TryGetValue(projectileType, out List<Entity>? value)) {
             foreach (Projectile trackedProjectile in value.Cast<Projectile>()) {
-                if (trackedProjectile.type != ModContent.ProjectileType<T>()) {
+                if (checkForType && trackedProjectile.type != ModContent.ProjectileType<T>()) {
                     continue;
                 }
                 if (filter != null && filter.Invoke(trackedProjectile)) {
@@ -94,11 +94,11 @@ sealed class TrackedEntitiesSystem : ModSystem {
         }
     }
 
-    public static IEnumerable<NPC> GetTrackedNPC<T>(Predicate<NPC>? filter = null) where T : ModNPC {
+    public static IEnumerable<NPC> GetTrackedNPC<T>(Predicate<NPC>? filter = null, bool checkForType = true) where T : ModNPC {
         Type npcType = typeof(T);
         if (TrackedEntitiesByType.TryGetValue(npcType, out List<Entity>? value)) {
             foreach (NPC trackedNPC in value.Cast<NPC>()) {
-                if (trackedNPC.type != ModContent.NPCType<T>()) {
+                if (checkForType && trackedNPC.type != ModContent.NPCType<T>()) {
                     continue;
                 }
                 if (filter != null && filter.Invoke(trackedNPC)) {

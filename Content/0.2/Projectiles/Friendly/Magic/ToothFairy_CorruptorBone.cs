@@ -8,6 +8,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.ID;
@@ -112,7 +113,7 @@ sealed class CorruptorBone : ModProjectile {
 
     private class ConnectBones : ModSystem {
         public override void PreUpdateProjectiles() {
-            IEnumerable<Projectile> corruptorBoneProjectiles = TrackedEntitiesSystem.GetTrackedProjectile<CorruptorBone>();
+            IEnumerable<Projectile> corruptorBoneProjectiles = TrackedEntitiesSystem.GetTrackedProjectile<CorruptorBone>(checkForType: false);
             float maxAttractionDistance = 200f;
             float fuseDistance = 20f;
             maxAttractionDistance *= maxAttractionDistance;
