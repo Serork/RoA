@@ -34,6 +34,10 @@ sealed class NixieTubeTE : ModTileEntity {
             return;
         }
 
+        if (Main.rand.NextBool(750)) {
+            Activate();
+        }
+
         if ((DeactivatedTimer -= 5) < 0) {
             DeactivatedTimer = DeactivatedTimer2 / 2;
             DeactivatedTimer2 /= 2;
