@@ -311,19 +311,6 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         }
     }
 
-    public override bool OnTileCollide(Vector2 oldVelocity) {
-        //SpawnIchorStreams();
-        //Projectile.Kill();
-
-        return false;
-    }
-
-    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-        width = height = 20;
-
-        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
-    }
-
     public override bool PreDraw(ref Color lightColor) {
         if (!AssetInitializer.TryGetRequestedTextureAssets<Bloodly>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return false;
