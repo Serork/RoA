@@ -21,6 +21,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+[Tracked]
 sealed class Bloodly : NatureProjectile, IRequestAssets {
     private enum ExtraBloodlyTextureType : byte {
         Glow,
@@ -110,6 +111,15 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     public override bool ShouldUpdatePosition() => !InCocoon;
 
     public override void AI() {
+        void setPosition() {
+            Player owner = Projectile.GetOwnerAsPlayer();
+            _cooconAngle = (float)_index / 3 * MathHelper.PiOver4 * -owner.direction;
+            if (_index == 2) {
+                _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4 * -owner.direction;
+            }
+            Projectile.Center = owner.Top;
+            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitY * -20f + (Vector2.UnitY * (_index == 1 ? 30f : _index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle);
+        }
         void init() {
             BloodlyValues bloodlyValues = new(Projectile);
             if (!bloodlyValues.Init) {
@@ -123,9 +133,13 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 if (_index > AMOUNTNEEDFORATTACK - 1) {
                     _index = 0;
                 }
-                _cooconAngle = (float)_index / 3 * MathHelper.PiOver4 * -owner.direction;
-                if (_index == 2) {
-                    _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4 * -owner.direction;
+                setPosition();
+                foreach (Projectile otherCocoons in TrackedEntitiesSystem.GetTrackedProjectile<Bloodly>(checkProjectile => checkProjectile.whoAmI == Projectile.whoAmI || !checkProjectile.As<Bloodly>().InCocoon)) {
+                    float dist = MathF.Abs(otherCocoons.Center.X - Projectile.Center.X);
+                    if (dist < 3) {
+                        _index = -_index;
+                        setPosition();
+                    }
                 }
 
                 Projectile.timeLeft = (int)AttackTime;
@@ -185,8 +199,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         void handleCocoon() {
             BloodlyValues bloodlyValues = new(Projectile);
             Player owner = Projectile.GetOwnerAsPlayer();
-            Projectile.Center = owner.Top;
-            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitY * -20f + (Vector2.UnitY * (_index == 1 ? 30f : _index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle);
+            setPosition();
             Projectile.direction = _directedLeft.ToDirectionInt();
             Projectile.rotation = MathHelper.TwoPi - _cooconAngle;
             int timeLeft = Projectile.timeLeft;
