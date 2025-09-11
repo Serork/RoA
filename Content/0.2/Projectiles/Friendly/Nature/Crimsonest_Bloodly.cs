@@ -230,7 +230,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                         int gore = Gore.NewGore(Projectile.GetSource_Misc("crimsonest"),
                             gorePosition,
                             Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{1 + Main.rand.NextBool().ToInt()}").Type, 1f);
-                        Main.gore[gore].velocity *= 0.5f;
+                        Main.gore[gore].velocity *= 1f;
                     }
                 }
             }
