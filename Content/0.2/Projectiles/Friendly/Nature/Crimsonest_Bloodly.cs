@@ -120,9 +120,9 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 if (_index > AMOUNTNEEDFORATTACK - 1) {
                     _index = 0;
                 }
-                _cooconAngle = (float)_index / 3 * MathHelper.PiOver4 * owner.direction;
+                _cooconAngle = (float)_index / 3 * MathHelper.PiOver4 * -owner.direction;
                 if (_index == 2) {
-                    _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4 * owner.direction;
+                    _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4 * -owner.direction;
                 }
 
                 Projectile.timeLeft = (int)AttackTime;
