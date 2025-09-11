@@ -336,7 +336,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
         if (InCocoon) {
             Projectile.QuickDrawAnimated(lightColor, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Cocoon].Value, maxFrames: COCOONFRAMECOUNT, 
-                scale: new Vector2(MathUtils.Clamp01(bloodlyValues.ScaleValue * 2f), MathUtils.Clamp01(bloodlyValues.ScaleValue * 1.5f)));
+                scale: new Vector2(MathUtils.Clamp01(bloodlyValues.ScaleValue * 1.75f), MathUtils.Clamp01(bloodlyValues.ScaleValue * 2f)));
         }
         else {
             Projectile.QuickDrawAnimated(lightColor);
