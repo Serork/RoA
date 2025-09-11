@@ -191,6 +191,14 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             int timeLeft = Projectile.timeLeft;
             float revealTime = AttackTime - AttackTime * COCOONTIMELEFTMODIFIER / 2;
             bloodlyValues.ScaleValue = Utils.GetLerpValue(AttackTime, revealTime, timeLeft, true);
+            bool holdingItem = owner.IsHolding<Crimsonest>();
+            if (!holdingItem) {
+                for (int i = 0; i < 18; i++) {
+                    Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
+                }
+                Projectile.active = false;
+                return;
+            }
             if (!Main.dedServ && Projectile.timeLeft == LastCocoonTime + 1) {
                 for (int i = 0; i < 18; i++) {
                     Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));

@@ -1,6 +1,7 @@
 ﻿using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Enums;
@@ -37,6 +38,12 @@ sealed class Crimsonest_AttackEncounter : ModPlayer {
     public override void ResetEffects() {
         CanReveal = AttackCount >= Bloodly.AMOUNTNEEDFORATTACK - 1;
         if (AttackCount >= Bloodly.AMOUNTNEEDFORATTACK) {
+            AttackCount = 0;
+        }
+    }
+
+    public override void PostUpdate() {
+        if (Player.ownedProjectileCounts[ModContent.ProjectileType<Bloodly>()] <= 0) {
             AttackCount = 0;
         }
     }
