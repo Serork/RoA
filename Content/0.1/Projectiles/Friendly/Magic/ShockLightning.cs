@@ -56,13 +56,23 @@ sealed class ShockLightning : ModProjectile {
 
         Projectile.timeLeft = 120;
 
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
 
         Projectile.netImportant = true;
 
         Projectile.localNPCHitCooldown = 500;
         Projectile.usesLocalNPCImmunity = true;
+    }
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        return false;
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 0;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
@@ -106,9 +116,13 @@ sealed class ShockLightning : ModProjectile {
         }
         else Projectile.Kill();
 
-        Vector2 lineEnd = Projectile.position + Vector2.Normalize(Projectile.velocity) * _lightningLength;
-        if (Collision.SolidCollision(lineEnd, 4, 4)) {
-            Projectile.Kill();
+        float check = 0f;
+        while (check < _lightningLength) {
+            Vector2 lineEnd = Projectile.Center + Vector2.Normalize(Projectile.velocity) * check;
+            if (Collision.SolidCollision(lineEnd, 0, 0)) {
+                Projectile.Kill();
+            }
+            check++;
         }
     }
 
