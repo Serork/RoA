@@ -245,7 +245,8 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 Projectile.timeLeft = (int)revealTime;
             }
             if (Projectile.timeLeft < revealTime) {
-                Projectile.scale += (200 + (200 - AttackTime)) / 40000f;
+                int baseTime = ItemLoader.GetItem(ModContent.ItemType<Crimsonest>()).Item.useTime * 5;
+                Projectile.scale += (baseTime + (baseTime - AttackTime)) / 40000f;
                 Projectile.scale *= 1.015f;
             }
         }
