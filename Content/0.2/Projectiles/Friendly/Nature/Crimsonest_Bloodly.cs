@@ -247,7 +247,6 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             if (Projectile.timeLeft < revealTime) {
                 Projectile.scale += (200 + (200 - AttackTime)) / 40000f;
                 Projectile.scale *= 1.015f;
-                Main.NewText(Projectile.scale);
             }
         }
 
