@@ -23,6 +23,11 @@ sealed class NixieTubeTE : ModTileEntity {
     public Item? Dye1 = null;
     public Item? Dye2 = null;
 
+    public NixieTubeTE() {
+        Dye1 ??= new Item();
+        Dye2 ??= new Item();
+    }
+
     public void SetDye1(Item item) => Dye1 = item;
     public void SetDye2(Item item) => Dye2 = item;
 
@@ -72,10 +77,10 @@ sealed class NixieTubeTE : ModTileEntity {
     }
 
     public override void SaveData(TagCompound tag) {
-        if (!Dye1.IsEmpty()) {
+        if (Dye1 is not null) {
             tag.Add(RoA.ModName + nameof(Dye1), ItemIO.Save(Dye1));
         }
-        if (!Dye2.IsEmpty()) {
+        if (Dye2 is not null) {
             tag.Add(RoA.ModName + nameof(Dye2), ItemIO.Save(Dye2));
         }
         if (IsFlickerOff) {
