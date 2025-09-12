@@ -6,6 +6,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -46,6 +47,9 @@ sealed class NixieTubeTE : ModTileEntity {
                 Dust dust = Dust.NewDustPerfect(new Point16(Position.X - 1, Position.Y - 2).ToWorldCoordinates() + Main.rand.Random2(-8f, 16f + 8f, 8f, 32f), ModContent.DustType<Dusts.NixieTube>(), newColor: Color.Yellow);
                 dust.velocity *= 0.5f;
                 dust.alpha = 100;
+                if (!Dye1.IsEmpty()) {
+                    dust.shader = GameShaders.Armor.GetShaderFromItemId(Dye1.type);
+                }
             }
         }
     }

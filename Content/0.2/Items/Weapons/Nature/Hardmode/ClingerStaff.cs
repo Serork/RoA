@@ -44,11 +44,11 @@ sealed class ClingerStaff : NatureItem {
         //    }
         //}
 
-        UpdateMaxClingers();
+        UpdateMaxClingers(player);
     }
 
-    private void UpdateMaxClingers() {
-        IEnumerable<Projectile> list2 = TrackedEntitiesSystem.GetTrackedProjectile<ClingerHideway>();
+    private void UpdateMaxClingers(Player player) {
+        IEnumerable<Projectile> list2 = TrackedEntitiesSystem.GetTrackedProjectile<ClingerHideway>(checkProjectile => checkProjectile.owner != player.whoAmI);
         List<Projectile> list = [];
         foreach (Projectile projectile in list2) {
             list.Add(projectile);

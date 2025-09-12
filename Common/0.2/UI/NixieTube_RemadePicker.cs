@@ -67,7 +67,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public const byte NUMCOUNT = 11;
     public const byte ENGCOUNT = 26;
     public const byte RUSCOUNT = 32;
-    public const byte MISCCOUNT = 22;
+    public const byte MISCCOUNT = 25;
 
     private readonly UIElement _mainContainer;
     private readonly UINixieTubePanel _numGrid;
@@ -84,7 +84,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public static byte ENGRUSCOUNT => IsRussian ? RUSCOUNT : ENGCOUNT;
 
     private static Point16 _nixieTubeTilePosition;
-    private static readonly char[] _miscSymbols = [':', '!', '?', '.', ',', '(', ')', '/', '|', '\u005c', '+', '-', '=', '#', '%', '&', '<', '>', '[', ']', '"', '\u0027'];
+    private static readonly char[] _miscSymbols = [':', '!', '?', '.', ',', '(', ')', '/', '|', '\u005c', '+', '-', '=', '#', '%', '&', '<', '>', '[', ']', '"', '\u0027', '_', '*', '^'];
 
     public UINixieTubeDyeSlot DyeSlot1 { get; init; }
     public UINixieTubeDyeSlot DyeSlot2 { get; init; }
