@@ -86,7 +86,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     private int _index;
 
     private float AttackTime => Projectile.GetOwnerAsPlayer().itemTimeMax * 5f;
-    private bool InCocoon => Projectile.timeLeft > LastCocoonTime;
+    private bool InCocoon => Projectile.timeLeft > LastCocoonTime && _index != -1;
     private ushort LastCocoonTime => (ushort)(AttackTime - AttackTime * COCOONTIMELEFTMODIFIER);
 
     public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
@@ -206,14 +206,8 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             float revealTime = AttackTime - AttackTime * COCOONTIMELEFTMODIFIER / 2;
             bloodlyValues.ScaleValue = Utils.GetLerpValue(AttackTime, revealTime, timeLeft, true);
             bool holdingItem = owner.IsHolding<Crimsonest>();
-            if (!holdingItem) {
-                for (int i = 0; i < 18; i++) {
-                    Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
-                }
-                Projectile.active = false;
-                return;
-            }
             if (Projectile.timeLeft == LastCocoonTime + 1) {
+                _index = -1;
                 if (Projectile.IsOwnerLocal()) {
                     Projectile.velocity = Projectile.Center.DirectionTo(owner.GetWorldMousePosition()) * Projectile.velocity.Length();
                     bloodlyValues.SetGoToPosition(true);
@@ -248,6 +242,14 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 int baseTime = ItemLoader.GetItem(ModContent.ItemType<Crimsonest>()).Item.useTime * 5;
                 Projectile.scale += (baseTime + (baseTime - AttackTime)) / 40000f;
                 Projectile.scale *= 1.015f;
+            }
+            else {
+                if (!holdingItem) {
+                    for (int i = 0; i < 18; i++) {
+                        Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
+                    }
+                    Projectile.active = false;
+                }
             }
         }
 
