@@ -17,6 +17,7 @@ sealed class NixieTubeTE : ModTileEntity {
     public static ushort ACTIVATIONTIME => 100;
 
     public bool Activated;
+    public bool IsFlickerOff;
     public int DeactivatedTimer, DeactivatedTimer2, ActivatedForTimer;
     public bool Active => DeactivatedTimer <= ACTIVATIONTIME / 3;
     public Item? Dye1 = null;
@@ -35,7 +36,7 @@ sealed class NixieTubeTE : ModTileEntity {
             return;
         }
 
-        if (Main.rand.NextBool(750)) {
+        if (!IsFlickerOff && Main.rand.NextBool(750)) {
             Activate();
         }
 
@@ -57,7 +58,12 @@ sealed class NixieTubeTE : ModTileEntity {
     public void Activate() {
         Activated = true;
 
-        DeactivatedTimer = DeactivatedTimer2 = ACTIVATIONTIME;
+        if (!IsFlickerOff) {
+            DeactivatedTimer = DeactivatedTimer2 = ACTIVATIONTIME;
+            return;
+        }
+
+        DeactivatedTimer = DeactivatedTimer2 = 0;
     }
 
     public override void OnKill() {
@@ -77,6 +83,12 @@ sealed class NixieTubeTE : ModTileEntity {
         if (Dye2 is not null) {
             tag.Add(RoA.ModName + nameof(Dye2), ItemIO.Save(Dye2));
         }
+        if (IsFlickerOff) {
+            tag.Add(RoA.ModName + nameof(IsFlickerOff), true);
+        }
+        if (Activated) {
+            tag.Add(RoA.ModName + nameof(Activated), true);
+        }
     }
 
     public override void LoadData(TagCompound tag) {
@@ -85,6 +97,12 @@ sealed class NixieTubeTE : ModTileEntity {
         }
         if (tag.TryGet(RoA.ModName + nameof(Dye2), out TagCompound dye2)) {
             Dye2 = ItemIO.Load(dye2);
+        }
+        if (tag.TryGet(RoA.ModName + nameof(IsFlickerOff), out TagCompound _)) {
+            IsFlickerOff = true;
+        }
+        if (tag.TryGet(RoA.ModName + nameof(Activated), out TagCompound _)) {
+            Activated = true;
         }
     }
 

@@ -13,8 +13,8 @@ sealed class UINixieTubeLanguageButton : UIImageButton {
     public UINixieTubeLanguageButton(Asset<Texture2D> texture) : base(texture) { }
 
     public override void Update(GameTime gameTime) {
-        Width.Set(_texture.Width() * Scale, 0f);
-        Height.Set(_texture.Height() * Scale, 0f);
+        Width.Set(texture.Width() * Scale, 0f);
+        Height.Set(texture.Height() * Scale, 0f);
 
         if (IsMouseHovering) {
             Main.instance.MouseText(Language.GetTextValue("Mods.RoA.NixieTubeLanguageButton"));

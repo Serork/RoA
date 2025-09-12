@@ -68,9 +68,9 @@ sealed class NixieTube : ModTile {
 
     public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
-        if (player.IsWithinSnappngRangeToTile(i, j, 80)) {
+        if (player.IsWithinSnappngRangeToTile(i, j, 80) && TryGetTE(out NixieTubeTE? nixieTubeTE, i, j)) {
             //NixieTubePicker.Activate(new Point16(i, j));
-            NixieTubePicker_RemadePicker.Toggle(i, j);
+            NixieTubePicker_RemadePicker.Toggle(i, j, nixieTubeTE.IsFlickerOff);
         }
 
         return true;

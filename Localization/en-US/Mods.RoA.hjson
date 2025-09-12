@@ -17,3 +17,5 @@ Liquids.Tar.MapEntry: Tar
 NixieTubeDyeSlot1: Fill Dye
 NixieTubeDyeSlot2: Casing Dye
 NixieTubeLanguageButton: Change Language
+NixieTubeFlickerButton1: Turn Off Flicker
+NixieTubeFlickerButton2: Turn On Flicker

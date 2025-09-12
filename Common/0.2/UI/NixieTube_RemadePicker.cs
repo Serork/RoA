@@ -42,6 +42,9 @@ sealed class NixieTubePicker_TextureLoader : IInitializer {
     public static Asset<Texture2D> NixieTubePickButton { get; private set; }
     public static Asset<Texture2D> NixieTubePickButtonBorder { get; private set; }
 
+    public static Asset<Texture2D> NixieTubeLightButton { get; private set; }
+    public static Asset<Texture2D> NixieTubeLightButtonBorder { get; private set; }
+
     void ILoadable.Load(Mod mod) {
         On_Player.Spawn += On_Player_Spawn;
 
@@ -53,6 +56,9 @@ sealed class NixieTubePicker_TextureLoader : IInitializer {
         NixieTubeLanguageButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LanguageButton_Border");
         NixieTubePickButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2");
         NixieTubePickButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2_Border");
+
+        NixieTubeLightButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LightButton");
+        NixieTubeLightButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LanguageButton_Border");
     }
 
     private void On_Player_Spawn(On_Player.orig_Spawn orig, Player self, PlayerSpawnContext context) {
@@ -74,6 +80,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     private readonly UINixieTubePanel _engRusGrid;
     private readonly UINixieTubePanel _miscGrid;
     private readonly UINixieTubeLanguageButton _languageButton;
+    private readonly UINixieTubeLightButton _lightButton;
 
     private static int _oldPickedIndexRussian, _oldPickedIndexEnglish;
 
@@ -81,6 +88,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public static bool CurrentEnglish = false;
 
     public static bool IsRussian { get; private set; }
+    public static bool IsFlickerOff { get; private set; }
     public static byte ENGRUSCOUNT => IsRussian ? RUSCOUNT : ENGCOUNT;
 
     private static Point16 _nixieTubeTilePosition;
@@ -166,11 +174,21 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
             Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
             Top = StyleDimension.FromPercent(0.65f),
-            Left = StyleDimension.FromPercent(1f - 0.0785f),
+            Left = StyleDimension.FromPercent(1f - 0.1f),
             Scale = 0.75f
         };
         _languageButton.SetHoverImage(NixieTubePicker_TextureLoader.NixieTubeLanguageButtonBorder);
         _languageButton.OnLeftClick += _languageButton_OnLeftClick;
+
+        _lightButton = new UINixieTubeLightButton(NixieTubePicker_TextureLoader.NixieTubeLightButton) {
+            Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
+            Top = StyleDimension.FromPercent(0.65f),
+            Left = StyleDimension.FromPercent(1f - 0.0564f),
+            Scale = 0.75f
+        };
+        _lightButton.SetHoverImage(NixieTubePicker_TextureLoader.NixieTubeLightButtonBorder);
+        _lightButton.OnLeftClick += _lightButton_OnLeftClick;
 
         DyeSlot1 = new UINixieTubeDyeSlot(true, ItemSlot.Context.EquipMiscDye) {
             Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
@@ -191,6 +209,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         _mainContainer.Append(DyeSlot2);
 
         _mainContainer.Append(_languageButton);
+        _mainContainer.Append(_lightButton);
 
         Recalculate();
     }
@@ -323,6 +342,13 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         GetColumnAndRowFromTile(out _, out _);
     }
 
+    private void _lightButton_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
+        IsFlickerOff = !IsFlickerOff;
+        var tilePos = _nixieTubeTilePosition;
+        NixieTube.GetTE(tilePos.X, tilePos.Y).IsFlickerOff = IsFlickerOff;
+        SoundEngine.PlaySound(SoundID.MenuTick);
+    }
+
     public static void ResetPickedIndex() {
         PickedIndex = 0;
         ShouldUpdateIndex = true;
@@ -384,7 +410,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         return (byte)(cumulativeSum + column);
     }
 
-    public static void Toggle(int i, int j) {
+    public static void Toggle(int i, int j, bool flickerOn = false) {
         Point16 checkPos = GetTopLeftOfNixieTube(new Point16(i, j));
         bool flag = Active && checkPos != _nixieTubeTilePosition;
         if (!Active || flag) {
@@ -394,6 +420,8 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             Main.recBigList = false;
             Main.hidePlayerCraftingMenu = true;
             _nixieTubeTilePosition = checkPos;
+
+            IsFlickerOff = flickerOn;
         }
         else {
             SoundEngine.PlaySound(SoundID.MenuClose);
