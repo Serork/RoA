@@ -134,7 +134,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                     _index = 0;
                 }
                 setPosition();
-                foreach (Projectile otherCocoons in TrackedEntitiesSystem.GetTrackedProjectile<Bloodly>(checkProjectile => checkProjectile.whoAmI == Projectile.whoAmI || !checkProjectile.As<Bloodly>().InCocoon)) {
+                foreach (Projectile otherCocoons in TrackedEntitiesSystem.GetTrackedProjectile<Bloodly>(checkProjectile => checkProjectile.owner != Projectile.owner || checkProjectile.whoAmI == Projectile.whoAmI || !checkProjectile.As<Bloodly>().InCocoon)) {
                     float dist = MathF.Abs(otherCocoons.Center.X - Projectile.Center.X);
                     if (dist < 3) {
                         _index = -_index;
@@ -223,35 +223,38 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                     for (int i = 0; i < 18; i++) {
                         Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Blood, Projectile.velocity.X * 0.2f, Projectile.velocity.X * 0.2f, 100, default(Color), 1.25f + Main.rand.NextFloatRange(0.25f));
                     }
-                    int goreCount = 1;
+                    int goreCount = 2;
                     for (int i = 0; i < goreCount; i++) {
                         int currentIndex = i + 1;
-                        Vector2 gorePosition = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 2f;
+                        Vector2 gorePosition = Projectile.Top/* + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 2f*/;
                         int gore = Gore.NewGore(Projectile.GetSource_Misc("crimsonest"),
                             gorePosition,
-                            Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{1 + Main.rand.NextBool().ToInt()}").Type, 1f);
+                            Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{1 + Main.rand.NextBool().ToInt()}").Type, 1f);
                         Main.gore[gore].velocity *= 1f;
                     }
                 }
             }
             bool canReveal = true;
-            for (int i = 0; i < 1000; i++) {
-                Projectile projectile = Main.projectile[i];
-                if (projectile.active && projectile.owner == Projectile.owner && projectile.type == Projectile.type) {
-                    if (projectile.As<Bloodly>().InCocoon && projectile.timeLeft > revealTime) {
-                        canReveal = false;
-                        break;
-                    }
+            foreach (Projectile otherCocoons in TrackedEntitiesSystem.GetTrackedProjectile<Bloodly>(checkProjectile => checkProjectile.owner != Projectile.owner || checkProjectile.whoAmI == Projectile.whoAmI)) {
+                if (otherCocoons.As<Bloodly>().InCocoon && otherCocoons.timeLeft > revealTime) {
+                    canReveal = false;
+                    break;
                 }
             }
             if (timeLeft <= revealTime && (!canReveal || !owner.GetModPlayer<Crimsonest_AttackEncounter>().CanReveal)) {
                 Projectile.timeLeft = (int)revealTime;
+            }
+            if (Projectile.timeLeft < revealTime) {
+                Projectile.scale += 0.005f;
+                Projectile.scale *= 1.015f;
             }
         }
 
         init();
         animate();
         if (!InCocoon) {
+            Projectile.scale = 1f;
+
             handleMovement();
             resetGoToPosition();
             moveFromOthers();
@@ -349,12 +352,12 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
         if (InCocoon) {
             Projectile.QuickDrawAnimated(lightColor, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Cocoon].Value, maxFrames: COCOONFRAMECOUNT, 
-                scale: new Vector2(MathUtils.Clamp01(bloodlyValues.ScaleValue * 1.75f), MathUtils.Clamp01(bloodlyValues.ScaleValue * 2f)), 
+                scale: new Vector2(MathUtils.Clamp01(bloodlyValues.ScaleValue * 1.75f), MathUtils.Clamp01(bloodlyValues.ScaleValue * 2f)) * Projectile.scale, 
                 originScale: new Vector2(1f, 1.375f));
         }
         else {
-            Projectile.QuickDrawAnimated(lightColor);
-            Projectile.QuickDrawAnimated(Color.White, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Glow].Value);
+            Projectile.QuickDrawAnimated(lightColor, scale: Vector2.One);
+            Projectile.QuickDrawAnimated(Color.White, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Glow].Value, scale: Vector2.One);
         }
 
         return false;
