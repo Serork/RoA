@@ -116,7 +116,7 @@ sealed class BookwormsProjectile : ModProjectile {
         int variant = Projectile.ai[0] == 0f ? 1 : flag ? 3 : (int)Projectile.ai[0];
         Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + $"Magic/Bookworms{variant}").Value;
         Vector2 position = Projectile.position - Main.screenPosition;
-        Color color = Lighting.GetColor((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16);
+        Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
         SpriteEffects effects = Projectile.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         Vector2 origin = Projectile.Size / 2f;
         Vector2 size = new(20, 26);
