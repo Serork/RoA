@@ -88,7 +88,7 @@ sealed class UINixieTubePickButton : UIElement {
 
     private void UINixieTubePickButton_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
         NixieTubePicker_RemadePicker.ResetPickedIndex();
-        SoundEngine.PlaySound(SoundID.MenuTick);
+        //SoundEngine.PlaySound(SoundID.MenuTick);
         NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(_nixieTubeInfo.Index);
     }
 }

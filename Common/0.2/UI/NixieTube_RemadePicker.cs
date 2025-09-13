@@ -239,7 +239,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         }
         IsRussian = !IsRussian;
         PopulateLists();
-        SoundEngine.PlaySound(SoundID.MenuTick);
+        //SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
     public override void OnInitialize() {
@@ -346,7 +346,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         IsFlickerOff = !IsFlickerOff;
         var tilePos = _nixieTubeTilePosition;
         NixieTube.GetTE(tilePos.X, tilePos.Y).IsFlickerOff = IsFlickerOff;
-        SoundEngine.PlaySound(SoundID.MenuTick);
+        //SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
     public static void ResetPickedIndex() {
