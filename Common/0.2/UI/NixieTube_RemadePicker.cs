@@ -243,7 +243,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     }
 
     public override void OnInitialize() {
-        //Recalculate();
+        Recalculate();
     }
 
     public override bool Visible => Active;
