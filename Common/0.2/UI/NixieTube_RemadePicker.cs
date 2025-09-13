@@ -243,7 +243,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     }
 
     public override void OnInitialize() {
-        Recalculate();
+        //Recalculate();
     }
 
     public override bool Visible => Active;
@@ -420,6 +420,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             Main.recBigList = false;
             Main.hidePlayerCraftingMenu = true;
             _nixieTubeTilePosition = checkPos;
+            ResetPickedIndex();
 
             IsFlickerOff = flickerOn;
         }
