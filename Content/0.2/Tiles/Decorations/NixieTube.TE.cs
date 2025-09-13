@@ -83,12 +83,8 @@ sealed class NixieTubeTE : ModTileEntity {
         if (Dye2 is not null) {
             tag.Add(RoA.ModName + nameof(Dye2), ItemIO.Save(Dye2));
         }
-        if (IsFlickerOff) {
-            tag.Add(RoA.ModName + nameof(IsFlickerOff), true);
-        }
-        if (Activated) {
-            tag.Add(RoA.ModName + nameof(Activated), true);
-        }
+        tag[RoA.ModName + nameof(IsFlickerOff)] = IsFlickerOff;
+        tag[RoA.ModName + nameof(Activated)] = Activated;
     }
 
     public override void LoadData(TagCompound tag) {
@@ -98,12 +94,8 @@ sealed class NixieTubeTE : ModTileEntity {
         if (tag.TryGet(RoA.ModName + nameof(Dye2), out TagCompound dye2)) {
             Dye2 = ItemIO.Load(dye2);
         }
-        if (tag.TryGet(RoA.ModName + nameof(IsFlickerOff), out TagCompound _)) {
-            IsFlickerOff = true;
-        }
-        if (tag.TryGet(RoA.ModName + nameof(Activated), out TagCompound _)) {
-            Activated = true;
-        }
+        IsFlickerOff = tag.GetBool(RoA.ModName + nameof(IsFlickerOff));
+        Activated = tag.GetBool(RoA.ModName + nameof(Activated));
     }
 
     public override bool IsTileValidForEntity(int x, int y) {
