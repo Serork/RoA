@@ -40,9 +40,9 @@ sealed class ShockLightning : ModProjectile {
             return;
         }
 
-        _segmentTexture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LightningSegment");
-        _endTexture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LightningEnd");
-        _endTexture2 = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LightningLight2");
+        _segmentTexture = ModContent.Request<Texture2D>(ResourceManager.MagicProjectileTextures + "LightningSegment");
+        _endTexture = ModContent.Request<Texture2D>(ResourceManager.MagicProjectileTextures + "LightningEnd");
+        _endTexture2 = ModContent.Request<Texture2D>(ResourceManager.MagicProjectileTextures + "LightningLight2");
     }
 
     public override void SetDefaults() {

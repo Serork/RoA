@@ -227,7 +227,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag = true;
                 int num = 10;
-                ushort type = (ushort)ModContent.TileType<Tiles.Miscellaneous.JawTrap>();
+                ushort type = (ushort)ModContent.TileType<Tiles.Danger.JawTrap>();
                 for (int i2 = i - num; i2 <= i + num; i2++) {
                     for (int j2 = j - num; j2 <= j + num; j2++) {
                         if (Main.tile[i2, j2].HasTile && Main.tile[i2, j2].TileType == type) {
@@ -265,7 +265,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         Main.tile[x + 1, y].TileFrameX = 20;
                         Main.tile[x + 1, y].TileType = type;
 
-                        ModContent.GetInstance<Tiles.Miscellaneous.JawTrap.JawTrapTE>().Place(x, y);
+                        ModContent.GetInstance<Tiles.Danger.JawTrap.JawTrapTE>().Place(x, y);
                     }
                 }
             }

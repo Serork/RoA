@@ -115,7 +115,7 @@ sealed class JudgementSlash : ModProjectile {
                                new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
                                new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
         //Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
-        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "JudgementSlashShadow").Value;
+        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.MeleeProjectileTextures + "JudgementSlashShadow").Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
         color = _slashColor.MultiplyRGB(lightColor);
@@ -125,7 +125,7 @@ sealed class JudgementSlash : ModProjectile {
                 new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
                 new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
                 new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
-        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "JudgementSlash").Value;
+        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.MeleeProjectileTextures + "JudgementSlash").Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
         Main.spriteBatch.End();

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Materials;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -14,6 +15,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class TreeDryadRubble : ModTile {
+    public override string Texture => TileHelper.GetTileTexture<TreeDryad>();
+
     public override void Load() {
         On_TileObject.DrawPreview += On_TileObject_DrawPreview;
     }

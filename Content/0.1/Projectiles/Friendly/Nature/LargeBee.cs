@@ -10,7 +10,7 @@ using Terraria.DataStructures;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class LargeBee : NatureProjectile {
-    public override string Texture => ResourceManager.ProjectileTextures + nameof(LargeBee);
+    public override string Texture => ResourceManager.NatureProjectileTextures + nameof(LargeBee);
 
     public override void SetStaticDefaults() {
         Main.projFrames[Type] = 4;

@@ -3,7 +3,7 @@
 using Terraria;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Placeable.Miscellaneous;
+namespace RoA.Content.Items.Placeable.Danger;
 
 sealed class JawTrap : ModItem {
     public override void SetDefaults() {
@@ -18,7 +18,7 @@ sealed class JawTrap : ModItem {
         Item.useStyle = 1;
         Item.consumable = true;
         //Item.value = 300;
-        Item.createTile = ModContent.TileType<Tiles.Miscellaneous.JawTrap>();
+        Item.createTile = ModContent.TileType<Tiles.Danger.JawTrap>();
 
         Item.value = Item.sellPrice(0, 0, 20, 0);
     }

@@ -1,4 +1,5 @@
-﻿using RoA.Content.Tiles.Miscellaneous;
+﻿using RoA.Content.Tiles.Danger;
+using RoA.Content.Tiles.Miscellaneous;
 
 using System.IO;
 

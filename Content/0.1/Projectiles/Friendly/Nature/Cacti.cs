@@ -96,7 +96,7 @@ sealed class Cacti : NatureProjectile {
     public override bool PreDraw(ref Color lightColor) {
         if (_state == State.Enchanted) {
             Texture2D texture = Projectile.GetTexture(),
-                      trailTexture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "CactiTrail").Value;
+                      trailTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "CactiTrail").Value;
             Vector2 origin = texture.Size() / 2f;
             Color color = lightColor;
             int length = Projectile.oldPos.Length;

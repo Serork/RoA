@@ -39,7 +39,7 @@ abstract class Wave : NatureProjectile {
 
     public override Color? GetAlpha(Color lightColor) => UsedColor().Bright(2f).MultiplyRGB(lightColor);
 
-    public override string Texture => ResourceManager.ProjectileTextures + "EvilBiomeClawsSpecialAttack";
+    public override string Texture => ResourceManager.NatureProjectileTextures + "EvilBiomeClawsSpecialAttack";
 
     protected override void SafeSetDefaults() {
         int width = 62; int height = width;

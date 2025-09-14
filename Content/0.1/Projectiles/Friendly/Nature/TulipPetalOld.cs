@@ -156,9 +156,9 @@ sealed class TulipPetalOld : NatureProjectile {
         SpriteBatch spriteBatch = Main.spriteBatch;
         if (Projectile.ai[0] == 1 || Projectile.ai[0] == 3) {
             for (int k = 0; k < _beeCounter + 1; k++) {
-                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "Bee");
+                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "Bee");
                 if (_largeBee[k]) {
-                    texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "LargeBee");
+                    texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "LargeBee");
                 }
                 Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
                 Rectangle frameRect = new Rectangle(0, texture.Height / 4 * beeFrame, texture.Width, texture.Height / 4);

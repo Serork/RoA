@@ -148,7 +148,7 @@ sealed class TulipPetal : NatureProjectile {
         }
 
         if (IsFirst) {
-            DrawStem(ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerStem").Value, Parent.Center - Vector2.UnitY * 10f, SpawnPosition);
+            DrawStem(ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "FlowerStem").Value, Parent.Center - Vector2.UnitY * 10f, SpawnPosition);
         }
 
         //Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerPetal").Value;
@@ -297,7 +297,7 @@ sealed class TulipFlower : NatureProjectile {
     private void DrawPetals() {
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             if (projectile.owner == Projectile.owner && projectile.type == ModContent.ProjectileType<TulipPetal>() && projectile.As<TulipPetal>().Parent == Projectile) {
-                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerPetal").Value;
+                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "FlowerPetal").Value;
 
                 Vector2 position = projectile.position + Vector2.UnitY * -3f;
 
@@ -325,7 +325,7 @@ sealed class TulipFlower : NatureProjectile {
     public override bool PreDraw(ref Color lightColor) {
         DrawPetals();
 
-        Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "Flower").Value;
+        Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "Flower").Value;
         Vector2 position = Projectile.Center - Main.screenPosition;
         float rotation = Projectile.rotation;
         float scale = Projectile.scale * 1.2f;

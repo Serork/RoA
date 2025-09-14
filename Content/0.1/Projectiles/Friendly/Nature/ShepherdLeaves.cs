@@ -33,7 +33,7 @@ sealed class ShepherdLeaves : NatureProjectile {
 
     public override Color? GetAlpha(Color lightColor) => _color.MultiplyRGB(lightColor) * Projectile.Opacity;
 
-    public override string Texture => ResourceManager.ProjectileTextures + "ShepherdLeaves2";
+    public override string Texture => ResourceManager.NatureProjectileTextures + "ShepherdLeaves2";
 
     public override bool PreDraw(ref Color lightColor) => true;
 

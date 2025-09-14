@@ -22,7 +22,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace RoA.Content.Tiles.Miscellaneous;
+namespace RoA.Content.Tiles.Danger;
 
 sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
     internal sealed class JawTrapTE : ModTileEntity {

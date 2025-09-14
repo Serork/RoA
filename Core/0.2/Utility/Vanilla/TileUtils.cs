@@ -23,6 +23,8 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class TileHelper {
+    public static string GetTileTexture<T>() where T : ModTile => TileLoader.GetTile(ModContent.TileType<T>()).Texture;
+
     public static bool CustomSolidCollision_CheckForIceBlocks(Entity source, Vector2 Position, int Width, int Height, bool[] conditions = null, bool shouldDestroyIceBlock = false, Action<Player>? onDestroyingIceBlock = null, params ushort[] extraTypes) {
         int value = (int)(Position.X / 16f) - 1;
         int value2 = (int)((Position.X + (float)Width) / 16f) + 2;
