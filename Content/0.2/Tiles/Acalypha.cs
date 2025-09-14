@@ -17,7 +17,7 @@ namespace RoA.Content.Tiles.Miscellaneous;
 sealed partial class Acalypha : CollectableFlower, IGrowLikeTulip {
     protected override ushort DropItemType => (ushort)ModContent.ItemType<SacredAcalypha>();
     protected override Color MapColor => new(246, 73, 112);
-    protected override int[] AnchorValidTileTypes => [TileID.HallowedGrass, TileID.GolfGrassHallowed, TileID.Pearlsand];
+    protected override int[] AnchorValidTileTypes => [TileID.HallowedGrass, TileID.GolfGrassHallowed, TileID.Pearlsand, TileID.HallowedIce, TileID.HallowSandstone, TileID.HallowHardenedSand];
     protected override ushort HitDustType => (ushort)DustID.HallowedPlants;
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
