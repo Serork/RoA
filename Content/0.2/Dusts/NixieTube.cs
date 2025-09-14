@@ -18,7 +18,9 @@ sealed class NixieTube : ModDust {
     public override bool Update(Dust dust) {
         DustHelper.BasicDust(dust);
 
-        Lighting.AddLight(dust.position, new Vector3(224 / 255f, 74 / 255f, 0f));
+        if (dust.customData is Color color) {
+            Lighting.AddLight(dust.position, new Vector3(color.R / 255f, color.G / 255f, color.B / 255f));
+        }
 
         if (Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4)) {
             dust.scale *= 0.9f;

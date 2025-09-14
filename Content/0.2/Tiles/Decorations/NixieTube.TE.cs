@@ -96,6 +96,7 @@ sealed class NixieTubeTE : ModTileEntity {
                 Dust dust = Dust.NewDustPerfect(new Point16(Position.X - 1, Position.Y - 2).ToWorldCoordinates() + Main.rand.Random2(-8f, 16f + 8f, 8f, 32f), ModContent.DustType<Dusts.NixieTube>(), newColor: Color.Yellow);
                 dust.velocity *= 0.5f;
                 dust.alpha = 100;
+                dust.customData = LightColor != null ? LightColor : new Color(224, 74, 0);
                 if (!Dye1.IsEmpty()) {
                     dust.shader = GameShaders.Armor.GetShaderFromItemId(Dye1.type);
                 }
@@ -141,7 +142,6 @@ sealed class NixieTubeTE : ModTileEntity {
         tag[RoA.ModName + nameof(LightColor) + "R"] = lightColor.R;
         tag[RoA.ModName + nameof(LightColor) + "G"] = lightColor.G;
         tag[RoA.ModName + nameof(LightColor) + "B"] = lightColor.B;
-        tag[RoA.ModName + nameof(LightColor) + "A"] = lightColor.B;
     }
 
     public override void LoadData(TagCompound tag) {
@@ -157,7 +157,7 @@ sealed class NixieTubeTE : ModTileEntity {
         if (isLightColorNull) {
             return;
         }
-        LightColor = new Color(tag.GetByte(RoA.ModName + nameof(LightColor) + "R"), tag.GetByte(RoA.ModName + nameof(LightColor) + "G"), tag.GetByte(RoA.ModName + nameof(LightColor) + "B"), tag.GetByte(RoA.ModName + nameof(LightColor) + "A"));
+        LightColor = new Color(tag.GetByte(RoA.ModName + nameof(LightColor) + "R"), tag.GetByte(RoA.ModName + nameof(LightColor) + "G"), tag.GetByte(RoA.ModName + nameof(LightColor) + "B"), 255);
     }
 
     public override bool IsTileValidForEntity(int x, int y) {
