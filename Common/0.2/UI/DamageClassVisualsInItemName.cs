@@ -643,7 +643,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float progress = 1f - OpacityUpdatedInDraws;
             extraRotation *= MathF.Max(0.25f, progress) * 1f;
             extraRotation *= rightDirection;
-            extraRotation *= 0.2f;
+            extraRotation *= 0.3f;
             extraRotation *= (nextArrowIndex % 2 == 0).ToDirectionInt();
             rotation += extraRotation;
             Vector2 velocity = Vector2.UnitY.RotatedBy(rotation);
