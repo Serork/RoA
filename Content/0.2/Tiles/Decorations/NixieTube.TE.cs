@@ -37,7 +37,7 @@ sealed class NixieTubeTE : ModTileEntity {
     public void SetDye1(Item item) => Dye1 = item;
     public void SetDye2(Item item) => Dye2 = item;
 
-    public void UpdateLightColor(bool checkForNull = false) {
+    public void UpdateLightColor(bool checkForNull = false, int dyeId = 0) {
         Main.QueueMainThreadAction(() => {
             if (!checkForNull || LightColor is null) {
                 LightColor = GetBrightestColor();
@@ -147,6 +147,14 @@ sealed class NixieTubeTE : ModTileEntity {
         }
         tag[RoA.ModName + nameof(IsFlickerOff)] = IsFlickerOff;
         tag[RoA.ModName + nameof(Activated)] = Activated;
+        if (LightColor is null) {
+            tag[RoA.ModName + nameof(LightColor) + "null"] = true;
+            return;
+        }
+        Color lightColor = LightColor.Value;
+        tag[RoA.ModName + nameof(LightColor) + "R"] = lightColor.R;
+        tag[RoA.ModName + nameof(LightColor) + "G"] = lightColor.G;
+        tag[RoA.ModName + nameof(LightColor) + "B"] = lightColor.B;
     }
 
     public override void LoadData(TagCompound tag) {
@@ -158,6 +166,11 @@ sealed class NixieTubeTE : ModTileEntity {
         }
         IsFlickerOff = tag.GetBool(RoA.ModName + nameof(IsFlickerOff));
         Activated = tag.GetBool(RoA.ModName + nameof(Activated));
+        bool isLightColorNull = !tag.GetBool(RoA.ModName + nameof(LightColor) + "null");
+        if (isLightColorNull) {
+            return;
+        }
+        LightColor = new Color(tag.GetByte(RoA.ModName + nameof(LightColor) + "R"), tag.GetByte(RoA.ModName + nameof(LightColor) + "G"), tag.GetByte(RoA.ModName + nameof(LightColor) + "B"), 255);
     }
 
     public override bool IsTileValidForEntity(int x, int y) {
