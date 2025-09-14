@@ -37,7 +37,7 @@ sealed class NixieTubeTE : ModTileEntity {
     public void SetDye1(Item item) => Dye1 = item;
     public void SetDye2(Item item) => Dye2 = item;
 
-    public void UpdateLightColor(bool checkForNull = false, int dyeId = 0) {
+    public void UpdateLightColor(bool checkForNull = false) {
         Main.QueueMainThreadAction(() => {
             if (!checkForNull || LightColor is null) {
                 LightColor = GetBrightestColor();
@@ -74,23 +74,9 @@ sealed class NixieTubeTE : ModTileEntity {
         drawData.Draw(spriteBatch);
         graphicsDevice.SetRenderTarget(null);
         spriteBatch.End();
-        float getBrightness(Color color) => (color.R * 0.299f + color.G * 0.587f + color.B * 0.114f) / 255f;
-        Color[] pixelData = new Color[_tileTarget.Width * _tileTarget.Height];
-        _tileTarget.GetData(pixelData);
-        Color brightestPixel = Color.Black;
-        float maxBrightness = 0f;
-        for (int i = 0; i < pixelData.Length; i++) {
-            Color pixel = pixelData[i];
-            if (pixel.A > 0) {
-                float brightness = getBrightness(pixel);
-                if (brightness > maxBrightness) {
-                    maxBrightness = brightness;
-                    brightestPixel = pixel;
-                }
-            }
-        }
 
-        return brightestPixel;
+        Color brightestColor = ColorUtils.GetBrightestColor(_tileTarget);
+        return brightestColor;
     }
 
     public override void Update() {
@@ -155,6 +141,7 @@ sealed class NixieTubeTE : ModTileEntity {
         tag[RoA.ModName + nameof(LightColor) + "R"] = lightColor.R;
         tag[RoA.ModName + nameof(LightColor) + "G"] = lightColor.G;
         tag[RoA.ModName + nameof(LightColor) + "B"] = lightColor.B;
+        tag[RoA.ModName + nameof(LightColor) + "A"] = lightColor.B;
     }
 
     public override void LoadData(TagCompound tag) {
@@ -170,7 +157,7 @@ sealed class NixieTubeTE : ModTileEntity {
         if (isLightColorNull) {
             return;
         }
-        LightColor = new Color(tag.GetByte(RoA.ModName + nameof(LightColor) + "R"), tag.GetByte(RoA.ModName + nameof(LightColor) + "G"), tag.GetByte(RoA.ModName + nameof(LightColor) + "B"), 255);
+        LightColor = new Color(tag.GetByte(RoA.ModName + nameof(LightColor) + "R"), tag.GetByte(RoA.ModName + nameof(LightColor) + "G"), tag.GetByte(RoA.ModName + nameof(LightColor) + "B"), tag.GetByte(RoA.ModName + nameof(LightColor) + "A"));
     }
 
     public override bool IsTileValidForEntity(int x, int y) {
