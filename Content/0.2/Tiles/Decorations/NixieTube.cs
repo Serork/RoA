@@ -84,6 +84,10 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
         int frameX = tile.TileFrameX;
         bool flag = frameY >= 56;
         if (flag && TryGetTE(out NixieTubeTE? nixieTubeTE, i, j) && nixieTubeTE!.Active) {
+            if (!nixieTubeTE.Dye2.IsEmpty() && nixieTubeTE.Dye2.type == ItemID.ShadowDye) {
+                r = g = b = 0f;
+                return;
+            }
             Color? lightColor = nixieTubeTE.LightColor;
             if (lightColor == null) {
                 r = 224 / 255f;
