@@ -7,6 +7,7 @@ using RoA.Core;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -53,5 +54,11 @@ sealed class RodOfTheShock : Rod {
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         position += velocity.SafeNormalize(Vector2.Zero) * -2f;
         position += new Vector2(player.direction == 1 ? 2f : 0f, 0f * player.direction).RotatedBy(velocity.ToRotation());
+    }
+
+    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+
+        return false;
     }
 }
