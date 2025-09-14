@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Xna.Framework.Graphics;
+
+using Newtonsoft.Json.Linq;
+
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Localization;
@@ -30,6 +34,18 @@ sealed class UINixieTubeDyeSlot : ItemSlotUIElement {
             }
             else {
                 NixieTubePicker_RemadePicker.GetTE()?.SetDye2(value!);
+            }
+        }
+    }
+
+    protected override void DrawSelf(SpriteBatch spriteBatch) {
+        base.DrawSelf(spriteBatch);
+
+        if (IsMouseHovering) {
+            if ((Main.mouseItem.IsEmpty() && !GetStoredItem.IsEmpty()) || (!Main.mouseItem.IsEmpty() && Main.mouseItem.dye > 0 && GetStoredItem.IsEmpty())) {
+                if (Main.mouseLeft && Main.mouseLeftRelease) {
+                    NixieTubePicker_RemadePicker.GetTE()?.UpdateLightColor();
+                }
             }
         }
     }

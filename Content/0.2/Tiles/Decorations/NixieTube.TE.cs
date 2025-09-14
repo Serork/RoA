@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Core.Utility;
 
 using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -16,12 +19,15 @@ namespace RoA.Content.Tiles.Decorations;
 sealed class NixieTubeTE : ModTileEntity {
     public static ushort ACTIVATIONTIME => 100;
 
+    private static RenderTarget2D _tileTarget;
+
     public bool Activated;
     public bool IsFlickerOff;
     public int DeactivatedTimer, DeactivatedTimer2, ActivatedForTimer;
     public bool Active => DeactivatedTimer <= ACTIVATIONTIME / 3;
     public Item? Dye1 = null;
     public Item? Dye2 = null;
+    public Color? LightColor = null;
 
     public NixieTubeTE() {
         Dye1 ??= new Item();
@@ -30,6 +36,62 @@ sealed class NixieTubeTE : ModTileEntity {
 
     public void SetDye1(Item item) => Dye1 = item;
     public void SetDye2(Item item) => Dye2 = item;
+
+    public void UpdateLightColor(bool checkForNull = false) {
+        Main.QueueMainThreadAction(() => {
+            if (!checkForNull || LightColor is null) {
+                LightColor = GetBrightestColor();
+            }
+        });
+    }
+
+    public override void Unload() {
+        if (!Main.dedServ) {
+            Main.QueueMainThreadAction(() => {
+                _tileTarget?.Dispose();
+            });
+        }
+    }
+
+    private Color? GetBrightestColor() {
+        GraphicsDevice graphicsDevice = Main.graphics.GraphicsDevice;
+        if (_tileTarget is null) {
+            Main.QueueMainThreadAction(() => _tileTarget = new(Main.graphics.GraphicsDevice, 28, 48));
+            return null;
+        }
+        SpriteBatch spriteBatch = Main.spriteBatch;
+        SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+        graphicsDevice.SetRenderTarget(_tileTarget);
+        graphicsDevice.Clear(Color.Transparent);
+        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, snapshot.transformationMatrix);
+        DrawData drawData = new(TextureAssets.Tile[TileLoader.GetTile(ModContent.TileType<NixieTube>()).Type].Value,
+                                Vector2.Zero,
+                                new Rectangle(36, 112, 28, 48),
+                                Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        if (!Dye1.IsEmpty()) {
+            GameShaders.Armor.GetShaderFromItemId(Dye1.type).Apply(null, drawData);
+        }
+        drawData.Draw(spriteBatch);
+        graphicsDevice.SetRenderTarget(null);
+        spriteBatch.End();
+        float getBrightness(Color color) => (color.R * 0.299f + color.G * 0.587f + color.B * 0.114f) / 255f;
+        Color[] pixelData = new Color[_tileTarget.Width * _tileTarget.Height];
+        _tileTarget.GetData(pixelData);
+        Color brightestPixel = Color.Black;
+        float maxBrightness = 0f;
+        for (int i = 0; i < pixelData.Length; i++) {
+            Color pixel = pixelData[i];
+            if (pixel.A > 0) {
+                float brightness = getBrightness(pixel);
+                if (brightness > maxBrightness) {
+                    maxBrightness = brightness;
+                    brightestPixel = pixel;
+                }
+            }
+        }
+
+        return brightestPixel;
+    }
 
     public override void Update() {
         if (!Activated) {

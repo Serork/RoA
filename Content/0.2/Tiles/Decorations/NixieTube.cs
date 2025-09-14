@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
+using RoA.Common.Tiles;
 using RoA.Common.UI;
 using RoA.Core.Utility;
 
@@ -18,7 +19,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Decorations;
 
-sealed class NixieTube : ModTile {
+sealed class NixieTube : ModTile, TileHooks.IPostDraw {
     private static BlendState? _multiplyBlendState;
 
     public override void SetStaticDefaults() {
@@ -45,7 +46,7 @@ sealed class NixieTube : ModTile {
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
         if (frameX != 0 && frameY != 0) {
-            Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j) * 16, ModContent.ItemType<Items.Placeable.Decorations.NixieTube>());
+            Terraria.Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j) * 16, ModContent.ItemType<Items.Placeable.Decorations.NixieTube>());
         }
     }
 
@@ -71,6 +72,7 @@ sealed class NixieTube : ModTile {
         if (player.IsWithinSnappngRangeToTile(i, j, 80) && TryGetTE(out NixieTubeTE? nixieTubeTE, i, j)) {
             //NixieTubePicker.Activate(new Point16(i, j));
             NixieTubePicker_RemadePicker.Toggle(i, j, nixieTubeTE.IsFlickerOff);
+            nixieTubeTE.LightColor = null;
         }
 
         return true;
@@ -82,9 +84,25 @@ sealed class NixieTube : ModTile {
         int frameX = tile.TileFrameX;
         bool flag = frameY >= 56;
         if (flag && TryGetTE(out NixieTubeTE? nixieTubeTE, i, j) && nixieTubeTE!.Active) {
-            r = 224 / 255f;
-            g = 74 / 255f;
-            b = 0 / 255f;
+            Color? lightColor = nixieTubeTE.LightColor;
+            if (lightColor == null) {
+                r = 224 / 255f;
+                g = 74 / 255f;
+                b = 0 / 255f;
+                return;
+            }
+            Color lightColor2 = lightColor.Value;
+            r = lightColor2.R / 255f;
+            g = lightColor2.G / 255f;
+            b = lightColor2.B / 255f;
+        }
+    }
+
+    void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
+        int i = pos.X;
+        int j = pos.Y;
+        if (TryGetTE(out NixieTubeTE? nixieTubeTE, i, j)) {
+            nixieTubeTE.UpdateLightColor(true);
         }
     }
 
@@ -120,14 +138,15 @@ sealed class NixieTube : ModTile {
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, snapshot.transformationMatrix);
                 drawData = new(TextureAssets.Tile[Type].Value,
-                                        new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                                        new Rectangle(frameX, frameY, 16, height),
-                                        Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                               new Rectangle(frameX, frameY, 16, height),
+                               Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 if (!nixieTubeTE.Dye1.IsEmpty()) {
                     GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye1.type).Apply(null, drawData);
                 }
                 if (nixieTubeTE!.Active) {
                     drawData.Draw(spriteBatch);
+                    TileHelper.AddPostSolidTileDrawPoint(this, i, j);
                 }
                 spriteBatch.Begin(snapshot, true);
             }
