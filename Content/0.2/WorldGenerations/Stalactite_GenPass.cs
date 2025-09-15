@@ -21,13 +21,13 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.WorldGenerations;
 
 sealed class Stalactite_GenPass : IInitializer {
-    private static HashSet<(ModTileEntity, Point16)> _TEPositions;
+    private static HashSet<(ModTileEntity, Point16)>? _TEPositions;
 
     void ILoadable.Load(Mod mod) {
         On_WorldGen.smCallback_End += On_WorldGen_smCallback_End;
     }
 
-    public static void PlaceStalactite(int i, int j, ushort solidTileType, ushort stalactiteTileType, ModTileEntity teInstance, bool onlyOneTile = false) {
+    public static void PlaceStalactite(int i, int j, ushort solidTileType, ushort stalactiteTileType, ModTileEntity teInstance, bool notHardmodeGen = false) {
         int checkWidth = 5, checkHeight = 5;
         bool canPlace = true;
         for (int checkX = i - checkWidth; checkX < i + checkWidth; checkX++) {
@@ -48,13 +48,21 @@ sealed class Stalactite_GenPass : IInitializer {
         if (Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType]) {
             WorldGen.KillTile(i, j);
         }
-        if (WorldGenHelper.Place1x2Top(i, j, stalactiteTileType, WorldGen.genRand.Next(3), onPlace: (tilePosition) => { _TEPositions.Add((teInstance, tilePosition)); })) {
-            if (!onlyOneTile) {
+        void placeTE(Point16 tilePosition) {
+            if (notHardmodeGen) {
+                teInstance.Place(tilePosition.X, tilePosition.Y);
+            }
+            else {
+                _TEPositions!.Add((teInstance, tilePosition));
+            }
+        }
+        if (WorldGenHelper.Place1x2Top(i, j, stalactiteTileType, WorldGen.genRand.Next(3), onPlace: placeTE)) {
+            if (!notHardmodeGen) {
                 WorldGenHelper.ModifiedTileRunner(i, j, WorldGen.genRand.Next(4, 8), WorldGen.genRand.Next(1, 4), solidTileType, ignoreTileTypes: [stalactiteTileType]);
                 for (int checkX = i - checkWidth; checkX < i + checkWidth; checkX++) {
                     for (int checkY = j - checkHeight; checkY < j + checkHeight; checkY++) {
                         if (WorldGenHelper.GetTileSafely(checkX, checkY).TileType == solidTileType && WorldGen.genRand.NextChance(0.75f)) {
-                            WorldGenHelper.Place1x2Top(checkX, checkY + 1, stalactiteTileType, WorldGen.genRand.Next(3), onPlace: (tilePosition) => { _TEPositions.Add((teInstance, tilePosition)); });
+                            WorldGenHelper.Place1x2Top(checkX, checkY + 1, stalactiteTileType, WorldGen.genRand.Next(3), onPlace: placeTE);
                         }
                     }
                 }
