@@ -188,7 +188,6 @@ abstract class StalactiteBase<T1, T2> : ModTile where T1 : StalactiteTE<T2> wher
     public override bool CanDrop(int i, int j) => false;
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        Main.NewText(frameX);
         Projectile.NewProjectileDirect(new EntitySource_TileBreak(i, j), new Point16(i, j).ToWorldCoordinates() + Vector2.UnitY * 6f, Vector2.Zero, ModContent.ProjectileType<T2>(), 100, 0f, Main.myPlayer, frameX);
     }
 
