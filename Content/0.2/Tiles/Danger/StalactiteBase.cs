@@ -33,7 +33,7 @@ abstract class StalactiteProjectileBase : ModProjectile {
     public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
 
     public override void SetDefaults() {
-        Projectile.SetSizeValues(16, 30);
+        Projectile.SetSizeValues(12, 30);
 
         Projectile.hostile = true;
         Projectile.friendly = true;
