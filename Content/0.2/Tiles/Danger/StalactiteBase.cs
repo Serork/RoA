@@ -55,7 +55,7 @@ abstract class StalactiteProjectileBase : ModProjectile {
 
     public sealed override void AI() {
         if (Projectile.ai[0] != 0f) {
-            Projectile.frame = (int)(Projectile.ai[0] / 18f);
+            Projectile.frame = (int)(Projectile.ai[0] / 16f);
             Projectile.ai[0] = 0f;
         }
 
@@ -92,7 +92,7 @@ abstract class StalactiteProjectileBase : ModProjectile {
 abstract class StalactiteTE<T> : ModTileEntity where T : StalactiteProjectileBase {
     private static ushort PLACETIMEMIN => 0;
     private static ushort PLACETIMEMAX => 30;
-    private static ushort DANGERAREAWIDTH => 300;
+    private static ushort DANGERAREAWIDTH => 100;
     private static ushort DANGERAREAHEIGHT => 500;
     private static float PLACEBASEVALUE => -1f;
 
@@ -100,6 +100,10 @@ abstract class StalactiteTE<T> : ModTileEntity where T : StalactiteProjectileBas
     private bool _shouldFall;
 
     public override void Update() {
+        if (WorldGen.gen) {
+            return;
+        }
+
         if (_placeTime == PLACEBASEVALUE) {
             _placeTime = Main.rand.NextFloat(PLACETIMEMIN, PLACETIMEMAX);
             NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
@@ -142,10 +146,7 @@ abstract class StalactiteTE<T> : ModTileEntity where T : StalactiteProjectileBas
         _placeTime = reader.ReadSingle();
     }
 
-    public override bool IsTileValidForEntity(int x, int y) {
-        Tile tile = WorldGenHelper.GetTileSafely(x, y);
-        return tile.HasTile && TileLoader.GetTile(tile.TileType) is StalactiteBase<StalactiteTE<T>, T>;
-    }
+    public override bool IsTileValidForEntity(int x, int y) => true;
 
     public override int Hook_AfterPlacement(int i, int j, int type, int style, int direction, int alternate) {
         if (Main.netMode == NetmodeID.MultiplayerClient) {
@@ -187,6 +188,7 @@ abstract class StalactiteBase<T1, T2> : ModTile where T1 : StalactiteTE<T2> wher
     public override bool CanDrop(int i, int j) => false;
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
+        Main.NewText(frameX);
         Projectile.NewProjectileDirect(new EntitySource_TileBreak(i, j), new Point16(i, j).ToWorldCoordinates() + Vector2.UnitY * 6f, Vector2.Zero, ModContent.ProjectileType<T2>(), 100, 0f, Main.myPlayer, frameX);
     }
 

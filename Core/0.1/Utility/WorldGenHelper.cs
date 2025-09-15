@@ -1186,6 +1186,29 @@ static class WorldGenHelper {
         return true;
     }
 
+    public static bool Place1x2Top(int x, int y, ushort type, int styleX = 0, int styleY = 0, Action<Point16>? onPlace = null) {
+        if (WorldGen.SolidTile2(x, y - 1) && !Main.tile[x, y].HasTile && !Main.tile[x, y + 1].HasTile) {
+            short num = (short)(styleY * 36);
+            short num2 = (short)(styleX * 18);
+            Tile tile = Main.tile[x, y];
+            tile.HasTile = true;
+            tile.TileFrameY = num;
+            tile.TileFrameX = num2;
+            tile.TileType = type;
+            tile = Main.tile[x, y + 1];
+            tile.HasTile = true;
+            tile.TileFrameY = (short)(num + 18);
+            tile.TileFrameX = num2;
+            tile.TileType = type;
+
+            onPlace?.Invoke(new Point16(x, y));
+
+            return true;
+        }
+
+        return false;
+    }
+
     // adapted vanilla
     public static void Place2x1(int x, int y, ushort type, int style = 0, Action? onPlaced = null) {
         bool flag = false;

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using ReLogic.Utilities;
 
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Danger;
 using RoA.Content.Tiles.LiquidsSpecific;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
@@ -111,11 +112,59 @@ sealed class TarBiome : MicroBiome {
         SimulatePressure(out var effectedMapArea);
         PlaceGranite(origin, effectedMapArea);
         CleanupTiles(origin, effectedMapArea);
-        PlaceDecorations(origin, effectedMapArea);
+        PlaceDecorations(origin + (Vector2.One * effectedMapArea.Size() / 2f).ToPoint(), effectedMapArea);
         if (WorldGen.gen) {
             structures.AddProtectedStructure(effectedMapArea, 8);
         }
+        PlaceStalactites(origin);
         return true;
+    }
+
+    private void PlaceStalactites(Point tileOrigin) {
+        ushort tarStalactiteTileType = (ushort)ModContent.TileType<SolidifiedTarStalactite>();
+        int width = 50, height = 50;
+        tileOrigin.X += 4;
+        tileOrigin.Y += 4;
+        for (int i = tileOrigin.X - width / 2; i < tileOrigin.X + width * 2; i++) {
+            for (int j = tileOrigin.Y - height / 2; j < tileOrigin.Y + height * 2; j++) {
+                if (!WorldGen.InWorld(i, j, 10)) {
+                    continue;
+                }
+
+                if (i > tileOrigin.X + width / 3 && i < tileOrigin.X + width / 3 + width &&
+                    j > tileOrigin.Y + height / 3 && j < tileOrigin.Y - 10 + height / 3 + height) {
+                    continue;
+                }
+
+                if (WorldGen.genRand.NextChance(0.05f)) {
+                    int checkWidth = 5, checkHeight = 5;
+                    bool canPlace = true;
+                    for (int checkX = i - checkWidth; checkX < i + checkWidth; checkX++) {
+                        if (!canPlace) {
+                            break;
+                        }
+                        for (int checkY = j - checkHeight; checkY < j + checkHeight; checkY++) {
+                            if (WorldGenHelper.GetTileSafely(checkX, checkY).TileType == tarStalactiteTileType) {
+                                canPlace = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (canPlace) {
+                        if (WorldGenHelper.Place1x2Top(i, j, tarStalactiteTileType, WorldGen.genRand.Next(3), onPlace: (tilePosition) => { ModContent.GetInstance<SolidifiedTarStalactiteTE>().Place(tilePosition.X, tilePosition.Y); })) {
+                            WorldGenHelper.ModifiedTileRunner(i, j, WorldGen.genRand.Next(4, 8), WorldGen.genRand.Next(1, 4), TARTILETYPE, ignoreTileTypes: [tarStalactiteTileType]);
+                            for (int checkX = i - checkWidth; checkX < i + checkWidth; checkX++) {
+                                for (int checkY = j - checkHeight; checkY < j + checkHeight; checkY++) {
+                                    if (WorldGenHelper.GetTileSafely(checkX, checkY).TileType == TARTILETYPE && WorldGen.genRand.NextChance(0.75f)) {
+                                        WorldGenHelper.Place1x2Top(checkX, checkY + 1, tarStalactiteTileType, WorldGen.genRand.Next(3), onPlace: (tilePosition) => { ModContent.GetInstance<SolidifiedTarStalactiteTE>().Place(tilePosition.X, tilePosition.Y); });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void BuildMagmaMap(Point tileOrigin) {

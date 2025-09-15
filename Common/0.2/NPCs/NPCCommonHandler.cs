@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.NPCs;
 
 sealed class NPCCommonHandler : GlobalNPC {
-    private static float MAXFALLSPEEDMODIFIERFORFALL => 0.5f;
+    private static float MAXFALLSPEEDMODIFIERFORFALL => 0.75f;
 
     private bool _fell;
     private float _fellTimer;
