@@ -415,9 +415,9 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     }
 
     private void SetPosition() {
-        Vector2 center = Owner.RotatedRelativePoint(Owner.MountedCenter, true);
+        Vector2 center = Owner.MountedCenter;
         Projectile.Center = center;
-        Projectile.Center = Utils.Floor(Projectile.Center);
+        Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * Owner.gfxOffY;
         //bool flag = !ShouldStopUpdatingRotationAndDirection();
         bool flag = true;
         if (Projectile.IsOwnerLocal() && flag) {

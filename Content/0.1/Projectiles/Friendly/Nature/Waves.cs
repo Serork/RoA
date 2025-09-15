@@ -75,7 +75,9 @@ abstract class Wave : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         if (player.whoAmI == Main.myPlayer) {
             Vector2 pointPosition = player.GetViableMousePosition();
-            Vector2 velocity = Vector2.Subtract(pointPosition, player.RotatedRelativePoint(player.MountedCenter, true));
+            Vector2 playerCenter = player.MountedCenter;
+            playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * player.gfxOffY;
+            Vector2 velocity = Vector2.Subtract(pointPosition, playerCenter);
             velocity.Normalize();
             Projectile.velocity = velocity;
             Projectile.netUpdate = true;

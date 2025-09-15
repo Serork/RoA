@@ -343,7 +343,8 @@ sealed class Snatcher : NatureProjectile {
         int direction = (int)Projectile.ai[1];
         float progress = 0.5f;
         Player player = Main.player[Projectile.owner];
-        Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter, true);
+        Vector2 playerCenter = player.MountedCenter;
+        playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * player.gfxOffY;
         Vector2 drawPosition = playerCenter + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * DIST;
         Vector2 endLocation = playerCenter + _targetVector2 + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * Math.Max(DIST * (1f - progress), 8f);
         Vector2 result = Vector2.Lerp(drawPosition, endLocation, progress) + _attackVector;
@@ -365,7 +366,8 @@ sealed class Snatcher : NatureProjectile {
 
     private Vector2 GetLookUpPos() {
         Player player = Main.player[Projectile.owner];
-        Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter, true);
+        Vector2 playerCenter = player.MountedCenter;
+        playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * player.gfxOffY;
         int mouseDir = (_mousePos - playerCenter).X.GetDirection();
         return IsAttacking ? AttackPos : (playerCenter + Vector2.UnitX * 50f * mouseDir);
     }
@@ -383,7 +385,8 @@ sealed class Snatcher : NatureProjectile {
         if (Projectile.Opacity > 0f) {
             Projectile.Opacity -= 0.1f;
         }
-        Vector2 playerCenter = player.RotatedRelativePoint(player.MountedCenter, true);
+        Vector2 playerCenter = player.MountedCenter;
+        playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * player.gfxOffY;
         Projectile.direction = player.direction;
         Projectile.Center = playerCenter;
         if (Projectile.ai[0] == 0f) {

@@ -124,8 +124,8 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        Projectile.Center = player.RotatedRelativePoint(player.MountedCenter, true);
-        Projectile.Center = Utils.Floor(Projectile.Center);
+        Projectile.Center = player.MountedCenter;
+        Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * player.gfxOffY;
         if (Projectile.owner == Main.myPlayer) {
             if (Projectile.ai[0] == 0f) {
                 Projectile.ai[0] = 1f;

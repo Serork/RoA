@@ -64,8 +64,9 @@ sealed class EnduranceCloud : ModProjectile {
                 Vector2 randomOffset = Main.rand.NextVector2(facedRight ? owner.width * 1.5f : owner.width * 0.25f, owner.height * 0.25f, facedRight ? owner.width * 2.25f : owner.width * 1f, owner.height * 1.75f);
                 offsetX = randomOffset.X;
                 offsetY = randomOffset.Y;
-                Projectile.Center = owner.RotatedRelativePoint(owner.MountedCenter);
-                Projectile.Center = Utils.Floor(Projectile.Center) + new Vector2(offsetX, offsetY) - owner.Size;
+                Vector2 playerCenter = owner.MountedCenter;
+                playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * owner.gfxOffY;
+                Projectile.Center = playerCenter + new Vector2(offsetX, offsetY) - owner.Size;
                 foreach (Projectile trackedCloud in TrackedEntitiesSystem.GetTrackedProjectile<EnduranceCloud>(checkProjectile => checkProjectile.owner != Projectile.owner || checkProjectile.whoAmI == Projectile.whoAmI)) {
                     float distance = trackedCloud.Distance(Projectile.Center);
                     if (distance < 30f) {
