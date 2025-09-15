@@ -1,15 +1,21 @@
-﻿using Terraria;
+﻿using System;
+
+using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
 
-sealed class RoAPlayer : ModPlayer {
+sealed class CommonHandler : ModPlayer {
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;
 
+    private bool _fell;
+    private float _fellTimer;
     private ushort _controlUseItemTimer;
 
     public ushort ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
     public bool ControlUseItem;
+
+    public bool Fell { get; private set; }
 
     public delegate void PreUpdateDelegate(Player player);
     public static event PreUpdateDelegate PreUpdateEvent;
@@ -28,7 +34,28 @@ sealed class RoAPlayer : ModPlayer {
                 ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
             }
         }
+
+        TouchGround();
     }
 
-    public static RoAPlayer GetHandler(Player player) => player.GetModPlayer<RoAPlayer>();
+    private void TouchGround() {
+        if (Player.velocity.Y >= Player.maxFallSpeed * 0.25f && !_fell) {
+            _fell = true;
+        }
+        if (_fell && Player.velocity.Y == 0f && !Fell) {
+            Fell = true;
+            _fell = false;
+            _fellTimer = 10f;
+            return;
+        }
+        if (MathF.Abs(Player.velocity.Y) > 1f) {
+            Fell = false;
+        }
+        if (_fellTimer > 0f) {
+            _fellTimer--;
+        }
+        else if (!_fell) {
+            Fell = false;
+        }
+    }
 }

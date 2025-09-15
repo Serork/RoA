@@ -1,8 +1,12 @@
-﻿using Terraria;
+﻿using RoA.Common.Players;
+
+using Terraria;
 
 namespace RoA.Core.Utility.Vanilla;
 
 static class PlayerUtils {
+    public static CommonHandler GetCommon(this Player player) => player.GetModPlayer<CommonHandler>();
+
     public static bool UpdateEquips_CanItemGrantBenefits(int itemSlot, Item item) {
         return itemSlot switch {
             0 => item.headSlot > -1,

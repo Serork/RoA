@@ -1,14 +1,19 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Build.Evaluation;
+using Microsoft.Xna.Framework;
 
+using RoA.Common.Players;
 using RoA.Content.Tiles.Decorations;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ID;
@@ -28,54 +33,92 @@ abstract class StalactiteProjectileBase : ModProjectile {
         Projectile.SetSizeValues(16, 30);
 
         Projectile.hostile = true;
+        Projectile.friendly = true;
+
         Projectile.aiStyle = -1;
         Projectile.penetrate = -1;
 
         Projectile.timeLeft = 360;
         Projectile.tileCollide = true;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = -1;
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        height = 20;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
     public override void AI() {
+        if (Projectile.ai[0] != 0f) {
+            Projectile.frame = (int)(Projectile.ai[0] / 18f);
+            Projectile.ai[0] = 0f;
+        }
+
         Projectile.velocity.Y += 0.35f;
         Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
+    }
+
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        modifiers.FinalDamage *= MathUtils.Clamp01(Projectile.velocity.Y / 7.5f);
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        modifiers.FinalDamage *= MathUtils.Clamp01(Projectile.velocity.Y / 7.5f);
     }
 
     public override void OnKill(int timeLeft) {
         for (int i = 0; i < 10; i++) {
             Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, KillDustType());
         }
+        SoundEngine.PlaySound(SoundID.Dig, Projectile.Center);
     }
 
     protected abstract ushort KillDustType();
 }
 
 abstract class StalactiteTE<T> : ModTileEntity where T : StalactiteProjectileBase {
-    private int _placeTime = -1;
+    private static ushort PLACETIMEMIN => 0;
+    private static ushort PLACETIMEMAX => 30;
+    private static ushort DANGERAREAWIDTH => 300;
+    private static ushort DANGERAREAHEIGHT => 500;
+    private static float PLACEBASEVALUE => -1f;
+
+    private float _placeTime = PLACEBASEVALUE;
+    private bool _shouldFall;
 
     public override void Update() {
-        if (_placeTime == -1) {
-            _placeTime = 300;
-            return;
-        }
-        else if (_placeTime > 0) {
-            _placeTime--;
+        if (_placeTime == PLACEBASEVALUE) {
+            _placeTime = Main.rand.NextFloat(PLACETIMEMIN, PLACETIMEMAX);
+            NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
             return;
         }
 
         Vector2 stalactitePosition = Position.ToWorldCoordinates();
-        Rectangle dangerArea = GeometryUtils.TopRectangle(stalactitePosition, new Vector2(300, 300));
-        bool shouldFall = false;
+        Rectangle dangerArea = GeometryUtils.TopRectangle(stalactitePosition, new Vector2(DANGERAREAWIDTH, DANGERAREAHEIGHT));
         foreach (Player player in Main.ActivePlayers) {
-            if (player.getRect().Intersects(dangerArea)) {
-                shouldFall = true;
+            if (player.getRect().Intersects(dangerArea) && player.GetCommon().Fell) {
+                _shouldFall = true;
                 break;
             }
         }
-        if (shouldFall) {
-            WorldGen.KillTile(Position.X, Position.Y);
-
-            Projectile.NewProjectileDirect(new EntitySource_TileEntity(this), Position.ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<T>(), 100, 0f, Main.myPlayer);
+        if (_shouldFall && _placeTime > 0) {
+            _placeTime--;
+            return;
         }
+        if (_shouldFall) {
+            WorldGen.KillTile(Position.X, Position.Y);
+        }
+    }
+
+    public override void NetSend(BinaryWriter writer) {
+        writer.Write(_placeTime);
+    }
+
+    public override void NetReceive(BinaryReader reader) {
+        _placeTime = reader.ReadSingle();
     }
 
     public override bool IsTileValidForEntity(int x, int y) {
@@ -118,6 +161,12 @@ abstract class StalactiteBase<T1, T2> : ModTile where T1 : StalactiteTE<T2> wher
 
         HitSound = null;
         DustType = -1;
+    }
+
+    public override bool CanDrop(int i, int j) => false;
+
+    public override void KillMultiTile(int i, int j, int frameX, int frameY) {
+        Projectile.NewProjectileDirect(new EntitySource_TileBreak(i, j), new Point16(i, j).ToWorldCoordinates() + Vector2.UnitY * 6f, Vector2.Zero, ModContent.ProjectileType<T2>(), 100, 0f, Main.myPlayer, frameX);
     }
 
     public sealed override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<T1>().Kill(i, j);
