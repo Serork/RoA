@@ -10,6 +10,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
@@ -45,6 +46,23 @@ abstract class StalactiteProjectileBase : ModProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
+
+        Projectile.manualDirectionChange = true;
+
+        Projectile.hide = true;
+    }
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+        behindNPCsAndTiles.Add(index);
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Vector2 position = Projectile.position;
+        Projectile.position.Y -= 2f;
+        Projectile.QuickDrawAnimated(lightColor);
+        Projectile.position.Y = position.Y;
+
+        return false;
     }
 
     public sealed override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
@@ -54,6 +72,7 @@ abstract class StalactiteProjectileBase : ModProjectile {
     }
 
     public sealed override void AI() {
+        Projectile.direction = Projectile.spriteDirection = 1;
         if (Projectile.ai[0] != 0f) {
             Projectile.frame = (int)(Projectile.ai[0] / 16f);
             Projectile.ai[0] = 0f;
@@ -190,7 +209,7 @@ abstract class StalactiteBase<T1, T2> : ModTile where T1 : StalactiteTE<T2> wher
     public override bool CanDrop(int i, int j) => false;
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        Projectile.NewProjectileDirect(new EntitySource_TileBreak(i, j), new Point16(i, j).ToWorldCoordinates() + Vector2.UnitY * 6f, Vector2.Zero, ModContent.ProjectileType<T2>(), 100, 0f, Main.myPlayer, frameX);
+        Projectile.NewProjectileDirect(new EntitySource_TileBreak(i, j), new Point16(i, j).ToWorldCoordinates() + Vector2.UnitY * 6f + Vector2.One, Vector2.Zero, ModContent.ProjectileType<T2>(), 100, 0f, Main.myPlayer, frameX);
     }
 
     public sealed override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
