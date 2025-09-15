@@ -47,7 +47,7 @@ sealed class LothorMaskGlowing : ModSystem {
             if (player.CheckArmorSlot(lothorMask, 0, 10) || player.CheckVanitySlot(lothorMask, 10)) {
                 flag = true;
             }
-            if (!player.active || player.isLockedToATile) {
+            if (player.isLockedToATile) {
                 flag = false;
             }
             if (flag) {
