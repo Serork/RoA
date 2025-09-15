@@ -8,7 +8,7 @@ namespace RoA.Content.Tiles.Danger;
 
 sealed class GrimrockStalactite : StalactiteBase<GrimrockStalactiteTE, GrimrockStalactiteProjectile> {
     protected override void SafeSetStaticDefaults() {
-        AddMapEntry(new Color(74, 75, 87));
+        AddMapEntry(new Color(53, 55, 64));
 
         MineResist = 1.25f;
     }

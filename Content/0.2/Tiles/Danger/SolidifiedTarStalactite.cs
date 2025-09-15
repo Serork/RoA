@@ -10,7 +10,7 @@ namespace RoA.Content.Tiles.Danger;
 
 sealed class SolidifiedTarStalactite : StalactiteBase<SolidifiedTarStalactiteTE, SolidifiedTarStalactiteProjectile> {
     protected override void SafeSetStaticDefaults() {
-        AddMapEntry(new Color(68, 57, 77));
+        AddMapEntry(new Color(57, 45, 65));
     }
 }
 
