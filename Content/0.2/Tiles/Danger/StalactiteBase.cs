@@ -185,6 +185,8 @@ abstract class StalactiteBase<T1, T2> : ModTile where T1 : StalactiteTE<T2> wher
         DustType = -1;
     }
 
+    public override bool IsTileDangerous(int i, int j, Player player) => true;
+
     public override bool CanDrop(int i, int j) => false;
 
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {

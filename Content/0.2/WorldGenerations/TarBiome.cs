@@ -1,8 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using ModLiquidLib.ModLoader;
+
 using ReLogic.Utilities;
 
+using RoA.Content.Liquids;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Danger;
 using RoA.Content.Tiles.LiquidsSpecific;
@@ -333,13 +336,13 @@ sealed class TarBiome : MicroBiome {
                     double num5 = (i - magmaMapArea.Left) / (float)(magmaMapArea.Right - magmaMapArea.Left);
                     bool flag2 = num5 > 0.35f + _random.NextFloat(0.05f) && num5 < 0.65f - _random.NextFloat(0.05f);
                     bool flag3 = num5 > 0.05f + _random.NextFloat(0.05f) && num5 < 0.95f - _random.NextFloat(0.05f);
-                    if (tile.LiquidType != 5) {
+                    if (tile.LiquidType != LiquidLoader.LiquidType<Tar>()) {
                         tile.LiquidAmount = 0;
                     }
                     if (j > magmaMapArea.Bottom - 40 + y) {
                         if (flag2 && j > magmaMapArea.Bottom - 30 - _random.Next(10)) {
                             tile.LiquidAmount = 255;
-                            tile.LiquidType = 5;
+                            tile.LiquidType = LiquidLoader.LiquidType<Tar>();
                         }
                         WorldUtils.ClearTile(tileOrigin.X + i, tileOrigin.Y + j);
                     }
@@ -456,7 +459,7 @@ sealed class TarBiome : MicroBiome {
                     }
 
                 }
-                if (_tiles[num, num2].LiquidType != 5) {
+                if (_tiles[num, num2].LiquidType != LiquidLoader.LiquidType<Tar>()) {
                     _tiles[num, num2].LiquidAmount = 0;
                 }
                 ushort distanceToFirstEmptyTile = TileHelper.GetDistanceToFirstEmptyTileAround(num, num2, extraCondition: (tilePosition) => {
@@ -512,7 +515,7 @@ sealed class TarBiome : MicroBiome {
 
                 FastRandom fastRandom2 = fastRandom.WithModifier(num, num2);
                 if (GenBase._tiles[num, num2].HasTile && !_tiles[num, num2].BottomSlope) {
-                    if (!GenBase._tiles[num, num2 + 1].HasTile && GenBase._tiles[num, num2 + 1].LiquidAmount <= 0 && WorldGen.genRand.NextChance(_tiles[num, num2].TileType == TARTILETYPE ? 1f : 0.75f))
+                    if (!GenBase._tiles[num, num2 + 1].HasTile && GenBase._tiles[num, num2 + 1].LiquidAmount <= 0 && WorldGen.genRand.NextChance(_tiles[num, num2].TileType == TARTILETYPE ? 1f : 0.5f))
                         WorldGen.PlaceTile(num, num2 + 1, TARDRIPPINGTILETYPE);
                 }
                 if (_tiles[num, num2].HasTile && _tiles[num, num2].TileType == TileID.WaterDrip) {
@@ -520,9 +523,9 @@ sealed class TarBiome : MicroBiome {
                 }
                 if (i > magmaMapArea.Left + 10 && i < magmaMapArea.Right - 10 &&
                     j > magmaMapArea.Top + 10 && j < magmaMapArea.Bottom - 10) {
-                    if (_tiles[num, num2].LiquidType != 5) {
+                    if (_tiles[num, num2].LiquidType != LiquidLoader.LiquidType<Tar>()) {
                         Tile tile = _tiles[num, num2];
-                        tile.LiquidType = 5;
+                        tile.LiquidType = LiquidLoader.LiquidType<Tar>();
                     }
                 }
                 //if (fastRandom2.Next(8) == 0 && GenBase._tiles[num, num2].HasTile) {
@@ -583,7 +586,7 @@ sealed class TarBiome : MicroBiome {
                 if (i >= x && i <= x + 1 && j >= y && j <= y + 1) {
                     tile.HasTile = false;
                     tile.LiquidAmount = 255;
-                    tile.LiquidType = 5;
+                    tile.LiquidType = LiquidLoader.LiquidType<Tar>();
                 }
                 else {
                     tile.HasTile = true;
