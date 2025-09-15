@@ -49,7 +49,7 @@ abstract class StalactiteProjectileBase : ModProjectile {
 
         Projectile.manualDirectionChange = true;
 
-        Projectile.spriteDirection = 1;
+        Projectile.direction = Projectile.spriteDirection = 1;
 
         Projectile.hide = true;
     }
@@ -59,12 +59,12 @@ abstract class StalactiteProjectileBase : ModProjectile {
     }
 
     public override void OnSpawn(IEntitySource source) {
-        Projectile.spriteDirection = 1;
+        Projectile.direction = Projectile.spriteDirection = 1;
     }
 
     public override bool PreDraw(ref Color lightColor) {
         Vector2 position = Projectile.position;
-        Projectile.spriteDirection = 1;
+        Projectile.direction = Projectile.spriteDirection = 1;
         Projectile.position.Y -= 2f;
         Projectile.QuickDrawAnimated(lightColor);
         Projectile.position.Y = position.Y;
@@ -199,7 +199,7 @@ abstract class StalactiteBase<T1, T2> : ModTile where T1 : StalactiteTE<T2> wher
         TileObjectData.newTile.CoordinatePadding = 0;
         TileObjectData.newTile.CoordinateHeights = [18, 18];
         TileObjectData.newTile.UsesCustomCanPlace = true;
-        TileObjectData.newTile.DrawYOffset = -2;
+        TileObjectData.newTile.DrawYOffset = -4;
         TileObjectData.newTile.StyleHorizontal = true;
 		TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide | AnchorType.SolidBottom, TileObjectData.newTile.Width, 0);
         TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<T1>().Hook_AfterPlacement, -1, 0, false);
