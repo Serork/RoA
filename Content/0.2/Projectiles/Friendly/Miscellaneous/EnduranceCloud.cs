@@ -102,8 +102,9 @@ sealed class EnduranceCloud : ModProjectile {
         }
         Projectile.Opacity = 0.65f * Utils.GetLerpValue(0f, 30f, opacityFactor, true) * Utils.GetLerpValue(TIMELEFT, opacityFluffMin, opacityFactor, true);
 
-        Projectile.Center = owner.MountedCenter + Vector2.UnitY * owner.gfxOffY;
-        Projectile.Center = Utils.Floor(Projectile.Center) + new Vector2(offsetX, offsetY) - owner.Size;
+        Vector2 playerCenter2 = owner.MountedCenter;
+        playerCenter2 = Utils.Floor(playerCenter2) + Vector2.UnitY * owner.gfxOffY;
+        Projectile.Center = playerCenter2 + new Vector2(offsetX, offsetY) - owner.Size;
         Projectile.Center = Vector2.Lerp(Projectile.Center, Projectile.Center + Projectile.velocity, 0.05f);
         Projectile.velocity.X -= 1f * owner.direction;
     }
