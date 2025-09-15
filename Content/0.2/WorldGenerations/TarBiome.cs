@@ -112,11 +112,11 @@ sealed class TarBiome : MicroBiome {
         SimulatePressure(out var effectedMapArea);
         PlaceGranite(origin, effectedMapArea);
         CleanupTiles(origin, effectedMapArea);
+        PlaceStalactites(origin);
         PlaceDecorations(origin, effectedMapArea);
         if (WorldGen.gen) {
             structures.AddProtectedStructure(effectedMapArea, 8);
         }
-        PlaceStalactites(origin);
         return true;
     }
 
