@@ -10,10 +10,6 @@ namespace RoA.Content.WorldGenerations;
 
 sealed class Stalactite_GrowOverTime : GlobalTile {
     public override void RandomUpdate(int i, int j, int type) {
-        if (!Main.hardMode) {
-            return;
-        }
-
         if (!WorldGen.genRand.NextBool(10)) {
             return;
         }
@@ -22,19 +18,21 @@ sealed class Stalactite_GrowOverTime : GlobalTile {
         ushort solidifiedTarTileType = (ushort)ModContent.TileType<SolidifiedTar>();
         ushort backwoodsMossTileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         j += 1;
-        if (type == TileID.Stone) {
-            Stalactite_GenPass.PlaceStalactite(i, j, TileID.Stone, (ushort)ModContent.TileType<StoneStalactite>(), ModContent.GetInstance<StoneStalactiteTE>(), true);
-        }
-        else if (type == TileID.IceBlock) {
-            Stalactite_GenPass.PlaceStalactite(i, j, TileID.IceBlock, (ushort)ModContent.TileType<IceStalactite>(), ModContent.GetInstance<IceStalactiteTE>(), true);
-        }
-        else if (type == backwoodsStoneTileType) {
-            Stalactite_GenPass.PlaceStalactite(i, j, backwoodsStoneTileType, (ushort)ModContent.TileType<GrimrockStalactite>(), ModContent.GetInstance<GrimrockStalactiteTE>(), true);
+        if (Main.hardMode) {
+            if (type == TileID.Stone) {
+                Stalactite_GenPass.PlaceStalactite(i, j, TileID.Stone, (ushort)ModContent.TileType<StoneStalactite>(), ModContent.GetInstance<StoneStalactiteTE>(), true);
+            }
+            else if (type == TileID.IceBlock) {
+                Stalactite_GenPass.PlaceStalactite(i, j, TileID.IceBlock, (ushort)ModContent.TileType<IceStalactite>(), ModContent.GetInstance<IceStalactiteTE>(), true);
+            }
+            else if (type == backwoodsStoneTileType) {
+                Stalactite_GenPass.PlaceStalactite(i, j, backwoodsStoneTileType, (ushort)ModContent.TileType<GrimrockStalactite>(), ModContent.GetInstance<GrimrockStalactiteTE>(), true);
+            }
+            else if (type == backwoodsMossTileType) {
+                Stalactite_GenPass.PlaceStalactite(i, j, backwoodsMossTileType, (ushort)ModContent.TileType<GrimrockStalactite>(), ModContent.GetInstance<GrimrockStalactiteTE>(), true);
+            }
         }
         else if (type == solidifiedTarTileType) {
-            Stalactite_GenPass.PlaceStalactite(i, j, backwoodsMossTileType, (ushort)ModContent.TileType<GrimrockStalactite>(), ModContent.GetInstance<GrimrockStalactiteTE>(), true);
-        }
-        else if (type == backwoodsMossTileType) {
             Stalactite_GenPass.PlaceStalactite(i, j, solidifiedTarTileType, (ushort)ModContent.TileType<SolidifiedTarStalactite>(), ModContent.GetInstance<SolidifiedTarStalactiteTE>(), true);
         }
     }
