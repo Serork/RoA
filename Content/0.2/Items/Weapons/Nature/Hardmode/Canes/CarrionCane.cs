@@ -138,7 +138,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                 ref ChargeInfo chargeData = ref _chargeData[i];
                 if (chargeData.ShouldBeShowed) {
                     ref Vector2 position = ref chargeData.Position;
-                    position = Vector2.Lerp(position, CorePosition + Vector2.UnitY.RotatedBy(MathHelper.Pi * direction + i * (float)chargeCount / MathHelper.TwoPi * 1.5f * -direction) * (30f * AttackProgress01), 1f);
+                    position = Vector2.Lerp(position, CorePosition + Vector2.UnitY.RotatedBy(Projectile.rotation + MathHelper.Pi * direction + i * (float)chargeCount / MathHelper.TwoPi * 1.5f * -direction) * (30f * AttackProgress01), 1f);
                     if (AttackProgress01 < 1f) {
                         chargeData.Rotation += 0.05f * direction;
                     }
