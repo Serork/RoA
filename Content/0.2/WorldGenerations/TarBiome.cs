@@ -112,7 +112,7 @@ sealed class TarBiome : MicroBiome {
         SimulatePressure(out var effectedMapArea);
         PlaceGranite(origin, effectedMapArea);
         CleanupTiles(origin, effectedMapArea);
-        PlaceDecorations(origin + (Vector2.One * effectedMapArea.Size() / 2f).ToPoint(), effectedMapArea);
+        PlaceDecorations(origin, effectedMapArea);
         if (WorldGen.gen) {
             structures.AddProtectedStructure(effectedMapArea, 8);
         }
@@ -512,7 +512,7 @@ sealed class TarBiome : MicroBiome {
 
                 FastRandom fastRandom2 = fastRandom.WithModifier(num, num2);
                 if (GenBase._tiles[num, num2].HasTile && !_tiles[num, num2].BottomSlope) {
-                    if (!GenBase._tiles[num, num2 + 1].HasTile && GenBase._tiles[num, num2 + 1].LiquidAmount <= 0)
+                    if (!GenBase._tiles[num, num2 + 1].HasTile && GenBase._tiles[num, num2 + 1].LiquidAmount <= 0 && WorldGen.genRand.NextChance(_tiles[num, num2].TileType == TARTILETYPE ? 1f : 0.75f))
                         WorldGen.PlaceTile(num, num2 + 1, TARDRIPPINGTILETYPE);
                 }
                 if (_tiles[num, num2].HasTile && _tiles[num, num2].TileType == TileID.WaterDrip) {
