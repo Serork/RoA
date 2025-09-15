@@ -49,6 +49,8 @@ abstract class StalactiteProjectileBase : ModProjectile {
 
         Projectile.manualDirectionChange = true;
 
+        Projectile.spriteDirection = 1;
+
         Projectile.hide = true;
     }
 
@@ -56,9 +58,13 @@ abstract class StalactiteProjectileBase : ModProjectile {
         behindNPCsAndTiles.Add(index);
     }
 
+    public override void OnSpawn(IEntitySource source) {
+        Projectile.spriteDirection = 1;
+    }
+
     public override bool PreDraw(ref Color lightColor) {
         Vector2 position = Projectile.position;
-        Projectile.direction = Projectile.spriteDirection = 1;
+        Projectile.spriteDirection = 1;
         Projectile.position.Y -= 2f;
         Projectile.QuickDrawAnimated(lightColor);
         Projectile.position.Y = position.Y;
