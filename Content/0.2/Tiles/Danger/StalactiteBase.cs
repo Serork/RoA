@@ -47,13 +47,13 @@ abstract class StalactiteProjectileBase : ModProjectile {
         Projectile.localNPCHitCooldown = -1;
     }
 
-    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+    public sealed override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         height = 20;
 
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
-    public override void AI() {
+    public sealed override void AI() {
         if (Projectile.ai[0] != 0f) {
             Projectile.frame = (int)(Projectile.ai[0] / 18f);
             Projectile.ai[0] = 0f;
@@ -79,7 +79,7 @@ abstract class StalactiteProjectileBase : ModProjectile {
 
     protected virtual void SafeModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) { }
 
-    public override void OnKill(int timeLeft) {
+    public sealed override void OnKill(int timeLeft) {
         for (int i = 0; i < 10; i++) {
             Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, KillDustType());
         }
@@ -112,6 +112,17 @@ abstract class StalactiteTE<T> : ModTileEntity where T : StalactiteProjectileBas
             if (player.getRect().Intersects(dangerArea) && player.GetCommon().Fell) {
                 _shouldFall = true;
                 break;
+            }
+        }
+        if (!_shouldFall) {
+            foreach (NPC npc in Main.ActiveNPCs) {
+                if (npc.noGravity) {
+                    continue;
+                }
+                if (npc.getRect().Intersects(dangerArea) && npc.GetCommon().Fell) {
+                    _shouldFall = true;
+                    break;
+                }
             }
         }
         if (_shouldFall && _placeTime > 0) {

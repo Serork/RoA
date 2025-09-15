@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Liquids;
 sealed partial class Tar : ModLiquid {
     public partial void CollisionLoad() {
-        CommonHandler.PreUpdateEvent += RoAPlayer_PreUpdateEvent;
+        PlayerCommonHandler.PreUpdateEvent += RoAPlayer_PreUpdateEvent;
         On_NPC.Collision_MoveWhileWet += On_NPC_Collision_MoveWhileWet;
         On_NPC.UpdateNPC_UpdateGravity += On_NPC_UpdateNPC_UpdateGravity;
         On_NPC.DelBuff += On_NPC_DelBuff;

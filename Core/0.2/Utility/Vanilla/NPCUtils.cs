@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.NPCs;
+using RoA.Common.Players;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -8,6 +11,8 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Vanilla;
 
 static class NPCUtils {
+    public static NPCCommonHandler GetCommon(this NPC npc) => npc.GetGlobalNPC<NPCCommonHandler>();
+
     public static bool CanBeChasedBy(NPC npc, object attacker = null, bool ignoreDontTakeDamage = false, bool checkForImmortals = true) {
         if (npc.active && npc.chaseable && npc.lifeMax > 5 && (!npc.dontTakeDamage || ignoreDontTakeDamage) && !npc.friendly)
             return !checkForImmortals || !npc.immortal;
