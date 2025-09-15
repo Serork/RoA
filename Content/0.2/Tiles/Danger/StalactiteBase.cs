@@ -49,6 +49,8 @@ abstract class StalactiteProjectileBase : ModProjectile {
 
         Projectile.manualDirectionChange = true;
 
+        Projectile.direction = Projectile.spriteDirection = 1;
+
         Projectile.hide = true;
     }
 
