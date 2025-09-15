@@ -73,7 +73,7 @@ sealed class Stalactite_GenPass : IInitializer {
                     continue;
                 }
                 Tile solidTile = WorldGenHelper.GetTileSafely(i, j - 1);
-                if (WorldGen.SolidTile(i, j - 1) && WorldGen.genRand.NextBool(30) &&
+                if (WorldGen.SolidTile(i, j - 1) && WorldGen.genRand.NextBool(25) &&
                     validSolidTileTypes.Contains(solidTile.TileType)) {
                     if (solidTile.TileType == TileID.Stone) {
                         PlaceStalactite(i, j, TileID.Stone, (ushort)ModContent.TileType<StoneStalactite>(), ModContent.GetInstance<StoneStalactiteTE>());
