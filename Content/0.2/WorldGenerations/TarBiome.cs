@@ -125,17 +125,15 @@ sealed class TarBiome : MicroBiome {
 
     private void PlaceStalactites(Point tileOrigin) {
         ushort tarStalactiteTileType = (ushort)ModContent.TileType<SolidifiedTarStalactite>();
-        int width = 50, height = 50;
-        tileOrigin.X += 4;
-        tileOrigin.Y += 4;
-        for (int i = tileOrigin.X - width / 2; i < tileOrigin.X + width * 2; i++) {
-            for (int j = tileOrigin.Y - height / 2; j < tileOrigin.Y + height * 2; j++) {
+        int width = 75, height = 75;
+        for (int i = tileOrigin.X - width; i < tileOrigin.X + width * 2; i++) {
+            for (int j = tileOrigin.Y - height; j < tileOrigin.Y + height * 2; j++) {
                 if (!WorldGen.InWorld(i, j, 10)) {
                     continue;
                 }
 
-                if (i > tileOrigin.X + width / 3 && i < tileOrigin.X + width / 3 + width &&
-                    j > tileOrigin.Y + height / 3 && j < tileOrigin.Y - 10 + height / 3 + height) {
+                if (i > tileOrigin.X - width / 4 && i < tileOrigin.X - width / 4 + width * 1.5f &&
+                    j > tileOrigin.Y - height / 4 && j < tileOrigin.Y - height / 4 + height * 1.5f) {
                     continue;
                 }
 
