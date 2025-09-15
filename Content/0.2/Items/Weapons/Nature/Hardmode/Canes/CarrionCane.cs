@@ -88,8 +88,8 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
             int dustCount = 20;
             float num12 = 6f;
             for (int i = 0; i < dustCount; i++) {
-                Vector2 vector = Vector2.UnitX.RotatedBy(Main.rand.NextFloat() * ((float)Math.PI * 2f));
-                int num11 = Projectile.width + 5 + (int)(10 * Main.rand.NextFloat());
+                Vector2 vector = Vector2.UnitX.RotatedBy(MathUtils.Clamp01(i / (float)dustCount + Main.rand.NextFloatRange(1f)) * ((float)Math.PI * 2f));
+                int num11 = Projectile.width + 5 + (int)(15 * Main.rand.NextFloat());
                 Vector2 vector2 = vector * ((float)num11 * Projectile.scale);
                 Vector2 vector3 = corePosition + vector2;
                 Vector2 vector4 = vector.RotatedBy(MathHelper.PiOver2);
@@ -97,7 +97,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                 int num14 = Dust.NewDust(vector3, 0, 0, ModContent.DustType<Dusts.CarrionCane>(), 0f, 0f, 0, default);
                 Main.dust[num14].position = vector3;
                 Main.dust[num14].noGravity = true;
-                Main.dust[num14].scale = 1f + Main.rand.NextFloatRange(0.2f);
+                Main.dust[num14].scale = 1f + Main.rand.NextFloatRange(0.5f);
                 float num13 = Main.rand.NextFloat(1f, 2f);
                 Main.dust[num14].fadeIn = Main.rand.NextFloat() * 1.2f * Projectile.scale;
                 Main.dust[num14].velocity = vector4 * Projectile.scale * (0f - num13) * player.direction;
