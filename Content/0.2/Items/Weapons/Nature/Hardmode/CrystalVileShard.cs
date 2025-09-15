@@ -1,8 +1,13 @@
-﻿using RoA.Common.Druid;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Prefixes;
 using Terraria.ModLoader;
 
@@ -22,8 +27,8 @@ sealed class CrystalVileShard : NatureItem {
         Item.useStyle = 5;
         Item.shootSpeed = 32f;
         Item.shoot = ModContent.ProjectileType<CrystalSpike>();
-        //Item.width = 26;
-        //Item.height = 28;
+        Item.width = 32;
+        Item.height = 32;
         Item.useAnimation = 33;
         Item.useTime = 33;
         Item.rare = 5;
@@ -35,5 +40,11 @@ sealed class CrystalVileShard : NatureItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 80);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
+    }
+
+    public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
+        position -= Vector2.UnitX * 1f;
+
+        position += velocity.SafeNormalize() * 5f;
     }
 }

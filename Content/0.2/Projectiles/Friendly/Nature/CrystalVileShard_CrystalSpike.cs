@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
+
 using System;
 
 using Terraria;
@@ -12,7 +14,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class CrystalSpikeTip : CrystalSpike { }
 
 class CrystalSpike : Vilethorn {
-    public override Color? GetAlpha(Color lightColor) => new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha);
+    public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
 
     protected override int AppearAlphaValue => 100;
     protected override int DisappearAlphaValue => 4;
@@ -24,6 +26,8 @@ class CrystalSpike : Vilethorn {
     }
 
     public override void SafePostAI() {
+        Projectile.hide = Projectile.Distance(Projectile.GetOwnerAsPlayer().Center) < 10f && Projectile.timeLeft > 190;
+
         float num = 0.2f;
         float num2 = 0.2f;
         float num3 = 0.2f;

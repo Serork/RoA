@@ -33,6 +33,8 @@ class Vilethorn : NatureProjectile {
         Projectile.alpha = 255;
         Projectile.ignoreWater = true;
 
+        Projectile.timeLeft = 200;
+
         ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
