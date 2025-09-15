@@ -129,7 +129,6 @@
 		<Folder Include="Common\0.2\DrawLayers\" />
 		<Folder Include="Content\0.1\Items\Weapons\Nature\Hardmode\" />
 		<Folder Include="Content\0.2\Items\Miscellaneous\" />
-		<Folder Include="Content\0.2\Items\Placeable\Miscellaneous\" />
 		<Folder Include="Content\0.2\Items\Placeable\Solid\" />
 		<Folder Include="Content\0.2\Items\Placeable\Walls\" />
 	</ItemGroup>

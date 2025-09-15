@@ -65,7 +65,5 @@ sealed class BackwoodsRocks3x2Rubble : ModTile, TileHooks.IGetTileDrawData {
         return base.CreateDust(i, j, ref type);
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;
-
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => BackwoodsGreenMoss.SetupLight(ref r, ref g, ref b);
 }

@@ -16,8 +16,6 @@ sealed class TarfallWall : ModWall {
         AddMapEntry(new Color(46, 39, 52));
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = !fail ? 13 : num;
-
     public override void KillWall(int i, int j, ref bool fail) {
         /*if (!fail) */{
             SoundEngine.PlaySound(SoundID.Shatter, new Vector2(i * 16, j * 16));

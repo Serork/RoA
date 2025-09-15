@@ -22,8 +22,6 @@ class BackwoodsRootWall : ModWall {
 
         return base.CreateDust(i, j, ref type);
     }
-
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }
 
 class BackwoodsRootWall2 : BackwoodsRootWall {
@@ -44,6 +42,4 @@ class BackwoodsRootWall2 : BackwoodsRootWall {
     }
 
     public override bool Drop(int i, int j, ref int type) => false;
-
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }

@@ -89,10 +89,10 @@ sealed class TanningRack : ModTile {
 
         AddMapEntry(new Color(193, 125, 83), CreateMapEntryName());
 
-        DustType = DustID.t_LivingWood;
+        DustType = -1;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
+    //public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
 

@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,6 +19,4 @@ class BackwoodsFlowerGrassWall : ModWall {
     }
 
     public override bool Drop(int i, int j, ref int type) => false;
-
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }

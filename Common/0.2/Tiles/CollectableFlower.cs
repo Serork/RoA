@@ -48,8 +48,6 @@ abstract class CollectableFlower : ModTile {
         MineResist = 0.01f;
     }
 
-    public sealed override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 10;
-
     public sealed override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) => spriteEffects = i % 2 == 0 ? SpriteEffects.FlipHorizontally : spriteEffects;
 
     public sealed override IEnumerable<Item> GetItemDrops(int i, int j) {

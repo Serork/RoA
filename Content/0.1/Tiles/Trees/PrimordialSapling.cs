@@ -54,8 +54,6 @@ sealed class PrimordialSapling : ModTile {
         HitSound = SoundID.Dig;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
-
     public override void RandomUpdate(int i, int j) {
         if (Main.rand.NextBool(15)) {
             GrowTree(i, j);

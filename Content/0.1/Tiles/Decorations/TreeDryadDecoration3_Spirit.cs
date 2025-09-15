@@ -78,8 +78,6 @@ class TreeDryadDecoration3_Spirit : ModTile {
         MineResist = 0.01f;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;
-
     public override void DropCritterChance(int i, int j, ref int wormChance, ref int grassHopperChance, ref int jungleGrubChance) {
         wormChance = 6;
     }

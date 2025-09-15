@@ -29,8 +29,6 @@ abstract class Rubble : ModTile {
     protected abstract void AddTile();
 
     protected virtual void SafeSetStaticDefaults() { }
-
-    public sealed override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;
 }
 
 abstract class Rubble_1x1 : Rubble {

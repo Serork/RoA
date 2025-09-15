@@ -177,6 +177,4 @@ sealed class TreeDryadRubble : ModTile {
             }
         }
     }
-
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 2 : 5;
 }

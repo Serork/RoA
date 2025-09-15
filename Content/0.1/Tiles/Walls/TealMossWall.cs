@@ -25,8 +25,6 @@ class TealMossWall : ModWall {
 
         return base.CreateDust(i, j, ref type);
     }
-
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }
 
 class TealMossWall2 : TealMossWall {
@@ -50,6 +48,4 @@ class TealMossWall2 : TealMossWall {
     }
 
     public override bool Drop(int i, int j, ref int type) => false;
-
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }

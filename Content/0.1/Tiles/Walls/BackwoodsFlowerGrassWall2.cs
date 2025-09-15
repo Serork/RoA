@@ -17,6 +17,4 @@ sealed class BackwoodsFlowerGrassWall2 : ModWall {
 
         WallID.Sets.WallSpreadStopsAtAir[Type] = true;
     }
-
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 1 : 3;
 }

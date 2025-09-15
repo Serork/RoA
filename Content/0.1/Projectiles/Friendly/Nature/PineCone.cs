@@ -61,7 +61,10 @@ sealed class PineCone : NatureProjectile {
         Player player = Projectile.GetOwnerAsPlayer();
         if (Projectile.localAI[0] > 0f) {
             if (Projectile.ai[0] == 0f && Projectile.ai[1] == 0f) {
-                Projectile.ai[0] = -(10f + Main.rand.NextFloat() * 5f) * Projectile.GetOwnerAsPlayer().direction;
+                if (Projectile.IsOwnerLocal()) {
+                    Projectile.ai[0] = -(10f + Main.rand.NextFloat() * 5f) * Projectile.GetOwnerAsPlayer().direction;
+                    Projectile.netUpdate = true;
+                }
             }
             else {
                 float angle = Math.Sign(Projectile.rotation) == Math.Sign(Projectile.ai[0]) ? 4f : 3f;
@@ -91,7 +94,7 @@ sealed class PineCone : NatureProjectile {
 
                         //Projectile.position.Y += Projectile.velocity.Y;
 
-                        Projectile.netUpdate = true;
+                        //Projectile.netUpdate = true;
                     }
                 }
             }
@@ -100,7 +103,10 @@ sealed class PineCone : NatureProjectile {
         }
         else {
             if (Projectile.ai[0] == 0f) {
-                Projectile.ai[0] = -10f * Main.rand.NextBool().ToDirectionInt();
+                if (Projectile.IsOwnerLocal()) {
+                    Projectile.ai[0] = -10f * Main.rand.NextBool().ToDirectionInt();
+                    Projectile.netUpdate = true;
+                }
             }
         }
         Projectile.localAI[0] += 1f;

@@ -2197,3 +2197,8 @@ Crimsonest: {
 	// DisplayName: Crimsonest
 	// Tooltip: ""
 }
+
+Test: {
+	// DisplayName: Test
+	// Tooltip: ""
+}

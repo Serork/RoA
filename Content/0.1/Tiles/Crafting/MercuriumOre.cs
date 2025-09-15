@@ -212,7 +212,5 @@ sealed class MercuriumOre : ModTile {
         return base.CreateDust(i, j, ref type);
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num *= !fail ? 2 : 1;
-
     public override bool HasWalkDust() => true;
 }

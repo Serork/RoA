@@ -104,8 +104,6 @@ class TreeDryadDecoration1Rubble : ModTile {
         MineResist = 0.01f;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 3 : 9;
-
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
 
     }

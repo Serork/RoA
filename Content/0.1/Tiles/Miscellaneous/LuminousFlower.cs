@@ -105,8 +105,6 @@ sealed class LuminousFlower : ModTile {
         Main.tileCut[Type] = false;
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) => num = fail ? 2 : 6;
-
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
         fail = false;
     }
