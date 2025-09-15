@@ -40,7 +40,7 @@ sealed class FireflyPinHandler : PlayerDrawLayer {
         Vector2 movementOffset = drawInfo.drawPlayer.bodyFrame.Y > 168 ? drawInfo.drawPlayer.PlayerMovementOffset() : Vector2.Zero;
         drawInfo.DrawDataCache.Add(new DrawData(
             texture,
-            drawInfo.Position.Floor() + new Vector2(0f, drawInfo.drawPlayer.gfxOffY) +
+            (drawInfo.drawPlayer.mount.Active ? drawInfo.drawPlayer.position : drawInfo.Position).Floor() + new Vector2(0f, drawInfo.drawPlayer.gfxOffY) +
             movementOffset - Main.screenPosition
             + Vector2.UnitY * (drawInfo.drawPlayer.gravDir == -1f ? drawInfo.drawPlayer.height / 2 + 6 : 0),
             new Rectangle(0, progress < 0.5f ? drawInfo.drawPlayer.bodyFrame.Height : 0, drawInfo.drawPlayer.bodyFrame.Width, drawInfo.drawPlayer.bodyFrame.Height),

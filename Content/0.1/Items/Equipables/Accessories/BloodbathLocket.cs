@@ -58,7 +58,7 @@ sealed class BloodbathLocketGlowGlowing : ModSystem {
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
                     Main.spriteBatch.Draw(
                         _lothorGlowMaskTexture.Value,
-                        drawInfo.Position + (player.gravDir != 1 ? Vector2.UnitY * 6f : Vector2.Zero) + Vector2.UnitY * (-posOffset.Y + seatYOffset) - Main.screenPosition + new Vector2(0f, drawInfo.drawPlayer.gfxOffY)
+                        (drawInfo.drawPlayer.mount.Active ? drawInfo.drawPlayer.position : drawInfo.Position) + (player.gravDir != 1 ? Vector2.UnitY * 6f : Vector2.Zero) + Vector2.UnitY * (-posOffset.Y + seatYOffset) - Main.screenPosition + new Vector2(0f, drawInfo.drawPlayer.gfxOffY)
                             +
                             Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0 * player.gravDir, new Vector2())
                             * Helper.Wave(0f, 3f, 12f, 0.5f),
