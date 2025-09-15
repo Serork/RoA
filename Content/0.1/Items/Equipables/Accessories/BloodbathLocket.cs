@@ -41,7 +41,7 @@ sealed class BloodbathLocketGlowGlowing : ModSystem {
         Player player = drawinfo.drawPlayer;
         if (player.neck > 0) {
             var drawInfo = drawinfo;
-            if (player.isLockedToATile) {
+            if (player.sleeping.isSleeping) {
                 return;
             }
             if (!(player.dead || player.invis || player.ShouldNotDraw)) {

@@ -47,12 +47,17 @@ sealed class LothorMaskGlowing : ModSystem {
             if (player.CheckArmorSlot(lothorMask, 0, 10) || player.CheckVanitySlot(lothorMask, 10)) {
                 flag = true;
             }
-            if (player.isLockedToATile) {
+            if (player.sleeping.isSleeping) {
                 flag = false;
             }
             if (flag) {
                 var drawInfo = drawinfo;
                 if (!(player.dead || player.invis || player.ShouldNotDraw)) {
+                    bool wasSitting = player.sitting.isSitting;
+                    if (drawInfo.isSitting) {
+                        player.sitting.isSitting = true;
+                    }
+                    player.sitting.GetSittingOffsetInfo(player, out Vector2 posOffset, out float seatYOffset);
                     float lifeProgress = 1f - MathHelper.Clamp((float)player.statLife / player.statLifeMax2 * 0.5f, 0f, 1f);
                     SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
                     Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
@@ -79,7 +84,7 @@ sealed class LothorMaskGlowing : ModSystem {
                             position.Y += progress4 * (player.height / 2f + 8f);
                         }
                         Main.spriteBatch.Draw(_lothorGlowMaskTexture.Value,
-                            helmetOffset + (player.gravDir != 1 ? Vector2.UnitY * 7f : Vector2.Zero) + new Vector2((int)(position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
+                            helmetOffset + Vector2.UnitY * (-posOffset.Y + seatYOffset) + (player.gravDir != 1 ? Vector2.UnitY * 7f : Vector2.Zero) + new Vector2((int)(position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) +
                             (float)(drawInfo.drawPlayer.width / 2)),
                             (int)(position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height -
                             (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.headPosition + drawInfo.headVect +
@@ -92,6 +97,7 @@ sealed class LothorMaskGlowing : ModSystem {
                     }
                     Main.spriteBatch.End();
                     Main.spriteBatch.Begin(in snapshot);
+                    player.sitting.isSitting = wasSitting;
                 }
             }
         }
