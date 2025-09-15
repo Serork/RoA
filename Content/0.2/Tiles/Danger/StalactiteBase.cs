@@ -25,6 +25,8 @@ namespace RoA.Content.Tiles.Danger;
 abstract class StalactiteProjectileBase : ModProjectile {
     private static byte FRAMECOUNT => 3;
 
+    protected virtual float FallSpeedModifier => 1f;
+
     public override string Texture => ResourceManager.EnemyProjectileTextures + GetType().Name[..^10];
 
     public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
@@ -57,17 +59,25 @@ abstract class StalactiteProjectileBase : ModProjectile {
             Projectile.ai[0] = 0f;
         }
 
-        Projectile.velocity.Y += 0.35f;
+        Projectile.velocity.Y += 0.35f * FallSpeedModifier;
         Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
     }
 
-    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+    public sealed override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
         modifiers.FinalDamage *= MathUtils.Clamp01(Projectile.velocity.Y / 7.5f);
+
+        SafeModifyHitPlayer(target, ref modifiers);
     }
 
-    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+    protected virtual void SafeModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) { }
+
+    public sealed override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
         modifiers.FinalDamage *= MathUtils.Clamp01(Projectile.velocity.Y / 7.5f);
+
+        SafeModifyHitNPC(target, ref modifiers);
     }
+
+    protected virtual void SafeModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) { }
 
     public override void OnKill(int timeLeft) {
         for (int i = 0; i < 10; i++) {
@@ -169,7 +179,11 @@ abstract class StalactiteBase<T1, T2> : ModTile where T1 : StalactiteTE<T2> wher
         Projectile.NewProjectileDirect(new EntitySource_TileBreak(i, j), new Point16(i, j).ToWorldCoordinates() + Vector2.UnitY * 6f, Vector2.Zero, ModContent.ProjectileType<T2>(), 100, 0f, Main.myPlayer, frameX);
     }
 
-    public sealed override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) => ModContent.GetInstance<T1>().Kill(i, j);
+    public sealed override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
+        SoundEngine.PlaySound(SoundID.Dig, new Point16(i, j).ToWorldCoordinates());
+
+        ModContent.GetInstance<T1>().Kill(i, j);
+    }
 
     protected virtual void SafeSetStaticDefaults() { }
 }

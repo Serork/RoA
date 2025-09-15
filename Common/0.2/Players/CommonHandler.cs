@@ -6,6 +6,8 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 sealed class CommonHandler : ModPlayer {
+    private static float MAXFALLSPEEDMODIFIERFORFALL => 0.5f;
+
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;
 
     private bool _fell;
@@ -39,7 +41,7 @@ sealed class CommonHandler : ModPlayer {
     }
 
     private void TouchGround() {
-        if (Player.velocity.Y >= Player.maxFallSpeed * 0.25f && !_fell) {
+        if (Player.velocity.Y >= Player.maxFallSpeed * MAXFALLSPEEDMODIFIERFORFALL && !_fell) {
             _fell = true;
         }
         if (_fell && Player.velocity.Y == 0f && !Fell) {

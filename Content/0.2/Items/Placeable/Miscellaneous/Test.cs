@@ -14,3 +14,19 @@ sealed class Test : ModItem {
         Item.DefaultToPlaceableTile(ModContent.TileType<GrimrockStalactite>());
     }
 }
+
+sealed class Test2 : ModItem {
+    public override string Texture => ItemLoader.GetItem(ModContent.ItemType<AltarPlacer>()).Texture;
+
+    public override void SetDefaults() {
+        Item.DefaultToPlaceableTile(ModContent.TileType<IceStalactite>());
+    }
+}
+
+sealed class Test3 : ModItem {
+    public override string Texture => ItemLoader.GetItem(ModContent.ItemType<AltarPlacer>()).Texture;
+
+    public override void SetDefaults() {
+        Item.DefaultToPlaceableTile(ModContent.TileType<StoneStalactite>());
+    }
+}

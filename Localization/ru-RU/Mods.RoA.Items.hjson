@@ -2202,3 +2202,13 @@ Test: {
 	// DisplayName: Test
 	// Tooltip: ""
 }
+
+Test2: {
+	// DisplayName: Test2
+	// Tooltip: ""
+}
+
+Test3: {
+	// DisplayName: Test3
+	// Tooltip: ""
+}
