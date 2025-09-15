@@ -47,10 +47,6 @@ abstract class StalactiteProjectileBase : ModProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
 
-        Projectile.manualDirectionChange = true;
-
-        Projectile.direction = Projectile.spriteDirection = 1;
-
         Projectile.hide = true;
     }
 
@@ -59,14 +55,13 @@ abstract class StalactiteProjectileBase : ModProjectile {
     }
 
     public override void OnSpawn(IEntitySource source) {
-        Projectile.direction = Projectile.spriteDirection = 1;
+        Projectile.frame = (int)(Projectile.ai[0] / 16f);
     }
 
     public override bool PreDraw(ref Color lightColor) {
         Vector2 position = Projectile.position;
-        Projectile.direction = Projectile.spriteDirection = 1;
         Projectile.position.Y -= 2f;
-        Projectile.QuickDrawAnimated(lightColor);
+        Projectile.QuickDrawAnimated(lightColor, spriteEffects: Microsoft.Xna.Framework.Graphics.SpriteEffects.None);
         Projectile.position.Y = position.Y;
 
         return false;
@@ -79,12 +74,6 @@ abstract class StalactiteProjectileBase : ModProjectile {
     }
 
     public sealed override void AI() {
-        Projectile.direction = Projectile.spriteDirection = 1;
-        if (Projectile.ai[0] != 0f) {
-            Projectile.frame = (int)(Projectile.ai[0] / 16f);
-            Projectile.ai[0] = 0f;
-        }
-
         Projectile.velocity.Y += 0.35f * FallSpeedModifier;
         Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
     }

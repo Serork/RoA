@@ -39,12 +39,12 @@ static class ProjectileUtils {
             frameBox.Size() / 2, projectile.scale, 0, 0);
     }
 
-    public static void QuickDrawAnimated(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null, byte maxFrames = 0, Vector2? scale = null, Vector2? origin = null, Vector2? originScale = null) {
+    public static void QuickDrawAnimated(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null, byte maxFrames = 0, Vector2? scale = null, Vector2? origin = null, Vector2? originScale = null, SpriteEffects? spriteEffects = null) {
         Texture2D mainTex = texture ?? projectile.GetTexture();
 
         int frameSize = mainTex.Height / (maxFrames != 0 ? maxFrames : Main.projFrames[projectile.type]);
         Rectangle frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
-        SpriteEffects effects = projectile.spriteDirection.ToSpriteEffects();
+        SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
         origin ??= frameBox.Size() / 2;
         if (originScale != null) {
             origin *= originScale;
