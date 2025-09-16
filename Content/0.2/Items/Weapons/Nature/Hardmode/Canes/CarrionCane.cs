@@ -126,7 +126,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                 }
             }
 
-            dustType = Main.rand.NextBool(3) ? (ushort)ModContent.DustType<Dusts.CarrionCane3>() : !Main.rand.NextBool(3) ? dustType : (ushort)DustID.Torch;
+            dustType = Main.rand.NextBool(4) ? (ushort)ModContent.DustType<Dusts.CarrionCane3>() : !Main.rand.NextBool(3) ? dustType : (ushort)DustID.Torch;
 
             if (!Main.rand.NextChance(AttackProgress01 * 0.8f)) {
                 return;
