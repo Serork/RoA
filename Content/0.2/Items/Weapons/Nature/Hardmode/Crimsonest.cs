@@ -10,6 +10,7 @@ using System;
 
 using Terraria;
 using Terraria.Enums;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 using static Terraria.Player;
@@ -23,6 +24,7 @@ sealed class Crimsonest : NatureItem {
         Item.SetUsableValues(-1, 40, autoReuse: true, showItemOnUse: false);
         Item.SetShootableValues((ushort)ModContent.ProjectileType<Bloodly>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice());
+        Item.UseSound = SoundID.NPCDeath19 with { Volume = 3f, Pitch = -0.2f };
 
         NatureWeaponHandler.SetPotentialDamage(Item, 60);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);

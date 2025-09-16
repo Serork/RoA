@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -172,6 +173,12 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             Projectile.SlightlyMoveTo(bloodlyValues.GoToPosition, speed, inertia);
             Projectile.position += Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation()) * Projectile.direction * MathF.Sin(bloodlyValues.SineYOffset++ * 0.1f) * SINEOFFSET;
         }
+        void playSound() {
+            if(Main.rand.NextBool(150)) {
+                SoundEngine.PlaySound(SoundID.Zombie43 with { Volume = 0.25f, Pitch = 0.4f, MaxInstances = 3 }, Projectile.Center);
+                SoundEngine.PlaySound(SoundID.Zombie44 with { Volume = 0.45f, Pitch = -0.4f, MaxInstances = 3 }, Projectile.Center);
+            }
+        }
         void resetGoToPosition() {
             BloodlyValues bloodlyValues = new(Projectile);
             Vector2 goToPosition = bloodlyValues.GoToPosition;
@@ -226,6 +233,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                             Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{1 + Main.rand.NextBool().ToInt()}").Type, 1f);
                         Main.gore[gore].velocity *= 1f;
                     }
+                    SoundEngine.PlaySound(SoundID.NPCDeath35 with { Volume = 0.75f, PitchVariance = 0.1f, Pitch = 0.2f }, Projectile.Center);
                 }
             }
             bool canReveal = true;
@@ -259,6 +267,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             Projectile.scale = 1f;
 
             handleMovement();
+            playSound();
             resetGoToPosition();
             moveFromOthers();
             slowOnHit();
@@ -313,6 +322,8 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 Main.gore[gore].velocity *= 0.5f;
             }
         }
+        SoundEngine.PlaySound(SoundID.NPCDeath11 with { Volume = 0.75f, Pitch = 0.2f }, Projectile.Center);
+        SoundEngine.PlaySound(SoundID.Item17 with { Volume = 0.5f, PitchVariance = 0.1f, Pitch = -0.3f }, Projectile.Center);
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {

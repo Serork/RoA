@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -156,6 +157,7 @@ sealed class CorruptorBone : ModProjectile {
                                         Damage = corruptorBoneProjectile.damage * 5,
                                         KnockBack = corruptorBoneProjectile.knockBack * 5
                                     });
+                                    SoundEngine.PlaySound(SoundID.NPCDeath25 with { Volume = 0.9f, Pitch = 1f, MaxInstances = 3 }, corruptorBoneProjectile.Center);
                                 }
                             }
                         }

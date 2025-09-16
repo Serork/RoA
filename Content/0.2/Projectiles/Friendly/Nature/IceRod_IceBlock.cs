@@ -264,7 +264,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
                 ref IceBlockInfo iceBlockData = ref IceBlockData[currentSegmentIndex];
                 if (!iceBlockData.Invalid) {
                     if (iceBlockData.Opacity >= 0.75f && !iceBlockData.PixieSoundPlayed) {
-                        SoundEngine.PlaySound(SoundID.Item30, Projectile.Center);
+                        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "IceRod") { Volume = 0.7f, Pitch = 0.2f, PitchVariance = 0.2f }, Projectile.Center);
                         iceBlockData.PixieSoundPlayed = true;
                     }
                     if (iceBlockData.Opacity < 0.75f && iceBlockData.PixieSoundPlayed) {

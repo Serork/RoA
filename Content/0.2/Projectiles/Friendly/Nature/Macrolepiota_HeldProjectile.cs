@@ -18,6 +18,7 @@ using RoA.Core.Utility.Vanilla;
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -236,6 +237,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
                 Position = GetShrivelPosition(),
                 Velocity = -new Vector2(Main.rand.NextFloatRange(0.5f), 1f).RotatedBy(Projectile.rotation) * owner.velocity.Y * sporeSpawnSpeed
             });
+            SoundEngine.PlaySound(SoundID.Item7 with { Volume = 3f, Pitch = 1f, PitchVariance = 0.2f, MaxInstances = 3 }, Projectile.Center);
         }
 
         init();

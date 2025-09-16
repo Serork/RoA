@@ -21,7 +21,7 @@ sealed class ClingerStaff : NatureItem {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(38, 38);
         Item.SetWeaponValues(40, 2f);
-        Item.SetUsableValues(ItemUseStyleID.Swing, 40, useSound: SoundID.Item100);
+        Item.SetUsableValues(ItemUseStyleID.Swing, 40);
         Item.SetShootableValues((ushort)ModContent.ProjectileType<ClingerHideway>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice(gold: 8));
 

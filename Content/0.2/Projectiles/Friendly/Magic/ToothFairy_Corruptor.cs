@@ -6,6 +6,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -69,6 +70,7 @@ sealed class Corruptor : ModProjectile {
             dust.noGravity = true;
             dust.scale *= Main.rand.NextFloat(1f, 1.5f);
         }
+        SoundEngine.PlaySound(SoundID.NPCHit2 with { Volume = 0.7f, Pitch = 0.3f, MaxInstances = 3 }, Projectile.Center);
     }
 
     public override bool PreDraw(ref Color lightColor) {

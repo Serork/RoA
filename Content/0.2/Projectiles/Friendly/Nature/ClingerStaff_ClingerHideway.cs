@@ -20,6 +20,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ID;
+using Terraria.Audio;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -122,6 +123,9 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
 
             MakeStoneDusts();
+
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Stonebreak") { Volume = 0.7f, PitchVariance = 0.1f, Pitch = 0.3f, MaxInstances = 3 }, projectile.Center);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ClawsRoot") { Volume = 0.5f, PitchVariance = 0.1f, Pitch = -0.5f, MaxInstances = 3 }, projectile.Center);
         }
 
         public void MakeStoneDusts(int? dustCount = null) {
@@ -237,6 +241,10 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 center = Projectile.Center;
             Player owner = Projectile.GetOwnerAsPlayer();
             if (hidewayValues.IsClingerSpawning) {
+                if (clingerAITimer == 20) {
+                    SoundEngine.PlaySound(SoundID.Item100, Projectile.Center);
+                    SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SteamBurst") { Volume = 0.7f, Pitch = -0.3f }, Projectile.Center);
+                }
                 clingerAITimer++;
                 _clingerPosition = center;
             }
