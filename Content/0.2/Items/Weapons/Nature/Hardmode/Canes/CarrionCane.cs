@@ -94,7 +94,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                 Vector2 vector3 = corePosition + vector2;
                 Vector2 vector4 = vector.RotatedBy(MathHelper.PiOver2);
                 vector3 += vector4 * num12;
-                int num14 = Dust.NewDust(vector3, 0, 0, ModContent.DustType<Dusts.CarrionCane>(), 0f, 0f, 0, default);
+                int num14 = Dust.NewDust(vector3, 0, 0, !Main.rand.NextBool(3) ? ModContent.DustType<Dusts.CarrionCane>() : DustID.Torch, 0f, 0f, 0, default);
                 Main.dust[num14].position = vector3;
                 Main.dust[num14].noGravity = true;
                 Main.dust[num14].scale = 1f + Main.rand.NextFloatRange(0.5f);
@@ -125,6 +125,8 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                     dustType = (ushort)TileHelper.GetKillTileDust(tileCoords.X, tileCoords.Y, WorldGenHelper.GetTileSafely(tileCoords.X, tileCoords.Y));
                 }
             }
+
+            dustType = Main.rand.NextBool(3) ? (ushort)ModContent.DustType<Dusts.CarrionCane3>() : !Main.rand.NextBool(3) ? dustType : (ushort)DustID.Torch;
 
             if (!Main.rand.NextChance(AttackProgress01 * 0.8f)) {
                 return;
