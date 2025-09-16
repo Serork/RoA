@@ -47,6 +47,8 @@ sealed class Bookworms : ModItem, IRecipeDuplicatorItem {
         Item.value = Item.sellPrice(0, 1, 50, 0);
     }
 
+    public override Vector2? HoldoutOffset() => new Vector2(5f, 0f);
+
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         position = player.Center + velocity.SafeNormalize(Vector2.Zero) * 5f;
     }
