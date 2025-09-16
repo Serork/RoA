@@ -481,7 +481,8 @@ sealed class WreathHandler : ModPlayer {
         VisualEffectOnFull();
 
         if (_hitEffectTimer > 0) {
-            _hitEffectTimer = 0;
+            _hitEffectTimer--;
+            //_hitEffectTimer = 0;
         }
 
         if (StartSlowlyIncreasingUntilFull) {
