@@ -29,6 +29,8 @@ using static RoA.Common.Druid.Forms.BaseFormHandler;
 namespace RoA.Common.Druid.Wreath;
 
 sealed class WreathHandler : ModPlayer {
+    private static ushort SHOWTIMEBEFOREDISAPPEARING => 120;
+
     public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
     public static bool IsWreathCharged(Player player) => GetWreathStats(player).IsFull1;
     public static float GetWreathChargeProgress(Player player) => GetWreathStats(player).ActualProgress4;
@@ -55,9 +57,10 @@ sealed class WreathHandler : ModPlayer {
     private bool _shouldDecrease, _shouldDecrease2;
     private FormInfo _formInfo;
     private bool _shouldSync;
-    private int _hitEffectTimer;
+    private ushort _hitEffectTimer;
     private bool _onFullCreated;
     private bool _useAltSounds = true;
+    private ushort _showForTime;
 
     public bool HasEnougthToJump;
 
@@ -142,7 +145,7 @@ sealed class WreathHandler : ModPlayer {
     public float AddValue => BASEADDVALUE + _addExtraValue;
     public bool IsChangingValue => _currentChangingTime > 0f;
 
-    public bool ShouldDrawItself => !IsEmpty/* || Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet*/ || Player.IsHoldingNatureWeapon() || Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm;
+    public bool ShouldDrawItself { get; private set; }
     public float PulseIntensity { get; private set; }
 
     public bool HasKeepTime => _keepBonusesForTime > 0f;
@@ -435,6 +438,13 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void PostUpdate() {
+        if (!IsEmpty || Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+            _showForTime = SHOWTIMEBEFOREDISAPPEARING;
+        }
+        if (_showForTime > 0) {
+            _showForTime--;
+        }
+        ShouldDrawItself = _showForTime > 0 /* || Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet*/; 
         if (Player.dead && !IsChangingValue && CurrentResource > 0) {
             ForcedHardReset();
         }

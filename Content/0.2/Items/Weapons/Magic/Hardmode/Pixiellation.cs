@@ -58,9 +58,9 @@ sealed class Pixiellation : ModItem, IRecipeDuplicatorItem {
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         float collisionCheckSize = Item.width * 1.4f;
         Vector2 collisionCheckPosition = position + Vector2.Normalize(velocity) * collisionCheckSize;
-        if (!Collision.CanHit(player.Center, 0, 0, collisionCheckPosition, 0, 0)) {
-            return false;
-        }
+        //if (!Collision.CanHit(player.Center, 0, 0, collisionCheckPosition, 0, 0)) {
+        //    return false;
+        //}
 
         Vector2 shootVelocityNormalized = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
         float itemRotation = shootVelocityNormalized.ToRotation();

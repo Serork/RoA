@@ -70,12 +70,14 @@ sealed class Pixie : ModProjectile {
 
         Projectile.manualDirectionChange = true;
 
-        Projectile.penetrate = 3;
+        Projectile.penetrate = 5;
     }
 
     public override bool ShouldUpdatePosition() => true;
 
     public override void AI() {
+        Projectile.tileCollide = Projectile.timeLeft <= TIMELEFT - 30;
+
         int timeLeft = Projectile.timeLeft;
         int appearTime = 2;
         Projectile.Opacity = Utils.GetLerpValue(timeLeft, TIMELEFT, TIMELEFT - appearTime, true) * Utils.GetLerpValue(timeLeft, 0f, appearTime * 2, true);
