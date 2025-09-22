@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.Druid;
 using RoA.Core;
 using RoA.Core.Data;
@@ -24,7 +25,7 @@ sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip 
     }
 
     private static float _counter;
-    private static FallingLeafData[] _fallingLeaves;
+    private static readonly FallingLeafData[] _fallingLeaves = new FallingLeafData[ItemTooltipLeaves.LEAVESCOUNT];
     private static bool _draw;
 
     private static float CounterMax => 1f + DELAY;
@@ -39,14 +40,6 @@ sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip 
         _fallingLeaves[data.Index] = data;
     }
 
-    public override void Load(Mod mod) {
-        _fallingLeaves = new FallingLeafData[ItemTooltipLeaves.LEAVESCOUNT];
-    }
-
-    public override void Unload() {
-        _fallingLeaves = null;
-    }
-
     protected override bool DrawSelf() {
         if (!_draw) {
             return true;
@@ -55,6 +48,10 @@ sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip 
         Helper.AddClamp(ref _counter, -TimeSystem.LogicDeltaTime, 0f, CounterMax);
 
         float maxY = 28f;
+
+        SpriteBatch batch = Main.spriteBatch;
+        SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
+        batch.BeginBlendState(snapshot.blendState, snapshot.samplerState, isUI: true);
 
         foreach (FallingLeafData fallingLeafData in _fallingLeaves) {
             float counter = Math.Clamp(_counter, 0f, 1f);
@@ -69,14 +66,15 @@ sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip 
 
             float velocityAffectedExtraRotation = velocity.X * 0.05f;
 
-            Main.spriteBatch.With(BlendState.AlphaBlend, true, () => {
-                SpriteData spriteInfo = fallingLeafData.SpriteInfo;
-                spriteInfo.VisualPosition += Vector2.UnitY * maxY - velocity + Vector2.UnitY;
-                spriteInfo.Color *= alpha;
-                spriteInfo.Rotation += velocityAffectedExtraRotation;
-                spriteInfo.DrawSelf();
-            }, samplerState: SamplerState.AnisotropicClamp);
+            SpriteData spriteInfo = fallingLeafData.SpriteInfo;
+            spriteInfo.VisualPosition += Vector2.UnitY * maxY - velocity + Vector2.UnitY;
+            spriteInfo.Color *= alpha;
+            spriteInfo.Rotation += velocityAffectedExtraRotation;
+            spriteInfo.DrawSelf();
         }
+
+        batch.End();
+        batch.Begin(snapshot);
 
         return true;
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.InterfaceElements;
 using RoA.Common.UI;
 using RoA.Core;
@@ -42,6 +43,10 @@ sealed class ItemTooltipLeaves : GlobalItem {
                 string text = line.Text;
                 Vector2 size = line.Font.MeasureString(text);
 
+                SpriteBatch batch = Main.spriteBatch;
+                SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
+                batch.BeginBlendState(snapshot.blendState, snapshot.samplerState, isUI: true);
+
                 for (int i = 0; i < leavesCount; i++) {
                     int mid = leavesCount / 2;
                     bool inFirstHalf = i < mid;
@@ -79,10 +84,11 @@ sealed class ItemTooltipLeaves : GlobalItem {
                     data.SpriteInfo = _leavesSpriteData;
                     TooltipFallingLeaves.MatchData(data);
 
-                    Main.spriteBatch.With(BlendState.AlphaBlend, true, () => {
-                        _leavesSpriteData.DrawSelf();
-                    }, samplerState: SamplerState.AnisotropicClamp);
+                    _leavesSpriteData.DrawSelf();
                 }
+
+                batch.End();
+                batch.Begin(snapshot);
             }
 
             if (DamageClassVisualsInItemName.CanDrawClassUIVisuals) {
