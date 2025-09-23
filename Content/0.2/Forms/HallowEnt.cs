@@ -52,4 +52,12 @@ sealed class HallowEnt : BaseForm {
 
         return true;
     }
+
+    protected override void SafeSetMount(Player player, ref bool skipDust) {
+        skipDust = true;
+    }
+
+    protected override void SafeDismountMount(Player player, ref bool skipDust) {
+        skipDust = true;
+    }
 }
