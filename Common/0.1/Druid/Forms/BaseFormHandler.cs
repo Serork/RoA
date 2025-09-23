@@ -296,9 +296,19 @@ sealed class BaseFormHandler : ModPlayer {
 
         On_Player.HorizontalMovement += On_Player_HorizontalMovement;
 
+        On_Player.TrySwitchingLoadout += On_Player_TrySwitchingLoadout;
+
         Hook_ExtraJumpLoader_UpdateHorizontalSpeeds = RoA.Detour(typeof(ExtraJumpLoader).GetMethod(nameof(ExtraJumpLoader.UpdateHorizontalSpeeds), BindingFlags.Public | BindingFlags.Static),
             typeof(BaseFormHandler).GetMethod(nameof(ExtraJumpLoader_UpdateHorizontalSpeeds), BindingFlags.NonPublic | BindingFlags.Static));
         On_Player.UpdateJumpHeight += On_Player_UpdateJumpHeight;
+    }
+
+    private void On_Player_TrySwitchingLoadout(On_Player.orig_TrySwitchingLoadout orig, Player self, int loadoutIndex) {
+        if (self.IsLocal() && self.GetModPlayer<WreathHandler>().StartSlowlyIncreasingUntilFull) {
+            return;
+        }
+
+        orig(self, loadoutIndex);
     }
 
     public override void Unload() => Hook_ExtraJumpLoader_UpdateHorizontalSpeeds = null;
