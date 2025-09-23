@@ -70,7 +70,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
             (int)(drawInfo.Position.Y + (float)drawInfo.drawPlayer.height - 40f)));
         var formHandler = player.GetModPlayer<BaseFormHandler>();
         var currentForm = formHandler.CurrentForm;
-        if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing)) {
+        if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing) {
             playerPosition += currentForm.BaseForm.WreathOffset;
         }
         playerPosition.Y += stats.YAdjustAmountInPixels;

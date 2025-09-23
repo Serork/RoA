@@ -510,7 +510,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (reversedGravity) {
             position.Y += 1f;
         }
-        if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing)) {
+        if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing) {
             position += currentForm.BaseForm.WreathOffset2;
         }
 
