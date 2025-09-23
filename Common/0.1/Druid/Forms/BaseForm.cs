@@ -264,8 +264,7 @@ abstract class BaseForm : ModMount {
     }
 
     public sealed override bool Draw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
-        //if (IsDrawing) 
-        {
+        if (IsDrawing) {
             GetSpriteEffects(drawPlayer, ref spriteEffects);
             DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
@@ -279,7 +278,7 @@ abstract class BaseForm : ModMount {
     protected void UpdateDrawingState() {
         if (!IsDrawing) {
             if (_drawFor == ushort.MaxValue) {
-                _drawFor = 2;
+                _drawFor = 1;
             }
             else {
                 if (_drawFor <= 0) {
