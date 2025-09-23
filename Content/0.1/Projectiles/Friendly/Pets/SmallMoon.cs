@@ -57,17 +57,20 @@ sealed class SmallMoon : ModProjectile {
 
         double deg = (double)Projectile.ai[1] / 2;
         double rad = deg * (Math.PI / 180);
-        double dist = 60;
-        Projectile.position.X = player.Center.X - (int)(Math.Cos(rad) * dist) - player.width / 2;
-        Projectile.position.Y = player.Center.Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + player.gfxOffY;
+        double dist = player.width + player.height;
+        if (Projectile.ai[2] == 0f) {
+            Projectile.ai[2] = (float)dist;
+        }
+        Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], (float)dist, 0.01f);
+        Projectile.Center = player.MountedCenter;
+        Projectile.Center = Utils.Floor(Projectile.Center);
+        Projectile.Center = new Vector2(Projectile.Center.X - (int)(Math.Cos(rad) * Projectile.ai[2]), Projectile.Center.Y - (int)(Math.Sin(rad) * Projectile.ai[2]) + player.gfxOffY);
 
         if (player.name == "has2r") Projectile.ai[1] -= 3f;
         else Projectile.ai[1] += 3f;
 
         ++Projectile.ai[0];
         if (Projectile.ai[0] > 120.0) Projectile.ai[0] = 0.0f;
-
-        Projectile.netUpdate = true;
 
         if (!player.HasBuff(ModContent.BuffType<Buffs.SmallMoon>())) {
             Projectile.Kill();
@@ -125,7 +128,7 @@ sealed class SmallMoon : ModProjectile {
         Rectangle glowframeRect = new Rectangle(0, 0, glowTexture.Width, glowTexture.Height);
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
         for (int k = 0; k < Projectile.oldPos.Length; k++) {
-            Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+            Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin;
             Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
             spriteBatch.Draw(texture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale - k * 0.1f, SpriteEffects.None, 0f);
         }

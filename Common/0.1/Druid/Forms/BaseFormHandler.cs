@@ -9,6 +9,8 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -32,7 +34,7 @@ sealed class BaseFormHandler : ModPlayer {
         public BaseFormBuff MountBuff => BaseForm.MountBuff;
     }
 
-    private PlayerDrawLayer[] _layers;
+    //private PlayerDrawLayer[] _layers;
     private bool _shouldClear;
 
     private static readonly Dictionary<Type, FormInfo> _formsByType = [];
@@ -116,6 +118,14 @@ sealed class BaseFormHandler : ModPlayer {
             return;
         }
 
+        player.position.X += player.width / 2;
+        player.width = Player.defaultWidth;
+        player.position.X -= player.width / 2;
+
+        player.position.Y += player.height;
+        player.height = Player.defaultHeight;
+        player.position.Y -= player.height;
+
         player.GetModPlayer<WreathHandler>().Reset(true, 0.1f);
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
@@ -139,6 +149,15 @@ sealed class BaseFormHandler : ModPlayer {
             player.ClearBuff(formInstance.MountBuff.Type);
             player.GetModPlayer<WreathHandler>().Reset(true);
             player.GetModPlayer<WreathHandler>().OnResetEffects();
+
+            player.position.X += player.width / 2;
+            player.width = Player.defaultWidth;
+            player.position.X -= player.width / 2;
+
+            player.position.Y += player.height; 
+            player.height = Player.defaultHeight;
+            player.position.Y -= player.height;
+
 
             if (player.whoAmI == Main.myPlayer) {
                 SoundEngine.PlaySound(formInstance.BaseForm.ReleaseSound, player.Center);
@@ -232,20 +251,37 @@ sealed class BaseFormHandler : ModPlayer {
             return;
         }
 
-        _layers = PlayerDrawLayerLoader.GetDrawLayers(drawInfo);
+        //_layers = PlayerDrawLayerLoader.GetDrawLayers(drawInfo);
     }
 
     public override void HideDrawLayers(PlayerDrawSet drawInfo) {
-        if (!IsInADruidicForm || _layers == null) {
-            return;
-        }
-
-        foreach (PlayerDrawLayer layer in _layers) {
-            if (layer.FullName.Contains("Terraria") && !layer.FullName.Contains("Mount")) {
+        if (IsInADruidicForm && Player.GetModPlayer<BaseFormHandler>().CurrentForm.BaseForm.IsDrawing) {
+            foreach (var layer in PlayerDrawLayerLoader.Layers.Except(PlayerDrawLayerLoader.Layers.Where(checkLayer => checkLayer.FullName.Contains("mount", StringComparison.CurrentCultureIgnoreCase) || checkLayer.FullName.Contains("wreath", StringComparison.CurrentCultureIgnoreCase)).Where(checkLayer => checkLayer.Visible))) {
                 layer.Hide();
             }
         }
+
+        //if (!IsInADruidicForm || _layers == null) {
+        //    return;
+        //}
+
+        //foreach (PlayerDrawLayer layer in _layers) {
+        //    if (layer.FullName.Contains("Terraria") && !layer.FullName.Contains("Mount")) {
+        //        layer.Hide();
+        //    }
+        //}
     }
+
+    private delegate void ExtraJumpLoader_UpdateHorizontalSpeeds_orig(Player player);
+    private static object Hook_ExtraJumpLoader_UpdateHorizontalSpeeds;
+
+    private readonly struct MovementSpeedInfo(float maxRunSpeed, float accRunSpeed, float runAcceleration) {
+        public readonly float MaxRunSpeed = maxRunSpeed;
+        public readonly float AccRunSpeed = accRunSpeed;
+        public readonly float RunAcceleration = runAcceleration;
+    }
+
+    private static MovementSpeedInfo _playerMovementSpeedInfo;
 
     public override void Load() {
         On_TileObject.DrawPreview += On_TileObject_DrawPreview;
@@ -255,15 +291,111 @@ sealed class BaseFormHandler : ModPlayer {
         On_Player.MakeFloorDust += On_Player_MakeFloorDust;
         On_PlayerHeadDrawRenderTargetContent.DrawTheContent += On_PlayerHeadDrawRenderTargetContent_DrawTheContent;
         On_Player.RotatedRelativePoint += On_Player_RotatedRelativePoint;
+
+        On_Player.ResizeHitbox += On_Player_ResizeHitbox;
+
+        On_Player.HorizontalMovement += On_Player_HorizontalMovement;
+
+        Hook_ExtraJumpLoader_UpdateHorizontalSpeeds = RoA.Detour(typeof(ExtraJumpLoader).GetMethod(nameof(ExtraJumpLoader.UpdateHorizontalSpeeds), BindingFlags.Public | BindingFlags.Static),
+            typeof(BaseFormHandler).GetMethod(nameof(ExtraJumpLoader_UpdateHorizontalSpeeds), BindingFlags.NonPublic | BindingFlags.Static));
+        On_Player.UpdateJumpHeight += On_Player_UpdateJumpHeight;
+    }
+
+    public override void Unload() => Hook_ExtraJumpLoader_UpdateHorizontalSpeeds = null;
+
+    private static void ExtraJumpLoader_UpdateHorizontalSpeeds(ExtraJumpLoader_UpdateHorizontalSpeeds_orig self, Player player) {
+        self(player);
+
+        if (player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed) {
+            _playerMovementSpeedInfo = new MovementSpeedInfo(player.maxRunSpeed, player.accRunSpeed, player.runAcceleration);
+        }
+    }
+
+    private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
+        if (self.GetModPlayer<BaseFormHandler>().UsePlayerSpeed && self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+            BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
+            self.maxRunSpeed = _playerMovementSpeedInfo.MaxRunSpeed * mountData.GetMaxSpeedMultiplier(self);
+            self.accRunSpeed = _playerMovementSpeedInfo.AccRunSpeed * mountData.GetAccRunSpeedMultiplier(self);
+            self.runAcceleration = _playerMovementSpeedInfo.RunAcceleration * mountData.GetRunAccelerationMultiplier(self);
+        }
+        orig(self);
+    }
+
+    private void On_Player_ResizeHitbox(On_Player.orig_ResizeHitbox orig, Player self) {
+        var handler = self.GetModPlayer<BaseFormHandler>();
+        if (handler.IsInADruidicForm) {
+            var activeForm = handler.CurrentForm.BaseForm;
+            self.position.X += self.width / 2;
+            self.width = activeForm.HitboxWidth;
+            self.position.X -= self.width / 2;
+
+            self.position.Y += self.height;
+            self.height = activeForm.HitboxHeight;
+            self.position.Y -= self.height;
+
+            return;
+        }
+
+        orig(self);
+    }
+
+    private void On_Player_UpdateJumpHeight(On_Player.orig_UpdateJumpHeight orig, Player self) {
+        if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+            BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
+            if (mountData != null && !mountData.ShouldApplyUpdateJumpHeightLogic) {
+                bool flag = false;
+                if (flag) {
+                    Player.jumpHeight = self.mount.JumpHeight(self, self.velocity.X);
+                    Player.jumpSpeed = self.mount.JumpSpeed(self, self.velocity.X);
+                }
+                else {
+                    if (self.jumpBoost) {
+                        Player.jumpHeight = 20;
+                        Player.jumpSpeed = 6.51f;
+                    }
+
+                    if (self.empressBrooch)
+                        self.jumpSpeedBoost += 1.8f;
+
+                    if (self.frogLegJumpBoost) {
+                        self.jumpSpeedBoost += 2.4f;
+                        self.extraFall += 15;
+                    }
+
+                    if (self.moonLordLegs) {
+                        self.jumpSpeedBoost += 1.8f;
+                        self.extraFall += 10;
+                        Player.jumpHeight++;
+                    }
+
+                    if (self.wereWolf) {
+                        Player.jumpHeight += 2;
+                        Player.jumpSpeed += 0.2f;
+                    }
+
+                    if (self.portableStoolInfo.IsInUse)
+                        Player.jumpHeight += 5;
+
+                    Player.jumpSpeed += self.jumpSpeedBoost;
+                }
+
+                if (self.sticky) {
+                    Player.jumpHeight /= 10;
+                    Player.jumpSpeed /= 5f;
+                }
+
+                if (self.dazed) {
+                    Player.jumpHeight /= 5;
+                    Player.jumpSpeed /= 2f;
+                }
+                return;
+            }
+        }
+
+        orig(self);
     }
 
     private Vector2 On_Player_RotatedRelativePoint(On_Player.orig_RotatedRelativePoint orig, Player self, Vector2 pos, bool reverseRotation, bool addGfxOffY) {
-        BaseFormHandler handler = self.GetModPlayer<BaseFormHandler>();
-        if (handler.IsInADruidicForm) {
-            Vector2 result = pos;
-            return result;
-        }
-
         return orig(self, pos, reverseRotation, addGfxOffY);
     }
 
@@ -272,16 +404,18 @@ sealed class BaseFormHandler : ModPlayer {
         if (player != null && !player.ShouldNotDraw) {
             BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
             if (handler.IsInADruidicForm) {
-                Texture2D texture = ModContent.Request<Texture2D>(handler.CurrentForm.BaseForm.Texture + "_Head").Value;
-                Vector2 position = new(84f * 0.5f, 84f * 0.5f);
-                position.X -= 6f;
-                position.Y -= 4f;
-                position.Y -= player.HeightMapOffset;
-                if (position.Y == 38) {
-                    position.Y = 48;
+                if (handler.CurrentForm.BaseForm.IsDrawing) {
+                    Texture2D texture = handler.CurrentForm.BaseForm.HeadTexture.Value;
+                    Vector2 position = new(84f * 0.5f, 84f * 0.5f);
+                    position.X -= 6f;
+                    position.Y -= 4f;
+                    position.Y -= player.HeightMapOffset;
+                    if (position.Y == 38) {
+                        position.Y = 48;
+                    }
+                    Vector2 origin = texture.Size() / 2f;
+                    spriteBatch.Draw(texture, position + origin - Vector2.UnitY * player.height / 2f, null, Color.White, 0f, origin, 1f, (SpriteEffects)(player.direction != 1).ToInt(), 0f);
                 }
-                Vector2 origin = texture.Size() / 2f;
-                spriteBatch.Draw(texture, position + origin - Vector2.UnitY * player.height / 2f, null, Color.White, 0f, origin, 1f, (SpriteEffects)(player.direction != 1).ToInt(), 0f);
             }
             else {
                 orig(self, spriteBatch);
@@ -490,7 +624,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_Player_QuickMount(On_Player.orig_QuickMount orig, Player self) {
-        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             return;
         }
 
@@ -498,7 +632,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private Item On_Player_QuickMount_GetItemToUse(On_Player.orig_QuickMount_GetItemToUse orig, Player self) {
-        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
             return null;
         }
 

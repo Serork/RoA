@@ -44,6 +44,13 @@ sealed class VanillaGlowMaskHandler : GlobalItem {
         return -1;
     }
 
+    public static short GetID<T>() where T : ModItem {
+        if (texturePathToGlowMaskID != null && texturePathToGlowMaskID.TryGetValue(ItemLoader.GetItem(ModContent.ItemType<T>()).Texture + "_Head_Glow", out var index)) {
+            return index;
+        }
+        return -1;
+    }
+
     public override void Load() {
         if (Main.dedServ)
             return;

@@ -22,7 +22,7 @@ namespace RoA.Common.GlowMasks;
 [Autoload(Side = ModSide.Client)]
 sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     public interface IDrawArmorGlowMask {
-        void SetDrawSettings(Player player, ref Texture2D texture, ref Color color);
+        void SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo);
     }
 
     // only head layer support for now
@@ -59,7 +59,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                 DrawData item2 = data;
                 Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem!.Texture + "_Body_Glow").Value;
                 Color glowMaskColor = Color.White;
-                (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor);
+                (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawinfo);
                 item2.texture = glowMaskTexture;
                 glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                 item2.color = glowMaskColor;
@@ -237,7 +237,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                         return;
                     }
                     if (armorGlowMaskModItem is IDrawArmorGlowMask armorGlowMask) {
-                        armorGlowMask.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor);
+                        armorGlowMask.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     }
                     DrawData item = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
                     drawInfo.DrawDataCache.Add(item);
@@ -287,7 +287,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem.Texture + "_Legs_Glow").Value;
                     Color glowMaskColor = Color.White;
                     if (armorGlowMaskModItem is IDrawArmorGlowMask armorGlowMask) {
-                        armorGlowMask.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor);
+                        armorGlowMask.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     }
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                     Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(player.width / 2 - player.legFrame.Width / 2, player.height - player.legFrame.Height + 4f) + player.legPosition;
@@ -321,7 +321,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             if (HasBodyGlowMask(player, out ModItem? armorGlowMaskModItem)) {
                 Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem!.Texture + "_Body_Glow").Value;
                 Color glowMaskColor = Color.White;
-                (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor);
+                (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                 glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawInfo.shadow);
                 Rectangle bodyFrame = drawInfo.compTorsoFrame;
                 Vector2 vector = new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.bodyFrame.Width / 2, drawInfo.drawPlayer.bodyFrame.Height / 2);

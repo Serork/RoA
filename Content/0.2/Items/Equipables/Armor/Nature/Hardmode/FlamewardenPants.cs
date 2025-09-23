@@ -6,6 +6,7 @@ using RoA.Common.GlowMasks;
 using RoA.Core.Defaults;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
@@ -27,5 +28,5 @@ sealed class FlamewardenPants : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
 
     }
 
-    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color) => color = Color.White * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
+    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) => color = Color.White * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
 }

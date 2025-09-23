@@ -4,8 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
+using RoA.Core.Graphics.Data;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -35,7 +37,7 @@ sealed class AshwalkerLeggings : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowM
 
     public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.06f;
 
-    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color) {
+    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
         color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5;
     }
 }

@@ -19,10 +19,13 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class FlederForm : BaseForm {
+    public override ushort HitboxWidth => (ushort)(Player.defaultWidth * 1.4f);
+    public override ushort HitboxHeight => (ushort)(Player.defaultHeight * 0.8f);
+
     public override SoundStyle? HurtSound => SoundID.NPCHit27;
 
-    public override Vector2 WreathOffset => new(0f, 7.5f);
-    public override Vector2 WreathOffset2 => new(0f, -10f);
+    public override Vector2 WreathOffset => new(0f, 6f);
+    public override Vector2 WreathOffset2 => new(0f, -2f);
 
     protected override Vector2 GetLightingPos(Player player) => player.Center;
     protected override Color LightingColor => new(79, 124, 211);
@@ -205,19 +208,21 @@ sealed class FlederForm : BaseForm {
         }
     }
 
-    protected override float GetMaxSpeedMultiplier(Player player) => 1f;
-    protected override float GetRunAccelerationMultiplier(Player player) => 1.25f;
+    public override float GetMaxSpeedMultiplier(Player player) => 1f;
+    public override float GetRunAccelerationMultiplier(Player player) => 1.25f;
 
     protected override void SafeSetDefaults() {
         MountData.totalFrames = 8;
         MountData.spawnDust = 59;
-        MountData.heightBoost = -14;
         MountData.fallDamage = 0f;
         MountData.flightTimeMax = 60;
         MountData.fatigueMax = 40;
+
+        MountData.yOffset = -7;
+        MountData.playerHeadOffset = -14;
     }
 
-    protected override void SafeUpdateEffects(Player player) {
+    protected override void SafePostUpdate(Player player) {
         player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed = true;
 
         player.npcTypeNoAggro[ModContent.NPCType<Fleder>()] = true;
@@ -432,7 +437,7 @@ sealed class FlederForm : BaseForm {
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 24; i++) {
-            Vector2 spawnPos = player.Center + new Vector2(30f, 0).RotatedBy(i * Math.PI * 2 / 24f) - new Vector2(-6f, 4f);
+            Vector2 spawnPos = player.Center + new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2 / 24f * player.direction) - new Vector2(-6f, 4f);
             Vector2 direction = (player.Center - spawnPos) * 0.5f;
             int dust = Dust.NewDust(spawnPos, 0, 0, MountData.spawnDust, direction.X, direction.Y);
             Main.dust[dust].velocity *= 0.95f;
@@ -445,7 +450,7 @@ sealed class FlederForm : BaseForm {
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 24; i++) {
-            Vector2 spawnPos = player.Center - new Vector2(30f, 0).RotatedBy(i * Math.PI * 2 / 24f) - new Vector2(-6f, 4f);
+            Vector2 spawnPos = player.Center - new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2 / 24f * player.direction) - new Vector2(-6f, 4f);
             Vector2 direction = (player.Center - spawnPos) * 0.5f;
             int dust = Dust.NewDust(spawnPos, 0, 0, MountData.spawnDust, direction.X, direction.Y);
             Main.dust[dust].velocity *= 0.95f;

@@ -285,3 +285,8 @@ TarDebuff: {
 	// DisplayName: Tar Debuff
 	// Description: Mods.RoA.Buffs.TarDebuff.Description
 }
+
+HallowEnt: {
+	// DisplayName: Hallow Ent
+	// Description: Mods.RoA.Buffs.HallowEnt.Description
+}

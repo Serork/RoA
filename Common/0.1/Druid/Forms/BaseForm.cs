@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
@@ -73,17 +75,8 @@ abstract class BaseForm : ModMount {
             }
         }
     }
-
-    private delegate void ExtraJumpLoader_UpdateHorizontalSpeeds_orig(Player player);
-    private static object Hook_ExtraJumpLoader_UpdateHorizontalSpeeds;
-
-    private readonly struct MovementSpeedInfo(float maxRunSpeed, float accRunSpeed, float runAcceleration) {
-        public readonly float MaxRunSpeed = maxRunSpeed;
-        public readonly float AccRunSpeed = accRunSpeed;
-        public readonly float RunAcceleration = runAcceleration;
-    }
-
-    private static MovementSpeedInfo _playerMovementSpeedInfo;
+    
+    public Asset<Texture2D> HeadTexture { get; private set; }
 
     public BaseFormBuff MountBuff { get; init; }
 
@@ -95,96 +88,21 @@ abstract class BaseForm : ModMount {
     public virtual SoundStyle ApplySound { get; } = SoundID.Item25;
     public virtual SoundStyle ReleaseSound { get; } = SoundID.Item25;
 
+    public virtual ushort HitboxWidth { get; } = Player.defaultWidth;
+    public virtual ushort HitboxHeight { get; } = Player.defaultHeight;
+
     public override void Load() {
         Mod.AddContent(MountBuff);
 
-        On_Player.HorizontalMovement += On_Player_HorizontalMovement;
-        Hook_ExtraJumpLoader_UpdateHorizontalSpeeds = RoA.Detour(typeof(ExtraJumpLoader).GetMethod(nameof(ExtraJumpLoader.UpdateHorizontalSpeeds), BindingFlags.Public | BindingFlags.Static),
-            typeof(BaseForm).GetMethod(nameof(ExtraJumpLoader_UpdateHorizontalSpeeds), BindingFlags.NonPublic | BindingFlags.Static));
-        On_Player.UpdateJumpHeight += On_Player_UpdateJumpHeight;
-    }
-
-    protected virtual bool ShouldApplyUpdateJumpHeightLogic { get; }
-
-    private void On_Player_UpdateJumpHeight(On_Player.orig_UpdateJumpHeight orig, Player self) {
-        if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
-            BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
-            if (mountData != null && !mountData.ShouldApplyUpdateJumpHeightLogic) {
-                bool flag = false;
-                if (flag) {
-                    Player.jumpHeight = self.mount.JumpHeight(self, self.velocity.X);
-                    Player.jumpSpeed = self.mount.JumpSpeed(self, self.velocity.X);
-                }
-                else {
-                    if (self.jumpBoost) {
-                        Player.jumpHeight = 20;
-                        Player.jumpSpeed = 6.51f;
-                    }
-
-                    if (self.empressBrooch)
-                        self.jumpSpeedBoost += 1.8f;
-
-                    if (self.frogLegJumpBoost) {
-                        self.jumpSpeedBoost += 2.4f;
-                        self.extraFall += 15;
-                    }
-
-                    if (self.moonLordLegs) {
-                        self.jumpSpeedBoost += 1.8f;
-                        self.extraFall += 10;
-                        Player.jumpHeight++;
-                    }
-
-                    if (self.wereWolf) {
-                        Player.jumpHeight += 2;
-                        Player.jumpSpeed += 0.2f;
-                    }
-
-                    if (self.portableStoolInfo.IsInUse)
-                        Player.jumpHeight += 5;
-
-                    Player.jumpSpeed += self.jumpSpeedBoost;
-                }
-
-                if (self.sticky) {
-                    Player.jumpHeight /= 10;
-                    Player.jumpSpeed /= 5f;
-                }
-
-                if (self.dazed) {
-                    Player.jumpHeight /= 5;
-                    Player.jumpSpeed /= 2f;
-                }
-                return;
-            }
-        }
-
-        orig(self);
-    }
-
-    public override void Unload() => Hook_ExtraJumpLoader_UpdateHorizontalSpeeds = null;
-
-    private static void ExtraJumpLoader_UpdateHorizontalSpeeds(ExtraJumpLoader_UpdateHorizontalSpeeds_orig self, Player player) {
-        self(player);
-
-        if (player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed) {
-            _playerMovementSpeedInfo = new MovementSpeedInfo(player.maxRunSpeed, player.accRunSpeed, player.runAcceleration);
+        if (!Main.dedServ) {
+            HeadTexture = ModContent.Request<Texture2D>(Texture + "_Head");
         }
     }
+    public virtual bool ShouldApplyUpdateJumpHeightLogic { get; }
 
-    private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
-        if (self.GetModPlayer<BaseFormHandler>().UsePlayerSpeed && self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
-            BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
-            self.maxRunSpeed = _playerMovementSpeedInfo.MaxRunSpeed * mountData.GetMaxSpeedMultiplier(self);
-            self.accRunSpeed = _playerMovementSpeedInfo.AccRunSpeed * mountData.GetAccRunSpeedMultiplier(self);
-            self.runAcceleration = _playerMovementSpeedInfo.RunAcceleration * mountData.GetRunAccelerationMultiplier(self);
-        }
-        orig(self);
-    }
-
-    protected virtual float GetMaxSpeedMultiplier(Player player) => 1f;
-    protected virtual float GetAccRunSpeedMultiplier(Player player) => 1f;
-    protected virtual float GetRunAccelerationMultiplier(Player player) => 1f;
+    public virtual float GetMaxSpeedMultiplier(Player player) => 1f;
+    public virtual float GetAccRunSpeedMultiplier(Player player) => 1f;
+    public virtual float GetRunAccelerationMultiplier(Player player) => 1f;
 
     protected static bool IsInAir(Player player) {
         bool flag = false;
@@ -210,7 +128,7 @@ abstract class BaseForm : ModMount {
 
         SafeSetDefaults();
 
-        MountData.playerYOffsets = Enumerable.Repeat(0, MountData.totalFrames).ToArray();
+        MountData.playerYOffsets = [.. Enumerable.Repeat(0, MountData.totalFrames)];
 
         MountData.frontTextureGlow = ModContent.Request<Texture2D>(Texture + "_Glow");
 
@@ -221,7 +139,7 @@ abstract class BaseForm : ModMount {
     }
 
     protected virtual void SafeSetDefaults() { }
-    protected virtual void SafeUpdateEffects(Player player) { }
+    protected virtual void SafePostUpdate(Player player) { }
     protected virtual bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) => true;
     protected virtual void SafeSetMount(Player player, ref bool skipDust) { }
     protected virtual void SafeDismountMount(Player player, ref bool skipDust) { }
@@ -229,6 +147,9 @@ abstract class BaseForm : ModMount {
     protected virtual Vector2 GetLightingPos(Player player) => Vector2.Zero;
     protected virtual Color LightingColor { get; } = Color.White;
     public virtual SoundStyle? HurtSound { get; } = null;
+
+    private ushort _drawFor = ushort.MaxValue;
+    public bool IsDrawing { get; private set; }
 
     public sealed override void SetMount(Player player, ref bool skipDust) {
         int buffType = MountBuff.Type;
@@ -244,12 +165,15 @@ abstract class BaseForm : ModMount {
         player.GetModPlayer<WreathHandler>().Dusts_ResetStayTime();
 
         SafeDismountMount(player, ref skipDust);
+
+        IsDrawing = false;
+        _drawFor = ushort.MaxValue;
     }
 
     public sealed override void UpdateEffects(Player player) {
         MountData.buff = MountBuff.Type;
 
-        SafeUpdateEffects(player);
+        SafePostUpdate(player);
 
         SpawnRunDusts(player);
 
@@ -334,27 +258,50 @@ abstract class BaseForm : ModMount {
         ref float frameCounter = ref mountedPlayer.mount._frameCounter;
         ref int frame = ref mountedPlayer.mount._frame;
 
+        UpdateDrawingState();
+
         return SafeUpdateFrame(mountedPlayer, ref frameCounter, ref frame);
     }
 
-    public override bool Draw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
-        GetSpriteEffects(drawPlayer, ref spriteEffects);
-        DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
-        item.shader = drawPlayer.cBody;
-        playerDrawData.Add(item);
-        DrawGlowMask(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor, ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
+    public sealed override bool Draw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
+        //if (IsDrawing) 
+        {
+            GetSpriteEffects(drawPlayer, ref spriteEffects);
+            DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
+            item.shader = drawPlayer.cBody;
+            playerDrawData.Add(item);
+            DrawGlowMask(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor, ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
+        }
 
         return false;
+    }
+
+    protected void UpdateDrawingState() {
+        if (!IsDrawing) {
+            if (_drawFor == ushort.MaxValue) {
+                _drawFor = 2;
+            }
+            else {
+                if (_drawFor <= 0) {
+                    IsDrawing = true;
+                }
+                else {
+                    _drawFor--;
+                }
+            }
+        }
     }
 
     protected virtual void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         if (glowTexture != null) {
             float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
-            DrawData item = new(glowTexture, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+            DrawData item = new(glowTexture, drawPosition, frame, GlowColor(drawColor, ((float)(int)drawColor.A / 255f) * value), rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
         }
     }
+
+    protected virtual Color GlowColor(Color drawColor, float progress) => Color.White * progress;
 
     protected virtual void GetSpriteEffects(Player player, ref SpriteEffects spriteEffects) { }
 

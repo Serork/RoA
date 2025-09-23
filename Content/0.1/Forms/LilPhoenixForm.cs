@@ -20,12 +20,15 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class LilPhoenixForm : BaseForm {
+    public override ushort HitboxWidth => Player.defaultWidth;
+    public override ushort HitboxHeight => Player.defaultHeight;
+
     public override SoundStyle? HurtSound => SoundID.NPCHit31;
 
-    protected override bool ShouldApplyUpdateJumpHeightLogic => true;
+    public override bool ShouldApplyUpdateJumpHeightLogic => true;
 
-    public override Vector2 WreathOffset => new(0f, 5.5f);
-    public override Vector2 WreathOffset2 => new(0f, -20f);
+    public override Vector2 WreathOffset => new(0f, 0f);
+    public override Vector2 WreathOffset2 => new(0f, 0f);
 
     protected override Color LightingColor {
         get {
@@ -79,13 +82,12 @@ sealed class LilPhoenixForm : BaseForm {
         }
     }
 
-    protected override float GetMaxSpeedMultiplier(Player player) => 1f;
-    protected override float GetRunAccelerationMultiplier(Player player) => 1.5f;
+    public override float GetMaxSpeedMultiplier(Player player) => 1f;
+    public override float GetRunAccelerationMultiplier(Player player) => 1.5f;
 
     protected override void SafeSetDefaults() {
         MountData.spawnDust = 6;
         MountData.spawnDustNoGravity = true;
-        MountData.heightBoost = -18;
         MountData.fallDamage = 0.1f;
         MountData.flightTimeMax = 0;
         MountData.fatigueMax = 0;
@@ -94,10 +96,12 @@ sealed class LilPhoenixForm : BaseForm {
         MountData.totalFrames = 12;
         MountData.constantJump = false;
         MountData.usesHover = false;
-        MountData.yOffset = -7;
+
+        MountData.yOffset = 2;
+        MountData.playerHeadOffset = -24;
     }
 
-    protected override void SafeUpdateEffects(Player player) {
+    protected override void SafePostUpdate(Player player) {
         player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed = true;
 
         float rotation = player.velocity.X * 0.1f;
@@ -112,12 +116,12 @@ sealed class LilPhoenixForm : BaseForm {
             float length = 9f - player.velocity.Length();
             length *= 0.075f;
             player.fullRotation += (0.4f + Utils.Remap(plr._charge * 2f, 0f, 3.5f, 0f, 0.2f)) * length * player.direction;
-            player.fullRotationOrigin = new Vector2(9f, 5f);
         }
         else {
             player.fullRotation = IsInAir(player) ? 0f : fullRotation;
-            player.fullRotationOrigin = new Vector2(player.width / 2 + 4f * player.direction, player.height / 2);
         }
+
+        player.fullRotationOrigin = player.getRect().Size() / 2f + new Vector2(0f, 3f);
 
         ExtraJumpsHandler(player);
         UltraAttackHandler(player);
@@ -501,7 +505,8 @@ sealed class LilPhoenixForm : BaseForm {
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 32; i++) {
-            int dust = Dust.NewDust(player.position + new Vector2(-12, -20), 40, 55, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
+            Point size = new(40, 55);
+            int dust = Dust.NewDust(player.Center - size.ToVector2() / 2f + new Vector2(0f, 10f), size.X, size.Y, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
             Main.dust[dust].noGravity = true;
             Main.dust[dust].fadeIn = 1f;
             Main.dust[dust].velocity.X *= 0.1f;
@@ -515,7 +520,8 @@ sealed class LilPhoenixForm : BaseForm {
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 56; i++) {
-            int dust = Dust.NewDust(player.position + new Vector2(-12, -30), 40, 55, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
+            Point size = new(40, 55);
+            int dust = Dust.NewDust(player.Center - size.ToVector2() / 2f + new Vector2(0f, -5f), size.X, size.Y, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
             Main.dust[dust].noGravity = true;
             Main.dust[dust].fadeIn = 1f;
             Main.dust[dust].velocity.X *= 0.1f;

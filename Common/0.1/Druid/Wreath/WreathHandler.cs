@@ -839,14 +839,16 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
-        Dust dust = Dust.NewDustPerfect(NormalWreathPosition - new Vector2(0, 23 * Player.gravDir) + Main.rand.NextVector2CircularEdge(26, 20) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(),
-            new Vector2(0f, ((0f - Main.rand.NextFloat()) * 0.3f - 0.4f) * Player.gravDir), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.65f, 0.8f, Main.rand.NextFloat()) * 1.5f);
-        dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
-        dust.alpha = (int)(DrawColorOpacity * PulseIntensity * 255f);
-        dust.noGravity = true;
-        dust.noLight = true;
-        dust.noLightEmittence = true;
-        dust.customData = DrawColorOpacity * PulseIntensity * 2f;
+        if (Main.rand.NextChance(MathUtils.Clamp01(GetWreathChargeProgress_ForArmorGlow(Player)))) {
+            Dust dust = Dust.NewDustPerfect(NormalWreathPosition - new Vector2(0, 23 * GetWreathChargeProgress_ForArmorGlow(Player) * Player.gravDir) + Main.rand.NextVector2CircularEdge(26, 20 * GetWreathChargeProgress_ForArmorGlow(Player)) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(),
+                new Vector2(0f, ((0f - Main.rand.NextFloat()) * 0.3f - 0.4f) * Player.gravDir), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.65f, 0.8f, Main.rand.NextFloat()) * 1.5f);
+            dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
+            dust.alpha = (int)(DrawColorOpacity * PulseIntensity * 255f);
+            dust.noGravity = true;
+            dust.noLight = true;
+            dust.noLightEmittence = true;
+            dust.customData = DrawColorOpacity * PulseIntensity * 2f;
+        }
     }
 
     public void MakeDustsOnHit(float progress = -1f) {

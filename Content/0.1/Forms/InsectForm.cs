@@ -19,12 +19,15 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 abstract class InsectForm : BaseForm {
+    public override ushort HitboxWidth => (ushort)(Player.defaultWidth * 2.2f);
+    public override ushort HitboxHeight => (ushort)(Player.defaultHeight * 0.8f);
+
     private float _maxRotation;
 
     public override SoundStyle? HurtSound => SoundID.NPCHit31;
 
     public override Vector2 WreathOffset => new(0f, 12f);
-    public override Vector2 WreathOffset2 => new(0f, -10f);
+    public override Vector2 WreathOffset2 => new(0f, -6f);
 
     protected virtual float InsectDustScale { get; } = 1f;
     protected virtual ushort InsectProjectileType { get; } = (ushort)ModContent.ProjectileType<CorruptionInsect>();
@@ -53,7 +56,6 @@ abstract class InsectForm : BaseForm {
     }
 
     protected sealed override void SafeSetDefaults() {
-        MountData.heightBoost = -16;
         MountData.fallDamage = 0;
         MountData.runSpeed = 5f;
         MountData.dashSpeed = 5f;
@@ -62,13 +64,17 @@ abstract class InsectForm : BaseForm {
         MountData.totalFrames = 6;
         MountData.yOffset = 2;
 
+        MountData.yOffset = 6;
+        MountData.playerHeadOffset = -12;
+
         SafeSetDefaults2();
     }
 
     protected virtual void SafeSetDefaults2() { }
 
-    protected override void SafeUpdateEffects(Player player) {
+    protected override void SafePostUpdate(Player player) {
         float rotation = player.velocity.X * (IsInAir(player) ? 0.2f : 0.15f);
+        rotation *= 0.5f;
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
         float maxRotation = 0.2f;
         bool? variable = player.GetModPlayer<InsectFormHandler>()._facedRight;
@@ -79,7 +85,7 @@ abstract class InsectForm : BaseForm {
         else {
             _maxRotation = maxRotation;
         }
-        fullRotation = MathHelper.Clamp(fullRotation, -_maxRotation, _maxRotation);
+        //fullRotation = MathHelper.Clamp(fullRotation, -_maxRotation, _maxRotation);
         player.fullRotation = fullRotation;
         if (!IsInAir(player)) {
             player.velocity.X *= 0.925f;
@@ -87,7 +93,7 @@ abstract class InsectForm : BaseForm {
         Player.jumpHeight = 50;
         Player.jumpSpeed = 4f;
         player.velocity.Y = Math.Min(5f, player.velocity.Y);
-        player.fullRotationOrigin = new Vector2(player.width / 2 + 4f * player.direction, player.height / 2 - 10f);
+        player.fullRotationOrigin = new Vector2(player.width / 2f, player.height / 2f);
 
         SpecialAttackHandler(player);
     }
@@ -124,7 +130,7 @@ abstract class InsectForm : BaseForm {
                         int damage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(insectDamage);
                         insectKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(insectKnockback);
                         Vector2 spread = new Vector2(0, Main.rand.Next(-5, -2)).RotatedByRandom(MathHelper.ToRadians(90));
-                        Projectile.NewProjectile(source, new Vector2(player.position.X, player.position.Y + 4), new Vector2(spread.X, spread.Y), InsectProjectileType, damage, insectKnockback, player.whoAmI);
+                        Projectile.NewProjectile(source, player.Center + Main.rand.RandomPointInArea(player.width / 2f, player.height / 2f) / 2f, new Vector2(spread.X, spread.Y), InsectProjectileType, damage, insectKnockback, player.whoAmI);
                     }
                     insectTimer = 30;
                 }
@@ -169,11 +175,11 @@ abstract class InsectForm : BaseForm {
 
             Vector2 playerPos, velocity;
             if (facedRight.Value) {
-                playerPos = new Vector2(player.position.X + 18, player.position.Y + 8);
+                playerPos = new Vector2(player.Center.X + player.width / 2f - 8, player.position.Y + 14);
                 velocity = Helper.VelocityToPoint(playerPos, Main.rand.RandomPointInArea(new Vector2(playerPos.X + 60, playerPos.Y + 30), new Vector2(playerPos.X + 60, playerPos.Y + 30)), 4);
             }
             else {
-                playerPos = new Vector2(player.position.X - 6, player.position.Y + 8);
+                playerPos = new Vector2(player.Center.X - player.width / 2f + 2, player.position.Y + 14);
                 velocity = Helper.VelocityToPoint(playerPos, Main.rand.RandomPointInArea(new Vector2(playerPos.X - 60, playerPos.Y + 30), new Vector2(playerPos.X - 60, playerPos.Y + 30)), 4);
             }
             velocity.Y += player.velocity.Y * 0.4f;
@@ -200,7 +206,7 @@ abstract class InsectForm : BaseForm {
         int maxFrame = 5;
         float flightFrameFrequency = 4f, walkingFrameFrequiency = 20f;
         if (IsInAir(player)) {
-            frameCounter += Math.Abs(player.velocity.Y) * (player.velocity.Y < 0f ? 0.5f : 0.25f);
+            frameCounter += MathF.Max(3f, Math.Abs(player.velocity.Y)) * (player.velocity.Y < 0f ? 0.5f : 0.25f);
             while (frameCounter > flightFrameFrequency) {
                 frameCounter -= flightFrameFrequency;
                 frame++;
@@ -229,7 +235,7 @@ abstract class InsectForm : BaseForm {
 
     protected sealed override void SafeSetMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 16; i++) {
-            Vector2 position = player.Center + new Vector2(0, -6) + new Vector2(30, 0).RotatedBy(i * Math.PI * 2 / 16f) - new Vector2(8f, 4f);
+            Vector2 position = player.Center + new Vector2(0, -6) + new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2 / 16f) - new Vector2(8f, 4f);
             int dust = Dust.NewDust(position, 0, 0, MountData.spawnDust, 0, 0, 0, default(Color), InsectDustScale);
             Main.dust[dust].noGravity = true;
             Main.dust[dust].fadeIn = 1.25f;
@@ -241,7 +247,7 @@ abstract class InsectForm : BaseForm {
 
     protected sealed override void SafeDismountMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 16; i++) {
-            Vector2 position = player.Center + new Vector2(2, -6) + new Vector2(20, 0).RotatedBy(i * Math.PI * 2f / 16f) - new Vector2(0f, -12f);
+            Vector2 position = player.Center + new Vector2(2, -6) + new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2f / 16f) - new Vector2(0f, -12f);
             Vector2 direction = (player.Center - position) * 0.8f;
             int dust = Dust.NewDust(position + direction, 0, 0, MountData.spawnDust, direction.X, direction.Y, 0, default(Color), InsectDustScale * 2f);
             Main.dust[dust].noGravity = true;
