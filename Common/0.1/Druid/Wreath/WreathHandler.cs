@@ -703,8 +703,9 @@ sealed class WreathHandler : ModPlayer {
 
         _stayTime = STAYTIMEMAX;
         ChangeItsValue();
-        _increaseValue = StartSlowlyIncreasingUntilFull ? (ushort)(MaxResource - CurrentResource) :
-            (ushort)(GetIncreaseValue(fine) * Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier);
+        float extra = Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier;
+        _increaseValue = StartSlowlyIncreasingUntilFull ? (ushort)((MaxResource - CurrentResource) * extra) :
+            (ushort)(GetIncreaseValue(fine) * extra);
     }
 
     internal ushort GetIncreaseValue(float fine) => (ushort)Math.Max(2, AddResourceValue() - AddResourceValue() * fine);
