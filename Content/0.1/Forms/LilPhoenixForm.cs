@@ -219,14 +219,14 @@ sealed class LilPhoenixForm : BaseForm {
 
                 int k = 36;
                 for (int i = 0; i < k; i++) {
-                    int x = (int)((double)player.Center.X - 3.0);
-                    int y = (int)((double)player.Center.Y);
+                    int x = (int)((double)player.Center.X - 2.5);
+                    int y = (int)((double)player.Center.Y + 2.0);
                     Vector2 vector3 = (new Vector2((float)player.width / 2f, player.height) * 0.5f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
                     Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
                     int dust = Dust.NewDust(vector3 - player.velocity * 3f + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].noLight = true;
-                    Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat() + player.velocity / 2f;
+                    Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat() + player.velocity * 0.75f * Main.rand.NextFloat(0.5f, 1f);
                 }
             }
         }
@@ -250,8 +250,8 @@ sealed class LilPhoenixForm : BaseForm {
             else if (!plr._prepared) {
                 int k = 36;
                 for (int i = 0; i < k; i++) {
-                    int x = (int)((double)player.Center.X - 3.0);
-                    int y = (int)((double)player.Center.Y);
+                    int x = (int)((double)player.Center.X - 2.5);
+                    int y = (int)((double)player.Center.Y + 2.0);
                     Vector2 vector = (new Vector2((float)player.width / 2f, player.height) * 0.5f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
                     Vector2 vector2 = vector - new Vector2((float)x, (float)y);
                     int dust = Dust.NewDust(vector + vector2 - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);

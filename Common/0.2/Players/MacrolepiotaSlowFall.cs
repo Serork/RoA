@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Weapons.Nature.Hardmode;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility.Extensions;
 
 using Terraria;
@@ -12,7 +13,7 @@ sealed class MacrolepiotaSlowFall : ModPlayer {
     }
 
     private void ApplyMacrolepiotaSlowFalling() {
-        if (!Player.IsHolding<Macrolepiota>()) {
+        if (!Player.HasProjectile<Macrolepiota_HeldProjectile>()) {
             return;
         }
 
