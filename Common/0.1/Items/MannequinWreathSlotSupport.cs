@@ -319,7 +319,7 @@ sealed class MannequinWreathSlotSupport : ILoadable {
 
         public override void Unload() {
             MannequinsInWorld.Clear();
-            MannequinsInWorld = null;
+            MannequinsInWorld = null!;
         }
     }
 

@@ -12,6 +12,8 @@ using RoA.Content.Gores;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
+using SteelSeries.GameSense.DeviceZone;
+
 using System.Collections.Generic;
 
 using Terraria;
@@ -27,6 +29,11 @@ sealed class PrimordialTreeGlow : GlobalTile {
 
     public override void Load() {
         On_TileDrawing.DrawTrees += On_TileDrawing_DrawTrees;
+    }
+
+    public override void Unload() {
+        PrimordialTreeDrawPoints.Clear();
+        PrimordialTreeDrawPoints = null!;
     }
 
     private void On_TileDrawing_DrawTrees(On_TileDrawing.orig_DrawTrees orig, TileDrawing self) {

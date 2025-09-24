@@ -43,6 +43,9 @@ internal class PaintsRenderer : ILoadable {
             }
         }
         Renderers = null;
+
+        Requests.Clear();
+        Requests = null!;
     }
 
     public static void Reset() {

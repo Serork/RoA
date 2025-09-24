@@ -53,8 +53,10 @@ class UILoader : ModSystem {
 
     public override void Unload() {
         UIStates.ForEach(n => n.Unload());
-        UserInterfaces = null;
-        UIStates = null;
+        UserInterfaces.Clear();
+        UserInterfaces = null!;
+        UIStates.Clear();
+        UIStates = null!;
     }
 
     /// <summary>

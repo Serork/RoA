@@ -25,6 +25,9 @@ sealed class CustomTileCollision : IInitializer {
     }
 
     void ILoadable.Unload() {
+        IceBlockPositions.Clear();
+        IceBlockPositions = null!;
+
         TectonicPlatesPositions.Clear();
         TectonicPlatesPositions = null!;
     }

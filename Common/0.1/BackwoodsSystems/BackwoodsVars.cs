@@ -71,8 +71,10 @@ sealed class BackwoodsVars : ModSystem {
     ];
 
     public override void Unload() {
+        BackwoodsTileTypes.Clear();
+        BackwoodsWallTypes.Clear();
         AllTreesWorldPositions.Clear();
-        AllTreesWorldPositions = null;
+        AllTreesWorldPositions = null!;
     }
 
     public override void ClearWorld() => ResetAllFlags();

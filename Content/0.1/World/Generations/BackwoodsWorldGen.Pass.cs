@@ -62,6 +62,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     public static List<ushort> MidInvalidWallTypesToKill;
     public static List<ushort> SkipBiomeInvalidWallTypeToKill;
+    
+    public static void Unload() {
+        MidInvalidWallTypesToKill.Clear();
+        MidInvalidWallTypesToKill = null!;
+        SkipBiomeInvalidWallTypeToKill.Clear();
+        SkipBiomeInvalidWallTypeToKill = null!;
+    }
 
     private HashSet<ushort> _backwoodsPlants = [];
     private HashSet<Point> _biomeSurface = [], _altarTiles = [];

@@ -5,6 +5,7 @@ using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.World.Generations;
 
 using System;
 using System.Collections.Generic;
@@ -303,6 +304,8 @@ static partial class TileHelper {
 
         PostPlayerDrawPoints.Clear();
         PostPlayerDrawPoints = null!;
+
+        BackwoodsBiomePass.Unload();
     }
 
     private static void On_TileDrawing_DrawMultiTileVinesInWind(On_TileDrawing.orig_DrawMultiTileVinesInWind orig, TileDrawing self, Vector2 screenPosition, Vector2 offSet, int topLeftX, int topLeftY, int sizeX, int sizeY) {
