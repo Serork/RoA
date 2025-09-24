@@ -50,7 +50,9 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
     public override void UpdateEquip(Player player) {
         player.setBonus = Language.GetTextValue("ArmorSetBonus.Hallowed");
         player.onHitDodge = true;
+    }
 
+    public override void ArmorSetShadows(Player player) {
         player.armorEffectDrawOutlines = true;
         player.armorEffectDrawShadow = true;
     }
