@@ -304,7 +304,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_Player_TrySwitchingLoadout(On_Player.orig_TrySwitchingLoadout orig, Player self, int loadoutIndex) {
-        if (self.IsLocal() && self.GetModPlayer<WreathHandler>().StartSlowlyIncreasingUntilFull) {
+        if (self.GetModPlayer<WreathHandler>().StartSlowlyIncreasingUntilFull) {
             return;
         }
 
