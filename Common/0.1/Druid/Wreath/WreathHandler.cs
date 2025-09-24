@@ -457,6 +457,8 @@ sealed class WreathHandler : ModPlayer {
         if (Player.dead && !IsChangingValue && CurrentResource > 0) {
             ForcedHardReset();
         }
+
+        YAdjustAmountInPixels = 0;
     }
 
     public CaneBaseProjectile? GetHeldCane() {
@@ -659,8 +661,6 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void PreUpdate() {
-        YAdjustAmountInPixels = 0;
-
         AddLight();
 
         MaxResource = 100;
