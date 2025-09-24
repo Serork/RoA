@@ -128,11 +128,10 @@ sealed class Woodpecker : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.SetSizeValues(28, 22);
+        NPC.SetSizeValues(34, 64);
         NPC.DefaultToEnemy(new NPCExtensions.NPCHitInfo(500, 40, 16, 0f));
 
         NPC.aiStyle = -1;
-        NPC.noGravity = true;
     }
 
     public override void AI() {
@@ -431,7 +430,7 @@ sealed class Woodpecker : ModNPC {
         byte dustCount = 4;
         float baseAngle = MathHelper.PiOver4 / 2f;
         for (float i = -baseAngle; i < baseAngle; i += baseAngle / dustCount) {
-            Vector2 dustPosition = NPC.Top + new Vector2((NPC.width - 2f) * NPC.spriteDirection, -2f);
+            Vector2 dustPosition = NPC.Center + new Vector2((NPC.width - 4f) * NPC.spriteDirection, -NPC.height / 3f);
             ushort dustType = TileHelper.GetTreeDustType(ChoosenTreeTilePosition);
             Vector2 dustVelocity = (dustPosition - NPC.Center).SafeNormalize().RotatedBy(MathHelper.Pi + baseAngle + i * Main.rand.NextFloat(0.5f, 1f) - baseAngle * NPC.direction) - Vector2.UnitY * Main.rand.NextFloat(1f, 3f) * Main.rand.NextFloat(0.5f, 1f);
             dustVelocity *= Main.rand.NextFloat();
@@ -495,6 +494,7 @@ sealed class Woodpecker : ModNPC {
                 goToTreePosition = treePosition.ToWorldCoordinates();
                 int directionToTree = goToTreePosition.GetDirectionTo(NPC.Center);
                 float treeOffsetFactor = isBigTree ? (directionToTree == -1 ? 1.3f : 1.875f) : 1.3f;
+                treeOffsetFactor *= 0.8f;
                 goToTreePosition += -Vector2.UnitX * NPC.width * directionToTree * treeOffsetFactor;
                 Point16 goToTreePositionInTiles = goToTreePosition.ToTileCoordinates16();
                 if (WorldGen.SolidOrSlopedTile(goToTreePositionInTiles.X, goToTreePositionInTiles.Y)) {
