@@ -17,11 +17,13 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Head)]
 [AutoloadGlowMask2("_Head_Glow")]
-sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap, IPostSetupContent {
+sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Dreadheart Helmet");
         //Tooltip.SetDefault("4% increased nature critical strike chance");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        BaseFormHandler.RegisterForm<CorruptionInsectForm>();
     }
 
     protected override void SafeSetDefaults() {
@@ -53,12 +55,8 @@ sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap, IPostSetupCont
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
-        if (player.HasSetBonusFrom<DreadheartCorruptionHelmet>() && direction == Helper.CurrentDoubleTapDirectionForSetBonuses && player.GetModPlayer<BaseFormHandler>().CanTransform) {
+        if (player.CanTransfromIntoDruidForm<DreadheartCorruptionHelmet>(direction)) {
             BaseFormHandler.ToggleForm<CorruptionInsectForm>(player);
         }
-    }
-
-    void IPostSetupContent.PostSetupContent() {
-        BaseFormHandler.RegisterForm<CorruptionInsectForm>();
     }
 }

@@ -13,7 +13,6 @@ using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using System;

@@ -18,12 +18,14 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Head)]
 [AutoloadGlowMask2("_Head_Glow")]
-sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
+sealed class LivingElderwoodCrown : NatureItem, IDoubleTap {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Living Elderwood Crown");
         //Tooltip.SetDefault("6% increased nature potential damage");
         ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        BaseFormHandler.RegisterForm<FlederForm>();
     }
 
     protected override void SafeSetDefaults() {
@@ -55,12 +57,8 @@ sealed class LivingElderwoodCrown : NatureItem, IDoubleTap, IPostSetupContent {
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
-        if (player.HasSetBonusFrom<LivingElderwoodCrown>() && direction == Helper.CurrentDoubleTapDirectionForSetBonuses && player.GetModPlayer<BaseFormHandler>().CanTransform) {
+        if (player.CanTransfromIntoDruidForm<LivingElderwoodCrown>(direction)) {
             BaseFormHandler.ToggleForm<FlederForm>(player);
         }
-    }
-
-    void IPostSetupContent.PostSetupContent() {
-        BaseFormHandler.RegisterForm<FlederForm>();
     }
 }

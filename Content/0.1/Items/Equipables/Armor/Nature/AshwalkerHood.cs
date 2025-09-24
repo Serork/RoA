@@ -7,6 +7,7 @@ using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Buffs;
 using RoA.Content.Forms;
+using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -19,11 +20,13 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Head)]
 [AutoloadGlowMask2("_Head_Glow")]
-sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
+sealed class AshwalkerHood : NatureItem, IDoubleTap {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Ashwalker Hood");
         //Tooltip.SetDefault("6% increased nature potential damage");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        BaseFormHandler.RegisterForm<LilPhoenixForm>();
     }
 
     protected override void SafeSetDefaults() {
@@ -56,13 +59,9 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap, IPostSetupContent {
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
-        if (player.HasSetBonusFrom<AshwalkerHood>() && direction == Helper.CurrentDoubleTapDirectionForSetBonuses && player.GetModPlayer<BaseFormHandler>().CanTransform) {
+        if (player.CanTransfromIntoDruidForm<AshwalkerHood>(direction)) {
             BaseFormHandler.ToggleForm<LilPhoenixForm>(player);
         }
-    }
-
-    void IPostSetupContent.PostSetupContent() {
-        BaseFormHandler.RegisterForm<LilPhoenixForm>();
     }
 }
 

@@ -19,11 +19,13 @@ namespace RoA.Content.Items.Equipables.Armor.Nature;
 
 [AutoloadEquip(EquipType.Head)]
 [AutoloadGlowMask2("_Head_Glow")]
-sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent {
+sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Dreadheart Helmet");
         //Tooltip.SetDefault("4% increased nature critical strike chance");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        BaseFormHandler.RegisterForm<CrimsonInsectForm>();
     }
 
     protected override void SafeSetDefaults() {
@@ -55,13 +57,9 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap, IPostSetupContent
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
-        if (player.HasSetBonusFrom<DreadheartCrimsonHelmet>() && direction == Helper.CurrentDoubleTapDirectionForSetBonuses && player.GetModPlayer<BaseFormHandler>().CanTransform) {
+        if (player.CanTransfromIntoDruidForm<DreadheartCrimsonHelmet>(direction)) {
             BaseFormHandler.ToggleForm<CrimsonInsectForm>(player);
         }
-    }
-
-    void IPostSetupContent.PostSetupContent() {
-        BaseFormHandler.RegisterForm<CrimsonInsectForm>();
     }
 
     internal class DreadheartSetBonusHandler : ModPlayer {
