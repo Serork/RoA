@@ -55,6 +55,11 @@ sealed class AssetInitializer : IPostSetupContent {
         return false;
     }
 
+    void ILoadable.Unload() {
+        TexturesPerType.Clear();
+        TexturesPerType = null!;
+    }
+
     void IPostSetupContent.PostSetupContent() {
         LoadRequestedAssets();
     }

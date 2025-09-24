@@ -24,6 +24,11 @@ sealed class CustomTileCollision : IInitializer {
         On_Collision.TileCollision += On_Collision_TileCollision;
     }
 
+    void ILoadable.Unload() {
+        TectonicPlatesPositions.Clear();
+        TectonicPlatesPositions = null!;
+    }
+
     private static void GenerateTectonicCanePositions() {
         TectonicPlatesPositions.Clear();
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<TectonicCaneProjectile>()) {

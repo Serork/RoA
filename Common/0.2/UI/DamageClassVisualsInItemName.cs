@@ -14,6 +14,7 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -99,6 +100,11 @@ sealed class DamageClassItemsStorage : IInitializer {
 
     void ILoadable.Load(Mod mod) {
         On_Item.SetDefaults_int_bool_ItemVariant += On_Item_SetDefaults_int_bool_ItemVariant;
+    }
+
+    void ILoadable.Unload() {
+        ItemsPerDamageClass!.Clear();
+        ItemsPerDamageClass = null;
     }
 
     private void On_Item_SetDefaults_int_bool_ItemVariant(On_Item.orig_SetDefaults_int_bool_ItemVariant orig, Item self, int Type, bool noMatCheck, Terraria.GameContent.Items.ItemVariant variant) {

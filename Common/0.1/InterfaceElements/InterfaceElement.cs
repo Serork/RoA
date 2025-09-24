@@ -36,6 +36,11 @@ sealed class InterfaceElementsSystem : ModSystem {
         }
     }
 
+    public override void Unload() {
+        InterfaceElements.Clear();
+        InterfaceElements = null!;
+    }
+
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
         foreach (InterfaceElement element in GetElements()) {
             if (!element.ShouldDrawSelfInMenu() && Main.gameMenu) {

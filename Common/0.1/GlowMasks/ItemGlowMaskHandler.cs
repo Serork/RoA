@@ -38,6 +38,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 
     public static Dictionary<int, GlowMaskInfo> GlowMasks { get; private set; } = [];
     internal static Dictionary<int, ModItem> ArmorGlowMasks { get; private set; } = [];
+    internal static Dictionary<int, ushort> ArmorGlowMasksByType { get; private set; } = [];
 
     public override void Load() {
         On_PlayerDrawLayers.DrawCompositeArmorPiece += On_PlayerDrawLayers_DrawCompositeArmorPiece;
@@ -136,12 +137,15 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     }
 
     public static void RegisterArmorGlowMask(int slotId, ModItem modItem) => ArmorGlowMasks.TryAdd(slotId, modItem);
+    public static void RegisterArmorGlowMask(int slotId, ushort type) => ArmorGlowMasksByType.TryAdd(slotId, type);
 
     public override void Unload() {
         GlowMasks.Clear();
-        GlowMasks = null;
+        GlowMasks = null!;
         ArmorGlowMasks.Clear();
-        ArmorGlowMasks = null;
+        ArmorGlowMasks = null!;
+        ArmorGlowMasksByType.Clear();
+        ArmorGlowMasksByType = null!;
     }
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => GlowMasks != null;

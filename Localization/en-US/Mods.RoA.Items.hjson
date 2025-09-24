@@ -2187,3 +2187,8 @@ Test3: {
 	DisplayName: Test3
 	Tooltip: ""
 }
+
+HallowedTopfhelm: {
+	DisplayName: Hallowed Topfhelm
+	Tooltip: ""
+}

@@ -150,19 +150,18 @@ sealed class NaturePrefix(string name,
         void ILoadable.Unload() { }
     }
 
-    public static Dictionary<int, NaturePrefix> NaturePrefixes { get; private set; }
-    public static Dictionary<int, string> NaturePrefixesNames { get; private set; }
+    public static Dictionary<int, NaturePrefix> NaturePrefixes { get; private set; } = [];
+    public static Dictionary<int, string> NaturePrefixesNames { get; private set; } = [];
 
     public override void Load() {
-        NaturePrefixes = [];
-        NaturePrefixesNames = [];
+
     }
 
     public override void Unload() {
-        NaturePrefixes?.Clear();
-        NaturePrefixes = null;
-        NaturePrefixesNames?.Clear();
-        NaturePrefixesNames = null;
+        NaturePrefixes.Clear();
+        NaturePrefixes = null!;
+        NaturePrefixesNames.Clear();
+        NaturePrefixesNames = null!;
     }
 
     public override string Name => _name;

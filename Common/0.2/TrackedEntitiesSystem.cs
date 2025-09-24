@@ -24,6 +24,11 @@ sealed class TrackedEntitiesSystem : ModSystem {
         On_Projectile.NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float += On_Projectile_NewProjectile_IEntitySource_float_float_float_float_int_int_float_int_float_float_float;
     }
 
+    public override void Unload() {
+        TrackedEntitiesByType.Clear();
+        TrackedEntitiesByType = null!;
+    }
+
     public static bool RegisterTrackedEntity<TEntity, TModType>(ModType<TEntity, TModType> modType) where TModType : ModType<TEntity, TModType> {
         Type projectileType = modType.GetType();
         TrackedAttribute? trackedAttribute = projectileType.GetCustomAttribute<TrackedAttribute>();

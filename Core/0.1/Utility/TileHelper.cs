@@ -133,6 +133,7 @@ static partial class TileHelper {
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawTiles_GetLightOverride")]
     public extern static Color TileDrawing_DrawTiles_GetLightOverride(TileDrawing tileDrawing, int j, int i, Tile tileCache, ushort typeCache, short tileFrameX, short tileFrameY, Color tileLight);
 
+
     public static void AddFluentPoint(ModTile modTile, int i, int j) {
         if (_fluentTiles.Contains((modTile, new Point(i, j)))) {
             return;
@@ -287,21 +288,21 @@ static partial class TileHelper {
     }
 
     public static void Unload() {
-        _addSpecialPointSpecialPositions = null;
-        _addSpecialPointSpecialsCount = null;
-        _addVineRootsPositions = null;
+        _addSpecialPointSpecialPositions = null!;
+        _addSpecialPointSpecialsCount = null!;
+        _addVineRootsPositions = null!;
 
         _fluentTiles.Clear();
-        _fluentTiles = null;
+        _fluentTiles = null!;
 
         HangingTile.Clear();
-        HangingTile = null;
+        HangingTile = null!;
 
         SolidTileDrawPoints.Clear();
-        SolidTileDrawPoints = null;
+        SolidTileDrawPoints = null!;
 
         PostPlayerDrawPoints.Clear();
-        PostPlayerDrawPoints = null;
+        PostPlayerDrawPoints = null!;
     }
 
     private static void On_TileDrawing_DrawMultiTileVinesInWind(On_TileDrawing.orig_DrawMultiTileVinesInWind orig, TileDrawing self, Vector2 screenPosition, Vector2 offSet, int topLeftX, int topLeftY, int sizeX, int sizeY) {

@@ -198,7 +198,13 @@ sealed class SerorkMask : ModItem {
             public float ghostDir;
 
             public override void PostUpdate() {
-                if (!Main.gamePaused) {
+                bool flag = false;
+                if (Player.head == EquipLoader.GetEquipSlot(Mod, nameof(SerorkHelmet), EquipType.Head) || Player.head == EquipLoader.GetEquipSlot(Mod, nameof(SerorkMask), EquipType.Head) ||
+                    Player.body == EquipLoader.GetEquipSlot(Mod, nameof(SerorkBreastplate), EquipType.Body) ||
+                    Player.legs == EquipLoader.GetEquipSlot(Mod, nameof(SerorkGreaves), EquipType.Legs)) {
+                    flag = true;
+                }
+                if (!Main.gamePaused && flag) {
                     ghostFade = MathHelper.SmoothStep(ghostFade,
                         (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
                         0.25f);
