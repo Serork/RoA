@@ -294,13 +294,13 @@ abstract class BaseForm : ModMount {
     protected virtual void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         if (glowTexture != null) {
             float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
-            DrawData item = new(glowTexture, drawPosition, frame, GlowColor(drawColor, ((float)(int)drawColor.A / 255f) * value), rotation, drawOrigin, drawScale, spriteEffects);
+            DrawData item = new(glowTexture, drawPosition, frame, GlowColor(drawPlayer, drawColor, ((float)(int)drawColor.A / 255f) * value), rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
         }
     }
 
-    protected virtual Color GlowColor(Color drawColor, float progress) => Color.White * progress;
+    protected virtual Color GlowColor(Player player, Color drawColor, float progress) => Color.White * progress;
 
     protected virtual void GetSpriteEffects(Player player, ref SpriteEffects spriteEffects) { }
 

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
 using RoA.Core.Defaults;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -17,28 +18,19 @@ namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask {
-    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
-        float progress = WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
-        color = Color.Lerp(drawInfo.colorArmorHead, Color.White, 0.25f) * progress;
-        color.A = (byte)(125 * progress);
-    }
+    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) 
+        => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorHead);
 
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
         ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Head, this);
 
-        void setDrawSettings1(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
-            float progress = WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
-            color = Color.Lerp(drawInfo.colorArmorBody, Color.White, 0.25f) * progress;
-            color.A = (byte)(125 * progress);
-        }
-        void setDrawSettings2(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
-            float progress = WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
-            color = Color.Lerp(drawInfo.colorArmorLegs, Color.White, 0.25f) * progress;
-            color.A = (byte)(125 * progress);
-        }
+        void setDrawSettings1(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) 
+            => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorBody);
         ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Body.HallowedPlateMail, EquipType.Body, (ushort)ItemID.HallowedPlateMail, setDrawSettings1);
+        void setDrawSettings2(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo)
+            => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorLegs);
         ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Legs.HallowedGreaves, EquipType.Legs, (ushort)ItemID.HallowedGreaves, setDrawSettings2);
     }
 

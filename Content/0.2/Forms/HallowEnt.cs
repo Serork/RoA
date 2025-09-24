@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Forms;
+using RoA.Common.Druid.Wreath;
 using RoA.Core.Graphics.Data;
 
 using Terraria;
@@ -8,12 +9,7 @@ using Terraria;
 namespace RoA.Content.Forms;
 
 sealed class HallowEnt : BaseForm {
-    protected override Color GlowColor(Color drawColor, float progress) {
-        Color color;
-        color = Color.Lerp(drawColor, Color.White, 0.25f) * progress;
-        color.A = (byte)(125 * progress);
-        return color;
-    }
+    protected override Color GlowColor(Player player, Color drawColor, float progress) => WreathHandler.GetArmorGlowColor1(player, drawColor, progress);
 
     public override ushort HitboxWidth => (ushort)(Player.defaultWidth * 2.5f);
     public override ushort HitboxHeight => (ushort)(Player.defaultHeight * 1.85f);

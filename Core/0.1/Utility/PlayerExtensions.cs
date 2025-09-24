@@ -1,6 +1,9 @@
 ﻿
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Forms;
+using RoA.Common.Players;
+
 using System;
 
 using Terraria;
@@ -40,6 +43,8 @@ static partial class PlayerExtensions {
         bool result = item.IsArmorSet(player.armor[0], player.armor[1], player.armor[2]);
         return result;
     }
+
+    public static bool CanTransfromIntoDruidForm<T>(this Player player, IDoubleTap.TapDirection direction) where T : ModItem => direction == Helper.CurrentDoubleTapDirectionForSetBonuses && HasSetBonusFrom<T>(player) && player.GetModPlayer<BaseFormHandler>().CanTransform;
 
     public static Vector2 PlayerMovementOffset(this Player player) {
         Vector2[] positions = [

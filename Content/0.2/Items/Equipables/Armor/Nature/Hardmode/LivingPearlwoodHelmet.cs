@@ -16,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 
 [AutoloadEquip(EquipType.Head)]
-sealed class LivingPearlwoodHelmet : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask, IDoubleTap, IPostSetupContent {
+sealed class LivingPearlwoodHelmet : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask, IDoubleTap {
     void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
         float progress = WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
         color = Color.Lerp(drawInfo.colorArmorHead, Color.White, 0.25f) * progress;
@@ -27,6 +27,8 @@ sealed class LivingPearlwoodHelmet : NatureItem, ItemGlowMaskHandler.IDrawArmorG
         Item.ResearchUnlockCount = 1;
 
         ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Head, this);
+
+        BaseFormHandler.RegisterForm<HallowEnt>();
     }
 
     protected override void SafeSetDefaults() {
@@ -51,12 +53,8 @@ sealed class LivingPearlwoodHelmet : NatureItem, ItemGlowMaskHandler.IDrawArmorG
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
-        if (player.HasSetBonusFrom<LivingPearlwoodHelmet>() && direction == Helper.CurrentDoubleTapDirectionForSetBonuses && player.GetModPlayer<BaseFormHandler>().CanTransform) {
+        if (player.CanTransfromIntoDruidForm<LivingPearlwoodHelmet>(direction)) {
             BaseFormHandler.ToggleForm<HallowEnt>(player);
         }
-    }
-
-    void IPostSetupContent.PostSetupContent() {
-        BaseFormHandler.RegisterForm<HallowEnt>();
     }
 }
