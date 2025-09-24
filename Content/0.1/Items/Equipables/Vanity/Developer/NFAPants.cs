@@ -16,7 +16,7 @@ sealed class NFAPants : ModItem {
         //Tooltip.SetDefault("'Great for impersonating RoA devs?' Sure!");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.legSlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Legs, this);
     }
 
     public override void SetDefaults() {

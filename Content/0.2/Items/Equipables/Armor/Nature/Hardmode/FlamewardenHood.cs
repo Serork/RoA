@@ -17,7 +17,7 @@ sealed class FlamewardenHood : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMas
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.headSlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Head, this);
     }
 
     protected override void SafeSetDefaults() {

@@ -16,7 +16,7 @@ sealed class BRIPEsRocketBoots : ModItem {
         //Tooltip.SetDefault("'Great for impersonating RoA devs?' Sure!");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.legSlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Legs, this);
         //if (!Main.dedServ) {
         //	LegsGlowmask.RegisterData(Item.legSlot, new DrawLayerData() {
         //		Texture = ModContent.Request<Texture2D>(Texture + "_Legs_Glow")

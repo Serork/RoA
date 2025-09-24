@@ -21,7 +21,7 @@ sealed class AshwalkerLeggings : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowM
         //Tooltip.SetDefault("6% increased nature potential damage");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.legSlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Legs, this);
     }
 
     protected override void SafeSetDefaults() {

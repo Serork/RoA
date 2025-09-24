@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Vanilla;
 
 static class NPCUtils {
-    public static NPCCommonHandler GetCommon(this NPC npc) => npc.GetGlobalNPC<NPCCommonHandler>();
+    public static NPCCommon GetCommon(this NPC npc) => npc.GetGlobalNPC<NPCCommon>();
 
     public static bool CanBeChasedBy(NPC npc, object attacker = null, bool ignoreDontTakeDamage = false, bool checkForImmortals = true) {
         if (npc.active && npc.chaseable && npc.lifeMax > 5 && (!npc.dontTakeDamage || ignoreDontTakeDamage) && !npc.friendly)

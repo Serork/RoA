@@ -19,7 +19,7 @@ sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask 
         //Tooltip.SetDefault("10% increased nature base damage");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.bodySlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Body, this);
     }
 
     protected override void SafeSetDefaults() {

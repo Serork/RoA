@@ -26,7 +26,7 @@ sealed class LivingPearlwoodHelmet : NatureItem, ItemGlowMaskHandler.IDrawArmorG
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.headSlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Head, this);
     }
 
     protected override void SafeSetDefaults() {

@@ -16,7 +16,7 @@ sealed class FlamewardenPants : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.legSlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Legs, this);
     }
 
     protected override void SafeSetDefaults() {

@@ -4,8 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 
-using RoA.Content.Items.Equipables.Vanity.Developer;
-using RoA.Core.Graphics.Data;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
@@ -16,6 +15,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using static RoA.Common.GlowMasks.ItemGlowMaskHandler;
 
 namespace RoA.Common.GlowMasks;
 
@@ -36,9 +37,14 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         public readonly bool ShouldApplyItemAlpha = shouldApplyItemAlpha;
     }
 
+    public readonly record struct ArmorGlowMaskInfo(ModItem ModItem, Asset<Texture2D> GlowMaskTexture);
+
+    public delegate void DrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo);
+    public readonly record struct ArmorGlowMaskByTypeInfo(ushort Type, Asset<Texture2D> GlowMaskTexture, DrawSettings? DrawSettings = null);
+
     public static Dictionary<int, GlowMaskInfo> GlowMasks { get; private set; } = [];
-    internal static Dictionary<int, ModItem> ArmorGlowMasks { get; private set; } = [];
-    internal static Dictionary<int, ushort> ArmorGlowMasksByType { get; private set; } = [];
+    public static Dictionary<int, ArmorGlowMaskInfo> ArmorGlowMasks { get; private set; } = [];
+    public static Dictionary<int, ArmorGlowMaskByTypeInfo> ArmorGlowMasksByType { get; private set; } = [];
 
     public override void Load() {
         On_PlayerDrawLayers.DrawCompositeArmorPiece += On_PlayerDrawLayers_DrawCompositeArmorPiece;
@@ -48,25 +54,47 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         orig(ref drawinfo, context, data);
 
         Player player = drawinfo.drawPlayer;
-        if (!BodyGlowMaskHandler.HasBodyGlowMask(player, out ModItem? armorGlowMaskModItem)) {
+        if (player.body == -1) {
             return;
         }
 
-        switch (context) {
-            case CompositePlayerDrawContext.BackShoulder:
-            case CompositePlayerDrawContext.BackArm:
-            case CompositePlayerDrawContext.FrontArm:
-            case CompositePlayerDrawContext.FrontShoulder: {
-                DrawData item2 = data;
-                Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem!.Texture + "_Body_Glow").Value;
-                Color glowMaskColor = Color.White;
-                (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawinfo);
-                item2.texture = glowMaskTexture;
-                glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
-                item2.color = glowMaskColor;
-                item2.shader = drawinfo.cBody;
-                drawinfo.DrawDataCache.Add(item2);
-                break;
+        if (ArmorGlowMasks.TryGetValue(player.body, out ArmorGlowMaskInfo armorGlowMaskInfo)) {
+            switch (context) {
+                case CompositePlayerDrawContext.BackShoulder:
+                case CompositePlayerDrawContext.BackArm:
+                case CompositePlayerDrawContext.FrontArm:
+                case CompositePlayerDrawContext.FrontShoulder: {
+                        DrawData item2 = data;
+                        var armorGlowMaskModItem = armorGlowMaskInfo.ModItem;
+                        Texture2D glowMaskTexture = armorGlowMaskInfo.GlowMaskTexture.Value;
+                        Color glowMaskColor = Color.White;
+                        (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawinfo);
+                        item2.texture = glowMaskTexture;
+                        glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
+                        item2.color = glowMaskColor;
+                        item2.shader = drawinfo.cBody;
+                        drawinfo.DrawDataCache.Add(item2);
+                        break;
+                    }
+            }
+        }
+        if (ArmorGlowMasksByType.TryGetValue(player.body, out ArmorGlowMaskByTypeInfo armorGlowMaskByTypesInfo)) {
+            switch (context) {
+                case CompositePlayerDrawContext.BackShoulder:
+                case CompositePlayerDrawContext.BackArm:
+                case CompositePlayerDrawContext.FrontArm:
+                case CompositePlayerDrawContext.FrontShoulder: {
+                        DrawData item2 = data;
+                        Texture2D glowMaskTexture = armorGlowMaskByTypesInfo.GlowMaskTexture.Value;
+                        Color glowMaskColor = Color.White;
+                        armorGlowMaskByTypesInfo.DrawSettings?.Invoke(player, ref glowMaskTexture, ref glowMaskColor, ref drawinfo);
+                        item2.texture = glowMaskTexture;
+                        glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
+                        item2.color = glowMaskColor;
+                        item2.shader = drawinfo.cBody;
+                        drawinfo.DrawDataCache.Add(item2);
+                        break;
+                    }
             }
         }
     }
@@ -136,8 +164,50 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         }
     }
 
-    public static void RegisterArmorGlowMask(int slotId, ModItem modItem) => ArmorGlowMasks.TryAdd(slotId, modItem);
-    public static void RegisterArmorGlowMask(int slotId, ushort type) => ArmorGlowMasksByType.TryAdd(slotId, type);
+    public static void RegisterArmorGlowMask(EquipType equipType, ModItem modItem) {
+        string textureTypePath = modItem.Texture;
+        switch (equipType) {
+            case EquipType.Head:
+                textureTypePath += "_Head_Glow";
+                break;
+            case EquipType.Body:
+                textureTypePath += "_Body_Glow";
+                break;
+            case EquipType.Legs:
+                textureTypePath += "_Legs_Glow";
+                break;
+        }
+        int slotId = 0;
+        Item item = modItem.Item;
+        switch (equipType) {
+            case EquipType.Head:
+                slotId = item.headSlot;
+                break;
+            case EquipType.Body:
+                slotId = item.bodySlot;
+                break;
+            case EquipType.Legs:
+                slotId = item.legSlot;
+                break;
+        }
+        ArmorGlowMasks.TryAdd(slotId, new ArmorGlowMaskInfo(modItem, ModContent.Request<Texture2D>(textureTypePath)));
+    }
+
+    public static void RegisterArmorGlowMask(int slotId, EquipType equipType, ushort type, DrawSettings? drawSettings = null) {
+        string textureTypePath = ResourceManager.GlowMaskItemTextures + $"Item_{type}";
+        switch (equipType) {
+            case EquipType.Head:
+                textureTypePath += "_Head_Glow";
+                break;
+            case EquipType.Body:
+                textureTypePath += "_Body_Glow";
+                break;
+            case EquipType.Legs:
+                textureTypePath += "_Legs_Glow";
+                break;
+        }
+        ArmorGlowMasksByType.TryAdd(slotId, new ArmorGlowMaskByTypeInfo(type, ModContent.Request<Texture2D>(textureTypePath), drawSettings));
+    }
 
     public override void Unload() {
         GlowMasks.Clear();
@@ -231,9 +301,9 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         private static void DrawHeadGlowMask(ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
             if (player.head != -1) {
-                if (ArmorGlowMasks.TryGetValue(player.head, out ModItem armorGlowMaskModItem) &&
-                    ModContent.HasAsset(armorGlowMaskModItem.Texture + "_Head_Glow")) {
-                    Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem.Texture + "_Head_Glow").Value;
+                if (ArmorGlowMasks.TryGetValue(player.head, out ArmorGlowMaskInfo armorGlowMaskInfo)) {
+                    var armorGlowMaskModItem = armorGlowMaskInfo.ModItem;
+                    Texture2D glowMaskTexture = armorGlowMaskInfo.GlowMaskTexture.Value;
                     Color glowMaskColor = Color.White;
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                     if (armorGlowMaskModItem is IAdvancedGlowMaskDraw advancedGlowMaskDraw) {
@@ -243,6 +313,14 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     if (armorGlowMaskModItem is IDrawArmorGlowMask armorGlowMask) {
                         armorGlowMask.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     }
+                    DrawData item = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
+                    drawInfo.DrawDataCache.Add(item);
+                }
+                if (ArmorGlowMasksByType.TryGetValue(player.head, out ArmorGlowMaskByTypeInfo armorGlowMaskByTypeInfo)) {
+                    Texture2D glowMaskTexture = armorGlowMaskByTypeInfo.GlowMaskTexture.Value;
+                    Color glowMaskColor = Color.White;
+                    armorGlowMaskByTypeInfo.DrawSettings?.Invoke(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
+                    glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                     DrawData item = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
                     drawInfo.DrawDataCache.Add(item);
                 }
@@ -286,13 +364,25 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
         private static void DrawArmorGlowMask(ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
             if (player.legs != -1) {
-                if (ArmorGlowMasks.TryGetValue(player.legs, out ModItem armorGlowMaskModItem) &&
-                    ModContent.HasAsset(armorGlowMaskModItem.Texture + "_Legs_Glow")) {
-                    Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem.Texture + "_Legs_Glow").Value;
+                if (ArmorGlowMasks.TryGetValue(player.legs, out ArmorGlowMaskInfo armorGlowMaskInfo)) {
+                    var armorGlowMaskModItem = armorGlowMaskInfo.ModItem;
+                    Texture2D glowMaskTexture = armorGlowMaskInfo.GlowMaskTexture.Value;
                     Color glowMaskColor = Color.White;
                     if (armorGlowMaskModItem is IDrawArmorGlowMask armorGlowMask) {
                         armorGlowMask.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     }
+                    glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
+                    Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(player.width / 2 - player.legFrame.Width / 2, player.height - player.legFrame.Height + 4f) + player.legPosition;
+                    Vector2 legsOffset = drawInfo.legsOffset;
+                    DrawData drawData = new(glowMaskTexture, drawPos.Floor() + legsOffset, player.legFrame, glowMaskColor, player.legRotation, legsOffset, 1f, drawInfo.playerEffect, 0) {
+                        shader = drawInfo.cLegs
+                    };
+                    drawInfo.DrawDataCache.Add(drawData);
+                }
+                if (ArmorGlowMasksByType.TryGetValue(player.legs, out ArmorGlowMaskByTypeInfo armorGlowMaskByTypeInfo)) {
+                    Texture2D glowMaskTexture = armorGlowMaskByTypeInfo.GlowMaskTexture.Value;
+                    Color glowMaskColor = Color.White;
+                    armorGlowMaskByTypeInfo.DrawSettings?.Invoke(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                     Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(player.width / 2 - player.legFrame.Width / 2, player.height - player.legFrame.Height + 4f) + player.legPosition;
                     Vector2 legsOffset = drawInfo.legsOffset;
@@ -322,35 +412,45 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 
         private static void DrawArmorGlowMask(ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
-            if (HasBodyGlowMask(player, out ModItem? armorGlowMaskModItem)) {
-                Texture2D glowMaskTexture = ModContent.Request<Texture2D>(armorGlowMaskModItem!.Texture + "_Body_Glow").Value;
-                Color glowMaskColor = Color.White;
-                (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
-                glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawInfo.shadow);
-                Rectangle bodyFrame = drawInfo.compTorsoFrame;
-                Vector2 vector = new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.bodyFrame.Width / 2, drawInfo.drawPlayer.bodyFrame.Height / 2);
-                vector.Y += drawInfo.torsoOffset;
-                Vector2 vector2 = Main.OffsetsPlayerHeadgear[drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height];
-                vector2.Y -= 2f;
-                vector += vector2 * -Utils.ToDirectionInt(drawInfo.playerEffect.HasFlag(SpriteEffects.FlipVertically));
-                Vector2 drawPos = vector;
-                DrawData drawData = new(glowMaskTexture, drawPos.Floor(),
-                    bodyFrame, glowMaskColor, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect, 0) {
-                    shader = drawInfo.cBody
-                };
-                drawInfo.DrawDataCache.Add(drawData);
-            }
-        }
-
-        public static bool HasBodyGlowMask(Player player, out ModItem? armorGlowMaskModItem) {
             if (player.body != -1) {
-                if (ArmorGlowMasks.TryGetValue(player.body, out armorGlowMaskModItem) &&
-                    ModContent.HasAsset(armorGlowMaskModItem.Texture + "_Body_Glow")) {
-                    return true;
+                if (ArmorGlowMasks.TryGetValue(player.body, out ArmorGlowMaskInfo armorGlowMaskInfo)) {
+                    var armorGlowMaskModItem = armorGlowMaskInfo.ModItem;
+                    Texture2D glowMaskTexture = armorGlowMaskInfo.GlowMaskTexture.Value;
+                    Color glowMaskColor = Color.White;
+                    (armorGlowMaskModItem as IDrawArmorGlowMask)?.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
+                    glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawInfo.shadow);
+                    Rectangle bodyFrame = drawInfo.compTorsoFrame;
+                    Vector2 vector = new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.bodyFrame.Width / 2, drawInfo.drawPlayer.bodyFrame.Height / 2);
+                    vector.Y += drawInfo.torsoOffset;
+                    Vector2 vector2 = Main.OffsetsPlayerHeadgear[drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height];
+                    vector2.Y -= 2f;
+                    vector += vector2 * -Utils.ToDirectionInt(drawInfo.playerEffect.HasFlag(SpriteEffects.FlipVertically));
+                    Vector2 drawPos = vector;
+                    DrawData drawData = new(glowMaskTexture, drawPos.Floor(),
+                        bodyFrame, glowMaskColor, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect, 0) {
+                        shader = drawInfo.cBody
+                    };
+                    drawInfo.DrawDataCache.Add(drawData);
+                }
+                if (ArmorGlowMasksByType.TryGetValue(player.body, out ArmorGlowMaskByTypeInfo armorGlowMaskByTypeInfo)) {
+                    Texture2D glowMaskTexture = armorGlowMaskByTypeInfo.GlowMaskTexture.Value;
+                    Color glowMaskColor = Color.White;
+                    armorGlowMaskByTypeInfo.DrawSettings?.Invoke(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
+                    glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawInfo.shadow);
+                    Rectangle bodyFrame = drawInfo.compTorsoFrame;
+                    Vector2 vector = new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.bodyFrame.Width / 2, drawInfo.drawPlayer.bodyFrame.Height / 2);
+                    vector.Y += drawInfo.torsoOffset;
+                    Vector2 vector2 = Main.OffsetsPlayerHeadgear[drawInfo.drawPlayer.bodyFrame.Y / drawInfo.drawPlayer.bodyFrame.Height];
+                    vector2.Y -= 2f;
+                    vector += vector2 * -Utils.ToDirectionInt(drawInfo.playerEffect.HasFlag(SpriteEffects.FlipVertically));
+                    Vector2 drawPos = vector;
+                    DrawData drawData = new(glowMaskTexture, drawPos.Floor(),
+                        bodyFrame, glowMaskColor, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect, 0) {
+                        shader = drawInfo.cBody
+                    };
+                    drawInfo.DrawDataCache.Add(drawData);
                 }
             }
-            armorGlowMaskModItem = null;
-            return false;
         }
     }
 

@@ -16,7 +16,7 @@ sealed class FlamewardenMantle : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowM
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.bodySlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Body, this);
     }
 
     protected override void SafeSetDefaults() {

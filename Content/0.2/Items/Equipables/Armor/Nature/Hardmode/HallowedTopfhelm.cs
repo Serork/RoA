@@ -26,12 +26,25 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.headSlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Head, this);
+
+        void setDrawSettings1(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
+            float progress = WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
+            color = Color.Lerp(drawInfo.colorArmorBody, Color.White, 0.25f) * progress;
+            color.A = (byte)(125 * progress);
+        }
+        void setDrawSettings2(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
+            float progress = WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
+            color = Color.Lerp(drawInfo.colorArmorLegs, Color.White, 0.25f) * progress;
+            color.A = (byte)(125 * progress);
+        }
+        ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Body.HallowedPlateMail, EquipType.Body, (ushort)ItemID.HallowedPlateMail, setDrawSettings1);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Legs.HallowedGreaves, EquipType.Legs, (ushort)ItemID.HallowedGreaves, setDrawSettings2);
     }
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(22, 24);
-        Item.SetShopValues(Terraria.Enums.ItemRarityColor.LightPurple6, Item.sellPrice());
+        Item.SetShopValues(Terraria.Enums.ItemRarityColor.LightPurple6, Item.sellPrice());         
     }
 
     public override void UpdateEquip(Player player) {

@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
 
-sealed class PlayerCommonHandler : ModPlayer {
+sealed class PlayerCommon : ModPlayer {
     private static float MAXFALLSPEEDMODIFIERFORFALL => 0.75f;
 
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;

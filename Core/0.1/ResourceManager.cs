@@ -22,6 +22,8 @@ static class ResourceManager {
     public const string SOUNDSPATH = RESOURCESPATH + "/Sounds";
     public const string EFFECTSPATH = RESOURCESPATH + "/Effects";
 
+    public const string VANILLAPATH = "Terraria/Images/";
+
     public static string Textures => RoA.ModName + $"/{TEXTURESPATH}/";
     public static string EmptyTexture => Textures + "Empty";
     public static string PixelTexture => Textures + "Pixel";
@@ -58,6 +60,7 @@ static class ResourceManager {
     public static string TileTextures => Textures + "Tiles/";
     public static string WaterTextures => TileTextures + "Waters/";
     public static string GlowMaskTileTextures => TileTextures + "Glow/";
+    public static string GlowMaskItemTextures => ItemTextures + "Glow/";
     public static string DecorationTileTextures => TileTextures + "Decorations/";
 
     public static string BiomeTextures => Textures + "Biomes/";

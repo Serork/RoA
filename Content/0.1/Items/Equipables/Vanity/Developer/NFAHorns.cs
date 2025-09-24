@@ -16,7 +16,7 @@ sealed class NFAHorns : ModItem {
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
-        ItemGlowMaskHandler.RegisterArmorGlowMask(Item.headSlot, this);
+        ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Head, this);
     }
 
     public override void SetDefaults() {

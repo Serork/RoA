@@ -109,7 +109,7 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
     public WhipBase_TagDamageDebuff TagDebuff { get; init; } = args.TagDebuff;
 
     public override void Load() {
-        NPCCommonHandler.ModifyHitByProjectileEvent += RoANPC_ModifyHitByProjectileEvent;
+        NPCCommon.ModifyHitByProjectileEvent += RoANPC_ModifyHitByProjectileEvent;
     }
 
     private void RoANPC_ModifyHitByProjectileEvent(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers) {
