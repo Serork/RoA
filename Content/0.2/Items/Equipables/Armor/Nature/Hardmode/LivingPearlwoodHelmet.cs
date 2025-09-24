@@ -36,12 +36,6 @@ sealed class LivingPearlwoodHelmet : NatureItem, ItemGlowMaskHandler.IDrawArmorG
         Item.SetShopValues(Terraria.Enums.ItemRarityColor.LightPurple6, Item.sellPrice());
     }
 
-    public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
-        glowMask = VanillaGlowMaskHandler.GetID<LivingPearlwoodHelmet>();
-        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetModPlayer<WreathHandler>().ActualProgress5;
-        glowMaskColor = glowMaskColor.MultiplyAlpha(1.5f);
-    }
-
     public override void UpdateEquip(Player player) {
 
     }

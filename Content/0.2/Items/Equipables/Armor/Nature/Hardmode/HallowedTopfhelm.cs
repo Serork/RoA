@@ -1,8 +1,11 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
+using RoA.Common.Players;
+using RoA.Content.Forms;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -17,7 +20,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 
 [AutoloadEquip(EquipType.Head)]
-sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask {
+sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask, IDoubleTap {
     void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) 
         => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorHead);
 
@@ -32,6 +35,8 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
         void setDrawSettings2(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo)
             => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorLegs);
         ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Legs.HallowedGreaves, EquipType.Legs, (ushort)ItemID.HallowedGreaves, setDrawSettings2);
+
+        BaseFormHandler.RegisterForm<HallowedGryphon>();
     }
 
     protected override void SafeSetDefaults() {
@@ -39,9 +44,17 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
         Item.SetShopValues(Terraria.Enums.ItemRarityColor.LightPurple6, Item.sellPrice());         
     }
 
-    public override void UpdateEquip(Player player) {
+    public override void UpdateArmorSet(Player player) {
         player.setBonus = Language.GetTextValue("ArmorSetBonus.Hallowed");
         player.onHitDodge = true;
+
+        BaseFormHandler.KeepFormActive(player);
+    }
+
+    void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
+        if (player.CanTransfromIntoDruidForm<HallowedTopfhelm>(direction)) {
+            BaseFormHandler.ToggleForm<HallowedGryphon>(player);
+        }
     }
 
     public override void ArmorSetShadows(Player player) {

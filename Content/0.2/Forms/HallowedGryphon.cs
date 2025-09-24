@@ -2,20 +2,19 @@
 
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
-using RoA.Core.Graphics.Data;
 
 using Terraria;
 
 namespace RoA.Content.Forms;
 
-sealed class HallowEnt : BaseForm {
+sealed class HallowedGryphon : BaseForm {
     protected override Color GlowColor(Player player, Color drawColor, float progress) => WreathHandler.GetArmorGlowColor1(player, drawColor, progress);
 
     public override ushort HitboxWidth => (ushort)(Player.defaultWidth * 2.5f);
-    public override ushort HitboxHeight => (ushort)(Player.defaultHeight * 1.85f);
+    public override ushort HitboxHeight => (ushort)(Player.defaultHeight * 1f);
 
-    public override Vector2 WreathOffset => new(0f, -36f);
-    public override Vector2 WreathOffset2 => new(0f, 18f);
+    public override Vector2 WreathOffset => new(0f, 0f);
+    public override Vector2 WreathOffset2 => new(0f, 0f);
 
     protected override void SafeSetDefaults() {
         MountData.fallDamage = 0.1f;
@@ -27,14 +26,15 @@ sealed class HallowEnt : BaseForm {
         MountData.constantJump = false;
         MountData.usesHover = false;
 
-        MountData.xOffset = -6;
-        MountData.yOffset = 3;
-        MountData.playerHeadOffset = -14;
-
+        //MountData.yOffset = 3;
+        //MountData.playerHeadOffset = -14;
     }
 
     protected override void SafePostUpdate(Player player) {
         player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed = true;
+
+        MountData.yOffset = 2;
+        MountData.playerHeadOffset = -14;
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {

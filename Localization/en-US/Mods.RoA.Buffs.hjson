@@ -290,3 +290,8 @@ HallowEnt: {
 	DisplayName: Hallow Ent
 	Description: Mods.RoA.Buffs.HallowEnt.Description
 }
+
+HallowedGryphon: {
+	DisplayName: Hallowed Gryphon
+	Description: Mods.RoA.Buffs.HallowedGryphon.Description
+}
