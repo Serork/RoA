@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
@@ -112,7 +113,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
 
             Projectile.timeLeft = 2;
 
-            if (!owner.IsHolding<Macrolepiota>()) {
+            if (!owner.IsHolding<Macrolepiota>() || owner.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
                 Projectile.Kill();
             }
             if (!owner.IsAliveAndFree()) {

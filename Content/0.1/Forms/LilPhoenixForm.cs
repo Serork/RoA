@@ -226,7 +226,7 @@ sealed class LilPhoenixForm : BaseForm {
                     int dust = Dust.NewDust(vector3 - player.velocity * 3f + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].noLight = true;
-                    Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat() + player.velocity;
+                    Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat() + player.velocity / 2f;
                 }
             }
         }

@@ -176,7 +176,7 @@ sealed class WreathHandler : ModPlayer {
                 config.WreathPosition == RoAClientConfig.WreathPositions.Health) {
                 flag = true;
             }
-            return flag || IsNormalNearHPBar() ? Player.Center : Utils.Floor(Player.Top - Vector2.UnitY * (Player.gravDir == -1 ? Player.height * -1f - 15f : 15f));
+            return (flag || IsNormalNearHPBar() ? Player.Center : Utils.Floor(Player.Top - Vector2.UnitY * (Player.gravDir == -1 ? Player.height * -1f - 15f : 15f))) + Vector2.UnitY * YAdjustAmountInPixels;
         }
     }
     public float LightingIntensity => (float)Math.Min(Ease.CircOut(ActualProgress3), 0.35f);
