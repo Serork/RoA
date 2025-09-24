@@ -235,7 +235,7 @@ abstract class InsectForm : BaseForm {
 
     protected sealed override void SafeSetMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 16; i++) {
-            Vector2 position = player.Center + new Vector2(0, -6) + new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2 / 16f) - new Vector2(8f, 4f);
+            Vector2 position = player.Center + new Vector2(0, -6) + new Vector2(30, 0).RotatedBy(i * Math.PI * 2 / 16f) - new Vector2(8f, 4f);
             int dust = Dust.NewDust(position, 0, 0, MountData.spawnDust, 0, 0, 0, default(Color), InsectDustScale);
             Main.dust[dust].noGravity = true;
             Main.dust[dust].fadeIn = 1.25f;
@@ -247,7 +247,7 @@ abstract class InsectForm : BaseForm {
 
     protected sealed override void SafeDismountMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 16; i++) {
-            Vector2 position = player.Center + new Vector2(2, -6) + new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2f / 16f) - new Vector2(0f, -12f);
+            Vector2 position = player.Center + new Vector2(2, -6) + new Vector2(20, 0).RotatedBy(i * Math.PI * 2f / 16f) - new Vector2(0f, -12f);
             Vector2 direction = (player.Center - position) * 0.8f;
             int dust = Dust.NewDust(position + direction, 0, 0, MountData.spawnDust, direction.X, direction.Y, 0, default(Color), InsectDustScale * 2f);
             Main.dust[dust].noGravity = true;
