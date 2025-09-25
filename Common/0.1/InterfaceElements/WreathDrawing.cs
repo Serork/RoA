@@ -325,17 +325,14 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         Color color = stats.BaseColor;
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
         //position = position.Floor();
-
         // dark border
         SpriteData wreathSpriteData = _wreathSpriteData;
         wreathSpriteData.Color = color * opacity;
         wreathSpriteData.VisualPosition = position;
         wreathSpriteData.Rotation = rotation;
-        wreathSpriteData.Scale = scale;
         wreathSpriteData.DrawSelf();
         // filling
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed((byte)(0 + stats.IsPhoenixWreath.ToInt()), 1);
-        wreathSpriteData2.Scale = scale;
         int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
         VerticalAppearanceShader.Min = 0.5f;
@@ -361,7 +358,7 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         Rectangle sourceRectangle2 = sourceRectangle;
         sourceRectangle2.X = 0;
         sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;
-        sourceRectangle2.Height = (int)(frameHeight * progress2);
+        sourceRectangle2.Height = (int)(frameHeight * 1f/*progress2*/);
         Vector2 offset = Vector2.Zero;
         float value3 = progress3 * (1f - Utils.GetLerpValue(0.6f, 1f, progress2, true));
         bool flag = true;

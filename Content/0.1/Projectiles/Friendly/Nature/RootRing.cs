@@ -128,7 +128,7 @@ sealed class RootRing : NatureProjectile {
         batch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, SpriteEffects.None, 0);
 
         float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
-        float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
+        float opacity = 1f;
         float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
         _factor = MathHelper.Lerp(_factor, factor, _factor < factor ? 0.1f : 0.025f);
         factor = _factor * Projectile.ai[0];
