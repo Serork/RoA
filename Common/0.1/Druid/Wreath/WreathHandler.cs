@@ -375,10 +375,11 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void Dusts_ResetStayTime() {
-        for (int i = 0; i < 5; i++) {
+        bool flag = IsFull1 && StartSlowlyIncreasingUntilFull;
+        for (int i = 0; i < (flag ? 5 : 3); i++) {
             MakeDusts_ActualMaking();
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < (StartSlowlyIncreasingUntilFull ? 1 : 3); i++) {
             MakeDustsOnHit();
         }
     }
