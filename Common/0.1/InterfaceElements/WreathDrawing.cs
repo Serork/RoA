@@ -270,7 +270,6 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         bool normal2 = config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Normal2;
 
         int width = 44, height = 46;
-        float scale = 1f;
         bool defaultResources = Main.ResourceSetsManager.ActiveSetKeyName == "Default";
         int UI_ScreenAnchorX = Main.screenWidth - (870 + (defaultResources ? 4 : 0));
         playerPosition = new Vector2(500 + UI_ScreenAnchorX + width / 2, 42f + (defaultResources ? Player.statLifeMax <= 100 ? 7f : 17f : 0f) + height / 2);
