@@ -357,8 +357,10 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
         else if (damageClassesTypeOfThisItem.Contains(DamageClass.Melee) || damageClassesTypeOfThisItem.Contains(DamageClass.MeleeNoSpeed)) {
             if (!mainDraw) {
-                _postMainDrawTimer += 1.5f;
-                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(40f, 85f, _postMainDrawTimer, true));
+                float max = 1.35f;
+                _postMainDrawTimer += 0.0275f;
+                _postMainDrawTimer = MathF.Min(max, _postMainDrawTimer);
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, max, _postMainDrawTimer, true));
             }
 
             DrawSwords(batch, damageClassVisualsInfo);
