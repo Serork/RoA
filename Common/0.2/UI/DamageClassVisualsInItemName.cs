@@ -357,10 +357,8 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
         }
         else if (damageClassesTypeOfThisItem.Contains(DamageClass.Melee) || damageClassesTypeOfThisItem.Contains(DamageClass.MeleeNoSpeed)) {
             if (!mainDraw) {
-                float max = 1.35f;
-                _postMainDrawTimer += 0.0275f;
-                _postMainDrawTimer = MathF.Min(max, _postMainDrawTimer);
-                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(0.5f, max, _postMainDrawTimer, true));
+                _postMainDrawTimer += 1.5f;
+                _postMainDrawOpacityValue = Ease.SineIn(Utils.GetLerpValue(40f, 85f, _postMainDrawTimer, true));
             }
 
             DrawSwords(batch, damageClassVisualsInfo);
@@ -738,7 +736,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float progress = Ease.CircOut(OpacityUpdatedInDraws),
                   progress2 = progress * MathF.Pow(_postMainDrawTimer + PostMainDrawOpacity, 0.4f);
             float rotation = MathHelper.TwoPi * 2f * progress2 * -direction;
-            position.X -= direction * (newSizeX / 2f + offsetX / 2f) * progress2;
+            position.X -= direction * (newSizeX / 2f + offsetX / 2f) * 1f/*progress2*/;
             position.Y += height / 1.25f;
             position.Y -= 3f;
             Color color = Color.White * PostMainDrawOpacity;
@@ -750,7 +748,8 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 Rotation = rotation,
                 Origin = origin,
                 ImageFlip = flip,
-                Clip = clip
+                Clip = clip,
+                Scale = Vector2.One * progress2
             }, false);
         }
     }
