@@ -378,7 +378,7 @@ sealed class WreathHandler : ModPlayer {
         for (int i = 0; i < 5; i++) {
             MakeDusts_ActualMaking();
         }
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) {
             MakeDustsOnHit();
         }
     }
@@ -517,7 +517,7 @@ sealed class WreathHandler : ModPlayer {
                 Reset();
             }
             float progress = Ease.QuartIn(Progress);
-            if (((float)Main.rand.Next(400) < Progress * 200f || Main.rand.Next(40) == 0)) {
+            if (((float)Main.rand.Next(425) < Progress * 200f || Main.rand.Next(40) == 0)) {
                 int num8 = Dust.NewDust(Player.position, Player.width, Player.height, GetDustType(), 0f, 0f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
                 Main.dust[num8].noGravity = true;
                 Main.dust[num8].velocity *= 0.75f;
