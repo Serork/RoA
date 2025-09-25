@@ -46,7 +46,7 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap {
 
     public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
         glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
-        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetModPlayer<WreathHandler>().ActualProgress5;
+        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetModPlayer<WreathHandler>().ActualProgress5 * 0.85f;
     }
 
     public override void UpdateArmorSet(Player player) {

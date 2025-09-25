@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Druid.Forms;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
@@ -20,6 +22,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class LilPhoenixForm : BaseForm {
+    private static Asset<Texture2D>? _glowMask2;
+
     public override ushort HitboxWidth => Player.defaultWidth;
     public override ushort HitboxHeight => Player.defaultHeight;
 
@@ -99,6 +103,10 @@ sealed class LilPhoenixForm : BaseForm {
 
         MountData.yOffset = 2;
         MountData.playerHeadOffset = -24;
+
+        if (!Main.dedServ) {
+            _glowMask2 = ModContent.Request<Texture2D>(Texture + "_Glow2");
+        }
     }
 
     protected override void SafePostUpdate(Player player) {
@@ -497,7 +505,7 @@ sealed class LilPhoenixForm : BaseForm {
         }
         if (glowTexture != null) {
             float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
-            DrawData item = new(ModContent.Request<Texture2D>(Texture + "_Glow2").Value, drawPosition, frame, Color.White * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+            DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.85f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
         }

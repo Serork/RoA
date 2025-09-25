@@ -38,6 +38,6 @@ sealed class AshwalkerLeggings : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowM
     public override void UpdateEquip(Player player) => player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.06f;
 
     void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
-        color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5;
+        color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5 * 0.85f;
     }
 }

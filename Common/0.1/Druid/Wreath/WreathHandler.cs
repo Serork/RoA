@@ -31,12 +31,12 @@ namespace RoA.Common.Druid.Wreath;
 sealed class WreathHandler : ModPlayer {
     private static ushort SHOWTIMEBEFOREDISAPPEARING => 120;
 
-    public static Color GetArmorGlowColor1(Player player, Color baseColor, float progress = -1f) {
+    public static Color GetArmorGlowColor1(Player player, Color baseColor, float progress = -1f, byte a = 255) {
         if (progress < 0f || progress > 1f) {
             progress = GetWreathChargeProgress_ForArmorGlow(player);
         }
         Color color = Color.Lerp(baseColor, Color.White, 0.25f) * progress;
-        color.A = (byte)(125 * progress);
+        color.A = (byte)((a != 255 ? a : 125) * progress);
         return color;
     }
 
