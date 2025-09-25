@@ -375,7 +375,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void Dusts_ResetStayTime() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             MakeDusts_ActualMaking();
         }
         for (int i = 0; i < 5; i++) {
@@ -854,7 +854,7 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (Main.rand.NextChance(MathUtils.Clamp01(GetWreathChargeProgress_ForArmorGlow(Player)))) {
-            Dust dust = Dust.NewDustPerfect(NormalWreathPosition - new Vector2(0, (IsNotNormal() ? (IsNotNormalWithStat() ? 34 : 40) : 23) * GetWreathChargeProgress_ForArmorGlow(Player) * Player.gravDir) + Main.rand.NextVector2CircularEdge(26, 20 * GetWreathChargeProgress_ForArmorGlow(Player)) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(),
+            Dust dust = Dust.NewDustPerfect(NormalWreathPosition - new Vector2(0, (IsNotNormal() ? (IsNotNormalWithStat() ? 34 : 40) : 20) * GetWreathChargeProgress_ForArmorGlow(Player) * Player.gravDir) + Main.rand.NextVector2CircularEdge(26, 20 * GetWreathChargeProgress_ForArmorGlow(Player)) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(),
                 new Vector2(0f, ((0f - Main.rand.NextFloat()) * 0.3f - 0.4f) * Player.gravDir), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.65f, 0.8f, Main.rand.NextFloat()) * 1.5f);
             dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
             dust.alpha = (int)(DrawColorOpacity * PulseIntensity * 255f);
@@ -895,7 +895,7 @@ sealed class WreathHandler : ModPlayer {
             int count = Math.Min((int)(15 * progress), 10);
             for (int i = 0; i < count; i++) {
                 if (Main.rand.NextChance(0.3)) {
-                    Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, (IsNotNormal() ? (IsNotNormalWithStat() ? 34 : 40) : 23) * Player.gravDir), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
+                    Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, (IsNotNormal() ? (IsNotNormalWithStat() ? 34 : 40) : 20) * Player.gravDir), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
                     if (Player.gravDir == -1f) {
                         dust.position.Y -= 15f;
                     }
