@@ -412,7 +412,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
                     if (drawableLines[k].Mod == "Terraria" && drawableLines[k].Name == "ItemName") {
                         /*
                         if (rare == -13)
-                            black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(masterColor * 200f * num4), 0, a);
+                            black = new Microsoft.Xna.Framework.DrawColor((byte)(255f * num4), (byte)(masterColor * 200f * num4), 0, a);
                         */
 
                         if (rare == -11)
@@ -489,7 +489,7 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
                     /*
                     ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, array[k], new Vector2(X, Y + num16), black, 0f, Vector2.Zero, Vector2.One);
                     */
-                    //drawableLines[k].Color = black;
+                    //drawableLines[k].DrawColor = black;
                     Color realLineColor = black;
 
                     if (overrideColor[k].HasValue) {
@@ -936,7 +936,7 @@ sealed class DamageTooltipOptionConfigElement2 : ConfigElement {
                 if (drawableLines[k].Mod == "Terraria" && drawableLines[k].Name == "ItemName") {
                     /*
 					if (rare == -13)
-						black = new Microsoft.Xna.Framework.Color((byte)(255f * num4), (byte)(masterColor * 200f * num4), 0, a);
+						black = new Microsoft.Xna.Framework.DrawColor((byte)(255f * num4), (byte)(masterColor * 200f * num4), 0, a);
 					*/
 
                     if (rare == -11)
@@ -1013,7 +1013,7 @@ sealed class DamageTooltipOptionConfigElement2 : ConfigElement {
                 /*
 				ChatManager.DrawColorCodedStringWithShadow(spriteBatch, FontAssets.MouseText.Value, array[k], new Vector2(X, Y + num16), black, 0f, Vector2.Zero, Vector2.One);
 				*/
-                //drawableLines[k].Color = black;
+                //drawableLines[k].DrawColor = black;
                 Color realLineColor = black;
 
                 if (overrideColor[k].HasValue) {

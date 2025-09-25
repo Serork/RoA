@@ -38,7 +38,7 @@ sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
         //protected override bool ShouldStopUpdatingRotationAndDirection() => false;
 
         protected override void SafestOnSpawn(IEntitySource source) {
-            //Color[] colors = [new Color(255, 0, 0), new Color(0, 255, 0), new Color(255, 255, 0)];
+            //DrawColor[] colors = [new DrawColor(255, 0, 0), new DrawColor(0, 255, 0), new DrawColor(255, 255, 0)];
             //_color = Main.rand.NextFromList(colors);
         }
 

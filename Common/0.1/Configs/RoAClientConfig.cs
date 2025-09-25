@@ -11,6 +11,8 @@ sealed class RoAClientConfig : ModConfig {
     public static RoAClientConfig Instance => ModContent.GetInstance<RoAClientConfig>();
     public static bool IsFancy => Instance.WreathDrawingMode == WreathDrawingModes.Fancy || Instance.WreathDrawingMode == WreathDrawingModes.Fancy2;
     public static bool IsBars => Instance.WreathDrawingMode == WreathDrawingModes.Bars || Instance.WreathDrawingMode == WreathDrawingModes.Bars2;
+    public static bool IsFancy2 => Instance.WreathDrawingMode == WreathDrawingModes.Fancy2;
+    public static bool IsBars2 => Instance.WreathDrawingMode == WreathDrawingModes.Bars2;
 
     public enum HighlightModes {
         Normal,

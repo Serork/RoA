@@ -46,7 +46,7 @@ sealed class BrightstonePlayer : ModPlayer {
             _oldPositions[num2] = _oldPositions[num2 - 1];
         }
         _oldPositions[0] = Player.Center;
-        //Lighting.AddLight(Player.Center, new Color(238, 225, 111).ToVector3());
+        //Lighting.AddLight(Player.Center, new DrawColor(238, 225, 111).ToVector3());
         Lighting.AddLight(Player.Center, new Color(238, 225, 111).ToVector3() * 0.7f);
         if (Player.velocity.Length() >= 1f && (Player.controlLeft || Player.controlRight || Player.controlJump || Player.velocity.Y >= 1f) && !Player.rocketFrame) {
             Vector2 pos = _oldPositions[1] + Player.velocity;

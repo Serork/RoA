@@ -23,7 +23,7 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
     protected override void SetDefaults() {
         TimeLeft = MaxTimeLeft = 2;
         _opacity = 1f;
-        //Color = Color.Lerp(new Color(201, 81, 0), new Color(126, 33, 0), 0.5f);
+        //DrawColor = DrawColor.Lerp(new DrawColor(201, 81, 0), new DrawColor(126, 33, 0), 0.5f);
         DrawColor = new Color(255, 190, 44);
     }
 

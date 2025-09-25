@@ -33,45 +33,85 @@ sealed class ShaderLoader : ModSystem {
 
         public static float WaveFactor {
             get => _waveFactor;
-            set => WavyEffect?.Parameters["waveFactor"].SetValue(_waveFactor = value);
+            set => Effect?.Parameters["waveFactor"].SetValue(_waveFactor = value);
         }
 
         public static float StrengthX {
             get => _strengthX;
-            set => WavyEffect?.Parameters["strengthX"].SetValue(_strengthX = value);
+            set => Effect?.Parameters["strengthX"].SetValue(_strengthX = value);
         }
 
         public static float StrengthY {
             get => _strengthY;
-            set => WavyEffect?.Parameters["strengthY"].SetValue(_strengthY = value);
+            set => Effect?.Parameters["strengthY"].SetValue(_strengthY = value);
         }
 
         public static float TimeFactor {
             get => _timeFactor;
-            set => WavyEffect?.Parameters["timeFactor"].SetValue(_timeFactor = value);
+            set => Effect?.Parameters["timeFactor"].SetValue(_timeFactor = value);
         }
 
         public static float YFactor {
             get => _yFactor;
-            set => WavyEffect?.Parameters["yFactor"].SetValue(_yFactor = value);
+            set => Effect?.Parameters["yFactor"].SetValue(_yFactor = value);
         }
 
         public static Color DrawColor {
             get => _drawColor;
-            set => WavyEffect?.Parameters["drawColor"].SetValue((_drawColor = value).ToVector4());
+            set => Effect?.Parameters["drawColor"].SetValue((_drawColor = value).ToVector4());
         }
 
-        public static Effect? WavyEffect => _loadedShaders["Wavy"].Value;
+        public static Effect? Effect => _loadedShaders["Wavy"].Value;
 
         public static void Apply(SpriteBatch batch, Action draw) {
             SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
             batch.End();
             batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, snapshot.samplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
-            WavyEffect?.CurrentTechnique.Passes[0].Apply();
+            Effect?.CurrentTechnique.Passes[0].Apply();
             draw();
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(in snapshot);
         }
+    }
+
+    public static class VerticalAppearanceShader {
+        private static float _progress;
+        private static float _size, _size2;
+        private static float _min = 0f;
+        private static float _max = 1f;
+        private static Color _drawColor;
+
+        public static float Progress {
+            get => _progress;
+            set => Effect?.Parameters["progress"].SetValue(_progress = value);
+        }
+
+        public static float Size {
+            get => _size;
+            set => Effect?.Parameters["size"].SetValue(_size = value);
+        }
+
+        public static float Size2 {
+            get => _size2;
+            set => Effect?.Parameters["size2"].SetValue(_size2 = value);
+        }
+
+        public static float Min {
+            get => _min;
+            set => Effect?.Parameters["min"].SetValue(_min = value);
+        }
+
+        public static float Max {
+            get => _max;
+            set => Effect?.Parameters["max"].SetValue(_max = value);
+        }
+
+        public static Color DrawColor {
+            get => _drawColor;
+            set => Effect?.Parameters["drawColor"].SetValue((_drawColor = value).ToVector4());
+        }
+
+        public static Effect? Effect => _loadedShaders["VerticalAppearance"].Value;
     }
 
     private static IDictionary<string, Asset<Effect>> _loadedShaders = new Dictionary<string, Asset<Effect>>();

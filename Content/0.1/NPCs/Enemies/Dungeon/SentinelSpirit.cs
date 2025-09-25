@@ -77,7 +77,7 @@ public class SentinelSpirit : ModNPC {
         SoundEngine.PlaySound(SoundID.NPCDeath6, NPC.Center);
         //if (NPC.life <= 0) {
         //    for (int k = 0; k < 20; k++) {
-        //        int _dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Clentaminator_Green, 2.5f * hit.HitDirection, -2.5f, 0, default(Color), 1.2f);
+        //        int _dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Clentaminator_Green, 2.5f * hit.HitDirection, -2.5f, 0, default(DrawColor), 1.2f);
         //        Main.dust[_dust].noGravity = true;
         //    }
         //}

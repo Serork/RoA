@@ -57,7 +57,7 @@ sealed class BloodshedAxeEnergy : ModProjectile {
         }
         if (_canHeal) {
             /*for (int i = 0; i < 16; i++) {
-				int dust = Dust.NewDust(player.Center, 0, 0, DustID.RainbowMk2, 0f, 0f, 0, new Color(50, 20, 20, 0), 3f - i * 0.2f);
+				int dust = Dust.NewDust(player.Center, 0, 0, DustID.RainbowMk2, 0f, 0f, 0, new DrawColor(50, 20, 20, 0), 3f - i * 0.2f);
 				Main.dust[dust].velocity = player.Center - Main.dust[dust].position;
 				Main.dust[dust].velocity.Normalize();
 				Main.dust[dust].velocity *= i;

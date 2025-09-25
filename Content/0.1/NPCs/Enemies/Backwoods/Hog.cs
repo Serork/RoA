@@ -422,7 +422,7 @@ sealed class Hog : RoANPC {
     //			Gore.NewGore(NPC.GetSource_Death(), NPC.NPC.position, NPC.velocity, ModContent.Find<ModGore>(nameof(RiseofAges) + "/VilestDruidGore" + (i + 1).ToString()).Type, 1f);
     //		}
     //		for (int i = 0; i < 20; i++) {
-    //			Dust.NewDust(NPC.NPC.position, NPC.width, NPC.height, DustID.Blood, 2.5f * hitNPC.direction, -2.5f, 0, default(Color), 0.7f);
+    //			Dust.NewDust(NPC.NPC.position, NPC.width, NPC.height, DustID.Blood, 2.5f * hitNPC.direction, -2.5f, 0, default(DrawColor), 0.7f);
     //		}*/
     //	}
     //	else {

@@ -17,7 +17,7 @@ sealed class BRIPEsHeart : ModItem {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
         //if (!Main.dedServ)
-        //	BodyGlowmask.RegisterData(Item.bodySlot, () => new Color(255, 255, 255, 0) * 0.8f * 0.75f);
+        //	BodyGlowmask.RegisterData(Item.bodySlot, () => new DrawColor(255, 255, 255, 0) * 0.8f * 0.75f);
 
         ItemGlowMaskHandler.BodyGlowMaskHandler2.RegisterData(Item.bodySlot, () => Color.White);
     }

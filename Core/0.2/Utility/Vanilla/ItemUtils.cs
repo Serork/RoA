@@ -52,7 +52,7 @@ static class ItemUtils {
         ItemSlot.GetItemLight(ref drawinfo.itemColor, heldItem);
         DrawData item;
 
-        //Color itemColor = heldItem.GetAlpha(drawinfo.itemColor);
+        //DrawColor itemColor = heldItem.GetAlpha(drawinfo.itemColor);
         Color itemColor = drawinfo.itemColor;
 
         if (heldItem.type == ItemID.Hammush) {

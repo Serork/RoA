@@ -88,7 +88,7 @@ sealed class TarDebuff : ModBuff {
                     position3.X -= 2f;
                     position3.Y -= 2f;
                     if (Main.rand.Next(4) == 0) {
-                        //Color newColor2 = new Color(88 / 255f + 0.1f * Main.rand.NextFloat(), 74 / 255f + 0.1f * Main.rand.NextFloat(), 91 / 255f + 0.1f * Main.rand.NextFloat());
+                        //DrawColor newColor2 = new DrawColor(88 / 255f + 0.1f * Main.rand.NextFloat(), 74 / 255f + 0.1f * Main.rand.NextFloat(), 91 / 255f + 0.1f * Main.rand.NextFloat());
                         //newColor2.A = (byte)(newColor2.A * 0.85f);
                         Dust dust11 = Dust.NewDustDirect(position3, drawPlayer.width + 4, drawPlayer.height + 2, tarDustType, 0f, 0f, alpha2, default, 1f);
                         if (Main.rand.Next(2) == 0)
@@ -105,9 +105,9 @@ sealed class TarDebuff : ModBuff {
                     }
 
                     //if (Main.rand.Next(30) == 0) {
-                    //    Color color2 = Main.hslToRgb(88 / 255f, 74 / 255f, 91 / 255f);
+                    //    DrawColor color2 = Main.hslToRgb(88 / 255f, 74 / 255f, 91 / 255f);
                     //    color2.A = (byte)(color2.A * 0.75f);
-                    //    Dust dust12 = Dust.NewDustDirect(position3, drawPlayer.width + 4, drawPlayer.height + 2, DustID.TintableDustLighted, 0f, 0f, 254, new Color(88, 74, 91, 0), 0.45f);
+                    //    Dust dust12 = Dust.NewDustDirect(position3, drawPlayer.width + 4, drawPlayer.height + 2, DustID.TintableDustLighted, 0f, 0f, 254, new DrawColor(88, 74, 91, 0), 0.45f);
                     //    dust12.noLight = true;
                     //    dust12.velocity.X *= 0f;
                     //    dust12.velocity *= 0.03f;

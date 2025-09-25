@@ -123,7 +123,7 @@ sealed class Sentinel : ModNPC {
         //    }
         //}
         //for (int k = 0; k < 20; k++) {
-        //    int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Clentaminator_Green, 2.5f * hitDirection, -2.5f, 0, default(Color), 1);
+        //    int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Clentaminator_Green, 2.5f * hitDirection, -2.5f, 0, default(DrawColor), 1);
         //    Main.dust[dust].noGravity = true;
         //}
     }

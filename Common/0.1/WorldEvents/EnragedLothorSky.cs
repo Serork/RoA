@@ -239,7 +239,7 @@ sealed class EnragedLothorSky : CustomSky {
             _shouldSunDraw = true;
 
             //if (_shouldSunDraw && Main.dayTime) {
-            //    DrawSunAndMoon(_sceneArea, Color.Red * _intensity2, Color.Red * _intensity2, 0.95f, 0.);
+            //    DrawSunAndMoon(_sceneArea, DrawColor.Red * _intensity2, DrawColor.Red * _intensity2, 0.95f, 0.);
             //}
         }
     }

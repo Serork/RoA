@@ -35,7 +35,7 @@ sealed class HunterProjectile1 : ModProjectile {
     }
 
     public override void AI() {
-        //Lighting.AddLight(Projectile.Center, Color.White.ToVector3() * 0.5f);
+        //Lighting.AddLight(Projectile.Center, DrawColor.White.ToVector3() * 0.5f);
 
         if (Projectile.localAI[0] == 0f) {
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "HunterShot"), Projectile.Center);

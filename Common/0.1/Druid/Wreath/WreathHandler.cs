@@ -399,11 +399,15 @@ sealed class WreathHandler : ModPlayer {
         return flag5;
     }
 
+    private bool IsNotNormal() => IsNormalNearHPBar() || RoAClientConfig.IsBars || RoAClientConfig.IsFancy;
+
+    private bool IsNotNormalWithStat() => IsNormalNearHPBar() || RoAClientConfig.IsBars2 || RoAClientConfig.IsFancy2;
+
     private void VisualEffectOnFull() {
         if (IsChangingValue && !_shouldDecrease) {
             ushort dustType = GetDustType();
             var config = ModContent.GetInstance<RoAClientConfig>();
-            bool noNormal = IsNormalNearHPBar() || RoAClientConfig.IsBars || RoAClientConfig.IsFancy;
+            bool noNormal = IsNotNormal();
             int value = CurrentResource % 100;
             if (CurrentResource > 50 && (value > 90 || value < 5)) {
                 if ((IsFull3 || IsFull2) && !_onFullCreated) {
@@ -411,7 +415,7 @@ sealed class WreathHandler : ModPlayer {
                         int count = 20;
                         for (int i = 0; i < count; i++) {
                             float progress2 = 1.35f;
-                            Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, 23 * Player.gravDir), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress2));
+                            Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, (IsNotNormalWithStat() ? 34 : 40) * Player.gravDir), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress2));
                             if (Player.gravDir == -1f) {
                                 dust.position.Y -= 15f;
                             }
@@ -850,7 +854,7 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (Main.rand.NextChance(MathUtils.Clamp01(GetWreathChargeProgress_ForArmorGlow(Player)))) {
-            Dust dust = Dust.NewDustPerfect(NormalWreathPosition - new Vector2(0, 23 * GetWreathChargeProgress_ForArmorGlow(Player) * Player.gravDir) + Main.rand.NextVector2CircularEdge(26, 20 * GetWreathChargeProgress_ForArmorGlow(Player)) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(),
+            Dust dust = Dust.NewDustPerfect(NormalWreathPosition - new Vector2(0, (IsNotNormal() ? (IsNotNormalWithStat() ? 34 : 40) : 23) * GetWreathChargeProgress_ForArmorGlow(Player) * Player.gravDir) + Main.rand.NextVector2CircularEdge(26, 20 * GetWreathChargeProgress_ForArmorGlow(Player)) * (0.3f + Main.rand.NextFloat() * 0.5f) + Player.velocity, GetDustType(),
                 new Vector2(0f, ((0f - Main.rand.NextFloat()) * 0.3f - 0.4f) * Player.gravDir), newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.65f, 0.8f, Main.rand.NextFloat()) * 1.5f);
             dust.fadeIn = Main.rand.Next(0, 17) * 0.1f;
             dust.alpha = (int)(DrawColorOpacity * PulseIntensity * 255f);
@@ -891,7 +895,7 @@ sealed class WreathHandler : ModPlayer {
             int count = Math.Min((int)(15 * progress), 10);
             for (int i = 0; i < count; i++) {
                 if (Main.rand.NextChance(0.3)) {
-                    Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, 23 * Player.gravDir), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
+                    Dust dust = Dust.NewDustDirect(NormalWreathPosition - new Vector2(13, (IsNotNormal() ? (IsNotNormalWithStat() ? 34 : 40) : 23) * Player.gravDir), 20, 20, dustType, newColor: BaseColor * DrawColorOpacity, Scale: MathHelper.Lerp(0.45f, 0.8f, progress));
                     if (Player.gravDir == -1f) {
                         dust.position.Y -= 15f;
                     }

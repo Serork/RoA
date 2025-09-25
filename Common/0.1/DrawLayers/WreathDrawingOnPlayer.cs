@@ -95,7 +95,7 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
         if (player.gravDir == -1f) {
             position.Y += 2f;
         }
-        Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(/*wreathItem.ModItem is FenethsBlazingWreath ? Color.White :*/ drawInfo.colorArmorLegs, drawInfo.shadow);
+        Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(/*wreathItem.ModItem is FenethsBlazingWreath ? DrawColor.White :*/ drawInfo.colorArmorLegs, drawInfo.shadow);
         immuneAlphaPure *= drawInfo.drawPlayer.stealth;
         DrawData drawData = new(texture,
                                 position + drawInfo.drawPlayer.PlayerMovementOffset(),

@@ -96,7 +96,7 @@ public class ElderwoodLantern : ModTile, TileHooks.ITileFluentlyDrawn {
     /*TileHooks.ITileFlameData.TileFlameData TileHooks.ITileFlameData.GetTileFlameData(int tileX, int tileY, int type, int tileFrameY) {
         TileHooks.ITileFlameData.TileFlameData tileFlameData = default;
         tileFlameData.flameTexture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Flame");
-        tileFlameData.flameColor = new Color(100, 100, 100, 0);
+        tileFlameData.flameColor = new DrawColor(100, 100, 100, 0);
         tileFlameData.flameCount = 7;
         tileFlameData.flameRangeXMin = -10;
         tileFlameData.flameRangeXMax = 11;

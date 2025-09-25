@@ -240,11 +240,11 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
             //    Vector2 position = chargeData.Position;
             //    Rectangle clip = new SpriteFrame(1, CHARGEFRAMECOUNT, 0, chargeData.Frame).GetSourceRectangle(chargeTexture);
             //    Vector2 origin = clip.Size() / 2f;
-            //    Color color = Lighting.GetColor(position.ToTileCoordinates()) * chargeData.Opacity;
+            //    DrawColor color = Lighting.GetColor(position.ToTileCoordinates()) * chargeData.Opacity;
             //    Main.spriteBatch.Draw(chargeTexture, position, DrawInfo.Default with {
             //        Clip = clip,
             //        Origin = origin,
-            //        Color = color,
+            //        DrawColor = color,
             //        Rotation = rotation
             //    });
             //}

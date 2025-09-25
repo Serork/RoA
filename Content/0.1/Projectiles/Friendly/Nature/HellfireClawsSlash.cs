@@ -306,7 +306,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
         Vector2 offset = new(0.2f);
         Vector2 velocity = 1.5f * offset;
         Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
-        Color color = Color.Lerp(color1, color2, Main.rand.NextFloat())/*Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()))*/;
+        Color color = Color.Lerp(color1, color2, Main.rand.NextFloat())/*Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(DrawColor.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()))*/;
         color.A = 50;
         position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
         velocity = angle.ToRotationVector2() * velocity * 0.5f;
@@ -329,7 +329,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
         Vector2 offset = new(0.2f);
         Vector2 velocity = 1.5f * offset;
         Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
-        Color color = Color.Lerp(color1, color2, Main.rand.NextFloat())/*Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()))*/;
+        Color color = Color.Lerp(color1, color2, Main.rand.NextFloat())/*Lighting.GetColor(target.Center.ToTileCoordinates()).MultiplyRGB(DrawColor.Lerp(FirstSlashColor, SecondSlashColor, Main.rand.NextFloat()))*/;
         color.A = 50;
         position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
         velocity = angle.ToRotationVector2() * velocity * 0.5f;

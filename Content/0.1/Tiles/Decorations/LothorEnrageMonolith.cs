@@ -270,7 +270,7 @@ sealed class LothorEnrageMonolith : ModTile {
         t = ModContent.Request<Texture2D>(Texture + "_Draw").Value;
         spriteBatch.Draw(t, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f), new Rectangle(frameX, frameY + addFrY, 16, height),
             Color.White * Main.LocalPlayer.GetModPlayer<EnragedVisuals>()._opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-        //Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), Color.Red.ToVector3());
+        //Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), DrawColor.Red.ToVector3());
 
         return false;
     }

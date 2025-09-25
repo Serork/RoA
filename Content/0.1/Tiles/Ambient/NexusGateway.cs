@@ -147,13 +147,13 @@ sealed class NexusGateway : ModTile {
         //    float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
         //    float shakeY = Utils.RandomInt(ref seed, -10, 1) * 0.35f;
         //    Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
-        //    Main.spriteBatch.DrawSelf(flameTexture, pos + Vector2.UnitY * c, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
+        //    Main.spriteBatch.DrawSelf(flameTexture, pos + Vector2.UnitY * c, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new DrawColor(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
         //}
         //for (int c = 0; c < 3; c++) {
         //    float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;
         //    float shakeY = Utils.RandomInt(ref seed, -10, 1) * 0.35f;
         //    Vector2 pos = new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f + shakeX, j * 16 - (int)Main.screenPosition.Y + offsetY + shakeY) + zero;
-        //    Main.spriteBatch.DrawSelf(flameTexture, pos - Vector2.UnitY * 2f * c, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
+        //    Main.spriteBatch.DrawSelf(flameTexture, pos - Vector2.UnitY * 2f * c, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new DrawColor(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
         //}
     }
 }

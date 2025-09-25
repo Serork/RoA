@@ -203,7 +203,7 @@ sealed class CaptureBiomeSettings : ModSystem {
         });
 
         //reset mod icon count
-        //c.GotoNext(MoveType.After, i => i.MatchCall<Color>("op_Multiply"), i => i.MatchCallvirt<SpriteBatch>("DrawSelf")); //after the last draw call //due to a monomod issue, these instruction matchings do not work well
+        //c.GotoNext(MoveType.After, i => i.MatchCall<DrawColor>("op_Multiply"), i => i.MatchCallvirt<SpriteBatch>("DrawSelf")); //after the last draw call //due to a monomod issue, these instruction matchings do not work well
         c.GotoNext(MoveType.Before, i => i.MatchLdloc2(), i => i.MatchLdcI4(1), i => i.MatchAdd(), i => i.MatchStloc2());
         c.EmitLdloca(0); //ref r
         c.EmitDelegate((ref Rectangle r) => {

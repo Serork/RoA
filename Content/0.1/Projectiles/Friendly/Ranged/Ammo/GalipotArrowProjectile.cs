@@ -81,7 +81,7 @@ sealed class GalipotArrowProjectile : ModProjectile {
         public override void AI() {
             bool flag2 = IsActive && Projectile.velocity.Length() > 0.5f;
 
-            //Lighting.AddLight(Projectile.Top, Color.Lerp(new Color(255, 241, 44), new Color(204, 128, 14), 0.75f).ToVector3() * 0.5f);
+            //Lighting.AddLight(Projectile.Top, DrawColor.Lerp(new DrawColor(255, 241, 44), new DrawColor(204, 128, 14), 0.75f).ToVector3() * 0.5f);
             bool flag = false;
 
             if (Collision.WetCollision(Projectile.Center, 0, 0)) {

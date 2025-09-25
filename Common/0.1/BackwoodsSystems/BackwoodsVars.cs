@@ -211,7 +211,7 @@ sealed class BackwoodsVars : ModSystem {
     //    if (Main.tile[i, j].HasUnactuatedTile && !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && WorldGen.IsTileTypeFitForTree(Main.tile[i, j].TileType) && ((Main.remixWorld && (double)j > Main.worldSurface) || Main.tile[i, j - 1].WallType == 0 || WorldGen.DefaultTreeWallTest(Main.tile[i, j - 1].WallType)) && ((Main.tile[i - 1, j].HasTile && WorldGen.IsTileTypeFitForTree(Main.tile[i - 1, j].TileType)) || (Main.tile[i + 1, j].HasActuator && WorldGen.IsTileTypeFitForTree(Main.tile[i + 1, j].TileType)))) {
     //        TileColorCache cache = Main.tile[i, j].BlockColorAndCoating();
     //        if (Main.tenthAnniversaryWorld && !WorldGen.gen)
-    //            cache.Color = (byte)genRand.Next(1, 13);
+    //            cache.DrawColor = (byte)genRand.Next(1, 13);
 
     //        bool isPrimordialTree = false;
     //        if (Main.tile[i, j].TileType == ModContent.TileType<BackwoodsGrass>()) {

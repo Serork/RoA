@@ -22,6 +22,8 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 
+using static RoA.Common.ShaderLoader;
+
 namespace RoA.Common.InterfaceElements;
 
 sealed class WreathDrawing : PlayerDrawLayer {
@@ -89,9 +91,10 @@ sealed class WreathDrawing : PlayerDrawLayer {
             return;
         }
 
-        SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(snapshot.sortMode, null, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
+        SpriteBatch batch = Main.spriteBatch;
+        SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
+        batch.End();
+        batch.Begin(snapshot.sortMode, null, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
 
         var phoenixHandler = player.GetModPlayer<LilPhoenixForm.LilPhoenixFormHandler>();
         float rotation = drawInfo.rotation + MathHelper.Pi;
@@ -119,7 +122,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         float progress = MathHelper.Clamp(stats.ActualProgress2, 0f, 1f);
         //float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
         //alpha = (alpha + 1f) / 2f;
-        //Color color = Color.Multiply(Stats.DrawColor, alpha);
+        //DrawColor color = DrawColor.Multiply(Stats.DrawColor, alpha);
         Color color = stats.BaseColor;
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
         //position = position.Floor();
@@ -133,12 +136,21 @@ sealed class WreathDrawing : PlayerDrawLayer {
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed((byte)(0 + stats.IsPhoenixWreath.ToInt()), 1);
         int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
-        void drawFilling(Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f) {
+        VerticalAppearanceShader.Min = 0.5f;
+        VerticalAppearanceShader.Max = 0.875f;
+        VerticalAppearanceShader.Size2 = 0.025f * (1f - Utils.GetLerpValue(0.75f, 1f, progress, true));
+        void drawFilling(Rectangle sourceRectangle, float progress, Vector2? offset = null, float opacity = 1f) {
+            batch.End();
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
+            VerticalAppearanceShader.Progress = 1f - Utils.Remap(progress, 0f, 1f, 0.35f, 0.675f, true);
             wreathSpriteData2.VisualPosition = position - Vector2.UnitY * frameOffsetY;
             wreathSpriteData2.Color = color * opacity;
+            VerticalAppearanceShader.DrawColor = color;
+            VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
+            batch.Begin(in snapshot, true);
         }
-        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * progress));
+        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * 1f/*progress*/));
         bool soulOfTheWoods = stats.SoulOfTheWoods;
         float progress2 = stats.ActualProgress2 - 1f;
         float value = progress2;
@@ -147,7 +159,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         Rectangle sourceRectangle2 = sourceRectangle;
         sourceRectangle2.X = 0;
         sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;
-        sourceRectangle2.Height = (int)(frameHeight * progress2);
+        sourceRectangle2.Height = (int)(frameHeight * 1f/*progress2*/);
         Vector2 offset = Vector2.Zero;
         float value3 = progress3 * (1f - Utils.GetLerpValue(0.6f, 1f, progress2, true));
         bool flag = true;
@@ -155,16 +167,18 @@ sealed class WreathDrawing : PlayerDrawLayer {
             flag = false;
         }
         if (flag) {
-            drawFilling(sourceRectangle, opacity: value3);
+            drawFilling(sourceRectangle, progress, opacity: value3);
         }
         if (soulOfTheWoods) {
-            drawFilling(sourceRectangle2, offset);
+            drawFilling(sourceRectangle2, progress2, offset);
         }
         float mult2 = 2.25f; // first transition mult
         progress3 = 1f - MathHelper.Clamp(progress2 * mult2, 0f, 1f);
         // effect
         void drawEffect(float progress, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
-            //color = Color.Multiply(Stats.DrawColor, alpha);
+            batch.End();
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.AnisotropicClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
+            //color = DrawColor.Multiply(Stats.DrawColor, alpha);
             color = stats.BaseColor;
             color *= 1.4f;
             color.A = 80;
@@ -177,15 +191,21 @@ sealed class WreathDrawing : PlayerDrawLayer {
             ref float mainFactor = ref storage.MainFactor;
             mainFactor = MathHelper.Lerp(mainFactor, factor, mainFactor < factor ? 0.1f : 0.025f);
             factor = mainFactor * stats.PulseIntensity;
+            VerticalAppearanceShader.Progress = 1f - Utils.Remap(progress, 0f, 1f, 0.35f, 0.675f, true);
             wreathSpriteData2.Color = color * factor * opacity * 2f;
             wreathSpriteData2.Scale = factor + 0.475f;
+            VerticalAppearanceShader.DrawColor = color * factor * 2f;
+            VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
             wreathSpriteData2.Scale += 0.13f * progress * 2f;
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
             SpriteData wreathSpriteData3 = wreathSpriteData.Framed(frameX, frameY);
             opacity = Math.Min(progress * 1.15f, 0.7f);
             wreathSpriteData3.Color = color * opacity;
+            VerticalAppearanceShader.DrawColor = color;
+            VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
             wreathSpriteData3.DrawSelf(offset: offset);
+            batch.Begin(in snapshot, true);
         }
         if (flag) {
             drawEffect(progress, sourceRectangle, opacity: progress3, frameX: (byte)(3 + stats.IsPhoenixWreath.ToInt()), frameY: 1);
@@ -287,6 +307,9 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
             position.Y -= 6f;
         }
 
+        SpriteBatch batch = Main.spriteBatch;
+        SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
+
         //position -= new Vector2(350f, -54f) * (scale - 1f);
 
         DrawText(Vector2.Zero);
@@ -295,7 +318,7 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         float progress = MathHelper.Clamp(stats.ActualProgress2, 0f, 1f);
         //float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
         //alpha = (alpha + 1f) / 2f;
-        //Color color = Color.Multiply(Stats.DrawColor, alpha);
+        //DrawColor color = DrawColor.Multiply(Stats.DrawColor, alpha);
         Color color = stats.BaseColor;
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
         //position = position.Floor();
@@ -312,10 +335,19 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         wreathSpriteData2.Scale = scale;
         int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
+        VerticalAppearanceShader.Min = 0.5f;
+        VerticalAppearanceShader.Max = 0.875f;
+        VerticalAppearanceShader.Size2 = 0.025f * (1f - Utils.GetLerpValue(0.8f, 1f, progress, true));
         void drawFilling(Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f) {
+            batch.End();
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
+            VerticalAppearanceShader.Progress = 1f - Utils.Remap(progress, 0f, 1f, 0.35f, 0.675f, true);
             wreathSpriteData2.VisualPosition = position - Vector2.UnitY * frameOffsetY;
             wreathSpriteData2.Color = color * opacity;
+            VerticalAppearanceShader.DrawColor = color;
+            VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
+            batch.Begin(in snapshot, true);
         }
         Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * progress));
         bool soulOfTheWoods = stats.SoulOfTheWoods;
@@ -343,7 +375,9 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         progress3 = 1f - MathHelper.Clamp(progress2 * mult2, 0f, 1f);
         // effect
         void drawEffect(float progress, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
-            //color = Color.Multiply(Stats.DrawColor, alpha);
+            batch.End();
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.AnisotropicClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
+            //color = DrawColor.Multiply(Stats.DrawColor, alpha);
             color = stats.BaseColor;
             color *= 1.4f;
             color.A = 80;
@@ -356,15 +390,21 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
             ref float mainFactor = ref storage.MainFactor;
             mainFactor = MathHelper.Lerp(mainFactor, factor, mainFactor < factor ? 0.1f : 0.025f);
             factor = mainFactor * stats.PulseIntensity;
+            VerticalAppearanceShader.Progress = 1f - Utils.Remap(progress, 0f, 1f, 0.35f, 0.675f, true);
             wreathSpriteData2.Color = color * factor * opacity * 2f;
             wreathSpriteData2.Scale = scale * (factor + 0.475f);
+            VerticalAppearanceShader.DrawColor = color * factor * 2f;
+            VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
             wreathSpriteData2.Scale += scale * 0.13f * progress * 2f;
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
             SpriteData wreathSpriteData3 = wreathSpriteData.Framed(frameX, frameY);
             opacity = Math.Min(progress * 1.15f, 0.7f);
             wreathSpriteData3.Color = color * opacity;
+            VerticalAppearanceShader.DrawColor = color;
+            VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
             wreathSpriteData3.DrawSelf(offset: offset);
+            batch.Begin(in snapshot, true);
         }
         if (flag) {
             drawEffect(progress, sourceRectangle, opacity: progress3, frameX: (byte)(3 + stats.IsPhoenixWreath.ToInt()), frameY: 1);

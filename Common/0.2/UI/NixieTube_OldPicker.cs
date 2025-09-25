@@ -98,7 +98,7 @@
 //        if (box.Contains(Main.MouseScreen.ToPoint())) {
 //            Main.LocalPlayer.mouseInterface = true;
 //        }
-//        Color color = new Color(33, 43, 79) * 0.8f;
+//        DrawColor color = new DrawColor(33, 43, 79) * 0.8f;
 
 //        Vector2 startPosition = position + Main.screenPosition;
 
@@ -273,13 +273,13 @@
 //            Vector2 mousePosition = Main.MouseWorld + Vector2.One * clip.Width / 2f;
 //            bool mouseOver = mousePosition.Between(position, position + clip.Size());
 //            string hoverText = GetHoverText(index);
-//            Color color = Color.White;
+//            DrawColor color = DrawColor.White;
 //            if (!mouseOver && !highligted) {
 //                color *= 0.6f;
 //            }
 //            Vector2 origin = clip.Centered();
 //            batch.Draw(texture, position, DrawInfo.Default with {
-//                Color = color,
+//                DrawColor = color,
 //                Clip = clip,
 //                Origin = origin
 //            });
@@ -289,7 +289,7 @@
 //                bool flag = !highligted || mouseOver;
 //                mouseHovering = true;
 //                batch.Draw(borderTexture, position, DrawInfo.Default with {
-//                    Color = color,
+//                    DrawColor = color,
 //                    Clip = borderTexture.Bounds,
 //                    Origin = origin
 //                });

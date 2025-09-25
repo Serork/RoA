@@ -178,7 +178,7 @@ sealed class SimpleTileGenerationOverTimeSystem : ModSystem {
                     Main.tile[i, j].CopyPaintAndCoating(Main.tile[i, j + 1]);
                 }
 
-                //Helper.NewMessage(new Vector2(i, j).ToString(), Color.White);
+                //Helper.NewMessage(new Vector2(i, j).ToString(), DrawColor.White);
 
                 //Main.LocalPlayer.position = new Vector2(i, j).ToWorldCoordinates();
 

@@ -51,12 +51,12 @@ sealed class HereticHood : ModItem {
                 Player player = drawInfo.drawPlayer;
                 bool flag = ItemLoader.GetItem(ModContent.ItemType<HereticHood>()).IsVanitySet(player.head, player.body, player.legs);
                 if (/*flag && */player.head == EquipLoader.GetEquipSlot(RoA.Instance, typeof(HereticHood).Name, EquipType.Head)) {
-                    //Color glowMaskColor = Color.White;
-                    //glowMaskColor = Color.White;
+                    //DrawColor glowMaskColor = DrawColor.White;
+                    //glowMaskColor = DrawColor.White;
                     //glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                     //Texture2D glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<HereticHood>()).Texture + "_Head_Glow").Value;
                     //DrawData drawData = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
-                    //glowMaskColor = Color.White;
+                    //glowMaskColor = DrawColor.White;
                     //glowMaskColor = drawInfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawInfo.shadow);
                     //drawData.color = glowMaskColor;
                     //drawData.shader = drawInfo.cHead;
@@ -115,11 +115,11 @@ sealed class HereticHood : ModItem {
         //            Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(player.width / 2 - player.legFrame.Width / 2, player.height - player.legFrame.Height + 4f) + player.legPosition;
         //            Vector2 legsOffset = drawInfo.legsOffset;
         //            var drawinfo = drawInfo;
-        //            Color glowMaskColor = Color.White;
+        //            DrawColor glowMaskColor = DrawColor.White;
         //            glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
         //            Texture2D glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<HereticPants>()).Texture + "_Legs_Glow").Value;
         //            DrawData drawData = new(glowMaskTexture, drawPos.Floor() + legsOffset, player.legFrame, default, player.legRotation, legsOffset, 1f, drawInfo.playerEffect, 0);
-        //            glowMaskColor = Color.White;
+        //            glowMaskColor = DrawColor.White;
         //            glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
         //            drawData.color = glowMaskColor;
         //            drawData.shader = drawinfo.cLegs;
@@ -148,7 +148,7 @@ sealed class HereticHood : ModItem {
         //        case CompositePlayerDrawContext.FrontShoulder: {
         //            DrawData item2 = data;
         //            item2.texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<HereticChestguard>()).Texture + "_Body_Glow").Value;
-        //            Color glowMaskColor = Color.White;
+        //            DrawColor glowMaskColor = DrawColor.White;
         //            glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
         //            Rectangle value2 = item2.sourceRect.Value;
         //            item2.color = glowMaskColor;
@@ -161,7 +161,7 @@ sealed class HereticHood : ModItem {
         //        case CompositePlayerDrawContext.Torso: {
         //            DrawData item = data;
         //            item.texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<HereticChestguard>()).Texture + "_Body_Glow").Value;
-        //            Color glowMaskColor = Color.White;
+        //            DrawColor glowMaskColor = DrawColor.White;
         //            glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
         //            item.color = glowMaskColor;
         //            Rectangle value = item.sourceRect.Value;

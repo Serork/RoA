@@ -217,7 +217,7 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
             int dustType = ModContent.DustType<Dusts.ToxicFumes>();
 
             // After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
-            Dust dust = Dust.NewDustDirect(spawnArea.TopLeft(), spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 0, Color.White);
+            Dust dust = Dust.NewDustDirect(spawnArea.TopLeft(), spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 0, DrawColor.White);
             dust.position = points[pointIndex];
             dust.fadeIn = 0.3f;
             Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];

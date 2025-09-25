@@ -563,7 +563,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             int dustType = ModContent.DustType<Dusts.ToxicFumes>();
 
             // After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
-            Dust dust = Dust.NewDustDirect(spawnArea.TopLeft(), spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 0, Color.White);
+            Dust dust = Dust.NewDustDirect(spawnArea.TopLeft(), spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 0, DrawColor.White);
             dust.position = points[pointIndex];
             dust.fadeIn = 0.3f;
             Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
@@ -606,7 +606,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
         //    // After choosing a randomized dust and a whip segment to spawn from, dust is spawned.
         //    Vector2 offset = (points[pointIndex] - points[pointIndex - 1]).SafeNormalize(Vector2.Zero) * 50f;
         //    Dust dust = Dust.NewDustDirect(spawnArea.TopLeft() +
-        //        offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, Color.White);
+        //        offset, spawnArea.Width, spawnArea.Height, dustType, 0f, 0f, 100, DrawColor.White);
         //    dust.position = points[pointIndex] + offset;
         //    dust.fadeIn = 0.3f;
         //    Vector2 spinningPoint = points[pointIndex] - points[pointIndex - 1];
