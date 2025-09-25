@@ -721,7 +721,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 usedColumn = 4;
             }
         }
-        OpacityUpdatedInDraws += 0.035f;
+        OpacityUpdatedInDraws += 0.03f;
         for (int i = 0; i < MULTICLASSICONCOUNT; i++) {
             byte half = MULTICLASSICONCOUNT / 2;
             bool firstPair = i < half;
@@ -737,7 +737,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
             float direction = firstPair.ToDirectionInt();
             float progress = Ease.CircOut(OpacityUpdatedInDraws),
                   progress2 = progress * MathF.Pow(_postMainDrawTimer + PostMainDrawOpacity, 0.4f);
-            float rotation = MathHelper.TwoPi * 2f * progress2 * -direction;
+            float rotation = MathHelper.TwoPi * 1.25f * progress2 * -direction;
             position.X -= direction * (newSizeX / 2f + offsetX / 2f) * 1f/*progress2*/;
             position.Y += height / 1.25f;
             position.Y -= 3f;
@@ -751,7 +751,7 @@ sealed class DamageClassVisualsInItemName : GlobalItem {
                 Origin = origin,
                 ImageFlip = flip,
                 Clip = clip,
-                Scale = Vector2.One * progress2
+                Scale = Vector2.One * Utils.Remap(progress2, 0f, 1f, 0.25f, 1f)
             }, false);
         }
     }
