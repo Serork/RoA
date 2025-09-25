@@ -156,6 +156,10 @@ sealed class Pixie : ModProjectile {
             dust.velocity *= 0.3f;
         }
 
+        float num94 = Projectile.scale * 0.8f;
+        num94 *= 0.5f;
+        Lighting.AddLight(Projectile.Center, num94, num94, num94 * 0.6f);
+
         //if (Main.rand.Next(100) == 0)
         //    SoundEngine.PlaySound(SoundID.Pixie, Projectile.position);
     }
