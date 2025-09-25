@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 using RoA.Core;
@@ -110,10 +111,10 @@ sealed class RootRing : NatureProjectile {
         => false;
 
     public override bool PreDraw(ref Color lightColor) {
-        SpriteBatch spriteBatch = Main.spriteBatch;
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null,
-            Main.GameViewMatrix.ZoomMatrix);
+        SpriteBatch batch = Main.spriteBatch;
+        SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
+        batch.End();
+        batch.Begin(SpriteSortMode.Deferred, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Vector2 position = Projectile.Center - Main.screenPosition;
         Player player = Main.player[Projectile.owner];
@@ -122,9 +123,9 @@ sealed class RootRing : NatureProjectile {
         Color color = stats.BaseColor * (0.5f + 0.5f * (1f - Projectile.ai[0]));
         float multiplier = 0.035f;
         //for (int i = 0; i < 2; i++)
-        //spriteBatch.DrawSelf(texture, position, null, color * _fading2, Projectile._rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
+        //batch.DrawSelf(texture, position, null, color * _fading2, Projectile._rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
 
-        spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, SpriteEffects.None, 0);
+        batch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale, SpriteEffects.None, 0);
 
         float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
@@ -139,16 +140,16 @@ sealed class RootRing : NatureProjectile {
         color *= 2f;
         float scale = Projectile.scale + factor * 0.035f;
         for (int i = 0; i < 3; i++) {
-            spriteBatch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
+            batch.Draw(texture, position, null, color * projOpacity, Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), scale, SpriteEffects.None, 0);
         }
 
         float scale2 = Projectile.scale + (float)(0.15f * Math.Sin(Main.time / 10.0));
-        spriteBatch.Draw(texture, position, null,
+        batch.Draw(texture, position, null,
             (color * projOpacity).MultiplyAlpha(scale) * 0.75f,
             Projectile.rotation, new Vector2(Projectile.width / 2, Projectile.height / 2),
             scale2, SpriteEffects.None, 0);
 
-        spriteBatch.EndBlendState();
+        batch.Begin(in snapshot, true);
         return false;
     }
 }

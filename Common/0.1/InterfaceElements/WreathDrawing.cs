@@ -8,6 +8,7 @@ using RoA.Common.Configs;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Forms;
+using RoA.Content.Items.Equipables.Accessories;
 using RoA.Core;
 using RoA.Core.Data;
 
@@ -137,8 +138,14 @@ sealed class WreathDrawing : PlayerDrawLayer {
         int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
         VerticalAppearanceShader.Min = 0.5f;
-        VerticalAppearanceShader.Max = 0.875f;
-        VerticalAppearanceShader.Size2 = 0.025f * (1f - Utils.GetLerpValue(0.75f, 1f, progress, true));
+        bool soulOfTheWoods = stats.SoulOfTheWoods;
+        VerticalAppearanceShader.Size2 = 0.025f * (1f - Utils.GetLerpValue(0.8f, 1f, progress, true));
+        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * progress));
+        float progress2 = stats.ActualProgress2 - 1f;
+        float value = progress2;
+        float mult = 0.5f; // second transition mult
+        float progress3 = 1f - MathHelper.Clamp(progress2 * mult, 0f, mult);
+        VerticalAppearanceShader.Max = soulOfTheWoods ? (0.875f + 0.125f * Utils.Remap(progress2, 0f, 0.1f, 0f, 1f, true)) : 0.875f;
         void drawFilling(Rectangle sourceRectangle, float progress, float progress2, Vector2? offset = null, float opacity = 1f) {
             batch.End();
             batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
@@ -150,12 +157,6 @@ sealed class WreathDrawing : PlayerDrawLayer {
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
             batch.Begin(in snapshot, true);
         }
-        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * 1f/*progress*/));
-        bool soulOfTheWoods = stats.SoulOfTheWoods;
-        float progress2 = stats.ActualProgress2 - 1f;
-        float value = progress2;
-        float mult = 0.5f; // second transition mult
-        float progress3 = 1f - MathHelper.Clamp(progress2 * mult, 0f, mult);
         Rectangle sourceRectangle2 = sourceRectangle;
         sourceRectangle2.X = 0;
         sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;
@@ -173,7 +174,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
             float filling2Progress = 1f - Utils.Remap(progress2, 0f, 1f, 0.725f, 1f, true);
             drawFilling(sourceRectangle2, progress2, filling2Progress, offset);
         }
-        float mult2 = 2.25f; // first transition mult
+        float mult2 = 5f; // first transition mult
         progress3 = 1f - MathHelper.Clamp(progress2 * mult2, 0f, 1f);
         // effect
         void drawEffect(float progress, float progress2, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
@@ -338,8 +339,14 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
         VerticalAppearanceShader.Min = 0.5f;
-        VerticalAppearanceShader.Max = 0.875f;
+        bool soulOfTheWoods = stats.SoulOfTheWoods;
         VerticalAppearanceShader.Size2 = 0.025f * (1f - Utils.GetLerpValue(0.8f, 1f, progress, true));
+        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * progress));
+        float progress2 = stats.ActualProgress2 - 1f;
+        float value = progress2;
+        float mult = 0.5f; // second transition mult
+        float progress3 = 1f - MathHelper.Clamp(progress2 * mult, 0f, mult);
+        VerticalAppearanceShader.Max = soulOfTheWoods ? (0.875f + 0.125f * Utils.Remap(progress2, 0f, 0.1f, 0f, 1f, true)) : 0.875f;
         void drawFilling(Rectangle sourceRectangle, float progress, float progress2, Vector2? offset = null, float opacity = 1f) {
             batch.End();
             batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
@@ -351,12 +358,6 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
             wreathSpriteData2.DrawSelf(sourceRectangle, offset);
             batch.Begin(in snapshot, true);
         }
-        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * progress));
-        bool soulOfTheWoods = stats.SoulOfTheWoods;
-        float progress2 = stats.ActualProgress2 - 1f;
-        float value = progress2;
-        float mult = 0.5f; // second transition mult
-        float progress3 = 1f - MathHelper.Clamp(progress2 * mult, 0f, mult);
         Rectangle sourceRectangle2 = sourceRectangle;
         sourceRectangle2.X = 0;
         sourceRectangle2.Y += frameHeight + 2 - frameOffsetY;
@@ -374,7 +375,7 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
             float filling2Progress = 1f - Utils.Remap(progress2, 0f, 1f, 0.725f, 1f, true);
             drawFilling(sourceRectangle2, progress2, filling2Progress, offset);
         }
-        float mult2 = 2.25f; // first transition mult
+        float mult2 = 5f; // first transition mult
         progress3 = 1f - MathHelper.Clamp(progress2 * mult2, 0f, 1f);
         // effect
         void drawEffect(float progress, float progress2, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
