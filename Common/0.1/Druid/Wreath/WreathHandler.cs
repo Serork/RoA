@@ -553,6 +553,7 @@ sealed class WreathHandler : ModPlayer {
             Player.accRunSpeed *= value;
             Player.runAcceleration *= value;
             Player.maxRunSpeed *= value;
+            Player.jumpSpeed *= value;
             if (_stayTime != 0f) {
                 Dusts_ResetStayTime();
                 _stayTime = 0f;
