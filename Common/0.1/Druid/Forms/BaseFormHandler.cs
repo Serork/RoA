@@ -126,9 +126,13 @@ sealed class BaseFormHandler : ModPlayer {
         player.height = Player.defaultHeight;
         player.position.Y -= player.height;
 
+        player.mount.ResetFlightTime(player.velocity.X);
+        player.wingTime = player.wingTimeMax;
+
         player.GetModPlayer<WreathHandler>().Reset(true, 0.1f);
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
+
         //handler._sync = 0;
         //if (Main.netMode == NetmodeID.MultiplayerClient) {
         //    MultiplayerSystem.SendPacket(new SpawnFormPacket2(player));
@@ -158,6 +162,8 @@ sealed class BaseFormHandler : ModPlayer {
             player.height = Player.defaultHeight;
             player.position.Y -= player.height;
 
+            player.mount.ResetFlightTime(player.velocity.X);
+            player.wingTime = player.wingTimeMax;
 
             if (player.whoAmI == Main.myPlayer) {
                 SoundEngine.PlaySound(formInstance.BaseForm.ReleaseSound, player.Center);

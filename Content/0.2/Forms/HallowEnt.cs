@@ -26,7 +26,6 @@ sealed class HallowEnt : BaseForm {
         MountData.totalFrames = 1;
         MountData.constantJump = false;
         MountData.usesHover = false;
-
         MountData.xOffset = -6;
         MountData.yOffset = 3;
         MountData.playerHeadOffset = -14;
