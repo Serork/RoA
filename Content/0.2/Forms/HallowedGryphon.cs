@@ -121,8 +121,8 @@ sealed class HallowedGryphon : BaseForm {
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
         for (int i = 0; i < 20; i++) {
-            Vector2 spawnPos = player.Center + new Vector2(40, 0).RotatedBy(i * Math.PI * 2 / 24f);
-            Vector2 direction = (player.Center - spawnPos) * 0.5f;
+            Vector2 spawnPos = player.Center + new Vector2(40, 0).RotatedBy(i * Math.PI * 2 / 20f);
+            Vector2 direction = (player.Center - spawnPos) * 0.5f * -player.direction;
             int dust = Dust.NewDust(spawnPos, 0, 0, DustID.TintableDustLighted, direction.X, direction.Y, newColor: Color.Yellow);
             Main.dust[dust].velocity *= 0.2f + Main.rand.NextFloatRange(0.15f);
             Main.dust[dust].velocity = new Vector2(-Main.dust[dust].velocity.Y, Main.dust[dust].velocity.X * 2f);
@@ -135,9 +135,9 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
-        for (int i = 0; i < 20; i++) {
-            Vector2 spawnPos = player.Center + new Vector2(20, 0).RotatedBy(i * Math.PI * 2 / 24f) - new Vector2(4f, 0f);
-            Vector2 direction = (player.Center - spawnPos) * 0.5f;
+        for (int i = 0; i < 15; i++) {
+            Vector2 spawnPos = player.Center + new Vector2(25, 0).RotatedBy(i * Math.PI * 2 / 15f) - new Vector2(4f, 0f);
+            Vector2 direction = (player.Center - spawnPos) * 0.5f * -player.direction;
             int dust = Dust.NewDust(spawnPos, 0, 0, DustID.TintableDustLighted, direction.X, direction.Y, newColor: Color.Yellow);
             Main.dust[dust].velocity *= 0.3f + Main.rand.NextFloatRange(0.15f);
             Main.dust[dust].velocity = new Vector2(-Main.dust[dust].velocity.Y, Main.dust[dust].velocity.X * 2f) * -1f;
