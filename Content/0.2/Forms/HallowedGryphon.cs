@@ -63,7 +63,7 @@ sealed class HallowedGryphon : BaseForm {
         Player.jumpHeight = 1;
         Player.jumpSpeed = 4.5f;
         player.gravity *= 0.75f;
-        if (player.controlJump) {
+        if (player.controlJump && !player.controlDown) {
             player.velocity.Y = Math.Min(5f, player.velocity.Y);
         }
     }
