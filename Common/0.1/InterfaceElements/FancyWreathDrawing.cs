@@ -250,7 +250,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
                 vector.Y += 28f;
             }
             if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing) {
-                vector += currentForm.BaseForm.WreathOffset2;
+                vector += currentForm.BaseForm.SetWreathOffset2(player);
             }
             spriteBatch.DrawString(FontAssets.MouseText.Value, text3,
                 reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2((0f - vector2.X) * 0.5f, 0f)) : (vector + new Vector2((0f - vector2.X) * 0.5f, 0f)), textColor, 0f, default(Vector2), 1f,
@@ -290,7 +290,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             position.Y -= 0f;
         }
         if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing) {
-            position += currentForm.BaseForm.WreathOffset2;
+            position += currentForm.BaseForm.SetWreathOffset2(player);
         }
 
         position += new Vector2(defaultResources ? -4 : 0, defaultResources ? 18f : 0f);
@@ -469,7 +469,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
                 vector.Y += 28f;
             }
             if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing) {
-                vector2 += currentForm.BaseForm.WreathOffset2;
+                vector2 += currentForm.BaseForm.SetWreathOffset2(player);
             }
             spriteBatch.DrawString(FontAssets.MouseText.Value, text3,
                 reversedGravity ? Main.ReverseGravitySupport(vector + new Vector2((0f - vector2.X) * 0.5f, 0f)) : (vector + new Vector2((0f - vector2.X) * 0.5f, 0f)), textColor, 0f, default(Vector2), 1f,
@@ -511,7 +511,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             position.Y += 1f;
         }
         if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing) {
-            position += currentForm.BaseForm.WreathOffset2;
+            position += currentForm.BaseForm.SetWreathOffset2(player);
         }
 
         position += new Vector2(defaultResources ? -4 : 0, defaultResources ? 18f : 0f);

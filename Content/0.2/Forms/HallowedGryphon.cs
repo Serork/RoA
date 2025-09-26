@@ -12,11 +12,11 @@ namespace RoA.Content.Forms;
 sealed class HallowedGryphon : BaseForm {
     protected override Color GlowColor(Player player, Color drawColor, float progress) => WreathHandler.GetArmorGlowColor1(player, drawColor, progress);
 
-    public override ushort HitboxWidth => (ushort)(Player.defaultWidth * 2.5f);
-    public override ushort HitboxHeight => (ushort)(Player.defaultHeight * 1f);
+    public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2.5f);
+    public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * 1f);
 
-    public override Vector2 WreathOffset => new(0f, 0f);
-    public override Vector2 WreathOffset2 => new(0f, 0f);
+    public override Vector2 SetWreathOffset(Player player) => new(0f, 0f);
+    public override Vector2 SetWreathOffset2(Player player) => new(0f, 0f);
 
     protected override void SafeSetDefaults() {
         MountData.totalFrames = 11;

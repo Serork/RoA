@@ -19,15 +19,15 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 abstract class InsectForm : BaseForm {
-    public override ushort HitboxWidth => (ushort)(Player.defaultWidth * 2.2f);
-    public override ushort HitboxHeight => (ushort)(Player.defaultHeight * 0.8f);
+    public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2.2f);
+    public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * 0.8f);
 
     private float _maxRotation;
 
     public override SoundStyle? HurtSound => SoundID.NPCHit31;
 
-    public override Vector2 WreathOffset => new(0f, 12f);
-    public override Vector2 WreathOffset2 => new(0f, -6f);
+    public override Vector2 SetWreathOffset(Player player) => new(0f, 12f);
+    public override Vector2 SetWreathOffset2(Player player) => new(0f, -6f);
 
     protected virtual float InsectDustScale { get; } = 1f;
     protected virtual ushort InsectProjectileType { get; } = (ushort)ModContent.ProjectileType<CorruptionInsect>();

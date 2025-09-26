@@ -11,11 +11,11 @@ namespace RoA.Content.Forms;
 sealed class HallowEnt : BaseForm {
     protected override Color GlowColor(Player player, Color drawColor, float progress) => WreathHandler.GetArmorGlowColor1(player, drawColor, progress);
 
-    public override ushort HitboxWidth => (ushort)(Player.defaultWidth * 2.5f);
-    public override ushort HitboxHeight => (ushort)(Player.defaultHeight * 1.85f);
+    public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2.5f);
+    public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * 1.85f);
 
-    public override Vector2 WreathOffset => new(0f, -36f);
-    public override Vector2 WreathOffset2 => new(0f, 18f);
+    public override Vector2 SetWreathOffset(Player player) => new(0f, -36f);
+    public override Vector2 SetWreathOffset2(Player player) => new(0f, 18f);
 
     protected override void SafeSetDefaults() {
         MountData.fallDamage = 0.1f;

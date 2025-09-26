@@ -82,14 +82,14 @@ abstract class BaseForm : ModMount {
 
     public BaseForm() => MountBuff = new BaseFormBuff(this);
 
-    public virtual Vector2 WreathOffset { get; } = Vector2.Zero;
-    public virtual Vector2 WreathOffset2 { get; } = Vector2.Zero;
+    public virtual Vector2 SetWreathOffset(Player player) => Vector2.Zero;
+    public virtual Vector2 SetWreathOffset2(Player player) => Vector2.Zero;
 
     public virtual SoundStyle ApplySound { get; } = SoundID.Item25;
     public virtual SoundStyle ReleaseSound { get; } = SoundID.Item25;
 
-    public virtual ushort HitboxWidth { get; } = Player.defaultWidth;
-    public virtual ushort HitboxHeight { get; } = Player.defaultHeight;
+    public virtual ushort SetHitboxWidth(Player player) => Player.defaultWidth;
+    public virtual ushort SetHitboxHeight(Player player) => Player.defaultHeight;
 
     public override void Load() {
         Mod.AddContent(MountBuff);

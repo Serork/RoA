@@ -19,13 +19,13 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class FlederForm : BaseForm {
-    public override ushort HitboxWidth => (ushort)(Player.defaultWidth * 1.4f);
-    public override ushort HitboxHeight => (ushort)(Player.defaultHeight * 0.8f);
+    public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 1.4f);
+    public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * (IsInAir(player) ? 1f : 0.8f));
 
     public override SoundStyle? HurtSound => SoundID.NPCHit27;
 
-    public override Vector2 WreathOffset => new(0f, 6f);
-    public override Vector2 WreathOffset2 => new(0f, -2f);
+    public override Vector2 SetWreathOffset(Player player) => new(0f, 6f + (IsInAir(player) ? -6f : 0f));
+    public override Vector2 SetWreathOffset2(Player player) => new(0f, -2f);
 
     protected override Vector2 GetLightingPos(Player player) => player.Center;
     protected override Color LightingColor => new(79, 124, 211);
@@ -234,6 +234,7 @@ sealed class FlederForm : BaseForm {
         bool flag = IsInAir(player);
         float maxRotation = flag ? 0.3f : 0.2f;
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
+        MountData.yOffset = flag ? -3 : -7;
         if (flag) {
             float maxFlightSpeedX = Math.Min(3.5f, player.maxRunSpeed * 0.75f);
             float acceleration = player.runAcceleration / 2f;

@@ -24,15 +24,15 @@ namespace RoA.Content.Forms;
 sealed class LilPhoenixForm : BaseForm {
     private static Asset<Texture2D>? _glowMask2;
 
-    public override ushort HitboxWidth => Player.defaultWidth;
-    public override ushort HitboxHeight => Player.defaultHeight;
+    public override ushort SetHitboxWidth(Player player) => Player.defaultWidth;
+    public override ushort SetHitboxHeight(Player player) => Player.defaultHeight;
 
     public override SoundStyle? HurtSound => SoundID.NPCHit31;
 
     public override bool ShouldApplyUpdateJumpHeightLogic => true;
 
-    public override Vector2 WreathOffset => new(0f, 0f);
-    public override Vector2 WreathOffset2 => new(0f, 0f);
+    public override Vector2 SetWreathOffset(Player player) => new(0f, 0f);
+    public override Vector2 SetWreathOffset2(Player player) => new(0f, 0f);
 
     protected override Color LightingColor {
         get {

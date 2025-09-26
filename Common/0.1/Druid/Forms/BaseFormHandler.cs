@@ -342,11 +342,11 @@ sealed class BaseFormHandler : ModPlayer {
         if (handler.IsInADruidicForm) {
             var activeForm = handler.CurrentForm.BaseForm;
             self.position.X += self.width / 2;
-            self.width = activeForm.HitboxWidth;
+            self.width = activeForm.SetHitboxWidth(self);
             self.position.X -= self.width / 2;
 
             self.position.Y += self.height;
-            self.height = activeForm.HitboxHeight;
+            self.height = activeForm.SetHitboxHeight(self);
             self.position.Y -= self.height;
 
             return;
