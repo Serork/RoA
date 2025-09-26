@@ -12,6 +12,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -513,9 +514,10 @@ sealed class LilPhoenixForm : BaseForm {
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
         player.GetModPlayer<LilPhoenixFormHandler>().ResetDash(true);
+        Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 32; i++) {
             Point size = new(40, 55);
-            int dust = Dust.NewDust(player.Center - size.ToVector2() / 2f + new Vector2(-3f, 10f), size.X, size.Y, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
+            int dust = Dust.NewDust(center - size.ToVector2() / 2f + new Vector2(-3f, 10f), size.X, size.Y, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
             Main.dust[dust].noGravity = true;
             Main.dust[dust].fadeIn = 1f;
             Main.dust[dust].velocity.X *= 0.1f;
@@ -529,9 +531,10 @@ sealed class LilPhoenixForm : BaseForm {
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
         player.GetModPlayer<LilPhoenixFormHandler>().ResetDash(true);
+        Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 56; i++) {
             Point size = new(40, 55);
-            int dust = Dust.NewDust(player.Center - size.ToVector2() / 2f + new Vector2(-3f, -5f), size.X, size.Y, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
+            int dust = Dust.NewDust(center - size.ToVector2() / 2f + new Vector2(-3f, -5f), size.X, size.Y, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
             Main.dust[dust].noGravity = true;
             Main.dust[dust].fadeIn = 1f;
             Main.dust[dust].velocity.X *= 0.1f;

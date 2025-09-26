@@ -10,6 +10,7 @@ using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
+using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -437,9 +438,10 @@ sealed class FlederForm : BaseForm {
     }
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
+        Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 24; i++) {
-            Vector2 spawnPos = player.Center + new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2 / 24f * player.direction) - new Vector2(-6f, 4f);
-            Vector2 direction = (player.Center - spawnPos) * 0.5f;
+            Vector2 spawnPos = center + new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2 / 24f * player.direction) - new Vector2(-6f, 4f);
+            Vector2 direction = (center - spawnPos) * 0.5f;
             int dust = Dust.NewDust(spawnPos, 0, 0, MountData.spawnDust, direction.X, direction.Y);
             Main.dust[dust].velocity *= 0.95f;
             Main.dust[dust].fadeIn = 1.8f;
@@ -450,9 +452,10 @@ sealed class FlederForm : BaseForm {
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
+        Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 24; i++) {
-            Vector2 spawnPos = player.Center - new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2 / 24f * player.direction) - new Vector2(-6f, 4f);
-            Vector2 direction = (player.Center - spawnPos) * 0.5f;
+            Vector2 spawnPos = center - new Vector2(player.width, 0).RotatedBy(i * Math.PI * 2 / 24f * player.direction) - new Vector2(-6f, 4f);
+            Vector2 direction = (center - spawnPos) * 0.5f;
             int dust = Dust.NewDust(spawnPos, 0, 0, MountData.spawnDust, direction.X, direction.Y);
             Main.dust[dust].velocity *= 0.95f;
             Main.dust[dust].fadeIn = 1.8f;
