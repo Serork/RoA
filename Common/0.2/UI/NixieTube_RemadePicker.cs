@@ -63,7 +63,7 @@ sealed class NixieTubePicker_TextureLoader : IInitializer {
 
     private void On_Player_Spawn(On_Player.orig_Spawn orig, Player self, PlayerSpawnContext context) {
         orig(self, context);
-        if (context == PlayerSpawnContext.SpawningIntoWorld) {
+        if (Main.netMode != NetmodeID.Server && context == PlayerSpawnContext.SpawningIntoWorld) {
             UILoader.GetUIState<NixieTubePicker_RemadePicker>().Recalculate();
         }
     }

@@ -2,6 +2,7 @@
 
 using ModLiquidLib.ModLoader;
 using ModLiquidLib.Utils;
+using ModLiquidLib.Utils.LiquidContent;
 
 using RoA.Common.Players;
 using RoA.Content.Buffs;
@@ -74,7 +75,7 @@ sealed partial class Tar : ModLiquid {
     private void On_NPC_UpdateNPC_UpdateGravity(On_NPC.orig_UpdateNPC_UpdateGravity orig, NPC self) {
         orig(self);
 
-        if (self.GetModdedWetArray()[LiquidLoader.LiquidType<Liquids.Tar>() - LiquidID.Count]) {
+        if (self.TryGetGlobalNPC(out ModLiquidNPC result) && result.moddedWet[LiquidLoader.LiquidType<Liquids.Tar>() - LiquidID.Count]) {
             if (!self.GravityIgnoresLiquid) {
                 self.GravityMultiplier *= 0.3f;
                 self.MaxFallSpeedMultiplier *= 0.4f;
