@@ -79,6 +79,13 @@ sealed class HallowedGryphon : BaseForm {
         player.fullRotationOrigin = player.getRect().Centered() + Vector2.UnitY * 4f;
 
         HandleLoopAttack(player);
+
+        if (!GetHandler(player).IncreasedMoveSpeed) {
+            return;
+        }
+
+        player.runAcceleration *= 1.75f;
+        player.maxRunSpeed *= 1.75f;
     }
 
     private void HandleLoopAttack(Player player) {
@@ -139,7 +146,11 @@ sealed class HallowedGryphon : BaseForm {
         }
         rotation = desiredRotation;
 
+        bool increasedMoveSpeed = handler.IncreasedMoveSpeed;
         int num15 = 185;
+        if (increasedMoveSpeed) {
+            num15 = (int)(num15 * 0.75f);
+        }
         float num19 = (float)Math.PI * 2f / (float)(num15 / 2);
         savedVelocity = savedVelocity.RotatedBy((0f - num19) * (float)direction);
         if (attackFactor++ > num15 / 2 - 2) {
@@ -153,7 +164,7 @@ sealed class HallowedGryphon : BaseForm {
             attackFactor = 0f;
             attackCount++;
         }
-        position += savedVelocity;
+        position += savedVelocity * (increasedMoveSpeed ? 1.5f : 1f);
         velocity *= 0f;
     }
 
