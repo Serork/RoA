@@ -60,13 +60,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private static ushort AltarPlaceholderTileType2 => TileID.StoneSlab;
     private static ushort CliffPlaceholderTileType => TileID.StoneSlab;
 
-    public static List<ushort> MidInvalidWallTypesToKill;
-    public static List<ushort> SkipBiomeInvalidWallTypeToKill;
+    public static List<ushort>? MidInvalidWallTypesToKill;
+    public static List<ushort>? SkipBiomeInvalidWallTypeToKill;
     
     public static void Unload() {
-        MidInvalidWallTypesToKill.Clear();
+        MidInvalidWallTypesToKill?.Clear();
         MidInvalidWallTypesToKill = null!;
-        SkipBiomeInvalidWallTypeToKill.Clear();
+        SkipBiomeInvalidWallTypeToKill?.Clear();
         SkipBiomeInvalidWallTypeToKill = null!;
     }
 
