@@ -194,7 +194,7 @@ sealed class HallowedGryphon : BaseForm {
         }
         if (attackFactor++ > num15 / 2 - 2) {
             bool doneEnough = attackCount >= 2;
-            if ((!isAttacking && attackCount == 0) || doneEnough) {
+            if (!isAttacking || doneEnough) {
                 loopAttackIsDone = true;
                 if (doneEnough) {
                     handler.CanDoLoopAttackTimer = 180;
