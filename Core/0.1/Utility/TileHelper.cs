@@ -113,11 +113,11 @@ static partial class TileHelper {
     private static int[] _addSpecialPointSpecialsCount;
     private static List<Point> _addVineRootsPositions;
 
-    private static List<(ModTile, Point)> _fluentTiles = [];
+    private static List<(ModTile, Point)>? _fluentTiles = [];
 
-    public static Dictionary<int, HangingTileInfo> HangingTile { get; private set; } = [];
-    public static List<(ModTile, Point16)> SolidTileDrawPoints { get; private set; } = [];
-    public static List<(ModTile, Point16)> PostPlayerDrawPoints { get; private set; } = [];
+    public static Dictionary<int, HangingTileInfo>? HangingTile { get; private set; }
+    public static List<(ModTile, Point16)>? SolidTileDrawPoints { get; private set; }
+    public static List<(ModTile, Point16)>? PostPlayerDrawPoints { get; private set; }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_sunflowerWindCounter")]
     public extern static ref double TileDrawing_sunflowerWindCounter(TileDrawing tileDrawing);
@@ -160,6 +160,11 @@ static partial class TileHelper {
         _addSpecialPointSpecialPositions = (Point[][])typeof(TileDrawing).GetFieldValue("_specialPositions", Main.instance.TilesRenderer);
         _addSpecialPointSpecialsCount = (int[])typeof(TileDrawing).GetFieldValue("_specialsCount", Main.instance.TilesRenderer);
         _addVineRootsPositions = (List<Point>)typeof(TileDrawing).GetFieldValue("_vineRootsPositions", Main.instance.TilesRenderer);
+
+        _fluentTiles = [];
+        HangingTile = [];
+        SolidTileDrawPoints = [];
+        PostPlayerDrawPoints = [];
 
         On_TileDrawing.PreDrawTiles += (orig, self, solidLayer, forRenderTargets, intoRenderTargets) => {
             orig.Invoke(self, solidLayer, forRenderTargets, intoRenderTargets);
@@ -293,16 +298,16 @@ static partial class TileHelper {
         _addSpecialPointSpecialsCount = null!;
         _addVineRootsPositions = null!;
 
-        _fluentTiles.Clear();
+        _fluentTiles?.Clear();
         _fluentTiles = null!;
 
-        HangingTile.Clear();
+        HangingTile?.Clear();
         HangingTile = null!;
 
-        SolidTileDrawPoints.Clear();
+        SolidTileDrawPoints?.Clear();
         SolidTileDrawPoints = null!;
 
-        PostPlayerDrawPoints.Clear();
+        PostPlayerDrawPoints?.Clear();
         PostPlayerDrawPoints = null!;
 
         BackwoodsBiomePass.Unload();
