@@ -168,7 +168,7 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
                 Clip = clip,
                 Origin = origin,
                 Scale = scale,
-                Color = color * (Projectile.timeLeft >= (int)(TIMELEFT * 0.825f) ? 1f : 0.625f),
+                Color = color * (Projectile.timeLeft >= (int)(TIMELEFT * 0.825f) ? 1f : 0.75f),
                 Rotation = rotation + vector.ToRotation()
             });
         }
