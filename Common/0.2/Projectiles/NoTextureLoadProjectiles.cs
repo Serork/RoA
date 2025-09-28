@@ -34,3 +34,9 @@ abstract class NatureProjectile_NoTextureLoad : NatureProjectile, IProjectileVan
 
     protected virtual void Draw(ref Color lightColor) { }
 }
+
+abstract class FormProjectile_NoTextureLoad : NatureProjectile_NoTextureLoad {
+    protected override void SafeSetDefaults3() {
+        ShouldChargeWreathOnDamage = false;
+    }
+}

@@ -43,7 +43,7 @@ sealed class BaseFormHandler : ModPlayer {
     private bool _startDecreasingWreath;
     internal byte _sync;
 
-    public bool CanTransform => IsInADruidicForm || !Player.mount.Active;
+    public bool CanTransform => true/*IsInADruidicForm || !Player.mount.Active*/;
 
     public static IReadOnlyCollection<FormInfo> Forms => _formsByType.Values;
     public FormInfo CurrentForm => _currentForm;

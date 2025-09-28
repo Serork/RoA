@@ -3,6 +3,7 @@
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
+using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -12,6 +13,8 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Forms;
 
@@ -44,7 +47,7 @@ sealed class HallowedGryphon : BaseForm {
             player.runAcceleration *= 1.5f;
             if (flag2) {
                 player.accRunSpeed *= 0.9f;
-                player.accRunSpeed *= 0.9f;
+                player.runAcceleration *= 0.9f;
             }
         }
         else {
@@ -84,8 +87,27 @@ sealed class HallowedGryphon : BaseForm {
             return;
         }
 
-        player.runAcceleration *= 1.75f;
-        player.maxRunSpeed *= 1.75f;
+        BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
+
+        float progress = 0.75f * GetMoveSpeedFactor(player);
+        player.accRunSpeed *= 1f + progress;
+        Player.jumpSpeed *= 1f + progress;
+        player.runAcceleration *= 1f + progress;
+        player.maxRunSpeed *= 1f + progress;
+    }
+
+    public static float GetMoveSpeedFactor(Player player) {
+        float moveSpeedFactor = GetHandler(player).MoveSpeedBuffTime;
+        return Utils.GetLerpValue(0f, HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS * 0.25f, moveSpeedFactor, true) * Utils.GetLerpValue(HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS, HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS * 0.75f, moveSpeedFactor, true);
+    }
+
+    private int GetLoopAttackTime(Player player) {
+        bool increasedMoveSpeed = GetHandler(player).IncreasedMoveSpeed;
+        int num15 = 185;
+        if (increasedMoveSpeed) {
+            num15 = (int)(num15 * (1f - (0.25f * GetMoveSpeedFactor(player))));
+        }
+        return num15;
     }
 
     private void HandleLoopAttack(Player player) {
@@ -99,11 +121,18 @@ sealed class HallowedGryphon : BaseForm {
         ref bool justStartedDoingLoopAttack = ref handler.JustStartedDoingLoopAttack;
         ref bool loopAttackIsDone = ref handler.LoopAttackIsDone;
         ref float attackFactor = ref handler.AttackFactor;
+        ref float attackFactor2 = ref handler.AttackFactor2;
         ref byte attackCount = ref handler.AttackCount;
 
         bool canDoLoopAttack = handler.CanDoLoopAttack;
 
         float startLoopVelocity = 10f;
+
+        bool increasedMoveSpeed = handler.IncreasedMoveSpeed;
+        int num15 = GetLoopAttackTime(player);
+        int attackPerCycle = 10;
+        float num19 = (float)Math.PI * 2f / (float)(num15 / 2);
+        int perAttack = (int)(num15 / (float)attackPerCycle);
 
         bool isAttacking = player.controlUseItem && Main.mouseLeft;
         if (isAttacking && canDoLoopAttack) {
@@ -112,6 +141,7 @@ sealed class HallowedGryphon : BaseForm {
                 savedVelocity = Vector2.UnitX * player.direction * startLoopVelocity;
                 velocity *= 0f;
                 handler.CanDoLoopAttack = false;
+                attackFactor2 = perAttack;
             }
         }
         if (!justStartedDoingLoopAttack) {
@@ -122,6 +152,7 @@ sealed class HallowedGryphon : BaseForm {
                 velocity = savedVelocity.SafeNormalize() * startLoopVelocity;
                 handler.JustStartedDoingLoopAttack = false;
                 attackCount = 0;
+                attackFactor2 = 0f;
 
                 player.shimmering = false;
             }
@@ -133,7 +164,7 @@ sealed class HallowedGryphon : BaseForm {
         player.shimmering = true;
         player.shimmerTransparency = 0f;
 
-        player.controlLeft = player.controlRight = false;
+        player.itemAnimation = 1;
 
         WreathHandler.GetWreathStats(player).LockWreathPosition = true;
 
@@ -144,27 +175,39 @@ sealed class HallowedGryphon : BaseForm {
         else {
             desiredRotation -= MathHelper.PiOver2;
         }
+        float moveSpeedFactor = GetHandler(player).MoveSpeedBuffTime;
         rotation = desiredRotation;
-
-        bool increasedMoveSpeed = handler.IncreasedMoveSpeed;
-        int num15 = 185;
-        if (increasedMoveSpeed) {
-            num15 = (int)(num15 * 0.75f);
-        }
-        float num19 = (float)Math.PI * 2f / (float)(num15 / 2);
         savedVelocity = savedVelocity.RotatedBy((0f - num19) * (float)direction);
+        if (attackFactor2++ > perAttack) {
+            BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
+            int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(30);
+            float baseKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(3f);
+            if (player.IsLocal()) {
+                ProjectileUtils.SpawnPlayerOwnedProjectile<HallowedFeather>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_FromThis()) {
+                    Damage = baseDamage,
+                    KnockBack = baseKnockback,
+                    Velocity = player.Center.DirectionTo(player.GetWorldMousePosition())
+                });
+            }
+            attackFactor2 = 0f;
+        }
         if (attackFactor++ > num15 / 2 - 2) {
             bool doneEnough = attackCount >= 2;
             if ((!isAttacking && attackCount == 0) || doneEnough) {
                 loopAttackIsDone = true;
                 if (doneEnough) {
                     handler.CanDoLoopAttackTimer = 180;
+                    attackFactor = 0f;
+                    return;
                 }
             }
             attackFactor = 0f;
             attackCount++;
+            if (!isAttacking) {
+                handler.CanDoLoopAttackTimer = (ushort)(60 * attackCount);
+            }
         }
-        position += savedVelocity * (increasedMoveSpeed ? 1.5f : 1f);
+        position += savedVelocity * (increasedMoveSpeed ? 1f + 0.5f * GetMoveSpeedFactor(player) : 1f);
         velocity *= 0f;
     }
 
@@ -172,8 +215,28 @@ sealed class HallowedGryphon : BaseForm {
         float walkingFrameFrequiency = 14f;
         int minMovingFrame = 1;
         int maxMovingFrame = minMovingFrame + 5;
-        if (IsInAir(player)) {
-            int minFlyingFrame = maxMovingFrame + 1, maxFlyingFrame = minFlyingFrame + 3;
+        int minFlyingFrame = maxMovingFrame + 1, maxFlyingFrame = minFlyingFrame + 3;
+        var handler = GetHandler(player);
+        if (handler.IsInLoopAttack) {
+            var attackTime = GetLoopAttackTime(player);
+            var attackFactor = handler.AttackFactor;
+            if (attackFactor < attackTime * 0.2f || attackFactor > attackTime * 0.4f) {
+                float flightFrameFrequency = 14f;
+                frameCounter += handler.IncreasedMoveSpeed ? 3f : 2f;
+                float frequency = flightFrameFrequency;
+                while (frameCounter > frequency) {
+                    frameCounter -= frequency;
+                    frame++;
+                }
+                if (frame < minFlyingFrame || frame > maxFlyingFrame) {
+                    frame = minFlyingFrame;
+                }
+            }
+            else {
+                frame = maxFlyingFrame - 2;
+            }
+        }
+        else if (IsInAir(player)) {
             float flightFrameFrequency = 14f;
             float speedY = Math.Abs(player.velocity.Y);
             frameCounter += Utils.Clamp(speedY, 3f, 5f) * (player.controlJump && player.velocity.Y > 0f ? 1f : 0.5f);
