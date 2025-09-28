@@ -17,6 +17,7 @@ namespace RoA.Content.Forms;
 
 sealed class HallowedGryphon : BaseForm {
     private static float MOVESPEEDBOOSTMODIFIER => 2.5f;
+    private static float LOOPATTACKSIZEMODIFIER => 0.8f;
 
     public static HallowedGryphonHandler GetHandler(Player player) => player.GetModPlayer<HallowedGryphonHandler>();
 
@@ -106,7 +107,7 @@ sealed class HallowedGryphon : BaseForm {
         if (increasedMoveSpeed) {
             num15 = (int)(num15 * (1f - ((MOVESPEEDBOOSTMODIFIER - 1f) / 3f * GetMoveSpeedFactor(player))));
         }
-        num15 = (int)(num15 * 0.8f);
+        num15 = (int)(num15 * LOOPATTACKSIZEMODIFIER);
         return num15;
     }
 
