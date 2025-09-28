@@ -11,14 +11,13 @@ using RoA.Core.Utility.Vanilla;
 using System;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.ID;
-
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Forms;
 
 sealed class HallowedGryphon : BaseForm {
+    private static float MOVESPEEDBOOSTMODIFIER => 2.5f;
+
     public static HallowedGryphonHandler GetHandler(Player player) => player.GetModPlayer<HallowedGryphonHandler>();
 
     protected override Color GlowColor(Player player, Color drawColor, float progress) => WreathHandler.GetArmorGlowColor1(player, drawColor, progress);
@@ -89,7 +88,7 @@ sealed class HallowedGryphon : BaseForm {
 
         BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
 
-        float progress = 0.75f * GetMoveSpeedFactor(player);
+        float progress = (MOVESPEEDBOOSTMODIFIER - 1f) * GetMoveSpeedFactor(player);
         player.accRunSpeed *= 1f + progress;
         Player.jumpSpeed *= 1f + progress;
         player.runAcceleration *= 1f + progress;
@@ -105,8 +104,9 @@ sealed class HallowedGryphon : BaseForm {
         bool increasedMoveSpeed = GetHandler(player).IncreasedMoveSpeed;
         int num15 = 185;
         if (increasedMoveSpeed) {
-            num15 = (int)(num15 * (1f - (0.25f * GetMoveSpeedFactor(player))));
+            num15 = (int)(num15 * (1f - ((MOVESPEEDBOOSTMODIFIER - 1f) / 3f * GetMoveSpeedFactor(player))));
         }
+        num15 = (int)(num15 * 0.8f);
         return num15;
     }
 
@@ -207,7 +207,7 @@ sealed class HallowedGryphon : BaseForm {
                 handler.CanDoLoopAttackTimer = (ushort)(60 * attackCount);
             }
         }
-        position += savedVelocity * (increasedMoveSpeed ? 1f + 0.5f * GetMoveSpeedFactor(player) : 1f);
+        position += savedVelocity * (increasedMoveSpeed ? 1f + (MOVESPEEDBOOSTMODIFIER - 1f) * 0.666f * GetMoveSpeedFactor(player) : 1f);
         velocity *= 0f;
     }
 

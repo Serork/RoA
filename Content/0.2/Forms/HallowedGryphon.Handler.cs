@@ -12,7 +12,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class HallowedGryphonHandler : ModPlayer, IDoubleTap {
-    public static float MOVESPEEDBUFFTIMEINTICKS => 120f;
+    public static float MOVESPEEDBUFFTIMEINTICKS => 60f;
+    public static float MOVESPEEDBUFFCOOLDOWN => 240f;
 
     public bool JustStartedDoingLoopAttack;
     public bool LoopAttackIsDone;
@@ -45,7 +46,7 @@ sealed class HallowedGryphonHandler : ModPlayer, IDoubleTap {
         if (IncreasedMoveSpeed) {
             MoveSpeedBuffTime--;
             if (CanIncreaseMoveSpeed) {
-                MoveSpeedBuffTime = -480f;
+                MoveSpeedBuffTime = -MOVESPEEDBUFFCOOLDOWN;
             }
         }
         else if (!CanIncreaseMoveSpeed) {
