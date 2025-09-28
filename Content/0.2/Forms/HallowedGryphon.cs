@@ -11,6 +11,7 @@ using RoA.Core.Utility.Vanilla;
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace RoA.Content.Forms;
@@ -218,6 +219,16 @@ sealed class HallowedGryphon : BaseForm {
         int maxMovingFrame = minMovingFrame + 5;
         int minFlyingFrame = maxMovingFrame + 1, maxFlyingFrame = minFlyingFrame + 3;
         var handler = GetHandler(player);
+        void playFlapSound(bool reset = false) {
+            if (reset) {
+                player.flapSound = false;
+                return;
+            }
+            if (!player.flapSound) {
+                SoundEngine.PlaySound(SoundID.Item32, player.position);
+            }
+            player.flapSound = true;
+        }
         if (handler.IsInLoopAttack) {
             var attackTime = GetLoopAttackTime(player);
             var attackFactor = handler.AttackFactor;
@@ -228,6 +239,12 @@ sealed class HallowedGryphon : BaseForm {
                 while (frameCounter > frequency) {
                     frameCounter -= frequency;
                     frame++;
+                    if (frame == maxFlyingFrame) {
+                        playFlapSound();
+                    }
+                    else {
+                        playFlapSound(true);
+                    }
                 }
                 if (frame < minFlyingFrame || frame > maxFlyingFrame) {
                     frame = minFlyingFrame;
@@ -245,6 +262,12 @@ sealed class HallowedGryphon : BaseForm {
             while (frameCounter > frequency) {
                 frameCounter -= frequency;
                 frame++;
+                if (frame == maxFlyingFrame) {
+                    playFlapSound();
+                }
+                else {
+                    playFlapSound(true);
+                }
             }
             if (frame < minFlyingFrame || frame > maxFlyingFrame) {
                 frame = minFlyingFrame;
