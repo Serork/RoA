@@ -31,6 +31,8 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
         Projectile.friendly = true;
         Projectile.penetrate = 1;
         Projectile.alpha = 0;
+
+        Projectile.timeLeft = 180;
     }
 
     public override void AI() {
@@ -44,6 +46,10 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
                 else
                     Projectile.ai[0] = 250f;
             }
+
+            Projectile.velocity = Projectile.velocity.NormalizeWithMaxLength(25f);
+
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
         }
         else {
             if (Projectile.ai[0] > 0f) {
@@ -60,10 +66,6 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
                 }
             }
         }
-
-        Projectile.velocity = Projectile.velocity.NormalizeWithMaxLength(25f);
-
-        Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
     }
 
     public override bool ShouldUpdatePosition() {
