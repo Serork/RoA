@@ -4,6 +4,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -17,8 +18,8 @@ using Terraria.ID;
 namespace RoA.Content.Forms;
 
 sealed class HallowedGryphon : BaseForm {
-    private static float MOVESPEEDBOOSTMODIFIER => 2.5f;
-    private static float LOOPATTACKSIZEMODIFIER => 0.8f;
+    private static float MOVESPEEDBOOSTMODIFIER => 3f;
+    private static float LOOPATTACKSIZEMODIFIER => 0.7f;
 
     public static HallowedGryphonHandler GetHandler(Player player) => player.GetModPlayer<HallowedGryphonHandler>();
 
@@ -99,7 +100,7 @@ sealed class HallowedGryphon : BaseForm {
 
     public static float GetMoveSpeedFactor(Player player) {
         float moveSpeedFactor = GetHandler(player).MoveSpeedBuffTime;
-        return Utils.GetLerpValue(0f, HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS * 0.25f, moveSpeedFactor, true) * Utils.GetLerpValue(HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS, HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS * 0.75f, moveSpeedFactor, true);
+        return Utils.GetLerpValue(0f, HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS * 0.05f, moveSpeedFactor, true) * Utils.GetLerpValue(HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS, HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS * 0.95f, moveSpeedFactor, true);
     }
 
     private int GetLoopAttackTime(Player player) {
@@ -144,6 +145,8 @@ sealed class HallowedGryphon : BaseForm {
                 velocity *= 0f;
                 handler.CanDoLoopAttack = false;
                 attackFactor2 = perAttack;
+                SoundEngine.PlaySound(SoundID.Item77 with { Pitch = 1.2f, Volume = 0.8f }, player.Center);
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "GryphonRoar2") with { Pitch = 0.5f, Volume = 1.4f }, player.Center);
             }
         }
         if (!justStartedDoingLoopAttack) {
@@ -191,10 +194,14 @@ sealed class HallowedGryphon : BaseForm {
                     Velocity = player.Center.DirectionTo(player.GetWorldMousePosition())
                 });
             }
+            SoundEngine.PlaySound(SoundID.Item29 with { Pitch = 0.6f, PitchVariance = 0.15f, Volume = 0.3f, MaxInstances = 5 }, player.Center);
             attackFactor2 = 0f;
         }
         if (attackFactor++ > num15 / 2 - 2) {
+
+            SoundEngine.PlaySound(SoundID.Item77 with { Pitch = 1.1f }, player.Center);
             bool doneEnough = attackCount >= 2;
+
             if (!isAttacking || doneEnough) {
                 loopAttackIsDone = true;
                 if (doneEnough) {

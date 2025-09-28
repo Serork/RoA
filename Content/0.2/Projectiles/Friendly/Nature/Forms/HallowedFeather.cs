@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
@@ -106,6 +107,7 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
                 Position = Projectile.Center
             });
         }
+        SoundEngine.PlaySound(SoundID.Item20 with { Pitch = 1.2f, PitchVariance = 0.1f, Volume = 0.6f, MaxInstances = 5 }, Projectile.Center);
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
@@ -119,6 +121,7 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
             Projectile.ai[2] = 1f;
             if (Projectile.ai[0] > 30f) {
                 Projectile.ai[0] = 30f;
+                SoundEngine.PlaySound(SoundID.Dig with { Pitch = 1.2f, Volume = 0.3f, MaxInstances = 5 }, Projectile.Center);
             }
         }
 

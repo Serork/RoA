@@ -2,18 +2,21 @@
 
 using RoA.Common.Druid.Forms;
 using RoA.Common.Players;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
 
 sealed class HallowedGryphonHandler : ModPlayer, IDoubleTap {
-    public static float MOVESPEEDBUFFTIMEINTICKS => 60f;
-    public static float MOVESPEEDBUFFCOOLDOWN => 240f;
+    public static float MOVESPEEDBUFFTIMEINTICKS => 90f;
+    public static float MOVESPEEDBUFFCOOLDOWN => 180f;
 
     public bool JustStartedDoingLoopAttack;
     public bool LoopAttackIsDone;
@@ -47,6 +50,7 @@ sealed class HallowedGryphonHandler : ModPlayer, IDoubleTap {
             MoveSpeedBuffTime--;
             if (CanIncreaseMoveSpeed) {
                 MoveSpeedBuffTime = -MOVESPEEDBUFFCOOLDOWN;
+                SoundEngine.PlaySound(SoundID.Item25 with { Pitch = 0.6f, Volume = 0.8f }, Player.Center);
             }
         }
         else if (!CanIncreaseMoveSpeed) {
@@ -140,5 +144,8 @@ sealed class HallowedGryphonHandler : ModPlayer, IDoubleTap {
             return;
         }
         MoveSpeedBuffTime = MOVESPEEDBUFFTIMEINTICKS;
+        SoundEngine.PlaySound(SoundID.Item66 with { Pitch = 0.9f, Volume = 0.8f }, Player.Center);
+        SoundEngine.PlaySound(SoundID.Item77 with { Pitch = 1.2f, Volume = 0.8f }, Player.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "GryphonRoar") with { Pitch = 0.5f, Volume = 2f }, Player.Center);
     }
 }
