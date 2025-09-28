@@ -39,7 +39,7 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static byte SEGMENTCOUNT => 5;
     private static float CLINGERLENGTH => 70f;
 
-    private enum ClingerHidewayRequstedTextureType : byte {
+    public enum ClingerHidewayRequstedTextureType : byte {
         Hideway,
         Clinger,
     }

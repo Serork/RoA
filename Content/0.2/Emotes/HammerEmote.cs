@@ -17,7 +17,7 @@ namespace RoA.Content.Emotes;
 sealed class HammerEmote : ModEmoteBubble, IRequestAssets {
     private int _frameCounter;
 
-    private enum HammerEmoteRequstedTextureType : byte {
+    public enum HammerEmoteRequstedTextureType : byte {
         Bubble,
         Hammer,
         Border
