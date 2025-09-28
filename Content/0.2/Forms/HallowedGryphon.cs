@@ -37,7 +37,7 @@ sealed class HallowedGryphon : BaseForm {
         MountData.flightTimeMax = 125;
        
         MountData.yOffset = -3;
-        MountData.playerHeadOffset = -14;
+        MountData.playerHeadOffset = -16;
     }
 
     protected override void SafePostUpdate(Player player) {
