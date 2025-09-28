@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RoA.Core.Utility.Vanilla;
+
+using System;
 
 using Terraria;
 using Terraria.ModLoader;

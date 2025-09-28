@@ -97,9 +97,12 @@ sealed class WreathDrawing : PlayerDrawLayer {
         batch.End();
         batch.Begin(snapshot.sortMode, null, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
 
-        var phoenixHandler = player.GetModPlayer<LilPhoenixForm.LilPhoenixFormHandler>();
+        var phoenixHandler = player.GetModPlayer<LilPhoenixFormHandler>();
         float rotation = drawInfo.rotation + MathHelper.Pi;
         bool flag2 = phoenixHandler._dashed || phoenixHandler._dashed || phoenixHandler._isPreparing || player.sleeping.isSleeping;
+        if (stats.LockWreathPosition) {
+            flag2 = true;
+        }
         if (flag2) {
             rotation = MathHelper.Pi;
         }

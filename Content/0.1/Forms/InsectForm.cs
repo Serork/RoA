@@ -32,29 +32,6 @@ abstract class InsectForm : BaseForm {
     protected virtual float InsectDustScale { get; } = 1f;
     protected virtual ushort InsectProjectileType { get; } = (ushort)ModContent.ProjectileType<CorruptionInsect>();
 
-    internal sealed class InsectFormHandler : ModPlayer {
-        internal bool? _facedRight;
-        internal int _shootCounter, _insectTimer;
-        internal float _directionChangedFor;
-
-        public override void ResetEffects() {
-            if (!Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
-                _facedRight = null;
-                _shootCounter = _insectTimer = 0;
-                _directionChangedFor = 0f;
-            }
-        }
-
-        public override void PostUpdate() {
-            if (_directionChangedFor > 0f) {
-                _directionChangedFor -= TimeSystem.LogicDeltaTime;
-                if (Player.controlLeft || Player.controlRight || Player.controlJump) {
-                    _directionChangedFor = 0f;
-                }
-            }
-        }
-    }
-
     protected sealed override void SafeSetDefaults() {
         MountData.fallDamage = 0;
         MountData.runSpeed = 5f;

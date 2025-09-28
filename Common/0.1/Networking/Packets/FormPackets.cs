@@ -67,7 +67,7 @@ sealed class InsectFormPacket1 : NetPacket {
 
         bool value = reader.ReadBoolean();
 
-        var handler = player.GetModPlayer<InsectForm.InsectFormHandler>();
+        var handler = player.GetModPlayer<InsectFormHandler>();
         handler._facedRight = value;
         handler._directionChangedFor = 1f;
 
@@ -87,7 +87,7 @@ sealed class InsectFormPacket2 : NetPacket {
             return;
         }
 
-        player.GetModPlayer<InsectForm.InsectFormHandler>()._facedRight = null;
+        player.GetModPlayer<InsectFormHandler>()._facedRight = null;
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new InsectFormPacket2(player), ignoreClient: sender);

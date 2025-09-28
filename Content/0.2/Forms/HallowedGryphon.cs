@@ -2,7 +2,10 @@
 
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Players;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -13,6 +16,8 @@ using Terraria.ID;
 namespace RoA.Content.Forms;
 
 sealed class HallowedGryphon : BaseForm {
+    public static HallowedGryphonHandler GetHandler(Player player) => player.GetModPlayer<HallowedGryphonHandler>();
+
     protected override Color GlowColor(Player player, Color drawColor, float progress) => WreathHandler.GetArmorGlowColor1(player, drawColor, progress);
 
     public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2.5f);
@@ -69,6 +74,87 @@ sealed class HallowedGryphon : BaseForm {
         if (player.controlJump && !player.controlDown) {
             player.velocity.Y = Math.Min(5f, player.velocity.Y);
         }
+
+        player.fullRotation = 0f;
+        player.fullRotationOrigin = player.getRect().Centered() + Vector2.UnitY * 4f;
+
+        HandleLoopAttack(player);
+    }
+
+    private void HandleLoopAttack(Player player) {
+        var handler = GetHandler(player);
+        ref Vector2 velocity = ref player.velocity;
+        ref float rotation = ref player.fullRotation;
+        ref Vector2 savedVelocity = ref handler.SavedVelocity;
+        ref Vector2 position = ref player.position;
+        int direction = player.direction;
+
+        ref bool justStartedDoingLoopAttack = ref handler.JustStartedDoingLoopAttack;
+        ref bool loopAttackIsDone = ref handler.LoopAttackIsDone;
+        ref float attackFactor = ref handler.AttackFactor;
+        ref byte attackCount = ref handler.AttackCount;
+
+        bool canDoLoopAttack = handler.CanDoLoopAttack;
+
+        float startLoopVelocity = 10f;
+
+        bool isAttacking = player.controlUseItem && Main.mouseLeft;
+        if (isAttacking && canDoLoopAttack) {
+            if (!justStartedDoingLoopAttack) {
+                justStartedDoingLoopAttack = true;
+                savedVelocity = Vector2.UnitX * player.direction * startLoopVelocity;
+                velocity *= 0f;
+                handler.CanDoLoopAttack = false;
+            }
+        }
+        if (!justStartedDoingLoopAttack) {
+            return;
+        }
+        if (loopAttackIsDone) {
+            if (handler.JustStartedDoingLoopAttack) {
+                velocity = savedVelocity.SafeNormalize() * startLoopVelocity;
+                handler.JustStartedDoingLoopAttack = false;
+                attackCount = 0;
+
+                player.shimmering = false;
+            }
+            return;
+        }
+
+        player.gravity *= 0f;
+
+        player.shimmering = true;
+        player.shimmerTransparency = 0f;
+
+        player.controlLeft = player.controlRight = false;
+
+        WreathHandler.GetWreathStats(player).LockWreathPosition = true;
+
+        float desiredRotation = savedVelocity.ToRotation() - MathHelper.PiOver2;
+        if (direction > 0) {
+            desiredRotation += MathHelper.PiOver2;
+        }
+        else {
+            desiredRotation -= MathHelper.PiOver2;
+        }
+        rotation = desiredRotation;
+
+        int num15 = 185;
+        float num19 = (float)Math.PI * 2f / (float)(num15 / 2);
+        savedVelocity = savedVelocity.RotatedBy((0f - num19) * (float)direction);
+        if (attackFactor++ > num15 / 2 - 2) {
+            bool doneEnough = attackCount >= 2;
+            if ((!isAttacking && attackCount == 0) || doneEnough) {
+                loopAttackIsDone = true;
+                if (doneEnough) {
+                    handler.CanDoLoopAttackTimer = 180;
+                }
+            }
+            attackFactor = 0f;
+            attackCount++;
+        }
+        position += savedVelocity;
+        velocity *= 0f;
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
@@ -120,6 +206,7 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
+        GetHandler(player).Reset();
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 20; i++) {
             Vector2 spawnPos = center + new Vector2(40, 0).RotatedBy(i * Math.PI * 2 / 20f);
@@ -136,6 +223,7 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
+        GetHandler(player).Reset();
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 15; i++) {
             Vector2 spawnPos = center + new Vector2(25, 0).RotatedBy(i * Math.PI * 2 / 15f) - new Vector2(4f, 0f);

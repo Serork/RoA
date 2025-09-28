@@ -46,6 +46,7 @@ sealed class WreathHandler : ModPlayer {
     public static float GetWreathChargeProgress_ForArmorGlow(Player player) => GetWreathStats(player).ActualProgress5;
 
     public short YAdjustAmountInPixels;
+    public bool LockWreathPosition;
 
     public enum WreathType : byte {
         Normal,
@@ -680,6 +681,8 @@ sealed class WreathHandler : ModPlayer {
         }
 
         ChangingHandler();
+
+        LockWreathPosition = false;
     }
 
     public void IncreaseResourceValue(float fine = 0f, bool increaseUntilFull = false) {
