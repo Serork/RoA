@@ -225,7 +225,7 @@ sealed class HallowedGryphon : BaseForm {
                 return;
             }
             if (!player.flapSound) {
-                SoundEngine.PlaySound(SoundID.Item32, player.position);
+                SoundEngine.PlaySound(SoundID.Item32, player.Center);
             }
             player.flapSound = true;
         }
