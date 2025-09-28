@@ -4,10 +4,13 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Common.Cache;
 using RoA.Core.Defaults;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -16,7 +19,9 @@ using Terraria.ID;
 namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
 
 sealed class HallowedFeather : FormProjectile, IRequestAssets {
-    private enum HallowedFeatherRequstedTextureType : byte {
+    private static ushort TIMELEFT => 180;
+
+    public enum HallowedFeatherRequstedTextureType : byte {
         Glow
     }
 
@@ -32,7 +37,7 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
         Projectile.penetrate = 1;
         Projectile.alpha = 0;
 
-        Projectile.timeLeft = 180;
+        Projectile.timeLeft = TIMELEFT;
     }
 
     public override void AI() {
@@ -121,7 +126,8 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        if (!AssetInitializer.TryGetRequestedTextureAssets<HallowedFeather>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+        if (!AssetInitializer.TryGetRequestedTextureAssets<HallowedFeather>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets) ||
+            !AssetInitializer.TryGetRequestedTextureAssets<HallowedZone>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets2)) {
             return false;
         }
 
@@ -130,8 +136,9 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
         Color color2 = lightColor with { A = 100 } * 0.25f;
         color *= Projectile.Opacity;
         color2 *= Projectile.Opacity;
+        float rotation;
         for (int i = 0; i < 4; i++) {
-            float rotation = Helper.Wave(-MathHelper.PiOver4 / 2f, MathHelper.PiOver4 / 2f, MathHelper.PiOver2 / 2f, i);
+            rotation = Helper.Wave(-MathHelper.PiOver4 / 2f, MathHelper.PiOver4 / 2f, MathHelper.PiOver2 / 2f, i);
             ProjectileUtils.QuickDrawShadowTrails(Projectile, color2, 0.5f, 1, rotation);
             ProjectileUtils.QuickDrawShadowTrails(Projectile, color, 0.5f, 1, rotation, texture: glowTexture);
         }
@@ -139,10 +146,33 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
         ProjectileUtils.QuickDraw(Projectile, lightColor);
 
         for (int i = 0; i < 4; i++) {
-            float rotation = Helper.Wave(-MathHelper.PiOver4, MathHelper.PiOver4, MathHelper.PiOver2, i);
+            rotation = Helper.Wave(-MathHelper.PiOver4, MathHelper.PiOver4, MathHelper.PiOver2, i);
             ProjectileUtils.QuickDraw(Projectile, color2, rotation);
             ProjectileUtils.QuickDraw(Projectile, color, rotation, glowTexture);
         }
+
+        Texture2D lightTexture = indexedTextureAssets2[(byte)HallowedZone.HallowedZoneRequstedTextureType.Light].Value;
+        Rectangle clip = lightTexture.Bounds;
+        SpriteBatch batch = Main.spriteBatch;
+        SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
+        Vector2 origin = clip.Centered();
+        batch.Begin(snapshot with { blendState = BlendState.Additive }, true);
+        float num2 = Projectile.velocity.ToRotation() + (float)Math.PI / 2f;
+        for (float num3 = 0f; num3 < 4f; num3 += 1f) {
+            Vector2 vector = ((float)Math.PI / 2f * num3 + num2).ToRotationVector2() * 4f;
+            float opacity = 1f - Projectile.Opacity;
+            Vector2 scale = new Vector2(1f, 0.5f) * 0.25f * opacity;
+            color = Color.Lerp(Color.Yellow, Color.LightYellow, 0.5f) * opacity * Helper.Wave(0.75f, 1.25f, speed: 5f);
+            rotation = 0.01f * Main.rand.NextFloatRange(1f) * opacity;
+            batch.Draw(lightTexture, Projectile.Center - vector * 0.2f, DrawInfo.Default with {
+                Clip = clip,
+                Origin = origin,
+                Scale = scale,
+                Color = color * (Projectile.timeLeft >= (int)(TIMELEFT * 0.825f) ? 1f : 0.625f),
+                Rotation = rotation + vector.ToRotation()
+            });
+        }
+        batch.Begin(snapshot, true);
 
         return false;
     }

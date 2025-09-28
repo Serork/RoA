@@ -35,7 +35,7 @@ sealed class TreeDryad : ModTile, IRequestAssets, TileHooks.IPreDraw, TileHooks.
     private static bool _hammerEmoteShown;
     private static short _frameX;
 
-    private enum TreeDryadRequstedTextureType : byte {
+    public enum TreeDryadRequstedTextureType : byte {
         Ray,
         Glow
     }
