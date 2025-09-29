@@ -74,6 +74,11 @@ RoAClientConfig: {
 		Label: Wreath Sound Style
 		Tooltip: ""
 	}
+
+	RotateWreathWithPlayer: {
+		Label: Rotate Wreath With Player
+		Tooltip: ""
+	}
 }
 
 RoAServerConfig: {

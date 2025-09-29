@@ -87,4 +87,7 @@ sealed class RoAClientConfig : ModConfig {
     [DefaultValue(WreathSoundModes.Alt)]
     [DrawTicks]
     public WreathSoundModes WreathSoundMode;
+
+    [DefaultValue(false)]
+    public bool RotateWreathWithPlayer;
 }

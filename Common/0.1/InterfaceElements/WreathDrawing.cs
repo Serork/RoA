@@ -99,7 +99,9 @@ sealed class WreathDrawing : PlayerDrawLayer {
         batch.Begin(snapshot.sortMode, null, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
 
         var phoenixHandler = player.GetFormHandler();
-        float rotation = drawInfo.rotation + MathHelper.Pi;
+        bool shouldRotateWithPlayer = ModContent.GetInstance<RoAClientConfig>().RotateWreathWithPlayer;
+        float baseRotation = !shouldRotateWithPlayer ? 0f : drawInfo.rotation;
+        float rotation = baseRotation + MathHelper.Pi;
         bool flag2 = phoenixHandler._dashed || phoenixHandler._dashed || phoenixHandler._isPreparing || player.sleeping.isSleeping;
         if (stats.LockWreathPosition) {
             flag2 = true;
@@ -110,11 +112,11 @@ sealed class WreathDrawing : PlayerDrawLayer {
         oldPosition = playerPosition;
         if (!flag2) {
             Vector2 vector = drawInfo.Position + drawInfo.rotationOrigin;
-            Matrix matrix = Matrix.CreateRotationZ(drawInfo.rotation);
+            Matrix matrix = Matrix.CreateRotationZ(baseRotation);
             Vector2 newPosition = oldPosition - vector;
             newPosition = Vector2.Transform(newPosition, matrix);
             oldPosition.X = (newPosition + vector).X;
-            float progress4 = Math.Abs(drawInfo.rotation) / MathHelper.Pi;
+            float progress4 = Math.Abs(baseRotation) / MathHelper.Pi;
             float offsetY2 = progress4 * (player.height / 2f + 10f);
             oldPosition.Y += offsetY2;
         }
