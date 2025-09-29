@@ -58,7 +58,7 @@ sealed class HallowEnt : BaseForm {
         ActivateExtraJumps(player);
 
         if (player.HasProjectile<HallowWard>()) {
-            BaseFormDataStorage.ChangeAttackCharge1(player, 0.7f, false);
+            BaseFormDataStorage.ChangeAttackCharge1(player, 0.35f, false);
         }
 
         //if (Main.rand.NextChance(0.025f)) {
