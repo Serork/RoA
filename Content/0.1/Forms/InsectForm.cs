@@ -91,6 +91,7 @@ abstract class InsectForm : BaseForm {
 
         ref bool? facedRight = ref player.GetFormHandler().FacedRight;
         ref float insectTimer = ref player.GetFormHandler().AttackFactor;
+        ref float attackTime = ref player.GetFormHandler().AttackFactor2;
         string context = "insectformattack";
         IEntitySource source = player.GetSource_Misc(context);
         if (player.velocity.Y == 0f && player.velocity.X == 0f) {
@@ -117,14 +118,24 @@ abstract class InsectForm : BaseForm {
         }
         else
             insectTimer = 0;
-        if (!player.HoldingLMB()) {
+        bool autofireOn = player.autoReuseAllWeapons;
+        bool isAttacking = autofireOn ? (player.HoldingLMB(true) && attackTime != -1f) : player.HoldingLMB(true);
+        ref int shootCounter = ref player.GetFormHandler().ShootCounter;
+        if (shootCounter < 0) {
+            shootCounter++;
             return;
         }
-        ref int shootCounter = ref player.GetFormHandler().ShootCounter;
-        if (player.HoldingLMB()) {
-            shootCounter++;
-            insectTimer = 0;
+        if (!isAttacking) {
+            if (shootCounter >= 0) {
+                attackTime = 0;
+            }
+            return;
         }
+        if (!autofireOn && attackTime == -1f) {
+            return;
+        }
+        shootCounter++;
+        insectTimer = 0;
         if (Main.mouseLeftRelease)
             shootCounter = 0;
         if (shootCounter % 10 == 5 && shootCounter > 0) {
@@ -160,6 +171,7 @@ abstract class InsectForm : BaseForm {
                 shootKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(shootKnockback);
                 Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, 1f), type, damage, shootKnockback, player.whoAmI, 0f, 0f, 2f);
                 Projectile.NewProjectile(source, playerPos, velocity + new Vector2(0f, -1f), type, damage, shootKnockback, player.whoAmI, 0f, 0f);
+                attackTime = -1f;
                 shootCounter = -35;
             }
         }

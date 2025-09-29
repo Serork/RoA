@@ -396,6 +396,7 @@ sealed partial class BaseFormHandler : ModPlayer {
             FacedRight = null;
             ShootCounter = 0;
             AttackFactor = 0;
+            AttackFactor2 = 0;
             DirectionChangedFor = 0f;
         }
     }
