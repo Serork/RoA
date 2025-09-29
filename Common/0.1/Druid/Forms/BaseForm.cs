@@ -162,14 +162,14 @@ abstract class BaseForm : ModMount {
                 }
             }
             else {
-                if ((player.sliding || player.velocity.Y == 0f || plr.Jumped || plr.Jumped2) && player.releaseJump && plr.JumpCD == 0) {
+                if ((player.sliding || player.velocity.Y == 0f || plr.Jumped || (hasDoubleJump && plr.Jumped2)) && player.releaseJump && plr.JumpCD == 0) {
                     bool justJumped = false;
                     bool justJumped2 = false;
                     if (plr.Jumped) {
                         justJumped = true;
                         plr.Jumped = false;
                     }
-                    else if (plr.Jumped2) {
+                    else if (hasDoubleJump && plr.Jumped2) {
                         justJumped2 = true;
                         plr.Jumped2 = false;
                     }
@@ -192,7 +192,7 @@ abstract class BaseForm : ModMount {
                     }
                 }
             }
-            bool flag = plr.Jumped || plr.Jumped2;
+            bool flag = plr.Jumped || (hasDoubleJump && plr.Jumped2);
             if (flag || plr.JumpCD > 0) {
                 player.releaseJump = false;
             }
