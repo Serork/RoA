@@ -44,6 +44,10 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
     public override void AI() {
         Projectile.Opacity = Utils.GetLerpValue(0f, 30f, Projectile.ai[0], true);
 
+        if (Projectile.timeLeft < TIMELEFT * 0.425f && Projectile.ai[2] != 1f) {
+            KillOnTileCollide();
+        }
+
         if (Projectile.ai[2] == 0f) {
             Projectile.ai[0] += 2f;
             if (!(Projectile.ai[0] < 30f)) {
@@ -117,6 +121,12 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
+        KillOnTileCollide();
+
+        return false;
+    }
+
+    private void KillOnTileCollide() {
         if (Projectile.ai[2] != 1f) {
             Projectile.ai[2] = 1f;
             if (Projectile.ai[0] > 30f) {
@@ -124,8 +134,6 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
                 SoundEngine.PlaySound(SoundID.Dig with { Pitch = 1.2f, Volume = 0.3f, MaxInstances = 5 }, Projectile.Center);
             }
         }
-
-        return false;
     }
 
     public override bool PreDraw(ref Color lightColor) {
