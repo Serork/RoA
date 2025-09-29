@@ -11,6 +11,7 @@ using RoA.Content.Forms;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Core;
 using RoA.Core.Data;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -68,10 +69,10 @@ sealed class WreathDrawing : PlayerDrawLayer {
             return;
         }
 
-        WreathHandler stats = player.GetModPlayer<WreathHandler>();
+        WreathHandler stats = player.GetWreathHandler();
         Vector2 playerPosition = Utils.Floor(new Vector2((int)(drawInfo.Position.X + (float)(drawInfo.drawPlayer.width / 2)),
             (int)(drawInfo.Position.Y + (float)drawInfo.drawPlayer.height - 40f)));
-        var formHandler = player.GetModPlayer<BaseFormHandler>();
+        var formHandler = player.GetFormHandler();
         var currentForm = formHandler.CurrentForm;
         if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing) {
             playerPosition += currentForm.BaseForm.SetWreathOffset(player);
@@ -97,7 +98,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         batch.End();
         batch.Begin(snapshot.sortMode, null, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
 
-        var phoenixHandler = player.GetModPlayer<LilPhoenixFormHandler>();
+        var phoenixHandler = player.GetFormHandler();
         float rotation = drawInfo.rotation + MathHelper.Pi;
         bool flag2 = phoenixHandler._dashed || phoenixHandler._dashed || phoenixHandler._isPreparing || player.sleeping.isSleeping;
         if (stats.LockWreathPosition) {
@@ -247,7 +248,7 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
     private const byte HORIZONTALFRAMECOUNT = 6;
 
     private static Player Player => Main.LocalPlayer;
-    private static WreathHandler Stats => Player.GetModPlayer<WreathHandler>();
+    private static WreathHandler Stats => Player.GetWreathHandler();
 
     public override void Load(Mod mod) {
         On_PlayerResourceSetsManager.Draw += On_PlayerResourceSetsManager_Draw;

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -36,6 +37,6 @@ sealed class AshwalkerRobe : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask 
     public override void UpdateEquip(Player player) => player.GetDamage(DruidClass.Nature) += 0.1f;
 
     public void SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
-        color = Color.White * player.GetModPlayer<WreathHandler>().ActualProgress5 * 0.85f;
+        color = Color.White * player.GetWreathHandler().ActualProgress5 * 0.85f;
     }
 }

@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Core;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -139,17 +140,17 @@ class MagicHerb1 : ModItem {
     public override bool OnPickup(Player player) {
         bool flag = false;
         foreach (Player checkPlayer in Main.ActivePlayers) {
-            if (checkPlayer.GetModPlayer<WreathHandler>().IsActualFull1) {
+            if (checkPlayer.GetWreathHandler().IsActualFull1) {
                 flag = true;
                 break;
             }
         }
-        if (player.GetModPlayer<WreathHandler>().IsActualFull1) {
+        if (player.GetWreathHandler().IsActualFull1) {
             player.statLife += 40;
             if (Main.myPlayer == player.whoAmI) {
                 player.HealEffect(40);
             }
-            player.GetModPlayer<WreathHandler>().ForcedHardReset();
+            player.GetWreathHandler().ForcedHardReset();
         }
         else {
             player.statLife += 20;

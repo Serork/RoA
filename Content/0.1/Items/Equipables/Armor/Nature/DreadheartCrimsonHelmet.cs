@@ -7,6 +7,7 @@ using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Audio;
@@ -44,7 +45,7 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap {
 
     public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
         glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
-        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetModPlayer<WreathHandler>().ActualProgress5;
+        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetWreathHandler().ActualProgress5;
     }
 
     public override void UpdateArmorSet(Player player) {
@@ -72,7 +73,7 @@ sealed class DreadheartCrimsonHelmet : NatureItem, IDoubleTap {
                 return;
             }
 
-            WreathHandler handler = Player.GetModPlayer<WreathHandler>();
+            WreathHandler handler = Player.GetWreathHandler();
             if (!handler.IsActualFull1) {
                 return;
             }

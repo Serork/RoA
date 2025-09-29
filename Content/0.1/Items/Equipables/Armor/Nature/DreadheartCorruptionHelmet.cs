@@ -6,6 +6,7 @@ using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -42,7 +43,7 @@ sealed class DreadheartCorruptionHelmet : NatureItem, IDoubleTap {
 
     public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
         glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
-        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetModPlayer<WreathHandler>().ActualProgress4;
+        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetWreathHandler().ActualProgress4;
     }
 
     public override void UpdateArmorSet(Player player) {

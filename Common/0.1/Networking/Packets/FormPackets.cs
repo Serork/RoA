@@ -2,14 +2,12 @@
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System.IO;
 
 using Terraria;
 using Terraria.ID;
-
-using static RoA.Content.Forms.FlederForm;
-using static RoA.Content.Forms.LilPhoenixForm;
 
 namespace RoA.Common.Networking.Packets;
 
@@ -25,7 +23,7 @@ sealed class PhoenixFormPacket1 : NetPacket {
         }
 
         bool value = reader.ReadBoolean();
-        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        var plr = player.GetFormHandler();
         plr._holdLmb = value;
 
         if (Main.netMode == NetmodeID.Server) {
@@ -44,7 +42,7 @@ sealed class PhoenixFormPacket2 : NetPacket {
             return;
         }
 
-        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        var plr = player.GetFormHandler();
         plr._prepared = false;
         plr._dashed2 = plr._dashed = true;
 
@@ -67,7 +65,7 @@ sealed class InsectFormPacket1 : NetPacket {
 
         bool value = reader.ReadBoolean();
 
-        var handler = player.GetModPlayer<InsectFormHandler>();
+        var handler = player.GetFormHandler();
         handler._facedRight = value;
         handler._directionChangedFor = 1f;
 
@@ -87,7 +85,7 @@ sealed class InsectFormPacket2 : NetPacket {
             return;
         }
 
-        player.GetModPlayer<InsectFormHandler>()._facedRight = null;
+        player.GetFormHandler()._facedRight = null;
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new InsectFormPacket2(player), ignoreClient: sender);
@@ -108,7 +106,7 @@ sealed class FlederFormPacket1 : NetPacket {
 
         IDoubleTap.TapDirection direction = (IDoubleTap.TapDirection)reader.ReadSByte();
 
-        player.GetModPlayer<FlederFormHandler>().UseFlederDash(direction, true);
+        player.GetFormHandler().UseFlederDash(direction, true);
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new FlederFormPacket1(player, direction), ignoreClient: sender);
@@ -129,15 +127,13 @@ sealed class FlederFormPacket2 : NetPacket {
 
         bool state = reader.ReadBoolean();
 
-        player.GetModPlayer<FlederFormHandler>()._holdingLmb = state;
+        player.GetFormHandler()._holdingLmb = state;
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new FlederFormPacket2(player, state), ignoreClient: sender);
         }
     }
 }
-
-
 
 sealed class FormPacket1 : NetPacket {
     public FormPacket1(Player player) {
@@ -149,7 +145,7 @@ sealed class FormPacket1 : NetPacket {
             return;
         }
 
-        player.GetModPlayer<WreathHandler>().Reset1();
+        player.GetWreathHandler().Reset1();
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new FormPacket1(player), ignoreClient: sender);

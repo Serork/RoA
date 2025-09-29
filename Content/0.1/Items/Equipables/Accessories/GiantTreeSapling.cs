@@ -2,6 +2,7 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -30,7 +31,7 @@ sealed class GiantTreeSapling : NatureItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetModPlayer<DruidStats>().DischargeTimeDecreaseMultiplier -= 0.15f;
-        if (player.GetModPlayer<WreathHandler>().IsFull1) {
+        if (player.GetWreathHandler().IsFull1) {
             player.statDefense += 5;
         }
     }

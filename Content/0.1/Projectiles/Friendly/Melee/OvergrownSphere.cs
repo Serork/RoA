@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Druid.Forms;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -157,7 +158,7 @@ sealed class OvergrownSphere : ModProjectile {
         else _changeAlpha = true;
 
         int type = ModContent.ItemType<Items.Weapons.Melee.OvergrownSpear>();
-        if (player.GetSelectedItem().type != type || !player.active || player.dead || player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (player.GetSelectedItem().type != type || !player.active || player.dead || player.GetFormHandler().IsInADruidicForm) {
             _changeAlpha = true;
 
             if (Projectile.Opacity > 0f) Projectile.Opacity -= 0.025f;

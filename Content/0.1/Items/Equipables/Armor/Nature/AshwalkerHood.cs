@@ -9,6 +9,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Forms;
 using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -46,7 +47,7 @@ sealed class AshwalkerHood : NatureItem, IDoubleTap {
 
     public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
         glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
-        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetModPlayer<WreathHandler>().ActualProgress5 * 0.85f;
+        glowMaskColor = Color.White * (1f - shadow) * drawPlayer.GetWreathHandler().ActualProgress5 * 0.85f;
     }
 
     public override void UpdateArmorSet(Player player) {

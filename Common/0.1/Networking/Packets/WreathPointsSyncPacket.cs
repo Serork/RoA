@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Druid.Wreath;
+using RoA.Core.Utility.Vanilla;
 
 using System.IO;
 
@@ -34,7 +35,7 @@ sealed class WreathPointsSyncPacket : NetPacket {
         ushort increaseValue = reader.ReadUInt16();
         float stayTime = reader.ReadSingle();
         bool startSlowlyIncreasingUntilFull = reader.ReadBoolean();
-        WreathHandler handler = Main.player[who].GetModPlayer<WreathHandler>();
+        WreathHandler handler = Main.player[who].GetWreathHandler();
         handler.ReceivePlayerSync(resource, tempResource, changingTimeValue, currentChangingTime, shouldDecrease1, shouldDecrease2, currentChangingMult, increaseValue, stayTime, startSlowlyIncreasingUntilFull);
         if (Main.netMode == NetmodeID.Server) {
             handler.SyncPlayer(-1, sender, false);

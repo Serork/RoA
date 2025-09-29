@@ -3,6 +3,7 @@
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Core.Graphics.Data;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 
@@ -33,7 +34,7 @@ sealed class HallowEnt : BaseForm {
     }
 
     protected override void SafePostUpdate(Player player) {
-        player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed = true;
+        player.GetFormHandler().UsePlayerSpeed = true;
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {

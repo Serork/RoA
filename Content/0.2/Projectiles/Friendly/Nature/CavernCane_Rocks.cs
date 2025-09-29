@@ -197,7 +197,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
             Player owner = Projectile.GetOwnerAsPlayer();
             if (owner.IsLocal()) {
                 RocksValues rocksValues = new(Projectile);
-                if (owner.GetModPlayer<WreathHandler>().TryGetHeldCane(out CaneBaseProjectile? heldCane)) {
+                if (owner.GetWreathHandler().TryGetHeldCane(out CaneBaseProjectile? heldCane)) {
                     if (!rocksValues.OwnerStoppedAttacking) {
                         CavernCane.CavernCaneBase heldCavernCaneData = (CavernCane.CavernCaneBase)heldCane!;
                         if (!heldCavernCaneData.IsInUse) {

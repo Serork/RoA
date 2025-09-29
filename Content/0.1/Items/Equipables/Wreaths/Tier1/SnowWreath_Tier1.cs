@@ -19,10 +19,10 @@ sealed class SnowWreathTier1 : WreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        //float value = 0.05f * player.GetModPlayer<WreathHandler>().ActualProgress4;
+        //float value = 0.05f * player.GetWreathHandler().ActualProgress4;
         //player.endurance += value;
 
-        //if (player.GetModPlayer<WreathHandler>().IsFull1) {
+        //if (player.GetWreathHandler().IsFull1) {
         //    player.GetCritChance(DruidClass.Nature) += 4;
         //}
 

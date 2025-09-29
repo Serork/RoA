@@ -6,6 +6,7 @@ using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
@@ -72,12 +73,12 @@ sealed class RootRing : NatureProjectile {
         Projectile.rotation += 0.03f;
 
         if (Projectile.owner == Main.myPlayer) {
-            var stats = player.GetModPlayer<WreathHandler>();
+            var stats = player.GetWreathHandler();
             Projectile.ai[0] = stats.PulseIntensity;
             Projectile.ai[2] = stats.ActualProgress2;
 
             bool flag = false;
-            if (!player.GetModPlayer<DruidStats>().SoulOfTheWoods || !player.GetModPlayer<WreathHandler>().IsFull2 || player.dead) {
+            if (!player.GetModPlayer<DruidStats>().SoulOfTheWoods || !player.GetWreathHandler().IsFull2 || player.dead) {
                 flag = true;
                 _alpha += 15;
                 if (_alpha >= 255) {
@@ -118,7 +119,7 @@ sealed class RootRing : NatureProjectile {
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Vector2 position = Projectile.Center - Main.screenPosition;
         Player player = Main.player[Projectile.owner];
-        var stats = player.GetModPlayer<WreathHandler>();
+        var stats = player.GetWreathHandler();
         float projOpacity = 1f - (float)_alpha / 255f;
         Color color = stats.BaseColor * (0.5f + 0.5f * (1f - Projectile.ai[0]));
         float multiplier = 0.035f;

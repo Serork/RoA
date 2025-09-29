@@ -113,7 +113,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
 
             Projectile.timeLeft = 2;
 
-            if (!owner.IsHolding<Macrolepiota>() || owner.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+            if (!owner.IsHolding<Macrolepiota>() || owner.GetFormHandler().IsInADruidicForm) {
                 Projectile.Kill();
             }
             if (!owner.IsAliveAndFree()) {
@@ -126,7 +126,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
             Projectile.Center = baseCenter + Vector2.UnitY * owner.gfxOffY;
             Projectile.Center = Utils.Floor(Projectile.Center) + new Vector2(owner.direction == -1 ? 4f : 0f, 0f);
 
-            owner.GetModPlayer<WreathHandler>().YAdjustAmountInPixels = -40;
+            owner.GetWreathHandler().YAdjustAmountInPixels = -40;
         }
         void playShrivelAnimation() {
             MacrolepiotaValues macrolepiotaValues = new(Projectile);

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Forms;
 using RoA.Common.Players;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -44,7 +45,7 @@ static partial class PlayerExtensions {
         return result;
     }
 
-    public static bool CanTransfromIntoDruidForm<T>(this Player player, IDoubleTap.TapDirection direction) where T : ModItem => direction == Helper.CurrentDoubleTapDirectionForSetBonuses && HasSetBonusFrom<T>(player) && player.GetModPlayer<BaseFormHandler>().CanTransform;
+    public static bool CanTransfromIntoDruidForm<T>(this Player player, IDoubleTap.TapDirection direction) where T : ModItem => direction == Helper.CurrentDoubleTapDirectionForSetBonuses && HasSetBonusFrom<T>(player) && player.GetFormHandler().CanTransform;
 
     public static Vector2 PlayerMovementOffset(this Player player) {
         Vector2[] positions = [

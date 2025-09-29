@@ -10,6 +10,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
@@ -53,7 +54,7 @@ sealed class FireblossomExplosion : NatureProjectile {
             return;
         }
         Player player = Main.player[Projectile.owner];
-        WreathHandler handler = player.GetModPlayer<WreathHandler>();
+        WreathHandler handler = player.GetWreathHandler();
         int type = ModContent.ProjectileType<Fireblossom>();
         if (handler.IsFull1
             && player.GetModPlayer<FenethsBlazingWreath.FenethsBlazingWreathHandler>().IsEffectActive
@@ -171,7 +172,7 @@ sealed class Fireblossom : NatureProjectile {
         NPC targetNPC = flag ? null : Main.npc[(int)Projectile.ai[0]];
         Player targetPlayer = !flag ? null : Main.player[(int)Projectile.ai[0]];
         int onFireForEnemiesType = ModContent.BuffType<OnFire>();
-        if (Main.player[Projectile.owner].GetModPlayer<WreathHandler>().IsFull1) {
+        if (Main.player[Projectile.owner].GetWreathHandler().IsFull1) {
             if (Projectile.ai[2] == 0f) {
                 float num2 = (float)Main.rand.Next(75, 150) * 0.025f;
                 int time = (int)(60f * num2 * 2f);

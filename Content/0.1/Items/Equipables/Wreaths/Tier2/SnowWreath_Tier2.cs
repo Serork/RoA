@@ -19,7 +19,7 @@ sealed class SnowWreathTier2 : WreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        //WreathHandler handler = player.GetModPlayer<WreathHandler>();
+        //WreathHandler handler = player.GetWreathHandler();
         //float value = 0.1f * handler.ActualProgress4;
         //player.endurance += value;
         //if (handler.IsFull1) {

@@ -10,6 +10,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
 
@@ -181,7 +182,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         Texture2D mainTexture = _mainTexture.Value;
 
         Player player = Main.LocalPlayer;
-        var stats = player.GetModPlayer<WreathHandler>();
+        var stats = player.GetWreathHandler();
 
         // border
         SpriteBatch spriteBatch = Main.spriteBatch;
@@ -199,13 +200,13 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
         Vector2 screenSize = Main.ScreenSize.ToVector2();
         screenSize *= Main.UIScale;
-        var formHandler = player.GetModPlayer<BaseFormHandler>();
+        var formHandler = player.GetFormHandler();
         var currentForm = formHandler.CurrentForm;
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
             position = screenSize / 2f;
             position.Y -= player.height * 1.5f;
 
-            if (!player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
+            if (!player.GetWreathHandler().ShouldDrawItself) {
                 return;
             }
         }
@@ -402,7 +403,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
 
         // border
         Player player = Main.LocalPlayer;
-        var stats = player.GetModPlayer<WreathHandler>();
+        var stats = player.GetWreathHandler();
         SpriteBatch spriteBatch = Main.spriteBatch;
         int width = 44, height = 44;
         int UI_ScreenAnchorX = Main.screenWidth - 870;
@@ -418,7 +419,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             position = screenSize / 2f;
             position.Y -= player.height * 1.5f;
 
-            if (!player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
+            if (!player.GetWreathHandler().ShouldDrawItself) {
                 return;
             }
         }
@@ -426,7 +427,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         if (Main.InGameUI.IsVisible || Main.ingameOptionsWindow) {
             reversedGravity = false;
         }
-        var formHandler = player.GetModPlayer<BaseFormHandler>();
+        var formHandler = player.GetFormHandler();
         var currentForm = formHandler.CurrentForm;
         bool bars2 = config.WreathDrawingMode == RoAClientConfig.WreathDrawingModes.Bars2;
         bool onPlayer = wreathPosition == RoAClientConfig.WreathPositions.Player;

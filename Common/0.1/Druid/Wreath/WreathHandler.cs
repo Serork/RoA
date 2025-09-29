@@ -14,6 +14,7 @@ using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ sealed class WreathHandler : ModPlayer {
         return color;
     }
 
-    public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
+    public static WreathHandler GetWreathStats(Player player) => player.GetWreathHandler();
     public static bool IsWreathCharged(Player player) => GetWreathStats(player).IsFull1;
     public static float GetWreathChargeProgress(Player player) => GetWreathStats(player).ActualProgress4;
     public static float GetWreathChargeProgress_ForArmorGlow(Player player) => GetWreathStats(player).ActualProgress5;
@@ -85,7 +86,7 @@ sealed class WreathHandler : ModPlayer {
             return StandardColor;
         }
 
-        var self = player.GetModPlayer<WreathHandler>();
+        var self = player.GetWreathHandler();
         if (Main.HoverItem.type == ModContent.ItemType<SoulOfTheWoods>()) {
             return SoulOfTheWoodsColor;
         }
@@ -140,7 +141,7 @@ sealed class WreathHandler : ModPlayer {
     public bool IsEmpty => ActualProgress2 <= 0.01f;
     public bool IsEmpty2 => ActualProgress2 <= 0.05f;
     public bool IsEmpty3 => ActualProgress2 <= 0.15f;
-    public bool IsFull1 => Progress >= 0.95f /*|| Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm*/;
+    public bool IsFull1 => Progress >= 0.95f /*|| Player.GetFormHandler().IsInADruidicForm*/;
     public bool IsActualFull1 => ActualProgress2 >= 0.95f;
     public bool WillBeFull(ushort currentResource, bool clawsReset = false) => (clawsReset ? GetActualProgress2(currentResource) : GetProgress(currentResource)) > 0.95f;
     public bool IsFull2 => Progress >= 1.95f;
@@ -349,7 +350,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void SlowlyActivateForm(FormInfo formInfo) {
-        if (Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (Player.GetFormHandler().IsInADruidicForm) {
             return;
         }
         if (StartSlowlyIncreasingUntilFull) {
@@ -454,13 +455,13 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void PostUpdate() {
-        if (!IsEmpty || Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (!IsEmpty || Player.GetFormHandler().IsInADruidicForm) {
             _showForTime = SHOWTIMEBEFOREDISAPPEARING;
         }
         if (_showForTime > 0) {
             _showForTime--;
         }
-        ShouldDrawItself = _showForTime > 0 /* || Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet*/; 
+        ShouldDrawItself = _showForTime > 0 /* || Player.GetFormHandler().HasDruidArmorSet*/; 
         if (Player.dead && !IsChangingValue && CurrentResource > 0) {
             ForcedHardReset();
         }
@@ -514,7 +515,7 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (StartSlowlyIncreasingUntilFull) {
-            if (!Player.GetModPlayer<BaseFormHandler>().HasDruidArmorSet) {
+            if (!Player.GetFormHandler().HasDruidArmorSet) {
                 StartSlowlyIncreasingUntilFull = false;
                 ResetChangingValue();
                 Reset();
@@ -577,7 +578,7 @@ sealed class WreathHandler : ModPlayer {
         else if (_stayTime <= 0f && !_shouldDecrease) {
             Reset(true);
         }
-        else if (!Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        else if (!Player.GetFormHandler().IsInADruidicForm) {
             CaneBaseProjectile? caneProjectile = GetHeldCane();
             bool flag = caneProjectile == null;
             bool flag2 = !flag && !caneProjectile!.PreparingAttack;
@@ -592,7 +593,7 @@ sealed class WreathHandler : ModPlayer {
         if (HasKeepTime) {
             _keepBonusesForTime -= 1f;
         }
-        if (Player.GetModPlayer<BaseFormHandler>().IsInADruidicForm && !IsFull1) {
+        if (Player.GetFormHandler().IsInADruidicForm && !IsFull1) {
             _keepBonusesForTime = Math.Max(Math.Max(DruidPlayerStats.KeepBonusesForTime, 10), _keepBonusesForTime);
         }
 
@@ -611,7 +612,7 @@ sealed class WreathHandler : ModPlayer {
     private void On_PlayerDrawLayers_DrawPlayer_36_CTG(On_PlayerDrawLayers.orig_DrawPlayer_36_CTG orig, ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         float positionY = drawinfo.Position.Y;
-        if (player.whoAmI == Main.myPlayer && player.GetModPlayer<WreathHandler>().ShouldDrawItself) {
+        if (player.whoAmI == Main.myPlayer && player.GetWreathHandler().ShouldDrawItself) {
             drawinfo.Position.Y -= 35f + (RoAClientConfig.IsBars || RoAClientConfig.IsFancy ? 20f : 0f);
         }
         orig(ref drawinfo);

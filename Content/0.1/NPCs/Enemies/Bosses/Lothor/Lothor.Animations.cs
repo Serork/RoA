@@ -3,7 +3,7 @@
 //ref struct ExecuteArgs {
 //    public byte CurrentState;
 //    public double FrameCounter;
-//    public bool Reset;
+//    public bool ResetGryphonStats;
 //}
 
 //interface ILothorAnimation : ILoadable {
@@ -27,12 +27,12 @@
 //            return;
 //        }
 //        ExecuteArgs executeArgs;
-//        executeArgs.Reset = false;
+//        executeArgs.ResetGryphonStats = false;
 //        executeArgs.FrameCounter = NPC.frameCounter;
 //        executeArgs.CurrentState = CurrentState;
 //        _currentAnimation.Execute(ref executeArgs);
 //        NPC.frameCounter = executeArgs.FrameCounter;
-//        if (executeArgs.Reset) {
+//        if (executeArgs.ResetGryphonStats) {
 //            _currentAnimation = null;
 //            return;
 //        }
@@ -78,7 +78,7 @@
 //        double frameRate = 5.0;
 //        ref byte currentFrame = ref executeArgs.CurrentState;
 //        ref double frameCounter = ref executeArgs.FrameCounter;
-//        ref bool reset = ref executeArgs.Reset;
+//        ref bool reset = ref executeArgs.ResetGryphonStats;
 //        if (++frameCounter > frameRate) {
 //            frameCounter = 0.0;
 //            currentFrame++;
@@ -98,7 +98,7 @@
 //        double frameRate = 5.0;
 //        ref byte currentFrame = ref executeArgs.CurrentState;
 //        ref double frameCounter = ref executeArgs.FrameCounter;
-//        ref bool reset = ref executeArgs.Reset;
+//        ref bool reset = ref executeArgs.ResetGryphonStats;
 //        if (++frameCounter > frameRate) {
 //            frameCounter = 0.0;
 //            currentFrame++;
@@ -118,7 +118,7 @@
 //        double frameRate = 5.0;
 //        ref byte currentFrame = ref executeArgs.CurrentState;
 //        ref double frameCounter = ref executeArgs.FrameCounter;
-//        ref bool reset = ref executeArgs.Reset;
+//        ref bool reset = ref executeArgs.ResetGryphonStats;
 //        if (++frameCounter > frameRate) {
 //            frameCounter = 0.0;
 //            currentFrame++;

@@ -6,6 +6,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
@@ -94,14 +95,14 @@ sealed class Snatcher : NatureProjectile {
     }
 
     protected override void SafeOnSpawn(IEntitySource source) {
-        Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset += OnReset;
+        Main.player[Projectile.owner].GetWreathHandler().OnWreathReset += OnReset;
         for (int j = 0; j < _oldPositions.Length; j++) {
             _oldPositions[j] = Vector2.Zero;
         }
     }
 
     public override void OnKill(int timeLeft) {
-        Main.player[Projectile.owner].GetModPlayer<WreathHandler>().OnWreathReset -= OnReset;
+        Main.player[Projectile.owner].GetWreathHandler().OnWreathReset -= OnReset;
         Dusts();
     }
 

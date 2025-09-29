@@ -19,10 +19,10 @@ sealed class BeachWreathTier2 : WreathItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        //WreathHandler handler = player.GetModPlayer<WreathHandler>();
+        //WreathHandler handler = player.GetWreathHandler();
         //float value = 0.1f * handler.ActualProgress4;
         //player.endurance += value;
-        //if (player.GetModPlayer<WreathHandler>().IsFull1) {
+        //if (player.GetWreathHandler().IsFull1) {
         //    player.moveSpeed += 0.15f;
         //}
 

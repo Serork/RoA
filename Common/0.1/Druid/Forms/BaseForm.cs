@@ -8,6 +8,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ sealed class BaseFormBuff(BaseForm parent) : ModBuff {
     }
 
     public override void Update(Player player, ref int buffIndex) {
-        if (!player.GetModPlayer<WreathHandler>().IsEmpty3) {
+        if (!player.GetWreathHandler().IsEmpty3) {
             player.mount.SetMount(Parent.Type, player);
             player.buffTime[buffIndex] = 10;
         }
@@ -162,7 +163,7 @@ abstract class BaseForm : ModMount {
     }
 
     public sealed override void Dismount(Player player, ref bool skipDust) {
-        player.GetModPlayer<WreathHandler>().Dusts_ResetStayTime();
+        player.GetWreathHandler().Dusts_ResetStayTime();
 
         SafeDismountMount(player, ref skipDust);
 

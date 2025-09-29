@@ -21,8 +21,6 @@ sealed class HallowedGryphon : BaseForm {
     private static float MOVESPEEDBOOSTMODIFIER => 3f;
     private static float LOOPATTACKSIZEMODIFIER => 0.7f;
 
-    public static HallowedGryphonHandler GetHandler(Player player) => player.GetModPlayer<HallowedGryphonHandler>();
-
     protected override Color GlowColor(Player player, Color drawColor, float progress) => WreathHandler.GetArmorGlowColor1(player, drawColor, progress);
 
     public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2.5f);
@@ -43,7 +41,7 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     protected override void SafePostUpdate(Player player) {
-        player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed = true;
+        player.GetFormHandler().UsePlayerSpeed = true;
         bool flag = player.mount.FlyTime > 0;
         if (IsInAir(player)) {
             bool flag2 = !flag && player.controlJump;
@@ -87,7 +85,7 @@ sealed class HallowedGryphon : BaseForm {
 
         HandleLoopAttack(player);
 
-        if (!GetHandler(player).IncreasedMoveSpeed) {
+        if (!player.GetFormHandler().IncreasedMoveSpeed) {
             return;
         }
 
@@ -101,12 +99,12 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     public static float GetMoveSpeedFactor(Player player) {
-        float moveSpeedFactor = GetHandler(player).MoveSpeedBuffTime;
-        return Utils.GetLerpValue(0f, HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS * 0.05f, moveSpeedFactor, true) * Utils.GetLerpValue(HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS, HallowedGryphonHandler.MOVESPEEDBUFFTIMEINTICKS * 0.95f, moveSpeedFactor, true);
+        float moveSpeedFactor = player.GetFormHandler().MoveSpeedBuffTime;
+        return Utils.GetLerpValue(0f, BaseFormHandler.MOVESPEEDBUFFTIMEINTICKS * 0.05f, moveSpeedFactor, true) * Utils.GetLerpValue(BaseFormHandler.MOVESPEEDBUFFTIMEINTICKS, BaseFormHandler.MOVESPEEDBUFFTIMEINTICKS * 0.95f, moveSpeedFactor, true);
     }
 
     private int GetLoopAttackTime(Player player) {
-        bool increasedMoveSpeed = GetHandler(player).IncreasedMoveSpeed;
+        bool increasedMoveSpeed = !player.GetFormHandler().IncreasedMoveSpeed;
         int num15 = 185;
         if (increasedMoveSpeed) {
             num15 = (int)(num15 * (1f - ((MOVESPEEDBOOSTMODIFIER - 1f) / 3f * GetMoveSpeedFactor(player))));
@@ -116,7 +114,7 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     private void HandleLoopAttack(Player player) {
-        var handler = GetHandler(player);
+        var handler = player.GetFormHandler();
         ref Vector2 velocity = ref player.velocity;
         ref float rotation = ref player.fullRotation;
         ref Vector2 savedVelocity = ref handler.SavedVelocity;
@@ -182,7 +180,7 @@ sealed class HallowedGryphon : BaseForm {
         else {
             desiredRotation -= MathHelper.PiOver2;
         }
-        float moveSpeedFactor = GetHandler(player).MoveSpeedBuffTime;
+        float moveSpeedFactor = player.GetFormHandler().MoveSpeedBuffTime;
         rotation = desiredRotation;
         savedVelocity = savedVelocity.RotatedBy((0f - num19) * (float)direction);
         if (attackFactor2++ > perAttack) {
@@ -227,7 +225,7 @@ sealed class HallowedGryphon : BaseForm {
         int minMovingFrame = 1;
         int maxMovingFrame = minMovingFrame + 5;
         int minFlyingFrame = maxMovingFrame + 1, maxFlyingFrame = minFlyingFrame + 3;
-        var handler = GetHandler(player);
+        var handler = player.GetFormHandler();
         void playFlapSound(bool reset = false) {
             if (reset) {
                 player.flapSound = false;
@@ -313,7 +311,7 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
-        GetHandler(player).Reset();
+		player.GetFormHandler().ResetGryphonStats();
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 20; i++) {
             Vector2 spawnPos = center + new Vector2(40, 0).RotatedBy(i * Math.PI * 2 / 20f);
@@ -330,7 +328,7 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
-        GetHandler(player).Reset();
+		player.GetFormHandler().ResetGryphonStats();
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 15; i++) {
             Vector2 spawnPos = center + new Vector2(25, 0).RotatedBy(i * Math.PI * 2 / 15f) - new Vector2(4f, 0f);

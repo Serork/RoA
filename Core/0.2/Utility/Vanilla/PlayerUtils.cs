@@ -1,10 +1,15 @@
-﻿using RoA.Common.Players;
+﻿using RoA.Common.Druid.Forms;
+using RoA.Common.Druid.Wreath;
+using RoA.Common.Players;
 
 using Terraria;
 
 namespace RoA.Core.Utility.Vanilla;
 
 static class PlayerUtils {
+    public static BaseFormHandler GetFormHandler(this Player player) => player.GetModPlayer<BaseFormHandler>();
+    public static WreathHandler GetWreathHandler(this Player player) => player.GetModPlayer<WreathHandler>();
+
     public static PlayerCommon GetCommon(this Player player) => player.GetModPlayer<PlayerCommon>();
 
     public static bool UpdateEquips_CanItemGrantBenefits(int itemSlot, Item item) {

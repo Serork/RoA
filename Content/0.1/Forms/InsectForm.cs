@@ -7,6 +7,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -54,7 +55,7 @@ abstract class InsectForm : BaseForm {
         rotation *= 0.5f;
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
         float maxRotation = 0.2f;
-        bool? variable = player.GetModPlayer<InsectFormHandler>()._facedRight;
+        bool? variable = player.GetFormHandler()._facedRight;
         if (variable.HasValue) {
             maxRotation = 0.1f;
             _maxRotation = MathHelper.Lerp(_maxRotation, maxRotation, 0.1f);
@@ -76,7 +77,7 @@ abstract class InsectForm : BaseForm {
     }
 
     protected override void GetSpriteEffects(Player player, ref SpriteEffects spriteEffects) {
-        bool? variable = player.GetModPlayer<InsectFormHandler>()._facedRight;
+        bool? variable = player.GetFormHandler()._facedRight;
         if (!variable.HasValue) {
             return;
         }
@@ -87,8 +88,8 @@ abstract class InsectForm : BaseForm {
         if (player.whoAmI != Main.myPlayer || Main.mouseText)
             return;
 
-        ref bool? facedRight = ref player.GetModPlayer<InsectFormHandler>()._facedRight;
-        ref int insectTimer = ref player.GetModPlayer<InsectFormHandler>()._insectTimer;
+        ref bool? facedRight = ref player.GetFormHandler()._facedRight;
+        ref int insectTimer = ref player.GetFormHandler()._insectTimer;
         string context = "insectformattack";
         IEntitySource source = player.GetSource_Misc(context);
         if (player.velocity.Y == 0f && player.velocity.X == 0f) {
@@ -96,7 +97,7 @@ abstract class InsectForm : BaseForm {
                 insectTimer++;
                 if (insectTimer >= 90) {
                     BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
-                    //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
+                    //player.GetWreathHandler().ResetGryphonStats(true, 0.25f);
                     SoundEngine.PlaySound(SoundID.NPCHit32, player.Center);
                     if (Main.netMode == NetmodeID.MultiplayerClient) {
                         MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 11, player.Center));
@@ -116,7 +117,7 @@ abstract class InsectForm : BaseForm {
         else
             insectTimer = 0;
         if (!Main.mouseLeft || !player.controlUseItem) {
-            if (player.GetModPlayer<InsectFormHandler>()._directionChangedFor <= 0f) {
+            if (player.GetFormHandler()._directionChangedFor <= 0f) {
                 facedRight = null;
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     MultiplayerSystem.SendPacket(new InsectFormPacket2(player));
@@ -124,7 +125,7 @@ abstract class InsectForm : BaseForm {
             }
             return;
         }
-        player.GetModPlayer<InsectFormHandler>()._directionChangedFor = 1f;
+        player.GetFormHandler()._directionChangedFor = 1f;
         var value = (Main.MouseWorld.X > player.position.X ? 1 : -1) == 1;
         if (facedRight != value) {
             facedRight = value;
@@ -132,7 +133,7 @@ abstract class InsectForm : BaseForm {
                 MultiplayerSystem.SendPacket(new InsectFormPacket1(player, facedRight.Value));
             }
         }
-        ref int shootCounter = ref player.GetModPlayer<InsectFormHandler>()._shootCounter;
+        ref int shootCounter = ref player.GetFormHandler()._shootCounter;
         if (!Main.mouseText) {
             if (Main.mouseLeft) {
                 shootCounter++;
@@ -143,7 +144,7 @@ abstract class InsectForm : BaseForm {
         }
         if (shootCounter % 10 == 5 && shootCounter > 0) {
             BaseFormDataStorage.ChangeAttackCharge1(player, 1.25f);
-            //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
+            //player.GetWreathHandler().ResetGryphonStats(true, 0.25f);
 
             SoundEngine.PlaySound(SoundID.Item17, player.Center);
             if (Main.netMode == NetmodeID.MultiplayerClient) {

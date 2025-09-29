@@ -9,6 +9,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -66,13 +67,13 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override void SafePostUpdate(Player player) {
-        player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed = true;
+        player.GetFormHandler().UsePlayerSpeed = true;
 
         float rotation = player.velocity.X * 0.1f;
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
         float maxRotation = 0.075f;
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
-        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        var plr = player.GetFormHandler();
         if (plr._dashed) {
             player.fullRotation = (float)Math.Atan2((double)player.velocity.Y, (double)player.velocity.X) + (float)Math.PI / 2f;
         }
@@ -92,7 +93,7 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     private void UltraAttackHandler(Player player) {
-        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        var plr = player.GetFormHandler();
         int testY = (int)player.Center.Y / 16;
         int value = 5;
         bool flag = true;
@@ -110,9 +111,9 @@ sealed class LilPhoenixForm : BaseForm {
         bool flag4 = !flag || !IsInAir(player);
         StrikeNPC(player, !player.wet && WorldGenHelper.CustomSolidCollision(player.position - Vector2.One * 3, player.width + 6, player.height + 6, TileID.Sets.Platforms));
         if (flag4) {
-            if (plr._charge3 < LilPhoenixFormHandler.MAXCHARGE) {
+            if (plr._charge3 < BaseFormHandler.MAXPHOENIXCHARGE) {
                 if (plr._dashed) {
-                    plr.ClearProjectiles();
+                    plr.ClearPhoenixProjectiles();
                 }
                 plr._dashed = false;
             }
@@ -155,7 +156,7 @@ sealed class LilPhoenixForm : BaseForm {
             }
 
             NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
-            //player.GetModPlayer<WreathHandler>().Reset(true, 0.25f);
+            //player.GetWreathHandler().ResetGryphonStats(true, 0.25f);
         }
         if (player.whoAmI == Main.myPlayer) {
             bool flag2 = player.controlUseItem && Main.mouseLeft && !Main.mouseText;
@@ -204,7 +205,7 @@ sealed class LilPhoenixForm : BaseForm {
             plr._tempPosition = Vector2.Lerp(plr._tempPosition, player.position, 0.25f);
             plr._isPreparing = true;
             plr._wasPreparing = false;
-            float max = LilPhoenixFormHandler.MAXCHARGE;
+            float max = BaseFormHandler.MAXPHOENIXCHARGE;
             if (plr._charge < max) {
                 plr._charge += 0.1f;
                 plr._charge3 = plr._charge;
@@ -243,10 +244,10 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     private void StrikeNPC(Player player, bool flag4) {
-        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        var plr = player.GetFormHandler();
         void explosion(int i = -1) {
             if (plr._dashed2 && Main.netMode != NetmodeID.Server) {
-                float value = plr._charge3 / LilPhoenixFormHandler.MAXCHARGE;
+                float value = plr._charge3 / BaseFormHandler.MAXPHOENIXCHARGE;
                 if (i != -1) {
                     player.immune = true;
                     player.immuneTime = 20;
@@ -264,7 +265,7 @@ sealed class LilPhoenixForm : BaseForm {
                     if (player.whoAmI == Main.myPlayer)
                         player.ApplyDamageToNPC(Main.npc[i], (int)damage, knockBack, direction, crit, DruidClass.Nature, true);
                 }
-                if (plr._charge3 >= LilPhoenixFormHandler.MAXCHARGE) {
+                if (plr._charge3 >= BaseFormHandler.MAXPHOENIXCHARGE) {
                     player.immune = true;
                     player.immuneTime = 30;
                     player.immuneNoBlink = true;
@@ -277,7 +278,7 @@ sealed class LilPhoenixForm : BaseForm {
                         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
                     plr._charge3 = 0f;
                     if (plr._dashed) {
-                        plr.ClearProjectiles();
+                        plr.ClearPhoenixProjectiles();
                     }
                     plr._dashed = false;
                 }
@@ -307,7 +308,7 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     private void ExtraJumpsHandler(Player player) {
-        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        var plr = player.GetFormHandler();
         Helper.GetJumpSettings(player, out int jumpHeight, out float jumpSpeed, out float jumpSpeedBoost, out float extraFall);
         jumpSpeed = jumpSpeed * 1.6f;
         jumpHeight = jumpHeight / 3;
@@ -331,7 +332,7 @@ sealed class LilPhoenixForm : BaseForm {
                 }
             }
             if (plr._dashed) {
-                plr.ResetDash();
+                plr.ResetPhoenixDash();
             }
             plr._dashed2 = false;
 
@@ -398,7 +399,7 @@ sealed class LilPhoenixForm : BaseForm {
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
         int maxFrame = 4;
         float walkingFrameFrequiency = 24f;
-        LilPhoenixFormHandler plr = player.GetModPlayer<LilPhoenixFormHandler>();
+        var plr = player.GetFormHandler();
         if (plr._dashed) {
             frame = 11;
             frameCounter = 0f;
@@ -468,7 +469,7 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
-        player.GetModPlayer<LilPhoenixFormHandler>().ResetDash(true);
+        player.GetFormHandler().ResetPhoenixDash(true);
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 32; i++) {
             Point size = new(40, 55);
@@ -485,7 +486,7 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
-        player.GetModPlayer<LilPhoenixFormHandler>().ResetDash(true);
+        player.GetFormHandler().ResetPhoenixDash(true);
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 56; i++) {
             Point size = new(40, 55);

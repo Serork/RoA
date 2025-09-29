@@ -1,5 +1,6 @@
 ﻿using RoA.Common.Druid.Forms;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System.IO;
 
@@ -20,7 +21,7 @@ sealed class SpawnFormPacket : NetPacket {
         }
 
         string serializedData = reader.ReadString();
-        BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
+        BaseFormHandler handler = player.GetFormHandler();
         handler.InternalSetCurrentForm(handler.Deserialize(serializedData));
 
         if (Main.netMode == NetmodeID.Server) {
@@ -39,7 +40,7 @@ sealed class SpawnFormPacket2 : NetPacket {
             return;
         }
 
-        BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
+        BaseFormHandler handler = player.GetFormHandler();
         handler._sync = 0;
 
         if (Main.netMode == NetmodeID.Server) {

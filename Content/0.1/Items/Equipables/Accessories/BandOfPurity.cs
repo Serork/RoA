@@ -2,6 +2,7 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -30,7 +31,7 @@ sealed class BandOfPurity : NatureItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.2f;
-        if (player.GetModPlayer<WreathHandler>().IsFull1) {
+        if (player.GetWreathHandler().IsFull1) {
             player.lifeRegen += 10;
         }
     }

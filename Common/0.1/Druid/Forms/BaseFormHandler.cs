@@ -4,8 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Common.Players;
 using RoA.Common.Utilities.Extensions;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -21,7 +23,15 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Druid.Forms;
-sealed class BaseFormHandler : ModPlayer {
+sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
+    void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
+        OnDoubleTap1(player, direction);
+        OnDoubleTap2(player, direction);
+    }
+
+    public partial void OnDoubleTap1(Player player, IDoubleTap.TapDirection direction);
+    public partial void OnDoubleTap2(Player player, IDoubleTap.TapDirection direction);
+
     public record FormInfo {
         public BaseForm BaseForm { get; init; }
         public Predicate<Player> ShouldBeActive { get; init; }
@@ -78,7 +88,7 @@ sealed class BaseFormHandler : ModPlayer {
         return (!flag && _shouldBeActive) || (flag && formInstance.ShouldBeActive(Player));
     }
 
-    public static void KeepFormActive(Player player) => player.GetModPlayer<BaseFormHandler>().KeepFormActive();
+    public static void KeepFormActive(Player player) => player.GetFormHandler().KeepFormActive();
 
     public static T GetFormInstance<T>() where T : BaseForm {
         if (_formsByType.TryGetValue(typeof(T), out FormInfo form)) {
@@ -99,14 +109,14 @@ sealed class BaseFormHandler : ModPlayer {
     public static void RegisterForm<T>(Predicate<Player> active = null) where T : BaseForm => _formsByType.TryAdd(typeof(T), new(ModContent.GetInstance<T>(), active));
 
     public static void ApplyForm<T>(Player player, T instance = null) where T : FormInfo {
-        BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
+        BaseFormHandler handler = player.GetFormHandler();
         if (handler.IsInADruidicForm) {
             return;
         }
 
         T formInstance = instance ?? GetForm<T>();
-        if (!player.GetModPlayer<WreathHandler>().IsFull6) {
-            player.GetModPlayer<WreathHandler>().SlowlyActivateForm(formInstance);
+        if (!player.GetWreathHandler().IsFull6) {
+            player.GetWreathHandler().SlowlyActivateForm(formInstance);
             return;
         }
 
@@ -129,7 +139,7 @@ sealed class BaseFormHandler : ModPlayer {
         player.mount.ResetFlightTime(player.velocity.X);
         player.wingTime = player.wingTimeMax;
 
-        player.GetModPlayer<WreathHandler>().Reset(true, 0.1f);
+        player.GetWreathHandler().Reset(true, 0.1f);
         player.AddBuffInStart(formInstance.MountBuff.Type, 3600);
         handler.InternalSetCurrentForm(formInstance);
 
@@ -147,12 +157,12 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public static void ReleaseForm<T>(Player player, T instance = null) where T : FormInfo {
-        BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
+        BaseFormHandler handler = player.GetFormHandler();
         T formInstance = instance ?? GetForm<T>();
         if (formInstance != null) {
             player.ClearBuff(formInstance.MountBuff.Type);
-            player.GetModPlayer<WreathHandler>().Reset(true);
-            player.GetModPlayer<WreathHandler>().OnResetEffects();
+            player.GetWreathHandler().Reset(true);
+            player.GetWreathHandler().OnResetEffects();
 
             player.position.X += player.width / 2;
             player.width = Player.defaultWidth;
@@ -177,7 +187,7 @@ sealed class BaseFormHandler : ModPlayer {
             return;
         }
 
-        BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
+        BaseFormHandler handler = player.GetFormHandler();
         T formInstance = instance ?? GetForm<T>();
         if (!handler.ShouldFormBeActive(formInstance)) {
             return;
@@ -196,13 +206,27 @@ sealed class BaseFormHandler : ModPlayer {
 
     public override void ResetEffects() {
         ResetActiveForm();
+
+        ResetEffects1();
+        ResetEffects2();
+        ResetEffects3();
     }
+
+    public partial void ResetEffects1();
+    public partial void ResetEffects2();
+    public partial void ResetEffects3();
 
     public override void PostUpdateRunSpeeds() { }
 
     public override void PostUpdate() {
         UsePlayerSpeed = false;
+
+        PostUpdate1();
+        PostUpdate2();
     }
+
+    public partial void PostUpdate1();
+    public partial void PostUpdate2();
 
     public override void PostUpdateEquips() {
         ClearForm();
@@ -261,7 +285,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     public override void HideDrawLayers(PlayerDrawSet drawInfo) {
-        if (IsInADruidicForm && Player.GetModPlayer<BaseFormHandler>().CurrentForm.BaseForm.IsDrawing) {
+        if (IsInADruidicForm && Player.GetFormHandler().CurrentForm.BaseForm.IsDrawing) {
             foreach (var layer in PlayerDrawLayerLoader.Layers.Except(PlayerDrawLayerLoader.Layers.Where(checkLayer => checkLayer.FullName.Contains("mount", StringComparison.CurrentCultureIgnoreCase) || checkLayer.FullName.Contains("wreath", StringComparison.CurrentCultureIgnoreCase)).Where(checkLayer => checkLayer.Visible))) {
                 layer.Hide();
             }
@@ -307,10 +331,14 @@ sealed class BaseFormHandler : ModPlayer {
         Hook_ExtraJumpLoader_UpdateHorizontalSpeeds = RoA.Detour(typeof(ExtraJumpLoader).GetMethod(nameof(ExtraJumpLoader.UpdateHorizontalSpeeds), BindingFlags.Public | BindingFlags.Static),
             typeof(BaseFormHandler).GetMethod(nameof(ExtraJumpLoader_UpdateHorizontalSpeeds), BindingFlags.NonPublic | BindingFlags.Static));
         On_Player.UpdateJumpHeight += On_Player_UpdateJumpHeight;
+
+        Load1();
     }
 
+    public partial void Load1();
+
     private void On_Player_TrySwitchingLoadout(On_Player.orig_TrySwitchingLoadout orig, Player self, int loadoutIndex) {
-        if (self.GetModPlayer<WreathHandler>().StartSlowlyIncreasingUntilFull) {
+        if (self.GetWreathHandler().StartSlowlyIncreasingUntilFull) {
             return;
         }
 
@@ -322,13 +350,13 @@ sealed class BaseFormHandler : ModPlayer {
     private static void ExtraJumpLoader_UpdateHorizontalSpeeds(ExtraJumpLoader_UpdateHorizontalSpeeds_orig self, Player player) {
         self(player);
 
-        if (player.GetModPlayer<BaseFormHandler>().UsePlayerSpeed) {
+        if (player.GetFormHandler().UsePlayerSpeed) {
             _playerMovementSpeedInfo = new MovementSpeedInfo(player.maxRunSpeed, player.accRunSpeed, player.runAcceleration);
         }
     }
 
     private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
-        if (self.GetModPlayer<BaseFormHandler>().UsePlayerSpeed && self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (self.GetFormHandler().UsePlayerSpeed && self.GetFormHandler().IsInADruidicForm) {
             BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
             self.maxRunSpeed = _playerMovementSpeedInfo.MaxRunSpeed * mountData.GetMaxSpeedMultiplier(self);
             self.accRunSpeed = _playerMovementSpeedInfo.AccRunSpeed * mountData.GetAccRunSpeedMultiplier(self);
@@ -338,7 +366,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_Player_ResizeHitbox(On_Player.orig_ResizeHitbox orig, Player self) {
-        var handler = self.GetModPlayer<BaseFormHandler>();
+        var handler = self.GetFormHandler();
         if (handler.IsInADruidicForm) {
             var activeForm = handler.CurrentForm.BaseForm;
             self.position.X += self.width / 2;
@@ -356,7 +384,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_Player_UpdateJumpHeight(On_Player.orig_UpdateJumpHeight orig, Player self) {
-        if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (self.GetFormHandler().IsInADruidicForm) {
             BaseForm mountData = MountLoader.GetMount(self.mount._type) as BaseForm;
             if (mountData != null && !mountData.ShouldApplyUpdateJumpHeightLogic) {
                 bool flag = false;
@@ -418,7 +446,7 @@ sealed class BaseFormHandler : ModPlayer {
     private void On_PlayerHeadDrawRenderTargetContent_DrawTheContent(On_PlayerHeadDrawRenderTargetContent.orig_DrawTheContent orig, PlayerHeadDrawRenderTargetContent self, SpriteBatch spriteBatch) {
         Player player = typeof(PlayerHeadDrawRenderTargetContent).GetFieldValue<Player>("_player", self);
         if (player != null && !player.ShouldNotDraw) {
-            BaseFormHandler handler = player.GetModPlayer<BaseFormHandler>();
+            BaseFormHandler handler = player.GetFormHandler();
             if (handler.IsInADruidicForm) {
                 if (handler.CurrentForm.BaseForm.IsDrawing) {
                     Texture2D texture = handler.CurrentForm.BaseForm.HeadTexture.Value;
@@ -582,7 +610,7 @@ sealed class BaseFormHandler : ModPlayer {
             if (!(self.velocity.X != 0f || Falling))
                 continue;
 
-            if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+            if (self.GetFormHandler().IsInADruidicForm) {
                 num3 = self.mount._data.spawnDust;
             }
 
@@ -640,7 +668,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_Player_QuickMount(On_Player.orig_QuickMount orig, Player self) {
-        if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (self.GetFormHandler().IsInADruidicForm) {
             return;
         }
 
@@ -648,7 +676,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private Item On_Player_QuickMount_GetItemToUse(On_Player.orig_QuickMount_GetItemToUse orig, Player self) {
-        if (self.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (self.GetFormHandler().IsInADruidicForm) {
             return null;
         }
 
@@ -656,7 +684,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_Main_DrawInterface_40_InteractItemIcon(On_Main.orig_DrawInterface_40_InteractItemIcon orig, Main self) {
-        if (Main.player[Main.myPlayer].cursorItemIconID <= 0 && Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (Main.player[Main.myPlayer].cursorItemIconID <= 0 && Main.LocalPlayer.GetFormHandler().IsInADruidicForm) {
             return;
         }
 
@@ -664,7 +692,7 @@ sealed class BaseFormHandler : ModPlayer {
     }
 
     private void On_TileObject_DrawPreview(On_TileObject.orig_DrawPreview orig, Microsoft.Xna.Framework.Graphics.SpriteBatch sb, TileObjectPreviewData op, Vector2 position) {
-        if (Main.LocalPlayer.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (Main.LocalPlayer.GetFormHandler().IsInADruidicForm) {
             return;
         }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.ID;
@@ -20,7 +21,7 @@ sealed class WreathCharger : NatureItem {
 
     public override bool? UseItem(Player player) {
         if (player.ItemAnimationJustStarted) {
-            WreathHandler handler = player.GetModPlayer<WreathHandler>();
+            WreathHandler handler = player.GetWreathHandler();
             handler.IncreaseResourceValue();
             handler.MakeDustsOnHit();
         }

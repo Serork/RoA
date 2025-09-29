@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.ID;
@@ -24,7 +25,7 @@ sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        WreathHandler handler = player.GetModPlayer<WreathHandler>();
+        WreathHandler handler = player.GetWreathHandler();
         if (handler.IsFull1) {
             player.GetKnockback(DruidClass.Nature) += 0.5f;
         }
@@ -49,7 +50,7 @@ sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
 
             int type = ModContent.ProjectileType<Fireblossom>();
             if (proj.type != ModContent.ProjectileType<FireblossomExplosion>() && proj.type != ModContent.ProjectileType<Fireblossom>() &&
-                IsEffectActive && Main.rand.NextChance(0.25 * Player.GetModPlayer<WreathHandler>().ActualProgress4) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
+                IsEffectActive && Main.rand.NextChance(0.25 * Player.GetWreathHandler().ActualProgress4) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
                 Player.ownedProjectileCounts[type] < 10) {
                 Vector2 center = proj.Center;
                 if (center.Distance(Player.Center) < 100f || center.Distance(Player.RotatedRelativePoint(Player.MountedCenter, true)) < 100f) {
@@ -74,7 +75,7 @@ sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
             }
 
             int type = ModContent.ProjectileType<Fireblossom>();
-            if (IsEffectActive && Main.rand.NextChance(0.25 * Player.GetModPlayer<WreathHandler>().ActualProgress4) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
+            if (IsEffectActive && Main.rand.NextChance(0.25 * Player.GetWreathHandler().ActualProgress4) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
                 Player.ownedProjectileCounts[type] < 10) {
                 int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, (int)Player.GetTotalDamage(DruidClass.Nature).ApplyTo(10) + + item.damage / 2, item.knockBack,
                     Player.whoAmI, target.whoAmI, Player.itemLocation.X, Player.itemLocation.Y);

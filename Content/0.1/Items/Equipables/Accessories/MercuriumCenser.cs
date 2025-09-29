@@ -2,6 +2,7 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -24,7 +25,7 @@ sealed class MercuriumCenser : NatureItem {
                 return;
             }
 
-            var handler = Player.GetModPlayer<WreathHandler>();
+            var handler = Player.GetWreathHandler();
             if (!handler.IsFull1) {
                 return;
             }

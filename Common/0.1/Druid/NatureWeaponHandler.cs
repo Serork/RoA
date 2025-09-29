@@ -5,6 +5,7 @@ using RoA.Content;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Prefixes;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Linq;
@@ -153,7 +154,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static ushort GetUseSpeedForClaws(Item item, Player player) =>
         (ushort)(GetUseSpeed(item, player) - (Math.Min(player.GetAttackSpeed(DamageClass.Melee), 2f) - 1f) * GetUseSpeed(item, player) * 0.5f);
 
-    public static WreathHandler GetWreathStats(Player player) => player.GetModPlayer<WreathHandler>();
+    public static WreathHandler GetWreathStats(Player player) => player.GetWreathHandler();
 
     public static void SetPotentialDamage(Item item, ushort potentialDamage) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialDamage = potentialDamage/*(ushort)Math.Max(potentialDamage, GetItemDamage(item, Main.LocalPlayer))*/;
     public static void SetPotentialUseSpeed(Item item, ushort potentialUseTime) => item.GetGlobalItem<NatureWeaponHandler>()._basePotentialUseSpeed = potentialUseTime/*(ushort)Math.Min(potentialUseTime, GetItemUseTime(item))*/;

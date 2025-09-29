@@ -40,7 +40,7 @@ sealed class Macrolepiota : NatureItem {
             return;
         }
 
-        if (player.HasProjectile<Macrolepiota_HeldProjectile>() || player.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (player.HasProjectile<Macrolepiota_HeldProjectile>() || player.GetFormHandler().IsInADruidicForm) {
             return;
         }
 

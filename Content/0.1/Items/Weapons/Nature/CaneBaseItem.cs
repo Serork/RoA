@@ -9,6 +9,7 @@ using RoA.Common.GlowMasks;
 using RoA.Common.Projectiles;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
@@ -365,7 +366,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             Projectile.Kill();
         }
 
-        if (Owner.GetModPlayer<BaseFormHandler>().IsInADruidicForm) {
+        if (Owner.GetFormHandler().IsInADruidicForm) {
             Projectile.Kill();
         }
         bool haveProjsActive = Owner.ownedProjectileCounts[ShootType] >= ProjActiveCount();

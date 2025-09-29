@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Audio;
@@ -36,7 +37,7 @@ sealed class FeathersInABottle : NatureItem {
     internal sealed class FeathersInABottleExtraJump : ExtraJump {
         public override Position GetDefaultPosition() => AfterBottleJumps;
 
-        public override bool CanStart(Player player) => !player.GetModPlayer<BaseFormHandler>().IsInADruidicForm && !player.GetModPlayer<WreathHandler>().StartSlowlyIncreasingUntilFull && player.GetModPlayer<WreathHandler>().HasEnough(0.25f);
+        public override bool CanStart(Player player) => !player.GetFormHandler().IsInADruidicForm && !player.GetWreathHandler().StartSlowlyIncreasingUntilFull && player.GetWreathHandler().HasEnough(0.25f);
 
         public override float GetDurationMultiplier(Player player) => 1f;
 
@@ -50,7 +51,7 @@ sealed class FeathersInABottle : NatureItem {
             if (player.gravDir == -1f)
                 num = -6;
 
-            var handler = player.GetModPlayer<WreathHandler>();
+            var handler = player.GetWreathHandler();
             int variant = 0;
             if (handler.IsPhoenixWreath) {
                 variant = 2;
@@ -68,7 +69,7 @@ sealed class FeathersInABottle : NatureItem {
         }
 
         public override void OnStarted(Player player, ref bool playSound) {
-            var handler = player.GetModPlayer<WreathHandler>();
+            var handler = player.GetWreathHandler();
             handler.Consume(0.25f);
 
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Flutter") { Volume = 1.2f }, player.Center);
@@ -106,7 +107,7 @@ sealed class FeathersInABottle : NatureItem {
         private static void SpawnCloudPoof(Player player, Vector2 position) {
             if (Main.netMode != NetmodeID.Server) {
                 string variant = string.Empty;
-                var handler = player.GetModPlayer<WreathHandler>();
+                var handler = player.GetWreathHandler();
                 if (handler.IsPhoenixWreath) {
                     variant = "1";
                 }
