@@ -12,6 +12,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -419,19 +420,19 @@ sealed partial class BaseFormHandler : ModPlayer {
         if (!Player.GetFormHandler().IsConsideredAs<HallowEnt>()) {
             return;
         }
-
-        var hallowWardProjectile = TrackedEntitiesSystem.GetTrackedProjectile<HallowWard>(checkProjectile => checkProjectile.owner != Player.whoAmI);
-        foreach (var projectile in hallowWardProjectile) {
-            projectile.Kill();
+        
+        void spawnAura() {
             ProjectileUtils.SpawnPlayerOwnedProjectile<HallowWard>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(info.DamageSource)) {
                 Position = Player.Center
             });
+        }
+        var hallowWardProjectile = TrackedEntitiesSystem.GetTrackedProjectile<HallowWard>(checkProjectile => checkProjectile.owner != Player.whoAmI).ToList();
+        if (Player.HasProjectile<HallowWard>()) {
+            TrackedEntitiesSystem.GetTrackedProjectile<HallowWard>(checkProjectile => checkProjectile.owner != Player.whoAmI).ToList()[0].Kill();
+            spawnAura();
             return;
         }
-
-        ProjectileUtils.SpawnPlayerOwnedProjectile<HallowWard>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(info.DamageSource)) {
-            Position = Player.Center
-        });
+        spawnAura();
     }
     #endregion
 }
