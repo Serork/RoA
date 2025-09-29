@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.DataStructures;
