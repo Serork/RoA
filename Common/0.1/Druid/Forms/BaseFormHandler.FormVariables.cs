@@ -426,7 +426,6 @@ sealed partial class BaseFormHandler : ModPlayer {
                 Position = Player.Center
             });
         }
-        var hallowWardProjectile = TrackedEntitiesSystem.GetTrackedProjectile<HallowWard>(checkProjectile => checkProjectile.owner != Player.whoAmI).ToList();
         if (Player.HasProjectile<HallowWard>()) {
             TrackedEntitiesSystem.GetTrackedProjectile<HallowWard>(checkProjectile => checkProjectile.owner != Player.whoAmI).ToList()[0].Kill();
             spawnAura();
