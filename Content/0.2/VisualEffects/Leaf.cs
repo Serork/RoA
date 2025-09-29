@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.VisualEffects;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
+using RoA.Core.Utility;
 
 using System;
 
@@ -50,6 +51,8 @@ sealed class Leaf : VisualEffect<Leaf> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
+        Helper.ApplyWindPhysics(Position, ref Velocity);
+
         if (AI0-- <= 0f) {
             _newVelocity = Velocity.RotatedByRandom(MathHelper.PiOver4);
 

@@ -47,6 +47,10 @@ sealed class FeathersInABottle : NatureItem {
         }
 
         public override void ShowVisuals(Player player) {
+            OnJumpingEffects(player);
+        }
+
+        public static void OnJumpingEffects(Player player) {
             int num = player.height;
             if (player.gravDir == -1f)
                 num = -6;
@@ -70,7 +74,11 @@ sealed class FeathersInABottle : NatureItem {
 
         public override void OnStarted(Player player, ref bool playSound) {
             var handler = player.GetWreathHandler();
-            handler.Consume(0.25f);
+            handler.Consume(0.25f);        
+        }
+
+        public static void OnJumpEffects(Player player) {
+            var handler = player.GetWreathHandler();
 
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Flutter") { Volume = 1.2f }, player.Center);
 

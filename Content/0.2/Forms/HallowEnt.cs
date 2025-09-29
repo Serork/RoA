@@ -4,6 +4,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Common.VisualEffects;
+using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Content.VisualEffects;
 using RoA.Core;
@@ -69,6 +70,17 @@ sealed class HallowEnt : BaseForm {
 
     protected override void OnJump(Player player) {
         BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
+        for (int i = 0; i < 2; i++) {
+            FeathersInABottle.FeathersInABottleExtraJump.OnJumpEffects(player);
+        }
+    }
+
+    protected override void OnJumping(Player player, bool firstJump) {
+        if (firstJump) {
+            return;
+        }
+
+        FeathersInABottle.FeathersInABottleExtraJump.OnJumpingEffects(player);
     }
 
     private void HandleLeafAttack(Player player) {
@@ -198,7 +210,7 @@ sealed class HallowEnt : BaseForm {
             Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
             leafParticle?.CustomData = player;
             leafParticle?.OnDismount = true;
-            leafParticle?.Scale *= 0.75f;
+            leafParticle?.Scale *= 0.85f;
         }
 
         Reset(player);

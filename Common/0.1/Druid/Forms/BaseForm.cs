@@ -126,12 +126,11 @@ abstract class BaseForm : ModMount {
         return !player.sliding && !onTile && player.gfxOffY == 0f;
     }
 
-    protected virtual void OnJump(Player player) {
-    }
+    protected virtual void OnJump(Player player) { }
+    protected virtual void OnJumping(Player player, bool firstJump) { }
 
     protected virtual void SetJumpSettings(Player player, ref int jumpHeight, ref float jumpSpeed, ref float jumpSpeedBoost, ref float extraFall,
-        ref bool hasDoubleJump, ref int jumpOnFirst, ref int jumpOnSecond) {
-    }
+        ref bool hasDoubleJump, ref int jumpOnFirst, ref int jumpOnSecond) { }
 
     protected virtual void ActivateExtraJumps(Player player) {
         var plr = player.GetFormHandler();
@@ -159,6 +158,7 @@ abstract class BaseForm : ModMount {
                 else {
                     player.velocity.Y = -jumpSpeed * player.gravDir;
                     plr.Jump--;
+                    OnJumping(player, plr.Jumped);
                 }
             }
             else {
