@@ -138,7 +138,7 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
         for (int k = 0; k < Projectile.oldPos.Length - 1; k++) {
             Vector2 drawPos = Projectile.oldPos[k] + new Vector2(Projectile.width, Projectile.height) / 2f + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
             color = new Color(pickedColor.R + k * 2, pickedColor.G - k * 3, pickedColor.B + k * 2, 50);
-            color = WreathHandler.GetArmorGlowColor_HallowEnt(owner, color, MathUtils.Clamp01(0f + progress * 2f));
+            //color = WreathHandler.GetArmorGlowColor_HallowEnt(owner, color, MathUtils.Clamp01(0f + progress * 2f));
             Main.spriteBatch.Draw(texture, drawPos, null, color * 0.2f, Projectile.oldRot[k] + (float)MathHelper.Pi / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
             //spriteBatch.DrawSelf(texture, drawPos - Projectile.oldPos[k] * 0.5f + Projectile.oldPos[k + 1] * 0.5f, null, color * 0.45f, Projectile.oldRot[k] * 0.5f + Projectile.oldRot[k + 1] * 0.5f + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
         }
