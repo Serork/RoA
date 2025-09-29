@@ -22,7 +22,7 @@ sealed class SyncMousePositionPacket : NetPacket {
         }
 
         Vector2 mousePosition = reader.ReadVector2();
-        MousePositionStorage mousePositionStorage = player.GetModPlayer<MousePositionStorage>();
+        MouseVariables mousePositionStorage = player.GetModPlayer<MouseVariables>();
         mousePositionStorage.MousePosition = mousePosition;
 
         if (Main.netMode == NetmodeID.Server) {
@@ -43,7 +43,7 @@ sealed class SyncMousePositionPacket2 : NetPacket {
         }
 
         Vector2 cappedMousePosition = reader.ReadVector2();
-        MousePositionStorage mousePositionStorage = player.GetModPlayer<MousePositionStorage>();
+        MouseVariables mousePositionStorage = player.GetModPlayer<MouseVariables>();
         mousePositionStorage.CappedMousePosition = cappedMousePosition;
 
         if (Main.netMode == NetmodeID.Server) {

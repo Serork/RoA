@@ -114,27 +114,6 @@ sealed class FlederFormPacket1 : NetPacket {
     }
 }
 
-sealed class FlederFormPacket2 : NetPacket {
-    public FlederFormPacket2(Player player, bool state) {
-        Writer.TryWriteSenderPlayer(player);
-        Writer.Write(state);
-    }
-
-    public override void Read(BinaryReader reader, int sender) {
-        if (!reader.TryReadSenderPlayer(sender, out var player)) {
-            return;
-        }
-
-        bool state = reader.ReadBoolean();
-
-        player.GetFormHandler()._holdingLmb = state;
-
-        if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new FlederFormPacket2(player, state), ignoreClient: sender);
-        }
-    }
-}
-
 sealed class FormPacket1 : NetPacket {
     public FormPacket1(Player player) {
         Writer.TryWriteSenderPlayer(player);

@@ -35,6 +35,8 @@ sealed class HallowEnt : BaseForm {
 
     protected override void SafePostUpdate(Player player) {
         player.GetFormHandler().UsePlayerSpeed = true;
+
+        player.statDefense += 20;
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {

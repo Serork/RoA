@@ -84,51 +84,65 @@ sealed class FlederForm : BaseForm {
         SpecialAttackHandler(player);
     }
 
-    private void SpecialAttackHandler(Player player) {
-        void dustEffects1() {
-            ref int shootCounter = ref player.GetFormHandler()._shootCounter;
-            ref bool holdingLmb = ref player.GetFormHandler()._holdingLmb;
+    protected override void SafeLoad() {
+        MouseVariables.OnHoldingLMBEvent += MouseVariables_OnHoldingLMBEvent;
+    }
 
-            shootCounter++;
-
-            bool flag = shootCounter >= 100;
-            int num20 = 1;
-            if (shootCounter >= 40f)
-                num20++;
-            if (shootCounter >= 70f)
-                num20++;
-            if (flag)
-                num20++;
-
-            Vector2 vector11 = player.Center + Vector2.UnitY * (IsInAir(player) ? 7f : 12f);
-            for (int k = 0; k < num20; k++) {
-                if (Main.rand.NextChance(0.9f - 0.1f * (num20 - 1))) {
-                    int num23 = 59;
-                    float num24 = 0.4f;
-                    if (k % 2 == 1) {
-                        num24 = 0.65f;
-                    }
-                    num24 *= 2.25f;
-
-                    Vector2 vector12 = vector11 + ((float)Main.rand.NextDouble() * ((float)Math.PI * 2f)).ToRotationVector2() * (12f - (float)(num20 * 2));
-                    int num25 = Dust.NewDust(vector12 - Vector2.One * 20f, 40, 40, num23, player.velocity.X / 2f, player.velocity.Y / 2f);
-                    if (Vector2.Distance(Main.dust[num25].position, vector11) > 16f) {
-                        Main.dust[num25].active = false;
-                        continue;
-                    }
-                    Main.dust[num25].velocity = Vector2.Normalize(vector11 - vector12) * 1.5f * (10f - (float)num20 * 2f) / 10f;
-                    Main.dust[num25].noGravity = true;
-                    Main.dust[num25].scale = num24;
-                }
-            }
+    private void MouseVariables_OnHoldingLMBEvent(Player player) {
+        if (!player.GetFormHandler().IsConsideredAs<FlederForm>()) {
+            return;
         }
 
+        bool flag = player.whoAmI != Main.myPlayer;
+        if (flag)
+            return;
+
+        OnHoldingLMB(player);
+    }
+
+    private static void OnHoldingLMB(Player player) {
         ref int shootCounter = ref player.GetFormHandler()._shootCounter;
-        ref bool holdingLmb = ref player.GetFormHandler()._holdingLmb;
+
+        shootCounter++;
+
+        bool flag = shootCounter >= 100;
+        int num20 = 1;
+        if (shootCounter >= 40f)
+            num20++;
+        if (shootCounter >= 70f)
+            num20++;
+        if (flag)
+            num20++;
+
+        Vector2 vector11 = player.Center + Vector2.UnitY * (IsInAir(player) ? 7f : 12f);
+        for (int k = 0; k < num20; k++) {
+            if (Main.rand.NextChance(0.9f - 0.1f * (num20 - 1))) {
+                int num23 = 59;
+                float num24 = 0.4f;
+                if (k % 2 == 1) {
+                    num24 = 0.65f;
+                }
+                num24 *= 2.25f;
+
+                Vector2 vector12 = vector11 + ((float)Main.rand.NextDouble() * ((float)Math.PI * 2f)).ToRotationVector2() * (12f - (float)(num20 * 2));
+                int num25 = Dust.NewDust(vector12 - Vector2.One * 20f, 40, 40, num23, player.velocity.X / 2f, player.velocity.Y / 2f);
+                if (Vector2.Distance(Main.dust[num25].position, vector11) > 16f) {
+                    Main.dust[num25].active = false;
+                    continue;
+                }
+                Main.dust[num25].velocity = Vector2.Normalize(vector11 - vector12) * 1.5f * (10f - (float)num20 * 2f) / 10f;
+                Main.dust[num25].noGravity = true;
+                Main.dust[num25].scale = num24;
+            }
+        }
+    }
+
+    private void SpecialAttackHandler(Player player) {
+        ref int shootCounter = ref player.GetFormHandler()._shootCounter;
 
         bool flag = player.whoAmI != Main.myPlayer;
-        if (flag && holdingLmb) {
-            dustEffects1();
+        if (flag && player.HoldingLMB()) {
+            OnHoldingLMB(player);
         }
 
         if (shootCounter == 40 || shootCounter == 70 || shootCounter == 100) {
@@ -146,27 +160,29 @@ sealed class FlederForm : BaseForm {
             BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
         }
 
-        if (player.controlUseItem && Main.mouseLeft) {
-            if (!holdingLmb) {
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new FlederFormPacket2(player, true));
-                }
-            }
-            holdingLmb = true;
-            dustEffects1();
-        }
-        else {
-            if (holdingLmb) {
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new FlederFormPacket2(player, false));
-                }
-            }
-            holdingLmb = false;
-        }
+        player.SyncLMB();
+
+        //if (player.controlUseItem && Main.mouseLeft) {
+        //    if (!holdingLmb) {
+        //        if (Main.netMode == NetmodeID.MultiplayerClient) {
+        //            MultiplayerSystem.SendPacket(new SyncLMBPacket(player, true));
+        //        }
+        //    }
+        //    holdingLmb = true;
+        //    OnHoldingLMB();
+        //}
+        //else {
+        //    if (holdingLmb) {
+        //        if (Main.netMode == NetmodeID.MultiplayerClient) {
+        //            MultiplayerSystem.SendPacket(new SyncLMBPacket(player, false));
+        //        }
+        //    }
+        //    holdingLmb = false;
+        //}
         string context = "flederformattack";
         int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(30);
         float baseKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(3f);
-        if (player.releaseUseItem && Main.mouseLeftRelease) {
+        if (Main.mouseLeftRelease) {
             if (shootCounter >= 40 && shootCounter < 70) {
                 BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
                 BaseFormHandler.SpawnFlederDusts(player, 1);
@@ -182,7 +198,7 @@ sealed class FlederForm : BaseForm {
                     MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 15, player.Bottom));
                 }
 
-                NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
+                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
             }
             if (shootCounter >= 70 && shootCounter < 100) {
                 BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
@@ -192,7 +208,7 @@ sealed class FlederForm : BaseForm {
                 player.velocity.Y = 0f;
                 player.velocity.Y -= 7.5f;
 
-                NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
+                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
 
                 if (player.whoAmI == Main.myPlayer) {
                     SoundEngine.PlaySound(SoundID.Item7 with { Pitch = 0.3f, PitchVariance = 0.1f, Volume = 1f }, player.Bottom);
@@ -209,7 +225,7 @@ sealed class FlederForm : BaseForm {
                 player.velocity.Y = 0f;
                 player.velocity.Y -= 10f;
 
-                NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
+                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
 
                 if (player.whoAmI == Main.myPlayer) {
                     SoundEngine.PlaySound(SoundID.Item7 with { Pitch = 0.3f, PitchVariance = 0.1f, Volume = 1f }, player.Bottom);

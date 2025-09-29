@@ -92,13 +92,18 @@ abstract class BaseForm : ModMount {
     public virtual ushort SetHitboxWidth(Player player) => Player.defaultWidth;
     public virtual ushort SetHitboxHeight(Player player) => Player.defaultHeight;
 
-    public override void Load() {
+    public sealed override void Load() {
         Mod.AddContent(MountBuff);
 
         if (!Main.dedServ) {
             HeadTexture = ModContent.Request<Texture2D>(Texture + "_Head");
         }
+
+        SafeLoad();
     }
+
+    protected virtual void SafeLoad() { }
+
     public virtual bool ShouldApplyUpdateJumpHeightLogic { get; }
 
     public virtual float GetMaxSpeedMultiplier(Player player) => 1f;

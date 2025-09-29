@@ -23,6 +23,138 @@ sealed partial class BaseFormHandler : ModPlayer {
     internal int _shootCounter;
     #endregion
 
+    #region GRYPHON
+    public static float MOVESPEEDBUFFTIMEINTICKS => 90f;
+    public static float MOVESPEEDBUFFCOOLDOWN => 180f;
+
+    public bool JustStartedDoingLoopAttack;
+    public bool LoopAttackIsDone;
+    public Vector2 SavedVelocity;
+    public ushort CanDoLoopAttackTimer;
+    public float AttackFactor, AttackFactor2;
+    public byte AttackCount;
+    public float MoveSpeedBuffTime;
+
+    public bool CanDoLoopAttack {
+        get => CanDoLoopAttackTimer <= 0;
+        set => CanDoLoopAttackTimer = (ushort)(value ? 0 : 30);
+    }
+
+    public bool IncreasedMoveSpeed => MoveSpeedBuffTime > 0f;
+    public bool CanIncreaseMoveSpeed => MoveSpeedBuffTime == 0f;
+
+    public bool IsInLoopAttack => AttackFactor > 0;
+
+    public partial void PostUpdate2() {
+        if (!Player.GetFormHandler().IsConsideredAs<HallowedGryphon>()) {
+            return;
+        }
+        if (LoopAttackIsDone && CanDoLoopAttackTimer > 0) {
+            CanDoLoopAttackTimer--;
+            if (CanDoLoopAttackTimer <= 0) {
+                LoopAttackIsDone = false;
+            }
+        }
+        if (IncreasedMoveSpeed) {
+            MoveSpeedBuffTime--;
+            if (CanIncreaseMoveSpeed) {
+                MoveSpeedBuffTime = -MOVESPEEDBUFFCOOLDOWN;
+                SoundEngine.PlaySound(SoundID.Item25 with { Pitch = 0.6f, Volume = 0.8f }, Player.Center);
+            }
+        }
+        else if (!CanIncreaseMoveSpeed) {
+            MoveSpeedBuffTime++;
+        }
+    }
+
+    public partial void Load1() {
+        On_Player.GetImmuneAlpha += On_Player_GetImmuneAlpha;
+        On_Player.GetImmuneAlphaPure += On_Player_GetImmuneAlphaPure;
+    }
+
+    private Color On_Player_GetImmuneAlphaPure(On_Player.orig_GetImmuneAlphaPure orig, Player self, Color newColor, float alphaReduction) {
+        if (self.GetFormHandler().IsConsideredAs<HallowedGryphon>() && self.GetFormHandler().IncreasedMoveSpeed) {
+            float num = (float)(255 - self.immuneAlpha) / 255f;
+            if (alphaReduction > 0f)
+                num *= 1f - alphaReduction;
+
+            float shimmerTransparency = 0.15f * HallowedGryphon.GetMoveSpeedFactor(self);
+            if (shimmerTransparency > 0f) {
+                if ((double)shimmerTransparency >= 0.8)
+                    return Color.Transparent;
+
+                num *= 1f - shimmerTransparency;
+                num *= 1f - shimmerTransparency;
+                num *= 1f - shimmerTransparency;
+
+                newColor.A = 0;
+            }
+
+            if (self.immuneAlpha > 125)
+                return Color.Transparent;
+
+            newColor.A = 0;
+
+            Color result = Color.Multiply(newColor.MultiplyRGB(Color.Lerp(Color.LightYellow, new Color(255, 224, 224), Helper.Wave(0f, 1f, speed: 15f))), num);
+            //result.A = (byte)Math.Max(result.A - 25, 0);
+            return result;
+        }
+
+        return orig(self, newColor, alphaReduction);
+    }
+
+    private Color On_Player_GetImmuneAlpha(On_Player.orig_GetImmuneAlpha orig, Player self, Color newColor, float alphaReduction) {
+        if (self.GetFormHandler().IsConsideredAs<HallowedGryphon>() && self.GetFormHandler().IncreasedMoveSpeed) {
+            float num = (float)(255 - self.immuneAlpha) / 255f;
+            float shimmerTransparency = 0.15f * HallowedGryphon.GetMoveSpeedFactor(self);
+            if (alphaReduction > 0f)
+                num *= 1f - alphaReduction;
+
+            if (shimmerTransparency > 0f)
+                num *= 1f - shimmerTransparency;
+
+            newColor.A = 0;
+
+            Color result = Color.Multiply(newColor.MultiplyRGB(Color.Lerp(Color.LightYellow, new Color(255, 224, 224), Helper.Wave(0f, 1f, speed: 15f))), num);
+            //result.A = (byte)Math.Max(result.A - 25, 0);
+            return result;
+        }
+
+        return orig(self, newColor, alphaReduction);
+    }
+
+    public void ResetGryphonStats() {
+        JustStartedDoingLoopAttack = LoopAttackIsDone = false;
+        SavedVelocity = Vector2.Zero;
+        CanDoLoopAttackTimer = 0;
+        AttackFactor = 0f;
+        AttackCount = 0;
+        MoveSpeedBuffTime = 0f;
+        AttackFactor2 = 0f;
+    }
+
+    public partial void OnDoubleTap2(Player player, IDoubleTap.TapDirection direction) {
+        bool flag = direction == IDoubleTap.TapDirection.Right | direction == IDoubleTap.TapDirection.Left;
+        if (!flag) {
+            return;
+        }
+        if (!player.GetFormHandler().IsConsideredAs<HallowedGryphon>()) {
+            return;
+        }
+
+        player.GetFormHandler().GainGryphonMoveSpeedBuff();
+    }
+
+    public void GainGryphonMoveSpeedBuff() {
+        if (!CanIncreaseMoveSpeed) {
+            return;
+        }
+        MoveSpeedBuffTime = MOVESPEEDBUFFTIMEINTICKS;
+        SoundEngine.PlaySound(SoundID.Item66 with { Pitch = 0.9f, Volume = 0.8f }, Player.Center);
+        SoundEngine.PlaySound(SoundID.Item77 with { Pitch = 1.2f, Volume = 0.8f }, Player.Center);
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "GryphonRoar") with { Pitch = 0.5f, Volume = 2f }, Player.Center);
+    }
+    #endregion
     #region PHOENIX
     public const float MAXPHOENIXCHARGE = 3.5f;
 
@@ -74,7 +206,6 @@ sealed partial class BaseFormHandler : ModPlayer {
     private IDoubleTap.TapDirection _dashDirection;
     internal float _dashDelay, _dashTimer;
     private int[] _localNPCImmunity = new int[Main.npc.Length];
-    internal bool _holdingLmb;
 
     public bool ActiveDash => _dashDelay > 0;
 
@@ -263,138 +394,6 @@ sealed partial class BaseFormHandler : ModPlayer {
                 _directionChangedFor = 0f;
             }
         }
-    }
-    #endregion
-    #region GRYPHON
-    public static float MOVESPEEDBUFFTIMEINTICKS => 90f;
-    public static float MOVESPEEDBUFFCOOLDOWN => 180f;
-
-    public bool JustStartedDoingLoopAttack;
-    public bool LoopAttackIsDone;
-    public Vector2 SavedVelocity;
-    public ushort CanDoLoopAttackTimer;
-    public float AttackFactor, AttackFactor2;
-    public byte AttackCount;
-    public float MoveSpeedBuffTime;
-
-    public bool CanDoLoopAttack {
-        get => CanDoLoopAttackTimer <= 0;
-        set => CanDoLoopAttackTimer = (ushort)(value ? 0 : 30);
-    }
-
-    public bool IncreasedMoveSpeed => MoveSpeedBuffTime > 0f;
-    public bool CanIncreaseMoveSpeed => MoveSpeedBuffTime == 0f;
-
-    public bool IsInLoopAttack => AttackFactor > 0;
-
-    public partial void PostUpdate2() {
-        if (!Player.GetFormHandler().IsConsideredAs<HallowedGryphon>()) {
-            return;
-        }
-        if (LoopAttackIsDone && CanDoLoopAttackTimer > 0) {
-            CanDoLoopAttackTimer--;
-            if (CanDoLoopAttackTimer <= 0) {
-                LoopAttackIsDone = false;
-            }
-        }
-        if (IncreasedMoveSpeed) {
-            MoveSpeedBuffTime--;
-            if (CanIncreaseMoveSpeed) {
-                MoveSpeedBuffTime = -MOVESPEEDBUFFCOOLDOWN;
-                SoundEngine.PlaySound(SoundID.Item25 with { Pitch = 0.6f, Volume = 0.8f }, Player.Center);
-            }
-        }
-        else if (!CanIncreaseMoveSpeed) {
-            MoveSpeedBuffTime++;
-        }
-    }
-
-    public partial void Load1() {
-        On_Player.GetImmuneAlpha += On_Player_GetImmuneAlpha;
-        On_Player.GetImmuneAlphaPure += On_Player_GetImmuneAlphaPure;
-    }
-
-    private Color On_Player_GetImmuneAlphaPure(On_Player.orig_GetImmuneAlphaPure orig, Player self, Color newColor, float alphaReduction) {
-        if (self.GetFormHandler().IsConsideredAs<HallowedGryphon>() && self.GetFormHandler().IncreasedMoveSpeed) {
-            float num = (float)(255 - self.immuneAlpha) / 255f;
-            if (alphaReduction > 0f)
-                num *= 1f - alphaReduction;
-
-            float shimmerTransparency = 0.15f * HallowedGryphon.GetMoveSpeedFactor(self);
-            if (shimmerTransparency > 0f) {
-                if ((double)shimmerTransparency >= 0.8)
-                    return Color.Transparent;
-
-                num *= 1f - shimmerTransparency;
-                num *= 1f - shimmerTransparency;
-                num *= 1f - shimmerTransparency;
-
-                newColor.A = 0;
-            }
-
-            if (self.immuneAlpha > 125)
-                return Color.Transparent;
-
-            newColor.A = 0;
-
-            Color result = Color.Multiply(newColor.MultiplyRGB(Color.Lerp(Color.LightYellow, new Color(255, 224, 224), Helper.Wave(0f, 1f, speed: 15f))), num);
-            //result.A = (byte)Math.Max(result.A - 25, 0);
-            return result;
-        }
-
-        return orig(self, newColor, alphaReduction);
-    }
-
-    private Color On_Player_GetImmuneAlpha(On_Player.orig_GetImmuneAlpha orig, Player self, Color newColor, float alphaReduction) {
-        if (self.GetFormHandler().IsConsideredAs<HallowedGryphon>() && self.GetFormHandler().IncreasedMoveSpeed) {
-            float num = (float)(255 - self.immuneAlpha) / 255f;
-            float shimmerTransparency = 0.15f * HallowedGryphon.GetMoveSpeedFactor(self);
-            if (alphaReduction > 0f)
-                num *= 1f - alphaReduction;
-
-            if (shimmerTransparency > 0f)
-                num *= 1f - shimmerTransparency;
-
-            newColor.A = 0;
-
-            Color result = Color.Multiply(newColor.MultiplyRGB(Color.Lerp(Color.LightYellow, new Color(255, 224, 224), Helper.Wave(0f, 1f, speed: 15f))), num);
-            //result.A = (byte)Math.Max(result.A - 25, 0);
-            return result;
-        }
-
-        return orig(self, newColor, alphaReduction);
-    }
-
-    public void ResetGryphonStats() {
-        JustStartedDoingLoopAttack = LoopAttackIsDone = false;
-        SavedVelocity = Vector2.Zero;
-        CanDoLoopAttackTimer = 0;
-        AttackFactor = 0f;
-        AttackCount = 0;
-        MoveSpeedBuffTime = 0f;
-        AttackFactor2 = 0f;
-    }
-
-    public partial void OnDoubleTap2(Player player, IDoubleTap.TapDirection direction) {
-        bool flag = direction == IDoubleTap.TapDirection.Right | direction == IDoubleTap.TapDirection.Left;
-        if (!flag) {
-            return;
-        }
-        if (!player.GetFormHandler().IsConsideredAs<HallowedGryphon>()) {
-            return;
-        }
-
-        player.GetFormHandler().GainGryphonMoveSpeedBuff();
-    }
-
-    public void GainGryphonMoveSpeedBuff() {
-        if (!CanIncreaseMoveSpeed) {
-            return;
-        }
-        MoveSpeedBuffTime = MOVESPEEDBUFFTIMEINTICKS;
-        SoundEngine.PlaySound(SoundID.Item66 with { Pitch = 0.9f, Volume = 0.8f }, Player.Center);
-        SoundEngine.PlaySound(SoundID.Item77 with { Pitch = 1.2f, Volume = 0.8f }, Player.Center);
-        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "GryphonRoar") with { Pitch = 0.5f, Volume = 2f }, Player.Center);
     }
     #endregion
 }
