@@ -193,10 +193,12 @@ sealed class HallowEnt : BaseForm {
             Vector2 position = player.Center + size * 5f * (i / (float)count) * Main.rand.Random2(0.5f);
             position.Y -= 15f;
             Vector2 velocity = Vector2.One * Main.rand.Random2(0.25f, 1f, 0.25f, 1f) * new Vector2(0.25f, 1f) * new Vector2(1f * Main.rand.NextFloatDirection(), 1f);
-            Leaf leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
-            leafParticle.CustomData = player;
-            leafParticle.OnDismount = false;
-            leafParticle.Scale *= 0.85f;
+            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
+            if (leafParticle != null) {
+                leafParticle.CustomData = player;
+                leafParticle.OnDismount = false;
+                leafParticle.Scale *= 0.85f;
+            }
         }
 
         Set(player);
@@ -210,10 +212,12 @@ sealed class HallowEnt : BaseForm {
             Vector2 size = new Vector2(15f, 20f) * 0.75f;
             Vector2 position = player.Center + size * 5f * (i / (float)count) * Main.rand.Random2(0.5f);
             Vector2 velocity = Vector2.One * Main.rand.Random2(0.25f, 1f, 0.25f, 1f) * new Vector2(0.25f, 1f) * new Vector2(1f * Main.rand.NextFloatDirection(), 1f);
-            Leaf leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
-            leafParticle.CustomData = player;
-            leafParticle.OnDismount = true;
-            leafParticle.Scale *= 0.85f;
+            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
+            if (leafParticle != null) {
+                leafParticle.CustomData = player;
+                leafParticle.OnDismount = true;
+                leafParticle.Scale *= 0.85f;
+            }
         }
 
         Reset(player);
