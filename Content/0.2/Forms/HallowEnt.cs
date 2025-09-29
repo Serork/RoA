@@ -119,6 +119,10 @@ sealed class HallowEnt : BaseForm {
         ref float timeForAttack = ref handler.AttackFactor;
         ref float attackTime = ref handler.AttackFactor2;
 
+        if (player.HasProjectile<HallowLeaf>()) {
+            BaseFormDataStorage.ChangeAttackCharge1(player, 0.35f, false);
+        }
+
         bool autofireOn = player.autoReuseAllWeapons;
         bool isAttacking = autofireOn ? (player.HoldingLMB(true) && attackTime != -1f) : player.HoldingLMB(true);
         if (isAttacking) {
@@ -160,12 +164,12 @@ sealed class HallowEnt : BaseForm {
             }
             timeForAttack -= 0.1f * ATTACKBOOSTSPEEDMODIFIER;
             timeForAttack = Utils.Clamp(timeForAttack, ENDATTACKTIME, STARTATTACKTIME);
-            float baseForEffect = MathHelper.Lerp(STARTATTACKTIME, ENDATTACKTIME, 0.75f), 
-                  base2ForEffect = MathHelper.Lerp(STARTATTACKTIME, ENDATTACKTIME, 1f);
-            if (timeForAttack <= baseForEffect) {
-                float value = Ease.SineOut(Utils.GetLerpValue(baseForEffect, base2ForEffect, timeForAttack, true)) * 0.35f;
-                BaseFormDataStorage.ChangeAttackCharge1(player, value, false);
-            }
+            //float baseForEffect = MathHelper.Lerp(STARTATTACKTIME, ENDATTACKTIME, 0.75f), 
+            //      base2ForEffect = MathHelper.Lerp(STARTATTACKTIME, ENDATTACKTIME, 1f);
+            //if (timeForAttack <= baseForEffect) {
+            //    float value = Ease.SineOut(Utils.GetLerpValue(baseForEffect, base2ForEffect, timeForAttack, true)) * 0.35f;
+            //    BaseFormDataStorage.ChangeAttackCharge1(player, value, false);
+            //}
             if (attackTime > MAXATTACKTIME) {
                 Reset(player);
                 attackTime = -1f;
