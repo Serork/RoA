@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -158,25 +159,8 @@ sealed class LilPhoenixForm : BaseForm {
             NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
             //player.GetWreathHandler().ResetGryphonStats(true, 0.25f);
         }
-        if (player.whoAmI == Main.myPlayer) {
-            bool flag2 = player.controlUseItem && Main.mouseLeft && !Main.mouseText;
-            if (plr._holdLmb != flag2) {
-                plr._holdLmb = flag2;
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new PhoenixFormPacket1(player, flag2));
-                }
-            }
-            if (plr._isPreparing) {
-                flag2 = player.controlUseItem && Main.mouseLeft;
-                if (plr._holdLmb != flag2) {
-                    plr._holdLmb = flag2;
-                    if (Main.netMode == NetmodeID.MultiplayerClient) {
-                        MultiplayerSystem.SendPacket(new PhoenixFormPacket1(player, flag2));
-                    }
-                }
-            }
-        }
-        if (!plr._holdLmb) {
+        player.SyncLMB();
+        if (!player.HoldingLMB()) {
             if (plr._charge > 0f) {
                 if (player.whoAmI == Main.myPlayer) {
                     dash();
@@ -195,7 +179,7 @@ sealed class LilPhoenixForm : BaseForm {
                 }
             }
         }
-        if (flag && plr._holdLmb && !plr._wasPreparing && !plr._dashed) {
+        if (flag && player.HoldingLMB() && !plr._wasPreparing && !plr._dashed) {
             player.controlJump = false;
             player.controlLeft = player.controlRight = false;
             player.velocity *= 0.7f;

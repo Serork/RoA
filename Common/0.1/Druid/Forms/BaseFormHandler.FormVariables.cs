@@ -166,7 +166,6 @@ sealed partial class BaseFormHandler : ModPlayer {
     internal bool _isPreparing, _wasPreparing, _prepared;
     internal float _charge, _charge2, _charge3;
     internal bool _dashed, _dashed2;
-    internal bool _holdLmb;
 
     internal void ResetPhoenixDash(bool hardReset = false) {
         if (_dashed) {

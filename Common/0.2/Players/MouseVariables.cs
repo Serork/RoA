@@ -76,27 +76,25 @@ sealed class MouseVariables : ModPlayer {
                 return;
             }
 
+            bool syncControls = false;
             if (Main.mouseLeft && !Main.mouseText) {
                 HoldingLMB = true;
-                if (ShouldSyncLMB && HoldingLMB != _oldHoldingLMB) {
-                    if (Main.netMode == NetmodeID.MultiplayerClient) {
-                        MultiplayerSystem.SendPacket(new SyncLMBPacket(Player, HoldingLMB));
-                    }
-                    _oldHoldingLMB = HoldingLMB;
-                }
                 OnHoldingLMBEvent?.Invoke(Player);
             }
             else {
                 HoldingLMB = false;
-                if (ShouldSyncLMB && HoldingLMB != _oldHoldingLMB) {
-                    if (Main.netMode == NetmodeID.MultiplayerClient) {
-                        MultiplayerSystem.SendPacket(new SyncLMBPacket(Player, HoldingLMB));
-                    }
-                    _oldHoldingLMB = HoldingLMB;
-                }
             }
 
-            ShouldSyncLMB = false;
+            if (ShouldSyncLMB && HoldingLMB != _oldHoldingLMB) {
+                _oldHoldingLMB = HoldingLMB;
+
+                syncControls = true;
+                ShouldSyncLMB = false;
+            }
+
+            if (syncControls) {
+                MultiplayerSystem.SendPacket(new SyncLMBPacket(Player, HoldingLMB));
+            }
         }
         updateAndSyncMousePosition();
         updateAndSyncMouseClicks();
