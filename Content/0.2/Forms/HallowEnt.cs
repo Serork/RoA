@@ -3,12 +3,19 @@
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
+using RoA.Common.VisualEffects;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
+using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
+using System;
+
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
 
@@ -49,6 +56,19 @@ sealed class HallowEnt : BaseForm {
         player.statDefense += 30;
 
         HandleLeafAttack(player);
+        ActivateExtraJumps(player);
+
+        //if (Main.rand.NextChance(0.025f)) {
+        //    Vector2 position = player.Top + Vector2.UnitY * 20f + Main.rand.RandomPointInArea(player.width * 0.85f, player.height * 0.5f) / 2f;
+        //    Vector2 velocity = Vector2.One * Main.rand.Random2(0.25f, 1f, 0.25f, 1f) * new Vector2(0.25f, 1f) * new Vector2(1f * Main.rand.NextFloatDirection(), 1f);
+        //    Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
+        //    leafParticle?.CustomData = player;
+        //    leafParticle?.Scale *= 0.85f;
+        //}
+    }
+
+    protected override void OnJump(Player player) {
+        BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
     }
 
     private void HandleLeafAttack(Player player) {
@@ -153,12 +173,34 @@ sealed class HallowEnt : BaseForm {
     }
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
+        int count = 20;
+        for (int i = 0; i < count; i++) {
+            Vector2 size = new(15f, 20f);
+            Vector2 position = player.Center + size * 5f * (i / (float)count) * Main.rand.Random2(0.5f);
+            position.Y -= 15f;
+            Vector2 velocity = Vector2.One * Main.rand.Random2(0.25f, 1f, 0.25f, 1f) * new Vector2(0.25f, 1f) * new Vector2(1f * Main.rand.NextFloatDirection(), 1f);
+            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
+            leafParticle?.CustomData = player;
+            leafParticle?.Scale *= 0.85f;
+        }
+
         Set(player);
 
         skipDust = true;
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
+        int count = 14;
+        for (int i = 0; i < count; i++) {
+            Vector2 size = new Vector2(15f, 20f) * 0.75f;
+            Vector2 position = player.Center + size * 5f * (i / (float)count) * Main.rand.Random2(0.5f);
+            Vector2 velocity = Vector2.One * Main.rand.Random2(0.25f, 1f, 0.25f, 1f) * new Vector2(0.25f, 1f) * new Vector2(1f * Main.rand.NextFloatDirection(), 1f);
+            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
+            leafParticle?.CustomData = player;
+            leafParticle?.OnDismount = true;
+            leafParticle?.Scale *= 0.75f;
+        }
+
         Reset(player);
 
         skipDust = true;

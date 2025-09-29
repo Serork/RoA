@@ -6,6 +6,8 @@ using ReLogic.Content;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Content;
+using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -124,6 +126,88 @@ abstract class BaseForm : ModMount {
         return !player.sliding && !onTile && player.gfxOffY == 0f;
     }
 
+    protected virtual void OnJump(Player player) {
+    }
+
+    protected virtual void SetJumpSettings(Player player, ref int jumpHeight, ref float jumpSpeed, ref float jumpSpeedBoost, ref float extraFall,
+        ref bool hasDoubleJump, ref int jumpOnFirst, ref int jumpOnSecond) {
+    }
+
+    protected virtual void ActivateExtraJumps(Player player) {
+        var plr = player.GetFormHandler();
+        Helper.GetJumpSettings(player, out int jumpHeight, out float jumpSpeed, out float jumpSpeedBoost, out float extraFall);
+        bool hasDoubleJump = false;
+        int jumpOnFirst = jumpHeight;
+        int jumpOnSecond = jumpHeight;
+        SetJumpSettings(player, ref jumpHeight, ref jumpSpeed, ref jumpSpeedBoost, ref extraFall, ref hasDoubleJump, ref jumpOnFirst, ref jumpOnSecond);
+        void jump() {
+            player.velocity.Y = -jumpSpeed * player.gravDir;
+            plr.Jump = jumpOnFirst;
+            plr.JumpCD = 15;
+            plr.JustJumped = plr.JustJumpedForAnimation = true;
+
+            OnJump(player);
+
+            NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
+        }
+
+        if (player.controlJump && !plr.IsPreparing) {
+            if (plr.Jump > 0) {
+                if (player.velocity.Y == 0f) {
+                    plr.Jump = 0;
+                }
+                else {
+                    player.velocity.Y = -jumpSpeed * player.gravDir;
+                    plr.Jump--;
+                }
+            }
+            else {
+                if ((player.sliding || player.velocity.Y == 0f || plr.Jumped || plr.Jumped2) && player.releaseJump && plr.JumpCD == 0) {
+                    bool justJumped = false;
+                    bool justJumped2 = false;
+                    if (plr.Jumped) {
+                        justJumped = true;
+                        plr.Jumped = false;
+                    }
+                    else if (plr.Jumped2) {
+                        justJumped2 = true;
+                        plr.Jumped2 = false;
+                    }
+                    if (player.velocity.Y == 0f || player.sliding) {
+                        plr.Jumped = true;
+                        plr.Jumped2 = true;
+                    }
+                    if (player.velocity.Y == 0f || player.sliding) {
+                        player.velocity.Y = -jumpSpeed * player.gravDir;
+                        plr.Jump = jumpOnSecond;
+                        plr.JumpCD = 15;
+                    }
+                    else {
+                        if (justJumped) {
+                            jump();
+                        }
+                        else if (justJumped2) {
+                            jump();
+                        }
+                    }
+                }
+            }
+            bool flag = plr.Jumped || plr.Jumped2;
+            if (flag || plr.JumpCD > 0) {
+                player.releaseJump = false;
+            }
+            else if (player.controlJump && player.releaseJump) {
+                plr.JustJumped = plr.JustJumpedForAnimation = true;
+            }
+        }
+        else {
+            plr.Jump = 0;
+        }
+        if (plr.JumpCD > 0) {
+            plr.JumpCD--;
+        }
+    }
+
     public sealed override void SetStaticDefaults() {
         MountData.buff = MountBuff.Type;
 
@@ -182,6 +266,10 @@ abstract class BaseForm : ModMount {
 
     public sealed override void UpdateEffects(Player player) {
         MountData.buff = MountBuff.Type;
+
+        if (!IsInAir(player)) {
+            player.GetFormHandler().JustJumpedForAnimation = player.GetFormHandler().JustJumpedForAnimation2 = false;
+        }
 
         SafePostUpdate(player);
 

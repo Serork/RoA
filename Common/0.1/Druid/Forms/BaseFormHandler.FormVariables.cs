@@ -33,6 +33,11 @@ sealed partial class BaseFormHandler : ModPlayer {
     public bool? FacedRight;
     public float DirectionChangedFor;
 
+    public bool Jumped, Jumped2;
+    public bool JustJumped, JustJumpedForAnimation, JustJumpedForAnimation2;
+    public int JumpCD;
+    public int Jump;
+
     public bool ActiveDash => DashDelay > 0;
 
     public static void ForcedDirectionChange(Player player, float changeFor = 1f, bool net = false) {
@@ -181,10 +186,6 @@ sealed partial class BaseFormHandler : ModPlayer {
     #region PHOENIX
     public const float MAXPHOENIXCHARGE = 3.5f;
 
-    internal bool _phoenixJumped, _phoenixJumped2;
-    internal bool _phoenixJustJumped, _phoenixJustJumpedForAnimation, _phoenixJustJumpedForAnimation2;
-    internal int _phoenixJumpsCD;
-    internal int _phoenixJump;
     internal float _charge, _charge2, _charge3;
 
     internal void ResetPhoenixDash(bool hardReset = false) {

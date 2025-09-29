@@ -35,7 +35,7 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
         public readonly Color[] Colors = colors;
     }
 
-    private readonly HallowLeafColorInfo[] _colors = 
+    private readonly static HallowLeafColorInfo[] _colors = 
         [new HallowLeafColorInfo([new Color(225, 110, 204), new Color(185, 99, 169), new Color(163, 74, 150)]),
          new HallowLeafColorInfo([new Color(169, 130, 202), new Color(134, 110, 188), new Color(97, 88, 169)]),
          new HallowLeafColorInfo([new Color(209, 97, 115), new Color(173, 76, 78), new Color(142, 59, 89)]),
@@ -43,7 +43,7 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
 
     private Color? _pickedColor;
 
-    private int AvailableColorCount => _colors.Length - 1;
+    private static int AvailableColorCount => _colors.Length - 1;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float PickedColorIndex => ref Projectile.ai[0];
@@ -74,15 +74,21 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
         behindProjectiles.Add(index);
     }
 
+    public static int PickIndex() => Main.rand.Next(_colors.Sum(colorInfo => colorInfo.Colors.Length));
+    public static Color GetColor(int index) {
+        int colorIndex = (int)((float)index / AvailableColorCount);
+        int pickedColorIndex = (int)((float)index % AvailableColorCount);
+        return _colors[colorIndex].Colors[pickedColorIndex];
+    }
+
     public override void AI() {
         Player owner = Projectile.GetOwnerAsPlayer();
 
         if (!Init) {
             Init = true;
 
-            int colorCount = _colors.Sum(colorInfo => colorInfo.Colors.Length);
             if (owner.IsLocal()) {
-                PickedColorIndex = Main.rand.Next(colorCount);
+                PickedColorIndex = PickIndex();
 
                 Projectile.netUpdate = true;
             }
@@ -92,9 +98,7 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
             velocity = velocity.SafeNormalize() * startSpeed;
         }
 
-        int colorIndex = (int)(PickedColorIndex / AvailableColorCount);
-        int pickedColorIndex = (int)(PickedColorIndex % AvailableColorCount);
-        _pickedColor ??= _colors[colorIndex].Colors[pickedColorIndex];
+        _pickedColor ??= GetColor((int)PickedColorIndex);
 
         Projectile.rotation = Projectile.velocity.ToRotation();
 

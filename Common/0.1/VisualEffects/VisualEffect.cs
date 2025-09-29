@@ -21,16 +21,24 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     public int TimeLeft;
     public int MaxTimeLeft;
     public float AI0 = 0f;
+    public object? CustomData;
 
     public virtual int InitialPoolSize => 1;
 
-    public virtual T CreateBaseInstance() => new();
+    public virtual T CreateBaseInstance() {
+        SetStaticDefaults();
+
+        return new();
+    }
+
+    protected virtual void SetStaticDefaults() { }
 
     public bool ShouldBeRemovedFromRenderer { get; protected set; }
 
     public bool IsRestingInPool => ShouldBeRemovedFromRenderer;
 
-    public virtual Texture2D Texture => ModContent.Request<Texture2D>(ResourceManager.Textures + $"VisualEffects/{typeof(T).Name}", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+    protected virtual string TexturePath => ResourceManager.Textures + $"VisualEffects/{typeof(T).Name}";
+    public virtual Texture2D Texture => ModContent.Request<Texture2D>(TexturePath, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
     protected void SetFramedTexture(int frames, int frameChoice = -1) {
         Frame = Texture.Frame(verticalFrames: frames, frameY: (frameChoice == -1 ? Main.rand.Next(frames) : frameChoice));
@@ -80,7 +88,11 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     }
 
     public virtual void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
-        spritebatch.Draw(Texture, Position - Main.screenPosition, Frame, GetParticleColor(), Rotation, Origin, Scale, SpriteEffects.None, 0f);
+        Draw_Inner(spritebatch, Texture);
+    }
+
+    protected virtual void Draw_Inner(SpriteBatch batch, Texture2D? texture = null, Color? color = null) {
+        batch.Draw(texture ?? Texture, Position - Main.screenPosition, Frame, color ?? GetParticleColor(), Rotation, Origin, Scale, SpriteEffects.None, 0f);
     }
 
     public virtual void RestInPool() {

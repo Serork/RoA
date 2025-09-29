@@ -1,0 +1,107 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
+
+using RoA.Common.Druid.Wreath;
+using RoA.Common.VisualEffects;
+using RoA.Content.Projectiles.Friendly.Nature.Forms;
+
+using System;
+
+using Terraria;
+using Terraria.Graphics.Renderers;
+using Terraria.ModLoader;
+
+using static RoA.Common.Druid.Forms.BaseForm;
+
+namespace RoA.Content.VisualEffects;
+
+sealed class Leaf : VisualEffect<Leaf> {
+    private static float BASECHANGEVALUE => 10f;
+
+    private static Asset<Texture2D>? _glowTexture;
+
+    private Vector2 _newVelocity = Vector2.Zero;
+
+    public bool OnDismount = false;
+    public float DisappearValue = 0f;
+
+    protected override void SetDefaults() {
+        MaxTimeLeft = TimeLeft = 300;
+
+        SetFramedTexture(3, Main.rand.Next(3));
+
+        AI0 = BASECHANGEVALUE;
+
+        _newVelocity = Velocity;
+
+        DrawColor = HallowLeaf.GetColor(HallowLeaf.PickIndex());
+        Scale *= Main.rand.NextFloat(0.5f, 0.75f);
+        DisappearValue = 0f;
+    }
+
+    public override void OnLoad(Mod mod) {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(TexturePath + "_Glow");
+    }
+
+    public override void Update(ref ParticleRendererSettings settings) {
+        if (AI0-- <= 0f) {
+            _newVelocity = Velocity.RotatedByRandom(MathHelper.PiOver4);
+
+            AI0 = BASECHANGEVALUE;
+        }
+        else {
+            Velocity = Vector2.Lerp(Velocity, _newVelocity, 0.1f);
+        }
+
+        bool flag = TimeLeft < 20;
+        bool flag2 = Collision.SolidCollision(Position - Vector2.One * 2, 4, 4) || flag;
+        bool flag3 = false;
+        if (flag2 || DisappearValue > 0f) {
+            if (flag2) {
+                DisappearValue++;
+            }
+            if (DisappearValue <= 0f) {
+                Scale *= 0.9f;
+                if (!flag) {
+                    Velocity *= 0.25f;
+                }
+            }
+            else {
+                Velocity *= 0.25f;
+            }
+            flag3 = flag2;
+        }
+
+        if (Scale <= 0.01f || --TimeLeft <= 0 || DisappearValue > 100f) {
+            RestInPool();
+        }
+
+        if (!flag3) {
+            Velocity.Y += 0.1f;
+            Velocity.Y = MathF.Min(1f, Velocity.Y);
+        }
+
+        Position += Velocity;
+    }
+
+    public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
+        Color color = Lighting.GetColor(Position.ToTileCoordinates()).MultiplyRGB(DrawColor);
+        float opacity = 1f - Utils.GetLerpValue(50f, 100f, DisappearValue, true);
+        opacity *= 1f - Utils.GetLerpValue(50f, 0f, TimeLeft, true);
+        Draw_Inner(spritebatch, color: color * opacity);
+        if (_glowTexture?.IsLoaded != true) {
+            return;
+        }
+        if (CustomData is Player owner) {
+            float progress = OnDismount ? -1f : BaseFormDataStorage.GetAttackCharge(owner);
+            color = WreathHandler.GetArmorGlowColor_HallowEnt(owner, color, progress) * opacity;
+            Draw_Inner(spritebatch, _glowTexture.Value, color);
+        }
+    }
+}

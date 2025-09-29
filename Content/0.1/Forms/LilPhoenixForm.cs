@@ -89,7 +89,7 @@ sealed class LilPhoenixForm : BaseForm {
 
         player.fullRotationOrigin = player.getRect().Size() / 2f + new Vector2(0f, 3f);
 
-        ExtraJumpsHandler(player);
+        ActivateExtraJumps(player);
         UltraAttackHandler(player);
     }
 
@@ -291,93 +291,35 @@ sealed class LilPhoenixForm : BaseForm {
         }
     }
 
-    private void ExtraJumpsHandler(Player player) {
+    protected override void OnJump(Player player) {
         var plr = player.GetFormHandler();
-        Helper.GetJumpSettings(player, out int jumpHeight, out float jumpSpeed, out float jumpSpeedBoost, out float extraFall);
+        SoundEngine.PlaySound(SoundID.Item45, player.position);
+        BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
+        int damage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(50f);
+        float knockBack = (int)player.GetTotalKnockback(DruidClass.Nature).ApplyTo(2f);
+        ushort projType = (ushort)ModContent.ProjectileType<LilPhoenixFlames>();
+        if (player.whoAmI == Main.myPlayer) {
+            for (int i = 0; i < 2; i++) {
+                int proj = Projectile.NewProjectile(player.GetSource_Misc("phoenixjump"),
+                    player.Center + new Vector2(14f * i * (i == 1 ? -1f : 1f), -4f) + Vector2.UnitX * player.direction * 6f + (player.direction == -1 ? new Vector2(8f, 0f) : Vector2.Zero),
+                    Vector2.Zero, projType, damage, knockBack, player.whoAmI);
+                //if (Main.netMode != NetmodeID.SinglePlayer)
+                //    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
+            }
+        }
+        if (plr.Dashed) {
+            plr.ResetPhoenixDash();
+        }
+        plr.Dashed2 = false;
+    }
+
+    protected override void SetJumpSettings(Player player, ref int jumpHeight, ref float jumpSpeed, ref float jumpSpeedBoost, ref float extraFall,
+        ref bool hasDoubleJump, ref int jumpOnFirst, ref int jumpOnSecond) {
         jumpSpeed = jumpSpeed * 1.6f;
         jumpHeight = jumpHeight / 3;
-        void jump() {
-            player.velocity.Y = -jumpSpeed * player.gravDir;
-            plr._phoenixJump = (int)((double)jumpHeight * 2f);
-            plr._phoenixJumpsCD = 15;
-            SoundEngine.PlaySound(SoundID.Item45, player.position);
-            plr._phoenixJustJumped = plr._phoenixJustJumpedForAnimation = true;
-            BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
-            int damage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(50f);
-            float knockBack = (int)player.GetTotalKnockback(DruidClass.Nature).ApplyTo(2f);
-            ushort projType = (ushort)ModContent.ProjectileType<LilPhoenixFlames>();
-            if (player.whoAmI == Main.myPlayer) {
-                for (int i = 0; i < 2; i++) {
-                    int proj = Projectile.NewProjectile(player.GetSource_Misc("phoenixjump"),
-                        player.Center + new Vector2(14f * i * (i == 1 ? -1f : 1f), -4f) + Vector2.UnitX * player.direction * 6f + (player.direction == -1 ? new Vector2(8f, 0f) : Vector2.Zero),
-                        Vector2.Zero, projType, damage, knockBack, player.whoAmI);
-                    //if (Main.netMode != NetmodeID.SinglePlayer)
-                    //    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
-                }
-            }
-            if (plr.Dashed) {
-                plr.ResetPhoenixDash();
-            }
-            plr.Dashed2 = false;
-
-            NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
-        }
-
-        if (player.controlJump && !plr.IsPreparing) {
-            if (plr._phoenixJump > 0) {
-                if (player.velocity.Y == 0f) {
-                    plr._phoenixJump = 0;
-                }
-                else {
-                    player.velocity.Y = -jumpSpeed * player.gravDir;
-                    plr._phoenixJump--;
-                }
-            }
-            else {
-                if ((player.sliding || player.velocity.Y == 0f || plr._phoenixJumped || plr._phoenixJumped2) && player.releaseJump && plr._phoenixJumpsCD == 0) {
-                    bool justJumped = false;
-                    bool justJumped2 = false;
-                    if (plr._phoenixJumped) {
-                        justJumped = true;
-                        plr._phoenixJumped = false;
-                    }
-                    else if (plr._phoenixJumped2) {
-                        justJumped2 = true;
-                        plr._phoenixJumped2 = false;
-                    }
-                    if (player.velocity.Y == 0f || player.sliding) {
-                        plr._phoenixJumped = true;
-                        plr._phoenixJumped2 = true;
-                    }
-                    if (player.velocity.Y == 0f || player.sliding) {
-                        player.velocity.Y = -jumpSpeed * player.gravDir;
-                        plr._phoenixJump = (int)((double)jumpHeight * 2.5f);
-                        plr._phoenixJumpsCD = 15;
-                    }
-                    else {
-                        if (justJumped) {
-                            jump();
-                        }
-                        else if (justJumped2) {
-                            jump();
-                        }
-                    }
-                }
-            }
-            bool flag = plr._phoenixJumped || plr._phoenixJumped2;
-            if (flag || plr._phoenixJumpsCD > 0) {
-                player.releaseJump = false;
-            }
-            else if (player.controlJump && player.releaseJump) {
-                plr._phoenixJustJumped = plr._phoenixJustJumpedForAnimation = true;
-            }
-        }
-        else {
-            plr._phoenixJump = 0;
-        }
-        if (plr._phoenixJumpsCD > 0) {
-            plr._phoenixJumpsCD--;
-        }
+        hasDoubleJump = true;
+        jumpOnFirst = (int)((double)jumpHeight * 2f);
+        jumpOnSecond = (int)((double)jumpHeight * 2.5f);
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
@@ -393,9 +335,9 @@ sealed class LilPhoenixForm : BaseForm {
             frameCounter = 0f;
         }
         else if (IsInAir(player)) {
-            if (plr._phoenixJustJumpedForAnimation) {
-                if (!plr._phoenixJustJumpedForAnimation2) {
-                    plr._phoenixJustJumpedForAnimation2 = true;
+            if (plr.JustJumpedForAnimation) {
+                if (!plr.JustJumpedForAnimation2) {
+                    plr.JustJumpedForAnimation2 = true;
                     frameCounter = 4f;
                 }
                 if (++frameCounter >= 4.0) {
@@ -404,8 +346,8 @@ sealed class LilPhoenixForm : BaseForm {
                         frame++;
                     else {
                         frame = 5;
-                        plr._phoenixJustJumpedForAnimation = false;
-                        plr._phoenixJustJumpedForAnimation2 = false;
+                        plr.JustJumpedForAnimation = false;
+                        plr.JustJumpedForAnimation2 = false;
                     }
                     frameCounter = 0f;
                 }
@@ -444,7 +386,7 @@ sealed class LilPhoenixForm : BaseForm {
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
         }
-        if (glowTexture != null) {
+        if (_glowMask2?.IsLoaded == true) {
             float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
             DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.85f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;

@@ -19,6 +19,7 @@ static class RandomExtensions {
 
     public static Vector2 Random2(this UnifiedRandom rand, float minX, float maxX, float minY, float maxY) => new(rand.NextFloat(minX, maxX), rand.NextFloat(minY, maxY));
     public static Vector2 Random2(this UnifiedRandom rand, float max) => rand.Random2(-max, max, -max, max);
+    public static Vector2 Random20(this UnifiedRandom rand, float max) => rand.Random2(0f, max, 0f, max);
     public static Vector2 Random2(this UnifiedRandom rand, Vector2 max) => rand.Random2(-max.X, max.X, -max.Y, max.Y);
 
     public static Vector2 RandomPointInArea(this UnifiedRandom rand, Vector2 a, Vector2 b) => new(rand.Next((int)a.X, (int)b.X) + 1, rand.Next((int)a.Y, (int)b.Y) + 1);
