@@ -70,6 +70,7 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
         Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * 10f + Vector2.UnitY * owner.gfxOffY;
 
         AreaSize = AREASIZE + AREASIZE * 0.115f * Helper.Wave(-1f, 1f, 2f, Projectile.whoAmI);
+        AreaSize *= Projectile.Opacity;
 
         if (State == 1f) {
             Projectile.Opacity -= 0.1f;
