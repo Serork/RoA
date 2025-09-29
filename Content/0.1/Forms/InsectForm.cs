@@ -123,12 +123,13 @@ abstract class InsectForm : BaseForm {
         ref int shootCounter = ref player.GetFormHandler().ShootCounter;
         if (shootCounter < 0) {
             shootCounter++;
+            if (!isAttacking) {
+                attackTime = 0;
+            }
             return;
         }
         if (!isAttacking) {
-            if (shootCounter >= 0) {
-                attackTime = 0;
-            }
+            attackTime = 0;
             return;
         }
         if (!autofireOn && attackTime == -1f) {
