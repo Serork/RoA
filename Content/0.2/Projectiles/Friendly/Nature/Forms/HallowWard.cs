@@ -100,10 +100,10 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
                 velocity = vector * (0f - num5);
             }
             velocity *= Main.rand.NextFloat(0.75f);
-            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(Projectile.Center + vector * num4, velocity);
-            leafParticle?.CustomData = owner;
-            leafParticle?.Scale *= 0.85f;
-            leafParticle?.AI0 = -1f;
+            Leaf leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(Projectile.Center + vector * num4, velocity);
+            leafParticle.CustomData = owner;
+            leafParticle.Scale *= 0.85f;
+            leafParticle.AI0 = -1f;
         }
     }
 
