@@ -18,6 +18,8 @@ sealed class HallowEnt : BaseForm {
     private static float ENDATTACKTIME => 10f;
     private static float STARTANGLE => MathHelper.PiOver4 / 1.75f;
     private static float ENDANGLE => STARTANGLE * 0.25f;
+    private static float MAXATTACKTIME => 300f;
+    private static float ATTACKBOOSTSPEEDMODIFIER => 1f;
 
     protected override Color GlowColor(Player player, Color drawColor, float progress) => WreathHandler.GetArmorGlowColor_HallowEnt(player, drawColor, progress);
 
@@ -54,9 +56,16 @@ sealed class HallowEnt : BaseForm {
         ref int shootCounter = ref handler.ShootCounter;
         ref byte attackCount = ref handler.AttackCount;
         ref float timeForAttack = ref handler.AttackFactor;
+        ref float attackTime = ref handler.AttackFactor2;
 
-        if (player.HoldingLMB(true)) {
+        bool autofireOn = player.autoReuseAllWeapons;
+        bool isAttacking = autofireOn ? (player.HoldingLMB(true) && attackTime != -1f) : player.HoldingLMB(true);
+        if (isAttacking) {
+            if (!autofireOn && attackTime == -1f) {
+                return;
+            }
             shootCounter++;
+            attackTime++;
             void leafAttack(float attackProgress) {
                 if (player.IsLocal()) {
                     int damage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(35f);
@@ -67,9 +76,9 @@ sealed class HallowEnt : BaseForm {
                     float progress = MathUtils.Clamp01(attackProgress);
                     angle = MathHelper.Lerp(angle, ENDANGLE, progress);
                     ref Vector2 savedVelocity = ref handler.SavedVelocity;
-                    velocity = velocity.RotatedBy(angle * Main.rand.NextFloatDirection());
+                    velocity = velocity.RotatedBy(angle * Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextBool().ToDirectionInt());
                     progress = Utils.Remap(1f - progress, 0.5f, 1f, 0.25f, 1f, true);
-                    savedVelocity = Vector2.Lerp(savedVelocity, velocity, progress);
+                    savedVelocity = Vector2.Lerp(savedVelocity, velocity, Utils.Remap(progress, 0f, 1f, 0f, 0.9f, true));
                     velocity = savedVelocity;
                     ProjectileUtils.SpawnPlayerOwnedProjectile<HallowLeaf>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("hallowentattack")) {
                         Damage = damage,
@@ -88,7 +97,7 @@ sealed class HallowEnt : BaseForm {
                     BaseFormHandler.ForcedDirectionChange(player, 0.5f + 0.5f * attackProgress, true);
                 }
             }
-            timeForAttack -= 0.05f;
+            timeForAttack -= 0.1f * ATTACKBOOSTSPEEDMODIFIER;
             timeForAttack = Utils.Clamp(timeForAttack, ENDATTACKTIME, STARTATTACKTIME);
             float baseForEffect = MathHelper.Lerp(STARTATTACKTIME, ENDATTACKTIME, 0.75f), 
                   base2ForEffect = MathHelper.Lerp(STARTATTACKTIME, ENDATTACKTIME, 1f);
@@ -96,9 +105,12 @@ sealed class HallowEnt : BaseForm {
                 float value = Ease.SineOut(Utils.GetLerpValue(baseForEffect, base2ForEffect, timeForAttack, true)) * 0.35f;
                 BaseFormDataStorage.ChangeAttackCharge1(player, value, false);
             }
+            if (attackTime > MAXATTACKTIME) {
+                Reset(player);
+                attackTime = -1f;
+            }
         }
         else {
-
             Set(player);
         }
     }
@@ -109,11 +121,13 @@ sealed class HallowEnt : BaseForm {
         ref byte attackCount = ref handler.AttackCount;
         ref float timeForAttack = ref handler.AttackFactor;
         ref Vector2 savedVelocity = ref handler.SavedVelocity;
+        ref float attackTime = ref handler.AttackFactor2;
 
         shootCounter = TIMEBEFORELEAFATTACK;
         attackCount = 0;
         timeForAttack = STARTATTACKTIME;
         savedVelocity = Vector2.Zero;
+        attackTime = 0;
     }
 
     private void Reset(Player player) {
@@ -122,11 +136,13 @@ sealed class HallowEnt : BaseForm {
         ref byte attackCount = ref handler.AttackCount;
         ref float timeForAttack = ref handler.AttackFactor;
         ref Vector2 savedVelocity = ref handler.SavedVelocity;
+        ref float attackTime = ref handler.AttackFactor2;
 
         shootCounter = 0;
         attackCount = 0;
         timeForAttack = 0;
         savedVelocity = Vector2.Zero;
+        attackTime = 0;
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
