@@ -57,6 +57,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         Scale = scale;
         Rotation = rotation;
         AI0 = 0f;
+        CustomData = null;
 
         SetDefaults();
 

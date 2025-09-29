@@ -8,7 +8,8 @@ namespace RoA.Core.Utility.Extensions;
 static partial class PlayerExtensions {
     public static bool HasProjectile<T>(this Player player) where T : ModProjectile => player.ownedProjectileCounts[ModContent.ProjectileType<T>()] >= 1;
 
-    public static bool IsAliveAndFree(this Player player) => player.active && !player.CCed && !player.dead;
+    public static bool IsAliveAndFree(this Player player) => player.IsAlive() && !player.CCed;
+    public static bool IsAlive(this Player player) => player.active && !player.dead;
 
     public static bool IsHolding<T>(this Player player) where T : ModItem => player.HeldItem.type == ModContent.ItemType<T>();
 

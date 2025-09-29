@@ -5,6 +5,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -82,7 +83,7 @@ sealed class MouseVariables : ModPlayer {
             }
 
             bool syncControls = false;
-            if (Main.mouseLeft && !Main.mouseText) {
+            if (Main.mouseLeft && !Main.mouseText && !Player.mouseInterface) {
                 HoldingLMB = true;
                 OnHoldingLMBEvent?.Invoke(Player);
             }

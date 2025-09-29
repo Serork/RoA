@@ -295,3 +295,8 @@ HallowedGryphon: {
 	// DisplayName: Hallowed Gryphon
 	// Description: Mods.RoA.Buffs.HallowedGryphon.Description
 }
+
+HallowBlessing: {
+	// DisplayName: Hallow Blessing
+	// Description: Mods.RoA.Buffs.HallowBlessing.Description
+}

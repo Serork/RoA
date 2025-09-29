@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
@@ -9,14 +11,10 @@ using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
-using System;
-
 using Terraria;
-using Terraria.Audio;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
 
@@ -58,6 +56,10 @@ sealed class HallowEnt : BaseForm {
 
         HandleLeafAttack(player);
         ActivateExtraJumps(player);
+
+        if (player.HasProjectile<HallowWard>()) {
+            BaseFormDataStorage.ChangeAttackCharge1(player, 0.7f, false);
+        }
 
         //if (Main.rand.NextChance(0.025f)) {
         //    Vector2 position = player.Top + Vector2.UnitY * 20f + Main.rand.RandomPointInArea(player.width * 0.85f, player.height * 0.5f) / 2f;
@@ -193,6 +195,7 @@ sealed class HallowEnt : BaseForm {
             Vector2 velocity = Vector2.One * Main.rand.Random2(0.25f, 1f, 0.25f, 1f) * new Vector2(0.25f, 1f) * new Vector2(1f * Main.rand.NextFloatDirection(), 1f);
             Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
             leafParticle?.CustomData = player;
+            leafParticle?.OnDismount = false;
             leafParticle?.Scale *= 0.85f;
         }
 

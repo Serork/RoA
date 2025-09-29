@@ -15,6 +15,7 @@ using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
 using static RoA.Common.Druid.Forms.BaseForm;
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.VisualEffects;
 
@@ -51,19 +52,24 @@ sealed class Leaf : VisualEffect<Leaf> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
-        Helper.ApplyWindPhysics(Position, ref Velocity);
+        bool noGravity = AI0 != -1f;
+        if (noGravity) {
+            Helper.ApplyWindPhysics(Position, ref Velocity);
+            if (AI0-- <= 0f) {
+                _newVelocity = Velocity.RotatedByRandom(MathHelper.PiOver4);
 
-        if (AI0-- <= 0f) {
-            _newVelocity = Velocity.RotatedByRandom(MathHelper.PiOver4);
-
-            AI0 = BASECHANGEVALUE;
+                AI0 = BASECHANGEVALUE;
+            }
+            else {
+                Velocity = Vector2.Lerp(Velocity, _newVelocity, 0.1f);
+            }
         }
         else {
-            Velocity = Vector2.Lerp(Velocity, _newVelocity, 0.1f);
+            Scale *= 0.95f;
+            Velocity *= 0.95f;
         }
 
-        bool flag = TimeLeft < 20;
-        bool flag2 = Collision.SolidCollision(Position - Vector2.One * 2, 4, 4) || flag;
+        bool flag2 = (Collision.SolidCollision(Position - Vector2.One * 2, 4, 4) && noGravity);
         bool flag3 = false;
         if (flag2 || DisappearValue > 0f) {
             if (flag2) {
@@ -71,14 +77,15 @@ sealed class Leaf : VisualEffect<Leaf> {
             }
             if (DisappearValue <= 0f) {
                 Scale *= 0.9f;
-                if (!flag) {
-                    Velocity *= 0.25f;
-                }
+                Velocity *= 0.25f;
             }
             else {
                 Velocity *= 0.25f;
             }
             flag3 = flag2;
+        }
+        if (!noGravity) {
+            flag3 = true;
         }
 
         if (Scale <= 0.01f || --TimeLeft <= 0 || DisappearValue > 100f) {
@@ -94,15 +101,15 @@ sealed class Leaf : VisualEffect<Leaf> {
     }
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
-        Color color = Lighting.GetColor(Position.ToTileCoordinates()).MultiplyRGB(DrawColor);
-        float opacity = 1f - Utils.GetLerpValue(50f, 100f, DisappearValue, true);
-        opacity *= 1f - Utils.GetLerpValue(50f, 0f, TimeLeft, true);
-        Draw_Inner(spritebatch, color: color * opacity);
         if (_glowTexture?.IsLoaded != true) {
             return;
         }
         if (CustomData is Player owner) {
             float progress = OnDismount ? -1f : BaseFormDataStorage.GetAttackCharge(owner);
+            Color color = Color.Lerp(Lighting.GetColor(Position.ToTileCoordinates()), Color.White, MathF.Max(0f, HallowLeaf.EXTRABRIGHTNESSMODIFIER * progress)).MultiplyRGB(DrawColor);
+            float opacity = 1f - Utils.GetLerpValue(50f, 100f, DisappearValue, true);
+            opacity *= 1f - Utils.GetLerpValue(50f, 0f, TimeLeft, true);
+            Draw_Inner(spritebatch, color: color * opacity);
             color = WreathHandler.GetArmorGlowColor_HallowEnt(owner, color, progress) * opacity;
             Draw_Inner(spritebatch, _glowTexture.Value, color);
         }
