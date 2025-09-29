@@ -41,6 +41,8 @@ sealed class WreathHandler : ModPlayer {
         return color;
     }
 
+    public static Color GetArmorGlowColor_HallowEnt(Player player, Color baseColor, float progress = -1f) => GetArmorGlowColor1(player, baseColor, progress);
+
     public static WreathHandler GetWreathStats(Player player) => player.GetWreathHandler();
     public static bool IsWreathCharged(Player player) => GetWreathStats(player).IsFull1;
     public static float GetWreathChargeProgress(Player player) => GetWreathStats(player).ActualProgress4;
@@ -571,7 +573,7 @@ sealed class WreathHandler : ModPlayer {
                 }
 
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new FormPacket1(Player));
+                    MultiplayerSystem.SendPacket(new ResetFormPacket(Player));
                 }
             }
         }

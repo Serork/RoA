@@ -339,7 +339,7 @@ sealed class GrimDefender : ModNPC {
                 diff = _tempPosition /*- Vector2.UnitY * 20f*/ - center;
                 diff.Normalize();
 
-                //NPC.Center = _tempPosition + NPC.velocity;
+                //NPC.Center = TempPosition + NPC.velocity;
                 ////NPC.velocity = Utils.MoveTowards(NPC.Center, Main.player[NPC.target].Center, NPC.ai[2]) - NPC.Center;
 
                 //int width = 60; int height = width;
@@ -482,7 +482,7 @@ sealed class GrimDefender : ModNPC {
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<GrimDefenderSpearAttack>(),
                                 60 / 3, 4f, Main.myPlayer, NPC.whoAmI);
                         }
-                        //_tempPosition = Main.player[NPC.target].Center;
+                        //TempPosition = Main.player[NPC.target].Center;
                         //_extraVelocity = Vector2.Zero;
                     }
                     NPC.localAI[2] = 1f;

@@ -15,7 +15,7 @@ namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 [AutoloadEquip(EquipType.Legs)]
 sealed class LivingPearlwoodGreaves : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask {
     void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) 
-        => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorLegs);
+        => color = WreathHandler.GetArmorGlowColor_HallowEnt(player, drawInfo.colorArmorLegs);
 
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;

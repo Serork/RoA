@@ -53,7 +53,7 @@ sealed class LilPhoenixTrailFlame : FormProjectile {
         Vector2 pos = player.Center + player.fullRotationOrigin - player.Size / 2f;
         Vector2 vector2 = pos + new Vector2(-10f * player.direction, 5f * offset).RotatedBy(player.velocity.SafeNormalize(Vector2.Zero).ToRotation()) * 2f * player.direction;
         vector2 = vector2.RotatedBy(player.fullRotation, vector2);
-        if (!player.GetFormHandler()._dashed) {
+        if (!player.GetFormHandler().Dashed) {
             Projectile.ai[2] = 1f;
             Projectile.netUpdate = true;
         }

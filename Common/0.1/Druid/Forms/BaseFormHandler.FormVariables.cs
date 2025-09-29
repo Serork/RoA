@@ -20,7 +20,33 @@ namespace RoA.Common.Druid.Forms;
 
 sealed partial class BaseFormHandler : ModPlayer {
     #region GENERIC
-    internal int _shootCounter;
+    public int ShootCounter;
+    public float AttackFactor, AttackFactor2;
+    public byte AttackCount;
+    public Vector2 SavedVelocity;
+    public bool IsPreparing, WasPreparing, Prepared;
+    public Vector2 TempPosition;
+    public bool Dashed, Dashed2;
+    public IDoubleTap.TapDirection DashDirection;
+    public float DashDelay, DashTimer;
+    public int[] LocalNPCImmunity = new int[Main.npc.Length];
+    public bool? FacedRight;
+    public float DirectionChangedFor;
+
+    public bool ActiveDash => DashDelay > 0;
+
+    public static void ForcedDirectionChange(Player player, float changeFor = 1f, bool net = false) {
+        ref bool? facedRight = ref player.GetFormHandler().FacedRight;
+        ref float directionChagedFor = ref player.GetFormHandler().DirectionChangedFor;
+        var value = (player.GetWorldMousePosition().X > player.position.X ? 1 : -1) == 1;
+        if (facedRight != value) {
+            facedRight = value;
+            if (net) {
+                player.SyncMousePosition();
+            }
+        }
+        directionChagedFor = changeFor;
+    }
     #endregion
 
     #region GRYPHON
@@ -29,10 +55,7 @@ sealed partial class BaseFormHandler : ModPlayer {
 
     public bool JustStartedDoingLoopAttack;
     public bool LoopAttackIsDone;
-    public Vector2 SavedVelocity;
     public ushort CanDoLoopAttackTimer;
-    public float AttackFactor, AttackFactor2;
-    public byte AttackCount;
     public float MoveSpeedBuffTime;
 
     public bool CanDoLoopAttack {
@@ -162,18 +185,15 @@ sealed partial class BaseFormHandler : ModPlayer {
     internal bool _phoenixJustJumped, _phoenixJustJumpedForAnimation, _phoenixJustJumpedForAnimation2;
     internal int _phoenixJumpsCD;
     internal int _phoenixJump;
-    internal Vector2 _tempPosition;
-    internal bool _isPreparing, _wasPreparing, _prepared;
     internal float _charge, _charge2, _charge3;
-    internal bool _dashed, _dashed2;
 
     internal void ResetPhoenixDash(bool hardReset = false) {
-        if (_dashed) {
+        if (Dashed) {
             ClearPhoenixProjectiles();
         }
-        _dashed = _dashed2 = false;
-        _wasPreparing = true;
-        _prepared = true;
+        Dashed = Dashed2 = false;
+        WasPreparing = true;
+        Prepared = true;
         _charge = _charge2 = 0f;
         if (hardReset || Player.GetFormHandler().IsConsideredAs<LilPhoenixForm>()) {
             Player.eocDash = 0;
@@ -202,17 +222,11 @@ sealed partial class BaseFormHandler : ModPlayer {
     public const int CD = 50, DURATION = 35;
     public const float SPEED = 10f;
 
-    private IDoubleTap.TapDirection _dashDirection;
-    internal float _dashDelay, _dashTimer;
-    private int[] _localNPCImmunity = new int[Main.npc.Length];
-
-    public bool ActiveDash => _dashDelay > 0;
-
     public partial void ResetEffects2() {
         if (!Player.GetFormHandler().IsInADruidicForm) {
-            _dashDelay = _dashTimer = 0;
-            _dashDirection = IDoubleTap.TapDirection.None;
-            _shootCounter = 0;
+            DashDelay = DashTimer = 0;
+            DashDirection = IDoubleTap.TapDirection.None;
+            ShootCounter = 0;
         }
     }
 
@@ -229,26 +243,26 @@ sealed partial class BaseFormHandler : ModPlayer {
     }
 
     public override void PreUpdateMovement() {
-        bool flag = _dashDirection != IDoubleTap.TapDirection.None || ActiveDash;
+        bool flag = DashDirection != IDoubleTap.TapDirection.None || ActiveDash;
         if (flag && !Player.GetFormHandler().IsConsideredAs<FlederForm>()) {
-            _dashDirection = IDoubleTap.TapDirection.None;
-            _dashDelay = _dashTimer = 0;
+            DashDirection = IDoubleTap.TapDirection.None;
+            DashDelay = DashTimer = 0;
             return;
         }
 
         if (flag && !ActiveDash) {
             Vector2 newVelocity = Player.velocity;
-            int dashDirection = (_dashDirection == IDoubleTap.TapDirection.Right).ToDirectionInt();
-            switch (_dashDirection) {
+            int dashDirection = (DashDirection == IDoubleTap.TapDirection.Right).ToDirectionInt();
+            switch (DashDirection) {
                 case IDoubleTap.TapDirection.Left:
                 case IDoubleTap.TapDirection.Right: {
                         newVelocity.X = dashDirection * SPEED;
                         break;
                     }
             }
-            _dashDirection = IDoubleTap.TapDirection.None;
-            _dashDelay = CD;
-            _dashTimer = DURATION;
+            DashDirection = IDoubleTap.TapDirection.None;
+            DashDelay = CD;
+            DashTimer = DURATION;
             SpawnFlederDusts(Player);
             Player.velocity = newVelocity;
             if (Player.velocity.Y == Player.gravity) {
@@ -268,10 +282,10 @@ sealed partial class BaseFormHandler : ModPlayer {
         }
 
         if (ActiveDash) {
-            _dashDelay--;
+            DashDelay--;
         }
 
-        if (_dashTimer > 0) {
+        if (DashTimer > 0) {
             if (!BaseForm.IsInAir(Player)) {
                 for (int i = 0; i < 3; i++) {
                     if (Main.rand.NextBool(3)) {
@@ -290,11 +304,11 @@ sealed partial class BaseFormHandler : ModPlayer {
             }
 
             for (int k = 0; k < 200; k++) {
-                if (_localNPCImmunity[k] > 0) {
-                    _localNPCImmunity[k]--;
+                if (LocalNPCImmunity[k] > 0) {
+                    LocalNPCImmunity[k]--;
                 }
             }
-            Player.eocDash = (int)_dashTimer;
+            Player.eocDash = (int)DashTimer;
             Player.armorEffectDrawShadowEOCShield = true;
             if (Player.velocity.Length() > 5f) {
                 Rectangle rectangle = new((int)((double)Player.position.X + (double)Player.velocity.X * 0.5 - 4.0), (int)((double)Player.position.Y + (double)Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
@@ -303,7 +317,7 @@ sealed partial class BaseFormHandler : ModPlayer {
                     if (!nPC.active || nPC.dontTakeDamage || nPC.friendly || (nPC.aiStyle == 112 && !(nPC.ai[2] <= 1f)) || !Player.CanNPCBeHitByPlayerOrPlayerProjectile(nPC))
                         continue;
 
-                    if (_localNPCImmunity[i] > 0) {
+                    if (LocalNPCImmunity[i] > 0) {
                         continue;
                     }
 
@@ -327,17 +341,17 @@ sealed partial class BaseFormHandler : ModPlayer {
                         if (Player.whoAmI == Main.myPlayer)
                             Player.ApplyDamageToNPC(nPC, (int)num, num2, num3, crit, DruidClass.Nature, true);
 
-                        _dashTimer = DURATION;
-                        _dashDelay = CD;
+                        DashTimer = DURATION;
+                        DashDelay = CD;
                         Player.velocity *= 0.9f;
-                        _localNPCImmunity[i] = 10;
+                        LocalNPCImmunity[i] = 10;
                         Player.immune = true;
                         Player.immuneTime = 10;
                         Player.immuneNoBlink = true;
                     }
                 }
             }
-            _dashTimer--;
+            DashTimer--;
         }
     }
 
@@ -367,32 +381,35 @@ sealed partial class BaseFormHandler : ModPlayer {
             return;
         }
 
-        handler._dashDirection = direction;
+        handler.DashDirection = direction;
         if (!server && Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new FlederFormPacket1(Player, direction));
+            MultiplayerSystem.SendPacket(new FlederDashPacket(Player, direction));
         }
     }
     #endregion
     #region INSECT
-    internal bool? _facedRight;
-    internal int _insectTimer;
-    internal float _directionChangedFor;
-
     public partial void ResetEffects3() {
         if (!Player.GetFormHandler().IsInADruidicForm) {
-            _facedRight = null;
-            _shootCounter = _insectTimer = 0;
-            _directionChangedFor = 0f;
+            FacedRight = null;
+            ShootCounter = 0;
+            AttackFactor = 0;
+            DirectionChangedFor = 0f;
         }
     }
 
     public partial void PostUpdate1() {
-        if (_directionChangedFor > 0f) {
-            _directionChangedFor -= TimeSystem.LogicDeltaTime;
-            if (Player.controlLeft || Player.controlRight || Player.controlJump) {
-                _directionChangedFor = 0f;
-            }
+        if (DirectionChangedFor > 0f) {
+            DirectionChangedFor -= TimeSystem.LogicDeltaTime;
+            //if (Player.controlLeft || Player.controlRight || Player.controlJump) {
+            //    DirectionChangedFor = 0f;
+            //}
+            return;
+        }
+        if (FacedRight != null) {
+            FacedRight = null;
         }
     }
+    #endregion
+    #region ENT
     #endregion
 }

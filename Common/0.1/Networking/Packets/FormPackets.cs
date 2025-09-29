@@ -11,8 +11,8 @@ using Terraria.ID;
 
 namespace RoA.Common.Networking.Packets;
 
-sealed class PhoenixFormPacket2 : NetPacket {
-    public PhoenixFormPacket2(Player player) {
+sealed class PhoenixDashPacket : NetPacket {
+    public PhoenixDashPacket(Player player) {
         Writer.TryWriteSenderPlayer(player);
     }
 
@@ -22,58 +22,17 @@ sealed class PhoenixFormPacket2 : NetPacket {
         }
 
         var plr = player.GetFormHandler();
-        plr._prepared = false;
-        plr._dashed2 = plr._dashed = true;
+        plr.Prepared = false;
+        plr.Dashed2 = plr.Dashed = true;
 
         if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new PhoenixFormPacket2(player), ignoreClient: sender);
+            MultiplayerSystem.SendPacket(new PhoenixDashPacket(player), ignoreClient: sender);
         }
     }
 }
 
-sealed class InsectFormPacket1 : NetPacket {
-    public InsectFormPacket1(Player player, bool value) {
-        Writer.TryWriteSenderPlayer(player);
-        Writer.Write(value);
-    }
-
-    public override void Read(BinaryReader reader, int sender) {
-        if (!reader.TryReadSenderPlayer(sender, out var player)) {
-            return;
-        }
-
-        bool value = reader.ReadBoolean();
-
-        var handler = player.GetFormHandler();
-        handler._facedRight = value;
-        handler._directionChangedFor = 1f;
-
-        if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new InsectFormPacket1(player, value), ignoreClient: sender);
-        }
-    }
-}
-
-sealed class InsectFormPacket2 : NetPacket {
-    public InsectFormPacket2(Player player) {
-        Writer.TryWriteSenderPlayer(player);
-    }
-
-    public override void Read(BinaryReader reader, int sender) {
-        if (!reader.TryReadSenderPlayer(sender, out var player)) {
-            return;
-        }
-
-        player.GetFormHandler()._facedRight = null;
-
-        if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new InsectFormPacket2(player), ignoreClient: sender);
-        }
-    }
-}
-
-sealed class FlederFormPacket1 : NetPacket {
-    public FlederFormPacket1(Player player, IDoubleTap.TapDirection direction) {
+sealed class FlederDashPacket : NetPacket {
+    public FlederDashPacket(Player player, IDoubleTap.TapDirection direction) {
         Writer.TryWriteSenderPlayer(player);
         Writer.Write((sbyte)direction);
     }
@@ -88,13 +47,13 @@ sealed class FlederFormPacket1 : NetPacket {
         player.GetFormHandler().UseFlederDash(direction, true);
 
         if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new FlederFormPacket1(player, direction), ignoreClient: sender);
+            MultiplayerSystem.SendPacket(new FlederDashPacket(player, direction), ignoreClient: sender);
         }
     }
 }
 
-sealed class FormPacket1 : NetPacket {
-    public FormPacket1(Player player) {
+sealed class ResetFormPacket : NetPacket {
+    public ResetFormPacket(Player player) {
         Writer.TryWriteSenderPlayer(player);
     }
 
@@ -106,7 +65,7 @@ sealed class FormPacket1 : NetPacket {
         player.GetWreathHandler().Reset1();
 
         if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new FormPacket1(player), ignoreClient: sender);
+            MultiplayerSystem.SendPacket(new ResetFormPacket(player), ignoreClient: sender);
         }
     }
 }

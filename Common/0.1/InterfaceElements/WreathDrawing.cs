@@ -102,7 +102,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         bool shouldRotateWithPlayer = ModContent.GetInstance<RoAClientConfig>().RotateWreathWithPlayer;
         float baseRotation = !shouldRotateWithPlayer ? 0f : drawInfo.rotation;
         float rotation = baseRotation + MathHelper.Pi;
-        bool flag2 = phoenixHandler._dashed || phoenixHandler._dashed || phoenixHandler._isPreparing || player.sleeping.isSleeping;
+        bool flag2 = phoenixHandler.Dashed || phoenixHandler.Dashed || phoenixHandler.IsPreparing || player.sleeping.isSleeping;
         if (stats.LockWreathPosition) {
             flag2 = true;
         }

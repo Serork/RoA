@@ -89,7 +89,7 @@ sealed class HallowedGryphon : BaseForm {
             return;
         }
 
-        BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
+        BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f, false);
 
         float progress = (MOVESPEEDBOOSTMODIFIER - 1f) * GetMoveSpeedFactor(player);
         player.accRunSpeed *= 1f + progress;
@@ -184,7 +184,7 @@ sealed class HallowedGryphon : BaseForm {
         rotation = desiredRotation;
         savedVelocity = savedVelocity.RotatedBy((0f - num19) * (float)direction);
         if (attackFactor2++ > perAttack) {
-            BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
+            BaseFormDataStorage.ChangeAttackCharge1(player, 1.25f, false);
             int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(30);
             float baseKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(3f);
             if (player.IsLocal()) {

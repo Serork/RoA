@@ -157,17 +157,17 @@ static class ProjectileUtils {
         }
     }
 
-    public ref struct SpawnProjectileArgs(Player player, IEntitySource source) {
-        public Player Player = player;
-        public IEntitySource Source = source;
-        public Vector2? Position = null;
-        public Vector2? Velocity = null;
-        public int Damage = 0;
-        public float KnockBack = 0f;
-        public float AI0 = 0f;
-        public float AI1 = 0f;
-        public float AI2 = 0f;
-        public ushort? ProjectileType = null;
+    public readonly ref struct SpawnProjectileArgs(Player player, IEntitySource source) {
+        public Player Player { get; } = player;
+        public IEntitySource Source { get; } = source;
+        public Vector2? Position { get; init; }
+        public Vector2? Velocity { get; init; }
+        public int Damage { get; init; }
+        public float KnockBack { get; init; }
+        public float AI0 { get; init; }
+        public float AI1 { get; init; }
+        public float AI2 { get; init; }
+        public ushort? ProjectileType { get; init; }
     }
 
     public ref struct SpawnCopyArgs(Projectile projectile, IEntitySource source) {

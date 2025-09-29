@@ -15,7 +15,7 @@ namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 [AutoloadEquip(EquipType.Body)]
 sealed class LivingPearlwoodChestplate : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask {
     void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) 
-        => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorBody);
+        => color = WreathHandler.GetArmorGlowColor_HallowEnt(player, drawInfo.colorArmorBody);
 
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;

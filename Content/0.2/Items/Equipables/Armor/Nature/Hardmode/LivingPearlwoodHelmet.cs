@@ -17,11 +17,8 @@ namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class LivingPearlwoodHelmet : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask, IDoubleTap {
-    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
-        float progress = WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
-        color = Color.Lerp(drawInfo.colorArmorHead, Color.White, 0.25f) * progress;
-        color.A = (byte)(125 * progress);
-    }
+    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo)
+        => color = WreathHandler.GetArmorGlowColor_HallowEnt(player, drawInfo.colorArmorHead);
 
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;

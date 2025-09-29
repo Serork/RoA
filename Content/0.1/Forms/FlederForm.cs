@@ -100,7 +100,7 @@ sealed class FlederForm : BaseForm {
     }
 
     private static void OnHoldingLMB(Player player) {
-        ref int shootCounter = ref player.GetFormHandler()._shootCounter;
+        ref int shootCounter = ref player.GetFormHandler().ShootCounter;
 
         shootCounter++;
 
@@ -137,7 +137,7 @@ sealed class FlederForm : BaseForm {
     }
 
     private void SpecialAttackHandler(Player player) {
-        ref int shootCounter = ref player.GetFormHandler()._shootCounter;
+        ref int shootCounter = ref player.GetFormHandler().ShootCounter;
 
         bool flag = player.whoAmI != Main.myPlayer;
         if (flag && player.HoldingLMB()) {
@@ -155,7 +155,7 @@ sealed class FlederForm : BaseForm {
 
         if (flag || Main.mouseText)
             return;
-        if (player.GetFormHandler()._dashDelay > BaseFormHandler.CD - 5) {
+        if (player.GetFormHandler().DashDelay > BaseFormHandler.CD - 5) {
             BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f);
         }
 

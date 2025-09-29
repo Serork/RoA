@@ -14,7 +14,12 @@ static class MousePositionStorageExtensions {
     public static void SyncMousePosition(this Player player) => player.GetModPlayer<MouseVariables>().ShouldSyncMousePosition = true;
     public static void SyncCappedMousePosition(this Player player) => player.GetModPlayer<MouseVariables>().ShouldSyncCappedMousePosition = true;
     public static void SyncLMB(this Player player) => player.GetModPlayer<MouseVariables>().ShouldSyncLMB = true;
-    public static bool HoldingLMB(this Player player) => player.GetModPlayer<MouseVariables>().HoldingLMB;
+    public static bool HoldingLMB(this Player player, bool net = false) {
+        if (net) {
+            SyncLMB(player);
+        }
+        return player.GetModPlayer<MouseVariables>().HoldingLMB;
+    }
     public static Vector2 GetWorldMousePosition(this Player player) => player.GetModPlayer<MouseVariables>().MousePosition;
     public static Vector2 GetCappedWorldMousePosition(this Player player, float width, float height) {
         MouseVariables storage = player.GetModPlayer<MouseVariables>();

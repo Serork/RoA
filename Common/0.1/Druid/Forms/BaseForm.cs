@@ -53,6 +53,8 @@ abstract class BaseForm : ModMount {
             private set => _attackCharge = value;
         }
 
+        public static float GetAttackCharge(Player player) => MathHelper.Clamp(Math.Max(player.GetModPlayer<BaseFormDataStorage>()._attackCharge2, player.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
+
         internal static void ChangeAttackCharge1(Player player, float value, bool net = true) {
             player.GetModPlayer<BaseFormDataStorage>().AttackCharge = value;
             if (net && Main.netMode == NetmodeID.MultiplayerClient) {
@@ -143,6 +145,8 @@ abstract class BaseForm : ModMount {
             MountData.textureHeight = MountData.backTexture.Height();
         }
     }
+
+    protected virtual bool ForcedChangeDirectionIfNeeded(Player player) => true;
 
     protected virtual void SafeSetDefaults() { }
     protected virtual void SafePostUpdate(Player player) { }
@@ -272,6 +276,8 @@ abstract class BaseForm : ModMount {
     public sealed override bool Draw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         if (IsDrawing) {
             GetSpriteEffects(drawPlayer, ref spriteEffects);
+            drawPosition.X -= drawPlayer.mount.XOffset * drawPlayer.direction;
+            drawPosition.X += drawPlayer.mount.XOffset * (spriteEffects == SpriteEffects.None).ToDirectionInt();
             DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
@@ -299,7 +305,7 @@ abstract class BaseForm : ModMount {
 
     protected virtual void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         if (glowTexture != null) {
-            float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
+            float value = BaseFormDataStorage.GetAttackCharge(drawPlayer);
             DrawData item = new(glowTexture, drawPosition, frame, GlowColor(drawPlayer, drawColor, ((float)(int)drawColor.A / 255f) * value), rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
@@ -308,7 +314,17 @@ abstract class BaseForm : ModMount {
 
     protected virtual Color GlowColor(Player player, Color drawColor, float progress) => Color.White * progress;
 
-    protected virtual void GetSpriteEffects(Player player, ref SpriteEffects spriteEffects) { }
+    protected virtual void GetSpriteEffects(Player player, ref SpriteEffects spriteEffects) {
+        if (!ForcedChangeDirectionIfNeeded(player)) {
+            return;
+        }
+
+        bool? variable = player.GetFormHandler().FacedRight;
+        if (!variable.HasValue) {
+            return;
+        }
+        spriteEffects = variable.Value ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+    }
 
     //public static void TestHook(Player player) => Main.NewText(123);
 

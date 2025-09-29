@@ -5,6 +5,7 @@ using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -55,7 +56,7 @@ abstract class InsectForm : BaseForm {
         rotation *= 0.5f;
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
         float maxRotation = 0.2f;
-        bool? variable = player.GetFormHandler()._facedRight;
+        bool? variable = player.GetFormHandler().FacedRight;
         if (variable.HasValue) {
             maxRotation = 0.1f;
             _maxRotation = MathHelper.Lerp(_maxRotation, maxRotation, 0.1f);
@@ -77,19 +78,19 @@ abstract class InsectForm : BaseForm {
     }
 
     protected override void GetSpriteEffects(Player player, ref SpriteEffects spriteEffects) {
-        bool? variable = player.GetFormHandler()._facedRight;
-        if (!variable.HasValue) {
-            return;
-        }
-        spriteEffects = variable.Value ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        base.GetSpriteEffects(player, ref spriteEffects);
     }
 
     private void SpecialAttackHandler(Player player) {
-        if (player.whoAmI != Main.myPlayer || Main.mouseText)
+        if (player.HoldingLMB(true)) {
+            BaseFormHandler.ForcedDirectionChange(player, 0.1f, true);
+        }
+
+        if (player.whoAmI != Main.myPlayer)
             return;
 
-        ref bool? facedRight = ref player.GetFormHandler()._facedRight;
-        ref int insectTimer = ref player.GetFormHandler()._insectTimer;
+        ref bool? facedRight = ref player.GetFormHandler().FacedRight;
+        ref float insectTimer = ref player.GetFormHandler().AttackFactor;
         string context = "insectformattack";
         IEntitySource source = player.GetSource_Misc(context);
         if (player.velocity.Y == 0f && player.velocity.X == 0f) {
@@ -116,32 +117,16 @@ abstract class InsectForm : BaseForm {
         }
         else
             insectTimer = 0;
-        if (!Main.mouseLeft || !player.controlUseItem) {
-            if (player.GetFormHandler()._directionChangedFor <= 0f) {
-                facedRight = null;
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new InsectFormPacket2(player));
-                }
-            }
+        if (!player.HoldingLMB()) {
             return;
         }
-        player.GetFormHandler()._directionChangedFor = 1f;
-        var value = (Main.MouseWorld.X > player.position.X ? 1 : -1) == 1;
-        if (facedRight != value) {
-            facedRight = value;
-            if (Main.netMode == NetmodeID.MultiplayerClient) {
-                MultiplayerSystem.SendPacket(new InsectFormPacket1(player, facedRight.Value));
-            }
+        ref int shootCounter = ref player.GetFormHandler().ShootCounter;
+        if (player.HoldingLMB()) {
+            shootCounter++;
+            insectTimer = 0;
         }
-        ref int shootCounter = ref player.GetFormHandler()._shootCounter;
-        if (!Main.mouseText) {
-            if (Main.mouseLeft) {
-                shootCounter++;
-                insectTimer = 0;
-            }
-            if (Main.mouseLeftRelease)
-                shootCounter = 0;
-        }
+        if (Main.mouseLeftRelease)
+            shootCounter = 0;
         if (shootCounter % 10 == 5 && shootCounter > 0) {
             BaseFormDataStorage.ChangeAttackCharge1(player, 1.25f);
             //player.GetWreathHandler().ResetGryphonStats(true, 0.25f);

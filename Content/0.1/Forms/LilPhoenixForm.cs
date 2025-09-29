@@ -75,10 +75,10 @@ sealed class LilPhoenixForm : BaseForm {
         float maxRotation = 0.075f;
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         var plr = player.GetFormHandler();
-        if (plr._dashed) {
+        if (plr.Dashed) {
             player.fullRotation = (float)Math.Atan2((double)player.velocity.Y, (double)player.velocity.X) + (float)Math.PI / 2f;
         }
-        else if (plr._isPreparing) {
+        else if (plr.IsPreparing) {
             float length = 9f - player.velocity.Length();
             length *= 0.075f;
             player.fullRotation += (0.4f + Utils.Remap(plr._charge * 2f, 0f, 3.5f, 0f, 0.2f)) * length * player.direction;
@@ -106,19 +106,19 @@ sealed class LilPhoenixForm : BaseForm {
                 break;
             }
         }
-        if (plr._isPreparing) {
+        if (plr.IsPreparing) {
             flag = true;
         }
         bool flag4 = !flag || !IsInAir(player);
         StrikeNPC(player, !player.wet && WorldGenHelper.CustomSolidCollision(player.position - Vector2.One * 3, player.width + 6, player.height + 6, TileID.Sets.Platforms));
         if (flag4) {
             if (plr._charge3 < BaseFormHandler.MAXPHOENIXCHARGE) {
-                if (plr._dashed) {
+                if (plr.Dashed) {
                     plr.ClearPhoenixProjectiles();
                 }
-                plr._dashed = false;
+                plr.Dashed = false;
             }
-            plr._wasPreparing = false;
+            plr.WasPreparing = false;
             if (player.eocDash > 0) {
                 player.eocDash -= 10;
             }
@@ -144,10 +144,10 @@ sealed class LilPhoenixForm : BaseForm {
             sqrt = speed / sqrt;
             player.velocity.X = vector.X * sqrt;
             player.velocity.Y = vector.Y * sqrt;
-            plr._prepared = false;
-            plr._dashed2 = plr._dashed = true;
+            plr.Prepared = false;
+            plr.Dashed2 = plr.Dashed = true;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                MultiplayerSystem.SendPacket(new PhoenixFormPacket2(player));
+                MultiplayerSystem.SendPacket(new PhoenixDashPacket(player));
             }
             ushort type = (ushort)ModContent.ProjectileType<LilPhoenixTrailFlame>();
             int damage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(35f);
@@ -179,16 +179,16 @@ sealed class LilPhoenixForm : BaseForm {
                 }
             }
         }
-        if (flag && player.HoldingLMB() && !plr._wasPreparing && !plr._dashed) {
+        if (flag && player.HoldingLMB() && !plr.WasPreparing && !plr.Dashed) {
             player.controlJump = false;
             player.controlLeft = player.controlRight = false;
             player.velocity *= 0.7f;
             player.gravity = 0f;
-            player.position.X = Helper.Approach(player.position.X, plr._tempPosition.X, 0.5f);
-            player.position.Y = Helper.Approach(player.position.Y, plr._tempPosition.Y, 0.5f);
-            plr._tempPosition = Vector2.Lerp(plr._tempPosition, player.position, 0.25f);
-            plr._isPreparing = true;
-            plr._wasPreparing = false;
+            player.position.X = Helper.Approach(player.position.X, plr.TempPosition.X, 0.5f);
+            player.position.Y = Helper.Approach(player.position.Y, plr.TempPosition.Y, 0.5f);
+            plr.TempPosition = Vector2.Lerp(plr.TempPosition, player.position, 0.25f);
+            plr.IsPreparing = true;
+            plr.WasPreparing = false;
             float max = BaseFormHandler.MAXPHOENIXCHARGE;
             if (plr._charge < max) {
                 plr._charge += 0.1f;
@@ -196,7 +196,7 @@ sealed class LilPhoenixForm : BaseForm {
                 plr._charge2 += 0.35f;
                 plr._charge2 = Math.Min(plr._charge2, max);
             }
-            else if (!plr._prepared) {
+            else if (!plr.Prepared) {
                 int k = 36;
                 for (int i = 0; i < k; i++) {
                     int x = (int)((double)player.Center.X - 2.5);
@@ -208,29 +208,29 @@ sealed class LilPhoenixForm : BaseForm {
                     Main.dust[dust].noLight = true;
                     Main.dust[dust].velocity = -Vector2.Normalize(vector2) * 2f;
                 }
-                plr._prepared = true;
+                plr.Prepared = true;
             }
             BaseFormDataStorage.ChangeAttackCharge1(player, plr._charge2 / max * 1.25f);
         }
         else {
-            if (plr._isPreparing) {
-                plr._isPreparing = false;
-                plr._wasPreparing = true;
+            if (plr.IsPreparing) {
+                plr.IsPreparing = false;
+                plr.WasPreparing = true;
             }
-            plr._tempPosition = player.position + player.velocity * 8f;
+            plr.TempPosition = player.position + player.velocity * 8f;
             if (plr._charge > 0f) {
                 player.eocDash = (int)(plr._charge * 15f);
                 player.armorEffectDrawShadowEOCShield = true;
             }
             plr._charge = plr._charge2 = 0f;
-            plr._prepared = false;
+            plr.Prepared = false;
         }
     }
 
     private void StrikeNPC(Player player, bool flag4) {
         var plr = player.GetFormHandler();
         void explosion(int i = -1) {
-            if (plr._dashed2 && Main.netMode != NetmodeID.Server) {
+            if (plr.Dashed2 && Main.netMode != NetmodeID.Server) {
                 float value = plr._charge3 / BaseFormHandler.MAXPHOENIXCHARGE;
                 if (i != -1) {
                     player.immune = true;
@@ -261,12 +261,12 @@ sealed class LilPhoenixForm : BaseForm {
                     if (Main.netMode != NetmodeID.SinglePlayer)
                         NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
                     plr._charge3 = 0f;
-                    if (plr._dashed) {
+                    if (plr.Dashed) {
                         plr.ClearPhoenixProjectiles();
                     }
-                    plr._dashed = false;
+                    plr.Dashed = false;
                 }
-                plr._dashed2 = false;
+                plr.Dashed2 = false;
                 //sMain.npc[i].StrikeNPC((int)(CurrentDamage * plr.dashChargeValue), 2f * plr.dashChargeValue, direction, Main.rand.Next(2) == 0 ? true : false, false, false);
             }
         }
@@ -315,15 +315,15 @@ sealed class LilPhoenixForm : BaseForm {
                     //    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
                 }
             }
-            if (plr._dashed) {
+            if (plr.Dashed) {
                 plr.ResetPhoenixDash();
             }
-            plr._dashed2 = false;
+            plr.Dashed2 = false;
 
             NetMessage.SendData(13, -1, -1, null, Main.myPlayer);
         }
 
-        if (player.controlJump && !plr._isPreparing) {
+        if (player.controlJump && !plr.IsPreparing) {
             if (plr._phoenixJump > 0) {
                 if (player.velocity.Y == 0f) {
                     plr._phoenixJump = 0;
@@ -384,11 +384,11 @@ sealed class LilPhoenixForm : BaseForm {
         int maxFrame = 4;
         float walkingFrameFrequiency = 24f;
         var plr = player.GetFormHandler();
-        if (plr._dashed) {
+        if (plr.Dashed) {
             frame = 11;
             frameCounter = 0f;
         }
-        else if (plr._isPreparing) {
+        else if (plr.IsPreparing) {
             frame = 10;
             frameCounter = 0f;
         }
