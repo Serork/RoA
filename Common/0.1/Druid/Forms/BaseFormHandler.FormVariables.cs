@@ -420,7 +420,12 @@ sealed partial class BaseFormHandler : ModPlayer {
             return;
         }
 
-        if (Player.HasProjectile<HallowWard>()) {
+        var hallowWardProjectile = TrackedEntitiesSystem.GetTrackedProjectile<HallowWard>(checkProjectile => checkProjectile.owner != Player.whoAmI);
+        foreach (var projectile in hallowWardProjectile) {
+            projectile.Kill();
+            ProjectileUtils.SpawnPlayerOwnedProjectile<HallowWard>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(info.DamageSource)) {
+                Position = Player.Center
+            });
             return;
         }
 

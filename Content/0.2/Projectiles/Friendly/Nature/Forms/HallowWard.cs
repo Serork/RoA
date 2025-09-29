@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Players;
 using RoA.Common.Projectiles;
 using RoA.Common.VisualEffects;
 using RoA.Content.Buffs;
@@ -30,6 +31,7 @@ using static RoA.Common.Druid.Forms.BaseForm;
 
 namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
 
+[Tracked]
 sealed class HallowWard : FormProjectile_NoTextureLoad {
     private static ushort TIMELEFT => 300;
     private static float AREASIZE => 200f;
@@ -69,6 +71,7 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
         Projectile.Center = owner.Center;
         Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * 10f + Vector2.UnitY * owner.gfxOffY;
 
+        Projectile.localAI[0]++;
         AreaSize = AREASIZE + AREASIZE * 0.115f * Helper.Wave(-1f, 1f, 2f, Projectile.whoAmI);
         AreaSize *= Ease.SineInOut(Utils.Remap(Projectile.Opacity, 0f, 1f, 0.75f, 1f));
 

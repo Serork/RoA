@@ -72,9 +72,29 @@ sealed class HallowEnt : BaseForm {
 
     protected override void OnJump(Player player) {
         BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
-        for (int i = 0; i < 2; i++) {
-            FeathersInABottle.FeathersInABottleExtraJump.OnJumpEffects(player);
+        //for (int i = 0; i < 2; i++) {
+        //    FeathersInABottle.FeathersInABottleExtraJump.OnJumpEffects(player);
+        //}
+
+        int num22 = player.height;
+        if (player.gravDir == -1f)
+            num22 = 0;
+
+        for (int num23 = 0; num23 < 10; num23++) {
+            int num24 = Dust.NewDust(new Vector2(player.position.X - 34f, player.position.Y + (float)num22 - 16f), 102, 32, 16, (0f - player.velocity.X) * 0.5f, player.velocity.Y * 0.5f, 100, default(Color), 1.5f);
+            Main.dust[num24].velocity.X = Main.dust[num24].velocity.X * 0.5f - player.velocity.X * 0.1f;
+            Main.dust[num24].velocity.Y = Main.dust[num24].velocity.Y * 0.5f - player.velocity.Y * 0.3f;
         }
+
+        int num25 = Gore.NewGore(null, new Vector2(player.position.X + (float)(player.width / 2) - 16f, player.position.Y + (float)num22 - 16f), new Vector2(0f - player.velocity.X, 0f - player.velocity.Y), Main.rand.Next(11, 14));
+        Main.gore[num25].velocity.X = Main.gore[num25].velocity.X * 0.1f - player.velocity.X * 0.1f;
+        Main.gore[num25].velocity.Y = Main.gore[num25].velocity.Y * 0.1f - player.velocity.Y * 0.05f;
+        num25 = Gore.NewGore(null, new Vector2(player.position.X - 36f, player.position.Y + (float)num22 - 16f), new Vector2(0f - player.velocity.X, 0f - player.velocity.Y), Main.rand.Next(11, 14));
+        Main.gore[num25].velocity.X = Main.gore[num25].velocity.X * 0.1f - player.velocity.X * 0.1f;
+        Main.gore[num25].velocity.Y = Main.gore[num25].velocity.Y * 0.1f - player.velocity.Y * 0.05f;
+        num25 = Gore.NewGore(null, new Vector2(player.position.X + (float)player.width + 4f, player.position.Y + (float)num22 - 16f), new Vector2(0f - player.velocity.X, 0f - player.velocity.Y), Main.rand.Next(11, 14));
+        Main.gore[num25].velocity.X = Main.gore[num25].velocity.X * 0.1f - player.velocity.X * 0.1f;
+        Main.gore[num25].velocity.Y = Main.gore[num25].velocity.Y * 0.1f - player.velocity.Y * 0.05f;
     }
 
     protected override void OnJumping(Player player, bool firstJump) {
@@ -82,7 +102,14 @@ sealed class HallowEnt : BaseForm {
             return;
         }
 
-        FeathersInABottle.FeathersInABottleExtraJump.OnJumpingEffects(player);
+        //FeathersInABottle.FeathersInABottleExtraJump.OnJumpingEffects(player);
+        int num = player.height;
+        if (player.gravDir == -1f)
+            num = -6;
+
+        int num2 = Dust.NewDust(new Vector2(player.position.X - 4f, player.position.Y + (float)num), player.width + 8, 4, 16, (0f - player.velocity.X) * 0.5f, player.velocity.Y * 0.5f, 100, default(Color), 1.5f);
+        Main.dust[num2].velocity.X = Main.dust[num2].velocity.X * 0.5f - player.velocity.X * 0.1f;
+        Main.dust[num2].velocity.Y = Main.dust[num2].velocity.Y * 0.5f - player.velocity.Y * 0.3f;
     }
 
     private void HandleLeafAttack(Player player) {

@@ -27,6 +27,12 @@ sealed class PlayerCommon : ModPlayer {
         PreUpdateEvent?.Invoke(Player);
     }
 
+    public delegate void OnHurtDelegate(Player player, Player.HurtInfo info);
+    public static event OnHurtDelegate OnHurtEvent;
+    public override void OnHurt(Player.HurtInfo info) {
+        OnHurtEvent?.Invoke(Player, info);
+    }
+
     public override void PostUpdate() {
         if (Player.controlUseItem) {
             ControlUseItem = true;
