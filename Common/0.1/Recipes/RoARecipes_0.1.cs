@@ -1,4 +1,5 @@
-﻿using RoA.Content.Items.Consumables;
+﻿using RoA.Content.Achievements;
+using RoA.Content.Items.Consumables;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Armor.Magic;
 using RoA.Content.Items.Equipables.Armor.Nature;
@@ -254,8 +255,9 @@ sealed partial class RoARecipes : ModSystem {
     }
 
     private static void CompleteWreathCraftAchievement(Recipe recipe, Item item, List<Item> consumedItems, Item destinationStack) {
-        RoA.CompleteAchievement("CraftDruidWreath");
-        Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().CraftDruidWreath = true;
+        ModContent.GetInstance<CraftDruidWreath>().CraftAnyWreathCondition.Complete();
+        //RoA.CompleteAchievement("CraftDruidWreath");
+        //Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().CraftDruidWreath = true;
     }
 
     private static void V01AddWreaths(out Recipe lastWreath) {
