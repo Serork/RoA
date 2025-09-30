@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Tiles;
+using RoA.Content.Achievements;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -236,8 +237,9 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
                         SoundEngine.PlaySound(SoundID.MenuClose);
                     }
                     else {
-                        RoA.CompleteAchievement("OpenRootboundChest");
-                        player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().OpenRootboundChest = true;
+                        ModContent.GetInstance<OpenRootboundChest>().OpenRootboundChestCondition.Complete();
+                        //RoA.CompleteAchievement("OpenRootboundChest");
+                        //player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().OpenRootboundChest = true;
 
                         player.chest = chest;
                         Main.playerInventory = true;

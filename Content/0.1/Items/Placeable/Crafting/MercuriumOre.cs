@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Content.Achievements;
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
@@ -56,8 +57,10 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
 
         public override bool OnPickup(Item item, Player player) {
             if (player.buffImmune[BuffID.Poisoned] && player.whoAmI == Main.myPlayer && item.type == ModContent.ItemType<MercuriumOre>()) {
-                RoA.CompleteAchievement("MineMercuriumNugget");
-                player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().MineMercuriumNugget = true;
+                ModContent.GetInstance<MineMercuriumNugget>().MineMercuriumAndIgnoreItsEffectCondition.Complete();
+
+                //RoA.CompleteAchievement("MineMercuriumNugget");
+                //player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().MineMercuriumNugget = true;
             }
 
             return base.OnPickup(item, player);

@@ -1,29 +1,29 @@
 DefeatLothor: {
-	Name: Животное сродство
+	FriendlyName: Животное сродство
 	Description: Одержать победу над Лотором Лютым — возрожденной грозой чащи.
 }
 
 MineMercuriumNugget: {
-	Name: Что за запах?
+	FriendlyName: Что за запах?
 	Description: Добыть свой первый самородок ртути и не отравиться.
 }
 
 OpenRootboundChest: {
-	Name: Я есть Рут
+	FriendlyName: Я есть Рут
 	Description: Открыть один из опутанных корнями сундуков в глубине чащи.
 }
 
 SurviveBackwoodsFog: {
-	Name: Тихие холмы
+	FriendlyName: Тихие холмы
 	Description: Выжить во время тумана — утреннего события, во время которого дальше своего носа не видно.
 }
 
 CraftDruidWreath: {
-	Name: Не время похорон
+	FriendlyName: Не время похорон
 	Description: Смастерить свой первый венок из охапки цветков.
 }
 
-DefeatLothorEnraged: {
-	Name: Берсерк и добыча
+DefeatEnragedLothor: {
+	FriendlyName: Берсерк и добыча
 	Description: Одержать победу над разъяренным Лотором и заполучить глыбу железа.
 }

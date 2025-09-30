@@ -2,6 +2,7 @@
 
 using RoA.Common.Players;
 using RoA.Common.VisualEffects;
+using RoA.Content.Achievements;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 
@@ -135,8 +136,9 @@ sealed class BackwoodsFogHandler : ModSystem {
                     continue;
                 }
                 if (player.whoAmI == Main.myPlayer) {
-                    RoA.CompleteAchievement("SurviveBackwoodsFog");
-                    player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().SurviveBackwoodsFog = true;
+                    ModContent.GetInstance<SurviveBackwoodsFog>().SurviveBackwoodsFogCondition.Complete();
+                    //RoA.CompleteAchievement("SurviveBackwoodsFog");
+                    //player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().SurviveBackwoodsFog = true;
                 }
             }
         }

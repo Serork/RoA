@@ -43,7 +43,7 @@ sealed partial class RoA : Mod {
             type.PostSetupContent();
         }
 
-        LoadAchievements();
+        //LoadAchievements();
 
         DoBossChecklistIntegration();
         DoMusicDisplayIntegration();

@@ -13,5 +13,5 @@ sealed class CraftDruidWreath : ModAchievement {
         CraftAnyWreathCondition = AddCondition();
     }
 
-    public override Position GetDefaultPosition() => new Before("FASHION_STATEMENT");
+    public override Position GetDefaultPosition() => new After("EYE_ON_YOU");
 }
