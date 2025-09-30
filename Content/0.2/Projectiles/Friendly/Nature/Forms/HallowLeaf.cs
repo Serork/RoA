@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -110,7 +111,7 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
         _pickedColor ??= GetColor((int)PickedColorIndex);
 
         if (Main.rand.NextBool(10)) {
-            int num2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - Vector2.One, 2, 2, DustID.MagicMirror, 0f, 0f, 50, _pickedColor!.Value, 1f);
+            int num2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - Vector2.One, 2, 2, DustID.MagicMirror, 0f, 0f, 100, _pickedColor!.Value, 1f);
             Main.dust[num2].velocity *= 0.2f;
             Main.dust[num2].velocity += Projectile.velocity * 0.2f;
         }
@@ -121,7 +122,19 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
     }
 
     public override void OnKill(int timeLeft) {
+        for (int i = 0; i < 2; i++) {
+            int num2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - Vector2.One, 2, 2, DustID.MagicMirror, 0f, 0f, 100, _pickedColor!.Value, 1f);
+            Main.dust[num2].velocity *= 0.2f;
+            Main.dust[num2].velocity += Projectile.velocity * 0.6f;
+        }
 
+        Player owner = Projectile.GetOwnerAsPlayer();
+        float progress = BaseForm.BaseFormDataStorage.GetAttackCharge(owner);
+        Color pickedColor = _pickedColor!.Value;
+        Color color = Color.Lerp(default, Color.White, EXTRABRIGHTNESSMODIFIER * progress).MultiplyRGB(pickedColor);
+        color.A = 225;
+        Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 2, 2, ModContent.DustType<Dusts.HallowLeaf>(), Projectile.velocity.X, Projectile.velocity.Y * 0.02f, 125,
+            color, 1f);
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
