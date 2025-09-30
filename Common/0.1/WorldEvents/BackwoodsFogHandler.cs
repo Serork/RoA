@@ -124,17 +124,6 @@ sealed class BackwoodsFogHandler : ModSystem {
                 //string message = Language.GetText("Mods.RoA.World.BackwoodsFog").ToString();
                 //Helper.NewMessage($"{message}...", Helper.EventMessageColor);
                 IsFogActive = true;
-
-                //foreach (Player player in Main.ActivePlayers) {
-                //    if (!player.InModBiome<BackwoodsBiome>()) {
-                //        continue;
-                //    }
-                //    if (player.whoAmI == Main.myPlayer) {
-                //        ModContent.GetInstance<SurviveBackwoodsFog>().SurviveBackwoodsFogCondition.Complete();
-                //        //RoA.CompleteAchievement("SurviveBackwoodsFog");
-                //        //player.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().SurviveBackwoodsFog = true;
-                //    }
-                //}
             }
         }
         else {
