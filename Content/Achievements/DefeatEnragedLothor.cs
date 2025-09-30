@@ -15,9 +15,5 @@ sealed class DefeatEnragedLothor : ModAchievement {
         KillEnragedLothorCondition = AddCondition();
     }
 
-    public override Position GetDefaultPosition() => new After("MINER_FOR_FIRE");
-
-    public override IEnumerable<Position> GetModdedConstraints() {
-        yield return new After(ModContent.GetInstance<DefeatLothor>());
-    }
+    public override Position GetDefaultPosition() => new Before("REAL_ESTATE_AGENT");
 }
