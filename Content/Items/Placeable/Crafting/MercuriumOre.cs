@@ -154,7 +154,8 @@ sealed class MercuriumOrePlayerHandler : ModPlayer {
     }
 
     private void Check(int fluff, int buffTime) {
-        if (Player.HasBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>())) {
+        if (Player.HasBuff(ModContent.BuffType<ToxicFumesNoTimeDisplay>()) ||
+            Player.HasBuff(ModContent.BuffType<ToxicFumes>())) {
             return;
         }
         int tilesAway = fluff;
