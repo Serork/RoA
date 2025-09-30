@@ -1,16 +1,30 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.NPCs;
-using RoA.Common.Players;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Core.Utility.Vanilla;
 
 static class NPCUtils {
+    public static Texture2D GetTexture(this NPC npc) => TextureAssets.Npc[npc.type].Value;
+
+    public static Rectangle GetFrameBox(this NPC npc, int xFrame) {
+        Texture2D tex = npc.GetTexture();
+        return tex.Frame(xFrame, Main.npcFrameCount[npc.type], npc.frame.X, npc.frame.Y);
+    }
+
+    public static void QuickDraw(this NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor, Rectangle? frameBox = null, SpriteEffects effect = SpriteEffects.None, float exRot = 0, float yOffset = 0f) {
+        Texture2D tex = npc.GetTexture();
+        spriteBatch.Draw(tex, npc.Center + Vector2.UnitY * yOffset + Vector2.UnitX * 10f * npc.spriteDirection - screenPos, frameBox, lightColor,
+            npc.rotation + exRot, frameBox == null ? tex.Size() / 2 : frameBox.Value.Size() / 2, npc.scale, effect, 0);
+    }
+
     public static NPCCommon GetCommon(this NPC npc) => npc.GetGlobalNPC<NPCCommon>();
 
     public static bool CanBeChasedBy(NPC npc, object attacker = null, bool ignoreDontTakeDamage = false, bool checkForImmortals = true) {

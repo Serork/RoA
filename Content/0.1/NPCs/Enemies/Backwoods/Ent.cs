@@ -7,6 +7,7 @@ using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Audio;
@@ -68,8 +69,6 @@ sealed class Ent : RoANPC {
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
-        DrawOffsetY = 2;
-
         Banner = Type;
         BannerItem = ModContent.ItemType<EntBanner>();
         ItemID.Sets.KillsToBanner[BannerItem] = 25;
@@ -99,6 +98,11 @@ sealed class Ent : RoANPC {
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         if (NPC.IsABestiaryIconDummy) {
             NPC.spriteDirection = NPC.direction = 1;
+        }
+        else {
+            NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor, NPC.frame, (NPC.spriteDirection * -1).ToSpriteEffects(), yOffset: 2f);
+
+            return false;
         }
 
         return base.PreDraw(spriteBatch, screenPos, drawColor);

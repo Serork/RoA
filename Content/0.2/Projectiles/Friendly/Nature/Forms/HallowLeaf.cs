@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
@@ -107,6 +108,12 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
         }
 
         _pickedColor ??= GetColor((int)PickedColorIndex);
+
+        if (Main.rand.NextBool(10)) {
+            int num2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - Vector2.One, 2, 2, DustID.MagicMirror, 0f, 0f, 50, _pickedColor!.Value, 1f);
+            Main.dust[num2].velocity *= 0.2f;
+            Main.dust[num2].velocity += Projectile.velocity * 0.2f;
+        }
 
         Projectile.rotation = Projectile.velocity.ToRotation();
 

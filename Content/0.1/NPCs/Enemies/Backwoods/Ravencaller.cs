@@ -76,6 +76,8 @@ sealed class Ravencaller : ModNPC {
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type, ModContent.GetInstance<BackwoodsBiomeFog>().Type];
 
+        DrawOffsetY = 1;
+
         Banner = Type;
         BannerItem = ModContent.ItemType<RavencallerBanner>();
         ItemID.Sets.KillsToBanner[BannerItem] = 25;

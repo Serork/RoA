@@ -195,7 +195,7 @@ sealed class EntLegs : RoANPC {
                         vector = vector.RotatedBy(NPC.velocity.ToRotation());
                         int num3 = Dust.NewDust(center, 0, 0, DustID.MagicMirror, 0f, 0f, 40, default, 1f);
                         Main.dust[num3].noGravity = true;
-                        Main.dust[num3].position = new Vector2(center.X + 20 * NPC.direction, center.Y + 6) + vector;
+                        Main.dust[num3].position = new Vector2(center.X + 10f * NPC.direction, center.Y + 10) + vector;
                         Main.dust[num3].velocity = NPC.velocity * 0f + vector.SafeNormalize(Vector2.UnitY) * 0.8f;
                         int num4 = num1;
                         num1 = num4 + 1;
@@ -204,7 +204,7 @@ sealed class EntLegs : RoANPC {
                     if (Main.netMode != NetmodeID.MultiplayerClient) {
                         Vector2 spreadOld = new Vector2(Main.player[NPC.target].position.X - center.X, Main.player[NPC.target].position.Y - center.Y).RotatedByRandom(MathHelper.ToRadians(30));
                         Vector2 spread = Vector2.Normalize(spreadOld);
-                        int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), center.X + 14f * NPC.direction, center.Y + 8f, spread.X * 4f, spread.Y * 4f, ModContent.ProjectileType<PrimordialLeaf>(),
+                        int projectile = Projectile.NewProjectile(NPC.GetSource_FromAI(), center.X + 10f * NPC.direction, center.Y + 10f, spread.X * 4f, spread.Y * 4f, ModContent.ProjectileType<PrimordialLeaf>(),
                             35 / 2, 1f, Main.myPlayer);
                         //NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, projectile);
                     }
