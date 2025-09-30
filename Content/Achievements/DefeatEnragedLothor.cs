@@ -15,5 +15,5 @@ sealed class DefeatEnragedLothor : ModAchievement {
         KillEnragedLothorCondition = AddCondition();
     }
 
-    public override Position GetDefaultPosition() => new Before("REAL_ESTATE_AGENT");
+    public override Position GetDefaultPosition() => new After("DEFEAT_DEERCLOPS");
 }
