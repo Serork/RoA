@@ -111,7 +111,7 @@ sealed class BackwoodsWorldGen : ModSystem {
     }
 
     public override void Load() {
-        On_WorldGen.Convert_int_int_int_int += On_WorldGen_Convert_int_int_int_int; ;
+        On_WorldGen.Convert_int_int_int_int += On_WorldGen_Convert_int_int_int_int;
         On_WorldGen.PaintTheLivingTrees += On_WorldGen_PaintTheLivingTrees;
         On_WorldGen.NotTheBees += On_WorldGen_NotTheBees;
     }

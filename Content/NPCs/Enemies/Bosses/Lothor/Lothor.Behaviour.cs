@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Common;
 using RoA.Common.NPCs;
+using RoA.Content.Achievements;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
@@ -844,8 +845,9 @@ sealed partial class Lothor : ModNPC {
     }
 
     public override void OnKill() {
-        RoA.CompleteAchievement("DefeatLothor");
-        Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothor = true;
+        ModContent.GetInstance<DefeatLothor>().KillLothorCondition.Complete();
+        //RoA.CompleteAchievement("DefeatLothor");
+        //Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothor = true;
 
         NPC.SetEventFlagCleared(ref DownedBossSystem.DownedLothorBoss, -1);
         if (Main.netMode == NetmodeID.Server) {
@@ -853,8 +855,9 @@ sealed partial class Lothor : ModNPC {
         }
 
         if (CanDropFlederSlayer) {
-            RoA.CompleteAchievement("DefeatLothorEnraged");
-            Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothorEnraged = true;
+            ModContent.GetInstance<DefeatEnragedLothor>().KillEnragedLothorCondition.Complete();
+            //RoA.CompleteAchievement("DefeatLothorEnraged");
+            //Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothorEnraged = true;
         }
     }
 
