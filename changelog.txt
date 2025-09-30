@@ -1,2 +1,3 @@
-- Backwoods enemies now correctly check for certain walls for spawning
-- Fixed a bug that prevented certain rare enemies from spawning more than once
+- Rise of Ages achievements now use the built-in tModLoader system
+- "What's That Smell?" achievement is now in the Challenger category 
+- "What's That Smell?", "Guts of Steel" and "Not Post Mortem" achievements are now considered optional for the progression
