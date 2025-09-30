@@ -52,7 +52,19 @@ sealed class Leaf : VisualEffect<Leaf> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
-        bool noGravity = AI0 != -1f;
+        bool noGravity = AI0 != 0f;
+        bool onKill = AI0 == -2f;
+        if (onKill) {
+            if (TimeLeft > MaxTimeLeft * 0.75f) {
+                Velocity *= 0.85f;
+            }
+            else {
+                Velocity.Y += 0.1f;
+                Velocity.Y = MathF.Min(1f, Velocity.Y);
+                _newVelocity = Velocity.RotatedByRandom(MathHelper.PiOver4);
+                Velocity = Vector2.Lerp(Velocity, _newVelocity, 0.1f);
+            }
+        }
         if (noGravity) {
             Helper.ApplyWindPhysics(Position, ref Velocity);
             if (AI0-- <= 0f) {
@@ -69,7 +81,7 @@ sealed class Leaf : VisualEffect<Leaf> {
             Velocity *= 0.95f;
         }
 
-        bool flag2 = (Collision.SolidCollision(Position - Vector2.One * 2, 4, 4) && noGravity);
+        bool flag2 = (Collision.SolidCollision(Position - Vector2.One * 2, 4, 4) && noGravity && !onKill);
         bool flag3 = false;
         if (flag2 || DisappearValue > 0f) {
             if (flag2) {

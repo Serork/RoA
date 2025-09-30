@@ -136,14 +136,18 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
             float maxOffset = 8f;
             float progress = BaseFormDataStorage.GetAttackCharge(owner);
             Vector2 position = Projectile.Center;
-            Vector2 drawPos = position - Main.screenPosition + Utils.ToRotationVector2(circleFactor) * AreaSize;
-            color = new Color(pickedColor.R, pickedColor.G, pickedColor.B, 50);
+            Vector2 drawPos = position  + Utils.ToRotationVector2(circleFactor) * AreaSize;
+            color = Color.Lerp(new Color(pickedColor.R, pickedColor.G, pickedColor.B, 50), Color.White, HallowLeaf.EXTRABRIGHTNESSMODIFIER);
             float rotation = circleFactor + MathHelper.PiOver2;
             float areaFactor0 = AreaSize / AREASIZE * 1.5f;
             Vector2 areaFactor = new(1f, areaFactor0);
-            position += Utils.ToRotationVector2(circleFactor) * (AreaSize + MathF.Sin(circleFactor * 5f + visualTimer) * maxOffset);
-            //Main.spriteBatch.Draw(texture, drawPos, null, color * 0.1f * areaFactor0, rotation + (float)MathHelper.Pi / 2 + MathF.Sin(circleFactor + visualTimer) * 0.05f, drawOrigin, Projectile.scale * areaFactor, effects, 0f);
             rotation += MathF.Sin(circleFactor + visualTimer) * 0.3f;
+            position += Utils.ToRotationVector2(circleFactor) * (AreaSize + MathF.Sin(circleFactor * 5f + visualTimer) * maxOffset);
+            float rotation1 = rotation;
+            for (int i2 = 0; i2 < 1; i2++) {
+                Main.spriteBatch.Draw(glowMaskLeafTexture, drawPos - Main.screenPosition, clip, Color.Lerp(color.MultiplyRGB(Lighting.GetColor(drawPos.ToTileCoordinates())) * 0.25f, Color.White, HallowLeaf.EXTRABRIGHTNESSMODIFIER * progress * 0.75f) * areaFactor0, rotation1 + (float)MathHelper.Pi / 2 + MathF.Sin(circleFactor + visualTimer) * 0.05f, drawOrigin, Projectile.scale, effects, 0f);
+                rotation1 += MathHelper.PiOver2;
+            }
             //spriteBatch.DrawSelf(texture, drawPos - Projectile.oldPos[k] * 0.5f + Projectile.oldPos[k + 1] * 0.5f, null, color * 0.45f, Projectile.oldRot[k] * 0.5f + Projectile.oldRot[k + 1] * 0.5f + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
             Color baseColor = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, HallowLeaf.EXTRABRIGHTNESSMODIFIER * progress).MultiplyRGB(pickedColor);
             color = baseColor * Projectile.Opacity;

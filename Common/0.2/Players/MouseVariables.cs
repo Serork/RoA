@@ -5,8 +5,6 @@ using RoA.Common.Networking.Packets;
 using RoA.Core.Utility;
 
 using Terraria;
-using Terraria.GameInput;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
@@ -19,7 +17,21 @@ static class MousePositionStorageExtensions {
         if (net) {
             SyncLMB(player);
         }
-        return player.GetModPlayer<MouseVariables>().HoldingLMB;
+        var handler = player.GetModPlayer<MouseVariables>();
+        ref ushort mouseInterface = ref handler.MouseInterfaceLock;
+        bool result = handler.HoldingLMB;
+        if (!(!result && player.mouseInterface)) {
+            if (mouseInterface > 0) {
+                mouseInterface--;
+            }
+        }
+        else {
+            mouseInterface = 2;
+        }
+        if (result) {
+            player.mouseInterface = true;
+        }
+        return result;
     }
     public static Vector2 GetWorldMousePosition(this Player player) => player.GetModPlayer<MouseVariables>().MousePosition;
     public static Vector2 GetCappedWorldMousePosition(this Player player, float width, float height) {
@@ -34,6 +46,7 @@ sealed class MouseVariables : ModPlayer {
     private Vector2 _oldMouseWorld, _oldCappedMouseWorld;
     private bool _oldHoldingLMB;
 
+    internal ushort MouseInterfaceLock;
     internal float CappedMousePositionWidth;
     internal float CappedMousePositionHeight;
 
@@ -77,18 +90,21 @@ sealed class MouseVariables : ModPlayer {
                 MultiplayerSystem.SendPacket(new SyncMousePositionPacket2(Player, CappedMousePosition));
             }
         }
+        updateAndSyncMousePosition();
+    }
+
+    public override void SetControls() {
         void updateAndSyncMouseClicks() {
             if (!Player.IsLocal()) {
                 return;
             }
 
             bool syncControls = false;
-            if (Main.mouseLeft && !Main.mouseText && !Player.mouseInterface) {
-                HoldingLMB = true;
-                OnHoldingLMBEvent?.Invoke(Player);
-            }
-            else {
-                HoldingLMB = false;
+            if (MouseInterfaceLock <= 0) {
+                HoldingLMB = Player.controlUseItem && !Main.blockMouse;
+                if (HoldingLMB) {
+                    OnHoldingLMBEvent?.Invoke(Player);
+                }
             }
 
             if (ShouldSyncLMB && HoldingLMB != _oldHoldingLMB) {
@@ -102,10 +118,6 @@ sealed class MouseVariables : ModPlayer {
                 MultiplayerSystem.SendPacket(new SyncLMBPacket(Player, HoldingLMB));
             }
         }
-        updateAndSyncMousePosition();
         updateAndSyncMouseClicks();
-    }
-
-    public override void PostUpdate() {
     }
 }

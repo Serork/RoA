@@ -6,7 +6,8 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
-using RoA.Content.Dusts;
+using RoA.Common.VisualEffects;
+using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -17,8 +18,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
 
@@ -84,7 +83,7 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
     }
 
     public static int PickIndex() => Main.rand.Next(ColorSum);
-    public static int PickIndex(int baseIndex) => baseIndex % ColorSum;
+    public static int PickIndex(int baseIndex = -1) => baseIndex == -1 ? PickIndex() : baseIndex % ColorSum;
     public static Color GetColor(int index) {
         int colorIndex = (int)((float)index / AvailableColorCount);
         int pickedColorIndex = (int)((float)index % AvailableColorCount);
@@ -110,31 +109,25 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
 
         _pickedColor ??= GetColor((int)PickedColorIndex);
 
-        if (Main.rand.NextBool(10)) {
-            int num2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - Vector2.One, 2, 2, DustID.MagicMirror, 0f, 0f, 100, _pickedColor!.Value, 1f);
-            Main.dust[num2].velocity *= 0.2f;
-            Main.dust[num2].velocity += Projectile.velocity * 0.2f;
-        }
-
         Projectile.rotation = Projectile.velocity.ToRotation();
 
         Projectile.Animate(FRAMECOUNTER);
     }
 
     public override void OnKill(int timeLeft) {
-        for (int i = 0; i < 2; i++) {
-            int num2 = Dust.NewDust(new Vector2(Projectile.Center.X, Projectile.Center.Y) - Vector2.One, 2, 2, DustID.MagicMirror, 0f, 0f, 100, _pickedColor!.Value, 1f);
-            Main.dust[num2].velocity *= 0.2f;
-            Main.dust[num2].velocity += Projectile.velocity * 0.6f;
-        }
-
         Player owner = Projectile.GetOwnerAsPlayer();
-        float progress = BaseForm.BaseFormDataStorage.GetAttackCharge(owner);
-        Color pickedColor = _pickedColor!.Value;
-        Color color = Color.Lerp(default, Color.White, EXTRABRIGHTNESSMODIFIER * progress).MultiplyRGB(pickedColor);
-        color.A = 225;
-        Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), 2, 2, ModContent.DustType<Dusts.HallowLeaf>(), Projectile.velocity.X, Projectile.velocity.Y * 0.02f, 125,
-            color, 1f);
+        int count = 4;
+        for (int i = 0; i < count; i++) {
+            Vector2 position = Projectile.Center;
+            Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
+            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
+            if (leafParticle != null) {
+                leafParticle.CustomData = owner;
+                leafParticle.AI0 = -2f;
+                leafParticle.Scale *= 0.85f;
+                leafParticle.DrawColor = _pickedColor!.Value;
+            }
+        }
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
@@ -156,8 +149,9 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
         Player owner = Projectile.GetOwnerAsPlayer();
         float progress = BaseForm.BaseFormDataStorage.GetAttackCharge(owner);
         for (int k = 0; k < Projectile.oldPos.Length - 1; k++) {
-            Vector2 drawPos = Projectile.oldPos[k] + new Vector2(Projectile.width, Projectile.height) / 2f + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
-            color = new Color(pickedColor.R + k * 2, pickedColor.G - k * 3, pickedColor.B + k * 2, 50);
+            Vector2 drawPos = Projectile.oldPos[k] + new Vector2(Projectile.width, Projectile.height) / 2f - Main.screenPosition;
+            drawPos += Vector2.UnitY.RotatedBy(Projectile.rotation) * -1f;
+            color = new Color(pickedColor.R + k * 2, pickedColor.G - k * 3, pickedColor.B + k * 2, 50) * Utils.Remap(progress, 0f, 0.2f, 0f, 1f, true);
             //color = WreathHandler.GetArmorGlowColor_HallowEnt(owner, color, MathUtils.Clamp01(0f + progress * 2f));
             Main.spriteBatch.Draw(texture, drawPos, null, color * 0.2f, Projectile.oldRot[k] + (float)MathHelper.Pi / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
             //spriteBatch.DrawSelf(texture, drawPos - Projectile.oldPos[k] * 0.5f + Projectile.oldPos[k + 1] * 0.5f, null, color * 0.45f, Projectile.oldRot[k] * 0.5f + Projectile.oldRot[k + 1] * 0.5f + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
