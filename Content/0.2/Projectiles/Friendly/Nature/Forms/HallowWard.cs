@@ -68,7 +68,7 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
             State = 1f;
         }
 
-        Projectile.Center = owner.Center;
+        Projectile.Center = owner.Bottom - Vector2.UnitY * 40f;
         Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * 10f + Vector2.UnitY * owner.gfxOffY;
 
         Projectile.localAI[0]++;
