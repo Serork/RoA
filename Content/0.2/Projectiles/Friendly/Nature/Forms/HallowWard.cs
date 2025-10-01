@@ -64,7 +64,7 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
 
         Player owner = Projectile.GetOwnerAsPlayer();
 
-        if (!owner.IsAlive() || !owner.GetFormHandler().IsConsideredAs<HallowEnt>() || Projectile.timeLeft < 15) {
+        if (!owner.IsAlive() || !owner.GetFormHandler().IsConsideredAs<HallowEnt>() || Projectile.timeLeft < 40) {
             State = 1f;
         }
 
