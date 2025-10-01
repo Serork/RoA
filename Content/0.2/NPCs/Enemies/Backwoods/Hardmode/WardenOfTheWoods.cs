@@ -263,15 +263,16 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                                 NPC.netUpdate = true;
                             }
 
+                            num67 *= 2;
                             for (int m = 0; m < num67; m++) {
                                 Color newColor2 = _areaColor!.Value;
                                 Vector2 position = NPC.Center;
                                 int num69 = Dust.NewDust(position, 0, 0, DustID.TintableDustLighted, 0f, 0f, 100, newColor2);
-                                Main.dust[num69].position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(NPC.width, NPC.height);
+                                Main.dust[num69].position = position + Vector2.UnitY * 10f + Main.rand.NextVector2Circular(NPC.width, NPC.height) * 0.5f;
                                 Main.dust[num69].velocity *= 0f;
                                 Main.dust[num69].noGravity = true;
                                 Main.dust[num69].velocity -= Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-                                Main.dust[num69].scale = Main.rand.NextFloat(0.1f, num67 * 0.4f) * GetFadeOutProgress();
+                                Main.dust[num69].scale = Main.rand.NextFloat(0.1f, num67 * 0.4f) * GetFadeOutProgress() * 1.5f;
                             }
                         }
                     }
