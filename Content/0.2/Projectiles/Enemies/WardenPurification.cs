@@ -31,7 +31,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
         float extraModifier = Projectile.ai[1];
         extraModifier = MathUtils.Clamp01(extraModifier);
         extraModifier *= 0.02f;
-        Projectile.ai[2] += 0.02f + extraModifier;
+        Projectile.ai[2] += 0.1f + extraModifier;
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
