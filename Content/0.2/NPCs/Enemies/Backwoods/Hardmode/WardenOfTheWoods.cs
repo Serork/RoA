@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.VisualEffects;
+using RoA.Content.Projectiles.Enemies;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
@@ -206,6 +207,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
             float fadeOutProgress2 = Utils.Remap(GetFadeOutProgress(), 0f, 1f, 0.2f, 1f, true);
             float offset = 10f * fadeOutProgress2;
             _yOffset = Helper.Wave(-offset, offset, 5f, NPC.whoAmI);
+            NPC.Center += Vector2.UnitY * _yOffset * 0.1f;
         }
         void lightUp() {
             Lighting.AddLight(NPC.Center, _areaColor!.Value.ToVector3() * GetFadeOutProgress() * 0.75f);
@@ -224,7 +226,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(TARGETDISTANCE, TARGETDISTANCE) / 3f;
                 Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
                 WardenDust? leafParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
-                    scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) * GetFadeOutProgress());
+                    scale: Main.rand.NextFloat(0.3f, num67 * 0.6f) * GetFadeOutProgress());
                 if (leafParticle != null) {
                     leafParticle.CustomData = GetFadeOutProgress();
                     leafParticle.AI0 = _timerForVisualEffects;
@@ -246,8 +248,24 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         makeDusts();
     }
 
-    private void Attack() {
+    public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) {
+        //position += Vector2.UnitY * _yOffset;
 
+        return base.DrawHealthBar(hbPosition, ref scale, ref position);
+    }
+
+    private void Attack() {
+        if (!Helper.SinglePlayerOrServer) {
+            return;
+        }
+
+        ProjectileUtils.SpawnHostileProjectile<WardenPurification>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
+            Damage = 50,
+            KnockBack = 0f,
+            Position = NPC.GetTargetPlayer().Center + (NPC.Center - _initialPosition) / 2f,
+            //AI1 = 1f - (float)NPC.life / NPC.lifeMax,
+            AI2 = _timerForVisualEffects
+        });
     }
 
     private void SetTargetPosition() {
@@ -326,7 +344,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         drawColor = Color.Lerp(drawColor, Color.Lerp(Color.Black, Color.DarkGreen, 0.5f), (1f - fadeOutProgress) * 0.5f);
         Texture2D glowTexture = indexedTextureAssets[(byte)WardenOfTheWoodsRequstedTextureType.Glow].Value;
         float xOffset = 4f * NPC.spriteDirection;
-        float yOffset = _yOffset;
+        float yOffset = 0f;
         NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor, xOffset: xOffset, yOffset: yOffset);
         NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor * Utils.Remap(fadeOutProgress, 0f, 1f, 0.5f, 1f, true), texture: glowTexture, xOffset: xOffset, yOffset: yOffset);
         for (int i = 0; i < extra; i++) {

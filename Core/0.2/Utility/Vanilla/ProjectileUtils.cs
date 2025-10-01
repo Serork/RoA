@@ -170,6 +170,19 @@ static class ProjectileUtils {
         public ushort? ProjectileType { get; init; }
     }
 
+    public readonly ref struct SpawnHostileProjectileArgs(Entity entity, IEntitySource source) {
+        public Entity Entity { get; } = entity;
+        public IEntitySource Source { get; } = source;
+        public Vector2? Position { get; init; }
+        public Vector2? Velocity { get; init; }
+        public int Damage { get; init; }
+        public float KnockBack { get; init; }
+        public float AI0 { get; init; }
+        public float AI1 { get; init; }
+        public float AI2 { get; init; }
+        public ushort? ProjectileType { get; init; }
+    }
+
     public ref struct SpawnCopyArgs(Projectile projectile, IEntitySource source) {
         public Projectile Projectile = projectile;
         public IEntitySource Source = source;
@@ -182,6 +195,11 @@ static class ProjectileUtils {
     public static Projectile SpawnPlayerOwnedProjectile<T>(in SpawnProjectileArgs spawnProjectileArgs, Action<Projectile>? beforeNetSend = null, bool centered = false) where T : ModProjectile {
         Player player = spawnProjectileArgs.Player;
         return Main.projectile[NewProjectile(spawnProjectileArgs.Source, spawnProjectileArgs.Position ?? player.Center, spawnProjectileArgs.Velocity ?? Vector2.Zero, spawnProjectileArgs.ProjectileType ?? ModContent.ProjectileType<T>(), spawnProjectileArgs.Damage, spawnProjectileArgs.KnockBack, player.whoAmI, spawnProjectileArgs.AI0, spawnProjectileArgs.AI1, spawnProjectileArgs.AI2, beforeNetSend, centered)];
+    }
+
+    public static Projectile SpawnHostileProjectile<T>(in SpawnHostileProjectileArgs spawnProjectileArgs, Action<Projectile>? beforeNetSend = null, bool centered = false) where T : ModProjectile {
+        Entity entity = spawnProjectileArgs.Entity;
+        return Main.projectile[NewProjectile(spawnProjectileArgs.Source, spawnProjectileArgs.Position ?? entity.Center, spawnProjectileArgs.Velocity ?? Vector2.Zero, spawnProjectileArgs.ProjectileType ?? ModContent.ProjectileType<T>(), spawnProjectileArgs.Damage, spawnProjectileArgs.KnockBack, Main.myPlayer, spawnProjectileArgs.AI0, spawnProjectileArgs.AI1, spawnProjectileArgs.AI2, beforeNetSend, centered)];
     }
 
     public static Projectile SpawnPlayerOwnedProjectileCopy<T>(in SpawnCopyArgs spawnCopyArgs, Action<Projectile>? beforeNetSend = null, bool centered = false) where T : ModProjectile {

@@ -25,6 +25,8 @@ sealed class GalipotDrop : VisualEffect<GalipotDrop> {
         _opacity = 1f;
         //DrawColor = DrawColor.Lerp(new DrawColor(201, 81, 0), new DrawColor(126, 33, 0), 0.5f);
         DrawColor = new Color(255, 190, 44);
+
+        DontEmitLight = true;
     }
 
     public override void Update(ref ParticleRendererSettings settings) {

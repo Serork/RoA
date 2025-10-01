@@ -16,6 +16,8 @@ sealed class WardenDust : VisualEffect<WardenDust> {
 
         SetFramedTexture(3, Main.rand.Next(1));
         AI0 = 0f;
+
+        DontEmitLight = true;
     }
 
     protected override float ScaleDecreaseModifier() => 0.75f;
@@ -34,7 +36,7 @@ sealed class WardenDust : VisualEffect<WardenDust> {
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
         int extra = 3;
         Color color2 = Color.White;
-        float fadeOutProgress = (float)CustomData!;
+        float fadeOutProgress = CustomData == null ? 1f : (float)CustomData!;
         float waveMin = MathHelper.Lerp(0.75f, 1f, 1f - fadeOutProgress), waveMax = MathHelper.Lerp(1.25f, 1f, 1f - fadeOutProgress);
         float wave = Helper.Wave(AI0, waveMin, waveMax, 3f, 0f) * fadeOutProgress;
         float opacity = wave * fadeOutProgress;

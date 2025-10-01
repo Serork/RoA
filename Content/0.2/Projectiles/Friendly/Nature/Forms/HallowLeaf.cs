@@ -26,7 +26,7 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
     private static byte FRAMECOUNTER => 4;
     private static ushort TIMELEFT => 180;
 
-    public static float EXTRABRIGHTNESSMODIFIER => 0.25f;
+    public static float EXTRABRIGHTNESSMODIFIER => 0.2f;
 
     public enum HallowLeafRequstedTextureType : byte {
         Glow

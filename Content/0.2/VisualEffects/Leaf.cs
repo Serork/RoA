@@ -43,6 +43,8 @@ sealed class Leaf : VisualEffect<Leaf> {
         DrawColor = HallowLeaf.GetColor(HallowLeaf.PickIndex());
         Scale *= Main.rand.NextFloat(0.5f, 0.75f);
         DisappearValue = 0f;
+
+        DontEmitLight = true;
     }
 
     public override void OnLoad(Mod mod) {

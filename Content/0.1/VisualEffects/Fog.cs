@@ -31,6 +31,8 @@ sealed class Fog : VisualEffect<Fog> {
         Frame = new Rectangle(0, 12 * Main.rand.Next(4), 42, 12);
         Alpha = 255;
         FadeIn = 3f;
+
+        DontEmitLight = true;
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
@@ -59,6 +61,7 @@ sealed class Fog : VisualEffect<Fog> {
             flag = true;
 
         Helper.ApplyWindPhysics(Position, ref Velocity);
+        Velocity.X *= 0.75f;
         Velocity.Y = 0f;
         if (!flag) {
             if (Alpha > 200) {
