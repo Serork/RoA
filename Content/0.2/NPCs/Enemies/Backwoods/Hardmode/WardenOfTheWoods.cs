@@ -17,13 +17,15 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
 sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     private static byte FRAMECOUNT => 9;
-    private static float TARGETDISTANCE => 400f;
+    public static float TARGETDISTANCE => 400f;
     private static float ATTACKTIME => 100f;
     private static float FADEOUTTIME => 50f;
     private static float BEFOREATTACKTIME => 50f;
@@ -68,6 +70,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         public ref float AttackValue = ref npc.localAI[2];
         public ref float StateValue = ref npc.ai[0];
         public ref float StateTimer = ref npc.ai[1];
+        public ref float ShouldTeleportValue = ref npc.ai[2];
 
         public bool Init {
             readonly get => InitOnSpawnValue == 1f;
@@ -91,6 +94,11 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
             readonly get => AttackValue == 1f;
             set => AttackValue = value.ToInt();
         }
+
+        public bool ShouldTeleport {
+            readonly get => ShouldTeleportValue == 1f;
+            set => ShouldTeleportValue = value.ToInt();
+        }
     }
 
     private Vector2 _initialPosition, _targetPosition;
@@ -109,6 +117,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
 
         NPC.aiStyle = -1;
         NPC.noGravity = true;
+        NPC.noTileCollide = true;
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
@@ -195,9 +204,11 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                             _timerForVisualEffects = 16f;
                         }
                     }
+                    wardenOfTheWoodsValues.ShouldTeleport = false;
                     break;
                 case WardenOfTheWoodsValues.AIState.HasTarget:
                 case WardenOfTheWoodsValues.AIState.Attacking:
+                    Player target = NPC.GetTargetPlayer();
                     if (wardenOfTheWoodsValues.StateTimer < 0f) {
                         moveTo(_initialPosition);
                         wardenOfTheWoodsValues.StateTimer++;
@@ -212,11 +223,68 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                         SetTargetPosition();
                         wardenOfTheWoodsValues.State = WardenOfTheWoodsValues.AIState.HasTarget;
                         wardenOfTheWoodsValues.Attacked = false;
+
+                        if (wardenOfTheWoodsValues.ShouldTeleport) {
+                            int num67 = 30;
+                            for (int m = 0; m < num67; m++) {
+                                Color newColor2 = _areaColor!.Value;
+                                Vector2 position = NPC.Center;
+                                position = position + Vector2.UnitX * 4f + Vector2.UnitY * 20f + Vector2.UnitX * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection() + Vector2.UnitY * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection();
+                                Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
+                                WardenDust? leafParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+                                    scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 8f);
+                                if (leafParticle != null) {
+                                    leafParticle.AI0 = _timerForVisualEffects;
+                                }
+                            }
+
+                            if (Helper.SinglePlayerOrServer) {
+                                ProjectileUtils.SpawnHostileProjectile<WardenPurification2>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
+                                    Damage = 50,
+                                    KnockBack = 0f,
+                                    Position = NPC.Center,
+                                    AI0 = _alt.ToInt(),
+                                    //AI1 = 1f - (float)NPC.life / NPC.lifeMax,
+                                    AI2 = _timerForVisualEffects
+                                });
+                            }
+
+                            wardenOfTheWoodsValues.ShouldTeleport = false;
+
+                            if (Helper.SinglePlayerOrServer) {
+                                Vector2 random = Main.rand.NextVector2CircularEdge(TARGETDISTANCE, TARGETDISTANCE) * 0.75f;
+                                void randomize() => NPC.Center = _initialPosition = target.Center + random;
+                                randomize();
+                                int attempts = 100;
+                                while (attempts-- > 0 && !Collision.CanHit(NPC.Center, NPC.width, NPC.height, target.Center, target.width, target.height)) {
+                                    randomize();
+                                }
+                                SetTargetPosition();
+                                NPC.netUpdate = true;
+                            }
+
+                            for (int m = 0; m < num67; m++) {
+                                Color newColor2 = _areaColor!.Value;
+                                Vector2 position = NPC.Center;
+                                int num69 = Dust.NewDust(position, 0, 0, DustID.TintableDustLighted, 0f, 0f, 100, newColor2);
+                                Main.dust[num69].position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(NPC.width, NPC.height);
+                                Main.dust[num69].velocity *= 0f;
+                                Main.dust[num69].noGravity = true;
+                                Main.dust[num69].velocity -= Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
+                                Main.dust[num69].scale = Main.rand.NextFloat(0.1f, num67 * 0.4f) * GetFadeOutProgress();
+                            }
+                        }
                     }
                     else {
-                        wardenOfTheWoodsValues.StateTimer--;
                         if (wardenOfTheWoodsValues.StateTimer <= ATTACKTIME - BEFOREATTACKTIME) {
                             wardenOfTheWoodsValues.State = WardenOfTheWoodsValues.AIState.Attacking;
+                            wardenOfTheWoodsValues.StateTimer -= wardenOfTheWoodsValues.ShouldTeleport ? 0.5f : 1f;
+                        }
+                        else {
+                            wardenOfTheWoodsValues.StateTimer--;
+                            if (target.Distance(_initialPosition) < TARGETDISTANCE / 2f) {
+                                wardenOfTheWoodsValues.ShouldTeleport = true;
+                            }
                         }
                         moveTo(_targetPosition);
                     }
