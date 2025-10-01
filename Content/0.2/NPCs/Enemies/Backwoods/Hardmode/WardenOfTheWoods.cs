@@ -123,7 +123,6 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 wardenOfTheWoodsValues.Init = true;
 
                 _initialPosition = NPC.Center;
-                _areaColor = _alt ? new Color(112, 187, 219) : new Color(5, 220, 135);
 
                 if (Helper.SinglePlayerOrServer) {
                     _alt = Main.rand.NextBool();
@@ -262,6 +261,8 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         levitate();
         lightUp();
         makeDusts();
+
+        _areaColor = _alt ? new Color(112, 187, 219) : new Color(5, 220, 135);
     }
 
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) {
