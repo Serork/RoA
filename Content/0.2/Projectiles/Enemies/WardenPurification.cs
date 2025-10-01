@@ -78,7 +78,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
         Rectangle clip2 = circle2.Bounds;
         Vector2 origin = clip.Centered();
         Vector2 origin2 = clip2.Centered();
-        float fadeOutProgress = 0f;
+        float fadeOutProgress = 1f;
         Color color2 = _areaColor;
         float waveMin = MathHelper.Lerp(0.75f, 1f, 1f - fadeOutProgress), waveMax = MathHelper.Lerp(1.25f, 1f, 1f - fadeOutProgress);
         float wave = Helper.Wave(Projectile.ai[2], waveMin, waveMax, 3f, Projectile.whoAmI) * fadeOutProgress;
