@@ -10,6 +10,7 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.WorldBuilding;
 
 namespace RoA.Content.Projectiles.Enemies;
 

@@ -113,10 +113,12 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
 
     public override void SendExtraAI(BinaryWriter writer) {
         writer.Write(_alt);
+        writer.WriteVector2(_targetPosition);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
         _alt = reader.ReadBoolean();
+        _targetPosition = reader.ReadVector2();
     }
 
     public override void AI() {
