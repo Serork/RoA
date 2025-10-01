@@ -275,6 +275,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                                 Main.dust[num69].velocity -= Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
                                 Main.dust[num69].scale = Main.rand.NextFloat(0.1f, num67 * 0.4f) * GetFadeOutProgress() * 1.5f;
                                 Main.dust[num69].noLight = true;
+                                Main.dust[num69].noLightEmittence = true;
                             }
                         }
                     }
