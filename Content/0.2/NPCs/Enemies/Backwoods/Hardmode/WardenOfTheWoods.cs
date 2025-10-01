@@ -135,7 +135,6 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         void findTarget() {
             WardenOfTheWoodsValues wardenOfTheWoodsValues = new(NPC);
             Vector2 initialPosition = _initialPosition;
-            Vector2 center = NPC.Center;
             bool shouldTarget() {
                 bool result = false;
                 foreach (Player player in Main.ActivePlayers) {
@@ -150,9 +149,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 NPC.ResetTarget();
                 return;
             }
-            NPC.Center = initialPosition;
             NPC.TargetClosest(false);
-            NPC.Center = center;
         }
         void goToTarget() {
             WardenOfTheWoodsValues wardenOfTheWoodsValues = new(NPC);
