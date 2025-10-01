@@ -100,7 +100,7 @@ sealed class Ent : RoANPC {
             NPC.spriteDirection = NPC.direction = 1;
         }
         else {
-            NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor, NPC.frame, (NPC.spriteDirection * -1).ToSpriteEffects(), yOffset: 2f);
+            NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor, NPC.frame, effect: (NPC.spriteDirection * -1).ToSpriteEffects(), yOffset: 2f, xOffset: 10f * NPC.spriteDirection);
 
             return false;
         }

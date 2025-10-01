@@ -9,6 +9,8 @@ using Terraria.ID;
 namespace RoA.Core.Utility; 
 
 static partial class Helper {
+    public static bool IsNearlyZero(this float value, float tolerance = 0.1f) => MathF.Abs(value) < tolerance;
+
     public static bool SinglePlayerOrServer => Main.netMode != NetmodeID.MultiplayerClient;
 
     public static SpriteEffects ToSpriteEffects(this int direction) => direction > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;

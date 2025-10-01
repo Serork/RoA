@@ -82,7 +82,6 @@ sealed class Woodpecker : ModNPC {
             set {
                 byte frameToSet = Utils.Clamp((byte)value, (byte)AnimationFrame.Idle, (byte)AnimationFrame.Count);
                 FrameValue = frameToSet;
-                npc.SetFrame(frameToSet, npc.GetFrameHeight());
             }
         }
 

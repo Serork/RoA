@@ -9,4 +9,6 @@ static class Vector2Extensions {
 
     public static Vector2 AdjustX(this Vector2 vector2, float value) => new(vector2.X, vector2.Y + value);
     public static Vector2 AdjustY(this Vector2 vector2, float value) => new(vector2.X, vector2.Y + value);
+
+    public static bool IsWithinRange(this Vector2 vector2, float value) => vector2.Length() < value;
 }

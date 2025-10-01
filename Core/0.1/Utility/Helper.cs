@@ -517,6 +517,17 @@ static partial class Helper {
         entity.velocity += (movement2 - entity.velocity) / inertia;
     }
 
+    public static void SlightlyMoveTo2(this Entity entity, Vector2 position, float speed = 5f, float inertia = 15f, float minDistance = 10f, float deceleration = 0.97f) {
+        Vector2 direction = position - entity.Center;
+        if (direction.Length() > 10f) {
+            direction.Normalize();
+            entity.velocity = (entity.velocity * inertia + direction * speed) / (inertia + 1f);
+        }
+        else {
+            entity.velocity *= (float)Math.Pow(deceleration, inertia * 2.0 / inertia);
+        }
+    }
+
     public static void NewMessage(object text, Color? color = null) {
         if (Main.netMode == NetmodeID.SinglePlayer) {
             Main.NewText(text, color);
