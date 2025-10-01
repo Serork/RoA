@@ -29,6 +29,9 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     private static float BEFOREATTACKTIME => 50f;
     private static float ATTACKANIMATIONTIME => 80f;
 
+    public static readonly Color Color = new(5, 220, 135);
+    public static readonly Color AltColor = new(79, 172, 211);
+
     public enum WardenOfTheWoodsRequstedTextureType : byte {
         Glow,
         Alt,
@@ -127,7 +130,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                     _alt = Main.rand.NextBool();
                     NPC.netUpdate = true;
                 }
-                _areaColor = _alt ? new Color(112, 187, 219) : new Color(5, 220, 135);
+                _areaColor = _alt ? AltColor : Color;
             }
             NPC.dontTakeDamage = wardenOfTheWoodsValues.State == WardenOfTheWoodsValues.AIState.Idle;
         }

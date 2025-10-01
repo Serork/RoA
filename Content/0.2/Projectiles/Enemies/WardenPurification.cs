@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Projectiles;
 using RoA.Common.VisualEffects;
+using RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Defaults;
@@ -36,10 +37,10 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
             Projectile.localAI[0] = 1f;
             switch (Projectile.ai[0]) {
                 case 0f:
-                    _areaColor = new Color(5, 220, 135);
+                    _areaColor = WardenOfTheWoods.Color;
                     break;
                 case 1f:
-                    _areaColor = new Color(112, 187, 219);
+                    _areaColor = WardenOfTheWoods.AltColor;
                     break;
             }
         }
