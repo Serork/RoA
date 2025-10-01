@@ -15,7 +15,6 @@ using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
 using static RoA.Common.Druid.Forms.BaseForm;
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.VisualEffects;
 
@@ -24,10 +23,11 @@ sealed class Leaf : VisualEffect<Leaf> {
 
     private static Asset<Texture2D>? _glowTexture;
 
-    private Vector2 _newVelocity = Vector2.Zero;
+    private Vector2 _newVelocity;
 
-    public bool OnDismount = false;
-    public float DisappearValue = 0f;
+    public bool OnSet;
+    public bool OnDismount;
+    public float DisappearValue;
 
     protected override void SetDefaults() {
         MaxTimeLeft = TimeLeft = 300;
@@ -35,6 +35,8 @@ sealed class Leaf : VisualEffect<Leaf> {
         SetFramedTexture(3, Main.rand.Next(3));
 
         AI0 = BASECHANGEVALUE;
+
+        OnSet = OnDismount = false;
 
         _newVelocity = Velocity;
 
@@ -52,8 +54,8 @@ sealed class Leaf : VisualEffect<Leaf> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
-        bool noGravity = AI0 >= 0f;
         bool onKill = AI0 == -2f;
+        bool noGravity = AI0 != 0f || OnSet;
         if (onKill) {
             if (TimeLeft > MaxTimeLeft * 0.75f) {
                 Velocity *= 0.85f;
@@ -81,7 +83,7 @@ sealed class Leaf : VisualEffect<Leaf> {
             Velocity *= 0.95f;
         }
 
-        bool flag2 = Collision.SolidCollision(Position - Vector2.One * 2, 4, 4) && noGravity && !onKill;
+        bool flag2 = (Collision.SolidCollision(Position - Vector2.One * 2, 4, 4) && noGravity && !onKill);
         bool flag3 = false;
         if (flag2 || DisappearValue > 0f) {
             if (flag2) {

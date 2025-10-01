@@ -229,6 +229,7 @@ sealed class HallowEnt : BaseForm {
                 leafParticle.CustomData = player;
                 leafParticle.OnDismount = false;
                 leafParticle.Scale *= 0.85f;
+                leafParticle.OnSet = true;
             }
         }
 
@@ -248,6 +249,7 @@ sealed class HallowEnt : BaseForm {
                 leafParticle.CustomData = player;
                 leafParticle.OnDismount = true;
                 leafParticle.Scale *= 0.85f;
+                leafParticle.OnSet = true;
             }
         }
 
