@@ -52,7 +52,7 @@ sealed class Leaf : VisualEffect<Leaf> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
-        bool noGravity = AI0 != 0f;
+        bool noGravity = AI0 >= 0f;
         bool onKill = AI0 == -2f;
         if (onKill) {
             if (TimeLeft > MaxTimeLeft * 0.75f) {
@@ -81,7 +81,7 @@ sealed class Leaf : VisualEffect<Leaf> {
             Velocity *= 0.95f;
         }
 
-        bool flag2 = (Collision.SolidCollision(Position - Vector2.One * 2, 4, 4) && noGravity && !onKill);
+        bool flag2 = Collision.SolidCollision(Position - Vector2.One * 2, 4, 4) && noGravity && !onKill;
         bool flag3 = false;
         if (flag2 || DisappearValue > 0f) {
             if (flag2) {
