@@ -123,11 +123,11 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 wardenOfTheWoodsValues.Init = true;
 
                 _initialPosition = NPC.Center;
-
                 if (Helper.SinglePlayerOrServer) {
                     _alt = Main.rand.NextBool();
                     NPC.netUpdate = true;
                 }
+                _areaColor = _alt ? new Color(112, 187, 219) : new Color(5, 220, 135);
             }
             NPC.dontTakeDamage = wardenOfTheWoodsValues.State == WardenOfTheWoodsValues.AIState.Idle;
         }
@@ -261,8 +261,6 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         levitate();
         lightUp();
         makeDusts();
-
-        _areaColor = _alt ? new Color(112, 187, 219) : new Color(5, 220, 135);
     }
 
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) {
