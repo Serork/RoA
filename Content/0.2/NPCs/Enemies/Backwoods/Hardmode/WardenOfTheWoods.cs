@@ -110,6 +110,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 _initialPosition = NPC.Center;
                 _areaColor = new Color(5, 220, 135);
             }
+            NPC.dontTakeDamage = wardenOfTheWoodsValues.State == WardenOfTheWoodsValues.AIState.Idle;
         }
         void findTarget() {
             WardenOfTheWoodsValues wardenOfTheWoodsValues = new(NPC);
