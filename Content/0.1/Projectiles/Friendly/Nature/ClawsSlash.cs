@@ -191,7 +191,9 @@ class ClawsSlash : NatureProjectile {
         float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float num3 = 0.975f;
-        float num4 = Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
+        Point tilePosition = Projectile.Center.ToTileCoordinates();
+        float num4 = Utils.Remap((Lighting.GetColor(tilePosition) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
+        num4 *= MathUtils.Clamp01(Utils.Remap(Lighting.Brightness(tilePosition.X, tilePosition.Y), 0f, 1f, 0.625f, 1f, false));
         if (FirstSlashColor != null && SecondSlashColor != null) {
             Color color1 = FirstSlashColor.Value;
             Color color2 = SecondSlashColor.Value;

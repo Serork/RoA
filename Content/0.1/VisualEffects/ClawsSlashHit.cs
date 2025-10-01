@@ -30,7 +30,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
             dust.noGravity = true;
         }
 
-        Rotation += Main.rand.Next(10) * Main.rand.NextFloat(0.05f);
+        Rotation += Main.rand.Next(7) * Main.rand.NextFloat(0.05f);
 
         if (--TimeLeft <= 0) {
             RestInPool();
