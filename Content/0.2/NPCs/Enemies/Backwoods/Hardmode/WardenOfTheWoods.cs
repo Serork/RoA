@@ -10,9 +10,11 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WardenOfTheWoods;
@@ -86,6 +88,8 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
 
     private Vector2 _initialPosition, _targetPosition;
     private Color? _areaColor;
+    private float _timerForVisualEffects;
+    private float _yOffset;
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
@@ -155,6 +159,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
             NPC.DirectTo(-NPC.velocity.X.GetDirection());
         }
         void handleMoveset() {
+            _timerForVisualEffects += 0.02f;
             float minDistance = 10f, speed = 5f, inertia = 25f, deceleration = 0.9375f;
             WardenOfTheWoodsValues wardenOfTheWoodsValues = new(NPC);
             void moveTo(Vector2 destination) => NPC.SlightlyMoveTo2(destination, minDistance: minDistance, speed: speed, inertia: inertia, deceleration: deceleration);
@@ -162,9 +167,12 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 case WardenOfTheWoodsValues.AIState.Idle:
                     moveTo(_initialPosition);
                     wardenOfTheWoodsValues.Attacked = false;
-                    if (NPC.velocity.IsWithinRange(1f)) {
+                    if (NPC.velocity.IsWithinRange(1.5f)) {
                         if (wardenOfTheWoodsValues.StateTimer > -FADEOUTTIME) {
                             wardenOfTheWoodsValues.StateTimer--;
+                        }
+                        else {
+                            _timerForVisualEffects = 16f;
                         }
                     }
                     break;
@@ -195,6 +203,36 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                     break;
             }
         }
+        void levitate() {
+            float fadeOutProgress2 = Utils.Remap(GetFadeOutProgress(), 0f, 1f, 0.2f, 1f, true);
+            float offset = 10f * fadeOutProgress2;
+            _yOffset = Helper.Wave(-offset, offset, 5f, NPC.whoAmI);
+        }
+        void lightUp() {
+            Lighting.AddLight(NPC.Center, _areaColor!.Value.ToVector3() * GetFadeOutProgress() * 0.75f);
+        }
+        void makeDusts() {
+            int num67 = Main.rand.Next(4) - 2;
+            num67 = (int)(num67 * GetFadeOutProgress());
+            WardenOfTheWoodsValues wardenOfTheWoodsValues = new WardenOfTheWoodsValues(NPC);
+            if (wardenOfTheWoodsValues.State == WardenOfTheWoodsValues.AIState.Attacking &&
+                wardenOfTheWoodsValues.StateTimer <= ATTACKTIME - ATTACKANIMATIONTIME * 0.9f) {
+                num67 += 2;
+            }
+            for (int m = 0; m < num67; m++) {
+                Color newColor2 = _areaColor!.Value;
+                Vector2 position = _initialPosition;
+                int num69 = Dust.NewDust(position, 0, 0, DustID.TintableDustLighted, 0f, 0f, 100, newColor2);
+                Main.dust[num69].position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(TARGETDISTANCE, TARGETDISTANCE) / 3f;
+                Main.dust[num69].velocity *= 0f;
+                Main.dust[num69].noGravity = true;
+                Main.dust[num69].velocity -= Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
+                Main.dust[num69].scale = Main.rand.NextFloat(0.1f, num67 * 0.4f) * GetFadeOutProgress();
+                if (Main.dust[num69].position.Distance(NPC.Center) < NPC.height * 0.75f) {
+                    Main.dust[num69].active = false;
+                }
+            }
+        }
 
         init();
         findTarget();
@@ -202,6 +240,9 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         setRotation();
         setDirection();
         handleMoveset();
+        levitate();
+        lightUp();
+        makeDusts();
     }
 
     private void SetTargetPosition() {
@@ -212,7 +253,10 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         Vector2 previousTargetPosition = _targetPosition;
         void randomize() => _targetPosition = _initialPosition + Main.rand.NextVector2Circular(TARGETDISTANCE, TARGETDISTANCE) / 4f;
         randomize();
-        while (Vector2.Distance(_targetPosition, previousTargetPosition) < TARGETDISTANCE / 5f) {
+        float checkDistance = TARGETDISTANCE / 5f;
+        Vector2 checkTargetPosition = NPC.GetTargetPlayer().Center;
+        while (Vector2.Distance(_targetPosition, previousTargetPosition) < checkDistance ||
+               Vector2.Distance(_targetPosition, checkTargetPosition) < checkDistance) {
             randomize();
         }
         NPC.netUpdate = true;
@@ -264,20 +308,22 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         Vector2 origin = clip.Centered();
         Vector2 position = _initialPosition;
         Color color = _areaColor ?? Color.White;
-        float waveMin = 0.75f, waveMax = 1.25f;
-        float wave = Helper.Wave(waveMin, waveMax, 3f, NPC.whoAmI);
-        color *= wave;
-        color *= 0.625f;
+        Color color2 = Color.White;
         float fadeOutProgress = GetFadeOutProgress();
-        color *= fadeOutProgress;
+        float waveMin = MathHelper.Lerp(0.75f, 1f, 1f - fadeOutProgress), waveMax = MathHelper.Lerp(1.25f, 1f, 1f - fadeOutProgress);
+        float wave = Helper.Wave(_timerForVisualEffects, waveMin, waveMax, 3f, NPC.whoAmI) * fadeOutProgress;
+        float opacity = wave * fadeOutProgress;
+        color *= opacity * 0.625f;
+        color2 *= opacity;
         int extra = 3;
         drawColor = Color.Lerp(drawColor, Color.Lerp(Color.Black, Color.DarkGreen, 0.5f), (1f - fadeOutProgress) * 0.5f);
         Texture2D glowTexture = indexedTextureAssets[(byte)WardenOfTheWoodsRequstedTextureType.Glow].Value;
         float xOffset = 4f * NPC.spriteDirection;
-        NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor, xOffset: xOffset);
-        NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor * Utils.Remap(fadeOutProgress, 0f, 1f, 0.5f, 1f, true), texture: glowTexture, xOffset: xOffset);
+        float yOffset = _yOffset;
+        NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor, xOffset: xOffset, yOffset: yOffset);
+        NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor * Utils.Remap(fadeOutProgress, 0f, 1f, 0.5f, 1f, true), texture: glowTexture, xOffset: xOffset, yOffset: yOffset);
         for (int i = 0; i < extra; i++) {
-            Vector2 scale = Vector2.One * TARGETDISTANCE / 150f * (i != 0 ? (Utils.Remap(i, 0, extra, 0.75f, 1f) * Utils.Remap(wave, waveMin, waveMax, waveMin * 1.5f, waveMax, true)) : 1f);
+            Vector2 scale = Vector2.One * Utils.Remap(fadeOutProgress, 0f, 1f, 0.75f, 1f, true) * TARGETDISTANCE / 150f * (i != 0 ? (Utils.Remap(i, 0, extra, 0.75f, 1f) * Utils.Remap(wave, waveMin, waveMax, waveMin * 1.5f, waveMax, true)) : 1f);
             spriteBatch.DrawWithSnapshot(circle, position, DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
@@ -285,7 +331,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 Scale = scale
             }, blendState: BlendState.Additive);
             spriteBatch.DrawWithSnapshot(() => {
-                NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor * 0.5f * fadeOutProgress, scale: scale.X * 0.4f, texture: glowTexture, xOffset: xOffset);
+                NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, color2 * 0.625f * fadeOutProgress, scale: scale.X * 0.4f, texture: glowTexture, xOffset: xOffset, yOffset: yOffset);
             }, blendState: BlendState.Additive);
         }
 
