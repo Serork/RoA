@@ -14,6 +14,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -29,10 +30,14 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     private static float ATTACKANIMATIONTIME => 80f;
 
     public enum WardenOfTheWoodsRequstedTextureType : byte {
-        Glow
+        Glow,
+        Alt,
+        AltGlow
     }
 
-    (byte, string)[] IRequestAssets.IndexedPathsToTexture => [((byte)WardenOfTheWoodsRequstedTextureType.Glow, Texture + "_Glow")];
+    (byte, string)[] IRequestAssets.IndexedPathsToTexture => [((byte)WardenOfTheWoodsRequstedTextureType.Glow, Texture + "_Glow"),
+                                                              ((byte)WardenOfTheWoodsRequstedTextureType.Alt, Texture + "_Alt"),
+                                                              ((byte)WardenOfTheWoodsRequstedTextureType.AltGlow, Texture + "_Alt_Glow")];
 
     public ref struct WardenOfTheWoodsValues(NPC npc) {
         public enum AIState : byte {
@@ -89,6 +94,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     private Color? _areaColor;
     private float _timerForVisualEffects;
     private float _yOffset;
+    private bool _alt;
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
@@ -102,6 +108,14 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         NPC.noGravity = true;
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_alt);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _alt = reader.ReadBoolean();
+    }
+
     public override void AI() {
         void init() {
             WardenOfTheWoodsValues wardenOfTheWoodsValues = new(NPC);
@@ -109,7 +123,12 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 wardenOfTheWoodsValues.Init = true;
 
                 _initialPosition = NPC.Center;
-                _areaColor = new Color(5, 220, 135);
+                _areaColor = _alt ? new Color(112, 187, 219) : new Color(5, 220, 135);
+
+                if (Helper.SinglePlayerOrServer) {
+                    _alt = Main.rand.NextBool();
+                    NPC.netUpdate = true;
+                }
             }
             NPC.dontTakeDamage = wardenOfTheWoodsValues.State == WardenOfTheWoodsValues.AIState.Idle;
         }
@@ -263,6 +282,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
             Damage = 50,
             KnockBack = 0f,
             Position = NPC.GetTargetPlayer().Center + (NPC.Center - _initialPosition) / 2f,
+            AI0 = _alt.ToInt(),
             //AI1 = 1f - (float)NPC.life / NPC.lifeMax,
             AI2 = _timerForVisualEffects
         });
@@ -342,10 +362,12 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         color2 *= opacity;
         int extra = 3;
         drawColor = Color.Lerp(drawColor, Color.Lerp(Color.Black, Color.DarkGreen, 0.5f), (1f - fadeOutProgress) * 0.5f);
-        Texture2D glowTexture = indexedTextureAssets[(byte)WardenOfTheWoodsRequstedTextureType.Glow].Value;
+        WardenOfTheWoodsRequstedTextureType glowVariant = _alt ? WardenOfTheWoodsRequstedTextureType.AltGlow : WardenOfTheWoodsRequstedTextureType.Glow;
+        Texture2D glowTexture = indexedTextureAssets[(byte)glowVariant].Value;
         float xOffset = 4f * NPC.spriteDirection;
         float yOffset = 0f;
-        NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor, xOffset: xOffset, yOffset: yOffset);
+        Texture2D texture = _alt ? indexedTextureAssets[(byte)WardenOfTheWoodsRequstedTextureType.Alt].Value : NPC.GetTexture();
+        NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor, xOffset: xOffset, yOffset: yOffset, texture: texture);
         NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor * Utils.Remap(fadeOutProgress, 0f, 1f, 0.5f, 1f, true), texture: glowTexture, xOffset: xOffset, yOffset: yOffset);
         for (int i = 0; i < extra; i++) {
             Vector2 scale = Vector2.One * Utils.Remap(fadeOutProgress, 0f, 1f, 0.75f, 1f, true) * TARGETDISTANCE / 150f * (i != 0 ? (Utils.Remap(i, 0, extra, 0.75f, 1f) * Utils.Remap(wave, waveMin, waveMax, waveMin * 1.5f, waveMax, true)) : 1f);

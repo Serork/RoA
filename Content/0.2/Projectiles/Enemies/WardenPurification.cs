@@ -39,7 +39,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
                     _areaColor = new Color(5, 220, 135);
                     break;
                 case 1f:
-                    _areaColor = Color.White;
+                    _areaColor = new Color(112, 187, 219);
                     break;
             }
         }
