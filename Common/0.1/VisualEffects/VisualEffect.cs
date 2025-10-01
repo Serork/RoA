@@ -61,6 +61,8 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
 
         SetDefaults();
 
+        MaxTimeLeft = TimeLeft;
+
         return (T)this;
     }
 
@@ -74,7 +76,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         Velocity *= 0.9f;
         float length = Velocity.Length();
         Rotation += length * 0.0314f;
-        Scale -= 0.05f - length / 1000f;
+        Scale -= 0.05f - length / 1000f * ScaleDecreaseModifier();
 
         if (Scale <= 0.1f || float.IsNaN(Scale) || --TimeLeft <= 0) {
             RestInPool();
@@ -87,6 +89,8 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         }
         Position += Velocity;
     }
+
+    protected virtual float ScaleDecreaseModifier() => 1f; 
 
     public virtual void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
         Draw_Inner(spritebatch, Texture);

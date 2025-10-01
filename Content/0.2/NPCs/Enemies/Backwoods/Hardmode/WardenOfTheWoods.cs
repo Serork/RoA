@@ -4,20 +4,18 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Common.VisualEffects;
+using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
-using System;
 using System.Collections.Generic;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
-
-using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WardenOfTheWoods;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
@@ -222,14 +220,16 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
             for (int m = 0; m < num67; m++) {
                 Color newColor2 = _areaColor!.Value;
                 Vector2 position = _initialPosition;
-                int num69 = Dust.NewDust(position, 0, 0, DustID.TintableDustLighted, 0f, 0f, 100, newColor2);
-                Main.dust[num69].position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(TARGETDISTANCE, TARGETDISTANCE) / 3f;
-                Main.dust[num69].velocity *= 0f;
-                Main.dust[num69].noGravity = true;
-                Main.dust[num69].velocity -= Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-                Main.dust[num69].scale = Main.rand.NextFloat(0.1f, num67 * 0.4f) * GetFadeOutProgress();
-                if (Main.dust[num69].position.Distance(NPC.Center) < NPC.height * 0.75f) {
-                    Main.dust[num69].active = false;
+                position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(TARGETDISTANCE, TARGETDISTANCE) / 3f;
+                Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
+                WardenDust? leafParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+                    scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) * GetFadeOutProgress());
+                if (leafParticle != null) {
+                    leafParticle.CustomData = GetFadeOutProgress();
+                    leafParticle.AI0 = _timerForVisualEffects;
+                    if (position.Distance(NPC.Center) < NPC.height * 0.75f) {
+                        leafParticle.RestInPool();
+                    }
                 }
             }
         }
@@ -243,6 +243,10 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         levitate();
         lightUp();
         makeDusts();
+    }
+
+    private void Attack() {
+
     }
 
     private void SetTargetPosition() {
@@ -291,7 +295,9 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 wardenOfTheWoodsValues.Frame = (WardenOfTheWoodsValues.AnimationFrame)NPC.AnimateFrame((byte)wardenOfTheWoodsValues.Frame,
                     (byte)WardenOfTheWoodsValues.AnimationFrame.Attacking1, (byte)WardenOfTheWoodsValues.AnimationFrame.Attacking4,
                     attackAnimationSpeed, (ushort)frameHeight);
-                if (wardenOfTheWoodsValues.Frame == WardenOfTheWoodsValues.AnimationFrame.Attacking4) {
+                if (wardenOfTheWoodsValues.Frame == WardenOfTheWoodsValues.AnimationFrame.Attacking4 &&
+                    !wardenOfTheWoodsValues.Attacked) {
+                    Attack();
                     wardenOfTheWoodsValues.Attacked = true;
                 }
                 break;

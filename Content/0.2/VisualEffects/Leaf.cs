@@ -30,7 +30,7 @@ sealed class Leaf : VisualEffect<Leaf> {
     public float DisappearValue;
 
     protected override void SetDefaults() {
-        MaxTimeLeft = TimeLeft = 300;
+        TimeLeft = 300;
 
         SetFramedTexture(3, Main.rand.Next(3));
 
