@@ -231,10 +231,11 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                                 Vector2 position = _initialPosition;
                                 position = position + Vector2.UnitX * 4f + Vector2.UnitY * 20f + Vector2.UnitX * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection() + Vector2.UnitY * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection();
                                 Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-                                WardenDust? leafParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+                                WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
                                     scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 8f);
-                                if (leafParticle != null) {
-                                    leafParticle.AI0 = _timerForVisualEffects;
+                                if (wardenParticle != null) {
+                                    wardenParticle.Alt = _alt;
+                                    wardenParticle.AI0 = _timerForVisualEffects;
                                 }
                             }
 
@@ -273,6 +274,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                                 Main.dust[num69].noGravity = true;
                                 Main.dust[num69].velocity -= Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
                                 Main.dust[num69].scale = Main.rand.NextFloat(0.1f, num67 * 0.4f) * GetFadeOutProgress() * 1.5f;
+                                Main.dust[num69].noLight = true;
                             }
                         }
                     }
@@ -314,27 +316,28 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 Vector2 position = _initialPosition;
                 position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(TARGETDISTANCE, TARGETDISTANCE) / 3f;
                 Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-                WardenDust? leafParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+                WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
                     scale: Main.rand.NextFloat(0.3f, num67 * 0.6f) * GetFadeOutProgress());
-                if (leafParticle != null) {
-                    leafParticle.CustomData = GetFadeOutProgress();
-                    leafParticle.AI0 = _timerForVisualEffects;
+                if (wardenParticle != null) {
+                    wardenParticle.CustomData = GetFadeOutProgress();
+                    wardenParticle.AI0 = _timerForVisualEffects;
+                    wardenParticle.Alt = _alt;
                     if (position.Distance(NPC.Center) < NPC.height * 0.75f) {
-                        leafParticle.RestInPool();
+                        wardenParticle.RestInPool();
                     }
                 }
             }
         }
 
         init();
+        levitate();
+        lightUp();
+        makeDusts();
         findTarget();
         goToTarget();
         setRotation();
         setDirection();
         handleMoveset();
-        levitate();
-        lightUp();
-        makeDusts();
     }
 
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) {

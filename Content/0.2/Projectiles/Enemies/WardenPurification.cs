@@ -71,6 +71,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
                 scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 7f);
             if (wardenParticle != null) {
                 wardenParticle.AI0 = Projectile.ai[2];
+                wardenParticle.Alt = Projectile.ai[0] != 0f;
             }
         }
     }
