@@ -5,6 +5,8 @@ using RoA.Common.VisualEffects;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
+using System;
+
 using Terraria;
 using Terraria.Graphics.Renderers;
 
@@ -18,6 +20,8 @@ sealed class WardenDust : VisualEffect<WardenDust> {
         AI0 = 0f;
 
         DontEmitLight = true;
+
+        Rotation = Main.rand.NextFloat(MathHelper.TwoPi);
     }
 
     protected override float ScaleDecreaseModifier() => 0.75f;
