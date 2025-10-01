@@ -136,7 +136,7 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
             float maxOffset = 8f;
             float progress = BaseFormDataStorage.GetAttackCharge(owner);
             Vector2 position = Projectile.Center;
-            Vector2 drawPos = position  + Utils.ToRotationVector2(circleFactor) * AreaSize;
+            Vector2 drawPos = position + Utils.ToRotationVector2(circleFactor) * AreaSize * 0.95f;
             color = Color.Lerp(new Color(pickedColor.R, pickedColor.G, pickedColor.B, 50), Color.White, HallowLeaf.EXTRABRIGHTNESSMODIFIER);
             float rotation = circleFactor + MathHelper.PiOver2;
             float areaFactor0 = AreaSize / AREASIZE * 1.5f;
