@@ -228,7 +228,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                             int num67 = 30;
                             for (int m = 0; m < num67; m++) {
                                 Color newColor2 = _areaColor!.Value;
-                                Vector2 position = NPC.Center;
+                                Vector2 position = _initialPosition;
                                 position = position + Vector2.UnitX * 4f + Vector2.UnitY * 20f + Vector2.UnitX * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection() + Vector2.UnitY * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection();
                                 Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
                                 WardenDust? leafParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
@@ -239,12 +239,12 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                             }
 
                             if (Helper.SinglePlayerOrServer) {
-                                ProjectileUtils.SpawnHostileProjectile<WardenPurification2>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
+                                ProjectileUtils.SpawnHostileProjectile<WardenPurification>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
                                     Damage = 50,
                                     KnockBack = 0f,
-                                    Position = NPC.Center,
+                                    Position = _initialPosition,
                                     AI0 = _alt.ToInt(),
-                                    //AI1 = 1f - (float)NPC.life / NPC.lifeMax,
+                                    AI1 = 1.5f,
                                     AI2 = _timerForVisualEffects
                                 });
                             }

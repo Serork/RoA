@@ -30,10 +30,10 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
     public float Circle2Progress => Utils.GetLerpValue(1.25f, 1.75f, Projectile.localAI[1], true);
 
     public override void AI() {
-        float extraModifier = Projectile.ai[1];
-        extraModifier = MathUtils.Clamp01(extraModifier);
-        extraModifier *= 0.02f;
-        Projectile.ai[2] += 0.05f + extraModifier;
+        //float extraModifier = Projectile.ai[1];
+        //extraModifier = MathUtils.Clamp01(extraModifier);
+        //extraModifier *= 0.02f;
+        Projectile.ai[2] += 0.05f /*+ extraModifier*/;
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
@@ -46,11 +46,16 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
                     break;
             }
         }
-        Projectile.localAI[1] += 0.05f + extraModifier;
+        Projectile.localAI[1] += 0.05f /*+ extraModifier*/;
 
         if (Circle2Progress >= 1f) {
             Projectile.Kill();
         }
+    }
+
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        int size = (int)(40 * Projectile.ai[1]);
+        hitbox.Inflate(size, size);
     }
 
     public override bool? CanDamage() => Circle2Progress >= 0.5f;
@@ -62,10 +67,10 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
             Vector2 position = Projectile.Center;
             position = position + Vector2.UnitX * 4f + Vector2.UnitY * 20f + Vector2.UnitX * Projectile.width / 2f * Main.rand.NextFloatDirection() + Vector2.UnitY * Projectile.height / 2f * Main.rand.NextFloatDirection();
             Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-            WardenDust? leafParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+            WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
                 scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 7f);
-            if (leafParticle != null) {
-                leafParticle.AI0 = Projectile.ai[2];
+            if (wardenParticle != null) {
+                wardenParticle.AI0 = Projectile.ai[2];
             }
         }
     }
@@ -87,7 +92,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
         float wave = Helper.Wave(Projectile.ai[2], waveMin, waveMax, 3f, Projectile.whoAmI) * fadeOutProgress;
         float opacity = wave * fadeOutProgress;
         color2 *= opacity;
-        float disappearValue = 1f - Utils.GetLerpValue(0.75f, 1f, Circle2Progress, true);
+        float disappearValue = 1f - Utils.GetLerpValue(0.5f, 1f, Circle2Progress, true);
         disappearValue = Ease.CircOut(disappearValue);
         color2 *= disappearValue;
         Color color3 = color2;
@@ -97,7 +102,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
                 Utils.Remap(fadeOutProgress, 0f, 1f, 0.75f, 1f, true) * 
                 (i != 0 ? (Utils.Remap(i, 0, extra, 0.75f, 1f) * 
                 Utils.Remap(wave, waveMin, waveMax, waveMin * 1.5f, waveMax, true)) : 1f) *
-                disappearValue;
+                disappearValue * (Projectile.ai[1] + 1f);
             spritebatch.DrawWithSnapshot(() => {
                 spritebatch.Draw(Texture, Position - Main.screenPosition, null, color2 * 0.625f * fadeOutProgress, Projectile.rotation, origin, Projectile.scale * scale, SpriteEffects.None, 0f);
             }, blendState: BlendState.Additive);
