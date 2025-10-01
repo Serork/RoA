@@ -88,7 +88,6 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
         disappearValue = Ease.CircOut(disappearValue);
         color2 *= disappearValue;
         Color color3 = color2;
-        color3.A = 100;
         for (int i = 0; i < extra; i++) {
             Vector2 scale = Ease.SineInOut(MathUtils.Clamp01(Projectile.localAI[1])) * Vector2.One *
                 Utils.Remap(fadeOutProgress, 0f, 1f, 0.75f, 1f, true) * 
