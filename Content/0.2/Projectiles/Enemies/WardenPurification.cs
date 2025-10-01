@@ -24,6 +24,8 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
 
         Projectile.hostile = true;
         Projectile.timeLeft = TIMELEFT;
+
+        Projectile.tileCollide = false;
     }
 
     public float Circle2Progress => Utils.GetLerpValue(1.25f, 1.75f, Projectile.localAI[1], true);
