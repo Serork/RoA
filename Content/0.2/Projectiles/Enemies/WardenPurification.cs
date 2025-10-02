@@ -18,6 +18,12 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
 
     private Color _areaColor;
 
+    public ref float VisualEffectTimer => ref Projectile.ai[2];
+    public ref float InitValue => ref Projectile.localAI[0];
+    public ref float CurrentAttackTime => ref Projectile.localAI[1];
+    public ref float FinalScaleFactor => ref Projectile.localAI[2];
+    public ref float AreaColorFactor => ref Projectile.ai[0];
+
     public override void SetDefaults() {
         Projectile.SetSizeValues(80);
 
@@ -27,17 +33,14 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
         Projectile.tileCollide = false;
     }
 
-    public float Circle2Progress => Utils.GetLerpValue(1.25f, 1.75f, Projectile.localAI[1], true);
+    public float CircleProgress => Utils.GetLerpValue(1.25f, 1.75f, CurrentAttackTime, true);
 
     public override void AI() {
-        //float extraModifier = Projectile.ai[1];
-        //extraModifier = MathUtils.Clamp01(extraModifier);
-        //extraModifier *= 0.02f;
-        Projectile.ai[2] += 0.05f /*+ extraModifier*/;
+        VisualEffectTimer += 0.05f;
 
-        if (Projectile.localAI[0] == 0f) {
-            Projectile.localAI[0] = 1f;
-            switch (Projectile.ai[0]) {
+        if (InitValue == 0f) {
+            InitValue = 1f;
+            switch (AreaColorFactor) {
                 case 0f:
                     _areaColor = WardenOfTheWoods.Color;
                     break;
@@ -46,9 +49,11 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
                     break;
             }
         }
-        Projectile.localAI[1] += 0.05f /*+ extraModifier*/;
+        CurrentAttackTime += 0.05f;
 
-        if (Circle2Progress >= 1f) {
+        FinalScaleFactor = 1.35f;
+
+        if (CircleProgress >= 1f) {
             Projectile.Kill();
         }
     }
@@ -58,7 +63,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
         hitbox.Inflate(size, size);
     }
 
-    public override bool? CanDamage() => Circle2Progress >= 0.5f;
+    public override bool? CanDamage() => CircleProgress >= 0.5f;
 
     public override void OnKill(int timeLeft) {
         int num67 = 20;
@@ -70,8 +75,8 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
             WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
                 scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 7f);
             if (wardenParticle != null) {
-                wardenParticle.AI0 = Projectile.ai[2];
-                wardenParticle.Alt = Projectile.ai[0] != 0f;
+                wardenParticle.AI0 = VisualEffectTimer;
+                wardenParticle.Alt = AreaColorFactor != 0f;
             }
         }
     }
@@ -90,16 +95,16 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
         float fadeOutProgress = 1f;
         Color color2 = _areaColor;
         float waveMin = MathHelper.Lerp(0.75f, 1f, 1f - fadeOutProgress), waveMax = MathHelper.Lerp(1.25f, 1f, 1f - fadeOutProgress);
-        float wave = Helper.Wave(Projectile.ai[2], waveMin, waveMax, 3f, Projectile.whoAmI) * fadeOutProgress;
+        float wave = Helper.Wave(VisualEffectTimer, waveMin, waveMax, 3f, Projectile.whoAmI) * fadeOutProgress;
         float opacity = wave * fadeOutProgress;
         color2 *= opacity;
-        float disappearValue = 1f - Utils.GetLerpValue(0.5f, 1f, Circle2Progress, true);
+        float disappearValue = 1f - Utils.GetLerpValue(0.5f, 1f, CircleProgress, true);
         disappearValue = Ease.CircOut(disappearValue);
         color2 *= disappearValue;
         Color color3 = color2;
         color3.A = 200;
         for (int i = 0; i < extra; i++) {
-            Vector2 scale = Ease.SineInOut(MathUtils.Clamp01(Projectile.localAI[1])) * Vector2.One *
+            Vector2 scale = Ease.SineInOut(MathUtils.Clamp01(CurrentAttackTime)) * Vector2.One *
                 Utils.Remap(fadeOutProgress, 0f, 1f, 0.75f, 1f, true) * 
                 (i != 0 ? (Utils.Remap(i, 0, extra, 0.75f, 1f) * 
                 Utils.Remap(wave, waveMin, waveMax, waveMin * 1.5f, waveMax, true)) : 1f) *
@@ -109,7 +114,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
             }, blendState: BlendState.Additive);
 
             spritebatch.DrawWithSnapshot(() => {
-                spritebatch.Draw(circle2, Position - Main.screenPosition, null, color3 * 0.625f * fadeOutProgress * Circle2Progress, Projectile.rotation, origin2, Projectile.scale * scale * Circle2Progress * 0.7f, SpriteEffects.None, 0f);
+                spritebatch.Draw(circle2, Position - Main.screenPosition, null, color3 * 0.625f * fadeOutProgress * CircleProgress, Projectile.rotation, origin2, Projectile.scale * scale * CircleProgress * FinalScaleFactor, SpriteEffects.None, 0f);
             }, blendState: BlendState.Additive);
         }
     }

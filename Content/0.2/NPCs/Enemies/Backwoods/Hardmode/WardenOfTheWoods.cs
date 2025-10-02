@@ -26,10 +26,10 @@ namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     private static byte FRAMECOUNT => 9;
     public static float TARGETDISTANCE => 400f;
-    private static float ATTACKTIME => 100f;
-    private static float FADEOUTTIME => 50f;
-    private static float BEFOREATTACKTIME => 50f;
-    private static float ATTACKANIMATIONTIME => 80f;
+    public static float ATTACKTIME => 100f;
+    public static float FADEOUTTIME => 50f;
+    public static float BEFOREATTACKTIME => 50f;
+    public static float ATTACKANIMATIONTIME => 80f;
 
     public static readonly Color Color = new(5, 220, 135);
     public static readonly Color AltColor = new(79, 172, 211);
@@ -211,6 +211,9 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                     Player target = NPC.GetTargetPlayer();
                     if (wardenOfTheWoodsValues.StateTimer < 0f) {
                         moveTo(_initialPosition);
+                        if (wardenOfTheWoodsValues.StateTimer == -0.5f) {
+                            wardenOfTheWoodsValues.StateTimer = 0f;
+                        }
                         wardenOfTheWoodsValues.StateTimer++;
                         return;
                     }
@@ -239,16 +242,16 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                                 }
                             }
 
-                            if (Helper.SinglePlayerOrServer) {
-                                ProjectileUtils.SpawnHostileProjectile<WardenPurification>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
-                                    Damage = 50,
-                                    KnockBack = 0f,
-                                    Position = _initialPosition,
-                                    AI0 = _alt.ToInt(),
-                                    AI1 = 1.5f,
-                                    AI2 = _timerForVisualEffects
-                                });
-                            }
+                            //if (Helper.SinglePlayerOrServer) {
+                            //    ProjectileUtils.SpawnHostileProjectile<WardenPurification>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
+                            //        Damage = 50,
+                            //        KnockBack = 0f,
+                            //        Position = _initialPosition,
+                            //        AI0 = _alt.ToInt(),
+                            //        AI1 = 1.5f,
+                            //        AI2 = _timerForVisualEffects
+                            //    });
+                            //}
 
                             wardenOfTheWoodsValues.ShouldTeleport = false;
 
@@ -278,17 +281,28 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                                 Main.dust[num69].noLightEmittence = true;
                             }
                         }
+
+                        if (target.Distance(_initialPosition) < TARGETDISTANCE / 2f) {
+                            if (!wardenOfTheWoodsValues.ShouldTeleport) {
+                                if (Helper.SinglePlayerOrServer) {
+                                    ProjectileUtils.SpawnHostileProjectile<WardenPurification2>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
+                                        Damage = 50,
+                                        KnockBack = 0f,
+                                        Position = _initialPosition,
+                                        AI0 = _alt.ToInt(),
+                                        AI1 = wardenOfTheWoodsValues.StateTimer,
+                                        AI2 = _timerForVisualEffects
+                                    });
+                                }
+                            }
+
+                            wardenOfTheWoodsValues.ShouldTeleport = true;
+                        }
                     }
                     else {
+                        wardenOfTheWoodsValues.StateTimer--;
                         if (wardenOfTheWoodsValues.StateTimer <= ATTACKTIME - BEFOREATTACKTIME) {
                             wardenOfTheWoodsValues.State = WardenOfTheWoodsValues.AIState.Attacking;
-                            wardenOfTheWoodsValues.StateTimer -= wardenOfTheWoodsValues.ShouldTeleport ? 0.5f : 1f;
-                        }
-                        else {
-                            wardenOfTheWoodsValues.StateTimer--;
-                            if (target.Distance(_initialPosition) < TARGETDISTANCE / 2f) {
-                                wardenOfTheWoodsValues.ShouldTeleport = true;
-                            }
                         }
                         moveTo(_targetPosition);
                     }
