@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Projectiles;
-using RoA.Common.VisualEffects;
 using RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
-using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -24,6 +22,7 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
     public ref float CurrentAttackTime => ref Projectile.ai[1];
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float VisualEffectTimer => ref Projectile.ai[2];
+    public ref float AreaColorFactor => ref Projectile.ai[0];
 
     public override void SetDefaults() {
         Projectile.SetSizeValues(80);
@@ -45,7 +44,7 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
 
         if (InitValue == 0f) {
             InitValue = 1f;
-            switch (Projectile.ai[0]) {
+            switch (AreaColorFactor) {
                 case 0f:
                     _areaColor = WardenOfTheWoods.Color;
                     break;
@@ -69,21 +68,7 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
 
     public override bool? CanDamage() => Circle2Progress >= 0.5f;
 
-    public override void OnKill(int timeLeft) {
-        int num67 = 20;
-        for (int m = 0; m < num67; m++) {
-            Color newColor2 = _areaColor;
-            Vector2 position = Projectile.Center;
-            position = position + Vector2.UnitX * 4f + Vector2.UnitY * 20f + Vector2.UnitX * Projectile.width / 2f * Main.rand.NextFloatDirection() + Vector2.UnitY * Projectile.height / 2f * Main.rand.NextFloatDirection();
-            Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-            WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
-                scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 7f);
-            if (wardenParticle != null) {
-                wardenParticle.AI0 = VisualEffectTimer;
-                wardenParticle.Alt = Projectile.ai[0] != 0f;
-            }
-        }
-    }
+    public override void OnKill(int timeLeft) { }
 
     protected override void Draw(ref Color lightColor) {
         Texture2D circle = ResourceManager.Circle;
