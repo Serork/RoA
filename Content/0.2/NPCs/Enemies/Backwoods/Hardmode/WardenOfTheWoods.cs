@@ -21,6 +21,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WardenOfTheWoods;
+
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
 sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
@@ -208,7 +210,6 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                     break;
                 case WardenOfTheWoodsValues.AIState.HasTarget:
                 case WardenOfTheWoodsValues.AIState.Attacking:
-                    Player target = NPC.GetTargetPlayer();
                     if (wardenOfTheWoodsValues.StateTimer < 0f) {
                         moveTo(_initialPosition);
                         if (wardenOfTheWoodsValues.StateTimer == -0.5f) {
@@ -228,74 +229,19 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                         wardenOfTheWoodsValues.Attacked = false;
 
                         if (wardenOfTheWoodsValues.ShouldTeleport) {
-                            int num67 = 30;
-                            for (int m = 0; m < num67; m++) {
-                                Color newColor2 = _areaColor!.Value;
-                                Vector2 position = _initialPosition;
-                                position = position + Vector2.UnitX * 4f + Vector2.UnitY * 20f + Vector2.UnitX * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection() + Vector2.UnitY * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection();
-                                Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-                                WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
-                                    scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 8f);
-                                if (wardenParticle != null) {
-                                    wardenParticle.Alt = _alt;
-                                    wardenParticle.AI0 = _timerForVisualEffects;
-                                }
-                            }
-
-                            //if (Helper.SinglePlayerOrServer) {
-                            //    ProjectileUtils.SpawnHostileProjectile<WardenPurification>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
-                            //        Damage = 50,
-                            //        KnockBack = 0f,
-                            //        Position = _initialPosition,
-                            //        AI0 = _alt.ToInt(),
-                            //        AI1 = 1.5f,
-                            //        AI2 = _timerForVisualEffects
-                            //    });
-                            //}
+                            SpawnBeforeTeleportEffects();
 
                             wardenOfTheWoodsValues.ShouldTeleport = false;
 
-                            if (Helper.SinglePlayerOrServer) {
-                                Vector2 random = Main.rand.NextVector2CircularEdge(TARGETDISTANCE, TARGETDISTANCE) * 0.75f;
-                                void randomize() => NPC.Center = _initialPosition = target.Center + random;
-                                randomize();
-                                int attempts = 100;
-                                while (attempts-- > 0 && !Collision.CanHit(NPC.Center, NPC.width, NPC.height, target.Center, target.width, target.height)) {
-                                    randomize();
-                                }
-                                SetTargetPosition();
-                                NPC.netUpdate = true;
-                            }
+                            Teleport();
 
-                            num67 *= 2;
-                            for (int m = 0; m < num67; m++) {
-                                Color newColor2 = _areaColor!.Value;
-                                Vector2 position = NPC.Center;
-                                int num69 = Dust.NewDust(position, 0, 0, DustID.TintableDustLighted, 0f, 0f, 100, newColor2);
-                                Main.dust[num69].position = position + Vector2.UnitY * 10f + Main.rand.NextVector2Circular(NPC.width, NPC.height) * 0.5f;
-                                Main.dust[num69].velocity *= 0f;
-                                Main.dust[num69].noGravity = true;
-                                Main.dust[num69].velocity -= Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-                                Main.dust[num69].scale = Main.rand.NextFloat(0.1f, num67 * 0.4f) * GetFadeOutProgress() * 1.5f;
-                                Main.dust[num69].noLight = true;
-                                Main.dust[num69].noLightEmittence = true;
-                            }
+                            SpawnAfterTeleportEffects();
                         }
 
-                        if (target.Distance(_initialPosition) < TARGETDISTANCE / 2f) {
+                        if (NPC.GetTargetPlayer().Distance(_initialPosition) < TARGETDISTANCE / 2f) {
                             if (!wardenOfTheWoodsValues.ShouldTeleport) {
-                                if (Helper.SinglePlayerOrServer) {
-                                    ProjectileUtils.SpawnHostileProjectile<WardenPurification2>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
-                                        Damage = 50,
-                                        KnockBack = 0f,
-                                        Position = _initialPosition,
-                                        AI0 = _alt.ToInt(),
-                                        AI1 = wardenOfTheWoodsValues.StateTimer,
-                                        AI2 = _timerForVisualEffects
-                                    });
-                                }
+                                TeleportAttack();
                             }
-
                             wardenOfTheWoodsValues.ShouldTeleport = true;
                         }
                     }
@@ -321,7 +267,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         void makeDusts() {
             int num67 = Main.rand.Next(4) - 2;
             num67 = (int)(num67 * GetFadeOutProgress());
-            WardenOfTheWoodsValues wardenOfTheWoodsValues = new WardenOfTheWoodsValues(NPC);
+            WardenOfTheWoodsValues wardenOfTheWoodsValues = new(NPC);
             if (wardenOfTheWoodsValues.State == WardenOfTheWoodsValues.AIState.Attacking &&
                 wardenOfTheWoodsValues.StateTimer <= ATTACKTIME - ATTACKANIMATIONTIME * 0.9f) {
                 num67 += 2;
@@ -353,6 +299,67 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         setRotation();
         setDirection();
         handleMoveset();
+    }
+
+    private void TeleportAttack() {
+        if (Helper.SinglePlayerOrServer) {
+            ProjectileUtils.SpawnHostileProjectile<WardenPurification2>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
+                Damage = 50,
+                KnockBack = 0f,
+                Position = _initialPosition,
+                AI0 = _alt.ToInt(),
+                AI1 = new WardenOfTheWoodsValues(NPC).StateTimer,
+                AI2 = _timerForVisualEffects
+            });
+        }
+    }
+
+    private void Teleport() {
+        Player target = NPC.GetTargetPlayer();
+        if (Helper.SinglePlayerOrServer) {
+            Vector2 random = Main.rand.NextVector2CircularEdge(TARGETDISTANCE, TARGETDISTANCE) * 0.75f;
+            void randomize() => NPC.Center = _initialPosition = target.Center + random;
+            randomize();
+            int attempts = 100;
+            while (attempts-- > 0 && !Collision.CanHit(NPC.Center, NPC.width, NPC.height, target.Center, target.width, target.height)) {
+                randomize();
+            }
+            SetTargetPosition();
+            NPC.netUpdate = true;
+        }
+    }
+
+    private void SpawnAfterTeleportEffects() {
+        int num67 = 30;
+        num67 *= 2;
+        for (int m = 0; m < num67; m++) {
+            Color newColor2 = _areaColor!.Value;
+            Vector2 position = NPC.Center;
+            int num69 = Dust.NewDust(position, 0, 0, DustID.TintableDustLighted, 0f, 0f, 100, newColor2);
+            Main.dust[num69].position = position + Vector2.UnitY * 10f + Main.rand.NextVector2Circular(NPC.width, NPC.height) * 0.5f;
+            Main.dust[num69].velocity *= 0f;
+            Main.dust[num69].noGravity = true;
+            Main.dust[num69].velocity -= Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
+            Main.dust[num69].scale = Main.rand.NextFloat(0.1f, num67 * 0.4f) * GetFadeOutProgress() * 1.5f;
+            Main.dust[num69].noLight = true;
+            Main.dust[num69].noLightEmittence = true;
+        }
+    }
+
+    private void SpawnBeforeTeleportEffects() {
+        int num67 = 30;
+        for (int m = 0; m < num67; m++) {
+            Color newColor2 = _areaColor!.Value;
+            Vector2 position = _initialPosition;
+            position = position + Vector2.UnitX * 4f + Vector2.UnitY * 20f + Vector2.UnitX * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection() + Vector2.UnitY * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection();
+            Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
+            WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+                scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 8f);
+            if (wardenParticle != null) {
+                wardenParticle.Alt = _alt;
+                wardenParticle.AI0 = _timerForVisualEffects;
+            }
+        }
     }
 
     public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position) {
