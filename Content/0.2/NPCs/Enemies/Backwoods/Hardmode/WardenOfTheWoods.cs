@@ -151,6 +151,9 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         void findTarget() {
             WardenOfTheWoodsValues wardenOfTheWoodsValues = new(NPC);
             Vector2 initialPosition = _initialPosition;
+            if (wardenOfTheWoodsValues.ShouldTeleport) {
+                return;
+            }
             bool shouldTarget() {
                 bool result = false;
                 foreach (Player player in Main.ActivePlayers) {
@@ -170,6 +173,9 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         void goToTarget() {
             WardenOfTheWoodsValues wardenOfTheWoodsValues = new(NPC);
             bool hasTarget = NPC.HasPlayerTarget;
+            if (wardenOfTheWoodsValues.ShouldTeleport) {
+                return;
+            }
             if (!hasTarget) {
                 wardenOfTheWoodsValues.State = WardenOfTheWoodsValues.AIState.Idle;
                 return;
