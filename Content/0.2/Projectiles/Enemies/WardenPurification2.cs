@@ -63,7 +63,7 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
     }
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox) {
-        int size = (int)(40 * FinalScale * Circle2Progress);
+        int size = (int)(45 * FinalScale * Circle2Progress);
         hitbox.Inflate(size, size);
     }
 
