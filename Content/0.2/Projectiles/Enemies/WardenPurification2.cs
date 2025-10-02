@@ -31,7 +31,7 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
         Projectile.SetSizeValues(80);
 
         Projectile.hostile = true;
-        Projectile.timeLeft = TIMELEFT;
+        Projectile.timeLeft = TIMELEFT + 10;
 
         Projectile.tileCollide = false;
     }
@@ -63,7 +63,7 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
             }
         }
 
-        if (_currentAttackTime > 0f) {
+        if (_currentAttackTime > -10f) {
             _currentAttackTime -= 1f;
         }
 
@@ -75,7 +75,7 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
         hitbox.Inflate(size, size);
     }
 
-    public override bool? CanDamage() => Circle2Progress >= 0.5f;
+    public override bool? CanDamage() => Circle2Progress >= 0.95f && _currentAttackTime > 0f;
 
     public override void OnKill(int timeLeft) { }
 
@@ -95,6 +95,7 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
         float waveMin = MathHelper.Lerp(0.75f, 1f, 1f - fadeOutProgress), waveMax = MathHelper.Lerp(1.25f, 1f, 1f - fadeOutProgress);
         float wave = Helper.Wave(VisualEffectTimer, waveMin, waveMax, 3f, Projectile.whoAmI) * fadeOutProgress;
         float opacity = wave * fadeOutProgress;
+        if (_currentAttackTime < 0f) opacity *= (10f + _currentAttackTime) / 10f;
         color2 *= opacity;
         Color color3 = color2;
         color3.A = 200;

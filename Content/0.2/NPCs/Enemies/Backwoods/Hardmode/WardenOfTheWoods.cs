@@ -12,7 +12,7 @@ using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
-
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -34,7 +34,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     public static float ATTACKANIMATIONTIME => 80f;
 
     public static readonly Color Color = new(5, 220, 135);
-    public static readonly Color AltColor = new(79, 172, 211);
+    public static readonly Color AltColor = new(35, 105, 230);
 
     public enum WardenOfTheWoodsRequstedTextureType : byte {
         Glow,
@@ -108,6 +108,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     private float _timerForVisualEffects;
     private float _yOffset;
     private bool _alt;
+    private float _teleportOpacity;
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
@@ -235,6 +236,8 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
 
                             Teleport();
 
+                            _teleportOpacity = 0.5f;
+
                             SpawnAfterTeleportEffects();
                         }
 
@@ -347,14 +350,16 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     }
 
     private void SpawnBeforeTeleportEffects() {
-        int num67 = 30;
+        int num67 = 50;
         for (int m = 0; m < num67; m++) {
             Color newColor2 = _areaColor!.Value;
             Vector2 position = _initialPosition;
             position = position + Vector2.UnitX * 4f + Vector2.UnitY * 20f + Vector2.UnitX * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection() + Vector2.UnitY * TARGETDISTANCE / 2f * Main.rand.NextFloatDirection();
+            if (m < 20) position = _initialPosition + Vector2.UnitY.RotatedBy(Math.PI * m * 0.1f) * 100f;
             Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
+            if (m < 20) velocity = Vector2.Normalize(position - _initialPosition) * 5f * Main.rand.NextFloat(0.25f, 1f);
             WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
-                scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 8f);
+                scale: Main.rand.NextFloat(0.5f, 2f));
             if (wardenParticle != null) {
                 wardenParticle.Alt = _alt;
                 wardenParticle.AI0 = _timerForVisualEffects;
@@ -452,9 +457,10 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         float fadeOutProgress = GetFadeOutProgress();
         float waveMin = MathHelper.Lerp(0.75f, 1f, 1f - fadeOutProgress), waveMax = MathHelper.Lerp(1.25f, 1f, 1f - fadeOutProgress);
         float wave = Helper.Wave(_timerForVisualEffects, waveMin, waveMax, 3f, NPC.whoAmI) * fadeOutProgress;
-        float opacity = wave * fadeOutProgress;
+        float opacity = wave * fadeOutProgress * _teleportOpacity;
         color *= opacity * 0.625f;
         color2 *= opacity;
+        if (_teleportOpacity < 1f) _teleportOpacity += 0.05f;
         int extra = 3;
         drawColor = Color.Lerp(drawColor, Color.Lerp(Color.Black, Color.DarkGreen, 0.5f), (1f - fadeOutProgress) * 0.5f);
         WardenOfTheWoodsRequstedTextureType glowVariant = _alt ? WardenOfTheWoodsRequstedTextureType.AltGlow : WardenOfTheWoodsRequstedTextureType.Glow;
@@ -469,8 +475,8 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
             spriteBatch.DrawWithSnapshot(circle, position, DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
-                Color = color,
-                Scale = scale
+                Color = color * 0.8f,
+                Scale = scale * _teleportOpacity
             }, blendState: BlendState.Additive);
             spriteBatch.DrawWithSnapshot(() => {
                 NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, color2 * 0.625f * fadeOutProgress, scale: scale.X * 0.4f, texture: glowTexture, xOffset: xOffset, yOffset: yOffset);
