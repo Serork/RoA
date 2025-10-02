@@ -102,9 +102,6 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
         float wave = Helper.Wave(VisualEffectTimer, waveMin, waveMax, 3f, Projectile.whoAmI) * fadeOutProgress;
         float opacity = wave * fadeOutProgress;
         color2 *= opacity;
-        float disappearValue = 1f - Utils.GetLerpValue(0.5f, 1f, Circle2Progress, true);
-        disappearValue = Ease.CircOut(disappearValue);
-        //color2 *= disappearValue;
         Color color3 = color2;
         color3.A = 200;
         for (int i = 0; i < extra; i++) {
@@ -113,9 +110,6 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
                 (i != 0 ? (Utils.Remap(i, 0, extra, 0.75f, 1f) *
                 Utils.Remap(wave, waveMin, waveMax, waveMin * 1.5f, waveMax, true)) : 1f) *
                 (FinalScale + 1f);
-            //spritebatch.DrawWithSnapshot(() => {
-            //    spritebatch.Draw(Texture, Position - Main.screenPosition, null, color2 * 0.625f * fadeOutProgress, Projectile.rotation, origin, Projectile.scale * scale, SpriteEffects.None, 0f);
-            //}, blendState: BlendState.Additive);
 
             spritebatch.DrawWithSnapshot(() => {
                 spritebatch.Draw(circle2, Position - Main.screenPosition, null, color3 * 0.625f * fadeOutProgress * Circle2Progress, Projectile.rotation, origin2, Projectile.scale * scale * Circle2Progress * 0.7f, SpriteEffects.None, 0f);
