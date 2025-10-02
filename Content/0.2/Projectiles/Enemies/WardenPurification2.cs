@@ -10,16 +10,19 @@ using RoA.Core.Utility;
 
 using Terraria;
 
+using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WardenOfTheWoods;
+
 namespace RoA.Content.Projectiles.Enemies;
 
 sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
     private static ushort TIMELEFT => (ushort)WardenOfTheWoods.ATTACKTIME;
 
     private Color _areaColor;
+    private float _currentAttackTime;
 
     public ref float FinalScale => ref Projectile.localAI[2];
     public ref float AttackTime => ref Projectile.localAI[1];
-    public ref float CurrentAttackTime => ref Projectile.ai[1];
+    public ref float OwnerWhoAmI => ref Projectile.ai[1];
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float VisualEffectTimer => ref Projectile.ai[2];
     public ref float AreaColorFactor => ref Projectile.ai[0];
@@ -33,11 +36,17 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
         Projectile.tileCollide = false;
     }
 
-    public float Circle2Progress => 1f - Utils.GetLerpValue(0f, AttackTime, CurrentAttackTime, true);
+    public float Circle2Progress => 1f - Utils.GetLerpValue(0f, AttackTime, _currentAttackTime, true);
 
     public override void AI() {
+        NPC owner = Main.npc[(int)OwnerWhoAmI];
+        if (!owner.active) {
+            Projectile.Kill();
+            return;
+        }
+
         if (AttackTime == 0f) {
-            AttackTime = CurrentAttackTime;
+            _currentAttackTime = AttackTime = new WardenOfTheWoodsValues(owner).StateTimer;
         }
 
         VisualEffectTimer += 0.05f;
@@ -54,8 +63,8 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
             }
         }
 
-        if (CurrentAttackTime > 0f) {
-            CurrentAttackTime -= 1f;
+        if (_currentAttackTime > 0f) {
+            _currentAttackTime -= 1f;
         }
 
         FinalScale = 2f;

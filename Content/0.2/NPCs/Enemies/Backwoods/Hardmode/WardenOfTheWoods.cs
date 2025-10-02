@@ -308,7 +308,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 KnockBack = 0f,
                 Position = _initialPosition,
                 AI0 = _alt.ToInt(),
-                AI1 = new WardenOfTheWoodsValues(NPC).StateTimer,
+                AI1 = NPC.whoAmI,
                 AI2 = _timerForVisualEffects
             });
         }
