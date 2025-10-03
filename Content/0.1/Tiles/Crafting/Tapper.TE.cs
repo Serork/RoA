@@ -87,11 +87,11 @@ class TapperTE : ModTileEntity {
     public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
 
     public override void SaveData(TagCompound tag) {
-        tag["tapperTime"] = Time;
+        tag[RoA.ModName + "tapperTime"] = Time;
     }
 
     public override void LoadData(TagCompound tag) {
-        Time = tag.GetDouble("tapperTime");
+        Time = tag.GetDouble(RoA.ModName + "tapperTime");
     }
 
     public override void NetSend(BinaryWriter writer) {

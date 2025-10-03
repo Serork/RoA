@@ -52,17 +52,17 @@ sealed class BackwoodsFogHandler : ModSystem {
     public override void OnWorldUnload() => Reset();
 
     public override void SaveWorldData(TagCompound tag) {
-        tag["backwoods" + nameof(IsFogActive)] = IsFogActive;
-        tag["backwoods" + nameof(Opacity)] = Opacity;
-        tag["backwoods" + nameof(Opacity2)] = Opacity2;
-        tag["backwoods" + nameof(_fogTime)] = _fogTime;
+        tag[RoA.ModName + "backwoods" + nameof(IsFogActive)] = IsFogActive;
+        tag[RoA.ModName + "backwoods" + nameof(Opacity)] = Opacity;
+        tag[RoA.ModName + "backwoods" + nameof(Opacity2)] = Opacity2;
+        tag[RoA.ModName + "backwoods" + nameof(_fogTime)] = _fogTime;
     }
 
     public override void LoadWorldData(TagCompound tag) {
-        IsFogActive = tag.GetBool("backwoods" + nameof(IsFogActive));
-        Opacity = tag.GetFloat("backwoods" + nameof(Opacity));
-        Opacity2 = tag.GetFloat("backwoods" + nameof(Opacity2));
-        _fogTime = tag.GetFloat("backwoods" + nameof(_fogTime));
+        IsFogActive = tag.GetBool(RoA.ModName + "backwoods" + nameof(IsFogActive));
+        Opacity = tag.GetFloat(RoA.ModName + "backwoods" + nameof(Opacity));
+        Opacity2 = tag.GetFloat(RoA.ModName + "backwoods" + nameof(Opacity2));
+        _fogTime = tag.GetFloat(RoA.ModName + "backwoods" + nameof(_fogTime));
     }
 
     private static void Reset() {

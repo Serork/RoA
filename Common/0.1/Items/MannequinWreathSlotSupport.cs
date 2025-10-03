@@ -67,36 +67,36 @@ sealed class MannequinWreathSlotSupport : ILoadable {
         }
 
         public override void SaveWorldData(TagCompound tag) {
-            tag[$"{DATA}COUNT"] = _count;
+            tag[RoA.ModName + $"{DATA}COUNT"] = _count;
             for (int i = 0; i < _count; i++) {
                 ExtraMannequinData data = MannequinsInWorld[i];
-                tag[$"{DATA}pos{i}X"] = data.Position.X;
-                tag[$"{DATA}pos{i}Y"] = data.Position.Y;
+                tag[RoA.ModName + $"{DATA}pos{i}X"] = data.Position.X;
+                tag[RoA.ModName + $"{DATA}pos{i}Y"] = data.Position.Y;
 
                 if (!data.Wreath.IsEmpty()) {
-                    tag[$"{DATA}itemType{i}"] = data.Wreath.type;
-                    tag[$"{DATA}itemPrefix{i}"] = data.Wreath.prefix;
+                    tag[RoA.ModName + $"{DATA}itemType{i}"] = data.Wreath.type;
+                    tag[RoA.ModName + $"{DATA}itemPrefix{i}"] = data.Wreath.prefix;
                 }
                 if (!data.Dye.IsEmpty()) {
-                    tag[$"{DATA}itemType2{i}"] = data.Dye.type;
+                    tag[RoA.ModName + $"{DATA}itemType2{i}"] = data.Dye.type;
                 }
             }
         }
 
         public override void LoadWorldData(TagCompound tag) {
-            _count = tag.GetInt($"{DATA}COUNT");
+            _count = tag.GetInt(RoA.ModName + $"{DATA}COUNT");
             int i = 0;
             MannequinsInWorld.Clear();
             while (i < _count) {
-                int x = tag.GetShort($"{DATA}pos{i}X");
-                int y = tag.GetShort($"{DATA}pos{i}Y");
+                int x = tag.GetShort(RoA.ModName + $"{DATA}pos{i}X");
+                int y = tag.GetShort(RoA.ModName + $"{DATA}pos{i}Y");
                 ExtraMannequinData data = new();
                 data.Position = new Point16(x, y);
                 data.Wreath = new Item();
-                data.Wreath.SetDefaults(tag.GetInt($"{DATA}itemType{i}"));
-                data.Wreath.Prefix(tag.GetInt($"{DATA}itemPrefix{i}"));
+                data.Wreath.SetDefaults(tag.GetInt(RoA.ModName + $"{DATA}itemType{i}"));
+                data.Wreath.Prefix(tag.GetInt(RoA.ModName + $"{DATA}itemPrefix{i}"));
                 data.Dye = new Item();
-                data.Dye.SetDefaults(tag.GetInt($"{DATA}itemType2{i}"));
+                data.Dye.SetDefaults(tag.GetInt(RoA.ModName + $"{DATA}itemType2{i}"));
                 MannequinsInWorld.Add(data);
 
                 i++;

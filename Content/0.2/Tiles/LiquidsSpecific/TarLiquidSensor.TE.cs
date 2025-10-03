@@ -215,13 +215,13 @@ sealed class TarLiquidSensorTE : ModTileEntity {
 	}
 
 	public override void LoadData(TagCompound tag) {
-		logicCheck = (LogicCheckType)tag.GetByte(nameof(logicCheck));
-		On = tag.GetBool(nameof(On));
+		logicCheck = (LogicCheckType)tag.GetByte(RoA.ModName + nameof(logicCheck));
+		On = tag.GetBool(RoA.ModName + nameof(On));
 	}
 
 	public override void SaveData(TagCompound tag) {
-		tag[nameof(logicCheck)] = (byte)logicCheck;
-		tag[nameof(On)] = On;
+		tag[RoA.ModName + nameof(logicCheck)] = (byte)logicCheck;
+		tag[RoA.ModName + nameof(On)] = On;
 	}
 
 	public override string ToString() {

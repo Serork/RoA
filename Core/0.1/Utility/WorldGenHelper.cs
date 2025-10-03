@@ -35,8 +35,8 @@ static class WorldGenHelper {
         public override void OnWorldLoad() => worldSurfaceLow = 0;
         public override void OnWorldUnload() => worldSurfaceLow = 0;
 
-        public override void SaveWorldData(TagCompound tag) => tag["backwoods" + nameof(worldSurfaceLow)] = worldSurfaceLow;
-        public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt("backwoods" + nameof(worldSurfaceLow));
+        public override void SaveWorldData(TagCompound tag) => tag[RoA.ModName + "backwoods" + nameof(worldSurfaceLow)] = worldSurfaceLow;
+        public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt(RoA.ModName + "backwoods" + nameof(worldSurfaceLow));
     }
 
     public static bool CustomEmptyTileCheck(int startX, int endX, int startY, int endY, params int[] ignoreIDs) {

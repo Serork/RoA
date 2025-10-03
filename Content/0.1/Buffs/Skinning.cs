@@ -48,7 +48,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         }
 
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        tag[nameof(handler.StartSpoilingTime)] = handler.StartSpoilingTime;
+        tag[RoA.ModName + nameof(handler.StartSpoilingTime)] = handler.StartSpoilingTime;
     }
 
     public override void LoadData(Item item, TagCompound tag) {
@@ -57,7 +57,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         }
 
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        handler.StartSpoilingTime = tag.Get<ulong>(nameof(handler.StartSpoilingTime));
+        handler.StartSpoilingTime = tag.Get<ulong>(RoA.ModName + nameof(handler.StartSpoilingTime));
     }
 
     public static bool IsValidToHandle(Item item) => item.ModItem is AnimalLeather;
