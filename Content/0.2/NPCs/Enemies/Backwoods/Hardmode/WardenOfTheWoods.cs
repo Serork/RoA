@@ -17,11 +17,13 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WardenOfTheWoods;
+using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WoodpeckerTongue;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
@@ -121,6 +123,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         NPC.aiStyle = -1;
         NPC.noGravity = true;
         NPC.noTileCollide = true;
+        NPC.HitSound = new SoundStyle(ResourceManager.ItemSounds + "WoodBreakStrong") with { Pitch = 0.3f, Volume = 0.3f, PitchVariance = 0.2f };
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
@@ -214,6 +217,14 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                         }
                     }
                     wardenOfTheWoodsValues.ShouldTeleport = false;
+
+                    //if (Main.rand.NextBool(1000)) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Active") with { PitchVariance = 0.1f, Pitch = -0.5f, Volume = 0.3f, MaxInstances = 2 }, NPC.Center);
+                    if (Main.rand.NextBool(3)) {
+                        int num730 = Dust.NewDust(NPC.position + new Vector2 (10f, 30f), NPC.width / 2, 8, DustID.WoodFurniture, 0, 1f, 0, _alt ? new Color(85, 90, 80) : new Color(100, 100, 80), 1f + Main.rand.NextFloatRange(0.1f));
+                        Main.dust[num730].noGravity = true;
+                        Main.dust[num730].velocity = new Vector2 (0, Main.rand.NextFloat(6f));
+                    }
+
                     break;
                 case WardenOfTheWoodsValues.AIState.HasTarget:
                 case WardenOfTheWoodsValues.AIState.Attacking:
@@ -243,6 +254,8 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                             Teleport();
 
                             _teleportOpacity = 0.5f;
+
+                            SoundEngine.PlaySound(SoundID.Item46 with { Pitch = 0.4f, Volume = 0.75f }, NPC.Center);
 
                             SpawnAfterTeleportEffects();
                         }
@@ -447,6 +460,28 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 }
                 break;
         }
+    }
+    public override void HitEffect(NPC.HitInfo hit) {
+        for (int num923 = 0; num923 < 3; num923++) {
+            int num730 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.WoodFurniture, 0, 0, 0, _alt ? new Color(185, 190, 180) : new Color(200, 200, 180), 1f + Main.rand.NextFloatRange(0.1f));
+        }
+    }
+
+    public override void OnKill() {
+        for (int num923 = 0; num923 < 15; num923++) {
+            int num730 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.WoodFurniture, 0, 0, 0, _alt ? new Color(185, 190, 180) : new Color(200, 200, 180), 1f + Main.rand.NextFloatRange(0.1f));
+        }
+        for (int m = 0; m < 30; m++) {
+            Color newColor2 = _areaColor!.Value;
+            Vector2 position = NPC.Center;
+            int num69 = Dust.NewDust(position, 0, 0, DustID.TintableDustLighted, 0f, 0f, 100, newColor2, Main.rand.NextFloat() + 2f);
+            Main.dust[num69].position = position + Vector2.UnitY * 10f + Main.rand.NextVector2Circular(NPC.width, NPC.height) * 0.25f;
+            Main.dust[num69].noGravity = true;
+            Main.dust[num69].noLight = true;
+            Main.dust[num69].noLightEmittence = true;
+        }
+        SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves2") with { Pitch = -0.3f, Volume = 0.7f }, NPC.Center);
+        SoundEngine.PlaySound(SoundID.Item66 with { Pitch = 0.25f, Volume = 0.75f }, NPC.Center);
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {

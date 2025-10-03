@@ -9,7 +9,7 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using Terraria;
-
+using Terraria.Audio;
 using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WardenOfTheWoods;
 
 namespace RoA.Content.Projectiles.Enemies;
@@ -66,6 +66,8 @@ sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
         if (_currentAttackTime > -10f) {
             _currentAttackTime -= 1f;
         }
+
+        if (Circle2Progress == 0.75f) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "PurifyBig") with { PitchVariance = 0.1f }, Projectile.Center);
 
         FinalScale = 2f;
     }

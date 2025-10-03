@@ -10,6 +10,8 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Enemies;
 
@@ -54,8 +56,12 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
         FinalScaleFactor = 1.35f;
 
         if (CircleProgress >= 1f) {
+            SoundEngine.PlaySound(SoundID.Item66 with { Pitch = 0.5f, Volume = 0.75f }, Projectile.Center);
             Projectile.Kill();
         }
+
+        if (CurrentAttackTime == 0.25f) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "PurifySmall") with { PitchVariance = 0.1f, Volume = 0.75f }, Projectile.Center);
+
     }
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox) {
@@ -63,7 +69,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
         hitbox.Inflate(size, size);
     }
 
-    public override bool? CanDamage() => CircleProgress >= 0.5f;
+    public override bool? CanDamage() => CircleProgress >= 0.75f;
 
     public override void OnKill(int timeLeft) {
         int num67 = 20;
