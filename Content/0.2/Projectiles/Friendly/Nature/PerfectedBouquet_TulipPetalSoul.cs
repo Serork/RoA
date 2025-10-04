@@ -511,6 +511,9 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                                             Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f) * 1.5f,
                                             Alpha: TulipDustFrame);
             dust.customData = Main.rand.NextFloatRange(50f);
+            if (onKill) {
+                dust.velocity *= 0.75f;
+            }
         }
     }
 
