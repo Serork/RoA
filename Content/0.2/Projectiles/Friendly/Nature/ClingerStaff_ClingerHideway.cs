@@ -312,6 +312,9 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
                     currentSegmentInfo.Position = startPosition;
                     continue;
                 }
+                if (startPosition.Distance(destination) < 1f) {
+                    continue;
+                }
                 currentSegmentInfo.Position = centerPoint(startPosition, destination);
             }
         }
