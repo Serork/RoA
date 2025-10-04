@@ -31,19 +31,6 @@ abstract class WreathItem : NatureItem {
         public Color GlowColor { get; }
     }
 
-    public override void Load() {
-        On_ItemFilters.AAccessories.IsAnAccessoryOfType += AAccessories_IsAnAccessoryOfType;
-    }
-
-    private bool AAccessories_IsAnAccessoryOfType(On_ItemFilters.AAccessories.orig_IsAnAccessoryOfType orig, ItemFilters.AAccessories self, Item entry, ItemFilters.AAccessories.AccessoriesCategory categoryType) {
-        bool flag = entry.ModItem != null && entry.ModItem is WreathItem;
-        if (flag && categoryType == AccessoriesCategory.Misc) {
-            return true;
-        }
-
-        return orig(self, entry, categoryType);
-    }
-
     public override bool CanEquipAccessory(Player player, int slot, bool modded) => modded;
 
     public sealed override void SetStaticDefaults() {

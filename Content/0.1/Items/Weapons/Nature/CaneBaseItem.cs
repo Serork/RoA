@@ -25,26 +25,13 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Nature;
 
 abstract class CaneBaseItem<T> : NatureItem where T : CaneBaseProjectile {
-    public override void Load() {
-        On_Player.TryAllowingItemReuse += On_Player_TryAllowingItemReuse;
-    }
-
-    private void On_Player_TryAllowingItemReuse(On_Player.orig_TryAllowingItemReuse orig, Player self, Item sItem) {
-        orig(self, sItem);
-
-        bool flag = false;
-        if (self.autoReuseAllWeapons && sItem.IsANatureWeapon() && sItem.useStyle == ItemUseStyleID.HiddenAnimation && sItem.shoot == ProjectileID.WoodenArrowFriendly)
-            flag = true;
-
-        if (flag)
-            self.releaseUseItem = true;
-    }
-
     protected virtual ushort ProjectileTypeToCreate() => (ushort)ProjectileID.WoodenArrowFriendly;
 
     protected virtual ushort TimeToCastAttack(Player player) => (ushort)(NatureWeaponHandler.GetUseSpeed(Item, player) * 2);
 
-    public override void SetStaticDefaults() => CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    public override void SetStaticDefaults() {
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+    }
 
     protected sealed override void SafeSetDefaults2() {
         Item.noMelee = true;
