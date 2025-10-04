@@ -220,9 +220,9 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
 
                     //if (Main.rand.NextBool(1000)) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Active") with { PitchVariance = 0.1f, Pitch = -0.5f, Volume = 0.3f, MaxInstances = 2 }, NPC.Center);
                     if (Main.rand.NextBool(3)) {
-                        int num730 = Dust.NewDust(NPC.position + new Vector2 (10f, 30f), NPC.width / 2, 8, DustID.WoodFurniture, 0, 1f, 0, _alt ? new Color(85, 90, 80) : new Color(100, 100, 80), 1f + Main.rand.NextFloatRange(0.1f));
+                        int num730 = Dust.NewDust(NPC.position + new Vector2(10f, 30f + 15f * Main.rand.NextFloat()), NPC.width / 2, 8, DustID.WoodFurniture, 0, 1f, 0, _alt ? new Color(85, 90, 80) : new Color(100, 100, 80), 1f + Main.rand.NextFloatRange(0.1f));
                         Main.dust[num730].noGravity = true;
-                        Main.dust[num730].velocity = new Vector2 (0, Main.rand.NextFloat(6f));
+                        Main.dust[num730].velocity = new Vector2(0, Main.rand.NextFloat(6f) * Main.rand.NextFloat(0.5f, 1f));
                     }
 
                     break;
