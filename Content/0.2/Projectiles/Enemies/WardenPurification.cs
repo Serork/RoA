@@ -55,6 +55,26 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
 
         FinalScaleFactor = 1.35f;
 
+        int type = DustID.TintableDustLighted;
+        for (int i = 0; i < 2; i++) {
+            if (Main.rand.NextBool(7)) {
+                Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
+                Vector2 center = Projectile.Center + new Vector2(Projectile.direction == 1 ? 3f : -3f, 0f) + Projectile.velocity + spinningpoint * (Projectile.width * 0.85f * Projectile.scale);
+                Vector2 rotationPoint = spinningpoint.RotatedBy(0.785) * Projectile.direction;
+                Vector2 position = center + rotationPoint * 5f;
+                int dust = Dust.NewDust(position, 0, 0, type, newColor: _areaColor, Alpha: 200);
+                Main.dust[dust].position = position;
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f * Projectile.scale;
+                Main.dust[dust].velocity = rotationPoint * Projectile.scale * -2f;
+                Main.dust[dust].scale = Main.rand.NextFloat() * Main.rand.NextFloat(1f, 1.25f);
+                Main.dust[dust].scale *= Projectile.scale * 1.5f;
+                Main.dust[dust].velocity += Projectile.velocity * 1.25f;
+                Main.dust[dust].position += Main.dust[dust].velocity * -5f;
+                Main.dust[dust].noLight = true;
+            }
+        }
+
         if (CircleProgress >= 1f) {
             SoundEngine.PlaySound(SoundID.Item66 with { Pitch = 0.5f, Volume = 0.75f }, Projectile.Center);
             Projectile.Kill();

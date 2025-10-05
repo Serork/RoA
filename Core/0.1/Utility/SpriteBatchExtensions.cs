@@ -8,14 +8,14 @@ using Terraria;
 namespace RoA.Core.Utility;
 
 static partial class SpriteBatchExtensions {
-    public static void Line(this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, SpriteEffects effects = 0) => LineAngle(spriteBatch, start, Utils.AngleTo(start, end), Vector2.Distance(start, end), color, effects);
-    public static void Line(this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, float thickness, SpriteEffects effects = 0) => LineAngle(spriteBatch, start, Utils.AngleTo(start, end), Vector2.Distance(start, end), color, thickness, effects);
+    public static void Line(this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, SpriteEffects effects = 0, Texture2D? texture = null) => LineAngle(spriteBatch, start, Utils.AngleTo(start, end), Vector2.Distance(start, end), color, effects, texture);
+    public static void Line(this SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color, float thickness, SpriteEffects effects = 0, Texture2D? texture = null) => LineAngle(spriteBatch, start, Utils.AngleTo(start, end), Vector2.Distance(start, end), color, thickness, effects, texture);
 
-    public static void LineAngle(this SpriteBatch spriteBatch, Vector2 start, float angle, float length, Color color, SpriteEffects effects = 0) =>
-        spriteBatch.Draw(ResourceManager.Pixel, start - Main.screenPosition, null, color, angle, Vector2.Zero, new Vector2(length, 1f), effects, 0f);
+    public static void LineAngle(this SpriteBatch spriteBatch, Vector2 start, float angle, float length, Color color, SpriteEffects effects = 0, Texture2D? texture = null) =>
+        spriteBatch.Draw(texture ?? ResourceManager.Pixel, start - Main.screenPosition, null, color, angle, Vector2.Zero, texture != null ? texture.Size() / 2f : new Vector2(length, 1f), effects, 0f);
 
-    public static void LineAngle(this SpriteBatch spriteBatch, Vector2 start, float angle, float length, Color color, float thickness, SpriteEffects effects = 0) =>
-        spriteBatch.Draw(ResourceManager.Pixel, start - Main.screenPosition, null, color, angle, new Vector2(0.0f, 0.5f), new Vector2(length, thickness), effects, 0f);
+    public static void LineAngle(this SpriteBatch spriteBatch, Vector2 start, float angle, float length, Color color, float thickness, SpriteEffects effects = 0, Texture2D? texture = null) =>
+        spriteBatch.Draw(texture ?? ResourceManager.Pixel, start - Main.screenPosition, null, color, angle, texture != null ? texture.Size() / 2f : new Vector2(0.0f, 0.5f), new Vector2(length, thickness), effects, 0f);
 
     public static void With(this SpriteBatch spriteBatch,
                             BlendState blendState,

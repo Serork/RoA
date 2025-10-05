@@ -169,7 +169,7 @@ sealed class HellfireClawsSlash : ClawsSlash {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        for (int index = 0; index < 10; index += 2) {
+        for (int index = 0; index < 8; index += 2) {
             DrawItself(ref lightColor, oldRot[index]);
         }
         Texture2D value = TextureAssets.Extra[98].Value;

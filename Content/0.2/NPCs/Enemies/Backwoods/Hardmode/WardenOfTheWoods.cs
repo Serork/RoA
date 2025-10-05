@@ -228,6 +228,26 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                     break;
                 case WardenOfTheWoodsValues.AIState.HasTarget:
                 case WardenOfTheWoodsValues.AIState.Attacking:
+                    int type = DustID.TintableDustLighted;
+                    for (int i = 0; i < 1; i++) {
+                        if (Main.rand.NextBool(10)) {
+                            Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
+                            Vector2 center = _initialPosition + new Vector2(NPC.direction == 1 ? 3f : -3f, 0f) + spinningpoint * (NPC.width * 4f * NPC.scale);
+                            Vector2 rotationPoint = spinningpoint.RotatedBy(0.785) * NPC.direction;
+                            Vector2 position = center + rotationPoint * 5f;
+                            int dust = Dust.NewDust(position, 0, 0, type, newColor: _areaColor!.Value, Alpha: 200);
+                            Main.dust[dust].position = position;
+                            Main.dust[dust].noGravity = true;
+                            Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f * NPC.scale;
+                            Main.dust[dust].velocity = rotationPoint * NPC.scale * -2f;
+                            Main.dust[dust].scale = Main.rand.NextFloat() * Main.rand.NextFloat(1f, 1.25f);
+                            Main.dust[dust].scale *= NPC.scale * 1.5f;
+                            //Main.dust[dust].velocity += NPC.velocity * 1.25f;
+                            Main.dust[dust].position += Main.dust[dust].velocity * -5f;
+                            Main.dust[dust].noLight = true;
+                        }
+                    }
+
                     if (wardenOfTheWoodsValues.StateTimer < 0f) {
                         moveTo(_initialPosition);
                         if (wardenOfTheWoodsValues.StateTimer == -0.5f) {
