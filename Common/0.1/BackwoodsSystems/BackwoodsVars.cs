@@ -189,7 +189,7 @@ sealed class BackwoodsVars : ModSystem {
         public override bool Deserialize(BinaryReader reader, int userId) {
             BackwoodsTreeCountInWorld = reader.ReadUInt16();
             AllTreesWorldPositions.Clear();
-            AllTreesWorldPositions = new List<Point16>(BackwoodsTreeCountInWorld);
+            AllTreesWorldPositions = [];
             for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
                 AllTreesWorldPositions.Add(new Point16(reader.ReadUInt16(), reader.ReadUInt16()));
             }
