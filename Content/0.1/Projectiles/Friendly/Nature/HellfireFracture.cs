@@ -231,6 +231,7 @@ sealed class HellfireFracture : NatureProjectile {
     }
 
     private void DrawSlash(float mult, Color lightColor, Vector2? posExtra = null, float scale = 1f) {
+        scale *= Utils.GetLerpValue(0f, 20f, Projectile.timeLeft, true);
         uint seed = (uint)(Projectile.position.GetHashCode() + Projectile.velocity.GetHashCode());
         float rot = Helper.VelocityAngle(Projectile.velocity) + MathHelper.PiOver2;
         rot += MathHelper.Pi;
