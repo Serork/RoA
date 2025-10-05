@@ -1,11 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.Utilities;
-
-using static Terraria.GameContent.Creative.ItemFilters.AAccessories;
 
 namespace RoA.Content.Items.Equipables.Wreaths;
 
