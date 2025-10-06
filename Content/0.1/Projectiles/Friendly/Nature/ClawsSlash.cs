@@ -278,6 +278,10 @@ class ClawsSlash : NatureProjectile {
             }
         }
 
+        if (Main.gamePaused || !Main.instance.IsActive || Lighting.UpdateEveryFrame && !Main.rand.NextBool(4)) {
+            return;
+        }
+
         if (SpawnSlashDust && FirstSlashColor != null && SecondSlashColor != null) {
             if (Projectile.localAI[0] >= Projectile.ai[1] * 0.7f && Projectile.localAI[0] < Projectile.ai[1] + Projectile.ai[1] * 0.2f) {
                 Color color1 = FirstSlashColor.Value;
