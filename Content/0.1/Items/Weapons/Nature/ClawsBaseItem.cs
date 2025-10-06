@@ -17,11 +17,15 @@ namespace RoA.Content.Items.Weapons.Nature;
 
 [WeaponOverlay(WeaponType.Claws)]
 abstract class ClawsBaseItem : NatureItem {
-    private static float FIRSTATTACKSPEEDMODIFIER => 0.75f;
-    private static float SECONDATTACKSPEEDMODIFIER => 0.75f;
-    private static float THIRDATTACKSPEEDMODIFIER => 1f;
-
     public virtual bool IsHardmodeClaws { get; } = false;
+
+    public virtual float FirstAttackSpeedModifier { get; } = 1f;
+    public virtual float SecondAttackSpeedModifier { get; } = 1f;
+    public virtual float ThirdAttackSpeedModifier { get; } = 1f;
+
+    public virtual float FirstAttackScaleModifier { get; } = 1f;
+    public virtual float SecondAttackScaleModifier { get; } = 1f;
+    public virtual float ThirdAttackScaleModifier { get; } = 1f;
 
     public override void UseStyle(Player player, Rectangle heldItemFrame) {
         if (!IsHardmodeClaws || player.ItemAnimationJustStarted) {
@@ -114,13 +118,13 @@ abstract class ClawsBaseItem : NatureItem {
         ClawsHandler.ClawsAttackType clawsAttackType = player.GetClawsHandler().AttackType;
         switch (clawsAttackType) {
             case ClawsHandler.ClawsAttackType.Back:
-                attackTime = (ushort)(attackTime * FIRSTATTACKSPEEDMODIFIER);
+                attackTime = (ushort)(attackTime * FirstAttackSpeedModifier);
                 break;
             case ClawsHandler.ClawsAttackType.Front:
-                attackTime = (ushort)(attackTime * SECONDATTACKSPEEDMODIFIER);
+                attackTime = (ushort)(attackTime * SecondAttackSpeedModifier);
                 break;
             case ClawsHandler.ClawsAttackType.Both:
-                attackTime = (ushort)(attackTime * THIRDATTACKSPEEDMODIFIER);
+                attackTime = (ushort)(attackTime * ThirdAttackSpeedModifier);
                 break;
         }
         Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/,

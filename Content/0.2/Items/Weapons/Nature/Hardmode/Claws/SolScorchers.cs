@@ -12,6 +12,14 @@ namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 sealed class SolScorchers : ClawsBaseItem {
     public override bool IsHardmodeClaws => true;
 
+    public override float FirstAttackSpeedModifier => 0.75f;
+    public override float SecondAttackSpeedModifier => 0.75f;
+    public override float ThirdAttackSpeedModifier => 1f;
+
+    public override float FirstAttackScaleModifier => 1f;
+    public override float SecondAttackScaleModifier => 1.375f;
+    public override float ThirdAttackScaleModifier => 1.75f;
+
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(34, 36);
         Item.SetWeaponValues(30, 4.2f);
