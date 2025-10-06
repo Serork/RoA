@@ -359,14 +359,20 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     private void Teleport() {
         Player target = NPC.GetTargetPlayer();
         if (Helper.SinglePlayerOrServer) {
-            Vector2 random = Main.rand.NextVector2CircularEdge(TARGETDISTANCE, TARGETDISTANCE) * 0.75f;
-            void randomize() => NPC.Center = _initialPosition = target.Center + random;
-            randomize();
-            int attempts = 100;
-            while (attempts-- > 0 && !Collision.CanHit(NPC.Center, NPC.width, NPC.height, target.Center, target.width, target.height)) {
-                randomize();
+            //Vector2 random = Main.rand.NextVector2CircularEdge(TARGETDISTANCE, TARGETDISTANCE) * 0.75f;
+            //void randomize() => NPC.Center = _initialPosition = target.Center + random;
+            //randomize();
+            //int attempts = 100;
+            //while (attempts-- > 0 && !Collision.CanHit(NPC.Center, NPC.width, NPC.height, target.Center, target.width, target.height)) {
+            //    randomize();
+            //}
+            Point point14 = NPC.Center.ToTileCoordinates();
+            Point point15 = target.Center.ToTileCoordinates();
+            Vector2 chosenTile2 = Vector2.Zero;
+            if (NPC.AI_AttemptToFindTeleportSpot(ref chosenTile2, point15.X, point15.Y, 20, 12, 1, solidTileCheckCentered: true, teleportInAir: true)) {
+                NPC.Center = _initialPosition = chosenTile2.ToWorldCoordinates();
+                SetTargetPosition();
             }
-            SetTargetPosition();
             NPC.netUpdate = true;
         }
     }
