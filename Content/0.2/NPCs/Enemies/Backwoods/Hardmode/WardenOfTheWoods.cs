@@ -538,7 +538,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 Clip = clip,
                 Origin = origin,
                 Color = color * 0.8f,
-                Scale = scale * _teleportOpacity * 0.5f
+                Scale = scale * _teleportOpacity * 0.45f
             }, blendState: BlendState.Additive);
             spriteBatch.DrawWithSnapshot(() => {
                 NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, color2 * 0.625f * fadeOutProgress, scale: scale.X * 0.4f, texture: glowTexture, xOffset: xOffset, yOffset: yOffset);
