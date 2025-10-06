@@ -108,8 +108,8 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
     }
 
     protected override void Draw(ref Color lightColor) {
-        Texture2D circle = ResourceManager.Circle;
-        //Texture2D circle = ResourceManager.Circle3;
+        //Texture2D circle = ResourceManager.Circle;
+        Texture2D circle = ResourceManager.Circle3;
         Texture2D circle2 = ResourceManager.Circle2;
         Texture2D Texture = circle;
         SpriteBatch spritebatch = Main.spriteBatch;
@@ -137,11 +137,11 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
                 Utils.Remap(wave, waveMin, waveMax, waveMin * 1.5f, waveMax, true)) : 1f) *
                 disappearValue * (Projectile.ai[1] + 1f);
             spritebatch.DrawWithSnapshot(() => {
-                spritebatch.Draw(Texture, Position - Main.screenPosition, null, color2 * 0.625f * fadeOutProgress, Projectile.rotation, origin, Projectile.scale * scale * 0.45f, SpriteEffects.None, 0f);
+                spritebatch.Draw(Texture, Position - Main.screenPosition, null, color2 * 0.625f * fadeOutProgress, Projectile.rotation, origin, Projectile.scale * scale/* * 0.45f*/, SpriteEffects.None, 0f);
             }, blendState: BlendState.Additive);
 
             spritebatch.DrawWithSnapshot(() => {
-                spritebatch.Draw(circle2, Position - Main.screenPosition, null, color3 * 0.625f * fadeOutProgress * CircleProgress, Projectile.rotation, origin2, Projectile.scale * scale * CircleProgress * FinalScaleFactor, SpriteEffects.None, 0f);
+                spritebatch.Draw(circle2, Position - Main.screenPosition, null, color3 * 0.75f * fadeOutProgress * CircleProgress, Projectile.rotation, origin2, Projectile.scale * scale * CircleProgress * FinalScaleFactor * 0.9f, SpriteEffects.None, 0f);
             }, blendState: BlendState.Additive);
         }
     }
