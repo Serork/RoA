@@ -68,7 +68,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
                 Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f * Projectile.scale;
                 Main.dust[dust].velocity = rotationPoint * Projectile.scale * -2f;
                 Main.dust[dust].scale = Main.rand.NextFloat() * Main.rand.NextFloat(1f, 1.25f);
-                Main.dust[dust].scale *= Projectile.scale * 1.5f;
+                Main.dust[dust].scale *= Projectile.scale * 1.75f;
                 Main.dust[dust].velocity += Projectile.velocity * 1.25f;
                 Main.dust[dust].position += Main.dust[dust].velocity * -5f;
                 Main.dust[dust].noLight = true;
@@ -136,7 +136,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
                 Utils.Remap(wave, waveMin, waveMax, waveMin * 1.5f, waveMax, true)) : 1f) *
                 disappearValue * (Projectile.ai[1] + 1f);
             spritebatch.DrawWithSnapshot(() => {
-                spritebatch.Draw(Texture, Position - Main.screenPosition, null, color2 * 0.625f * fadeOutProgress, Projectile.rotation, origin, Projectile.scale * scale, SpriteEffects.None, 0f);
+                spritebatch.Draw(Texture, Position - Main.screenPosition, null, color2 * 0.625f * fadeOutProgress, Projectile.rotation, origin, Projectile.scale * scale * 0.45f, SpriteEffects.None, 0f);
             }, blendState: BlendState.Additive);
 
             spritebatch.DrawWithSnapshot(() => {

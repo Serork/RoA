@@ -241,7 +241,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                             Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f * NPC.scale;
                             Main.dust[dust].velocity = rotationPoint * NPC.scale * -2f;
                             Main.dust[dust].scale = Main.rand.NextFloat() * Main.rand.NextFloat(1f, 1.25f);
-                            Main.dust[dust].scale *= NPC.scale * 1.5f;
+                            Main.dust[dust].scale *= NPC.scale * 1.75f;
                             //Main.dust[dust].velocity += NPC.velocity * 1.25f;
                             Main.dust[dust].position += Main.dust[dust].velocity * -5f;
                             Main.dust[dust].noLight = true;
@@ -537,7 +537,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 Clip = clip,
                 Origin = origin,
                 Color = color * 0.8f,
-                Scale = scale * _teleportOpacity
+                Scale = scale * _teleportOpacity * 0.45f
             }, blendState: BlendState.Additive);
             spriteBatch.DrawWithSnapshot(() => {
                 NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, color2 * 0.625f * fadeOutProgress, scale: scale.X * 0.4f, texture: glowTexture, xOffset: xOffset, yOffset: yOffset);

@@ -36,6 +36,7 @@ static class ResourceManager {
     public static Texture2D DefaultSparkle => ModContent.Request<Texture2D>("RoA/Resources/Textures/VisualEffects/DefaultSparkle", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Circle => ModContent.Request<Texture2D>(Textures + "Circle", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Circle2 => ModContent.Request<Texture2D>(Textures + "Circle2", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Circle3 => ModContent.Request<Texture2D>(Textures + "Circle3", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Blood => ModContent.Request<Texture2D>(Textures + "Blood", AssetRequestMode.ImmediateLoad).Value;
 
     public static string UITextures => Textures + "UI/";
