@@ -14,6 +14,7 @@ using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
@@ -28,7 +29,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 class ClawsSlash : NatureProjectile {
-    private float _scale;
+    private float _clawsExtraScale;
     private Color? _firstSlashColor = null, _secondSlashColor = null;
     private bool _soundPlayed;
 
@@ -109,11 +110,13 @@ class ClawsSlash : NatureProjectile {
             }
             position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
             velocity = angle.ToRotationVector2() * velocity * 0.5f;
+            float scale = Projectile.scale;
             int layer = VisualEffectLayer.ABOVENPCS;
             VisualEffectSystem.New<ClawsSlashHit>(layer).
                 Setup(position,
                       velocity,
-                      color);
+                      color,
+                      scale: scale);
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
             }
@@ -143,11 +146,13 @@ class ClawsSlash : NatureProjectile {
             }
             position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
             velocity = angle.ToRotationVector2() * velocity * 0.5f;
+            float scale = Projectile.scale;
             int layer = VisualEffectLayer.ABOVENPCS;
             VisualEffectSystem.New<ClawsSlashHit>(layer).
                 Setup(position,
                       velocity,
-                      color);
+                      color,
+                      scale: scale);
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
             }
@@ -306,7 +311,7 @@ class ClawsSlash : NatureProjectile {
         Projectile.rotation = (float)(MathHelper.Pi * (double)num1 * (double)fromValue + (double)rotation + (double)num1 * MathHelper.Pi) + player.fullRotation;
 
         Projectile.scale = num3 + fromValue * num2;
-        Projectile.scale *= _scale;
+        Projectile.scale *= _clawsExtraScale;
 
         if (CanFunction) {
             for (float i = -MathHelper.PiOver4; i <= MathHelper.PiOver4; i += MathHelper.PiOver2) {
@@ -331,11 +336,12 @@ class ClawsSlash : NatureProjectile {
             return;
         }
 
-        if (_scale == 0f) {
-            _scale = 1f;
+        if (_clawsExtraScale == 0f) {
+            _clawsExtraScale = 1f;
             float scale = Main.player[Projectile.owner].CappedMeleeOrDruidScale();
+            GetExtraSizeByAttackType(ref scale);
             if (scale != 1f) {
-                _scale *= scale;
+                _clawsExtraScale *= scale;
                 Projectile.scale *= scale;
             }
         }
@@ -351,5 +357,20 @@ class ClawsSlash : NatureProjectile {
             return;
         }
         Projectile.Kill();
+    }
+
+    protected virtual void GetExtraSizeByAttackType(ref float scale) {
+        ClawsHandler.ClawsAttackType clawsAttackType = Owner.GetClawsHandler().AttackType;
+        switch (clawsAttackType) {
+            case ClawsHandler.ClawsAttackType.Back:
+                scale *= 1f;
+                break;
+            case ClawsHandler.ClawsAttackType.Front:
+                scale *= 1f;
+                break;
+            case ClawsHandler.ClawsAttackType.Both:
+                scale *= 1.75f;
+                break;
+        }
     }
 }

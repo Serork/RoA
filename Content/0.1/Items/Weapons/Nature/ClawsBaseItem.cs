@@ -9,7 +9,6 @@ using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 using static Terraria.Player;
@@ -107,8 +106,18 @@ abstract class ClawsBaseItem : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        ushort attackTime = NatureWeaponHandler.GetUseSpeedForClaws(Item, player);
+        ClawsHandler.ClawsAttackType clawsAttackType = player.GetClawsHandler().AttackType;
+        switch (clawsAttackType) {
+            case ClawsHandler.ClawsAttackType.Back:
+            case ClawsHandler.ClawsAttackType.Front:
+                attackTime = (ushort)(attackTime * 0.75f);
+                break;
+            case ClawsHandler.ClawsAttackType.Both:
+                break;
+        }
         Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/,
-            NatureWeaponHandler.GetUseSpeedForClaws(Item, player));
+            attackTime);
 
         return false;
     }

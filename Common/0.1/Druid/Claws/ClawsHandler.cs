@@ -39,8 +39,12 @@ sealed class ClawsHandler : ModPlayer {
     }
 
     public override void PostItemCheck() {
-        if (AttackCount != 0 && !Player.GetSelectedItem().IsNatureClaws(out ClawsBaseItem clawsBaseItem) && clawsBaseItem.IsHardmodeClaws) {
-            AttackCount = 0;
+        if (AttackCount != 0) {
+            Item selectedItem = Player.GetSelectedItem();
+            bool hasClaws = selectedItem.IsNatureClaws(out ClawsBaseItem clawsBaseItem) && clawsBaseItem.IsHardmodeClaws;
+            if (!hasClaws) {
+                AttackCount = 0;
+            }
         }
     }
 

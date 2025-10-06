@@ -13,14 +13,18 @@ using Terraria.ModLoader;
 namespace RoA.Content.VisualEffects;
 
 sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
+    private float _baseScale;
+
     protected override void SetDefaults() {
-        TimeLeft = MaxTimeLeft = 30;
+        TimeLeft = 30;
+
+        _baseScale = Scale * 0.85f;
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
         float t = (float)((MaxTimeLeft - TimeLeft) / (double)MaxTimeLeft * 60.0);
         float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 3f, t, true) * Utils.GetLerpValue((float)(MaxTimeLeft - MaxTimeLeft / 5f), MaxTimeLeft / 2f, t, true);
-        Scale = scale;
+        Scale = scale * _baseScale;
 
         if (Main.rand.NextChance(0.1) && TimeLeft > 5 && TimeLeft < MaxTimeLeft - 5) {
             int type = ModContent.DustType<Slash>();
