@@ -112,11 +112,11 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         bool flag2 = Main.gameMenu || Main.InGameUI.IsVisible;
         baseDamage += (ushort)(flag2 ? 0 : player.GetModPlayer<DruidStats>().DruidPotentialDamage);
         if (flag) {
-            baseDamage += activePrefix._potentialDamage;
+            baseDamage += activePrefix!._potentialDamage;
         }
         ushort result = (ushort)(baseDamage * (flag2 ? 1f : player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier));
         if (flag) {
-            result = (ushort)(result * activePrefix._potentialDamageMult);
+            result = (ushort)(result * activePrefix!._potentialDamageMult);
         }
         result = (ushort)(result * (flag2 ? 1f : player.GetTotalDamage(DamageClass.Generic).ApplyTo(1f)));
         result = (ushort)Math.Max(GetFinalBaseDamage(item, player), result);
@@ -131,7 +131,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
         bool flag = activePrefix != null;
         ushort result = (ushort)(baseSpeed / (Main.gameMenu || Main.InGameUI.IsVisible ? 1f : player.GetModPlayer<DruidStats>().DruidPotentialUseTimeMultiplier));
         if (flag) {
-            result = (ushort)(result / activePrefix._potentialDruidSpeedMult);
+            result = (ushort)(result / activePrefix!._potentialDruidSpeedMult);
         }
         return (ushort)result;
     }

@@ -64,8 +64,8 @@ class ClawsSlash : NatureProjectile {
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
-        writer.WriteRGBA(_firstSlashColor.Value);
-        writer.WriteRGBA(_secondSlashColor.Value);
+        writer.WriteRGBA(_firstSlashColor!.Value);
+        writer.WriteRGBA(_secondSlashColor!.Value);
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
