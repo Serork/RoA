@@ -107,7 +107,7 @@ class ClawsSlash : NatureProjectile {
             color.A = 25;
             if (!ShouldFullBright) {
                 Point pos = Projectile.Center.ToTileCoordinates();
-                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.625f, 1f);
+                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.45f, 1f);
                 color *= brightness;
             }
             position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
@@ -143,7 +143,7 @@ class ClawsSlash : NatureProjectile {
             color.A = 25;
             if (!ShouldFullBright) {
                 Point pos = Projectile.Center.ToTileCoordinates();
-                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.625f, 1f);
+                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.45f, 1f);
                 color *= brightness;
             }
             position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
@@ -200,7 +200,7 @@ class ClawsSlash : NatureProjectile {
         float num3 = 0.975f;
         Point tilePosition = Projectile.Center.ToTileCoordinates();
         float num4 = Utils.Remap((Lighting.GetColor(tilePosition) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
-        num4 *= MathUtils.Clamp01(Utils.Remap(Lighting.Brightness(tilePosition.X, tilePosition.Y), 0f, 1f, 0.625f, 1f, false));
+        num4 *= MathUtils.Clamp01(Utils.Remap(Lighting.Brightness(tilePosition.X, tilePosition.Y), 0f, 1f, 0.5f, 1f, false));
         if (FirstSlashColor != null && SecondSlashColor != null) {
             Color color1 = FirstSlashColor.Value;
             Color color2 = SecondSlashColor.Value;
@@ -241,21 +241,23 @@ class ClawsSlash : NatureProjectile {
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f * 0.15f, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * 0.15f * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
-                
-                spriteBatch.Begin(snapshot, true);
 
                 Color lightColor2 = ShouldFullBright ? Color.White : lightColor;
+                lightColor2 *= num4;
+                Color lightColor3 = ShouldFullBright ? Color.White : lightColor;
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.333f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale * 1.075f, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * -0.05f, origin, scale * 0.8f * 1.075f, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.333f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * -0.1f, origin, scale * 0.6f * 1.075f, effects, 0.0f);
 
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.15f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale * 0.575f, effects, 0.0f);
 
+                spriteBatch.Begin(snapshot, true);
+              
                 Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
-                DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor2) * num3, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
+                DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
 
                 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
-                DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor2) * num3, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
+                DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
             }
         }
 
@@ -303,7 +305,7 @@ class ClawsSlash : NatureProjectile {
         Vector2 origin = value.Size() / 2f;
         Microsoft.Xna.Framework.Color color2 = drawColor * 0.5f;
         float num = Utils.GetLerpValue(fadeInStart, fadeInEnd, flareCounter, clamped: true) * Utils.GetLerpValue(fadeOutEnd, fadeOutStart, flareCounter, clamped: true);
-        num *= 1f;
+        num *= 0.95f;
         Vector2 vector = new Vector2(fatness.X * 0.5f, scale.X) * num * 1f;
         Vector2 vector2 = new Vector2(fatness.Y * 0.5f, scale.Y) * num * 1f;
         color *= num;
