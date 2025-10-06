@@ -251,7 +251,7 @@ class ClawsSlash : NatureProjectile {
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
 
                 Color lightColor2 = ShouldFullBright ? Color.White : lightColor;
-                lightColor2 *= MathUtils.Clamp01(num4 * 2f);
+                lightColor2 *= MathUtils.Clamp01(num4 * 3f);
                 Color lightColor3 = ShouldFullBright ? Color.White : lightColor;
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.333f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale * 1.075f, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * -0.05f, origin, scale * 0.8f * 1.075f, effects, 0.0f);
