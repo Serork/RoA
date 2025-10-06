@@ -120,7 +120,7 @@ sealed class Woodpecker : ModNPC {
         }
     }
 
-    public Vector2 TonguePosition => NPC.Top + new Vector2(0f, -16f);
+    public Vector2 TonguePosition => NPC.Top + new Vector2(0f, -1f);
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
