@@ -509,8 +509,8 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
             return false;
         }
 
-        Texture2D circle = ResourceManager.Circle;
-        //Texture2D circle = ResourceManager.Circle3;
+        //Texture2D circle = ResourceManager.Circle;
+        Texture2D circle = ResourceManager.Circle3;
         Rectangle clip = circle.Bounds;
         Vector2 origin = clip.Centered();
         Vector2 position = _initialPosition;
@@ -538,7 +538,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 Clip = clip,
                 Origin = origin,
                 Color = color * 0.8f,
-                Scale = scale * _teleportOpacity * 0.5f
+                Scale = scale * _teleportOpacity/* * 0.5f*/
             }, blendState: BlendState.Additive);
             spriteBatch.DrawWithSnapshot(() => {
                 NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, color2 * 0.625f * fadeOutProgress, scale: scale.X * 0.4f, texture: glowTexture, xOffset: xOffset, yOffset: yOffset);

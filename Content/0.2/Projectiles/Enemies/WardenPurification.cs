@@ -141,7 +141,7 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
             }, blendState: BlendState.Additive);
 
             spritebatch.DrawWithSnapshot(() => {
-                spritebatch.Draw(circle2, Position - Main.screenPosition, null, color3 * 0.75f * fadeOutProgress * CircleProgress, Projectile.rotation, origin2, Projectile.scale * scale * CircleProgress * FinalScaleFactor * 0.9f, SpriteEffects.None, 0f);
+                spritebatch.Draw(circle2, Position - Main.screenPosition, null, color3 * 0.625f * fadeOutProgress * CircleProgress, Projectile.rotation, origin2, Projectile.scale * scale * CircleProgress * FinalScaleFactor * 0.9f, SpriteEffects.None, 0f);
             }, blendState: BlendState.Additive);
         }
     }
