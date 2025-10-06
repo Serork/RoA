@@ -24,6 +24,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -240,13 +241,21 @@ class ClawsSlash : NatureProjectile {
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color4 * 0.15f * 0.15f, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * 0.15f * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+                
                 spriteBatch.Begin(snapshot, true);
 
-                spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.333f).MultiplyRGB(lightColor) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale * 1.075f, effects, 0.0f);
-                spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * -0.05f, origin, scale * 0.8f * 1.075f, effects, 0.0f);
-                spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.333f).MultiplyRGB(lightColor) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * -0.1f, origin, scale * 0.6f * 1.075f, effects, 0.0f);
+                Color lightColor2 = ShouldFullBright ? Color.White : lightColor;
+                spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.333f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale * 1.075f, effects, 0.0f);
+                spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * -0.05f, origin, scale * 0.8f * 1.075f, effects, 0.0f);
+                spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.333f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * -0.1f, origin, scale * 0.6f * 1.075f, effects, 0.0f);
 
-                spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor) * 0.15f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale * 0.575f, effects, 0.0f);
+                spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.15f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale * 0.575f, effects, 0.0f);
+
+                Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
+                DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor2) * num3, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
+
+                drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
+                DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor2) * num3, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
             }
         }
 
@@ -285,6 +294,24 @@ class ClawsSlash : NatureProjectile {
                 }
             }
         }
+    }
+
+    private static void DrawPrettyStarSparkle(float opacity, SpriteEffects dir, Vector2 drawpos, Microsoft.Xna.Framework.Color drawColor, Microsoft.Xna.Framework.Color shineColor, float flareCounter, float fadeInStart, float fadeInEnd, float fadeOutStart, float fadeOutEnd, float rotation, Vector2 scale, Vector2 fatness) {
+        Texture2D value = TextureAssets.Extra[98].Value;
+        Microsoft.Xna.Framework.Color color = shineColor * opacity * 0.5f;
+        color.A = 0;
+        Vector2 origin = value.Size() / 2f;
+        Microsoft.Xna.Framework.Color color2 = drawColor * 0.5f;
+        float num = Utils.GetLerpValue(fadeInStart, fadeInEnd, flareCounter, clamped: true) * Utils.GetLerpValue(fadeOutEnd, fadeOutStart, flareCounter, clamped: true);
+        num *= 1f;
+        Vector2 vector = new Vector2(fatness.X * 0.5f, scale.X) * num * 1f;
+        Vector2 vector2 = new Vector2(fatness.Y * 0.5f, scale.Y) * num * 1f;
+        color *= num;
+        color2 *= num;
+        Main.EntitySpriteDraw(value, drawpos, null, color, (float)Math.PI / 2f + rotation, origin, vector, dir);
+        Main.EntitySpriteDraw(value, drawpos, null, color, 0f + rotation, origin, vector2, dir);
+        Main.EntitySpriteDraw(value, drawpos, null, color2, (float)Math.PI / 2f + rotation, origin, vector * 0.6f, dir);
+        Main.EntitySpriteDraw(value, drawpos, null, color2, 0f + rotation, origin, vector2 * 0.6f, dir);
     }
 
     //public override void PostAI() {

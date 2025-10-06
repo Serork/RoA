@@ -38,6 +38,7 @@ static class ResourceManager {
     public static Texture2D Circle2 => ModContent.Request<Texture2D>(Textures + "Circle2", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Circle3 => ModContent.Request<Texture2D>(Textures + "Circle3", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Blood => ModContent.Request<Texture2D>(Textures + "Blood", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Flash => ModContent.Request<Texture2D>(Textures + "Flash", AssetRequestMode.ImmediateLoad).Value;
 
     public static string UITextures => Textures + "UI/";
 
