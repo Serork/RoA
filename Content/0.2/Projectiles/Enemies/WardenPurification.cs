@@ -57,9 +57,9 @@ sealed class WardenPurification : ModProjectile_NoTextureLoad {
 
         int type = DustID.TintableDustLighted;
         for (int i = 0; i < 2; i++) {
-            if (Main.rand.NextBool(7)) {
+            if (Main.rand.NextBool(8)) {
                 Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
-                Vector2 center = Projectile.Center + new Vector2(Projectile.direction == 1 ? 3f : -3f, 0f) + Projectile.velocity + spinningpoint * (Projectile.width * 0.85f * Projectile.scale);
+                Vector2 center = Projectile.Center + new Vector2(Projectile.direction == 1 ? 3f : -3f, 0f) + Projectile.velocity + spinningpoint * (Projectile.width * 0.8f * Projectile.scale);
                 Vector2 rotationPoint = spinningpoint.RotatedBy(0.785) * Projectile.direction;
                 Vector2 position = center + rotationPoint * 5f;
                 int dust = Dust.NewDust(position, 0, 0, type, newColor: _areaColor, Alpha: 200);
