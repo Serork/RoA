@@ -16,8 +16,6 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static RoA.Common.GlowMasks.ItemGlowMaskHandler;
-
 namespace RoA.Common.GlowMasks;
 
 [Autoload(Side = ModSide.Client)]

@@ -14,6 +14,7 @@ using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -304,7 +305,7 @@ sealed class WreathHandler : ModPlayer {
     private void ClawsReset(Projectile projectile, bool nonDataReset) {
         Item attachedItem = projectile.ModProjectile is NatureProjectile natureProjectile ? natureProjectile.AttachedNatureWeapon : projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedNatureWeapon;
         Item selectedItem = Player.GetSelectedItem();
-        bool playerUsingClaws = selectedItem.ModItem is ClawsBaseItem;
+        bool playerUsingClaws = selectedItem.IsClaws();
         if (playerUsingClaws && Player.ItemAnimationActive && attachedItem == selectedItem) {
             selectedItem.As<ClawsBaseItem>().OnHit(Player, Progress);
             if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {

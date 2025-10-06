@@ -2192,3 +2192,8 @@ HallowedTopfhelm: {
 	DisplayName: Hallowed Topfhelm
 	Tooltip: ""
 }
+
+SolScorchers: {
+	DisplayName: Sol Scorchers
+	Tooltip: ""
+}

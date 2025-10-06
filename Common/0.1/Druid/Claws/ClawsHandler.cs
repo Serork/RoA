@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Projectiles.Friendly;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -11,6 +14,36 @@ using Terraria.ModLoader;
 namespace RoA.Common.Druid.Claws;
 
 sealed class ClawsHandler : ModPlayer {
+    public enum ClawsAttackType : byte {
+        Back,
+        Front,
+        Both,
+        Count
+    }
+
+    public ClawsAttackType AttackType { get; private set; }
+
+    public byte AttackCount {
+        get => (byte)AttackType;
+        set {
+            byte max = (byte)ClawsAttackType.Count,
+                 min = (byte)ClawsAttackType.Back;
+            AttackType = (ClawsAttackType)value;
+            if ((byte)AttackType >= max) {
+                AttackType = (ClawsAttackType)min;
+            }
+            if ((byte)AttackType < min) {
+                AttackType = (ClawsAttackType)max;
+            }
+        }
+    }
+
+    public override void PostItemCheck() {
+        if (AttackCount != 0 && !Player.GetSelectedItem().IsNatureClaws(out ClawsBaseItem clawsBaseItem) && clawsBaseItem.IsHardmodeClaws) {
+            AttackCount = 0;
+        }
+    }
+
     public ref struct AttackSpawnInfoArgs() {
         public Item Owner;
         public ushort ProjectileTypeToSpawn;

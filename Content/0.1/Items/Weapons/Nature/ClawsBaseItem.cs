@@ -5,17 +5,65 @@ using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
+
+using static Terraria.Player;
 
 namespace RoA.Content.Items.Weapons.Nature;
 
 [WeaponOverlay(WeaponType.Claws)]
 abstract class ClawsBaseItem : NatureItem {
+    public virtual bool IsHardmodeClaws { get; } = false;
+
+    public override void UseStyle(Player player, Rectangle heldItemFrame) {
+        if (!IsHardmodeClaws || player.ItemAnimationJustStarted) {
+            return;
+        }
+
+        CompositeArmStretchAmount compositeArmStretchAmount = CompositeArmStretchAmount.Full;
+        float attackProgress = player.itemAnimation / (float)player.itemAnimationMax;
+        float rotation;
+        if (attackProgress >= 0.75f) {
+            rotation = MathHelper.Pi;
+        }
+        else if (attackProgress >= 0.5f) {
+            rotation = MathHelper.Pi + MathHelper.PiOver2 / 2f;
+        }
+        else if (attackProgress >= 0.25f) {
+            rotation = MathHelper.Pi + MathHelper.PiOver2;
+        }
+        else {
+            rotation = -MathHelper.PiOver4;
+        }
+        rotation *= player.direction;
+        bool front = false,
+             back = false;
+        switch (player.GetClawsHandler().AttackType) {
+            case ClawsHandler.ClawsAttackType.Front:
+                front = true;
+                break;
+            case ClawsHandler.ClawsAttackType.Back:
+                back = true;
+                break;
+            case ClawsHandler.ClawsAttackType.Both:
+                front = back = true;
+                break;
+        }
+        player.SetCompositeArmFront(enabled: true, compositeArmStretchAmount, !front ? 0f : rotation);
+        player.SetCompositeArmBack(enabled: true, compositeArmStretchAmount, !back ? 0f : rotation);
+    }
+
     protected sealed override void SafeSetDefaults2() {
         Item.SetShootableValues((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
+
+        if (IsHardmodeClaws) {
+            Item.useStyle = -1;
+        }
     }
 
     public virtual void OnHit(Player player, float progress) { }
@@ -33,6 +81,13 @@ abstract class ClawsBaseItem : NatureItem {
             (Color, Color) slashColors = SlashColors(player);
             ClawsHandler clawsStats = player.GetModPlayer<ClawsHandler>();
             clawsStats.SetColors(slashColors.Item1, slashColors.Item2);
+
+            if (IsHardmodeClaws) {
+                player.GetClawsHandler().AttackCount++;
+            }
+            else {
+                player.GetClawsHandler().AttackCount = 0;
+            }
 
             SafeOnUse(player, clawsStats);
         }

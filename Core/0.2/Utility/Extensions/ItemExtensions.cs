@@ -1,4 +1,5 @@
-﻿using RoA.Core.Defaults;
+﻿using RoA.Content.Items.Weapons.Nature;
+using RoA.Core.Defaults;
 
 using Terraria;
 using Terraria.Audio;
@@ -8,6 +9,19 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Extensions;
 
 static partial class ItemExtensions {
+    public static bool IsNatureClaws(this Item item, out ClawsBaseItem clawsBaseItem) {
+        bool result = item.IsModded(out ModItem modItem) && modItem is ClawsBaseItem;
+        if (result) {
+            clawsBaseItem = (modItem as ClawsBaseItem)!;
+        }
+        else {
+            clawsBaseItem = null!;
+        }
+        return result;
+    }
+
+    public static bool IsClaws(this Item item) => item.IsModded(out ModItem modItem) && modItem is ClawsBaseItem;
+
     public static bool IsModded(this Item item) => item.ModItem is not null;
     public static bool IsModded(this Item item, out ModItem modItem) {
         modItem = item.ModItem;

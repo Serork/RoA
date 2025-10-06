@@ -1,6 +1,8 @@
 ﻿using RoA.Common.Players;
 using RoA.Content.Items.Equipables.Wreaths;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -18,6 +20,17 @@ sealed partial class Hooks : ModSystem {
         On_Player.TryAllowingItemReuse += On_Player_TryAllowingItemReuse;
         On_ItemSlot.AccCheck_ForLocalPlayer += On_ItemSlot_AccCheck_ForLocalPlayer;
         On_ItemFilters.AAccessories.IsAnAccessoryOfType += AAccessories_IsAnAccessoryOfType;
+        On_Player.CanVisuallyHoldItem += On_Player_CanVisuallyHoldItem;
+    }
+
+    private bool On_Player_CanVisuallyHoldItem(On_Player.orig_CanVisuallyHoldItem orig, Player self, Item item) {
+        if (item.IsNatureClaws(out ClawsBaseItem clawsBaseItem)) {
+            if (clawsBaseItem.IsHardmodeClaws) {
+                return false;
+            }
+        }
+
+        return orig(self, item);
     }
 
     private bool AAccessories_IsAnAccessoryOfType(On_ItemFilters.AAccessories.orig_IsAnAccessoryOfType orig, ItemFilters.AAccessories self, Item entry, ItemFilters.AAccessories.AccessoriesCategory categoryType) {

@@ -21,7 +21,7 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
             return;
         }
 
-        DrawClawsOnPlayer(drawInfo);
+        DrawClawsOnPlayer_PreHardmode(drawInfo);
     }
 
     private static void LoadOutfitTextures() {

@@ -1,4 +1,5 @@
-﻿using RoA.Common.Druid.Forms;
+﻿using RoA.Common.Druid.Claws;
+using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 
@@ -7,6 +8,7 @@ using Terraria;
 namespace RoA.Core.Utility.Vanilla;
 
 static class PlayerUtils {
+    public static ClawsHandler GetClawsHandler(this Player player) => player.GetModPlayer<ClawsHandler>();
     public static BaseFormHandler GetFormHandler(this Player player) => player.GetModPlayer<BaseFormHandler>();
     public static WreathHandler GetWreathHandler(this Player player) => player.GetModPlayer<WreathHandler>();
 

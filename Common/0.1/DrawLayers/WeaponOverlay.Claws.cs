@@ -1,13 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using ReLogic.Content;
 
 using RoA.Content.Items.Weapons;
 using RoA.Content.Items.Weapons.Nature;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -17,6 +22,10 @@ using Terraria.ModLoader;
 namespace RoA.Common.DrawLayers;
 
 sealed partial class WeaponOverlay : PlayerDrawLayer {
+    private static Vector2 GetCompositeOffset_BackArm(ref PlayerDrawSet drawinfo) => new Vector2(6 * ((!drawinfo.playerEffect.HasFlag(SpriteEffects.FlipHorizontally)) ? 1 : (-1)), 2 * ((!drawinfo.playerEffect.HasFlag(SpriteEffects.FlipVertically)) ? 1 : (-1)));
+    private static Vector2 GetCompositeOffset_FrontArm(ref PlayerDrawSet drawinfo) => new Vector2(-5 * ((!drawinfo.playerEffect.HasFlag(SpriteEffects.FlipHorizontally)) ? 1 : (-1)), 0f);
+
+
     //private const string CLAWSTEXTURESPATH = $"/{ResourceManager.TEXTURESPATH}/Items/Weapons/Druidic/Claws";
 
     private static readonly Dictionary<string, Asset<Texture2D>?> _clawsOutfitTextures = [];
@@ -29,6 +38,10 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
             }
         }
 
+        On_PlayerDrawLayers.DrawPlayer_12_SkinComposite_BackArmShirt += On_PlayerDrawLayers_DrawPlayer_12_SkinComposite_BackArmShirt;
+        On_PlayerDrawLayers.DrawPlayer_17_TorsoComposite += On_PlayerDrawLayers_DrawPlayer_17_TorsoComposite;
+        On_PlayerDrawLayers.DrawPlayer_28_ArmOverItemComposite += On_PlayerDrawLayers_DrawPlayer_28_ArmOverItemComposite;
+
         //foreach (Asset<Texture2D> texture in ResourceManager.GetAllTexturesInPath(CLAWSTEXTURESPATH, REQUIREMENT)) {
         //    string getName() {
         //        return texture.Name.Split("\\").Last().Replace(REQUIREMENT, string.Empty);
@@ -37,21 +50,97 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
         //}
     }
 
-    private static void DrawClawsOnPlayer(PlayerDrawSet drawInfo) {
+    private static void On_PlayerDrawLayers_DrawPlayer_28_ArmOverItemComposite(On_PlayerDrawLayers.orig_DrawPlayer_28_ArmOverItemComposite orig, ref PlayerDrawSet drawinfo) {
+        orig(ref drawinfo);
+
+        DrawClawsOverArm(ref drawinfo, CompositePlayerDrawContext.FrontArm);
+    }
+
+    private static void On_PlayerDrawLayers_DrawPlayer_17_TorsoComposite(On_PlayerDrawLayers.orig_DrawPlayer_17_TorsoComposite orig, ref PlayerDrawSet drawinfo) {
+        orig(ref drawinfo);
+    }
+
+    private static void On_PlayerDrawLayers_DrawPlayer_12_SkinComposite_BackArmShirt(On_PlayerDrawLayers.orig_DrawPlayer_12_SkinComposite_BackArmShirt orig, ref PlayerDrawSet drawinfo) {
+        orig(ref drawinfo);
+
+        DrawClawsOverArm(ref drawinfo, CompositePlayerDrawContext.BackArm);
+    }
+
+    private static void DrawClawsOverArm(ref PlayerDrawSet drawinfo, CompositePlayerDrawContext context) {
+        Player player = drawinfo.drawPlayer;
+        if (!HasClawsSelectedAndLoaded(player, out ClawsBaseItem clawsBaseItem, out WeaponOverlayAttribute weaponAttribute, out Asset<Texture2D> texture)) {
+            return;
+        }
+
+        if (!clawsBaseItem.IsHardmodeClaws) {
+            return;
+        }
+
+        switch (context) {
+            case CompositePlayerDrawContext.FrontArm: {
+                    Vector2 vector = new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.bodyFrame.Width / 2, drawinfo.drawPlayer.bodyFrame.Height / 2);
+                    Vector2 vector2 = Main.OffsetsPlayerHeadgear[drawinfo.drawPlayer.bodyFrame.Y / drawinfo.drawPlayer.bodyFrame.Height];
+                    vector2.Y -= 2f;
+                    vector += vector2 * -drawinfo.playerEffect.HasFlag(SpriteEffects.FlipVertically).ToDirectionInt();
+                    float bodyRotation = drawinfo.drawPlayer.bodyRotation;
+                    float rotation = drawinfo.drawPlayer.bodyRotation + drawinfo.compositeFrontArmRotation;
+                    Vector2 bodyVect = drawinfo.bodyVect;
+                    Vector2 compositeOffset_FrontArm = GetCompositeOffset_FrontArm(ref drawinfo);
+                    bodyVect += compositeOffset_FrontArm;
+                    vector += compositeOffset_FrontArm;
+                    Vector2 position = vector + drawinfo.frontShoulderOffset;
+                    if (drawinfo.compFrontArmFrame.X / drawinfo.compFrontArmFrame.Width >= 7)
+                        vector += new Vector2((!drawinfo.playerEffect.HasFlag(SpriteEffects.FlipHorizontally)) ? 1 : (-1), (!drawinfo.playerEffect.HasFlag(SpriteEffects.FlipVertically)) ? 1 : (-1));
+
+                    _ = drawinfo.drawPlayer.invis;
+                    bool num = drawinfo.drawPlayer.body > 0 && drawinfo.drawPlayer.body < ArmorIDs.Body.Count;
+                    int num2 = (drawinfo.compShoulderOverFrontArm ? 1 : 0);
+                    int num3 = ((!drawinfo.compShoulderOverFrontArm) ? 1 : 0);
+                    int num4 = ((!drawinfo.compShoulderOverFrontArm) ? 1 : 0);
+                    bool flag = !drawinfo.hidesTopSkin;
+                    var data = new DrawData(texture.Value, vector, drawinfo.compFrontArmFrame, drawinfo.colorArmorBody, rotation, bodyVect, 1f, drawinfo.playerEffect) {
+                    };
+                    DrawData item2 = data;
+                    if (weaponAttribute.Hex != null) {
+                        item2.color = player.GetImmuneAlphaPure(Helper.FromHexRgb(weaponAttribute.Hex.Value), (float)drawinfo.shadow);
+                    }
+                    drawinfo.DrawDataCache.Add(item2);
+                    break;
+                }
+            case CompositePlayerDrawContext.BackArm: {
+                    Vector2 vector = new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.bodyFrame.Width / 2, drawinfo.drawPlayer.bodyFrame.Height / 2);
+                    Vector2 vector2 = Main.OffsetsPlayerHeadgear[drawinfo.drawPlayer.bodyFrame.Y / drawinfo.drawPlayer.bodyFrame.Height];
+                    vector2.Y -= 2f;
+                    vector += vector2 * -drawinfo.playerEffect.HasFlag(SpriteEffects.FlipVertically).ToDirectionInt();
+                    vector.Y += drawinfo.torsoOffset;
+                    float bodyRotation = drawinfo.drawPlayer.bodyRotation;
+                    Vector2 vector3 = vector;
+                    Vector2 position = vector;
+                    Vector2 bodyVect = drawinfo.bodyVect;
+                    Vector2 compositeOffset_BackArm = GetCompositeOffset_BackArm(ref drawinfo);
+                    vector3 += compositeOffset_BackArm;
+                    position += drawinfo.backShoulderOffset;
+                    bodyVect += compositeOffset_BackArm;
+                    float rotation = bodyRotation + drawinfo.compositeBackArmRotation;
+                    var data = new DrawData(texture.Value, vector3, drawinfo.compBackArmFrame, drawinfo.colorArmorBody, rotation, bodyVect, 1f, drawinfo.playerEffect) {
+                    };
+                    DrawData item2 = data;
+                    if (weaponAttribute.Hex != null) {
+                        item2.color = player.GetImmuneAlphaPure(Helper.FromHexRgb(weaponAttribute.Hex.Value), (float)drawinfo.shadow);
+                    }
+                    drawinfo.DrawDataCache.Add(item2);
+                    break;
+                }
+        }
+    }
+
+    private static void DrawClawsOnPlayer_PreHardmode(PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
-
-        Item item = player.GetSelectedItem();
-        if (item.IsEmpty()) {
+        if (!HasClawsSelectedAndLoaded(player, out ClawsBaseItem clawsBaseItem, out WeaponOverlayAttribute weaponAttribute, out Asset<Texture2D> texture)) {
             return;
         }
 
-        WeaponOverlayAttribute? weaponAttribute = item.GetAttribute<WeaponOverlayAttribute>();
-        if (weaponAttribute == null || weaponAttribute.WeaponType != WeaponType.Claws) {
-            return;
-        }
-
-        Asset<Texture2D>? asset = _clawsOutfitTextures[GetItemNameForTexture(item)];
-        if (asset?.IsLoaded != true) {
+        if (clawsBaseItem.IsHardmodeClaws) {
             return;
         }
 
@@ -61,7 +150,34 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
         Vector2 drawPosition = drawInfo.drawPlayer.bodyPosition + offset;
         Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(weaponAttribute.Hex != null ? Helper.FromHexRgb(weaponAttribute.Hex.Value) : drawInfo.colorArmorBody, drawInfo.shadow);
         immuneAlphaPure *= drawInfo.drawPlayer.stealth;
-        DrawData drawData = new(asset.Value, drawPosition - Main.screenPosition, player.bodyFrame, immuneAlphaPure, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect);
+        DrawData drawData = new(texture.Value, drawPosition - Main.screenPosition, player.bodyFrame, immuneAlphaPure, player.bodyRotation, drawInfo.bodyVect, 1f, drawInfo.playerEffect);
         drawInfo.DrawDataCache.Add(drawData);
+    }
+
+    private static bool HasClawsSelectedAndLoaded(Player player, out ClawsBaseItem clawsBaseItem, out WeaponOverlayAttribute weaponAttribute, out Asset<Texture2D> texture) {
+        Item item = player.GetSelectedItem();
+        clawsBaseItem = null!;
+        weaponAttribute = null!;
+        texture = null!;
+        if (item.IsEmpty() || !item.IsModded(out ModItem modItem)) {
+            return false;
+        }
+
+        if (modItem is not ClawsBaseItem clawsBaseItem2) {
+            return false;
+        }
+
+        weaponAttribute = item.GetAttribute<WeaponOverlayAttribute>();
+        if (weaponAttribute == null || weaponAttribute.WeaponType != WeaponType.Claws) {
+            return false;
+        }
+
+        texture = _clawsOutfitTextures[GetItemNameForTexture(item)]!;
+        if (texture?.IsLoaded != true) {
+            return false;
+        }
+
+        clawsBaseItem = clawsBaseItem2;
+        return true;
     }
 }
