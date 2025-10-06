@@ -18,7 +18,6 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
-using System.Security.Policy;
 
 using Terraria;
 using Terraria.Audio;
@@ -31,6 +30,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 class ClawsSlash : NatureProjectile {
+    private static float FIRSTATTACKSCALEMODIFIER => 1f;
+    private static float SECONDATTACKSCALEMODIFIER => 1.375f;
+    private static float THIRDATTACKSCALEMODIFIER => 1.75f;
+
     private float _clawsExtraScale;
     private Color? _firstSlashColor = null, _secondSlashColor = null;
     private bool _soundPlayed;
@@ -400,13 +403,13 @@ class ClawsSlash : NatureProjectile {
         ClawsHandler.ClawsAttackType clawsAttackType = Owner.GetClawsHandler().AttackType;
         switch (clawsAttackType) {
             case ClawsHandler.ClawsAttackType.Back:
-                scale *= 1f;
+                scale *= FIRSTATTACKSCALEMODIFIER;
                 break;
             case ClawsHandler.ClawsAttackType.Front:
-                scale *= 1f;
+                scale *= SECONDATTACKSCALEMODIFIER;
                 break;
             case ClawsHandler.ClawsAttackType.Both:
-                scale *= 1.75f;
+                scale *= THIRDATTACKSCALEMODIFIER;
                 break;
         }
     }

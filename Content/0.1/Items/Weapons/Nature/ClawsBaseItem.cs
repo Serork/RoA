@@ -17,6 +17,10 @@ namespace RoA.Content.Items.Weapons.Nature;
 
 [WeaponOverlay(WeaponType.Claws)]
 abstract class ClawsBaseItem : NatureItem {
+    private static float FIRSTATTACKSPEEDMODIFIER => 0.75f;
+    private static float SECONDATTACKSPEEDMODIFIER => 0.75f;
+    private static float THIRDATTACKSPEEDMODIFIER => 1f;
+
     public virtual bool IsHardmodeClaws { get; } = false;
 
     public override void UseStyle(Player player, Rectangle heldItemFrame) {
@@ -110,10 +114,13 @@ abstract class ClawsBaseItem : NatureItem {
         ClawsHandler.ClawsAttackType clawsAttackType = player.GetClawsHandler().AttackType;
         switch (clawsAttackType) {
             case ClawsHandler.ClawsAttackType.Back:
+                attackTime = (ushort)(attackTime * FIRSTATTACKSPEEDMODIFIER);
+                break;
             case ClawsHandler.ClawsAttackType.Front:
-                attackTime = (ushort)(attackTime * 0.75f);
+                attackTime = (ushort)(attackTime * SECONDATTACKSPEEDMODIFIER);
                 break;
             case ClawsHandler.ClawsAttackType.Both:
+                attackTime = (ushort)(attackTime * THIRDATTACKSPEEDMODIFIER);
                 break;
         }
         Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/,
