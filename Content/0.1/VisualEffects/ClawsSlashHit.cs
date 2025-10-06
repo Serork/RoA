@@ -52,7 +52,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
         spriteBatch.Draw(Texture, position, null, color, Rotation, origin, Scale * 0.6f, effects, 0f);
         SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
         spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
-        Color shineColor = new(255, 200, 150);
+        Color shineColor = new Color(255, 200, 150) * 0.85f;
         Color color3 = color * Scale * 0.5f;
         color3.A = (byte)(color3.A * (1.0 - (double)Scale));
         Color color4 = color3 * Scale * 0.5f;
