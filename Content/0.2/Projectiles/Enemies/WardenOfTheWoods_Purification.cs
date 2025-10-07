@@ -98,7 +98,7 @@ sealed class Purification : ModProjectile_NoTextureLoad {
             Vector2 position = Projectile.Center;
             position = position + Vector2.UnitX * 4f + Vector2.UnitY * 20f + Vector2.UnitX * Projectile.width / 2f * Main.rand.NextFloatDirection() + Vector2.UnitY * Projectile.height / 2f * Main.rand.NextFloatDirection();
             Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-            WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity,
+            WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
                 scale: Main.rand.NextFloat(0.2f, num67 * 0.6f) / 7f);
             if (wardenParticle != null) {
                 wardenParticle.AI0 = VisualEffectTimer;
