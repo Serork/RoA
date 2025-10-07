@@ -12,22 +12,23 @@ using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WardenOfTheWoods;
-using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WoodpeckerTongue;
-
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
-sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
+class WardenOfTheWoods2 : WardenOfTheWoods {
+    public override bool Alt => true;
+}
+
+class WardenOfTheWoods : ModNPC, IRequestAssets {
     private static byte FRAMECOUNT => 9;
     public static float TARGETDISTANCE => 400f;
     public static float ATTACKTIME => 100f;
@@ -37,6 +38,8 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
 
     public static readonly Color Color = new(5, 220, 135);
     public static readonly Color AltColor = new(35, 105, 230);
+
+    public sealed override string Texture => ResourceManager.Textures + $"NPCs/Enemies/Backwoods/Hardmode/{nameof(WardenOfTheWoods)}";
 
     public enum WardenOfTheWoodsRequstedTextureType : byte {
         Glow,
@@ -109,8 +112,9 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     private Color? _areaColor;
     private float _timerForVisualEffects;
     private float _yOffset;
-    private bool _alt;
     private float _teleportOpacity;
+
+    public virtual bool Alt { get; } = false;
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
@@ -127,12 +131,10 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
-        writer.Write(_alt);
         writer.WriteVector2(_targetPosition);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
-        _alt = reader.ReadBoolean();
         _targetPosition = reader.ReadVector2();
     }
 
@@ -143,11 +145,11 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 wardenOfTheWoodsValues.Init = true;
 
                 _initialPosition = NPC.Center;
-                if (Helper.SinglePlayerOrServer) {
-                    _alt = Main.rand.NextBool();
-                    NPC.netUpdate = true;
-                }
-                _areaColor = _alt ? AltColor : Color;
+                //if (Helper.SinglePlayerOrServer) {
+                //    Alt = Main.rand.NextBool();
+                //    NPC.netUpdate = true;
+                //}
+                _areaColor = Alt ? AltColor : Color;
             }
             NPC.dontTakeDamage = wardenOfTheWoodsValues.State == WardenOfTheWoodsValues.AIState.Idle;
         }
@@ -220,7 +222,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
 
                     //if (Main.rand.NextBool(1000)) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Active") with { PitchVariance = 0.1f, Pitch = -0.5f, Volume = 0.3f, MaxInstances = 2 }, NPC.Center);
                     if (Main.rand.NextChance(1f - GetFadeOutProgress()) && Main.rand.NextBool(3)) {
-                        int num730 = Dust.NewDust(NPC.position + new Vector2(10f, 30f + 15f * Main.rand.NextFloat()), NPC.width / 2, 8, DustID.WoodFurniture, 0, 1f, 0, _alt ? new Color(85, 90, 80) : new Color(100, 100, 80), 1f + Main.rand.NextFloatRange(0.1f));
+                        int num730 = Dust.NewDust(NPC.position + new Vector2(10f, 30f + 15f * Main.rand.NextFloat()), NPC.width / 2, 8, DustID.WoodFurniture, 0, 1f, 0, Alt ? new Color(85, 90, 80) : new Color(100, 100, 80), 1f + Main.rand.NextFloatRange(0.1f));
                         Main.dust[num730].noGravity = true;
                         Main.dust[num730].velocity = new Vector2(0, Main.rand.NextFloat(6f) * Main.rand.NextFloat(0.5f, 1f));
                     }
@@ -324,7 +326,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 if (wardenParticle != null) {
                     wardenParticle.CustomData = GetFadeOutProgress();
                     wardenParticle.AI0 = _timerForVisualEffects;
-                    wardenParticle.Alt = _alt;
+                    wardenParticle.Alt = Alt;
                     if (position.Distance(NPC.Center) < NPC.height * 0.75f) {
                         wardenParticle.RestInPool();
                     }
@@ -349,7 +351,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
                 Damage = 50,
                 KnockBack = 0f,
                 Position = _initialPosition,
-                AI0 = _alt.ToInt(),
+                AI0 = Alt.ToInt(),
                 AI1 = NPC.whoAmI,
                 AI2 = _timerForVisualEffects
             });
@@ -406,7 +408,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
             WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
                 scale: Main.rand.NextFloat(0.5f, 2f));
             if (wardenParticle != null) {
-                wardenParticle.Alt = _alt;
+                wardenParticle.Alt = Alt;
                 wardenParticle.AI0 = _timerForVisualEffects;
             }
         }
@@ -427,7 +429,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
             Damage = 50,
             KnockBack = 0f,
             Position = NPC.GetTargetPlayer().Center + (NPC.Center - _initialPosition) / 2f,
-            AI0 = _alt.ToInt(),
+            AI0 = Alt.ToInt(),
             //AI1 = 1f - (float)NPC.life / NPC.lifeMax,
             AI2 = _timerForVisualEffects
         });
@@ -489,13 +491,13 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
     }
     public override void HitEffect(NPC.HitInfo hit) {
         for (int num923 = 0; num923 < 3; num923++) {
-            int num730 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.WoodFurniture, 0, 0, 0, _alt ? new Color(185, 190, 180) : new Color(200, 200, 180), 1f + Main.rand.NextFloatRange(0.1f));
+            int num730 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.WoodFurniture, 0, 0, 0, Alt ? new Color(185, 190, 180) : new Color(200, 200, 180), 1f + Main.rand.NextFloatRange(0.1f));
         }
     }
 
     public override void OnKill() {
         for (int num923 = 0; num923 < 15; num923++) {
-            int num730 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.WoodFurniture, 0, 0, 0, _alt ? new Color(185, 190, 180) : new Color(200, 200, 180), 1f + Main.rand.NextFloatRange(0.1f));
+            int num730 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.WoodFurniture, 0, 0, 0, Alt ? new Color(185, 190, 180) : new Color(200, 200, 180), 1f + Main.rand.NextFloatRange(0.1f));
         }
         for (int m = 0; m < 30; m++) {
             Color newColor2 = _areaColor!.Value;
@@ -530,12 +532,12 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         color2 *= opacity;
         if (_teleportOpacity < 1f) _teleportOpacity += 0.05f;
         int extra = 3;
-        drawColor = Color.Lerp(drawColor, Color.Lerp(Color.Black, _alt ? Color.DarkBlue : Color.DarkGreen, 0.5f), (1f - fadeOutProgress) * 0.5f);
-        WardenOfTheWoodsRequstedTextureType glowVariant = _alt ? WardenOfTheWoodsRequstedTextureType.AltGlow : WardenOfTheWoodsRequstedTextureType.Glow;
+        drawColor = Color.Lerp(drawColor, Color.Lerp(Color.Black, Alt ? Color.DarkBlue : Color.DarkGreen, 0.5f), (1f - fadeOutProgress) * 0.5f);
+        WardenOfTheWoodsRequstedTextureType glowVariant = Alt ? WardenOfTheWoodsRequstedTextureType.AltGlow : WardenOfTheWoodsRequstedTextureType.Glow;
         Texture2D glowTexture = indexedTextureAssets[(byte)glowVariant].Value;
         float xOffset = 4f * NPC.spriteDirection;
         float yOffset = 0f;
-        Texture2D texture = _alt ? indexedTextureAssets[(byte)WardenOfTheWoodsRequstedTextureType.Alt].Value : NPC.GetTexture();
+        Texture2D texture = Alt ? indexedTextureAssets[(byte)WardenOfTheWoodsRequstedTextureType.Alt].Value : NPC.GetTexture();
         NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor, xOffset: xOffset, yOffset: yOffset, texture: texture);
         NPCUtils.QuickDraw(NPC, spriteBatch, screenPos, drawColor * Utils.Remap(fadeOutProgress, 0f, 1f, 0.5f, 1f, true), texture: glowTexture, xOffset: xOffset, yOffset: yOffset);
         for (int i = 0; i < extra; i++) {
