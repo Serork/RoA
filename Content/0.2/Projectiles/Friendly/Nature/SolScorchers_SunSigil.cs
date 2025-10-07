@@ -8,7 +8,6 @@ using RoA.Common.Druid.Claws;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
 using RoA.Common.VisualEffects;
-using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -21,13 +20,12 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
-
-using static Terraria.GameContent.Animations.Actions.Sprites;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static ushort TIMELEFT => 3000;
+    private static ushort TIMELEFT => 600;
 
     public enum SunSigilRequstedTextureType : byte {
         Main,
@@ -42,6 +40,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
     private Vector2 _laserDirection;
 
     private Color SelectedColor => Color.Lerp(_firstSlashColor, _secondSlashColor, Helper.Wave(0f, 1f, 5f, Projectile.whoAmI));
+    private float Opacity => Utils.GetLerpValue(TIMELEFT, TIMELEFT - 30, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
 
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(10);
@@ -77,13 +76,11 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.localAI[1] = 256f;
         }
 
-        Projectile.timeLeft = 2;
-
         Projectile.scale = 0.75f;
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.Center = owner.Top;
-            Projectile.Center = Utils.Floor(Projectile.Center) - Vector2.UnitY * 50f + Vector2.UnitY * owner.gfxOffY;
+            Projectile.Center = Utils.Floor(Projectile.Center) - Vector2.UnitY * 40f + Vector2.UnitY * owner.gfxOffY;
             if (Projectile.IsOwnerLocal()) {
                 Projectile.velocity = Projectile.Center.DirectionTo(owner.GetWorldMousePosition());
                 Projectile.netUpdate = true;
@@ -106,7 +103,9 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Vector2 samplingPoint = Projectile.Center;
         float distance = 0f;
-        while (distance < 2000f) {
+        float opacity = Opacity;
+        float maxdistance = 400f * opacity;
+        while (distance < maxdistance) {
             Vector2 start = Projectile.Center;
             NPC[] sortedNPC = Main.npc.Where(n => n.active && !n.friendly && !n.CountsAsACritter).OrderBy(n => (n.Center - start).Length()).ToArray();
             bool flag = false;
@@ -138,13 +137,28 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 last = Projectile.Center + _laserDirection * num718;
         Utils.PlotTileLine(Projectile.Center, last, (float)num717 * Projectile.scale, DelegateMethods.CastLight);
 
+        Vector2 vector72 = last;
+        Vector2 velocity = last.DirectionTo(Projectile.Center).RotatedByRandom(MathHelper.PiOver2) * Main.rand.NextFloat(0.25f, 1.25f) * 5f;
+        if (Projectile.localAI[0] % 14f == 0) {
+            for (int num730 = 0; num730 < 2; num730++) {
+                float num731 = velocity.ToRotation() + ((Main.rand.Next(2) == 1) ? (-1f) : 1f) * ((float)Math.PI / 2f);
+                float num732 = (float)Main.rand.NextDouble() * 0.8f + 1f;
+                Vector2 vector73 = new Vector2((float)Math.Cos(num731) * num732, (float)Math.Sin(num731) * num732);
+                int num733 = Dust.NewDust(vector72 - last.DirectionTo(Projectile.Center) * -20f, 0, 0, DustID.FireworksRGB, vector73.X, vector73.Y);
+                Main.dust[num733].noGravity = true;
+                Main.dust[num733].scale = Opacity * 1.2f;
+                Main.dust[num733].velocity = velocity;
+                Main.dust[num733].color = SelectedColor;
+            }
+        }
+
         if (Projectile.localAI[0] % 8 != 0) {
             return;
         }
         Vector2 position = last;
-        Vector2 velocity = last.DirectionTo(Projectile.Center).RotatedByRandom(MathHelper.PiOver2) * Main.rand.NextFloat(0.25f, 1.25f);
+        velocity = last.DirectionTo(Projectile.Center).RotatedByRandom(MathHelper.PiOver2) * Main.rand.NextFloat(0.25f, 1.25f);
         VisualEffectSystem.New<VisualEffects.SunSigil>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity,
-            scale: Main.rand.NextFloat(1f, 1.5f),
+            scale: Opacity * Main.rand.NextFloat(1f, 1.5f),
             color: SelectedColor);
     }
 
@@ -206,8 +220,11 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                 float seeded = Utils.RandomFloat(ref seed) + Projectile.whoAmI;
                 Vector2 circleOffset2 = circleOffset * Vector2.One * Helper.Wave(-0.5f, 0.75f, 5f, seeded) * 15f * Projectile.scale;
                 Vector2 position2 = position + circleOffset2;
-                Color rayColor = color * Helper.Wave(0.475f, 0.525f, 10f, seeded) * 1.25f;
+                Color rayColor = color * Helper.Wave(0.475f, 0.525f, 10f, seeded) * 1.375f * Opacity;
                 Vector2 scale = Projectile.scale * Helper.Wave(0.9f, 1f, 2.5f, seeded).ToRotationVector2() / MathHelper.Pi * 2.9f * new Vector2(1.3f, 1f);
+                if (Projectile.timeLeft > TIMELEFT / 2) {
+                    scale *= Opacity;
+                }
                 batch.Draw(glowTexture, position2, DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
