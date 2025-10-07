@@ -18,6 +18,8 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 sealed class HellfireClaws : ClawsBaseItem {
     public override Color? GetAlpha(Color lightColor) => Color.White;
 
+    public override float BrightnessModifier => 1f;
+
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(26);
         Item.SetWeaponValues(30, 4.2f);

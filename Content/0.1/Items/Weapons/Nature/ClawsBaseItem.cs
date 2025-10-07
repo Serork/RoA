@@ -19,6 +19,9 @@ namespace RoA.Content.Items.Weapons.Nature;
 abstract class ClawsBaseItem : NatureItem {
     public virtual bool IsHardmodeClaws { get; } = false;
 
+    public virtual float BrightnessModifier { get; } = 0f;
+    public virtual bool HasLighting { get; } = false;
+
     public virtual float FirstAttackSpeedModifier { get; } = 1f;
     public virtual float SecondAttackSpeedModifier { get; } = 1f;
     public virtual float ThirdAttackSpeedModifier { get; } = 1f;

@@ -41,10 +41,10 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public override int ChoosePrefix(Item item, UnifiedRandom rand) {
         if (item.IsANatureWeapon() && !item.accessory) {
             int result = NaturePrefix.NaturePrefixes.ElementAt(rand.Next(0, NaturePrefix.NaturePrefixes.Count)).Key;
-            while (!item.IsClaws() && NaturePrefix.NaturePrefixes[result]._forClaws) {
+            while (!item.IsNatureClaws() && NaturePrefix.NaturePrefixes[result]._forClaws) {
                 result = NaturePrefix.NaturePrefixes.ElementAt(rand.Next(0, NaturePrefix.NaturePrefixes.Count)).Key;
             }
-            while (item.IsClaws() && !NaturePrefix.NaturePrefixes[result]._forClaws && !NaturePrefix.NaturePrefixes[result]._vanillaAdapted) {
+            while (item.IsNatureClaws() && !NaturePrefix.NaturePrefixes[result]._forClaws && !NaturePrefix.NaturePrefixes[result]._vanillaAdapted) {
                 result = NaturePrefix.NaturePrefixes.ElementAt(rand.Next(0, NaturePrefix.NaturePrefixes.Count)).Key;
             }
             return result;
@@ -201,7 +201,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
             damage.Flat = Math.Min(GetItemDamage(item, player) + GetBasePotentialDamage(item, player), damage.Flat);
         }
 
-        bool claws = item.IsClaws();
+        bool claws = item.IsNatureClaws();
         if (ActivePrefix != null) {
             if (HasPotentialDamage()) {
                 damage *= ActivePrefix._druidDamageMult;

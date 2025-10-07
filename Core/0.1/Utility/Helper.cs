@@ -327,7 +327,7 @@ static partial class Helper {
     public static float CappedMeleeOrDruidScale(this Player player) {
         var item = player.HeldItem;
         float result = player.GetAdjustedItemScale(item);
-        if (item.IsClaws()) {
+        if (item.IsNatureClaws()) {
             result *= NatureWeaponHandler.GetSize(item);
         }
         return Math.Clamp(result, 0.5f * item.scale, 2f * item.scale);

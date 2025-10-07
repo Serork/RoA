@@ -14,6 +14,7 @@ using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -40,7 +41,7 @@ class ClawsSlash : NatureProjectile {
 
     protected virtual bool SpawnSlashDust { get; } = true;
 
-    protected bool ShouldFullBright => AttachedNatureWeapon != null && AttachedNatureWeapon.type == ModContent.ItemType<HellfireClaws>();
+    protected bool ShouldFullBright => AttachedNatureWeapon != null && AttachedNatureWeapon.IsNatureClaws(out ClawsBaseItem clawsBaseItem) && clawsBaseItem.BrightnessModifier > 0f;
 
     protected Color? FirstSlashColor => _firstSlashColor;
     protected Color? SecondSlashColor => _secondSlashColor;
@@ -100,6 +101,7 @@ class ClawsSlash : NatureProjectile {
             modifiers.Knockback *= 0f;
         }
 
+        var selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
         if (FirstSlashColor != null && SecondSlashColor != null) {
             float angle = MathHelper.PiOver2;
             Vector2 offset = new(0.2f);
@@ -107,7 +109,7 @@ class ClawsSlash : NatureProjectile {
             Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
             Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()));
             if (ShouldFullBright) {
-                color = Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat());
+                color = Color.Lerp(color, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()), selectedClaws.BrightnessModifier);
             }
             color.A = 25;
             if (!ShouldFullBright) {
@@ -123,7 +125,7 @@ class ClawsSlash : NatureProjectile {
                 Setup(position,
                       velocity,
                       color,
-                      scale: scale);
+                      scale: scale).DontEmitLight = !selectedClaws.HasLighting;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
             }
@@ -136,6 +138,7 @@ class ClawsSlash : NatureProjectile {
             modifiers.Knockback *= 0f;
         }
 
+        var selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
         if (FirstSlashColor != null && SecondSlashColor != null) {
             float angle = MathHelper.PiOver2;
             Vector2 offset = new(0.2f);
@@ -143,7 +146,7 @@ class ClawsSlash : NatureProjectile {
             Vector2 position = Main.rand.NextVector2Circular(4f, 4f) * offset;
             Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()));
             if (ShouldFullBright) {
-                color = Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat());
+                color = Color.Lerp(color, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()), selectedClaws.BrightnessModifier);
             }
             color.A = 25;
             if (!ShouldFullBright) {
@@ -159,7 +162,7 @@ class ClawsSlash : NatureProjectile {
                 Setup(position,
                       velocity,
                       color,
-                      scale: scale);
+                      scale: scale).DontEmitLight = !selectedClaws.HasLighting;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
             }
@@ -193,6 +196,7 @@ class ClawsSlash : NatureProjectile {
         float rot = rotation ?? Projectile.rotation;
         lightColor *= 2f;
         lightColor.A = 100;
+        var selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
         Vector2 position = Projectile.Center - Main.screenPosition;
         Asset<Texture2D> asset = TextureAssets.Projectile[Type];
         Asset<Texture2D> asset2 = _secondSlashTexture;
@@ -213,7 +217,7 @@ class ClawsSlash : NatureProjectile {
             Color color1 = FirstSlashColor.Value;
             Color color2 = SecondSlashColor.Value;
             if (ShouldFullBright) {
-                num4 = 1f;
+                num4 = Owner.GetSelectedItem().As<ClawsBaseItem>().BrightnessModifier;
             }
             if (!ShouldFullBright) {
                 color1 = color1.MultiplyRGB(lightColor);
@@ -254,9 +258,9 @@ class ClawsSlash : NatureProjectile {
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * 0.15f * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
 
-                Color lightColor2 = ShouldFullBright ? Color.White : lightColor;
+                Color lightColor2 = ShouldFullBright ? Color.Lerp(Color.White, lightColor, 1f - num4) : lightColor;
                 lightColor2 *= MathUtils.Clamp01(num4 * 3f);
-                Color lightColor3 = ShouldFullBright ? Color.White : lightColor;
+                Color lightColor3 = ShouldFullBright ? Color.Lerp(Color.White, lightColor, 1f - num4) : lightColor;
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.333f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale * 1.075f, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * -0.05f, origin, scale * 0.8f * 1.075f, effects, 0.0f);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.333f).MultiplyRGB(lightColor2) * 0.25f * num2, Projectile.rotation + Projectile.ai[0] * -0.1f, origin, scale * 0.6f * 1.075f, effects, 0.0f);
@@ -294,7 +298,7 @@ class ClawsSlash : NatureProjectile {
                 float num22 = Utils.Remap(num12, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num12, 0.6f, 1f, 1f, 0.0f);
                 float num42 = num4;
                 if (ShouldFullBright) {
-                    num42 = 1f;
+                    num42 = selectedClaws.BrightnessModifier;
                 }
                 color1 *= num42 * num22;
                 color2 *= num42 * num22;
@@ -308,11 +312,11 @@ class ClawsSlash : NatureProjectile {
                     int type = ModContent.DustType<Slash>();
                     Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(color1, color2, Main.rand.NextFloat(0.5f, 1f) * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
                     dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
-                    dust.noLight = dust.noLightEmittence = true;
+                    dust.noLight = dust.noLightEmittence = !selectedClaws.HasLighting;
                     dust.scale *= Projectile.scale;
                     dust.noGravity = true;
                     if (ShouldFullBright) {
-                        dust.customData = 1f;
+                        dust.customData = num42;
                     }
                 }
             }

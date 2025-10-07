@@ -191,7 +191,7 @@ sealed class NaturePrefix(string name,
     public override float RollChance(Item item) => 1f;
 
     public override bool CanRoll(Item item) {
-        bool flag = item.IsClaws();
+        bool flag = item.IsNatureClaws();
         return item.IsANatureWeapon() && ((!flag && !_forClaws) || (flag && (_forClaws || _vanillaAdapted)));
     }
 
@@ -381,7 +381,7 @@ sealed class NaturePrefix(string name,
     public override IEnumerable<TooltipLine> GetTooltipLines(Item item) {
         NatureWeaponHandler handler = item.GetGlobalItem<NatureWeaponHandler>();
         string baseExtra = !handler.HasPotentialDamage() ? "1" : string.Empty;
-        bool claws = item.IsClaws();
+        bool claws = item.IsNatureClaws();
         if (_druidDamage != 0) {
             yield return new TooltipLine(Mod, "ExtraDruidDamage", GetLocalizedText("DruidDamageModifier" + baseExtra).Format(_druidDamage)) {
                 IsModifier = true,

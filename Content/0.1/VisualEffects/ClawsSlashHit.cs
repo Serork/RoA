@@ -19,6 +19,8 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
         TimeLeft = 30;
 
         _baseScale = Scale * 0.85f;
+
+        DontEmitLight = true;
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
@@ -38,6 +40,10 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
 
         if (--TimeLeft <= 0) {
             RestInPool();
+        }
+
+        if (!DontEmitLight) {
+            Lighting.AddLight(Position, DrawColor.ToVector3() * 0.5f * Scale);
         }
     }
 
