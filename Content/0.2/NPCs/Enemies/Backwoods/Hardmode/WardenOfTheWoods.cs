@@ -345,6 +345,25 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
         handleMoveset();
     }
 
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 50.0; num828++) {
+                int num730 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.WoodFurniture, 0, 0, 0, Alt ? new Color(185, 190, 180) : new Color(200, 200, 180), 1f + Main.rand.NextFloatRange(0.1f));
+            }
+
+            return;
+        }
+
+        if (!Main.dedServ) {
+            string name = nameof(WardenOfTheWoods);
+            string alt = Alt ? "_Alt" : string.Empty;
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, (name + "5" + alt).GetGoreType(), Scale: NPC.scale);
+            for (int i = 0; i < 4; i++) {
+                Gore.NewGore(NPC.GetSource_Death(), NPC.position + Vector2.UnitY * ((float)i / 4) * NPC.height, NPC.velocity, (name + (Main.rand.Next(4) + 1) + alt).GetGoreType(), Scale: NPC.scale);
+            }
+        }
+    }
+
     private void TeleportAttack() {
         if (Helper.SinglePlayerOrServer) {
             ProjectileUtils.SpawnHostileProjectile<Purification2>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
@@ -487,11 +506,6 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
                     wardenOfTheWoodsValues.Attacked = true;
                 }
                 break;
-        }
-    }
-    public override void HitEffect(NPC.HitInfo hit) {
-        for (int num923 = 0; num923 < 3; num923++) {
-            int num730 = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.WoodFurniture, 0, 0, 0, Alt ? new Color(185, 190, 180) : new Color(200, 200, 180), 1f + Main.rand.NextFloatRange(0.1f));
         }
     }
 
