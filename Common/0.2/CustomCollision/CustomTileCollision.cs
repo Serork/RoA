@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.CustomCollision;
 
 sealed class CustomTileCollision : IInitializer {
-    public static Dictionary<Point, (Projectile, Vector2)> TectonicPlatesPositions { get; private set; } = [];
+    public static Dictionary<Point, (Projectile, Vector2)> ExtraTileCollisionBlocks_Vectors { get; private set; } = [];
     public static HashSet<Point16> ExtraTileCollisionBlocks_Solid { get; private set; } = [];
     public static HashSet<Point16> ExtraTileCollisionBlocks_Platforms { get; private set; } = [];
 
@@ -33,12 +33,11 @@ sealed class CustomTileCollision : IInitializer {
         ExtraTileCollisionBlocks_Platforms.Clear();
         ExtraTileCollisionBlocks_Platforms = null!;
 
-        TectonicPlatesPositions.Clear();
-        TectonicPlatesPositions = null!;
+        ExtraTileCollisionBlocks_Vectors.Clear();
+        ExtraTileCollisionBlocks_Vectors = null!;
     }
 
     private static void GenerateTectonicCanePositions() {
-        TectonicPlatesPositions.Clear();
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<TectonicCaneProjectile>()) {
             List<Vector2> positions = [];
             for (int i = -2; i < 3; i++) {
@@ -59,7 +58,7 @@ sealed class CustomTileCollision : IInitializer {
                 }
             }
             foreach (Vector2 position in positions) {
-                TectonicPlatesPositions.TryAdd(position.ToTileCoordinates(), (projectile, position));
+                ExtraTileCollisionBlocks_Vectors.TryAdd(position.ToTileCoordinates(), (projectile, position));
             }
         }
     }
@@ -115,11 +114,12 @@ sealed class CustomTileCollision : IInitializer {
         value2 = Utils.Clamp(value2, 0, Main.maxTilesX - 1);
         value3 = Utils.Clamp(value3, 0, Main.maxTilesY - 1);
         value4 = Utils.Clamp(value4, 0, Main.maxTilesY - 1);
+        ExtraTileCollisionBlocks_Vectors.Clear();
         GenerateTectonicCanePositions();
         float num6 = (value4 + 3) * 16;
         Vector2 vector4 = default(Vector2);
         bool targetDummy = false;
-        if (TectonicPlatesPositions.Count > 0) {
+        if (ExtraTileCollisionBlocks_Vectors.Count > 0) {
             for (int i = num5; i < value2; i++) {
                 for (int j = value3; j < value4; j++) {
                     int num1451 = TETrainingDummy.Find(i, j);
@@ -138,7 +138,7 @@ sealed class CustomTileCollision : IInitializer {
                 bool customCollision = false;
                 Point16 tilePosition = new(i, j);
                 bool platform = false;
-                if (TectonicPlatesPositions.TryGetValue(new Point(i, j), out (Projectile, Vector2) turple)) {
+                if (ExtraTileCollisionBlocks_Vectors.TryGetValue(new Point(i, j), out (Projectile, Vector2) turple)) {
                     customCollision = true;
                 }
                 if (ExtraTileCollisionBlocks_Platforms.Contains(tilePosition)) {
