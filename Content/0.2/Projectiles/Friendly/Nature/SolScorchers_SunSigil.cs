@@ -233,7 +233,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                 batch.Draw(glowTexture, position2, DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
-                    Color = rayColor * 1.05f,
+                    Color = rayColor * 1.1f,
                     Scale = scale
                 });
                 Vector2 scale2 = new Vector2(MathHelper.Lerp(scale.X, 1f, 0.5f), scale.Y);
@@ -260,7 +260,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Origin = origin4,
                     Scale = scale * 0.6f,
                     Rotation = Projectile.rotation + Projectile.localAI[0] * 0.05f,
-                    Color = color * 0.5f
+                    Color = color * 0.5f * Utils.GetLerpValue(0, 10, Projectile.timeLeft, true)
                 });
             }
         }, blendState: BlendState.Additive);
