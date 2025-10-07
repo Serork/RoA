@@ -81,13 +81,11 @@ sealed class CustomTileCollision : IInitializer {
         for (int i = num5; i < value2; i++) {
             for (int j = value3; j < value4; j++) {
                 if (TileLoader.GetTile(Main.tile[i, j].TileType) is TreeBranch) {
-                    if (Main.tile[i + 1, j].TileType != type && Main.tile[i + 1, j].TileType != TileID.Trees) {
-                        ExtraTileCollisionBlocks_Platforms.Add(new Point16(i + 1, j));
-                        return;
-                    }
-                    if (Main.tile[i - 1, j].TileType != type && Main.tile[i - 1, j].TileType != TileID.Trees) {
+                    if (Main.tile[i + 1, j].TileType == TileID.Trees) {
                         ExtraTileCollisionBlocks_Platforms.Add(new Point16(i - 1, j));
-                        return;
+                    }
+                    if (Main.tile[i - 1, j].TileType == TileID.Trees) {
+                        ExtraTileCollisionBlocks_Platforms.Add(new Point16(i + 1, j));
                     }
                 }
             }
