@@ -289,7 +289,7 @@ sealed class MurkyCarcass : ModNPC {
             bool flag11 = false;
             if (NPC.type != 55 && NPC.type != 592 && NPC.type != 607 && NPC.type != 615) {
                 NPC.TargetClosest(faceTarget: false);
-                if (Main.player[NPC.target].wet && !Main.player[NPC.target].dead && Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height))
+                if ((Main.player[NPC.target].wet || (Main.expertMode && Vector2.Distance(NPC.Center, Main.player[NPC.target].Center) < 300f)) && !Main.player[NPC.target].dead && Collision.CanHit(NPC.position, NPC.width, NPC.height, Main.player[NPC.target].position, Main.player[NPC.target].width, Main.player[NPC.target].height))
                     flag11 = true;
             }
 
