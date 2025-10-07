@@ -15,6 +15,8 @@ namespace RoA.Content.VisualEffects;
 sealed class SunSigil : VisualEffect<SunSigil> {
     public float AI1;
 
+    public override Texture2D Texture => ResourceManager.DefaultSparkle;
+
     protected override void SetDefaults() {
         TimeLeft = 50;
 
@@ -42,7 +44,6 @@ sealed class SunSigil : VisualEffect<SunSigil> {
     }
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
-        Texture2D texture = ResourceManager.DefaultSparkle;
         Main.spriteBatch.DrawWithSnapshot(() => {
             for (int i = 0; i < 1; i++) {
                 float num2 = Math.Abs(Velocity.X) + Math.Abs(Velocity.Y);
@@ -54,8 +55,8 @@ sealed class SunSigil : VisualEffect<SunSigil> {
                     Vector2 vector2 = Position - velocity2 * k;
                     float scale3 = Scale * ((float)k / 10f);
                     Color color2 = DrawColor * Utils.GetLerpValue(0f, 10f, TimeLeft, true);
-                    Main.spriteBatch.Draw(texture, vector2 - Main.screenPosition, null, color2, Rotation, texture.Size() / 2f, scale3, SpriteEffects.None, 0f);
-                    Main.spriteBatch.Draw(texture, vector2 - Main.screenPosition, null, color2, Rotation + MathHelper.PiOver2, texture.Size() / 2f, scale3, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Texture, vector2 - Main.screenPosition, null, color2, Rotation, texture.Size() / 2f, scale3, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Texture, vector2 - Main.screenPosition, null, color2, Rotation + MathHelper.PiOver2, texture.Size() / 2f, scale3, SpriteEffects.None, 0f);
                 }
             }
         }, blendState: BlendState.Additive);
