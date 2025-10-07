@@ -2197,3 +2197,13 @@ SolScorchers: {
 	DisplayName: Sol Scorchers
 	Tooltip: "'Golden rays of the glorious sunshine'"
 }
+
+WardenOfTheWoods2Banner: {
+	DisplayName: Warden Of The Woods2 Banner
+	Tooltip: ""
+}
+
+WardenOfTheWoodsBanner: {
+	DisplayName: Warden Of The Woods Banner
+	Tooltip: ""
+}
