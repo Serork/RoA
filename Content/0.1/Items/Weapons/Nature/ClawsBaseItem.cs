@@ -3,12 +3,9 @@
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
 using RoA.Content.Projectiles.Friendly.Nature;
-using RoA.Content.World.Generations;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
-
-using System;
 
 using Terraria;
 using Terraria.DataStructures;

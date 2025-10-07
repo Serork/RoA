@@ -14,7 +14,7 @@ using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.WardenOfTheWoods;
 
 namespace RoA.Content.Projectiles.Enemies;
 
-sealed class WardenPurification2 : ModProjectile_NoTextureLoad {
+sealed class Purification2 : ModProjectile_NoTextureLoad {
     private static ushort TIMELEFT => (ushort)WardenOfTheWoods.ATTACKTIME;
 
     private Color _areaColor;

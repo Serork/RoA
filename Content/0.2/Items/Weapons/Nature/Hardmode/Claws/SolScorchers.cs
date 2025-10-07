@@ -1,9 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Druid.Claws;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
@@ -38,4 +42,10 @@ sealed class SolScorchers : ClawsBaseItem {
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(255, 221, 71), new Color(175, 152, 49));
+
+    public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
+        clawsStats.SetSpecialAttackData<SunSigil>(new ClawsHandler.AttackSpawnInfoArgs() {
+            Owner = Item
+        });
+    }
 }

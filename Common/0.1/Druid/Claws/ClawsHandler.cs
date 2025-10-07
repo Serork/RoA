@@ -51,7 +51,7 @@ sealed class ClawsHandler : ModPlayer {
     public ref struct AttackSpawnInfoArgs() {
         public Item Owner;
         public ushort ProjectileTypeToSpawn;
-        public Vector2 SpawnPosition;
+        public Vector2? SpawnPosition = null;
         public Vector2? StartVelocity = null;
         public SoundStyle? PlaySoundStyle = null;
         public bool ShouldReset = true;
@@ -65,7 +65,7 @@ sealed class ClawsHandler : ModPlayer {
     public readonly struct SpecialAttackSpawnInfo(AttackSpawnInfoArgs args) {
         public readonly Item Owner = args.Owner;
         public readonly ushort ProjectileTypeToSpawn = args.ProjectileTypeToSpawn;
-        public readonly Vector2 SpawnPosition = args.SpawnPosition;
+        public readonly Vector2? SpawnPosition = args.SpawnPosition;
         public readonly Vector2 StartVelocity = args.StartVelocity ?? Vector2.Zero;
         public readonly SoundStyle? PlaySoundStyle = args.PlaySoundStyle ?? null;
         public readonly bool ShouldReset = args.ShouldReset;

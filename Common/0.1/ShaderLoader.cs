@@ -23,6 +23,47 @@ using static Terraria.ModLoader.Core.TmodFile;
 namespace RoA.Common;
 
 sealed class ShaderLoader : ModSystem {
+    public static class SunShader {
+        private static float _time = 0f;
+        private static Color _color = Color.Transparent;
+        private static float _scale = 1f;
+        private static float _rayAlpha = 1f;
+        private static Vector2 _screenResolution = Vector2.Zero;
+        private static Vector2 _position = Vector2.Zero;
+
+        public static float Time {
+            get => _time;
+            set => Effect?.Parameters["uTime"].SetValue(_time = value);
+        }
+
+        public static Color Color {
+            get => _color;
+            set => Effect?.Parameters["uColor"].SetValue((_color = value).ToVector3());
+        }
+
+        public static float Scale {
+            get => _scale;
+            set => Effect?.Parameters["uScale"].SetValue(_scale = value);
+        }
+
+        public static float RayAlpha {
+            get => _rayAlpha;
+            set => Effect?.Parameters["uRayAlpha"].SetValue(_rayAlpha = value);
+        }
+
+        public static Vector2 ScreenResolution {
+            get => _screenResolution;
+            set => Effect?.Parameters["uScreenResolution"].SetValue(_screenResolution = value);
+        }
+
+        public static Vector2 Position {
+            get => _position;
+            set => Effect?.Parameters["uPos"].SetValue(_position = value);
+        }
+
+        public static Effect? Effect => _loadedShaders["Sun"].Value;
+    }
+
     public static class WavyShader {
         private static float _waveFactor = 0f;
         private static float _strengthX = 0f;
@@ -69,8 +110,8 @@ sealed class ShaderLoader : ModSystem {
             batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, snapshot.samplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
             Effect?.CurrentTechnique.Passes[0].Apply();
             draw();
-            Main.spriteBatch.End();
-            Main.spriteBatch.Begin(in snapshot);
+            batch.End();
+            batch.Begin(in snapshot);
         }
     }
 
@@ -112,6 +153,16 @@ sealed class ShaderLoader : ModSystem {
         }
 
         public static Effect? Effect => _loadedShaders["VerticalAppearance"].Value;
+    }
+
+    public static void Apply(SpriteBatch batch, Effect? effect, Action draw) {
+        SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
+        batch.End();
+        batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, snapshot.samplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
+        effect?.CurrentTechnique.Passes[0].Apply();
+        draw();
+        batch.End();
+        batch.Begin(in snapshot);
     }
 
     private static IDictionary<string, Asset<Effect>> _loadedShaders = new Dictionary<string, Asset<Effect>>();

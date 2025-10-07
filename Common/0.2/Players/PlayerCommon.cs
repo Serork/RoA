@@ -1,4 +1,8 @@
-﻿using RoA.Core.Utility.Vanilla;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.VisualEffects;
+using RoA.Content.VisualEffects;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 

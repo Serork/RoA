@@ -321,7 +321,7 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
                 Vector2 position = _initialPosition;
                 position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(TARGETDISTANCE, TARGETDISTANCE) / 3f;
                 Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-                WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+                WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity,
                     scale: Main.rand.NextFloat(0.3f, num67 * 0.6f) * GetFadeOutProgress());
                 if (wardenParticle != null) {
                     wardenParticle.CustomData = GetFadeOutProgress();
@@ -347,7 +347,7 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
 
     private void TeleportAttack() {
         if (Helper.SinglePlayerOrServer) {
-            ProjectileUtils.SpawnHostileProjectile<WardenPurification2>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
+            ProjectileUtils.SpawnHostileProjectile<Purification2>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
                 Damage = 50,
                 KnockBack = 0f,
                 Position = _initialPosition,
@@ -405,7 +405,7 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
             if (m < 20) position = _initialPosition + Vector2.UnitY.RotatedBy(Math.PI * m * 0.1f) * 100f;
             Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
             if (m < 20) velocity = Vector2.Normalize(position - _initialPosition) * 5f * Main.rand.NextFloat(0.25f, 1f);
-            WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+            WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity,
                 scale: Main.rand.NextFloat(0.5f, 2f));
             if (wardenParticle != null) {
                 wardenParticle.Alt = Alt;
@@ -425,7 +425,7 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
             return;
         }
 
-        ProjectileUtils.SpawnHostileProjectile<WardenPurification>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
+        ProjectileUtils.SpawnHostileProjectile<Purification>(new ProjectileUtils.SpawnHostileProjectileArgs(NPC, NPC.GetSource_FromAI()) {
             Damage = 50,
             KnockBack = 0f,
             Position = NPC.GetTargetPlayer().Center + (NPC.Center - _initialPosition) / 2f,

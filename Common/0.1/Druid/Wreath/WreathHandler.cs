@@ -322,7 +322,7 @@ sealed class WreathHandler : ModPlayer {
                                 SpecialAttackData.SpawnProjectile.Invoke(Player);
                             }
                             else if (Player.whoAmI == Main.myPlayer) {
-                                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
+                                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition ?? Player.Center, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
                             }
 
                             SpecialAttackData.OnAttack?.Invoke(Player);
