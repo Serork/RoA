@@ -107,7 +107,7 @@ sealed class HallowedGryphon : BaseForm {
         bool increasedMoveSpeed = player.GetFormHandler().IncreasedMoveSpeed;
         int num15 = 185;
         if (increasedMoveSpeed) {
-            num15 = (int)(num15 * (1f - ((MOVESPEEDBOOSTMODIFIER - 1f) / 3.5f * GetMoveSpeedFactor(player))));
+            num15 = (int)(num15 * (1f - ((MOVESPEEDBOOSTMODIFIER - 1f) / 3.25f * GetMoveSpeedFactor(player))));
         }
         num15 = (int)(num15 * LOOPATTACKSIZEMODIFIER);
         return num15;
@@ -133,7 +133,7 @@ sealed class HallowedGryphon : BaseForm {
 
         bool increasedMoveSpeed = handler.IncreasedMoveSpeed;
         int num15 = GetLoopAttackTime(player);
-        int attackPerCycle = increasedMoveSpeed ? 12 : 10;
+        int attackPerCycle = increasedMoveSpeed ? 15 : 10;
         float num19 = (float)Math.PI * 2f / (float)(num15 / 2);
         int perAttack = (int)(num15 / (float)attackPerCycle);
 
