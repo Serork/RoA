@@ -169,9 +169,9 @@ sealed class HallowedGryphon : BaseForm {
         player.shimmering = true;
         player.shimmerTransparency = 0f;
 
-        player.itemAnimation = 1;
+        player.itemTime = player.itemAnimation = 1;
 
-        player.controlLeft = player.controlRight = player.controlJump = false;
+        player.controlJump = false;
 
         WreathHandler.GetWreathStats(player).LockWreathPosition = true;
 
