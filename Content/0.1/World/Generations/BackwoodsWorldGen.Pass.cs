@@ -3883,7 +3883,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step_AddCatTails() {
-        for (int i = Left - 35; i <= Right + 35; i++) {
+        for (int i = Left - 100; i <= Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY; j++) {
                 if (WorldGenHelper.GetTileSafely(i, j).LiquidAmount > 0 && !WorldGenHelper.GetTileSafely(i, j).HasTile && !Main.tile[i, j - 1].HasTile) {
                     PlaceBackwoodsCattail(i, j);
@@ -3893,8 +3893,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     public static void PlaceBackwoodsCattail(int i, int j) {
-        int right = BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX - 200;
-        int left = BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX + 200;
+        int right = BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX - 100;
+        int left = BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX + 100;
         int x = i, num = j;
 
         Point point = PlaceCattail(i, j);
@@ -3909,7 +3909,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step_AddLilypads() {
-        for (int i = Left - 35; i <= Right + 35; i++) {
+        for (int i = Left - 100; i <= Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY; j++) {
                 if (WorldGenHelper.GetTileSafely(i, j).LiquidAmount > 0 && !(Main.tile[i, j + 1].HasTile && Main.tile[i, j + 1].TileType == ModContent.TileType<BackwoodsLilypad>())) {
                     PlaceBackwoodsLilypad(i, j, Right, Left);
