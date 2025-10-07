@@ -41,7 +41,7 @@ static partial class TileHelper {
         for (int i = num; i < value2; i++) {
             for (int j = value3; j < value4; j++) {
                 bool flag = false;
-                if (CustomTileCollision.IceBlockPositions.Contains(new Point16(i, j))) {
+                if (CustomTileCollision.ExtraTileCollisionBlocks_Solid.Contains(new Point16(i, j))) {
                     flag = true;
                 }
                 if (flag || (Main.tile[i, j] != null && !Main.tile[i, j].IsActuated && Main.tile[i, j].HasTile && ((Main.tileSolid[Main.tile[i, j].TileType] && !Main.tileSolidTop[Main.tile[i, j].TileType]) || (conditions != null && conditions[Main.tile[i, j].TileType]) || extraTypes.Contains(Main.tile[i, j].TileType)))) {
