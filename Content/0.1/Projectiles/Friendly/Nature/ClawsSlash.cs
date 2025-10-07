@@ -269,7 +269,7 @@ class ClawsSlash : NatureProjectile {
 
                 // melee slashes
                 //spriteBatch.Draw(asset2.Value, position, new Rectangle?(asset2.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.45f * num2, Projectile.rotation + Projectile.ai[0] * 0f, origin2, scale * 1.075f * 1.115f, effects, 0.0f);
-                spriteBatch.Draw(asset2.Value, position, new Rectangle?(asset2.Frame(verticalFrames: 2, frameY: 0)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.45f * num2, Projectile.rotation + Projectile.ai[0] * 0f, origin2, scale * 1.125f, effects, 0.0f);
+                spriteBatch.Draw(asset2.Value, position, new Rectangle?(asset2.Frame(verticalFrames: 2, frameY: 0)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.45f * num2, Projectile.rotation + Projectile.ai[0] * -0.15f, origin2, scale * 1.125f, effects, 0.0f);
                 spriteBatch.Draw(asset2.Value, position, new Rectangle?(asset2.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.45f * num2, Projectile.rotation + Projectile.ai[0] * -0.2f, origin2, scale * 0.6f * 1.075f, effects, 0.0f);
 
                 spriteBatch.Begin(snapshot, true);
