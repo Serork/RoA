@@ -55,8 +55,8 @@ sealed class SunSigil : VisualEffect<SunSigil> {
                     Vector2 vector2 = Position - velocity2 * k;
                     float scale3 = Scale * ((float)k / 10f);
                     Color color2 = DrawColor * Utils.GetLerpValue(0f, 10f, TimeLeft, true);
-                    Main.spriteBatch.Draw(Texture, vector2 - Main.screenPosition, null, color2, Rotation, texture.Size() / 2f, scale3, SpriteEffects.None, 0f);
-                    Main.spriteBatch.Draw(Texture, vector2 - Main.screenPosition, null, color2, Rotation + MathHelper.PiOver2, texture.Size() / 2f, scale3, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Texture, vector2 - Main.screenPosition, null, color2, Rotation, Texture.Size() / 2f, scale3, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(Texture, vector2 - Main.screenPosition, null, color2, Rotation + MathHelper.PiOver2, Texture.Size() / 2f, scale3, SpriteEffects.None, 0f);
                 }
             }
         }, blendState: BlendState.Additive);
