@@ -45,6 +45,11 @@ FenethStatue.MapEntry: Статуя Фенет
 TanningRack.MapEntry: Дубильный станок
 DullDaikatana.MapEntry: Затупившаяся дай-катана
 FlederSlayerDecoration.MapEntry: Погибель нетопырей
+// Acalypha.MapEntry: Acalypha
+// FourPixels.MapEntry: Four Pixels
+// DrippingTar.MapEntry: Dripping Tar
+// TarLiquidSensor.MapEntry: Liquid Sensor (Tar)
+// NixieTube.MapEntry: Nixie Tube
 //Paintings
 MillionDollarPainting.MapEntry: Картина на миллион долларов
 Moss.MapEntry: '''"Мох"'''
@@ -52,8 +57,3 @@ TheLegend.MapEntry: '''"Легенда"'''
 Absolute.MapEntry: '''"Абсолютный"'''
 Nihility.MapEntry: '''"Небытие"'''
 Them.MapEntry: '''"Они"'''
-// Acalypha.MapEntry: Acalypha
-// FourPixels.MapEntry: Four Pixels
-// DrippingTar.MapEntry: Dripping Tar
-// TarLiquidSensor.MapEntry: Liquid Sensor (Tar)
-// NixieTube.MapEntry: Nixie Tube
