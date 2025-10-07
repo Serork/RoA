@@ -29,15 +29,15 @@ sealed class SolScorchers : ClawsBaseItem {
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(34, 36);
-        Item.SetWeaponValues(30, 4.2f);
+        Item.SetWeaponValues(65, 4.2f);
 
-        Item.rare = ItemRarityID.LightRed;
+        Item.rare = ItemRarityID.Lime;
 
         Item.value = Item.sellPrice(0, 2, 50, 0);
 
         Item.SetUsableValues(ItemUseStyleID.Swing, 18, false, autoReuse: true);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 34);
+        NatureWeaponHandler.SetPotentialDamage(Item, 70);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
