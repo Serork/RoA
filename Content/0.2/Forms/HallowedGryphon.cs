@@ -171,6 +171,8 @@ sealed class HallowedGryphon : BaseForm {
 
         player.itemAnimation = 1;
 
+        player.controlLeft = player.controlRight = player.controlJump = false;
+
         WreathHandler.GetWreathStats(player).LockWreathPosition = true;
 
         float desiredRotation = savedVelocity.ToRotation() - MathHelper.PiOver2;
