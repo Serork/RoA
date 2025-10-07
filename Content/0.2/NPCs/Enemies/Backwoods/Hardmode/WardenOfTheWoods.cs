@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.VisualEffects;
+using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Content.VisualEffects;
 using RoA.Core;
@@ -128,6 +129,10 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
         NPC.noGravity = true;
         NPC.noTileCollide = true;
         NPC.HitSound = new SoundStyle(ResourceManager.ItemSounds + "WoodBreakStrong") with { Pitch = 0.3f, Volume = 0.3f, PitchVariance = 0.2f };
+
+        Banner = Type;
+        BannerItem = Alt ? ModContent.ItemType<WardenOfTheWoods2Banner>() : ModContent.ItemType<WardenOfTheWoodsBanner>();
+        ItemID.Sets.KillsToBanner[BannerItem] = 25;
     }
 
     public override void SendExtraAI(BinaryWriter writer) {

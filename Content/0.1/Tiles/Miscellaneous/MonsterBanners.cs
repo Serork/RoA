@@ -26,7 +26,9 @@ sealed class MonsterBanners : ModBannerTile {
         GrimDefender,
         BackwoodsRaven,
         DeerSkull,
-        MurkyCarcass
+        MurkyCarcass,
+        WardenOfTheWoods,
+        WardenOfTheWoods_Alt
     }
 
     public override void NearbyEffects(int i, int j, bool closer) {
