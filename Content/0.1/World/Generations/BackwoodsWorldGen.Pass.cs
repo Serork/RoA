@@ -3896,11 +3896,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int right = BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX - 200;
         int left = BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX + 200;
         int x = i, num = j;
-        if (x < left || x > right || num < 50 || num > Main.maxTilesY - 50)
-            return;
-
-        if (num > BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + 200)
-            return;
 
         Point point = PlaceCattail(i, j);
         if (WorldGen.InWorld(point.X, point.Y)) {
