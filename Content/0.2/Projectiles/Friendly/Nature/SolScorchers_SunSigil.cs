@@ -40,7 +40,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
     private Vector2 _laserDirection;
 
     private Color SelectedColor => Color.Lerp(_firstSlashColor, _secondSlashColor, Helper.Wave(0f, 1f, 5f, Projectile.whoAmI));
-    private float Opacity => Utils.GetLerpValue(TIMELEFT, TIMELEFT - 30, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
+    private float Opacity => Utils.GetLerpValue(TIMELEFT, TIMELEFT - 20, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
 
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(10);
