@@ -40,7 +40,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
     private Vector2 _laserDirection;
 
     private Color SelectedColor => Color.Lerp(_firstSlashColor, _secondSlashColor, Helper.Wave(0f, 1f, 5f, Projectile.whoAmI));
-    private float Opacity => Utils.GetLerpValue(TIMELEFT, TIMELEFT - 10, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
+    private float Opacity => Utils.GetLerpValue(TIMELEFT, TIMELEFT - 15, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
 
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(10);
@@ -76,6 +76,9 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.localAI[1] = 256f;
         }
 
+        float startVelocityModifier = Ease.CubeIn(Utils.GetLerpValue(TIMELEFT + 1, TIMELEFT - 10, Projectile.timeLeft, true));
+        float startVelocityModifier2 = Ease.CubeOut(Utils.GetLerpValue(TIMELEFT + 1, TIMELEFT - 20, Projectile.timeLeft, true));
+
         Projectile.scale = 0.75f;
 
         if (Projectile.localAI[0] == 0f) {
@@ -86,6 +89,8 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Projectile.netUpdate = true;
             }
         }
+
+        Projectile.velocity.X = Projectile.velocity.X.GetDirection() * 1f * startVelocityModifier2;
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.direction = Projectile.velocity.X.GetDirection();
@@ -103,7 +108,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Vector2 samplingPoint = Projectile.Center;
         float distance = 0f;
-        float opacity = Opacity;
+        float opacity = Opacity * startVelocityModifier2;
         float maxdistance = 400f * opacity;
         while (distance < maxdistance) {
             Vector2 start = Projectile.Center;
