@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Projectiles;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Content.Tiles.Platforms;
 using RoA.Core;

@@ -12,6 +12,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
+using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -24,7 +25,7 @@ class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
 
     // TODO: separate
     private void On_Main_DrawSmartCursor(On_Main.orig_DrawSmartCursor orig) {
-        if (TileLoader.GetTile(Main.tile[Main.SmartCursorX, Main.SmartCursorY].TileType) is TreeBranch) {
+        if (Main.SmartCursorShowing && !Main.player[Main.myPlayer].dead && TileLoader.GetTile(Main.tile[Main.SmartCursorX, Main.SmartCursorY].TileType) is TreeBranch) {
             Vector2 vector = new Vector2(Main.SmartCursorX, Main.SmartCursorY) * 16f;
             new Vector2(Main.offScreenRange, Main.offScreenRange);
             _ = Main.drawToScreen;
