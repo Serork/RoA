@@ -253,7 +253,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
     
     private void CreateTulipDusts() {
-        float tulipCount = TULIPCOUNT * 1;
+        float tulipCount = TULIPCOUNT * 1 + TULIPCOUNT / 2;
         Vector2 center = Projectile.Center;
         for (int i = 0; i < tulipCount + 1; i++) {
             Vector2 position = center;
