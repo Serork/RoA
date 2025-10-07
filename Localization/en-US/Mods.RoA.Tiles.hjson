@@ -45,6 +45,12 @@ FenethStatue.MapEntry: Feneth Statue
 TanningRack.MapEntry: Tanning Rack
 DullDaikatana.MapEntry: Dull Daikatana
 FlederSlayerDecoration.MapEntry: Fleder Slayer
+Acalypha.MapEntry: Acalypha
+FourPixels.MapEntry: Four Pixels
+DrippingTar.MapEntry: Dripping Tar
+TarLiquidSensor.MapEntry: Liquid Sensor (Tar)
+NixieTube.MapEntry: Nixie Tube
+
 //Paintings
 MillionDollarPainting.MapEntry: Million Dollar Painting
 Moss.MapEntry: '''"Moss"'''
@@ -52,8 +58,3 @@ TheLegend.MapEntry: '''"The Legend"'''
 Absolute.MapEntry: '''"Absolute"'''
 Nihility.MapEntry: '''"Nihility"'''
 Them.MapEntry: '''"Them"'''
-Acalypha.MapEntry: Acalypha
-FourPixels.MapEntry: Four Pixels
-DrippingTar.MapEntry: Dripping Tar
-TarLiquidSensor.MapEntry: Liquid Sensor (Tar)
-NixieTube.MapEntry: Nixie Tube
