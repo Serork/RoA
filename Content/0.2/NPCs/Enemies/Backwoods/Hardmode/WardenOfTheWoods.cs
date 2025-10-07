@@ -530,7 +530,7 @@ sealed class WardenOfTheWoods : ModNPC, IRequestAssets {
         color2 *= opacity;
         if (_teleportOpacity < 1f) _teleportOpacity += 0.05f;
         int extra = 3;
-        drawColor = Color.Lerp(drawColor, Color.Lerp(Color.Black, Color.DarkGreen, 0.5f), (1f - fadeOutProgress) * 0.5f);
+        drawColor = Color.Lerp(drawColor, Color.Lerp(Color.Black, _alt ? Color.DarkBlue : Color.DarkGreen, 0.5f), (1f - fadeOutProgress) * 0.5f);
         WardenOfTheWoodsRequstedTextureType glowVariant = _alt ? WardenOfTheWoodsRequstedTextureType.AltGlow : WardenOfTheWoodsRequstedTextureType.Glow;
         Texture2D glowTexture = indexedTextureAssets[(byte)glowVariant].Value;
         float xOffset = 4f * NPC.spriteDirection;
