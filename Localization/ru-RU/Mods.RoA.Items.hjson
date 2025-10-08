@@ -2224,11 +2224,11 @@ SolScorchers: {
 }
 
 WardenOfTheWoods2Banner: {
-	// DisplayName: Woodlands Warden
+	// DisplayName: Backwoods Warden Banner
 	// Tooltip: ""
 }
 
 WardenOfTheWoodsBanner: {
-	// DisplayName: Woodlands Keeper
+	// DisplayName: Woodlands Keeper Banner
 	// Tooltip: ""
 }
