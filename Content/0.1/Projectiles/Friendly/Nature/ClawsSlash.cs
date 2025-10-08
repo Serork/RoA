@@ -179,7 +179,7 @@ class ClawsSlash : NatureProjectile {
     public override bool? CanCutTiles() => CanFunction;
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        float coneLength = 80f * Projectile.scale;
+        float coneLength = 75f * Projectile.scale;
         float num1 = 0.5105088f * Projectile.ai[0];
         float maximumAngle = 0.3926991f;
         float coneRotation = Projectile.rotation + num1;
