@@ -19,6 +19,7 @@ sealed class HellfireClaws : ClawsBaseItem {
     public override Color? GetAlpha(Color lightColor) => Color.White;
 
     public override float BrightnessModifier => 1f;
+    public override bool HasLighting => true;
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(26);
