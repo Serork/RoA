@@ -10,6 +10,7 @@ using System;
 using System.IO;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -296,7 +297,11 @@ sealed class BackwoodsFogHandler : ModSystem {
         float brightness = (lightColor.R / 255f + lightColor.G / 255f + lightColor.B / 255f) / 3f;
         float brightness2 = MathHelper.Clamp((brightness - 0.6f) * 5f, 0f, 1f);
         if (Main.rand.NextChance(1f - brightness2)) {
-            Vector2 position = new Point(x, y - 1).ToWorldCoordinates();
+            Point16 tilePosition = new(x, y - 1);
+            if (Main.wallHouse[WorldGenHelper.GetTileSafely(x, y - 1).WallType]) {
+                return;
+            }
+            Vector2 position = tilePosition.ToWorldCoordinates();
             float num = 16f * Main.rand.NextFloat();
             position.Y -= num;
             float num2 = 0.4f;

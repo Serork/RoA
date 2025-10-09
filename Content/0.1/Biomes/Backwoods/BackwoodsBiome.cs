@@ -117,7 +117,7 @@ sealed partial class BackwoodsBiome : ModBiome {
 
     public static BackwoodsBiome Instance => ModContent.GetInstance<BackwoodsBiome>();
 
-    public override SceneEffectPriority Priority => SceneEffectPriority.Environment;
+    public override SceneEffectPriority Priority => SceneEffectPriority.BiomeHigh;
 
     public override int BiomeTorchItemType => ModContent.ItemType<Items.Placeable.Crafting.ElderTorch>();
     public override int BiomeCampfireItemType => ModContent.ItemType<Items.Placeable.Crafting.BackwoodsCampfire>();
