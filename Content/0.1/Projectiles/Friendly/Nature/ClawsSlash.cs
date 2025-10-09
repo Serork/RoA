@@ -364,12 +364,34 @@ class ClawsSlash : NatureProjectile {
         Projectile.scale = num3 + fromValue * num2;
         Projectile.scale *= _clawsExtraScale;
 
+        ClawsBaseItem selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
+        bool hasLighting = selectedClaws.HasLighting;
+        if (hasLighting) {
+            Lighting.AddLight(Projectile.Center, GetLightingColor().ToVector3());
+        }
+
         if (CanFunction) {
             for (float i = -MathHelper.PiOver4; i <= MathHelper.PiOver4; i += MathHelper.PiOver2) {
-                Rectangle rectangle = Utils.CenteredRectangle(Projectile.Center + (Projectile.rotation * player.gravDir + i).ToRotationVector2() * 60f * Projectile.scale, new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
+                Vector2 position = Projectile.Center + (Projectile.rotation * player.gravDir + i).ToRotationVector2() * 60f * Projectile.scale;
+                if (hasLighting) {
+                    Lighting.AddLight(position, GetLightingColor().ToVector3());
+                }
+                Rectangle rectangle = Utils.CenteredRectangle(position, new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
                 Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
             }
         }
+    }
+
+    protected virtual Color GetLightingColor() {
+        Color color = Color.Transparent;
+        if (FirstSlashColor != null && SecondSlashColor != null) {
+            ClawsBaseItem selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
+            color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()).MultiplyRGB(Color.Lerp(FirstSlashColor!.Value, SecondSlashColor!.Value, Main.rand.NextFloat()));
+            if (ShouldFullBright) {
+                color = Color.Lerp(color, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, Main.rand.NextFloat()), selectedClaws.BrightnessModifier);
+            }
+        }
+        return color;
     }
 
     public override void AI() {
