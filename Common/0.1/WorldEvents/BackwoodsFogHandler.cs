@@ -4,6 +4,7 @@ using RoA.Common.Players;
 using RoA.Common.VisualEffects;
 using RoA.Content.Achievements;
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Tiles.Platforms;
 using RoA.Core.Utility;
 
 using System;
@@ -260,7 +261,7 @@ sealed class BackwoodsFogHandler : ModSystem {
         //if (y >= Main.worldSurface) {
         //    return;
         //}
-        if (!tile.HasTile/* || tile.Slope > 0 || tile.IsHalfBlock*/ || !Main.tileSolid[tile.TileType]) {
+        if (!tile.HasTile/* || tile.Slope > 0 || tile.IsHalfBlock*/ || !(Main.tileSolid[tile.TileType] || WorldGenHelper.IsPlatform(x, y))) {
             return;
         }
         ////if (TileID.Sets.Platforms[tile.TileType]) {
@@ -270,7 +271,7 @@ sealed class BackwoodsFogHandler : ModSystem {
         ////if (!tile.AnyWall() && !WorldGenHelper.GetTileSafely(x, y).AnyWall()) {
         ////    return;
         ////}
-        tile = WorldGenHelper.GetTileSafely(x, y - 1);
+
         //int type = ModContent.TileType<OvergrownAltar>();
 
         //bool flag = true;
@@ -284,7 +285,7 @@ sealed class BackwoodsFogHandler : ModSystem {
         ////        }
         ////    }
         ////}
-        if (!WorldGen.SolidTile(tile) && Main.rand.NextBool((int)(20 + 40 * (1f - Math.Clamp(Opacity / 0.75f, 0f, 1f))))) {
+        if (!WorldGenHelper.SolidTile2(x, y - 1) && Main.rand.NextBool((int)(20 + 40 * (1f - Math.Clamp(Opacity / 0.75f, 0f, 1f))))) {
             SpawnFloorCloud(x, y);
             if (Main.rand.NextBool(3)) {
                 SpawnFloorCloud(x, y - 1);

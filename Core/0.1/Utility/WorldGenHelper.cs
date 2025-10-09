@@ -3,6 +3,7 @@
 using ReLogic.Utilities;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Common.CustomCollision;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.World.Generations;
@@ -458,7 +459,7 @@ static class WorldGenHelper {
 
     public static bool IsPlatform(Point tilePosition) {
         Tile tile = GetTileSafely(tilePosition.X, tilePosition.Y);
-        return (TileID.Sets.Platforms[tile.TileType] && WorldGen.PlatformProperTopFrame(tile.TileFrameX));
+        return (TileID.Sets.Platforms[tile.TileType] && (WorldGen.PlatformProperTopFrame(tile.TileFrameX) || CustomTileCollision.ExtraTileCollisionBlocks_Platforms.Contains(new Point16(tilePosition.X, tilePosition.Y))));
     }
 
     public static int SafeFloatingIslandY => ModLoader.HasMod("Remnants") ? (WorldGenHelperVars.worldSurfaceLow + 66) : (WorldGenHelperVars.worldSurfaceLow - 22);

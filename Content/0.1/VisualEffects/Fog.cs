@@ -54,7 +54,7 @@ sealed class Fog : VisualEffect<Fog> {
             return;
         }
 
-        if (WorldGen.SolidTile(tile) || (!WorldGen.SolidTile(tile2) && !WorldGen.SolidTile(tile3)))
+        if (WorldGenHelper.SolidTile2(point.X, point.Y) || (!WorldGenHelper.SolidTile2(point.X, point.Y + 1) && !WorldGenHelper.SolidTile2(point.X, point.Y + 2)))
             flag = true;
 
         if (FadeIn <= 0.3f)
