@@ -13,7 +13,7 @@ sealed class Slash : ModDust {
         bool flag = dust.customData is float v && v == 1f;
         if (!flag) {
             Point pos = dust.position.ToTileCoordinates();
-            float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0f, 1f);
+            float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.1f, 1f);
             color *= brightness;
         }
 

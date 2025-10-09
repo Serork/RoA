@@ -15,6 +15,16 @@ using static Terraria.Player;
 
 namespace RoA.Content.Items.Weapons.Nature;
 
+abstract class ClawsBaseItem<T> : ClawsBaseItem where T : ClawsSlash {
+    protected sealed override void SafeSetDefaults3() {
+        Item.SetShootableValues(SetClawsSlash<T>(), 1.2f);
+
+        if (IsHardmodeClaws) {
+            Item.useStyle = -1;
+        }
+    }
+}
+
 [WeaponOverlay(WeaponType.Claws)]
 abstract class ClawsBaseItem : NatureItem {
     public virtual bool IsHardmodeClaws { get; } = false;
@@ -29,6 +39,8 @@ abstract class ClawsBaseItem : NatureItem {
     public virtual float FirstAttackScaleModifier { get; } = 1f;
     public virtual float SecondAttackScaleModifier { get; } = 1f;
     public virtual float ThirdAttackScaleModifier { get; } = 1f;
+
+    protected virtual ushort SetClawsSlash<T>() where T : ClawsSlash => (ushort)ModContent.ProjectileType<T>();
 
     public override void UseStyle(Player player, Rectangle heldItemFrame) {
         if (!IsHardmodeClaws || player.ItemAnimationJustStarted) {
@@ -69,7 +81,7 @@ abstract class ClawsBaseItem : NatureItem {
     }
 
     protected sealed override void SafeSetDefaults2() {
-        Item.SetShootableValues((ushort)ModContent.ProjectileType<ClawsSlash>(), 1.2f);
+        Item.SetShootableValues(SetClawsSlash<ClawsSlash>(), 1.2f);
 
         if (IsHardmodeClaws) {
             Item.useStyle = -1;

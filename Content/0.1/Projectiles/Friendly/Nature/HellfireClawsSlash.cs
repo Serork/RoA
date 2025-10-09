@@ -36,11 +36,9 @@ sealed class HellfireClawsSlash : ClawsSlash {
 
     public bool Charged { get; private set; } = true;
 
-    protected override bool SpawnSlashDust => false;
+    protected override bool OnSlashDustSpawn(float progress) => false;
 
     private bool Hit => _hitTimer > 0;
-
-    public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<ClawsSlash>()).Texture;
 
     public override void SetStaticDefaults() {
         base.SetStaticDefaults();

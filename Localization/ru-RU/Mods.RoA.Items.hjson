@@ -2232,3 +2232,8 @@ WardenOfTheWoodsBanner: {
 	// DisplayName: Woodlands Keeper Banner
 	// Tooltip: ""
 }
+
+ShadowflameClaws: {
+	// DisplayName: Shadowflame Claws
+	// Tooltip: ""
+}

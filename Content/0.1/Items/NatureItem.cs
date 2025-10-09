@@ -39,6 +39,7 @@ abstract class NatureItem : ModItem {
         }
 
         SafeSetDefaults2();
+        SafeSetDefaults3();
 
         if (Item.IsAWeapon()) {
             //NatureWeaponHandler handler = Item.GetGlobalItem<NatureWeaponHandler>();
@@ -53,6 +54,7 @@ abstract class NatureItem : ModItem {
 
     protected virtual void SafeSetDefaults() { }
     protected virtual void SafeSetDefaults2() { }
+    protected virtual void SafeSetDefaults3() { }
 
     public virtual void WhileBeingHold(Player player, float progress) { }
 }
