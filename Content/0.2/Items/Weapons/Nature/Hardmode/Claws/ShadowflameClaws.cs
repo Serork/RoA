@@ -3,6 +3,7 @@
 using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using Terraria;
@@ -43,26 +44,36 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
 
     public sealed class ShadowflameClawsSlash : ClawsSlash {
         protected override bool OnSlashDustSpawn(float progress) {
-            float num12 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
-            float num22 = Utils.Remap(num12, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num12, 0.6f, 1f, 1f, 0.0f);
-            Player player = Main.player[Projectile.owner];
-            float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * progress);
-            float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
-            Vector2 rotationVector2 = (f + Projectile.ai[0] * 1.25f * MathHelper.PiOver2).ToRotationVector2();
-            Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
-            for (int num807 = 0; (float)num807 < Projectile.scale * 10f * 5; num807++) {
-                int type = 27;
-                Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 100, default, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
-                dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
-                dust.scale *= 0.35f;
-                dust.scale *= Projectile.scale;
-                dust.noGravity = true;
-                Dust dust2 = dust;
-                dust2 = dust;
-                dust2.velocity -= Projectile.velocity * (1.3f - Projectile.scale);
-                dust.fadeIn = 100 + Projectile.owner;
-                dust2 = dust;
-                dust2.scale += Projectile.scale * 0.75f;
+            float max = Projectile.ai[1] + Projectile.ai[1] * 0.5f;
+            if (Projectile.localAI[0] >= Projectile.ai[1] * 0.5f && Projectile.localAI[0] < max) {
+                float startProgress = Utils.Remap(Utils.GetLerpValue(Projectile.ai[1] * 0.5f, Projectile.ai[1] * 0.7f, Projectile.localAI[0], true), 0f, 1f, 0.5f, 1f, true);
+                float endProgress = Utils.GetLerpValue(max, max * 0.75f, Projectile.localAI[0], true);
+                startProgress *= endProgress;
+                float num12 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
+                float num22 = Utils.Remap(num12, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num12, 0.6f, 1f, 1f, 0.0f);
+                Player player = Main.player[Projectile.owner];
+                float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * progress);
+                float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
+                Vector2 rotationVector2 = (f + Projectile.ai[0] * 1.25f * MathHelper.PiOver2).ToRotationVector2();
+                Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
+                for (int num807 = 0; (float)num807 < Projectile.scale * 10f; num807++) {
+                    if (!Main.rand.NextChance(startProgress * 0.9f)) {
+                        continue;
+                    }
+                    int type = 27;
+                    Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 100, default, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
+                    dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
+                    dust.scale *= 0.35f * startProgress;
+                    dust.scale *= Projectile.scale;
+                    dust.scale *= Utils.GetLerpValue(0f, 1f, position.Distance(player.Center) / 50f, true) * startProgress;
+                    dust.noGravity = true;
+                    Dust dust2 = dust;
+                    dust2 = dust;
+                    dust2.velocity -= Projectile.velocity * (1.25f - Projectile.scale);
+                    dust.fadeIn = 100 + Projectile.owner;
+                    dust2 = dust;
+                    dust2.scale += Projectile.scale * 0.75f;
+                }
             }
 
             return false;

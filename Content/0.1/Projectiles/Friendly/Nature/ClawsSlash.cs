@@ -263,8 +263,15 @@ class ClawsSlash : NatureProjectile {
         }
 
         if (FirstSlashColor != null && SecondSlashColor != null) {
-            if (Projectile.localAI[0] >= Projectile.ai[1] * 0.7f && Projectile.localAI[0] < Projectile.ai[1] + Projectile.ai[1] * 0.2f) {
-                if (OnSlashDustSpawn(num1)) {
+            if (OnSlashDustSpawn(num1)) {
+                float max = Projectile.ai[1] + Projectile.ai[1] * 0.5f;
+                if (Projectile.localAI[0] >= Projectile.ai[1] * 0.5f && Projectile.localAI[0] < max) {
+                    float startProgress = Utils.Remap(Utils.GetLerpValue(Projectile.ai[1] * 0.5f, Projectile.ai[1] * 0.7f, Projectile.localAI[0], true), 0f, 1f, 0.5f, 1f, true);
+                    float endProgress = Utils.GetLerpValue(max, max * 0.75f, Projectile.localAI[0], true);
+                    startProgress *= endProgress;
+                    if (!Main.rand.NextChance(startProgress * 0.9f)) {
+                        return;
+                    }
                     Color color1 = FirstSlashColor.Value;
                     Color color2 = SecondSlashColor.Value;
                     //Point pos = Projectile.Center.ToTileCoordinates();
@@ -291,7 +298,7 @@ class ClawsSlash : NatureProjectile {
                         dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                         dust.noLight = dust.noLightEmittence = !selectedClaws.HasLighting;
                         dust.scale *= Projectile.scale;
-                        dust.scale *= Utils.GetLerpValue(0f, 1f, position.Distance(player.Center) / 50f, true);
+                        dust.scale *= Utils.GetLerpValue(0f, 1f, position.Distance(player.Center) / 50f, true) * startProgress;
                         dust.noGravity = true;
                         if (ShouldFullBright) {
                             dust.customData = num42;
