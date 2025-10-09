@@ -298,7 +298,7 @@ sealed class BackwoodsFogHandler : ModSystem {
         float brightness2 = MathHelper.Clamp((brightness - 0.6f) * 5f, 0f, 1f);
         if (Main.rand.NextChance(1f - brightness2)) {
             Point16 tilePosition = new(x, y - 1);
-            if (Main.wallHouse[WorldGenHelper.GetTileSafely(x, y - 1).WallType]) {
+            if (WorldGenHelper.ActiveWall(x, y - 1) && Main.wallHouse[WorldGenHelper.GetTileSafely(x, y - 1).WallType]) {
                 return;
             }
             Vector2 position = tilePosition.ToWorldCoordinates();
