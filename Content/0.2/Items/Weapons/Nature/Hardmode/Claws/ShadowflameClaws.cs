@@ -40,7 +40,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
-    protected override (Color, Color) SlashColors(Player player) => (Color.Lerp(new Color(144, 85, 240), new Color(63, 63, 163).ModifyRGB(1f), 0.75f), Color.Lerp(new Color(90, 30, 200), new Color(63, 63, 163).ModifyRGB(0.75f), 0.75f));
+    protected override (Color, Color) SlashColors(Player player) => (Color.Lerp(new Color(169, 85, 240), new Color(88, 63, 163).ModifyRGB(1f), 0.75f), Color.Lerp(new Color(115, 30, 200), new Color(88, 63, 163).ModifyRGB(0.75f), 0.75f));
 
     public sealed class ShadowflameClawsSlash : ClawsSlash {
         protected override bool OnSlashDustSpawn(float progress) {
@@ -61,7 +61,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
                         continue;
                     }
                     int type = 27;
-                    Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 100, default, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
+                    Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 125, default, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
                     dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                     dust.scale *= 0.35f * startProgress;
                     dust.scale *= Projectile.scale;
