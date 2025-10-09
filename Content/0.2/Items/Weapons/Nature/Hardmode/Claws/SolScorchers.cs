@@ -18,6 +18,7 @@ sealed class SolScorchers : ClawsBaseItem {
 
     public override float BrightnessModifier => 1f;
     public override bool HasLighting => true;
+    public override float HitEffectOpacity => 0.75f;
 
     public override float FirstAttackSpeedModifier => 0.75f;
     public override float SecondAttackSpeedModifier => 0.75f;

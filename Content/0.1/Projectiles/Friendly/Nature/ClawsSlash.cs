@@ -130,6 +130,7 @@ class ClawsSlash : NatureProjectile {
                 float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.8f, 1f);
                 color *= brightness;
             }
+            color *= selectedClaws.HitEffectOpacity;
             position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
             velocity = angle.ToRotationVector2() * velocity * 0.5f;
             float scale = Projectile.scale;

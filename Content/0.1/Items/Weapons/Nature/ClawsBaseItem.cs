@@ -31,6 +31,7 @@ abstract class ClawsBaseItem : NatureItem {
 
     public virtual float BrightnessModifier { get; } = 0f;
     public virtual bool HasLighting { get; } = false;
+    public virtual float HitEffectOpacity { get; } = 1f;
 
     public virtual float FirstAttackSpeedModifier { get; } = 1f;
     public virtual float SecondAttackSpeedModifier { get; } = 1f;
