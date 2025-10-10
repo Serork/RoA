@@ -57,6 +57,8 @@ sealed class HellfireFracture : NatureProjectile {
     }
 
     public override void AI() {
+        //Projectile.timeLeft = 20;
+
         Player player = Main.player[Projectile.owner];
         float max = 4.5f;
         bool flag = Projectile.ai[0] < max;
@@ -77,7 +79,7 @@ sealed class HellfireFracture : NatureProjectile {
             if (slash != null) {
                 Projectile.ai[1] = 0f;
                 Projectile.position = proj.As<HellfireClawsSlash>().GetPos(MathHelper.PiOver4 * 0.5f);
-                Projectile.position += Vector2.UnitY * 10f * -player.direction;
+                Projectile.position += Vector2.UnitY * 7.5f;
                 Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 10f;
                 Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
                 Projectile.direction = player.direction;
@@ -241,6 +243,10 @@ sealed class HellfireFracture : NatureProjectile {
         }
         bool flag0 = Projectile.direction == -1;
         Vector2 pos1 = _first, pos2 = _last;
+        if (!flag0) {
+            pos1 = _last;
+            pos2 = _first;
+        }
         Vector2 dif = pos2 - pos1;
         Vector2 vel = dif.SafeNormalize(Vector2.Zero) * dif.Length() / 2f;
         Vector2 center = Projectile.position + vel;
@@ -277,7 +283,7 @@ sealed class HellfireFracture : NatureProjectile {
             count++;
             float progress = num4 / num1;
             float pi = MathHelper.Pi * 0.9f;
-            Vector2 vector2_2 = a + vec.RotatedBy(pi * progress - pi) * 0.6f * num4 + vec * num4 * 0.6f;
+            Vector2 vector2_2 = a + vec.RotatedBy((pi * progress - pi) * (flag0).ToDirectionInt()) * 0.6f * num4 + vec * num4 * 0.6f;
             Vector2 vector2_3 = vector2_2 + (random.NextBool() ? (float)num2 * vector2_1 * PseudoRandRange(ref seed, -6f, 6f) : Vector2.Zero);
             Vector2 vector2_4 = vector2_3;
             Vector2 offset = Vector2.UnitY * num1 / 2f;
