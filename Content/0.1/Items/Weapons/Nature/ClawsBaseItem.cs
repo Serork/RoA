@@ -81,6 +81,8 @@ abstract class ClawsBaseItem : NatureItem {
         player.SetCompositeArmBack(enabled: true, compositeArmStretchAmount, !back ? 0f : rotation);
     }
 
+    protected virtual void SetSpecialAttackData(ref ClawsHandler.AttackSpawnInfoArgs args) { }
+
     protected sealed override void SafeSetDefaults2() {
         Item.SetShootableValues(SetClawsSlash<ClawsSlash>(), 1.2f);
 
@@ -104,6 +106,13 @@ abstract class ClawsBaseItem : NatureItem {
             (Color, Color) slashColors = SlashColors(player);
             ClawsHandler clawsStats = player.GetModPlayer<ClawsHandler>();
             clawsStats.SetColors(slashColors.Item1, slashColors.Item2);
+
+            var args = new ClawsHandler.AttackSpawnInfoArgs() {
+                Owner = Item,
+                ShouldReset = false
+            };
+            SetSpecialAttackData(ref args);
+            clawsStats.SetSpecialAttackData(args);
 
             if (IsHardmodeClaws) {
                 player.GetClawsHandler().AttackCount++;

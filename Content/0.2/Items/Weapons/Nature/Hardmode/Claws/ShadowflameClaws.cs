@@ -50,13 +50,6 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
 
     protected override (Color, Color) SlashColors(Player player) => (Color.Lerp(new Color(169, 85, 240), new Color(88, 63, 163).ModifyRGB(1f), 0.75f), Color.Lerp(new Color(115, 30, 200), new Color(88, 63, 163).ModifyRGB(0.75f), 0.75f));
 
-    public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
-        clawsStats.SetSpecialAttackData(new ClawsHandler.AttackSpawnInfoArgs() {
-            Owner = Item,
-            ShouldReset = false
-        });
-    }
-
     public sealed class ShadowflameClawsSlash : ClawsSlash {
         private bool Charged => Projectile.GetOwnerAsPlayer().GetWreathHandler().IsActualFull6;
 

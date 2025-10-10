@@ -46,11 +46,4 @@ sealed class HellfireClaws : ClawsBaseItem {
     }
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(255, 150, 20), new Color(200, 80, 10));
-
-    public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
-        clawsStats.SetSpecialAttackData(new ClawsHandler.AttackSpawnInfoArgs() {
-            Owner = Item,
-            ShouldReset = false
-        });
-    }
 }
