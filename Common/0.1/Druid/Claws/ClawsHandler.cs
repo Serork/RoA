@@ -56,10 +56,10 @@ sealed class ClawsHandler : ModPlayer {
         public SoundStyle? PlaySoundStyle = null;
         public bool ShouldReset = true;
         public bool ShouldSpawn = true;
-        public Action<Player>? SpawnProjectile = null;
-        public Action<Player>? OnSpawn = null;
+        public Action? SpawnProjectile = null;
+        public Action? OnSpawn = null;
         public bool OnlySpawn = false;
-        public Action<Player>? OnAttack = null;
+        public Action? OnAttack = null;
     }
 
     public readonly struct SpecialAttackSpawnInfo(AttackSpawnInfoArgs args) {
@@ -70,10 +70,10 @@ sealed class ClawsHandler : ModPlayer {
         public readonly SoundStyle? PlaySoundStyle = args.PlaySoundStyle ?? null;
         public readonly bool ShouldReset = args.ShouldReset;
         public readonly bool ShouldSpawn = args.ShouldSpawn;
-        public readonly Action<Player>? SpawnProjectile = args.SpawnProjectile;
-        public readonly Action<Player>? OnSpawn = args.OnSpawn;
+        public readonly Action? SpawnProjectile = args.SpawnProjectile;
+        public readonly Action? OnSpawn = args.OnSpawn;
         public readonly bool OnlySpawn = args.OnlySpawn;
-        public readonly Action<Player>? OnAttack = args.OnAttack;
+        public readonly Action? OnAttack = args.OnAttack;
     }
 
     public (Color, Color) SlashColors { get; private set; }

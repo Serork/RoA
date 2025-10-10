@@ -51,51 +51,48 @@ sealed class ElderwoodClaws : ClawsBaseItem {
         return position;
     }
 
-    public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
+    protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
         ushort type = (ushort)ModContent.ProjectileType<ElderwoodWallProjectile>();
-        clawsStats.SetSpecialAttackData(new ClawsHandler.AttackSpawnInfoArgs() {
-            Owner = Item,
-            SpawnProjectile = (Player player) => {
-                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ClawsRoot") { Volume = 2.5f }, player.Center);
-                for (int k = 0; k < 2; k++) {
-                    switch (k) {
-                        case 0:
-                            for (int k2 = 0; k2 < 3; k2++) {
-                                Vector2 position = GetPos(player, false);
-                                Projectile.NewProjectile(player.GetSource_ItemUse(Item),
-                                       position,
-                                       Vector2.Zero,
-                                       type,
-                                       NatureWeaponHandler.GetNatureDamage(Item, player),
-                                       player.GetTotalKnockback(DruidClass.Nature).ApplyTo(Item.knockBack),
-                                       player.whoAmI,
-                                       5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
-                                       2f);
-                            }
-                            break;
-                        case 1:
-                            for (int k2 = 0; k2 < 3; k2++) {
-                                Vector2 position = GetPos(player, true);
-                                Projectile.NewProjectile(player.GetSource_ItemUse(Item),
-                                       position,
-                                       Vector2.Zero,
-                                       type,
-                                       NatureWeaponHandler.GetNatureDamage(Item, player),
-                                       player.GetTotalKnockback(DruidClass.Nature).ApplyTo(Item.knockBack),
-                                       player.whoAmI,
-                                       5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
-                                       2f);
-                            }
-                            break;
-                    }
-                }
-            },
-            OnAttack = (player) => {
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 3, player.Center));
+        args.SpawnProjectile = () => {
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "ClawsRoot") { Volume = 2.5f }, player.Center);
+            for (int k = 0; k < 2; k++) {
+                switch (k) {
+                    case 0:
+                        for (int k2 = 0; k2 < 3; k2++) {
+                            Vector2 position = GetPos(player, false);
+                            Projectile.NewProjectile(player.GetSource_ItemUse(Item),
+                                   position,
+                                   Vector2.Zero,
+                                   type,
+                                   NatureWeaponHandler.GetNatureDamage(Item, player),
+                                   player.GetTotalKnockback(DruidClass.Nature).ApplyTo(Item.knockBack),
+                                   player.whoAmI,
+                                   5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
+                                   2f);
+                        }
+                        break;
+                    case 1:
+                        for (int k2 = 0; k2 < 3; k2++) {
+                            Vector2 position = GetPos(player, true);
+                            Projectile.NewProjectile(player.GetSource_ItemUse(Item),
+                                   position,
+                                   Vector2.Zero,
+                                   type,
+                                   NatureWeaponHandler.GetNatureDamage(Item, player),
+                                   player.GetTotalKnockback(DruidClass.Nature).ApplyTo(Item.knockBack),
+                                   player.whoAmI,
+                                   5f - k2 + Main.rand.Next(-k2 / 2, k2 / 2),
+                                   2f);
+                        }
+                        break;
                 }
             }
-        });
+        };
+        args.OnAttack = () => {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 3, player.Center));
+            }
+        };
     }
 
     private static void GetPoints(Player player, int direction, out Point point1, out Point point2) {

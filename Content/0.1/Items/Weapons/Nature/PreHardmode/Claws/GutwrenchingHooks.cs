@@ -2,6 +2,8 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
@@ -10,6 +12,7 @@ using RoA.Core.Utility;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
@@ -30,16 +33,19 @@ sealed class GutwrenchingHooks : ClawsBaseItem {
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(216, 73, 73), new Color(255, 114, 114));
 
-    public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
+    protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
         int offset = 30 * player.direction;
         var position = new Vector2(player.Center.X + offset, player.Center.Y);
         Vector2 pointPosition = player.GetViableMousePosition();
         Vector2 point = Helper.VelocityToPoint(player.Center, pointPosition, 1.2f);
-        clawsStats.SetSpecialAttackData<HemorrhageWave>(new ClawsHandler.AttackSpawnInfoArgs() {
-            Owner = Item,
-            SpawnPosition = new Vector2(position.X, position.Y - 14f),
-            StartVelocity = point,
-            PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "ClawsWave") { Volume = 0.75f }
-        });
+        args.ProjectileTypeToSpawn = (ushort)ModContent.ProjectileType<HemorrhageWave>();
+        args.SpawnPosition = new Vector2(position.X, position.Y - 14f);
+        args.StartVelocity = point;
+        args.PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "ClawsWave") { Volume = 0.75f };
+        args.OnAttack = () => {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 1, player.Center));
+            }
+        };
     }
 }

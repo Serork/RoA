@@ -33,7 +33,7 @@ sealed class ThornyClaws : ClawsBaseItem {
 
     protected override (Color, Color) SlashColors(Player player) => (new Color(75, 167, 85), new Color(100, 200, 110));
 
-    public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
+    protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
         ushort type = (ushort)ModContent.ProjectileType<Snatcher>();
         bool shouldReset = true;
         int count = 0;
@@ -50,19 +50,16 @@ sealed class ThornyClaws : ClawsBaseItem {
         if (count > 1) {
             shouldReset = false;
         }
-        clawsStats.SetSpecialAttackData(new ClawsHandler.AttackSpawnInfoArgs() {
-            Owner = Item,
-            SpawnPosition = player.Center,
-            StartVelocity = Helper.VelocityToPoint(player.Center, player.GetViableMousePosition(), 1f).SafeNormalize(Vector2.Zero),
-            ProjectileTypeToSpawn = type,
-            ShouldReset = shouldReset,
-            ShouldSpawn = player.ownedProjectileCounts[type] < 2,
-            PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "Leaves2") { Pitch = 0.3f, Volume = 1.2f },
-            OnAttack = (player) => {
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 2, player.Center));
-                }
+        args.SpawnPosition = player.Center;
+        args.StartVelocity = Helper.VelocityToPoint(player.Center, player.GetViableMousePosition(), 1f).SafeNormalize(Vector2.Zero);
+        args.ProjectileTypeToSpawn = type;
+        args.ShouldReset = shouldReset;
+        args.ShouldSpawn = player.ownedProjectileCounts[type] < 2;
+        args.PlaySoundStyle = new SoundStyle(ResourceManager.ItemSounds + "Leaves2") { Pitch = 0.3f, Volume = 1.2f };
+        args.OnAttack = () => {
+            if (Main.netMode == NetmodeID.MultiplayerClient) {
+                MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 2, player.Center));
             }
-        });
+        };
     }
 }
