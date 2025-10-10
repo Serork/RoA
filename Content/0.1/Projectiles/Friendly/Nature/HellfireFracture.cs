@@ -235,7 +235,8 @@ sealed class HellfireFracture : NatureProjectile {
         uint seed = (uint)(Projectile.position.GetHashCode() + Projectile.velocity.GetHashCode());
         float rot = Helper.VelocityAngle(Projectile.velocity) + MathHelper.PiOver2;
         rot += MathHelper.Pi;
-        if (Projectile.direction == 1) {
+        bool right = Projectile.direction == 1;
+        if (right) {
             rot += 0.2f;
             rot -= MathHelper.TwoPi;
         }
@@ -335,7 +336,7 @@ sealed class HellfireFracture : NatureProjectile {
                     size = maxSize;
                 }
             }
-            float drawSize = size * 1f;
+            float drawSize = (right ? maxSize - size : size) * 1f;
             int max = (int)(4 * Math.Min(2f, progress / gap2) * (progress <= gap1 ? 1f : (1f - (progress - gap1) / gap2)));
             for (int i = 0; i < max; i++) {
                 int index = i;
