@@ -42,7 +42,7 @@ sealed class SolScorchers : ClawsBaseItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
-    protected override (Color, Color) SlashColors(Player player) => (new Color(255, 221, 71), new Color(175, 152, 49));
+    protected override (Color, Color) SetSlashColors(Player player) => (new Color(255, 221, 71), new Color(175, 152, 49));
 
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
         clawsStats.SetSpecialAttackData<SunSigil>(new ClawsHandler.AttackSpawnInfoArgs() {

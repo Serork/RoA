@@ -12,6 +12,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static System.Net.Mime.MediaTypeNames;
+
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
 [WeaponOverlay(WeaponType.Claws, 0xffffff)]
@@ -39,15 +41,15 @@ sealed class HellfireClaws : ClawsBaseItem {
         args.ShouldReset = false;
     }
 
-    public override bool CanUseItem(Player player) => base.CanUseItem(player) && player.ownedProjectileCounts[ModContent.ProjectileType<HellfireClawsSlash>()] < 1;
-
-    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+    protected override ushort? SpawnClawsProjectileType(Player player) {
         WreathHandler handler = player.GetWreathHandler();
         bool flag = handler.WillBeFull(handler.CurrentResource, true);
-        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), flag ? ModContent.ProjectileType<HellfireClawsSlash>() : type, damage, knockback, player.whoAmI, player.direction, NatureWeaponHandler.GetUseSpeed(Item, player));
-
-        return false;
+        ushort? result = null;
+        if (flag) {
+            result = (ushort)ModContent.ProjectileType<HellfireClawsSlash>();
+        }
+        return result;
     }
 
-    protected override (Color, Color) SlashColors(Player player) => (new Color(255, 150, 20), new Color(200, 80, 10));
+    protected override (Color, Color) SetSlashColors(Player player) => (new Color(255, 150, 20), new Color(200, 80, 10));
 }

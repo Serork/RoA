@@ -31,7 +31,7 @@ sealed class GutwrenchingHooks : ClawsBaseItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.8f);
     }
 
-    protected override (Color, Color) SlashColors(Player player) => (new Color(216, 73, 73), new Color(255, 114, 114));
+    protected override (Color, Color) SetSlashColors(Player player) => (new Color(216, 73, 73), new Color(255, 114, 114));
 
     protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
         int offset = 30 * player.direction;

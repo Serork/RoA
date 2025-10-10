@@ -31,7 +31,7 @@ sealed class HorrorPincers : ClawsBaseItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.8f);
     }
 
-    protected override (Color, Color) SlashColors(Player player) => (new Color(112, 75, 140), new Color(130, 100, 210));
+    protected override (Color, Color) SetSlashColors(Player player) => (new Color(112, 75, 140), new Color(130, 100, 210));
 
     protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
         int offset = 30 * player.direction;

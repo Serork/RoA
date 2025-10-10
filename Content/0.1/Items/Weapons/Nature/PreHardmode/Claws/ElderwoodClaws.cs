@@ -32,7 +32,7 @@ sealed class ElderwoodClaws : ClawsBaseItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
-    protected override (Color, Color) SlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));
+    protected override (Color, Color) SetSlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));
 
     private Vector2 GetPos(Player player, bool leftSided) {
         int direction = leftSided ? -1 : 1;

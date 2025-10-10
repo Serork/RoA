@@ -93,9 +93,9 @@ abstract class ClawsBaseItem : NatureItem {
 
     public virtual void OnHit(Player player, float progress) { }
 
-    protected abstract (Color, Color) SlashColors(Player player);
+    protected abstract (Color, Color) SetSlashColors(Player player);
 
-    public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] < 1;
+    public sealed override bool CanUseItem(Player player) => player.ownedProjectileCounts[SpawnClawsProjectileType(player) ?? Item.shoot] < 1;
 
     public virtual void SafeOnUse(Player player, ClawsHandler clawsStats) { }
 
@@ -103,7 +103,7 @@ abstract class ClawsBaseItem : NatureItem {
 
     public override bool? UseItem(Player player) {
         if (player.whoAmI == Main.myPlayer && player.ItemAnimationJustStarted) {
-            (Color, Color) slashColors = SlashColors(player);
+            (Color, Color) slashColors = SetSlashColors(player);
             ClawsHandler clawsStats = player.GetModPlayer<ClawsHandler>();
             clawsStats.SetColors(slashColors.Item1, slashColors.Item2);
 
@@ -137,7 +137,9 @@ abstract class ClawsBaseItem : NatureItem {
         velocity = point;
     }
 
-    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+    protected virtual ushort? SpawnClawsProjectileType(Player player) => null;
+
+    public sealed override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         ushort attackTime = NatureWeaponHandler.GetUseSpeedForClaws(Item, player);
         ClawsHandler.ClawsAttackType clawsAttackType = player.GetClawsHandler().AttackType;
         switch (clawsAttackType) {
@@ -151,7 +153,7 @@ abstract class ClawsBaseItem : NatureItem {
                 attackTime = (ushort)(attackTime * ThirdAttackSpeedModifier);
                 break;
         }
-        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/,
+        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), SpawnClawsProjectileType(player) ?? type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/,
             attackTime);
 
         return false;

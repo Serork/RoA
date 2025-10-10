@@ -31,7 +31,7 @@ sealed class ThornyClaws : ClawsBaseItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
-    protected override (Color, Color) SlashColors(Player player) => (new Color(75, 167, 85), new Color(100, 200, 110));
+    protected override (Color, Color) SetSlashColors(Player player) => (new Color(75, 167, 85), new Color(100, 200, 110));
 
     protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
         ushort type = (ushort)ModContent.ProjectileType<Snatcher>();
