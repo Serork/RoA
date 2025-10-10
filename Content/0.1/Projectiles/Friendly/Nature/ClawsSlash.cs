@@ -157,12 +157,15 @@ class ClawsSlash : NatureProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         float coneLength = 75f * Projectile.scale;
+        SetCollisionScale(ref coneLength);
         float num1 = 0.5105088f * Projectile.ai[0];
         float maximumAngle = 0.3926991f;
         float coneRotation = Projectile.rotation + num1;
         bool result = targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center, coneLength, coneRotation, maximumAngle);
         return result;
     }
+
+    protected virtual void SetCollisionScale(ref float coneLength) { }
 
     public override bool PreDraw(ref Color lightColor) {
         DrawItself(ref lightColor);
@@ -173,7 +176,6 @@ class ClawsSlash : NatureProjectile {
         float rot = rotation ?? Projectile.rotation;
         lightColor *= 2f;
         lightColor.A = 100;
-        var selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
         Vector2 position = Projectile.Center - Main.screenPosition;
         Asset<Texture2D> asset = TextureAssets.Projectile[Type];
         Asset<Texture2D> asset2 = _secondSlashTexture;
@@ -182,14 +184,12 @@ class ClawsSlash : NatureProjectile {
         Vector2 origin = r.Size() / 2f;
         Vector2 origin2 = r2.Size() / 2f;
         float scale = Projectile.scale * 1.1f;
-        SpriteEffects effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
-        //SpriteEffects effects = Projectile.ai[0] >= 0.0 ? ((player.gravDir == 1f) ? SpriteEffects.None : SpriteEffects.FlipVertically) : ((player.gravDir == 1f) ? SpriteEffects.FlipVertically : SpriteEffects.None);
+        SpriteEffects effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.None : SpriteEffects.FlipVertically;  
         float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float num3 = 0.975f;
         Point tilePosition = Projectile.Center.ToTileCoordinates();
         float num4 = Utils.Remap((Lighting.GetColor(tilePosition) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
-        //num4 *= MathUtils.Clamp01(Utils.Remap(Lighting.Brightness(tilePosition.X, tilePosition.Y), 0f, 1f, 0.5f, 1f, false));
         if (FirstSlashColor != null && SecondSlashColor != null) {
             Color color1 = FirstSlashColor.Value;
             Color color2 = SecondSlashColor.Value;
@@ -200,10 +200,7 @@ class ClawsSlash : NatureProjectile {
                 color1 = color1.MultiplyRGB(lightColor);
                 color2 = color2.MultiplyRGB(lightColor);
             }
-            //Point pos = Projectile.Center.ToTileCoordinates();
-            //float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.5f, 1f);
-            //color1 *= brightness;
-            //color2 *= brightness;
+
             float num12 = MathHelper.Clamp(Projectile.timeLeft / 2, 0f, 5f);
             if (CanFunction) {
                 SpriteBatch spriteBatch = Main.spriteBatch;
@@ -211,7 +208,7 @@ class ClawsSlash : NatureProjectile {
                 spriteBatch.Begin(snapshot with { blendState = BlendState.NonPremultiplied }, true);
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(r), FirstSlashColor.Value * num4 * num2 * 0.35f, Projectile.rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
                 spriteBatch.Begin(snapshot with { blendState = BlendState.Additive, samplerState = SamplerState.LinearClamp }, true);
-                //spriteBatch.DrawSelf(asset.Value, position, new Rectangle?(r), color1 * num4 * num2, Projectile._rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
+                
                 Color shineColor = new Color(255, 200, 150);
                 Color color3 = lightColor * num2 * 0.5f;
                 color3.A = (byte)(color3.A * (1.0 - (double)num4));
@@ -244,8 +241,6 @@ class ClawsSlash : NatureProjectile {
 
                 spriteBatch.Draw(asset.Value, position, new Rectangle?(asset.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.15f * num2, Projectile.rotation + Projectile.ai[0] * 0.01f, origin, scale * 0.575f, effects, 0.0f);
 
-                // melee slashes
-                //spriteBatch.Draw(asset2.Value, position, new Rectangle?(asset2.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.45f * num2, Projectile.rotation + Projectile.ai[0] * 0f, origin2, scale * 1.075f * 1.115f, effects, 0.0f);
                 spriteBatch.Draw(asset2.Value, position, new Rectangle?(asset2.Frame(verticalFrames: 2, frameY: 0)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.45f * num2, Projectile.rotation + Projectile.ai[0] * -0.15f, origin2, scale * 1.125f, effects, 0.0f);
                 spriteBatch.Draw(asset2.Value, position, new Rectangle?(asset2.Frame(verticalFrames: 2, frameY: 1)), Color.Lerp(Color.White, FirstSlashColor.Value, 0.75f).MultiplyRGB(lightColor2) * 0.45f * num2, Projectile.rotation + Projectile.ai[0] * -0.2f, origin2, scale * 0.6f * 1.075f, effects, 0.0f);
 
@@ -259,10 +254,15 @@ class ClawsSlash : NatureProjectile {
             }
         }
 
+        SpawnSlashDusts(num1, num4);
+    }
+
+    protected virtual void SpawnSlashDusts(float num1, float num4) {
         if (Main.gamePaused || !Main.instance.IsActive || Lighting.UpdateEveryFrame && !Main.rand.NextBool(4)) {
             return;
         }
 
+        var selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
         if (FirstSlashColor != null && SecondSlashColor != null) {
             if (OnSlashDustSpawn(num1)) {
                 float max = Projectile.ai[1] + Projectile.ai[1] * 0.5f;
@@ -292,7 +292,7 @@ class ClawsSlash : NatureProjectile {
                     float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
                     float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
                     Vector2 rotationVector2 = (f + Projectile.ai[0] * 1.25f * MathHelper.PiOver2).ToRotationVector2();
-                    position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
+                    Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
                     if (position.Distance(player.Center) >= 10f/*45f*/) {
                         int type = ModContent.DustType<Slash>();
                         Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(color1, color2, Main.rand.NextFloat(0.5f, 1f) * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
@@ -415,6 +415,7 @@ class ClawsSlash : NatureProjectile {
             float scale = Main.player[Projectile.owner].CappedMeleeOrDruidScale();
             GetExtraSizeByAttackType(ref scale, clawsBaseItem);
             if (scale != 1f) {
+                SetScaleOnSpawn(ref scale);
                 _clawsExtraScale *= scale;
                 Projectile.scale *= scale;
             }
@@ -433,6 +434,8 @@ class ClawsSlash : NatureProjectile {
         }
         Projectile.Kill();
     }
+
+    protected virtual void SetScaleOnSpawn(ref float scale) { }
 
     protected virtual void GetExtraSizeByAttackType(ref float scale, ClawsBaseItem clawsBaseItem) {
         ClawsHandler.ClawsAttackType clawsAttackType = Owner.GetClawsHandler().AttackType;
