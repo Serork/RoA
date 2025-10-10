@@ -237,10 +237,11 @@ sealed class HellfireFracture : NatureProjectile {
         rot += MathHelper.Pi;
         bool right = Projectile.direction == 1;
         if (right) {
-            rot += 0.2f;
+            rot += 0.3f;
             rot -= MathHelper.TwoPi;
         }
-        bool flag0 = false;
+        rot += 0.1f * Projectile.direction;
+        bool flag0 = true;
         Vector2 pos1 = _first, pos2 = _last;
         Vector2 dif = pos2 - pos1;
         Vector2 vel = dif.SafeNormalize(Vector2.Zero) * dif.Length() / 2f;
@@ -336,7 +337,8 @@ sealed class HellfireFracture : NatureProjectile {
                     size = maxSize;
                 }
             }
-            float drawSize = (right ? maxSize - size : size) * 1f;
+            float drawSize = maxSize * 0.75f;
+            drawSize *= Utils.GetLerpValue(0f, 0.5f, progress, true) * Utils.GetLerpValue(1f, 0.85f, progress, true);
             int max = (int)(4 * Math.Min(2f, progress / gap2) * (progress <= gap1 ? 1f : (1f - (progress - gap1) / gap2)));
             for (int i = 0; i < max; i++) {
                 int index = i;
@@ -355,7 +357,7 @@ sealed class HellfireFracture : NatureProjectile {
             Vector2 vector = f.ToRotationVector2();
             int value5 = (int)Projectile.ai[0];
             bool flag6 = Projectile.ai[0] > value5 - 0.2f && Projectile.ai[0] < value5 + 0.2f;
-            if (progress > 0.15f && progress < 0.95f && flag4) {
+            if (progress > 0.15f && progress < 0.85f && flag4) {
                 float width = 0f;
                 float width2 = PseudoRandRange(ref seed, 30f, 40f);
                 float size2 = size + random.NextFloat(-size / 4f, size / 5f);
