@@ -77,7 +77,7 @@ sealed class HellfireFracture : NatureProjectile {
             if (slash != null) {
                 Projectile.ai[1] = 0f;
                 Projectile.position = proj.As<HellfireClawsSlash>().GetPos(MathHelper.PiOver4 * 0.5f);
-                Projectile.position += Vector2.UnitY * 10f * -player.direction;
+                Projectile.position += Vector2.UnitY * 5f * -player.direction;
                 Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 10f;
                 Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
                 Projectile.direction = player.direction;
@@ -237,7 +237,7 @@ sealed class HellfireFracture : NatureProjectile {
         rot += MathHelper.Pi;
         bool right = Projectile.direction == 1;
         if (right) {
-            rot += 0.3f;
+            rot += 0.25f;
             rot -= MathHelper.TwoPi;
         }
         rot += 0.1f * Projectile.direction;
