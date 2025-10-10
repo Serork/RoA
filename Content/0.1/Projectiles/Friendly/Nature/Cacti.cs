@@ -243,8 +243,8 @@ sealed class Cacti : NatureProjectile {
                         Projectile.netUpdate = true;
                     }
 
-                    for (int i = 0; i < 30; i++) {
-                        int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CactiCasterDust>(), 0f, -2f, 0, default, 1.5f);
+                    for (int i = 0; i < 20; i++) {
+                        int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<CactiCasterDust>(), 0f, -2f, 0, default, 1.5f + Main.rand.NextFloatRange(0.1f));
                         Main.dust[dust].position.X += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
                         Main.dust[dust].position.Y += Main.rand.Next(-50, 51) * 0.05f - 1.5f;
                         Main.dust[dust].noGravity = true;
