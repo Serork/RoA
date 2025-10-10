@@ -5,7 +5,10 @@ using RoA.Common.Druid.Claws;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
+
+using System.Runtime.InteropServices;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -17,7 +20,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
 [WeaponOverlay(WeaponType.Claws, 0xffffff)]
-sealed class HellfireClaws : ClawsBaseItem {
+sealed class HellfireClaws : ClawsBaseItem<HellfireClaws.HellfireClawsSlash> {
     public override Color? GetAlpha(Color lightColor) => Color.White;
 
     public override float BrightnessModifier => 1f;
@@ -46,10 +49,20 @@ sealed class HellfireClaws : ClawsBaseItem {
         bool flag = handler.WillBeFull(handler.CurrentResource, true);
         ushort? result = null;
         if (flag) {
-            result = (ushort)ModContent.ProjectileType<HellfireClawsSlash>();
+            result = (ushort)ModContent.ProjectileType<UltimateHellfireClawsSlash>();
         }
         return result;
     }
 
     protected override (Color, Color) SetSlashColors(Player player) => (new Color(255, 150, 20), new Color(200, 80, 10));
+
+    public sealed class HellfireClawsSlash : ClawsSlash {
+        public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+            target.AddBuff(BuffID.OnFire, Main.rand.Next(60, 180));
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+            target.AddBuff(BuffID.OnFire, Main.rand.Next(60, 180));
+        }
+    }
 }

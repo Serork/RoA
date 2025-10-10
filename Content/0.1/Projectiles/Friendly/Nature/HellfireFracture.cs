@@ -65,18 +65,16 @@ sealed class HellfireFracture : NatureProjectile {
         Vector2 baseValue = Projectile.position;
         _first = _last = baseValue;
         _last.Y = _first.Y + Projectile.ai[0] * 0.2f * height;
-        if (Projectile.Opacity < 1f) {
-            Projectile.Opacity += 0.1f;
-        }
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.025f);
         if (player.whoAmI != Main.myPlayer) {
             return;
         }
         Projectile? proj = GetParent();
         if (flag && proj != null && Projectile.ai[1] == 1f) {
-            var slash = proj.As<HellfireClawsSlash>();
+            var slash = proj.As<UltimateHellfireClawsSlash>();
             if (slash != null) {
                 Projectile.ai[1] = 0f;
-                Projectile.position = proj.As<HellfireClawsSlash>().GetPos(MathHelper.PiOver4 * 0.5f);
+                Projectile.position = proj.As<UltimateHellfireClawsSlash>().GetPos(MathHelper.PiOver4 * 0.5f);
                 Projectile.position += Vector2.UnitY * 5f * -player.direction;
                 Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 10f;
                 Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
@@ -92,7 +90,7 @@ sealed class HellfireFracture : NatureProjectile {
     private Projectile? GetParent() {
         Projectile proj = Main.projectile[(int)Projectile.ai[2]];
         if (proj != null && proj.active) {
-            var slash = proj.As<HellfireClawsSlash>();
+            var slash = proj.As<UltimateHellfireClawsSlash>();
             if (slash != null) {
                 return proj;
             }
@@ -231,7 +229,7 @@ sealed class HellfireFracture : NatureProjectile {
     }
 
     private void DrawSlash(float mult, Color lightColor, Vector2? posExtra = null, float scale = 1f) {
-        scale *= Utils.GetLerpValue(0f, 20f, Projectile.timeLeft, true);
+        scale *= Utils.GetLerpValue(0f, 20f, Projectile.timeLeft, true) * Projectile.Opacity;
         uint seed = (uint)(Projectile.position.GetHashCode() + Projectile.velocity.GetHashCode());
         float rot = Helper.VelocityAngle(Projectile.velocity) + MathHelper.PiOver2;
         rot += MathHelper.Pi;
@@ -263,7 +261,7 @@ sealed class HellfireFracture : NatureProjectile {
         int count = 0;
         Color color1 = Color.Lerp(new Color(255, 150, 20), new Color(137, 54, 6), 0.8f * Main.rand.NextFloat()),
               color2 = Color.Lerp(new Color(200, 80, 10), new Color(96, 36, 4), 0.8f * Main.rand.NextFloat());
-        Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.9f * Projectile.Opacity;
+        Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.9f;
         color = lightColor.MultiplyRGB(color);
         color *= 0.875f;
         Texture2D texture = ResourceManager.Blood;

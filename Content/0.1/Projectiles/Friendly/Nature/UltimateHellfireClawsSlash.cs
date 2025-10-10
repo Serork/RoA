@@ -24,7 +24,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class HellfireClawsSlash : ClawsSlash {
+sealed class UltimateHellfireClawsSlash : ClawsSlash {
     private const int MAX = 14;
 
     private int _hitTimer, _oldTimeleft;
