@@ -35,6 +35,10 @@ sealed class HellfireClaws : ClawsBaseItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
+    protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
+        args.ShouldReset = false;
+    }
+
     public override bool CanUseItem(Player player) => base.CanUseItem(player) && player.ownedProjectileCounts[ModContent.ProjectileType<HellfireClawsSlash>()] < 1;
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
