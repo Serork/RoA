@@ -55,7 +55,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
     protected override (Color, Color) SetSlashColors(Player player) => (Color.Lerp(new Color(169, 85, 240), new Color(88, 63, 163).ModifyRGB(1f), 0.75f), Color.Lerp(new Color(115, 30, 200), new Color(88, 63, 163).ModifyRGB(0.75f), 0.75f));
 
     public sealed class ShadowflameClawsSlash : ClawsSlash {
-        private bool Charged => Projectile.GetOwnerAsPlayer().GetWreathHandler().IsActualFull6;
+        private bool Charged => (!CanFunction || Opacity == 1f) && Projectile.GetOwnerAsPlayer().GetWreathHandler().IsActualFull6;
 
         public ref float Opacity => ref Projectile.localAI[1];
 
@@ -82,12 +82,8 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
         }
 
         public override void SafePostAI() {
-            float lerpValue = 0.1f;
             if (Charged) {
-                Opacity = Helper.Approach(Opacity, 1f, lerpValue);
-            }
-            else {
-                Opacity = Helper.Approach(Opacity, 0f, lerpValue);
+                Opacity = 1f;
             }
         }
 
@@ -100,7 +96,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             Vector2 origin = rectangle.Size() / 2f;
             float num = proj.scale * 1.1f;
             SpriteEffects effects = ((!(proj.ai[0] >= 0f)) ? SpriteEffects.FlipVertically : SpriteEffects.None);
-            float num2 = proj.localAI[0] / proj.ai[1];
+            float num2 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
             float num3 = Utils.Remap(num2, 0f, 0.6f, 0f, 1f) * Utils.Remap(num2, 0.6f, 1f, 1f, 0f);
             float num4 = 0.975f;
             float fromValue = Lighting.GetColor(proj.Center.ToTileCoordinates()).ToVector3().Length() / (float)Math.Sqrt(3.0);
@@ -116,16 +112,20 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             if (Opacity > 0f) {
                 Color baseColor = FirstSlashColor!.Value;
                 baseColor.A = 150;
-                for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
-                    spriteBatch.Draw(asset.Value, vector, rectangle,
-                        baseColor * fromValue * num3 * 0.3f * 1f * Opacity, Main.rand.NextFloatRange(0.1f) + proj.rotation + i * Projectile.direction - MathHelper.PiOver4 * Projectile.direction, origin,
-                        num * 0.8f * 1f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
-                }
+                for (int k = 0; k < 2; k++) {
+                    for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
+                        float progress = i / MathHelper.PiOver2;
+                        spriteBatch.Draw(asset.Value, vector, rectangle,
+                            baseColor * fromValue * num3 * 0.3f * 1f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + proj.rotation + i * Projectile.direction - MathHelper.PiOver2 * 0.75f * Projectile.direction, origin,
+                            num * 0.8f * 1f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
+                    }
 
-                for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
-                    spriteBatch.Draw(asset.Value, vector, rectangle,
-                        baseColor * fromValue * num3 * 0.3f * 0.75f * Opacity, Main.rand.NextFloatRange(0.1f) + proj.rotation + i * Projectile.direction - MathHelper.PiOver4 * Projectile.direction, origin,
-                        num * 0.8f * 0.5f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
+                    for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
+                        float progress = i / MathHelper.PiOver2;
+                        spriteBatch.Draw(asset.Value, vector, rectangle,
+                            baseColor * fromValue * num3 * 0.3f * 0.75f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + proj.rotation + i * Projectile.direction - MathHelper.PiOver2 * 0.75f * Projectile.direction, origin,
+                            num * 0.8f * 0.5f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
+                    }
                 }
             }
 
@@ -134,7 +134,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             if (Opacity > 0f) {
                 spriteBatch.DrawWithSnapshot(() => {
                     for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
-                        spriteBatch.Draw(asset.Value, vector, rectangle, GetLightingColor() * fromValue * num3 * 0.3f * Opacity, proj.rotation + i * Projectile.direction - MathHelper.PiOver4 * Projectile.direction, origin, num * 0.8f, effects, 0f);
+                        spriteBatch.Draw(asset.Value, vector, rectangle, GetLightingColor() * fromValue * num3 * 0.3f * Opacity * 1f, proj.rotation + i * Projectile.direction - MathHelper.PiOver2 * 0.75f * Projectile.direction, origin, num * 0.8f, effects, 0f);
                     }
                 }, blendState: BlendState.Additive);
             }
