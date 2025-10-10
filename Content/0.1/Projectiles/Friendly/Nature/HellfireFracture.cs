@@ -166,6 +166,12 @@ sealed class HellfireFracture : NatureProjectile {
         uint seed = (uint)(Projectile.position.GetHashCode() + Projectile.velocity.GetHashCode());
         float rot = Helper.VelocityAngle(Projectile.velocity) + MathHelper.PiOver2;
         rot += MathHelper.Pi;
+        bool right = Projectile.direction == 1;
+        if (right) {
+            rot += 0.25f;
+            rot -= MathHelper.TwoPi;
+        }
+        rot += 0.1f * Projectile.direction;
         Vector2 pos1 = _first, pos2 = _last;
         Vector2 dif = pos2 - pos1;
         Vector2 vel = dif.SafeNormalize(Vector2.Zero) * dif.Length() / 2f;
