@@ -1,11 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.Druid.Forms;
-using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Miscellaneous;

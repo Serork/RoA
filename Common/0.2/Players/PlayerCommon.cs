@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -43,18 +44,18 @@ sealed class PlayerCommon : ModPlayer {
 
         _ = drawPlayer.position;
         if (!Main.gamePaused)
-            drawPlayer.ghostFade += drawPlayer.ghostDir * 0.075f;
+            drawPlayer.ghostFade += drawPlayer.ghostDir * 0.025f;
 
-        if ((double)drawPlayer.ghostFade < 0.1) {
+        if ((double)drawPlayer.ghostFade < 0.75f) {
             drawPlayer.ghostDir = 1f;
-            drawPlayer.ghostFade = 0.1f;
+            drawPlayer.ghostFade = 0.75f;
         }
         else if ((double)drawPlayer.ghostFade > 0.9) {
             drawPlayer.ghostDir = -1f;
             drawPlayer.ghostFade = 0.9f;
         }
 
-        float num2 = drawPlayer.ghostFade * 5f;
+        float num2 = 5f;
         for (int l = 0; l < 4; l++) {
             float num3;
             float num4;
@@ -77,9 +78,9 @@ sealed class PlayerCommon : ModPlayer {
                     break;
             }
 
-            float num165 = (1f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 0.5f * ((float)Math.PI * 2f) * 3f)) * 0.8f;
+            float num165 = (1.2f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 2.5f * ((float)Math.PI * 2f) * 3f)) * 0.8f;
             Vector2 position = new Vector2(drawPlayer.position.X + num3 * num165, drawPlayer.position.Y + drawPlayer.gfxOffY + num4);
-            self.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, drawPlayer.ghostFade);
+            self.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, drawPlayer.ghostFade, MathF.Max(1.1f, (num165 + 0.2f) * 0.9f));
         }
     }
 

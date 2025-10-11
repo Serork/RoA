@@ -30,16 +30,6 @@ sealed class FloatingRemains : ModProjectile {
         Projectile.penetrate = -1;
         Projectile.timeLeft = 86400;
         Projectile.manualDirectionChange = true;
-        Projectile.hide = true;
-    }
-
-    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
-        if ((int)Projectile.ai[1] > 0) {
-            overWiresUI.Add(index);
-        }
-        else {
-            behindProjectiles.Add(index);
-        }
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) => false;
@@ -51,9 +41,6 @@ sealed class FloatingRemains : ModProjectile {
     }
 
     public override void AI() {
-        if (Projectile.ai[1] == 0f) {
-            Projectile.ai[1] = Main.rand.NextBool().ToDirectionInt();
-        }
         if (Projectile.ai[0] == 0f) {
             Projectile.ai[0] = 1f;
 
