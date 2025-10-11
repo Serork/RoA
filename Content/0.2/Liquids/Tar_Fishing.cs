@@ -81,13 +81,14 @@ sealed class FishingInTar : ModPlayer {
     }
 
     public override void CatchFish(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition) {
-        if (!Main.hardMode) {
-            return;
-        }
-
         int liquidType = Main.tile[attempt.X, attempt.Y].LiquidType;
         Vector2 worldPosition = new Point16(attempt.X, attempt.Y).ToWorldCoordinates();
         if (liquidType == LiquidLoader.LiquidType<Tar>()) {
+            if (!Main.hardMode) {
+                itemDrop = 0;
+                return;
+            }
+
             bool canCatchFish = false;
             foreach (Projectile boneRemains in TrackedEntitiesSystem.GetTrackedProjectile<FloatingRemains>()) {
                 if (boneRemains.Distance(worldPosition) < 48f && Collision.CanHit(boneRemains.position, boneRemains.width, boneRemains.height, worldPosition + Vector2.One * 8f, 1, 1)) {
