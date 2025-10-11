@@ -148,7 +148,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
         Projectile.manualDirectionChange = true;
 
         Projectile.usesIDStaticNPCImmunity = true;
-        Projectile.idStaticNPCHitCooldown = 12;
+        Projectile.idStaticNPCHitCooldown = 20;
 
         Projectile.netImportant = true;
     }
