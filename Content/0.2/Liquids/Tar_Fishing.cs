@@ -19,6 +19,10 @@ sealed class FishingInTar : ModPlayer {
     }
 
     private void TileCommon_RandomUpdateEvent(int i, int j, int type) {
+        if (!Main.hardMode) {
+            return;
+        }
+
         int liquidType = Main.tile[i, j].LiquidType;
         if (liquidType == LiquidLoader.LiquidType<Tar>()) {
             GetFishingPondState(i, j, out int waterTilesCount);
@@ -66,6 +70,10 @@ sealed class FishingInTar : ModPlayer {
     }
 
     public override void ModifyFishingAttempt(ref FishingAttempt attempt) {
+        if (!Main.hardMode) {
+            return;
+        }
+
         int liquidType = Main.tile[attempt.X, attempt.Y].LiquidType;
         if (liquidType == LiquidLoader.LiquidType<Tar>()) {
             attempt.fishingLevel /= 10;
@@ -73,6 +81,10 @@ sealed class FishingInTar : ModPlayer {
     }
 
     public override void CatchFish(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition) {
+        if (!Main.hardMode) {
+            return;
+        }
+
         int liquidType = Main.tile[attempt.X, attempt.Y].LiquidType;
         Vector2 worldPosition = new Point16(attempt.X, attempt.Y).ToWorldCoordinates();
         if (liquidType == LiquidLoader.LiquidType<Tar>()) {
