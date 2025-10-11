@@ -1,10 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-
-using RoA.Common.VisualEffects;
-using RoA.Content.VisualEffects;
-using RoA.Core.Utility.Vanilla;
-
-using System;
+﻿using System;
 
 using Terraria;
 using Terraria.ModLoader;

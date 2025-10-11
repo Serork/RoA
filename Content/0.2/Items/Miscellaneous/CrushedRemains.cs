@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Content.Projectiles.LiquidsSpecific;
 
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 namespace RoA.Content.Items.Miscellaneous;
 
@@ -27,7 +29,7 @@ sealed class CrushedRemains : ModItem {
         Item.rare = ItemRarityID.Blue;
     }
 
-    public override void ExtractinatorUse(int extractinatorBlockType, ref int resultType, ref int resultStack) { // Calls upon use of an extractinator. Below is the chance you will get ExampleOre from the extractinator.
+    public override void ExtractinatorUse(int extractinatorBlockType, ref int resultType, ref int resultStack) {
         float chance = Main.rand.Next(10);
         if (chance < 3) {
             resultType = ItemID.Bone;
