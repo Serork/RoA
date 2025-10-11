@@ -2237,3 +2237,18 @@ ShadowflameClaws: {
 	// DisplayName: Shadowflame Claws
 	// Tooltip: ""
 }
+
+CarcassChestguard: {
+	// DisplayName: Carcass Chestguard
+	// Tooltip: ""
+}
+
+CarcassSandals: {
+	// DisplayName: Carcass Sandals
+	// Tooltip: ""
+}
+
+DevilSkull: {
+	// DisplayName: Devil Skull
+	// Tooltip: ""
+}
