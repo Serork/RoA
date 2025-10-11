@@ -34,7 +34,7 @@ sealed class FloatingRemains : ModProjectile {
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
-        if ((int)Projectile.ai[1] != 0) {
+        if ((int)Projectile.ai[1] > 0) {
             overWiresUI.Add(index);
         }
         else {
