@@ -2227,3 +2227,8 @@ DevilSkull: {
 	DisplayName: Devil Skull
 	Tooltip: ""
 }
+
+CrushedRemains: {
+	DisplayName: Crushed Remains
+	Tooltip: ""
+}
