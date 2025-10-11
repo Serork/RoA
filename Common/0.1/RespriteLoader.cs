@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common;
 
-sealed class RespriteLoader : ILoadable {
+sealed partial class RespriteLoader : ILoadable {
     public void Load(Mod mod) {
         string texturePath = ResourceManager.ItemTextures;
         int id = 4;
@@ -39,7 +39,11 @@ sealed class RespriteLoader : ILoadable {
         TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>(texturePath + $"Tree_Branches_{id}");
         id = 18;
         TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>(texturePath + $"Tree_Branches_{id}");
+
+        LoadV02Resprites();
     }
+
+    public partial void LoadV02Resprites();
 
     private void UnloadInner() {
         TextureAssets.Item[ItemID.Daybloom] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Daybloom}");
@@ -60,7 +64,11 @@ sealed class RespriteLoader : ILoadable {
         TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
         id = 18;
         TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
+
+        UnloadV02Resprites();
     }
+
+    public partial void UnloadV02Resprites();
 
     public void Unload() {
         UnloadInner();
