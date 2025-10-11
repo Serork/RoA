@@ -38,6 +38,7 @@ sealed partial class Tar : ModLiquid {
                 num = Main.windSpeedCurrent * 15f;
                 num = ((!(num < 0f)) ? (num + 5f) : (num - 5f));
                 num = MathF.Abs(num);
+                num *= 0.5f;
                 _frameState += num * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (_frameState < 0f)
                     _frameState += 16f;
