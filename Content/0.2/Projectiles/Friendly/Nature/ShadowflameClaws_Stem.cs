@@ -218,7 +218,8 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
-        writer.Write((ushort)_leafData.Count - 1);
+        ushort count = (ushort)(_leafData.Count - 1);
+        writer.Write(count);
         for (int i = 0; i < _leafData.Count - 1; i++) {
             var leafData = _leafData[i];
             writer.WriteVector2(leafData.Position);
@@ -226,12 +227,17 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
             writer.Write(leafData.AppearanceTime);
             writer.Write(leafData.Flip);
         }
+        _leafData.Clear();
     }
 
     protected override void SafeReceiveExtraAI(BinaryReader reader) {
-        _leafData.Clear();
-        for (int i = 0; i < reader.ReadUInt16(); i++) {
-            _leafData.Add(new ShadowflameLeafInfo(reader.ReadVector2(), (ShadowflameLeafInfo.LeafType)reader.ReadByte(), reader.ReadUInt16(), reader.ReadBoolean()));
+        ushort count = reader.ReadUInt16();
+        for (int i = 0; i < count; i++) {
+            Vector2 position = reader.ReadVector2();
+            ShadowflameLeafInfo.LeafType type = (ShadowflameLeafInfo.LeafType)reader.ReadByte();
+            ushort appearanceTime = reader.ReadUInt16();
+            bool flip = reader.ReadBoolean();
+            _leafData.Add(new ShadowflameLeafInfo(position, type, appearanceTime, flip));
         }
     }
 
@@ -358,6 +364,8 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
             return;
         }
 
+        float idleOffset = Helper.Wave(-1f, 1f, 2.5f, Projectile.whoAmI) * 0.35f;
+
         SpriteBatch batch = Main.spriteBatch;
         Color color = lightColor;
         int timeLeft = Projectile.timeLeft;
@@ -413,6 +421,8 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
                 return;
             }
 
+            float opacity = 0.9f;
+
             Projectile proj = Projectile;
             Microsoft.Xna.Framework.Color color35 = new Color(123, 89, 234);
             color35.A = 0;
@@ -446,19 +456,26 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
             scale.X *= appearanceScaleXFactor;
             scale.Y *= appearanceScaleYFactor;
             SpriteEffects flip = Projectile.direction.ToSpriteEffects();
-            batch.Draw(texture, position, DrawInfo.Default with {
+
+            Vector2 idleExtra = Vector2.One.RotatedBy(MathHelper.PiOver4 * idleOffset - MathHelper.Pi * 0.75f) * 2f;
+            float idleRotation = idleOffset * 0.05f;
+            float rotation = idleRotation;
+
+            batch.Draw(texture, position + idleExtra, DrawInfo.Default with {
                 Clip = sourceRectangle,
-                Color = color,
+                Color = color * opacity,
                 Origin = origin,
                 Scale = scale,
-                ImageFlip = flip
+                ImageFlip = flip,
+                Rotation = rotation
             });
-            batch.Draw(texture, position, DrawInfo.Default with {
+            batch.Draw(texture, position + idleExtra, DrawInfo.Default with {
                 Clip = sourceRectangle,
-                Color = color2,
+                Color = color2 * opacity,
                 Origin = origin,
                 Scale = scale,
-                ImageFlip = flip
+                ImageFlip = flip,
+                Rotation = rotation
             });
 
             for (int i = _leafData.Count - 1; i > 0; i--) {
@@ -481,13 +498,15 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
                 if (leafData.Flip) {
                     flip = flip == SpriteEffects.FlipHorizontally ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                 }
+
                 //Dust.NewDustPerfect(Projectile.Center + leafData.Position, DustID.Adamantite, Vector2.Zero).noGravity = true;
-                batch.Draw(leafTexture, position2, DrawInfo.Default with {
+                batch.Draw(leafTexture, position2 + idleExtra * 5f, DrawInfo.Default with {
                     Clip = clip,
-                    Color = color,
+                    Color = color * opacity,
                     Origin = origin2,
                     Scale = scale * colorFactor,
-                    ImageFlip = flip
+                    ImageFlip = flip,
+                    Rotation = rotation
                 });
             }
         }
