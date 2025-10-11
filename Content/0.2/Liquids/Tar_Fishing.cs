@@ -32,8 +32,6 @@ sealed class FishingInTar : ModPlayer {
                     return;
                 }
             }
-            Main.NewText(123);
-            Main.LocalPlayer.position = worldPosition;
             Projectile.NewProjectile(new EntitySource_TileUpdate(i, j, context: "FloatingRemains"), i * 16, j * 16, 0f, 0f, ModContent.ProjectileType<FloatingRemains>(), 0, 0f, Main.myPlayer);
         }
     }
