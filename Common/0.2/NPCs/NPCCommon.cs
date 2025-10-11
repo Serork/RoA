@@ -15,7 +15,7 @@ sealed class NPCCommon : GlobalNPC {
 
     public override bool InstancePerEntity => true;
 
-    public override bool AppliesToEntity(NPC entity, bool lateInstantiation) => !entity.noGravity;
+    public override bool AppliesToEntity(NPC entity, bool lateInstantiation) => true;
 
     public delegate void ModifyHitByProjectileDelegate(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers);
     public static event ModifyHitByProjectileDelegate ModifyHitByProjectileEvent;
@@ -28,6 +28,10 @@ sealed class NPCCommon : GlobalNPC {
     }
 
     private void TouchGround(NPC npc) {
+        if (npc.noGravity) {
+            return;
+        }
+
         if (npc.velocity.Y >= npc.maxFallSpeed * MAXFALLSPEEDMODIFIERFORFALL && !_fell) {
             _fell = true;
         }

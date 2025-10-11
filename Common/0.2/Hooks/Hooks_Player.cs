@@ -6,6 +6,7 @@ using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.GameContent.Creative;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Default;

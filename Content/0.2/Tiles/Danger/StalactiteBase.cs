@@ -1,6 +1,7 @@
 ﻿using Microsoft.Build.Evaluation;
 using Microsoft.Xna.Framework;
 
+using RoA.Common.NPCs;
 using RoA.Common.Players;
 using RoA.Content.Tiles.Decorations;
 using RoA.Core;
@@ -138,7 +139,7 @@ abstract class StalactiteTE<T> : ModTileEntity where T : StalactiteProjectileBas
                 if (npc.noGravity) {
                     continue;
                 }
-                if (npc.getRect().Intersects(dangerArea) && npc.GetCommon().Fell) {
+                if (npc.getRect().Intersects(dangerArea) && npc.TryGetCommon(out NPCCommon npcCommon) && npcCommon.Fell) {
                     _shouldFall = true;
                     break;
                 }

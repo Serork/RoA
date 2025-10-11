@@ -1,5 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Forms;
+using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
+using RoA.Core.Utility.Vanilla;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,5 +18,11 @@ sealed class DevilSkull : ModItem {
     public override void SetDefaults() {
         int width = 24; int height = 26;
         Item.Size = new Vector2(width, height);
+    }
+
+    public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
+
+    public override void UpdateArmorSet(Player player) {
+        player.GetCommon().ApplyBoneArmorVisuals = true;
     }
 }

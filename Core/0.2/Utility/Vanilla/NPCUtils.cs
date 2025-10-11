@@ -30,6 +30,8 @@ static class NPCUtils {
 
     public static NPCCommon GetCommon(this NPC npc) => npc.GetGlobalNPC<NPCCommon>();
 
+    public static bool TryGetCommon(this NPC npc, out NPCCommon npcCommon) => npc.TryGetGlobalNPC(out npcCommon);
+
     public static bool CanBeChasedBy(NPC npc, object attacker = null, bool ignoreDontTakeDamage = false, bool checkForImmortals = true) {
         if (npc.active && npc.chaseable && npc.lifeMax > 5 && (!npc.dontTakeDamage || ignoreDontTakeDamage) && !npc.friendly)
             return !checkForImmortals || !npc.immortal;

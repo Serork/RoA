@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Core.Utility.Vanilla;
+
+using System;
 
 using Terraria;
+using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
@@ -17,7 +22,75 @@ sealed class PlayerCommon : ModPlayer {
     public ushort ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
     public bool ControlUseItem;
 
+    public bool ApplyBoneArmorVisuals;
+
     public bool Fell { get; private set; }
+
+    public override void Load() {
+        On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
+
+        DrawPlayerFullEvent += PlayerCommon_DrawPlayerFullEvent;
+    }
+
+    private void PlayerCommon_DrawPlayerFullEvent(LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer) {
+        if (!drawPlayer.GetCommon().ApplyBoneArmorVisuals) {
+            return;
+        }
+
+        drawPlayer.armorEffectDrawOutlines = false;
+        drawPlayer.armorEffectDrawShadow = false;
+        drawPlayer.armorEffectDrawShadowSubtle = false;
+
+        _ = drawPlayer.position;
+        if (!Main.gamePaused)
+            drawPlayer.ghostFade += drawPlayer.ghostDir * 0.075f;
+
+        if ((double)drawPlayer.ghostFade < 0.1) {
+            drawPlayer.ghostDir = 1f;
+            drawPlayer.ghostFade = 0.1f;
+        }
+        else if ((double)drawPlayer.ghostFade > 0.9) {
+            drawPlayer.ghostDir = -1f;
+            drawPlayer.ghostFade = 0.9f;
+        }
+
+        float num2 = drawPlayer.ghostFade * 5f;
+        for (int l = 0; l < 4; l++) {
+            float num3;
+            float num4;
+            switch (l) {
+                default:
+                    num3 = num2;
+                    num4 = 0f;
+                    break;
+                case 1:
+                    num3 = 0f - num2;
+                    num4 = 0f;
+                    break;
+                case 2:
+                    num3 = 0f;
+                    num4 = 0f;
+                    break;
+                case 3:
+                    num3 = 0f;
+                    num4 = 0f;
+                    break;
+            }
+
+            float num165 = (1f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 0.5f * ((float)Math.PI * 2f) * 3f)) * 0.8f;
+            Vector2 position = new Vector2(drawPlayer.position.X + num3 * num165, drawPlayer.position.Y + drawPlayer.gfxOffY + num4);
+            self.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, drawPlayer.ghostFade);
+        }
+    }
+
+    public delegate void DrawPlayerFullDelegate(LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer);
+    public static event DrawPlayerFullDelegate DrawPlayerFullEvent;
+
+    private void On_LegacyPlayerRenderer_DrawPlayerFull(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer) {
+        DrawPlayerFullEvent?.Invoke(self, camera, drawPlayer);
+
+        orig(self, camera, drawPlayer);
+    }
 
     public delegate void PreUpdateDelegate(Player player);
     public static event PreUpdateDelegate PreUpdateEvent;
@@ -29,6 +102,15 @@ sealed class PlayerCommon : ModPlayer {
     public static event OnHurtDelegate OnHurtEvent;
     public override void OnHurt(Player.HurtInfo info) {
         OnHurtEvent?.Invoke(Player, info);
+    }
+
+    public delegate void ResetEffectsDelegate(Player player);
+    public static event ResetEffectsDelegate ResetEffectsEvent;
+
+    public override void ResetEffects() {
+        ResetEffectsEvent?.Invoke(Player);
+
+        ApplyBoneArmorVisuals = false;
     }
 
     public override void PostUpdate() {
