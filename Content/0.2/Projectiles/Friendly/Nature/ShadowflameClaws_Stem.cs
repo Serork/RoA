@@ -243,7 +243,6 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
 
                 if (Projectile.IsOwnerLocal()) {
                     shadowflameStemValues.Type = Main.rand.GetRandomEnumValue<ShadowflameStemValues.StemType>(1);
-                    shadowflameStemValues.Type = ShadowflameStemValues.StemType.Large;
                     shadowflameStemValues.FacedRight = Main.rand.NextBool();
 
                     for (float i = 1f; i > 0f;) {
