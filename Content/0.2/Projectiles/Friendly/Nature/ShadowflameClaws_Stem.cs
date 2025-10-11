@@ -220,7 +220,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
     protected override void SafeSendExtraAI(BinaryWriter writer) {
         ushort count = (ushort)(_leafData.Count - 1);
         writer.Write(count);
-        for (int i = 0; i < _leafData.Count - 1; i++) {
+        for (int i = 0; i < count; i++) {
             var leafData = _leafData[i];
             writer.WriteVector2(leafData.Position);
             writer.Write((byte)leafData.Type);
