@@ -106,6 +106,13 @@ sealed class FishingInTar : ModPlayer {
                 }
 
                 itemDrop = ModContent.ItemType<CrushedRemains>();
+
+                foreach (Projectile boneRemains in TrackedEntitiesSystem.GetTrackedProjectile<FloatingRemains>()) {
+                    if (boneRemains.Distance(worldPosition) < 48f && Collision.CanHit(boneRemains.position, boneRemains.width, boneRemains.height, worldPosition + Vector2.One * 8f, 1, 1)) {
+                        boneRemains.Kill();
+                        break;
+                    }
+                }
             }
         }
     }
