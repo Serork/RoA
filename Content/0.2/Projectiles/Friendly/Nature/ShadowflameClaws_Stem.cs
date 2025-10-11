@@ -333,7 +333,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
     public override void OnKill(int timeLeft) {
         for (float i = 0; i < 1f; i += 0.1f) {
             for (int num389 = 0; num389 < 3; num389++) {
-                int num390 = Dust.NewDust(Projectile.Center + GetLeafPositionByType(i) + Main.rand.RandomPointInArea(6) / 2f, 0, 0, DustID.Shadowflame, Alpha: 125);
+                int num390 = Dust.NewDust(Projectile.Center - Vector2.UnitY * 12.5f + GetLeafPositionByType(i) + Main.rand.RandomPointInArea(6) / 2f, 0, 0, DustID.Shadowflame, Alpha: 125);
                 Main.dust[num390].noGravity = true;
                 Main.dust[num390].fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                 Main.dust[num390].velocity *= 0.85f + Main.rand.NextFloatRange(0.1f);
@@ -346,7 +346,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
         }
         foreach (var leafInfo in _leafData) {
             for (int num389 = 0; num389 < 6; num389++) {
-                int num390 = Dust.NewDust(Projectile.Center + leafInfo.Position + Main.rand.RandomPointInArea(leafInfo.GetSize()) / 2f, 0, 0, DustID.Shadowflame, Alpha: 125);
+                int num390 = Dust.NewDust(Projectile.Center - Vector2.UnitY * 12.5f + leafInfo.Position + Main.rand.RandomPointInArea(leafInfo.GetSize()) / 2f, 0, 0, DustID.Shadowflame, Alpha: 125);
                 Main.dust[num390].noGravity = true;
                 Main.dust[num390].fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                 Main.dust[num390].velocity *= 0.85f + Main.rand.NextFloatRange(0.1f);
