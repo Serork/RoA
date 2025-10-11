@@ -24,6 +24,8 @@ class Vilethorn : NatureProjectile {
     protected virtual bool CanSpawnBody => Type == ModContent.ProjectileType<Vilethorn>();
 
     protected sealed override void SafeSetDefaults() {
+        SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: false);
+
         Projectile.width = 28;
         Projectile.height = 28;
         Projectile.aiStyle = -1;
@@ -34,8 +36,6 @@ class Vilethorn : NatureProjectile {
         Projectile.ignoreWater = true;
 
         Projectile.timeLeft = 200;
-
-        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
     public override bool ShouldUpdatePosition() => false;

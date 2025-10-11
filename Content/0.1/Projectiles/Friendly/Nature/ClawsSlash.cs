@@ -92,12 +92,24 @@ class ClawsSlash : NatureProjectile {
         }
     }
 
-    public override void OnHitPlayer(Player target, Player.HurtInfo info) => Projectile.ApplyFlaskEffects(target);
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) => Projectile.ApplyFlaskEffects(target);
+    public sealed override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        Projectile.ApplyFlaskEffects(target);
+
+        SafeOnHitPlayer(target, info);
+    }
+
+    public sealed override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        Projectile.ApplyFlaskEffects(target);
+
+        SafeOnHitNPC(target, hit, damageDone);
+    }
+
+    protected virtual void SafeOnHitPlayer(Player target, Player.HurtInfo info) { }
+    protected virtual void SafeOnHitNPC(NPC target, NPC.HitInfo info, int damageDone) { }
 
     public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
         if (Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<InfectedWave>()] > 0 ||
-                    Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<HemorrhageWave>()] > 0) {
+            Main.player[Projectile.owner].ownedProjectileCounts[ModContent.ProjectileType<HemorrhageWave>()] > 0) {
             modifiers.Knockback *= 0f;
         }
 

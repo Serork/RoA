@@ -28,7 +28,7 @@ sealed class TulipBlast : NatureProjectile {
     }
 
     protected override void SafeSetDefaults() {
-        SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: true);
+        SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: false);
 
         Projectile.SetSizeValues(10);
 

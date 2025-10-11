@@ -52,9 +52,7 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
         base.SafeSetDefaults();
     }
 
-    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        base.OnHitPlayer(target, info);
-
+    protected override void SafeOnHitPlayer(Player target, Player.HurtInfo info) {
         if (!Charged) {
             return;
         }
@@ -109,9 +107,7 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
         _proj = reader.ReadInt32();
     }
 
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        base.OnHitNPC(target, hit, damageDone);
-
+    protected override void SafeOnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         if (!Charged) {
             return;
         }

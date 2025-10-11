@@ -93,6 +93,8 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
     public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
 
     protected override void SafeSetDefaults() {
+        SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: true);
+
         Projectile.SetSizeValues(40);
 
         Projectile.aiStyle = -1;

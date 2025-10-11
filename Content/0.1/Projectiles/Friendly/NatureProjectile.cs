@@ -15,7 +15,7 @@ namespace RoA.Content.Projectiles.Friendly;
 
 abstract class FormProjectile : NatureProjectile {
     protected override void SafeSetDefaults3() {
-        ShouldChargeWreathOnDamage = false;
+        SetNatureValues(Projectile, shouldChargeWreath: false, shouldApplyAttachedItemDamage: false);
     }
 }
 

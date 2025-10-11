@@ -57,11 +57,11 @@ sealed class HellfireClaws : ClawsBaseItem<HellfireClaws.HellfireClawsSlash> {
     protected override (Color, Color) SetSlashColors(Player player) => (new Color(255, 150, 20), new Color(200, 80, 10));
 
     public sealed class HellfireClawsSlash : ClawsSlash {
-        public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        protected override void SafeOnHitPlayer(Player target, Player.HurtInfo info) {
             target.AddBuff(BuffID.OnFire, Main.rand.Next(60, 180));
         }
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        protected override void SafeOnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
             target.AddBuff(BuffID.OnFire, Main.rand.Next(60, 180));
         }
     }

@@ -10,6 +10,8 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class IchorStream : NatureProjectile_NoTextureLoad {
     protected override void SafeSetDefaults() {
+        SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: false);
+
         Projectile.width = 32;
         Projectile.height = 32;
         Projectile.friendly = true;
@@ -17,8 +19,6 @@ sealed class IchorStream : NatureProjectile_NoTextureLoad {
         Projectile.penetrate = -1;
         Projectile.extraUpdates = 1;
         Projectile.ignoreWater = true;
-
-        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
     public override void AI() {

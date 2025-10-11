@@ -43,6 +43,8 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
     private float Opacity => Utils.GetLerpValue(TIMELEFT, TIMELEFT - 15, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
 
     protected override void SafeSetDefaults() {
+        SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: true);
+
         Projectile.SetSizeValues(10);
 
         Projectile.friendly = true;

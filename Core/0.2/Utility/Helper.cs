@@ -9,6 +9,30 @@ using Terraria.ID;
 namespace RoA.Core.Utility; 
 
 static partial class Helper {
+    public static Vector2 GetBezierPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 d, float t) {
+        t = MathHelper.Clamp(t, 0.0f, 1f);
+        float num = 1f - t;
+        return num * num * num * a + 3f * num * num * t * b + 3f * num * t * t * c + t * t * t * d;
+    }
+
+    public static Vector2 GetBezierPoint(Vector2 a, Vector2 b, Vector2 c, float t) {
+        t = MathHelper.Clamp(t, 0.0f, 1f);
+        float num = 1f - t;
+        return num * num * a + 2f * num * t * b + t * t * c;
+    }
+
+    public static void PushPath<T>(T[] array, T point) {
+        Array.Copy((Array)array, 0, (Array)array, 1, array.Length - 1);
+        array[0] = point;
+    }
+
+    public static void FillBezier(Vector2[] array, Vector2 a, Vector2 b, Vector2 c, int length = -1) {
+        length = length == -1 ? array.Length : length;
+        for (int index = 0; index < length; ++index) {
+            array[index] = GetBezierPoint(a, b, c, (float)index / (float)(length - 1));
+        }
+    }
+
     public static bool IsNearlyZero(this float value, float tolerance = 0.1f) => MathF.Abs(value) < tolerance;
 
     public static bool SinglePlayerOrServer => Main.netMode != NetmodeID.MultiplayerClient;
