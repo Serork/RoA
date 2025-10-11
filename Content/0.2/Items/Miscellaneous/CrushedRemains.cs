@@ -14,6 +14,13 @@ sealed class CrushedRemains : ModItem {
     }
 
     public override void SetDefaults() {
+        Item.useStyle = 1;
+        Item.useTurn = true;
+        Item.useAnimation = 15;
+        Item.useTime = 10;
+        Item.autoReuse = true;
+        Item.consumable = true;
+
         Item.maxStack = Item.CommonMaxStack;
         int width = 36, height = 24;
         Item.Size = new Vector2(width, height);
@@ -22,6 +29,7 @@ sealed class CrushedRemains : ModItem {
 
     public override void ExtractinatorUse(int extractinatorBlockType, ref int resultType, ref int resultStack) { // Calls upon use of an extractinator. Below is the chance you will get ExampleOre from the extractinator.
         float chance = Main.rand.Next(10);
+        Main.NewText(chance);
         if (chance < 3) {
             resultType = ItemID.Bone;
             resultStack = Main.rand.Next(1, 6);
