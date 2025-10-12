@@ -10,6 +10,10 @@ namespace RoA.Content.WorldGenerations;
 
 sealed class Stalactite_GrowOverTime : GlobalTile {
     public override void RandomUpdate(int i, int j, int type) {
+        if (j < (int)Main.worldSurface - 10) {
+            return;
+        }
+
         if (!WorldGen.genRand.NextBool(600)) {
             return;
         }

@@ -80,7 +80,7 @@ sealed class Stalactite_GenPass : IInitializer {
         ushort backwoodsMossTileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
         ushort[] validSolidTileTypes = [TileID.Stone, TileID.IceBlock, backwoodsStoneTileType, solidifiedTarTileType, backwoodsMossTileType];
         for (int i = 20; i < Main.maxTilesX - 20; i++) {
-            for (int j = (int)Main.worldSurface; j < Main.maxTilesY - 300; j++) {
+            for (int j = (int)Main.worldSurface - 10; j < Main.maxTilesY - 300; j++) {
                 if (!WorldGen.InWorld(i, j, 50)) {
                     continue;
                 }
