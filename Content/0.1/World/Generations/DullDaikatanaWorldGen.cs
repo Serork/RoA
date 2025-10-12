@@ -23,10 +23,19 @@ sealed class DullDaikatanaWorldGen : ModSystem {
         tasks.Insert(genIndex, new PassLegacy("Dull Daikatana", DullDaikatanaGenerator, 9213.443f));
     }
 
+    private static ushort GetUnderworldBuildingWallType() {
+        ushort wallType = 14;
+        if (ModLoader.GetMod("TheDepths").TryFind<ModWall>("ArqueriteBrickWallUnsafe", out ModWall ArqueriteBrickWallUnsafe)) {
+            wallType = ArqueriteBrickWallUnsafe.Type;
+        }
+        return wallType;
+    }
+
     private void DullDaikatanaGenerator(GenerationProgress progress, GameConfiguration configuration) {
         var genRand = WorldGen.genRand;
         bool hasRemnants = ModLoader.HasMod("Remnants");
         int count = WorldGenHelper.WorldSize * (hasRemnants ? 2 : 1);
+        ushort checkWallType = GetUnderworldBuildingWallType();
         for (int num436 = 0; num436 < count; num436++) {
             double value2 = (double)num436 / (double)(count);
             progress.Set(value2);
