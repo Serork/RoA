@@ -84,6 +84,24 @@ sealed class PlayerCommon : ModPlayer {
         }
     }
 
+    public delegate void PostUpdateEquipsDelegate(Player player);
+    public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent;
+    public override void PostUpdateEquips() {
+        PostUpdateEquipsEvent?.Invoke(Player);
+    }
+
+    public delegate void UpdateEquipsDelegate(Player player);
+    public static event UpdateEquipsDelegate UpdateEquipsEvent;
+    public override void UpdateEquips() {
+        UpdateEquipsEvent?.Invoke(Player);
+    }
+
+    public delegate void FrameEffectsDelegate(Player player);
+    public static event FrameEffectsDelegate FrameEffectsEvent;
+    public override void FrameEffects() {
+        FrameEffectsEvent?.Invoke(Player);
+    }
+
     public delegate void DrawPlayerFullDelegate(LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer);
     public static event DrawPlayerFullDelegate DrawPlayerFullEvent;
 
