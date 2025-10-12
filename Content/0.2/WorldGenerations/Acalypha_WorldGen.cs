@@ -2,6 +2,7 @@
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Tiles.Miscellaneous;
@@ -37,11 +38,24 @@ sealed partial class Acalypha : CollectableFlower, IGrowLikeTulip {
             return false;
         }
 
+        int surfaceAttempts = 200;
         while (true) {
-            for (int k = 20; k < Main.maxTilesX - 20; k++) {
-                for (int l = 20; l < Main.maxTilesY - 20; l++) {
-                    if (tryToGrowAcalypha(k, l)) {
-                        return;
+            if (surfaceAttempts > 0) {
+                for (int k = 20; k < Main.maxTilesX - 20; k++) {
+                    for (int l = WorldGenHelper.SafeFloatingIslandY; l < (int)Main.worldSurface; l++) {
+                        if (tryToGrowAcalypha(k, l)) {
+                            return;
+                        }
+                    }
+                }
+                surfaceAttempts--;
+            }
+            else {
+                for (int k = 20; k < Main.maxTilesX - 20; k++) {
+                    for (int l = (int)Main.worldSurface; l < Main.maxTilesY - 20; l++) {
+                        if (tryToGrowAcalypha(k, l)) {
+                            return;
+                        }
                     }
                 }
             }
