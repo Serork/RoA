@@ -103,7 +103,7 @@ sealed class DamageClassItemsStorage : IInitializer {
     }
 
     void ILoadable.Unload() {
-        ItemsPerDamageClass!.Clear();
+        ItemsPerDamageClass?.Clear();
         ItemsPerDamageClass = null;
     }
 
