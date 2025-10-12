@@ -25,7 +25,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
 
     private static ushort GetUnderworldBuildingWallType() {
         ushort wallType = 14;
-        if (ModLoader.GetMod("TheDepths").TryFind<ModWall>("ArqueriteBrickWallUnsafe", out ModWall ArqueriteBrickWallUnsafe)) {
+        if (ModLoader.TryGetMod("TheDepths", out Mod theDepths) && theDepths.TryFind<ModWall>("ArqueriteBrickWallUnsafe", out ModWall ArqueriteBrickWallUnsafe)) {
             wallType = ArqueriteBrickWallUnsafe.Type;
         }
         return wallType;

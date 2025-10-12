@@ -32,7 +32,7 @@ sealed class FenethStatueWorldGen : ModSystem {
 
     public static ushort GetUnderworldGrassTileType() {
         ushort tileType = TileID.AshGrass;
-        if (ModLoader.GetMod("TheDepths").TryFind<ModTile>("NightmareGrass", out ModTile NightmareGrass)) {
+        if (ModLoader.TryGetMod("TheDepths", out Mod theDepths) && theDepths.TryFind<ModTile>("NightmareGrass", out ModTile NightmareGrass)) {
             tileType = NightmareGrass.Type;
         }
         return tileType;

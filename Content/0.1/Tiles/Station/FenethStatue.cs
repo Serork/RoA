@@ -207,7 +207,7 @@ sealed class FenethStatue : ModTile {
             for (int j = num869 - 10; j < num869 + 11; j++) {
                 if (genRand.NextBool(20)) {
                     List<int> grass = [TileID.Ash, 2, 23, 109, 199, 477, 492, 633, ModContent.TileType<BackwoodsGrass>()];
-                    if (ModLoader.GetMod("TheDepths").TryFind<ModTile>("NightmareGrass", out ModTile NightmareGrass)) {
+                    if (ModLoader.TryGetMod("TheDepths", out Mod theDepths) && theDepths.TryFind<ModTile>("NightmareGrass", out ModTile NightmareGrass)) {
                         grass.Add(NightmareGrass.Type);
                     }
                     if (Main.tile[i, j].HasTile && (grass.Contains(Main.tile[i, j].TileType)) &&
