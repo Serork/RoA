@@ -81,7 +81,7 @@ sealed class Stalactite_GenPass : IInitializer {
                     continue;
                 }
                 Tile solidTile = WorldGenHelper.GetTileSafely(i, j - 1);
-                if (WorldGen.SolidTile(i, j - 1) && WorldGen.genRand.NextBool(25) &&
+                if (WorldGen.SolidTile(i, j - 1) && Main.tile[i, j - 1].HasUnactuatedTile && WorldGen.genRand.NextBool(100) &&
                     validSolidTileTypes.Contains(solidTile.TileType)) {
                     if (solidTile.TileType == TileID.Stone) {
                         PlaceStalactite(i, j, TileID.Stone, (ushort)ModContent.TileType<StoneStalactite>(), ModContent.GetInstance<StoneStalactiteTE>());
@@ -101,17 +101,20 @@ sealed class Stalactite_GenPass : IInitializer {
                 }
             }
         }
+
     }
 
     private void On_WorldGen_smCallback_End(On_WorldGen.orig_smCallback_End orig, System.Collections.Generic.List<Terraria.WorldBuilding.GenPass> hardmodeTasks) {
         _TEPositions = [];
+
         hardmodeTasks.Add(new PassLegacy("Stalactites", GenerateStalactites));
 
-        orig(hardmodeTasks);   
-        
+        orig(hardmodeTasks);
+
         foreach (var teInfo in _TEPositions) {
             teInfo.Item1.Place(teInfo.Item2.X, teInfo.Item2.Y);
         }
         _TEPositions.Clear();
+        _TEPositions = null!;
     }
 }
