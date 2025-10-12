@@ -214,8 +214,10 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 Projectile.scale *= scale;
             }
         }
-        Lighting.AddLight(Projectile.Center + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale,
-        Color.White.ToVector3() * MathHelper.Clamp(_charge * 2f, 0f, 1f) * 0.35f);
+        if (Projectile.ai[1] < 3f) {
+            Lighting.AddLight(Projectile.Center + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale,
+            Color.White.ToVector3() * MathHelper.Clamp(_charge * 2f, 0f, 1f) * 0.5f);
+        }
         int itemAnimationMax = 40;
         int min = itemAnimationMax / 2 - itemAnimationMax / 4;
         Projectile.Opacity = Utils.GetLerpValue(itemAnimationMax, itemAnimationMax - 7, Projectile.timeLeft, clamped: true) * Utils.GetLerpValue(0f, 7f, Projectile.timeLeft, clamped: true);
@@ -623,7 +625,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 spriteBatch.Draw(bladeTexture2D,
                             position - center + Projectile.oldPos[i],
                             glowRectangle,
-                            color * ((Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length) * 0.3f * charge,
+                            color * ((Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length) * 0.6f * charge,
                                 Projectile.oldRot[i] + 0.78f,
                             new Vector2(0f, texture2D.Height),
                             Projectile.scale,
