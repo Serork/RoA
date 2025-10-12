@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Content.Items.Equipables.Vanity.Developer;
+using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
@@ -50,8 +51,8 @@ sealed class DevilSkull : ModItem {
     }
 
     public override void SetDefaults() {
-        int width = 24; int height = 26;
-        Item.Size = new Vector2(width, height);
+        int width = 24, height = 26;
+        Item.SetSizeValues(width, height);
     }
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();

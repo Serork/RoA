@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Defaults;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -15,8 +16,8 @@ sealed class HornetSkull : ModItem {
     }
 
     public override void SetDefaults() {
-        int width = 22; int height = 28;
-        Item.Size = new Vector2(width, height);
+        int width = 22, height = 28;
+        Item.SetSizeValues(width, height);
     }
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();

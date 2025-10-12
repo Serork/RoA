@@ -10,6 +10,8 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
+using static Terraria.Player;
+
 namespace RoA.Common.Players;
 
 sealed class PlayerCommon : ModPlayer {

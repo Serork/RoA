@@ -35,7 +35,7 @@ static partial class PlayerExtensions {
 
     public static bool HasEquipped<T>(this Player player, EquipType equipType) where T : ModItem {
         int check = -1;
-        switch(equipType) {
+        switch (equipType) {
             case EquipType.Head:
                 check = player.head;
                 break;
@@ -49,17 +49,26 @@ static partial class PlayerExtensions {
         return check != EquipLoader.GetEquipSlot(RoA.Instance, nameof(T), equipType);
     }
 
-    public static bool HasSetBonusFrom<T>(this Player player) where T : ModItem {
+    public static bool HasSetBonusFrom<T>(this Player player, bool checkVanity = false) where T : ModItem {
         ModItem item = ItemLoader.GetItem(ModContent.ItemType<T>());
         if (item == null) {
             return false;
         }
 
-        if (player.armor[0].type != item.Type) {
+        if (!(player.armor[0].type == item.Type || (checkVanity && player.armor[10].type == item.Type))) {
             return false;
         }
 
         bool result = item.IsArmorSet(player.armor[0], player.armor[1], player.armor[2]);
+        if (checkVanity && !result) {
+            if (!result) result = item.IsArmorSet(player.armor[0], player.armor[11], player.armor[2]);
+            if (!result) result = item.IsArmorSet(player.armor[0], player.armor[1], player.armor[12]);
+            if (!result) result = item.IsArmorSet(player.armor[0], player.armor[11], player.armor[12]);
+            if (!result) result = item.IsArmorSet(player.armor[1], player.armor[1], player.armor[2]);
+            if (!result) result = item.IsArmorSet(player.armor[1], player.armor[11], player.armor[2]);
+            if (!result) result = item.IsArmorSet(player.armor[1], player.armor[1], player.armor[12]);
+            if (!result) result = item.IsArmorSet(player.armor[1], player.armor[11], player.armor[12]);
+        }
         return result;
     }
 
