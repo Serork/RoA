@@ -225,16 +225,13 @@ sealed class TarSlime : ModNPC {
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         spriteBatch.DrawWithSnapshot(() => {
-            var shader = ShaderLoader.TarDye.Value;
-            //shader.Parameters["uSecondaryColor"]?.SetValue(new Color(62, 53, 70).ToVector3());
-            //shader.Parameters["rgbNoise"]?.SetValue(ResourceManager.NoiseRGB.Value);
-            //shader.Parameters["liquidColor1"]?.SetValue(new Vector3(62 / 255f + 0.3f, 53 / 255f + 0.3f, 70 / 255f + 0.3f));
-            //shader.Parameters["liquidColor2"]?.SetValue(new Vector3(98 / 255f + 0.3f, 85 / 255f + 0.3f, 101 / 255f + 0.3f));
-            GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TarDye>()), NPC, NPC.QuickDrawAsDrawData(spriteBatch, screenPos, drawColor * 0.9f));
-            NPC.QuickDraw(spriteBatch, screenPos, drawColor * 0.9f);
+            TarDyeArmorShaderData.Color1 = Vector3.Lerp(new Vector3(62 / 255f + 0.3f, 53 / 255f + 0.3f, 70 / 255f + 0.3f), Color.White.ToVector3(), 0.5f);
+            TarDyeArmorShaderData.Color2 = Vector3.Lerp(new Vector3(98 / 255f + 0.3f, 85 / 255f + 0.3f, 101 / 255f + 0.3f), Color.White.ToVector3(), 0.5f);
+            GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TarDye>()), NPC, NPC.QuickDrawAsDrawData(spriteBatch, screenPos, drawColor * 1f));
+            NPC.QuickDraw(spriteBatch, screenPos, drawColor * 1f);
         }, sortMode: SpriteSortMode.Immediate);
 
-        NPC.QuickDraw(spriteBatch, screenPos, drawColor * 0.25f * 0.9f);
+        NPC.QuickDraw(spriteBatch, screenPos, drawColor * 0.25f * 1f);
 
         return false;
     }
