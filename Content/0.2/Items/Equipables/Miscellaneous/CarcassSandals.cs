@@ -7,7 +7,7 @@ namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 [AutoloadEquip(EquipType.Legs)]
 sealed class CarcassSandals : ModItem {
-    public static int Alternative = -1;
+    public static int Alternative { get; private set; } = -1;
 
     public override void Load() {
         if (Main.dedServ) {
