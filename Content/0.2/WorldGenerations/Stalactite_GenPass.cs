@@ -21,7 +21,7 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.WorldGenerations;
 
 sealed class Stalactite_GenPass : IInitializer {
-    private static HashSet<(ModTileEntity, Point16)>? _TEPositions;
+    private static HashSet<(ModTileEntity, Point16)> _TEPositions = [];
 
     void ILoadable.Load(Mod mod) {
         On_WorldGen.smCallback_End += On_WorldGen_smCallback_End;
@@ -53,7 +53,7 @@ sealed class Stalactite_GenPass : IInitializer {
                 teInstance.Place(tilePosition.X, tilePosition.Y);
             }
             else {
-                _TEPositions!.Add((teInstance, tilePosition));
+                _TEPositions.Add((teInstance, tilePosition));
             }
         }
         if (WorldGenHelper.Place1x2Top(i, j, stalactiteTileType, WorldGen.genRand.Next(3), onPlace: placeTE)) {
@@ -101,17 +101,17 @@ sealed class Stalactite_GenPass : IInitializer {
                 }
             }
         }
-    }
 
-    private void On_WorldGen_smCallback_End(On_WorldGen.orig_smCallback_End orig, System.Collections.Generic.List<Terraria.WorldBuilding.GenPass> hardmodeTasks) {
-        _TEPositions = [];
-        hardmodeTasks.Add(new PassLegacy("Stalactites", GenerateStalactites));
-
-        orig(hardmodeTasks);   
-        
         foreach (var teInfo in _TEPositions) {
             teInfo.Item1.Place(teInfo.Item2.X, teInfo.Item2.Y);
         }
         _TEPositions.Clear();
+        _TEPositions = null!;
+    }
+
+    private void On_WorldGen_smCallback_End(On_WorldGen.orig_smCallback_End orig, System.Collections.Generic.List<Terraria.WorldBuilding.GenPass> hardmodeTasks) {
+        hardmodeTasks.Add(new PassLegacy("Stalactites", GenerateStalactites));
+
+        orig(hardmodeTasks);   
     }
 }
