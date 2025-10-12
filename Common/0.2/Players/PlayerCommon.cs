@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
