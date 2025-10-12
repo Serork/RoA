@@ -24,7 +24,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
 // my first attempt at something special
-// its super unnptimized but it is what it is
+// its super unoptimized but it is what it is
 sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFixShoulderWhileActive {
     private TrailInfo[] _trails;
     private float _charge;

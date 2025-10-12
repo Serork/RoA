@@ -154,7 +154,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
     }
     
     private Vector2 GetLeafPositionByType(float progress) {
-        progress = Utils.Clamp(progress, 0f, 0.85f);
+        progress = Utils.Clamp(progress, 0.05f, 0.85f);
         ShadowflameStemValues shadowflameStemValues = new(Projectile);
         bool facedRight = !shadowflameStemValues.FacedRight;
         Vector2 result = Vector2.Zero;
