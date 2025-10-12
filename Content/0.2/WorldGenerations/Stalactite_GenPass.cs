@@ -71,8 +71,6 @@ sealed class Stalactite_GenPass : IInitializer {
     }
 
     private static void GenerateStalactites(GenerationProgress progress, GameConfiguration configuration) {
-        _TEPositions = [];
-
         ushort backwoodsStoneTileType = (ushort)ModContent.TileType<BackwoodsStone>();
         ushort solidifiedTarTileType = (ushort)ModContent.TileType<SolidifiedTar>();
         ushort backwoodsMossTileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
@@ -104,16 +102,19 @@ sealed class Stalactite_GenPass : IInitializer {
             }
         }
 
+    }
+
+    private void On_WorldGen_smCallback_End(On_WorldGen.orig_smCallback_End orig, System.Collections.Generic.List<Terraria.WorldBuilding.GenPass> hardmodeTasks) {
+        _TEPositions = [];
+
+        hardmodeTasks.Add(new PassLegacy("Stalactites", GenerateStalactites));
+
+        orig(hardmodeTasks);
+
         foreach (var teInfo in _TEPositions) {
             teInfo.Item1.Place(teInfo.Item2.X, teInfo.Item2.Y);
         }
         _TEPositions.Clear();
         _TEPositions = null!;
-    }
-
-    private void On_WorldGen_smCallback_End(On_WorldGen.orig_smCallback_End orig, System.Collections.Generic.List<Terraria.WorldBuilding.GenPass> hardmodeTasks) {
-        hardmodeTasks.Add(new PassLegacy("Stalactites", GenerateStalactites));
-
-        orig(hardmodeTasks);   
     }
 }
