@@ -2257,3 +2257,8 @@ CrushedRemains: {
 	// DisplayName: Crushed Remains
 	// Tooltip: ""
 }
+
+HornetSkull: {
+	// DisplayName: Hornet Skull
+	// Tooltip: ""
+}
