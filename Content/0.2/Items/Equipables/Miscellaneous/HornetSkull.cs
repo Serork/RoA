@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Players;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -10,7 +12,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 [AutoloadEquip(EquipType.Head)]
-sealed class HornetSkull : ModItem {
+sealed class HornetSkull : ModItem, IDoubleTap {
     public override void SetStaticDefaults() {
         ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = false;
     }
@@ -25,4 +27,6 @@ sealed class HornetSkull : ModItem {
     public override void ArmorSetShadows(Player player) {
         player.GetCommon().ApplyBoneArmorVisuals = true;
     }
+
+    void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) => player.GetCommon().OnHornetDash(direction);
 }

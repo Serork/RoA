@@ -30,7 +30,7 @@
 
 //    public bool Finished => false;
 
-//    public float Progress { get; private set; }
+//    public float DashTime { get; private set; }
 
 //    public void PassiveUpdate() {
 //        if (TotalDuration > 0 && from != Vector2.Zero && target != Vector2.Zero) {
@@ -55,11 +55,11 @@
 //            var offset = new Vector2(-Main.screenWidth / 2f, -Main.screenHeight / 2f);
 
 //            if (timer <= timeOut) { //go out
-//                Progress = timer / (float)timeOut;
-//                cameraPosition.CameraPosition = EaseOutFunction(from + offset, target + offset, Progress);
+//                DashTime = timer / (float)timeOut;
+//                cameraPosition.CameraPosition = EaseOutFunction(from + offset, target + offset, DashTime);
 //            }
 //            else if (timer >= TotalDuration - timeIn) { //go in
-//                Progress = (timer - (TotalDuration - timeIn)) / (float)timeIn;
+//                DashTime = (timer - (TotalDuration - timeIn)) / (float)timeIn;
 //                cameraPosition.CameraPosition = EaseInFunction(target + offset, from + offset, (timer - (TotalDuration - timeIn)) / (float)timeIn);
 //            }
 //            else {

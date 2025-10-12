@@ -156,7 +156,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
         void makeDustsOnGrowth() {
             DoOnSegmentIteration((segmentIterationArgs) => {
                 //if (Main.rand.NextChance(1.5f - segmentIterationArgs.Index / (float)segmentIterationArgs.Length)) {
-                //    if (segmentIterationArgs.Info.Progress < 1f) {
+                //    if (segmentIterationArgs.Info.DashTime < 1f) {
                 //        SpawnThornsDust(segmentIterationArgs.Position);
                 //    }
                 //}

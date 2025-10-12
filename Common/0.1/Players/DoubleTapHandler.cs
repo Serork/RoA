@@ -24,7 +24,7 @@ sealed class DoubleTapHandler : ModPlayer, IPostSetupContent {
     private static readonly List<IDoubleTap> _doubleTapTypes = [];
 
     void IPostSetupContent.PostSetupContent() {
-        IEnumerable<ILoadable> content = Mod.GetContent<ModPlayer>().Concat((IEnumerable<ILoadable>)Mod.GetContent<NatureItem>());
+        IEnumerable<ILoadable> content = Mod.GetContent<ModPlayer>().Concat((IEnumerable<ILoadable>)Mod.GetContent<ModItem>());
         foreach (ILoadable element in content) {
             if (element is not IDoubleTap) {
                 continue;

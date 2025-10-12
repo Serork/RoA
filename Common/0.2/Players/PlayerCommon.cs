@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Content.Items.Equipables.Miscellaneous;
-using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -10,11 +8,9 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
-using static Terraria.Player;
-
 namespace RoA.Common.Players;
 
-sealed class PlayerCommon : ModPlayer {
+sealed partial class PlayerCommon : ModPlayer {
     private static float MAXFALLSPEEDMODIFIERFORFALL => 0.75f;
 
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;
@@ -30,8 +26,13 @@ sealed class PlayerCommon : ModPlayer {
 
     public bool Fell { get; private set; }
 
+    public Vector2 SavedPosition;
+    public Vector2 SavedVelocity;
+    public float DashTime;
+
     public override void Load() {
         On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
+        On_Player.DryCollision += On_Player_DryCollision;
 
         DrawPlayerFullEvent += PlayerCommon_DrawPlayerFullEvent;
     }
@@ -87,6 +88,13 @@ sealed class PlayerCommon : ModPlayer {
         }
     }
 
+    public delegate void PreUpdateMovementDelegate(Player player);
+    public static event PreUpdateMovementDelegate PreUpdateMovementEvent;
+    public override void PreUpdateMovement() {
+        PreUpdateMovementEvent?.Invoke(Player);
+
+    }
+
     public delegate void PostUpdateEquipsDelegate(Player player);
     public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent;
     public override void PostUpdateEquips() {
@@ -103,6 +111,14 @@ sealed class PlayerCommon : ModPlayer {
     public static event FrameEffectsDelegate FrameEffectsEvent;
     public override void FrameEffects() {
         FrameEffectsEvent?.Invoke(Player);
+    }
+
+    public delegate void PostUpdateRunSpeedsDelegate(Player player);
+    public static event PostUpdateRunSpeedsDelegate PostUpdateRunSpeedsEvent;
+    public override void PostUpdateRunSpeeds() {
+        PostUpdateRunSpeedsEvent?.Invoke(Player);
+
+        HandleHornetDash();
     }
 
     public delegate void DrawPlayerFullDelegate(LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer);
