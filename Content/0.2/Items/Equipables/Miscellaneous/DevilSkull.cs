@@ -54,7 +54,7 @@ sealed class DevilSkull : ModItem {
         Item.Size = new Vector2(width, height);
     }
 
-    public override bool IsArmorSet(Item head, Item body, Item legs) => head.type == ModContent.ItemType<DevilSkull>() && body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
+    public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && (legs.legSlot == CarcassSandals.Alternative || legs.type == ModContent.ItemType<CarcassSandals>());
 
     public override void ArmorSetShadows(Player player) {
         player.GetCommon().ApplyBoneArmorVisuals = true;

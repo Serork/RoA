@@ -25,7 +25,7 @@ sealed partial class ItemCommon : GlobalItem {
     }
 
     public override string IsArmorSet(Item head, Item body, Item legs) {
-        if (head.type == ItemID.Skull && body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>()) {
+        if (head.type == ItemID.Skull && body.type == ModContent.ItemType<CarcassChestguard>() && (legs.legSlot == CarcassSandals.Alternative || legs.type == ModContent.ItemType<CarcassSandals>())) {
             return "SkullArmorSet";
         }
 

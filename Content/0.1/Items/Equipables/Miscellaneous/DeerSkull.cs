@@ -30,7 +30,7 @@ sealed class DeerSkull : ModItem {
 
     public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.Nature) += 4;
 
-    public override bool IsArmorSet(Item head, Item body, Item legs) => head.type == ModContent.ItemType<DeerSkull>() && body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
+    public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && (legs.legSlot == CarcassSandals.Alternative || legs.type == ModContent.ItemType<CarcassSandals>());
 
     public override void ArmorSetShadows(Player player) {
         player.GetCommon().ApplyBoneArmorVisuals = true;
