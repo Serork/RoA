@@ -23,6 +23,8 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
+// my first attempt at something special
+// its super unnptimized but it is what it is
 sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFixShoulderWhileActive {
     private TrailInfo[] _trails;
     private float _charge;
@@ -462,14 +464,11 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         }
         Projectile.Center += _offset;
         int trailTimeLeft = 5;
-        _trails[0] = new TrailInfo(trailTimeLeft, Projectile.Opacity, Projectile.scale * Main.rand.NextFloat(1.1f, 1.3f), Projectile.Center, Projectile.rotation);
+        _trails[0] = new TrailInfo(Projectile.Center, Projectile.rotation);
         Projectile.oldPos[0] = _trails[0].Position;
         Projectile.oldRot[0] = _trails[0].Rotation;
         for (int i = _trails.Length - 1; i > 0; i--) {
             _trails[i] = _trails[i - 1];
-            _trails[i].TimeLeft--;
-            _trails[i].Opacity = _trails[i].TimeLeft / trailTimeLeft;
-            _trails[i].Scale -= 0.035f;
         }
         for (int i = Projectile.oldPos.Length - 1; i > 0; i--) {
             Projectile.oldPos[i] = Projectile.oldPos[i - 1];
@@ -502,10 +501,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         }
     }
 
-    private struct TrailInfo(int timeLeft, float opacity, float scale, Vector2 position, float rotation) {
-        public int TimeLeft = timeLeft;
-        public float Opacity = opacity;
-        public float Scale = scale;
+    private struct TrailInfo(Vector2 position, float rotation) {
         public Vector2 Position = position;
         public float Rotation = rotation;
     }
