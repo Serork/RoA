@@ -47,7 +47,7 @@ sealed class FenethStatueWorldGen : ModSystem {
         int startX = hasSpooky ? jungleSide != 1 ? 100 : Main.maxTilesX / 2 : hasCalamity ? Main.maxTilesX / 2 : 100;
         int endX = hasSpooky ? jungleSide != 1 ? Main.maxTilesX / 2 : (Main.maxTilesX - 100) : (Main.maxTilesX - 100);
         ushort grassTileType = GetUnderworldGrassTileType();
-        int attempts = 200;
+        int attempts = 1000;
         while (!_fenethStatuePlaced && attempts-- > 0) {
             for (int num868 = startX;
                 num868 < endX; num868++) {
