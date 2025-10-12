@@ -45,7 +45,11 @@ sealed class Stalactite_GenPass : IInitializer {
         if (!canPlace) {
             return;
         }
-        if (Main.tileCut[WorldGenHelper.GetTileSafely(i, j).TileType]) {
+        ushort tileType = WorldGenHelper.GetTileSafely(i, j).TileType;
+        if (Main.tileCut[tileType] ||
+            tileType == (ushort)ModContent.TileType<DrippingTar>() ||
+            tileType == TileID.WaterDrip ||
+            tileType == TileID.LavaDrip) {
             WorldGen.KillTile(i, j);
         }
         void placeTE(Point16 tilePosition) {
