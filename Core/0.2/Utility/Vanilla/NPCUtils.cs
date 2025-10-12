@@ -28,6 +28,13 @@ static class NPCUtils {
             npc.rotation + exRot, sourceRectangle.Size() / 2, npc.scale * scale, effect ?? npc.spriteDirection.ToSpriteEffects(), 0);
     }
 
+    public static DrawData QuickDrawAsDrawData(this NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor, Rectangle? frameBox = null, float scale = 1f, SpriteEffects? effect = null, float exRot = 0, float yOffset = 0f, float xOffset = 0f, Texture2D? texture = null) {
+        Texture2D tex = texture ?? npc.GetTexture();
+        Rectangle sourceRectangle = frameBox ?? npc.frame;
+        return new DrawData(tex, npc.Center + Vector2.UnitY * yOffset + Vector2.UnitX * xOffset - screenPos, sourceRectangle, lightColor,
+            npc.rotation + exRot, sourceRectangle.Size() / 2, npc.scale * scale, effect ?? npc.spriteDirection.ToSpriteEffects(), 0);
+    }
+
     public static NPCCommon GetCommon(this NPC npc) => npc.GetGlobalNPC<NPCCommon>();
 
     public static bool TryGetCommon(this NPC npc, out NPCCommon npcCommon) => npc.TryGetGlobalNPC(out npcCommon);

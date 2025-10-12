@@ -10,6 +10,7 @@ using RoA.Core.Utility;
 using System;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -47,6 +48,7 @@ sealed class LothorClawsSlash : ModProjectile {
 
             float dist = Vector2.Distance(npc.Center, Main.player[npc.target].Center);
             float value = Utils.Remap(dist, 0f, 300f, 1f, 2.5f);
+            value *= 1.25f;
             Projectile.localAI[2] = Math.Max(value, 1f);
         }
 
@@ -172,7 +174,31 @@ sealed class LothorClawsSlash : ModProjectile {
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color2 * 0.15f * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, Projectile.rotation + (float)(Projectile.ai[2] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             spriteBatch.Begin(snapshot, true);
+
+            Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 4f) * scale;
+            DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, color2, Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
+
+            drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 4f) * scale;
+            DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, color1, Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
         }
+    }
+
+    private void DrawPrettyStarSparkle(float opacity, SpriteEffects dir, Vector2 drawpos, Microsoft.Xna.Framework.Color drawColor, Microsoft.Xna.Framework.Color shineColor, float flareCounter, float fadeInStart, float fadeInEnd, float fadeOutStart, float fadeOutEnd, float rotation, Vector2 scale, Vector2 fatness) {
+        Texture2D value = TextureAssets.Extra[98].Value;
+        Microsoft.Xna.Framework.Color color = shineColor * opacity * 0.5f;
+        color.A = 0;
+        Vector2 origin = value.Size() / 2f;
+        Microsoft.Xna.Framework.Color color2 = drawColor * 0.5f;
+        float num = Utils.GetLerpValue(fadeInStart, fadeInEnd, flareCounter, clamped: true) * Utils.GetLerpValue(fadeOutEnd, fadeOutStart, flareCounter, clamped: true);
+        num *= 0.95f;
+        Vector2 vector = new Vector2(fatness.X * 0.5f, scale.X) * num * 1f;
+        Vector2 vector2 = new Vector2(fatness.Y * 0.5f, scale.Y) * num * 1f;
+        color *= num;
+        color2 *= num;
+        Main.EntitySpriteDraw(value, drawpos, null, color, (float)Math.PI / 2f + rotation, origin, vector, dir);
+        Main.EntitySpriteDraw(value, drawpos, null, color, 0f + rotation, origin, vector2, dir);
+        Main.EntitySpriteDraw(value, drawpos, null, color2, (float)Math.PI / 2f + rotation, origin, vector * 0.6f, dir);
+        Main.EntitySpriteDraw(value, drawpos, null, color2, 0f + rotation, origin, vector2 * 0.6f, dir);
     }
 
     public override bool PreDraw(ref Color lightColor) {

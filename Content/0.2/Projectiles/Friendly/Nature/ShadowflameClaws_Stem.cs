@@ -327,6 +327,10 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
             }
         }
 
+        if (GeometryUtils.CenteredSquare(Projectile.Center, 10).Intersects(targetHitbox)) {
+            return true;
+        }
+
         return false;
     }
 
@@ -356,6 +360,17 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
                 dust2 = Main.dust[num390];
                 dust2.scale += (float)Main.rand.Next(150) * 0.001f;
             }
+        }
+        for (int num389 = 0; num389 < 9; num389++) {
+            int num390 = Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(10), 0, 0, DustID.Shadowflame, Alpha: 125);
+            Main.dust[num390].noGravity = true;
+            Main.dust[num390].fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
+            Main.dust[num390].velocity *= 0.85f + Main.rand.NextFloatRange(0.1f);
+            Main.dust[num390].scale *= 1.1f;
+            Dust dust2 = Main.dust[num390];
+            dust2 = Main.dust[num390];
+            dust2 = Main.dust[num390];
+            dust2.scale += (float)Main.rand.Next(150) * 0.001f;
         }
     }
 

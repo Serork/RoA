@@ -6,6 +6,7 @@ using ModLiquidLib.Utils.Structs;
 
 using RoA.Content.Projectiles.LiquidsSpecific;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
@@ -144,7 +145,9 @@ sealed partial class Tar : ModLiquid {
             Tile tile4 = Main.tile[x, y + 1];
             Tile tile5 = Main.tile[x, y];
             tile.LiquidAmount = tile2.LiquidAmount = tile3.LiquidAmount = 0;
-            Projectile.NewProjectile(null, new Point16(tileX, tileY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<TarExplosion>(), 100, 0f, Main.myPlayer);
+            if (Helper.SinglePlayerOrServer) {
+                Projectile.NewProjectile(null, new Point16(tileX, tileY).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<TarExplosion>(), 100, 0f, Main.myPlayer);
+            }
             WorldGen.SquareTileFrame(x, y);
 
             return false;

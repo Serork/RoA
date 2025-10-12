@@ -1046,7 +1046,7 @@ sealed partial class Lothor : ModNPC {
                     Main.dust[dust].noGravity = true;
                 }
 
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 7; i++) {
                     int dust = Dust.NewDust(spawnPosition, 20, 20, dustType, (float)(NPC.velocity.X * 0.25), (float)(NPC.velocity.Y * 0.25));
                     if (Main.rand.NextBool(3)) {
                         Main.dust[dust].fadeIn = (float)(0.75 + (double)Main.rand.Next(-10, 11) * 0.01f);
@@ -1055,6 +1055,7 @@ sealed partial class Lothor : ModNPC {
                     else {
                         Main.dust[dust].scale = (float)(1.2 + (double)Main.rand.Next(-10, 11) * 0.05f);
                     }
+                    Main.dust[dust].scale *= 1.25f;
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity *= 1.125f;
                 }
@@ -1125,7 +1126,7 @@ sealed partial class Lothor : ModNPC {
         }
         float speed = 7f;
         if (Main.masterMode) {
-            speed = MathHelper.Lerp(7f, 10f, LifeProgress);
+            speed = MathHelper.Lerp(7f, 8.5f, LifeProgress);
         }
         if (_tempDirection == 0 && Main.netMode != NetmodeID.MultiplayerClient) {
             _tempDirection = (Target.Center - NPC.Center).X.GetDirection();
@@ -1139,7 +1140,7 @@ sealed partial class Lothor : ModNPC {
         if (FlightAttackTimer == 0f) {
             float acceleration = 0.2f;
             if (Main.masterMode) {
-                acceleration += 0.2f * LifeProgress;
+                acceleration += 0.1f * LifeProgress;
             }
             NPC.SimpleFlyMovement(desiredVelocity, acceleration);
             float min = 5f + 15f * LifeProgress;
@@ -1158,6 +1159,9 @@ sealed partial class Lothor : ModNPC {
             NPC.velocity *= value;
             if (!_shouldWreathAttack) {
                 CreateCircleDusts();
+            }
+            else {
+                CreateCircleDusts2();
             }
             if (_frameChosen) {
                 bool flag = BeforeAttackTimer > 0f;
@@ -1188,6 +1192,29 @@ sealed partial class Lothor : ModNPC {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void CreateCircleDusts2() {
+        int type = ModContent.DustType<RedLineDust>();
+        for (int i = 0; i < 4; i++) {
+            if (Main.rand.NextBool(2)) {
+                Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
+                Vector2 center = NPC.Center + new Vector2(NPC.direction == 1 ? 3f : -3f, 0f) + NPC.velocity + spinningpoint * (NPC.width * NPC.scale);
+                Vector2 rotationPoint = spinningpoint.RotatedBy(0.785) * NPC.direction;
+                Vector2 position = center + rotationPoint * 5f;
+                int dust = Dust.NewDust(position, 0, 0, type);
+                Main.dust[dust].position = position + Vector2.UnitY * 10f;
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f * NPC.scale;
+                Main.dust[dust].velocity = rotationPoint * NPC.scale * -2f;
+                Main.dust[dust].velocity.X *= 0.25f * Main.rand.NextFloat();
+                Main.dust[dust].velocity.Y -= 5f + 5f * Main.rand.NextFloat();
+                Main.dust[dust].scale = Main.rand.NextFloat() * Main.rand.NextFloat(1f, 1.25f) * 2f;
+                Main.dust[dust].scale *= NPC.scale;
+                //Main.dust[dust].velocity += NPC.velocity * 1.25f;
+                //Main.dust[dust].position += Main.dust[dust].velocity * -5f;
             }
         }
     }
