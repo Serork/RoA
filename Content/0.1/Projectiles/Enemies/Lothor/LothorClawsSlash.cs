@@ -35,6 +35,8 @@ sealed class LothorClawsSlash : ModProjectile {
         Projectile.tileCollide = false;
         Projectile.ignoreWater = true;
         Projectile.timeLeft = 200;
+
+        Projectile.manualDirectionChange = true;
     }
 
     public override void AI() {
@@ -83,6 +85,8 @@ sealed class LothorClawsSlash : ModProjectile {
         float num42 = 1f/*Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f)*/ * Projectile.Opacity;
         color1 *= num42 * num22;
         color2 *= num42 * num22;
+
+        Projectile.direction = npc.direction;
 
         float offset = 0f;
         float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
@@ -187,10 +191,10 @@ sealed class LothorClawsSlash : ModProjectile {
             spriteBatch.Draw(asset.Value, position, new Rectangle?(r), color1 * 0.15f * num4 * num2, Projectile.rotation + (float)(Projectile.ai[2] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             spriteBatch.Begin(snapshot, true);
 
-            Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 0f) * scale;
+            Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 0f - Utils.Remap(num1, 0f, 1f, 0f, 6f)) * scale;
             DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(color1, color2, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
 
-            drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 4f) * scale;
+            drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 4f - Utils.Remap(num1, 0f, 1f, 0f, 4f)) * scale;
             DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(color1, color2, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
         }
     }

@@ -1076,7 +1076,7 @@ sealed partial class Lothor : ModNPC {
             }
             float speed = 8f + 2f * LifeProgress;
             Vector2 desiredVelocity = NPC.DirectionTo(_tempPosition) * speed;
-            float acceleration = 0.2f + 0.5f * LifeProgress;
+            float acceleration = 0.2f + 0.42f * LifeProgress;
             NPC.SimpleFlyMovement(desiredVelocity, acceleration);
             float min = 10f;
             if (Vector2.Distance(_tempPosition, NPC.Center) < min) {
@@ -1131,7 +1131,7 @@ sealed partial class Lothor : ModNPC {
         }
         float speed = 7f;
         if (Main.masterMode) {
-            speed = MathHelper.Lerp(7f, 8.5f, LifeProgress);
+            speed = MathHelper.Lerp(7f, 10f, LifeProgress);
         }
         if (_tempDirection == 0 && Main.netMode != NetmodeID.MultiplayerClient) {
             _tempDirection = (Target.Center - NPC.Center).X.GetDirection();
@@ -1157,7 +1157,7 @@ sealed partial class Lothor : ModNPC {
         else {
             Glow2();
 
-            float value = 0.925f;
+            float value = 0.935f;
             if (Main.getGoodWorld) {
                 value -= 0.025f * LifeProgress;
             }
@@ -1218,7 +1218,7 @@ sealed partial class Lothor : ModNPC {
                 Main.dust[dust].velocity.Y -= 5f + 5f * Main.rand.NextFloat();
                 Main.dust[dust].scale = Main.rand.NextFloat() * Main.rand.NextFloat(1f, 1.25f) * 2f;
                 Main.dust[dust].scale *= NPC.scale;
-                Main.dust[dust].velocity += NPC.velocity * 1.25f;
+                Main.dust[dust].velocity += NPC.velocity * 0.5f;
                 //Main.dust[dust].position += Main.dust[dust].velocity * -5f;
             }
         }
