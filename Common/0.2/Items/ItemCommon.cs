@@ -34,7 +34,7 @@ sealed class ItemCommon : GlobalItem {
         return base.IsArmorSet(head, body, legs);   
     }
 
-    public override void UpdateArmorSet(Player player, string set) {
+    public override void ArmorSetShadows(Player player, string set) {
         if (set == "SkullArmorSet") {
             player.GetCommon().ApplyBoneArmorVisuals = true;
         }
