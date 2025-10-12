@@ -1,2 +1,1 @@
-- Fixed the Backwoods music not switching to the town theme
-- Backwoods Fog no longer spawns on player-built walls
+- Added compatibility for The Depths world generation

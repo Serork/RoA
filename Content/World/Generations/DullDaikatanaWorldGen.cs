@@ -45,7 +45,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                 int num438 = genRand.Next((int)(Main.maxTilesX * 0.17f), (int)(Main.maxTilesX * 0.83f));
                 int num439 = genRand.Next(Main.maxTilesY - 250, Main.maxTilesY - 30);
                 try {
-                    if (WorldGenHelper.GetTileSafely(num438, num439).WallType == checkWallType) {
+                    if (WorldGenHelper.GetTileSafely(num438, num439).WallType == checkWallType || WorldGenHelper.GetTileSafely(num438, num439).WallType == 14) {
                         bool flag = true;
                         int check = 3;
                         for (int x = -check; x < check + 2; x++) {
