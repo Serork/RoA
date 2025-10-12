@@ -40,6 +40,47 @@ static class WorldGenHelper {
         public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt(RoA.ModName + "backwoods" + nameof(worldSurfaceLow));
     }
 
+
+    public static void Place3x4(int x, int y, ushort type, int style, byte paintID = 0) {
+        if (x < 5 || x > Main.maxTilesX - 5 || y < 5 || y > Main.maxTilesY - 5)
+            return;
+
+        bool flag = true;
+        for (int i = x - 1; i < x + 2; i++) {
+            for (int j = y - 3; j < y + 1; j++) {
+                if (Main.tile[i, j].HasTile)
+                    flag = false;
+            }
+
+            if (!WorldGen.SolidTile2(i, y + 1))
+                flag = false;
+        }
+
+        if (flag) {
+            int num = style * 54;
+            for (int k = -3; k <= 0; k++) {
+                short frameY = (short)((3 + k) * 18);
+                Tile tile = Main.tile[x - 1, y + k];
+                tile.HasTile = true;
+                tile.TileFrameY = frameY;
+                tile.TileFrameX = (short)num;
+                tile.TileType = type;
+                tile.TileColor = paintID;
+                tile = Main.tile[x, y + k];
+                tile.HasTile = true;
+                tile.TileFrameY = frameY;
+                tile.TileFrameX = (short)(num + 18);
+                tile.TileType = type;
+                tile.TileColor = paintID;
+                tile = Main.tile[x + 1, y + k];
+                tile.HasTile = true;
+                tile.TileFrameY = frameY;
+                tile.TileFrameX = (short)(num + 36);
+                tile.TileType = type;
+                tile.TileColor = paintID;
+            }
+        }
+    }
     public static bool CustomEmptyTileCheck(int startX, int endX, int startY, int endY, params int[] ignoreIDs) {
         if (startX < 0)
             return false;

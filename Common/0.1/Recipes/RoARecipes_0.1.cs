@@ -584,7 +584,7 @@ sealed partial class RoARecipes : ModSystem {
             if (item.Type == ModContent.ItemType<EmptyPlanterBox>()) {
                 continue;
             }
-            if (item.GetType().ToString().Contains("PlanterBox")) {
+            if (item.FullName.Contains("PlanterBox")) {
                 addRecipe((short)item.Type);
             }
         }

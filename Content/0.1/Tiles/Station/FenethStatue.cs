@@ -206,10 +206,18 @@ sealed class FenethStatue : ModTile {
         for (int i = num868 - 10; i < num868 + 11; i++) {
             for (int j = num869 - 10; j < num869 + 11; j++) {
                 if (genRand.NextBool(20)) {
-                    int[] grass = [TileID.Ash, 2, 23, 109, 199, 477, 492, 633, ModContent.TileType<BackwoodsGrass>()];
+                    List<int> grass = [TileID.Ash, 2, 23, 109, 199, 477, 492, 633, ModContent.TileType<BackwoodsGrass>()];
+                    if (ModLoader.GetMod("TheDepths").TryFind<ModTile>("NightmareGrass", out ModTile NightmareGrass)) {
+                        grass.Add(NightmareGrass.Type);
+                    }
                     if (Main.tile[i, j].HasTile && (grass.Contains(Main.tile[i, j].TileType)) &&
                         !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0 && !Main.tile[i, j - 1].HasTile) {
-                        WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FenethStatueFlowers>(), style: genRand.Next(4), mute: true);
+                        int flowersType = ModContent.TileType<FenethStatueFlowers>();
+                        WorldGen.PlaceTile(i, j - 1, flowersType, style: genRand.Next(4), mute: true);
+                        Tile tile = Main.tile[i, j - 1];
+                        if (tile.TileType == flowersType) {
+                            tile.TileColor = Main.tile[x, y].TileColor;
+                        }
                     }
                 }
             }
