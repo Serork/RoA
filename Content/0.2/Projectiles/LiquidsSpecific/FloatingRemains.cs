@@ -52,19 +52,21 @@ sealed class FloatingRemains : ModProjectile {
             }
         }
 
-        float num = 0.25f;
-        float num2 = Projectile.width / 2;
-        for (int i = 0; i < 1000; i++) {
-            if (i != Projectile.whoAmI && Main.projectile[i].active && Main.projectile[i].type == Projectile.type && Math.Abs(Projectile.position.X - Main.projectile[i].position.X) + Math.Abs(Projectile.position.Y - Main.projectile[i].position.Y) < num2) {
-                if (Projectile.position.X < Main.projectile[i].position.X)
-                    Projectile.velocity.X -= num;
-                else
-                    Projectile.velocity.X += num;
+        if (Projectile.wet) {
+            float num = 0.25f;
+            float num2 = Projectile.width / 2;
+            for (int i = 0; i < 1000; i++) {
+                if (i != Projectile.whoAmI && Main.projectile[i].active && Main.projectile[i].type == Projectile.type && Math.Abs(Projectile.position.X - Main.projectile[i].position.X) + Math.Abs(Projectile.position.Y - Main.projectile[i].position.Y) < num2) {
+                    if (Projectile.position.X < Main.projectile[i].position.X)
+                        Projectile.velocity.X -= num;
+                    else
+                        Projectile.velocity.X += num;
 
-                if (Projectile.position.Y < Main.projectile[i].position.Y)
-                    Projectile.velocity.Y -= num;
-                else
-                    Projectile.velocity.Y += num;
+                    if (Projectile.position.Y < Main.projectile[i].position.Y)
+                        Projectile.velocity.Y -= num;
+                    else
+                        Projectile.velocity.Y += num;
+                }
             }
         }
 
