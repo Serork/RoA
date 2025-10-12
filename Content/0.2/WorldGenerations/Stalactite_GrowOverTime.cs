@@ -10,10 +10,13 @@ namespace RoA.Content.WorldGenerations;
 
 sealed class Stalactite_GrowOverTime : GlobalTile {
     public override void RandomUpdate(int i, int j, int type) {
-        if (!WorldGen.genRand.NextBool(10)) {
+        if (!WorldGen.genRand.NextBool(600)) {
             return;
         }
 
+        if (!(Main.tile[i, j].HasUnactuatedTile && Main.tile[i, j].HasTile)) {
+            return;
+        }
         ushort backwoodsStoneTileType = (ushort)ModContent.TileType<BackwoodsStone>();
         ushort solidifiedTarTileType = (ushort)ModContent.TileType<SolidifiedTar>();
         ushort backwoodsMossTileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
