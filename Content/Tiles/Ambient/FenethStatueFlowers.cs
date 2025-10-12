@@ -19,16 +19,6 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
-    public class FenethStatueFlowers_DepthsGrassSupport : GlobalTile {
-        public override void SetStaticDefaults() {
-            // This allows the Sunflower tile to be placed on ExampleBlock
-            if (ModLoader.GetMod("TheDepths").TryFind<ModTile>("NightmareGrass", out ModTile NightmareGrass)) {
-                TileObjectData tileObjectData = TileObjectData.GetTileData(ModContent.TileType<FenethStatueFlowers>(), 0);
-                tileObjectData.AnchorValidTiles = tileObjectData.AnchorValidTiles.Append(NightmareGrass.Type).ToArray();
-            }
-        }
-    }
-
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
@@ -49,6 +39,9 @@ sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
         TileObjectData.newTile.Style = 0;
         TileObjectData.newTile.LavaDeath = false;
         List<int> anchorValidTileTypes = [TileID.Ash, 2, 23, 109, 199, 477, 492, 633, ModContent.TileType<BackwoodsGrass>()];
+        if (ModLoader.TryGetMod("TheDepths", out Mod theDepths) && theDepths.TryFind<ModTile>("NightmareGrass", out ModTile NightmareGrass)) {
+            anchorValidTileTypes.Add(NightmareGrass.Type);
+        }
         TileObjectData.newTile.AnchorValidTiles = anchorValidTileTypes.ToArray();
         TileObjectData.addTile(Type);
 
