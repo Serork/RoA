@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Core.Utility.Vanilla;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -20,6 +23,20 @@ sealed class ItemCommon : GlobalItem {
             entity.headSlot = 93;
             entity.rare = ItemRarityID.White;
             entity.vanity = false;
+        }
+    }
+
+    public override string IsArmorSet(Item head, Item body, Item legs) {
+        if (head.type == ItemID.Skull && body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>()) {
+            return "SkullArmorSet";
+        }
+
+        return base.IsArmorSet(head, body, legs);   
+    }
+
+    public override void UpdateArmorSet(Player player, string set) {
+        if (set == "SkullArmorSet") {
+            player.GetCommon().ApplyBoneArmorVisuals = true;
         }
     }
 }

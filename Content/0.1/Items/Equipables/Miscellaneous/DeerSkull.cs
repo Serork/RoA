@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility.Vanilla;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -27,6 +29,12 @@ sealed class DeerSkull : ModItem {
     }
 
     public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.Nature) += 4;
+
+    public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
+
+    public override void UpdateArmorSet(Player player) {
+        player.GetCommon().ApplyBoneArmorVisuals = true;
+    }
 
     //public override void DrawArmorColor(Player drawPlayer, float shadow, ref DrawColor color, ref int glowMask, ref DrawColor glowMaskColor) {
     //	if (drawPlayer.active) {
