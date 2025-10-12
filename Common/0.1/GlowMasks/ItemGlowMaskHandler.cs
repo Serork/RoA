@@ -309,7 +309,6 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     }
                     Texture2D glowMaskTexture = armorGlowMaskInfo.GlowMaskTexture.Value;
                     Color glowMaskColor = Color.White;
-                    glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                     if (armorGlowMaskModItem is IAdvancedGlowMaskDraw advancedGlowMaskDraw) {
                         advancedGlowMaskDraw.Draw(ref drawInfo, ref glowMaskTexture, ref glowMaskColor);
                         return;
@@ -317,6 +316,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     if (armorGlowMaskModItem is IDrawArmorGlowMask armorGlowMask) {
                         armorGlowMask.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     }
+                    glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                     DrawData item = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
                     drawInfo.DrawDataCache.Add(item);
                 }
@@ -325,6 +325,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     Color glowMaskColor = Color.White;
                     armorGlowMaskByTypeInfo.DrawSettings?.Invoke(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
+                    glowMaskColor *= 1f - drawInfo.shadow;
                     DrawData item = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
                     drawInfo.DrawDataCache.Add(item);
                 }
@@ -391,6 +392,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     Color glowMaskColor = Color.White;
                     armorGlowMaskByTypeInfo.DrawSettings?.Invoke(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
+                    glowMaskColor *= 1f - drawInfo.shadow;
                     Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(player.width / 2 - player.legFrame.Width / 2, player.height - player.legFrame.Height + 4f) + player.legPosition;
                     Vector2 legsOffset = drawInfo.legsOffset;
                     DrawData drawData = new(glowMaskTexture, drawPos.Floor() + legsOffset, player.legFrame, glowMaskColor, player.legRotation, legsOffset, 1f, drawInfo.playerEffect, 0) {
@@ -447,6 +449,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     Color glowMaskColor = Color.White;
                     armorGlowMaskByTypeInfo.DrawSettings?.Invoke(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, (float)drawInfo.shadow);
+                    glowMaskColor *= 1f - drawInfo.shadow;
                     Rectangle bodyFrame = drawInfo.compTorsoFrame;
                     Vector2 vector = new Vector2((int)(drawInfo.Position.X - Main.screenPosition.X - (float)(drawInfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawInfo.drawPlayer.width / 2)), (int)(drawInfo.Position.Y - Main.screenPosition.Y + (float)drawInfo.drawPlayer.height - (float)drawInfo.drawPlayer.bodyFrame.Height + 4f)) + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.bodyFrame.Width / 2, drawInfo.drawPlayer.bodyFrame.Height / 2);
                     vector.Y += drawInfo.torsoOffset;
