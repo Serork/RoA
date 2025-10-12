@@ -415,7 +415,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
                 }
                 Vector2 position = trailInfo.Position;
                 float rotation = Projectile.rotation;
-                Vector2 scale = trailInfo.Scale * Projectile.scale;
+                Vector2 scale = trailInfo.Scale * Projectile.scale * 0.85f;
                 Color color = projectileColor * trailInfo.Opacity;
                 Rectangle clip = new SpriteFrame(Dusts.Tulip.COLUMNCOUNT, Dusts.Tulip.ROWCOUNT, TulipDustFrame, trailInfo.Frame).GetSourceRectangle(texture);
                 clip.Width += 2;
