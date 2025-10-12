@@ -2,6 +2,7 @@
 using RoA.Content.Tiles.Station;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -22,6 +23,75 @@ sealed class FenethStatueWorldGen : ModSystem {
         tasks.RemoveAt(genIndex);
 
         tasks.Insert(genIndex, new PassLegacy("Underworld", UnderworldGenerator, 9213.443f));
+
+        if (ModLoader.HasMod("TheDepths")) {
+            genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Underworld"));
+            tasks.Insert(genIndex + 2, new PassLegacy(string.Empty, TheDepthFenethStatueWorldGen, 10));
+        }
+    }
+
+    public static ushort GetUnderworldGrassTileType() {
+        ushort tileType = TileID.AshGrass;
+        if (ModLoader.GetMod("TheDepths").TryFind<ModTile>("NightmareGrass", out ModTile NightmareGrass)) {
+            tileType = NightmareGrass.Type;
+        }
+        return tileType;
+    }
+
+    private void TheDepthFenethStatueWorldGen(GenerationProgress progress, GameConfiguration configuration) {
+        _fenethStatuePlaced = false;
+        int jungleSide = (GenVars.JungleX < Main.maxTilesX / 2).ToInt();
+        bool hasSpooky = false;
+        bool hasCalamity = false;
+        var genRand = WorldGen.genRand;
+        int startX = hasSpooky ? jungleSide != 1 ? 100 : Main.maxTilesX / 2 : hasCalamity ? Main.maxTilesX / 2 : 100;
+        int endX = hasSpooky ? jungleSide != 1 ? Main.maxTilesX / 2 : (Main.maxTilesX - 100) : (Main.maxTilesX - 100);
+        ushort grassTileType = GetUnderworldGrassTileType();
+        int attempts = 200;
+        while (!_fenethStatuePlaced && attempts-- > 0) {
+            for (int num868 = startX;
+                num868 < endX; num868++) {
+                if ((double)num868 < (double)Main.maxTilesX * 0.17 || (double)num868 > (double)Main.maxTilesX * 0.83) {
+                    if (_fenethStatuePlaced) {
+                        break;
+                    }
+                    for (int num869 = Main.maxTilesY - 170; num869 < Main.maxTilesY - 140; num869++) {
+                        if (Main.tile[num868, num869].LiquidAmount <= 0 && Main.tile[num868, num869].TileType == grassTileType && Main.tile[num868, num869].HasTile && !Main.tile[num868, num869 - 1].HasTile && genRand.Next(30) == 0) {
+                            ushort type = (ushort)ModContent.TileType<FenethStatue>();
+                            WorldGenHelper.Place3x4(num868, num869 - 1, type, genRand.NextBool().ToInt(), PaintID.DeepPurplePaint);
+                            if (Main.tile[num868, num869 - 1].TileType == type) {
+                                _fenethStatuePlaced = true;
+                                for (int i = num868 - 20; i < num868 + 21; i++) {
+                                    for (int j = num869 - 20; j < num869 + 21; j++) {
+                                        Main.tile[i, j].LiquidAmount = 0;
+                                    }
+                                }
+                                for (int i = num868 - 10; i < num868 + 11; i++) {
+                                    for (int j = num869 - 10; j < num869 + 11; j++) {
+                                        if (genRand.NextChance(0.7f) && Main.tile[i, j].HasTile && Main.tile[i, j].TileType == grassTileType &&
+                                            !Main.tile[i, j].IsHalfBlock && Main.tile[i, j].Slope == 0) {
+                                            if (genRand.NextBool(10)) {
+                                                WorldGen.PlaceTile(i, j - 1, TileID.BloomingHerbs, style: 5);
+                                            }
+                                            else {
+                                                int flowersType = ModContent.TileType<FenethStatueFlowers>();
+                                                WorldGen.PlaceTile(i, j - 1, flowersType, style: genRand.Next(4));
+                                                Tile tile = Main.tile[i, j - 1];
+                                                if (tile.TileType == flowersType) {
+                                                    tile.TileColor = PaintID.DeepPurplePaint;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                //Console.WriteLine(num868 + " " + num869);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void UnderworldGenerator(GenerationProgress progress, GameConfiguration configuration) {

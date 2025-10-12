@@ -23,10 +23,19 @@ sealed class DullDaikatanaWorldGen : ModSystem {
         tasks.Insert(genIndex, new PassLegacy("Dull Daikatana", DullDaikatanaGenerator, 9213.443f));
     }
 
+    private static ushort GetUnderworldBuildingWallType() {
+        ushort wallType = 14;
+        if (ModLoader.GetMod("TheDepths").TryFind<ModWall>("ArqueriteBrickWallUnsafe", out ModWall ArqueriteBrickWallUnsafe)) {
+            wallType = ArqueriteBrickWallUnsafe.Type;
+        }
+        return wallType;
+    }
+
     private void DullDaikatanaGenerator(GenerationProgress progress, GameConfiguration configuration) {
         var genRand = WorldGen.genRand;
         bool hasRemnants = ModLoader.HasMod("Remnants");
         int count = WorldGenHelper.WorldSize * (hasRemnants ? 2 : 1);
+        ushort checkWallType = GetUnderworldBuildingWallType();
         for (int num436 = 0; num436 < count; num436++) {
             double value2 = (double)num436 / (double)(count);
             progress.Set(value2);
@@ -36,7 +45,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                 int num438 = genRand.Next((int)(Main.maxTilesX * 0.17f), (int)(Main.maxTilesX * 0.83f));
                 int num439 = genRand.Next(Main.maxTilesY - 250, Main.maxTilesY - 30);
                 try {
-                    if (WorldGenHelper.GetTileSafely(num438, num439).WallType == 14) {
+                    if (WorldGenHelper.GetTileSafely(num438, num439).WallType == checkWallType) {
                         bool flag = true;
                         int check = 3;
                         for (int x = -check; x < check + 2; x++) {
