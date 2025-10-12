@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Projectiles;
+using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System;
@@ -44,8 +45,10 @@ sealed class FloatingRemains : ModProjectile {
         if (Projectile.ai[0] == 0f) {
             Projectile.ai[0] = 1f;
 
-            for (int i = 0; i < 15; i++) {
-                Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Projectile.velocity, Type, 0, 0f, Projectile.owner, 1f);
+            if (Helper.SinglePlayerOrServer) {
+                for (int i = 0; i < Main.rand.Next(4, 7); i++) {
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Projectile.velocity, Type, 0, 0f, Projectile.owner, 1f);
+                }
             }
         }
 
