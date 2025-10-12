@@ -21,7 +21,7 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.WorldGenerations;
 
 sealed class Stalactite_GenPass : IInitializer {
-    private static HashSet<(ModTileEntity, Point16)> _TEPositions = [];
+    private static HashSet<(ModTileEntity, Point16)>? _TEPositions;
 
     void ILoadable.Load(Mod mod) {
         On_WorldGen.smCallback_End += On_WorldGen_smCallback_End;
@@ -53,7 +53,7 @@ sealed class Stalactite_GenPass : IInitializer {
                 teInstance.Place(tilePosition.X, tilePosition.Y);
             }
             else {
-                _TEPositions.Add((teInstance, tilePosition));
+                _TEPositions!.Add((teInstance, tilePosition));
             }
         }
         if (WorldGenHelper.Place1x2Top(i, j, stalactiteTileType, WorldGen.genRand.Next(3), onPlace: placeTE)) {
@@ -71,6 +71,8 @@ sealed class Stalactite_GenPass : IInitializer {
     }
 
     private static void GenerateStalactites(GenerationProgress progress, GameConfiguration configuration) {
+        _TEPositions = [];
+
         ushort backwoodsStoneTileType = (ushort)ModContent.TileType<BackwoodsStone>();
         ushort solidifiedTarTileType = (ushort)ModContent.TileType<SolidifiedTar>();
         ushort backwoodsMossTileType = (ushort)ModContent.TileType<BackwoodsGreenMoss>();
