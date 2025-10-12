@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Forms;
 using RoA.Common.Players;
+using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -29,6 +31,22 @@ static partial class PlayerExtensions {
         newBuffTime[0] = time;
         Array.Copy(self.buffTime, 0, newBuffTime, 1, self.buffTime.Length);
         self.buffTime = newBuffTime;
+    }
+
+    public static bool HasEquipped<T>(this Player player, EquipType equipType) where T : ModItem {
+        int check = -1;
+        switch(equipType) {
+            case EquipType.Head:
+                check = player.head;
+                break;
+            case EquipType.Body:
+                check = player.body;
+                break;
+            case EquipType.Legs:
+                check = player.legs;
+                break;
+        }
+        return check != EquipLoader.GetEquipSlot(RoA.Instance, nameof(T), equipType);
     }
 
     public static bool HasSetBonusFrom<T>(this Player player) where T : ModItem {
