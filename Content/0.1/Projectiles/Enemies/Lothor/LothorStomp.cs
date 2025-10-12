@@ -54,7 +54,7 @@ sealed class LothorStomp : ModProjectile {
         bool enraged = Projectile.localAI[0] == 1f;
         int enragedDust = ModContent.DustType<RedLineDust>();
         if (enraged) {
-            num4 += num4 / 3;
+            num4 += num4 / 2;
         }
         for (int i = point.X; i <= point2.X; i++) {
             for (int j = point.Y; j <= point2.Y; j++) {
@@ -69,6 +69,9 @@ sealed class LothorStomp : ModProjectile {
                     continue;
                 }
                 int num5 = WorldGen.KillTile_GetTileDustAmount(fail: true, tileSafely, i, j);
+                if (enraged) {
+                    num5 += num5 / 2;
+                }
                 for (int k = 0; k < num5; k++) {
                     if (enraged) {
                         Dust obj = Main.dust[Dust.NewDust(new Vector2(i * 16, j * 16), 16, 16, enragedDust)];
@@ -92,7 +95,7 @@ sealed class LothorStomp : ModProjectile {
                             obj2.velocity.Y -= 1f + num4;
                             obj2.velocity.Y *= Main.rand.NextFloat();
                             obj2.velocity.Y *= 0.9f;
-                            obj2.scale *= 1.1f;
+                            obj2.scale *= 1.25f;
                         }
                         else {
                             Dust obj2 = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
