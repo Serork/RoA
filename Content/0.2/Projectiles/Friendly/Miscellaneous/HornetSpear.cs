@@ -16,6 +16,8 @@ namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 [Tracked]
 sealed class HornetSpear : ModProjectile {
+    private static ushort STARTDISAPPEARINGTIME => 15;
+
     public override void SetDefaults() {
         Projectile.SetSizeValues(10);
 
@@ -35,6 +37,13 @@ sealed class HornetSpear : ModProjectile {
         Projectile.ownerHitCheckDistance = 300f;
     }
 
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        if (Projectile.ai[1] != 0f) {
+            Projectile.ai[1] = 1f;
+            Projectile.netUpdate = true;
+        }
+    }
+
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => overPlayers.Add(index);
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -52,6 +61,10 @@ sealed class HornetSpear : ModProjectile {
         if (Projectile.ai[0] != 0f) {
             Projectile.timeLeft = (int)Projectile.ai[0];
             Projectile.ai[0] = 0f;
+        }
+        if (Projectile.ai[1] != 1f) {
+            Projectile.timeLeft = STARTDISAPPEARINGTIME;
+            Projectile.ai[1] = 0f;
         }
 
         Player owner = Projectile.GetOwnerAsPlayer();
