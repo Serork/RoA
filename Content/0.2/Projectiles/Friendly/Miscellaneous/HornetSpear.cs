@@ -44,6 +44,8 @@ sealed class HornetSpear : ModProjectile {
         }
     }
 
+    public override bool? CanDamage() => Projectile.timeLeft > STARTDISAPPEARINGTIME;
+
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => overPlayers.Add(index);
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
