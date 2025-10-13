@@ -29,6 +29,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public Vector2 SavedPosition;
     public Vector2 SavedVelocity;
     public float DashTime;
+    public bool Dashed;
 
     public override void Load() {
         On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
