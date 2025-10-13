@@ -24,5 +24,5 @@ sealed class HornetSkull : ModItem, IDoubleTap {
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
 
-    void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) => player.GetCommon().OnHornetDash(direction);
+    void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) => player.GetCommon().DoHornetDash(direction);
 }

@@ -109,7 +109,7 @@ sealed partial class PlayerCommon : ModPlayer {
         Player.gravity = 0f;
     }
 
-    public void OnHornetDash(IDoubleTap.TapDirection direction) {
+    public void DoHornetDash(IDoubleTap.TapDirection direction) {
         if (!Player.HasSetBonusFrom<HornetSkull>()) {
             return;
         }
@@ -118,7 +118,7 @@ sealed partial class PlayerCommon : ModPlayer {
             return;
         }
 
-        if (Player.velocity.Y == 0f) {
+        if (Player.velocity.Y == 0f || Player.ItemAnimationActive) {
             return;
         }
 
