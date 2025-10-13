@@ -61,6 +61,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     (nPC.noTileCollide || Player.CanHit(nPC))) {
                     hit = true;
                     DashTime = 0f;
+                    DoBackflip();
                     break;
                 }
             }
@@ -96,7 +97,7 @@ sealed partial class PlayerCommon : ModPlayer {
             return;
         }
 
-        Player.itemAnimation = 1;
+        Player.controlUseItem = false;
         Player.controlJump = true;
 
         Player.armorEffectDrawShadowEOCShield = true;

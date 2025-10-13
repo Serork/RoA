@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Core;
+using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
@@ -14,6 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
+    private static float BACKFLIPTIME => 25f;
     private static float MAXFALLSPEEDMODIFIERFORFALL => 0.75f;
 
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;
@@ -21,11 +24,23 @@ sealed partial class PlayerCommon : ModPlayer {
     private bool _fell;
     private float _fellTimer;
     private ushort _controlUseItemTimer;
+    private float _backflipTimer;
 
     public ushort ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
     public bool ControlUseItem;
 
     public bool ApplyBoneArmorVisuals;
+
+    public bool DoingBackflip => _backflipTimer > 0f;
+    public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
+
+    public void DoBackflip(float time = 0f) {
+        if (DoingBackflip) {
+            return;
+        }
+
+        _backflipTimer = time == 0f ? BACKFLIPTIME : time;
+    }
 
     private void ApplySkullEffect() {
         if (Player.HasEquipped<CarcassChestguard>(EquipType.Body) &&
@@ -105,7 +120,6 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event PreUpdateMovementDelegate PreUpdateMovementEvent;
     public override void PreUpdateMovement() {
         PreUpdateMovementEvent?.Invoke(Player);
-
     }
 
     public delegate void PostUpdateEquipsDelegate(Player player);
@@ -133,7 +147,25 @@ sealed partial class PlayerCommon : ModPlayer {
     public override void PostUpdateRunSpeeds() {
         PostUpdateRunSpeedsEvent?.Invoke(Player);
 
+        HandleBackflip();
         HandleHornetDash();
+    }
+
+    private void HandleBackflip() {
+        if (!DoingBackflip) {
+            return;
+        }
+
+        if (Player.velocity.Y == 0f) {
+            _backflipTimer = 0f;
+        }
+
+        _backflipTimer = Helper.Approach(_backflipTimer, 0f, 1f);
+
+        Player.controlJump = false;
+
+        Player.fullRotation = MathHelper.ToRadians(360f * BackflipProgress * -Player.direction);
+        Player.fullRotationOrigin = Player.Size / 2f;
     }
 
     public delegate void DrawPlayerFullDelegate(LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer);
