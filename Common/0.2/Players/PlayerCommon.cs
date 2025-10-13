@@ -160,11 +160,6 @@ sealed partial class PlayerCommon : ModPlayer {
             _backflipTimer = 0f;
         }
 
-        if (BackflipProgress <= 0.75f) {
-            Player.eocDash = (int)_backflipTimer;
-            Player.armorEffectDrawShadowEOCShield = true;
-        }
-
         _backflipTimer = Helper.Approach(_backflipTimer, 0f, 1f);
 
         Player.controlJump = false;
