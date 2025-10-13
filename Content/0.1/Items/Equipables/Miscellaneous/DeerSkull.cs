@@ -32,10 +32,6 @@ sealed class DeerSkull : ModItem {
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
 
-    public override void ArmorSetShadows(Player player) {
-        player.GetCommon().ApplyBoneArmorVisuals = true;
-    }
-
     //public override void DrawArmorColor(Player drawPlayer, float shadow, ref DrawColor color, ref int glowMask, ref DrawColor glowMaskColor) {
     //	if (drawPlayer.active) {
     //		glowMask = RoAGlowMask.Get("DeerSkull_Head");

@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
 
 using Terraria;
 using Terraria.Graphics.Renderers;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
@@ -23,6 +26,15 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool ControlUseItem;
 
     public bool ApplyBoneArmorVisuals;
+
+    private void ApplySkullEffect() {
+        if (Player.HasEquipped<CarcassChestguard>(EquipType.Body) &&
+            Player.HasEquipped<CarcassSandals>(EquipType.Legs) &&
+            (Player.HasEquipped<HornetSkull>(EquipType.Head) || Player.HasEquipped<DeerSkull>(EquipType.Head) || Player.HasEquipped<DeerSkull>(EquipType.Head) ||
+            Player.HasEquipped(ArmorIDs.Head.Skull, EquipType.Head))) {
+            ApplyBoneArmorVisuals = true;
+        }
+    }
 
     public bool Fell { get; private set; }
 
@@ -106,6 +118,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event UpdateEquipsDelegate UpdateEquipsEvent;
     public override void UpdateEquips() {
         UpdateEquipsEvent?.Invoke(Player);
+
+        ApplySkullEffect();
     }
 
     public delegate void FrameEffectsDelegate(Player player);
