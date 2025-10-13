@@ -53,6 +53,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool Fell { get; private set; }
 
+    public bool LockHorizontalMovement;
+
     public Vector2 SavedPosition;
     public Vector2 SavedVelocity;
     public float DashTime;
@@ -63,6 +65,16 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.DryCollision += On_Player_DryCollision;
 
         DrawPlayerFullEvent += PlayerCommon_DrawPlayerFullEvent;
+
+        On_Player.HorizontalMovement += On_Player_HorizontalMovement;
+    }
+
+    private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
+        if (self.GetCommon().LockHorizontalMovement) {
+            return;
+        }
+
+        orig(self);
     }
 
     private void PlayerCommon_DrawPlayerFullEvent(LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer) {
@@ -196,6 +208,7 @@ sealed partial class PlayerCommon : ModPlayer {
         ResetEffectsEvent?.Invoke(Player);
 
         ApplyBoneArmorVisuals = false;
+        LockHorizontalMovement = false;
     }
 
     public override void PostUpdate() {

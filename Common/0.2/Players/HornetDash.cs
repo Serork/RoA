@@ -10,15 +10,13 @@ using RoA.Core.Utility.Vanilla;
 using System;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
-    public static float HORNETDASHTIME => 17.5f;
-    public static float HORNETDASHLENGTH => 200f;
-    public static float HORNETDASHVELOCITYDECELERATIONFACTOR => 0.975f;
+    public static float HORNETDASHTIME => 16.125f;
+    public static float HORNETDASHLENGTH => 150f;
 
     public bool CanDoHornetDash {
         get => !Dashed;
@@ -99,13 +97,13 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         Player.controlUseItem = false;
-        Player.controlJump = true;
+        LockHorizontalMovement = true;
 
         Player.armorEffectDrawShadowEOCShield = true;
 
-        Player.velocity *= 1E-5F;
+        Player.velocity *= 0.01f;
 
-        SavedVelocity *= HORNETDASHVELOCITYDECELERATIONFACTOR;
+        //SavedVelocity *= HORNETDASHVELOCITYDECELERATIONFACTOR;
         Player.position = SavedPosition + SavedVelocity * HornetDashProgress;
 
         Player.gravity = 0f;
