@@ -15,7 +15,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
-    public static float HORNETDASHTIME => 16.125f;
+    public static float HORNETDASHTIME => 15f;
     public static float HORNETDASHLENGTH => 150f;
 
     public bool CanDoHornetDash {
