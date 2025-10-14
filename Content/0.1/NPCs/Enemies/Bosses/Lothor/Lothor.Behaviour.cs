@@ -789,7 +789,7 @@ sealed partial class Lothor : ModNPC {
             return;
         }
         float value = MathHelper.Clamp(Math.Max(_glowMaskOpacity, LifeProgress), 0f, 1f);
-        Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f + NPC.velocity, new Vector3(1f, 0.2f, 0.2f) * value * 0.75f);
+        //Lighting.AddLight(NPC.Top + Vector2.UnitY * NPC.height * 0.1f + NPC.velocity, new Vector3(0.9f, 0.2f, 0.3f) * value * 0.75f);
     }
 
     private void HandleActiveState() {

@@ -142,7 +142,7 @@ sealed class CustomTileCollision : IInitializer {
                     customCollision = true;
                     platform = true;
                 }
-                if (targetDummy) {
+                if (targetDummy || fallThrough) {
                     customCollision = false;
                 }
                 if (!customCollision && !ExtraTileCollisionBlocks_Solid.Contains(tilePosition) && (Main.tile[i, j] == null || !Main.tile[i, j].HasTile || Main.tile[i, j].IsActuated || (!Main.tileSolid[Main.tile[i, j].TileType] && (!Main.tileSolidTop[Main.tile[i, j].TileType] || Main.tile[i, j].TileFrameY != 0))))

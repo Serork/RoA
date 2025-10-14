@@ -63,7 +63,12 @@ sealed class SoulPart : VisualEffect<SoulPart> {
             Opacity -= 0.0045f;
             float altarStrength = AltarHandler.GetAltarStrength();
             bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
-            if (Opacity <= 0f || (!flag2 && Scale > 1.5f) || Vector2.Distance(Position + Velocity, MoveTo) < 40f || ShouldBeRemovedFromRenderer) {
+
+            if (Vector2.Distance(Position + Velocity, MoveTo) < 40f) {
+                Opacity -= 0.05f;
+            }
+
+            if (Opacity <= 0f || (!flag2 && Scale > 1.5f) || ShouldBeRemovedFromRenderer) {
                 Opacity = 0f;
                 TimeLeft = 0;
                 RestInPool();
@@ -82,7 +87,14 @@ sealed class SoulPart : VisualEffect<SoulPart> {
             Vector2 velocity2 = velocity * -counting;
             Velocity = (Velocity * 4f + velocity2) / 5f;
             Opacity -= 0.0075f;
-            if (Opacity <= 0f || Vector2.Distance(Position + Velocity, MoveTo) < 60f || ShouldBeRemovedFromRenderer) {
+
+            float dif = Position.X - MoveTo.X;
+            Position.X += MathF.Abs(dif) * 0.05f * -dif.GetDirection();
+
+            if (Vector2.Distance(Position + Velocity, MoveTo) < 60f) {
+                Opacity -= 0.05f;
+            }
+            if (Opacity <= 0f || ShouldBeRemovedFromRenderer) {
                 Opacity = 0f;
                 TimeLeft = 0;
                 RestInPool();
@@ -103,11 +115,13 @@ sealed class SoulPart : VisualEffect<SoulPart> {
             Opacity *= 1f - Utils.GetLerpValue(1.4f, 1.7f, Scale, true);
         }
         Color color = Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16).MultiplyRGB(new Color(241, 53, 84, 200)) * Opacity;
+        float distanceProgress = MathUtils.Clamp01(1f - (Vector2.Distance(Position, MoveTo) - 75f) / 50f);
         for (int index = 0; index < Positions.Length; index++) {
             float factor = (Positions.Length - (float)index) / Positions.Length;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
                 Vector2 position = Positions[index] + Size / 2 + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
                 Color color2 = color.MultiplyAlpha(Opacity).MultiplyAlpha((float)i / Positions.Length) * factor;
+                color2.A = (byte)Utils.Lerp(color2.A, 0, distanceProgress);
                 SpriteEffects effect = SpriteEffects.None;
                 spriteBatch.Draw(Texture, position, null, color2 * (Opacity + 0.5f), 0f, Size / 2, Helper.Wave(Scale + 0.05f, Scale + 0.15f, 1f, 0f) * 0.9f * factor, effect, 0f);
             }
