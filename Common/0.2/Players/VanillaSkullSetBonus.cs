@@ -26,7 +26,7 @@ sealed partial class PlayerCommon : ModPlayer {
             return;
         }
 
-        if (!Main.rand.NextBool(4) || proj.GetOwnerAsPlayer().HasProjectile<BoneSpinner>(3)) {
+        if (!Main.rand.NextBool(4) || proj.GetOwnerAsPlayer().HasProjectile<BoneSpinner>(2)) {
             return;
         }
 

@@ -53,13 +53,18 @@ sealed class BoneSpinner : ModProjectile {
                 _init = num184;
                 num185 = num184;
 
-                for (int num615 = 0; num615 < 4; num615++) {
+                for (int num615 = 0; num615 < 3; num615++) {
+                    if (Main.rand.NextBool(3)) {
+                        continue;
+                    }
                     Vector2 direction = projectile.velocity.RotateRandom(MathHelper.PiOver4 / 2f);
                     int num616 = Dust.NewDust(projectile.Center + Main.rand.RandomPointInArea(36) / 3f, 0, 0, DustID.Bone, direction.X, direction.Y, 0, 
                         default, 1f + 0.1f * Main.rand.NextFloatDirection());
-                    Main.dust[num616].noGravity = true;
+                    Main.dust[num616].noGravity = Main.rand.NextBool();
                     Dust dust2 = Main.dust[num616];
-                    dust2.scale *= 1.25f;
+                    if (!Main.dust[num616].noGravity) {
+                        dust2.scale *= 1.25f;
+                    }
                     dust2 = Main.dust[num616];
                     dust2.velocity *= 0.5f;
                 }
@@ -134,6 +139,8 @@ sealed class BoneSpinner : ModProjectile {
 
     public ref float State => ref Projectile.ai[1];
 
+    public float RotationSlow => MathF.Max(0.25f, MathUtils.Clamp01((Projectile.penetrate + 1) / (float)Projectile.maxPenetrate * 3));
+
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(FRAMECOUNT);
         Projectile.SetTrail(3, 5);
@@ -145,14 +152,22 @@ sealed class BoneSpinner : ModProjectile {
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
 
-        Projectile.tileCollide = false;
+        Projectile.tileCollide = true;
 
         Projectile.penetrate = 10;
+
+        Projectile.timeLeft = 600;
     }
 
-    public override void AI() {
-        Projectile.timeLeft = 2;
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 24;
 
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
+    public override bool OnTileCollide(Vector2 oldVelocity) => false;
+
+    public override void AI() {
         ref float initValue = ref Projectile.localAI[0];
         if (initValue == 0f) {
             initValue = 1f;
@@ -189,7 +204,9 @@ sealed class BoneSpinner : ModProjectile {
                     Projectile.Kill();
                 }
 
-                Projectile.position += projectile.velocity.SafeNormalize() * 1.5f;
+                if (!Collision.SolidCollision(Projectile.position + Vector2.One * 3f, Projectile.width - 6, Projectile.height - 6)) {
+                    Projectile.position += projectile.velocity.SafeNormalize() * 2f;
+                }
 
                 if (projectile.IsOwnerLocal()) {
                     projectile.velocity = -projectile.velocity.RotatedByRandom(MathHelper.PiOver2);
@@ -208,7 +225,7 @@ sealed class BoneSpinner : ModProjectile {
         ref float rotationTime = ref Projectile.ai[0];
         float neededTime = 30f;
         float neededTimeToSwapState = neededTime * 1.1f;
-        Projectile.rotation += MathF.Min(neededTime, rotationTime) / neededTime * 0.5f * Projectile.direction;
+        Projectile.rotation += MathF.Min(neededTime, rotationTime) / neededTime * 0.5f * Projectile.direction * RotationSlow;
         if (rotationTime >= neededTime) {
             if (rotationTime >= neededTimeToSwapState) {
                 State = 1f;
@@ -228,11 +245,12 @@ sealed class BoneSpinner : ModProjectile {
         }
 
         ushort frameTime = 4;
-        Projectile.frame = Projectile.frameCounter / frameTime + 1;
+        Projectile.frame = (int)(Projectile.localAI[1] / frameTime + 1);
         if (Projectile.frame >= Projectile.GetFrameCount()) {
             Projectile.frame = 1;
         }
-        if (Projectile.frameCounter++ >= frameTime * 2) {
+        Projectile.localAI[1] += RotationSlow;
+        if (Projectile.localAI[1] >= frameTime * 2) {
             Projectile.frameCounter = 0;
         }
     }
@@ -248,11 +266,14 @@ sealed class BoneSpinner : ModProjectile {
     public override void OnKill(int timeLeft) {
         for (int i = 0; i < 16; i++) {
             Vector2 direction = Vector2.One.RotateRandom(MathHelper.TwoPi) * 2.5f;
-            int num616 = Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(Projectile.width) / 2f, 0, 0, 
+            int num616 = Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(Projectile.width) / 3f, 0, 0, 
                 DustID.Bone, direction.X, direction.X, 0,
                 default, 1f + 0.1f * Main.rand.NextFloatDirection());
+            Main.dust[num616].noGravity = Main.rand.NextBool();
             Dust dust2 = Main.dust[num616];
-            dust2.scale *= 1f;
+            if (!Main.dust[num616].noGravity) {
+                dust2.scale *= 1.25f;
+            }
             dust2 = Main.dust[num616];
             dust2.velocity *= 0.5f;
         }
