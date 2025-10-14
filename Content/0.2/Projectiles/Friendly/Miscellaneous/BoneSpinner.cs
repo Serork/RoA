@@ -160,7 +160,7 @@ sealed class BoneSpinner : ModProjectile {
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-        width = height = 24;
+        width = height = 26;
 
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
