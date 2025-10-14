@@ -281,7 +281,7 @@ sealed class OvergrownAltar : ModTile {
             float strength = AltarHandler.GetAltarStrength();
             Color color = Lighting.GetColor(i, j);
             Color color2 = new(255, 255, 200, 200);
-            Color color3 = Color.Lerp(color, new(255, 150, 125, 200), 0.5f);
+            Color color3 = Color.Lerp(color, new(255, 155, 130, 200), 0.75f);
             if (strength < 1f) {
                 color = Color.Lerp(color, color.MultiplyRGB(color3), MathUtils.YoYo(Ease.QuadOut(strength)));
             }

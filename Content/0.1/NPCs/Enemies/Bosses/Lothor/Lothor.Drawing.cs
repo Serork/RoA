@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
+using RoA.Common.WorldEvents;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -69,7 +70,19 @@ sealed partial class Lothor : ModNPC {
             _glowMaskOpacity = 1f;
         }
         enrage(ref color);
-        Color glowMaskColor = (_isDead ? Color.Lerp(Color.White, Color.Black.MultiplyRGB(drawColor), MathHelper.Clamp(_deadStateProgress, 0f, 1f)) : Color.White) * _glowMaskOpacity;
+        float glowMaskOpacity = _glowMaskOpacity;
+        Vector2 altarPosition = AltarHandler.GetAltarPosition().ToWorldCoordinates();
+        float minDistance = 300f;
+        Vector2 center = NPC.Center;
+        float distance = center.Distance(altarPosition + altarPosition.DirectionTo(center) * minDistance) * 2f;
+        float altarOpacity = MathUtils.Clamp01(1f - distance / minDistance);
+        if (center.Distance(altarPosition) < minDistance) {
+            altarOpacity = 1f;
+        }
+        float lifeProgress = LifeProgress;
+        lifeProgress = MathF.Max(lifeProgress, altarOpacity);
+        glowMaskOpacity = MathF.Max(glowMaskOpacity, altarOpacity);
+        Color glowMaskColor = (_isDead ? Color.Lerp(Color.White, Color.Black.MultiplyRGB(drawColor), MathHelper.Clamp(_deadStateProgress, 0f, 1f)) : Color.White) * glowMaskOpacity;
         if (!_isDead) {
             for (int num173 = 1; num173 < length; num173 += 2) {
                 _ = ref NPC.oldPos[num173];
@@ -135,8 +148,8 @@ sealed partial class Lothor : ModNPC {
         for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
             spriteBatch.Draw(GlowMask, NPC.position + offset +
                 Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
-                * Helper.Wave(0f, 3f, 12f, 0.5f) * LifeProgress,
-                NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * LifeProgress * NPC.Opacity, NPC.rotation + Main.rand.NextFloatRange(0.05f) * LifeProgress, origin, NPC.scale, effects, 0f);
+                * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
+                NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress * NPC.Opacity, NPC.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
         }
         spriteBatch.Begin(snapshot, true);
 

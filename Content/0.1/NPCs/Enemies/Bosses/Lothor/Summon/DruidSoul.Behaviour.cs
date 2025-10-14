@@ -515,7 +515,7 @@ sealed partial class DruidSoul : RoANPC {
             }
             if (flag4) {
                 int max = 5;
-                if (Main.GameUpdateCount % 3 == 0) {
+                if (NPC.localAI[1]++ % 3 == 0) {
                     if (NPC.ai[2] < max) {
                         NPC.ai[2]++;
                     }
@@ -578,9 +578,10 @@ sealed partial class DruidSoul : RoANPC {
                 float dist2 = NPC.Distance(towards) / 100f;
                 NPC.Opacity = Math.Min(NPC.Opacity, MathHelper.Clamp(dist2 * 0.75f, 0f, 1f));
             }
-            if (NPC.scale > 0f) {
-                NPC.scale -= OPACITYACC * 1.56f;
-            }
+            //if (NPC.scale > 0f) {
+            //    NPC.scale -= OPACITYACC * 1.56f;
+            //}
+            NPC.scale = MathUtils.Clamp01(Vector2.Distance(NPC.Center, towards) / 85f);
             NPC.velocity *= 0.85f;
             NPC.SlightlyMoveTo(towards, 3f, 10f);
             NPC.velocity *= 0.75f;

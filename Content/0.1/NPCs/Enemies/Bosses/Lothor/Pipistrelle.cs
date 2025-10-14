@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Cache;
+using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
@@ -103,7 +104,21 @@ sealed class Pipistrelle : ModNPC {
 
         NPC owner = Main.npc[(int)NPC.ai[0]];
         bool flag = !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor;
-        float value = MathHelper.Clamp(flag ? _lightingColorValue : Math.Max(_lightingColorValue, owner.As<Lothor>().LifeProgress), 0f, 1f);
+
+        float glowMaskOpacity = _lightingColorValue;
+        Vector2 altarPosition = AltarHandler.GetAltarPosition().ToWorldCoordinates();
+        float minDistance = 300f;
+        Vector2 center = NPC.Center;
+        float distance = center.Distance(altarPosition + altarPosition.DirectionTo(center) * minDistance) * 2f;
+        float altarOpacity = MathUtils.Clamp01(1f - distance / minDistance);
+        if (center.Distance(altarPosition) < minDistance) {
+            altarOpacity = 1f;
+        }
+        float lifeProgress = !flag ? owner.As<Lothor>().LifeProgress : 0f;
+        lifeProgress = MathF.Max(lifeProgress, altarOpacity);
+        glowMaskOpacity = MathF.Max(glowMaskOpacity, altarOpacity);
+        float value = MathHelper.Clamp(flag ? glowMaskOpacity : Math.Max(glowMaskOpacity, lifeProgress), 0f, 1f);
+
         Color glowColor = Color.White * value;
         spriteBatch.Draw(GlowMask, position, NPC.frame, glowColor, rotation, origin, NPC.scale, effects, 0f);
 
@@ -112,12 +127,12 @@ sealed class Pipistrelle : ModNPC {
         if (!(!npc.active || npc.ModNPC is null || npc.ModNPC is not Lothor)) {
             SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
             spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
-            float lifeProgress = _shouldEnrage ? 1f : npc.As<Lothor>().LifeProgress;
+            float lifeProgress2 = _shouldEnrage ? 1f : npc.As<Lothor>().LifeProgress;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                 spriteBatch.Draw(GlowMask, position +
                     Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
-                    * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
-                    NPC.frame, glowColor.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
+                    * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress2,
+                    NPC.frame, glowColor.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress2, rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress2, origin, NPC.scale, effects, 0f);
             }
             spriteBatch.Begin(snapshot, true);
         }
@@ -281,6 +296,7 @@ sealed class Pipistrelle : ModNPC {
                         sqrt = speed2 / sqrt;
                         NPC.velocity.X = x * sqrt;
                         NPC.velocity.Y = y * sqrt;
+                        _lightingColorValue = 1f;
                         if (Main.netMode != NetmodeID.MultiplayerClient) {
                             int damage = (int)MathHelper.Lerp(Lothor.ACORN_DAMAGE, Lothor.ACORN_DAMAGE2, lifeProgress);
                             damage /= 2;
