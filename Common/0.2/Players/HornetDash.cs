@@ -48,7 +48,7 @@ sealed partial class PlayerCommon : ModPlayer {
         Vector2 checkPosition = Player.position + SavedVelocity.SafeNormalize() * Player.width / 2f;
         float f = SavedVelocity.ToRotation();
         float collisionPoint2 = 0f;
-        float num10 = 60f;
+        float num10 = 70f;
         if (DashTime < HORNETDASHTIME * 0.75f) {
             foreach (NPC nPC in Main.ActiveNPCs) {
                 if (nPC.dontTakeDamage || nPC.friendly || (nPC.aiStyle == 112 && !(nPC.ai[2] <= 1f)) || !Player.CanNPCBeHitByPlayerOrPlayerProjectile(nPC))
@@ -82,7 +82,7 @@ sealed partial class PlayerCommon : ModPlayer {
             if (hit) {
                 Player.velocity.Y = -MathF.Abs(Player.velocity.Y);
                 float speed = 4f;
-                Player.velocity.Y -= speed * SavedVelocity.Y.GetDirection();
+                Player.velocity.Y -= speed * 1.25f * SavedVelocity.Y.GetDirection();
                 Player.velocity.X = -Player.direction * speed;
                 Player.velocity.X = -Player.velocity.X;
                 Player.GiveImmuneTimeForCollisionAttack(4);
