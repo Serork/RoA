@@ -53,14 +53,14 @@ sealed class BoneSpinner : ModProjectile {
                 _init = num184;
                 num185 = num184;
 
-                for (int num615 = 0; num615 < 3; num615++) {
+                for (int num615 = 0; num615 < 4; num615++) {
                     if (Main.rand.NextBool(3)) {
                         continue;
                     }
                     Vector2 direction = projectile.velocity.RotateRandom(MathHelper.PiOver4 / 2f);
                     int num616 = Dust.NewDust(projectile.Center + Main.rand.RandomPointInArea(36) / 3f, 0, 0, DustID.Bone, direction.X, direction.Y, 0, 
                         default, 1f + 0.1f * Main.rand.NextFloatDirection());
-                    Main.dust[num616].noGravity = Main.rand.NextBool();
+                    Main.dust[num616].noGravity = Main.rand.NextBool(3);
                     Dust dust2 = Main.dust[num616];
                     if (!Main.dust[num616].noGravity) {
                         dust2.scale *= 1.25f;
@@ -269,7 +269,7 @@ sealed class BoneSpinner : ModProjectile {
             int num616 = Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(Projectile.width) / 3f, 0, 0, 
                 DustID.Bone, direction.X, direction.X, 0,
                 default, 1f + 0.1f * Main.rand.NextFloatDirection());
-            Main.dust[num616].noGravity = Main.rand.NextBool();
+            Main.dust[num616].noGravity = Main.rand.NextBool(3);
             Dust dust2 = Main.dust[num616];
             if (!Main.dust[num616].noGravity) {
                 dust2.scale *= 1.25f;
