@@ -65,7 +65,7 @@ sealed class HellfireFracture : NatureProjectile {
         Vector2 baseValue = Projectile.position;
         _first = _last = baseValue;
         _last.Y = _first.Y + Projectile.ai[0] * 0.2f * height;
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.025f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.03f);
         if (player.whoAmI != Main.myPlayer) {
             return;
         }
