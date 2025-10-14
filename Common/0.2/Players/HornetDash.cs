@@ -82,7 +82,7 @@ sealed partial class PlayerCommon : ModPlayer {
             if (hit) {
                 Player.velocity.Y = -MathF.Abs(Player.velocity.Y);
                 float speed = 4f;
-                Player.velocity.Y -= speed * 1.25f * SavedVelocity.Y.GetDirection();
+                Player.velocity.Y -= speed * 1.2f * SavedVelocity.Y.GetDirection();
                 Player.velocity.X = -Player.direction * speed;
                 Player.velocity.X = -Player.velocity.X;
                 Player.GiveImmuneTimeForCollisionAttack(4);
