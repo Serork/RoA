@@ -32,7 +32,13 @@ sealed class MercuriumSword : ModItem {
         Item.value = Item.sellPrice(0, 0, 25, 0);
     }
 
+    public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo) {
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 80);
+    }
+
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 80);
+
         if (!target.CanActivateOnHitEffect()) {
             return;
         }
