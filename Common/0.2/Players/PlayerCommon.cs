@@ -209,6 +209,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
         ApplyBoneArmorVisuals = false;
         LockHorizontalMovement = false;
+        ApplyVanillaSkullSetBonus = false;
     }
 
     public override void PostUpdate() {

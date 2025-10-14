@@ -31,4 +31,10 @@ sealed partial class ItemCommon : GlobalItem {
 
         return base.IsArmorSet(head, body, legs);
     }
+
+    public override void UpdateArmorSet(Player player, string set) {
+        if (set == "SkullArmorSet") {
+            player.GetCommon().ApplyVanillaSkullSetBonus = true;
+        }
+    }
 }

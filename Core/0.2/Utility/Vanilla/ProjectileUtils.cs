@@ -61,27 +61,37 @@ static class ProjectileUtils {
         }
     }
 
-    public static void QuickDrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, int start, float extraRot = 0, float scale = -1, Texture2D? texture = null) {
+    public static void QuickDrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, int start, float extraRot = 0, float scale = -1, Texture2D? texture = null, byte maxFrames = 0, SpriteEffects? spriteEffects = null, Vector2? origin = null) {
         int howMany = ProjectileID.Sets.TrailCacheLength[projectile.type];
-        projectile.DrawShadowTrails(drawColor, maxAlpha, maxAlpha / howMany, start, howMany, 1, extraRot, scale, texture);
+        projectile.DrawShadowTrails(drawColor, maxAlpha, maxAlpha / howMany, start, howMany, 1, extraRot, scale, texture, maxFrames, spriteEffects, origin);
     }
 
-    public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, float extraRot = 0, float scale = -1, Texture2D? texture = null) {
+    public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, float extraRot = 0, float scale = -1, Texture2D? texture = null, byte maxFrames = 0, SpriteEffects? spriteEffects = null, Vector2? origin = null) {
         Texture2D mainTex = TextureAssets.Projectile[projectile.type].Value;
         Vector2 toCenter = new(projectile.width / 2, projectile.height / 2);
 
+        int frameSize = mainTex.Height / (maxFrames != 0 ? maxFrames : Main.projFrames[projectile.type]);
+        Rectangle frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
+        SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
+        origin ??= frameBox.Size() / 2;
+
         for (int i = start; i < howMany; i += step)
-            Main.spriteBatch.Draw(texture ?? mainTex, projectile.oldPos[i] + toCenter - Main.screenPosition, null,
-                drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, mainTex.Size() / 2, scale == -1 ? projectile.scale : scale, 0, 0);
+            Main.spriteBatch.Draw(texture ?? mainTex, projectile.oldPos[i] + toCenter - Main.screenPosition, frameBox,
+                drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, origin.Value, scale == -1 ? projectile.scale : scale, effects, 0);
     }
 
-    public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, float scaleStep, float extraRot = 0, float scale = -1) {
+    public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, float scaleStep, float extraRot = 0, float scale = -1, byte maxFrames = 0, SpriteEffects? spriteEffects = null, Vector2? origin = null) {
         Texture2D mainTex = TextureAssets.Projectile[projectile.type].Value;
         Vector2 toCenter = new(projectile.width / 2, projectile.height / 2);
 
+        int frameSize = mainTex.Height / (maxFrames != 0 ? maxFrames : Main.projFrames[projectile.type]);
+        Rectangle frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
+        SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
+        origin ??= frameBox.Size() / 2;
+
         for (int i = start; i < howMany; i += step)
-            Main.spriteBatch.Draw(mainTex, projectile.oldPos[i] + toCenter - Main.screenPosition, null,
-                drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, mainTex.Size() / 2, (scale == -1 ? projectile.scale : scale) * (1 - (i * scaleStep)), 0, 0);
+            Main.spriteBatch.Draw(mainTex, projectile.oldPos[i] + toCenter - Main.screenPosition, frameBox,
+                drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, origin.Value, (scale == -1 ? projectile.scale : scale) * (1 - (i * scaleStep)), effects, 0);
     }
 
     public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, float scaleStep, Rectangle frameBox, float extraRot = 0, float scale = -1) {
@@ -94,22 +104,32 @@ static class ProjectileUtils {
                 drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, origin, (scale == -1 ? projectile.scale : scale) * (1 - (i * scaleStep)), 0, 0);
     }
 
-    public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, Vector2 scale, float extraRot = 0) {
+    public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, Vector2 scale, float extraRot = 0, byte maxFrames = 0, SpriteEffects? spriteEffects = null, Vector2? origin = null) {
         Texture2D mainTex = TextureAssets.Projectile[projectile.type].Value;
         Vector2 toCenter = new(projectile.width / 2, projectile.height / 2);
 
+        int frameSize = mainTex.Height / (maxFrames != 0 ? maxFrames : Main.projFrames[projectile.type]);
+        Rectangle frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
+        SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
+        origin ??= frameBox.Size() / 2;
+
         for (int i = start; i < howMany; i += step)
-            Main.spriteBatch.Draw(mainTex, projectile.oldPos[i] + toCenter - Main.screenPosition, null,
-                drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, mainTex.Size() / 2, scale, 0, 0);
+            Main.spriteBatch.Draw(mainTex, projectile.oldPos[i] + toCenter - Main.screenPosition, frameBox,
+                drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, origin.Value, scale, effects, 0);
     }
 
-    public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, Vector2 scale, float scaleStep, float extraRot = 0) {
+    public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, Vector2 scale, float scaleStep, float extraRot = 0, byte maxFrames = 0, SpriteEffects? spriteEffects = null, Vector2? origin = null) {
         Texture2D mainTex = TextureAssets.Projectile[projectile.type].Value;
         Vector2 toCenter = new(projectile.width / 2, projectile.height / 2);
 
+        int frameSize = mainTex.Height / (maxFrames != 0 ? maxFrames : Main.projFrames[projectile.type]);
+        Rectangle frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
+        SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
+        origin ??= frameBox.Size() / 2;
+
         for (int i = start; i < howMany; i += step)
-            Main.spriteBatch.Draw(mainTex, projectile.oldPos[i] + toCenter - Main.screenPosition, null,
-                drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, mainTex.Size() / 2, scale * (1 - (i * scaleStep)), 0, 0);
+            Main.spriteBatch.Draw(mainTex, projectile.oldPos[i] + toCenter - Main.screenPosition, frameBox,
+                drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, origin.Value, scale * (1 - (i * scaleStep)), effects, 0);
     }
 
     public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, float scale, Rectangle frameBox, float extraRot) {

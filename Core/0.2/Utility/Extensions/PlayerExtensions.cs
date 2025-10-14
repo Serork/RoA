@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Extensions;
 
 static partial class PlayerExtensions {
-    public static bool HasProjectile<T>(this Player player) where T : ModProjectile => player.ownedProjectileCounts[ModContent.ProjectileType<T>()] >= 1;
+    public static bool HasProjectile<T>(this Player player, int count = 1) where T : ModProjectile => player.ownedProjectileCounts[ModContent.ProjectileType<T>()] >= count;
 
     public static bool IsAliveAndFree(this Player player) => player.IsAlive() && !player.CCed;
     public static bool IsAlive(this Player player) => player.active && !player.dead;
