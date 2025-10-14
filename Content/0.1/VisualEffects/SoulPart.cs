@@ -125,9 +125,7 @@ sealed class SoulPart : VisualEffect<SoulPart> {
                 Vector2 position = Positions[index] + extraPosition + Size / 2;
                 Color baseColor = color.MultiplyAlpha(Opacity).MultiplyAlpha((float)i / Positions.Length) * factor;
                 Color color2 = baseColor;
-                if (Type == 1) {
-                    color2.A = (byte)Utils.Lerp(color2.A, 0, distanceProgress);
-                }
+                color2.A = (byte)Utils.Lerp(color2.A, 0, distanceProgress);
                 SpriteEffects effect = SpriteEffects.None;
                 spriteBatch.Draw(Texture, position, null, color2 * (Opacity + 0.5f), 0f, Size / 2, Helper.Wave(Scale + 0.05f, Scale + 0.15f, 1f, 0f) * 0.9f * factor, effect, 0f);
             }
