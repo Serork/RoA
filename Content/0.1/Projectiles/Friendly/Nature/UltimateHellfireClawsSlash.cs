@@ -113,6 +113,9 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
         }
         float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
         target.AddBuff(BuffID.OnFire, (int)(60f * num2 * 2f));
+        if (!target.CanActivateOnHitEffect()) {
+            return;
+        }
         _hitAmount++;
         target.immune[Projectile.owner] = 0;
         Projectile.localNPCImmunity[target.whoAmI] = 10 + _hitAmount;
