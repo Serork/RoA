@@ -235,7 +235,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone) {
-        if (target.immortal) {
+        if (!target.CanActivateOnHitEffect()) {
             return;
         }
         if (!item.IsANatureWeapon()) {
@@ -247,7 +247,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void HandleOnHitNPCForNatureProjectile(Projectile proj, bool nonDataReset = false, NPC target = null) {
-        if (target != null && target.immortal) {
+        if (target != null && !target.CanActivateOnHitEffect()) {
             return;
         }
 

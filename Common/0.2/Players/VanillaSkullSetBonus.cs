@@ -18,6 +18,10 @@ sealed partial class PlayerCommon : ModPlayer {
             return;
         }
 
+        if (!target.CanActivateOnHitEffect()) {
+            return;
+        }
+
         if (proj.DamageType != DamageClass.Ranged) {
             return;
         }
