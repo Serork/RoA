@@ -111,6 +111,9 @@ sealed partial class DruidSoul : RoANPC {
 
     private void SearchForNearbyAltar() {
         GetNearbyAltarCoords(out Point altarCoords);
+        if (altarCoords == default) {
+            return;
+        }
         AltarHandler.SetPosition(altarCoords);
     }
 
