@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.WorldEvents;
 using RoA.Core.Utility;
 
 using System;
@@ -48,7 +49,7 @@ sealed class DruidSoul : ModItem {
         Item.height = 30;
     }
 
-    public override bool CanUseItem(Player player) => !NPC.AnyNPCs(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Summon.DruidSoul>());
+    public override bool CanUseItem(Player player) => !NPC.AnyNPCs(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Summon.DruidSoul>()) && AltarHandler.GetAltarStrength() <= 0f;
 
     public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI) {
         Color color = alphaColor;

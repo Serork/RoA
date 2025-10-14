@@ -282,7 +282,7 @@ sealed class OvergrownAltar : ModTile {
             float strength = AltarHandler.GetAltarStrength();
             Color color = Lighting.GetColor(i, j);
             Color color2 = new(255, 255, 200, 200);
-            Color color3 = Color.Lerp(color, new(255, 155, 130, 200), 0.75f);
+            Color color3 = Color.Lerp(color, new(235, 155, 130, 200), 0.75f);
             if (NPC.AnyNPCs(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Summon.DruidSoul>())) {
                 color = Color.Lerp(color, color.MultiplyRGB(color3), MathUtils.YoYo(Ease.QuadOut(strength)));
             }
