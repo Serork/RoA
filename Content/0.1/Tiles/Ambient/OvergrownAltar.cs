@@ -280,6 +280,11 @@ sealed class OvergrownAltar : ModTile {
             float factor = counting;
             float strength = AltarHandler.GetAltarStrength();
             Color color = Lighting.GetColor(i, j);
+            Color color2 = new(255, 255, 200, 200);
+            Color color3 = Color.Lerp(color, new(255, 150, 125, 200), 0.5f);
+            if (strength < 1f) {
+                color = Color.Lerp(color, color.MultiplyRGB(color3), MathUtils.YoYo(Ease.QuadOut(strength)));
+            }
             Tile tile = Main.tile[i, j];
             bool flag = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
             int frame = (int)(factor * 6) + (flag || strength > 0.3f ? 6 : 0);
@@ -302,7 +307,6 @@ sealed class OvergrownAltar : ModTile {
             }
 
             texture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "OvergrownAltar_Glow").Value;
-            Color color2 = new(255, 255, 200, 200);
             float mult = flag ? 1f : Helper.EaseInOut3(strength);
             float factor3 = flag ? 1f : AltarHandler.GetAltarFactor();
             float factor4 = factor3 * 1.5f;

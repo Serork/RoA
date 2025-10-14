@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.VisualEffects;
 using RoA.Common.WorldEvents;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
+using RoA.Content.Tiles.Ambient;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -65,7 +67,7 @@ sealed class SoulPart : VisualEffect<SoulPart> {
             bool flag2 = Helper.EaseInOut3(altarStrength) > 0.65f;
 
             if (Vector2.Distance(Position + Velocity, MoveTo) < 40f) {
-                Opacity -= 0.05f;
+                Opacity -= 0.1f;
             }
 
             if (Opacity <= 0f || (!flag2 && Scale > 1.5f) || ShouldBeRemovedFromRenderer) {
@@ -92,7 +94,7 @@ sealed class SoulPart : VisualEffect<SoulPart> {
             Position.X += MathF.Abs(dif) * 0.05f * -dif.GetDirection();
 
             if (Vector2.Distance(Position + Velocity, MoveTo) < 60f) {
-                Opacity -= 0.05f;
+                Opacity -= 0.2f;
             }
             if (Opacity <= 0f || ShouldBeRemovedFromRenderer) {
                 Opacity = 0f;
@@ -119,9 +121,13 @@ sealed class SoulPart : VisualEffect<SoulPart> {
         for (int index = 0; index < Positions.Length; index++) {
             float factor = (Positions.Length - (float)index) / Positions.Length;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
-                Vector2 position = Positions[index] + Size / 2 + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
-                Color color2 = color.MultiplyAlpha(Opacity).MultiplyAlpha((float)i / Positions.Length) * factor;
-                color2.A = (byte)Utils.Lerp(color2.A, 0, distanceProgress);
+                Vector2 extraPosition = ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
+                Vector2 position = Positions[index] + extraPosition + Size / 2;
+                Color baseColor = color.MultiplyAlpha(Opacity).MultiplyAlpha((float)i / Positions.Length) * factor;
+                Color color2 = baseColor;
+                if (Type == 1) {
+                    color2.A = (byte)Utils.Lerp(color2.A, 0, distanceProgress);
+                }
                 SpriteEffects effect = SpriteEffects.None;
                 spriteBatch.Draw(Texture, position, null, color2 * (Opacity + 0.5f), 0f, Size / 2, Helper.Wave(Scale + 0.05f, Scale + 0.15f, 1f, 0f) * 0.9f * factor, effect, 0f);
             }

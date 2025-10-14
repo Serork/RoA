@@ -9,6 +9,8 @@ using Terraria;
 namespace RoA.Core.Utility;
 
 static class MathUtils {
+    public static float YoYo(float value) => MathUtils.Clamp01((double)value <= 0.5 ? value * 2f : (float)(1.0 - ((double)value - 0.5) * 2.0));
+
     public static Vector2 NormalizeWithMaxLength(this Vector2 vector2, float maxSpeed) {
         Vector2 result = vector2;
         if (result.Length() > maxSpeed) {
