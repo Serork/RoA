@@ -48,6 +48,8 @@ sealed class DruidSoul : ModItem {
         Item.height = 30;
     }
 
+    public override bool CanUseItem(Player player) => !NPC.AnyNPCs(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Summon.DruidSoul>());
+
     public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation, ref float scale, int whoAmI) {
         Color color = alphaColor;
         int length = 6;

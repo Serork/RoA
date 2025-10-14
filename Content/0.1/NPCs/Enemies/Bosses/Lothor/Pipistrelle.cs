@@ -122,12 +122,11 @@ sealed class Pipistrelle : ModNPC {
         Color glowColor = Color.White * value;
         spriteBatch.Draw(GlowMask, position, NPC.frame, glowColor, rotation, origin, NPC.scale, effects, 0f);
 
-
         NPC npc = Main.npc[(int)NPC.ai[0]];
         if (!(!npc.active || npc.ModNPC is null || npc.ModNPC is not Lothor)) {
             SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
             spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
-            float lifeProgress2 = _shouldEnrage ? 1f : npc.As<Lothor>().LifeProgress;
+            float lifeProgress2 = _shouldEnrage ? 1f : lifeProgress;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                 spriteBatch.Draw(GlowMask, position +
                     Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
@@ -274,9 +273,9 @@ sealed class Pipistrelle : ModNPC {
             NPC.LookAtPlayer(player);
             NPC.SlightlyMoveTo(destination, speed, 12.5f);
             if (NPC.Distance(destination) < 100f || NPC.localAI[2] > 300f) {
-                NPC previous = Main.npc[NPC.whoAmI - 1];
+                int previousIndex = NPC.whoAmI - 1;
                 bool flag5 = true;
-                if (previous != null && previous.active && previous.ModNPC is Pipistrelle && previous.ai[2] != 1f) {
+                if (previousIndex >= 0 && Main.npc[previousIndex] != null && Main.npc[previousIndex].active && Main.npc[previousIndex].ModNPC is Pipistrelle && Main.npc[previousIndex].ai[2] != 1f) {
                     flag5 = false;
                 }
                 if (flag5) {

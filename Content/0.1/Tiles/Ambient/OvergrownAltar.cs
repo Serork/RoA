@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
+using RoA.Content.Items.Consumables;
 using RoA.Content.Tiles.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
@@ -282,7 +283,7 @@ sealed class OvergrownAltar : ModTile {
             Color color = Lighting.GetColor(i, j);
             Color color2 = new(255, 255, 200, 200);
             Color color3 = Color.Lerp(color, new(255, 155, 130, 200), 0.75f);
-            if (strength < 1f) {
+            if (NPC.AnyNPCs(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Summon.DruidSoul>())) {
                 color = Color.Lerp(color, color.MultiplyRGB(color3), MathUtils.YoYo(Ease.QuadOut(strength)));
             }
             Tile tile = Main.tile[i, j];
