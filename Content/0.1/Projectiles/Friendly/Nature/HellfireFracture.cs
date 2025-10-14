@@ -150,7 +150,7 @@ sealed class HellfireFracture : NatureProjectile {
                     break;
             }
             extraPosition *= Helper.Wave(-1f * Main.rand.NextFloat(), 1f * Main.rand.NextFloat(), 10f * Main.rand.NextFloat(), Projectile.whoAmI + i * 10);
-            //DrawSlash((num13 / 2f * 0.3f + 0.85f), Color.Lerp(lightColor, Color.DarkOrange, 0.75f), extraPosition);
+            DrawSlash((num13 / 2f * 0.3f + 0.85f), Color.Lerp(lightColor, Color.DarkOrange, 0.75f), extraPosition);
         }
         //for (float num14 = -4f; num14 < 4f; num14 += 1f) {
         //    DrawSlash((num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);
@@ -199,9 +199,9 @@ sealed class HellfireFracture : NatureProjectile {
             Vector2 offset = Vector2.UnitY * num1 / 2f;
             Vector2 offset2 = Vector2.Zero;
             Vector2 first = start - offset + offset2;
-            //if (random.NextBool()) {
-            //    num2 = -num2;
-            //}
+            if (random.NextBool()) {
+                num2 = -num2;
+            }
             float num56 = Projectile.ai[0] / 5f;
             if (num56 > 0.6f)
                 num56 = 0.6f;
@@ -292,9 +292,9 @@ sealed class HellfireFracture : NatureProjectile {
             if (posExtra.HasValue) {
                 offset2 = posExtra.Value;
             }
-            //if (random.NextBool()) {
-            //    num2 = -num2;
-            //}
+            if (random.NextBool()) {
+                num2 = -num2;
+            }
             float gap1 = 0.9f;
             float gap2 = 0.1f;
             bool flag = progress > gap1;
