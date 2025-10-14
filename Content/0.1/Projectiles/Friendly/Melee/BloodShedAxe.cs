@@ -66,7 +66,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
-        if (target.immortal) {
+        if (!target.CanActivateOnHitEffect()) {
             return;
         }
 
@@ -141,7 +141,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         target.AddBuff(BuffID.Bleeding, 100);
 
-        if (target.immortal) {
+        if (!target.CanActivateOnHitEffect()) {
             return;
         }
         Player player = Main.player[Projectile.owner];

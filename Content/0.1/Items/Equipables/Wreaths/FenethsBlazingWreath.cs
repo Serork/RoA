@@ -40,7 +40,7 @@ sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
         }
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers) {
-            if (target.immortal) {
+            if (!target.CanActivateOnHitEffect()) {
                 return;
             }
 
@@ -66,7 +66,7 @@ sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
         }
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers) {
-            if (target.immortal) {
+            if (!target.CanActivateOnHitEffect()) {
                 return;
             }
 

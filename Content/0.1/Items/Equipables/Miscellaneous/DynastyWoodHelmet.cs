@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -43,7 +44,7 @@ sealed class DynastyWoodHelmet : ModItem {
         }
 
         public override void OnHitAnything(float x, float y, Entity victim) {
-            if (victim is NPC npc && (npc.immortal || npc.lifeMax <= 5)) {
+            if (victim is NPC npc && !npc.CanActivateOnHitEffect()) {
                 return;
             }
 

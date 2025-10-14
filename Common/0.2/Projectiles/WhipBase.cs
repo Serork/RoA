@@ -113,7 +113,7 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
     }
 
     private void RoANPC_ModifyHitByProjectileEvent(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers) {
-        if (projectile.ModProjectile is WhipBase_Projectile whip && !npc.immortal && npc.lifeMax > 5) {
+        if (projectile.ModProjectile is WhipBase_Projectile whip && npc.CanActivateOnHitEffect()) {
             whip._onHitFunction?.Invoke(projectile.GetOwnerAsPlayer(), npc);
         }
 
@@ -248,7 +248,7 @@ sealed class WhipBase_Projectile(WhipBase_ProjectileArgs args) : InstancedProjec
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        if (target.immortal) {
+        if (!target.CanActivateOnHitEffect()) {
             return;
         }
 

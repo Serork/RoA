@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -32,7 +33,7 @@ sealed class MercuriumSword : ModItem {
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
-        if (target.immortal) {
+        if (!target.CanActivateOnHitEffect()) {
             return;
         }
 

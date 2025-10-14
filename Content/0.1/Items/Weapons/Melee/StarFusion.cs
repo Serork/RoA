@@ -64,7 +64,7 @@ sealed class StarFusion : ModItem {
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
-        if (target.immortal) {
+        if (!target.CanActivateOnHitEffect()) {
             return;
         }
 
