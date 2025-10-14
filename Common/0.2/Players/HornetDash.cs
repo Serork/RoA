@@ -92,7 +92,9 @@ sealed partial class PlayerCommon : ModPlayer {
                 Player.DryCollision(false, true);
             }
 
-            DashTime = -HORNETDASHTIME;
+            if (!hit) {
+                DashTime = -HORNETDASHTIME;
+            }
             return;
         }
 
