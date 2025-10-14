@@ -132,10 +132,9 @@ sealed class HornetSpear : ModProjectile {
             Projectile.localAI[0] = Projectile.direction;
         }
         Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-        if (Projectile.ai[1] == 0f) {
+        if (Projectile.ai[2] == 1f) {
             Projectile.rotation += owner.fullRotation;
         }
-
         int maxTimeLeft = (int)Projectile.localAI[1];
         Projectile.scale = Utils.GetLerpValue(maxTimeLeft, maxTimeLeft - STARTDISAPPEARINGTIME / 2, Projectile.timeLeft, true);
 
