@@ -191,6 +191,10 @@ sealed class BoneSpinner : ModProjectile {
                 continue;
             }
 
+            if (projectile.type == ProjectileID.GoldCoin && projectile.ai[2] == -1f) {
+                continue;
+            }
+
             var handler = projectile.GetGlobalProjectile<BoneSpinner_MakeAmmoHoming>();
             if (handler.IsEffectActive) {
                 continue;
@@ -210,6 +214,9 @@ sealed class BoneSpinner : ModProjectile {
 
                 if (projectile.IsOwnerLocal()) {
                     projectile.velocity = -projectile.velocity.RotatedByRandom(MathHelper.PiOver2);
+                    if (Main.rand.NextBool(4)) {
+                        Projectile.NewProjectileDirect(Projectile.GetSource_Misc("bonespinner"), projectile.position, projectile.velocity.RotatedByRandom(MathHelper.PiOver4), ProjectileID.GoldCoin, 0, 0, Projectile.owner, ai2: -1f);
+                    }
                     projectile.netUpdate = true;
                 }
 
