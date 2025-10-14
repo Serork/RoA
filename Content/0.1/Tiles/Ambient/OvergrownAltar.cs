@@ -284,7 +284,7 @@ sealed class OvergrownAltar : ModTile {
             Color color2 = new(255, 255, 200, 200);
             Color color3 = Color.Lerp(color, new(235, 155, 130, 200), 0.75f);
             if (NPC.AnyNPCs(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Summon.DruidSoul>())) {
-                color = Color.Lerp(color, color.MultiplyRGB(color3), MathUtils.YoYo(Ease.QuadOut(strength)));
+                color = Color.Lerp(color, color.MultiplyRGB(color3), MathUtils.YoYo(Ease.QuartOut(strength)));
             }
             Tile tile = Main.tile[i, j];
             bool flag = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
