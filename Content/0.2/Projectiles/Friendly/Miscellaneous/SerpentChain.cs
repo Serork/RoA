@@ -36,7 +36,8 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
                 return base.CanHitNPC(projectile, target);
             }
             Projectile serpent = TrackedEntitiesSystem.GetTrackedProjectile<SerpentChain>(checkProjectile => checkProjectile.owner != ownerWhoAmI).ToList()[0];
-            if (serpent.ai[0] == 1f || serpent.ai[2] < 0.25f) {
+            SerpentChain serpent2 = serpent.As<SerpentChain>();
+            if (serpent2.MaxDistanced || !serpent2.CanApplyItsEffect) {
                 return base.CanHitNPC(projectile, target);
             }
 
@@ -67,7 +68,8 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
                 return;
             }
             Projectile serpent = TrackedEntitiesSystem.GetTrackedProjectile<SerpentChain>(checkProjectile => checkProjectile.owner != ownerWhoAmI).ToList()[0];
-            if (serpent.ai[0] == 1f || serpent.ai[2] < 0.25f) {
+            SerpentChain serpent2 = serpent.As<SerpentChain>();
+            if (serpent2.MaxDistanced || !serpent2.CanApplyItsEffect) {
                 return;
             }
 
@@ -99,6 +101,17 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
         [((byte)SerpentChainRequstedTextureType.Head, ResourceManager.FriendlyMiscProjectiles + "SerpentChain2"),
          ((byte)SerpentChainRequstedTextureType.Body, ResourceManager.FriendlyMiscProjectiles + "SerpentChain1")];
 
+    public ref float DistanceToTargetFactor => ref Projectile.ai[2];
+    public ref float HasTargetFactor => ref Projectile.ai[1];
+    public ref float VisualTimer => ref Projectile.localAI[0];
+
+    public bool MaxDistanced {
+        get => HasTargetFactor == 1f;
+        set => HasTargetFactor = value.ToInt();
+    }
+
+    public bool CanApplyItsEffect => DistanceToTargetFactor > 0.25f;
+
     public override void SetDefaults() {
         Projectile.SetSizeValues(10);
 
@@ -111,7 +124,7 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
     public override void AI() {
         Projectile.timeLeft = 2;
 
-        Projectile.localAI[0] += TimeSystem.LogicDeltaTime;
+        VisualTimer += TimeSystem.LogicDeltaTime;
 
         Player owner = Projectile.GetOwnerAsPlayer();
         Vector2 center = owner.Center;
@@ -120,9 +133,9 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
         float maxDistance = 16f * 20;
         float inertia = 15f;
         if (!owner.HasMinionAttackTargetNPC) {
-            Projectile.ai[2] = 1f - MathUtils.Clamp01(center.Distance(Projectile.Center) / 100f);
-            inertia *= 1f - Projectile.ai[2];
-            Projectile.SlightlyMoveTo2(center, speed, inertia, 0.97f - Projectile.ai[2] * 0.17f / 2f);
+            DistanceToTargetFactor = 1f - MathUtils.Clamp01(center.Distance(Projectile.Center) / 100f);
+            inertia *= 1f - DistanceToTargetFactor;
+            Projectile.SlightlyMoveTo2(center, speed, inertia, 0.97f - DistanceToTargetFactor * 0.17f / 2f);
             if (Projectile.Distance(center) < minDistance) {
                 Projectile.Kill();
             }
@@ -133,19 +146,19 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
         float distance = target.Distance(center);
         if (distance > maxDistance) {
             moveTo = owner.Center;
-            Projectile.ai[2] = 1f - MathUtils.Clamp01(moveTo.Distance(Projectile.Center) / 100f);
+            DistanceToTargetFactor = 1f - MathUtils.Clamp01(moveTo.Distance(Projectile.Center) / 100f);
             if (Projectile.Distance(moveTo) < minDistance) {
                 Projectile.Kill();
             }
-            inertia *= 1f - Projectile.ai[2];
-            Projectile.ai[1] = 1f;
+            inertia *= 1f - DistanceToTargetFactor;
+            MaxDistanced = true;
         }
         else {
-            Projectile.ai[2] = 1f - MathUtils.Clamp01(target.Distance(Projectile.Center) / 100f);
-            Projectile.ai[1] = 0f;
+            DistanceToTargetFactor = 1f - MathUtils.Clamp01(target.Distance(Projectile.Center) / 100f);
+            MaxDistanced = false;
         }
         Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-        Projectile.SlightlyMoveTo2(moveTo, speed, inertia, deceleration: 0.97f - Projectile.ai[2] * 0.17f / 2f);
+        Projectile.SlightlyMoveTo2(moveTo, speed, inertia, deceleration: 0.97f - DistanceToTargetFactor * 0.17f / 2f);
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -183,7 +196,7 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
                 }
                 intensity *= targetMultiplier;
                 float shakeMultiplier = Math.Min((chainDistance - 8f) / 200f, 1f);
-                float shakeValue = MathF.Sin(Projectile.localAI[0] * 10f + i * 0.3f) * intensity;
+                float shakeValue = MathF.Sin(VisualTimer * 10f + i * 0.3f) * intensity;
                 offset += shakeVector * shakeValue * 12.5f * shakeMultiplier;
                 if (!start) {
                     rotation -= shakeValue * 0.2f;
