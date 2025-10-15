@@ -171,7 +171,7 @@ sealed class CorruptionAndOverrideForBackwoods : ModSystem {
                     else if (GenVars.dungeonSide > 0 && num794 > Main.maxTilesX - 400)
                         num794 = Main.maxTilesX - 400;
 
-                    if (num794 > BackwoodsVars.BackwoodsStartX - num797 && num794 < BackwoodsVars.BackwoodsEndX + num797) {
+                    if (num794 > BackwoodsVars.BackwoodsStartX - num797 * 2 && num794 < BackwoodsVars.BackwoodsEndX + num797 * 2) {
                         flag50 = false;
                     }
 
@@ -367,7 +367,7 @@ sealed class CorruptionAndOverrideForBackwoods : ModSystem {
                     if (num817 < GenVars.dungeonLocation + num786 && num818 > GenVars.dungeonLocation - num786)
                         flag53 = false;
 
-                    if (num816 > BackwoodsVars.BackwoodsStartX - num820 && num816 < BackwoodsVars.BackwoodsEndX + num820) {
+                    if (num816 > BackwoodsVars.BackwoodsStartX - num820 * 2 && num816 < BackwoodsVars.BackwoodsEndX + num820 * 2) {
                         flag53 = false;
                     }
 
