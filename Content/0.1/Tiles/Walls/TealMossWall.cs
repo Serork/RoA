@@ -33,6 +33,8 @@ class TealMossWall2 : TealMossWall {
     public override void SetStaticDefaults() {
         AddMapEntry(new Color(34, 37, 46));
 
+        Main.wallHouse[Type] = false;
+
         WallID.Sets.WallSpreadStopsAtAir[Type] = true;
     }
 
