@@ -31,7 +31,7 @@ sealed partial class DruidSoul : RoANPC {
     private bool _lothorSummonSoundPlayed;
     private float _canChangeDirectionAgain;
     private bool _deathSoundPlayed;
-    private ushort _effectTimer;
+    private ushort _effectTimer, _effectTimer2;
 
     public bool ShouldConsumeItsEnergy { get; private set; }
 
@@ -525,7 +525,9 @@ sealed partial class DruidSoul : RoANPC {
                     }
                 }
                 int count = (int)(max - NPC.ai[2]);
-                if (Main.rand.NextBool(1 + Main.rand.Next(2) + (int)((3 + count) * MathHelper.Clamp(1f - altarStrength * 3f - (1f - NPC.scale), 0f, 1f)))) {
+                int time = 1 + Main.rand.Next(2) + (int)((3 + count) * MathHelper.Clamp(1f - altarStrength * 3f - (1f - NPC.scale), 0f, 1f));
+                if (_effectTimer2++ > time || Main.rand.NextBool(time)) {
+                    _effectTimer2 = 0;
                     if (!_lothorSummonSoundPlayed) {
                         _lothorSummonSoundPlayed = true;
                         _lothorSummonSound = SoundEngine.PlaySound(new SoundStyle(ResourceManager.AmbientSounds + "LothorAltar2") { Volume = 1f }, NPC.Center);
