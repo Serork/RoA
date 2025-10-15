@@ -3746,10 +3746,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int sizeX = _random.Next(4, 9);
             int sizeY = _random.Next(5, 18);
             if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
-                float progress = (float)(y - y2) / (minY - y2);
-                if (!_random.NextChance(progress * 1.25f)) {
-                    continue;
-                }
+                //float progress = (float)(y - y2) / (minY - y2);
+                //if (!_random.NextChance(progress * 1.25f)) {
+                //    continue;
+                //}
                 WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
             }
         }
