@@ -1117,7 +1117,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY / 2;
         int maxY = Bottom + EdgeY;
         int x;
-        float modifier = WorldGenHelper.SmallWorld ? 2f : 1.5f;
+        float modifier = WorldGenHelper.SmallWorld ? 1.5f : 1.5f;
         int maxCaves = (int)(tileCount * 0.0001625f * modifier);
         for (int i = 0; i < maxCaves; i++) {
             x = _random.Next(startX - 100, endX + 100);
@@ -3629,7 +3629,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         PlaceGateway(true);
 
-        double count = (WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.1) : (Main.maxTilesX * 0.055)) */* * 0.5f */1f;
+        double count = (WorldGenHelper.BigWorld ? (Main.maxTilesX * 0.04) : WorldGenHelper.SmallWorld ? (Main.maxTilesX * 0.08) : (Main.maxTilesX * 0.055)) */* * 0.5f */1f;
         for (int num555 = 0; num555 < count; num555++) {
             //progress.Set((float)(num555 + 1) / count);
             GenerateLootRoom1();
@@ -4531,7 +4531,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (num794 < num796 + num797_2 && num795 > num796 - num797_2)
                 flag50 = false;
 
-            if (num794 < GenVars.dungeonLocation + num786 && num795 > GenVars.dungeonLocation - num786)
+            if (num794 < GenVars.dungeonLocation + num786 * 2f && num795 > GenVars.dungeonLocation - num786 * 2f)
                 flag50 = false;
 
             if (!remixWorldGen) {
@@ -4647,6 +4647,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //}
         BackwoodsVars.BackwoodsCenterX = (ushort)CenterX;
         CenterY = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
+        _biomeHeight += (int)MathF.Abs((float)Main.worldSurface - CenterY) / 4;
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsHalfSizeX = (ushort)(_biomeWidth / 2);
     }

@@ -75,10 +75,10 @@ sealed class TarBiome : MicroBiome {
             return false;
         }
 
-        if (origin.X > BackwoodsVars.BackwoodsStartX - Main.maxTilesX / 10 && origin.X < BackwoodsVars.BackwoodsEndX + Main.maxTilesX / 10 && 
-            origin.Y < BackwoodsVars.BackwoodsEndY + 100) {
-            return false;
-        }
+        //if (origin.X > BackwoodsVars.BackwoodsStartX - Main.maxTilesX / 10 && origin.X < BackwoodsVars.BackwoodsEndX + Main.maxTilesX / 10 && 
+        //    origin.Y < BackwoodsVars.BackwoodsEndY + 100) {
+        //    return false;
+        //}
 
         if (WorldGen.BiomeTileCheck(origin.X, origin.Y))
             return false;
