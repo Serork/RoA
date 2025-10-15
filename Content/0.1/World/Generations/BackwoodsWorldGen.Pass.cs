@@ -3064,6 +3064,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if ((((double)i > (double)CenterX + 3 && (double)i < (double)CenterX + 15)) && j < BackwoodsVars.FirstTileYAtCenter + 20) {
                             flag = true;
                         }
+                        if (i > CenterX - 2 && i < CenterX + 2 && j < BackwoodsVars.FirstTileYAtCenter) {
+                            continue;
+                        }
                         if (_random.NextChance(0.5)) {
                             WallBush(i, j + 3 + (flag ? _random.Next(-1, 2) : 0), !flag);
                             i += _random.Next(2, 8);
