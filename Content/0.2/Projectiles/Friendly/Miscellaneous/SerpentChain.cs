@@ -157,6 +157,7 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
         }
         else {
             DistanceToTargetFactor = 1f - MathUtils.Clamp01(target.Distance(Projectile.Center) / minDistance2);
+            inertia *= Utils.Remap(1f - DistanceToTargetFactor, 0f, 1f, 0.5f, 1f, true);
             MaxDistanced = false;
         }
         Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
