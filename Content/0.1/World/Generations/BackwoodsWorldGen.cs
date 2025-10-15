@@ -23,17 +23,9 @@ sealed class BackwoodsWorldGen : ModSystem {
     public static BackwoodsBiomePass? BackwoodsWorldGenPass { get; private set; }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
-        bool hasSpirit = ModLoader.HasMod("SpiritMod");
-        bool hasSpiritReforged = ModLoader.HasMod("SpiritReforged");
-        bool hasRemnants = ModLoader.HasMod("Remnants");
-
-        if (hasRemnants) {
-            _extraModSupport = true;
-        }
-
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         if (genIndex == -1) {
-            _extraModSupport = true;
+            //_extraModSupport = true;
         }
         else {
             //genIndex += 6;
@@ -42,30 +34,30 @@ sealed class BackwoodsWorldGen : ModSystem {
             genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Pyramids"));
             genIndex -= 1;
         }
-        if (hasSpiritReforged) {
-            genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Pyramids"));
-            genIndex += 2;
-        }
+        //if (hasSpiritReforged) {
+        //    genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Pyramids"));
+        //    genIndex += 2;
+        //}
         tasks.Insert(genIndex, BackwoodsWorldGenPass = new("Backwoods", LAYERWEIGHT));
 
-        if (hasRemnants) {
-            genIndex += 22;
-            tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
-            genIndex++;
-            tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
+        //if (hasRemnants) {
+        //    genIndex += 22;
+        //    tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
+        //    genIndex++;
+        //    tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsCleanup, 600f));
 
-            genIndex++;
-            tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
+        //    genIndex++;
+        //    tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.ReplaceAllSnowBlockForSpiritModSupport, 10f));
 
-            tasks.Insert(tasks.Count - 4, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
-            tasks.Insert(tasks.Count - 3, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
-            tasks.Insert(tasks.Count - 2, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast0));
-            tasks.Insert(tasks.Count - 1, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast));
+        //    tasks.Insert(tasks.Count - 4, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOtherPlacements, 3000f));
+        //    tasks.Insert(tasks.Count - 3, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsTilesReplacement));
+        //    tasks.Insert(tasks.Count - 2, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast0));
+        //    tasks.Insert(tasks.Count - 1, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast));
 
-            tasks.Add(new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast1));
+        //    tasks.Add(new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsOnLast1));
 
-            return;
-        }
+        //    return;
+        //}
 
         genIndex += 3;
         tasks.Insert(genIndex, new PassLegacy(string.Empty, BackwoodsWorldGenPass.BackwoodsLootRooms, 1500f));
