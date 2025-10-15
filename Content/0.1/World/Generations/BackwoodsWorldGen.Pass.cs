@@ -3068,7 +3068,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step10_SpreadMossGrass();
 
         // place bushes
-        for (i = Left - 15; i <= Right + 15; i++) {
+        for (i = Left - 50; i <= Right + 50; i++) {
             for (j = WorldGenHelper.SafeFloatingIslandY; j < CenterY - EdgeY; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_grassTileType)) {
