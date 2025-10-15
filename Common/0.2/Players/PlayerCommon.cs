@@ -45,7 +45,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private void ApplySkullEffect() {
         if (Player.HasEquipped<CarcassChestguard>(EquipType.Body) &&
             Player.HasEquipped<CarcassSandals>(EquipType.Legs) &&
-            (Player.HasEquipped<HornetSkull>(EquipType.Head) || Player.HasEquipped<DeerSkull>(EquipType.Head) || Player.HasEquipped<DeerSkull>(EquipType.Head) ||
+            (Player.HasEquipped<HornetSkull>(EquipType.Head) || Player.HasEquipped<DevilSkull>(EquipType.Head) || Player.HasEquipped<DeerSkull>(EquipType.Head) ||
             Player.HasEquipped(ArmorIDs.Head.Skull, EquipType.Head))) {
             ApplyBoneArmorVisuals = true;
         }

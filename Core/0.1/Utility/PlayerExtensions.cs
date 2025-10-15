@@ -46,7 +46,7 @@ static partial class PlayerExtensions {
                 check = player.legs;
                 break;
         }
-        return check != EquipLoader.GetEquipSlot(RoA.Instance, nameof(T), equipType);
+        return check == EquipLoader.GetEquipSlot(RoA.Instance, typeof(T).Name, equipType);
     }
 
     public static bool HasSetBonusFrom<T>(this Player player, bool checkVanity = false) where T : ModItem {
