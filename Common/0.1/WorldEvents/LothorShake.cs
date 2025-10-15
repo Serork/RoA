@@ -66,7 +66,8 @@ sealed class LothorShake : ModSystem {
                     }
                 }
                 float value = (!before ? Helper.EaseInOut3(_shakeIntensity) : (float)Math.Pow((double)Helper.EaseInOut4(_shakeIntensity * 7f) * 3f, 4.0) * 1.3f);
-                Filters.Scene[shader].GetShader().UseOpacity(value * LothorSummoningHandler._alpha).UseColor(Color.Red);
+                float alpha = Utils.Remap(LothorSummoningHandler._alpha, 0f, 1f, 0f, 0.75f, true);
+                Filters.Scene[shader].GetShader().UseOpacity(value * alpha).UseColor(Color.Red);
             }
             if (!before && _shakeIntensity >= 1f) {
                 _timer += TimeSystem.LogicDeltaTime * (!before ? 1.5f : 1f);
