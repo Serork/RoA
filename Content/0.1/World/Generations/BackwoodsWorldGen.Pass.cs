@@ -4516,11 +4516,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         bool tenthAnniversaryWorldGen = WorldGen.tenthAnniversaryWorldGen;
         CenterY = (int)Main.worldSurface;
         int attemtps = 0;
-        while (!flag50 && attemtps <= 100) {
+        while (!flag50) {
             flag50 = true;
             int num796 = Main.maxTilesX / 2;
             int num797 = 200;
-            int num797_2 = Main.maxTilesX / (5 + attemtps++ / 20);
+            if (attemtps <= 100) {
+                attemtps++;
+            }
+            int num797_2 = Main.maxTilesX / (5 + attemtps / 20);
             //if (drunkWorldGen) {
             //    num797 = 100;
             //    num793 = ((!GenVars.crimsonLeft) ? genRand.Next((int)((double)Main.maxTilesX * 0.5), Main.maxTilesX - num785) : genRand.Next(num785, (int)((double)Main.maxTilesX * 0.5)));
