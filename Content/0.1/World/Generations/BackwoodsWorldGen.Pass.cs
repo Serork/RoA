@@ -1665,7 +1665,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void WallBush_Moss(int i, int j, bool ignoreWalls = true) {
-        int sizeX = _random.Next(8, 17);
+        int sizeX = _random.Next(8, 14);
         int sizeY = _random.Next(2, 5);
         int sizeY2 = sizeY;
         ushort tealMossWallType = (ushort)ModContent.WallType<TealMossWall2>();
@@ -1679,7 +1679,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             for (int x = x1; x < x2; x++) {
                 for (int y = y1; y < y2; y++) {
                     double min = Math.Abs((double)(x - i)) + Math.Abs((double)(y - j));
-                    double max = (double)sizeX * 0.5 * (1.0 + _random.Next(-5, 10) * 0.025);
+                    double max = (double)sizeX * 0.5 * (1.0 + _random.Next(-5, 8) * 0.025);
                     for (int x3 = x - 1; x3 < x + 1; x3++) {
                         for (int y3 = y - 1; y3 < y + 1; y3++) {
                             if (ignoreWalls && (WorldGenHelper.ActiveTile(x3, y3, tealMossWallType) || WorldGenHelper.GetTileSafely(x3, y3).WallType == _elderwoodWallType)) {
