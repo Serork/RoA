@@ -48,7 +48,7 @@ sealed partial class Tar : ModLiquid {
 
                 _animationFrame = (int)_frameState;
 
-                num = 15f;
+                num = 1f;
                 num = ((!(num < 0f)) ? (num + 5f) : (num - 5f));
                 num = MathF.Abs(num);
                 _frameState2 += num * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -336,7 +336,7 @@ sealed partial class Tar : ModLiquid {
         Lighting.GetCornerColors(i, j, out VertexColors vertices);
         Texture2D texture = LiquidLoader.LiquidAssets[Type].Value;
         Rectangle sourceRectangle = liquidDrawCache.SourceRectangle;
-        if (liquidDrawCache.IsSurfaceLiquid) {
+        if (j < Main.worldSurface - 40.0) {
             sourceRectangle.Y += _animationFrame * 80;
         }
         else {
