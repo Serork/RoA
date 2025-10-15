@@ -3093,7 +3093,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if ((((double)i > (double)CenterX + 3 && (double)i < (double)CenterX + 15)) && j < BackwoodsVars.FirstTileYAtCenter + 20) {
                             flag = true;
                         }
-                        if (_random.NextChance(0.25)) {
+                        if (_random.NextChance(0.375)) {
                             WallBush_Moss(i, j + 3 + (flag ? _random.Next(-1, 2) : 0), !flag);
                             i += _random.Next(2, 8);
                         }
@@ -3746,10 +3746,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int sizeX = _random.Next(4, 9);
             int sizeY = _random.Next(5, 18);
             if (WorldGenHelper.ActiveTile(x, y, _dirtTileType)) {
-                //float progress = (float)(y - y2) / (minY - y2);
-                //if (!_random.NextChance(progress * 1.25f)) {
-                //    continue;
-                //}
+                float progress = (float)(y - y2) / (minY - y2);
+                if (!_random.NextChance(0.25f + progress * 1.25f)) {
+                    continue;
+                }
                 WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
             }
         }
