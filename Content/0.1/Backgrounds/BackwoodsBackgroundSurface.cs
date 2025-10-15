@@ -77,7 +77,12 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         if (WorldGen.drunkWorldGen) {
             offset = -180;
         }
+        bool capturing = CaptureManager.Instance.IsCapturing &&
+    CaptureBiome.GetCaptureBiome(CaptureInterface.Settings.BiomeChoiceIndex).BackgroundIndex == ModContent.GetInstance<BackwoodsBackgroundSurface>().Slot;
         float surfacePosition = (float)BackwoodsVars.BackwoodsTileForBackground - 1;
+        if (capturing && !Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
+            surfacePosition = (float)Main.worldSurface - 100;
+        }
         if (surfacePosition == 0f) {
             surfacePosition = 1f;
         }
@@ -94,8 +99,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         pushBGTopHack = menuOffset;
         pushBGTopHack += offset;
         pushBGTopHack += offset2;
-        float captureOffset = CaptureManager.Instance.IsCapturing &&
-            CaptureBiome.GetCaptureBiome(CaptureInterface.Settings.BiomeChoiceIndex).BackgroundIndex == ModContent.GetInstance<BackwoodsBackgroundSurface>().Slot ? 600f : 0f;
+        float captureOffset = capturing ? 200f : 0f;
         if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
             captureOffset = 0;
         }
