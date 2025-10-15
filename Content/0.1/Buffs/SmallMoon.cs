@@ -62,7 +62,7 @@ sealed class SmallMoonPlayer : ModPlayer {
                 break;
             }
         }
-        return Player.name == "Serork" || flag;
+        return Player.name.Equals("Serork", StringComparison.CurrentCultureIgnoreCase) || flag;
     }
 
     private void SetInfo() {
