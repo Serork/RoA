@@ -128,7 +128,9 @@ sealed class WorshipperBonehelm : ModItem {
             }
         }
 
-        private void AddCD() => Player.AddBuff(ModContent.BuffType<BoneHarpyAttackDebuff>(), 900);
+        private void AddCD() {
+            Player.AddBuff(ModContent.BuffType<BoneHarpyAttackDebuff>(), (int)(900 * (1f - (float)StateTimer / STATETIME)));
+        }
 
         public bool RodeHarpy => !(HarpyThatRideWhoAmI == -1 || !Main.projectile[HarpyThatRideWhoAmI].active);
 
