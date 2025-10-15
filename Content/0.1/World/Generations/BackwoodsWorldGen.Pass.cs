@@ -1117,7 +1117,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY / 2;
         int maxY = Bottom + EdgeY;
         int x;
-        float modifier = WorldGenHelper.MediumWorld ? 2f : WorldGenHelper.SmallWorld ? 1.5f : 1.75f;
+        float modifier = 1.75f;
         int maxCaves = (int)(tileCount * 0.0001625f * modifier);
         for (int i = 0; i < maxCaves; i++) {
             x = _random.Next(startX - 100, endX + 100);
@@ -3064,7 +3064,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if ((((double)i > (double)CenterX + 3 && (double)i < (double)CenterX + 15)) && j < BackwoodsVars.FirstTileYAtCenter + 20) {
                             flag = true;
                         }
-                        if (i > CenterX - 2 && i < CenterX + 2 && j < BackwoodsVars.FirstTileYAtCenter) {
+                        if (i > CenterX - 4 && i < CenterX + 2 && j < BackwoodsVars.FirstTileYAtCenter) {
                             continue;
                         }
                         if (_random.NextChance(0.5)) {
