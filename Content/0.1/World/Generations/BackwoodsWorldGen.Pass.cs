@@ -3082,7 +3082,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                         bool flag2 = i > CenterX + 2 && i < CenterX + 10;
                         if (_random.NextChance(0.5)) {
-                            WallBush(i, j + 3 + (flag ? _random.Next(-1, 2) : 0) + flag2.ToInt() * 2, !flag);
+                            WallBush(i, j + 3 + (flag ? _random.Next(-1, 2) : 0), !flag);
                             i += _random.Next(2, 8);
                         }
                         if (flag2) {
