@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
+using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
@@ -13,11 +14,13 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool ApplyDevilSkullSetBonus;
 
     public partial void DevilSkullLoad() {
-        On_Player.MinionNPCTargetAim += On_Player_MinionNPCTargetAim;
     }
 
-    private void On_Player_MinionNPCTargetAim(On_Player.orig_MinionNPCTargetAim orig, Player self, bool doNotDisableIfTheTargetIsTheSame) {
-        orig(self, doNotDisableIfTheTargetIsTheSame);
+    public override void PostUpdateMiscEffects() {
+        Player self = Player;
+        if (!self.IsLocal()) {
+            return;
+        }
 
         if (!self.GetCommon().ApplyDevilSkullSetBonus) {
             return;

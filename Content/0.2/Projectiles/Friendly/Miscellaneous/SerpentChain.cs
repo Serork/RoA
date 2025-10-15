@@ -111,15 +111,18 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
     public override void AI() {
         Projectile.timeLeft = 2;
 
-        Projectile.localAI[0]++;
+        Projectile.localAI[0] += TimeSystem.LogicDeltaTime;
 
         Player owner = Projectile.GetOwnerAsPlayer();
         Vector2 center = owner.Center;
         float minDistance = 20f;
         float speed = 10f;
         float maxDistance = 16f * 20;
+        float inertia = 15f;
         if (!owner.HasMinionAttackTargetNPC) {
-            Projectile.SlightlyMoveTo2(center, speed);
+            Projectile.ai[2] = 1f - MathUtils.Clamp01(center.Distance(Projectile.Center) / 100f);
+            inertia *= 1f - Projectile.ai[2];
+            Projectile.SlightlyMoveTo2(center, speed, inertia, 0.97f - Projectile.ai[2] * 0.17f / 2f);
             if (Projectile.Distance(center) < minDistance) {
                 Projectile.Kill();
             }
@@ -130,17 +133,19 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
         float distance = target.Distance(center);
         if (distance > maxDistance) {
             moveTo = owner.Center;
+            Projectile.ai[2] = 1f - MathUtils.Clamp01(moveTo.Distance(Projectile.Center) / 100f);
             if (Projectile.Distance(moveTo) < minDistance) {
                 Projectile.Kill();
             }
+            inertia *= 1f - Projectile.ai[2];
             Projectile.ai[1] = 1f;
         }
         else {
+            Projectile.ai[2] = 1f - MathUtils.Clamp01(target.Distance(Projectile.Center) / 100f);
             Projectile.ai[1] = 0f;
         }
         Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-        Projectile.ai[2] = 1f - MathUtils.Clamp01(target.Distance(Projectile.Center) / 100f);
-        Projectile.SlightlyMoveTo2(moveTo, speed, deceleration: 0.97f - Projectile.localAI[1] * 0.17f);
+        Projectile.SlightlyMoveTo2(moveTo, speed, inertia, deceleration: 0.97f - Projectile.ai[2] * 0.17f / 2f);
     }
 
     protected override void Draw(ref Color lightColor) {
