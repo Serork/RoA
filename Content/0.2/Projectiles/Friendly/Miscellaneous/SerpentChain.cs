@@ -128,14 +128,16 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
 
         Player owner = Projectile.GetOwnerAsPlayer();
         Vector2 center = owner.Center;
-        float minDistance = 20f;
+        float minDistance = 20f,
+              minDistance2 = 100f;
         float speed = 10f;
         float maxDistance = 16f * 20;
         float inertia = 15f;
+        float deceleration = 0.97f - DistanceToTargetFactor * 0.17f / 2f;
         if (!owner.HasMinionAttackTargetNPC) {
-            DistanceToTargetFactor = 1f - MathUtils.Clamp01(center.Distance(Projectile.Center) / 100f);
+            DistanceToTargetFactor = 1f - MathUtils.Clamp01(center.Distance(Projectile.Center) / minDistance2);
             inertia *= 1f - DistanceToTargetFactor;
-            Projectile.SlightlyMoveTo2(center, speed, inertia, 0.97f - DistanceToTargetFactor * 0.17f / 2f);
+            Projectile.SlightlyMoveTo2(center, speed, inertia, deceleration);
             if (Projectile.Distance(center) < minDistance) {
                 Projectile.Kill();
             }
@@ -146,7 +148,7 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
         float distance = target.Distance(center);
         if (distance > maxDistance) {
             moveTo = owner.Center;
-            DistanceToTargetFactor = 1f - MathUtils.Clamp01(moveTo.Distance(Projectile.Center) / 100f);
+            DistanceToTargetFactor = 1f - MathUtils.Clamp01(moveTo.Distance(Projectile.Center) / minDistance2);
             if (Projectile.Distance(moveTo) < minDistance) {
                 Projectile.Kill();
             }
@@ -154,11 +156,11 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
             MaxDistanced = true;
         }
         else {
-            DistanceToTargetFactor = 1f - MathUtils.Clamp01(target.Distance(Projectile.Center) / 100f);
+            DistanceToTargetFactor = 1f - MathUtils.Clamp01(target.Distance(Projectile.Center) / minDistance2);
             MaxDistanced = false;
         }
         Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-        Projectile.SlightlyMoveTo2(moveTo, speed, inertia, deceleration: 0.97f - DistanceToTargetFactor * 0.17f / 2f);
+        Projectile.SlightlyMoveTo2(moveTo, speed, inertia, deceleration);
     }
 
     protected override void Draw(ref Color lightColor) {
