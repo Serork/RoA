@@ -4515,7 +4515,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 flag50 = false;
             }
 
-            if (num793 > GenVars.snowOriginLeft - num786 * 2f && num793 < GenVars.snowOriginRight + num786 * 2f) {
+            if (num793 > GenVars.snowOriginLeft - num786 * 1f && num793 < GenVars.snowOriginRight + num786 * 1f) {
                 flag50 = false;
             }
 
