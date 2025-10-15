@@ -22,6 +22,8 @@ namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 [Tracked]
 sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
     public sealed class SerpentChain_ReduceTargetNPCImmunityFrames : GlobalProjectile {
+        public static float IMMUNITYFRAMEMODIFIER => 0.5f;
+
         private static int _previousImmune, _previousLocalImmune;
         private static uint _previousStaticImmune;
 
@@ -76,14 +78,14 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
 
             int type = projectile.type;
             if (target.immune[ownerWhoAmI] == _previousImmune) {
-                target.immune[ownerWhoAmI] /= 2;
+                target.immune[ownerWhoAmI] = (int)(target.immune[ownerWhoAmI] * IMMUNITYFRAMEMODIFIER);
             }
             int staticCooldown = projectile.idStaticNPCHitCooldown;
             if (Projectile.perIDStaticNPCImmunity[type][i] == _previousStaticImmune) {
-                Projectile.perIDStaticNPCImmunity[type][i] = Main.GameUpdateCount + (uint)projectile.idStaticNPCHitCooldown / 2;
+                Projectile.perIDStaticNPCImmunity[type][i] = Main.GameUpdateCount + (uint)(projectile.idStaticNPCHitCooldown * IMMUNITYFRAMEMODIFIER);
             }
             if (projectile.localNPCImmunity[i] == _previousLocalImmune) {
-                projectile.localNPCImmunity[i] /= 2;
+                projectile.localNPCImmunity[i] = (int)(projectile.localNPCImmunity[i] * IMMUNITYFRAMEMODIFIER);
             }
         }
     }
