@@ -109,11 +109,13 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
     public override void AI() {
         Projectile.timeLeft = 2;
 
+        Projectile.localAI[0]++;
+
         Player owner = Projectile.GetOwnerAsPlayer();
         Vector2 center = owner.Center;
         float minDistance = 20f;
         float speed = 10f;
-        float maxDistance = 600f;
+        float maxDistance = 16f * 20;
         if (!owner.HasMinionAttackTargetNPC) {
             Projectile.SlightlyMoveTo2(center, speed);
             if (Projectile.Distance(center) < minDistance) {
@@ -148,22 +150,22 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
         Vector2 startPosition = Utils.Floor(owner.Center) + Vector2.UnitY * owner.gfxOffY,
                 endPosition = Projectile.Center;
         float opacity = Projectile.Opacity;
-        var chainTexture = indexedTextureAssets[(byte)SerpentChainRequstedTextureType.Body];
-        var headTexture = indexedTextureAssets[(byte)SerpentChainRequstedTextureType.Head];
+        Asset<Texture2D> chainTexture = indexedTextureAssets[(byte)SerpentChainRequstedTextureType.Body],
+                         headTexture = indexedTextureAssets[(byte)SerpentChainRequstedTextureType.Head];
         for (int i = 0; i < 200; i++) {
-            var texture = chainTexture;
+            Asset<Texture2D> texture = chainTexture;
             bool start = i == 0;
             if (start) {
                 texture = headTexture;
             }
-            var difference = startPosition - endPosition;
+            Vector2 dif = startPosition - endPosition;
             float height = texture.Height() * (start ? 0.5f : 0.8f);
-            var chainVelocity = Vector2.Normalize(difference) * height;
-            var chainOrigin = texture.Size() / 2f;
+            Vector2 chainVelocity = Vector2.Normalize(dif) * height;
+            Vector2 chainOrigin = texture.Size() / 2f;
             float minDistance = height * 3f;
-            var shakeVector = Vector2.Normalize(chainVelocity).RotatedBy(MathHelper.PiOver2);
+            Vector2 shakeVector = Vector2.Normalize(chainVelocity).RotatedBy(MathHelper.PiOver2);
             float intensity = 1f ;
-            var offset = Vector2.Zero;
+            Vector2 offset = Vector2.Zero;
             float rotation = chainVelocity.ToRotation() - MathHelper.PiOver2;
             float chainDistance = Vector2.Distance(endPosition, startPosition);
             if (intensity > 0f && chainDistance > 8f) {
@@ -174,7 +176,7 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
                 }
                 intensity *= targetMultiplier;
                 float shakeMultiplier = Math.Min((chainDistance - 8f) / 200f, 1f);
-                float shakeValue = MathF.Sin(Main.GlobalTimeWrappedHourly * 10f + i * 0.3f) * intensity;
+                float shakeValue = MathF.Sin(Projectile.localAI[0] * 10f + i * 0.3f) * intensity;
                 offset += shakeVector * shakeValue * 12.5f * shakeMultiplier;
                 if (!start) {
                     rotation -= shakeValue * 0.2f;
