@@ -45,5 +45,11 @@ sealed class Stalactite_GrowOverTime : GlobalTile {
         else if (type == solidifiedTarTileType) {
             Stalactite_GenPass.PlaceStalactite(i, j, solidifiedTarTileType, (ushort)ModContent.TileType<SolidifiedTarStalactite>(), ModContent.GetInstance<SolidifiedTarStalactiteTE>(), true);
         }
+        else if (type == backwoodsStoneTileType) {
+            Stalactite_GenPass.PlaceStalactite(i, j, backwoodsStoneTileType, (ushort)ModContent.TileType<GrimrockStalactite>(), ModContent.GetInstance<GrimrockStalactiteTE>(), true);
+        }
+        else if (type == backwoodsMossTileType) {
+            Stalactite_GenPass.PlaceStalactite(i, j, backwoodsMossTileType, (ushort)ModContent.TileType<GrimrockStalactite>(), ModContent.GetInstance<GrimrockStalactiteTE>(), true);
+        }
     }
 }

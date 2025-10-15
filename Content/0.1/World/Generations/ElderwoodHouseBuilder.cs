@@ -5,6 +5,7 @@ using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Crafting;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
+using RoA.Content.Tiles.LiquidsSpecific;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
@@ -41,7 +42,7 @@ public class PlaceWall : GenAction {
     public override bool Apply(Point origin, int x, int y, params object[] args) {
         Tile tile = _tiles[x, y];
         ushort[] invalidWalls2 = [23, 24, 42, 45, 10, 179, 181, 196, 197, 198, 199, 212, 213, 214, 215, 208, 209, 210, 211];
-        ushort[] invalidWalls = [WallID.DirtUnsafe, 59, 179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
+        ushort[] invalidWalls = [(ushort)ModContent.WallType<SolidifiedTarWall_Unsafe>(), WallID.DirtUnsafe, 59, 179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
         _random.NextDouble();
         if ((!invalidWalls2.Contains(tile.WallType) && !invalidWalls.Contains(tile.WallType)) || (!_fail && _random.NextDouble() >= 0.1f)) {
             GenBase._tiles[x, y].WallType = _type;
@@ -929,7 +930,7 @@ sealed class ElderwoodHouseBuilder : HouseBuilderCustom {
         public override bool Apply(Point origin, int x, int y, params object[] args) {
             Tile tile = WorldGenHelper.GetTileSafely(x, y);
             ushort[] invalidWalls2 = [23, 24, 42, 45, 10, 179, 181, 196, 197, 198, 199, 212, 213, 214, 215, 208, 209, 210, 211];
-            ushort[] invalidWalls = [WallID.DirtUnsafe, 59, 179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
+            ushort[] invalidWalls = [(ushort)ModContent.WallType<SolidifiedTarWall_Unsafe>(), WallID.DirtUnsafe, 59, 179, 181, WallID.GraniteUnsafe, WallID.MarbleUnsafe, 59, WallID.DirtUnsafe, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
             if (!invalidWalls2.Contains(tile.WallType) && !invalidWalls.Contains(tile.WallType)) {
                 tile.WallType = 0;
                 if (_frameNeighbors) {
