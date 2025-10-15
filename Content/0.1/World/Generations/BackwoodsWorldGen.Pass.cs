@@ -3080,14 +3080,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if (i > CenterX - 2 && i < CenterX + 4 && j < BackwoodsVars.FirstTileYAtCenter + 10) {
                             continue;
                         }
-                        bool flag2 = i > CenterX + 2 && i < CenterX + 10;
+                        bool flag2 = i > CenterX + 2 && i < CenterX + 15;
                         if (_random.NextChance(0.5)) {
                             WallBush(i, j + 3 + (flag ? _random.Next(-1, 2) : 0), !flag);
                             i += _random.Next(2, 8);
                         }
                         if (flag2) {
                             int sizeX = 10;
-                            int sizeY = 3;
+                            int sizeY = 5;
                             int sizeY2 = sizeY;
                             while (sizeY2 > 0) {
                                 double progress2 = sizeX * ((double)sizeY2 / sizeY);
@@ -3099,7 +3099,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 for (int x = x1; x < x2; x++) {
                                     for (int y = y1; y < y2; y++) {
                                         double min = Math.Abs((double)(x - i)) + Math.Abs((double)(y - j));
-                                        double max = (double)sizeX * 0.5 * (1.0 + 4 * 0.025);
+                                        double max = (double)sizeX * 0.5 * (1.0 + 5 * 0.025);
                                         if (min < max) {
                                             WorldGenHelper.ReplaceWall(x, y + 2, _leavesWallType);
                                         }
