@@ -197,7 +197,8 @@ sealed class Backwoods_MakeDungeonSkipBackwoods : IInitializer {
         if (WorldGen.remixWorldGen)
             flag11 = vector2D.Y < Main.worldSurface + 100.0;
 
-        bool inBackwoods = vector2D.X > BackwoodsVars.BackwoodsStartX - BackwoodsVars.BackwoodsHalfSizeX * 2 && vector2D.X < BackwoodsVars.BackwoodsEndX + BackwoodsVars.BackwoodsHalfSizeX * 2;
+        bool inBackwoods = vector2D.X > BackwoodsVars.BackwoodsStartX - BackwoodsVars.BackwoodsHalfSizeX * 2 && vector2D.X < BackwoodsVars.BackwoodsEndX + BackwoodsVars.BackwoodsHalfSizeX * 2 &&
+            vector2D.Y < BackwoodsVars.BackwoodsEndY;
 
         if (!forceX) {
             if (vector2D.X > (double)(WorldGen_lastMaxTilesX(null) - 200) || (inBackwoods && vector2D.X < BackwoodsVars.BackwoodsCenterX)) {

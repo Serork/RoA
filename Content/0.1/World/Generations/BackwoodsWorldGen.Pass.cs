@@ -3074,10 +3074,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (tile.ActiveTile(_grassTileType)) {
                     if (!WorldGen.SolidTile2(i, j - 1)) {
                         bool flag = false;
-                        if ((((double)i > (double)CenterX + 3 && (double)i < (double)CenterX + 10)) && j < BackwoodsVars.FirstTileYAtCenter) {
+                        if ((((double)i > (double)CenterX + 3 && (double)i < (double)CenterX + 10)) && j < BackwoodsVars.FirstTileYAtCenter + 5) {
                             flag = true;
                         }
-                        if (i > CenterX - 4 && i < CenterX + 2 && j < BackwoodsVars.FirstTileYAtCenter) {
+                        if (i > CenterX - 2 && i < CenterX + 3 && j < BackwoodsVars.FirstTileYAtCenter + 5) {
                             continue;
                         }
                         bool flag2 = i > CenterX + 2 && i < CenterX + 10;
