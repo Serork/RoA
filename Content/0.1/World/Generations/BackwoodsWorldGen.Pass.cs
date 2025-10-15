@@ -3074,13 +3074,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (tile.ActiveTile(_grassTileType)) {
                     if (!WorldGen.SolidTile2(i, j - 1)) {
                         bool flag = false;
-                        if ((((double)i > (double)CenterX + 3 && (double)i < (double)CenterX + 15)) && j < BackwoodsVars.FirstTileYAtCenter + 20) {
+                        if ((((double)i > (double)CenterX + 3 && (double)i < (double)CenterX + 10)) && j < BackwoodsVars.FirstTileYAtCenter) {
                             flag = true;
                         }
                         if (i > CenterX - 4 && i < CenterX + 2 && j < BackwoodsVars.FirstTileYAtCenter) {
                             continue;
                         }
-                        bool flag2 = i > CenterX + 2 && i < CenterX + 16;
+                        bool flag2 = i > CenterX + 2 && i < CenterX + 10;
                         if (_random.NextChance(0.5)) {
                             WallBush(i, j + 3 + (flag ? _random.Next(-1, 2) : 0) + flag2.ToInt() * 2, !flag);
                             i += _random.Next(2, 8);
@@ -3753,6 +3753,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 WorldGen.TileRunner(x, y, sizeX, sizeY, _stoneTileType);
             }
         }
+        minY = CenterY - EdgeY;
         stoneCount = (int)(tileCount * 0.0035f);
         int maxY = CenterY + (int)(EdgeY * 1.5f);
         for (int i = 0; i < stoneCount; i++) {
@@ -4497,7 +4498,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             flag50 = true;
             int num796 = Main.maxTilesX / 2;
             int num797 = 200;
-            int num797_2 = Main.maxTilesX / (5 + attemtps / 10);
+            int num797_2 = Main.maxTilesX / (5 + attemtps / 20);
             //if (drunkWorldGen) {
             //    num797 = 100;
             //    num793 = ((!GenVars.crimsonLeft) ? genRand.Next((int)((double)Main.maxTilesX * 0.5), Main.maxTilesX - num785) : genRand.Next(num785, (int)((double)Main.maxTilesX * 0.5)));
@@ -4505,7 +4506,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             //else {
             //    num793 = genRand.Next(num785, Main.maxTilesX - num785);
             //}
-            num793 = genRand.Next(num785, Main.maxTilesX - num785);
+            num793 = genRand.Next(num785 + 50, Main.maxTilesX - num785 - 50);
 
             num794 = num793;
             num795 = num793;
@@ -4533,7 +4534,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 flag50 = false;
             }
 
-            if (num793 > GenVars.snowOriginLeft - num786 * 1f && num793 < GenVars.snowOriginRight + num786 * 1f) {
+            if (num793 > GenVars.snowOriginLeft - num786 * 1.5f && num793 < GenVars.snowOriginRight + num786 * 1.5f) {
                 flag50 = false;
             }
 
