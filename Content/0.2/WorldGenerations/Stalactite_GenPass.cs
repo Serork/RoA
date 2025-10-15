@@ -36,7 +36,7 @@ sealed class Stalactite_GenPass : IInitializer {
             }
             for (int checkY = j - checkHeight; checkY < j + checkHeight; checkY++) {
                 ModTile modTile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(checkX, checkY).TileType);
-                if (modTile is GrimrockStalactite || modTile is IceStalactite || modTile is StoneStalactite || modTile is SolidifiedTarStalactite) {
+                if (modTile is IStalactiteTile) {
                     canPlace = false;
                     break;
                 }

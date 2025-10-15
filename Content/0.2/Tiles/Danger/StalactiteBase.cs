@@ -127,7 +127,7 @@ abstract class StalactiteTE<T> : ModTileEntity where T : StalactiteProjectileBas
         }
 
         var tile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(Position.X, Position.Y).TileType);
-        if (tile is not GrimrockStalactite && tile is not IceStalactite && tile is not StoneStalactite && tile is not SolidifiedTarStalactite) {
+        if (tile is not IStalactiteTile) {
             Kill(Position.X, Position.Y);
             return;
         }
@@ -183,7 +183,9 @@ abstract class StalactiteTE<T> : ModTileEntity where T : StalactiteProjectileBas
     }
 }
 
-abstract class StalactiteBase<T1, T2> : ModTile where T1 : StalactiteTE<T2> where T2 : StalactiteProjectileBase {
+interface IStalactiteTile { }
+
+abstract class StalactiteBase<T1, T2> : ModTile, IStalactiteTile where T1 : StalactiteTE<T2> where T2 : StalactiteProjectileBase {
     public sealed override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
