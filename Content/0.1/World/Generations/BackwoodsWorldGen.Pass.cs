@@ -1117,7 +1117,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY / 2;
         int maxY = Bottom + EdgeY;
         int x;
-        float modifier = WorldGenHelper.SmallWorld ? 1.5f : 1.5f;
+        float modifier = WorldGenHelper.MediumWorld ? 2f : WorldGenHelper.SmallWorld ? 1.5f : 1.75f;
         int maxCaves = (int)(tileCount * 0.0001625f * modifier);
         for (int i = 0; i < maxCaves; i++) {
             x = _random.Next(startX - 100, endX + 100);
@@ -1151,7 +1151,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
     private void Step8_2_AddCaves() {
         // adapted vanilla
-        float modifier = WorldGenHelper.SmallWorld ? 0.5f : 1f;
+        float modifier = 0.5f;
         int num992 = (int)((double)Main.maxTilesX * 0.002 * modifier);
         int num993 = (int)((double)Main.maxTilesX * 0.0007 * modifier);
         int num994 = (int)((double)Main.maxTilesX * 0.0003 * modifier);
@@ -4922,24 +4922,24 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (tile.ActiveTile(CliffPlaceholderTileType) || WorldGenHelper.IsCloud(i, j) || MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                     break;
                 }
-                if (!SandTileTypes.Contains(tile.TileType) && !tile.ActiveTile(TileID.Mud) && !tile.ActiveTile(TileID.Stone)) {
-                    int count = 0;
-                    if (WorldGenHelper.ActiveTile(i - 1, j)) {
-                        count++;
-                    }
-                    if (WorldGenHelper.ActiveTile(i + 1, j)) {
-                        count++;
-                    }
-                    if (WorldGenHelper.ActiveTile(i, j - 1)) {
-                        count++;
-                    }
-                    if (WorldGenHelper.ActiveTile(i, j + 1)) {
-                        count++;
-                    }
-                    if (count >= 3) {
-                        WorldGenHelper.ReplaceTile(i, j, _dirtTileType);
-                    }
-                }
+                //if (!SandTileTypes.Contains(tile.TileType) && !tile.ActiveTile(TileID.SnowBlock) && !tile.ActiveTile(TileID.Mud) && !tile.ActiveTile(TileID.Stone)) {
+                //    int count = 0;
+                //    if (WorldGenHelper.ActiveTile(i - 1, j)) {
+                //        count++;
+                //    }
+                //    if (WorldGenHelper.ActiveTile(i + 1, j)) {
+                //        count++;
+                //    }
+                //    if (WorldGenHelper.ActiveTile(i, j - 1)) {
+                //        count++;
+                //    }
+                //    if (WorldGenHelper.ActiveTile(i, j + 1)) {
+                //        count++;
+                //    }
+                //    if (count >= 3) {
+                //        WorldGenHelper.ReplaceTile(i, j, _dirtTileType);
+                //    }
+                //}
                 int minY = BackwoodsVars.FirstTileYAtCenter + EdgeY;
                 bool flag = true;
                 for (int checkX = i - 5; checkX < i + 6; checkX++) {

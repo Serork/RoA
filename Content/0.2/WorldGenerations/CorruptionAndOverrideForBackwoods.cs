@@ -1,13 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.BackwoodsSystems;
+using RoA.Content.Tiles.Solid.Backwoods;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 
 using Terraria;
 using Terraria.GameContent.Biomes;
 using Terraria.GameContent.Generation;
+using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
@@ -15,6 +18,27 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.WorldGenerations;
 
 sealed class CorruptionAndOverrideForBackwoods : ModSystem {
+    public override void Load() {
+        On_WorldGen.Pyramid += On_WorldGen_Pyramid;
+        On_WorldGen.ShimmerCleanUp += On_WorldGen_ShimmerCleanUp; ;
+    }
+
+    private void On_WorldGen_ShimmerCleanUp(On_WorldGen.orig_ShimmerCleanUp orig) {
+        TileID.Sets.Conversion.Moss[ModContent.TileType<BackwoodsGreenMoss>()] = false;
+        orig();
+        TileID.Sets.Conversion.Moss[ModContent.TileType<BackwoodsGreenMoss>()] = true;
+    }
+
+    private bool On_WorldGen_Pyramid(On_WorldGen.orig_Pyramid orig, int i, int j) {
+        int x = i, y = j;
+        if (x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 50 && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 50
+            && y < BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + BackwoodsVars.BackwoodsSizeY / 3) {
+            return false;
+        }
+
+        return orig(i, j);
+    }
+
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dunes"));
         tasks.RemoveAt(genIndex);
