@@ -8,7 +8,6 @@ using RoA.Common.Sets;
 using RoA.Common.WorldEvents;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
-using RoA.Content.Items.Placeable;
 using RoA.Content.Items.Placeable.Miscellaneous;
 using RoA.Content.Items.Potions;
 using RoA.Content.Items.Weapons.Magic;
@@ -16,6 +15,7 @@ using RoA.Content.Items.Weapons.Melee;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Danger;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
 using RoA.Content.Tiles.LiquidsSpecific;
@@ -23,6 +23,7 @@ using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
+using RoA.Content.WorldGenerations;
 using RoA.Core.Utility;
 
 using System;
@@ -39,8 +40,6 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
-
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.World.Generations;
 
@@ -203,7 +202,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int minY = (int)Main.worldSurface + 10;
 
         for (int i = Left - 25; i < Right + 25; i++) {
-            for (int j = minY; j < Bottom - EdgeY / 2; j++) {
+            for (int j = minY; j < Bottom + EdgeY / 2; j++) {
                 if ((WorldGenHelper.ActiveTile(i, j, _dirtTileType) || WorldGenHelper.ActiveTile(i, j, _stoneTileType) ||
                     WorldGenHelper.ActiveTile(i, j, WallID.DirtUnsafe)) &&
                     _random.NextChance(0.0035) && _random.NextChance(0.75)) {
@@ -213,7 +212,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         for (int i = Left - 25; i < Right + 25; i++) {
-            for (int j = minY; j < Bottom - EdgeY / 2; j++) {
+            for (int j = minY; j < Bottom + EdgeY / 2; j++) {
                 if ((WorldGenHelper.ActiveTile(i, j, _mossTileType)) &&
                     _random.NextChance(0.035) && _random.NextChance(0.75)) {
                     MossRoot(i, j);
@@ -2893,6 +2892,20 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     //}
                     if (tile.TileType == TileID.WaterDrip && _random.NextChance(0.8)) {
                         tile.HasTile = false;
+                    }
+                }
+            }
+        }
+
+        for (int i = Left - 100; i <= Right + 100; i++) {
+            for (int j = (int)Main.worldSurface; j < Bottom + EdgeY / 2; j++) {
+                Tile solidTile = WorldGenHelper.GetTileSafely(i, j - 1);
+                if (WorldGen.SolidTile(i, j - 1) && Main.tile[i, j - 1].HasUnactuatedTile && WorldGen.genRand.NextBool(50)) {
+                    if (solidTile.TileType == _stoneTileType) {
+                        Stalactite_GenPass.PlaceStalactite(i, j, _stoneTileType, (ushort)ModContent.TileType<GrimrockStalactite>(), ModContent.GetInstance<GrimrockStalactiteTE>());
+                    }
+                    else if (solidTile.TileType == _mossTileType) {
+                        Stalactite_GenPass.PlaceStalactite(i, j, _mossTileType, (ushort)ModContent.TileType<GrimrockStalactite>(), ModContent.GetInstance<GrimrockStalactiteTE>());
                     }
                 }
             }
