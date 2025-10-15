@@ -143,6 +143,7 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
             }
             return;
         }
+        float minDistance3 = 10f;
         NPC target = Main.npc[owner.MinionAttackTargetNPC];
         Vector2 moveTo = target.Center;
         float distance = target.Distance(center);
@@ -157,11 +158,13 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
         }
         else {
             DistanceToTargetFactor = 1f - MathUtils.Clamp01(target.Distance(Projectile.Center) / minDistance2);
-            inertia *= Utils.Remap(1f - DistanceToTargetFactor, 0f, 1f, 0.5f, 1f, true);
+            float progress = Utils.Remap(1f - DistanceToTargetFactor, 0f, 1f, 0.5f, 1f, true);
+            inertia *= progress;
+            minDistance3 = 10f * progress;
             MaxDistanced = false;
         }
         Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-        Projectile.SlightlyMoveTo2(moveTo, speed, inertia, deceleration);
+        Projectile.SlightlyMoveTo2(moveTo, speed, inertia, minDistance3, deceleration);
     }
 
     protected override void Draw(ref Color lightColor) {
