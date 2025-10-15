@@ -59,6 +59,7 @@ static class ResourceManager {
     public static string MagicWeaponTextures => WeaponTextures + "Magic/";
 
     public static string ProjectileTextures => Textures + "Projectiles/";
+    public static string FriendlyMiscProjectiles => FriendlyProjectileTextures + "Miscellaneous/";
     public static string EnemyProjectileTextures => ProjectileTextures + "Enemies/";
     public static string FriendlyProjectileTextures => ProjectileTextures + "Friendly/";
     public static string NatureProjectileTextures => FriendlyProjectileTextures + "Nature/";

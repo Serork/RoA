@@ -67,7 +67,11 @@ sealed partial class PlayerCommon : ModPlayer {
         DrawPlayerFullEvent += PlayerCommon_DrawPlayerFullEvent;
 
         On_Player.HorizontalMovement += On_Player_HorizontalMovement;
+
+        DevilSkullLoad();
     }
+
+    public partial void DevilSkullLoad();
 
     private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
         if (self.GetCommon().LockHorizontalMovement) {
@@ -210,6 +214,7 @@ sealed partial class PlayerCommon : ModPlayer {
         ApplyBoneArmorVisuals = false;
         LockHorizontalMovement = false;
         ApplyVanillaSkullSetBonus = false;
+        ApplyDevilSkullSetBonus = false;
     }
 
     public override void PostUpdate() {

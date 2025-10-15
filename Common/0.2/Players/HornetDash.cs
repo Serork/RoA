@@ -8,6 +8,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Linq;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -71,10 +72,9 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         Player.eocDash = (int)DashTime;
         if (DashTime == 0f) {
-            foreach (Projectile hornetSpear in TrackedEntitiesSystem.GetTrackedProjectile<HornetSpear>(checkProjectile => checkProjectile.owner != Player.whoAmI)) {
-                hornetSpear.ai[1] = 1f;
-                hornetSpear.netUpdate = true;
-            }
+            Projectile hornetSpear = TrackedEntitiesSystem.GetTrackedProjectile<HornetSpear>(checkProjectile => checkProjectile.owner != Player.whoAmI).ToList()[0];
+            hornetSpear.ai[1] = 1f;
+            hornetSpear.netUpdate = true;
 
             Player.shimmering = false;
             Vector2 extraVelocity = SavedVelocity * 0.025f;
