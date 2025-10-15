@@ -4531,7 +4531,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             //else {
             //    num793 = genRand.Next(num785, Main.maxTilesX - num785);
             //}
-            num793 = genRand.Next(num785 + 25, Main.maxTilesX - num785 - 25);
+            num793 = genRand.Next(num785, Main.maxTilesX - num785);
 
             num794 = num793;
             num795 = num793;
