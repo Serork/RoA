@@ -22,8 +22,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Liquids;
 
 sealed partial class Tar : ModLiquid {
-    private static int _animationFrame;
-    private static float _frameState;
+    private static int _animationFrame, _animationFrame2;
+    private static float _frameState, _frameState2;
 
     private class UpdateAnimation : IInitializer {
         void ILoadable.Load(Mod mod) {
@@ -39,7 +39,7 @@ sealed partial class Tar : ModLiquid {
                 num = Main.windSpeedCurrent * 15f;
                 num = ((!(num < 0f)) ? (num + 5f) : (num - 5f));
                 num = MathF.Abs(num);
-                num *= 0.5f;
+                //num *= 0.5f;
                 _frameState += num * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (_frameState < 0f)
                     _frameState += 16f;
@@ -47,6 +47,17 @@ sealed partial class Tar : ModLiquid {
                 _frameState %= 16f;
 
                 _animationFrame = (int)_frameState;
+
+                num = 15f;
+                num = ((!(num < 0f)) ? (num + 5f) : (num - 5f));
+                num = MathF.Abs(num);
+                _frameState2 += num * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_frameState2 < 0f)
+                    _frameState2 += 16f;
+
+                _frameState2 %= 16f;
+
+                _animationFrame2 = (int)_frameState2;
             }
         }
     }
@@ -325,7 +336,12 @@ sealed partial class Tar : ModLiquid {
         Lighting.GetCornerColors(i, j, out VertexColors vertices);
         Texture2D texture = LiquidLoader.LiquidAssets[Type].Value;
         Rectangle sourceRectangle = liquidDrawCache.SourceRectangle;
-        sourceRectangle.Y += _animationFrame * 80;
+        if (liquidDrawCache.IsSurfaceLiquid) {
+            sourceRectangle.Y += _animationFrame * 80;
+        }
+        else {
+            sourceRectangle.Y += _animationFrame2 * 80;
+        }
 
         drawOffset += liquidDrawCache.LiquidOffset;
 
