@@ -5,6 +5,7 @@ using ModLiquidLib.ModLoader;
 
 using ReLogic.Utilities;
 
+using RoA.Common.BackwoodsSystems;
 using RoA.Content.Liquids;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Danger;
@@ -71,6 +72,11 @@ sealed class TarBiome : MicroBiome {
             return false;
         }
         if (origin.X > GenVars.JungleX - Main.maxTilesX / 10 && origin.X < GenVars.JungleX + Main.maxTilesX / 10) {
+            return false;
+        }
+
+        if (origin.X > BackwoodsVars.BackwoodsStartX - Main.maxTilesX / 10 && origin.X < BackwoodsVars.BackwoodsEndX + Main.maxTilesX / 10 && 
+            origin.Y < BackwoodsVars.BackwoodsEndY + 100) {
             return false;
         }
 

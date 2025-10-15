@@ -36,7 +36,7 @@ sealed class BackwoodsWorldGen : ModSystem {
             _extraModSupport = true;
         }
         else {
-            genIndex += 6;
+            //genIndex += 6;
         }
         if (_extraModSupport) {
             genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Pyramids"));
