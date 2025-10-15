@@ -126,6 +126,12 @@ abstract class StalactiteTE<T> : ModTileEntity where T : StalactiteProjectileBas
             return;
         }
 
+        var tile = TileLoader.GetTile(WorldGenHelper.GetTileSafely(Position.X, Position.Y).TileType);
+        if (tile is not GrimrockStalactite && tile is not IceStalactite && tile is not StoneStalactite && tile is not SolidifiedTarStalactite) {
+            Kill(Position.X, Position.Y);
+            return;
+        }
+
         Vector2 stalactitePosition = Position.ToWorldCoordinates();
         Rectangle dangerArea = GeometryUtils.TopRectangle(stalactitePosition, new Vector2(DANGERAREAWIDTH, DANGERAREAHEIGHT));
         foreach (Player player in Main.ActivePlayers) {
