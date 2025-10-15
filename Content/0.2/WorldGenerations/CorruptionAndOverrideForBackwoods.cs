@@ -31,8 +31,7 @@ sealed class CorruptionAndOverrideForBackwoods : ModSystem {
 
     private bool On_WorldGen_Pyramid(On_WorldGen.orig_Pyramid orig, int i, int j) {
         int x = i, y = j;
-        if (x > BackwoodsVars.BackwoodsCenterX - BackwoodsVars.BackwoodsHalfSizeX - 50 && x < BackwoodsVars.BackwoodsCenterX + BackwoodsVars.BackwoodsHalfSizeX + 50
-            && y < BackwoodsVars.BackwoodsCenterY + BackwoodsVars.BackwoodsSizeY / 2 + BackwoodsVars.BackwoodsSizeY / 3) {
+        if (x > BackwoodsVars.BackwoodsStartX - 100 && x < BackwoodsVars.BackwoodsEndX + 100) {
             return false;
         }
 
@@ -40,14 +39,14 @@ sealed class CorruptionAndOverrideForBackwoods : ModSystem {
     }
 
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
-        int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dunes"));
-        tasks.RemoveAt(genIndex);
-        string pass = "Dunes";
-        tasks.Insert(genIndex, new PassLegacy(pass, DunesOverrideGenerator, 779.3144f));
+        //int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Dunes"));
+        //tasks.RemoveAt(genIndex);
+        //string pass = "Dunes";
+        //tasks.Insert(genIndex, new PassLegacy(pass, DunesOverrideGenerator, 779.3144f));
 
-        genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
+        int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Corruption"));
         tasks.RemoveAt(genIndex);
-        pass = "Corruption";
+        string pass = "Corruption";
         tasks.Insert(genIndex, new PassLegacy(pass, CorruptionOverrideGenerator, 1367.0684f));
     }
 

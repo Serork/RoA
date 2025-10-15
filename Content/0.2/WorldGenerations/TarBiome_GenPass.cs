@@ -26,7 +26,7 @@ sealed class TarBiome_GenPass : ModSystem {
                 double num920 = (double)num919 / (double)num916;
                 progress.Set(num920);
                 progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Tar").Value;
-                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 200, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - 500);
+                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 200, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - (int)(Main.maxTilesX * 0.42f));
                 //if (remixWorldGen)
                 //    point3 = RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
