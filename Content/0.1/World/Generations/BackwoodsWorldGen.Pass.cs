@@ -3082,7 +3082,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         }
                         bool flag2 = i > CenterX + 2 && i < CenterX + 16;
                         if (_random.NextChance(0.5)) {
-                            WallBush(i, j + 3 + (flag ? _random.Next(-1, 2) : 0) + flag2.ToInt() * 4, !flag);
+                            WallBush(i, j + 3 + (flag ? _random.Next(-1, 2) : 0) + flag2.ToInt() * 2, !flag);
                             i += _random.Next(2, 8);
                         }
                     }
@@ -4869,7 +4869,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Point cliffTileCoords = Point.Zero;
         cliffTileCoords.X = _toLeft ? topLeftTileX - 10 : (topRightTileX + 10);
         cliffTileCoords.Y = WorldGenHelper.GetFirstTileY2(cliffTileCoords.X, true, true);
-        int lastSurfaceY = _biomeSurface.Last().Y + 10;
+        int lastSurfaceY = _biomeSurface.Last().Y;
         int cliffX = cliffTileCoords.X;
         int startY = cliffTileCoords.Y;
         bool first = true;
@@ -4885,7 +4885,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 x = cliffX + (randomnessPoints[max - testJ] + 1) * dir;
                 if (testJ < startY + 3) {
                     for (int j = testJ - 15; j < testJ; j++) {
-                        if (Main.tile[x, j].TileType != CliffPlaceholderTileType) {
+                        if (Main.tile[x, j].TileType != CliffPlaceholderTileType && Main.tile[x, j].TileType != _dirtTileType) {
                             WorldGen.KillTile(x, j);
                         }
                     }
