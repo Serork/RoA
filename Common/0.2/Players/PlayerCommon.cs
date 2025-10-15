@@ -12,6 +12,7 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace RoA.Common.Players;
 

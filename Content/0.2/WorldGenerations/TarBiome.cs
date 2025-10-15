@@ -113,6 +113,9 @@ sealed class TarBiome : MicroBiome {
     }
 
     public override bool Place(Point origin, StructureMap structures) {
+        if (TooCloseToImportantLocations(origin)) {
+            return false;
+        }
         _sourceMagmaMap = new Magma[90, 70];
         _targetMagmaMap = new Magma[90, 70];
         origin.X -= _sourceMagmaMap.GetLength(0) / 2;
@@ -123,9 +126,7 @@ sealed class TarBiome : MicroBiome {
         CleanupTiles(origin, effectedMapArea);
         PlaceStalactites(origin);
         PlaceDecorations(origin, effectedMapArea);
-        if (WorldGen.gen) {
-            structures.AddProtectedStructure(effectedMapArea, 8);
-        }
+        structures.AddStructure(GeometryUtils.CenteredSquare(origin.ToVector2() + new Vector2(effectedMapArea.Size().X * 1.05f, effectedMapArea.Size().Y) * 0.625f, effectedMapArea.Size()), 8);
         return true;
     }
 
@@ -196,6 +197,9 @@ sealed class TarBiome : MicroBiome {
             for (int j = y - num; j < y + num; j += 10) {
                 if (j > 0 && j <= Main.maxTilesY - 1) {
                     if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == 226)
+                        return true;
+
+                    if (Main.tile[i, j].WallType == TARWALLTYPE)
                         return true;
 
                     if (Main.tile[i, j].WallType == 83 || Main.tile[i, j].WallType == 3 || Main.tile[i, j].WallType == 87)

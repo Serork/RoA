@@ -16,7 +16,7 @@ namespace RoA.Content.WorldGenerations;
 // TODO: seeds support
 sealed class TarBiome_GenPass : ModSystem {
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
-        tasks.Insert(tasks.FindIndex(task => task.Name == "Granite") + 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Settle Liquids") + 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             int num916 = 5 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
@@ -26,7 +26,7 @@ sealed class TarBiome_GenPass : ModSystem {
                 double num920 = (double)num919 / (double)num916;
                 progress.Set(num920);
                 progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Tar").Value;
-                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 200, (int)num917, Main.maxTilesY - ((int)GenVars.rockLayer + 40) - (int)(Main.maxTilesY * 0.42f));
+                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 200, (int)num917, (Main.maxTilesY - ((int)GenVars.lavaLine + 125)));
                 //if (remixWorldGen)
                 //    point3 = RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
