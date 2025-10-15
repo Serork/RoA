@@ -497,6 +497,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
         return false;
     }
 
+    public override bool? CanCutTiles() => !PseudoDestroyed;
     public override bool? CanDamage() => !DidEnoughDamage && !PseudoDestroyed;
 
     private void MakeTulipDusts(bool onKill = false) {
