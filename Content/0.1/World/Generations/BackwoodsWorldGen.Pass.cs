@@ -201,7 +201,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step_AddWallRootsAndMoss() {
         int minY = (int)Main.worldSurface + 10;
 
-        for (int i = Left - 25; i < Right + 25; i++) {
+        for (int i = Left - 50; i < Right + 50; i++) {
             for (int j = minY; j < Bottom + EdgeY / 2; j++) {
                 if ((WorldGenHelper.ActiveTile(i, j, _dirtTileType) || WorldGenHelper.ActiveTile(i, j, _stoneTileType) ||
                     WorldGenHelper.ActiveTile(i, j, WallID.DirtUnsafe)) &&
@@ -211,7 +211,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int i = Left - 25; i < Right + 25; i++) {
+        for (int i = Left - 50; i < Right + 50; i++) {
             for (int j = minY; j < Bottom + EdgeY / 2; j++) {
                 if ((WorldGenHelper.ActiveTile(i, j, _mossTileType)) &&
                     _random.NextChance(0.035) && _random.NextChance(0.75)) {
