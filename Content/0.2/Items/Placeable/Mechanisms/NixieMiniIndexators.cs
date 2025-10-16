@@ -69,3 +69,9 @@ sealed class NixieResetter : NixieIndexator1Plus {
         Item.createTile = ModContent.TileType<Tiles.Mechanisms.NixieResetter>();
     }
 }
+sealed class NixieCategoryChanger : NixieIndexator1Plus {
+    public override void SetDefaults() {
+        base.SetDefaults();
+        Item.createTile = ModContent.TileType<Tiles.Mechanisms.NixieCategoryChanger>();
+    }
+}

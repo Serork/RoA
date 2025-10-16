@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,6 +11,7 @@ using RoA.Content.Tiles.Decorations;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -368,31 +371,86 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         ShouldUpdateIndex = true;
     }
 
-    public static void ChangeNixieTubeSymbol(int index, Point16? tePosition = null, int increaseBy = 0, bool activate = true, int max = -1) {
+    public enum Category : byte {
+        Num,
+        EngRus,
+        Misc
+    }
+
+    public static Category? GetCategory(int index) {
+        Category? result = null;
+        bool inEng = index >= NUMCOUNT && index < NUMCOUNT + ENGRUSCOUNT;
+        bool inNum = index < NUMCOUNT;
+        bool inSym = index >= NUMCOUNT + ENGRUSCOUNT;
+        if (inNum) {
+            result = Category.Num;
+        }
+        if (inEng) {
+            result = Category.EngRus;
+        }
+        if (inSym) {
+            result = Category.Misc;
+        }
+        return result;
+    }
+
+    public static void ChangeNixieTubeSymbol(int index, Point16? tePosition = null, int increaseBy = 0, bool activate = true, Category? category = null) {
         TileObjectData tileData = TileObjectData.GetTileData(ModContent.TileType<NixieTube>(), 0);
         int tileWidth = tileData.CoordinateWidth + 2;
         int width = tileData.Width;
         int height = tileData.Height;
         int result = index;
+        int beforeIndex = result;
+        bool inEng = index >= NUMCOUNT && index < NUMCOUNT + ENGRUSCOUNT;
+        bool inNum = index < NUMCOUNT;
+        bool inSym = index >= NUMCOUNT + ENGRUSCOUNT;
+        bool noMaxSet = true;
+        int min = 0;
+        int max = 0;
+        bool lessThanMin = false;
+        if (tePosition == null) {
+            max = LAST;
+            noMaxSet = false;
+        }
+        if (noMaxSet) {
+            if (inNum || category == Category.Num) {
+                min = 0;
+                max = NUMCOUNT - 2;
+                lessThanMin = result > max + 1;
+            }
+            else if (inEng || category == Category.EngRus) {
+                min = NUMCOUNT;
+                max = NUMCOUNT + ENGRUSCOUNT - 1;
+                lessThanMin = result > max + 1 || result < min - 1;
+            }
+            else if (inSym || category == Category.Misc) {
+                min = NUMCOUNT + ENGRUSCOUNT;
+                max = LAST - 1;
+                lessThanMin = result > max + 1 || result < min - 1;
+            }
+        }
         result += increaseBy;
-        max = max < 0 ? LAST : max;
+        if (lessThanMin) {
+            result = min;
+            beforeIndex = result;
+            result += increaseBy;
+        }
         if (result > max) {
             int previous = result;
-            result = 0;
-            result += previous - max;
+            result = min;
+            result += previous - max - 1;
         }
-        if (result < 0) {
-            int previous = result;
+        if (result < min) {
             result = max;
-            result += previous;
+            result -= (int)MathF.Abs(increaseBy) - (beforeIndex - min) - 1;
         }
         index = result;
         if (tePosition == null && index < NUMCOUNT) {
             index -= 1;
         }
-        if (index == NUMCOUNT - 1) {
-            index += 1;
-        }
+        //if (index == NUMCOUNT - 1) {
+        //    index += 1;
+        //}
         GetColumnAndRow(index, out byte column, out byte row);
         if (index >= NUMCOUNT && index < NUMCOUNT + RUSCOUNT && IsRussian) {
             row += 2;

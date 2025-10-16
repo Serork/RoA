@@ -18,6 +18,7 @@ sealed class NixieIndexator5Minus : NixieMiniIndexatorBase { }
 sealed class NixieIndexator10Plus : NixieMiniIndexatorBase { }
 sealed class NixieIndexator10Minus : NixieMiniIndexatorBase { }
 sealed class NixieResetter : NixieMiniIndexatorBase { }
+sealed class NixieCategoryChanger : NixieMiniIndexatorBase { }
 
 abstract class NixieMiniIndexatorBase : ModTile {
     public override void SetStaticDefaults() {

@@ -2307,3 +2307,8 @@ NixieResetter: {
 	// DisplayName: Nixie Resetter
 	// Tooltip: ""
 }
+
+NixieCategoryChanger: {
+	// DisplayName: Nixie Category Changer
+	// Tooltip: ""
+}

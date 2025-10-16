@@ -30,6 +30,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
             Point16 topLeft = TileHelper.GetTileTopLeft2<NixieTube>(i, j);
             int topX = topLeft.X, topY = topLeft.Y;
             int increaseBy = 0;
+            int category = -1;
             foreach (Point16 point in Wiring._toProcess.Keys) {
                 Tile tile = WorldGenHelper.GetTileSafely(point);
                 if (tile.HasTile) {
@@ -61,6 +62,9 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                     else if (tileType == ModContent.TileType<NixieResetter>()) {
                         increaseBy = 0;
                         NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(0, topLeft, activate: false);
+                    }
+                    else if (tileType == ModContent.TileType<NixieCategoryChanger>()) {
+                        category++;
                     }
                     //else if (tileType == togglerTileType) {
                     //    bool reset = tile.TileFrameX == 144;
@@ -101,7 +105,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
             }
             else {
                 int currentIndex = NixieTubePicker_RemadePicker.GetIndex(topLeft);
-                NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(currentIndex, topLeft, increaseBy, false);
+                NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(currentIndex, topLeft, increaseBy, false, category == -1 ? null : (NixieTubePicker_RemadePicker.Category)(category % 2));
             }
         }
     }
