@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Mechanisms;
 
-class NixieTubeIncreaser : ModItem {
+sealed class NixieTubeToggler : ModItem {
     public override void SetDefaults() {
         Item.mech = true;
         Item.noWet = true;
@@ -17,31 +17,10 @@ class NixieTubeIncreaser : ModItem {
         Item.autoReuse = true;
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<NixieTubeToggler>();
+        Item.createTile = ModContent.TileType<Tiles.Mechanisms.NixieTubeToggler>();
         Item.placeStyle = 0;
         Item.width = 10;
         Item.height = 12;
         Item.SetShopValues(ItemRarityColor.White0, Item.buyPrice(0, 2));
-    }
-}
-
-class NixieTubeIncreaser2 : NixieTubeIncreaser {
-    public override void SetDefaults() {
-        base.SetDefaults();
-        Item.placeStyle = 2;
-    }
-}
-
-class NixieTubeIncreaser3 : NixieTubeIncreaser {
-    public override void SetDefaults() {
-        base.SetDefaults();
-        Item.placeStyle = 4;
-    }
-}
-
-class NixieTubeIncreaser4 : NixieTubeIncreaser {
-    public override void SetDefaults() {
-        base.SetDefaults();
-        Item.placeStyle = 7;
     }
 }

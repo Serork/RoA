@@ -2312,3 +2312,8 @@ NixieTubeIncreaser4: {
 	// DisplayName: Nixie Tube Increaser4
 	// Tooltip: ""
 }
+
+NixieTubeToggler: {
+	// DisplayName: Nixie Tube Toggler
+	// Tooltip: ""
+}
