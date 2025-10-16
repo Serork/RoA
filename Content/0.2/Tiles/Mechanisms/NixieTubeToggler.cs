@@ -23,7 +23,7 @@ sealed class NixieTubeToggler : ModTile {
         player.noThrow = 2;
         player.cursorItemIconEnabled = true;
         int tileFrame = Main.tile[i, j].TileFrameX / 18;
-        int cursorItemIconID = ModContent.ItemType<Toggler1>();
+        int cursorItemIconID = ModContent.ItemType<Items.Placeable.Mechanisms.NixieTubeToggler>();
         switch (tileFrame) {
             case 1:
                 cursorItemIconID = ModContent.ItemType<Toggler2>();
@@ -48,9 +48,6 @@ sealed class NixieTubeToggler : ModTile {
                 break;
             case 8:
                 cursorItemIconID = ModContent.ItemType<Toggler9>();
-                break;
-            case 9:
-                cursorItemIconID = ModContent.ItemType<Toggler10>();
                 break;
         }
         player.cursorItemIconID = cursorItemIconID;
