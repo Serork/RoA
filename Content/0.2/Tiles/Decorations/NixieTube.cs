@@ -34,9 +34,14 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                 Tile tile = WorldGenHelper.GetTileSafely(point);
                 if (tile.HasTile && tile.TileType == togglerTileType) {
                     bool reset = tile.TileFrameX == 18 * 6;
+                    bool tenIncrease = tile.TileFrameX == 18 * 7;
+                    bool ten = tenIncrease || tile.TileFrameX == 18 * 8;
                     int increaseValue = (tile.TileFrameX / 18 % 2 == 0).ToDirectionInt();
                     if (reset) {
                         increaseValue = 0;
+                    }
+                    if (ten) {
+                        increaseValue = 10 * tenIncrease.ToDirectionInt();
                     }
                     if (tile.TileFrameX == 36 || tile.TileFrameX == 54) {
                         increaseValue *= 3;

@@ -38,3 +38,10 @@ class NixieTubeIncreaser3 : NixieTubeIncreaser {
         Item.placeStyle = 4;
     }
 }
+
+class NixieTubeIncreaser4 : NixieTubeIncreaser {
+    public override void SetDefaults() {
+        base.SetDefaults();
+        Item.placeStyle = 7;
+    }
+}
