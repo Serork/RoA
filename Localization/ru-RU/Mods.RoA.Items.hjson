@@ -2263,11 +2263,6 @@ HornetSkull: {
 	// Tooltip: ""
 }
 
-NixieIndexator: {
-	// DisplayName: Nixie Indexator
-	// Tooltip: ""
-}
-
 NixieIndexator10Minus: {
 	// DisplayName: Nixie Indexator10 Minus
 	// Tooltip: ""

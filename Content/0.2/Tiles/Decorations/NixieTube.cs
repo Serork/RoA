@@ -25,7 +25,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
     private static BlendState? _multiplyBlendState;
 
     public override void HitWire(int i, int j) {
-        ushort togglerTileType = (ushort)ModContent.TileType<NixieIndexator>();
+        //ushort togglerTileType = (ushort)ModContent.TileType<NixieIndexator>();
         if (TryGetTE(out NixieTubeTE nixieTubeTE, i, j)) {
             Point16 topLeft = TileHelper.GetTileTopLeft2<NixieTube>(i, j);
             int topX = topLeft.X, topY = topLeft.Y;
@@ -62,31 +62,31 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                         increaseBy = 0;
                         NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(0, topLeft, activate: false);
                     }
-                    else if (tileType == togglerTileType) {
-                        bool reset = tile.TileFrameX == 144;
-                        int increaseValue = (tile.TileFrameX / 18 % 2 == 0).ToDirectionInt();
-                        if (reset) {
-                            increaseValue = 0;
-                        }
-                        if (tile.TileFrameX == 36 || tile.TileFrameX == 54) {
-                            increaseValue *= 3;
-                        }
-                        if (tile.TileFrameX == 72 || tile.TileFrameX == 90) {
-                            increaseValue *= 5;
-                        }
-                        if (tile.TileFrameX == 108 || tile.TileFrameX == 126) {
-                            increaseValue *= 10;
-                        }
-                        increaseBy += increaseValue;
-                        if (reset) {
-                            if (increaseBy == 0) {
-                                NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(0, topLeft, activate: false);
-                            }
-                            else {
-                                increaseBy = 0;
-                            }
-                        }
-                    }
+                    //else if (tileType == togglerTileType) {
+                    //    bool reset = tile.TileFrameX == 144;
+                    //    int increaseValue = (tile.TileFrameX / 18 % 2 == 0).ToDirectionInt();
+                    //    if (reset) {
+                    //        increaseValue = 0;
+                    //    }
+                    //    if (tile.TileFrameX == 36 || tile.TileFrameX == 54) {
+                    //        increaseValue *= 3;
+                    //    }
+                    //    if (tile.TileFrameX == 72 || tile.TileFrameX == 90) {
+                    //        increaseValue *= 5;
+                    //    }
+                    //    if (tile.TileFrameX == 108 || tile.TileFrameX == 126) {
+                    //        increaseValue *= 10;
+                    //    }
+                    //    increaseBy += increaseValue;
+                    //    if (reset) {
+                    //        if (increaseBy == 0) {
+                    //            NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(0, topLeft, activate: false);
+                    //        }
+                    //        else {
+                    //            increaseBy = 0;
+                    //        }
+                    //    }
+                    //}
                 }
             }
             Wiring.SkipWire(topX, topY);

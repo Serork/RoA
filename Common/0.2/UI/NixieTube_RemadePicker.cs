@@ -368,14 +368,14 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         ShouldUpdateIndex = true;
     }
 
-    public static void ChangeNixieTubeSymbol(int index, Point16? tePosition = null, int increaseBy = 0, bool activate = true) {
+    public static void ChangeNixieTubeSymbol(int index, Point16? tePosition = null, int increaseBy = 0, bool activate = true, int max = -1) {
         TileObjectData tileData = TileObjectData.GetTileData(ModContent.TileType<NixieTube>(), 0);
         int tileWidth = tileData.CoordinateWidth + 2;
         int width = tileData.Width;
         int height = tileData.Height;
         int result = index;
         result += increaseBy;
-        int max = LAST;
+        max = max < 0 ? LAST : max;
         if (result > max) {
             int previous = result;
             result = 0;
