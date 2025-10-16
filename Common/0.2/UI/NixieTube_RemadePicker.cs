@@ -377,24 +377,33 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         Misc
     }
 
-    public static Category? GetCategory(int index) {
-        Category? result = null;
+    public static Category GetCategory(int index) {
+        Category result;
         bool inEng = index >= NUMCOUNT && index < NUMCOUNT + ENGRUSCOUNT;
         bool inNum = index < NUMCOUNT;
         bool inSym = index >= NUMCOUNT + ENGRUSCOUNT;
         if (inNum) {
             result = Category.Num;
         }
-        if (inEng) {
+        else if (inEng) {
             result = Category.EngRus;
         }
-        if (inSym) {
+        else {
             result = Category.Misc;
         }
         return result;
     }
 
-    public static void ChangeNixieTubeSymbol(int index, Point16? tePosition = null, int increaseBy = 0, bool activate = true, Category? category = null) {
+    public static void ChangeNixieTubeSymbol(int index, Point16? tePosition = null, int increaseBy = 0, bool activate = true, int categoryExtra = 0) {
+        var tilePos = tePosition ?? _nixieTubeTilePosition;
+        var te = NixieTube.GetTE(tilePos.X, tilePos.Y);
+        if (categoryExtra == 0 && increaseBy == 0) {
+            te.Category = GetCategory(index);
+        }
+        if (categoryExtra < 0) {
+            categoryExtra = 0;
+        }
+        Category category = (Category)((categoryExtra + (byte)te.Category) % 3);
         TileObjectData tileData = TileObjectData.GetTileData(ModContent.TileType<NixieTube>(), 0);
         int tileWidth = tileData.CoordinateWidth + 2;
         int width = tileData.Width;
@@ -408,25 +417,45 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         int min = 0;
         int max = 0;
         bool lessThanMin = false;
-        if (tePosition == null) {
+        bool onUI = tePosition == null;
+        if (onUI) {
             max = LAST;
             noMaxSet = false;
         }
         if (noMaxSet) {
-            if (inNum || category == Category.Num) {
-                min = 0;
-                max = NUMCOUNT - 2;
-                lessThanMin = result > max + 1;
+            if (!onUI) {
+                if (category == Category.Num) {
+                    min = 0;
+                    max = NUMCOUNT - 2;
+                    lessThanMin = result > max + 1;
+                }
+                else if (category == Category.EngRus) {
+                    min = NUMCOUNT;
+                    max = NUMCOUNT + ENGRUSCOUNT - 1;
+                    lessThanMin = result > max + 1 || result < min - 1;
+                }
+                else if (category == Category.Misc) {
+                    min = NUMCOUNT + ENGRUSCOUNT;
+                    max = LAST - 1;
+                    lessThanMin = result > max + 1 || result < min - 1;
+                }
             }
-            else if (inEng || category == Category.EngRus) {
-                min = NUMCOUNT;
-                max = NUMCOUNT + ENGRUSCOUNT - 1;
-                lessThanMin = result > max + 1 || result < min - 1;
-            }
-            else if (inSym || category == Category.Misc) {
-                min = NUMCOUNT + ENGRUSCOUNT;
-                max = LAST - 1;
-                lessThanMin = result > max + 1 || result < min - 1;
+            else {
+                if (inNum) {
+                    min = 0;
+                    max = NUMCOUNT - 2;
+                    lessThanMin = result > max + 1;
+                }
+                else if (inEng) {
+                    min = NUMCOUNT;
+                    max = NUMCOUNT + ENGRUSCOUNT - 1;
+                    lessThanMin = result > max + 1 || result < min - 1;
+                }
+                else if (inSym) {
+                    min = NUMCOUNT + ENGRUSCOUNT;
+                    max = LAST - 1;
+                    lessThanMin = result > max + 1 || result < min - 1;
+                }
             }
         }
         result += increaseBy;
@@ -445,7 +474,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
             result -= (int)MathF.Abs(increaseBy) - (beforeIndex - min) - 1;
         }
         index = result;
-        if (tePosition == null && index < NUMCOUNT) {
+        if (onUI && index < NUMCOUNT) {
             index -= 1;
         }
         //if (index == NUMCOUNT - 1) {
@@ -455,12 +484,11 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         if (index >= NUMCOUNT && index < NUMCOUNT + RUSCOUNT && IsRussian) {
             row += 2;
         }
-        var tilePos = tePosition ?? _nixieTubeTilePosition;
         if (activate) {
-            NixieTube.GetTE(tilePos.X, tilePos.Y).Activate(true);
+            te.Activate(true);
         }
         else {
-            NixieTube.GetTE(tilePos.X, tilePos.Y).ResetFlicker();
+            te.ResetFlicker();
         }
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {

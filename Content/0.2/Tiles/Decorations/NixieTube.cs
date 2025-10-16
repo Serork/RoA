@@ -30,7 +30,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
             Point16 topLeft = TileHelper.GetTileTopLeft2<NixieTube>(i, j);
             int topX = topLeft.X, topY = topLeft.Y;
             int increaseBy = 0;
-            int category = -1;
+            int category = 0;
             foreach (Point16 point in Wiring._toProcess.Keys) {
                 Tile tile = WorldGenHelper.GetTileSafely(point);
                 if (tile.HasTile) {
@@ -105,7 +105,8 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
             }
             else {
                 int currentIndex = NixieTubePicker_RemadePicker.GetIndex(topLeft);
-                NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(currentIndex, topLeft, increaseBy, false, category == -1 ? null : (NixieTubePicker_RemadePicker.Category)(category % 2));
+                var category2 = category % 3;
+                NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(currentIndex, topLeft, increaseBy, false, category2);
             }
         }
     }
