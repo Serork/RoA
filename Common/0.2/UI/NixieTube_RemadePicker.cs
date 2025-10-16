@@ -398,6 +398,9 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         if (activate) {
             NixieTube.GetTE(tilePos.X, tilePos.Y).Activate(true);
         }
+        else {
+            NixieTube.GetTE(tilePos.X, tilePos.Y).ResetFlicker();
+        }
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Tile tile = Main.tile[tilePos.X + i, tilePos.Y + j];

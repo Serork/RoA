@@ -107,6 +107,10 @@ sealed class NixieTubeTE : ModTileEntity {
     public void Activate(bool keepActive = false) {
         Activated = keepActive || !Activated;
 
+        ResetFlicker();
+    }
+
+    public void ResetFlicker() {
         if (!IsFlickerOff) {
             DeactivatedTimer = DeactivatedTimer2 = ACTIVATIONTIME;
             return;
