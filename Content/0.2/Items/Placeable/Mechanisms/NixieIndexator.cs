@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Mechanisms;
 
-sealed class NixieIndexator : ModItem {
+class NixieIndexator : ModItem {
     public override void SetDefaults() {
         Item.mech = true;
         Item.noWet = true;

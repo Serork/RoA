@@ -32,28 +32,59 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
             int increaseBy = 0;
             foreach (Point16 point in Wiring._toProcess.Keys) {
                 Tile tile = WorldGenHelper.GetTileSafely(point);
-                if (tile.HasTile && tile.TileType == togglerTileType) {
-                    bool reset = tile.TileFrameX == 144;
-                    int increaseValue = (tile.TileFrameX / 18 % 2 == 0).ToDirectionInt();
-                    if (reset) {
-                        increaseValue = 0;
+                if (tile.HasTile) {
+                    int tileType = tile.TileType;
+                    if (tileType == ModContent.TileType<NixieIndexator1Plus>()) {
+                        increaseBy += 1;
                     }
-                    if (tile.TileFrameX == 36 || tile.TileFrameX == 54) {
-                        increaseValue *= 3;
+                    else if (tileType == ModContent.TileType<NixieIndexator1Minus>()) {
+                        increaseBy -= 1;
                     }
-                    if (tile.TileFrameX == 72 || tile.TileFrameX == 90) {
-                        increaseValue *= 5;
+                    else if (tileType == ModContent.TileType<NixieIndexator3Plus>()) {
+                        increaseBy += 3;
                     }
-                    if (tile.TileFrameX == 108 || tile.TileFrameX == 126) {
-                        increaseValue *= 10;
+                    else if (tileType == ModContent.TileType<NixieIndexator3Minus>()) {
+                        increaseBy -= 3;
                     }
-                    increaseBy += increaseValue;
-                    if (reset) {
-                        if (increaseBy == 0) {
-                            NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(0, topLeft, activate: false);
+                    else if (tileType == ModContent.TileType<NixieIndexator5Plus>()) {
+                        increaseBy += 5;
+                    }
+                    else if (tileType == ModContent.TileType<NixieIndexator5Minus>()) {
+                        increaseBy -= 5;
+                    }
+                    else if (tileType == ModContent.TileType<NixieIndexator10Plus>()) {
+                        increaseBy += 10;
+                    }
+                    else if (tileType == ModContent.TileType<NixieIndexator10Minus>()) {
+                        increaseBy -= 10;
+                    }
+                    else if (tileType == ModContent.TileType<NixieResetter>()) {
+                        increaseBy = 0;
+                        NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(0, topLeft, activate: false);
+                    }
+                    else if (tileType == togglerTileType) {
+                        bool reset = tile.TileFrameX == 144;
+                        int increaseValue = (tile.TileFrameX / 18 % 2 == 0).ToDirectionInt();
+                        if (reset) {
+                            increaseValue = 0;
                         }
-                        else {
-                            increaseBy = 0;
+                        if (tile.TileFrameX == 36 || tile.TileFrameX == 54) {
+                            increaseValue *= 3;
+                        }
+                        if (tile.TileFrameX == 72 || tile.TileFrameX == 90) {
+                            increaseValue *= 5;
+                        }
+                        if (tile.TileFrameX == 108 || tile.TileFrameX == 126) {
+                            increaseValue *= 10;
+                        }
+                        increaseBy += increaseValue;
+                        if (reset) {
+                            if (increaseBy == 0) {
+                                NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(0, topLeft, activate: false);
+                            }
+                            else {
+                                increaseBy = 0;
+                            }
                         }
                     }
                 }
