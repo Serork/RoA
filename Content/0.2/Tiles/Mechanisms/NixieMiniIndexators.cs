@@ -30,7 +30,9 @@ abstract class NixieMiniIndexatorBase : ModTile {
         TileObjectData.addTile(Type);
     }
 
-    public override void NumDust(int i, int j, bool fail, ref int num) {
-        num = 1;
+    public override bool CreateDust(int i, int j, ref int type) {
+        type = 1;
+
+        return base.CreateDust(i, j, ref type);
     }
 }
