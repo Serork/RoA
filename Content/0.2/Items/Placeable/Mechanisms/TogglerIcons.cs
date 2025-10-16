@@ -2,11 +2,12 @@
 
 namespace RoA.Content.Items.Placeable.Mechanisms;
 
-sealed class Toggler2 : ItemIcon { }
-sealed class Toggler3 : ItemIcon { }
-sealed class Toggler4 : ItemIcon { }
-sealed class Toggler5 : ItemIcon { }
-sealed class Toggler6 : ItemIcon { }
-sealed class Toggler7 : ItemIcon { }
-sealed class Toggler8 : ItemIcon { }
-sealed class Toggler9 : ItemIcon { }
+sealed class NixieIndexator1Plus : ItemIcon { }
+sealed class NixieIndexator1Minus : ItemIcon { }
+sealed class NixieIndexator3Plus : ItemIcon { }
+sealed class NixieIndexator3Minus : ItemIcon { }
+sealed class NixieIndexator5Plus : ItemIcon { }
+sealed class NixieIndexator5Minus : ItemIcon { }
+sealed class NixieIndexator10Plus : ItemIcon { }
+sealed class NixieIndexator10Minus : ItemIcon { }
+sealed class NixieResetter : ItemIcon { }

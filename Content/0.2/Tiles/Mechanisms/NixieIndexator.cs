@@ -9,7 +9,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Mechanisms;
 
-sealed class NixieTubeToggler : ModTile {
+sealed class NixieIndexator : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
 
@@ -19,42 +19,46 @@ sealed class NixieTubeToggler : ModTile {
         TileObjectData.addTile(Type);
 
         TileID.Sets.HasOutlines[Type] = true;
+        TileID.Sets.DisableSmartCursor[Type] = true;
     }
 
-    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
-        return true;
-    }
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) => true;
+
+    public override bool RightClick(int i, int j) => true;
 
     public override void MouseOver(int i, int j) {
         Player player = Main.LocalPlayer;
         player.noThrow = 2;
         player.cursorItemIconEnabled = true;
         int tileFrame = Main.tile[i, j].TileFrameX / 18;
-        int cursorItemIconID = ModContent.ItemType<Items.Placeable.Mechanisms.NixieTubeToggler>();
+        int cursorItemIconID;
         switch (tileFrame) {
+            default:
+                cursorItemIconID = ModContent.ItemType<NixieIndexator1Plus>();
+                break;
             case 1:
-                cursorItemIconID = ModContent.ItemType<Toggler2>();
+                cursorItemIconID = ModContent.ItemType<NixieIndexator1Minus>();
                 break;
             case 2:
-                cursorItemIconID = ModContent.ItemType<Toggler3>();
+                cursorItemIconID = ModContent.ItemType<NixieIndexator3Plus>();
                 break;
             case 3:
-                cursorItemIconID = ModContent.ItemType<Toggler4>();
+                cursorItemIconID = ModContent.ItemType<NixieIndexator3Minus>();
                 break;
             case 4:
-                cursorItemIconID = ModContent.ItemType<Toggler5>();
+                cursorItemIconID = ModContent.ItemType<NixieIndexator5Plus>();
                 break;
             case 5:
-                cursorItemIconID = ModContent.ItemType<Toggler6>();
+                cursorItemIconID = ModContent.ItemType<NixieIndexator5Minus>();
                 break;
             case 6:
-                cursorItemIconID = ModContent.ItemType<Toggler7>();
+                cursorItemIconID = ModContent.ItemType<NixieIndexator10Plus>();
                 break;
             case 7:
-                cursorItemIconID = ModContent.ItemType<Toggler8>();
+                cursorItemIconID = ModContent.ItemType<NixieIndexator10Minus>();
                 break;
             case 8:
-                cursorItemIconID = ModContent.ItemType<Toggler9>();
+                cursorItemIconID = ModContent.ItemType<NixieResetter>();
                 break;
         }
         player.cursorItemIconID = cursorItemIconID;

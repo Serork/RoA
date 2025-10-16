@@ -1,12 +1,10 @@
-﻿using RoA.Content.Tiles.Mechanisms;
-
-using Terraria;
+﻿using Terraria;
 using Terraria.Enums;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Mechanisms;
 
-sealed class NixieTubeToggler : ModItem {
+sealed class NixieIndexator : ModItem {
     public override void SetDefaults() {
         Item.mech = true;
         Item.noWet = true;
@@ -17,7 +15,7 @@ sealed class NixieTubeToggler : ModItem {
         Item.autoReuse = true;
         Item.maxStack = Item.CommonMaxStack;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<Tiles.Mechanisms.NixieTubeToggler>();
+        Item.createTile = ModContent.TileType<Tiles.Mechanisms.NixieIndexator>();
         Item.placeStyle = 0;
         Item.width = 10;
         Item.height = 12;

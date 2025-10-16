@@ -25,7 +25,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
     private static BlendState? _multiplyBlendState;
 
     public override void HitWire(int i, int j) {
-        ushort togglerTileType = (ushort)ModContent.TileType<NixieTubeToggler>();
+        ushort togglerTileType = (ushort)ModContent.TileType<NixieIndexator>();
         if (TryGetTE(out NixieTubeTE nixieTubeTE, i, j)) {
             Point16 topLeft = TileHelper.GetTileTopLeft2<NixieTube>(i, j);
             int topX = topLeft.X, topY = topLeft.Y;
@@ -33,21 +33,19 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
             foreach (Point16 point in Wiring._toProcess.Keys) {
                 Tile tile = WorldGenHelper.GetTileSafely(point);
                 if (tile.HasTile && tile.TileType == togglerTileType) {
-                    bool reset = tile.TileFrameX == 18 * 6;
-                    bool tenIncrease = tile.TileFrameX == 18 * 7;
-                    bool ten = tenIncrease || tile.TileFrameX == 18 * 8;
+                    bool reset = tile.TileFrameX == 144;
                     int increaseValue = (tile.TileFrameX / 18 % 2 == 0).ToDirectionInt();
                     if (reset) {
                         increaseValue = 0;
-                    }
-                    if (ten) {
-                        increaseValue = 10 * tenIncrease.ToDirectionInt();
                     }
                     if (tile.TileFrameX == 36 || tile.TileFrameX == 54) {
                         increaseValue *= 3;
                     }
                     if (tile.TileFrameX == 72 || tile.TileFrameX == 90) {
                         increaseValue *= 5;
+                    }
+                    if (tile.TileFrameX == 108 || tile.TileFrameX == 126) {
+                        increaseValue *= 10;
                     }
                     increaseBy += increaseValue;
                     if (reset) {

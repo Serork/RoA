@@ -2263,58 +2263,8 @@ HornetSkull: {
 	// Tooltip: ""
 }
 
-NixieTubeDecreaser: {
-	// DisplayName: Nixie Tube Decreaser
-	// Tooltip: ""
-}
-
-NixieTubeIncreaser: {
-	// DisplayName: Nixie Tube Increaser
-	// Tooltip: ""
-}
-
-NixieTubeDecreaser2: {
-	// DisplayName: Nixie Tube Decreaser2
-	// Tooltip: ""
-}
-
-NixieTubeDecreaser3: {
-	// DisplayName: Nixie Tube Decreaser3
-	// Tooltip: ""
-}
-
-NixieTubeIncreaser2: {
-	// DisplayName: Nixie Tube Increaser2
-	// Tooltip: ""
-}
-
-NixieTubeIncreaser3: {
-	// DisplayName: Nixie Tube Increaser3
-	// Tooltip: ""
-}
-
-NixieTubeResetter: {
-	// DisplayName: Nixie Tube Resetter
-	// Tooltip: ""
-}
-
-ActivationUnit: {
-	// DisplayName: Activation Unit
-	// Tooltip: ""
-}
-
-NixieTubeDecreaser4: {
-	// DisplayName: Nixie Tube Decreaser4
-	// Tooltip: ""
-}
-
-NixieTubeIncreaser4: {
-	// DisplayName: Nixie Tube Increaser4
-	// Tooltip: ""
-}
-
 NixieTubeToggler: {
-	// DisplayName: Nixie Tube Toggler
+	// DisplayName: Nixie Indexator
 	// Tooltip: ""
 }
 
@@ -2355,5 +2305,55 @@ Toggler8: {
 
 Toggler9: {
 	// DisplayName: Toggler9
+	// Tooltip: ""
+}
+
+NixieIndexator: {
+	// DisplayName: Nixie Indexator
+	// Tooltip: ""
+}
+
+NixieIndexator10Minus: {
+	// DisplayName: Nixie Indexator10 Minus
+	// Tooltip: ""
+}
+
+NixieIndexator10Plus: {
+	// DisplayName: Nixie Indexator10 Plus
+	// Tooltip: ""
+}
+
+NixieIndexator1Minus: {
+	// DisplayName: Nixie Indexator1 Minus
+	// Tooltip: ""
+}
+
+NixieIndexator1Plus: {
+	// DisplayName: Nixie Indexator1 Plus
+	// Tooltip: ""
+}
+
+NixieIndexator3Minus: {
+	// DisplayName: Nixie Indexator3 Minus
+	// Tooltip: ""
+}
+
+NixieIndexator3Plus: {
+	// DisplayName: Nixie Indexator3 Plus
+	// Tooltip: ""
+}
+
+NixieIndexator5Minus: {
+	// DisplayName: Nixie Indexator5 Minus
+	// Tooltip: ""
+}
+
+NixieIndexator5Plus: {
+	// DisplayName: Nixie Indexator5 Plus
+	// Tooltip: ""
+}
+
+NixieResetter: {
+	// DisplayName: Nixie Resetter
 	// Tooltip: ""
 }
