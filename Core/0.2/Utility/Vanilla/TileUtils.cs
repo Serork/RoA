@@ -240,7 +240,7 @@ static partial class TileHelper {
             }
             --j;
         }
-        return new Point16(i + 1, j + 1);
+        return new Point16(i, j);
     }
 
     public static ushort GetDistanceToFirstEmptyTileAround(int i, int j, ushort checkDistance = 10, float startCheckAngle = 0f, float defaultCheckAngle = MathHelper.TwoPi / 10f, Predicate<Point16>? extraCondition = null) {

@@ -25,7 +25,7 @@ class UINixieTubeImage : UIFramedImage {
         }
 
         if (IsMouseHovering) {
-            Main.hoverItemName = NixieTubePicker_RemadePicker.GetHoverText(_nixieTubeInfo.Index);
+            Main.hoverItemName = NixieTubePicker_RemadePicker.GetHoverText(_nixieTubeInfo.Index) + $" ({_nixieTubeInfo.Index})";
         }
 
         base.DrawSelf(spriteBatch);

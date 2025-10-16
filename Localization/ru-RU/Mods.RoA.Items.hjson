@@ -2262,3 +2262,43 @@ HornetSkull: {
 	// DisplayName: Hornet Skull
 	// Tooltip: ""
 }
+
+NixieTubeDecreaser: {
+	// DisplayName: Nixie Tube Decreaser
+	// Tooltip: ""
+}
+
+NixieTubeIncreaser: {
+	// DisplayName: Nixie Tube Increaser
+	// Tooltip: ""
+}
+
+NixieTubeDecreaser2: {
+	// DisplayName: Nixie Tube Decreaser2
+	// Tooltip: ""
+}
+
+NixieTubeDecreaser3: {
+	// DisplayName: Nixie Tube Decreaser3
+	// Tooltip: ""
+}
+
+NixieTubeIncreaser2: {
+	// DisplayName: Nixie Tube Increaser2
+	// Tooltip: ""
+}
+
+NixieTubeIncreaser3: {
+	// DisplayName: Nixie Tube Increaser3
+	// Tooltip: ""
+}
+
+NixieTubeResetter: {
+	// DisplayName: Nixie Tube Resetter
+	// Tooltip: ""
+}
+
+ActivationUnit: {
+	// DisplayName: Activation Unit
+	// Tooltip: ""
+}

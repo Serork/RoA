@@ -85,7 +85,7 @@ sealed class NixieTubeTE : ModTileEntity {
         }
 
         if (!IsFlickerOff && Main.rand.NextBool(750)) {
-            Activate();
+            Activate(true);
         }
 
         if ((DeactivatedTimer -= 5) < 0) {
@@ -104,8 +104,8 @@ sealed class NixieTubeTE : ModTileEntity {
         }
     }
 
-    public void Activate() {
-        Activated = true;
+    public void Activate(bool keepActive = false) {
+        Activated = keepActive || !Activated;
 
         if (!IsFlickerOff) {
             DeactivatedTimer = DeactivatedTimer2 = ACTIVATIONTIME;

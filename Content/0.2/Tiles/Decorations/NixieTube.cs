@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Build.Tasks;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.UI;
+using RoA.Content.Tiles.Mechanisms;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -21,6 +23,54 @@ namespace RoA.Content.Tiles.Decorations;
 
 sealed class NixieTube : ModTile, TileHooks.IPostDraw {
     private static BlendState? _multiplyBlendState;
+
+    public override void HitWire(int i, int j) {
+        ushort togglerTileType = (ushort)ModContent.TileType<NixieTubeToggler>();
+        if (TryGetTE(out NixieTubeTE nixieTubeTE, i, j)) {
+            Point16 topLeft = TileHelper.GetTileTopLeft2<NixieTube>(i, j);
+            int topX = topLeft.X, topY = topLeft.Y;
+            int increaseBy = 0;
+            foreach (Point16 point in Wiring._toProcess.Keys) {
+                Tile tile = WorldGenHelper.GetTileSafely(point);
+                if (tile.HasTile && tile.TileType == togglerTileType) {
+                    bool reset = tile.TileFrameX == 18 * 6;
+                    int increaseValue = (tile.TileFrameX / 18 % 2 == 0).ToDirectionInt();
+                    if (reset) {
+                        increaseValue = 0;
+                    }
+                    if (tile.TileFrameX == 36 || tile.TileFrameX == 54) {
+                        increaseValue *= 3;
+                    }
+                    if (tile.TileFrameX == 72 || tile.TileFrameX == 90) {
+                        increaseValue *= 5;
+                    }
+                    increaseBy += increaseValue;
+                    if (reset) {
+                        if (increaseBy == 0) {
+                            NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(0, topLeft, activate: false);
+                        }
+                        else {
+                            increaseBy = 0;
+                        }
+                    }
+                }
+            }
+            Wiring.SkipWire(topX, topY);
+            Wiring.SkipWire(topX, topY + 1);
+            Wiring.SkipWire(topX, topY + 2);
+            Wiring.SkipWire(topX + 1, topY);
+            Wiring.SkipWire(topX + 1, topY + 1);
+            Wiring.SkipWire(topX + 1, topY + 2);
+
+            if (increaseBy == 0) {
+                nixieTubeTE.Activate();
+            }
+            else {
+                int currentIndex = NixieTubePicker_RemadePicker.GetIndex(topLeft);
+                NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(currentIndex, topLeft, increaseBy, false);
+            }
+        }
+    }
 
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
@@ -83,7 +133,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
         int frameY = tile.TileFrameY;
         int frameX = tile.TileFrameX;
         bool flag = frameY >= 56;
-        if (flag && TryGetTE(out NixieTubeTE? nixieTubeTE, i, j) && nixieTubeTE!.Active) {
+        if (flag && TryGetTE(out NixieTubeTE nixieTubeTE, i, j) && nixieTubeTE.Active && nixieTubeTE.Activated) {
             if (nixieTubeTE.Dye2?.type == ItemID.ShadowDye) {
                 r = g = b = 0f;
                 return;
@@ -105,7 +155,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
     void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X;
         int j = pos.Y;
-        if (TryGetTE(out NixieTubeTE? nixieTubeTE, i, j)) {
+        if (TryGetTE(out NixieTubeTE nixieTubeTE, i, j)) {
             nixieTubeTE.UpdateLightColor(true);
         }
     }
@@ -137,7 +187,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
         if (TryGetTE(out NixieTubeTE? nixieTubeTE, i, j)) {
             SpriteBatchSnapshot snapshot;
             DrawData drawData;
-            if (flag) {
+            if (flag && nixieTubeTE.Activated) {
                 snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, snapshot.transformationMatrix);
@@ -218,14 +268,14 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
     }
 
 
-    public static bool TryGetTE(out NixieTubeTE? nixieTubeTE, int i, int j) {
+    public static bool TryGetTE(out NixieTubeTE nixieTubeTE, int i, int j) {
         NixieTubeTE? result = GetTE(i, j);
         if (result is not null) {
             nixieTubeTE = result;
             return true;
         }
 
-        nixieTubeTE = null;
+        nixieTubeTE = null!;
         return false;
     }
 

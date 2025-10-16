@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using System.Data.Common;
-
-using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;

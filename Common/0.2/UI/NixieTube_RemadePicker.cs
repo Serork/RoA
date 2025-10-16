@@ -23,6 +23,7 @@ using Terraria.UI;
 
 namespace RoA.Common.UI;
 
+// ugly and stinks. i hate ui
 sealed class NixieTubePicker_DisableOnTalk : IInitializer {
     void ILoadable.Load(Mod mod) {
         On_Player.SetTalkNPC += On_Player_SetTalkNPC;
@@ -90,6 +91,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
     public static bool IsRussian { get; private set; }
     public static bool IsFlickerOff { get; private set; }
     public static byte ENGRUSCOUNT => IsRussian ? RUSCOUNT : ENGCOUNT;
+    public static byte LAST => (byte)(ENGRUSCOUNT + NUMCOUNT + MISCCOUNT);
 
     private static Point16 _nixieTubeTilePosition;
     private static readonly char[] _miscSymbols = [':', '!', '?', '.', ',', '(', ')', '/', '|', '\u005c', '+', '-', '=', '#', '%', '&', '<', '>', '[', ']', '"', '\u0027', '_', '*', '^'];
@@ -254,6 +256,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
 
     private void UIText_OnLeftClick(UIMouseEvent evt, UIElement listeningElement) {
         ChangeNixieTubeSymbol(0);
+        NixieTube.GetTE(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y).Activate();
         SoundEngine.PlaySound(SoundID.MenuTick);
     }
 
@@ -330,10 +333,21 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         if (!Main.playerInventory || tooFar || _nixieTubeTilePosition == Point16.Zero || WorldGenHelper.GetTileSafely(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y).TileType != ModContent.TileType<NixieTube>()) {
             Active = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
+            return;
         }
 
+        bool activated = NixieTube.GetTE(_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y).Activated;
         if (ShouldUpdateIndex) {
             PickedIndex = GetIndex();
+            //if (!activated) {
+            //    PickedIndex = 0;
+            //    return;
+            //}
+            bool off = Main.tile[_nixieTubeTilePosition.X, _nixieTubeTilePosition.Y].TileFrameY < 56;
+            if (activated && PickedIndex == 0 && !off) {
+                PickedIndex = 1;
+                return;
+            }
             if (PickedIndex != 0 && PickedIndex < NUMCOUNT) {
                 PickedIndex += 1;
             }
@@ -354,20 +368,36 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         ShouldUpdateIndex = true;
     }
 
-    public static void ChangeNixieTubeSymbol(byte index) {
+    public static void ChangeNixieTubeSymbol(int index, Point16? tePosition = null, int increaseBy = 0, bool activate = true) {
         TileObjectData tileData = TileObjectData.GetTileData(ModContent.TileType<NixieTube>(), 0);
         int tileWidth = tileData.CoordinateWidth + 2;
         int width = tileData.Width;
         int height = tileData.Height;
-        if (index < NUMCOUNT) {
+        int result = index;
+        result += increaseBy;
+        int max = LAST;
+        if (result > max) {
+            int previous = result;
+            result = 0;
+            result += previous - max;
+        }
+        if (result < 0) {
+            int previous = result;
+            result = max;
+            result += previous;
+        }
+        index = result;
+        if (tePosition == null && index < NUMCOUNT) {
             index -= 1;
         }
         GetColumnAndRow(index, out byte column, out byte row);
         if (index >= NUMCOUNT && index < NUMCOUNT + RUSCOUNT && IsRussian) {
             row += 2;
         }
-        var tilePos = _nixieTubeTilePosition;
-        NixieTube.GetTE(tilePos.X, tilePos.Y).Activate();
+        var tilePos = tePosition ?? _nixieTubeTilePosition;
+        if (activate) {
+            NixieTube.GetTE(tilePos.X, tilePos.Y).Activate(true);
+        }
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 Tile tile = Main.tile[tilePos.X + i, tilePos.Y + j];
@@ -378,7 +408,7 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         }
     }
 
-    private static void GetColumnAndRow(byte index, out byte column, out byte row) {
+    public static void GetColumnAndRow(int index, out byte column, out byte row) {
         column = 0;
         row = 0;
 
@@ -397,8 +427,8 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         }
     }
 
-    private static byte GetIndex() {
-        GetColumnAndRowFromTile(out byte column, out byte row);
+    public static byte GetIndex(Point16? tePosition = null) {
+        GetColumnAndRowFromTile(out byte column, out byte row, tePosition);
         int[] groupSizes = [NUMCOUNT, ENGCOUNT, MISCCOUNT];
         if (IsRussian) {
             groupSizes = [NUMCOUNT, RUSCOUNT, MISCCOUNT];
@@ -448,8 +478,8 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         return new Point16(left, top);
     }
 
-    private static void GetColumnAndRowFromTile(out byte column, out byte row) {
-        Tile tile = WorldGenHelper.GetTileSafely(_nixieTubeTilePosition);
+    private static void GetColumnAndRowFromTile(out byte column, out byte row, Point16? tePosition = null) {
+        Tile tile = WorldGenHelper.GetTileSafely(tePosition ?? _nixieTubeTilePosition);
         column = (byte)(tile.TileFrameX / 36);
         row = (byte)(tile.TileFrameY / 56);
         if (IsRussian && tile.TileFrameY / 56 >= 4) {
