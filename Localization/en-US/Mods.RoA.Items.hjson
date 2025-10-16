@@ -2239,51 +2239,51 @@ HornetSkull: {
 }
 
 NixieIndexator10Minus: {
-	DisplayName: Nixie Indexator10 Minus
+	DisplayName: Nixie Indexator
 	Tooltip: ""
 }
 
 NixieIndexator10Plus: {
-	DisplayName: Nixie Indexator10 Plus
+	DisplayName: Nixie Indexator
 	Tooltip: ""
 }
 
 NixieIndexator1Minus: {
-	DisplayName: Nixie Indexator1 Minus
+	DisplayName: Nixie Indexator
 	Tooltip: ""
 }
 
 NixieIndexator1Plus: {
-	DisplayName: Nixie Indexator1 Plus
+	DisplayName: Nixie Indexator
 	Tooltip: ""
 }
 
 NixieIndexator3Minus: {
-	DisplayName: Nixie Indexator3 Minus
+	DisplayName: Nixie Indexator
 	Tooltip: ""
 }
 
 NixieIndexator3Plus: {
-	DisplayName: Nixie Indexator3 Plus
+	DisplayName: Nixie Indexator
 	Tooltip: ""
 }
 
 NixieIndexator5Minus: {
-	DisplayName: Nixie Indexator5 Minus
+	DisplayName: Nixie Indexator
 	Tooltip: ""
 }
 
 NixieIndexator5Plus: {
-	DisplayName: Nixie Indexator5 Plus
+	DisplayName: Nixie Indexator
 	Tooltip: ""
 }
 
 NixieResetter: {
-	DisplayName: Nixie Resetter
+	DisplayName: Nixie Breaker
 	Tooltip: ""
 }
 
 NixieCategoryChanger: {
-	DisplayName: Nixie Category Changer
+	DisplayName: Nixie Modulator
 	Tooltip: ""
 }
