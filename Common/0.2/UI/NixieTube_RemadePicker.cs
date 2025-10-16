@@ -390,6 +390,9 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
         if (tePosition == null && index < NUMCOUNT) {
             index -= 1;
         }
+        if (index == NUMCOUNT - 1) {
+            index += 1;
+        }
         GetColumnAndRow(index, out byte column, out byte row);
         if (index >= NUMCOUNT && index < NUMCOUNT + RUSCOUNT && IsRussian) {
             row += 2;
