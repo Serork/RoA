@@ -2,6 +2,7 @@
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -16,6 +17,12 @@ sealed class NixieTubeToggler : ModTile {
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.LavaDeath = false;
         TileObjectData.addTile(Type);
+
+        TileID.Sets.HasOutlines[Type] = true;
+    }
+
+    public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
+        return true;
     }
 
     public override void MouseOver(int i, int j) {

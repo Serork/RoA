@@ -2292,3 +2292,43 @@ NixieTubeToggler: {
 	DisplayName: Nixie Tube Toggler
 	Tooltip: ""
 }
+
+Toggler2: {
+	DisplayName: Toggler2
+	Tooltip: ""
+}
+
+Toggler3: {
+	DisplayName: Toggler3
+	Tooltip: ""
+}
+
+Toggler4: {
+	DisplayName: Toggler4
+	Tooltip: ""
+}
+
+Toggler5: {
+	DisplayName: Toggler5
+	Tooltip: ""
+}
+
+Toggler6: {
+	DisplayName: Toggler6
+	Tooltip: ""
+}
+
+Toggler7: {
+	DisplayName: Toggler7
+	Tooltip: ""
+}
+
+Toggler8: {
+	DisplayName: Toggler8
+	Tooltip: ""
+}
+
+Toggler9: {
+	DisplayName: Toggler9
+	Tooltip: ""
+}
