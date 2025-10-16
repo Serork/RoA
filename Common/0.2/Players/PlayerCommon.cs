@@ -101,7 +101,7 @@ sealed partial class PlayerCommon : ModPlayer {
         if (WorldGen.InWorld(myX, myY) && Main.tile[myX, myY].TileType == ModContent.TileType<NixieTubeToggler>()) {
             int i = myX, j = myY;
             bool flag = self.releaseUseTile;
-            if (!self.tileInteractAttempted)
+            if (!self.tileInteractAttempted || !flag)
                 return;
 
             Wiring.HitSwitch(myX, myY);

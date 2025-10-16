@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using RoA.Content.Items.Placeable.Mechanisms;
+
+using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -20,11 +22,38 @@ sealed class NixieTubeToggler : ModTile {
         Player player = Main.LocalPlayer;
         player.noThrow = 2;
         player.cursorItemIconEnabled = true;
-        int num27 = Main.tile[i, j].TileFrameX / 18;
-        if (num27 < 3)
-            cursorItemIconID = 583 + num27;
-        else
-            cursorItemIconID = 4484 + (num27 - 3);
+        int tileFrame = Main.tile[i, j].TileFrameX / 18;
+        int cursorItemIconID = ModContent.ItemType<Toggler1>();
+        switch (tileFrame) {
+            case 1:
+                cursorItemIconID = ModContent.ItemType<Toggler2>();
+                break;
+            case 2:
+                cursorItemIconID = ModContent.ItemType<Toggler3>();
+                break;
+            case 3:
+                cursorItemIconID = ModContent.ItemType<Toggler4>();
+                break;
+            case 4:
+                cursorItemIconID = ModContent.ItemType<Toggler5>();
+                break;
+            case 5:
+                cursorItemIconID = ModContent.ItemType<Toggler6>();
+                break;
+            case 6:
+                cursorItemIconID = ModContent.ItemType<Toggler7>();
+                break;
+            case 7:
+                cursorItemIconID = ModContent.ItemType<Toggler8>();
+                break;
+            case 8:
+                cursorItemIconID = ModContent.ItemType<Toggler9>();
+                break;
+            case 9:
+                cursorItemIconID = ModContent.ItemType<Toggler10>();
+                break;
+        }
+        player.cursorItemIconID = cursorItemIconID;
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) {
