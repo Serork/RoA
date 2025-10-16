@@ -2302,3 +2302,13 @@ ActivationUnit: {
 	// DisplayName: Activation Unit
 	// Tooltip: ""
 }
+
+NixieTubeDecreaser4: {
+	// DisplayName: Nixie Tube Decreaser4
+	// Tooltip: ""
+}
+
+NixieTubeIncreaser4: {
+	// DisplayName: Nixie Tube Increaser4
+	// Tooltip: ""
+}
