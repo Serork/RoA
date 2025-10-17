@@ -2,6 +2,7 @@ using System.IO;
 
 using Terraria;
 using Terraria.Graphics.Effects;
+using Terraria.Initializers;
 using Terraria.ModLoader;
 using Terraria.Net;
 
@@ -9,6 +10,11 @@ namespace RoA.Common.CustomSkyAmbience;
 
 sealed class CustomNetAmbienceModule : NetModule, ILoadable {
     public void Load(Mod mod) {
+        On_NetworkInitializer.Load += On_NetworkInitializer_Load;
+    }
+
+    private void On_NetworkInitializer_Load(On_NetworkInitializer.orig_Load orig) {
+        orig();
         NetManager.Instance.Register<CustomNetAmbienceModule>();
     }
 
@@ -25,9 +31,6 @@ sealed class CustomNetAmbienceModule : NetModule, ILoadable {
     }
 
     public override bool Deserialize(BinaryReader reader, int userId) {
-        if (Main.dedServ)
-            return false;
-
         byte playerId = reader.ReadByte();
         int seed = reader.ReadInt32();
         CustomSkyEntityType type = (CustomSkyEntityType)reader.ReadByte();

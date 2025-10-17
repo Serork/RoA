@@ -160,39 +160,39 @@ sealed class BackwoodsVars : ModSystem {
         //}
     }
 
-    public override void Load() {
-        //On_WorldGen.GrowTree += On_WorldGen_GrowTree;
-        On_TeleportPylonsSystem.OnPlayerJoining += On_TeleportPylonsSystem_OnPlayerJoining;
-    }
+    //public override void Load() {
+    //    //On_WorldGen.GrowTree += On_WorldGen_GrowTree;
+    //    On_TeleportPylonsSystem.OnPlayerJoining += On_TeleportPylonsSystem_OnPlayerJoining;
+    //}
 
-    private void On_TeleportPylonsSystem_OnPlayerJoining(On_TeleportPylonsSystem.orig_OnPlayerJoining orig, TeleportPylonsSystem self, int playerIndex) {
-        orig(self, playerIndex);
+    //private void On_TeleportPylonsSystem_OnPlayerJoining(On_TeleportPylonsSystem.orig_OnPlayerJoining orig, TeleportPylonsSystem self, int playerIndex) {
+    //    orig(self, playerIndex);
 
-        NetManager.Instance.SendToClient(TreePositionsModule.SerializePositions(), playerIndex);
-    }
+    //    NetManager.Instance.SendToClient(TreePositionsModule.SerializePositions(), playerIndex);
+    //}
 
-    private class TreePositionsModule : NetModule {
-        public static NetPacket SerializePositions() {
-            NetPacket result = CreatePacket<TreePositionsModule>(BackwoodsTreeCountInWorld * 2 + 1);
-            result.Writer.Write((short)BackwoodsTreeCountInWorld);
-            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-                result.Writer.Write((short)AllTreesWorldPositions[i].X);
-                result.Writer.Write((short)AllTreesWorldPositions[i].Y);
-            }
+    //private class TreePositionsModule : NetModule {
+    //    public static NetPacket SerializePositions() {
+    //        NetPacket result = CreatePacket<TreePositionsModule>(BackwoodsTreeCountInWorld * 2 + 1);
+    //        result.Writer.Write((short)BackwoodsTreeCountInWorld);
+    //        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+    //            result.Writer.Write((short)AllTreesWorldPositions[i].X);
+    //            result.Writer.Write((short)AllTreesWorldPositions[i].Y);
+    //        }
 
-            return result;
-        }
+    //        return result;
+    //    }
 
-        public override bool Deserialize(BinaryReader reader, int userId) {
-            BackwoodsTreeCountInWorld = reader.ReadInt16();
-            AllTreesWorldPositions.Clear();
-            for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
-                AllTreesWorldPositions.Add(new Point(reader.ReadInt16(), reader.ReadInt16()));
-            }
+    //    public override bool Deserialize(BinaryReader reader, int userId) {
+    //        BackwoodsTreeCountInWorld = reader.ReadInt16();
+    //        AllTreesWorldPositions.Clear();
+    //        for (int i = 0; i < BackwoodsTreeCountInWorld; i++) {
+    //            AllTreesWorldPositions.Add(new Point(reader.ReadInt16(), reader.ReadInt16()));
+    //        }
 
-            return true;
-        }
-    }
+    //        return true;
+    //    }
+    //}
 
     // check out pine cone
     //private bool On_WorldGen_GrowTree(On_WorldGen.orig_GrowTree orig, int i, int y) {
