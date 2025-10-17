@@ -31,6 +31,9 @@ sealed class CustomNetAmbienceModule : NetModule, ILoadable {
     }
 
     public override bool Deserialize(BinaryReader reader, int userId) {
+        if (Main.dedServ)
+            return false;
+
         byte playerId = reader.ReadByte();
         int seed = reader.ReadInt32();
         CustomSkyEntityType type = (CustomSkyEntityType)reader.ReadByte();
