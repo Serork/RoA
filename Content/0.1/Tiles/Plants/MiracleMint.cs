@@ -92,7 +92,7 @@ sealed class MiracleMint : PlantBase, TileHooks.IGrowAlchPlantRandom {
         //}
         ulong seed = (ulong)(i * j);
         float random = Utils.RandomFloat(ref seed);
-        float counting = Helper.Repeat(AltarHandler.MiracleMintCounting + ((float)i / Main.maxTilesX * (j / Main.maxTilesY)) + random, 1f);
+        float counting = MathUtils.Repeat(AltarHandler.MiracleMintCounting + ((float)i / Main.maxTilesX * (j / Main.maxTilesY)) + random, 1f);
         float factor = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
         float lightValue = (factor > 0.5f ? 1f - factor : factor) + 0.5f;
         lightValue *= 0.85f;
