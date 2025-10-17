@@ -3,6 +3,7 @@
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
+using RoA.Common.WorldEvents;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable.Seeds;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -25,11 +26,11 @@ sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
         }
 
         TryPlacePlant2(i, j, Type, 0, onPlaced: (position) => {
-            int x = position.X, y = position.Y;
-            ModContent.GetInstance<MiracleMintTE>().Place(x, y);
-            if (Main.netMode != NetmodeID.SinglePlayer) {
-                MultiplayerSystem.SendPacket(new PlaceMiracleMintTEPacket(x, y));
-            }
+            //int x = position.X, y = position.Y;
+            //ModContent.GetInstance<MiracleMintTE>().Place(x, y);
+            //if (Main.netMode != NetmodeID.SinglePlayer) {
+            //    MultiplayerSystem.SendPacket(new PlaceMiracleMintTEPacket(x, y));
+            //}
         }, validTiles: [ModContent.TileType<BackwoodsGrass>()]);
     }
 
@@ -49,29 +50,29 @@ sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
 
     protected override int SeedsDrop => (ushort)ModContent.ItemType<MiracleMintSeeds>();
 
-    protected override void PreAddNewTile() {
-        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<MiracleMintTE>().Hook_AfterPlacement, -1, 0, false);
-    }
+    //protected override void PreAddNewTile() {
+    //    TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<MiracleMintTE>().Hook_AfterPlacement, -1, 0, false);
+    //}
 
     protected override int[] AnchorValidTiles => [ModContent.TileType<BackwoodsGrass>()];
 
-    public override void PlaceInWorld(int i, int j, Item item) {
-        ModContent.GetInstance<MiracleMintTE>().Place(i, j);
-        if (Main.netMode != NetmodeID.SinglePlayer) {
-            MultiplayerSystem.SendPacket(new PlaceMiracleMintTEPacket(i, j));
-        }
-    }
+    //public override void PlaceInWorld(int i, int j, Item item) {
+    //    ModContent.GetInstance<MiracleMintTE>().Place(i, j);
+    //    if (Main.netMode != NetmodeID.SinglePlayer) {
+    //        MultiplayerSystem.SendPacket(new PlaceMiracleMintTEPacket(i, j));
+    //    }
+    //}
 
-    public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
-        if (Main.netMode != NetmodeID.Server) {
-            if (!fail) {
-                ModContent.GetInstance<MiracleMintTE>().Kill(i, j);
-                if (Main.netMode != NetmodeID.SinglePlayer) {
-                    MultiplayerSystem.SendPacket(new RemoveMiracleTileEntityOnServerPacket(i, j));
-                }
-            }
-        }
-    }
+    //public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
+    //    if (Main.netMode != NetmodeID.Server) {
+    //        if (!fail) {
+    //            ModContent.GetInstance<MiracleMintTE>().Kill(i, j);
+    //            if (Main.netMode != NetmodeID.SinglePlayer) {
+    //                MultiplayerSystem.SendPacket(new RemoveMiracleTileEntityOnServerPacket(i, j));
+    //            }
+    //        }
+    //    }
+    //}
 
     public override bool CreateDust(int i, int j, ref int type) {
         if (IsGrown(i, j) && Main.rand.NextBool(3)) {
@@ -85,11 +86,13 @@ sealed class MiracleMint : PlantBase, TileHooks.IGrowPlantRandom {
     }
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
-        MiracleMintTE tileEntity = TileHelper.GetTE<MiracleMintTE>(i, j);
-        if (tileEntity == null) {
-            return;
-        }
-        float counting = tileEntity.Counting;
+        //MiracleMintTE tileEntity = TileHelper.GetTE<MiracleMintTE>(i, j);
+        //if (tileEntity == null) {
+        //    return;
+        //}
+        ulong seed = (ulong)(i * j);
+        float random = Utils.RandomFloat(ref seed);
+        float counting = Helper.Repeat(AltarHandler.MiracleMintCounting + ((float)i / Main.maxTilesX * (j / Main.maxTilesY)) + random, 1f);
         float factor = Math.Max(0.1f, (double)counting < 1.0 ? 1f - (float)Math.Pow(2.0, -10.0 * (double)counting) : 1f);
         float lightValue = (factor > 0.5f ? 1f - factor : factor) + 0.5f;
         lightValue *= 0.85f;

@@ -23,6 +23,12 @@ using Terraria.UI.Gamepad;
 namespace RoA.Core.Utility;
 
 static class Helper {
+    public static float Repeat(float value, float length) {
+        float quotient = MathF.Floor(value / length);
+
+        return value - quotient * length;
+    }
+
     public static float Clamp01(float value) => value <= 0f ? 0f : value >= 1f ? 1f : value;
     public static double Clamp01(double value) => value <= 0.0 ? 0.0 : value >= 1.0 ? 1.0 : value;
 

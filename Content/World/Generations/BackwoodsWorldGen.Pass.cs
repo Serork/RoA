@@ -1283,11 +1283,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             }
                         }
 
-                        for (int xSize = 0; xSize < 3; xSize++) {
-                            for (int ySize = 0; ySize < 2; ySize++) {
-                                ModContent.GetInstance<OvergrownAltarTE>().Place(i + xSize, j - 2 + ySize);
-                            }
-                        }
+                        //for (int xSize = 0; xSize < 3; xSize++) {
+                        //    for (int ySize = 0; ySize < 2; ySize++) {
+                        //        ModContent.GetInstance<OvergrownAltarTE>().Place(i + xSize, j - 2 + ySize);
+                        //    }
+                        //}
                     });
                 }
 
@@ -2895,7 +2895,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             tile.TileFrameY = 0;
                             tile.TileType = _mintTileType;
                             tile.TileFrameX = (short)(18 * 2);
-                            ModContent.GetInstance<MiracleMintTE>().Place(x, y - 1);
+                            //ModContent.GetInstance<MiracleMintTE>().Place(x, y - 1);
                         }
                     }
                     else {
@@ -3418,7 +3418,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         if (_random.NextBool(21)) {
                             tile.TileType = _mintTileType;
                             tile.TileFrameX = (short)(18 * (_random.Next(8) < 2 ? 2 : _random.NextBool() ? 0 : 1));
-                            ModContent.GetInstance<MiracleMintTE>().Place(i, j - 1);
+                            //ModContent.GetInstance<MiracleMintTE>().Place(i, j - 1);
                         }
                         else {
                             tile.TileType = _plantsTileType;
