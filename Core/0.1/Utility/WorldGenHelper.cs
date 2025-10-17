@@ -2095,7 +2095,7 @@ static class WorldGenHelper {
     public static Func<float> RightSizeFactor = () => 1f;
 
     // adapted vanilla
-    public static void ModifiedTileRunner(int i, int j, double strength, int steps, int type = 0, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int[] ignoreTileTypes = null, bool applySeedSettings = false, Action? onIteration = null, Predicate<Point16>? onTilePlacement = null, ushort? wallType = null) {
+    public static void ModifiedTileRunner(int i, int j, double strength, int steps, int type = 0, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int[] ignoreTileTypes = null, bool applySeedSettings = false, Action? onIteration = null, Predicate<Point16>? onTilePlacement = null, ushort? wallType = null, bool resetSlope = false) {
         if (applySeedSettings) {
             if (!GenVars.mudWall) {
                 if (WorldGen.drunkWorldGen) {
@@ -2250,6 +2250,10 @@ static class WorldGenHelper {
                             if (wallType == null) {
                                 if (onTilePlacement == null || onTilePlacement(new Point16(k, l))) {
                                     tile.TileType = (ushort)type;
+                                    if (resetSlope) {
+                                        tile.IsHalfBlock = false;
+                                        tile.Slope = 0;
+                                    }
                                 }
                             }
                             else {
@@ -2263,6 +2267,10 @@ static class WorldGenHelper {
                             Tile tile = Main.tile[k, l];
                             tile.HasTile = true;
                             tile.LiquidAmount = 0;
+                            if (resetSlope) {
+                                tile.IsHalfBlock = false;
+                                tile.Slope = 0;
+                            }
                         }
                     }
 

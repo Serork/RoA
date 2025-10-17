@@ -328,7 +328,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     }
                 }
                 _gatewayLocation = new Point(x, y);
-                WorldGenHelper.ModifiedTileRunner(x + 3, y + 13, 20, 1, _dirtTileType, true, overRide: true, ignoreTileTypes: [type, _stoneTileType, _grassTileType]);
+                WorldGenHelper.ModifiedTileRunner(x + 3, y + 13, 20, 1, _dirtTileType, true, overRide: true, ignoreTileTypes: [type, _stoneTileType, _grassTileType], resetSlope: true);
                 break;
             }
         }
