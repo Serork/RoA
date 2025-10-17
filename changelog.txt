@@ -1,1 +1,1 @@
-- Small adjustments
+- Fixed rare cases of server crashing upon entering the Backwoods in multiplayer
