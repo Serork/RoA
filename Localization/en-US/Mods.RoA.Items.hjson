@@ -2239,51 +2239,51 @@ HornetSkull: {
 }
 
 NixieIndexator10Minus: {
-	DisplayName: Nixie Indexator
-	Tooltip: ""
+	DisplayName: Nixie Indexator (-10)
+	Tooltip: Decreases the connected Nixie Tube's symbol index by 10
 }
 
 NixieIndexator10Plus: {
-	DisplayName: Nixie Indexator
-	Tooltip: ""
+	DisplayName: Nixie Indexator (+10)
+	Tooltip: Increases the connected Nixie Tube's symbol index by 10
 }
 
 NixieIndexator1Minus: {
-	DisplayName: Nixie Indexator
-	Tooltip: ""
+	DisplayName: Nixie Indexator (-1)
+	Tooltip: Decreases the connected Nixie Tube's symbol index by 1
 }
 
 NixieIndexator1Plus: {
-	DisplayName: Nixie Indexator
-	Tooltip: ""
+	DisplayName: Nixie Indexator (+1)
+	Tooltip: Increases the connected Nixie Tube's symbol index by 1
 }
 
 NixieIndexator3Minus: {
-	DisplayName: Nixie Indexator
-	Tooltip: ""
+	DisplayName: Nixie Indexator (-3)
+	Tooltip: Decreases the connected Nixie Tube's symbol index by 3
 }
 
 NixieIndexator3Plus: {
-	DisplayName: Nixie Indexator
-	Tooltip: ""
+	DisplayName: Nixie Indexator (+3)
+	Tooltip: Increases the connected Nixie Tube's symbol index by 3
 }
 
 NixieIndexator5Minus: {
-	DisplayName: Nixie Indexator
-	Tooltip: ""
+	DisplayName: Nixie Indexator (-5)
+	Tooltip: Decreases the connected Nixie Tube's symbol index by 5
 }
 
 NixieIndexator5Plus: {
-	DisplayName: Nixie Indexator
-	Tooltip: ""
+	DisplayName: Nixie Indexator (+5)
+	Tooltip: Increases the connected Nixie Tube's symbol index by 5
 }
 
 NixieResetter: {
 	DisplayName: Nixie Breaker
-	Tooltip: ""
+	Tooltip: Resets the connected Nixie Tube's symbol index to the first value
 }
 
 NixieCategoryChanger: {
 	DisplayName: Nixie Modulator
-	Tooltip: ""
+	Tooltip: Switches the connected Nixie Tube's active symbol category
 }
