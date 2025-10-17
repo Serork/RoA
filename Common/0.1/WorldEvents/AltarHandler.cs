@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
+using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -21,6 +24,10 @@ sealed class AltarHandler : ModSystem {
     private static float _altarStrength, _altarFactor;
     private static bool _shouldUpdateAudio;
     private static float _musicFade;
+
+    public static float Counting { get; private set; }
+    public static float MiracleMintCounting { get; private set; }
+    public static float Counting2 { get; private set; }
 
     internal static void SetPosition(Point altarPosition) {
         //if (!WorldGen.gen) {
@@ -73,6 +80,47 @@ sealed class AltarHandler : ModSystem {
         }
 
         orig(self);
+    }
+
+    public override void PostUpdatePlayers() {
+        MiracleMintCounting += (float)Math.Round(TimeSystem.LogicDeltaTime / 3f + Main.rand.NextFloatRange(0.015f), 2);
+
+        if (MiracleMintCounting >= 1f) {
+            MiracleMintCounting = 0f;
+        }
+
+        float counting = MathHelper.Clamp(1f - Counting, 0f, 1f);
+        float factor = AltarHandler.GetAltarFactor();
+        bool flag6 = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
+        bool flag7 = NPC.AnyNPCs(ModContent.NPCType<Lothor>());
+        if (flag6 || flag7) {
+            factor = 1f;
+        }
+        Counting2 = MathHelper.Lerp(Counting2, counting, factor > 0.5f ? Math.Max(0.1f, counting * 0.1f) : counting < 0.5f ? 0.075f : Math.Max(0.05f, counting * 0.025f));
+        Counting += TimeSystem.LogicDeltaTime / (3f - MathHelper.Min(0.9f, factor) * 2.5f) * Math.Max(0.05f, Counting) * 7f;
+        Point Position = GetAltarPosition();
+        if (Counting > 0.8f) {
+            if (factor > 0f && Main.rand.NextChance(1f - (double)Math.Min(0.25f, factor - 0.5f))) {
+                float volume = 2.5f * Math.Max(0.3f, factor + 0.1f);
+                float dist = Vector2.Distance(Main.LocalPlayer.Center, Position.ToWorldCoordinates());
+                float dist2 = MathHelper.Clamp(1f - dist / 1400f, 0f, 1f);
+                volume *= dist2;
+                if (flag7) {
+                    volume *= 0.25f;
+                }
+                var style = new SoundStyle(ResourceManager.AmbientSounds + "Heartbeat") { Volume = volume };
+                var sound = SoundEngine.FindActiveSound(in style);
+                if (Main.netMode == NetmodeID.Server) {
+                    MultiplayerSystem.SendPacket(new PlayHeartbeatSoundPacket(Main.LocalPlayer, Position.X, Position.Y, volume), ignoreClient: -1);
+                }
+                else {
+                    SoundEngine.PlaySound(style, new Microsoft.Xna.Framework.Vector2(Position.X, Position.Y) * 16f);
+                }
+            }
+        }
+        if (Counting >= 1.25f) {
+            Counting = 0f;
+        }
     }
 
     public override void PostUpdateNPCs() {
