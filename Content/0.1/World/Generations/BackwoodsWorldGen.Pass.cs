@@ -3010,7 +3010,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(x, y);
                 if (tile.ActiveTile(_grassTileType) && WorldGen.SolidTile(x, y) && !aboveTile.HasTile) {
                     tile = WorldGenHelper.GetTileSafely(x, y - 1);
-                    if (_random.NextBool(ModLoader.HasMod("Remnants") ? 10 : 5) && (tile.WallType == _grassWallType || tile.WallType == _flowerGrassWallType || tile.WallType == _leavesWallType)) {
+                    if (_random.NextBool(5) && (tile.WallType == _grassWallType || tile.WallType == _flowerGrassWallType || tile.WallType == _leavesWallType)) {
                         int num3 = 20;
                         int num4 = 2;
                         int num5 = 0;
@@ -5038,7 +5038,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int right = !_toLeft ? (_lastCliffX != 0 ? _lastCliffX : Right) : Right;
         for (int i = left - 100; i <= right + 100; i++) {
             if (i < left - 20 || i > right + 20) {
-                for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + (ModLoader.HasMod("Remnants") ? 50 : 20); j++) {
+                for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + 20; j++) {
                     Tile tile = WorldGenHelper.GetTileSafely(i, j);
                     if (WorldGenHelper.ActiveTile(i, j, _grassTileType) && !_backwoodsPlants.Contains(WorldGenHelper.GetTileSafely(i, j - 1).TileType) && tile.Slope == SlopeType.Solid && !tile.IsHalfBlock) {
                         WorldGen.GrowTree(i, j);
