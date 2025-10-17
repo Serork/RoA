@@ -4497,7 +4497,6 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //CenterX = GenVars.JungleX;
 
         int num785 = 500;
-        int num786 = _biomeWidth * 2;
         var genRand = WorldGen.genRand;
         int num778 = Main.maxTilesX;
         int num779 = 0;
@@ -4517,6 +4516,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         CenterY = (int)Main.worldSurface;
         int attemtps = 0;
         while (!flag50) {
+            float attemptProgress = (float)attemtps / 100;
+            int num786 = (int)(_biomeWidth * 2 - _biomeWidth * attemptProgress);
             flag50 = true;
             int num796 = Main.maxTilesX / 2;
             int num797 = 200;
