@@ -70,7 +70,6 @@ sealed class WreathHandler : ModPlayer {
     private float _currentChangingTime, _currentChangingMult, _stayTime, _extraChangingValueMultiplier;
     private bool _shouldDecrease, _shouldDecrease2;
     private FormInfo _formInfo;
-    private bool _shouldSync;
     private ushort _hitEffectTimer;
     private bool _onFullCreated;
     private bool _useAltSounds = true;
@@ -215,18 +214,23 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void CopyClientState(ModPlayer targetCopy) {
-        WreathHandler clone = (WreathHandler)targetCopy;
-        clone.CurrentResource = CurrentResource;
+        WreathHandler source = Player.GetModPlayer<WreathHandler>(), target = targetCopy.Player.GetModPlayer<WreathHandler>();
+        target.CurrentResource = source.CurrentResource;
     }
 
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-        => MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)Player.whoAmI, CurrentResource, _tempResource, ChangingTimeValue, _currentChangingTime, _shouldDecrease, _shouldDecrease2, _currentChangingMult, _increaseValue, _stayTime, StartSlowlyIncreasingUntilFull), toWho, fromWho);
+        => SendPacket(Player, toWho);
+
+    private void SendPacket(Player player, int toClient) {
+        WreathHandler source = player.GetModPlayer<WreathHandler>();
+        MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)player.whoAmI, source.CurrentResource, source._tempResource, source.ChangingTimeValue, source._currentChangingTime, source._shouldDecrease, source._shouldDecrease2, source._currentChangingMult, source._increaseValue, source._stayTime, source.StartSlowlyIncreasingUntilFull),
+            toClient: toClient);
+    }
 
     public override void SendClientChanges(ModPlayer clientPlayer) {
-        WreathHandler clone = (WreathHandler)clientPlayer;
-        if (CurrentResource != clone.CurrentResource || _shouldSync) {
-            SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
-            _shouldSync = false;
+        WreathHandler source = Player.GetModPlayer<WreathHandler>(), target = clientPlayer.Player.GetModPlayer<WreathHandler>();
+        if (source.CurrentResource != target.CurrentResource) {
+            SendPacket(Player, -1);
         }
     }
 
@@ -342,8 +346,6 @@ sealed class WreathHandler : ModPlayer {
         _shouldDecrease = _shouldDecrease2 = false;
         _increaseValue = 0;
         ResetChangingValue();
-
-        _shouldSync = true;
 
         StartSlowlyIncreasingUntilFull = false;
 
@@ -690,8 +692,6 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void IncreaseResourceValue(float fine = 0f, bool increaseUntilFull = false) {
-        _shouldSync = true;
-
         if (_shouldDecrease2) {
             _shouldDecrease = _shouldDecrease2 = false;
         }
@@ -765,7 +765,6 @@ sealed class WreathHandler : ModPlayer {
         if ((_shouldDecrease || _shouldDecrease2) && caneProjectile != null && caneProjectile.PreparingAttack) {
             value2 *= 0.15f;
         }
-        _shouldSync = true;
         _currentChangingTime -= value2;
         if (_shouldDecrease) {
             CurrentResource = (ushort)(_tempResource - _tempResource * ChangingProgress);
