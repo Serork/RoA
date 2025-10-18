@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
@@ -22,32 +23,37 @@ sealed class WorshipperBonehelm : ModItem {
 
         private const int STATETIME = 600;
 
-        private bool _shouldSync = false;
         internal bool IsInIdle = true;
         internal int HarpyThatRideWhoAmI = -1;
 
-        internal int StateTimer;
+        internal ushort StateTimer;
         internal float FlyTime;
 
-        internal void ReceivePlayerSync(bool isInIdle, int harpyThatRideWhoAmI) {
+        internal void ReceivePlayerSync(bool isInIdle, int harpyThatRideWhoAmI, ushort stateTimer) {
             IsInIdle = isInIdle;
             HarpyThatRideWhoAmI = harpyThatRideWhoAmI;
+            StateTimer = stateTimer;
         }
 
         public override void CopyClientState(ModPlayer targetCopy) {
-            BoneHarpyOptions clone = (BoneHarpyOptions)targetCopy;
-            clone.IsInIdle = IsInIdle;
-            clone.HarpyThatRideWhoAmI = HarpyThatRideWhoAmI;
+            BoneHarpyOptions source = Player.GetModPlayer<BoneHarpyOptions>(), target = targetCopy.Player.GetModPlayer<BoneHarpyOptions>();
+            target.IsInIdle = source.IsInIdle;
+            target.HarpyThatRideWhoAmI = source.HarpyThatRideWhoAmI;
         }
 
         public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
-            => MultiplayerSystem.SendPacket(new BoneHarpyOptionsPacket((byte)Player.whoAmI, IsInIdle, HarpyThatRideWhoAmI), toWho, fromWho);
+            => SendPacket(Player, toWho);
+
+        private void SendPacket(Player player, int toClient) {
+            BoneHarpyOptions source = player.GetModPlayer<BoneHarpyOptions>();
+            MultiplayerSystem.SendPacket(new BoneHarpyOptionsPacket((byte)player.whoAmI, source.IsInIdle, source.HarpyThatRideWhoAmI, source.StateTimer),
+                toClient: toClient);
+        }
 
         public override void SendClientChanges(ModPlayer clientPlayer) {
-            BoneHarpyOptions clone = (BoneHarpyOptions)clientPlayer;
-            if (IsInIdle != clone.IsInIdle || HarpyThatRideWhoAmI != clone.HarpyThatRideWhoAmI || _shouldSync) {
-                SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
-                _shouldSync = false;
+            BoneHarpyOptions source = Player.GetModPlayer<BoneHarpyOptions>(), target = clientPlayer.Player.GetModPlayer<BoneHarpyOptions>();
+            if (source.IsInIdle != target.IsInIdle || source.HarpyThatRideWhoAmI != target.HarpyThatRideWhoAmI) {
+                SendPacket(Player, -1);
             }
         }
 
@@ -76,7 +82,6 @@ sealed class WorshipperBonehelm : ModItem {
             if (handler.StateTimer <= 0) {
                 handler.StateTimer = STATETIME;
             }
-            handler._shouldSync = true;
         }
 
         public void RideHarpy(int harpyWhoAmI) {
@@ -99,7 +104,6 @@ sealed class WorshipperBonehelm : ModItem {
             if (StateTimer <= 0) {
                 StateTimer = STATETIME;
             }
-            _shouldSync = true;
         }
 
         public void JumpOffHarpy() {
@@ -108,7 +112,6 @@ sealed class WorshipperBonehelm : ModItem {
             }
             Player.ClearBuff(ModContent.BuffType<BoneHarpyMountBuff>());
             HarpyThatRideWhoAmI = -1;
-            _shouldSync = true;
             //AddCD();
         }
 
