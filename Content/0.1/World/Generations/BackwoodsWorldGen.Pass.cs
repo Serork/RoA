@@ -29,6 +29,7 @@ using RoA.Core.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -4352,20 +4353,38 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
+        bool init = false;
+        int startY = -10, endY = (int)Main.worldSurface - 10;
+        int sizeY = (int)MathF.Abs(endY - startY);
+        int[] sandX = new int[sizeY + 1];
         foreach (Point surface in _biomeSurface) {
-            for (int j = -10; j < 2; j++) {
+            for (int j = startY; j < endY; j++) {
+                float progress = (float)(j - startY) / (endY - startY);
+                int index = (int)(progress * sizeY);
+                if (!init) {
+                    sandX[index] = sandX[Math.Max(0, index - 1)];
+                    sandX[index] += _random.Next(-1, 2);
+                    if (MathF.Abs(sandX[index]) > 5) {
+                        sandX[index] = 5 * MathF.Sign(sandX[index]);
+                    }
+                }
+            }
+            for (int j = startY; j < endY; j++) {
+                float progress = (float)(j - startY) / (endY - startY);
+                int index = (int)(progress * sizeY);
                 if (surface.Y + j < WorldGenHelper.SafeFloatingIslandY) {
                     continue;
                 }
 
-                if (WorldGenHelper.IsCloud(surface.X, surface.Y + j)) {
+                if (WorldGenHelper.IsCloud(surface.X + sandX[index], surface.Y + j)) {
                     break;
                 }
-                Tile tile = WorldGenHelper.GetTileSafely(surface.X, surface.Y + j);
+                Tile tile = WorldGenHelper.GetTileSafely(surface.X + sandX[index], surface.Y + j);
                 if (SandTileTypes.Contains(tile.TileType)) {
-                    WorldGenHelper.ReplaceTile(surface.X, surface.Y + j, _dirtTileType);
+                    WorldGenHelper.ReplaceTile(surface.X + sandX[index], surface.Y + j, _dirtTileType);
                 }
             }
+            init = true;
         }
 
         for (int i = Left - 100; i < Right + 100; i++) {
