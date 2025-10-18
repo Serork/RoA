@@ -214,7 +214,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void CopyClientState(ModPlayer targetCopy) {
-        WreathHandler source = Player.GetModPlayer<WreathHandler>(), target = targetCopy.Player.GetModPlayer<WreathHandler>();
+        WreathHandler source = Player.GetWreathHandler(), target = targetCopy.Player.GetWreathHandler();
         target.CurrentResource = source.CurrentResource;
     }
 
@@ -222,13 +222,13 @@ sealed class WreathHandler : ModPlayer {
         => SendPacket(Player, toWho);
 
     private void SendPacket(Player player, int toClient) {
-        WreathHandler source = player.GetModPlayer<WreathHandler>();
+        WreathHandler source = player.GetWreathHandler();
         MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)player.whoAmI, source.CurrentResource, source._tempResource, source.ChangingTimeValue, source._currentChangingTime, source._shouldDecrease, source._shouldDecrease2, source._currentChangingMult, source._increaseValue, source._stayTime, source.StartSlowlyIncreasingUntilFull),
             toClient: toClient);
     }
 
     public override void SendClientChanges(ModPlayer clientPlayer) {
-        WreathHandler source = Player.GetModPlayer<WreathHandler>(), target = clientPlayer.Player.GetModPlayer<WreathHandler>();
+        WreathHandler source = Player.GetWreathHandler(), target = clientPlayer.Player.GetWreathHandler();
         if (source.CurrentResource != target.CurrentResource) {
             SendPacket(Player, -1);
         }
