@@ -4382,7 +4382,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 for (int x = -1; x < 2; x++) {
                     int x2 = (int)(x * _random.NextBool().ToInt());
                     if (surface.Y + j < surface.Y) {
-                        x2 = x;
+                        x2 = 0;
                     }
                     Tile tile = WorldGenHelper.GetTileSafely(surface.X + sandX[index] + x2, surface.Y + j);
                     if (SandTileTypes.Contains(tile.TileType)) {
