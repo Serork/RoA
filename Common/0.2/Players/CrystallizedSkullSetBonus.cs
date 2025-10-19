@@ -127,7 +127,7 @@ sealed partial class PlayerCommon : ModPlayer {
         for (int i = 0; i < max; i++) {
             var info = handler._crystalData[i];
             Color color = info.Color;
-            color.A = (byte)MathHelper.Lerp(188, 255, Helper.Wave(0f, 1f, 15f, i * max));
+            color.A = (byte)MathHelper.Lerp(188, 255, Helper.Wave(0f, 1f, 12.5f, i * max));
             color = drawinfo.drawPlayer.GetImmuneAlphaPure(color, (float)drawinfo.shadow);
             SpriteFrame spriteFrame = new(1, 2, 0, (byte)info.SecondFrame.ToInt());
             Rectangle sourceRectangle = spriteFrame.GetSourceRectangle(texture);
