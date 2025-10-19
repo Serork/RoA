@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
@@ -108,6 +109,8 @@ sealed class LittleFleder : ModProjectile {
     }
 
     public override void AI() {
+        Projectile.localAI[2] += TimeSystem.LogicDeltaTime;
+
         if (--_havePickUpTimer <= 0f) {
             _havePickUp = _foundPickUp || _nowGoToPlayer;
             _havePickUpTimer = 10f;
@@ -355,6 +358,8 @@ sealed class LittleFleder : ModProjectile {
         }
 
         _hasTarget = hasTarget;
+
+        Projectile.position.Y += Helper.Wave(Projectile.localAI[2], -1f, 1f, 2.5f, Projectile.whoAmI) * 0.25f;
 
         int num21 = 500;
         if (hasTarget)
