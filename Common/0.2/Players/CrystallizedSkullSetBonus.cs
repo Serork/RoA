@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Content.Buffs;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -20,6 +21,8 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
+    public static ushort BUFFTIMEMAX => 300;
+
     private struct CrystalInfo(Vector2 offset, bool secondFrame, float extraRotation = 0f, Color? color = null) {
         private float _opacity = 0f;
 
@@ -60,7 +63,7 @@ sealed partial class PlayerCommon : ModPlayer {
         PreUpdateEvent += PlayerCommon_PreUpdateEvent;
     }
 
-    private void PlayerCommon_PreUpdateEvent(Player player) {
+    private static void PlayerCommon_PreUpdateEvent(Player player) {
         if (!player.GetCommon().ApplyCrystallizedSkullSetBonus) {
             return;
         }
@@ -109,7 +112,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
     }
 
-    private void ExtraDrawLayerSupport_PreBackpackDrawEvent(ref PlayerDrawSet drawinfo) {
+    private static void ExtraDrawLayerSupport_PreBackpackDrawEvent(ref PlayerDrawSet drawinfo) {
         var handler = drawinfo.drawPlayer.GetCommon();
         if (!handler.ApplyCrystallizedSkullSetBonus || !handler.ShouldDrawCrystals()) {
             return;
@@ -141,7 +144,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
     }
 
-    private bool On_Player_CheckMana_Item_int_bool_bool(On_Player.orig_CheckMana_Item_int_bool_bool orig, Player self, Item item, int amount, bool pay, bool blockQuickMana) {
+    private static bool On_Player_CheckMana_Item_int_bool_bool(On_Player.orig_CheckMana_Item_int_bool_bool orig, Player self, Item item, int amount, bool pay, bool blockQuickMana) {
         if (self.GetCommon().ApplyCrystallizedSkullSetBonus) {
             if (self.statMana > 0) {
                 if (amount <= -1)
@@ -209,7 +212,7 @@ sealed partial class PlayerCommon : ModPlayer {
         return orig(self, item, amount, pay, blockQuickMana);
     }
 
-    private bool On_Player_CheckMana_int_bool_bool(On_Player.orig_CheckMana_int_bool_bool orig, Player self, int amount, bool pay, bool blockQuickMana) {
+    private static bool On_Player_CheckMana_int_bool_bool(On_Player.orig_CheckMana_int_bool_bool orig, Player self, int amount, bool pay, bool blockQuickMana) {
         if (self.GetCommon().ApplyCrystallizedSkullSetBonus) {
             int num;
             if (self.statMana > 0) {
@@ -260,84 +263,87 @@ sealed partial class PlayerCommon : ModPlayer {
         return orig(self, amount, pay, blockQuickMana);
     }
 
-    private void On_Player_UpdateManaRegen(On_Player.orig_UpdateManaRegen orig, Player self) {
+    private static void On_Player_UpdateManaRegen(On_Player.orig_UpdateManaRegen orig, Player self) {
         //if (self.statMana < 0) {
-            if (self.statMana < -self.statManaMax2) {
-                self.statMana = -self.statManaMax2;
+        if (self.statMana < -self.statManaMax2) {
+            self.statMana = -self.statManaMax2;
+        }
+        if (self.nebulaLevelMana > 0) {
+            int num = 6;
+            self.nebulaManaCounter += self.nebulaLevelMana;
+            if (self.nebulaManaCounter >= num) {
+                self.nebulaManaCounter -= num;
+                self.statMana++;
+                if (self.statMana >= self.statManaMax2)
+                    self.statMana = self.statManaMax2;
             }
-            if (self.nebulaLevelMana > 0) {
-                int num = 6;
-                self.nebulaManaCounter += self.nebulaLevelMana;
-                if (self.nebulaManaCounter >= num) {
-                    self.nebulaManaCounter -= num;
-                    self.statMana++;
-                    if (self.statMana >= self.statManaMax2)
-                        self.statMana = self.statManaMax2;
-                }
-            }
-            else {
-                self.nebulaManaCounter = 0;
-            }
+        }
+        else {
+            self.nebulaManaCounter = 0;
+        }
 
-            if (self.manaRegenDelay > 0f) {
+        if (self.manaRegenDelay > 0f) {
+            self.manaRegenDelay -= 1f;
+            self.manaRegenDelay -= self.manaRegenDelayBonus;
+            if (self.IsStandingStillForSpecialEffects || self.grappling[0] >= 0 || self.manaRegenBuff)
                 self.manaRegenDelay -= 1f;
-                self.manaRegenDelay -= self.manaRegenDelayBonus;
-                if (self.IsStandingStillForSpecialEffects || self.grappling[0] >= 0 || self.manaRegenBuff)
-                    self.manaRegenDelay -= 1f;
 
-                if (self.usedArcaneCrystal)
-                    self.manaRegenDelay -= 0.05f;
-            }
+            if (self.usedArcaneCrystal)
+                self.manaRegenDelay -= 0.05f;
+        }
 
-            if (self.manaRegenBuff && self.manaRegenDelay > 20f)
-                self.manaRegenDelay = 20f;
+        if (self.manaRegenBuff && self.manaRegenDelay > 20f)
+            self.manaRegenDelay = 20f;
 
-            if (self.manaRegenDelay <= 0f) {
-                self.manaRegenDelay = 0f;
-                self.manaRegen = self.statManaMax2 / 3 + 1 + self.manaRegenBonus;
-                if (self.IsStandingStillForSpecialEffects || self.grappling[0] >= 0 || self.manaRegenBuff)
-                    self.manaRegen += self.statManaMax2 / 3;
+        if (self.manaRegenDelay <= 0f) {
+            self.manaRegenDelay = 0f;
+            self.manaRegen = self.statManaMax2 / 3 + 1 + self.manaRegenBonus;
+            if (self.IsStandingStillForSpecialEffects || self.grappling[0] >= 0 || self.manaRegenBuff)
+                self.manaRegen += self.statManaMax2 / 3;
 
-                if (self.usedArcaneCrystal)
-                    self.manaRegen += self.statManaMax2 / 50;
+            if (self.usedArcaneCrystal)
+                self.manaRegen += self.statManaMax2 / 50;
 
-                float num2 = (float)(MathF.Max(((float)self.statMana / (float)self.statManaMax2), 1f - Math.Abs(self.statMana) / (float)self.statManaMax2)) * 0.8f + 0.2f;
-            
-                if (self.manaRegenBuff)
-                    num2 = 1f;
+            float num2 = (float)(MathF.Max(((float)self.statMana / (float)self.statManaMax2), 1f - Math.Abs(self.statMana) / (float)self.statManaMax2)) * 0.8f + 0.2f;
 
-                self.manaRegen = (int)((double)((float)self.manaRegen * num2) * 1.15);
-            }
-            else {
-                self.manaRegen = 0;
-            }
+            if (self.manaRegenBuff)
+                num2 = 1f;
 
-            self.manaRegenCount += self.manaRegen;
-            while (self.manaRegenCount >= 120) {
-                bool flag = false;
-                self.manaRegenCount -= 120;
-                if (self.statMana < self.statManaMax2) {
-                    self.statMana++;
-                    flag = true;
+            self.manaRegen = (int)((double)((float)self.manaRegen * num2) * 1.15);
+        }
+        else {
+            self.manaRegen = 0;
+        }
+
+        self.manaRegenCount += self.manaRegen;
+        while (self.manaRegenCount >= 120) {
+            bool flag = false;
+            self.manaRegenCount -= 120;
+            if (self.statMana < self.statManaMax2) {
+                if (self.statMana < 0 && !self.HasBuff<Crystallized>()) {
+                    self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
                 }
-
-                if (self.statMana < self.statManaMax2)
-                    continue;
-
-                if (self.whoAmI == Main.myPlayer && flag) {
-                    SoundEngine.PlaySound(SoundID.MaxMana);
-                    for (int i = 0; i < 5; i++) {
-                        int num3 = Dust.NewDust(self.position, self.width, self.height, 45, 0f, 0f, 255, default(Color), (float)Main.rand.Next(20, 26) * 0.1f);
-                        Main.dust[num3].noLight = true;
-                        Main.dust[num3].noGravity = true;
-                        Main.dust[num3].velocity *= 0.5f;
-                    }
-                }
-
-                self.statMana = self.statManaMax2;
+                self.statMana++;
+                flag = true;
             }
 
-            return;
+            if (self.statMana < self.statManaMax2)
+                continue;
+
+            if (self.whoAmI == Main.myPlayer && flag) {
+                SoundEngine.PlaySound(SoundID.MaxMana);
+                for (int i = 0; i < 5; i++) {
+                    int num3 = Dust.NewDust(self.position, self.width, self.height, 45, 0f, 0f, 255, default(Color), (float)Main.rand.Next(20, 26) * 0.1f);
+                    Main.dust[num3].noLight = true;
+                    Main.dust[num3].noGravity = true;
+                    Main.dust[num3].velocity *= 0.5f;
+                }
+            }
+
+            self.statMana = self.statManaMax2;
+        }
+
+        return;
         //}
 
         //orig(self);

@@ -300,3 +300,8 @@ HallowBlessing: {
 	// DisplayName: Hallow Blessing
 	// Description: Mods.RoA.Buffs.HallowBlessing.Description
 }
+
+Crystallized: {
+	// DisplayName: Crystallized
+	// Description: Mods.RoA.Buffs.Crystallized.Description
+}
