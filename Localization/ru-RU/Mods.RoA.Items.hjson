@@ -2026,7 +2026,7 @@ PerfafrostBucket: {
 }
 
 TarBucket: {
-	// DisplayName: Tar Bucket
+	DisplayName: Ведро смолы
 	// Tooltip: ""
 }
 
@@ -2110,7 +2110,7 @@ SolidifiedTarWall: {
 }
 
 SolidifiedTar: {
-	// DisplayName: Solidified Tar
+	DisplayName: Отвердевшая смола
 	// Tooltip: ""
 }
 
@@ -2160,17 +2160,17 @@ TarRocket: {
 }
 
 CarrionCane: {
-	// DisplayName: Carrion Cane
-	// Tooltip: Grows a stinking flower that attracts flies
+	DisplayName: Трость с цветком-падальщиком
+	Tooltip: Выращивает гнилостный цветок, привлекающий мух
 }
 
 ToothFairy: {
-	// DisplayName: Tooth Fairy
-	// Tooltip: "'Rip and tear'"
+	DisplayName: Зубная фея
+	Tooltip: "'Рви и кромсай!'"
 }
 
 AerialConcussion: {
-	// DisplayName: Aerial Concussion
+	DisplayName: Небесное сотрясение
 	/* Tooltip:
 		'''
 		{$CommonItemTooltip.SummonTagDamage}
@@ -2179,17 +2179,17 @@ AerialConcussion: {
 }
 
 TarLiquidSensor: {
-	// DisplayName: Liquid Sensor (Tar)
+	DisplayName: Жидкостный датчик (Смола)
 	// Tooltip: ""
 }
 
 NixieTube: {
-	// DisplayName: Nixie Tube
+	DisplayName: Лампа тлеющего свечения
 	// Tooltip: ""
 }
 
 Crimsonest: {
-	// DisplayName: Crimsonest
+	DisplayName: Багрянездо
 	// Tooltip: ""
 }
 
@@ -2209,107 +2209,107 @@ Test3: {
 }
 
 HallowedTopfhelm: {
-	// DisplayName: Hallowed Topfhelm
+	DisplayName: Освящённый  топфхельм
 	// Tooltip: ""
 }
 
 SolScorchers: {
-	// DisplayName: Sol Scorchers
-	// Tooltip: "'Golden rays of the glorious sunshine'"
+	DisplayName: Палящее солнце
+	Tooltip: "'Золотые лучи прекрасного солнца'"
 }
 
 WardenOfTheWoods2Banner: {
-	// DisplayName: Backwoods Warden Banner
+	DisplayName: Знамя стража чащи
 	// Tooltip: ""
 }
 
 WardenOfTheWoodsBanner: {
-	// DisplayName: Woodlands Keeper Banner
+	DisplayName: Знамя хранителя лесов
 	// Tooltip: ""
 }
 
 ShadowflameClaws: {
-	// DisplayName: Shadowflame Claws
+	DisplayName: Когти пламени тьмы
 	// Tooltip: ""
 }
 
 CarcassChestguard: {
-	// DisplayName: Carcass Chestguard
+	DisplayName: Стеганый труп
 	// Tooltip: ""
 }
 
 CarcassSandals: {
-	// DisplayName: Carcass Sandals
+	DisplayName: Стеганые сандали
 	// Tooltip: ""
 }
 
 DevilSkull: {
-	// DisplayName: Devil Skull
+	DisplayName: Череп дьявола
 	// Tooltip: ""
 }
 
 CrushedRemains: {
-	// DisplayName: Crushed Remains
+	DisplayName: Раздробленные останки
 	// Tooltip: ""
 }
 
 HornetSkull: {
-	// DisplayName: Hornet Skull
+	DisplayName: Череп осы
 	// Tooltip: ""
 }
 
 NixieIndexator10Minus: {
-	// DisplayName: Nixie Indexator (-10)
-	// Tooltip: Decreases the connected Nixie Tube's symbol index by 10
+	DisplayName: Газоразрядный указатель (-10)
+	Tooltip: Сдвигает символ подключенных ламп тлеющего свечения на 10 назад
 }
 
 NixieIndexator10Plus: {
-	// DisplayName: Nixie Indexator (+10)
-	// Tooltip: Increases the connected Nixie Tube's symbol index by 10
+	DisplayName:  Газоразрядный указатель (+10)
+	Tooltip: Сдвигает значения подключенных ламп тлеющего свечения на 10 вперед
 }
 
 NixieIndexator1Minus: {
-	// DisplayName: Nixie Indexator (-1)
-	// Tooltip: Decreases the connected Nixie Tube's symbol index by 1
+	DisplayName:  Газоразрядный указатель (-1)
+	Tooltip: Сдвигает значения подключенных ламп тлеющего свечения на 1 назад
 }
 
 NixieIndexator1Plus: {
-	// DisplayName: Nixie Indexator (+1)
-	// Tooltip: Increases the connected Nixie Tube's symbol index by 1
+	DisplayName:  Газоразрядный указатель (+1)
+	Tooltip: Сдвигает значения подключенных ламп тлеющего свечения на 1 вперед
 }
 
 NixieIndexator3Minus: {
-	// DisplayName: Nixie Indexator (-3)
-	// Tooltip: Decreases the connected Nixie Tube's symbol index by 3
+	DisplayName:  Газоразрядный указатель (-3)
+	Tooltip: Сдвигает значения подключенных ламп тлеющего свечения на 3 назад
 }
 
 NixieIndexator3Plus: {
-	// DisplayName: Nixie Indexator (+3)
-	// Tooltip: Increases the connected Nixie Tube's symbol index by 3
+	DisplayName:  Газоразрядный указатель (+3)
+	Tooltip: Сдвигает значения подключенных ламп тлеющего свечения на 3 вперед
 }
 
 NixieIndexator5Minus: {
-	// DisplayName: Nixie Indexator (-5)
-	// Tooltip: Decreases the connected Nixie Tube's symbol index by 5
+	DisplayName:  Газоразрядный указатель (-5)
+	Tooltip: Сдвигает значения подключенных ламп тлеющего свечения на 5 назад
 }
 
 NixieIndexator5Plus: {
-	// DisplayName: Nixie Indexator (+5)
-	// Tooltip: Increases the connected Nixie Tube's symbol index by 5
+	DisplayName:  Газоразрядный указатель (+5)
+	Tooltip: Сдвигает значения подключенных ламп тлеющего свечения на 5 вперед
 }
 
 NixieResetter: {
-	// DisplayName: Nixie Breaker
-	// Tooltip: Resets the connected Nixie Tube's symbol index to the first value
+	DisplayName: Газоразрядный выключатель
+	Tooltip: Обнуляет значения подключенных ламп тлеющего свечения
 }
 
 NixieCategoryChanger: {
-	// DisplayName: Nixie Modulator
-	// Tooltip: Switches the connected Nixie Tube's active symbol category
+	DisplayName: Газоразрядный множитель
+	Tooltip: Сменяет категорию значений подключенных ламп тлеющего свечения
 }
 
 CrystallizedSkull: {
-	// DisplayName: Crystallized Skull
+	DisplayName: Поросший кристаллами череп
 	// Tooltip: ""
 }
 
