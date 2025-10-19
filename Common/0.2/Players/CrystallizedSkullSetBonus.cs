@@ -58,9 +58,24 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.UpdateManaRegen += On_Player_UpdateManaRegen;
         On_Player.CheckMana_int_bool_bool += On_Player_CheckMana_int_bool_bool;
         On_Player.CheckMana_Item_int_bool_bool += On_Player_CheckMana_Item_int_bool_bool;
+        On_Player.ApplyLifeAndOrMana += On_Player_ApplyLifeAndOrMana;
 
         ExtraDrawLayerSupport.PreBackpackDrawEvent += ExtraDrawLayerSupport_PreBackpackDrawEvent;
         PreUpdateEvent += PlayerCommon_PreUpdateEvent;
+    }
+
+    private void On_Player_ApplyLifeAndOrMana(On_Player.orig_ApplyLifeAndOrMana orig, Player self, Item item) {
+        if (self.GetCommon().ApplyCrystallizedSkullSetBonus) {
+            int previousMana = self.statMana;
+            orig(self, item);
+            if (previousMana < 0 && !self.HasBuff<Crystallized>()) {
+                self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(previousMana) / (float)self.statManaMax2)));
+            }
+
+            return;
+        }
+
+        orig(self, item);
     }
 
     private static void PlayerCommon_PreUpdateEvent(Player player) {
