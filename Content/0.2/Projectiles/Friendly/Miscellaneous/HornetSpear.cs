@@ -92,6 +92,7 @@ sealed class HornetSpear : ModProjectile {
 
     public bool CanFunction => Projectile.timeLeft > STARTDISAPPEARINGTIME - 1;
     public override bool? CanDamage() => CanFunction;
+    public override bool? CanCutTiles() => false;
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindProjectiles.Add(index);
 
