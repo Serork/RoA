@@ -265,14 +265,12 @@ class ClawsSlash : NatureProjectile {
                 DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
             }
         }
-
-        SpawnSlashDusts(num1, num4);
     }
 
     protected virtual void SpawnSlashDusts(float num1, float num4) {
-        if (Main.gamePaused || !Main.instance.IsActive || Lighting.UpdateEveryFrame && !Main.rand.NextBool(4)) {
-            return;
-        }
+        //if (Main.gamePaused || !Main.instance.IsActive || Lighting.UpdateEveryFrame && !Main.rand.NextBool(4)) {
+        //    return;
+        //}
 
         var selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
         if (FirstSlashColor != null && SecondSlashColor != null) {
@@ -393,6 +391,13 @@ class ClawsSlash : NatureProjectile {
                 Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
             }
         }
+
+        num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
+        num2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
+        num3 = 0.975f;
+        Point tilePosition = Projectile.Center.ToTileCoordinates();
+        float num4 = Utils.Remap((Lighting.GetColor(tilePosition) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
+        SpawnSlashDusts(num1, num4);
     }
 
     protected virtual Color GetLightingColor() {
