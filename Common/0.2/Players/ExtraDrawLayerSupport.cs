@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
@@ -32,7 +33,17 @@ sealed class ExtraDrawLayerSupport : ILoadable {
         _extraDrawLayerByItemType = null!;
     }
 
+    public delegate void PreBackpackDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event PreBackpackDrawDelegate PreBackpackDrawEvent;
     private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawinfo) {
+        PreBackpackDrawEvent?.Invoke(ref drawinfo);
+
+        orig(ref drawinfo);
+
+        DrawBackpacks(ref drawinfo);
+    }
+
+    public static void DrawBackpacks(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         foreach (var drawInfo in _extraDrawLayerByItemType) {
             if (drawInfo.Key != EquipType.Back) {
@@ -60,11 +71,9 @@ sealed class ExtraDrawLayerSupport : ILoadable {
                     item.shader = shader;
                     drawinfo.DrawDataCache.Add(item);
 
-                    return;
+                    //return;
                 }
             }
         }
-
-        orig(ref drawinfo);
     }
 }

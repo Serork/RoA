@@ -1,6 +1,13 @@
-﻿using RoA.Core.Defaults;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Core.Defaults;
+using RoA.Core.Utility.Vanilla;
+
+using System;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Miscellaneous;
@@ -18,5 +25,6 @@ sealed class CrystallizedSkull : ModItem {
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
 
     public override void UpdateArmorSet(Player player) {
+        player.GetCommon().ApplyCrystallizedSkullSetBonus = true;
     }
 }

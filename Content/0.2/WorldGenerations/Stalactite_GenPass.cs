@@ -108,20 +108,22 @@ sealed class Stalactite_GenPass : IInitializer {
                 }
             }
         }
+    }
 
+    private static void GenerateStalactitesTE(GenerationProgress progress, GameConfiguration configuration) {
+        foreach (var teInfo in _TEPositions!) {
+            teInfo.Item1.Place(teInfo.Item2.X, teInfo.Item2.Y);
+        }
+        _TEPositions.Clear();
+        _TEPositions = null!;
     }
 
     private void On_WorldGen_smCallback_End(On_WorldGen.orig_smCallback_End orig, System.Collections.Generic.List<Terraria.WorldBuilding.GenPass> hardmodeTasks) {
         _TEPositions = [];
 
         hardmodeTasks.Add(new PassLegacy("Stalactites", GenerateStalactites));
+        hardmodeTasks.Add(new PassLegacy("Stalactites TE", GenerateStalactitesTE));
 
         orig(hardmodeTasks);
-
-        foreach (var teInfo in _TEPositions) {
-            teInfo.Item1.Place(teInfo.Item2.X, teInfo.Item2.Y);
-        }
-        _TEPositions.Clear();
-        _TEPositions = null!;
     }
 }

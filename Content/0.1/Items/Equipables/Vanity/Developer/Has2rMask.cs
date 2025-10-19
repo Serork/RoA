@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.GlowMasks;
+using RoA.Common.Players;
 using RoA.Core;
+using RoA.Core.Graphics.Data;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -61,6 +63,7 @@ sealed class Has2rMask : ModItem {
 
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
+            bool flag2 = false;
             if (drawInfo.shadow == 0) {
                 int itemType = ModContent.ItemType<Has2rMask>();
                 bool flag = ItemLoader.GetItem(itemType).IsVanitySet(player.head, player.body, player.legs);
@@ -103,9 +106,17 @@ sealed class Has2rMask : ModItem {
                         drawInfo.DrawDataCache.Add(_drawData);
                     }
 
-                    return;
+                    flag2 = true;
+
+                    //return;
                 }
             }
+
+            ExtraDrawLayerSupport.DrawBackpacks(ref drawInfo);
+            if (flag2) {
+                return;
+            }
+
 
             orig(ref drawInfo);
         }

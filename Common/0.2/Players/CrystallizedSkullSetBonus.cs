@@ -1,0 +1,345 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
+
+using RoA.Core;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Common.Players;
+
+sealed partial class PlayerCommon : ModPlayer {
+    private struct CrystalInfo(Vector2 offset, bool secondFrame, float extraRotation = 0f, Color? color = null) {
+        private float _opacity = 0f;
+
+        public readonly Vector2 Offset = offset;
+        public readonly bool SecondFrame = secondFrame;
+        public readonly float ExtraRotation = extraRotation;
+        public readonly Color Color = color ?? Color.White;
+
+        public float Opacity {
+            readonly get => _opacity;
+            set => _opacity = MathUtils.Clamp01(value);    
+        }
+    }
+
+    private static Asset<Texture2D> _crystalOnPlayerTexture = null!;
+
+    private bool _initializingCrystals = true;
+    private CrystalInfo[] _crystalData = null!;
+
+    public bool ShouldDrawCrystals() => Player.statMana < 0 && !_initializingCrystals;
+
+    public bool ApplyCrystallizedSkullSetBonus;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _crystalOnPlayerTexture = ModContent.Request<Texture2D>(ResourceManager.FriendlyMiscProjectiles + "ManaCrystal");
+    }
+
+    public partial void CrystallizedSkullLoad() {
+        On_Player.UpdateManaRegen += On_Player_UpdateManaRegen;
+        On_Player.CheckMana_int_bool_bool += On_Player_CheckMana_int_bool_bool;
+        On_Player.CheckMana_Item_int_bool_bool += On_Player_CheckMana_Item_int_bool_bool;
+
+        ExtraDrawLayerSupport.PreBackpackDrawEvent += ExtraDrawLayerSupport_PreBackpackDrawEvent;
+        PreUpdateEvent += PlayerCommon_PreUpdateEvent;
+    }
+
+    private void PlayerCommon_PreUpdateEvent(Player player) {
+        if (!player.GetCommon().ApplyCrystallizedSkullSetBonus) {
+            return;
+        }
+
+        var handler = player.GetCommon();
+        int max = 3;
+        if (player.statMana >= 0) {
+            if (!handler._initializingCrystals) {
+                handler._initializingCrystals = true;
+            }
+        }
+        else {
+            if (handler._initializingCrystals) {
+                handler._initializingCrystals = false;
+
+                handler._crystalData = new CrystalInfo[max];
+                Color[] colors = [
+                            Color.Lerp(new Color(227, 170, 230), new Color(175, 89, 192), 0.375f),
+                            Color.Lerp(new Color(210, 182, 241), new Color(164, 109, 224), 0.375f),
+                            Color.Lerp(new Color(184, 200, 241), new Color(133, 148, 186), 0.375f)
+                            ];
+                List<int> taken = [];
+                for (int i = 0; i < max; i++) {
+                    int colorIndex = Main.rand.Next(max);
+                    while (taken.Contains(colorIndex)) {
+                        colorIndex = Main.rand.Next(max);
+                    }
+                    taken.Add(colorIndex);
+                    handler._crystalData[i] = new CrystalInfo(
+                        Main.rand.RandomPointInArea(4f) - Vector2.UnitY * player.height * 0.6f,
+                        Main.rand.NextBool(),
+                        MathHelper.Lerp(-MathHelper.PiOver4, MathHelper.PiOver4, (float)i / max + Main.rand.NextFloatRange(0.05f) + (float)i / max / 2f),
+                        colors[colorIndex]);
+                }
+            }
+            else {
+                for (int i = 0; i < max; i++) {
+                    if (i > 0 && handler._crystalData[i - 1].Opacity <= 0f) {
+                        continue;
+                    }
+                    float opacity = Utils.GetLerpValue(i / (float)max, MathF.Max(max, i + 1) / (float)max, (float)Math.Abs(player.statMana) / player.statManaMax2, true) * 1.5f;
+                    opacity = MathUtils.Clamp01(opacity);
+                    handler._crystalData[i].Opacity = MathHelper.Lerp(handler._crystalData[i].Opacity, opacity, 0.25f);
+                }
+            }
+        }
+    }
+
+    private void ExtraDrawLayerSupport_PreBackpackDrawEvent(ref PlayerDrawSet drawinfo) {
+        var handler = drawinfo.drawPlayer.GetCommon();
+        if (!handler.ApplyCrystallizedSkullSetBonus || !handler.ShouldDrawCrystals()) {
+            return;
+        }
+
+        if (_crystalOnPlayerTexture?.IsLoaded != true) {
+            return;
+        }
+
+        Texture2D texture = _crystalOnPlayerTexture.Value;
+        int max = handler._crystalData.Length;
+        for (int i = 0; i < max; i++) {
+            var info = handler._crystalData[i];
+            Color color = info.Color;
+            color.A = (byte)MathHelper.Lerp(188, 255, Helper.Wave(0f, 1f, 15f, i * max));
+            color = drawinfo.drawPlayer.GetImmuneAlphaPure(color, (float)drawinfo.shadow);
+            SpriteFrame spriteFrame = new(1, 2, 0, (byte)info.SecondFrame.ToInt());
+            Rectangle sourceRectangle = spriteFrame.GetSourceRectangle(texture);
+            float rotation = info.ExtraRotation;
+            float y = -drawinfo.drawPlayer.width * 0.5f;
+            Vector2 vector3 = (new Vector2(0f, y) + info.Offset).RotatedBy(rotation);
+            Vector2 position = drawinfo.Position - Main.screenPosition + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f);
+            Vector2 origin = sourceRectangle.BottomCenter();
+            position = position.Floor() + vector3 + (Vector2.UnitY * origin.Y * 0.75f).RotatedBy(rotation);
+            Vector2 scale = new(1f, info.Opacity);
+            SpriteEffects effect = SpriteEffects.None;
+            DrawData item = new(texture, position, sourceRectangle, color, rotation, origin, scale, effect);
+            drawinfo.DrawDataCache.Add(item);
+        }
+    }
+
+    private bool On_Player_CheckMana_Item_int_bool_bool(On_Player.orig_CheckMana_Item_int_bool_bool orig, Player self, Item item, int amount, bool pay, bool blockQuickMana) {
+        if (self.GetCommon().ApplyCrystallizedSkullSetBonus) {
+            if (self.statMana > 0) {
+                if (amount <= -1)
+                    amount = self.GetManaCost(item);
+
+                if (self.statMana >= 0/*amount*/) {
+                    if (pay) {
+                        CombinedHooks.OnConsumeMana(self, item, amount);
+                        self.statMana -= amount;
+                    }
+
+                    return true;
+                }
+
+                if (blockQuickMana)
+                    return false;
+
+                CombinedHooks.OnMissingMana(self, item, amount);
+                if ((self.statManaMax2 - Math.Abs(self.statMana)) < amount && self.manaFlower)
+                    self.QuickMana();
+
+                if (self.statMana >= 0/*amount*/) {
+                    if (pay) {
+                        CombinedHooks.OnConsumeMana(self, item, amount);
+                        self.statMana -= amount;
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (amount <= -1)
+                amount = self.GetManaCost(item);
+
+            if ((self.statManaMax2 - Math.Abs(self.statMana)) >= amount) {
+                if (pay) {
+                    CombinedHooks.OnConsumeMana(self, item, amount);
+                    self.statMana -= amount;
+                }
+
+                return true;
+            }
+
+            if (blockQuickMana)
+                return false;
+
+            CombinedHooks.OnMissingMana(self, item, amount);
+            if ((self.statManaMax2 - Math.Abs(self.statMana)) < amount && self.manaFlower)
+                self.QuickMana();
+
+            if ((self.statManaMax2 - Math.Abs(self.statMana)) >= amount) {
+                if (pay) {
+                    CombinedHooks.OnConsumeMana(self, item, amount);
+                    self.statMana -= amount;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        return orig(self, item, amount, pay, blockQuickMana);
+    }
+
+    private bool On_Player_CheckMana_int_bool_bool(On_Player.orig_CheckMana_int_bool_bool orig, Player self, int amount, bool pay, bool blockQuickMana) {
+        if (self.GetCommon().ApplyCrystallizedSkullSetBonus) {
+            int num;
+            if (self.statMana > 0) {
+                num = (int)((float)amount * self.manaCost);
+                if (self.statMana >= 0/*num*/) {
+                    if (pay)
+                        self.statMana -= num;
+
+                    return true;
+                }
+
+                if (self.manaFlower && !blockQuickMana) {
+                    self.QuickMana();
+                    if (self.statMana >= 0/*num*/) {
+                        if (pay)
+                            self.statMana -= num;
+
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                return false;
+            }
+
+            num = (int)((float)amount * self.manaCost);
+            if ((self.statManaMax2 - Math.Abs(self.statMana)) >= num) {
+                if (pay)
+                    self.statMana -= num;
+
+                return true;
+            }
+
+            if (self.manaFlower && !blockQuickMana) {
+                self.QuickMana();
+                if ((self.statManaMax2 - Math.Abs(self.statMana)) >= num) {
+                    if (pay)
+                        self.statMana -= num;
+
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        return orig(self, amount, pay, blockQuickMana);
+    }
+
+    private void On_Player_UpdateManaRegen(On_Player.orig_UpdateManaRegen orig, Player self) {
+        //if (self.statMana < 0) {
+            if (self.statMana < -self.statManaMax2) {
+                self.statMana = -self.statManaMax2;
+            }
+            if (self.nebulaLevelMana > 0) {
+                int num = 6;
+                self.nebulaManaCounter += self.nebulaLevelMana;
+                if (self.nebulaManaCounter >= num) {
+                    self.nebulaManaCounter -= num;
+                    self.statMana++;
+                    if (self.statMana >= self.statManaMax2)
+                        self.statMana = self.statManaMax2;
+                }
+            }
+            else {
+                self.nebulaManaCounter = 0;
+            }
+
+            if (self.manaRegenDelay > 0f) {
+                self.manaRegenDelay -= 1f;
+                self.manaRegenDelay -= self.manaRegenDelayBonus;
+                if (self.IsStandingStillForSpecialEffects || self.grappling[0] >= 0 || self.manaRegenBuff)
+                    self.manaRegenDelay -= 1f;
+
+                if (self.usedArcaneCrystal)
+                    self.manaRegenDelay -= 0.05f;
+            }
+
+            if (self.manaRegenBuff && self.manaRegenDelay > 20f)
+                self.manaRegenDelay = 20f;
+
+            if (self.manaRegenDelay <= 0f) {
+                self.manaRegenDelay = 0f;
+                self.manaRegen = self.statManaMax2 / 3 + 1 + self.manaRegenBonus;
+                if (self.IsStandingStillForSpecialEffects || self.grappling[0] >= 0 || self.manaRegenBuff)
+                    self.manaRegen += self.statManaMax2 / 3;
+
+                if (self.usedArcaneCrystal)
+                    self.manaRegen += self.statManaMax2 / 50;
+
+                float num2 = (float)(MathF.Max(((float)self.statMana / (float)self.statManaMax2), 1f - Math.Abs(self.statMana) / (float)self.statManaMax2)) * 0.8f + 0.2f;
+            
+                if (self.manaRegenBuff)
+                    num2 = 1f;
+
+                self.manaRegen = (int)((double)((float)self.manaRegen * num2) * 1.15);
+            }
+            else {
+                self.manaRegen = 0;
+            }
+
+            self.manaRegenCount += self.manaRegen;
+            while (self.manaRegenCount >= 120) {
+                bool flag = false;
+                self.manaRegenCount -= 120;
+                if (self.statMana < self.statManaMax2) {
+                    self.statMana++;
+                    flag = true;
+                }
+
+                if (self.statMana < self.statManaMax2)
+                    continue;
+
+                if (self.whoAmI == Main.myPlayer && flag) {
+                    SoundEngine.PlaySound(SoundID.MaxMana);
+                    for (int i = 0; i < 5; i++) {
+                        int num3 = Dust.NewDust(self.position, self.width, self.height, 45, 0f, 0f, 255, default(Color), (float)Main.rand.Next(20, 26) * 0.1f);
+                        Main.dust[num3].noLight = true;
+                        Main.dust[num3].noGravity = true;
+                        Main.dust[num3].velocity *= 0.5f;
+                    }
+                }
+
+                self.statMana = self.statManaMax2;
+            }
+
+            return;
+        //}
+
+        //orig(self);
+    }
+}

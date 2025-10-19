@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Players;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -37,6 +38,7 @@ sealed class cleoChestguard : ModItem {
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawinfo) {
             Player player = drawinfo.drawPlayer;
             int itemType = ModContent.ItemType<cleoChestguard>();
+            bool flag = false;
             if (!drawinfo.hideEntirePlayer && !player.dead) {
                 if (player.CheckArmorSlot(itemType, 1, 11) || player.CheckVanitySlot(itemType, 11)) {
                     int type = drawinfo.heldItem.type;
@@ -58,8 +60,13 @@ sealed class cleoChestguard : ModItem {
                     item.shader = shader;
                     drawinfo.DrawDataCache.Add(item);
 
-                    return;
+                    flag = true;
                 }
+            }
+
+            ExtraDrawLayerSupport.DrawBackpacks(ref drawinfo);
+            if (flag) {
+                return;
             }
 
             orig(ref drawinfo);

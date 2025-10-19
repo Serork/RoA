@@ -70,6 +70,7 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.SetArmorEffectVisuals += On_Player_SetArmorEffectVisuals;
 
         DevilSkullLoad();
+        CrystallizedSkullLoad();
         WiresLoad();
     }
 
@@ -81,6 +82,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public partial void WiresLoad();
 
     public partial void DevilSkullLoad();
+    public partial void CrystallizedSkullLoad();
 
     private void On_Player_HorizontalMovement(On_Player.orig_HorizontalMovement orig, Player self) {
         if (self.GetCommon().LockHorizontalMovement) {
@@ -222,6 +224,7 @@ sealed partial class PlayerCommon : ModPlayer {
         LockHorizontalMovement = false;
         ApplyVanillaSkullSetBonus = false;
         ApplyDevilSkullSetBonus = false;
+        ApplyCrystallizedSkullSetBonus = false;
     }
 
     public override void PostUpdate() {
