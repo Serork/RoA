@@ -48,6 +48,17 @@ sealed class FlederStaff : ModItem {
         Item.value = Item.sellPrice(0, 2, 25, 0);
     }
 
+    public override bool? UseItem(Player player) {
+        if (player.altFunctionUse != 0) {
+            Item.useStyle = ItemUseStyleID.Swing;
+        }
+        else {
+            Item.useStyle = ItemUseStyleID.Shoot;
+        }
+
+        return base.UseItem(player);
+    }
+
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         player.AddBuff(Item.buffType, 2);
         player.SpawnMinionOnCursor(source, player.whoAmI, type, Item.damage, knockback);
