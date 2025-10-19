@@ -962,11 +962,6 @@ MercuriumSword: {
 	Tooltip: Creates clouds of toxic fumes on hit
 }
 
-StarFusion: {
-	DisplayName: Star Fusion
-	Tooltip: Summons a constellation on hit
-}
-
 RavensEye: {
 	DisplayName: Raven's Eye
 	Tooltip: ""
@@ -2286,4 +2281,18 @@ NixieResetter: {
 NixieCategoryChanger: {
 	DisplayName: Nixie Modulator
 	Tooltip: Switches the connected Nixie Tube's active symbol category
+}
+
+CrystallizedSkull: {
+	DisplayName: Crystallized Skull
+	Tooltip: ""
+}
+
+StarFusion: {
+	DisplayName: Star Fusion
+	Tooltip:
+		'''
+		Summons a constellation on hit
+		'The blackness of darkness, forever'
+		'''
 }

@@ -978,11 +978,6 @@ MercuriumSword: {
 	Tooltip: Выпускает пары ртути при ударе
 }
 
-StarFusion: {
-	DisplayName: Слияние звезд
-	Tooltip: Призывает созвездие при атаке
-}
-
 RavensEye: {
 	DisplayName: Глаз ворона
 	// Tooltip: ""
@@ -2311,4 +2306,18 @@ NixieResetter: {
 NixieCategoryChanger: {
 	// DisplayName: Nixie Modulator
 	// Tooltip: Switches the connected Nixie Tube's active symbol category
+}
+
+CrystallizedSkull: {
+	// DisplayName: Crystallized Skull
+	// Tooltip: ""
+}
+
+StarFusion: {
+	DisplayName: Слияние звезд
+	Tooltip:
+		'''
+		Призывает созвездие при атаке
+		'Навеки мрачная тьма'
+		'''
 }

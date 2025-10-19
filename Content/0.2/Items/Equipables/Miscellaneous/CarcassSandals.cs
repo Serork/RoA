@@ -9,12 +9,14 @@ namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 [AutoloadEquip(EquipType.Legs)]
 sealed class CarcassSandals : ModItem {
+    public static int FemaleLegs { get; private set; } = -1;
+
     public override void Load() {
         if (Main.dedServ) {
             return;
         }
 
-        EquipLoader.AddEquipTexture(Mod, $"{Texture}_Thin{EquipType.Legs}", EquipType.Legs, this, Name + "_Female");
+        FemaleLegs = EquipLoader.AddEquipTexture(Mod, $"{Texture}_Thin{EquipType.Legs}", EquipType.Legs, this, Name + "_Female");
     }
 
     public override void SetMatch(bool male, ref int equipSlot, ref bool robes) {

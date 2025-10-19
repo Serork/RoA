@@ -1,16 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using ReLogic.Content;
-
-using RoA.Content.Items.Equipables.Vanity.Developer;
-using RoA.Core.Defaults;
+﻿using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Miscellaneous;

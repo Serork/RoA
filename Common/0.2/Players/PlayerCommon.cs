@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Equipables.Miscellaneous;
-using RoA.Content.Tiles.Mechanisms;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -10,11 +9,9 @@ using RoA.Core.Utility.Vanilla;
 using System;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.WorldBuilding;
 
 namespace RoA.Common.Players;
 
@@ -45,12 +42,12 @@ sealed partial class PlayerCommon : ModPlayer {
         _backflipTimer = time == 0f ? BACKFLIPTIME : time;
     }
 
-    private void ApplySkullEffect() {
-        if (Player.HasEquipped<CarcassChestguard>(EquipType.Body) &&
-            Player.HasEquipped<CarcassSandals>(EquipType.Legs) &&
-            (Player.HasEquipped<HornetSkull>(EquipType.Head) || Player.HasEquipped<DevilSkull>(EquipType.Head) || Player.HasEquipped<DeerSkull>(EquipType.Head) ||
-            Player.HasEquipped(ArmorIDs.Head.Skull, EquipType.Head))) {
-            ApplyBoneArmorVisuals = true;
+    private static void ApplySkullEffect(Player self, Player drawPlayer) {
+        if (drawPlayer.HasEquipped<CarcassChestguard>(EquipType.Body) &&
+            (drawPlayer.HasEquipped<CarcassSandals>(EquipType.Legs) || drawPlayer.legs == CarcassSandals.FemaleLegs) &&
+            (drawPlayer.HasEquipped<HornetSkull>(EquipType.Head) || drawPlayer.HasEquipped<DevilSkull>(EquipType.Head) || drawPlayer.HasEquipped<DeerSkull>(EquipType.Head) || drawPlayer.HasEquipped<CrystallizedSkull>(EquipType.Head) ||
+            drawPlayer.HasEquipped(ArmorIDs.Head.Skull, EquipType.Head))) {
+            self.GetCommon().ApplyBoneArmorVisuals = true;
         }
     }
 
@@ -70,9 +67,15 @@ sealed partial class PlayerCommon : ModPlayer {
         DrawPlayerFullEvent += PlayerCommon_DrawPlayerFullEvent;
 
         On_Player.HorizontalMovement += On_Player_HorizontalMovement;
+        On_Player.SetArmorEffectVisuals += On_Player_SetArmorEffectVisuals;
 
         DevilSkullLoad();
         WiresLoad();
+    }
+
+    private void On_Player_SetArmorEffectVisuals(On_Player.orig_SetArmorEffectVisuals orig, Player self, Player drawPlayer) {
+        orig(self, drawPlayer);
+        ApplySkullEffect(self, drawPlayer);
     }
 
     public partial void WiresLoad();
@@ -154,8 +157,6 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event UpdateEquipsDelegate UpdateEquipsEvent;
     public override void UpdateEquips() {
         UpdateEquipsEvent?.Invoke(Player);
-
-        ApplySkullEffect();
     }
 
     public delegate void FrameEffectsDelegate(Player player);
