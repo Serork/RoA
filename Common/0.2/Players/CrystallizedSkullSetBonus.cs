@@ -70,7 +70,7 @@ sealed partial class PlayerCommon : ModPlayer {
             if (stoppedUsingManaFor > 0) {
                 stoppedUsingManaFor--;
                 if (stoppedUsingManaFor <= 0) {
-                    self.AddBuff<Crystallized>((int)((BUFFTIMEMAX == 0 ? int.MaxValue : BUFFTIMEMAX) * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
+                    self.AddBuff<Crystallized>((int)((BUFFTIMEMAX == 0 ? 3000 : BUFFTIMEMAX) * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
                 }
             }
         }
