@@ -174,12 +174,12 @@
 //            Rectangle r = Utils.CenteredRectangle(bottomAnchorPosition + new Vector2(0f, (0f - size.Y) * 0.5f), size);
 //            Vector2 mouseScreen = Main.MouseScreen;
 //            bool num2 = r.Contains(mouseScreen.ToPoint());
-//            Utils.DrawInvBG(c: num2 ? (new Color(64, 109, 164) * 0.75f) : (new Color(64, 109, 164) * 0.5f), sb: sb, R: r);
+//            Utils.DrawInvBG(c: num2 ? (new _color(64, 109, 164) * 0.75f) : (new _color(64, 109, 164) * 0.5f), sb: sb, R: r);
 //            float num3 = num * 0.3f;
 //            Vector2 vector = r.Right() - Vector2.UnitX * num * (12f + num3 * (float)_achievementIconFrame.Width);
-//            sb.Draw(_achievementTexture.Value, vector, _achievementIconFrame, Color.White * opacity, 0f, new Vector2(0f, _achievementIconFrame.Height / 2), num3, SpriteEffects.None, 0f);
-//            sb.Draw(_achievementBorderTexture.Value, vector, null, Color.White * opacity, 0f, new Vector2(0f, _achievementIconFrame.Height / 2), num3, SpriteEffects.None, 0f);
-//            Utils.DrawBorderString(color: new Color(Main.mouseTextColor, Main.mouseTextColor, (int)Main.mouseTextColor / 5, Main.mouseTextColor) * opacity, sb: sb, text: _title, pos: vector - Vector2.UnitX * 10f, scale: num * 0.9f, anchorx: 1f, anchory: 0.4f);
+//            sb.Draw(_achievementTexture.Value, vector, _achievementIconFrame, _color.White * opacity, 0f, new Vector2(0f, _achievementIconFrame.Height / 2), num3, SpriteEffects.None, 0f);
+//            sb.Draw(_achievementBorderTexture.Value, vector, null, _color.White * opacity, 0f, new Vector2(0f, _achievementIconFrame.Height / 2), num3, SpriteEffects.None, 0f);
+//            Utils.DrawBorderString(color: new _color(Main.mouseTextColor, Main.mouseTextColor, (int)Main.mouseTextColor / 5, Main.mouseTextColor) * opacity, sb: sb, text: _title, pos: vector - Vector2.UnitX * 10f, scale: num * 0.9f, anchorx: 1f, anchory: 0.4f);
 //            if (num2)
 //                OnMouseOver();
 //        }
@@ -201,6 +201,6 @@
 //    }
 
 //    public void DrawInNotificationsArea(SpriteBatch spriteBatch, Rectangle area, ref int gamepadPointLocalIndexTouse) {
-//        Utils.DrawInvBG(spriteBatch, area, Color.Red);
+//        Utils.DrawInvBG(spriteBatch, area, _color.Red);
 //    }
 //}

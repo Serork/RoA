@@ -68,9 +68,9 @@ sealed partial class PlayerCommon : ModPlayer {
         if (self.GetCommon().ApplyCrystallizedSkullSetBonus) {
             int previousMana = self.statMana;
             orig(self, item);
-            if (previousMana < 0 && !self.HasBuff<Crystallized>()) {
-                self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(previousMana) / (float)self.statManaMax2)));
-            }
+            //if (previousMana < 0 && !self.HasBuff<Crystallized>()) {
+            //    self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(previousMana) / (float)self.statManaMax2)));
+            //}
 
             return;
         }
@@ -96,9 +96,9 @@ sealed partial class PlayerCommon : ModPlayer {
 
                 handler._crystalData = new CrystalInfo[max];
                 Color[] colors = [
-                            Color.Lerp(new Color(227, 170, 230), new Color(175, 89, 192), 0.375f),
-                            Color.Lerp(new Color(210, 182, 241), new Color(164, 109, 224), 0.375f),
-                            Color.Lerp(new Color(184, 200, 241), new Color(133, 148, 186), 0.375f)
+                            Color.Lerp(new Color(227, 170, 230), new Color(175, 89, 192), 0.5f),
+                            Color.Lerp(new Color(210, 182, 241), new Color(164, 109, 224), 0.5f),
+                            Color.Lerp(new Color(184, 200, 241), new Color(133, 148, 186), 0.5f)
                             ];
                 List<int> taken = [];
                 for (int i = 0; i < max; i++) {

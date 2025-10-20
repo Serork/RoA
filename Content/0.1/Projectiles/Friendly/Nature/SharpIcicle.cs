@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Players;
 using RoA.Core.Utility;
 
 using System;
@@ -86,7 +87,7 @@ sealed class SharpIcicle : NatureProjectile {
             return;
         }
 
-        Vector2 pointPosition = player.GetViableMousePosition();
+        Vector2 pointPosition = player.GetWorldMousePosition();
         Projectile.ai[0]++;
         bool flag = Projectile.ai[0] > 35f;
         if ((pointPosition.X >= player.position.X && Projectile.position.X >= pointPosition.X) || (pointPosition.X <= player.position.X && Projectile.position.X <= pointPosition.X) || flag) {

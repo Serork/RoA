@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -147,6 +148,9 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
                 if (!_stopCounting) {
                     _attackTimer++;
                     _shootCount = (byte)(_attackTimer / PerShoot - 1);
+                    if (_attackTimer % PerShoot == 0 && _shootCount == 2) {
+                        SoundEngine.PlaySound(SoundID.MaxMana with { Pitch = 0f + _shootCount * 0.1f }, CorePosition);
+                    }
                     if (!IsInUse) {
                         SpawnDustsOnShoot(Owner, CorePosition);
                         _stopCounting = true;
@@ -202,7 +206,9 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
                 Vector2 pointPosition = player.GetViableMousePosition();
                 Vector2 center = player.Center;
                 float speed = MathHelper.Clamp((pointPosition - center).Length() * 0.025f, 8.5f, 11f);
+
                 velocity = Helper.VelocityToPoint(center, pointPosition, speed) * NatureWeaponHandler.GetUseSpeedMultiplier(player.GetSelectedItem(), player);
+                velocity = spawnPosition.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
             }
         }
 

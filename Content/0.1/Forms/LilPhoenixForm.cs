@@ -37,7 +37,7 @@ sealed class LilPhoenixForm : BaseForm {
     public override Vector2 SetWreathOffset(Player player) => new(0f, 0f);
     public override Vector2 SetWreathOffset2(Player player) => new(0f, 0f);
 
-    //protected override Color LightingColor {
+    //protected override _color LightingColor {
     //    get {
     //        float num56 = 1f;
     //        return new(num56, num56 * 0.65f, num56 * 0.4f);

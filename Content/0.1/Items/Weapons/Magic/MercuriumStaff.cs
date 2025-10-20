@@ -55,7 +55,7 @@ sealed class MercuriumStaff : ModItem {
         if (!Collision.CanHit(player.Center, 0, 0, position, 0, 0))
             return false;
 
-        Vector2 dustPosition = position + new Vector2(player.direction == 1 ? 2f : 4f, 4f * player.direction).RotatedBy(velocity.ToRotation());
+        Vector2 dustPosition = position + new Vector2((player.direction == 1 ? 2f : 2f) * 2f, 4f * player.direction).RotatedBy(velocity.ToRotation());
         int k = Main.rand.Next(20, 26);
         for (int i = 0; i < k; i++) {
             int x = (int)((double)dustPosition.X - 3.0 + (double)2 / 2.0);

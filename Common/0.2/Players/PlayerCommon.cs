@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.NPCs;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;

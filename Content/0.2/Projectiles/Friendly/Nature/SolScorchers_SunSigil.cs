@@ -215,7 +215,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         //batch.Draw(laser2, position, DrawInfo.Default with {
         //    Clip = clip3,
         //    Origin = origin3,
-        //    Color = color * 0.5f
+        //    _color = color * 0.5f
         //});
 
         int count = 8;

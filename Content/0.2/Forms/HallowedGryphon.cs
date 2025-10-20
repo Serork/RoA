@@ -29,7 +29,7 @@ sealed class HallowedGryphon : BaseForm {
     public override Vector2 SetWreathOffset(Player player) => new(0f, 0f);
     public override Vector2 SetWreathOffset2(Player player) => new(0f, 0f);
 
-    //protected override Color LightingColor => Color.Yellow;
+    //protected override _color LightingColor => _color.Yellow;
 
     protected override void SafeSetDefaults() {
         MountData.totalFrames = 11;

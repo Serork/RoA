@@ -30,6 +30,7 @@ sealed class NixieTubeTE : ModTileEntity {
     public Item? Dye2 { get; private set; } = null;
     public Color? LightColor { get; internal set; } = null;
     public NixieTubePicker_RemadePicker.Category Category { get; internal set; }
+    public bool Eng { get; internal set; }
 
     public NixieTubeTE() {
         Dye1 ??= new Item();
@@ -134,7 +135,7 @@ sealed class NixieTubeTE : ModTileEntity {
     const string name = "nixietube";
 
     public override void SaveData(TagCompound tag) {
-        tag[RoA.ModName + name + nameof(Category)] = Category;
+        tag[RoA.ModName + name + nameof(Category)] = (byte)Category;
         if (Dye1 is not null) {
             tag.Add(RoA.ModName + name + nameof(Dye1), ItemIO.Save(Dye1));
         }
@@ -143,6 +144,7 @@ sealed class NixieTubeTE : ModTileEntity {
         }
         tag[RoA.ModName + name + nameof(IsFlickerOff)] = IsFlickerOff;
         tag[RoA.ModName + name + nameof(Activated)] = Activated;
+        tag[RoA.ModName + name + nameof(Eng)] = Eng;
         if (LightColor is null) {
             tag[RoA.ModName + name + nameof(LightColor) + "null"] = true;
             return;
@@ -163,6 +165,7 @@ sealed class NixieTubeTE : ModTileEntity {
         }
         IsFlickerOff = tag.GetBool(RoA.ModName + name + nameof(IsFlickerOff));
         Activated = tag.GetBool(RoA.ModName + name + nameof(Activated));
+        Eng = tag.GetBool(RoA.ModName + name + nameof(Eng));
         bool isLightColorNull = !tag.GetBool(RoA.ModName + name + nameof(LightColor) + "null");
         if (isLightColorNull) {
             return;

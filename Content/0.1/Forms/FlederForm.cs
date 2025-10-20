@@ -30,7 +30,7 @@ sealed class FlederForm : BaseForm {
     public override Vector2 SetWreathOffset2(Player player) => new(0f, 0f);
 
     protected override Vector2 GetLightingPos(Player player) => player.Center;
-    //protected override Color LightingColor => new(79, 124, 211);
+    //protected override _color LightingColor => new(79, 124, 211);
 
     public override float GetMaxSpeedMultiplier(Player player) => 1f;
     public override float GetRunAccelerationMultiplier(Player player) => 1.25f;

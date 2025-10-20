@@ -1665,7 +1665,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void WallBush_Moss(int i, int j, bool ignoreWalls = true) {
-        int sizeX = _random.Next(8, 14);
+        float progressX = 1f;
+        if (i < Left) {
+            progressX *= (1f - MathF.Abs(((float)i - Left) / 100f));
+        }
+        if (i > Right) {
+            progressX *= (((float)i - Right) / 100f);
+        }
+        int sizeX = (int)(_random.Next(8, 14) * progressX);
         int sizeY = _random.Next(2, 5);
         int sizeY2 = sizeY;
         ushort tealMossWallType = (ushort)ModContent.WallType<TealMossWall2>();
@@ -1696,7 +1703,14 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void WallBush(int i, int j, bool ignoreWalls = true) {
-        int sizeX = _random.Next(8, 17);
+        float progressX = 1f;
+        if (i < Left) {
+            progressX *= (1f - MathF.Abs(((float)i - Left) / 100f));
+        }
+        if (i > Right) {
+            progressX *= (((float)i - Right) / 100f);
+        }
+        int sizeX = (int)(_random.Next(8, 17) * progressX);
         int sizeY = _random.Next(2, 5);
         int sizeY2 = sizeY;
         while (sizeY2 > 0) {
@@ -3269,7 +3283,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     public void BackwoodsTilesReplacement(GenerationProgress progress, GameConfiguration config) {
         //progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods2").Value;
 
-        for (int i = Left - 5; i < Right + 5; i++) {
+        for (int i = Left - 50; i < Right + 50; i++) {
             for (int j = BackwoodsVars.FirstTileYAtCenter - EdgeY; j < Bottom + EdgeY * 2; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 bool flag = tile.TileFrameX >= 1116 && tile.TileFrameX <= 1206 && tile.TileFrameY > 0;
@@ -5101,7 +5115,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //        }
         //    }
         //}
-        for (int i = left - 10; i <= right + 10; i++) {
+        for (int i = left - 20; i <= right + 20; i++) {
             if (i > CenterX - 10 && i < CenterX + 22) {
                 continue;
             }

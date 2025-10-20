@@ -153,7 +153,7 @@ sealed class HornetSpear : ModProjectile {
         //int timeLeft = Projectile.timeLeft;
         //int maxTimeLeft = (int)Projectile.localAI[1];
         //float colorLerpProgress = Utils.GetLerpValue(0, STARTDISAPPEARINGTIME, timeLeft, true);
-        //Color baseColor = Color.Lerp(Color.Black, Color.White, colorLerpProgress);
+        //_color baseColor = _color.Lerp(_color.Black, _color.White, colorLerpProgress);
         //lightColor = baseColor.MultiplyRGB(lightColor) * colorLerpProgress;
 
         if (CanFunction) {

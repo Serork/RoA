@@ -31,7 +31,7 @@ sealed class UINixieTubePickButton : UIElement {
         var texture = NixieTubePicker_TextureLoader.NixieTubePickButton;
         var borderTexture = NixieTubePicker_TextureLoader.NixieTubePickButtonBorder;
         SpriteFrame spriteFrame = new(41, 3, nixieTubeInfo.Index, 0);
-        if (NixieTubePicker_RemadePicker.IsRussian) {
+        if (NixieTubePicker_RemadePicker.IsRussian()) {
             bool flag = false;
             int checkCount = NixieTubePicker_RemadePicker.NUMCOUNT + NixieTubePicker_RemadePicker.RUSCOUNT;
             if (nixieTubeInfo.Index >= checkCount) {

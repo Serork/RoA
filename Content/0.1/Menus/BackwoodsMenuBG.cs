@@ -91,7 +91,7 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
                 Vector2 position = new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f));
                 texture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsMid2").Value;
                 //spriteBatch.DrawSelf(texture, position, new Rectangle(0, 0, texture.Width * 3, texture.Height * 3), color);
-                spriteBatch.Draw(texture, new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f) + (int)(Main.screenHeight * 0.5f)),
+                spriteBatch.Draw(texture, new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f) + 540),
                     new Rectangle?(new Rectangle(0, 0, texture.Width, 1160)), color, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
             }
         }

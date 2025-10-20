@@ -11,33 +11,55 @@ namespace RoA.Common.UI;
 readonly record struct NixieTubeInfo(byte Index, bool IsRussian = false) { }
 
 sealed class UINixieTubeGrid : UIElement {
-    private List<NixieTubeInfo> _workingButtons;
+    private List<NixieTubeInfo>? _workingButtons;
     private int _atEntryIndex;
     private int _lastEntry;
     private bool _calculated;
     private bool _engRusGrid;
 
-    private bool IsRussian => _engRusGrid && NixieTubePicker_RemadePicker.IsRussian;
+    private bool IsRussian => _engRusGrid && NixieTubePicker_RemadePicker.IsRussian();
 
-    public UINixieTubeGrid(List<NixieTubeInfo> workingSet, bool engRusGrid = false) {
+    public UINixieTubeGrid(List<NixieTubeInfo>? workingSet = null, bool engRusGrid = false) {
         Width = new StyleDimension(0f, 1f);
         Height = new StyleDimension(0f, 1f);
+
+        Init(workingSet, engRusGrid);
+
+        SetPadding(0f);
+        UpdateEntries();
+        FillBestiarySpaceWithEntries();
+        Recalculate();
+
+        _calculated = true;
+    }
+
+    public void Init(List<NixieTubeInfo>? workingSet, bool engRusGrid = false) {
+        _calculated = false;
+
         _workingButtons = workingSet;
         _engRusGrid = engRusGrid;
     }
 
     public override void OnInitialize() {
-        Recalculate();
-        SetPadding(0f);
-        UpdateEntries();
-        FillBestiarySpaceWithEntries();
+        //Recalculate();
+        //SetPadding(0f);
+        //UpdateEntries();
+        //FillBestiarySpaceWithEntries();
     }
 
     public void UpdateEntries() {
+        if (_workingButtons is null) {
+            return;
+        }
+
         _lastEntry = _workingButtons.Count;
     }
 
     public void FillBestiarySpaceWithEntries() {
+        if (_workingButtons is null) {
+            return;
+        }
+
         RemoveAllChildren();
         UpdateEntries();
         GetEntriesToShow(out var maxEntriesWidth, out var maxEntriesHeight, out var maxEntriesToHave);
