@@ -22,6 +22,7 @@ namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
     public static ushort BUFFTIMEMAX => 300;
+    public static ushort USECHECKTIME => 30;
 
     private struct CrystalInfo(Vector2 offset, bool secondFrame, float extraRotation = 0f, Color? color = null) {
         private float _opacity = 0f;
@@ -41,6 +42,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     private bool _initializingCrystals = true;
     private CrystalInfo[] _crystalData = null!;
+    private ushort _stoppedUsingManaFor;
 
     public bool ShouldDrawCrystals() => Player.statMana < 0 && !_initializingCrystals;
 
@@ -169,6 +171,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     if (pay) {
                         CombinedHooks.OnConsumeMana(self, item, amount);
                         self.statMana -= amount;
+                        self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
                     }
 
                     return true;
@@ -185,6 +188,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     if (pay) {
                         CombinedHooks.OnConsumeMana(self, item, amount);
                         self.statMana -= amount;
+                        self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
                     }
 
                     return true;
@@ -200,6 +204,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (pay) {
                     CombinedHooks.OnConsumeMana(self, item, amount);
                     self.statMana -= amount;
+                    self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
                 }
 
                 return true;
@@ -216,6 +221,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (pay) {
                     CombinedHooks.OnConsumeMana(self, item, amount);
                     self.statMana -= amount;
+                    self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
                 }
 
                 return true;
@@ -233,8 +239,10 @@ sealed partial class PlayerCommon : ModPlayer {
             if (self.statMana > 0) {
                 num = (int)((float)amount * self.manaCost);
                 if (self.statMana >= 0/*num*/) {
-                    if (pay)
+                    if (pay) {
                         self.statMana -= num;
+                        self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                    }
 
                     return true;
                 }
@@ -242,8 +250,10 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (self.manaFlower && !blockQuickMana) {
                     self.QuickMana();
                     if (self.statMana >= 0/*num*/) {
-                        if (pay)
+                        if (pay) {
                             self.statMana -= num;
+                            self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                        }
 
                         return true;
                     }
@@ -256,8 +266,10 @@ sealed partial class PlayerCommon : ModPlayer {
 
             num = (int)((float)amount * self.manaCost);
             if ((self.statManaMax2 - Math.Abs(self.statMana)) >= num) {
-                if (pay)
+                if (pay) {
                     self.statMana -= num;
+                    self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                }
 
                 return true;
             }
@@ -265,8 +277,10 @@ sealed partial class PlayerCommon : ModPlayer {
             if (self.manaFlower && !blockQuickMana) {
                 self.QuickMana();
                 if ((self.statManaMax2 - Math.Abs(self.statMana)) >= num) {
-                    if (pay)
+                    if (pay) {
                         self.statMana -= num;
+                        self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                    }
 
                     return true;
                 }
@@ -298,8 +312,18 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         if (self.manaRegenDelay > 0f) {
-            if (self.statMana < 0 && self.manaRegenDelay < self.maxRegenDelay / 2 && !self.HasBuff<Crystallized>()) {
-                self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
+            //if (self.statMana < 0 && self.manaRegenDelay < self.maxRegenDelay / 2 && !self.HasBuff<Crystallized>()) {
+            //    self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
+            //}
+
+            if (self.statMana < 0) {
+                ref ushort stoppedUsingManaFor = ref self.GetCommon()._stoppedUsingManaFor;
+                if (stoppedUsingManaFor > 0) {
+                    stoppedUsingManaFor--;
+                    if (stoppedUsingManaFor <= 0) {
+                        self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
+                    }
+                }
             }
 
             self.manaRegenDelay -= 1f;
