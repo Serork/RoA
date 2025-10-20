@@ -60,7 +60,7 @@ sealed partial class Lothor : ModNPC {
         NPC.value = Item.buyPrice(gold: 6);
 
         if (!Main.dedServ) {
-            Music = MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor");
+            Music = MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Lothor");
         }
 
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];

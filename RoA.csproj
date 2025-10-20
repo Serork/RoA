@@ -138,6 +138,9 @@
 		<Reference Include="ModLiquidLib">
 			<HintPath>..\ModAssemblies\ModLiquidLib_v2025.7.2.dll</HintPath>
 		</Reference>
+		<Reference Include="RoAMusic">
+			<HintPath>..\ModAssemblies\RoAMusic_v0.2.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 	
 </Project>

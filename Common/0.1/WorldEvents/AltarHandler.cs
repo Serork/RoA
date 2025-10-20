@@ -38,7 +38,7 @@ sealed class AltarHandler : ModSystem {
     }
 
     private sealed class LothorSummoningHandler2 : ModSceneEffect {
-        public override int Music => MusicLoader.GetMusicSlot(ResourceManager.Music + "Lothor");
+        public override int Music => MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Lothor");
 
         public override SceneEffectPriority Priority => SceneEffectPriority.Event;
 
