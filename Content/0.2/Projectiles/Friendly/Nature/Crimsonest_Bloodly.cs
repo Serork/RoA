@@ -121,7 +121,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                 _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4 * -owner.direction;
             }
             Projectile.Center = owner.Top;
-            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitY * -20f + (Vector2.UnitY * (_index == 1 ? 30f : _index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle);
+            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY + (Vector2.UnitY * -20f + (Vector2.UnitY * (_index == 1 ? 30f : _index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle * owner.gravDir)) * owner.gravDir;
         }
         void init() {
             BloodlyValues bloodlyValues = new(Projectile);
@@ -209,8 +209,16 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             BloodlyValues bloodlyValues = new(Projectile);
             Player owner = Projectile.GetOwnerAsPlayer();
             setPosition();
+            if (owner.gravDir < 0) {
+                Projectile.position.Y += 60f;
+            }
             Projectile.direction = _directedLeft.ToDirectionInt();
-            Projectile.rotation = MathHelper.TwoPi - _cooconAngle;
+            float minus = _cooconAngle;
+            if (owner.gravDir < 0) {
+                minus *= -1f;
+                Projectile.position.X += 16f * minus;
+            }
+            Projectile.rotation = MathHelper.TwoPi - minus;
             int timeLeft = Projectile.timeLeft;
             float revealTime = AttackTime - AttackTime * COCOONTIMELEFTMODIFIER / 2;
             bloodlyValues.ScaleValue = Utils.GetLerpValue(AttackTime, revealTime, timeLeft, true);
@@ -367,9 +375,18 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
         BloodlyValues bloodlyValues = new(Projectile);
         lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
         if (InCocoon) {
-            Projectile.QuickDrawAnimated(lightColor, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Cocoon].Value, maxFrames: COCOONFRAMECOUNT, 
+            Vector2 position = Projectile.position;
+            Player player = Projectile.GetOwnerAsPlayer();
+            Projectile.position += player.MovementOffset();
+            SpriteEffects effects = SpriteEffects.None;
+            float rotation = 0f;
+            if (player.gravDir < 0) {
+                effects = SpriteEffects.FlipVertically;
+            }
+            Projectile.QuickDrawAnimated(lightColor, exRot: rotation, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Cocoon].Value, maxFrames: COCOONFRAMECOUNT, 
                 scale: new Vector2(MathUtils.Clamp01(bloodlyValues.ScaleValue * 1.75f), MathUtils.Clamp01(bloodlyValues.ScaleValue * 2f)) * Projectile.scale, 
-                originScale: new Vector2(1f, 1.375f));
+                originScale: new Vector2(1f, 1.375f), spriteEffects: effects);
+            Projectile.position = position;
         }
         else {
             Projectile.QuickDrawAnimated(lightColor, scale: Vector2.One);
