@@ -8,12 +8,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class Tar : LiquidDust {
-    protected override Vector3 LightColorRGB => Vector3.Zero;
 }
 
 abstract class LiquidDust : ModDust {
-    protected virtual Vector3 LightColorRGB { get; }
-
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         float num = (255 - dust.alpha) / 255f;
         num = (num + 3f) / 4f;
@@ -44,9 +41,6 @@ abstract class LiquidDust : ModDust {
         if (num100 > 1f)
             num100 = 1f;
 
-        float lightR = LightColorRGB.X, lightG = LightColorRGB.Y, lightB = LightColorRGB.Z;
-        Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), num100 * lightR, num100 * lightG, num100 * lightB);
-
         if (dust.noGravity) {
             dust.scale += 0.03f;
             if (dust.scale < 1f)
@@ -57,12 +51,6 @@ abstract class LiquidDust : ModDust {
                 dust.rotation += 0.01f;
             else
                 dust.rotation -= 0.01f;
-
-            float num96 = dust.scale * 0.6f;
-            if (num96 > 1f)
-                num96 = 1f;
-
-            Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f + 1f), num96 * lightR, num96 * lightG, num96 * lightB);
         }
         else {
             if (!Collision.WetCollision(new Vector2(dust.position.X, dust.position.Y - 8f), 4, 4)) {
