@@ -673,7 +673,7 @@ sealed class BackwoodsVars : ModSystem {
         if (_preDownedBossTimer >= 5f) {
             _preDownedBossTimer = -1f;
 
-            Color color = Color.LightGreen;
+            Color color = Helper.EventMessageColor/*Color.LightGreen*/;
             string text = Language.GetText("Mods.RoA.World.BackwoodsFree" + (WorldGen.crimson ? "1" : "2")).ToString();
             Helper.NewMessage(text, color);
 
