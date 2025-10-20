@@ -84,7 +84,7 @@ static class ResourceManager {
     public static string Sounds => RoA.ModName + $"/{SOUNDSPATH}/";
     public static string AmbientSounds => Sounds + "Ambient/";
     //public static string Music => Sounds + "Music/";
-    public static string Music => "Resources/Sounds/Music/";
+    public static string Music => $"{SOUNDSPATH}/Music/";
     public static string ItemSounds => Sounds + "Items/";
     public static string NPCSounds => Sounds + "NPCs/";
     public static string MiscSounds => Sounds + "Other/";
