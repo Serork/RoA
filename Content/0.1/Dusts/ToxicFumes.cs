@@ -18,14 +18,19 @@ sealed class ToxicFumes : ModDust {
         dust.scale *= 1f;
     }
 
-    public override Color? GetAlpha(Dust dust, Color lightColor)
-        => dust.color;
+    public override Color? GetAlpha(Dust dust, Color lightColor) {
+        Color result = dust.color;
+        result *= Utils.GetLerpValue(0, 30, dust.alpha, true) * Utils.GetLerpValue(255, 225, dust.alpha, true);
+
+        return result;
+    }
 
     public override bool Update(Dust dust) {
         Helper.ApplyWindPhysics(dust.position, ref dust.velocity);
 
+        bool hasCustomData = dust.customData is float;
         float opacity = Utils.GetLerpValue(0f, 0.2f, 1f - (float)dust.alpha / 255, true);
-        dust.color = Lighting.GetColor((int)(dust.position.X / 16), (int)(dust.position.Y / 16)).MultiplyRGB(new Color(106, 140, 34, 100)) * 0.1f * opacity;
+        dust.color = Lighting.GetColor((int)(dust.position.X / 16), (int)(dust.position.Y / 16)).MultiplyRGB(new Color(106, 140, 34, 100)) * (hasCustomData ? (float)dust.customData : 0.1f) * opacity;
         dust.position += dust.velocity * 0.12f;
         dust.scale *= 0.99f;
         dust.velocity *= 0.97f;
