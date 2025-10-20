@@ -22,7 +22,7 @@ namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
     public static ushort BUFFTIMEMAX => 300;
-    public static ushort USECHECKTIME => 30;
+    public static ushort USECHECKTIME => 0; // we use useTime * 1.5 if USECHECKTIME value is zero
 
     private struct CrystalInfo(Vector2 offset, bool secondFrame, float extraRotation = 0f, Color? color = null) {
         private float _opacity = 0f;
@@ -45,6 +45,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private ushort _stoppedUsingManaFor;
 
     public bool ShouldDrawCrystals() => Player.statMana < 0 && !_initializingCrystals;
+    public ushort GetUseCheckTime() => USECHECKTIME == 0 ? (ushort)(Player.itemTimeMax * 1.5f) : USECHECKTIME;
 
     public bool ApplyCrystallizedSkullSetBonus;
 
@@ -171,7 +172,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     if (pay) {
                         CombinedHooks.OnConsumeMana(self, item, amount);
                         self.statMana -= amount;
-                        self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                        self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                     }
 
                     return true;
@@ -188,7 +189,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     if (pay) {
                         CombinedHooks.OnConsumeMana(self, item, amount);
                         self.statMana -= amount;
-                        self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                        self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                     }
 
                     return true;
@@ -204,7 +205,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (pay) {
                     CombinedHooks.OnConsumeMana(self, item, amount);
                     self.statMana -= amount;
-                    self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                 }
 
                 return true;
@@ -221,7 +222,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (pay) {
                     CombinedHooks.OnConsumeMana(self, item, amount);
                     self.statMana -= amount;
-                    self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                 }
 
                 return true;
@@ -241,7 +242,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (self.statMana >= 0/*num*/) {
                     if (pay) {
                         self.statMana -= num;
-                        self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                        self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                     }
 
                     return true;
@@ -252,7 +253,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     if (self.statMana >= 0/*num*/) {
                         if (pay) {
                             self.statMana -= num;
-                            self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                            self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                         }
 
                         return true;
@@ -268,7 +269,7 @@ sealed partial class PlayerCommon : ModPlayer {
             if ((self.statManaMax2 - Math.Abs(self.statMana)) >= num) {
                 if (pay) {
                     self.statMana -= num;
-                    self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                 }
 
                 return true;
@@ -279,7 +280,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if ((self.statManaMax2 - Math.Abs(self.statMana)) >= num) {
                     if (pay) {
                         self.statMana -= num;
-                        self.GetCommon()._stoppedUsingManaFor = USECHECKTIME;
+                        self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                     }
 
                     return true;
