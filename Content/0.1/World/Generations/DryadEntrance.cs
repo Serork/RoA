@@ -305,7 +305,7 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                             }
                         }
                     }
-                    if (Main.tile[x2, y2].TileType == 192 && genRand.NextBool(4)) {
+                    if (Main.tile[x2, y2].TileType == 192 && genRand.NextBool(6)) {
                         WorldGen.PlaceTile(x2, y2 - 1, 187, mute: true, forced: false, -1, genRand.Next(50, 52));
                     }
                     if (genRand.NextBool(3)) {
