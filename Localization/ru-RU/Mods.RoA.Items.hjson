@@ -2230,7 +2230,7 @@ CarcassSandals: {
 
 DevilSkull: {
 	DisplayName: Череп дьявола
-	Tooltip: "'Вуду в моей крови ярость'"
+	Tooltip: "'Вуду в моей крови бушует'"
 }
 
 CrushedRemains: {
