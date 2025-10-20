@@ -2230,7 +2230,7 @@ CrushedRemains: {
 
 HornetSkull: {
 	DisplayName: Hornet Skull
-	Tooltip: ""
+	Tooltip: "'Shaw!'"
 }
 
 NixieIndexator10Minus: {
