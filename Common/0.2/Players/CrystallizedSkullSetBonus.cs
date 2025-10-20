@@ -24,7 +24,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
-    public static ushort BUFFTIMEMAX => 0; // we use INFINITE if BUFFTIMEMAX value is zero
+    public static ushort BUFFTIMEMAX => 0; // we use 5 minutes if BUFFTIMEMAX value is zero
     public static ushort USECHECKTIME => 0; // we use useTime * 1.5 if USECHECKTIME value is zero
 
     private struct CrystalInfo(Vector2 offset, bool secondFrame, float extraRotation = 0f, Color? color = null) {
