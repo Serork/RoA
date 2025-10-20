@@ -2295,7 +2295,7 @@ NixieCategoryChanger: {
 
 CrystallizedSkull: {
 	DisplayName: Поросший кристаллами череп
-	// Tooltip: ""
+	// Tooltip: "'There is a monster inside all of us'"
 }
 
 StarFusion: {
