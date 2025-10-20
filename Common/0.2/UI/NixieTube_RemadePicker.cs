@@ -596,6 +596,9 @@ sealed class NixieTubePicker_RemadePicker : SmartUIState {
                 Main.recBigList = false;
                 Main.hidePlayerCraftingMenu = true;
             }
+            else {
+                SoundEngine.PlaySound(SoundID.MenuTick);
+            }
             Main.playerInventory = true;
             _nixieTubeTilePosition = checkPos;
             ResetPickedIndex();
