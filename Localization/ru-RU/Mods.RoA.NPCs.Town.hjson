@@ -50,9 +50,10 @@ Dryad: {
 GoblinTinkerer.PettyGoblinQuote1: Тебя обставил тот мелкий воришка с волшебным мешком? Скажу честно, ты не первый.
 
 Guide: {
-	// HelpText1: Have you seen that wooden cocoon? It has stayed dormant for ages. Maybe defeating a powerful foe will bring it to life?
-	// HelpText2: Have you checked on that wooden woman? Perhaps she needs a little push...
-	// HelpText3: Once you forge appropriate tools, nothing should stop you from chopping down those trees in the backwoods.
-	// HelpText4: Have you seen those chests hidden deep below in the backwoods? A strong pickaxe may help you reach them.
-	// HelpText5: That altar in the backwoods yearns for souls of those who once worshipped it. Try fulfilling its hunger if you seek an ancient monster.
+	// HelpText0: Have you seen that wooden cocoon? It has stayed dormant for ages. Maybe defeating a powerful foe will bring it to life?
+	// HelpText1: Have you checked on that wooden woman? Perhaps she needs a little push...
+	// HelpText2: Once you forge appropriate tools, nothing should stop you from chopping down those trees in the backwoods.
+	// HelpText3: Have you seen those chests hidden deep below in the backwoods? A strong pickaxe may help you reach them.
+	// HelpText4: That altar in the backwoods yearns for souls of those who once worshipped it. Try fulfilling its hunger if you seek an ancient monster.
+	// HelpText5: TAR TEXT TAR TEXT TAR TEXT
 }

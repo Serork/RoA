@@ -15,69 +15,40 @@ sealed class GuideHelpTexts : ILoadable {
         On_Main.HelpText += On_Main_HelpText;
     }
 
-    public static void Update() {
-        if (NewGuideHelpTextID.DryadCocoon1Condition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.DryadCocoon1]) {
-            WorldCommon.Remind();
-            return;
-        }
-        if (NewGuideHelpTextID.TarCondition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.Tar]) {
-            WorldCommon.Remind();
-            return;
-        }
-        if (NewGuideHelpTextID.DryadCocoon2Condition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.DryadCocoon2]) {
-            WorldCommon.Remind();
-            return;
-        }
-        if (NewGuideHelpTextID.BackwoodsTreesCondition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.BackwoodsTrees]) {
-            WorldCommon.Remind();
-            return;
-        }
-
-        if (NewGuideHelpTextID.BackwoodsLootRoomsCondition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.BackwoodsLootRooms]) {
-            WorldCommon.Remind();
-            return;
-        }
-
-        if (NewGuideHelpTextID.LothorCondition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.Lothor]) {
-            WorldCommon.Remind();
-            return;
-        }
-    }
-
     private void On_Main_HelpText(On_Main.orig_HelpText orig) {
         //orig();
 
-        if (NewGuideHelpTextID.DryadCocoon1Condition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.DryadCocoon1]) {
-            Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{1}");
-            WorldCommon.ShownGuideTexts[NewGuideHelpTextID.DryadCocoon1] = true;
-            return;
+        if (NewGuideHelpTextID.DryadCocoon1Condition()) {
+            if (WorldCommon.ShowMessage(NewGuideHelpTextID.DryadCocoon1)) {
+                return;
+            }
         }
-        if (NewGuideHelpTextID.TarCondition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.Tar]) {
-            Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{1}");
-            WorldCommon.ShownGuideTexts[NewGuideHelpTextID.Tar] = true;
-            return;
+        if (NewGuideHelpTextID.TarCondition()) {
+            if (WorldCommon.ShowMessage(NewGuideHelpTextID.Tar)) {
+                return;
+            }
         }
-        if (NewGuideHelpTextID.DryadCocoon2Condition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.DryadCocoon2]) {
-            Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{2}");
-            WorldCommon.ShownGuideTexts[NewGuideHelpTextID.DryadCocoon2] = true;
-            return;
+        if (NewGuideHelpTextID.DryadCocoon2Condition()) {
+            if (WorldCommon.ShowMessage(NewGuideHelpTextID.DryadCocoon2)) {
+                return;
+            }
         }
-        if (NewGuideHelpTextID.BackwoodsTreesCondition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.BackwoodsTrees]) {
-            Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{3}");
-            WorldCommon.ShownGuideTexts[NewGuideHelpTextID.BackwoodsTrees] = true;
-            return;
-        }
-
-        if (NewGuideHelpTextID.BackwoodsLootRoomsCondition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.BackwoodsLootRooms]) {
-            Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{4}");
-            WorldCommon.ShownGuideTexts[NewGuideHelpTextID.BackwoodsLootRooms] = true;
-            return;
+        if (NewGuideHelpTextID.BackwoodsTreesCondition()) {
+            if (WorldCommon.ShowMessage(NewGuideHelpTextID.BackwoodsTrees)) {
+                return;
+            }
         }
 
-        if (NewGuideHelpTextID.LothorCondition() && !WorldCommon.ShownGuideTexts[NewGuideHelpTextID.Lothor]) {
-            Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{5}");
-            WorldCommon.ShownGuideTexts[NewGuideHelpTextID.Lothor] = true;
-            return;
+        if (NewGuideHelpTextID.BackwoodsLootRoomsCondition()) {
+            if (WorldCommon.ShowMessage(NewGuideHelpTextID.BackwoodsLootRooms)) {
+                return;
+            }
+        }
+
+        if (NewGuideHelpTextID.LothorCondition()) {
+            if (WorldCommon.ShowMessage(NewGuideHelpTextID.Lothor)) {
+                return;
+            }
         }
 
         bool flag = false;
@@ -327,15 +298,15 @@ sealed class GuideHelpTexts : ILoadable {
             //    return;
             //}
             if (NewGuideHelpTextID.DryadCocoon1Condition() && Main.helpText == 64) {
-                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{1}");
+                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{NewGuideHelpTextID.DryadCocoon1}");
                 return;
             }
             if (Main.helpText == 65) {
-                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{6}");
+                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{NewGuideHelpTextID.Tar}");
                 return;
             }
             if (NewGuideHelpTextID.DryadCocoon2Condition() && Main.helpText == 66) {
-                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{2}");
+                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{NewGuideHelpTextID.DryadCocoon2}");
                 return;
             }
             int num5 = 2;
@@ -500,12 +471,12 @@ sealed class GuideHelpTexts : ILoadable {
             }
 
             if (Main.helpText == 206 && NewGuideHelpTextID.BackwoodsTreesCondition()) {
-                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{3}");
+                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{NewGuideHelpTextID.BackwoodsTrees}");
                 return;
             }
 
             if (Main.helpText == 207 && NewGuideHelpTextID.BackwoodsLootRoomsCondition()) {
-                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{4}");
+                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{NewGuideHelpTextID.BackwoodsLootRooms}");
                 return;
             }
 
@@ -516,7 +487,7 @@ sealed class GuideHelpTexts : ILoadable {
             }
 
             if (Main.helpText == 208 + num6 && NewGuideHelpTextID.LothorCondition()) {
-                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{5}");
+                Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{NewGuideHelpTextID.Lothor}");
                 return;
             }
 

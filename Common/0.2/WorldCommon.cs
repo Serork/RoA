@@ -5,6 +5,7 @@ using System;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
@@ -34,29 +35,90 @@ sealed class WorldCommon : ModSystem {
 
     public static byte NEWGUIDETEXTCOUNT => NewGuideHelpTextID.Count;
 
-    public static bool[] ShownGuideTexts { get; private set; } = null!;
+
+    private static bool[] _shownGuideTexts = null!;
+
 
     public static bool ShouldRemindOfNewGuideText;
 
     public static bool HasNewGuideTextToShow { get; private set; }
 
-    public string GetKeyText(int index) => RoA.ModName + "newguidetexts" + nameof(ShownGuideTexts) + Utils.Clamp(index, 0, NEWGUIDETEXTCOUNT);
+    public static int GetClampedIndex(int index) => Utils.Clamp(index, 0, NEWGUIDETEXTCOUNT);
+    public static string GetKeyText(int index) => RoA.ModName + "newguidetexts" + nameof(_shownGuideTexts) + GetClampedIndex(index);
 
-    public static void Remind() {
-        if (!ShouldRemindOfNewGuideText) {
-            return;
+    public static void TryToRemind() {
+        if (NewGuideHelpTextID.DryadCocoon1Condition()) {
+            if (Remind(NewGuideHelpTextID.DryadCocoon1)) {
+                return;
+            }
+        }
+        if (NewGuideHelpTextID.TarCondition()) {
+            if (Remind(NewGuideHelpTextID.Tar)) {
+                return;
+            }
+        }
+        if (NewGuideHelpTextID.DryadCocoon2Condition()) {
+            if (Remind(NewGuideHelpTextID.DryadCocoon2)) {
+                return;
+            }
+        }
+        if (NewGuideHelpTextID.BackwoodsTreesCondition()) {
+            if (Remind(NewGuideHelpTextID.BackwoodsTrees)) {
+                return;
+            }
+        }
+
+        if (NewGuideHelpTextID.BackwoodsLootRoomsCondition()) {
+            if (Remind(NewGuideHelpTextID.BackwoodsLootRooms)) {
+                return;
+            }
+        }
+
+        if (NewGuideHelpTextID.LothorCondition()) {
+            if (Remind(NewGuideHelpTextID.Lothor)) {
+                return;
+            }
+        }
+    }
+
+    public static bool Remind(int index) {
+        index = GetClampedIndex(index);
+
+        if (!ShouldRemindOfNewGuideText || _shownGuideTexts[index]) {
+            return false;
         }
 
         HasNewGuideTextToShow = true;
+
+        return true;
+    }
+
+    public static bool ShowMessage(int index) {
+        if (!HasNewGuideTextToShow) {
+            return false;
+        }
+
+        index = GetClampedIndex(index);
+        if (!_shownGuideTexts[index]) {
+            Main.npcChatText = Language.GetTextValue($"Mods.RoA.NPCs.Town.Guide.HelpText{index}");
+
+            _shownGuideTexts[index] = true;
+
+            ShouldRemindOfNewGuideText = false;
+
+            return true;
+        }
+
+        return false;
     }
 
     public override void ClearWorld() {
-        ShownGuideTexts = new bool[NEWGUIDETEXTCOUNT];
+        _shownGuideTexts = new bool[NEWGUIDETEXTCOUNT];
     }
 
     public override void SaveWorldData(TagCompound tag) {
         for (int i = 0; i < NEWGUIDETEXTCOUNT; i++) {
-            tag[GetKeyText(i)] = ShownGuideTexts[i];
+            tag[GetKeyText(i)] = _shownGuideTexts[i];
         }
         if (ShouldRemindOfNewGuideText) {
             tag[RoA.ModName + nameof(ShouldRemindOfNewGuideText)] = true;
@@ -65,7 +127,7 @@ sealed class WorldCommon : ModSystem {
 
     public override void LoadWorldData(TagCompound tag) {
         for (int i = 0; i < NEWGUIDETEXTCOUNT; i++) {
-            ShownGuideTexts[i] = tag.GetBool(GetKeyText(i));
+            _shownGuideTexts[i] = tag.GetBool(GetKeyText(i));
         }
         ShouldRemindOfNewGuideText = tag.GetBool(RoA.ModName + nameof(ShouldRemindOfNewGuideText));
     }
@@ -80,6 +142,6 @@ sealed class WorldCommon : ModSystem {
         }
 
         HasNewGuideTextToShow = false;
-        GuideHelpTexts.Update();
+        TryToRemind();
     }
 }
