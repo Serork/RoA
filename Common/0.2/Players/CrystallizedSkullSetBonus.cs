@@ -162,7 +162,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 + (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
 
                     for (int k = 0; k < 4; k++) {
-                        if (Main.rand.NextBool()) {
+                        if (Main.rand.NextBool(3)) {
                             continue;
                         }
                         int dustType = Main.rand.NextBool() ? DustID.BlueCrystalShard : Main.rand.NextBool() ? DustID.PinkCrystalShard : DustID.PurpleCrystalShard;
