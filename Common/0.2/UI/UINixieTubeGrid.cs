@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using System;
 using System.Collections.Generic;
@@ -108,6 +109,9 @@ sealed class UINixieTubeGrid : UIElement {
     }
 
     public override void Update(GameTime gameTime) {
+    }
+
+    public override void Draw(SpriteBatch spriteBatch) {
         if (_calculated) {
             return;
         }
@@ -117,5 +121,7 @@ sealed class UINixieTubeGrid : UIElement {
         FillBestiarySpaceWithEntries();
 
         _calculated = true;
+
+        base.Draw(spriteBatch);
     }
 }
