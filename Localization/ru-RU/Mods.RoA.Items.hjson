@@ -2230,7 +2230,7 @@ CarcassSandals: {
 
 DevilSkull: {
 	DisplayName: Череп дьявола
-	Tooltip: "'Вуду бушует в моей крови'"
+	Tooltip: "'Вуду в моей крови ярость'"
 }
 
 CrushedRemains: {
@@ -2295,7 +2295,7 @@ NixieCategoryChanger: {
 
 CrystallizedSkull: {
 	DisplayName: Поросший кристаллами череп
-	// Tooltip: "'There is a monster inside all of us'"
+	Tooltip: "'В каждом из нас есть монстр'"
 }
 
 StarFusion: {
