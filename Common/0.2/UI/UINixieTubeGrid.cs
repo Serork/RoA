@@ -112,15 +112,13 @@ sealed class UINixieTubeGrid : UIElement {
     }
 
     public override void Draw(SpriteBatch spriteBatch) {
-        if (_calculated) {
-            return;
+        if (!_calculated) {
+            SetPadding(0f);
+            UpdateEntries();
+            FillBestiarySpaceWithEntries();
+
+            _calculated = true;
         }
-
-        SetPadding(0f);
-        UpdateEntries();
-        FillBestiarySpaceWithEntries();
-
-        _calculated = true;
 
         base.Draw(spriteBatch);
     }
