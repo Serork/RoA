@@ -24,7 +24,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
-    public static ushort BUFFTIMEMAX => 0; // we use 5 minutes if BUFFTIMEMAX value is zero
+    //public static ushort BUFFTIMEMAX => 0; // we use 5 minutes if BUFFTIMEMAX value is zero
     public static ushort USECHECKTIME => 0; // we use useTime * 1.5 if USECHECKTIME value is zero
 
     private struct CrystalInfo(Vector2 offset, bool secondFrame, float extraRotation = 0f, Color? color = null) {
@@ -70,7 +70,7 @@ sealed partial class PlayerCommon : ModPlayer {
             if (stoppedUsingManaFor > 0) {
                 stoppedUsingManaFor--;
                 if (stoppedUsingManaFor <= 0) {
-                    self.AddBuff<Crystallized>((int)((BUFFTIMEMAX == 0 ? 3000 : BUFFTIMEMAX) * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
+                    self.AddBuff<Crystallized>(2/*(int)((BUFFTIMEMAX == 0 ? 3000 : BUFFTIMEMAX) * (Math.Abs(self.statMana) / (float)self.statManaMax2))*/);
                 }
             }
         }
