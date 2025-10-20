@@ -45,9 +45,22 @@ sealed partial class PlayerCommon : ModPlayer {
     private ushort _stoppedUsingManaFor;
 
     public bool ShouldDrawCrystals() => Player.statMana < 0 && !_initializingCrystals;
-    public ushort GetUseCheckTime() => USECHECKTIME == 0 ? (ushort)(Player.itemAnimationMax * 1.5f) : USECHECKTIME;
+    public ushort GetUseCheckTime() => USECHECKTIME == 0 ? Math.Max((ushort)30, (ushort)(Player.itemAnimationMax * 1.5f)) : USECHECKTIME;
 
     public bool ApplyCrystallizedSkullSetBonus;
+
+    public override void PostItemCheck() {
+        Player self = Player;
+        if (self.statMana < 0 && !self.ItemAnimationActive) {
+            ref ushort stoppedUsingManaFor = ref self.GetCommon()._stoppedUsingManaFor;
+            if (stoppedUsingManaFor > 0) {
+                stoppedUsingManaFor--;
+                if (stoppedUsingManaFor <= 0) {
+                    self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
+                }
+            }
+        }
+    }
 
     public override void SetStaticDefaults() {
         if (Main.dedServ) {
@@ -172,8 +185,9 @@ sealed partial class PlayerCommon : ModPlayer {
                     if (pay) {
                         CombinedHooks.OnConsumeMana(self, item, amount);
                         self.statMana -= amount;
-                        self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                     }
+
+                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
 
                     return true;
                 }
@@ -189,8 +203,8 @@ sealed partial class PlayerCommon : ModPlayer {
                     if (pay) {
                         CombinedHooks.OnConsumeMana(self, item, amount);
                         self.statMana -= amount;
-                        self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                     }
+                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
 
                     return true;
                 }
@@ -205,8 +219,8 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (pay) {
                     CombinedHooks.OnConsumeMana(self, item, amount);
                     self.statMana -= amount;
-                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                 }
+                self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
 
                 return true;
             }
@@ -222,8 +236,8 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (pay) {
                     CombinedHooks.OnConsumeMana(self, item, amount);
                     self.statMana -= amount;
-                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                 }
+                self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
 
                 return true;
             }
@@ -242,8 +256,8 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (self.statMana >= 0/*num*/) {
                     if (pay) {
                         self.statMana -= num;
-                        self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                     }
+                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
 
                     return true;
                 }
@@ -253,8 +267,8 @@ sealed partial class PlayerCommon : ModPlayer {
                     if (self.statMana >= 0/*num*/) {
                         if (pay) {
                             self.statMana -= num;
-                            self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                         }
+                        self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
 
                         return true;
                     }
@@ -269,8 +283,8 @@ sealed partial class PlayerCommon : ModPlayer {
             if ((self.statManaMax2 - Math.Abs(self.statMana)) >= num) {
                 if (pay) {
                     self.statMana -= num;
-                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                 }
+                self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
 
                 return true;
             }
@@ -280,8 +294,8 @@ sealed partial class PlayerCommon : ModPlayer {
                 if ((self.statManaMax2 - Math.Abs(self.statMana)) >= num) {
                     if (pay) {
                         self.statMana -= num;
-                        self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
                     }
+                    self.GetCommon()._stoppedUsingManaFor = self.GetCommon().GetUseCheckTime();
 
                     return true;
                 }
@@ -316,16 +330,6 @@ sealed partial class PlayerCommon : ModPlayer {
             //if (self.statMana < 0 && self.manaRegenDelay < self.maxRegenDelay / 2 && !self.HasBuff<Crystallized>()) {
             //    self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
             //}
-
-            if (self.statMana < 0) {
-                ref ushort stoppedUsingManaFor = ref self.GetCommon()._stoppedUsingManaFor;
-                if (stoppedUsingManaFor > 0) {
-                    stoppedUsingManaFor--;
-                    if (stoppedUsingManaFor <= 0) {
-                        self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
-                    }
-                }
-            }
 
             self.manaRegenDelay -= 1f;
             self.manaRegenDelay -= self.manaRegenDelayBonus;
