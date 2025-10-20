@@ -2193,21 +2193,6 @@ Crimsonest: {
 	// Tooltip: ""
 }
 
-Test: {
-	// DisplayName: Test
-	// Tooltip: ""
-}
-
-Test2: {
-	// DisplayName: Test2
-	// Tooltip: ""
-}
-
-Test3: {
-	// DisplayName: Test3
-	// Tooltip: ""
-}
-
 HallowedTopfhelm: {
 	DisplayName: Освящённый  топфхельм
 	// Tooltip: ""
@@ -2255,7 +2240,7 @@ CrushedRemains: {
 
 HornetSkull: {
 	DisplayName: Череп осы
-	// Tooltip: ""
+	// Tooltip: "'Shaw!'"
 }
 
 NixieIndexator10Minus: {
