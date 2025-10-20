@@ -98,7 +98,7 @@ static partial class PlayerExtensions {
             new Vector2(0f, 0f),
         ];
 
-        return new Vector2(positions[player.headFrame.Y / 56].X * player.direction, positions[player.headFrame.Y / 56].Y);
+        return new Vector2(positions[player.bodyFrame.Y / 56].X * player.direction, positions[player.bodyFrame.Y / 56].Y);
     }
 
     public static bool FindBuff(this Player player, int type, out int index) {
