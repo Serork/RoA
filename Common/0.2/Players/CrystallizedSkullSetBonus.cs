@@ -298,6 +298,10 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         if (self.manaRegenDelay > 0f) {
+            if (self.statMana < 0 && self.manaRegenDelay < self.maxRegenDelay / 2 && !self.HasBuff<Crystallized>()) {
+                self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
+            }
+
             self.manaRegenDelay -= 1f;
             self.manaRegenDelay -= self.manaRegenDelayBonus;
             if (self.IsStandingStillForSpecialEffects || self.grappling[0] >= 0 || self.manaRegenBuff)
@@ -335,9 +339,6 @@ sealed partial class PlayerCommon : ModPlayer {
             bool flag = false;
             self.manaRegenCount -= 120;
             if (self.statMana < self.statManaMax2) {
-                if (self.statMana < 0 && !self.HasBuff<Crystallized>()) {
-                    self.AddBuff<Crystallized>((int)(BUFFTIMEMAX * (Math.Abs(self.statMana) / (float)self.statManaMax2)));
-                }
                 self.statMana++;
                 flag = true;
             }
