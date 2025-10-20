@@ -11,21 +11,21 @@ sealed class Tar : LiquidDust {
 }
 
 abstract class LiquidDust : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) {
-        float num = (255 - dust.alpha) / 255f;
-        num = (num + 3f) / 4f;
-        int num6 = (int)(lightColor.R * num);
-        int num5 = (int)(lightColor.G * num);
-        int num4 = (int)(lightColor.B * num);
-        int num8 = lightColor.A - dust.alpha;
-        if (num8 < 0)
-            num8 = 0;
+    //public override Color? GetAlpha(Dust dust, Color lightColor) {
+    //    float num = (255 - dust.alpha) / 255f;
+    //    num = (num + 3f) / 4f;
+    //    int num6 = (int)(lightColor.R * num);
+    //    int num5 = (int)(lightColor.G * num);
+    //    int num4 = (int)(lightColor.B * num);
+    //    int num8 = lightColor.A - dust.alpha;
+    //    if (num8 < 0)
+    //        num8 = 0;
 
-        if (num8 > 255)
-            num8 = 255;
+    //    if (num8 > 255)
+    //        num8 = 255;
 
-        return new Color(num6, num5, num4, num8);
-    }
+    //    return new Color(num6, num5, num4, num8);
+    //}
 
     public override void OnSpawn(Dust dust) {
         dust.velocity *= 0.1f;
