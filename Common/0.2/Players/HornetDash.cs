@@ -124,12 +124,11 @@ sealed partial class PlayerCommon : ModPlayer {
             return;
         }
 
-        bool dashUp = direction == IDoubleTap.TapDirection.Top;
-        if (direction != IDoubleTap.TapDirection.Down &&
-            !dashUp) {
+        if (direction != IDoubleTap.TapDirection.Left && direction != IDoubleTap.TapDirection.Right) {
             return;
         }
 
+        bool dashUp = Player.controlJump;
         if (DoingHornetDash || IsHornetDashInCooldown || (dashUp && !CanDoHornetDash)) {
             return;
         }
@@ -140,7 +139,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
         DashTime = HORNETDASHTIME;
         SavedPosition = Player.position;
-        SavedVelocity = new Vector2(Player.direction, 1f * (direction == IDoubleTap.TapDirection.Down).ToDirectionInt()) * HORNETDASHLENGTH;
+        SavedVelocity = new Vector2(Player.direction, 1f * (!dashUp).ToDirectionInt()) * HORNETDASHLENGTH;
         if (dashUp) {
             CanDoHornetDash = false;
         }
