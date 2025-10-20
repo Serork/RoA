@@ -45,7 +45,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private ushort _stoppedUsingManaFor;
 
     public bool ShouldDrawCrystals() => Player.statMana < 0 && !_initializingCrystals;
-    public ushort GetUseCheckTime() => USECHECKTIME == 0 ? (ushort)(Player.itemTimeMax * 1.5f) : USECHECKTIME;
+    public ushort GetUseCheckTime() => USECHECKTIME == 0 ? (ushort)(Player.itemAnimationMax * 1.5f) : USECHECKTIME;
 
     public bool ApplyCrystallizedSkullSetBonus;
 
