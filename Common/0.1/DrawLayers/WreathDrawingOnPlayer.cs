@@ -98,7 +98,7 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
         Color immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(/*wreathItem.ModItem is FenethsBlazingWreath ? DrawColor.White :*/ drawInfo.colorArmorLegs, drawInfo.shadow);
         immuneAlphaPure *= drawInfo.drawPlayer.stealth;
         DrawData drawData = new(texture,
-                                position + drawInfo.drawPlayer.PlayerMovementOffset(),
+                                position + drawInfo.drawPlayer.MovementOffset(),
                                 null,
                                 immuneAlphaPure, drawInfo.drawPlayer.legRotation, drawInfo.legVect, 1f, drawInfo.playerEffect, 0) {
             shader = wreathItemToShowHandler.DyeItem.dye
@@ -113,7 +113,7 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
             immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(wreathGlowMask.GlowColor, drawInfo.shadow);
             immuneAlphaPure *= drawInfo.drawPlayer.stealth;
             drawData = new(texture,
-                           position + drawInfo.drawPlayer.PlayerMovementOffset(),
+                           position + drawInfo.drawPlayer.MovementOffset(),
                            null,
                            immuneAlphaPure, drawInfo.drawPlayer.legRotation, drawInfo.legVect, 1f, drawInfo.playerEffect, 0) {
                 shader = wreathItemToShowHandler.DyeItem.dye

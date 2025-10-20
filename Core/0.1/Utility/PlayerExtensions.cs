@@ -74,7 +74,7 @@ static partial class PlayerExtensions {
 
     public static bool CanTransfromIntoDruidForm<T>(this Player player, IDoubleTap.TapDirection direction) where T : ModItem => direction == Helper.CurrentDoubleTapDirectionForSetBonuses && HasSetBonusFrom<T>(player) && player.GetFormHandler().CanTransform;
 
-    public static Vector2 PlayerMovementOffset(this Player player) {
+    public static Vector2 MovementOffset(this Player player) {
         Vector2[] positions = [
             new Vector2(0f, 0f),
             new Vector2(0f, 0f),

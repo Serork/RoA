@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using ReLogic.Content;
 
 using RoA.Content.Buffs;
+using RoA.Content.Gores;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -11,6 +13,7 @@ using RoA.Core.Utility.Vanilla;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -43,6 +46,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private bool _initializingCrystals = true;
     private CrystalInfo[] _crystalData = null!;
     private ushort _stoppedUsingManaFor;
+    private float _crystalAlphaOpacity;
 
     public bool ShouldDrawCrystals() => Player.statMana < 0 && !_initializingCrystals;
     public ushort GetUseCheckTime() => USECHECKTIME == 0 ? Math.Max((ushort)30, (ushort)(Player.itemAnimationMax * 1.5f)) : USECHECKTIME;
@@ -50,7 +54,17 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool ApplyCrystallizedSkullSetBonus;
 
     public override void PostItemCheck() {
+        if (!ApplyCrystallizedSkullSetBonus) {
+            return;
+        }
+
         Player self = Player;
+        float target = 1f;
+        if (!(!self.HasBuff<Crystallized>() && self.manaRegenDelay > 0f)) {
+            target = 0f;
+        }
+        _crystalAlphaOpacity = Helper.Approach(_crystalAlphaOpacity, target, TimeSystem.LogicDeltaTime);
+
         if (self.statMana < 0 && !self.ItemAnimationActive) {
             ref ushort stoppedUsingManaFor = ref self.GetCommon()._stoppedUsingManaFor;
             if (stoppedUsingManaFor > 0) {
@@ -100,6 +114,59 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         var handler = player.GetCommon();
+
+        void breakCrystal(int index) {
+            ref var info = ref handler._crystalData[index];
+            if (info.Opacity == 0f) {
+                return;
+            }
+
+            info.Opacity = 0f;
+
+            // here we spawn dusts and gores
+            SoundEngine.PlaySound(SoundID.Item27, player.Center);
+            if (!Main.dedServ) {
+                int goreCount = 4;
+                for (int i = 0; i < goreCount; i++) {
+                    float rotation = info.ExtraRotation;
+                    int direction = (int)(player.direction * player.gravDir);
+                    bool facedLeft = direction == -1;
+                    bool reversedGravity = player.gravDir < 0f;
+                    if (facedLeft) {
+                        rotation = MathHelper.TwoPi - rotation;
+                        if (reversedGravity) {
+                            rotation += MathHelper.Pi;
+                        }
+                    }
+                    else {
+                        if (reversedGravity) {
+                            rotation += MathHelper.Pi;
+                        }
+                    }
+                    float y = -player.width * 2f * Main.rand.NextFloat(0.5f, 1.25f);
+                    Vector2 vector3 = (new Vector2(0f, y) + info.Offset * new Vector2(direction, 1f)).RotatedBy(rotation);
+                    int currentIndex = i + 1;
+                    float progress = currentIndex / goreCount;
+                    Vector2 gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 + (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
+                    int gore = Gore.NewGore(player.GetSource_Misc("manacrystalgore"),
+                        gorePosition,
+                        Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/ManaCrystalGore").Type, 1f);
+                    Main.gore[gore].velocity *= 0.5f;
+                    Main.gore[gore].frameCounter = (byte)Main.rand.Next(3);
+                    gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 + (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
+
+                    for (int k = 0; k < 4; k++) {
+                        if (Main.rand.NextBool()) {
+                            continue;
+                        }
+                        int dustType = Main.rand.NextBool() ? DustID.BlueCrystalShard : Main.rand.NextBool() ? DustID.PinkCrystalShard : DustID.PurpleCrystalShard;
+                        Dust dust = Dust.NewDustPerfect(gorePosition, dustType, Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, 150, default, 1f + Main.rand.NextFloatRange(0.1f));
+                        dust.velocity *= 0.5f;
+                    }
+                }
+            }
+        }
+
         int max = 3;
         if (player.statMana >= 0) {
             if (!handler._initializingCrystals) {
@@ -132,11 +199,21 @@ sealed partial class PlayerCommon : ModPlayer {
             }
             else {
                 for (int i = 0; i < max; i++) {
-                    if (i > 0 && handler._crystalData[i - 1].Opacity <= 0f) {
+                    if (player.manaRegenDelay > 0f && i > 0 && handler._crystalData[i - 1].Opacity <= 0f) {
                         continue;
                     }
-                    float opacity = Utils.GetLerpValue(i / (float)max, MathF.Max(max, i + 1) / (float)max, (float)Math.Abs(player.statMana) / player.statManaMax2, true) * 1.5f;
+                    float progress = (float)Math.Abs(player.statMana) / player.statManaMax2;
+                    float to = MathF.Min(max, i + 1) / (float)max,
+                          from = i / (float)max;
+                    float opacity = Utils.GetLerpValue(from, to, progress, true) * 1.5f;
                     opacity = MathUtils.Clamp01(opacity);
+                    if (player.manaRegenDelay <= 0f) {
+                        opacity = handler._crystalData[i].Opacity;
+                        if (progress < from + 0.01f) {
+                            breakCrystal(i);
+                            opacity = 0f;
+                        }
+                    }
                     handler._crystalData[i].Opacity = MathHelper.Lerp(handler._crystalData[i].Opacity, opacity, 0.25f);
                 }
             }
@@ -144,7 +221,8 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     private static void ExtraDrawLayerSupport_PreBackpackDrawEvent(ref PlayerDrawSet drawinfo) {
-        var handler = drawinfo.drawPlayer.GetCommon();
+        var player = drawinfo.drawPlayer;
+        var handler = player.GetCommon();
         if (!handler.ApplyCrystallizedSkullSetBonus || !handler.ShouldDrawCrystals()) {
             return;
         }
@@ -157,20 +235,43 @@ sealed partial class PlayerCommon : ModPlayer {
         int max = handler._crystalData.Length;
         for (int i = 0; i < max; i++) {
             var info = handler._crystalData[i];
-            Color color = info.Color;
-            color.A = (byte)MathHelper.Lerp(188, 255, Helper.Wave(0f, 1f, 12.5f, i * max));
+            Color color = info.Color * 0.9f;
+            color.A = (byte)MathHelper.Lerp(255, 188, Helper.Wave(0f, handler._crystalAlphaOpacity, 12.5f, i * max));
             color = drawinfo.drawPlayer.GetImmuneAlphaPure(color, (float)drawinfo.shadow);
             SpriteFrame spriteFrame = new(1, 2, 0, (byte)info.SecondFrame.ToInt());
             Rectangle sourceRectangle = spriteFrame.GetSourceRectangle(texture);
             float rotation = info.ExtraRotation;
+            int direction = (int)(player.direction * player.gravDir);
+            bool facedLeft = direction == -1;
+            bool reversedGravity = player.gravDir < 0f;
+            if (facedLeft) {
+                rotation = MathHelper.TwoPi - rotation;
+                if (reversedGravity) {
+                    rotation += MathHelper.Pi;
+                }
+            }
+            else {
+                if (reversedGravity) {
+                    rotation += MathHelper.Pi;
+                }
+            }
             float y = -drawinfo.drawPlayer.width * 0.5f;
-            Vector2 vector3 = (new Vector2(0f, y) + info.Offset).RotatedBy(rotation);
+            Vector2 vector3 = (new Vector2(0f, y) + info.Offset * new Vector2(direction, 1f)).RotatedBy(rotation);
             Vector2 position = drawinfo.Position - Main.screenPosition + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f);
             Vector2 origin = sourceRectangle.BottomCenter();
             position = position.Floor() + vector3 + (Vector2.UnitY * origin.Y * 0.75f).RotatedBy(rotation);
             Vector2 scale = new(1f, info.Opacity);
-            SpriteEffects effect = SpriteEffects.None;
-            DrawData item = new(texture, position, sourceRectangle, color, rotation, origin, scale, effect);
+            SpriteEffects effect = facedLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            if (reversedGravity) {
+                if (!facedLeft) {
+                    effect = SpriteEffects.None;
+                }
+                else {
+                    effect |= SpriteEffects.FlipHorizontally;
+                }
+                position.Y += 16f;
+            }
+            DrawData item = new(texture, position + player.MovementOffset(), sourceRectangle, color, rotation, origin, scale, effect);
             drawinfo.DrawDataCache.Add(item);
         }
     }
