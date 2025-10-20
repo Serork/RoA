@@ -235,7 +235,7 @@ sealed partial class PlayerCommon : ModPlayer {
         int max = handler._crystalData.Length;
         for (int i = 0; i < max; i++) {
             var info = handler._crystalData[i];
-            Color color = info.Color * 0.9f;
+            Color color = info.Color;
             color.A = (byte)MathHelper.Lerp(255, 188, Helper.Wave(0f, handler._crystalAlphaOpacity, 12.5f, i * max));
             color = drawinfo.drawPlayer.GetImmuneAlphaPure(color, (float)drawinfo.shadow);
             SpriteFrame spriteFrame = new(1, 2, 0, (byte)info.SecondFrame.ToInt());
@@ -271,7 +271,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 }
                 position.Y += 16f;
             }
-            DrawData item = new(texture, position + player.MovementOffset(), sourceRectangle, color, rotation, origin, scale, effect);
+            DrawData item = new(texture, position + player.MovementOffset(), sourceRectangle, color * 0.9f, rotation, origin, scale, effect);
             drawinfo.DrawDataCache.Add(item);
         }
     }
