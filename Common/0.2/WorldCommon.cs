@@ -114,6 +114,7 @@ sealed class WorldCommon : ModSystem {
 
     public override void ClearWorld() {
         _shownGuideTexts = new bool[NEWGUIDETEXTCOUNT];
+        ShouldRemindOfNewGuideText = false;
     }
 
     public override void SaveWorldData(TagCompound tag) {
