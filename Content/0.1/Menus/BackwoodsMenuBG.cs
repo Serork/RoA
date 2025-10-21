@@ -54,7 +54,13 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
             }
             float extraY = index1 == 2 ? -50f : 0;
             if (index1 == 0) {
-                extraY -= 50;
+                extraY -= 25;
+            }
+            if (index1 == 1) {
+                extraY += 40;
+            }
+            if (index1 == 3) {
+                extraY -= 25;
             }
             int num7 = Main.screenWidth / num4 + 2;
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
@@ -91,7 +97,7 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
                 Vector2 position = new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f));
                 texture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsMid2").Value;
                 //spriteBatch.DrawSelf(texture, position, new Rectangle(0, 0, texture.Width * 3, texture.Height * 3), color);
-                spriteBatch.Draw(texture, new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f) + 540),
+                spriteBatch.Draw(texture, new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f) + 500),
                     new Rectangle?(new Rectangle(0, 0, texture.Width, 1160)), color, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
             }
         }
