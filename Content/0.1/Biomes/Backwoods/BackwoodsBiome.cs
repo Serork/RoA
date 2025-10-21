@@ -131,7 +131,7 @@ sealed partial class BackwoodsBiome : ModBiome {
 
     public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface");
 
-    public override int Music => BackwoodsFogHandler.IsFogActive ? MusicLoader.GetMusicSlot(ResourceManager.Music + "Fog") : /*Main.IsItDay() ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") :*/ MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketNight");
+    public override int Music => BackwoodsFogHandler.IsFogActive ? MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Fog") : /*Main.IsItDay() ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") :*/ MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "ThicketNight");
 
     public override string MapBackground => ResourceManager.BackwoodsTextures + "DruidBiomeMapBG";
 

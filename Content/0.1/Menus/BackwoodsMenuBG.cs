@@ -60,7 +60,7 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
                 extraY += 40;
             }
             if (index1 == 3) {
-                extraY -= 25;
+                extraY -= 5;
             }
             int num7 = Main.screenWidth / num4 + 2;
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {

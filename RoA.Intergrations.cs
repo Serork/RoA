@@ -71,7 +71,7 @@ sealed partial class RoA : Mod {
 
         void addMusicDisplayIntergationFor(string name, string pathToMusic) {
             Mod mod = Instance;
-            short slotId = (short)MusicLoader.GetMusicSlot(mod, pathToMusic);
+            short slotId = (short)MusicLoader.GetMusicSlot(RoA.MusicMod, pathToMusic);
             LocalizedText author = Language.GetOrRegister($"Mods.RoA.MusicDisplay.{name}.Author");
             LocalizedText displayName = Language.GetOrRegister($"Mods.RoA.MusicDisplay.{name}.DisplayName");
             musicDisplay.Call(
