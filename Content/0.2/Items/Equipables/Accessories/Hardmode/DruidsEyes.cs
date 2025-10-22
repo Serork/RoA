@@ -16,7 +16,7 @@ sealed class DruidsEyes : NatureItem {
             return;
         }
 
-        player.GetWreathHandler().IncreaseResourceValue(0f);
+        player.GetWreathHandler().IncreaseResourceValue(-1f, extra2: 1.5f);
     }
 
     protected override void SafeSetDefaults() {

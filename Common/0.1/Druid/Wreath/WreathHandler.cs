@@ -706,7 +706,7 @@ sealed class WreathHandler : ModPlayer {
         LockWreathPosition = false;
     }
 
-    public void IncreaseResourceValue(float fine = 0f, bool increaseUntilFull = false) {
+    public void IncreaseResourceValue(float fine = 0f, bool increaseUntilFull = false, float extra2 = 1f) {
         if (_shouldDecrease2) {
             _shouldDecrease = _shouldDecrease2 = false;
         }
@@ -732,7 +732,7 @@ sealed class WreathHandler : ModPlayer {
 
         _stayTime = STAYTIMEMAX;
         ChangeItsValue();
-        float extra = Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier;
+        float extra = Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier * extra2;
         _increaseValue = StartSlowlyIncreasingUntilFull ? (ushort)((MaxResource - CurrentResource) * extra) :
             (ushort)(GetIncreaseValue(fine) * extra);
     }
