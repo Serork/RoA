@@ -4963,10 +4963,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     randomness += _random.Next(-1, 2);
                     randomnessPoints[max - testJ] = randomness;
                 }
-                if (/*SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[x, testJ].TileType) ||*/
-                    SandTileTypes.Contains(Main.tile[x, testJ].TileType)) {
-                    break;
-                }
+                //if (/*SkipBiomeInvalidTileTypeToKill.Contains(Main.tile[x, testJ].TileType) ||*/
+                //    SandTileTypes.Contains(Main.tile[x, testJ].TileType)) {
+                //    break;
+                //}
                 if (testJ >= max) {
                     first = false;
                 }
