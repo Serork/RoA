@@ -252,7 +252,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
 
         // adapted vanilla
         Microsoft.Xna.Framework.Rectangle mouseRectangle = new Microsoft.Xna.Framework.Rectangle((int)((float)Main.mouseX + Main.screenPosition.X), (int)((float)Main.mouseY + Main.screenPosition.Y), 1, 1);
-        if (player.gravDir == -1f)
+        if (applyGravityForText && player.gravDir == -1f)
             mouseRectangle.Y = (int)Main.screenPosition.Y + Main.screenHeight - Main.mouseY;
         Microsoft.Xna.Framework.Rectangle value2 = new Microsoft.Xna.Framework.Rectangle((int)((double)wreathSpriteData.VisualPosition.X + Main.screenPosition.X), (int)(wreathSpriteData.VisualPosition.Y + Main.screenPosition.Y), (int)(29 * Main.UIScale), (int)(29 * Main.UIScale));
         if (!Main.mouseText && mouseRectangle.Intersects(value2)) {
