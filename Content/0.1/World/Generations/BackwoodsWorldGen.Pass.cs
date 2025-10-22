@@ -3476,12 +3476,20 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         progress.Set(0.5f);
         for (int i = Left; i < Right; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom - EdgeY; j++) {
-                Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                int extraX = _random.Next(-2, 3);
+                if (i > Left + 5 && i < Right - 5) {
+                    extraX = 0;
+                }
+                int extraY = _random.Next(-2, 3);
+                if (j < Bottom - EdgeY - 5) {
+                    extraY = 0;
+                }
+                Tile tile = WorldGenHelper.GetTileSafely(i + extraX, j + extraY);
                 if (tile.ActiveTile(TileID.Grass)) {
-                    WorldGenHelper.ReplaceTile(i, j, _grassTileType);
+                    WorldGenHelper.ReplaceTile(i + extraX, j + extraY, _grassTileType);
                 }
                 if (tile.ActiveTile(TileID.Stone)) {
-                    WorldGenHelper.ReplaceTile(i, j, _stoneTileType);
+                    WorldGenHelper.ReplaceTile(i + extraX, j + extraY, _stoneTileType);
                 }
             }
         }
