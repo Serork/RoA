@@ -162,7 +162,9 @@ class ClawsSlash : NatureProjectile {
 
     public override void CutTiles() {
         DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-        Utils.PlotTileLine(Projectile.Center + (Projectile.rotation - 0.7853982f).ToRotationVector2() * 55f * Projectile.scale, Projectile.Center + (Projectile.rotation + 0.7853982f).ToRotationVector2() * 55f * Projectile.scale, 55f * Projectile.scale, DelegateMethods.CutTiles);
+        float coneLength = 55f * Projectile.scale;
+        SetCollisionScale(ref coneLength);
+        Utils.PlotTileLine(Projectile.Center + (Projectile.rotation - 0.7853982f).ToRotationVector2() * coneLength, Projectile.Center + (Projectile.rotation + 0.7853982f).ToRotationVector2() * coneLength, coneLength, DelegateMethods.CutTiles);
     }
 
     public override bool? CanCutTiles() => CanFunction;
