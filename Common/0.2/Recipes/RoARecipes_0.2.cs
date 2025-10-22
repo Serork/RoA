@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Content.Items.Equipables.Wreaths.Tier2;
 using RoA.Content.Items.Equipables.Wreaths.Tier3;
 

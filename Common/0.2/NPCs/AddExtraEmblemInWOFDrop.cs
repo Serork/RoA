@@ -1,6 +1,7 @@
 ﻿using MonoMod.Core.Utils;
 
 using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
 
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;

@@ -32,6 +32,7 @@ namespace RoA.Common.Druid.Wreath;
 
 sealed class WreathHandler : ModPlayer {
     private static ushort SHOWTIMEBEFOREDISAPPEARING => 120;
+    public static ushort GETHITEFFECTTIME => 30;
 
     public static Color GetArmorGlowColor1(Player player, Color baseColor, float progress = -1f, byte a = 255) {
         if (progress < 0f || progress > 1f) {
@@ -74,6 +75,8 @@ sealed class WreathHandler : ModPlayer {
     private bool _onFullCreated;
     private bool _useAltSounds = true;
     private ushort _showForTime;
+
+    public ushort GetHitTimer { get; private set; }
 
     public bool HasEnougthToJump;
 
@@ -232,6 +235,17 @@ sealed class WreathHandler : ModPlayer {
         if (source.CurrentResource != target.CurrentResource) {
             SendPacket(Player, -1);
         }
+    }
+
+    public delegate void OnHitByAnythingDelegate(Player player, Player.HurtInfo hurtInfo);
+    public static event OnHitByAnythingDelegate OnHitByAnythingEvent = null!;
+
+    public override void OnHurt(Player.HurtInfo info) {
+        if (GetHitTimer <= 0) {
+            GetHitTimer = GETHITEFFECTTIME;
+        }
+
+        OnHitByAnythingEvent?.Invoke(Player, info);
     }
 
     public override void OnHitNPCWithProj(Projectile proj, NPC target, NPC.HitInfo hit, int damageDone) {
@@ -466,6 +480,7 @@ sealed class WreathHandler : ModPlayer {
         if (_showForTime > 0) {
             _showForTime--;
         }
+        GetHitTimer = (ushort)Helper.Approach(GetHitTimer, 0, 1);
         ShouldDrawItself = _showForTime > 0 /* || Player.GetFormHandler().HasDruidArmorSet*/; 
         if (Player.dead && !IsChangingValue && CurrentResource > 0) {
             ForcedHardReset();

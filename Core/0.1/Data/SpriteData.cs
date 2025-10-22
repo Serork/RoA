@@ -51,4 +51,19 @@ struct SpriteData(Asset<Texture2D> textureAsset, SpriteFrame frame) {
                               Scale,
                               Effects);
     }
+
+    public DrawData? AsDrawData(Rectangle? rectangle = null, Vector2? offset = null) {
+        if (Texture == null) {
+            return null;
+        }
+
+        return new DrawData(Texture,
+                              Center + (offset ?? Vector2.Zero),
+                              rectangle ?? SourceRectangle,
+                              Color,
+                              Rotation,
+                              Origin,
+                              Scale,
+                              Effects);
+    }
 }

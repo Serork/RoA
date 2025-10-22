@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
 
 using System.Collections.Generic;
 using System.Linq;

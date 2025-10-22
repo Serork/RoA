@@ -2306,3 +2306,13 @@ StarFusion: {
 		'Навеки мрачная тьма'
 		'''
 }
+
+DruidsEyes: {
+	// DisplayName: Druid's Eyes
+	// Tooltip: ""
+}
+
+WreathDye: {
+	// DisplayName: Wreath Dye
+	// Tooltip: ""
+}

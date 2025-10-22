@@ -307,6 +307,7 @@ static partial class Helper {
     public static string GetPath(Type t) => $"{NamespacePath(t)}/{t.Name}";
 
     public static float Approach(float val, float target, float maxMove) => (double)val <= (double)target ? Math.Min(val + maxMove, target) : Math.Max(val - maxMove, target);
+    public static int Approach(int val, int target, int maxMove) => (double)val <= (double)target ? Math.Min(val + maxMove, target) : Math.Max(val - maxMove, target);
     public static Vector2 Approach(Vector2 val, Vector2 target, float maxMove) => new(Approach(val.X, target.X, maxMove), Approach(val.Y, target.Y, maxMove));
 
     public static Vector2 CircleOffset(this Entity entity, float elapsedTime, float circleRotation, float circleHeight) => ((((float)(MathHelper.TwoPi * (double)elapsedTime + MathHelper.PiOver2)).ToRotationVector2() + new Vector2(0.0f, -1f)) * new Vector2(6 * -entity.direction, circleHeight)).RotatedBy((double)circleRotation);

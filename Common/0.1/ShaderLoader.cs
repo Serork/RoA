@@ -6,6 +6,8 @@ using ReLogic.Content;
 using RoA.Common.Cache;
 using RoA.Common.WorldEvents;
 using RoA.Content.Backgrounds;
+using RoA.Content.Items.Dyes;
+using RoA.Content.Items.LiquidsSpecific;
 using RoA.Core;
 
 using System;
@@ -15,6 +17,7 @@ using System.Reflection;
 
 using Terraria;
 using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Core;
 
@@ -173,10 +176,13 @@ sealed class ShaderLoader : ModSystem {
     public static readonly string EnragedLothorSky = RoA.ModName + "Enraged Lothor Sky";
     public static readonly string Vignette = RoA.ModName + "Vignette";
 
-    public static VignetteScreenShaderData VignetteShaderData { get; private set; }
-    public static Effect VignetteEffectData { get; private set; }
+    public static VignetteScreenShaderData VignetteShaderData { get; private set; } = null!;
+    public static Effect VignetteEffectData { get; private set; } = null!;
+
+    public static ArmorShaderData WreathDyeShaderData { get; private set; } = null!;
 
     public static Asset<Effect> TarDye => _loadedShaders["TarDye"];
+    public static Asset<Effect> WreathDye => _loadedShaders["WreathDye"];
 
     public override void OnModLoad() {
         if (Main.dedServ) {
@@ -225,6 +231,8 @@ sealed class ShaderLoader : ModSystem {
 
         load01Shaders();
         load02Shaders();
+
+        WreathDyeShaderData = new WreathDyeArmorShaderData(ShaderLoader.WreathDye, "WreathDyePass");
     }
 
     public override void OnModUnload() {

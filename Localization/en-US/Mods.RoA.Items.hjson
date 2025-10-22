@@ -2281,3 +2281,13 @@ StarFusion: {
 		'The blackness of darkness, forever'
 		'''
 }
+
+DruidsEyes: {
+	DisplayName: Druid's Eyes
+	Tooltip: ""
+}
+
+WreathDye: {
+	DisplayName: Wreath Dye
+	Tooltip: ""
+}

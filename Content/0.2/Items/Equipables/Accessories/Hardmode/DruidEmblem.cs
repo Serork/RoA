@@ -4,7 +4,7 @@ using RoA.Core.Defaults;
 using Terraria;
 using Terraria.ID;
 
-namespace RoA.Content.Items.Equipables.Accessories;
+namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
 sealed class DruidEmblem : NatureItem {
     public override void SetStaticDefaults() {

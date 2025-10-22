@@ -13,6 +13,8 @@ sealed partial class DruidStats : ModPlayer {
     private float _druidPotentialUseTimeMultiplier = 1f;
     private int _druidBaseDamage = 0, _druidPotentialDamage = 0;
 
+    public bool IsDruidsEyesEffectActive;
+
     public float DruidPotentialDamageMultiplier {
         get => _druidPotentialDamageMultiplier;
         set {
@@ -77,6 +79,8 @@ sealed partial class DruidStats : ModPlayer {
         SoulOfTheWoods = false;
 
         ResetEquippableWreathStats();
+
+        IsDruidsEyesEffectActive = false;
     }
 
     public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {
