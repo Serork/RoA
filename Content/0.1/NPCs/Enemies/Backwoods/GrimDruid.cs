@@ -352,7 +352,7 @@ sealed class GrimDruid : DruidNPC {
                 StateTimer += TimeSystem.LogicDeltaTime;
                 if (StateTimer >= 0.17f) {
                     Attack = true;
-                    NPC.netUpdate = true;
+                    //NPC.netUpdate = true;
                 }
                 if (StateTimer >= 0.25f) {
                     AttackEffects(position);
@@ -361,11 +361,12 @@ sealed class GrimDruid : DruidNPC {
                     GrimDruidAttack(position);
                     if (Main.netMode != NetmodeID.MultiplayerClient) {
                         AttackType = Main.rand.Next(0, 2);
+                        NPC.netUpdate = true;
                     }
                     AttackTimer = -TimeToChangeState();
                     AttackEndTimer = -0.3f;
                 }
-                NPC.netUpdate = true;
+                //NPC.netUpdate = true;
             }
             else {
                 AttackEffects(position);
@@ -431,7 +432,7 @@ sealed class GrimDruid : DruidNPC {
             if (NPC.localAI[3] > 0.05f) {
                 PlayersOldPosition = position;
                 NPC.localAI[3] = 0f;
-                NPC.netUpdate = true;
+                //NPC.netUpdate = true;
             }
         }
         ushort dustType = (ushort)ModContent.DustType<GrimDruidDust>();

@@ -26,6 +26,10 @@ sealed class ArchVileSpike : ModProjectile {
     public override void SendExtraAI(BinaryWriter writer) => writer.Write(_spawnedNext);
     public override void ReceiveExtraAI(BinaryReader reader) => _spawnedNext = reader.ReadBoolean();
 
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.NeedsUUID[Type] = true;
+    }
+
     public override void SetDefaults() {
         int width = 30; int height = 32;
         Projectile.Size = new Vector2(width, height);
@@ -52,7 +56,8 @@ sealed class ArchVileSpike : ModProjectile {
         float height2 = 4f;
         Projectile.velocity = Vector2.Zero;
         Projectile.ai[0] += 2f;
-        if (Projectile.ai[2] > 0f && !Main.projectile[(int)Projectile.ai[2]].active) {
+        int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[2]);
+        if (byUUID != -1 && Main.projectile.IndexInRange(byUUID) && !Main.projectile[byUUID].active) {
             Projectile.Kill();
         }
         if (Projectile.ai[1] == 0f && Projectile.ai[0] < 55f) {
@@ -71,7 +76,7 @@ sealed class ArchVileSpike : ModProjectile {
         if (Projectile.ai[0] % height2 == 0 && !_spawnedNext) {
             if (Main.netMode != NetmodeID.MultiplayerClient) {
                 int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y - 32), Vector2.Zero, ModContent.ProjectileType<ArchVileSpike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f,
-                    Projectile.ai[1] + 1f, ai2: Projectile.whoAmI);
+                    Projectile.ai[1] + 1f, ai2: Projectile.GetByUUID(Projectile.owner, Projectile.whoAmI));
             }
             _spawnedNext = true;
         }
@@ -118,6 +123,10 @@ sealed class ArchVileSpike : ModProjectile {
 }
 
 sealed class ArchVileSpikeTip : ModProjectile {
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.NeedsUUID[Type] = true;
+    }
+
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = Projectile.GetTexture();
         Rectangle sourceRectangle = texture.Bounds;
@@ -150,7 +159,8 @@ sealed class ArchVileSpikeTip : ModProjectile {
     }
 
     public override void AI() {
-        if (Projectile.ai[2] > 0f && !Main.projectile[(int)Projectile.ai[2]].active) {
+        int byUUID = Projectile.GetByUUID(Projectile.owner, (int)Projectile.ai[2]);
+        if (byUUID != -1 && Main.projectile.IndexInRange(byUUID) && !Main.projectile[byUUID].active) {
             Projectile.Kill();
         }
         Projectile.velocity = Vector2.Zero;

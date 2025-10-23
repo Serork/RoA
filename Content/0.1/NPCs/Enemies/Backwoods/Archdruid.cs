@@ -415,7 +415,7 @@ sealed class Archdruid : DruidNPC {
                 StateTimer += _entAttack && flag2 ? TimeSystem.LogicDeltaTime * 1.25f : flag2 ? TimeSystem.LogicDeltaTime : (TimeSystem.LogicDeltaTime * 0.75f);
                 if (StateTimer >= 0.17f) {
                     Attack = true;
-                    NPC.netUpdate = true;
+                    //NPC.netUpdate = true;
                 }
                 if (StateTimer >= 0.25f) {
                     AttackEffects(position);
@@ -441,7 +441,7 @@ sealed class Archdruid : DruidNPC {
                         AttackEndTimer = _entAttack ? -0.05f : -0.3f;
                         //ChangeState((int)States.Walking);
                     }
-                    NPC.netUpdate = true;
+                    //NPC.netUpdate = true;
                 }
             }
             else {
@@ -470,7 +470,7 @@ sealed class Archdruid : DruidNPC {
 
             NPC.frameCounter = 0;
 
-            NPC.netUpdate = true;
+            //NPC.netUpdate = true;
 
             return true;
         }
