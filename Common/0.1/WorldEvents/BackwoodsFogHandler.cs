@@ -196,7 +196,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                 }
                 else {
                     if (Opacity2 > 0f) {
-                        Opacity2 -= 0.005f * 0.2f;
+                        Opacity2 -= 0.005f * 0.25f;
                     }
                     else {
                         Opacity2 = 0f;
