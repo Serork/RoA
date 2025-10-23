@@ -135,7 +135,9 @@ sealed class TarSlime : ModNPC {
             }
 
             NPC.ai[3] = 0f;
-            NPC.velocity.X *= 0.8f;
+            if (NPC.velocity.Y == 0f) {
+                NPC.velocity.X *= 0.8f;
+            }
             if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1)
                 NPC.velocity.X = 0f;
 

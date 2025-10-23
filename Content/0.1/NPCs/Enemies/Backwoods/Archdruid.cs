@@ -366,7 +366,9 @@ sealed class Archdruid : DruidNPC {
             Player player = Main.player[NPC.target];
             Vector2 position = new(player.Center.X, player.Center.Y + 32);
             NPC.direction = player.Center.DirectionFrom(NPC.Center).X.GetDirection();
-            NPC.velocity.X *= 0.8f;
+            if (NPC.velocity.Y == 0f) {
+                NPC.velocity.X *= 0.8f;
+            }
             if (_entAttack) {
                 if (NPC.ai[2] >= 65 && !_entAttack3) {
                     SoundEngine.PlaySound(SoundID.Item29, NPC.position);

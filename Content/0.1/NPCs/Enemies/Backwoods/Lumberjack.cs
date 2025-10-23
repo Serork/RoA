@@ -436,7 +436,9 @@ sealed class Lumberjack : RoANPC {
                 }
                 if (NPC.velocity.Y == 0f) {
                     NPC.ResetAIStyle();
-                    NPC.velocity.X *= 0.8f;
+                    if (NPC.velocity.Y == 0f) {
+                        NPC.velocity.X *= 0.8f;
+                    }
                     StateTimer += TimeSystem.LogicDeltaTime / 2f;
                     StateTimer *= 1.05f;
                     if (StateTimer >= 0.6f) {

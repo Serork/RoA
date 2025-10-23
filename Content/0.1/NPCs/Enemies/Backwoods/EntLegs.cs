@@ -167,7 +167,9 @@ sealed class EntLegs : RoANPC {
                 break;
             case SHIELD:
                 if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
-                    NPC.velocity.X *= 0.8f;
+                    if (NPC.velocity.Y == 0f) {
+                        NPC.velocity.X *= 0.8f;
+                    }
 
                     NPC.ResetAIStyle();
                     if (++_attackTimer >= 180f) {

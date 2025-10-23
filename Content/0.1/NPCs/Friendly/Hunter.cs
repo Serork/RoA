@@ -316,7 +316,9 @@ sealed class Hunter : ModNPC {
             if (NPC.ai[1] > 0f) {
                 NPC.ai[1]--;
 
-                NPC.velocity.X *= 0.8f;
+                if (NPC.velocity.Y == 0f) {
+                    NPC.velocity.X *= 0.8f;
+                }
 
                 NPC.direction = NPC.spriteDirection = (Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)].Center.X - NPC.Center.X).GetDirection();
             }
@@ -329,7 +331,9 @@ sealed class Hunter : ModNPC {
             if (NPC.ai[1] > 0f) {
                 NPC.ai[1] -= 2f;
 
-                NPC.velocity.X *= 0.8f;
+                if (NPC.velocity.Y == 0f) {
+                    NPC.velocity.X *= 0.8f;
+                }
 
                 NPC.direction = NPC.spriteDirection = (Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)].Center.X - NPC.Center.X).GetDirection();
             }

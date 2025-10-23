@@ -151,7 +151,9 @@ sealed class Ravencaller : ModNPC {
             NPC.ApplyFighterAI(true, flag5);
         else {
             NPC.ResetAIStyle();
-            NPC.velocity.X *= 0.8f;
+            if (NPC.velocity.Y == 0f) {
+                NPC.velocity.X *= 0.8f;
+            }
         }
 
         NPC.chaseable = NPC.alpha < 50;
