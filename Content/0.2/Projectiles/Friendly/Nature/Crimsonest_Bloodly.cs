@@ -210,7 +210,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             Player owner = Projectile.GetOwnerAsPlayer();
             setPosition();
             if (owner.gravDir < 0) {
-                Projectile.position.Y += 60f;
+                Projectile.position.Y += 42f;
             }
             Projectile.direction = _directedLeft.ToDirectionInt();
             float minus = _cooconAngle;
@@ -378,14 +378,15 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             Vector2 position = Projectile.position;
             Player player = Projectile.GetOwnerAsPlayer();
             Projectile.position += player.MovementOffset();
-            SpriteEffects effects = SpriteEffects.None;
+            SpriteEffects effects = player.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             float rotation = 0f;
             if (player.gravDir < 0) {
-                effects = SpriteEffects.FlipVertically;
+                effects = player.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                effects |= SpriteEffects.FlipVertically;
             }
             Projectile.QuickDrawAnimated(lightColor, exRot: rotation, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Cocoon].Value, maxFrames: COCOONFRAMECOUNT, 
                 scale: new Vector2(MathUtils.Clamp01(bloodlyValues.ScaleValue * 1.75f), MathUtils.Clamp01(bloodlyValues.ScaleValue * 2f)) * Projectile.scale, 
-                originScale: new Vector2(1f, 1.375f), spriteEffects: effects);
+                originScale: new Vector2(1f, player.gravDir < 0 ? 0.625f : 1.375f), spriteEffects: effects);
             Projectile.position = position;
         }
         else {
