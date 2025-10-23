@@ -282,7 +282,7 @@ sealed class SkinningNPC : GlobalNPC {
             NPCsType.Enemies => (ushort)ModContent.ItemType<RoughLeather>()
         };
         */
-        bool invalidType = npc.SpawnedFromStatue || npc.value == 0 || npc.boss || npc.HitSound == SoundID.NPCHit2 || npc.HitSound == SoundID.NPCHit4 || npc.HitSound == SoundID.NPCHit5 || npc.HitSound == SoundID.NPCHit30 || npc.HitSound == SoundID.NPCHit34 || npc.HitSound == SoundID.NPCHit36 || npc.HitSound == SoundID.NPCHit39 || npc.HitSound == SoundID.NPCHit41 || npc.HitSound == SoundID.NPCHit49 || npc.HitSound == SoundID.NPCHit54;
+        bool invalidType = npc.DeathSound == SoundID.NPCDeath6 || npc.SpawnedFromStatue || npc.value == 0 || npc.boss || npc.HitSound == SoundID.NPCHit2 || npc.HitSound == SoundID.NPCHit4 || npc.HitSound == SoundID.NPCHit5 || npc.HitSound == SoundID.NPCHit30 || npc.HitSound == SoundID.NPCHit34 || npc.HitSound == SoundID.NPCHit36 || npc.HitSound == SoundID.NPCHit39 || npc.HitSound == SoundID.NPCHit41 || npc.HitSound == SoundID.NPCHit49 || npc.HitSound == SoundID.NPCHit54;
         invalidType = invalidType || npc.FullName.Contains("Slime") || npc.FullName.Contains("Elemental") || npc.FullName.Contains("Golem") || npc.FullName.Contains("Dandelion") || npc.FullName.Contains("Skeleton") || npc.FullName.Contains("Skull");
         if (invalidType) return;
         int itemType = npc.aiStyle == 3 ? (ushort)ModContent.ItemType<RoughLeather>() : (ushort)ModContent.ItemType<AnimalLeather>();
