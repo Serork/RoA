@@ -3092,7 +3092,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         //if ((((double)i > (double)CenterX + 3 && (double)i < (double)CenterX + 10)) && j < BackwoodsVars.FirstTileYAtCenter + 5) {
                         //    flag = true;
                         //}
-                        if (i > CenterX - 2 && i < CenterX + 4 && j < BackwoodsVars.FirstTileYAtCenter + 10) {
+                        if (i > CenterX && i < CenterX + 4 && j < BackwoodsVars.FirstTileYAtCenter + 10) {
                             continue;
                         }
                         bool flag2 = i > CenterX + 2 && i < CenterX + 15;
