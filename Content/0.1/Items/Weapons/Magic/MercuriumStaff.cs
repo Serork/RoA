@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Common.Players;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Magic;
 
@@ -55,6 +56,8 @@ sealed class MercuriumStaff : ModItem {
         if (!Collision.CanHit(player.Center, 0, 0, position, 0, 0))
             return false;
 
+        velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
+
         Vector2 dustPosition = position + new Vector2((player.direction == 1 ? 2f : 2f) * 2f, 4f * player.direction).RotatedBy(velocity.ToRotation());
         int k = Main.rand.Next(20, 26);
         for (int i = 0; i < k; i++) {
@@ -67,6 +70,7 @@ sealed class MercuriumStaff : ModItem {
             Main.dust[dust2].scale *= 0.3f;
             Main.dust[dust2].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat();
         }
-        return true;
+        Projectile.NewProjectileDirect(source, position, velocity, type, damage, knockback, player.whoAmI);
+        return false;
     }
 }
