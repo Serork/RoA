@@ -154,7 +154,7 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
             color = new Color(pickedColor.R + k * 2, pickedColor.G - k * 3, pickedColor.B + k * 2, 50) * Utils.Remap(progress, 0f, 0.2f, 0f, 1f, true);
             //color = WreathHandler.GetArmorGlowColor_HallowEnt(owner, color, MathUtils.Clamp01(0f + progress * 2f));
             Main.spriteBatch.Draw(texture, drawPos, null, color * 0.2f, Projectile.oldRot[k] + (float)MathHelper.Pi / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
-            //spriteBatch.DrawSelf(texture, drawPos - Projectile.oldPos[k] * 0.5f + Projectile.oldPos[k + 1] * 0.5f, null, color * 0.45f, Projectile.oldRot[k] * 0.5f + Projectile.oldRot[k + 1] * 0.5f + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
+            //spriteBatch.DrawSelf(texture, drawPos - Projectile.OldUseItemPos[k] * 0.5f + Projectile.OldUseItemPos[k + 1] * 0.5f, null, color * 0.45f, Projectile.OldUseItemRot[k] * 0.5f + Projectile.OldUseItemRot[k + 1] * 0.5f + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.OldUseItemPos.Length, effects, 0f);
         }
 
         color = Color.Lerp(lightColor, Color.White, EXTRABRIGHTNESSMODIFIER * progress).MultiplyRGB(pickedColor);

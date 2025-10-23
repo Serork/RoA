@@ -29,7 +29,7 @@ sealed class PrimordialLeaf : ModProjectile {
             Vector2 drawPos = Projectile.oldPos[k] + new Vector2(Projectile.width, Projectile.height) / 2f + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
             Color color = new Color(0, 150 - k * 10, 200 + k * 5, 50);
             spriteBatch.Draw(texture, drawPos, null, color * 0.2f, Projectile.oldRot[k] + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
-            //spriteBatch.DrawSelf(texture, drawPos - Projectile.oldPos[k] * 0.5f + Projectile.oldPos[k + 1] * 0.5f, null, color * 0.45f, Projectile.oldRot[k] * 0.5f + Projectile.oldRot[k + 1] * 0.5f + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
+            //spriteBatch.DrawSelf(texture, drawPos - Projectile.OldUseItemPos[k] * 0.5f + Projectile.OldUseItemPos[k + 1] * 0.5f, null, color * 0.45f, Projectile.OldUseItemRot[k] * 0.5f + Projectile.OldUseItemRot[k + 1] * 0.5f + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.OldUseItemPos.Length, effects, 0f);
         }
         return true;
     }

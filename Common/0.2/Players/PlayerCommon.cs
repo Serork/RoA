@@ -61,6 +61,30 @@ sealed partial class PlayerCommon : ModPlayer {
     public float DashTime;
     public bool Dashed;
 
+    public Vector2[] OldUseItemPos = null!;
+    public float[] OldUseItemRot = null!;
+
+    public void UpdateOldUseItemInfo(int length, Vector2 position, float rotation) {
+        int num = length;
+        if (OldUseItemPos == null || num != OldUseItemPos.Length) {
+            OldUseItemPos = new Vector2[num];
+            OldUseItemRot = new float[num];
+            for (int i = 0; i < OldUseItemPos.Length; i++) {
+                OldUseItemPos[i].X = 0f;
+                OldUseItemPos[i].Y = 0f;
+                OldUseItemRot[i] = 0f;
+            }
+        }
+
+        for (int num28 = OldUseItemPos.Length - 1; num28 > 0; num28--) {
+            OldUseItemPos[num28] = OldUseItemPos[num28 - 1];
+            OldUseItemRot[num28] = OldUseItemRot[num28 - 1];
+        }
+
+        OldUseItemPos[0] = position;
+        OldUseItemRot[0] = rotation;
+    }
+
     public override void Load() {
         On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
         On_Player.DryCollision += On_Player_DryCollision;

@@ -148,7 +148,7 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
                 Main.spriteBatch.Draw(glowMaskLeafTexture, drawPos - Main.screenPosition, clip, Color.Lerp(color.MultiplyRGB(Lighting.GetColor(drawPos.ToTileCoordinates())) * 0.25f, Color.White, HallowLeaf.EXTRABRIGHTNESSMODIFIER * progress * 0.75f) * areaFactor0, rotation1 + (float)MathHelper.Pi / 2 + MathF.Sin(circleFactor + visualTimer) * 0.05f, drawOrigin, Projectile.scale, effects, 0f);
                 rotation1 += MathHelper.PiOver2;
             }
-            //spriteBatch.DrawSelf(texture, drawPos - Projectile.oldPos[k] * 0.5f + Projectile.oldPos[k + 1] * 0.5f, null, color * 0.45f, Projectile.oldRot[k] * 0.5f + Projectile.oldRot[k + 1] * 0.5f + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.oldPos.Length, effects, 0f);
+            //spriteBatch.DrawSelf(texture, drawPos - Projectile.OldUseItemPos[k] * 0.5f + Projectile.OldUseItemPos[k + 1] * 0.5f, null, color * 0.45f, Projectile.OldUseItemRot[k] * 0.5f + Projectile.OldUseItemRot[k + 1] * 0.5f + (float)Math.PI / 2, drawOrigin, Projectile.scale - k / (float)Projectile.OldUseItemPos.Length, effects, 0f);
             Color baseColor = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, HallowLeaf.EXTRABRIGHTNESSMODIFIER * progress).MultiplyRGB(pickedColor);
             color = baseColor * Projectile.Opacity;
             Vector2 origin = clip.Centered();

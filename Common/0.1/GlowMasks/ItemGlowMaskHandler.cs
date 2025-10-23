@@ -4,15 +4,18 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 
+using RoA.Content.Items.Tools;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -245,8 +248,10 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             return;
         }
 
-        if (item.type >= ItemID.Count && GlowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo)) {
-            Texture2D texture = glowMaskInfo.Texture.Value;
+        int[] specialCasesAkaShitCode = [ModContent.ItemType<RodOfTheLustrous>()];
+        bool flag = specialCasesAkaShitCode.Contains(item.type);
+        if (item.type >= ItemID.Count && (GlowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo) || flag)) {
+            Texture2D texture = flag ? TextureAssets.Item[item.type].Value : glowMaskInfo.Texture.Value;
             Vector2 offset = new();
             float rotOffset = 0f;
             Vector2 origin = new();
@@ -278,9 +283,24 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             }
 
             Vector2 position = (player.itemLocation + offset + new Vector2(0f, player.gfxOffY)).Floor();
+            float rotation = player.itemRotation + rotOffset;
             Color color = Color.Lerp(glowMaskInfo.Color, drawInfo.itemColor, Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
+            if (item.type == ModContent.ItemType<RodOfTheLustrous>()) {
+                var handler = player.GetCommon();
+                handler.UpdateOldUseItemInfo(4, position, rotation);
+                var oldPos = handler.OldUseItemPos!;
+                var oldRot = handler.OldUseItemRot!;
+
+                for (int n = 0; n < oldPos.Length; n++) {
+                    drawInfo.DrawDataCache.Add(new DrawData(texture, oldPos[n] - Main.screenPosition, texture.Bounds,
+                                                            Color.Lerp(item.GetAlpha(color), Color.White, 0.5f) with { A = 100 } * 0.75f * MathUtils.Clamp01((1f - (float)n / oldPos.Length) * 1.5f), oldRot[n], origin, item.scale, drawInfo.itemEffect, 0));
+                }
+
+                color = Color.Lerp(item.GetAlpha(color), Color.White, 0.5f);
+            }
+
             drawInfo.DrawDataCache.Add(new DrawData(texture, position - Main.screenPosition, texture.Bounds,
-                                                     glowMaskInfo.ShouldApplyItemAlpha ? item.GetAlpha(color) : glowMaskInfo.Color, player.itemRotation + rotOffset, origin, item.scale, drawInfo.itemEffect, 0));
+                                                     glowMaskInfo.ShouldApplyItemAlpha ? item.GetAlpha(color) : glowMaskInfo.Color, rotation, origin, item.scale, drawInfo.itemEffect, 0));
         }
     }
 
