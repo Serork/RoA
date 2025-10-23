@@ -110,7 +110,7 @@ sealed class TarSlime : ModNPC {
             }
 
             if (NPC.localAI[0] != 0f) {
-                float num5 = MathF.Max(NPC.oldVelocity.X, 0.5f * NPC.oldVelocity.X.GetDirection());
+                float num5 = MathF.Max(NPC.oldVelocity.X, 1f * NPC.oldVelocity.X.GetDirection());
                 if (num5 > 6f)
                     num5 = 6f;
 
