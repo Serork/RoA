@@ -277,7 +277,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                         flag2 = false;
                     }
 
-                    if (Main.tile[x, y + 1].TileType == TileID.RollingCactus) {
+                    if (Main.tile[x, y].TileType == TileID.RollingCactus || Main.tile[x, y + 1].TileType == TileID.RollingCactus) {
                         flag2 = false;
                     }
 
