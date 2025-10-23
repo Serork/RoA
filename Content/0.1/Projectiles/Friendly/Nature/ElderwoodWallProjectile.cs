@@ -22,9 +22,9 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
     private float _currentLength;
     private bool _init;
 
-    public override string Texture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<VileSpike>()).Texture;
-    public static string TipTexture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<VileSpikeTip>()).Texture;
-    public static string StartTexture => ResourceManager.EnemyProjectileTextures + "VileSpikeStart";
+    public override string Texture => ResourceManager.NatureProjectileTextures + "VileSpike";
+    public static string TipTexture => ResourceManager.NatureProjectileTextures + "VileSpikeTip";
+    public static string StartTexture => ResourceManager.NatureProjectileTextures + "VileSpikeStart";
 
     private int Length => (int)Projectile.ai[0];
     private bool Temporary => Projectile.ai[1] >= 1f;

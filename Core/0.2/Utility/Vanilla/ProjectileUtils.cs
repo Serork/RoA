@@ -18,12 +18,12 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Vanilla;
 
 static class ProjectileUtils {
-    public static void QuickDraw(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null, SpriteEffects? spriteEffects = null) {
+    public static void QuickDraw(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null, SpriteEffects? spriteEffects = null, Rectangle? sourceRectangle = null) {
         Texture2D mainTex = texture ?? projectile.GetTexture();
 
         SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
 
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, null, lightColor, projectile.rotation + exRot,
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, sourceRectangle, lightColor, projectile.rotation + exRot,
             mainTex.Size() / 2, projectile.scale, effects, 0);
     }
 

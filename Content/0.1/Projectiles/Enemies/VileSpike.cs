@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System.IO;
 
@@ -48,6 +51,9 @@ sealed class VileSpike : ModProjectile {
         float height2 = 4f;
         Projectile.velocity = Vector2.Zero;
         Projectile.ai[0]++;
+        if (Projectile.ai[2] > 0f && !Main.projectile[(int)Projectile.ai[2]].active) {
+            Projectile.Kill();
+        }
         if (Projectile.ai[1] == 0f && Projectile.ai[0] < 55f) {
             if (Main.netMode != NetmodeID.Server) {
                 int dust = Dust.NewDust(new Vector2(Projectile.Center.X + Main.rand.Next(-32, 32), Projectile.Center.Y + 12f), 8, 8, ModContent.DustType<GrimDruidDust>(), 0f, Main.rand.NextFloat(-2.5f, -0.5f), 255, Scale: 0.9f + Main.rand.NextFloat(0f, 0.4f));
@@ -65,7 +71,8 @@ sealed class VileSpike : ModProjectile {
         }
         if (Projectile.ai[0] % height2 == 0 && !_spawnedNext) {
             if (Main.netMode != NetmodeID.MultiplayerClient) {
-                int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y - 32), Vector2.Zero, ModContent.ProjectileType<VileSpike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, ai1: Projectile.ai[1] + 1f);
+                int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), new Vector2(Projectile.Center.X, Projectile.Center.Y - 32), Vector2.Zero, ModContent.ProjectileType<VileSpike>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 
+                    ai1: Projectile.ai[1] + 1f, ai2: Projectile.whoAmI);
             }
             _spawnedNext = true;
         }
@@ -95,12 +102,33 @@ sealed class VileSpike : ModProjectile {
         }
 
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<VileSpikeTip>(), Projectile.damage, Projectile.knockBack);
+            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<VileSpikeTip>(), Projectile.damage,
+                Projectile.knockBack, ai2: Projectile.ai[2]);
         }
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Texture2D texture = Projectile.GetTexture();
+        Rectangle sourceRectangle = texture.Bounds;
+        float rotation = MathHelper.Pi;
+        sourceRectangle.Height = (int)(texture.Height * MathUtils.Clamp01(Projectile.ai[0] / 3f));
+        Projectile.QuickDraw(lightColor * Projectile.Opacity, exRot: rotation, sourceRectangle: sourceRectangle);
+
+        return false;
     }
 }
 
 sealed class VileSpikeTip : ModProjectile {
+    public override bool PreDraw(ref Color lightColor) {
+        Texture2D texture = Projectile.GetTexture();
+        Rectangle sourceRectangle = texture.Bounds;
+        float rotation = MathHelper.Pi;
+        sourceRectangle.Height = (int)(texture.Height * MathUtils.Clamp01(Projectile.ai[0] / 3f));
+        Projectile.QuickDraw(lightColor * Projectile.Opacity, exRot: rotation, sourceRectangle: sourceRectangle);
+
+        return false;
+    }
+
     public override void SetDefaults() {
         int width = 30; int height = 32;
         Projectile.Size = new Vector2(width, height);
@@ -119,7 +147,13 @@ sealed class VileSpikeTip : ModProjectile {
         Projectile.tileCollide = false;
     }
 
-    public override void AI() => Projectile.velocity = Vector2.Zero;
+    public override void AI() {
+        if (Projectile.ai[2] > 0f && !Main.projectile[(int)Projectile.ai[2]].active) {
+            Projectile.Kill();
+        }
+        Projectile.velocity = Vector2.Zero;
+        Projectile.ai[0]++;
+    }
 
     public override void OnKill(int timeLeft) {
         if (Main.rand.NextBool(3)) {
