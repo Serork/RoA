@@ -188,7 +188,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             if (Main.netMode != NetmodeID.Server) {
                 if (player.position.Y / 16 < Main.worldSurface) {
                     if (Opacity2 < 0.75f) {
-                        Opacity2 += 0.0175f * 0.25f;
+                        Opacity2 += 0.0175f * 0.15f;
                     }
                     else {
                         Opacity2 = 0.75f;
@@ -196,7 +196,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                 }
                 else {
                     if (Opacity2 > 0f) {
-                        Opacity2 -= 0.005f * 0.25f;
+                        Opacity2 -= 0.005f * 0.2f;
                     }
                     else {
                         Opacity2 = 0f;
@@ -240,7 +240,7 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
 
         if (Opacity < 0.75f) {
-            Opacity += 0.0175f * 0.15f;
+            Opacity += 0.0175f * 0.2f;
         }
         else {
             Opacity = 0.75f;
