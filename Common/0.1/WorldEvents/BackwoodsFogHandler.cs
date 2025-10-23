@@ -188,7 +188,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             if (Main.netMode != NetmodeID.Server) {
                 if (player.position.Y / 16 < Main.worldSurface) {
                     if (Opacity2 < 0.75f) {
-                        Opacity2 += 0.0175f * 0.15f;
+                        Opacity2 += 0.0175f * 0.25f;
                     }
                     else {
                         Opacity2 = 0.75f;
