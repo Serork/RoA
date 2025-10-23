@@ -105,7 +105,7 @@ sealed class EvilLeaf : NatureProjectile {
                 Projectile.netUpdate = true;
             }
             float scaleY = parentScale.Y * Projectile.ai[2];
-            float rotation = parent.rotation + MathHelper.Pi * Projectile.direction * (1f - scaleY);
+            float rotation = parent.rotation + MathHelper.Pi * 0.875f * Projectile.direction * (1f - scaleY);
             if (Projectile.owner == Main.myPlayer) {
                 if (!_init) {
                     _init = true;
