@@ -233,7 +233,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             if (!_init) {
                 _time = itemAnimationMax;
                 _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
-                Projectile.Center = player.MountedCenter;
+                Projectile.Center = player.RotatedRelativePoint(player.MountedCenter);
                 Projectile.Center = Utils.Floor(Projectile.Center);
                 Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
                 _init = true;
