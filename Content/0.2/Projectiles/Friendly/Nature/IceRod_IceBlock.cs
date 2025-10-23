@@ -26,6 +26,7 @@ using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+// TODO: separate block mechanic (and collision)
 [Tracked]
 sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAssets {
     (byte, string)[] IRequestAssets.IndexedPathsToTexture => [(0, ResourceManager.NatureProjectileTextures + "MagicalIceBlock")];

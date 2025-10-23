@@ -38,7 +38,7 @@ sealed class GrimDefender : ModNPC {
         Main.npcFrameCount[Type] = 8;
 
         NPCID.Sets.TrailingMode[NPC.type] = 7;
-        NPCID.Sets.TrailCacheLength[NPC.type] = 7;
+        NPCID.Sets.TrailCacheLength[NPC.type] = 5;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             Position = new Vector2(0f, 20f),
