@@ -28,6 +28,8 @@ abstract class DruidNPC : RoANPC {
 
     protected virtual byte MaxFrame => 19 - 1;
 
+    private float _magicCastOpacity;
+
     public enum States {
         Walking,
         Attacking
@@ -99,8 +101,10 @@ abstract class DruidNPC : RoANPC {
     }
 
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        if (CurrentFrame >= 19 - 3) {
-            DrawMagicCast(spriteBatch, MagicCastColor, (int)CastFrame, Helper.EaseInOut2((float)(NPC.frameCounter / 80.0)));
+        //if (CurrentFrame >= 19 - 3)
+            {
+            _magicCastOpacity = MathHelper.Lerp(_magicCastOpacity, (float)(NPC.frameCounter / 80.0), 0.2f);
+            DrawMagicCast(spriteBatch, MagicCastColor, (int)CastFrame, Helper.EaseInOut2(_magicCastOpacity));
         }
     }
 
@@ -151,7 +155,7 @@ abstract class DruidNPC : RoANPC {
                 AttackAnimation();
                 break;
         }
-        if (NPC.velocity.Y > 0f || NPC.velocity.Y <= -0.25f) {
+        if (NPC.velocity.Y != 0f) {
             CurrentFrame = 1;
         }
         ChangeFrame((currentFrame, frameHeight));
@@ -186,7 +190,7 @@ abstract class DruidNPC : RoANPC {
                     //if (NPC.justHit && AttackTimer > -TimeToRecoveryAfterGettingHit()) {
                     //    AttackTimer -= -TimeToRecoveryAfterGettingHit() * 0.25f;
                     //}
-                    if (Main.netMode != NetmodeID.MultiplayerClient) {
+                    if (NPC.velocity.Y == 0f && Main.netMode != NetmodeID.MultiplayerClient) {
                         if (!player.dead && AttackTimer >= 0f) {
                             AttackTimer = 0f;
                             AttackType = Main.rand.Next(0, 2);

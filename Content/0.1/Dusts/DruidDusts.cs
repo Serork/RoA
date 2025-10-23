@@ -6,8 +6,15 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 class GrimDruidDust : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(200, 200, 200, 0)
+    public override Color? GetAlpha(Dust dust, Color lightColor) {
+        Color color = new Color(200, 200, 200, 0);
+        if (dust.customData is float value && value == 1f) {
+            float progress = 1f - dust.alpha / 255f;
+            color *= Utils.GetLerpValue(0f, 0.1f, progress, true);
+        }
+        return color
         * Utils.GetLerpValue(0f, 0.25f, 1f - dust.alpha / 255f, true);
+    }
 
     public override void OnSpawn(Dust dust) {
         //UpdateType = DustID.Clentaminator_Red;

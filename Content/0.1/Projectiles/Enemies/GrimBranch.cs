@@ -64,7 +64,7 @@ sealed class GrimBranch : ModProjectile {
         for (int i = 0; i < 8; i++) {
             float centx = Projectile.Center.X - Projectile.velocity.X / 8f * i;
             float centy = Projectile.Center.Y - Projectile.velocity.Y / 8f * i;
-            int dust = Dust.NewDust(Projectile.oldPos[i], 4, 4, ModContent.DustType<GrimDruidDust>(), 0f, 0f, 255, Scale: 0.8f);
+            int dust = Dust.NewDust(Projectile.oldPos[i] + Projectile.Size / 2f - Vector2.One * 2, 4, 4, ModContent.DustType<GrimDruidDust>(), 0f, 0f, 255, Scale: 0.8f);
             Dust dust2 = Main.dust[dust];
             dust2.noGravity = true;
             dust2.position.X = centx;
@@ -106,7 +106,7 @@ sealed class GrimBranch : ModProjectile {
     public override void OnKill(int timeLeft) {
         //SoundEngine.PlaySound(SoundID.Grass, new Vector2(Projectile.position.X, Projectile.position.Y));
         for (int i = 0; i < 5; i++) {
-            int dust = Dust.NewDust(Projectile.Center - Projectile.velocity * 1f, 0, 0, ModContent.DustType<GrimDruidDust>(), 0, 0, 255, Scale: 0.8f);
+            int dust = Dust.NewDust(Projectile.position - Projectile.velocity * 1f, 0, 0, ModContent.DustType<GrimDruidDust>(), 0, 0, 255, Scale: 0.8f);
             Main.dust[dust].velocity *= 0.1f;
             Main.dust[dust].velocity += Projectile.velocity;
             Main.dust[dust].velocity *= 0.5f;

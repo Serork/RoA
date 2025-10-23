@@ -441,6 +441,7 @@ sealed class GrimDruid : DruidNPC {
                     if (Main.rand.NextBool()) {
                         int dust = Dust.NewDust(new Vector2(NPC.Center.X + 19 * NPC.direction - 4, NPC.Center.Y - 2), 4, 4, dustType, 0f, 0f, 255, Scale: 0.9f);
                         Main.dust[dust].velocity *= 0.1f;
+                        Main.dust[dust].customData = 1f;
                     }
                 }
             }
