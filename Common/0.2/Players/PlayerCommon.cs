@@ -64,6 +64,16 @@ sealed partial class PlayerCommon : ModPlayer {
     public Vector2[] OldUseItemPos = null!;
     public float[] OldUseItemRot = null!;
 
+    public void KeepOldUseItemInfo() {
+        for (int num28 = OldUseItemPos.Length - 1; num28 > 0; num28--) {
+            OldUseItemPos[num28] = OldUseItemPos[num28 - 1];
+            OldUseItemRot[num28] = OldUseItemRot[num28 - 1];
+        }
+
+        OldUseItemPos[0] = Player.Center;
+        OldUseItemRot[0] = 0f;
+    }
+
     public void UpdateOldUseItemInfo(int length, Vector2 position, float rotation) {
         int num = length;
         if (OldUseItemPos == null || num != OldUseItemPos.Length) {
@@ -76,10 +86,7 @@ sealed partial class PlayerCommon : ModPlayer {
             }
         }
 
-        for (int num28 = OldUseItemPos.Length - 1; num28 > 0; num28--) {
-            OldUseItemPos[num28] = OldUseItemPos[num28 - 1];
-            OldUseItemRot[num28] = OldUseItemRot[num28 - 1];
-        }
+        KeepOldUseItemInfo();
 
         OldUseItemPos[0] = position;
         OldUseItemRot[0] = rotation;

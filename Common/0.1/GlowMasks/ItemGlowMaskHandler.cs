@@ -244,7 +244,9 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     private static void DrawUsableItemGlowMask(ref PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
         Item item = player.HeldItem;
+        var handler = player.GetCommon();
         if (!player.IsAliveAndFree() || ((player.itemAnimation <= 0 || item.useStyle == ItemUseStyleID.None) && (item.holdStyle <= 0 || player.pulley)) || player.dead || item.noUseGraphic || (player.wet && item.noWet)) {
+            handler.KeepOldUseItemInfo();
             return;
         }
 
@@ -286,16 +288,13 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             float rotation = player.itemRotation + rotOffset;
             Color color = Color.Lerp(glowMaskInfo.Color, drawInfo.itemColor, Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
             if (item.type == ModContent.ItemType<RodOfTheLustrous>()) {
-                var handler = player.GetCommon();
                 handler.UpdateOldUseItemInfo(4, position, rotation);
                 var oldPos = handler.OldUseItemPos!;
                 var oldRot = handler.OldUseItemRot!;
-
                 for (int n = 0; n < oldPos.Length; n++) {
                     drawInfo.DrawDataCache.Add(new DrawData(texture, oldPos[n] - Main.screenPosition, texture.Bounds,
                                                             Color.Lerp(item.GetAlpha(color), Color.White, 0.5f) with { A = 100 } * 0.75f * MathUtils.Clamp01((1f - (float)n / oldPos.Length) * 1.5f), oldRot[n], origin, item.scale, drawInfo.itemEffect, 0));
                 }
-
                 color = Color.Lerp(item.GetAlpha(color), Color.White, 0.5f);
             }
 
