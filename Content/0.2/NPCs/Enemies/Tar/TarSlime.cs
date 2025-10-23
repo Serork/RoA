@@ -94,7 +94,7 @@ sealed class TarSlime : ModNPC {
         }
 
         if (MathF.Abs(NPC.velocity.Y) > NPC.gravity) {
-            NPC.localAI[0] = 1f;
+            NPC.localAI[0] = NPC.oldVelocity.Y;
         }
 
         if (NPC.velocity.Y == 0f) {
@@ -110,9 +110,7 @@ sealed class TarSlime : ModNPC {
             }
 
             if (NPC.localAI[0] != 0f) {
-                NPC.localAI[0] = 0f;
-
-                float num5 = NPC.oldVelocity.X;
+                float num5 = MathF.Max(NPC.oldVelocity.X, 0.5f * NPC.oldVelocity.X.GetDirection());
                 if (num5 > 6f)
                     num5 = 6f;
 
@@ -123,7 +121,7 @@ sealed class TarSlime : ModNPC {
                     Main.dust[num6].noGravity = true;
                     Main.dust[num6].velocity.X *= 1.2f;
                     Main.dust[num6].velocity.Y *= 0.8f;
-                    Main.dust[num6].velocity.Y -= NPC.oldVelocity.Y / 2f;
+                    Main.dust[num6].velocity.Y -= NPC.localAI[0] / 2f;
                     Main.dust[num6].velocity *= 0.8f;
                     Main.dust[num6].scale += (float)Main.rand.Next(3) * 0.1f;
                     Main.dust[num6].velocity.X = (Main.dust[num6].position.X - (NPC.position.X + (float)(NPC.width / 2))) * 0.2f;
@@ -132,12 +130,11 @@ sealed class TarSlime : ModNPC {
 
                     Main.dust[num6].velocity.X += num5 * 0.3f;
                 }
+                NPC.localAI[0] = 0f;
             }
 
             NPC.ai[3] = 0f;
-            if (NPC.velocity.Y == 0f) {
-                NPC.velocity.X *= 0.8f;
-            }
+            NPC.velocity.X *= 0.8f;
             if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1)
                 NPC.velocity.X = 0f;
 
