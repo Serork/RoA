@@ -4958,7 +4958,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             while (testJ <= max) {
                 x = cliffX + (randomnessPoints[max - testJ] + 1) * dir;
                 if (testJ < startY + 3) {
-                    for (int j = testJ - 15; j < testJ; j++) {
+                    for (int j = testJ - 25; j < testJ; j++) {
                         if (Main.tile[x, j].TileType != CliffPlaceholderTileType && Main.tile[x, j].TileType != _dirtTileType) {
                             WorldGen.KillTile(x, j);
                         }
