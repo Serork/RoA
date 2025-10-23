@@ -156,7 +156,7 @@ sealed class GrimDefender : ModNPC {
             if (num170 > 1f || flag) {
                 num170 = 1f;
             }
-            int max = NPCID.Sets.TrailCacheLength[Type] - 2;
+            int max = NPCID.Sets.TrailCacheLength[Type] - 1;
             float mult = 1f / max;
             Color trailColor = drawColor * num170 * (!flag ? Utils.GetLerpValue(0f, 5f, NPC.velocity.Length(), true) : 1f);
             if (flag) {
@@ -261,7 +261,7 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override void AI() {
-        NPC.localAI[3] = MathHelper.Lerp(NPC.localAI[3], NPC.velocity.Length() / 6.5f, 0.2f);
+        NPC.localAI[3] = MathHelper.Lerp(NPC.localAI[3], NPC.velocity.Length() / 6.5f, 0.325f);
 
         NPC.ShowNameOnHover = _isAngry;
 
@@ -317,6 +317,7 @@ sealed class GrimDefender : ModNPC {
                         Main.dust[dust].velocity = -NPC.velocity * 0.3f * Main.rand.NextFloat();
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].scale = Main.rand.NextFloat(0.9f, 3f) * 0.38f * (1f + 0.2f * Main.rand.NextFloat());
+                        Main.dust[dust].fadeIn = Main.rand.NextFloat(0.1f, 0.5f);
                     }
                 }
             }
