@@ -65,6 +65,10 @@ sealed partial class PlayerCommon : ModPlayer {
     public float[] OldUseItemRot = null!;
 
     public void KeepOldUseItemInfo() {
+        if (OldUseItemPos == null) {
+            return;
+        }
+
         for (int num28 = OldUseItemPos.Length - 1; num28 > 0; num28--) {
             OldUseItemPos[num28] = OldUseItemPos[num28 - 1];
             OldUseItemRot[num28] = OldUseItemRot[num28 - 1];

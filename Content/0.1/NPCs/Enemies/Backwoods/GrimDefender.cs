@@ -38,7 +38,7 @@ sealed class GrimDefender : ModNPC {
         Main.npcFrameCount[Type] = 8;
 
         NPCID.Sets.TrailingMode[NPC.type] = 7;
-        NPCID.Sets.TrailCacheLength[NPC.type] = 5;
+        NPCID.Sets.TrailCacheLength[NPC.type] = 7;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
             Position = new Vector2(0f, 20f),
@@ -152,17 +152,18 @@ sealed class GrimDefender : ModNPC {
         float progress = NPC.ai[1] > num ? Ease.CubeInOut(1f - (NPC.ai[1] - num) / (attackCd - num)) : 1f;
         bool flag = NPC.localAI[2] == 1f;
         if (NPC.ai[0] > 1f) {
-            float num170 = NPC.velocity.Length() / 6.5f;
+            float num170 = NPC.localAI[3];
             if (num170 > 1f || flag) {
                 num170 = 1f;
             }
-            float mult = 1f / NPCID.Sets.TrailCacheLength[Type];
+            int max = NPCID.Sets.TrailCacheLength[Type] - 2;
+            float mult = 1f / max;
             Color trailColor = drawColor * num170 * (!flag ? Utils.GetLerpValue(0f, 5f, NPC.velocity.Length(), true) : 1f);
             if (flag) {
                 trailColor *= 1f - NPC.localAI[1] / 12f;
             }
-            for (int i = 0; i < NPCID.Sets.TrailCacheLength[Type]; i++) {
-                Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, trailColor * (mult * (NPCID.Sets.TrailCacheLength[Type] - i)), NPC.oldRot[i], origin, NPC.scale, effects);
+            for (int i = 0; i < max; i++) {
+                Main.EntitySpriteDraw(texture, NPC.oldPos[i] + offset - Main.screenPosition, NPC.frame, trailColor * (mult * (max - i)), NPC.oldRot[i], origin, NPC.scale, effects);
             }
         }
         float opacity = 1f - progress;
@@ -240,7 +241,7 @@ sealed class GrimDefender : ModNPC {
             NPC.ai[1] = 60f - NPC.ai[1];
             NPC.localAI[1] = 0f;
             NPC.localAI[2] = 0f;
-            NPC.localAI[3] = 0f;
+            //NPC.localAI[3] = 0f;
             NPC.dontTakeDamage = true;
             SpawnHitGores();
             NPC.netUpdate = true;
@@ -260,6 +261,8 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override void AI() {
+        NPC.localAI[3] = MathHelper.Lerp(NPC.localAI[3], NPC.velocity.Length() / 6.5f, 0.2f);
+
         NPC.ShowNameOnHover = _isAngry;
 
         NPC.wet = false;
@@ -387,7 +390,7 @@ sealed class GrimDefender : ModNPC {
                 NPC.ai[1] = /*NPC.justHit ? (60f - NPC.ai[1]) : */0f;
                 NPC.localAI[1] = 0f;
                 NPC.localAI[2] = 0f;
-                NPC.localAI[3] = 0f;
+                //NPC.localAI[3] = 0f;
                 NPC.netUpdate = true;
             }
         }
