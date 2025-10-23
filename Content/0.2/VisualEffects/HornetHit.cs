@@ -25,7 +25,6 @@ sealed class HornetHit : VisualEffect<HornetHit> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
-
         if (--TimeLeft <= 0) {
             RestInPool();
 

@@ -1,5 +1,6 @@
 ﻿using RoA.Common.Druid.Wreath;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -16,7 +17,7 @@ sealed class DruidsEyes : NatureItem {
             return;
         }
 
-        player.GetWreathHandler().IncreaseResourceValue(-1f, extra2: 1.5f);
+        player.GetWreathHandler().IncreaseResourceValue(-MathUtils.Clamp01((hurtInfo.Damage / (float)player.statLifeMax2) * 3.5f), extra2: 1.5f);
     }
 
     protected override void SafeSetDefaults() {
