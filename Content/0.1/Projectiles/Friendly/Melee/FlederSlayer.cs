@@ -148,10 +148,10 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         if (Projectile.owner != Main.myPlayer) {
             return;
         }
-        Player player = Main.player[Projectile.owner];
+        //Player player = Main.player[Projectile.owner];
         for (int i2 = 1; i2 < 6; i2++) {
-            Vector2 boxPosition = Projectile.position + new Vector2(-30f * player.direction, 0f) + ((Projectile.rotation + _extraRotation)).ToRotationVector2() * 20f * i2 +
-                new Vector2(-20f + (player.direction == 1 ? 100f : 0f), 20f);
+            Vector2 boxPosition = Projectile.position + new Vector2(-30f * Projectile.direction, 0f) + ((Projectile.rotation + _extraRotation)).ToRotationVector2() * 20f * i2 +
+                new Vector2(-20f + (Projectile.direction == 1 ? 100f : 0f), 20f);
             int boxWidth = 20;
             int boxHeight = 20;
             int num = (int)(boxPosition.X / 16f);
