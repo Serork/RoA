@@ -78,10 +78,12 @@ sealed partial class NPCCommon : GlobalNPC {
 
                 float rotation = v.ToRotation() + (float)Math.PI / 2f;
 
+                float scale = MathHelper.Lerp(target.scale, source.scale, (float)k / amount);
                 for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
                     color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
                     spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - screenPos, sourceRectangle,
-                        color * source.As<Menhir>().GlowOpacityFactor * 0.1f * Helper.Wave(k * 10f, 0.75f, 2f, 5f, k), rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
+                        color * source.As<Menhir>().GlowOpacityFactor * 0.1f * Helper.Wave(k * 10f, 0.75f, 2f, 5f, k), rotation, origin, 
+                        scale * Helper.Wave(scale + 0.05f, scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
                 }
                 start += v * height;
             }

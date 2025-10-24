@@ -273,9 +273,9 @@ sealed class Menhir : ModNPC, IRequestAssets {
         if (StateValue >= FrameTime + 60f) {
             NPC.TargetClosest(false);
             ActuallyTeleport();
-            StateValue = FrameTime;
+            StateValue = 0f;
         }
-        else if (StateValue >= FrameTime) {
+        else if (StateValue >= FrameTime * 1.25f) {
             MakeInvisible();
         }
     }
