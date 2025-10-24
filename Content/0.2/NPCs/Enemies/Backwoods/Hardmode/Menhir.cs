@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Content.Emotes;
+using RoA.Core.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
@@ -12,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -20,6 +23,8 @@ namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 sealed class Menhir : ModNPC, IRequestAssets {
     private static byte FRAMECOUNT => 9;
     private static byte MAXENEMYCOUNTTOLOCK => 3;
+    private static ushort PICKAXEEMOTESPAWNTIME => 300;
+    private static float MINDISTANCETOENEMY => 800f;
 
     private static ushort TELEPORTTIME_JOURNEY => 9 * 60;
     private static ushort TELEPORTTIME_NORMAL => 7 * 60;
@@ -28,6 +33,9 @@ sealed class Menhir : ModNPC, IRequestAssets {
     private static ushort TELEPORTTIME_LEGENDARY => 3 * 60;
 
     private static float TELEPORTANIMATIONTIMEINTICKS => 60f;
+
+    public static LerpColor LerpColor { get; private set; } = new();
+    public static Color GlowColor => LerpColor.GetLerpColor([new Color(79, 172, 211), new Color(49, 75, 188)]);
 
     public enum MenhirRequstedTextureType : byte {
         Glow,
@@ -63,6 +71,8 @@ sealed class Menhir : ModNPC, IRequestAssets {
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
+
+        NPCID.Sets.ImmuneToAllBuffs[Type] = true;
     }
 
     public MenhirState State {
@@ -83,6 +93,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
     public ref float TeleportTime => ref NPC.localAI[0];
     public ref float StateValue => ref NPC.ai[1];
     public ref float GlowOpacityFactor => ref NPC.localAI[2];
+    public ref float PickaxeEmoteTimer => ref NPC.localAI[3];
 
     public bool IsTeleporting => IsDisappearing || IsAppearing;
     public bool IsDisappearing => State == MenhirState.Disappearing;
@@ -112,6 +123,21 @@ sealed class Menhir : ModNPC, IRequestAssets {
     }
 
     public override void AI() {
+        LerpColor.Update();
+        LerpColor.Update();
+
+        if (IsCasting && PickaxeEmoteTimer++ >= PICKAXEEMOTESPAWNTIME) {
+            PickaxeEmoteTimer = 0f;
+
+            foreach (Player player in Main.ActivePlayers) {
+                if (player.Distance(NPC.Center) > 16f * 10f || !Collision.CanHit(player.Center, 0, 0, NPC.position, NPC.width, NPC.height)) {
+                    continue;
+                }
+
+                EmoteBubble.NewBubble(EmoteID.ItemPickaxe, new WorldUIAnchor(player), 180);
+            }
+        }
+
         NPC.velocity.X *= 0.8f;
 
         LockEnemies();
@@ -164,7 +190,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
         }
 
         List<int> taken = [];
-        var npcs = Main.npc.Where(checkNPC => checkNPC.active && checkNPC.Distance(NPC.Center) < 1000f).OrderBy(x => x.Distance(NPC.Center));
+        var npcs = Main.npc.Where(checkNPC => checkNPC.active && checkNPC.Distance(NPC.Center) < MINDISTANCETOENEMY).OrderBy(x => x.Distance(NPC.Center));
         foreach (NPC checkNPC in npcs) {
             if (checkNPC.GetCommon().IsMenhirEffectActive) {
                 continue;
@@ -339,16 +365,17 @@ sealed class Menhir : ModNPC, IRequestAssets {
         NPC.position.Y += 3;
         drawColor *= NPC.Opacity;
         NPC.QuickDraw(spriteBatch, screenPos, drawColor);
-        Color glowColor = Color.Lerp(drawColor, Color.White * NPC.Opacity, 0.9f) * GlowOpacityFactor;
+        Color baseGlowColor = Color.Lerp(drawColor, GlowColor * NPC.Opacity, 0.9f);
+        Color glowColor = baseGlowColor * GlowOpacityFactor;
         int max = 2;
         for (int k = -max; k < max + 1; k++) {
             float scaleFactor = 1f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 0.5f * ((float)Math.PI * 2f) * 3f + 1f * k);
             Color color = glowColor;
-            for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
+            for (double i = -Math.PI; i < Math.PI; i += Math.PI * 2) {
                 color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
                 Vector2 position2 = NPC.position;
                 NPC.position += ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f);
-                NPC.QuickDraw_Vector2Scale(spriteBatch, screenPos, glowColor * 0.25f * (1f - MathF.Abs(k) / (float)max) * 0.5f, scale: new Vector2(scaleFactor, 1f) * NPC.scale * Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
+                NPC.QuickDraw_Vector2Scale(spriteBatch, screenPos, glowColor * 0.2f * (1f - MathF.Abs(k) / (float)max) * 0.5f, scale: new Vector2(scaleFactor, 1f) * NPC.scale * Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
                 NPC.position = position2;
             }
         }

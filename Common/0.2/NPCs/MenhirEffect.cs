@@ -70,11 +70,16 @@ sealed partial class NPCCommon : GlobalNPC {
             Vector2 between = end - start;
             float length = between.Length();
             int height = (int)(texture.Height * 0.9f);
-            int amount = (int)(length / height) + 1;
-            for (int k = 2; k <= amount; ++k) {
+            int amount = (int)(length / height);
+            int attempts = 0;
+            for (int k = 2;; ++k) {
+                if (start.Distance(end) < height || attempts > amount + amount / 2) {
+                    break;
+                }
+                attempts++;
                 Vector2 point = curve.GetPoint((float)k / amount);
                 Vector2 v = (point - start).SafeNormalize(Vector2.Zero);
-                Color color = Color.Lerp(drawColor, Color.White * NPC.Opacity, 0.9f) * 0.75f;
+                Color color = Color.Lerp(drawColor, Menhir.GlowColor * NPC.Opacity, 0.9f) * 0.75f;
 
                 float rotation = v.ToRotation() + (float)Math.PI / 2f;
 
@@ -85,7 +90,7 @@ sealed partial class NPCCommon : GlobalNPC {
                         color * source.As<Menhir>().GlowOpacityFactor * 0.1f * Helper.Wave(k * 10f, 0.75f, 2f, 5f, k), rotation, origin, 
                         scale * Helper.Wave(scale + 0.05f, scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
                 }
-                start += v * height;
+                start += v * (height * scale);
             }
         }
     }
@@ -101,7 +106,7 @@ sealed partial class NPCCommon : GlobalNPC {
         Rectangle clip = lockTexture.Bounds;
         Vector2 origin = clip.Size() / 2f;
         Vector2 position = target.position + target.Size / 2f - screenPos;
-        Color color = Color.Lerp(drawColor, Color.White * NPC.Opacity, 0.9f) * 0.85f;
+        Color color = Color.Lerp(drawColor, Menhir.GlowColor * NPC.Opacity, 0.9f) * 0.85f;
         for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
             color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
             spriteBatch.Draw(lockTexture, position + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f), DrawInfo.Default with {
