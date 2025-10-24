@@ -103,7 +103,7 @@ abstract class DruidNPC : RoANPC {
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         //if (CurrentFrame >= 19 - 3)
             {
-            _magicCastOpacity = MathHelper.Lerp(_magicCastOpacity, (float)(NPC.frameCounter / 80.0), 0.2f);
+            _magicCastOpacity = MathHelper.Lerp(_magicCastOpacity, (float)(NPC.frameCounter / 80.0), 0.25f);
             DrawMagicCast(spriteBatch, MagicCastColor, (int)CastFrame, Helper.EaseInOut2(_magicCastOpacity));
         }
     }
