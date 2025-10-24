@@ -188,8 +188,10 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
 
         FlederSlayerCutTiles();
 
-        if (CanDamageInternal()) {
+        if (!_released) {
+            Vector2 velocity = Projectile.velocity;
             int count = 3;
+            Projectile.velocity *= 0.5f;
             for (int i = 0; i < count; i++) {
                 Rectangle rectangle = Utils.CenteredRectangle(Projectile.Center + (Projectile.rotation * player.gravDir).ToRotationVector2() * (i + 1) * (100f / count) * Projectile.scale,
                 new Vector2(40f * Projectile.scale, 40f * Projectile.scale));
@@ -197,6 +199,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                     Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
                 }
             }
+            Projectile.velocity = velocity;
         }
 
         player.itemAnimation = player.itemTime = 2;
