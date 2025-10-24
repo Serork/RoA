@@ -192,13 +192,13 @@ sealed class Menhir : ModNPC, IRequestAssets {
         List<int> taken = [];
         var npcs = Main.npc.Where(checkNPC => checkNPC.active && checkNPC.Distance(NPC.Center) < MINDISTANCETOENEMY).OrderBy(x => x.Distance(NPC.Center));
         foreach (NPC checkNPC in npcs) {
-            if (checkNPC.GetCommon().IsMenhirEffectActive) {
-                continue;
-            }
             if (checkNPC.type == Type || checkNPC.whoAmI == NPC.whoAmI) {
                 continue;
             }
-            if (checkNPC.friendly || checkNPC.boss) {
+            if (checkNPC.GetCommon().IsMenhirEffectActive) {
+                continue;
+            }
+            if (!checkNPC.CanActivateOnHitEffect() || checkNPC.friendly || checkNPC.boss) {
                 continue;
             }
             if (taken.Contains(checkNPC.whoAmI) || taken.Count >= MAXENEMYCOUNTTOLOCK) {
