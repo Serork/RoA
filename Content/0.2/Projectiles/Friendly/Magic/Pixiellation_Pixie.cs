@@ -188,7 +188,7 @@ sealed class Pixie : ModProjectile {
 
         SoundEngine.PlaySound(PixieDeath with { PitchVariance = 0.1f }, Projectile.Center);
 
-        int num11 = Projectile.width / 2;
+        int num11 = Projectile.width;
         for (float num17 = 0f; num17 < 1f; num17 += 0.15f) {
             Vector2 vector10 = Vector2.UnitX.RotatedBy((float)Math.PI * 2f * num17);
             _ = vector10 * ((float)num11 * Projectile.scale);
