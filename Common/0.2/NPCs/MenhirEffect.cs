@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
+using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.Menhir;
+
 namespace RoA.Common.NPCs;
 
 sealed partial class NPCCommon : GlobalNPC {
@@ -24,6 +26,23 @@ sealed partial class NPCCommon : GlobalNPC {
 
     public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         if (npc.type == ModContent.NPCType<Menhir>()) {
+            if (!AssetInitializer.TryGetRequestedTextureAssets<Menhir>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+                return false;
+            }
+
+            NPC NPC = npc;
+
+            int yOffset = 3;
+
+            Vector2 position = NPC.position;
+            NPC.position.Y += yOffset;
+            drawColor *= NPC.Opacity;
+            Color baseGlowColor = Color.Lerp(drawColor, GlowColor * NPC.Opacity, 0.9f);
+            Menhir menhir = npc.As<Menhir>();
+            Color glowColor = baseGlowColor * menhir.GlowOpacityFactor;
+            NPC.QuickDraw(spriteBatch, screenPos, glowColor, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
+            NPC.position = position;
+
             foreach (NPC checkNPC in Main.ActiveNPCs) {
                 if (checkNPC.whoAmI == npc.whoAmI) {
                     continue;
@@ -35,6 +54,26 @@ sealed partial class NPCCommon : GlobalNPC {
 
                 DrawChain(spriteBatch, npc, checkNPC, drawColor, screenPos);
             }
+
+            position = NPC.position;
+            NPC.position.Y += yOffset;
+            NPC.QuickDraw(spriteBatch, screenPos, drawColor);
+            int max = 2;
+            for (int k = -max; k < max + 1; k++) {
+                float scaleFactor = 1f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 0.5f * ((float)Math.PI * 2f) * 3f + 1f * k);
+                Color color = glowColor;
+                for (double i = -Math.PI; i < Math.PI; i += Math.PI * 2) {
+                    color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
+                    Vector2 position2 = NPC.position;
+                    NPC.position += ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f);
+                    NPC.QuickDraw_Vector2Scale(spriteBatch, screenPos, glowColor * 0.2f * (1f - MathF.Abs(k) / (float)max) * 0.5f, scale: new Vector2(scaleFactor, 1f) * NPC.scale * Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
+                    NPC.position = position2;
+                }
+            }
+            if (menhir.IsTeleporting || menhir.IsInIdle) {
+                NPC.QuickDraw(spriteBatch, screenPos, glowColor, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
+            }
+            NPC.position = position;
         }
 
         return base.PreDraw(npc, spriteBatch, screenPos, drawColor);
@@ -61,9 +100,10 @@ sealed partial class NPCCommon : GlobalNPC {
         NPC NPC = source;
         Vector2 sourceCenter = target.position + target.Size / 2f;
         Vector2 targetCenter = source.As<Menhir>().ChainCenter + Vector2.UnitY * source.height / 4f - texture.Size() / 2f;
+        sourceCenter += sourceCenter.DirectionTo(targetCenter) * 10f;
         float mult = MathHelper.Clamp((targetCenter + targetCenter.DirectionTo(sourceCenter) * source.width).Distance(sourceCenter) / 100f, 0f, 1f);
         for (int k2 = 0; k2 < 3; k2++) {
-            float width = 50f * mult * Helper.Wave(0.25f, 1f, 5f, source.whoAmI + 10 * k2);
+            float width = (50f + sourceCenter.Distance(targetCenter) * 0.05f) * mult * Helper.Wave(0.25f, 1f, 5f, source.whoAmI + 10 * k2);
             SimpleCurve curve = new(sourceCenter, targetCenter, Vector2.Zero);
             curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, width);
             Vector2 start = curve.Begin, end = curve.End;
@@ -112,7 +152,7 @@ sealed partial class NPCCommon : GlobalNPC {
             spriteBatch.Draw(lockTexture, position + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f), DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
-                Color = color * 0.25f * source.As<Menhir>().GlowOpacityFactor,
+                Color = color * 0.3f * source.As<Menhir>().GlowOpacityFactor,
                 Scale = 1.15f * target.scale * Vector2.One * Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f,
                 Rotation = Helper.Wave(-0.15f, 0.15f, 5f, target.whoAmI)
             }, false);

@@ -35,7 +35,13 @@ sealed class Menhir : ModNPC, IRequestAssets {
     private static float TELEPORTANIMATIONTIMEINTICKS => 60f;
 
     public static LerpColor LerpColor { get; private set; } = new();
-    public static Color GlowColor => LerpColor.GetLerpColor([new Color(79, 172, 211), new Color(49, 75, 188)]);
+    public static Color GlowColor {
+        get {
+            Color result = LerpColor.GetLerpColor([new Color(79, 172, 211), new Color(49, 75, 188)]);
+            result.A = 225;
+            return result;
+        }
+    }
 
     public enum MenhirRequstedTextureType : byte {
         Glow,
@@ -241,6 +247,14 @@ sealed class Menhir : ModNPC, IRequestAssets {
     }
 
     private void TeleportOverTime() {
+        if ((IsTeleporting || IsInIdle) && NPC.Opacity > 0f) {
+            if (Main.rand.NextBool(5)) {
+                int dust = Dust.NewDust(NPC.Bottom - new Vector2(NPC.width / 2f, 20), NPC.width, 20, (ushort)ModContent.DustType<Dusts.Backwoods.Stone>());
+                Main.dust[dust].velocity.Y -= 2f * Main.rand.NextFloat();
+                Main.dust[dust].scale *= 1f + 0.1f * Main.rand.NextFloatDirection();
+            }
+        }
+
         if (!CanTeleport) {
             return;
         }
@@ -296,6 +310,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
         }
 
         StateValue++;
+
         if (StateValue >= FrameTime + 60f) {
             NPC.TargetClosest(false);
             ActuallyTeleport();
@@ -356,32 +371,8 @@ sealed class Menhir : ModNPC, IRequestAssets {
     public override void OnKill() {
     }
 
+    // see MenhirEffect
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        if (!AssetInitializer.TryGetRequestedTextureAssets<Menhir>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
-            return false;
-        }
-
-        Vector2 position = NPC.position;
-        NPC.position.Y += 3;
-        drawColor *= NPC.Opacity;
-        NPC.QuickDraw(spriteBatch, screenPos, drawColor);
-        Color baseGlowColor = Color.Lerp(drawColor, GlowColor * NPC.Opacity, 0.9f);
-        Color glowColor = baseGlowColor * GlowOpacityFactor;
-        int max = 2;
-        for (int k = -max; k < max + 1; k++) {
-            float scaleFactor = 1f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 0.5f * ((float)Math.PI * 2f) * 3f + 1f * k);
-            Color color = glowColor;
-            for (double i = -Math.PI; i < Math.PI; i += Math.PI * 2) {
-                color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
-                Vector2 position2 = NPC.position;
-                NPC.position += ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f);
-                NPC.QuickDraw_Vector2Scale(spriteBatch, screenPos, glowColor * 0.2f * (1f - MathF.Abs(k) / (float)max) * 0.5f, scale: new Vector2(scaleFactor, 1f) * NPC.scale * Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
-                NPC.position = position2;
-            }
-        }
-        NPC.QuickDraw(spriteBatch, screenPos, glowColor, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
-        NPC.position = position;
-
         return false;
     }
 }
