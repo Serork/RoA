@@ -1,26 +1,30 @@
-﻿//using Microsoft.Xna.Framework;
-//using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-//using RoA.Core.Utility;
+using RoA.Core;
+using RoA.Core.Utility;
 
-//using Terraria.ID;
-//using Terraria.ModLoader;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 
-//namespace RoA.Content.NPCs.Enemies.Tar;
+namespace RoA.Content.NPCs.Enemies.Tar;
 
-//sealed class PerfectMimic : ModNPC {
-//    public override void SetDefaults() {
-//        NPC.SetSizeValues(30, 60);
-//        NPC.DefaultToEnemy(new NPCExtensions.NPCHitInfo(500, 40, 16, 0f));
+sealed class PerfectMimic : ModNPC {
+    public override string Texture => ResourceManager.EmptyTexture;
 
-//        NPC.aiStyle = -1;
-//    }
+    public override void SetDefaults() {
+        NPC.SetSizeValues(30, 60);
+        NPC.DefaultToEnemy(new NPCExtensions.NPCHitInfo(500, 40, 16, 0f));
 
-//    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-//        return base.PreDraw(spriteBatch, screenPos, drawColor);
-//    }
+        NPC.aiStyle = -1;
+    }
 
-//    public override void AI() {
-//        NPC.velocity.X *= 0.8f;
-//    }
-//}
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        return false;
+    }
+
+    public override void AI() {
+        NPC.velocity.X *= 0.8f;
+    }
+}

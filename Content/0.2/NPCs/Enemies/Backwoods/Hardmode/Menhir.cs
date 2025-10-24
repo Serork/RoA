@@ -157,14 +157,23 @@ sealed class Menhir : ModNPC, IRequestAssets {
         if (!IsCasting) {
             if (!IsInIdle) {
                 GlowOpacityFactor = MathHelper.Lerp(GlowOpacityFactor, 0f, 0.1f);
+                if (GlowOpacityFactor < 0.01f) {
+                    GlowOpacityFactor = 0.01f;
+                }
             }
 
             return;
         }
 
-        GlowOpacityFactor = MathHelper.Lerp(GlowOpacityFactor, 1f, 0.15f);
-        if (GlowOpacityFactor < 0.01f) {
-            GlowOpacityFactor = 0.01f;
+        bool canGlow = false;
+        foreach (NPC checkNPC in CheckNPCs) {
+            if (ValidNPC(checkNPC)) {
+                canGlow = true;
+                break;
+            }
+        }
+        if (canGlow) {
+            GlowOpacityFactor = MathHelper.Lerp(GlowOpacityFactor, 1f, 0.15f);
         }
 
         Frame = MenhirFrame.Casting;
@@ -196,15 +205,11 @@ sealed class Menhir : ModNPC, IRequestAssets {
         }
 
         List<int> taken = [];
-        var npcs = Main.npc.Where(checkNPC => checkNPC.active && checkNPC.Distance(NPC.Center) < MINDISTANCETOENEMY).OrderBy(x => x.Distance(NPC.Center));
-        foreach (NPC checkNPC in npcs) {
-            if (checkNPC.type == Type || checkNPC.whoAmI == NPC.whoAmI) {
+        foreach (NPC checkNPC in CheckNPCs) {
+            if (!ValidNPC(checkNPC)) {
                 continue;
             }
             if (checkNPC.GetCommon().IsMenhirEffectActive) {
-                continue;
-            }
-            if (!checkNPC.CanActivateOnHitEffect() || checkNPC.friendly || checkNPC.boss) {
                 continue;
             }
             if (taken.Contains(checkNPC.whoAmI) || taken.Count >= MAXENEMYCOUNTTOLOCK) {
@@ -214,6 +219,9 @@ sealed class Menhir : ModNPC, IRequestAssets {
             taken.Add(checkNPC.whoAmI);
         }
     }
+
+    private IEnumerable<NPC> CheckNPCs => Main.npc.Where(checkNPC => checkNPC.active && checkNPC.Distance(NPC.Center) < MINDISTANCETOENEMY).OrderBy(x => x.Distance(NPC.Center));
+    private Predicate<NPC> ValidNPC => (checkNPC) => !(checkNPC.type == Type || checkNPC.whoAmI == NPC.whoAmI) && !(!checkNPC.CanActivateOnHitEffect() || checkNPC.friendly || checkNPC.boss);
 
     private void ApplyEffect(NPC npc, int whoAmI) {
         var handler = npc.GetCommon();
@@ -339,7 +347,14 @@ sealed class Menhir : ModNPC, IRequestAssets {
     }
 
     private void ActuallyTeleport() {
-        Player target = NPC.GetTargetPlayer();
+        Entity? target = null;
+        foreach (NPC checkNPC in CheckNPCs) {
+            if (ValidNPC(checkNPC)) {
+                target = checkNPC;
+                break;
+            }
+        }
+        target ??= NPC.GetTargetPlayer();
         if (Helper.SinglePlayerOrServer) {
             Point point14 = NPC.Center.ToTileCoordinates();
             Point point15 = target.Center.ToTileCoordinates();
@@ -361,6 +376,9 @@ sealed class Menhir : ModNPC, IRequestAssets {
     public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers) {
         if (item.pick <= 0) {
             modifiers.FinalDamage *= 0.1f;
+        }
+        else {
+            modifiers.FinalDamage *= 1.9f;
         }
     }
 
