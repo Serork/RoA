@@ -33,6 +33,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
     private static ushort TELEPORTTIME_LEGENDARY => 3 * 60;
 
     private static float TELEPORTANIMATIONTIMEINTICKS => 40f;
+    private static float INVINSIBLETIME => 40f;
 
     public static LerpColor LerpColor { get; private set; } = new();
     public static Color GlowColor {
@@ -319,7 +320,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
 
         StateValue++;
 
-        if (StateValue >= FrameTime + 60f) {
+        if (StateValue >= FrameTime + INVINSIBLETIME) {
             NPC.TargetClosest(false);
             ActuallyTeleport();
             StateValue = 0f;
