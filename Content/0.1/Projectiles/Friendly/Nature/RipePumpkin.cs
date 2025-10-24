@@ -135,10 +135,10 @@ sealed class RipePumpkin : NatureProjectile {
                 Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/PumpkinGore").Type, 1f);
         }
         for (int i = 0; i < 10; i++) {
-            int dust = Dust.NewDust(Projectile.position, 20, 20, DustID.Water_Desert, Projectile.velocity.X * 0.3f, 0, 0, new Color(250, 200, 100), 1.5f);
+            int dust = Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) - Projectile.velocity * 2f, 0, 0, DustID.Water_Desert, Projectile.velocity.X * 0.3f, 0, 0, new Color(250, 200, 100), 1.5f);
             Main.dust[dust].noGravity = false;
             Main.dust[dust].scale *= 0.9f;
-            int dust2 = Dust.NewDust(Projectile.position, 20, 20, DustID.Water_Desert, 0, 0, 0, new Color(250, 200, 100), 1.5f);
+            int dust2 = Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) - Projectile.velocity * 2f, 0, 0, DustID.Water_Desert, 0, 0, 0, new Color(250, 200, 100), 1.5f);
             Main.dust[dust2].noGravity = true;
             Main.dust[dust2].scale *= 0.9f;
         }

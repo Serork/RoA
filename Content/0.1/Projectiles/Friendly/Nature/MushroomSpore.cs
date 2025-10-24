@@ -23,7 +23,7 @@ sealed class MushroomSpore : NatureProjectile {
     public override void SetStaticDefaults() => Main.projFrames[Type] = 3;
 
     protected override void SafeSetDefaults() {
-        int width = 16; int height = width;
+        int width = 16; int height = width + 4;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.penetrate = 1;
