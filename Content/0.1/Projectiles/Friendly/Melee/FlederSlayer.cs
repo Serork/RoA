@@ -838,7 +838,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             while (!WorldGenHelper.SolidTile((int)(Projectile.Center.X + Projectile.width / 5 * Projectile.direction * player.gravDir) / 16, (int)y / 16)) {
                 y += 1;
             }
-            Projectile.position.Y = y - 22f;
+            Projectile.position.Y = MathHelper.Lerp(Projectile.position.Y, y - 22f, 0.5f);
             int amt = 3;
             float acc = Math.Clamp(Projectile.velocity.Length() / 5f, 0.5f, 1.25f);
             if (Projectile.velocity.Length() > 2f && Main.rand.NextBool(amt + 2)) {
