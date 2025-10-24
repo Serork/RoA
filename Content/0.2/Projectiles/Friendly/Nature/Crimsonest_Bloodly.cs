@@ -378,10 +378,10 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             Vector2 position = Projectile.position;
             Player player = Projectile.GetOwnerAsPlayer();
             Projectile.position += player.MovementOffset();
-            SpriteEffects effects = player.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            SpriteEffects effects = player.direction * Projectile.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             float rotation = 0f;
             if (player.gravDir < 0) {
-                effects = player.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                effects = player.direction * Projectile.direction < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                 effects |= SpriteEffects.FlipVertically;
             }
             Projectile.QuickDrawAnimated(lightColor, exRot: rotation, texture: indexedTextureAssets[(byte)ExtraBloodlyTextureType.Cocoon].Value, maxFrames: COCOONFRAMECOUNT, 
