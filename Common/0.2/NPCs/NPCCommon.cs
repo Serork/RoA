@@ -1,11 +1,27 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
+
+using RoA.Common.Cache;
+using RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
+using RoA.Core;
+using RoA.Core.Data;
+using RoA.Core.Graphics.Data;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
+
+using System;
+using System.Collections.Generic;
+using System.CommandLine.Parsing;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.NPCs;
 
-sealed class NPCCommon : GlobalNPC {
+sealed partial class NPCCommon : GlobalNPC {
     private static float MAXFALLSPEEDMODIFIERFORFALL => 0.75f;
 
     private bool _fell;

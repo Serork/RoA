@@ -4,12 +4,12 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
-using RoA.Core.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.ID;
@@ -19,6 +19,7 @@ namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
 sealed class Menhir : ModNPC, IRequestAssets {
     private static byte FRAMECOUNT => 9;
+    private static byte MAXENEMYCOUNTTOLOCK => 3;
 
     private static ushort TELEPORTTIME_JOURNEY => 9 * 60;
     private static ushort TELEPORTTIME_NORMAL => 7 * 60;
@@ -29,11 +30,15 @@ sealed class Menhir : ModNPC, IRequestAssets {
     private static float TELEPORTANIMATIONTIMEINTICKS => 60f;
 
     public enum MenhirRequstedTextureType : byte {
-        Glow
+        Glow,
+        Chain,
+        Lock
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture 
-        => [((byte)MenhirRequstedTextureType.Glow, Texture + "_Glow")];
+        => [((byte)MenhirRequstedTextureType.Glow, Texture + "_Glow"),
+            ((byte)MenhirRequstedTextureType.Chain, Texture + "_Chain"),
+            ((byte)MenhirRequstedTextureType.Lock, Texture + "_Lock")];
 
     public enum MenhirState : byte {
         Idle,
@@ -69,6 +74,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
         get => (MenhirFrame)NPC.localAI[1];
         set => NPC.localAI[1] = Utils.Clamp((byte)value, (byte)MenhirFrame.Idle, (byte)MenhirFrame.Count);
     }
+
     public bool FacedLeft {
         get => NPC.ai[2] == 0f;
         set => NPC.ai[2] = value.ToInt();
@@ -86,6 +92,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
 
     public float FrameTime => TELEPORTANIMATIONTIMEINTICKS / ((int)MenhirFrame.Teleport7 - (int)MenhirFrame.Teleport1 + 1);
     public bool CanTeleport => State >= MenhirState.Casting;
+    public Vector2 ChainCenter => IsTeleporting ? NPC.Center + Vector2.UnitY * 20f : NPC.Center;
 
     public override void SetDefaults() {
         NPC.SetSizeValues(30, 60);
@@ -94,11 +101,20 @@ sealed class Menhir : ModNPC, IRequestAssets {
         NPC.HitSound = SoundID.Dig;
 
         NPC.aiStyle = -1;
+    }
 
+    public override bool? CanFallThroughPlatforms() => true;
+
+    public override bool PreAI() {
+        UnlockEnemies();
+
+        return base.PreAI();
     }
 
     public override void AI() {
         NPC.velocity.X *= 0.8f;
+
+        LockEnemies();
 
         HandleIdle();
         HandleCasting();
@@ -115,8 +131,69 @@ sealed class Menhir : ModNPC, IRequestAssets {
         }
 
         GlowOpacityFactor = MathHelper.Lerp(GlowOpacityFactor, 1f, 0.15f);
+        if (GlowOpacityFactor < 0.01f) {
+            GlowOpacityFactor = 0.01f;
+        }
 
         Frame = MenhirFrame.Casting;
+    }
+
+    private void UnlockEnemies() {
+        foreach (NPC checkNPC in Main.ActiveNPCs) {
+            if (checkNPC.whoAmI == NPC.whoAmI) {
+                continue;
+            }
+            var handler = checkNPC.GetCommon();
+            if (!(handler.IsMenhirEffectActive && handler.MenhirEffectAppliedBy == NPC.whoAmI)) {
+                continue;
+            }
+
+            handler.IsMenhirEffectActive = false;
+            if (handler.DontTakeDamagePrevious is not null) {
+                checkNPC.dontTakeDamage = handler.DontTakeDamagePrevious.Value;
+                handler.DontTakeDamagePrevious = null;
+            }
+        }
+    }
+
+    private void LockEnemies() {
+        GlowOpacityFactor = MathUtils.Clamp01(GlowOpacityFactor);
+
+        if (GlowOpacityFactor <= 0.01f) {
+            return;
+        }
+
+        List<int> taken = [];
+        var npcs = Main.npc.Where(checkNPC => checkNPC.active && checkNPC.Distance(NPC.Center) < 1000f).OrderBy(x => x.Distance(NPC.Center));
+        foreach (NPC checkNPC in npcs) {
+            if (checkNPC.GetCommon().IsMenhirEffectActive) {
+                continue;
+            }
+            if (checkNPC.type == Type || checkNPC.whoAmI == NPC.whoAmI) {
+                continue;
+            }
+            if (checkNPC.friendly || checkNPC.boss) {
+                continue;
+            }
+            if (taken.Contains(checkNPC.whoAmI) || taken.Count >= MAXENEMYCOUNTTOLOCK) {
+                continue;
+            }
+            ApplyEffect(checkNPC, NPC.whoAmI);
+            taken.Add(checkNPC.whoAmI);
+        }
+    }
+
+    private void ApplyEffect(NPC npc, int whoAmI) {
+        var handler = npc.GetCommon();
+        handler.IsMenhirEffectActive = true;
+        handler.MenhirEffectAppliedBy = whoAmI;
+        HandleMenhirEffect(npc);
+    }
+
+    private void HandleMenhirEffect(NPC npc) {
+        ref bool dontTakeDamage = ref npc.dontTakeDamage;
+        npc.GetCommon().DontTakeDamagePrevious ??= dontTakeDamage;
+        dontTakeDamage = true;
     }
 
     private void HandleIdle() {
@@ -264,9 +341,16 @@ sealed class Menhir : ModNPC, IRequestAssets {
         NPC.QuickDraw(spriteBatch, screenPos, drawColor);
         Color glowColor = Color.Lerp(drawColor, Color.White * NPC.Opacity, 0.9f) * GlowOpacityFactor;
         int max = 2;
-        for (int i = -max; i < max + 1; i++) {
-            float scaleFactor = 1f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 0.5f * ((float)Math.PI * 2f) * 3f + 1f * i);
-            NPC.QuickDraw_Vector2Scale(spriteBatch, screenPos, glowColor * (1f - MathF.Abs(i) / (float)max) * 0.5f, scale: new Vector2(scaleFactor, 1f) * NPC.scale, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
+        for (int k = -max; k < max + 1; k++) {
+            float scaleFactor = 1f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 0.5f * ((float)Math.PI * 2f) * 3f + 1f * k);
+            Color color = glowColor;
+            for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
+                color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
+                Vector2 position2 = NPC.position;
+                NPC.position += ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f);
+                NPC.QuickDraw_Vector2Scale(spriteBatch, screenPos, glowColor * 0.25f * (1f - MathF.Abs(k) / (float)max) * 0.5f, scale: new Vector2(scaleFactor, 1f) * NPC.scale * Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
+                NPC.position = position2;
+            }
         }
         NPC.QuickDraw(spriteBatch, screenPos, glowColor, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
         NPC.position = position;
