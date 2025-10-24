@@ -354,6 +354,10 @@ sealed class Menhir : ModNPC, IRequestAssets {
                 break;
             }
         }
+        Player targetAsPlayer = NPC.GetTargetPlayer();
+        if (target is not null && targetAsPlayer.Distance(target.Center) > MINDISTANCETOENEMY) {
+            target = null;
+        }
         target ??= NPC.GetTargetPlayer();
         if (Helper.SinglePlayerOrServer) {
             Point point14 = NPC.Center.ToTileCoordinates();
