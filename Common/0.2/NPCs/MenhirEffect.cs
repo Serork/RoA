@@ -61,7 +61,7 @@ sealed partial class NPCCommon : GlobalNPC {
         NPC NPC = source;
         Vector2 sourceCenter = target.position + target.Size / 2f;
         Vector2 targetCenter = source.As<Menhir>().ChainCenter + Vector2.UnitY * source.height / 4f - texture.Size() / 2f;
-        float mult = 1f;
+        float mult = MathHelper.Clamp((targetCenter + targetCenter.DirectionTo(sourceCenter) * source.width).Distance(sourceCenter) / 100f, 0f, 1f);
         for (int k2 = 0; k2 < 3; k2++) {
             float width = 50f * mult * Helper.Wave(0.25f, 1f, 5f, source.whoAmI + 10 * k2);
             SimpleCurve curve = new(sourceCenter, targetCenter, Vector2.Zero);
@@ -73,7 +73,7 @@ sealed partial class NPCCommon : GlobalNPC {
             int amount = (int)(length / height);
             int attempts = 0;
             for (int k = 2;; ++k) {
-                if (start.Distance(end) < height || attempts > amount + amount / 2) {
+                if (start.Distance(targetCenter) < height || attempts > amount) {
                     break;
                 }
                 attempts++;
