@@ -10,6 +10,13 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class NPCExtensions {
+    public static void SetDirection(this NPC npc, int direction, bool setSpriteDirectionToo = true) {
+        npc.direction = direction;
+        if (setSpriteDirectionToo) {
+            npc.spriteDirection = npc.direction;
+        }
+    }
+
     public static bool CanActivateOnHitEffect(this NPC npc) => !npc.immortal && npc.lifeMax > 5;
 
     public static void StepUp(this NPC npc) => Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);

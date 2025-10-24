@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.NPCs;
+using RoA.Content.Items.Equipables.Miscellaneous;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -19,6 +20,13 @@ static class NPCUtils {
     public static Rectangle GetFrameBox(this NPC npc, int xFrame) {
         Texture2D tex = npc.GetTexture();
         return tex.Frame(xFrame, Main.npcFrameCount[npc.type], npc.frame.X, npc.frame.Y);
+    }
+
+    public static void QuickDraw_Vector2Scale(this NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor, Rectangle? frameBox = null, Vector2? scale = null, SpriteEffects? effect = null, float exRot = 0, float yOffset = 0f, float xOffset = 0f, Texture2D? texture = null) {
+        Texture2D tex = texture ?? npc.GetTexture();
+        Rectangle sourceRectangle = frameBox ?? npc.frame;
+        spriteBatch.Draw(tex, npc.Center + Vector2.UnitY * yOffset + Vector2.UnitX * xOffset - screenPos, sourceRectangle, lightColor,
+            npc.rotation + exRot, sourceRectangle.Size() / 2, scale ?? Vector2.One * npc.scale, effect ?? npc.spriteDirection.ToSpriteEffects(), 0);
     }
 
     public static void QuickDraw(this NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color lightColor, Rectangle? frameBox = null, float scale = 1f, SpriteEffects? effect = null, float exRot = 0, float yOffset = 0f, float xOffset = 0f, Texture2D? texture = null) {

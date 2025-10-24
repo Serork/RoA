@@ -9,7 +9,7 @@ namespace RoA.Common.UI.UILoading;
 // starlight river
 
 /// <summary>
-/// An auto-loaded UI State, that knows information about its own visibility.
+/// An auto-loaded UI MenhirState, that knows information about its own visibility.
 /// </summary>
 public abstract class SmartUIState : UIState {
     /// <summary>

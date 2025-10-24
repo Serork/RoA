@@ -264,7 +264,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                         if (_charge <= 0f) {
                             _slot = SoundEngine.PlaySound(style, Projectile.Center);
                         }
-                        _charge += 0.015f;
+                        _charge += 0.015f * player.GetTotalAttackSpeed(DamageClass.Melee);
                         _charge = Math.Clamp(_charge, 0f, 1f);
                     }
                     if (flag || ++Projectile.ai[0] < 10f) {
@@ -286,7 +286,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 if (_timingProgress >= 1.3f && _timingProgress <= 2.3f && !_empoweredAttack) {
                     _empoweredAttack = true;
                     _charge = 1f;
-                    Projectile.netUpdate = true;
+                    //Projectile.netUpdate = true;
                 }
 
                 SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
@@ -449,9 +449,9 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 Projectile.rotation = Projectile.velocity.ToRotation() + Helper.EaseInOut2(Math.Abs(_extraRotation)) * (_extraRotation != 0f ? Math.Sign(_extraRotation) : 1f);
             }
         }
-        if (Projectile.owner == Main.myPlayer && flag3 && _timeLeft > 0) {
+        if (/*Projectile.owner == Main.myPlayer && */flag3 && _timeLeft > 0) {
             _timeLeft--;
-            Projectile.netUpdate = true;
+            //Projectile.netUpdate = true;
         }
         if (flag3) {
             player.velocity.X *= 0.975f;
@@ -830,7 +830,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             Projectile.position += Vector2.Normalize(Projectile.velocity) * 2f;
             Projectile.direction = Projectile.velocity.X > 0f ? 1 : -1;
             Player player = Main.player[Projectile.owner];
-            Projectile.velocity *= 0.9f + Math.Clamp((player.GetTotalAttackSpeed(DamageClass.Melee) - 1f) * 0.1f, 0f, 1f);
+            Projectile.velocity *= 0.9f + Math.Clamp((player.GetTotalAttackSpeed(DamageClass.Melee) - 1f) * 0.05f, 0f, 1f);
             float y = player.Center.Y - 10f;
             while (!WorldGenHelper.SolidTile((int)(Projectile.Center.X + Projectile.width / 5 * Projectile.direction * player.gravDir) / 16, (int)y / 16)) {
                 y += 1;
