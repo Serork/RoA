@@ -225,7 +225,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Vector2 circleOffset = Utils.ToRotationVector2(circleFactor);
                 ulong seed = (ulong)(Projectile.position.Length() * i);
                 float seeded = Utils.RandomFloat(ref seed) + Projectile.whoAmI;
-                Vector2 circleOffset2 = circleOffset * Vector2.One * Helper.Wave(-0.5f, 0.75f, 5f, seeded) * 12.5f * Projectile.scale;
+                Vector2 circleOffset2 = circleOffset * Vector2.One * Helper.Wave(-0.5f, 0.75f, 5f, seeded) * 15f * Projectile.scale;
                 Vector2 position2 = position + circleOffset2;
                 Color rayColor = color * Helper.Wave(0.475f, 0.525f, 10f, seeded) * 1.25f * Opacity;
                 Vector2 scale = Projectile.scale * Helper.Wave(0.9f, 1f, 2.5f, seeded).ToRotationVector2() / MathHelper.Pi * 2.9f * new Vector2(1.3f, 1f);
