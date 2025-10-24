@@ -32,7 +32,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
     private static ushort TELEPORTTIME_MASTER => 5 * 60;
     private static ushort TELEPORTTIME_LEGENDARY => 3 * 60;
 
-    private static float TELEPORTANIMATIONTIMEINTICKS => 60f;
+    private static float TELEPORTANIMATIONTIMEINTICKS => 40f;
 
     public static LerpColor LerpColor { get; private set; } = new();
     public static Color GlowColor {
