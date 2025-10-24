@@ -250,7 +250,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             return;
         }
 
-        int[] specialCasesAkaShitCode = [ModContent.ItemType<RodOfTheLustrous>()];
+        List<int> specialCasesAkaShitCode = [ModContent.ItemType<RodOfTheLustrous>()];
         bool flag = specialCasesAkaShitCode.Contains(item.type);
         if (item.type >= ItemID.Count && (GlowMasks.TryGetValue(item.type, out GlowMaskInfo glowMaskInfo) || flag)) {
             Texture2D texture = flag ? TextureAssets.Item[item.type].Value : glowMaskInfo.Texture.Value;
