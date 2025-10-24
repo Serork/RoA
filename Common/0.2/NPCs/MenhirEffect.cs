@@ -114,7 +114,7 @@ sealed partial class NPCCommon : GlobalNPC {
                 Origin = origin,
                 Color = color * 0.25f * source.As<Menhir>().GlowOpacityFactor,
                 Scale = 1.25f * target.scale * Vector2.One * Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f,
-                Rotation = 0f
+                Rotation = Helper.Wave(-0.15f, 0.15f, 5f, target.whoAmI)
             }, false);
         }
     }
