@@ -59,7 +59,7 @@ DryadStatue: {
 }
 
 MiracleMint: {
-	DisplayName: Miracle Mint
+	DisplayName: Miraclemint
 	Tooltip: ""
 }
 
@@ -973,17 +973,17 @@ MercuriumStaff: {
 }
 
 MiracleMintSeeds: {
-	DisplayName: Miracle Mint Seeds
+	DisplayName: Miraclemint Seeds
 	Tooltip: ""
 }
 
 MiracleMintPlanterBox: {
-	DisplayName: Miracle Mint Planter Box
+	DisplayName: Miraclemint Planter Box
 	Tooltip: ""
 }
 
 MiracleMintHangingPot: {
-	DisplayName: Miracle Mint Hanging Pot
+	DisplayName: Miraclemint Hanging Pot
 	Tooltip: ""
 }
 
