@@ -32,7 +32,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
     private static ushort TELEPORTTIME_MASTER => 5 * 60;
     private static ushort TELEPORTTIME_LEGENDARY => 3 * 60;
 
-    private static float TELEPORTANIMATIONTIMEINTICKS => 40f;
+    private static float TELEPORTANIMATIONTIMEINTICKS => 20f;
     private static float INVINSIBLETIME => 40f;
 
     public static LerpColor LerpColor { get; private set; } = new();
@@ -114,7 +114,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
 
     public override void SetDefaults() {
         NPC.SetSizeValues(30, 60);
-        NPC.DefaultToEnemy(new NPCExtensions.NPCHitInfo(500, 40, 16, 0f));
+        NPC.DefaultToEnemy(new NPCExtensions.NPCHitInfo(320, 20, 4, 0f));
 
         NPC.HitSound = SoundID.Dig;
 
@@ -383,7 +383,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
             modifiers.FinalDamage *= 0.1f;
         }
         else {
-            modifiers.FinalDamage *= 1.9f;
+            modifiers.FinalDamage *= 6.9f;
         }
     }
 
