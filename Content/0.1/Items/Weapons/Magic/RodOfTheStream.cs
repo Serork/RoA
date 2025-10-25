@@ -23,7 +23,7 @@ sealed class RodOfTheStream : Rod {
 
         Item.ResearchUnlockCount = 1;
 
-        ItemID.Sets.ShimmerTransformToItem[Type] = (ushort)ModContent.ItemType<SphereOfStream>();
+        //ItemID.Sets.ShimmerTransformToItem[Type] = (ushort)ModContent.ItemType<SphereOfStream>();
 
         //ItemSwapSystem.SwapToOnRightClick[Type] = (ushort)ModContent.ItemType<SphereOfStream>();
     }
