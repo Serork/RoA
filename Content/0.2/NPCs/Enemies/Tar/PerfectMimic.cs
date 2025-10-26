@@ -48,6 +48,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     private FluidBodyPart[] _fluidBodyParts = null!;
     private Player _playerCopy = null!;
+    private Color _eyeColor;
 
     public ref float InitValue => ref NPC.localAI[0];
     public ref float TransformationFactor => ref NPC.scale;
@@ -91,6 +92,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         _playerCopy.velocity = NPC.velocity;
         _playerCopy.PlayerFrame();
         _playerCopy.head = _playerCopy.body = _playerCopy.legs = -1;
+        _playerCopy.socialIgnoreLight = true;
         _playerCopy.dead = true;
 
         Main.PlayerRenderer.DrawPlayer(Main.Camera, _playerCopy, NPC.Center - _playerCopy.Size / 2f, 0f, Vector2.Zero);
@@ -183,6 +185,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         headRotation = Helper.Wave(VisualTimer, - maxHeadRotation, maxHeadRotation, 5f, 0f);
         headRotation = MathHelper.Lerp(headRotation, 0f, 1f - TransformationFactor);
         _playerCopy.headPosition = new Vector2(0f, -20f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
+        _playerCopy.eyeColor = Color.Lerp(_eyeColor, Color.White, TransformationFactor);
 
         NPC.TargetClosest(false);
 
@@ -215,12 +218,14 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     private void RandomizePlayer() {
         Player player = _playerCopy;
+        Main.Hairstyles.UpdateUnlocks();
         int index = Main.rand.Next(Main.Hairstyles.AvailableHairstyles.Count);
         player.hair = Main.Hairstyles.AvailableHairstyles[index];
         player.eyeColor = ScaledHslToRgb(GetRandomColorVector());
         while (player.eyeColor.R + player.eyeColor.G + player.eyeColor.B > 300) {
             player.eyeColor = ScaledHslToRgb(GetRandomColorVector());
         }
+        _eyeColor = player.eyeColor;
 
         float num = (float)Main.rand.Next(60, 120) * 0.01f;
         if (num > 1f)
