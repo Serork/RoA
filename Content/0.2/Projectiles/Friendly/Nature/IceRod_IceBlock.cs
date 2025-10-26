@@ -29,6 +29,8 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 // TODO: separate block mechanic (and collision)
 [Tracked]
 sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAssets {
+    private static ushort TIMELEFT => 240;
+
     (byte, string)[] IRequestAssets.IndexedPathsToTexture => [(0, ResourceManager.NatureProjectileTextures + "MagicalIceBlock")];
 
     public static IEnumerable<Point16> EnumerateIceBlockPositions() {
@@ -80,8 +82,8 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
 
     public bool IsCharged => Projectile.ai[0] < 0f;
 
-    private bool UseExtraPattern1 => Projectile.GetOwnerAsPlayer().name.Equals("NFA", StringComparison.CurrentCultureIgnoreCase);
-    private bool UseExtraPattern2 => Projectile.GetOwnerAsPlayer().name.Equals("has2r", StringComparison.CurrentCultureIgnoreCase);
+    private bool UseExtraPattern1 => false/*Projectile.GetOwnerAsPlayer().name.Equals("NFA", StringComparison.CurrentCultureIgnoreCase)*/;
+    private bool UseExtraPattern2 => false/*Projectile.GetOwnerAsPlayer().name.Equals("has2r", StringComparison.CurrentCultureIgnoreCase)*/;
 
     private byte GetBlockCountToPlace() {
         byte result = (byte)(5 + _extraRandomIceBlocks.Count);
@@ -343,7 +345,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
             }
 
             Projectile.ai[0] -= 1f;
-            if (Projectile.ai[0] <= -450f) {
+            if (Projectile.ai[0] <= -TIMELEFT) {
                 Projectile.Kill();
             }
 
