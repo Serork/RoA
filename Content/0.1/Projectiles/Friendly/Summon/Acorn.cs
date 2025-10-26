@@ -72,6 +72,9 @@ sealed class Acorn : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
+        for (int k = 0; k < 4; k++)
+            Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 1, Projectile.oldVelocity.X * 0.2f, Projectile.oldVelocity.Y * 0.2f);
+
         Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
         SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
     }
