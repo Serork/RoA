@@ -166,7 +166,7 @@ sealed class PineCone : NatureProjectile {
         for (int i = 0; i < Main.rand.Next(4, 8) + 1; i++) {
             if (Main.rand.Next(2) == 0)
                 type = ModContent.DustType<Dusts.PineCone>();
-            Dust dust = Dust.NewDustDirect(Projectile.Center - Projectile.velocity * 0.1f, 8, 8, type, Projectile.velocity.X / 10f * 0.25f, Projectile.velocity.Y / 10f * 0.25f, 0, default, Main.rand.NextFloat(0.8f, 1f) * Main.rand.NextFloat(0.75f, 0.9f) * 0.85f);
+            Dust dust = Dust.NewDustDirect(Projectile.Center - Vector2.One * 4 - Projectile.velocity * 0.1f, 8, 8, type, Projectile.velocity.X / 10f * 0.25f, Projectile.velocity.Y / 10f * 0.25f, 0, default, Main.rand.NextFloat(0.8f, 1f) * Main.rand.NextFloat(0.75f, 0.9f) * 0.85f);
             dust.fadeIn = (float)(1.3 + (double)Main.rand.NextFloat() * 0.2);
             dust.noGravity = true;
             Dust dust2 = dust;
