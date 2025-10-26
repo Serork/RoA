@@ -35,16 +35,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     public record struct FluidBodyPart(Vector2 Position, FluidBodyPartType Type, float Rotation, Vector2 Velocity = default);
 
-    private FluidBodyPart[] _fluidBodyParts = null!;
-    private Player _playerCopy = null!;
-
-    public ref float InitValue => ref NPC.localAI[0];
-
-    public bool Init {
-        get => InitValue == 1f;
-        set => InitValue = value.ToInt();
-    }
-
     public enum PerfectMimicRequstedTextureType : byte {
         Part1,
         Part2,
@@ -56,7 +46,18 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             ((byte)PerfectMimicRequstedTextureType.Part2, Texture + "_Part2"),
             ((byte)PerfectMimicRequstedTextureType.Part3, Texture + "_Part3")];
 
+    private FluidBodyPart[] _fluidBodyParts = null!;
+    private Player _playerCopy = null!;
+
+    public ref float InitValue => ref NPC.localAI[0];
     public ref float TransformationFactor => ref NPC.scale;
+    public ref float VisualTimer => ref NPC.localAI[1];
+
+    public bool Init {
+        get => InitValue == 1f;
+        set => InitValue = value.ToInt();
+    }
+
 
     public override void SetDefaults() {
         NPC.SetSizeValues(30, 60);
@@ -90,7 +91,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         _playerCopy.velocity = NPC.velocity;
         _playerCopy.PlayerFrame();
         _playerCopy.head = _playerCopy.body = _playerCopy.legs = -1;
-
         _playerCopy.dead = true;
 
         Main.PlayerRenderer.DrawPlayer(Main.Camera, _playerCopy, NPC.Center - _playerCopy.Size / 2f, 0f, Vector2.Zero);
@@ -102,6 +102,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         if (!AssetInitializer.TryGetRequestedTextureAssets<PerfectMimic>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return;
         }
+
+        _playerCopy.Center = NPC.Center;
+        _playerCopy.direction = NPC.direction;
+        _playerCopy.velocity = NPC.velocity;
 
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = NPC.GetTexture();
@@ -156,20 +160,11 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     }
 
     public override void AI() {
-        float maxHeadRotation = MathHelper.PiOver4 / 3f;
-        ref float headRotation = ref _playerCopy.headRotation;
-        headRotation = Helper.Wave(-maxHeadRotation, maxHeadRotation, 5f, NPC.whoAmI);
-        headRotation = MathHelper.Lerp(headRotation, 0f, 1f - TransformationFactor);
-        _playerCopy.headPosition = new Vector2(0f, -20f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
-
-        NPC.TargetClosest(false);
-
-        NPC.velocity.X *= 0.8f;
-
-        TransformationFactor = Helper.Wave(0f, 1f, 1f, NPC.whoAmI);
-
         if (!Init) {
             Init = true;
+
+            VisualTimer = -2f;
+            TransformationFactor = 0f;
 
             int partCount = 10;
             _fluidBodyParts = new FluidBodyPart[partCount];
@@ -181,9 +176,23 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             RandomizePlayer();
         }
 
+        VisualTimer += TimeSystem.LogicDeltaTime;
+
+        float maxHeadRotation = MathHelper.PiOver4 / 3f;
+        ref float headRotation = ref _playerCopy.headRotation;
+        headRotation = Helper.Wave(VisualTimer, - maxHeadRotation, maxHeadRotation, 5f, 0f);
+        headRotation = MathHelper.Lerp(headRotation, 0f, 1f - TransformationFactor);
+        _playerCopy.headPosition = new Vector2(0f, -20f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
+
+        NPC.TargetClosest(false);
+
+        NPC.velocity.X *= 0.8f;
+
+        TransformationFactor = Helper.Wave(VisualTimer, 0f, 1f, 1f, 0f);
+
         for (int i = 0; i < _fluidBodyParts.Length; i++) {
             _fluidBodyParts[i].Rotation += TimeSystem.LogicDeltaTime * (i % 2 == 0).ToDirectionInt();
-            _fluidBodyParts[i].Velocity = Helper.Wave(-1f, 1f, 5f, i).ToRotationVector2() * 5f;
+            _fluidBodyParts[i].Velocity = Helper.Wave(VisualTimer, -1f, 1f, 5f, i).ToRotationVector2() * 5f;
         }
     }
 
