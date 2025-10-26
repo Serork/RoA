@@ -1,10 +1,10 @@
 ﻿using RoA.Core;
-using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Dusts;
+
 sealed class DrawBehindNPCs : IInitializer {
     void ILoadable.Load(Mod mod) {
         On_Main.DrawNPCs += On_Main_DrawNPCs;
