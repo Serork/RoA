@@ -295,7 +295,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         ref float headRotation = ref _playerCopy.headRotation;
         headRotation = Helper.Wave(VisualTimer, - maxHeadRotation, maxHeadRotation, 5f, 0f);
         headRotation = MathHelper.Lerp(headRotation, -0.1f * NPC.direction, 1f - TransformationFactor);
-        _playerCopy.headPosition = new Vector2(0f, -20f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
+        _playerCopy.headPosition = new Vector2(0f, -24f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
         _playerCopy.headPosition.Y += 1f;
         _playerCopy.eyeColor = Color.Lerp(_eyeColor, Color.White, TransformationFactor);
 
