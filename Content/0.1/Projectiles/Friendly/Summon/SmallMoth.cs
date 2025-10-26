@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
+
 using System;
 
 using Terraria;
@@ -39,6 +41,15 @@ sealed class SmallMoth : ModProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
+    }
+
+    public override bool? CanCutTiles() {
+        Player owner = Projectile.GetOwnerAsPlayer();
+        if (!Collision.CanHit(Projectile.Center, 0, 0, owner.position, owner.width, owner.height)) {
+            return false;
+        }
+
+        return base.CanCutTiles();
     }
 
     public override void AI() {
