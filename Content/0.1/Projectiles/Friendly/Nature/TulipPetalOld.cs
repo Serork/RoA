@@ -283,7 +283,7 @@ sealed class TulipPetalOld : NatureProjectile {
         if (Projectile.frame == 0 && Projectile.ai[0] != 3) {
             if (Main.netMode != NetmodeID.Server) {
                 for (int i = 0; i < 5; i++) {
-                    int ind4 = Dust.NewDust(Projectile.Center, 8, 8, DustID.Sand, 0f, 0f, 0, new Color(225, 60, 200), 1f);
+                    int ind4 = Dust.NewDust(Projectile.Center - Vector2.One * 4, 8, 8, DustID.Sand, 0f, 0f, 0, new Color(225, 60, 200), 1f);
                     Main.dust[ind4].velocity *= 0.95f;
                     Main.dust[ind4].noGravity = true;
                 }
@@ -293,7 +293,7 @@ sealed class TulipPetalOld : NatureProjectile {
         if (Projectile.frame == 1 && Projectile.ai[0] != 3) {
             if (Main.netMode != NetmodeID.Server) {
                 for (int i = 0; i < 5; i++) {
-                    int ind4 = Dust.NewDust(Projectile.Center, 8, 8, DustID.Sand, 0f, 0f, 0, new Color(255, 120, 90), 1f);
+                    int ind4 = Dust.NewDust(Projectile.Center - Vector2.One * 4, 8, 8, DustID.Sand, 0f, 0f, 0, new Color(255, 120, 90), 1f);
                     Main.dust[ind4].velocity *= 0.95f;
                     Main.dust[ind4].noGravity = true;
                 }
