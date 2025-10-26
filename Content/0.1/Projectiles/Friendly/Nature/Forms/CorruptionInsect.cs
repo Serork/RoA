@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
+
 using System;
 
 using Terraria;
@@ -171,6 +173,15 @@ class CorruptionInsect : FormProjectile {
         }
 
         return base.OnTileCollide(oldVelocity);
+    }
+
+    public override bool? CanCutTiles() {
+        Player owner = Projectile.GetOwnerAsPlayer();
+        if (!Collision.CanHit(Projectile.Center, 0, 0, owner.position, owner.width, owner.height)) {
+            return false;
+        }
+
+        return base.CanCutTiles();
     }
 
     public override void OnKill(int timeLeft) {
