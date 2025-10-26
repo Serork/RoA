@@ -10,6 +10,8 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility;
 
 static partial class NPCExtensions {
+    public static bool AnyNPCs(this NPC npc) => NPC.AnyNPCs(npc.type);
+
     public static void SetDirection(this NPC npc, int direction, bool setSpriteDirectionToo = true) {
         npc.direction = direction;
         if (setSpriteDirectionToo) {

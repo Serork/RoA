@@ -183,6 +183,8 @@ sealed class ShaderLoader : ModSystem {
 
     public static Asset<Effect> TarDye => _loadedShaders["TarDye"];
     public static Asset<Effect> WreathDye => _loadedShaders["WreathDye"];
+    public static Asset<Effect> MetaballEdgeShader => _loadedShaders["MetaballEdgeShader"];
+    public static Asset<Effect> TarBorder => _loadedShaders["TarBorder"];
 
     public override void OnModLoad() {
         if (Main.dedServ) {

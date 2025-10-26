@@ -8,6 +8,7 @@ using RoA.Content.Items.Weapons.Nature;
 using RoA.Core.Utility.Extensions;
 
 using System;
+using System.Globalization;
 using System.Linq;
 
 using Terraria;
@@ -34,6 +35,25 @@ static partial class Helper {
 
     public static bool JustPressed(Keys key) {
         return Main.keyState.IsKeyDown(key) && !Main.oldKeyState.IsKeyDown(key);
+    }
+
+    public static Color FromHex(string hex) {
+        // Parse the hexadecimal string into an integer
+        int hexValue = int.Parse(hex.TrimStart('#'), NumberStyles.HexNumber);
+
+        // Extract the red, green, and blue color values from the integer
+        int r = (hexValue >> 16) & 0xFF;
+        int g = (hexValue >> 8) & 0xFF;
+        int b = hexValue & 0xFF;
+
+        // Normalize the color values to the range of 0 to 1
+        float normalize = 1.0f / 255.0f;
+        float rf = r * normalize;
+        float gf = g * normalize;
+        float bf = b * normalize;
+
+        // Create a new Color object with the normalized color values
+        return new Color(rf, gf, bf);
     }
 
     public static string ToHexString(float f) {

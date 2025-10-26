@@ -13,6 +13,8 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Vanilla;
 
 static class NPCUtils {
+    public static bool AnyNPCs<T>() where T : ModNPC => NPC.AnyNPCs(ModContent.NPCType<T>());
+
     public static void ResetTarget(this NPC npc) => npc.target = -1;
 
     public static Texture2D GetTexture(this NPC npc) => TextureAssets.Npc[npc.type].Value;

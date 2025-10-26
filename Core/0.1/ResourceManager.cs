@@ -29,11 +29,13 @@ static class ResourceManager {
     public static string PixelTexture => Textures + "Pixel";
 
     public static string AchievementsTextures => UITextures + "Achievements/";
+    public static string MetaballLayerTextures => Textures + "MetaballLayers/";
 
     public static string Effects => RoA.ModName + $"/{EFFECTSPATH}/";
 
     public static Texture2D Pixel => ModContent.Request<Texture2D>(PixelTexture, AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D DefaultSparkle => ModContent.Request<Texture2D>("RoA/Resources/Textures/VisualEffects/DefaultSparkle", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D BasicCircle => ModContent.Request<Texture2D>(Textures + "BasicCircle", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Circle => ModContent.Request<Texture2D>(Textures + "Circle", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Circle2 => ModContent.Request<Texture2D>(Textures + "Circle2", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Circle3 => ModContent.Request<Texture2D>(Textures + "Circle3", AssetRequestMode.ImmediateLoad).Value;
