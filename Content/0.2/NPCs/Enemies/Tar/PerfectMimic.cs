@@ -15,6 +15,7 @@ using RoA.Core.Utility.Vanilla;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Tar;
@@ -23,6 +24,7 @@ namespace RoA.Content.NPCs.Enemies.Tar;
 sealed class PerfectMimic : ModNPC, IRequestAssets {
     private static readonly LerpColor LerpColor = new();
 
+    public static Color LiquidColor => LerpColor.GetLerpColor([new Color(46, 34, 47)]);
     public static Color OutlineColor => LerpColor.GetLerpColor([/*new Color(62, 53, 70), */new Color(98, 85, 101)]);
 
     public enum FluidBodyPartType : byte {
@@ -31,9 +33,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         Part3
     }
 
-    public record struct FluidBodyPart(Vector2 Position, FluidBodyPartType Type, float Rotation);
+    public record struct FluidBodyPart(Vector2 Position, FluidBodyPartType Type, float Rotation, Vector2 Velocity = default);
 
     private FluidBodyPart[] _fluidBodyParts = null!;
+    private Player _playerCopy = null!;
 
     public ref float InitValue => ref NPC.localAI[0];
 
@@ -53,14 +56,45 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             ((byte)PerfectMimicRequstedTextureType.Part2, Texture + "_Part2"),
             ((byte)PerfectMimicRequstedTextureType.Part3, Texture + "_Part3")];
 
+    public ref float TransformationFactor => ref NPC.scale;
+
     public override void SetDefaults() {
         NPC.SetSizeValues(30, 60);
         NPC.DefaultToEnemy(new NPCExtensions.NPCHitInfo(500, 40, 16, 0f));
 
         NPC.aiStyle = -1;
+
+        _playerCopy = new Player();
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        Player other = NPC.GetTargetPlayer();
+        _playerCopy.direction = other.direction;
+        _playerCopy.selectedItem = other.selectedItem;
+        _playerCopy.extraAccessory = other.extraAccessory;
+        _playerCopy.position = other.position;
+        _playerCopy.velocity = other.velocity;
+        _playerCopy.statLife = other.statLife;
+        _playerCopy.statLifeMax = other.statLifeMax;
+        _playerCopy.statLifeMax2 = other.statLifeMax2;
+        _playerCopy.statMana = other.statMana;
+        _playerCopy.statManaMax = other.statManaMax;
+        _playerCopy.statManaMax2 = other.statManaMax2;
+        _playerCopy.hideMisc = other.hideMisc;
+        _playerCopy.ResetEffects();
+        _playerCopy.ResetVisibleAccessories();
+        _playerCopy.DisplayDollUpdate();
+        _playerCopy.UpdateSocialShadow();
+        _playerCopy.Center = NPC.Center;
+        _playerCopy.direction = NPC.direction;
+        _playerCopy.velocity = NPC.velocity;
+        _playerCopy.PlayerFrame();
+        _playerCopy.head = _playerCopy.body = _playerCopy.legs = -1;
+
+        _playerCopy.dead = true;
+
+        Main.PlayerRenderer.DrawPlayer(Main.Camera, _playerCopy, NPC.Center - _playerCopy.Size / 2f, 0f, Vector2.Zero);
+
         return false;
     }
 
@@ -74,8 +108,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         Vector2 position = NPC.Center;
         Rectangle clip = texture.Bounds;
         Vector2 origin = clip.Centered();
-        Color color = Color.White;
-        Vector2 scale = Vector2.One * NPC.scale;
+        Color color = LiquidColor;
+        Vector2 scale = Vector2.One * TransformationFactor;
         float rotation = 0f;
         batch.DrawWithSnapshot(() => {
             batch.Draw(texture, position, DrawInfo.Default with {
@@ -86,6 +120,12 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 Rotation = rotation
             });
         });
+
+        Vector2 center = NPC.Center;
+        Vector2 headPosition = _playerCopy.Center + _playerCopy.headPosition;
+        headPosition += headPosition.DirectionFrom(center) * 10f;
+        batch.Line(center, headPosition, thickness: 10f, color: color);
+
         foreach (var part in _fluidBodyParts) {
             switch (part.Type) {
                 case FluidBodyPartType.Part1:
@@ -100,7 +140,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             }
             position = NPC.Center;
             clip = texture.Bounds;
-            origin = clip.Centered() + part.Position;
+            origin = clip.Centered() + part.Position + part.Velocity;
             color = Color.White;
             rotation = part.Rotation;
             batch.DrawWithSnapshot(() => {
@@ -116,9 +156,17 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     }
 
     public override void AI() {
+        float maxHeadRotation = MathHelper.PiOver4 / 3f;
+        ref float headRotation = ref _playerCopy.headRotation;
+        headRotation = Helper.Wave(-maxHeadRotation, maxHeadRotation, 5f, NPC.whoAmI);
+        headRotation = MathHelper.Lerp(headRotation, 0f, 1f - TransformationFactor);
+        _playerCopy.headPosition = new Vector2(0f, -20f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
+
+        NPC.TargetClosest(false);
+
         NPC.velocity.X *= 0.8f;
 
-        NPC.scale = 1f;
+        TransformationFactor = Helper.Wave(0f, 1f, 1f, NPC.whoAmI);
 
         if (!Init) {
             Init = true;
@@ -126,14 +174,133 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             int partCount = 10;
             _fluidBodyParts = new FluidBodyPart[partCount];
             for (int i = 0; i < partCount; i++) {
-                Vector2 position = (i / MathHelper.TwoPi).ToRotationVector2() * 10f;
+                Vector2 position = (i / MathHelper.TwoPi).ToRotationVector2() * 5f;
                 _fluidBodyParts[i] = new FluidBodyPart(position, Main.rand.GetRandomEnumValue<FluidBodyPartType>(), Main.rand.NextFloatRange(MathHelper.TwoPi));
             }
+
+            RandomizePlayer();
         }
 
         for (int i = 0; i < _fluidBodyParts.Length; i++) {
             _fluidBodyParts[i].Rotation += TimeSystem.LogicDeltaTime * (i % 2 == 0).ToDirectionInt();
-            _fluidBodyParts[i].Position = Helper.Wave(-1f, 1f, 5f, i).ToRotationVector2() * 5f;
+            _fluidBodyParts[i].Velocity = Helper.Wave(-1f, 1f, 5f, i).ToRotationVector2() * 5f;
+        }
+    }
+
+    private int[] _validClothStyles = new int[10] {
+        0,
+        2,
+        1,
+        3,
+        8,
+        4,
+        6,
+        5,
+        7,
+        9
+    };
+
+    private static Color ScaledHslToRgb(Vector3 hsl) => ScaledHslToRgb(hsl.X, hsl.Y, hsl.Z);
+    private static Color ScaledHslToRgb(float hue, float saturation, float luminosity) => Main.hslToRgb(hue, saturation, luminosity * 0.85f + 0.15f);
+    private static Vector3 GetRandomColorVector() => new Vector3(Main.rand.NextFloat(), Main.rand.NextFloat(), Main.rand.NextFloat());
+
+    private void RandomizePlayer() {
+        Player player = _playerCopy;
+        int index = Main.rand.Next(Main.Hairstyles.AvailableHairstyles.Count);
+        player.hair = Main.Hairstyles.AvailableHairstyles[index];
+        player.eyeColor = ScaledHslToRgb(GetRandomColorVector());
+        while (player.eyeColor.R + player.eyeColor.G + player.eyeColor.B > 300) {
+            player.eyeColor = ScaledHslToRgb(GetRandomColorVector());
+        }
+
+        float num = (float)Main.rand.Next(60, 120) * 0.01f;
+        if (num > 1f)
+            num = 1f;
+
+        player.skinColor.R = (byte)((float)Main.rand.Next(240, 255) * num);
+        player.skinColor.G = (byte)((float)Main.rand.Next(110, 140) * num);
+        player.skinColor.B = (byte)((float)Main.rand.Next(75, 110) * num);
+        player.hairColor = ScaledHslToRgb(GetRandomColorVector());
+        player.shirtColor = ScaledHslToRgb(GetRandomColorVector());
+        player.underShirtColor = ScaledHslToRgb(GetRandomColorVector());
+        player.pantsColor = ScaledHslToRgb(GetRandomColorVector());
+        player.shoeColor = ScaledHslToRgb(GetRandomColorVector());
+        player.skinVariant = _validClothStyles[Main.rand.Next(_validClothStyles.Length)];
+        switch (player.hair + 1) {
+            case 5:
+            case 6:
+            case 7:
+            case 10:
+            case 12:
+            case 19:
+            case 22:
+            case 23:
+            case 26:
+            case 27:
+            case 30:
+            case 33:
+            case 34:
+            case 35:
+            case 37:
+            case 38:
+            case 39:
+            case 40:
+            case 41:
+            case 44:
+            case 45:
+            case 46:
+            case 47:
+            case 48:
+            case 49:
+            case 51:
+            case 56:
+            case 65:
+            case 66:
+            case 67:
+            case 68:
+            case 69:
+            case 70:
+            case 71:
+            case 72:
+            case 73:
+            case 74:
+            case 79:
+            case 80:
+            case 81:
+            case 82:
+            case 84:
+            case 85:
+            case 86:
+            case 87:
+            case 88:
+            case 90:
+            case 91:
+            case 92:
+            case 93:
+            case 95:
+            case 96:
+            case 98:
+            case 100:
+            case 102:
+            case 104:
+            case 107:
+            case 108:
+            case 113:
+            case 124:
+            case 126:
+            case 133:
+            case 134:
+            case 135:
+            case 144:
+            case 146:
+            case 147:
+            case 163:
+            case 165:
+                player.Male = false;
+                break;
+            default:
+                player.Male = true;
+                break;
         }
     }
 
