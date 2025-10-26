@@ -45,7 +45,7 @@ sealed class Tulip : ModDust {
             }
         }
 
-        if (!Collision.SolidCollision(dust.position, 4, 4)) {
+        if (!Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4)) {
             Helper.ApplyWindPhysics(dust.position, ref dust.velocity);
 
             dust.rotation += Helper.Wave(-0.1f, 0.1f, 0.5f, randomness);

@@ -41,7 +41,7 @@ sealed class FeatherDust : ModDust {
         _velocity = Vector2.SmoothStep(_velocity, dust.velocity *= 0.9f, 1f);
         dust.position += _velocity *= 0.99f;
 
-        if (!Collision.SolidCollision(dust.position, 4, 4)) {
+        if (!Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4)) {
             dust.rotation += Helper.Wave(-0.1f, 0.1f, 0.5f, randomness);
 
             dust.position.X += Helper.Wave(-1f, 1f, 4f, randomness);

@@ -45,7 +45,7 @@ sealed class TarDebuff : ModDust {
             dust.velocity.Y += 0.015f;
         }
 
-        if (Collision.SolidCollision(dust.position, 4, 4))
+        if (Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4))
             dust.active = false;
 
         return false;

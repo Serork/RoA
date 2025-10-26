@@ -21,7 +21,7 @@ sealed class TectonicDust : ModDust {
                 }
             }
 
-            if (Collision.SolidCollision(dust.position, 1, 1)) {
+            if (Collision.SolidCollision(dust.position - Vector2.One * 0.5f, 1, 1)) {
                 dust.velocity = Vector2.Zero;
             }
             else {

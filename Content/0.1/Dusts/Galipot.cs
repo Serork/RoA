@@ -40,7 +40,7 @@ sealed class Galipot2 : ModDust {
 sealed class Galipot : ModDust {
     public override bool Update(Dust dust) {
         if (dust.velocity.X == 0f) {
-            if (Collision.SolidCollision(dust.position, 2, 2))
+            if (Collision.SolidCollision(dust.position - Vector2.One, 2, 2))
                 dust.scale = 0f;
 
             dust.rotation += 0.5f;
