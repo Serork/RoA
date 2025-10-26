@@ -109,7 +109,6 @@ public class MetaballManager : ModSystem {
                 if (metaball.ShouldDrawItsContent()) {
                     Main.spriteBatch.Draw(metaball.LayerTargets[i], Main.screenLastPosition - Main.screenPosition, Color.White);
                 }
-
                 // Prepare shaders for the given layer target.
                 metaball.PrepareShaderForTarget(i);
 
