@@ -72,7 +72,7 @@ sealed class Acorn : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        for (int k = 0; k < 2; k++)
+        for (int k = 0; k < 3; k++)
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 1, Projectile.oldVelocity.X * 0.2f, Projectile.oldVelocity.Y * 0.2f, newColor: Color.Lerp(new Color(129, 111, 67), new Color(107, 97, 55), Main.rand.NextFloat()));
 
         Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
