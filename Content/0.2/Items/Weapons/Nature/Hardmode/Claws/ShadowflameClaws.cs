@@ -52,7 +52,8 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
         args.ShouldReset = false;
     }
 
-    protected override (Color, Color) SetSlashColors(Player player) => (Color.Lerp(new Color(169, 85, 240), new Color(88, 63, 163).ModifyRGB(1f), 0.75f), Color.Lerp(new Color(115, 30, 200), new Color(88, 63, 163).ModifyRGB(0.75f), 0.75f));
+    protected override (Color, Color) SetSlashColors(Player player) 
+        => (new Color(160, 85, 255), new Color(120, 50, 255));
 
     public sealed class ShadowflameClawsSlash : ClawsSlash {
         private bool Charged => (!CanFunction && Projectile.GetOwnerAsPlayer().GetWreathHandler().IsActualFull6) || Opacity == 1f;
