@@ -74,18 +74,21 @@ sealed class WreathDrawing : PlayerDrawLayer {
 
         WreathHandler stats = player.GetWreathHandler();
         Vector2 playerPosition = Utils.Floor(new Vector2((int)(drawInfo.Position.X + (float)(drawInfo.drawPlayer.width / 2)),
-            (int)(drawInfo.Position.Y + (float)drawInfo.drawPlayer.height - 40f)));
+            (int)(drawInfo.Position.Y + ((float)drawInfo.drawPlayer.height - 40f) * player.gravDir)));
         var formHandler = player.GetFormHandler();
         var currentForm = formHandler.CurrentForm;
         if (formHandler.IsInADruidicForm && currentForm != null && currentForm.BaseForm.IsDrawing) {
             playerPosition += currentForm.BaseForm.SetWreathOffset(player);
         }
-        playerPosition.Y += stats.YAdjustAmountInPixels;
-        playerPosition.Y -= 12f;
+        playerPosition.Y += stats.YAdjustAmountInPixels * player.gravDir;
+        playerPosition.Y -= 12f * player.gravDir;
+        if (player.gravDir < 0) {
+            playerPosition.Y += 10f;
+        }
         Vector2 position;
         bool breathUI = player.breath < player.breathMax || player.lavaTime < player.lavaMax;
         float offsetX = -_wreathSpriteData.FrameWidth / 2f + 2,
-              offsetY = _wreathSpriteData.FrameHeight;
+              offsetY = _wreathSpriteData.FrameHeight * player.gravDir;
         playerPosition.X += offsetX;
         var storage = player.GetModPlayer<ValuesStorage>();
         ref Vector2 oldPosition = ref storage.OldPosition;
@@ -98,8 +101,6 @@ sealed class WreathDrawing : PlayerDrawLayer {
 
         SpriteBatch batch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
-        batch.End();
-        batch.Begin(snapshot.sortMode, null, null, null, null, null, Main.GameViewMatrix.ZoomMatrix);
 
         var phoenixHandler = player.GetFormHandler();
         bool shouldRotateWithPlayer = ModContent.GetInstance<RoAClientConfig>().RotateWreathWithPlayer;
@@ -130,9 +131,6 @@ sealed class WreathDrawing : PlayerDrawLayer {
         WreathDrawing2.DrawText(Vector2.UnitY * 15f);
 
         DrawWreath(player, batch, snapshot, position, rotation);
-
-        batch.End();
-        batch.Begin(in snapshot);
     }
 
     public static void DrawWreath(Player player, SpriteBatch batch, SpriteBatchSnapshot snapshot, Vector2 position, float rotation, bool applyGravityForText = false) {
@@ -147,10 +145,22 @@ sealed class WreathDrawing : PlayerDrawLayer {
         //position = position.Floor();
         // dark border
         SpriteData wreathSpriteData = _wreathSpriteData;
+        if (!applyGravityForText) {
+            if (player.gravDir < 0) {
+                wreathSpriteData.Effects = SpriteEffects.FlipVertically;
+            }
+            else {
+                wreathSpriteData.Effects = SpriteEffects.None;
+            }
+        }
+        batch.End();
+        batch.Begin(SpriteSortMode.Deferred, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
         wreathSpriteData.Color = color * opacity;
         wreathSpriteData.VisualPosition = position;
         wreathSpriteData.Rotation = rotation;
         wreathSpriteData.DrawSelf();
+        batch.Begin(in snapshot, true);
+        float gravOffset = 0f;
         // filling
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed((byte)(0 + stats.IsPhoenixWreath.ToInt()), 1);
         int frameOffsetY = 0;
@@ -158,7 +168,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         VerticalAppearanceShader.Min = 0.5f;
         bool soulOfTheWoods = stats.SoulOfTheWoods;
         VerticalAppearanceShader.Size2 = 0.025f * (1f - Utils.GetLerpValue(0.8f, 1f, progress, true));
-        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, (int)(frameHeight * progress));
+        Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, frameHeight);
         float progress2 = stats.ActualProgress2 - 1f;
         float value = progress2;
         float mult = 0.5f; // second transition mult
@@ -166,7 +176,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         VerticalAppearanceShader.Max = soulOfTheWoods ? (0.875f + 0.125f * Utils.Remap(progress2, 0f, 0.1f, 0f, 1f, true)) : 0.875f;
         void drawFilling(Rectangle sourceRectangle, float progress, float progress2, Vector2? offset = null, float opacity = 1f) {
             batch.End();
-            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
             VerticalAppearanceShader.Progress = progress2;
             wreathSpriteData2.VisualPosition = position - Vector2.UnitY * frameOffsetY;
             wreathSpriteData2.Color = color * opacity;
@@ -197,7 +207,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         // effect
         void drawEffect(float progress, float progress2, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
             batch.End();
-            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.AnisotropicClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.AnisotropicClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
             //color = DrawColor.Multiply(Stats.DrawColor, alpha);
             color = stats.BaseColor;
             color *= 1.4f;
@@ -224,6 +234,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
             wreathSpriteData3.Color = color * opacity;
             VerticalAppearanceShader.DrawColor = wreathSpriteData3.Color;
             VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
+            wreathSpriteData3.VisualPosition.Y += gravOffset;
             wreathSpriteData3.DrawSelf(offset: offset);
             batch.Begin(in snapshot, true);
         }
@@ -237,7 +248,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
 
         // on hit special visuals 
         batch.DrawWithSnapshot(() => {
-            wreathSpriteData = _wreathSpriteData.Framed(1, 0);
+            wreathSpriteData = wreathSpriteData.Framed(1, 0);
             int fluff = WreathHandler.GETHITEFFECTTIME / 4;
             float opacity = Utils.GetLerpValue(0, fluff, stats.GetHitTimer, true) * Utils.GetLerpValue(WreathHandler.GETHITEFFECTTIME, WreathHandler.GETHITEFFECTTIME - fluff, stats.GetHitTimer, true);
             wreathSpriteData.Color = Color.White * opacity;

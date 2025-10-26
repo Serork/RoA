@@ -35,10 +35,10 @@ sealed class Menhir : ModNPC, IRequestAssets {
     private static float TELEPORTANIMATIONTIMEINTICKS => 20f;
     private static float INVINSIBLETIME => 40f;
 
-    public static LerpColor LerpColor { get; private set; } = new();
+    private static readonly LerpColor _lerpColor = new();
     public static Color GlowColor {
         get {
-            Color result = LerpColor.GetLerpColor([new Color(79, 172, 211), new Color(49, 75, 188)]);
+            Color result = _lerpColor.GetLerpColor([new Color(79, 172, 211), new Color(49, 75, 188)]);
             result.A = 225;
             return result;
         }
@@ -130,8 +130,8 @@ sealed class Menhir : ModNPC, IRequestAssets {
     }
 
     public override void AI() {
-        LerpColor.Update();
-        LerpColor.Update();
+        _lerpColor.Update();
+        _lerpColor.Update();
 
         if (IsCasting && PickaxeEmoteTimer++ >= PICKAXEEMOTESPAWNTIME) {
             PickaxeEmoteTimer = 0f;

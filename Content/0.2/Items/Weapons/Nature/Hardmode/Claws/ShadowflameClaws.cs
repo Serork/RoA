@@ -115,6 +115,9 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
         }
 
         public override bool PreDraw(ref Color lightColor) {
+            Player player = Projectile.GetOwnerAsPlayer();
+            float rot = GetRotation();
+
             Projectile proj = Projectile;
             SpriteBatch spriteBatch = Main.spriteBatch;
             Vector2 vector = proj.Center - Main.screenPosition;
@@ -145,14 +148,14 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
                     for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
                         float progress = i / MathHelper.PiOver2;
                         spriteBatch.Draw(asset.Value, vector, rectangle,
-                            baseColor * fromValue * num3 * 0.3f * 1f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + proj.rotation + i * Projectile.direction + offsetRotation, origin,
+                            baseColor * fromValue * num3 * 0.3f * 1f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
                             num * 0.8f * 1f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
                     }
 
                     for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
                         float progress = i / MathHelper.PiOver2;
                         spriteBatch.Draw(asset.Value, vector, rectangle,
-                            baseColor * fromValue * num3 * 0.3f * 0.75f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + proj.rotation + i * Projectile.direction + offsetRotation, origin,
+                            baseColor * fromValue * num3 * 0.3f * 0.75f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
                             num * 0.8f * 0.5f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
                     }
                 }
@@ -163,13 +166,16 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             if (charged) {
                 spriteBatch.DrawWithSnapshot(() => {
                     for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
-                        spriteBatch.Draw(asset.Value, vector, rectangle, GetLightingColor() * fromValue * num3 * 0.3f * Opacity * 1f, proj.rotation + i * Projectile.direction + offsetRotation, origin, num * 0.8f, effects, 0f);
+                        spriteBatch.Draw(asset.Value, vector, rectangle, GetLightingColor() * fromValue * num3 * 0.3f * Opacity * 1f, rot + i * Projectile.direction + offsetRotation, origin, num * 0.8f, effects, 0f);
                     }
                 }, blendState: BlendState.Additive);
             }
 
             if (charged) {
-                Vector2 drawpos = vector + (proj.rotation + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 2f) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 4f) * num;
+                if (player.gravDir < 0) {
+                    rot -= MathHelper.PiOver4 * 0.3725f * Projectile.direction;
+                }
+                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 2f) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f) * num;
                 DrawPrettyStarSparkle(proj.Opacity, SpriteEffects.None, drawpos, GetLightingColor() with { A = 0 } * num3 * 0.5f, color2, num2, 0f, 0.5f, 0.5f, 1f, (float)Math.PI / 4f, new Vector2(2f, 2f), Vector2.One);
             }
 
@@ -180,15 +186,16 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             float max = Projectile.ai[1] + Projectile.ai[1] * 0.5f;
             float scale = Projectile.scale;
             Projectile.scale *= Charged ? 1.05f : 1f;
+            Player player = Projectile.GetOwnerAsPlayer();
+            float rot = GetRotation();
             if (Projectile.localAI[0] >= Projectile.ai[1] * 0.5f && Projectile.localAI[0] < max) {
                 float startProgress = Utils.Remap(Utils.GetLerpValue(Projectile.ai[1] * 0.5f, Projectile.ai[1] * 0.7f, Projectile.localAI[0], true), 0f, 1f, 0.5f, 1f, true);
                 float endProgress = Utils.GetLerpValue(max, max * 0.75f, Projectile.localAI[0], true);
                 startProgress *= endProgress;
                 float num12 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
                 float num22 = Utils.Remap(num12, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num12, 0.6f, 1f, 1f, 0.0f);
-                Player player = Main.player[Projectile.owner];
-                float offset = player.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * progress);
-                float f = Projectile.rotation + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
+                float offset = 0f;
+                float f = rot + (float)((double)Main.rand.NextFloatDirection() * MathHelper.PiOver2 * 0.7);
                 Vector2 rotationVector2 = (f + Projectile.ai[0] * 1.25f * MathHelper.PiOver2).ToRotationVector2();
                 Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
                 for (int num807 = 0; (float)num807 < Projectile.scale * 10f; num807++) {
