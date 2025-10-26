@@ -93,7 +93,7 @@ sealed class MushroomSpore : NatureProjectile {
     public override void OnKill(int timeLeft) {
         if (Main.netMode != NetmodeID.Server) {
             for (int i = 0; i < Main.rand.Next(3, 6); i++) {
-                int dust = Dust.NewDust(Projectile.Center, 5, 5, DustID.Pumpkin, Projectile.velocity.X * 0.4f, Projectile.velocity.Y * 0.4f, 100, default, 1.1f);
+                int dust = Dust.NewDust(Projectile.Center - Vector2.One * 2.5f, 5, 5, DustID.Pumpkin, Projectile.velocity.X * 0.4f, Projectile.velocity.Y * 0.4f, 100, default, 1.1f);
                 Main.dust[dust].velocity.Y *= 0.1f;
                 Main.dust[dust].scale *= 0.8f;
             }
