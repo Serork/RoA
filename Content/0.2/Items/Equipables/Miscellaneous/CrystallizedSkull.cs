@@ -1,20 +1,19 @@
-﻿using Microsoft.Xna.Framework;
-
-using RoA.Core.Defaults;
+﻿using RoA.Core.Defaults;
 using RoA.Core.Utility.Vanilla;
 
-using System;
-
 using Terraria;
-using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Miscellaneous;
 
-[AutoloadEquip(EquipType.Head)]
+[AutoloadEquip(EquipType.Head, EquipType.Face)]
 sealed class CrystallizedSkull : ModItem {
     public override void SetStaticDefaults() {
+        ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = false;
+
+        ArmorIDs.Face.Sets.PreventHairDraw[Item.faceSlot] = true;
+        ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
     }
 
     public override void SetDefaults() {
@@ -35,6 +34,7 @@ sealed class CrystallizedSkull : ModItem {
     public override void UpdateEquip(Player player) {
         if (player.GetCommon().PerfectClotActivated) {
             player.GetCommon().ApplyCrystallizedSkullSetBonus = true;
+            player.GetCommon().StopFaceDrawing = true;
         }
     }
 

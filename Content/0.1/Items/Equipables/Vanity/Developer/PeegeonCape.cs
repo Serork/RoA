@@ -121,7 +121,13 @@ sealed class PeegeonCape : ModItem {
     private static string WingsTextureName => ResourceManager.EmptyTexture;
     private static string WingsLayerName => $"{nameof(PeegeonCape)}_Wings";
 
-    public override void Load() => _wingsSlot = EquipLoader.AddEquipTexture(Mod, WingsTextureName, EquipType.Wings, name: WingsLayerName);
+    public override void Load() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _wingsSlot = EquipLoader.AddEquipTexture(Mod, WingsTextureName, EquipType.Wings, name: WingsLayerName);
+    }
 
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Peegeon's Cape");

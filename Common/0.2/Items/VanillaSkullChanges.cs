@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Core;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -10,8 +12,25 @@ using Terraria.ModLoader;
 namespace RoA.Common.Items;
 
 sealed partial class ItemCommon : GlobalItem {
+    private static int _skullFaceSlot;
+
     public override void SetDefaults(Item entity) {
         ResetSkullItemDefaults(entity);
+    }
+
+    public override void SetStaticDefaults() {
+        ArmorIDs.Head.Sets.DrawHead[93] = false;
+
+        ArmorIDs.Face.Sets.PreventHairDraw[_skullFaceSlot] = true;
+        ArmorIDs.Face.Sets.OverrideHelmet[_skullFaceSlot] = true;
+    }
+
+    public override void Load() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _skullFaceSlot = EquipLoader.AddEquipTexture(Mod, ResourceManager.ItemTextures + "Skull_Face", EquipType.Face, name: "VanillaSkullFaceSlot");
     }
 
     private void ResetSkullItemDefaults(Item entity) {
@@ -23,6 +42,8 @@ sealed partial class ItemCommon : GlobalItem {
             entity.vanity = false;
 
             entity.accessory = true;
+
+            entity.faceSlot = _skullFaceSlot;
         }
     }
 
@@ -51,6 +72,7 @@ sealed partial class ItemCommon : GlobalItem {
     public override void UpdateEquip(Item item, Player player) {
         if (item.type == ItemID.Skull && player.GetCommon().PerfectClotActivated) {
             player.GetCommon().ApplyVanillaSkullSetBonus = true;
+            player.GetCommon().StopFaceDrawing = true;
         }
     }
 

@@ -230,7 +230,13 @@ sealed class RodOfTheCondor : ModItem {
 
         public override void SetStaticDefaults() => ArmorIDs.Wing.Sets.Stats[_wingsSlot] = new WingStats(60, 5f, 0.8f);
 
-        public override void Load() => _wingsSlot = EquipLoader.AddEquipTexture(Mod, WingsTextureName, EquipType.Wings, name: WingsLayerName);
+        public override void Load() {
+            if (Main.dedServ) {
+                return;
+            }
+
+            _wingsSlot = EquipLoader.AddEquipTexture(Mod, WingsTextureName, EquipType.Wings, name: WingsLayerName);
+        }
 
         public void ActivateCondor() {
             _active = true;

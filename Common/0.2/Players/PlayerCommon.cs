@@ -10,6 +10,7 @@ using RoA.Core.Utility.Vanilla;
 using System;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -30,6 +31,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public ushort ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
     public bool ControlUseItem;
+    public bool StopFaceDrawing;
 
     public bool ApplyBoneArmorVisuals;
 
@@ -116,10 +118,19 @@ sealed partial class PlayerCommon : ModPlayer {
 
         On_Player.HorizontalMovement += On_Player_HorizontalMovement;
         On_Player.SetArmorEffectVisuals += On_Player_SetArmorEffectVisuals;
+        On_PlayerDrawLayers.DrawPlayer_21_Head_TheFace += On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace;
 
         DevilSkullLoad();
         CrystallizedSkullLoad();
         WiresLoad();
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace(On_PlayerDrawLayers.orig_DrawPlayer_21_Head_TheFace orig, ref PlayerDrawSet drawinfo) {
+        if (drawinfo.drawPlayer.GetCommon().StopFaceDrawing) {
+            return;
+        }
+
+        orig(ref drawinfo);
     }
 
     private void On_Player_SetArmorEffectVisuals(On_Player.orig_SetArmorEffectVisuals orig, Player self, Player drawPlayer) {
@@ -274,6 +285,8 @@ sealed partial class PlayerCommon : ModPlayer {
         ApplyDevilSkullSetBonus = false;
         ApplyCrystallizedSkullSetBonus = false;
         ApplyHornetSkullSetBonus = false;
+
+        StopFaceDrawing = false;
     }
 
     public override void PostUpdate() {
