@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -99,8 +100,18 @@ sealed class TarArm : ModProjectile {
 
         List<Vector2> points = _bezierCurve.GetPoints(30);
         SpriteBatch batch = Main.spriteBatch;
+        Texture2D armTexture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.PlayerArm].Value;
+        Texture2D headTexture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.PlayerHead].Value;
         for (int i = 0; i < points.Count; i++) {
             Texture2D texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.Part1].Value;
+            bool flag = false;
+            bool flag2 = false;
+            if (Projectile.whoAmI % 2 == 0) {
+                flag = true;
+            }
+            if (Projectile.whoAmI % 3 == 0) {
+                flag2 = true;
+            }
             if (i % 2 == 0) {
                 texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.Part2].Value;
             }
@@ -123,6 +134,27 @@ sealed class TarArm : ModProjectile {
                     Rotation = rotation
                 });
             });
+            if (i == points.Count - 1) {
+                texture = flag2 ? headTexture : armTexture;
+                SpriteFrame frame = new(1, 2, 0, (byte)(!flag).ToInt());
+                clip = frame.GetSourceRectangle(texture);
+                if (flag2) {
+                    clip = texture.Bounds;
+                }
+                origin = clip.Centered();
+                color = Color.Lerp(Color.White, SkinColor, 0.25f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * Projectile.Opacity;
+                scale = Vector2.One * (1f - (float)i / (points.Count * 3f)) * Projectile.Opacity * 2f;
+                //rotation += MathHelper.Pi;
+                batch.DrawWithSnapshot(() => {
+                    batch.Draw(texture, position, DrawInfo.Default with {
+                        Clip = clip,
+                        Origin = origin,
+                        Color = color,
+                        Scale = scale,
+                        Rotation = rotation
+                    });
+                });
+            }
         }
     }
 }

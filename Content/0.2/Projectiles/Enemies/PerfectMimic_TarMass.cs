@@ -50,7 +50,7 @@ sealed class TarMass : ModProjectile {
     public override void AI() {
         float target = 0.75f;
         if (Projectile.ai[2] == 1f) {
-            Projectile.velocity *= 0.5f;
+            Projectile.velocity *= 0.9f;
             target = 0f;
             if (Projectile.Opacity <= 0f) {
                 Projectile.Kill();

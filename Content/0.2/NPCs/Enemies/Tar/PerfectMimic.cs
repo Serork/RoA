@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using ReLogic.Content;
 
@@ -7,6 +8,7 @@ using RoA.Common;
 using RoA.Common.Metaballs;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Graphics.Data;
@@ -31,7 +33,7 @@ namespace RoA.Content.NPCs.Enemies.Tar;
 sealed class PerfectMimic : ModNPC, IRequestAssets {
     private static readonly LerpColor LerpColor = new();
 
-    private static bool _settingUpHead;
+    private static bool _settingUpHead, _settingUpArms;
 
     public static Color LiquidColor => LerpColor.GetLerpColor([new Color(46, 34, 47)]);
     public static Color SkinColor => LerpColor.GetLerpColor([new Color(46, 34, 47), Color.Lerp(new Color(62, 53, 70), new Color(98, 85, 101), 0.5f)]);
@@ -53,7 +55,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         OnPlayer1,
         OnPlayer2,
         OnPlayer1Glow,
-        OnPlayer2Glow
+        OnPlayer2Glow,
+        PlayerArm,
+        PlayerHead
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture
@@ -63,7 +67,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             ((byte)PerfectMimicRequstedTextureType.OnPlayer1, Texture + "_OnPlayer1"),
             ((byte)PerfectMimicRequstedTextureType.OnPlayer2, Texture + "_OnPlayer2"),
             ((byte)PerfectMimicRequstedTextureType.OnPlayer1Glow, Texture + "_OnPlayer1_Glow"),
-            ((byte)PerfectMimicRequstedTextureType.OnPlayer2Glow, Texture + "_OnPlayer2_Glow")];
+            ((byte)PerfectMimicRequstedTextureType.OnPlayer2Glow, Texture + "_OnPlayer2_Glow"),
+            ((byte)PerfectMimicRequstedTextureType.PlayerArm, Texture + "_PlayerArm"),
+            ((byte)PerfectMimicRequstedTextureType.PlayerHead, Texture + "_PlayerHead")];
 
     private FluidBodyPart[] _fluidBodyParts = null!;
     private Player _playerCopy = null!;
@@ -106,6 +112,25 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
         On_Player.SetTalkNPC += On_Player_SetTalkNPC;
         On_PlayerDrawSet.HeadOnlySetup += On_PlayerDrawSet_HeadOnlySetup;
+
+        On_PlayerDrawLayers.DrawPlayer_28_ArmOverItem += On_PlayerDrawLayers_DrawPlayer_28_ArmOverItem;
+        On_PlayerDrawLayers.DrawPlayer_12_SkinComposite_BackArmShirt += On_PlayerDrawLayers_DrawPlayer_12_SkinComposite_BackArmShirt;
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_12_SkinComposite_BackArmShirt(On_PlayerDrawLayers.orig_DrawPlayer_12_SkinComposite_BackArmShirt orig, ref PlayerDrawSet drawinfo) {
+        if (_settingUpArms) {
+            return;
+        }
+
+        orig(ref drawinfo);
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_28_ArmOverItem(On_PlayerDrawLayers.orig_DrawPlayer_28_ArmOverItem orig, ref PlayerDrawSet drawinfo) {
+        if (_settingUpArms) {
+            return;
+        }
+
+        orig(ref drawinfo);
     }
 
     private void On_PlayerDrawSet_HeadOnlySetup(On_PlayerDrawSet.orig_HeadOnlySetup orig, ref PlayerDrawSet self, Player drawPlayer2, List<DrawData> drawData, List<int> dust, List<int> gore, float X, float Y, float Alpha, float Scale) {
@@ -185,9 +210,14 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         _playerCopy.shimmerTransparency = 1f - opacity;
 
         Vector2 headPosition = NPC.Center - _playerCopy.Size / 2f;
+        if (TransformedEnough && !CanTeleport) {
+            _settingUpArms = true;
+        }
         Main.PlayerRenderer.DrawPlayer(Main.Camera, _playerCopy, headPosition, 0f, Vector2.Zero, scale: opacity);
+        _settingUpArms = false;
 
         SpriteBatch batch = Main.spriteBatch;
+
         Texture2D texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer1].Value;
         Vector2 position = BodyPosition() + (NPC.FacedRight() ? new Vector2(4f, 0f) : Vector2.Zero);
         Rectangle clip = texture.Bounds;
@@ -205,7 +235,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 Rotation = rotation,
                 ImageFlip = effects
             });
-            texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer1Glow].Value;
+        });
+        texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer1Glow].Value;
+        batch.DrawWithSnapshot(() => {
             batch.Draw(texture, position + Vector2.UnitY * 20f * (1f - opacity) + _playerCopy.MovementOffset(), DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
@@ -239,9 +271,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                     Rotation = rotation,
                     ImageFlip = effects
                 });
-            });
-            texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2Glow].Value;
-            batch.DrawWithSnapshot(() => {
+                texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2Glow].Value;
                 batch.Draw(texture, position, DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
@@ -511,7 +541,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             _fluidBodyParts[i].Velocity = Helper.Wave(VisualTimer2, -1f, 1f, 5f, i).ToRotationVector2() * 5f * TransformationFactor;
         }
 
-        if (!flag && NPC.IsGrounded()) {
+        if (!flag && NPC.IsGrounded() && NPC.Opacity > 0.5f) {
             int chance = (int)(20 + 40 * (1f - TransformationFactor));
             if (Main.rand.NextBool(chance)) {
                 Dust dust = Dust.NewDustPerfect(ArmPosition() + new Vector2(2f * Main.rand.NextFloatDirection(), 2f * Main.rand.NextFloatDirection()), tarDustMetaball);
