@@ -47,6 +47,12 @@ sealed class TarMass : ModProjectile {
         behindNPCs.Add(index);
     }
 
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 10;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     public override void AI() {
         float target = 0.75f;
         if (Projectile.ai[2] == 1f) {
