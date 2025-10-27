@@ -433,6 +433,24 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         NPC.dontTakeDamage = flag;
 
         if (!Init) {
+            List<NPC> list = new List<NPC>();
+            for (int i = 0; i < Main.npc.Length; i++) {
+                if (Main.npc[i].active && Main.npc[i].type == Type && !Main.npc[i].SameAs(NPC))
+                    list.Add(Main.npc[i]);
+            }
+
+            int num = 0;
+            while (list.Count > 0 && ++num < Main.npc.Length) {
+                NPC npc = list[0];
+                for (int j = 1; j < list.Count; j++) {
+                    if (list[j].whoAmI < npc.whoAmI)
+                        npc = list[j];
+                }
+
+                npc.KillNPC();
+                list.Remove(npc);
+            }
+
             Init = true;
 
             VisualTimer = VisualTimer2 = -2f;

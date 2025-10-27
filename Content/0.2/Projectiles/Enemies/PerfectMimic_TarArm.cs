@@ -38,6 +38,8 @@ sealed class TarArm : ModProjectile {
         Projectile.tileCollide = false;
 
         Projectile.hide = true;
+
+        Projectile.Opacity = 0f;
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
@@ -46,6 +48,8 @@ sealed class TarArm : ModProjectile {
 
     public override void AI() {
         Projectile.timeLeft = 2;
+
+        Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f);
 
         if (!Owner.active || Owner.type != ModContent.NPCType<PerfectMimic>()) {
             Projectile.Kill();
@@ -79,6 +83,17 @@ sealed class TarArm : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) => false;
 
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        List<Vector2> points = _bezierCurve.GetPoints(30);
+        for (int i = 0; i < points.Count; i++) {
+            if (GeometryUtils.CenteredSquare(points[i], (int)(10 * (1f - (float)i / (points.Count * 3f)) * Projectile.Opacity)).Intersects(targetHitbox)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void DrawFluidSelf() {
         if (!AssetInitializer.TryGetRequestedTextureAssets<PerfectMimic>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return;
@@ -98,8 +113,8 @@ sealed class TarArm : ModProjectile {
             Vector2 position = current;
             Rectangle clip = texture.Bounds;
             Vector2 origin = clip.Centered();
-            Color color = Lighting.GetColor(position.ToTileCoordinates());
-            Vector2 scale = Vector2.One * (1f - (float)i / (points.Count * 3f));
+            Color color = Lighting.GetColor(position.ToTileCoordinates()) * Projectile.Opacity;
+            Vector2 scale = Vector2.One * (1f - (float)i / (points.Count * 3f)) * Projectile.Opacity;
             float rotation = Helper.Wave(-MathHelper.Pi, MathHelper.Pi, 1f, i) * Projectile.direction;
             batch.DrawWithSnapshot(() => {
                 batch.Draw(texture, position, DrawInfo.Default with {
