@@ -507,8 +507,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 npc.direction = 1;
         }
 
-        float num87 = 1f * 1.25f;
-        float num88 = 0.07f * 1.25f;
+        float num87 = 1f * 4.5f;
+        float num88 = 0.07f * 1.5f;
         if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
             if (NPC.IsGrounded())
                 npc.velocity *= 0.7f;
@@ -536,6 +536,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 }
             }
         }
+        float jumpModifier = 1.5f;
         if (NPC.velocity.Y >= 0f) {
             int direction = Math.Sign(NPC.velocity.X);
 
@@ -583,14 +584,14 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                             if (NPC.IsGrounded()) {
                                 int num200 = 6;
                                 if (Main.player[npc.target].Bottom.Y > npc.Top.Y - (float)(num200 * 16)) {
-                                    npc.velocity.Y = -7.9f;
+                                    npc.velocity.Y = -7.9f * jumpModifier;
                                 }
                                 else {
                                     int num201 = (int)(npc.Center.X / 16f);
                                     int num202 = (int)(npc.Bottom.Y / 16f) - 1;
                                     for (int num203 = num202; num203 > num202 - num200; num203--) {
                                         if (Main.tile[num201, num203].HasUnactuatedTile && TileID.Sets.Platforms[Main.tile[num201, num203].TileType]) {
-                                            npc.velocity.Y = -7.9f;
+                                            npc.velocity.Y = -7.9f * jumpModifier;
                                             break;
                                         }
                                     }
@@ -603,27 +604,27 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                     bool JumpCheck(int tileX, int tileY) {
                         if (NPC.height >= 32 && Main.tile[tileX, tileY - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 2].TileType]) {
                             if (Main.tile[tileX, tileY - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 3].TileType]) {
-                                NPC.velocity.Y = -8f;
+                                NPC.velocity.Y = -8f * jumpModifier;
                                 NPC.netUpdate = true;
                             }
                             else {
-                                NPC.velocity.Y = -7f;
+                                NPC.velocity.Y = -7f * jumpModifier;
                                 NPC.netUpdate = true;
                             }
                             return true;
                         }
                         else if (Main.tile[tileX, tileY - 1].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 1].TileType]) {
-                            NPC.velocity.Y = -6f;
+                            NPC.velocity.Y = -6f * jumpModifier;
                             NPC.netUpdate = true;
                             return true;
                         }
                         else if (NPC.position.Y + NPC.height - tileY * 16 > 20f && Main.tile[tileX, tileY].HasUnactuatedTile && !Main.tile[tileX, tileY].TopSlope && Main.tileSolid[Main.tile[tileX, tileY].TileType]) {
-                            NPC.velocity.Y = -5f;
+                            NPC.velocity.Y = -5f * jumpModifier;
                             NPC.netUpdate = true;
                             return true;
                         }
                         else if (NPC.directionY < 0 && (!Main.tile[tileX, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY + 1].TileType]) && (!Main.tile[tileX + NPC.direction, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX + NPC.direction, tileY + 1].TileType])) {
-                            NPC.velocity.Y = -8f;
+                            NPC.velocity.Y = -8f * jumpModifier;
                             NPC.velocity.X *= 1.5f;
                             NPC.netUpdate = true;
                             return true;
@@ -635,9 +636,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 }
             }
         }
-        //if (npc.IsGrounded()) {
-        //    Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
-        //}
+        if (npc.IsGrounded()) {
+            Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        }
     }
 
     private void ActuallyTeleport() {

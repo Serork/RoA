@@ -415,7 +415,9 @@ sealed class Lumberjack : RoANPC {
                         }
                     }
                 }
-                //Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+                if (npc.IsGrounded()) {
+                    Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+                }
 
                 player = Main.player[NPC.target];
                 if (shouldTargetPlayer && Collision.CanHit(NPC, player)) {

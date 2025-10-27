@@ -349,10 +349,10 @@ sealed class Archdruid : DruidNPC {
                 }
             }
         }
-        //if (npc.IsGrounded()) {
-        //    Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
-        //}
-    }
+		if (npc.IsGrounded()) {
+			Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+		}
+	}
 
     protected override void ChangeToAttackState() {
         if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool()) {

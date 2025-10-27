@@ -54,7 +54,9 @@ static partial class NPCExtensions {
             if (npc.velocity.X < 0f - num87)
                 npc.velocity.X = 0f - num87;
         }
-        Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        if (npc.IsGrounded()) {
+            Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        }
     }
 
     public static void ResetAIStyle(this NPC npc) {
@@ -692,7 +694,9 @@ static partial class NPCExtensions {
             //NPC.ai[2] = 0f;
         }
 
-        //Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        if (npc.IsGrounded()) {
+            Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        }
 
         //if (Main.netMode != 1 && npc.type == 120 && npc.ai[3] >= (float)num56) {
         //    int targetTileX = (int)Main.player[target].Center.X / 16;

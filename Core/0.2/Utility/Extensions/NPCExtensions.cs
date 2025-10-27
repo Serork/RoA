@@ -21,7 +21,11 @@ static partial class NPCExtensions {
 
     public static bool CanActivateOnHitEffect(this NPC npc) => !npc.immortal && npc.lifeMax > 5;
 
-    public static void StepUp(this NPC npc) => Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+    public static void StepUp(this NPC npc) {
+        if (npc.IsGrounded()) {
+            Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        }
+    }
 
     public static Player GetTargetPlayer(this NPC npc) => Main.player[npc.target];
 
@@ -318,7 +322,9 @@ static partial class NPCExtensions {
                     }
                 }
             }
-            //Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+            if (npc.IsGrounded()) {
+                Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+            }
         }
     }
 

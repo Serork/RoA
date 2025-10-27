@@ -336,8 +336,10 @@ sealed class GrimDruid : DruidNPC {
                 }
             }
         }
-        //Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
-    }
+		if (npc.IsGrounded()) {
+			Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+		}
+	}
 
     protected override void Attacking() {
         if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
