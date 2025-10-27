@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
 
+using RoA.Content.Dusts;
 using RoA.Content.NPCs.Enemies.Tar;
 
 using System;
@@ -432,7 +433,8 @@ static partial class NPCExtensions {
         bool flag29 = NPCID.Sets.FighterUsesDD2PortalAppearEffect[npc.type];
         bool flag30 = true;
         if (npc.type == ModContent.NPCType<PerfectMimic>()) {
-            flag27 = npc.wet;
+            flag27 = /*!Collision.CanHit(npc.position, npc.width, npc.height, targetData.Position, targetData.Width, targetData.Height) || */targetData.Center.Distance(npc.Center) > 450f;
+            //npc.noTileCollide = flag27;
             flag30 = false;
             flag16 = true;
             num20 = 150f;
@@ -464,6 +466,10 @@ static partial class NPCExtensions {
             acceleration *= 1f;
             deceleration *= 1f;
 
+            amount *= 1.25f;
+            amount2 *= 1.25f;
+            amount3 *= 1.25f;
+
             //npc.position += npc.netOffset;
             //if (npc.alpha == 255) {
             //    npc.spriteDirection = npc.direction;
@@ -492,8 +498,8 @@ static partial class NPCExtensions {
             //    }
             //}
 
-            //if (Main.rand.Next(3) == 0)
-            //    Dust.NewDustDirect(npc.position, npc.width, npc.height, 5, 0f, 0f, 50, default(Color), 1.3f).velocity = Vector2.Zero;
+            if (flag27 && Main.rand.Next(3) == 0)
+                Dust.NewDustDirect(npc.position, npc.width, npc.height, ModContent.DustType<TarMetaball>(), 0f, 0f, 50, default(Color), 1.3f);
 
             //npc.position -= npc.netOffset;
             if (!(npc.velocity.Y != 0f || !((float)targetData.Hitbox.Bottom < npc.Top.Y) || !(Math.Abs(npc.Center.X - (float)targetData.Hitbox.Center.X) < (float)(npc.width * 3)) || !Collision.CanHit(npc.Hitbox.TopLeft(), npc.Hitbox.Width, npc.Hitbox.Height, targetData.Hitbox.TopLeft(), targetData.Hitbox.Width, targetData.Hitbox.Height))) {
@@ -572,10 +578,11 @@ static partial class NPCExtensions {
             if (npc.velocity.X != 0f)
                 npc.direction = Math.Sign(npc.direction);
 
+            Vector2 value = targetData.Center - npc.Center;
+            value.Normalize();
+            value *= num28;
+
             if (Collision.CanHit(npc.position, npc.width, npc.height, targetData.Position, targetData.Width, targetData.Height)) {
-                Vector2 value = targetData.Center - npc.Center;
-                value.Normalize();
-                value *= num28;
                 npc.velocity = Vector2.Lerp(npc.velocity, value, amount);
                 return;
             }
@@ -587,7 +594,7 @@ static partial class NPCExtensions {
             if (npc.velocity.Y < 0f)
                 num56 = num30;
 
-            Vector2 value2 = new Vector2(npc.direction, -1f);
+            Vector2 value2 = new Vector2(npc.direction, value.Y);
             value2.Normalize();
             value2 *= num56;
             if (num56 < num28)
@@ -877,9 +884,6 @@ static partial class NPCExtensions {
                 num65 = Utils.Clamp(num65, 0, Main.maxTilesX);
                 num62 = Utils.Clamp(num62, 0, Main.maxTilesY);
                 Tile tile = Main.tile[num65, num62];
-                if (tile == null)
-                    return;
-
                 if (tile.HasUnactuatedTile && Main.tileSolid[tile.TileType]) {
                     flag32 = true;
                     break;

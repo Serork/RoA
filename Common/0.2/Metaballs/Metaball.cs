@@ -64,6 +64,8 @@ public abstract class Metaball : ModType {
 
     public virtual bool ShouldDrawItsContent() => true;
 
+    public virtual Color WorldColor() => Color.White;
+
     /// <summary>
     /// Optionally overridable method that can be used to make layers offset when drawn, to allow for layer-specific animations. Defaults to <see cref="Vector2.Zero"/>, aka no animation.
     /// </summary>

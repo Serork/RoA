@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.NPCs.Enemies.Tar;
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -107,7 +109,7 @@ public class MetaballManager : ModSystem {
         foreach (Metaball metaball in metaballs.Where(m => m.DrawContext == layerType && m.AnythingToDraw)) {
             for (int i = 0; i < metaball.LayerTargets.Count; i++) {
                 if (metaball.ShouldDrawItsContent()) {
-                    Main.spriteBatch.Draw(metaball.LayerTargets[i], Main.screenLastPosition - Main.screenPosition, Color.White);
+                    Main.spriteBatch.Draw(metaball.LayerTargets[i], Main.screenLastPosition - Main.screenPosition, metaball.WorldColor());
                 }
                 // Prepare shaders for the given layer target.
                 metaball.PrepareShaderForTarget(i);
@@ -115,7 +117,7 @@ public class MetaballManager : ModSystem {
                 // Draw the metaball's raw contents with the shader.
                 metaball.BeforeDrawingTarget(Main.spriteBatch);
 
-                Main.spriteBatch.Draw(metaball.LayerTargets[i], Main.screenLastPosition - Main.screenPosition, Color.White);
+                Main.spriteBatch.Draw(metaball.LayerTargets[i], Main.screenLastPosition - Main.screenPosition, metaball.WorldColor());
             }
         }
     }

@@ -13,7 +13,6 @@ static class GeometryUtils {
             ControlPoints = controls;
         }
 
-
         public Vector2 Evaluate(float interpolant) => PrivateEvaluate(ControlPoints, MathHelper.Clamp(interpolant, 0f, 1f));
 
         public List<Vector2> GetPoints(int totalPoints) {
