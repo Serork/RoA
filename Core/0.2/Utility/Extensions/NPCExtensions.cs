@@ -80,7 +80,7 @@ static partial class NPCExtensions {
     }
     public static bool IsFacingLeft(this NPC npc) => npc.direction < 0;
     public static bool IsFacingRight(this NPC npc) => npc.direction > 0;
-    public static bool IsGrounded(this NPC npc) => npc.velocity.Y == 0f;
+    public static bool IsGrounded(this NPC npc) => npc.IsGrounded();
 
     public static void DirectTo(this NPC npc, Vector2 destination, bool updateSpriteDirection = true, bool reverse = false) => DirectTo(npc, destination.GetDirectionTo(npc.Center), updateSpriteDirection, reverse);
     public static void DirectTo(this NPC npc, int direction, bool updateSpriteDirection = true, bool reverse = false) {
@@ -134,7 +134,7 @@ static partial class NPCExtensions {
             bool flag10 = true;
 
             if (!flag9 && flag10) {
-                if (npc.velocity.Y == 0f && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
+                if (NPC.IsGrounded() && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
                     flag7 = true;
 
                 if (shouldBeBored != null && shouldBeBored(npc)) {
@@ -171,7 +171,7 @@ static partial class NPCExtensions {
                 }
 
                 if (npc.velocity.X == 0f) {
-                    if (npc.velocity.Y == 0f) {
+                    if (NPC.IsGrounded()) {
                         encouragementTimer += 1f;
                         if (encouragementTimer >= 2f) {
                             npc.direction *= -1;
@@ -192,7 +192,7 @@ static partial class NPCExtensions {
                 float num87 = 1f * 0.9f;
                 float num88 = 0.07f * 0.9f;
                 if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
-                    if (npc.velocity.Y == 0f)
+                    if (NPC.IsGrounded())
                         npc.velocity *= 0.7f;
                 }
                 else if (npc.velocity.X < num87 && npc.direction == 1) {
@@ -211,7 +211,7 @@ static partial class NPCExtensions {
             }
 
             bool tileChecks = false;
-            if (NPC.velocity.Y == 0f) {
+            if (NPC.IsGrounded()) {
                 int num77 = (int)(NPC.position.Y + NPC.height + 7f) / 16;
                 int num189 = (int)NPC.position.X / 16;
                 int num79 = (int)(NPC.position.X + NPC.width) / 16;
@@ -265,8 +265,8 @@ static partial class NPCExtensions {
                 {
                     if (NPC.velocity.X < 0f && NPC.direction == -1 || NPC.velocity.X > 0f && NPC.direction == 1) {
                         void jumpIfPlayerAboveAndClose() {
-                            if (npc.velocity.Y == 0f && Main.expertMode && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
-                                if (npc.velocity.Y == 0f) {
+                            if (NPC.IsGrounded() && Main.expertMode && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
+                                if (NPC.IsGrounded()) {
                                     int num200 = 6;
                                     if (Main.player[npc.target].Bottom.Y > npc.Top.Y - (float)(num200 * 16)) {
                                         npc.velocity.Y = -7.9f;

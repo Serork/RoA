@@ -190,7 +190,7 @@ abstract class DruidNPC : RoANPC {
                     //if (NPC.justHit && AttackTimer > -TimeToRecoveryAfterGettingHit()) {
                     //    AttackTimer -= -TimeToRecoveryAfterGettingHit() * 0.25f;
                     //}
-                    if (NPC.velocity.Y == 0f) {
+                    if (NPC.IsGrounded()) {
                         if (!player.dead && AttackTimer >= 0f) {
                             AttackTimer = 0f;
                             if (Main.netMode != NetmodeID.MultiplayerClient) {

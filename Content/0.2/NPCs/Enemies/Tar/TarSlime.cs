@@ -97,7 +97,7 @@ sealed class TarSlime : ModNPC {
             NPC.localAI[0] = NPC.oldVelocity.Y;
         }
 
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.IsGrounded()) {
             if (NPC.collideY && NPC.oldVelocity.Y != 0f) {
                 if (Collision.SolidCollision(NPC.position, NPC.width, NPC.height)) {
                     NPC.position.X -= NPC.velocity.X + (float)NPC.direction;

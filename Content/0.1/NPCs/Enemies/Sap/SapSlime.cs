@@ -163,7 +163,7 @@ sealed class SapSlime : ModNPC {
     }
 
     public override void AI() {
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.IsGrounded()) {
             NPC.ai[0] += 1f + (Main.expertMode ? 0.5f : 0f);
         }
         if (NPC.ai[1] == 0f && Main.netMode != 1) {

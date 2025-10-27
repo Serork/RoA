@@ -1870,7 +1870,7 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
-        if (NPC.velocity.Y == 0f && !_stompSpawned) {
+        if (NPC.IsGrounded() && !_stompSpawned) {
             _stompSpawned = true;
         }
 
@@ -2049,7 +2049,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     private void PrepareJump() {
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.IsGrounded()) {
             SetKnockBackResist();
         }
         else {

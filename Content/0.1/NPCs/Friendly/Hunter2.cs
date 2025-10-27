@@ -36,7 +36,7 @@ sealed class Hunter2 : ModNPC {
 
     public override void FindFrame(int frameHeight) {
         int num236 = 10;
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.IsGrounded()) {
             if (NPC.direction == 1)
                 NPC.spriteDirection = 1;
 

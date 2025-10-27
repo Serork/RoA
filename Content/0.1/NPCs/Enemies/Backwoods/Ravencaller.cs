@@ -151,7 +151,7 @@ sealed class Ravencaller : ModNPC {
             NPC.ApplyFighterAI(true, flag5);
         else {
             NPC.ResetAIStyle();
-            if (NPC.velocity.Y == 0f) {
+            if (NPC.IsGrounded()) {
                 NPC.velocity.X *= 0.8f;
             }
         }
@@ -189,7 +189,7 @@ sealed class Ravencaller : ModNPC {
             NPC.alpha -= 5;
         }
 
-        if (NPC.velocity.Y == 0f && timer > 280 && Collision.CanHit(NPC, Main.player[NPC.target]) && Vector2.Distance(player.position, NPC.position) < 320.0 && whenYouWalking) {
+        if (NPC.IsGrounded() && timer > 280 && Collision.CanHit(NPC, Main.player[NPC.target]) && Vector2.Distance(player.position, NPC.position) < 320.0 && whenYouWalking) {
             if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.Next(15) == 0) {
                 timer = 280;
                 whenYouWalking = false;

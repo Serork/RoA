@@ -196,7 +196,7 @@ sealed class SummonedRaven : ModNPC {
             num = TextureAssets.Npc[Type].Height() / Main.npcFrameCount[Type];
         }
         if (state != SPAWN) {
-            if (NPC.velocity.X == 0f && NPC.velocity.Y == 0f) {
+            if (NPC.velocity.X == 0f && NPC.IsGrounded()) {
                 NPC.frame.Y = 0;
                 NPC.frameCounter = 0.0;
                 return;

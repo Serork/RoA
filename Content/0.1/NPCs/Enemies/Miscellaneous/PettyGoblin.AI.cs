@@ -104,7 +104,7 @@ sealed partial class PettyGoblin : ModNPC {
     }
 
     private void Victory() {
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.IsGrounded()) {
             NPC.velocity.X *= 0.8f;
             if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1) {
                 NPC.velocity.X = 0f;
@@ -128,7 +128,7 @@ sealed partial class PettyGoblin : ModNPC {
                 NPC.velocity.X = 0f;
             }
         }
-        else if (NPC.velocity.Y == 0f) {
+        else if (NPC.IsGrounded()) {
             NPC.velocity.X *= 0.8f;
             if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1) {
                 NPC.velocity.X = 0f;
@@ -216,7 +216,7 @@ sealed partial class PettyGoblin : ModNPC {
                 float num87 = 1f * speed;
                 float num88 = 0.07f * speed;
                 if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
-                    if (npc.velocity.Y == 0f)
+                    if (NPC.IsGrounded())
                         npc.velocity *= 0.7f;
                 }
                 else if (npc.velocity.X < num87 && npc.direction == 1) {
@@ -235,7 +235,7 @@ sealed partial class PettyGoblin : ModNPC {
             }, targetDelay: 20);
         }
         else {
-            if (NPC.velocity.Y == 0f) {
+            if (NPC.IsGrounded()) {
                 NPC.velocity.X *= 0.8f;
                 if ((double)NPC.velocity.X > -0.1 && (double)NPC.velocity.X < 0.1) {
                     NPC.velocity.X = 0f;
@@ -301,7 +301,7 @@ sealed partial class PettyGoblin : ModNPC {
         float num87 = 1f * speed;
         float num88 = 0.07f * speed;
         if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
-            if (npc.velocity.Y == 0f)
+            if (NPC.IsGrounded())
                 npc.velocity *= 0.7f;
         }
         else if (npc.velocity.X < num87 && npc.direction == 1) {
@@ -320,7 +320,7 @@ sealed partial class PettyGoblin : ModNPC {
 
         bool flag7 = false;
         int num56 = targetDelay;
-        if (npc.velocity.Y == 0f && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
+        if (NPC.IsGrounded() && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
             flag7 = true;
 
         if (npc.position.X == npc.oldPosition.X || npc.ai[3] >= (float)num56 || flag7)
@@ -344,7 +344,7 @@ sealed partial class PettyGoblin : ModNPC {
             npc.ai[3] = 0f;
 
         bool tileChecks = false;
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.IsGrounded()) {
             int num77 = (int)(NPC.position.Y + NPC.height + 7f) / 16;
             int num189 = (int)NPC.position.X / 16;
             int num79 = (int)(NPC.position.X + NPC.width) / 16;
@@ -400,8 +400,8 @@ sealed partial class PettyGoblin : ModNPC {
             int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);
             if (NPC.velocity.X < 0f && NPC.direction == -1 || NPC.velocity.X > 0f && NPC.direction == 1) {
                 void jumpIfPlayerAboveAndClose() {
-                    if (npc.velocity.Y == 0f && Main.expertMode && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
-                        if (npc.velocity.Y == 0f) {
+                    if (NPC.IsGrounded() && Main.expertMode && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
+                        if (NPC.IsGrounded()) {
                             int num200 = 6;
                             if (Main.player[npc.target].Bottom.Y > npc.Top.Y - (float)(num200 * 16)) {
                                 npc.velocity.Y = -7.9f;
@@ -523,7 +523,7 @@ sealed partial class PettyGoblin : ModNPC {
             float num87 = 1f * speed;
             float num88 = 0.07f * speed;
             if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
-                if (npc.velocity.Y == 0f)
+                if (NPC.IsGrounded())
                     npc.velocity *= 0.7f;
             }
             else if (npc.velocity.X < num87 && npc.direction == 1) {
@@ -596,7 +596,7 @@ sealed partial class PettyGoblin : ModNPC {
             float num87 = 1f * speed;
             float num88 = 0.07f * speed;
             if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
-                if (npc.velocity.Y == 0f)
+                if (NPC.IsGrounded())
                     npc.velocity *= 0.7f;
             }
             else if (npc.velocity.X < num87 && npc.direction == 1) {

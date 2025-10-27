@@ -479,7 +479,7 @@ sealed class MurkyCarcass : ModNPC {
             }
         }
         else {
-            if (NPC.velocity.Y == 0f) {
+            if (NPC.IsGrounded()) {
                 if (NPC.type == 65) {
                     NPC.velocity.X *= 0.94f;
                     if ((double)NPC.velocity.X > -0.2 && (double)NPC.velocity.X < 0.2)

@@ -182,7 +182,7 @@ sealed class Hunter : ModNPC {
                 NPC.frame.Height = num;
             }
 
-            if (NPC.velocity.Y == 0f) {
+            if (NPC.IsGrounded()) {
                 if (NPC.direction == 1)
                     NPC.spriteDirection = 1;
 
@@ -316,7 +316,7 @@ sealed class Hunter : ModNPC {
             if (NPC.ai[1] > 0f) {
                 NPC.ai[1]--;
 
-                if (NPC.velocity.Y == 0f) {
+                if (NPC.IsGrounded()) {
                     NPC.velocity.X *= 0.8f;
                 }
 
@@ -331,7 +331,7 @@ sealed class Hunter : ModNPC {
             if (NPC.ai[1] > 0f) {
                 NPC.ai[1] -= 2f;
 
-                if (NPC.velocity.Y == 0f) {
+                if (NPC.IsGrounded()) {
                     NPC.velocity.X *= 0.8f;
                 }
 
@@ -418,7 +418,7 @@ sealed class Hunter : ModNPC {
             }
 
             if (_extraVelocity.X < 0f - num17 || _extraVelocity.X > num17) {
-                if (NPC.velocity.Y == 0f)
+                if (NPC.IsGrounded())
                     _extraVelocity *= 0.8f;
             }
             else if (_extraVelocity.X < num17 && NPC.direction == 1) {

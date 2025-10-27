@@ -51,7 +51,7 @@ sealed partial class NPCCommon : GlobalNPC {
         if (npc.velocity.Y >= npc.maxFallSpeed * MAXFALLSPEEDMODIFIERFORFALL && !_fell) {
             _fell = true;
         }
-        if (_fell && npc.velocity.Y == 0f && !Fell) {
+        if (_fell && npc.IsGrounded() && !Fell) {
             Fell = true;
             _fell = false;
             _fellTimer = 10f;

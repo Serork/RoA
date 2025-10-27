@@ -170,7 +170,7 @@ sealed class Archdruid : DruidNPC {
         bool flag10 = true;
 
         if (!flag9 && flag10) {
-            if (npc.velocity.Y == 0f && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
+            if (NPC.IsGrounded() && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
                 flag7 = true;
 
             if (npc.position.X == npc.oldPosition.X || npc.ai[3] >= (float)num56 || flag7)
@@ -203,7 +203,7 @@ sealed class Archdruid : DruidNPC {
             }
 
             if (npc.velocity.X == 0f) {
-                if (npc.velocity.Y == 0f) {
+                if (NPC.IsGrounded()) {
                     _timer2 += 1f;
                     if (_timer2 >= 2f) {
                         npc.direction *= -1;
@@ -223,7 +223,7 @@ sealed class Archdruid : DruidNPC {
         float num87 = 1f * 0.9f;
         float num88 = 0.07f * 0.9f;
         if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
-            if (npc.velocity.Y == 0f)
+            if (NPC.IsGrounded())
                 npc.velocity *= 0.7f;
         }
         else if (npc.velocity.X < num87 && npc.direction == 1) {
@@ -238,7 +238,7 @@ sealed class Archdruid : DruidNPC {
         }
 
         bool tileChecks = false;
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.IsGrounded()) {
             int num77 = (int)(NPC.position.Y + NPC.height + 7f) / 16;
             int num189 = (int)NPC.position.X / 16;
             int num79 = (int)(NPC.position.X + NPC.width) / 16;
@@ -292,8 +292,8 @@ sealed class Archdruid : DruidNPC {
             {
                 if (NPC.velocity.X < 0f && NPC.direction == -1 || NPC.velocity.X > 0f && NPC.direction == 1) {
                     void jumpIfPlayerAboveAndClose() {
-                        if (npc.velocity.Y == 0f && Main.expertMode && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
-                            if (npc.velocity.Y == 0f) {
+                        if (NPC.IsGrounded() && Main.expertMode && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
+                            if (NPC.IsGrounded()) {
                                 int num200 = 6;
                                 if (Main.player[npc.target].Bottom.Y > npc.Top.Y - (float)(num200 * 16)) {
                                     npc.velocity.Y = -7.9f;
@@ -366,7 +366,7 @@ sealed class Archdruid : DruidNPC {
             Player player = Main.player[NPC.target];
             Vector2 position = new(player.Center.X, player.Center.Y + 32);
             NPC.direction = player.Center.DirectionFrom(NPC.Center).X.GetDirection();
-            if (NPC.velocity.Y == 0f) {
+            if (NPC.IsGrounded()) {
                 NPC.velocity.X *= 0.8f;
             }
             if (_entAttack) {

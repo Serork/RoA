@@ -70,7 +70,7 @@ sealed class EntLegs : RoANPC {
 
     public override bool PreAI() {
         if (NPC.oldVelocity.Y >= 1f) NPC.localAI[2]++;
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.IsGrounded()) {
             if (NPC.localAI[2] > 10) Stomp(true);
             NPC.localAI[2] = 0;
         }
@@ -134,7 +134,7 @@ sealed class EntLegs : RoANPC {
                     //num87 += (1f - (float)life / (float)lifeMax) * 1.5f;
                     //num88 += (1f - (float)life / (float)lifeMax) * 0.15f;
                     if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
-                        if (npc.velocity.Y == 0f)
+                        if (NPC.IsGrounded())
                             npc.velocity *= 0.7f;
                     }
                     else if (npc.velocity.X < num87 && npc.direction == 1) {
@@ -154,7 +154,7 @@ sealed class EntLegs : RoANPC {
                 //    NPC.velocity.Y = 0f;
                 //}
                 if (NPC.HasValidTarget) {
-                    if (!Main.player[NPC.target].dead && ++_attackTimer >= 300f && NPC.velocity.Y == 0f && Vector2.Distance(Main.player[NPC.target].position, NPC.position) < 500.0) {
+                    if (!Main.player[NPC.target].dead && ++_attackTimer >= 300f && NPC.IsGrounded() && Vector2.Distance(Main.player[NPC.target].position, NPC.position) < 500.0) {
                         if (Collision.CanHit(NPC, Main.player[NPC.target])) {
                             _attackTimer = 0f;
                             ChangeState(SHIELD, keepState: false);
@@ -167,7 +167,7 @@ sealed class EntLegs : RoANPC {
                 break;
             case SHIELD:
                 if (Math.Abs(NPC.velocity.Y) <= NPC.gravity) {
-                    if (NPC.velocity.Y == 0f) {
+                    if (NPC.IsGrounded()) {
                         NPC.velocity.X *= 0.8f;
                     }
 
@@ -233,7 +233,7 @@ sealed class EntLegs : RoANPC {
                     if (++NPC.frameCounter >= 6.0) {
                         NPC.frameCounter = 0.0;
                         CurrentFrame++;
-                        if (NPC.velocity.Y == 0f && (CurrentFrame == 4 || CurrentFrame == 9)) {
+                        if (NPC.IsGrounded() && (CurrentFrame == 4 || CurrentFrame == 9)) {
                             Stomp();
                         }
                         if (CurrentFrame >= 13 || CurrentFrame < 3) {

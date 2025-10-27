@@ -58,7 +58,7 @@ sealed class CrowdRaven : ModNPC {
 
         NPC.spriteDirection = -NPC.direction;
         NPC.rotation = NPC.velocity.X * 0.1f;
-        if (NPC.velocity.X == 0f && NPC.velocity.Y == 0f) {
+        if (NPC.velocity.X == 0f && NPC.IsGrounded()) {
             NPC.frame.Y = 0;
             NPC.frameCounter = 0.0;
             return;
@@ -213,7 +213,7 @@ sealed class CrowdRaven : ModNPC {
         }
         else if (NPC.ai[0] == 2f) {
             NPC.velocity.X *= 0.98f;
-            if (NPC.velocity.Y == 0f) {
+            if (NPC.IsGrounded()) {
                 NPC.ai[0] = 0f;
                 NPC.velocity.X = 0f;
             }

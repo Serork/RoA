@@ -20,6 +20,8 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.Menhir;
+
 namespace RoA.Content.NPCs.Enemies.Tar;
 
 [Tracked]
@@ -55,11 +57,15 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     private FluidBodyPart[] _fluidBodyParts = null!;
     private Player _playerCopy = null!;
     private Color _eyeColor;
+    private float _minTransform, _maxTransform;
 
     public ref float InitValue => ref NPC.localAI[0];
     public ref float TalkedValue => ref NPC.ai[0];
+    public ref float TransformedEnoughValue => ref NPC.ai[1];
+    public ref float TeleportCount => ref NPC.ai[2];
     public ref float TransformationFactor => ref NPC.scale;
     public ref float VisualTimer => ref NPC.localAI[1];
+    public ref float VisualTimer2 => ref NPC.localAI[2];
 
     public bool Init {
         get => InitValue == 1f;
@@ -70,6 +76,13 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         get => TalkedValue == 1f;
         set => TalkedValue = value.ToInt();
     }
+
+    public bool TransformedEnough {
+        get => TransformedEnoughValue == 1f;
+        set => TransformedEnoughValue = value.ToInt();
+    }
+
+    public bool CanTeleport => TeleportCount < 2;
 
     public override void SetStaticDefaults() {
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
@@ -91,6 +104,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
         Vector2 basePosition = NPC.position;
         NPC.position.Y += 9f;
+
+        float opacity = NPC.Opacity;
 
         Player other = NPC.GetTargetPlayer();
         _playerCopy.direction = other.direction;
@@ -117,6 +132,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         _playerCopy.socialIgnoreLight = true;
         _playerCopy.dead = true;
 
+        _playerCopy.opacityForAnimation = opacity;
+
         Vector2 headPosition = NPC.Center - _playerCopy.Size / 2f;
         Main.PlayerRenderer.DrawPlayer(Main.Camera, _playerCopy, headPosition, 0f, Vector2.Zero);
 
@@ -125,7 +142,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         Vector2 position = BodyPosition() + (NPC.FacedRight() ? new Vector2(4f, 0f) : Vector2.Zero);
         Rectangle clip = texture.Bounds;
         Vector2 origin = clip.Centered();
-        Color color = Color.White;
+        Color color = Color.White * opacity;
         Vector2 scale = Vector2.One;
         float rotation = 0f;
         SpriteEffects effects = NPC.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -141,13 +158,13 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         });
 
         _playerCopy.direction = NPC.direction;
-        Main.PlayerRenderer.DrawPlayerHead(Main.Camera, _playerCopy, headPosition + new Vector2(6f, 4f) - Main.screenPosition);
+        Main.PlayerRenderer.DrawPlayerHead(Main.Camera, _playerCopy, headPosition + new Vector2(6f, 4f) - Main.screenPosition, alpha: Ease.CubeIn(opacity));
 
         texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2].Value;
         position = ArmPosition() + (NPC.FacedRight() ? new Vector2(-14f, 0f) : Vector2.Zero);
         clip = texture.Bounds;
         origin = clip.Centered();
-        color = Color.White;
+        color = Color.White * opacity;
         scale = Vector2.One;
         rotation = 0f;
         batch.DrawWithSnapshot(() => {
@@ -178,13 +195,15 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         _playerCopy.direction = NPC.direction;
         _playerCopy.velocity = NPC.velocity;
 
+        float opacity = NPC.Opacity;
+
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = NPC.GetTexture();
         Vector2 basePosition = NPC.Center + Vector2.UnitY * 5f;
         Vector2 position = basePosition;
         Rectangle clip = texture.Bounds;
         Vector2 origin = clip.Centered();
-        Color color = Color.White;
+        Color color = Color.White * opacity;
         Vector2 scale = Vector2.One * TransformationFactor;
         float rotation = 0f;
         SpriteEffects effects = NPC.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -199,11 +218,11 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             });
         });
 
-        color = LiquidColor;
+        color = LiquidColor * opacity;
         Vector2 baseHeadPosition = _playerCopy.Center + _playerCopy.headPosition;
         Vector2 headPosition = baseHeadPosition;
-        headPosition += headPosition.DirectionFrom(position) * 10f;
-        batch.Line(position, headPosition, thickness: 10f, color: color);
+        headPosition += headPosition.DirectionFrom(position) * 10f * TransformationFactor;
+        batch.Line(position, headPosition, thickness: 10f * TransformationFactor, color: color);
 
         foreach (var part in _fluidBodyParts) {
             switch (part.Type) {
@@ -220,7 +239,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             position = basePosition;
             clip = texture.Bounds;
             origin = clip.Centered() + part.Position + part.Velocity;
-            color = Color.White;
+            color = Color.White * opacity;
             rotation = part.Rotation;
             batch.DrawWithSnapshot(() => {
                 batch.Draw(texture, position, DrawInfo.Default with {
@@ -268,33 +287,74 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     }
 
     public override void AI() {
+        bool teleported = false;
+        TransformationFactor = Helper.Wave(VisualTimer, _minTransform, _maxTransform, 1f, 0f);
+        TransformationFactor = Ease.SineOut(MathUtils.Clamp01(TransformationFactor));
+
+        float addFactor = 2f;
+        if (Talked && !TransformedEnough) {
+            VisualTimer += TimeSystem.LogicDeltaTime * addFactor;
+            VisualTimer2 = VisualTimer;
+
+            if (TransformationFactor >= _maxTransform) {
+                TransformedEnough = true;
+                VisualTimer2 = VisualTimer;
+            }
+        }
+        if (TransformedEnough) {
+            VisualTimer2 += TimeSystem.LogicDeltaTime * addFactor;
+            if (CanTeleport && VisualTimer2 > VisualTimer + (1f - _minTransform * 2f)) {
+                Init = false;
+                ActuallyTeleport();
+                teleported = true;
+            }
+        }
+
         if (!Init) {
             Init = true;
 
-            VisualTimer = -2f;
+            VisualTimer = VisualTimer2 = -2f;
             TransformationFactor = 0f;
 
-            int partCount = 10;
-            _fluidBodyParts = new FluidBodyPart[partCount];
-            for (int i = 0; i < partCount; i++) {
-                Vector2 position = (i / MathHelper.TwoPi).ToRotationVector2() * 5f;
-                _fluidBodyParts[i] = new FluidBodyPart(position, Main.rand.GetRandomEnumValue<FluidBodyPartType>(), Main.rand.NextFloatRange(MathHelper.TwoPi));
+            NPC.Opacity = 0f;
+
+            if (_maxTransform == 0f) {
+                _maxTransform = 0.5f;
+            }
+            else {
+                TeleportCount++;
+                if (TeleportCount == 1) {
+                    _minTransform = 0.25f;
+                    _maxTransform = 0.75f;
+                }
+                else {
+                    _minTransform = 0.5f;
+                    _maxTransform = 1f;
+                }
             }
 
-            RandomizePlayer();
+
+            Talked = TransformedEnough = false;
+
+            if (!teleported) {
+                int partCount = 10;
+                _fluidBodyParts = new FluidBodyPart[partCount];
+                for (int i = 0; i < partCount; i++) {
+                    Vector2 position = (i / MathHelper.TwoPi).ToRotationVector2() * 5f;
+                    _fluidBodyParts[i] = new FluidBodyPart(position, Main.rand.GetRandomEnumValue<FluidBodyPartType>(), Main.rand.NextFloatRange(MathHelper.TwoPi));
+                }
+
+                RandomizePlayer();
+            }
         }
-
-        TransformationFactor = VisualTimer < 2f ? Helper.Wave(VisualTimer, 0f, 2f, 1f, 0f) : 2f;
-        TransformationFactor = Ease.SineOut(MathUtils.Clamp01(TransformationFactor));
-
-        if (Talked) {
-            VisualTimer += TimeSystem.LogicDeltaTime * 1.5f;
+        else if (NPC.IsGrounded()) {
+            NPC.Opacity = MathHelper.Lerp(NPC.Opacity, 1f, 0.05f);
         }
 
         float maxHeadRotation = MathHelper.PiOver4 / 3f;
         ref float headRotation = ref _playerCopy.headRotation;
-        headRotation = Helper.Wave(VisualTimer, - maxHeadRotation, maxHeadRotation, 5f, 0f);
-        headRotation = MathHelper.Lerp(headRotation, -0.1f * NPC.direction, 1f - TransformationFactor);
+        headRotation = Helper.Wave(VisualTimer2, - maxHeadRotation, maxHeadRotation, 5f, 0f);
+        headRotation = MathHelper.Lerp(headRotation, -0.25f * NPC.direction, 1f - TransformationFactor);
         _playerCopy.headPosition = new Vector2(0f, -24f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
         _playerCopy.headPosition.Y += 1f;
         _playerCopy.eyeColor = Color.Lerp(_eyeColor, Color.White, TransformationFactor);
@@ -304,8 +364,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         NPC.velocity.X *= 0.8f;
 
         for (int i = 0; i < _fluidBodyParts.Length; i++) {
-            _fluidBodyParts[i].Rotation += TimeSystem.LogicDeltaTime * (i % 2 == 0).ToDirectionInt() * TransformationFactor;
-            _fluidBodyParts[i].Velocity = Helper.Wave(VisualTimer, -1f, 1f, 5f, i).ToRotationVector2() * 5f * TransformationFactor;
+            _fluidBodyParts[i].Rotation += TimeSystem.LogicDeltaTime * (i % 2 == 0).ToDirectionInt() * TransformationFactor * NPC.direction;
+            _fluidBodyParts[i].Rotation += 0.01f * NPC.direction * TransformationFactor;
+            _fluidBodyParts[i].Velocity = Helper.Wave(VisualTimer2, -1f, 1f, 5f, i).ToRotationVector2() * 5f * TransformationFactor;
         }
 
         ushort tarDustMetaball = (ushort)ModContent.DustType<TarMetaball>();
@@ -318,6 +379,19 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
         if (TransformationFactor > 0.15f && Main.rand.NextBool((int)(chance + 40 * (1f - TransformationFactor)))) {
             Dust.NewDustPerfect(BodyPosition() - Vector2.UnitY * 14f + new Vector2(20f * Main.rand.NextFloatDirection(), 20f * Main.rand.NextFloatDirection()), tarDustMetaball);
+        }
+    }
+
+    private void ActuallyTeleport() {
+        Player targetAsPlayer = NPC.GetTargetPlayer();
+        if (Helper.SinglePlayerOrServer) {
+            Point point14 = NPC.Center.ToTileCoordinates();
+            Point point15 = targetAsPlayer.Center.ToTileCoordinates();
+            Vector2 chosenTile2 = Vector2.Zero;
+            if (NPC.AI_AttemptToFindTeleportSpot(ref chosenTile2, point15.X, point15.Y, 20, 12, 1, solidTileCheckCentered: true, teleportInAir: true)) {
+                NPC.Center = chosenTile2.ToWorldCoordinates();
+            }
+            NPC.netUpdate = true;
         }
     }
 

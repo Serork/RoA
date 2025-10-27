@@ -113,7 +113,7 @@ sealed class Hog : RoANPC {
         bool flag = false;
         bool flag2 = false;
         bool flag3 = false;
-        if (NPC.velocity.Y == 0f && ((NPC.velocity.X > 0f && NPC.direction < 0) || (NPC.velocity.X < 0f && NPC.direction > 0))) {
+        if (NPC.IsGrounded() && ((NPC.velocity.X > 0f && NPC.direction < 0) || (NPC.velocity.X < 0f && NPC.direction > 0))) {
             flag2 = true;
             NPC.ai[3] += 1f;
         }
@@ -146,7 +146,7 @@ sealed class Hog : RoANPC {
         }
         else {
             if (NPC.velocity.X == 0f) {
-                if (NPC.velocity.Y == 0f) {
+                if (NPC.IsGrounded()) {
                     NPC.ai[0] += 1f;
                     if (NPC.ai[0] >= 2f) {
                         NPC.direction *= -1;
@@ -166,9 +166,9 @@ sealed class Hog : RoANPC {
 
         float num11 = 3.5f;
         float num12 = 0.08f;
-        if (!flag && (NPC.velocity.Y == 0f || NPC.wet || (NPC.velocity.X <= 0f && NPC.direction < 0) || (NPC.velocity.X >= 0f && NPC.direction > 0))) {
+        if (!flag && (NPC.IsGrounded() || NPC.wet || (NPC.velocity.X <= 0f && NPC.direction < 0) || (NPC.velocity.X >= 0f && NPC.direction > 0))) {
             if (NPC.velocity.X < 0f - num11 || NPC.velocity.X > num11) {
-                if (NPC.velocity.Y == 0f)
+                if (NPC.IsGrounded())
                     NPC.velocity *= 0.7f;
             }
             else if (NPC.velocity.X < num11 && NPC.direction == 1) {
@@ -218,7 +218,7 @@ sealed class Hog : RoANPC {
             }
         }
 
-        if (NPC.velocity.Y == 0f) {
+        if (NPC.IsGrounded()) {
             bool flag6 = true;
             int num19 = (int)(NPC.position.Y - 7f) / 16;
             int num20 = (int)(NPC.position.X - 7f) / 16;
@@ -294,7 +294,7 @@ sealed class Hog : RoANPC {
 
                 // adapted vanilla
                 // it allows the enemy to jump over 1-3 height tiles
-                if (NPC.velocity.Y == 0f) {
+                if (NPC.IsGrounded()) {
                     int collisionWidth = 18;
                     int collisionHeight = 40;
                     int num20 = (int)((NPC.position.X + (float)(collisionWidth / 2) + (float)(15 * NPC.direction)) / 16f);
