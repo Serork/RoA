@@ -15,6 +15,7 @@ using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.UI;
 
 namespace RoA.Common.Players;
 
@@ -120,9 +121,24 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.SetArmorEffectVisuals += On_Player_SetArmorEffectVisuals;
         On_PlayerDrawLayers.DrawPlayer_21_Head_TheFace += On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace;
 
+        On_ItemSlot.PickItemMovementAction += On_ItemSlot_PickItemMovementAction;
+
         DevilSkullLoad();
         CrystallizedSkullLoad();
         WiresLoad();
+    }
+
+    private int On_ItemSlot_PickItemMovementAction(On_ItemSlot.orig_PickItemMovementAction orig, Item[] inv, int context, int slot, Item checkItem) {
+        int result = orig(inv, context, slot, checkItem);
+        bool hornetSkull = checkItem.type == ModContent.ItemType<HornetSkull>() && Main.LocalPlayer.GetCommon().ApplyHornetSkullSetBonus;
+        bool devilSkull = checkItem.type == ModContent.ItemType<DevilSkull>() && Main.LocalPlayer.GetCommon().ApplyDevilSkullSetBonus;
+        bool vanillaSkull = checkItem.type == ItemID.Skull && Main.LocalPlayer.GetCommon().ApplyVanillaSkullSetBonus;
+        bool crystallizedSkull = checkItem.type == ModContent.ItemType<CrystallizedSkull>() && Main.LocalPlayer.GetCommon().ApplyCrystallizedSkullSetBonus;
+        if (result == 1 &&
+            (hornetSkull || devilSkull || vanillaSkull || crystallizedSkull)) {
+            result = -1;
+        }
+        return result;
     }
 
     private void On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace(On_PlayerDrawLayers.orig_DrawPlayer_21_Head_TheFace orig, ref PlayerDrawSet drawinfo) {
