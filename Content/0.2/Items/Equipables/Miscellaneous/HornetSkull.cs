@@ -17,21 +17,6 @@ sealed class HornetSkull : ModItem, IDoubleTap {
 
         ArmorIDs.Face.Sets.PreventHairDraw[Item.faceSlot] = true;
         ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
-
-        On_ItemSlot.PickItemMovementAction += On_ItemSlot_PickItemMovementAction;
-    }
-
-    private int On_ItemSlot_PickItemMovementAction(On_ItemSlot.orig_PickItemMovementAction orig, Item[] inv, int context, int slot, Item checkItem) {
-        int result = orig(inv, context, slot, checkItem);
-        bool hornetSkull = checkItem.type == ModContent.ItemType<HornetSkull>() && Main.LocalPlayer.GetCommon().ApplyHornetSkullSetBonus;
-        bool devilSkull = checkItem.type == ModContent.ItemType<DevilSkull>() && Main.LocalPlayer.GetCommon().ApplyDevilSkullSetBonus;
-        bool vanillaSkull = checkItem.type == ItemID.Skull && Main.LocalPlayer.GetCommon().ApplyVanillaSkullSetBonus;
-        bool crystallizedSkull = checkItem.type == ModContent.ItemType<CrystallizedSkull>() && Main.LocalPlayer.GetCommon().ApplyCrystallizedSkullSetBonus;
-        if (result == 1 && 
-            (hornetSkull || devilSkull || vanillaSkull || crystallizedSkull)) {
-            result = -1;
-        }
-        return result;
     }
 
     public override void SetDefaults() {

@@ -122,11 +122,26 @@ sealed partial class PlayerCommon : ModPlayer {
         On_PlayerDrawLayers.DrawPlayer_21_Head_TheFace += On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace;
 
         On_ItemSlot.PickItemMovementAction += On_ItemSlot_PickItemMovementAction;
+        On_ItemSlot.ArmorSwap += On_ItemSlot_ArmorSwap;
 
         DevilSkullLoad();
         CrystallizedSkullLoad();
         WiresLoad();
     }
+
+    private Item On_ItemSlot_ArmorSwap(On_ItemSlot.orig_ArmorSwap orig, Item item, out bool success) {
+        bool hornetSkull = item.type == ModContent.ItemType<HornetSkull>() && Main.LocalPlayer.GetCommon().ApplyHornetSkullSetBonus;
+        bool devilSkull = item.type == ModContent.ItemType<DevilSkull>() && Main.LocalPlayer.GetCommon().ApplyDevilSkullSetBonus;
+        bool vanillaSkull = item.type == ItemID.Skull && Main.LocalPlayer.GetCommon().ApplyVanillaSkullSetBonus;
+        bool crystallizedSkull = item.type == ModContent.ItemType<CrystallizedSkull>() && Main.LocalPlayer.GetCommon().ApplyCrystallizedSkullSetBonus;
+        if (hornetSkull || devilSkull || vanillaSkull || crystallizedSkull) {
+            success = false;
+            return item;
+        }
+
+        return orig(item, out success);
+    }
+
 
     private int On_ItemSlot_PickItemMovementAction(On_ItemSlot.orig_PickItemMovementAction orig, Item[] inv, int context, int slot, Item checkItem) {
         int result = orig(inv, context, slot, checkItem);
