@@ -12,7 +12,6 @@ namespace RoA.Content.Items.Equipables.Miscellaneous;
 [AutoloadEquip(EquipType.Head)]
 sealed class DeerSkull : ModItem {
     public override void SetStaticDefaults() {
-        //Tooltip.SetDefault("4% increased nature critical strike chance");
         ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[Item.headSlot] = true;
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
@@ -26,16 +25,22 @@ sealed class DeerSkull : ModItem {
         Item.rare = ItemRarityID.Orange;
 
         Item.value = Item.sellPrice(0, 0, 30, 0);
+
+        Item.accessory = true;
     }
 
-    public override void UpdateEquip(Player player) => player.GetCritChance(DruidClass.Nature) += 4;
+    public override void UpdateEquip(Player player) {
+        player.GetCritChance(DruidClass.Nature) += 4;
+
+        if (player.GetCommon().PerfectClotActivated) {
+        }
+    }
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
 
-    //public override void DrawArmorColor(Player drawPlayer, float shadow, ref DrawColor color, ref int glowMask, ref DrawColor glowMaskColor) {
-    //	if (drawPlayer.active) {
-    //		glowMask = RoAGlowMask.Get("DeerSkull_Head");
-    //		glowMaskColor = DrawColor.White;
-    //	}
-    //}
+    public override bool CanEquipAccessory(Player player, int slot, bool modded) => player.GetCommon().PerfectClotActivated;
+
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        
+    }
 }

@@ -13,6 +13,7 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Common.Players;
 
@@ -55,6 +56,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool Fell { get; private set; }
 
     public bool LockHorizontalMovement;
+    public bool PerfectClotActivated;
 
     public Vector2 SavedPosition;
     public Vector2 SavedVelocity;
@@ -94,6 +96,16 @@ sealed partial class PlayerCommon : ModPlayer {
 
         OldUseItemPos[0] = position;
         OldUseItemRot[0] = rotation;
+    }
+
+    public override void SaveData(TagCompound tag) {
+        if (PerfectClotActivated) {
+            tag[RoA.ModName + nameof(PerfectClotActivated)] = true;
+        }
+    }
+
+    public override void LoadData(TagCompound tag) {
+        PerfectClotActivated = tag.GetBool(RoA.ModName + nameof(PerfectClotActivated));
     }
 
     public override void Load() {
@@ -261,6 +273,7 @@ sealed partial class PlayerCommon : ModPlayer {
         ApplyVanillaSkullSetBonus = false;
         ApplyDevilSkullSetBonus = false;
         ApplyCrystallizedSkullSetBonus = false;
+        ApplyHornetSkullSetBonus = false;
     }
 
     public override void PostUpdate() {

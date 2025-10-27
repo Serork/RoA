@@ -20,9 +20,27 @@ sealed class HornetSkull : ModItem, IDoubleTap {
     public override void SetDefaults() {
         int width = 22, height = 28;
         Item.SetSizeValues(width, height);
+
+        Item.accessory = true;
     }
 
+    public override bool CanEquipAccessory(Player player, int slot, bool modded) => player.GetCommon().PerfectClotActivated;
+
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
+
+    public override void UpdateArmorSet(Player player) {
+        player.GetCommon().ApplyHornetSkullSetBonus = true;
+    }
+
+    public override void UpdateEquip(Player player) {
+        if (player.GetCommon().PerfectClotActivated) {
+            player.GetCommon().ApplyHornetSkullSetBonus = true;
+        }
+    }
+
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        player.GetCommon().ApplyHornetSkullSetBonus = true;
+    }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) => player.GetCommon().DoHornetDash(direction);
 }

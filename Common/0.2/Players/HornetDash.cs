@@ -19,6 +19,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public static float HORNETDASHTIME => 15f;
     public static float HORNETDASHLENGTH => 150f;
 
+    public bool ApplyHornetSkullSetBonus;
+
     public bool CanDoHornetDash {
         get => !Dashed;
         set => Dashed = !value;
@@ -112,7 +114,7 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public void DoHornetDash(IDoubleTap.TapDirection direction) {
-        if (!Player.HasSetBonusFrom<HornetSkull>()) {
+        if (!Player.GetCommon().ApplyHornetSkullSetBonus) {
             return;
         }
 
