@@ -272,16 +272,16 @@ sealed class Archdruid : DruidNPC {
                         num86 += 8f;
                     }
 
-                    //if (num85 <= num86) {
-                    //    NPC.gfxOffY += NPC.position.Y + NPC.height - num84;
-                    //    NPC.position.Y = num84 - NPC.height;
-                    //    if (num85 < 9f) {
-                    //        NPC.stepSpeed = 1f;
-                    //    }
-                    //    else {
-                    //        NPC.stepSpeed = 2f;
-                    //    }
-                    //}
+                    if (num85 <= num86) {
+                        NPC.gfxOffY += NPC.position.Y + NPC.height - num84;
+                        NPC.position.Y = num84 - NPC.height;
+                        if (num85 < 9f) {
+                            NPC.stepSpeed = 1f;
+                        }
+                        else {
+                            NPC.stepSpeed = 2f;
+                        }
+                    }
                 }
             }
         }
@@ -349,7 +349,9 @@ sealed class Archdruid : DruidNPC {
                 }
             }
         }
-        Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        //if (npc.IsGrounded()) {
+        //    Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        //}
     }
 
     protected override void ChangeToAttackState() {

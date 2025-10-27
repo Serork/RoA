@@ -25,8 +25,6 @@ static partial class NPCExtensions {
 
     public static Player GetTargetPlayer(this NPC npc) => Main.player[npc.target];
 
-    public static float SpeedX(this NPC npc) => MathF.Abs(npc.velocity.X);
-
     public static bool HasJustChangedFrame(this NPC npc) => npc.frameCounter == 0.0;
 
     public static bool SameAs(this NPC npc, NPC checkNPC) => npc.whoAmI == checkNPC.whoAmI;
@@ -320,7 +318,7 @@ static partial class NPCExtensions {
                     }
                 }
             }
-            Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+            //Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
         }
     }
 

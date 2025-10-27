@@ -364,7 +364,7 @@ sealed class Hog : RoANPC {
                                 NPC.direction *= -1;
                             }
                         }
-                        Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
+                        //Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY);
                         float acceleration = 0.05f;
                         float speed = 1f;
                         if (NPC.velocity.X < 0f - speed || NPC.velocity.X > speed) {

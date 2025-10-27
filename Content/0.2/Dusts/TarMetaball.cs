@@ -17,7 +17,6 @@ sealed class TarMetaball : ModDust {
     }
 
     public override bool Update(Dust dust) {
-        dust.velocity.X *= 0.25f;
         dust.velocity.Y = MathF.Abs(dust.velocity.Y);
 
         dust.BasicDust();

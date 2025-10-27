@@ -98,7 +98,7 @@ sealed partial class NPCCommon : GlobalNPC {
         Rectangle? sourceRectangle = null;
         Vector2 origin = texture.Bounds.BottomCenter();
         NPC NPC = source;
-        Vector2 sourceCenter = target.position + target.Size / 2f;
+        Vector2 sourceCenter = target.position + Vector2.UnitY * target.gfxOffY + target.Size / 2f;
         Vector2 targetCenter = source.As<Menhir>().ChainCenter + Vector2.UnitY * source.height / 4f - texture.Size() / 2f;
         sourceCenter += sourceCenter.DirectionTo(targetCenter) * 10f;
         float mult = MathHelper.Clamp((targetCenter + targetCenter.DirectionTo(sourceCenter) * source.width).Distance(sourceCenter) / 100f, 0f, 1f);
@@ -145,7 +145,7 @@ sealed partial class NPCCommon : GlobalNPC {
                   lockTexture = indexedTextureAssets[(byte)Menhir.MenhirRequstedTextureType.Lock].Value;
         Rectangle clip = lockTexture.Bounds;
         Vector2 origin = clip.Size() / 2f;
-        Vector2 position = target.position + target.Size / 2f - screenPos;
+        Vector2 position = target.position + Vector2.UnitY * target.gfxOffY + target.Size / 2f - screenPos;
         Color color = Color.Lerp(drawColor, Menhir.GlowColor * NPC.Opacity, 0.9f) * 0.85f;
         for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
             color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);

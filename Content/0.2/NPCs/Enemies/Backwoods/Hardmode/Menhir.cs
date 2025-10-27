@@ -364,7 +364,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
             Point point14 = NPC.Center.ToTileCoordinates();
             Point point15 = target.Center.ToTileCoordinates();
             Vector2 chosenTile2 = Vector2.Zero;
-            if (NPC.AI_AttemptToFindTeleportSpot(ref chosenTile2, point15.X, point15.Y, 20, 12, 1, solidTileCheckCentered: true, teleportInAir: true)) {
+            if (NPC.AI_AttemptToFindTeleportSpot(ref chosenTile2, point15.X, point15.Y, 20, 12, 2, solidTileCheckCentered: true, teleportInAir: true)) {
                 NPC.Center = chosenTile2.ToWorldCoordinates();
                 State = MenhirState.Idle;
             }
