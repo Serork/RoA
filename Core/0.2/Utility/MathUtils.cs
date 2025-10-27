@@ -9,6 +9,14 @@ using Terraria;
 namespace RoA.Core.Utility;
 
 static class MathUtils {
+    public static int SecondsToFrames(float seconds) => (int)MathF.Round(seconds * 60f);
+
+    public static int MinutesToFrames(float minutes) => (int)MathF.Round(minutes * 3600f);
+
+    public static float Sin01(float x) => MathF.Sin(x) * 0.5f + 0.5f;
+
+    public static float Cos01(float x) => MathF.Cos(x) * 0.5f + 0.5f;
+
     public static float Repeat(float value, float length) {
         float quotient = MathF.Floor(value / length);
 

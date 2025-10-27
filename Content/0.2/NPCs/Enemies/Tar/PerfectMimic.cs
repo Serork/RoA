@@ -36,6 +36,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     public static Color LiquidColor => LerpColor.GetLerpColor([new Color(46, 34, 47)]);
     public static Color SkinColor => LerpColor.GetLerpColor([new Color(46, 34, 47), Color.Lerp(new Color(62, 53, 70), new Color(98, 85, 101), 0.5f)]);
     public static Color OutlineColor => LerpColor.GetLerpColor([/*new Color(62, 53, 70), */new Color(98, 85, 101)]);
+    public static Color OutlineColorWorld => OutlineColor.MultiplyRGB(Lighting.GetColor(TrackedEntitiesSystem.GetTrackedNPC<PerfectMimic>().ToList()[0].position.ToTileCoordinates()));
 
     public enum FluidBodyPartType : byte {
         Part1,
@@ -72,6 +73,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     private float _initValue, _talkedValue, _transformedEnoughValue, _teleportCount;
     private float _visualTimer, _visualTimer2;
+    private float _teleportTimer; // need sync
 
     public ref float InitValue => ref _initValue;
     public ref float TalkedValue => ref _talkedValue; // need sync
@@ -97,6 +99,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     }
 
     public bool CanTeleport => TeleportCount < 2;
+    public bool IsTeleporting => _teleportTimer > 0;
 
     public override void SetStaticDefaults() {
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
@@ -385,13 +388,16 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 VisualTimer2 = VisualTimer;
             }
         }
-        if (TransformedEnough) {
+        if (TransformedEnough && !IsTeleporting) {
             VisualTimer2 += TimeSystem.LogicDeltaTime * addFactor;
             float max = VisualTimer + (1f - _minTransform * 2f);
             float progress = VisualTimer2 / max;
             if (CanTeleport && VisualTimer2 > max) {
                 Init = false;
-                ActuallyTeleport();
+                if (Helper.SinglePlayerOrServer) {
+                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(5), MathUtils.SecondsToFrames(15)));
+                    NPC.netUpdate = true;
+                }
                 teleported = true;
             }
             if (CanTeleport && !teleported && progress >= 0.75f) {
@@ -411,6 +417,21 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             }
         }
 
+        bool flag = IsTeleporting;
+        if (IsTeleporting) {
+            _teleportTimer--;
+            Init = false;
+            teleported = true;
+            if (_teleportTimer == 1f) {
+                _teleportTimer--;
+                ActuallyTeleport();
+                flag = false;
+            }
+        }
+
+        NPC.ShowNameOnHover = !flag;
+        NPC.dontTakeDamage = flag;
+
         if (!Init) {
             Init = true;
 
@@ -419,18 +440,20 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
             NPC.Opacity = 0f;
 
-            if (_maxTransform == 0f) {
-                _maxTransform = 0.5f;
-            }
-            else {
-                TeleportCount++;
-                if (TeleportCount == 1) {
-                    _minTransform = 0.25f;
-                    _maxTransform = 0.75f;
+            if (!flag) {
+                if (_maxTransform == 0f) {
+                    _maxTransform = 0.5f;
                 }
                 else {
-                    _minTransform = 0.5f;
-                    _maxTransform = 1f;
+                    TeleportCount++;
+                    if (TeleportCount == 1) {
+                        _minTransform = 0.25f;
+                        _maxTransform = 0.75f;
+                    }
+                    else {
+                        _minTransform = 0.5f;
+                        _maxTransform = 1f;
+                    }
                 }
             }
 
@@ -468,7 +491,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             _fluidBodyParts[i].Velocity = Helper.Wave(VisualTimer2, -1f, 1f, 5f, i).ToRotationVector2() * 5f * TransformationFactor;
         }
 
-        if (NPC.IsGrounded()) {
+        if (!flag && NPC.IsGrounded()) {
             int chance = (int)(20 + 40 * (1f - TransformationFactor));
             if (Main.rand.NextBool(chance)) {
                 Dust dust = Dust.NewDustPerfect(ArmPosition() + new Vector2(2f * Main.rand.NextFloatDirection(), 2f * Main.rand.NextFloatDirection()), tarDustMetaball);
@@ -635,7 +658,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     public class PerfectMimicMetaballs : Metaball {
         public override MetaballDrawLayer DrawContext => MetaballDrawLayer.BeforeNPCs;
 
-        public override Color EdgeColor => OutlineColor;
+        public override Color EdgeColor => OutlineColorWorld;
 
         public override bool AnythingToDraw => NPCUtils.AnyNPCs<PerfectMimic>();
 
@@ -665,7 +688,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     public class PerfectMimicMetaballs_AfterEffects : Metaball {
         public override MetaballDrawLayer DrawContext => MetaballDrawLayer.AfterProjectiles;
 
-        public override Color EdgeColor => OutlineColor;
+        public override Color EdgeColor => OutlineColorWorld;
 
         public override bool AnythingToDraw => NPCUtils.AnyNPCs<PerfectMimic>();
 

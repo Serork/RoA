@@ -359,8 +359,8 @@ static partial class NPCExtensions {
         bool flag13 = false;
         bool flag14 = false;
         bool flag15 = true;
-        int num8 = 70;
-        int num9 = num8 / 2;
+        int standingTime = 70;
+        int num9 = standingTime / 2;
         float num10 = 11f;
         Vector2 vector = Vector2.Zero;
         int num11 = 1;
@@ -374,7 +374,7 @@ static partial class NPCExtensions {
         float num18 = 1f;
         bool flag16 = false;
         float num19 = 30f;
-        float num20 = 0f;
+        float attackFrequency = 0f;
         bool flag17 = false;
         bool flag18 = true;
         bool flag19 = false;
@@ -432,27 +432,26 @@ static partial class NPCExtensions {
 
         bool flag29 = NPCID.Sets.FighterUsesDD2PortalAppearEffect[npc.type];
         bool flag30 = true;
-        if (npc.type == ModContent.NPCType<PerfectMimic>()) {
+        bool isPerfectMimic = npc.type == ModContent.NPCType<PerfectMimic>();
+        if (isPerfectMimic) {
             flag27 = /*!Collision.CanHit(npc.position, npc.width, npc.height, targetData.Position, targetData.Width, targetData.Height) || */targetData.Center.Distance(npc.Center) > 450f;
             //npc.noTileCollide = flag27;
             flag30 = false;
             flag16 = true;
-            num20 = 150f;
+            attackFrequency = 150f;
             num19 = 20f;
             //bool dayTime = Main.dayTime;
             flag21 = true;
             flag24 = true;
             flag12 = true;
-            flag15 = npc.ai[1] > 40f;
+            flag15 = true;
 
-            npc.ai[1] = 10f;
+            standingTime = 20;
+            num9 = 10;
+            //if (npc.ai[1] > 10f && npc.ai[1] <= 40f && (int)npc.ai[1] % 5 == 0)
+            //    num9 = (int)npc.ai[1] - 1;
 
-            num8 = 60;
-            num9 = 40;
-            if (npc.ai[1] > 10f && npc.ai[1] <= 40f && (int)npc.ai[1] % 5 == 0)
-                num9 = (int)npc.ai[1] - 1;
-
-            //num12 = 811;
+            //num12 = 811; // here we spawn shoot projectile
             vector.X -= 4 * npc.direction;
             vector.Y -= 20f;
             //num15 = 0.15f;
@@ -828,11 +827,11 @@ static partial class NPCExtensions {
                     bool flag33 = true;
                     if ((npc.velocity.Y != 0f && !flag14) || npc.ai[1] <= 0f) {
                         bool flag34 = false;
-                        if (num20 != 0f && npc.ai[1] <= 0f)
+                        if (attackFrequency != 0f && npc.ai[1] <= 0f)
                             flag34 = true;
 
                         npc.ai[0] = 0f;
-                        npc.ai[1] = (flag34 ? num20 : 0f);
+                        npc.ai[1] = (flag34 ? attackFrequency : 0f);
                     }
                     else if (!flag13 || (!flag33 && (!flag14 || npc.velocity.Y == 0f))) {
                         npc.velocity.X *= 0.9f;
@@ -846,7 +845,7 @@ static partial class NPCExtensions {
                         npc.netUpdate = true;
                         npc.velocity.X *= 0.5f;
                         npc.ai[0] = 3f;
-                        npc.ai[1] = num8;
+                        npc.ai[1] = standingTime;
                         if (Math.Abs(vector12.Y) > Math.Abs(vector12.X) * 2f)
                             npc.ai[0] = ((vector12.Y > 0f) ? 1 : 5);
                         else if (Math.Abs(vector12.X) > Math.Abs(vector12.Y) * 2f)
