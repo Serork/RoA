@@ -698,6 +698,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             foreach (Projectile perfectMimicArm in TrackedEntitiesSystem.GetTrackedProjectile<TarArm>()) {
                 perfectMimicArm.As<TarArm>().DrawFluidSelf();
             }
+            foreach (Projectile perfectMimicArm in TrackedEntitiesSystem.GetTrackedProjectile<TarMass>()) {
+                perfectMimicArm.As<TarMass>().DrawFluidSelf();
+            }
             foreach (NPC perfectMimic in TrackedEntitiesSystem.GetTrackedNPC<PerfectMimic>()) {
                 perfectMimic.As<PerfectMimic>().DrawFluidSelf();
             }

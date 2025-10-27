@@ -34,12 +34,10 @@ sealed class TarArm : ModProjectile {
         Projectile.SetSizeValues(10);
 
         Projectile.hostile = true;
-
         Projectile.tileCollide = false;
-
         Projectile.hide = true;
-
         Projectile.Opacity = 0f;
+        Projectile.aiStyle = -1;
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Content.Dusts;
 using RoA.Content.NPCs.Enemies.Tar;
+using RoA.Content.Projectiles.Enemies;
 
 using System;
 
@@ -363,7 +364,8 @@ static partial class NPCExtensions {
         int num9 = standingTime / 2;
         float num10 = 11f;
         Vector2 vector = Vector2.Zero;
-        int num11 = 1;
+        int damage = 1;
+        float knockBack = 0f;
         int num12 = 81;
         float num13 = 700f;
         float num14 = 0f;
@@ -453,7 +455,7 @@ static partial class NPCExtensions {
             num9 = 10;
             //if (npc.ai[1] > 10f && npc.ai[1] <= 40f && (int)npc.ai[1] % 5 == 0)
             //    num9 = (int)npc.ai[1] - 1;
-
+            num12 = ModContent.ProjectileType<TarMass>();
             //num12 = 811; // here we spawn shoot projectile
             vector.X -= 4 * npc.direction;
             vector.Y -= 20f;
@@ -463,10 +465,13 @@ static partial class NPCExtensions {
             num10 = 13f;
             num17 = 1;
             num18 = 0f;
-            //num11 = npc.GetAttackDamage_ForProjectiles(40f, 30f);
+            //damage = npc.GetAttackDamage_ForProjectiles(40f, 30f);
             maxSpeed = 5f;
             acceleration *= 1f;
             deceleration *= 1f;
+
+            damage = 50;
+            knockBack = 2f;
 
             amount *= 1.25f;
             amount2 *= 1.25f;
@@ -667,7 +672,7 @@ static partial class NPCExtensions {
 
                     vector7 += vector5 * num18;
                     if (Main.netMode != 1)
-                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector7, vector6, num12, num11, 0f, Main.myPlayer);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), vector7, vector6, num12, damage, knockBack, Main.myPlayer);
                 }
             }
         }
@@ -813,7 +818,7 @@ static partial class NPCExtensions {
 
                             vector10 += vector11 * num18;
                             if (Main.netMode != 1)
-                                Projectile.NewProjectile(npc.GetSource_FromAI(), vector10, vector11, num12, num11, 0f, Main.myPlayer);
+                                Projectile.NewProjectile(npc.GetSource_FromAI(), vector10, vector11, num12, damage, knockBack, Main.myPlayer);
                         }
 
                         if (Math.Abs(vector9.Y) > Math.Abs(vector9.X) * 2f)
