@@ -381,7 +381,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 if (!CanTeleport) {
                     for (int i = 0; i < 3; i++) {
                         if (Helper.SinglePlayerOrServer) {
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<TarArm>(), 0, 0, Main.myPlayer, NPC.whoAmI, i * MathHelper.TwoPi * 0.75f);
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<TarArm>(), 
+                                50, 1f, Main.myPlayer, NPC.whoAmI, i * MathHelper.TwoPi * 0.75f);
                         }
                     }
                 }
