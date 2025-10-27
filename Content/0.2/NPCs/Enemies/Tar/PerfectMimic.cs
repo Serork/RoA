@@ -20,8 +20,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.Menhir;
-
 namespace RoA.Content.NPCs.Enemies.Tar;
 
 [Tracked]
