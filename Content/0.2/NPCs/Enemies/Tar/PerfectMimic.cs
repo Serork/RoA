@@ -106,11 +106,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
         On_Player.SetTalkNPC += On_Player_SetTalkNPC;
         On_PlayerDrawSet.HeadOnlySetup += On_PlayerDrawSet_HeadOnlySetup;
-        On_PlayerHeadDrawRenderTargetContent.DrawTheContent += On_PlayerHeadDrawRenderTargetContent_DrawTheContent;
-    }
-
-    private void On_PlayerHeadDrawRenderTargetContent_DrawTheContent(On_PlayerHeadDrawRenderTargetContent.orig_DrawTheContent orig, PlayerHeadDrawRenderTargetContent self, SpriteBatch spriteBatch) {
-        orig(self, spriteBatch);
     }
 
     private void On_PlayerDrawSet_HeadOnlySetup(On_PlayerDrawSet.orig_HeadOnlySetup orig, ref PlayerDrawSet self, Player drawPlayer2, List<DrawData> drawData, List<int> dust, List<int> gore, float X, float Y, float Alpha, float Scale) {
@@ -131,6 +126,12 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
 
         orig(self, npcIndex, fromNet);
+    }
+
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        if (IsTeleporting) {
+            modifiers.Cancel();
+        }
     }
 
     public override void SetDefaults() {
