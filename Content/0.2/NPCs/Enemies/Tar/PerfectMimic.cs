@@ -144,7 +144,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         Main.PlayerRenderer.DrawPlayerHead(Main.Camera, _playerCopy, headPosition + new Vector2(6f, 4f) - Main.screenPosition);
 
         texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2].Value;
-        position = ArmPosition() + (NPC.FacedRight() ? new Vector2(-18f, 0f) : Vector2.Zero);
+        position = ArmPosition() + (NPC.FacedRight() ? new Vector2(-14f, 0f) : Vector2.Zero);
         clip = texture.Bounds;
         origin = clip.Centered();
         color = Color.White;
@@ -167,7 +167,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     }
 
     private Vector2 BodyPosition() => _playerCopy.Center + _playerCopy.bodyPosition + new Vector2(-2f, 1f);
-    private Vector2 ArmPosition() => _playerCopy.Center + _playerCopy.bodyPosition + new Vector2(9f, 10f);
+    private Vector2 ArmPosition() => _playerCopy.Center + _playerCopy.bodyPosition + new Vector2(7f, 10f);
 
     public void DrawFluidSelf() {
         if (!AssetInitializer.TryGetRequestedTextureAssets<PerfectMimic>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
