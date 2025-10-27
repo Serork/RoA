@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
+using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Core.Data;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 
-using static RoA.Content.NPCs.Enemies.Backwoods.Hardmode.Menhir;
+using static RoA.Content.NPCs.Enemies.Backwoods.Menhir;
 
 namespace RoA.Common.NPCs;
 

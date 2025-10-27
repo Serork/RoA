@@ -18,7 +18,7 @@ using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
+namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class Menhir : ModNPC, IRequestAssets {
     private static byte FRAMECOUNT => 9;
