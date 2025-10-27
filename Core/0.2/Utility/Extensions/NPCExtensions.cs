@@ -434,7 +434,7 @@ static partial class NPCExtensions {
         bool flag30 = true;
         bool isPerfectMimic = npc.type == ModContent.NPCType<PerfectMimic>();
         if (isPerfectMimic) {
-            flag27 = /*!Collision.CanHit(npc.position, npc.width, npc.height, targetData.Position, targetData.Width, targetData.Height) || */targetData.Center.Distance(npc.Center) > 450f;
+            flag27 = !Collision.CanHit(npc.position, npc.width, npc.height, targetData.Position, targetData.Width, targetData.Height) || targetData.Center.Distance(npc.Center) > 450f;
             npc.noTileCollide = flag27;
             if (flag27) {
                 npc.TargetClosest();
