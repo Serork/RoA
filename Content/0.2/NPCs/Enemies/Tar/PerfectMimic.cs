@@ -27,8 +27,8 @@ namespace RoA.Content.NPCs.Enemies.Tar;
 
 [Tracked]
 sealed class PerfectMimic : ModNPC, IRequestAssets {
-    private static float CONTACTDISTANCE => 100f;
-    private static float STOPDISTANCE => 300f;
+    private static float CONTACTDISTANCE => 160f;
+    private static float STOPDISTANCE => 320f;
     private static byte TELEPORTTIMEMININSECONDS => 5;
     private static byte TELEPORTTIMEMAXINSECONDS => 15;
 
