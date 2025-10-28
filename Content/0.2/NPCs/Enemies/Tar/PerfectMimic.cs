@@ -25,6 +25,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Tar;
@@ -104,8 +105,24 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         set => TransformedEnoughValue = value.ToInt();
     }
 
+    private Vector2 BodyPosition() => _playerCopy.Center + _playerCopy.bodyPosition + new Vector2(-2f, 1f);
+    private Vector2 ArmPosition() => _playerCopy.Center + _playerCopy.bodyPosition + new Vector2(7f, 10f);
+
     public bool CanTeleport => TeleportCount < 2;
     public bool IsTeleporting => _teleportTimer > 0;
+    public bool FullTransformed => TransformedEnough && !CanTeleport;
+
+    public override void ModifyTypeName(ref string typeName) {
+        if (!NPC.active) {
+            return;
+        }
+
+        typeName = string.Empty;
+
+        if (FullTransformed) {
+            typeName += this.GetLocalizedValue("DisplayName");
+        }
+    }
 
     public override void SetStaticDefaults() {
         NPCID.Sets.NoTownNPCHappiness[Type] = true;
@@ -205,12 +222,12 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         _playerCopy.dead = true;
 
         //_playerCopy.opacityForAnimation = opacity;
-        _playerCopy.skinColor = Color.Lerp(_skinColor, SkinColor, TransformationFactor);
+        _playerCopy.skinColor = Color.Lerp(_skinColor, Color.Lerp(_skinColor, SkinColor, 0.5f), TransformationFactor);
 
         _playerCopy.shimmerTransparency = 1f - opacity;
 
         Vector2 headPosition = NPC.Center - _playerCopy.Size / 2f;
-        if (TransformedEnough && !CanTeleport) {
+        if (FullTransformed) {
             _settingUpArms = true;
         }
         Main.PlayerRenderer.DrawPlayer(Main.Camera, _playerCopy, headPosition, 0f, Vector2.Zero, scale: opacity);
@@ -288,9 +305,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         return false;
     }
 
-    private Vector2 BodyPosition() => _playerCopy.Center + _playerCopy.bodyPosition + new Vector2(-2f, 1f);
-    private Vector2 ArmPosition() => _playerCopy.Center + _playerCopy.bodyPosition + new Vector2(7f, 10f);
-
     public void DrawFluidSelf() {
         if (!AssetInitializer.TryGetRequestedTextureAssets<PerfectMimic>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return;
@@ -367,10 +381,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
     }
 
-    public override bool CanChat() => true;
+    public override bool CanChat() => (!CanTeleport || !TransformedEnough) && !IsTeleporting && !Talked;
 
     public override void ChatBubblePosition(ref Vector2 position, ref SpriteEffects spriteEffects) {
-        position.Y += 18f + 18f * (1f - NPC.Opacity);
+        position.Y += 32f - _maxTransform * 24f + 18f * (1f - NPC.Opacity);
         position.X += 6f * NPC.direction;
         if (!NPC.FacedRight()) {
             position.X += NPC.width * 2f;
@@ -394,8 +408,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     }
 
     public override void AI() {
-        NPC.dontTakeDamage = NPC.Opacity < 0.5f;
-
         bool teleported = false;
         TransformationFactor = Helper.Wave(VisualTimer, _minTransform, _maxTransform, 1f, 0f);
         TransformationFactor = Ease.SineOut(MathUtils.Clamp01(TransformationFactor));
@@ -410,10 +422,14 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (TransformationFactor >= _maxTransform) {
                 TransformedEnough = true;
                 if (!CanTeleport) {
-                    for (int i = 0; i < 3; i++) {
-                        if (Helper.SinglePlayerOrServer) {
+                    if (Helper.SinglePlayerOrServer) {
+                        for (int i = 0; i < 2; i++) {
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<TarArm>(), 
                                 50, 1f, Main.myPlayer, NPC.whoAmI, i * MathHelper.TwoPi * 0.75f);
+                        }
+                        for (int i = 0; i < 2; i++) {
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<TarArm>(),
+                                50, 1f, Main.myPlayer, NPC.whoAmI, i * MathHelper.TwoPi * 0.75f, ai2: 1f);
                         }
                     }
                 }
@@ -463,6 +479,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
         NPC.ShowNameOnHover = !flag;
         NPC.dontTakeDamage = flag;
+        if (!FullTransformed) {
+            NPC.dontTakeDamage = true;
+        }
 
         if (!Init) {
             List<NPC> list = new List<NPC>();

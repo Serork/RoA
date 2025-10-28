@@ -21,7 +21,7 @@ sealed class TarMetaball : ModDust {
 
         dust.BasicDust();
 
-        if (Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4)) {
+        if (dust.customData is not float && Collision.SolidCollision(dust.position - Vector2.One * 2, 4, 4)) {
             dust.scale *= 0.9f;
             dust.velocity *= 0.25f;
         }

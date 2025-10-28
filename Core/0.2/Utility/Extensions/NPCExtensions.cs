@@ -443,6 +443,7 @@ static partial class NPCExtensions {
             }
             flag30 = false;
             flag16 = true;
+            //attackFrequency = 150f;
             attackFrequency = 150f;
             num19 = 20f;
             //bool dayTime = Main.dayTime;
@@ -451,8 +452,10 @@ static partial class NPCExtensions {
             flag12 = true;
             flag15 = true;
 
-            standingTime = 20;
-            num9 = 10;
+            //standingTime = 20;
+            standingTime = 0;
+            //num9 = 10;
+            num9 = -1;
             //if (npc.ai[1] > 10f && npc.ai[1] <= 40f && (int)npc.ai[1] % 5 == 0)
             //    num9 = (int)npc.ai[1] - 1;
             num12 = ModContent.ProjectileType<TarMass>();

@@ -54,6 +54,8 @@ sealed class TarMass : ModProjectile {
     }
 
     public override void AI() {
+        Projectile.tileCollide = Projectile.timeLeft < TIMELEFT - TIMELEFT / 4;
+
         float target = 0.75f;
         if (Projectile.ai[2] == 1f) {
             Projectile.velocity *= 0.9f;
@@ -63,8 +65,9 @@ sealed class TarMass : ModProjectile {
             }
         }
         else {
-            if (Main.rand.Next(3) == 0)
-                Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<TarMetaball>(), 0f, 0f, 50, default(Color), 1.3f);
+            if (Main.rand.Next(3) == 0) {
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<TarMetaball>(), 0f, 0f, 50, default(Color), 1.3f);
+            }
         }
         Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, target, 0.25f);
 
