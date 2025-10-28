@@ -9,11 +9,14 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Miscellaneous;
 
-[AutoloadEquip(EquipType.Head)]
+[AutoloadEquip(EquipType.Head, EquipType.Face)]
 sealed class DeerSkull : ModItem {
     public override void SetStaticDefaults() {
         ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[Item.headSlot] = true;
+
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        ArmorIDs.Face.Sets.PreventHairDraw[Item.faceSlot] = true;
     }
 
     public override void SetDefaults() {
@@ -37,6 +40,10 @@ sealed class DeerSkull : ModItem {
     }
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ModContent.ItemType<CarcassChestguard>() && legs.type == ModContent.ItemType<CarcassSandals>();
+
+    public override void UpdateArmorSet(Player player) {
+        
+    }
 
     public override bool CanEquipAccessory(Player player, int slot, bool modded) => player.GetCommon().PerfectClotActivated;
 
