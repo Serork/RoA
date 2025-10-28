@@ -456,6 +456,9 @@ sealed partial class PettyGoblin : ModNPC {
                 }
             }
         }
+        if (npc.IsGrounded()) {
+            Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        }
     }
 
     private void TryToStealMoney(Player target) {

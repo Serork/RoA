@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using ReLogic.Content;
 
@@ -8,7 +7,6 @@ using RoA.Common;
 using RoA.Common.Metaballs;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies;
-using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Graphics.Data;
@@ -22,16 +20,19 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
-using Terraria.Graphics.Renderers;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Tar;
 
 [Tracked]
 sealed class PerfectMimic : ModNPC, IRequestAssets {
+    private static float CONTACTDISTANCE => 100f;
+    private static float STOPDISTANCE => 300f;
+    private static byte TELEPORTTIMEMININSECONDS => 5;
+    private static byte TELEPORTTIMEMAXINSECONDS => 15;
+
+
     private static readonly LerpColor LerpColor = new();
 
     private static bool _settingUpHead, _settingUpArms;
@@ -81,6 +82,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     private float _initValue, _talkedValue, _transformedEnoughValue, _teleportCount;
     private float _visualTimer, _visualTimer2;
     private float _teleportTimer; // need sync
+    private float _walkingSpeedX;
 
     public ref float InitValue => ref _initValue;
     public ref float TalkedValue => ref _talkedValue; // need sync
@@ -198,7 +200,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         float opacity = NPC.Opacity;
 
         Player other = NPC.GetTargetPlayer();
-        _playerCopy.direction = other.direction;
         _playerCopy.selectedItem = other.selectedItem;
         _playerCopy.extraAccessory = other.extraAccessory;
         _playerCopy.position = other.position;
@@ -215,7 +216,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         _playerCopy.DisplayDollUpdate();
         _playerCopy.UpdateSocialShadow();
         _playerCopy.Center = NPC.Center;
-        _playerCopy.direction = NPC.direction;
+        //_playerCopy.direction = NPC.direction;
         _playerCopy.velocity = NPC.velocity;
         _playerCopy.PlayerFrame();
         _playerCopy.head = _playerCopy.body = _playerCopy.legs = -1;
@@ -265,8 +266,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             });
         });
 
-        _playerCopy.direction = NPC.direction;
-        _headPosition = headPosition + new Vector2(6f, 6f) - Main.screenPosition;
+        _headPosition = headPosition + new Vector2(6f, 6f) + _playerCopy.MovementOffset() - Main.screenPosition;
         _settingUpHead = true;
         Main.PlayerRenderer.DrawPlayerHead(Main.Camera, _playerCopy, _headPosition, alpha: Ease.CubeIn(opacity), scale: opacity);
         _settingUpHead = false;
@@ -311,7 +311,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
 
         _playerCopy.Center = NPC.Center + Vector2.UnitY * NPC.gfxOffY;
-        _playerCopy.direction = NPC.direction;
         _playerCopy.velocity = NPC.velocity;
 
         float opacity = NPC.Opacity;
@@ -386,10 +385,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     public override void ChatBubblePosition(ref Vector2 position, ref SpriteEffects spriteEffects) {
         position.Y += 32f - _maxTransform * 24f + 18f * (1f - NPC.Opacity);
         position.X += 6f * NPC.direction;
-        if (!NPC.FacedRight()) {
-            position.X += NPC.width * 2f;
-            position.X -= 12f;
-        }
+        position.X += (NPC.width * 2f - 12f) * -NPC.direction;
 
         spriteEffects = (-NPC.direction).ToSpriteEffects();
     }
@@ -411,6 +407,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         bool teleported = false;
         TransformationFactor = Helper.Wave(VisualTimer, _minTransform, _maxTransform, 1f, 0f);
         TransformationFactor = Ease.SineOut(MathUtils.Clamp01(TransformationFactor));
+
+        _playerCopy.direction = NPC.SpeedX() > 0.1f ? NPC.velocity.X.GetDirection() : NPC.direction;
 
         ushort tarDustMetaball = (ushort)ModContent.DustType<TarMetaball>();
 
@@ -441,9 +439,11 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             float max = VisualTimer + (1f - _minTransform * 2f);
             float progress = VisualTimer2 / max;
             if (CanTeleport && VisualTimer2 > max) {
+                NPC.ai[3] = 0f;
+
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
-                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(5), MathUtils.SecondsToFrames(15)));
+                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
                     NPC.netUpdate = true;
                 }
                 teleported = true;
@@ -462,6 +462,14 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             }
             else {
                 NPC.velocity.X *= 0.8f;
+            }
+        }
+        else {
+            if (!FullTransformed && !Talked) {
+                int dir = NPC.direction;
+                NPC.SetDirection(-dir);
+                SimpleMovement();
+                NPC.SetDirection(dir);
             }
         }
 
@@ -547,7 +555,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         float maxHeadRotation = MathHelper.PiOver4 / 3f;
         ref float headRotation = ref _playerCopy.headRotation;
         headRotation = Helper.Wave(VisualTimer2, - maxHeadRotation, maxHeadRotation, 5f, 0f);
-        headRotation = MathHelper.Lerp(headRotation, -0.25f * NPC.direction, 1f - TransformationFactor);
+        headRotation = MathHelper.Lerp(headRotation, -0.25f * _playerCopy.direction, 1f - TransformationFactor);
         _playerCopy.headPosition = new Vector2(0f, -24f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
         _playerCopy.headPosition.Y += 1f;
         _playerCopy.eyeColor = Color.Lerp(_eyeColor, Color.White, TransformationFactor);
@@ -582,6 +590,187 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     private void Walking() {
         NPC.ApplyImprovedWalkerAI();
+    }
+
+    private void SimpleMovement(bool super = false) {
+        if (NPC.Opacity < 1f) {
+            return;
+        }
+
+        NPC npc = NPC;
+        float speed = super ? 3f : 2f;
+        Vector2 center = npc.GetTargetData().Center;
+        float baseDistance = (npc.Center).Distance(center);
+        float distance = MathUtils.Clamp01(baseDistance / CONTACTDISTANCE);
+        if (distance < 1f) {
+            speed = 0f;
+        }
+        if (baseDistance > STOPDISTANCE) {
+            speed = 0f;
+        }
+        _walkingSpeedX = Helper.Approach(_walkingSpeedX, speed, 0.1f);
+        speed = _walkingSpeedX;
+        float num87 = 1f * speed;
+        float num88 = 0.07f * speed;
+        if (npc.velocity.X < 0f - num87 || npc.velocity.X > num87) {
+            if (NPC.IsGrounded())
+                npc.velocity *= 0.7f;
+        }
+        else if (npc.velocity.X < num87 && npc.direction == 1) {
+            npc.velocity.X += num88;
+            if (npc.velocity.X > num87)
+                npc.velocity.X = num87;
+        }
+        else if (npc.velocity.X > 0f - num87 && npc.direction == -1) {
+            npc.velocity.X -= num88;
+            if (npc.velocity.X < 0f - num87)
+                npc.velocity.X = 0f - num87;
+        }
+
+        int targetDelay = 20;
+        int npcTypeForSomeReason = NPC.type;
+
+        bool flag7 = false;
+        int num56 = targetDelay;
+        if (NPC.IsGrounded() && ((npc.velocity.X > 0f && npc.direction < 0) || (npc.velocity.X < 0f && npc.direction > 0)))
+            flag7 = true;
+
+        if (npc.position.X == npc.oldPosition.X || npc.ai[3] >= (float)num56 || flag7)
+            npc.ai[3] += 1f;
+        else if ((double)Math.Abs(npc.velocity.X) > 0.9 && npc.ai[3] > 0f)
+            npc.ai[3] -= 1f;
+
+        if (npc.ai[3] > 60) {
+            npc.ai[3] = 0f;
+            npc.direction *= -1;
+            npc.spriteDirection = npc.direction;
+        }
+
+        if (npc.justHit)
+            npc.ai[3] = 0f;
+
+        if (npc.ai[3] == (float)num56)
+            npc.netUpdate = true;
+
+        if (Main.player[npc.target].Hitbox.Intersects(npc.Hitbox))
+            npc.ai[3] = 0f;
+
+        bool tileChecks = false;
+        if (NPC.IsGrounded()) {
+            int num77 = (int)(NPC.position.Y + NPC.height + 7f) / 16;
+            int num189 = (int)NPC.position.X / 16;
+            int num79 = (int)(NPC.position.X + NPC.width) / 16;
+            for (int num80 = num189; num80 <= num79; num80++) {
+                if (Main.tile[num80, num77] == null) {
+                    return;
+                }
+
+                if (Main.tile[num80, num77].HasUnactuatedTile && Main.tileSolid[Main.tile[num80, num77].TileType]) {
+                    tileChecks = true;
+                    break;
+                }
+            }
+        }
+        if (NPC.velocity.Y >= 0f) {
+            int direction = Math.Sign(NPC.velocity.X);
+
+            Vector2 position3 = NPC.position;
+            position3.X += NPC.velocity.X;
+            int num82 = (int)((position3.X + NPC.width / 2 + (NPC.width / 2 + 1) * direction) / 16f);
+            int num83 = (int)((position3.Y + NPC.height - 1f) / 16f);
+            if (num82 * 16 < position3.X + NPC.width && num82 * 16 + 16 > position3.X && (Main.tile[num82, num83].HasUnactuatedTile && !Main.tile[num82, num83].TopSlope && !Main.tile[num82, num83 - 1].TopSlope && Main.tileSolid[Main.tile[num82, num83].TileType] && !Main.tileSolidTop[Main.tile[num82, num83].TileType] || Main.tile[num82, num83 - 1].IsHalfBlock && Main.tile[num82, num83 - 1].HasUnactuatedTile) && (!Main.tile[num82, num83 - 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82, num83 - 1].TileType] || Main.tileSolidTop[Main.tile[num82, num83 - 1].TileType] || Main.tile[num82, num83 - 1].IsHalfBlock && (!Main.tile[num82, num83 - 4].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82, num83 - 4].TileType] || Main.tileSolidTop[Main.tile[num82, num83 - 4].TileType])) && (!Main.tile[num82, num83 - 2].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82, num83 - 2].TileType] || Main.tileSolidTop[Main.tile[num82, num83 - 2].TileType]) && (!Main.tile[num82, num83 - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82, num83 - 3].TileType] || Main.tileSolidTop[Main.tile[num82, num83 - 3].TileType]) && (!Main.tile[num82 - direction, num83 - 3].HasUnactuatedTile || !Main.tileSolid[Main.tile[num82 - direction, num83 - 3].TileType])) {
+                float num84 = num83 * 16;
+                if (Main.tile[num82, num83].IsHalfBlock) {
+                    num84 += 8f;
+                }
+
+                if (Main.tile[num82, num83 - 1].IsHalfBlock) {
+                    num84 -= 8f;
+                }
+                if (num84 < position3.Y + NPC.height) {
+                    float num85 = position3.Y + NPC.height - num84;
+                    float num86 = 16.1f;
+                    if (NPC.type == NPCID.BlackRecluse || NPC.type == NPCID.WallCreeper || NPC.type == NPCID.JungleCreeper || NPC.type == NPCID.BloodCrawler || NPC.type == NPCID.DesertScorpionWalk) {
+                        num86 += 8f;
+                    }
+
+                    if (num85 <= num86) {
+                        NPC.gfxOffY += NPC.position.Y + NPC.height - num84;
+                        NPC.position.Y = num84 - NPC.height;
+                        if (num85 < 9f) {
+                            NPC.stepSpeed = 1f;
+                        }
+                        else {
+                            NPC.stepSpeed = 2f;
+                        }
+                    }
+                }
+            }
+        }
+        if (tileChecks && !Main.tile[(int)(NPC.Center.X) / 16, (int)(NPC.Center.Y - 15f) / 16 - 1].HasUnactuatedTile) {
+            int tileX = (int)((NPC.position.X + NPC.width / 2 + 15 * NPC.direction) / 16f);
+            int tileY = (int)((NPC.position.Y + NPC.height - 15f) / 16f);
+            if (NPC.velocity.X < 0f && NPC.direction == -1 || NPC.velocity.X > 0f && NPC.direction == 1) {
+                void jumpIfPlayerAboveAndClose() {
+                    if (NPC.IsGrounded() && Main.expertMode && Main.player[npc.target].Bottom.Y < npc.Top.Y && Math.Abs(npc.Center.X - Main.player[npc.target].Center.X) < (float)(Main.player[npc.target].width * 3) && Collision.CanHit(npc, Main.player[npc.target])) {
+                        if (NPC.IsGrounded()) {
+                            int num200 = 6;
+                            if (Main.player[npc.target].Bottom.Y > npc.Top.Y - (float)(num200 * 16)) {
+                                npc.velocity.Y = -7.9f;
+                            }
+                            else {
+                                int num201 = (int)(npc.Center.X / 16f);
+                                int num202 = (int)(npc.Bottom.Y / 16f) - 1;
+                                for (int num203 = num202; num203 > num202 - num200; num203--) {
+                                    if (Main.tile[num201, num203].HasUnactuatedTile && TileID.Sets.Platforms[Main.tile[num201, num203].TileType]) {
+                                        npc.velocity.Y = -7.9f;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                jumpIfPlayerAboveAndClose();
+
+                bool JumpCheck(int tileX, int tileY) {
+                    if (NPC.height >= 32 && Main.tile[tileX, tileY - 2].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 2].TileType]) {
+                        if (Main.tile[tileX, tileY - 3].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 3].TileType]) {
+                            NPC.velocity.Y = -8f;
+                            NPC.netUpdate = true;
+                        }
+                        else {
+                            NPC.velocity.Y = -7f;
+                            NPC.netUpdate = true;
+                        }
+                        return true;
+                    }
+                    else if (Main.tile[tileX, tileY - 1].HasUnactuatedTile && Main.tileSolid[Main.tile[tileX, tileY - 1].TileType]) {
+                        NPC.velocity.Y = -6f;
+                        NPC.netUpdate = true;
+                        return true;
+                    }
+                    else if (NPC.position.Y + NPC.height - tileY * 16 > 20f && Main.tile[tileX, tileY].HasUnactuatedTile && !Main.tile[tileX, tileY].TopSlope && Main.tileSolid[Main.tile[tileX, tileY].TileType]) {
+                        NPC.velocity.Y = -5f;
+                        NPC.netUpdate = true;
+                        return true;
+                    }
+                    else if (NPC.directionY < 0 && (!Main.tile[tileX, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX, tileY + 1].TileType]) && (!Main.tile[tileX + NPC.direction, tileY + 1].HasUnactuatedTile || !Main.tileSolid[Main.tile[tileX + NPC.direction, tileY + 1].TileType])) {
+                        NPC.velocity.Y = -8f;
+                        NPC.velocity.X *= 1.5f;
+                        NPC.netUpdate = true;
+                        return true;
+                    }
+                    return false;
+                }
+                if (!JumpCheck(tileX, tileY)) {
+
+                }
+            }
+        }
+        if (npc.IsGrounded()) {
+            Collision.StepUp(ref npc.position, ref npc.velocity, npc.width, npc.height, ref npc.stepSpeed, ref npc.gfxOffY);
+        }
     }
 
     private void ActuallyTeleport() {
