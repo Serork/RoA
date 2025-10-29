@@ -77,7 +77,7 @@ sealed partial class ItemCommon : GlobalItem {
         return orig(item, out success);
     }
 
-    public bool HoveredWithTar(Item item, Action<FocusedTar>? onHovered = null) {
+    public bool HoveredWithTar(Item item, Action<FocusedTar>? onHovered = null, bool click = true) {
         if (!CanApplyTarEnchantment(item)) {
             return false;
         }
@@ -86,8 +86,10 @@ sealed partial class ItemCommon : GlobalItem {
             return false;
         }
         if (mouseItem.IsModded(out ModItem modItem) && modItem is FocusedTar focusedTar) {
-            if (mouseItem.stack-- <= 0) {
-                mouseItem.SetDefaults();
+            if (click) {
+                if (mouseItem.stack-- <= 0) {
+                    mouseItem.SetDefaults();
+                }
             }
             onHovered?.Invoke(focusedTar);
             return true;
@@ -100,7 +102,7 @@ sealed partial class ItemCommon : GlobalItem {
 
         HoveredWithTar(item, (focusedTar) => {
             item.GetCommon().ApplyTarEnchantment(focusedTar.GetAppliedEnchantment());
-        });
+        }, true);
     }
 
     private void PlayerCommon_PreItemCheckEvent(Player player) {
