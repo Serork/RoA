@@ -37,8 +37,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     private static bool _settingUpHead, _settingUpArms;
 
-    public static Color LiquidColor => LerpColor.GetLerpColor([new Color(46, 34, 47)]);
-    public static Color SkinColor => LerpColor.GetLerpColor([new Color(46, 34, 47), Color.Lerp(new Color(62, 53, 70), new Color(98, 85, 101), 0.5f)]);
+    public static Color LiquidColor => LerpColor.GetLerpColor([Liquids.Tar.LiquidColor]);
+    public static Color SkinColor => LerpColor.GetLerpColor([Liquids.Tar.LiquidColor, Color.Lerp(new Color(62, 53, 70), new Color(98, 85, 101), 0.5f)]);
     public static Color OutlineColor => LerpColor.GetLerpColor([/*new Color(62, 53, 70), */new Color(98, 85, 101)]);
     public static Color OutlineColorWorld => OutlineColor.MultiplyRGB(Lighting.GetColor(TrackedEntitiesSystem.GetSingleTrackedNPC<PerfectMimic>().position.ToTileCoordinates()));
 

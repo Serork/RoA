@@ -38,7 +38,7 @@ sealed class DrippingTar : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
 
-        AddMapEntry(new Color(46, 34, 47), CreateMapEntryName());
+        AddMapEntry(Liquids.Tar.LiquidColor, CreateMapEntryName());
     }
 
     public override bool CanDrop(int i, int j) => false;

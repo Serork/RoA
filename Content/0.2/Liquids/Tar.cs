@@ -25,6 +25,8 @@ sealed partial class Tar : ModLiquid {
     private static int _animationFrame, _animationFrame2;
     private static float _frameState, _frameState2;
 
+    public static Color LiquidColor => new(46, 34, 47);
+
     private class UpdateAnimation : IInitializer {
         void ILoadable.Load(Mod mod) {
             On_LiquidRenderer.Update += On_LiquidRenderer_Update;
@@ -103,7 +105,7 @@ sealed partial class Tar : ModLiquid {
 
         //We can add a map entry to our liquid, by doing so we can show where our liquid is on the map.
         //Unlike vanilla, we can also add a map entry name, which will display a name if the liquid is being selected on the map.
-        AddMapEntry(new Color(46, 34, 47));
+        AddMapEntry(LiquidColor);
 
         PlayerMovementMultiplier = 0.175f;
         StopWatchMPHMultiplier = PlayerMovementMultiplier; //We set stopwatch to the same multiplier as we don't want a different between whats felt and what the player can read their movement as.

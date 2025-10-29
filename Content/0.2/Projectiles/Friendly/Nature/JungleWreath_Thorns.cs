@@ -61,7 +61,7 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
         public ref float InitOnSpawnValue = ref projectile.localAI[0];
         public ref float LengthValue = ref projectile.ai[0];
         public ref float WrapDirectionValue = ref projectile.ai[1];
-        public ref float LostHPProcentValue = ref projectile.ai[2];
+        public ref float LostHPPercentageValue = ref projectile.ai[2];
 
         public bool Init {
             readonly get => InitOnSpawnValue == 1f;
@@ -104,7 +104,7 @@ sealed class JungleWreath_Thorns : NatureProjectile_NoTextureLoad {
                 thornValues.Init = true;
 
                 if (Projectile.IsOwnerLocal()) {
-                    thornValues.LengthValue = BASELENGTH + thornValues.LostHPProcentValue * BASELENGTH;
+                    thornValues.LengthValue = BASELENGTH + thornValues.LostHPPercentageValue * BASELENGTH;
                     Vector2 checkPosition = Projectile.Center + Projectile.velocity;
                     thornValues.WrapDirectionValue = Math.Sign(checkPosition.X - Projectile.Center.X) * (checkPosition.Y < Projectile.Center.Y).ToDirectionInt();
                     Projectile.netUpdate = true;

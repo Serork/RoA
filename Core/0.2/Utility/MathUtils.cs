@@ -9,6 +9,8 @@ using Terraria;
 namespace RoA.Core.Utility;
 
 static class MathUtils {
+    public static int GetPercentageFromModifier(float value) => (int)((value - 1f) * 100f);
+
     public static int SecondsToFrames(float seconds) => (int)MathF.Round(seconds * 60f);
 
     public static int MinutesToFrames(float minutes) => (int)MathF.Round(minutes * 3600f);

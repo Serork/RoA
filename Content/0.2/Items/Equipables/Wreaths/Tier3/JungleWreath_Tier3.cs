@@ -53,7 +53,7 @@ sealed class JungleWreathTier3 : WreathItem {
 
         private void GrowThorns(Player.HurtInfo info) {
             Vector2 thornsSpawnPosition = Player.Center;
-            float lostHPProcentValue = info.Damage / (float)Player.statLifeMax2;
+            float lostHPPercentageValue = info.Damage / (float)Player.statLifeMax2;
             NPC? target = NPCUtils.FindClosestNPC(thornsSpawnPosition, 300, false);
             bool foundTarget = target != null;
             Vector2 thornsVelocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
@@ -64,9 +64,9 @@ sealed class JungleWreathTier3 : WreathItem {
             thornsSpawnPosition += startOffset;
 
             //int damage = info.Damage;
-            //damage += (int)(info.Damage * lostHPProcentValue);
+            //damage += (int)(info.Damage * lostHPPercentageValue);
             //float knockBack = info.Knockback;
-            //knockBack += knockBack * lostHPProcentValue;
+            //knockBack += knockBack * lostHPPercentageValue;
             int damage = 75;
             if (Main.masterMode) {
                 damage *= 3;
@@ -81,7 +81,7 @@ sealed class JungleWreathTier3 : WreathItem {
                 Velocity = thornsVelocity,
                 Damage = damage,
                 KnockBack = knockBack,
-                AI2 = lostHPProcentValue
+                AI2 = lostHPPercentageValue
             });
         }
     }

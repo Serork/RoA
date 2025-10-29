@@ -50,7 +50,7 @@ sealed class KeywordSystem : ILoadable {
                 if (tooltip.Name == "ItemName") {
                     continue;
                 }
-                if (tooltip.IsModifier || tooltip.IsModifierBad) {
+                if (tooltip.IsModifier || tooltip.IsModifierBad || tooltip.OverrideColor != null) {
                     continue;
                 }
                 char[] checks = ['m', 'l', 'n'];

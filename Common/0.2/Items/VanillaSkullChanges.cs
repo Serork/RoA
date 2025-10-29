@@ -14,15 +14,15 @@ namespace RoA.Common.Items;
 sealed partial class ItemCommon : GlobalItem {
     private static int _skullFaceSlot;
 
-    public override void SetDefaults(Item entity) {
-        ResetSkullItemDefaults(entity);
-    }
-
-    public override void SetStaticDefaults() {
+    public partial void VanillaSkullSetStaticDefaults() {
         ArmorIDs.Head.Sets.DrawHead[93] = false;
 
         ArmorIDs.Face.Sets.PreventHairDraw[_skullFaceSlot] = true;
         ArmorIDs.Face.Sets.OverrideHelmet[_skullFaceSlot] = true;
+    }
+
+    public override void SetDefaults(Item entity) {
+        ResetSkullItemDefaults(entity);
     }
 
     public partial void VanillaSkullLoad() {

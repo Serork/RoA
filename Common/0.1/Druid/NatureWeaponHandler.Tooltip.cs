@@ -107,8 +107,8 @@ sealed partial class NatureWeaponHandler : GlobalItem {
                     if (extraUseSpeed > 0) {
                         int maxUseSpeed = (GetFinalUseTime(item, Main.LocalPlayer) * 2);
                         maxUseSpeed -= maxUseSpeed / 3;
-                        int procent = (int)(extraUseSpeed / (float)maxUseSpeed * 100f);
-                        tooltip += $" (+{procent}%)";
+                        int percentage = (int)(extraUseSpeed / (float)maxUseSpeed * 100f);
+                        tooltip += $" (+{percentage}%)";
                     }
                 }
                 tooltips.Insert(speedIndex + 1, new(Mod, tag, tooltip));
