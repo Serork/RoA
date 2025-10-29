@@ -2326,3 +2326,8 @@ PerfectClot: {
 	// DisplayName: Perfect Clot
 	// Tooltip: ""
 }
+
+FocusedTar: {
+	// DisplayName: Focused Tar
+	// Tooltip: ""
+}

@@ -17,6 +17,8 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
+using static RoA.Common.Players.PlayerCommon;
+
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
@@ -306,7 +308,6 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
-
     public override void ResetEffects() {
         ResetEffectsEvent?.Invoke(Player);
 
@@ -318,6 +319,14 @@ sealed partial class PlayerCommon : ModPlayer {
         ApplyHornetSkullSetBonus = false;
 
         StopFaceDrawing = false;
+    }
+
+    public delegate void PreItemCheckDelegate(Player player);
+    public static event PreItemCheckDelegate PreItemCheckEvent;
+    public override bool PreItemCheck() {
+        PreItemCheckEvent?.Invoke(Player);
+
+        return base.PreItemCheck();
     }
 
     public override void PostUpdate() {

@@ -1,4 +1,5 @@
-﻿using RoA.Content.Items.Weapons.Nature;
+﻿using RoA.Common.Items;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Core.Defaults;
 
 using Terraria;
@@ -9,6 +10,8 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Extensions;
 
 static partial class ItemExtensions {
+    public static ItemCommon GetCommon(this Item item) => item.GetGlobalItem<ItemCommon>();
+
     public static bool IsNatureClaws(this Item item, out ClawsBaseItem clawsBaseItem) {
         bool result = item.IsModded(out ModItem modItem) && modItem is ClawsBaseItem;
         if (result) {

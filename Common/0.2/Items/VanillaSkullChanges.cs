@@ -25,7 +25,7 @@ sealed partial class ItemCommon : GlobalItem {
         ArmorIDs.Face.Sets.OverrideHelmet[_skullFaceSlot] = true;
     }
 
-    public override void Load() {
+    public partial void VanillaSkullLoad() {
         if (Main.dedServ) {
             return;
         }

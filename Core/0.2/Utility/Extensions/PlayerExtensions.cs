@@ -1,5 +1,4 @@
-﻿using RoA.Content.Items.Equipables.Miscellaneous;
-using RoA.Core.Data;
+﻿using RoA.Core.Data;
 
 using Terraria;
 using Terraria.ModLoader;
