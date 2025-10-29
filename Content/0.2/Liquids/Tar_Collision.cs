@@ -7,6 +7,7 @@ using ModLiquidLib.Utils.LiquidContent;
 using RoA.Common.Players;
 using RoA.Content.Buffs;
 using RoA.Content.NPCs.Enemies.Tar;
+using RoA.Content.Projectiles.Enemies;
 
 using Terraria;
 using Terraria.ID;
@@ -52,6 +53,11 @@ sealed partial class Tar : ModLiquid {
     }
 
     private void On_Projectile_UpdatePosition(On_Projectile.orig_UpdatePosition orig, Projectile self, Vector2 wetVelocity) {
+        if (self.type == ModContent.ProjectileType<TarMass>()) {
+            orig(self, wetVelocity);
+            return;
+        }
+
         if (self.GetModdedWetArray()[LiquidLoader.LiquidType<Liquids.Tar>() - LiquidID.Count]) {
             wetVelocity *= 0.425f;
         }
