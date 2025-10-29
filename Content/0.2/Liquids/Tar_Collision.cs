@@ -6,6 +6,7 @@ using ModLiquidLib.Utils.LiquidContent;
 
 using RoA.Common.Players;
 using RoA.Content.Buffs;
+using RoA.Content.Items.Consumables;
 using RoA.Content.NPCs.Enemies.Tar;
 using RoA.Content.Projectiles.Enemies;
 
@@ -43,6 +44,11 @@ sealed partial class Tar : ModLiquid {
     }
 
     private void On_Item_MoveInWorld(On_Item.orig_MoveInWorld orig, Item self, float gravity, float maxFallSpeed, ref Vector2 wetVelocity, int i) {
+        if (self.type == ModContent.ItemType<PerfectClot>()) {
+            orig(self, gravity, maxFallSpeed, ref wetVelocity, i);
+            return;
+        }
+
         if (self.GetModdedWetArray()[LiquidLoader.LiquidType<Liquids.Tar>() - LiquidID.Count]) {
             gravity = 0.05f;
             maxFallSpeed = 3f;
