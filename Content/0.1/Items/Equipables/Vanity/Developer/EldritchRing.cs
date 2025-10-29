@@ -123,10 +123,6 @@ sealed class EldritchRing : ModItem {
     private static string WingsLayerName => $"{nameof(EldritchRing)}_Wings";
 
     public override void Load() {
-        if (Main.dedServ) {
-            return;
-        }
-
         _wingsSlot = EquipLoader.AddEquipTexture(Mod, WingsTextureName, EquipType.Wings, name: WingsLayerName);
     }
 

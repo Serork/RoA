@@ -12,10 +12,6 @@ sealed class CarcassSandals : ModItem {
     public static int FemaleLegs { get; private set; } = -1;
 
     public override void Load() {
-        if (Main.dedServ) {
-            return;
-        }
-
         FemaleLegs = EquipLoader.AddEquipTexture(Mod, $"{Texture}_Thin{EquipType.Legs}", EquipType.Legs, this, Name + "_Female");
     }
 

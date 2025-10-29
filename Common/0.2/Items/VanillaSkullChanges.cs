@@ -26,10 +26,6 @@ sealed partial class ItemCommon : GlobalItem {
     }
 
     public partial void VanillaSkullLoad() {
-        if (Main.dedServ) {
-            return;
-        }
-
         _skullFaceSlot = EquipLoader.AddEquipTexture(Mod, ResourceManager.ItemTextures + "Skull_Face", EquipType.Face, name: "VanillaSkullFaceSlot");
     }
 
