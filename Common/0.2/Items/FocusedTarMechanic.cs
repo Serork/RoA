@@ -16,7 +16,6 @@ using System.Linq;
 using System.Text;
 
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
@@ -66,24 +65,42 @@ sealed partial class ItemCommon : GlobalItem {
         PlayerCommon.PreItemCheckEvent += PlayerCommon_PreItemCheckEvent;
 
         On_ItemSlot.TryItemSwap += On_ItemSlot_TryItemSwap;
+        On_ItemSlot.ArmorSwap += On_ItemSlot_ArmorSwap;
     }
 
-    private void On_ItemSlot_TryItemSwap(On_ItemSlot.orig_TryItemSwap orig, Item item) {
-        orig(item);
+    private Item On_ItemSlot_ArmorSwap(On_ItemSlot.orig_ArmorSwap orig, Item item, out bool success) {
+        if (HoveredWithTar(item)) {
+            success = false;
+            return item;
+        }
 
+        return orig(item, out success);
+    }
+
+    public bool HoveredWithTar(Item item, Action<FocusedTar>? onHovered = null) {
         if (!CanApplyTarEnchantment(item)) {
-            return;
+            return false;
         }
         Item mouseItem = Main.mouseItem;
         if (mouseItem.IsEmpty()) {
-            return;
+            return false;
         }
         if (mouseItem.IsModded(out ModItem modItem) && modItem is FocusedTar focusedTar) {
             if (mouseItem.stack-- <= 0) {
                 mouseItem.SetDefaults();
             }
-            item.GetCommon().ApplyTarEnchantment(focusedTar.GetAppliedEnchantment());
+            onHovered?.Invoke(focusedTar);
+            return true;
         }
+        return false;
+    }
+
+    private void On_ItemSlot_TryItemSwap(On_ItemSlot.orig_TryItemSwap orig, Item item) {
+        orig(item);
+
+        HoveredWithTar(item, (focusedTar) => {
+            item.GetCommon().ApplyTarEnchantment(focusedTar.GetAppliedEnchantment());
+        });
     }
 
     private void PlayerCommon_PreItemCheckEvent(Player player) {
