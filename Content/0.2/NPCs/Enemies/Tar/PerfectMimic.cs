@@ -40,7 +40,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     public static Color LiquidColor => LerpColor.GetLerpColor([new Color(46, 34, 47)]);
     public static Color SkinColor => LerpColor.GetLerpColor([new Color(46, 34, 47), Color.Lerp(new Color(62, 53, 70), new Color(98, 85, 101), 0.5f)]);
     public static Color OutlineColor => LerpColor.GetLerpColor([/*new Color(62, 53, 70), */new Color(98, 85, 101)]);
-    public static Color OutlineColorWorld => OutlineColor.MultiplyRGB(Lighting.GetColor(TrackedEntitiesSystem.GetTrackedNPC<PerfectMimic>().ToList()[0].position.ToTileCoordinates()));
+    public static Color OutlineColorWorld => OutlineColor.MultiplyRGB(Lighting.GetColor(TrackedEntitiesSystem.GetSingleTrackedNPC<PerfectMimic>().position.ToTileCoordinates()));
 
     public enum FluidBodyPartType : byte {
         Part1,
@@ -439,8 +439,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             float max = VisualTimer + (1f - _minTransform * 2f);
             float progress = VisualTimer2 / max;
             if (CanTeleport && VisualTimer2 > max) {
-                NPC.ai[3] = 0f;
-
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
                     _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
@@ -461,7 +459,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 Walking();
             }
             else {
-                NPC.velocity.X *= 0.8f;
+                //NPC.velocity.X *= 0.8f;
             }
         }
         else {

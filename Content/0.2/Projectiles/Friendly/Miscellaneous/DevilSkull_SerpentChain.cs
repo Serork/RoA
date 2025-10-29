@@ -35,7 +35,7 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
             if (!owner.HasProjectile<SerpentChain>()) {
                 return base.CanHitNPC(projectile, target);
             }
-            Projectile serpent = TrackedEntitiesSystem.GetTrackedProjectile<SerpentChain>(checkProjectile => checkProjectile.owner != ownerWhoAmI).ToList()[0];
+            Projectile serpent = TrackedEntitiesSystem.GetSingleTrackedProjectile<SerpentChain>(checkProjectile => checkProjectile.owner != ownerWhoAmI);
             SerpentChain serpent2 = serpent.As<SerpentChain>();
             if (serpent2.MaxDistanced || !serpent2.CanApplyItsEffect) {
                 return base.CanHitNPC(projectile, target);
@@ -67,7 +67,7 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
             if (!owner.HasProjectile<SerpentChain>()) {
                 return;
             }
-            Projectile serpent = TrackedEntitiesSystem.GetTrackedProjectile<SerpentChain>(checkProjectile => checkProjectile.owner != ownerWhoAmI).ToList()[0];
+            Projectile serpent = TrackedEntitiesSystem.GetSingleTrackedProjectile<SerpentChain>(checkProjectile => checkProjectile.owner != ownerWhoAmI);
             SerpentChain serpent2 = serpent.As<SerpentChain>();
             if (serpent2.MaxDistanced || !serpent2.CanApplyItsEffect) {
                 return;
