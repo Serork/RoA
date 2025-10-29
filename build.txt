@@ -11,5 +11,4 @@ includeSource = true
 includePDB = true
 
 modReferences = ModLiquidLib, RoAMusic
-
 sortAfter = RoAMusic
