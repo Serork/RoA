@@ -6,6 +6,7 @@ using ModLiquidLib.Utils.LiquidContent;
 
 using RoA.Common.Players;
 using RoA.Content.Buffs;
+using RoA.Content.NPCs.Enemies.Tar;
 
 using Terraria;
 using Terraria.ID;
@@ -73,6 +74,11 @@ sealed partial class Tar : ModLiquid {
     }
 
     private void On_NPC_UpdateNPC_UpdateGravity(On_NPC.orig_UpdateNPC_UpdateGravity orig, NPC self) {
+        if (self.type == ModContent.NPCType<PerfectMimic>()) {
+            orig(self);
+            return;
+        }
+
         orig(self);
 
         if (self.TryGetGlobalNPC(out ModLiquidNPC result) && result.moddedWet[LiquidLoader.LiquidType<Liquids.Tar>() - LiquidID.Count]) {
@@ -84,6 +90,11 @@ sealed partial class Tar : ModLiquid {
     }
 
     private void On_NPC_Collision_MoveWhileWet(On_NPC.orig_Collision_MoveWhileWet orig, NPC self, Vector2 oldDryVelocity, float Slowdown) {
+        if (self.type == ModContent.NPCType<PerfectMimic>()) {
+            orig(self, oldDryVelocity, Slowdown);
+            return;
+        }
+
         if (self.GetModdedWetArray()[LiquidLoader.LiquidType<Liquids.Tar>() - LiquidID.Count]) {
             CustomLiquidCollision(self, oldDryVelocity, 0.175f);
             return;
