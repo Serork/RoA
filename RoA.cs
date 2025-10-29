@@ -30,8 +30,8 @@ sealed partial class RoA : Mod {
 
     public override IContentSource CreateDefaultContentSource() => new CustomContentSource(base.CreateDefaultContentSource());
 
-    //public static string MusicModName => "RoAMusic";
-    //public static Mod MusicMod => ModLoader.GetMod(MusicModName);
+    public static string MusicModName => "RoAMusic";
+    public static Mod MusicMod => ModLoader.GetMod(MusicModName);
 
     public override void HandlePacket(BinaryReader reader, int sender) {
         MultiplayerSystem.HandlePacket(reader, sender);
