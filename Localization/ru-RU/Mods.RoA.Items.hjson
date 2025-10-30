@@ -2055,7 +2055,7 @@ IceRod: {
 }
 
 PerfectedBouquet: {
-	DisplayName: Идеальный букет
+	DisplayName: Безупречный букет
 	// Tooltip: ""
 }
 
@@ -2308,26 +2308,26 @@ StarFusion: {
 }
 
 DruidsEyes: {
-	// DisplayName: Druid's Eyes
+	DisplayName: Глаза друида
 	// Tooltip: ""
 }
 
 WreathDye: {
-	// DisplayName: Wreath Dye
+	DisplayName: Краска для венка
 	// Tooltip: ""
 }
 
 RodOfTheLustrous: {
-	// DisplayName: Rod Of The Lustrous
+	DisplayName: Блестящий посох
 	// Tooltip: ""
 }
 
 PerfectClot: {
-	// DisplayName: Perfect Clot
+	DisplayName: Идеальный комок
 	// Tooltip: ""
 }
 
 FocusedTar: {
-	// DisplayName: Focused Tar
+	DisplayName: Сцеженная смола
 	// Tooltip: ""
 }

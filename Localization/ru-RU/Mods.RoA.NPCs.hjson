@@ -31,11 +31,11 @@ DeerSkullTail.DisplayName: Олений череп
 BackwoodsRaven.DisplayName: Недобрые вороны
 Hunter.DisplayName: Охотник
 Hunter2.DisplayName: Охотник
-// Woodpecker.DisplayName: Woodpecker
-// WoodpeckerTongue.DisplayName: Woodpecker Tongue
-// MurkyCarcass.DisplayName: Murky Carcass
-// WardenOfTheWoods.DisplayName: Woodlands Keeper
-// WardenOfTheWoods2.DisplayName: Backwoods Warden
-// TarSlime.DisplayName: Tar Slime
-// Menhir.DisplayName: Menhir
-// PerfectMimic.DisplayName: Perfect Mimic
+Woodpecker.DisplayName: Дятел
+WoodpeckerTongue.DisplayName: Язык дятла
+MurkyCarcass.DisplayName: Мрачный труп
+WardenOfTheWoods.DisplayName: Хранитель леса
+WardenOfTheWoods2.DisplayName: Страж чащи
+TarSlime.DisplayName: Смоляной слизень
+Menhir.DisplayName: Мейнхир 
+PerfectMimic.DisplayName: Точная копия

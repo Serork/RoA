@@ -4,7 +4,7 @@ TooFar: Вы слишком далеко от маяка, чтобы перем�
 WreathUI: Слот венка
 WreathSlot: Венок
 SocialWreathSlot: Внешний вид: Венок
-// ReforgeSphereText: ???
+ReforgeSphereText: ???
 RoADev: "'Отлично подходит для подражания внешности разработчиков 'RoA'? Конечно!'"
 AchievementModNotification: Скачайте Achievement Mod чтобы увидеть достижение!
 ChecklistLothorSummon: Проведите Душу Друида, время от времени появляющуюся из Мрачных друидов, к заросшему алтарю в чаще
@@ -13,9 +13,9 @@ LifeWords: жизнь;жизнью;жизни;жизней;жизням;жизн
 WreathWords: венок;венка;венку;венком;венке
 ExpireLeather1: Сгниет через {0} мин.
 ExpireLeather2: Сгниет через {0} мин.
-// Liquids.Tar.MapEntry: Tar
-// NixieTubeDyeSlot1: Fill Dye
-// NixieTubeDyeSlot2: Casing Dye
-// NixieTubeLanguageButton: Change Language
-// NixieTubeFlickerButton1: Turn Off Flicker
-// NixieTubeFlickerButton2: Turn On Flicker
+Liquids.Tar.MapEntry: Смола
+NixieTubeDyeSlot1: Окраска изнутри
+NixieTubeDyeSlot2: Окраска общивки
+NixieTubeLanguageButton: Сменить язык
+NixieTubeFlickerButton1: Выключить мерцание
+NixieTubeFlickerButton2: Включить мерцание

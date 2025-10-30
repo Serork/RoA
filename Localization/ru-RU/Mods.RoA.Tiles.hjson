@@ -33,7 +33,7 @@ OniMask.MapEntry: Маска Они
 ElderwoodDresser.MapEntry: Комод из вечного дерева
 Coffin.MapEntry: Гроб
 Tapper.MapEntry: Подсочник
-// LothorMusicBox.MapEntry: Music Box (Lothor the Wild)
+LothorMusicBox.MapEntry: Музыкальная шкатулка (Лотор Лютый)
 BackwoodsBigTree.MapEntry: Гигантское дерево
 BackwoodsPylonTile.MapEntry: Пилон чащи
 JawTrap.MapEntry: Капкан-ловушка
@@ -45,11 +45,11 @@ FenethStatue.MapEntry: Статуя Фенет
 TanningRack.MapEntry: Дубильный станок
 DullDaikatana.MapEntry: Затупившаяся дай-катана
 FlederSlayerDecoration.MapEntry: Погибель нетопырей
-// Acalypha.MapEntry: Acalypha
-// FourPixels.MapEntry: Four Pixels
-// DrippingTar.MapEntry: Dripping Tar
-// TarLiquidSensor.MapEntry: Liquid Sensor (Tar)
-// NixieTube.MapEntry: Nixie Tube
+Acalypha.MapEntry: Акалифа
+FourPixels.MapEntry: Четыре пикселя
+DrippingTar.MapEntry: Капаюшая смола
+TarLiquidSensor.MapEntry: Датчик жидкости (Смола)
+NixieTube.MapEntry: Лампа тлеющего свечения
 //Paintings
 MillionDollarPainting.MapEntry: Картина на миллион долларов
 Moss.MapEntry: '''"Мох"'''

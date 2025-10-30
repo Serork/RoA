@@ -50,10 +50,10 @@ Dryad: {
 GoblinTinkerer.PettyGoblinQuote1: Тебя обставил тот мелкий воришка с волшебным мешком? Скажу честно, ты не первый.
 
 Guide: {
-	// HelpText0: Have you seen that wooden cocoon? It has stayed dormant for ages. Maybe defeating a powerful foe will bring it to life?
-	// HelpText1: Have you checked on that wooden woman? Perhaps she needs a little push...
-	// HelpText2: Once you forge appropriate tools, nothing should stop you from chopping down those trees in the backwoods.
-	// HelpText3: Have you seen those chests hidden deep below in the backwoods? A strong pickaxe may help you reach them.
-	// HelpText4: That altar in the backwoods yearns for souls of those who once worshipped it. Try fulfilling its hunger if you seek an ancient monster.
+	HelpText0: Вы видели тот деревянный кокон? Он уже веками остается таким, но вдруг убийство сильного противника сможет его оживить?
+	HelpText1: Вы не смотрели, как там эта деревянная женщина? Может ей нужна помощь?
+	HelpText2: Оснастившись достаточно крепким топором, срубить деревья в Чаще должно наконец не доставить проблем.
+	HelpText3: Вы не видели тех сундуков в глубине Чащи? С крепкой киркой добраться до них не должно составить труда.
+	HelpText4: Тот алтарь в Чаще жаждет душ тех, кто его восхваляет. Если ответить на его мольбы, это вызовет интерес древнего чудища.
 	// HelpText5: TAR TEXT TAR TEXT TAR TEXT
 }
