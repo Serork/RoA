@@ -23,20 +23,20 @@ class FocusedTar : ModItem {
         float damageModifier = random.NextFromList(damageModifierOptions);
         ushort[] defenseOptions = [1, 2, 4];
         ushort defense = random.NextFromList(defenseOptions);
-        switch (Main.rand.Next(3)) {
-            case 0:
-                hp = 0;
-                damageModifier = 1f;
-                break;
-            case 1:
-                damageModifier = 1f;
-                defense = 0;
-                break;
-            case 2:
-                hp = 0;
-                defense = 0;
-                break;
-        }
+        //switch (Main.rand.Next(3)) {
+        //    case 0:
+        //        hp = 0;
+        //        damageModifier = 1f;
+        //        break;
+        //    case 1:
+        //        damageModifier = 1f;
+        //        defense = 0;
+        //        break;
+        //    case 2:
+        //        hp = 0;
+        //        defense = 0;
+        //        break;
+        //}
         ItemCommon.TarEnchantmentStat tarEnchantmentStat = new(HP: hp, DamageModifier: damageModifier, Defense: defense);
         return tarEnchantmentStat;
     }

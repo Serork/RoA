@@ -25,7 +25,10 @@ namespace RoA.Common.Items;
 sealed partial class ItemCommon : GlobalItem {
     private static ushort MAXTARENCHANTMENTCOUNT => 3;
 
-    private static Asset<Texture2D> _tarEnchantmentIndicator = null!;
+    private static Asset<Texture2D> _tarEnchantmentIndicator = null!,
+                                    _tarEnchantmentIndicator_Damage = null!,
+                                    _tarEnchantmentIndicator_Defense = null!,
+                                    _tarEnchantmentIndicator_Life = null!;
 
     public readonly record struct TarEnchantmentStat(ushort HP = 0, float HPModifier = 1f, ushort Damage = 0, float DamageModifier = 1f, ushort Defense = 0, float DefenseModifier = 1f)
         : TagSerializable {
@@ -47,6 +50,9 @@ sealed partial class ItemCommon : GlobalItem {
                 (ushort)tag.GetShort("hp"), tag.GetFloat("hpmodifier"), (ushort)tag.GetShort("damage"), tag.GetFloat("damagemodifier"), (ushort)tag.GetShort("defense"), tag.GetFloat("damagemodifier"));
             return tarEnchantmentStat;
         }
+
+        public int EnchantmentCount 
+            => (HP != 0).ToInt() + (HPModifier != 1f).ToInt() + (Damage != 0).ToInt() + (DamageModifier != 1f).ToInt() + (Defense != 0).ToInt() + (DefenseModifier != 1f).ToInt();
     }
 
     public HashSet<TarEnchantmentStat> ActiveTarEnchantments { get; private set; } = [];
@@ -59,6 +65,9 @@ sealed partial class ItemCommon : GlobalItem {
         }
 
         _tarEnchantmentIndicator = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TarEnchantmentIndicator");
+        _tarEnchantmentIndicator_Damage = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TarEnchantmentIndicator_Damage");
+        _tarEnchantmentIndicator_Defense = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TarEnchantmentIndicator_Defense");
+        _tarEnchantmentIndicator_Life = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TarEnchantmentIndicator_Life");
     }
 
     public partial void TarEnchantmentLoad() {
@@ -125,23 +134,30 @@ sealed partial class ItemCommon : GlobalItem {
         }
         StringBuilder activeBonuses = new();
         GetTarEnchantmentStats(out ushort sumHP, out float sumHPModifier, out ushort sumDamage, out float sumDamageModifier, out ushort sumDefense, out float sumDefenseModifier);
-        if (sumHP > 0) {
-            activeBonuses.Append($"+{sumHP} life, ");
+        string plus = "+", minus = "-";
+        if (sumHP != 0) {
+            string sign = sumHP >= 0 ? plus : minus;
+            activeBonuses.Append($"{sign}{sumHP} life, ");
         }
         if (sumHPModifier != 1f) {
-            activeBonuses.Append($"+{MathUtils.GetPercentageFromModifier(sumHPModifier)}% life, ");
+            string sign = sumHPModifier >= 1f ? plus : minus;
+            activeBonuses.Append($"{sign}{MathUtils.GetPercentageFromModifier(sumHPModifier)}% life, ");
         }
-        if (sumDamage > 0) {
-            activeBonuses.Append($"+{sumDamage} damage, ");
+        if (sumDamage != 0) {
+            string sign = sumDamage >= 0 ? plus : minus;
+            activeBonuses.Append($"{sign}{sumDamage} damage, ");
         }
         if (sumDamageModifier != 1f) {
-            activeBonuses.Append($"+{MathUtils.GetPercentageFromModifier(sumDamageModifier)}% damage, ");
+            string sign = sumDamageModifier >= 1f ? plus : minus;
+            activeBonuses.Append($"{sign}{MathUtils.GetPercentageFromModifier(sumDamageModifier)}% damage, ");
         }
-        if (sumDefense > 0) {
-            activeBonuses.Append($"+{sumDefense} defense, ");
+        if (sumDefense != 0) {
+            string sign = sumDefense >= 0 ? plus : minus;
+            activeBonuses.Append($"{sign}{sumDefense} defense, ");
         }
         if (sumDefenseModifier != 1f) {
-            activeBonuses.Append($"+{MathUtils.GetPercentageFromModifier(sumDefenseModifier)}% defense, ");
+            string sign = sumDefenseModifier >= 1f ? plus : minus;
+            activeBonuses.Append($"{sign}{MathUtils.GetPercentageFromModifier(sumDefenseModifier)}% defense, ");
         }
         TooltipLine line = new(Mod, "tarenchantment", string.Concat(activeBonuses.ToString().AsSpan(0, activeBonuses.Length - 2), $"[c/{Color.White.Hex3()}:{active}]"));
         line.OverrideColor = new Color(153, 134, 158);
@@ -154,13 +170,17 @@ sealed partial class ItemCommon : GlobalItem {
         if (line.Name == "tarenchantmentimage") {
             float num19 = 1f;
             int num20 = (int)((float)(int)Main.mouseTextColor * num19);
-            Microsoft.Xna.Framework.Color color2 = Microsoft.Xna.Framework.Color.White;
             int num21 = line.X;
             int num22 = line.Y;
-            for (int i = 0; i < item.GetCommon().ActiveTarEnchantments.Count; i++) {
-                for (int l = 0; l < 1; l++) {
+            var enchantments = item.GetCommon().ActiveTarEnchantments.ToList();
+            for (int i = 0; i < enchantments.Count; i++) {
+                Microsoft.Xna.Framework.Color color2 = Microsoft.Xna.Framework.Color.White;
+                var enchantment = enchantments[i];
+                for (int l = 0; l < 5; l++) {
                     if (l == 4)
                         color2 = new Microsoft.Xna.Framework.Color(num20, num20, num20, num20);
+
+                    color2.A = 150;
 
                     switch (l) {
                         case 0:
@@ -178,6 +198,46 @@ sealed partial class ItemCommon : GlobalItem {
                     }
 
                     Main.spriteBatch.Draw(_tarEnchantmentIndicator.Value, new Vector2(num21, num22), null, color2, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+
+                    bool hp = false,
+                         defense = false,
+                         damage = false;
+                    Vector2 offset = Vector2.Zero,
+                            offset2 = offset;
+                    int count = enchantment.EnchantmentCount;
+                    Vector2 baseOffsetValue = _tarEnchantmentIndicator.Value.Size();
+                    Vector2 offsetValue = baseOffsetValue / (float)count * new Vector2(-1f, 1f);
+                    for (int i2 = 0; i2 < count - 1; i2++) {
+                        offset2 -= offsetValue;
+                    }
+                    for (int i2 = 0; i2 < count; i2++) {
+                        Texture2D enchantmentTexture = _tarEnchantmentIndicator_Life.Value;
+                        Texture2D defenseTexture = _tarEnchantmentIndicator_Defense.Value;
+                        Texture2D damageTexture = _tarEnchantmentIndicator_Damage.Value;
+                        bool chosen = false;
+                        bool hasHP = enchantment.HP != 0 || enchantment.HPModifier != 1f;
+                        if (!hp && hasHP) {
+                            hp = true;
+                            chosen = true;
+                        }
+                        bool hasDamage = enchantment.Damage != 0 || enchantment.DamageModifier != 1f;
+                        if (!chosen && !damage && hasDamage) {
+                            enchantmentTexture = damageTexture;
+                            damage = true;
+                            chosen = true;
+                        }
+                        bool hasDefense = enchantment.Defense != 0 || enchantment.DefenseModifier != 1f;
+                        if (!chosen && !defense && hasDefense) {
+                            enchantmentTexture = defenseTexture;
+                            defense = true;
+                            chosen = true;
+                        }
+                        float sin = (Main.GlobalTimeWrappedHourly + num21 * 10f) % 1f;
+                        Main.spriteBatch.Draw(enchantmentTexture, new Vector2(num21, num22)
+                            + baseOffsetValue.RotatedBy(sin * MathHelper.TwoPi * (i2 % 2 == 0).ToDirectionInt()) * 0.025f
+                            + offset / 2f - offset2 / (count + 1), null, color2, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+                        offset -= offsetValue;
+                    }
                 }
                 num21 += (int)(_tarEnchantmentIndicator.Width() * 1.5f);
                 //yOffset += 16;
