@@ -32,7 +32,7 @@ sealed partial class ItemCommon : GlobalItem {
                                     _tarEnchantmentIndicator_Defense = null!,
                                     _tarEnchantmentIndicator_Life = null!;
 
-    private static bool _armorSwap;
+    //private static bool _armorSwap;
 
     public readonly record struct TarEnchantmentStat(ushort HP = 0, float HPModifier = 1f, ushort Damage = 0, float DamageModifier = 1f, ushort Defense = 0, float DefenseModifier = 1f)
         : TagSerializable {
@@ -77,10 +77,28 @@ sealed partial class ItemCommon : GlobalItem {
     public partial void TarEnchantmentLoad() {
         PlayerCommon.PreItemCheckEvent += PlayerCommon_PreItemCheckEvent;
 
-        On_ItemSlot.TryItemSwap += On_ItemSlot_TryItemSwap;
-        On_ItemSlot.ArmorSwap += On_ItemSlot_ArmorSwap;
+        //On_ItemSlot.TryItemSwap += On_ItemSlot_TryItemSwap;
+        //On_ItemSlot.ArmorSwap += On_ItemSlot_ArmorSwap;
 
         On_Player.GrantArmorBenefits += On_Player_GrantArmorBenefits;
+
+        On_ItemSlot.RightClick_ItemArray_int_int += On_ItemSlot_RightClick_ItemArray_int_int;
+    }
+
+    private void On_ItemSlot_RightClick_ItemArray_int_int(On_ItemSlot.orig_RightClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+        Player player = Main.LocalPlayer;
+        if (!(player.itemAnimation > 0) && Main.mouseRight && Main.mouseRightRelease) {
+            bool flag = false;
+            HoveredWithTar(inv[slot], (focusedTar) => {
+                inv[slot].GetCommon().ApplyTarEnchantment(focusedTar.GetAppliedEnchantment());
+                inv[slot].newAndShiny = false;
+                flag = true;
+            }, true);
+            if (flag) {
+                return;
+            }
+        }
+        orig(inv, context, slot);
     }
 
     private void On_Player_GrantArmorBenefits(On_Player.orig_GrantArmorBenefits orig, Player self, Item armorPiece) {
@@ -90,15 +108,22 @@ sealed partial class ItemCommon : GlobalItem {
         }
     }
 
-    private Item On_ItemSlot_ArmorSwap(On_ItemSlot.orig_ArmorSwap orig, Item item, out bool success) {
-        if (HoveredWithTar(item)) {
-            _armorSwap = true;
-            success = false;
-            return item;
-        }
+    //private Item On_ItemSlot_ArmorSwap(On_ItemSlot.orig_ArmorSwap orig, Item item, out bool success) {
+    //    if (HoveredWithTar(item)) {
+    //        _armorSwap = true;
+    //        success = false;
+    //        return item;
+    //    }
 
-        return orig(item, out success);
-    }
+    //    return orig(item, out success);
+    //}
+
+    //private void On_ItemSlot_TryItemSwap(On_ItemSlot.orig_TryItemSwap orig, Item item) {
+    //    orig(item);
+    //    HoveredWithTar(item, (focusedTar) => {
+    //        item.GetCommon().ApplyTarEnchantment(focusedTar.GetAppliedEnchantment());
+    //    }, true);
+    //}
 
     public bool HoveredWithTar(Item item, Action<FocusedTar>? onHovered = null, bool click = true) {
         if (!CanApplyTarEnchantment(item)) {
@@ -108,29 +133,25 @@ sealed partial class ItemCommon : GlobalItem {
         if (mouseItem.IsEmpty()) {
             return false;
         }
+        if (item.GetCommon().HasEnoughTarEnchantment()) {
+            return false;
+        }
         if (mouseItem.IsModded(out ModItem modItem) && modItem is FocusedTar focusedTar) {
-            if (!_armorSwap) {
+            //if (!_armorSwap)
+            {
                 if (click) {
                     if (mouseItem.stack-- <= 0) {
                         mouseItem.SetDefaults();
                     }
                 }
             }
-            else {
-                _armorSwap = false;
-            }
+            //else {
+            //    _armorSwap = false;
+            //}
             onHovered?.Invoke(focusedTar);
             return true;
         }
         return false;
-    }
-
-    private void On_ItemSlot_TryItemSwap(On_ItemSlot.orig_TryItemSwap orig, Item item) {
-        orig(item);
-
-        HoveredWithTar(item, (focusedTar) => {
-            item.GetCommon().ApplyTarEnchantment(focusedTar.GetAppliedEnchantment());
-        }, true);
     }
 
     private void PlayerCommon_PreItemCheckEvent(Player player) {

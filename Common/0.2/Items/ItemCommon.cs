@@ -29,9 +29,13 @@ sealed partial class ItemCommon : GlobalItem {
     
     public override void UpdateEquip(Item item, Player player) {
         VanillaSkullUpdateEquip(item, player);
+
+        TarEnchantmentUpdateEquip(item, player);
     }
 
     public override void UpdateAccessory(Item item, Player player, bool hideVisual) {
+        VanillaSkullUpdateAccessory(item, player, hideVisual);
+
         VanillaSkullUpdateAccessory(item, player, hideVisual);
     }
 
