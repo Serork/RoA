@@ -32,6 +32,8 @@ sealed partial class ItemCommon : GlobalItem {
                                     _tarEnchantmentIndicator_Defense = null!,
                                     _tarEnchantmentIndicator_Life = null!;
 
+    private static bool _armorSwap;
+
     public readonly record struct TarEnchantmentStat(ushort HP = 0, float HPModifier = 1f, ushort Damage = 0, float DamageModifier = 1f, ushort Defense = 0, float DefenseModifier = 1f)
         : TagSerializable {
         public static readonly Func<TagCompound, TarEnchantmentStat> DESERIALIZER = Load;
@@ -89,7 +91,8 @@ sealed partial class ItemCommon : GlobalItem {
     }
 
     private Item On_ItemSlot_ArmorSwap(On_ItemSlot.orig_ArmorSwap orig, Item item, out bool success) {
-        if (HoveredWithTar(item, click: false)) {
+        if (HoveredWithTar(item)) {
+            _armorSwap = true;
             success = false;
             return item;
         }
@@ -106,10 +109,15 @@ sealed partial class ItemCommon : GlobalItem {
             return false;
         }
         if (mouseItem.IsModded(out ModItem modItem) && modItem is FocusedTar focusedTar) {
-            if (click) {
-                if (mouseItem.stack-- <= 0) {
-                    mouseItem.SetDefaults();
+            if (!_armorSwap) {
+                if (click) {
+                    if (mouseItem.stack-- <= 0) {
+                        mouseItem.SetDefaults();
+                    }
                 }
+            }
+            else {
+                _armorSwap = false;
             }
             onHovered?.Invoke(focusedTar);
             return true;
@@ -130,25 +138,25 @@ sealed partial class ItemCommon : GlobalItem {
         if (!heldItem.IsEquippable() && heldItem.TryGetGlobalItem(out ItemCommon handler) && handler.HasTarEnchantment()) {
             handler.ActivateTarEnchantments(player, heldItem);
         }
+    }
 
+    public override void UpdateInventory(Item item, Player player) {
+        RemoveEnchantmentsOnFire(item, player);
+    }
+
+    public partial void TarEnchantmentUpdateEquip(Item item, Player player) {
+        RemoveEnchantmentsOnFire(item, player);
+    }
+
+    public partial void TarEnchantmentUpdateAccessory(Item item, Player player, bool hideVisual) {
+        RemoveEnchantmentsOnFire(item, player);
+    }
+
+    public void RemoveEnchantmentsOnFire(Item item, Player player) {
         if (player.onFire || player.onFire2 || player.onFire3 || player.onFrostBurn || player.onFrostBurn2) {
-            for (int j = 0; j < 58; j++) {
-                if (!player.inventory[j].IsEmpty()) {
-                    var handler2 = player.inventory[j].GetCommon();
-                    if (handler2.HasTarEnchantment()) {
-                        handler2.RemoveEnchantments(player);
-                    }
-                }
-            }
-
-            for (int k = 0; k < 10; k++) {
-                Item item = player.armor[k];
-                if (!item.IsAir && player.IsItemSlotUnlockedAndUsable(k) && (!item.expertOnly || Main.expertMode) && PlayerUtils.UpdateEquips_CanItemGrantBenefits(k, item)) {
-                    var handler2 = item.GetCommon();
-                    if (handler2.HasTarEnchantment()) {
-                        handler2.RemoveEnchantments(player);
-                    }
-                }
+            var handler2 = item.GetCommon();
+            if (handler2.HasTarEnchantment()) {
+                handler2.RemoveEnchantments(player);
             }
         }
     }

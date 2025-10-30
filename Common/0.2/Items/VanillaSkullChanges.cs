@@ -65,14 +65,14 @@ sealed partial class ItemCommon : GlobalItem {
         return base.CanEquipAccessory(item, player, slot, modded);
     }
 
-    public override void UpdateEquip(Item item, Player player) {
+    public partial void VanillaSkullUpdateEquip(Item item, Player player) {
         if (item.type == ItemID.Skull && player.GetCommon().PerfectClotActivated) {
             player.GetCommon().ApplyVanillaSkullSetBonus = true;
             player.GetCommon().StopFaceDrawing = true;
         }
     }
 
-    public override void UpdateAccessory(Item item, Player player, bool hideVisual) {
+    public partial void VanillaSkullUpdateAccessory(Item item, Player player, bool hideVisual) {
         if (item.type == ItemID.Skull) {
             player.GetCommon().ApplyVanillaSkullSetBonus = true;
         }
