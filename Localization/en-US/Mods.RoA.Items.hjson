@@ -2287,11 +2287,6 @@ DruidsEyes: {
 	Tooltip: ""
 }
 
-WreathDye: {
-	DisplayName: Wreath Dye
-	Tooltip: ""
-}
-
 RodOfTheLustrous: {
 	DisplayName: Rod Of The Lustrous
 	Tooltip: ""

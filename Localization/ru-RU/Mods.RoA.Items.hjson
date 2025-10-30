@@ -2312,11 +2312,6 @@ DruidsEyes: {
 	// Tooltip: ""
 }
 
-WreathDye: {
-	DisplayName: Краска для венка
-	// Tooltip: ""
-}
-
 RodOfTheLustrous: {
 	DisplayName: Блестящий посох
 	// Tooltip: ""
