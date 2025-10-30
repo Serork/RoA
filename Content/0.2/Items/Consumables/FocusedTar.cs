@@ -23,21 +23,15 @@ class FocusedTar : ModItem {
         float damageModifier = random.NextFromList(damageModifierOptions);
         ushort[] defenseOptions = [1, 2, 4];
         ushort defense = random.NextFromList(defenseOptions);
-        //switch (Main.rand.Next(3)) {
-        //    case 0:
-        //        hp = 0;
-        //        damageModifier = 1f;
-        //        break;
-        //    case 1:
-        //        damageModifier = 1f;
-        //        defense = 0;
-        //        break;
-        //    case 2:
-        //        hp = 0;
-        //        defense = 0;
-        //        break;
-        //}
-        ItemCommon.TarEnchantmentStat tarEnchantmentStat = new(HP: hp, DamageModifier: damageModifier, Defense: defense);
+        bool shouldGiveHP = Main.rand.NextBool();
+        bool shouldGiveDamage = Main.rand.NextBool();
+        bool shouldGiveDefense = Main.rand.NextBool();
+        while (!shouldGiveHP && !shouldGiveDamage && !shouldGiveDefense) {
+            shouldGiveHP = Main.rand.NextBool();
+            shouldGiveDamage = Main.rand.NextBool();
+            shouldGiveDefense = Main.rand.NextBool();
+        }
+        ItemCommon.TarEnchantmentStat tarEnchantmentStat = new(HP: (ushort)(shouldGiveHP ? hp : 0), DamageModifier: shouldGiveDamage ? damageModifier : 1f, Defense: (ushort)(shouldGiveDefense ? defense : 0));
         return tarEnchantmentStat;
     }
 }
