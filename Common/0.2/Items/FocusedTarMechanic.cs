@@ -17,10 +17,10 @@ using System.Linq;
 using System.Text;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
-using Terraria.Utilities;
 
 namespace RoA.Common.Items;
 
@@ -89,7 +89,7 @@ sealed partial class ItemCommon : GlobalItem {
     }
 
     private Item On_ItemSlot_ArmorSwap(On_ItemSlot.orig_ArmorSwap orig, Item item, out bool success) {
-        if (HoveredWithTar(item)) {
+        if (HoveredWithTar(item, click: false)) {
             success = false;
             return item;
         }
@@ -129,6 +129,27 @@ sealed partial class ItemCommon : GlobalItem {
         Item heldItem = player.GetSelectedItem();
         if (!heldItem.IsEquippable() && heldItem.TryGetGlobalItem(out ItemCommon handler) && handler.HasTarEnchantment()) {
             handler.ActivateTarEnchantments(player, heldItem);
+        }
+
+        if (player.onFire || player.onFire2 || player.onFire3 || player.onFrostBurn || player.onFrostBurn2) {
+            for (int j = 0; j < 58; j++) {
+                if (!player.inventory[j].IsEmpty()) {
+                    var handler2 = player.inventory[j].GetCommon();
+                    if (handler2.HasTarEnchantment()) {
+                        handler2.RemoveEnchantments(player);
+                    }
+                }
+            }
+
+            for (int k = 0; k < 10; k++) {
+                Item item = player.armor[k];
+                if (!item.IsAir && player.IsItemSlotUnlockedAndUsable(k) && (!item.expertOnly || Main.expertMode) && PlayerUtils.UpdateEquips_CanItemGrantBenefits(k, item)) {
+                    var handler2 = item.GetCommon();
+                    if (handler2.HasTarEnchantment()) {
+                        handler2.RemoveEnchantments(player);
+                    }
+                }
+            }
         }
     }
 
@@ -238,7 +259,6 @@ sealed partial class ItemCommon : GlobalItem {
                     }
 
                     for (int l = 0; l < 5; l++) {
-
                         switch (l) {
                             case 0:
                                 num21--;
@@ -322,4 +342,16 @@ sealed partial class ItemCommon : GlobalItem {
 
     public bool HasTarEnchantment() => ActiveTarEnchantments.Count > 0;
     public bool HasEnoughTarEnchantment() => ActiveTarEnchantments.Count >= MAXTARENCHANTMENTCOUNT;
+    public void RemoveEnchantments(Player player) {
+        if (ActiveTarEnchantments.Count > 0) {
+            for (int i = 0; i < ActiveTarEnchantments.Count; i++) {
+                int number = Item.NewItem(player.GetSource_Misc("focusedtardrop"), (int)player.position.X, (int)player.position.Y, player.width, player.height, ModContent.ItemType<FocusedTar>());
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
+                }
+            }
+
+            ActiveTarEnchantments.Clear();
+        }
+    }
 }
