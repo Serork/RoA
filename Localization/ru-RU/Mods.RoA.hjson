@@ -19,3 +19,6 @@ NixieTubeDyeSlot2: Окраска общивки
 NixieTubeLanguageButton: Сменить язык
 NixieTubeFlickerButton1: Выключить мерцание
 NixieTubeFlickerButton2: Включить мерцание
+// TarKillCount: Enemy kills to mutate
+// TarDamage: damage
+// TarMaximumLife: maximum life

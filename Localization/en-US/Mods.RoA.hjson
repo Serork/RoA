@@ -19,3 +19,6 @@ NixieTubeDyeSlot2: Casing Dye
 NixieTubeLanguageButton: Change Language
 NixieTubeFlickerButton1: Turn Off Flicker
 NixieTubeFlickerButton2: Turn On Flicker
+TarKillCount: Enemy kills to mutate
+TarDamage: damage
+TarMaximumLife: maximum life

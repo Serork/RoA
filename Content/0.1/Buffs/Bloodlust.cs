@@ -1,3 +1,5 @@
+using RoA.Core.Utility;
+
 using System;
 
 using Terraria;
@@ -20,7 +22,7 @@ sealed class BloodlustPlayer : ModPlayer {
     public override void ResetEffects() => bloodlustEffect = false;
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        if (bloodlustEffect && target.life <= 0 && target.lifeMax > 5) {
+        if (bloodlustEffect && target.life <= 0 && target.CanActivateOnHitEffect()) {
             BloodlustHeal(Math.Max(1, (int)(Player.statLifeMax2 * Main.rand.NextFloat(0.005f, 0.011f))));
         }
     }

@@ -3,9 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using RoA.Common.Druid;
 using RoA.Common.Players;
-using RoA.Content.Buffs;
 using RoA.Content.Items.Consumables;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -20,6 +18,7 @@ using System.Text;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
@@ -27,14 +26,20 @@ using Terraria.UI;
 namespace RoA.Common.Items;
 
 sealed partial class ItemCommon : GlobalItem {
-    private static ushort MAXTARENCHANTMENTCOUNT => 3;
+    private static ushort MAXTARENCHANTMENTCOUNT => 4;
     private static ushort LIFEPERSTACK => 20;
     private static float DAMAGEMODIFIERPERSTACK => 0.1f;
-    private static ushort TIMETOUPGRADESTACK => (ushort)MathUtils.SecondsToFrames(5);
+    private static ushort KILLCOUNTTOMUTATE => 250;
 
-    private static Asset<Texture2D> _tarEnchantmentIndicator = null!;
+    private static Asset<Texture2D> _tarEnchantmentIndicator = null!,
+                                    _tarEnchantmentIndicator_Inventory1 = null!,
+                                    _tarEnchantmentIndicator_Inventory2 = null!,
+                                    _tarEnchantmentIndicator_Inventory3 = null!;
 
-    public ulong TarTime;
+    public ulong TarKillCount;
+    public float BorderOpacity;
+
+    public static HashSet<Item> ItemToHandleInInventory = [];
 
     //private static bool _armorSwap;
 
@@ -93,6 +98,9 @@ sealed partial class ItemCommon : GlobalItem {
         }
 
         _tarEnchantmentIndicator = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TarEnchantmentIndicator");
+        _tarEnchantmentIndicator_Inventory1 = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TarEnchantmentIndicator_Inventory1");
+        _tarEnchantmentIndicator_Inventory2 = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TarEnchantmentIndicator_Inventory2");
+        _tarEnchantmentIndicator_Inventory3 = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TarEnchantmentIndicator_Inventory3");
     }
 
     public partial void TarEnchantmentLoad() {
@@ -104,22 +112,110 @@ sealed partial class ItemCommon : GlobalItem {
         On_Player.GrantArmorBenefits += On_Player_GrantArmorBenefits;
 
         On_ItemSlot.RightClick_ItemArray_int_int += On_ItemSlot_RightClick_ItemArray_int_int;
+
+        On_ItemSlot.MouseHover_ItemArray_int_int += On_ItemSlot_MouseHover_ItemArray_int_int;
+        On_ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += On_ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color;
+
+        PlayerCommon.OnHitNPCEvent += PlayerCommon_OnHitNPCEvent;
+        PlayerCommon.PreUpdateEvent += PlayerCommon_PreUpdateEvent;
+    }
+
+    private void PlayerCommon_PreUpdateEvent(Player player) {
+        ItemToHandleInInventory.Clear();
+    }
+
+    private void PlayerCommon_OnHitNPCEvent(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
+        if (target.life <= 0 && target.CanActivateOnHitEffect()) {
+            foreach (Item item2 in ItemToHandleInInventory) {
+                item2.GetCommon().TarKillCount++;
+            }
+        }
+    }
+
+    public override void Unload() {
+        ItemToHandleInInventory.Clear();
+        ItemToHandleInInventory = null!;
+    }
+
+    private void On_ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color(On_ItemSlot.orig_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color orig,
+        SpriteBatch spriteBatch, Item[] inv, int context, int slot, Vector2 position, Color lightColor) {
+        orig(spriteBatch, inv, context, slot, position, lightColor);
+
+        Player player = Main.player[Main.myPlayer];
+        Item hoverItem = inv[slot];
+        float inventoryScale = Main.inventoryScale;
+        Color color = Color.White;
+        if (lightColor != Color.Transparent)
+            color = lightColor;
+        if (!hoverItem.IsEmpty()) {
+            if (hoverItem != Main.mouseItem) {
+                Texture2D inventory = _tarEnchantmentIndicator_Inventory1.Value;
+                spriteBatch.Draw(inventory, position - new Vector2(2.5f, 2f) * inventoryScale, null, color * MathUtils.Clamp01(hoverItem.GetCommon().BorderOpacity), 0f, default(Vector2), inventoryScale, SpriteEffects.None, 0f);
+            }
+        }
+        //if (hoverItem != Main.mouseItem && !hoverItem.IsEmpty() && hoverItem.GetCommon().HasTarEnchantment()) {
+        //    Texture2D inventory = _tarEnchantmentIndicator_Inventory3.Value;
+        //    spriteBatch.Draw(inventory, position - new Vector2(2.5f, 0f) * inventoryScale, null, color * 0.3f, 0f, default(Vector2), inventoryScale, SpriteEffects.None, 0f);
+        //}
+    }
+
+    public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+        Player player = Main.player[Main.myPlayer];
+        Item hoverItem = item;
+        if (hoverItem != Main.mouseItem && !hoverItem.IsEmpty() && hoverItem.GetCommon().HasTarEnchantment()) {
+            Texture2D inventory = _tarEnchantmentIndicator_Inventory2.Value;
+            position.Y += inventory.Height / 2f;
+            position.X += inventory.Width / 3f;
+            float xOffset = 0f;
+            for (int i = 0; i < hoverItem.GetCommon().TarEnchantmentCount(); i++) {
+                xOffset += inventory.Width / 2f; 
+            }
+            for (int i = 0; i < hoverItem.GetCommon().TarEnchantmentCount(); i++) {
+                spriteBatch.Draw(inventory, position - Vector2.UnitX * xOffset / 2f, null, drawColor, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
+                position.X += inventory.Width / 2f;
+            }
+        }
+    }
+
+    private void On_ItemSlot_MouseHover_ItemArray_int_int(On_ItemSlot.orig_MouseHover_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+        orig(inv, context, slot);
+        Item hoverItem = inv[slot];
+        if (!hoverItem.IsEmpty()) {
+            if (context == 8) {
+                TryToInsertTar(hoverItem);
+            }
+            if (HoveredWithTar2(hoverItem, out _) && CanApplyTarEnchantment(hoverItem)) {
+                if (!hoverItem.GetCommon().HasTarEnchantment()) {
+                    hoverItem.GetCommon().BorderOpacity = 1f;
+                }
+            }
+        }
     }
 
     private void On_ItemSlot_RightClick_ItemArray_int_int(On_ItemSlot.orig_RightClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+        if (TryToInsertTar(inv[slot])) {
+            return;
+        }
+        orig(inv, context, slot);
+    }
+
+    private static bool TryToInsertTar(Item item, bool onlyCheck = false) {
         Player player = Main.LocalPlayer;
         if (!(player.itemAnimation > 0) && Main.mouseRight && Main.mouseRightRelease) {
             bool flag = false;
-            HoveredWithTar(inv[slot], (focusedTar) => {
-                inv[slot].GetCommon().ApplyTarEnchantment(focusedTar.GetAppliedEnchantment());
-                inv[slot].newAndShiny = false;
+            HoveredWithTar(item, (focusedTar) => {
+                if (!onlyCheck) {
+                    item.GetCommon().ApplyTarEnchantment(focusedTar.GetAppliedEnchantment());
+                    item.newAndShiny = false;
+                    item.GetCommon().BorderOpacity = 1.5f;
+                }
                 flag = true;
-            }, true);
+            }, !onlyCheck);
             if (flag) {
-                return;
+                return true;
             }
         }
-        orig(inv, context, slot);
+        return false;
     }
 
     private void On_Player_GrantArmorBenefits(On_Player.orig_GrantArmorBenefits orig, Player self, Item armorPiece) {
@@ -146,7 +242,7 @@ sealed partial class ItemCommon : GlobalItem {
     //    }, true);
     //}
 
-    public bool HoveredWithTar(Item item, Action<FocusedTar>? onHovered = null, bool click = true) {
+    public static bool HoveredWithTar(Item item, Action<FocusedTar>? onHovered = null, bool click = true) {
         if (!CanApplyTarEnchantment(item)) {
             return false;
         }
@@ -175,6 +271,19 @@ sealed partial class ItemCommon : GlobalItem {
         return false;
     }
 
+    public static bool HoveredWithTar2(Item item, out FocusedTar focusedTar) {
+        focusedTar = null!;
+        Item mouseItem = Main.mouseItem;
+        if (mouseItem.IsEmpty()) {
+            return false;
+        }
+        if (mouseItem.IsModded(out ModItem modItem) && modItem is FocusedTar focusedTar2) {
+            focusedTar = focusedTar2;
+            return true;
+        }
+        return false;
+    }
+
     private void PlayerCommon_PreItemCheckEvent(Player player) {
         Item heldItem = player.GetSelectedItem();
         if (!heldItem.IsEquippable() && heldItem.TryGetGlobalItem(out ItemCommon handler) && handler.HasTarEnchantment()) {
@@ -196,11 +305,17 @@ sealed partial class ItemCommon : GlobalItem {
 
     public void ResetEnchantmentsOnFire(Item item, Player player) {
         var handler2 = item.GetCommon();
-        if (!OnFire(player) && handler2.HasTarEnchantment()) {
-            handler2.TarTime++;
-            if (handler2.TarTime >= TIMETOUPGRADESTACK) {
-                handler2.TarTime = 0;
-                handler2.ApplyTarEnchantment(new TarEnchantmentStat());
+        if (!OnFire(player)) {
+            if (handler2.BorderOpacity > 0) {
+                handler2.BorderOpacity = 0f;
+            }
+
+            if (handler2.HasTarEnchantment()) {
+                ItemToHandleInInventory.Add(item);
+                if (handler2.TarKillCount >= KILLCOUNTTOMUTATE) {
+                    handler2.TarKillCount = 0;
+                    handler2.ApplyTarEnchantment(new TarEnchantmentStat());
+                }
             }
         }
         if (OnFire(player)) {
@@ -219,7 +334,7 @@ sealed partial class ItemCommon : GlobalItem {
         }
 
         tag[SaveKey] = handler2.ActiveTarEnchantments.ToList();
-        tag[SaveKey + nameof(handler2.TarTime)] = handler2.TarTime;
+        tag[SaveKey + nameof(handler2.TarKillCount)] = handler2.TarKillCount;
     }
 
     public override void LoadData(Item item, TagCompound tag) {
@@ -229,7 +344,7 @@ sealed partial class ItemCommon : GlobalItem {
         }
 
         handler2.ActiveTarEnchantments = [.. tag.GetList<TarEnchantmentStat>(SaveKey)];
-        handler2.TarTime = tag.Get<ulong>(SaveKey + nameof(handler2.TarTime));
+        handler2.TarKillCount = tag.Get<ulong>(SaveKey + nameof(handler2.TarKillCount));
     }
 
     public override void NetReceive(Item item, BinaryReader reader) {
@@ -238,7 +353,7 @@ sealed partial class ItemCommon : GlobalItem {
             return;
         }
 
-        handler2.TarTime = reader.ReadUInt64();
+        handler2.TarKillCount = reader.ReadUInt64();
         int count = reader.ReadUInt16();
         for (int i = 0; i < count; i++) {
             handler2.ApplyTarEnchantment(new TarEnchantmentStat());
@@ -251,8 +366,8 @@ sealed partial class ItemCommon : GlobalItem {
             return;
         }
 
-        writer.Write(handler2.TarTime);
-        writer.Write((ushort)handler2.ActiveTarEnchantments.Count);
+        writer.Write(handler2.TarKillCount);
+        writer.Write((ushort)handler2.TarEnchantmentCount());
     }
 
     public void RemoveEnchantmentsOnFire(Item item, Player player) {
@@ -301,17 +416,30 @@ sealed partial class ItemCommon : GlobalItem {
         //}
         GetTarEnchantmentStats(out ushort hpToCut, out float damageToAdd);
         string plus = "+", minus = "-";
+        bool hasHPCut = hpToCut != 0;
         if (damageToAdd != 0f) {
             string sign = damageToAdd >= 0 ? plus : minus;
-            activeBonuses.Append($"{sign}{damageToAdd}% damage, ");
+            string text = Language.GetTextValue("Mods.RoA.TarDamage");
+            int value = MathUtils.GetPercentageFromModifier(1f + damageToAdd);
+            if (hasHPCut) {
+                activeBonuses.AppendLine($"{sign}{value}% {text}");
+            }
+            else {
+                activeBonuses.Append($"{sign}{value}% {text}");
+            }
         }
-        if (hpToCut != 0) {
+        if (hasHPCut) {
             string sign = hpToCut >= 0 ? minus : plus;
-            activeBonuses.Append($"{sign}{hpToCut} life");
+            activeBonuses.Append($"{sign}{hpToCut} {Language.GetTextValue("Mods.RoA.TarMaximumLife")}");
         }
         //TooltipLine line = new(Mod, "tarenchantment", string.Concat(activeBonuses.ToString().AsSpan(0, activeBonuses.Length - 2), $"[c/{Color.White.Hex3()}:{active}]"));
-        TooltipLine line = new(Mod, "tarenchantment", activeBonuses.ToString());
-        line.OverrideColor = new Color(153, 134, 158);
+        TooltipLine line;
+        Color tarColor = new(153, 134, 158);
+        line = new(Mod, "tarenchantment", activeBonuses.ToString());
+        line.OverrideColor = tarColor;
+        tooltips.Add(line);
+        line = new(Mod, "tarenchantmentkillcount", $"{Language.GetTextValue("Mods.RoA.TarKillCount")}: {item.GetCommon().TarKillCount}/{KILLCOUNTTOMUTATE}");
+        line.OverrideColor = tarColor;
         tooltips.Add(line);
         line = new(Mod, "tarenchantmentimage", "Space");
         tooltips.Add(line);
@@ -412,7 +540,7 @@ sealed partial class ItemCommon : GlobalItem {
         return base.PreDrawTooltipLine(item, line, ref yOffset);
     }
 
-    public bool CanApplyTarEnchantment(Item item) => !item.GetCommon().HasTarEnchantment() && /*item.damage > 0 || */!item.vanity && (item.headSlot >= 0 || item.bodySlot >= 0 || item.legSlot >= 0);
+    public static bool CanApplyTarEnchantment(Item item) => !item.GetCommon().HasTarEnchantment() && /*item.damage > 0 || */!item.vanity && (item.headSlot >= 0 || item.bodySlot >= 0 || item.legSlot >= 0);
 
     public void ApplyTarEnchantment(TarEnchantmentStat tarEnchantmentStat) {
         if (HasEnoughTarEnchantment()) {
@@ -448,9 +576,22 @@ sealed partial class ItemCommon : GlobalItem {
         if (!HasTarEnchantment()) {
             return;
         }
-        foreach (TarEnchantmentStat tarEnchantmentStat in ActiveTarEnchantments) {
-            hpToCut += (ushort)(LIFEPERSTACK * tarEnchantmentStat.Level);
-            damageToAdd += DAMAGEMODIFIERPERSTACK * tarEnchantmentStat.Level;
+        switch (TarEnchantmentCount()) {
+            case 1:
+                damageToAdd = 0.04f;
+                break;
+            case 2:
+                damageToAdd = 0.08f;
+                hpToCut = 40;
+                break;
+            case 3:
+                damageToAdd = 0.16f;
+                hpToCut = 80;
+                break;
+            case 4:
+                damageToAdd = 0.24f;
+                hpToCut = 120;
+                break;
         }
     }
 
@@ -475,11 +616,12 @@ sealed partial class ItemCommon : GlobalItem {
     //    }
     //}
 
-    public bool HasTarEnchantment() => ActiveTarEnchantments.Count > 0;
-    public bool HasEnoughTarEnchantment() => ActiveTarEnchantments.Count >= MAXTARENCHANTMENTCOUNT;
+    public bool HasTarEnchantment() => TarEnchantmentCount() > 0;
+    public bool HasEnoughTarEnchantment() => TarEnchantmentCount() >= MAXTARENCHANTMENTCOUNT;
+    public int TarEnchantmentCount() => ActiveTarEnchantments.Count;
 
     public void ResetEnchantments(Player player) {
-        if (ActiveTarEnchantments.Count > 0) {
+        if (HasTarEnchantment()) {
             //for (int i = 0; i < ActiveTarEnchantments.Count; i++) {
             //    int number = Item.NewItem(player.GetSource_Misc("focusedtardrop"), (int)player.position.X, (int)player.position.Y, player.width, player.height, ModContent.ItemType<FocusedTar>());
             //    if (Main.netMode == NetmodeID.MultiplayerClient) {
@@ -493,8 +635,8 @@ sealed partial class ItemCommon : GlobalItem {
     }
 
     public void RemoveEnchantments(Player player) {
-        if (ActiveTarEnchantments.Count > 0) {
-            for (int i = 0; i < ActiveTarEnchantments.Count; i++) {
+        if (HasTarEnchantment()) {
+            for (int i = 0; i < TarEnchantmentCount(); i++) {
                 int number = Item.NewItem(player.GetSource_Misc("focusedtardrop"), (int)player.position.X, (int)player.position.Y, player.width, player.height, ModContent.ItemType<FocusedTar>());
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);

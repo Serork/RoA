@@ -306,6 +306,12 @@ sealed partial class PlayerCommon : ModPlayer {
         OnHurtEvent?.Invoke(Player, info);
     }
 
+    public delegate void OnHitNPCDelegate(Player player, NPC target, NPC.HitInfo hit, int damageDone);
+    public static event OnHitNPCDelegate OnHitNPCEvent;
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        OnHitNPCEvent?.Invoke(Player, target, hit, damageDone);
+    }
+
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
