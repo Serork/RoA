@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.Druid;
 using RoA.Common.Players;
 using RoA.Content.Items.Consumables;
 using RoA.Core;
@@ -75,6 +76,15 @@ sealed partial class ItemCommon : GlobalItem {
 
         On_ItemSlot.TryItemSwap += On_ItemSlot_TryItemSwap;
         On_ItemSlot.ArmorSwap += On_ItemSlot_ArmorSwap;
+
+        On_Player.GrantArmorBenefits += On_Player_GrantArmorBenefits;
+    }
+
+    private void On_Player_GrantArmorBenefits(On_Player.orig_GrantArmorBenefits orig, Player self, Item armorPiece) {
+        orig(self, armorPiece);
+        if (armorPiece.TryGetGlobalItem(out ItemCommon handler) && handler.HasTarEnchantment()) {
+            handler.ActivateTarEnchantments(self, armorPiece);
+        }
     }
 
     private Item On_ItemSlot_ArmorSwap(On_ItemSlot.orig_ArmorSwap orig, Item item, out bool success) {
@@ -116,7 +126,7 @@ sealed partial class ItemCommon : GlobalItem {
 
     private void PlayerCommon_PreItemCheckEvent(Player player) {
         Item heldItem = player.GetSelectedItem();
-        if (heldItem.TryGetGlobalItem(out ItemCommon handler) && handler.HasTarEnchantment()) {
+        if (!heldItem.IsEquippable() && heldItem.TryGetGlobalItem(out ItemCommon handler) && handler.HasTarEnchantment()) {
             handler.ActivateTarEnchantments(player, heldItem);
         }
     }
@@ -250,7 +260,7 @@ sealed partial class ItemCommon : GlobalItem {
         return base.PreDrawTooltipLine(item, line, ref yOffset);
     }
 
-    public bool CanApplyTarEnchantment(Item item) => item.damage > 0 || item.accessory || (!item.vanity && (item.headSlot >= 0 || item.bodySlot >= 0 || item.legSlot >= 0));
+    public bool CanApplyTarEnchantment(Item item) => item.damage > 0 || item.IsEquippable();
 
     public void ApplyTarEnchantment(TarEnchantmentStat tarEnchantmentStat) {
         if (HasEnoughTarEnchantment()) {
@@ -269,6 +279,7 @@ sealed partial class ItemCommon : GlobalItem {
             StatModifier damage = player.GetDamage(damageType);
             damage.Flat += tarEnchantmentStat.Damage;
             player.GetDamage(damageType) += tarEnchantmentStat.DamageModifier - 1f;
+            player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += tarEnchantmentStat.DamageModifier - 1f;
             ref Player.DefenseStat statDefense = ref player.statDefense;
             statDefense += tarEnchantmentStat.Defense;
             statDefense *= tarEnchantmentStat.DefenseModifier;

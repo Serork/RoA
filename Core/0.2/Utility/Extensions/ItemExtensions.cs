@@ -12,6 +12,8 @@ namespace RoA.Core.Utility.Extensions;
 static partial class ItemExtensions {
     public static ItemCommon GetCommon(this Item item) => item.GetGlobalItem<ItemCommon>();
 
+    public static bool IsEquippable(this Item item) => item.accessory || (!item.vanity && (item.headSlot >= 0 || item.bodySlot >= 0 || item.legSlot >= 0));
+
     public static bool IsNatureClaws(this Item item, out ClawsBaseItem clawsBaseItem) {
         bool result = item.IsModded(out ModItem modItem) && modItem is ClawsBaseItem;
         if (result) {
