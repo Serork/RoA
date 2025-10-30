@@ -20,6 +20,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
+using Terraria.Utilities;
 
 namespace RoA.Common.Items;
 
@@ -180,74 +181,86 @@ sealed partial class ItemCommon : GlobalItem {
         if (line.Name == "tarenchantmentimage") {
             float num19 = 1f;
             int num20 = (int)((float)(int)Main.mouseTextColor * num19);
+            Microsoft.Xna.Framework.Color color2 = new Microsoft.Xna.Framework.Color(num20, num20, num20, num20);
             int num21 = line.X;
             int num22 = line.Y;
             var enchantments = item.GetCommon().ActiveTarEnchantments.ToList();
             for (int i = 0; i < enchantments.Count; i++) {
-                Microsoft.Xna.Framework.Color color2 = Microsoft.Xna.Framework.Color.White;
                 var enchantment = enchantments[i];
-                for (int l = 0; l < 5; l++) {
-                    if (l == 4)
-                        color2 = new Microsoft.Xna.Framework.Color(num20, num20, num20, num20);
+                int count = enchantment.EnchantmentCount;
+                bool hp = false,
+                     defense = false,
+                     damage = false;
+                Vector2 offset = Vector2.Zero,
+                        offset2 = offset;
+                Vector2 baseOffsetValue = _tarEnchantmentIndicator.Value.Size();
+                Vector2 offsetValue = baseOffsetValue / (float)count * new Vector2(-1f, 1f);
 
-                    color2.A = 150;
+                Main.spriteBatch.Draw(_tarEnchantmentIndicator.Value, new Vector2(num21, num22), null, color2, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
 
-                    switch (l) {
-                        case 0:
-                            num21--;
-                            break;
-                        case 1:
-                            num21++;
-                            break;
-                        case 2:
-                            num22--;
-                            break;
-                        case 3:
-                            num22++;
-                            break;
-                    }
+                for (int i2 = 0; i2 < count - 1; i2++) {
+                    offset2 -= offsetValue;
+                }
+                for (int i2 = 0; i2 < count; i2++) {
+                    ulong seed = (ulong)(item.type + enchantment.GetHashCode());
 
-                    Main.spriteBatch.Draw(_tarEnchantmentIndicator.Value, new Vector2(num21, num22), null, color2, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-
-                    bool hp = false,
-                         defense = false,
-                         damage = false;
-                    Vector2 offset = Vector2.Zero,
-                            offset2 = offset;
-                    int count = enchantment.EnchantmentCount;
-                    Vector2 baseOffsetValue = _tarEnchantmentIndicator.Value.Size();
-                    Vector2 offsetValue = baseOffsetValue / (float)count * new Vector2(-1f, 1f);
-                    for (int i2 = 0; i2 < count - 1; i2++) {
-                        offset2 -= offsetValue;
-                    }
-                    for (int i2 = 0; i2 < count; i2++) {
-                        Texture2D enchantmentTexture = _tarEnchantmentIndicator_Life.Value;
-                        Texture2D defenseTexture = _tarEnchantmentIndicator_Defense.Value;
-                        Texture2D damageTexture = _tarEnchantmentIndicator_Damage.Value;
-                        bool chosen = false;
+                    Texture2D enchantmentTexture = _tarEnchantmentIndicator_Life.Value;
+                    Texture2D defenseTexture = _tarEnchantmentIndicator_Defense.Value;
+                    Texture2D damageTexture = _tarEnchantmentIndicator_Damage.Value;
+                    bool chosen = false;
+                    void hpCheck() {
                         bool hasHP = enchantment.HP != 0 || enchantment.HPModifier != 1f;
                         if (!hp && hasHP) {
                             hp = true;
                             chosen = true;
                         }
+                    }
+                    void damageCheck() {
                         bool hasDamage = enchantment.Damage != 0 || enchantment.DamageModifier != 1f;
                         if (!chosen && !damage && hasDamage) {
                             enchantmentTexture = damageTexture;
                             damage = true;
                             chosen = true;
                         }
+                    }
+                    void defenseCheck() {
                         bool hasDefense = enchantment.Defense != 0 || enchantment.DefenseModifier != 1f;
                         if (!chosen && !defense && hasDefense) {
                             enchantmentTexture = defenseTexture;
                             defense = true;
                             chosen = true;
                         }
-                        float sin = (Main.GlobalTimeWrappedHourly + num21 * 10f) % 1f;
+                    }
+                    List<Action> checks = [hpCheck, damageCheck, defenseCheck];
+                    List<Action> shuffledChecks = [.. checks.OrderBy(x => Utils.RandomInt(ref seed, 100))];
+                    foreach (Action check in shuffledChecks) {
+                        check();
+                    }
+
+                    for (int l = 0; l < 5; l++) {
+
+                        switch (l) {
+                            case 0:
+                                num21--;
+                                break;
+                            case 1:
+                                num21++;
+                                break;
+                            case 2:
+                                num22--;
+                                break;
+                            case 3:
+                                num22++;
+                                break;
+                        }
+
+                        float sin = Main.GlobalTimeWrappedHourly % 1f;
                         Main.spriteBatch.Draw(enchantmentTexture, new Vector2(num21, num22)
                             + baseOffsetValue.RotatedBy(sin * MathHelper.TwoPi * (i2 % 2 == 0).ToDirectionInt()) * 0.025f
-                            + offset / 2f - offset2 / (count + 1), null, color2, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-                        offset -= offsetValue;
+                            + offset / 2f - offset2 / (count + 1), null, color2 with { A = 150 }, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
                     }
+
+                    offset -= offsetValue;
                 }
                 num21 += (int)(_tarEnchantmentIndicator.Width() * 1.5f);
                 //yOffset += 16;
