@@ -201,7 +201,7 @@ sealed partial class ItemCommon : GlobalItem {
 
     private static bool TryToInsertTar(Item item, bool onlyCheck = false) {
         Player player = Main.LocalPlayer;
-        if (!(player.itemAnimation > 0) && Main.mouseRight && Main.mouseRightRelease) {
+        if (!item.IsEmpty() && !(player.itemAnimation > 0) && Main.mouseRight && Main.mouseRightRelease) {
             bool flag = false;
             HoveredWithTar(item, (focusedTar) => {
                 if (!onlyCheck) {
