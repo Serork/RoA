@@ -563,9 +563,10 @@ sealed partial class ItemCommon : GlobalItem {
             //ref Player.DefenseStat statDefense = ref player.statDefense;
             //statDefense += tarEnchantmentStat.Defense;
             //statDefense *= tarEnchantmentStat.DefenseModifier;
+            GetTarEnchantmentStats(out ushort hpToCut, out float damageToAdd);
             ref int statLife = ref player.statLifeMax2;
-            statLife -= LIFEPERSTACK * tarEnchantmentStat.Level;
-            player.GetDamage(DamageClass.Generic) += DAMAGEMODIFIERPERSTACK * tarEnchantmentStat.Level;
+            statLife -= hpToCut;
+            player.GetDamage(DamageClass.Generic) += damageToAdd;
         }
     }
 
