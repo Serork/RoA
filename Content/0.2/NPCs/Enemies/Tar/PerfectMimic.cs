@@ -352,8 +352,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                     SpriteFrame frame = new(1, 2, 0, (byte)(!flag).ToInt());
                     Rectangle clip = frame.GetSourceRectangle(texture);
                     Vector2 origin = clip.Centered() + new Vector2(0f, 2f);
-                    Color color = Color.Lerp(Color.White, SkinColor, 0.5f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates()));
-                    Vector2 scale = Vector2.One;
+                    Color color = Color.Lerp(Color.White, SkinColor, 0.5f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * opacity;
+                    Vector2 scale = Vector2.One * opacity;
                     SpriteEffects effects2 = effects;
                     if (!flag) {
                         effects2 = !NPC.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -622,7 +622,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
             if (!flag) {
                 if (_maxTransform == 0f) {
-                    _maxTransform = 0.075f;
+                    _maxTransform = 0.1f;
                 }
                 else {
                     TeleportCount++;
