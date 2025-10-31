@@ -262,11 +262,18 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         _playerCopy.shimmerTransparency = 1f - opacity;
 
         Vector2 headPosition = NPC.Center - _playerCopy.Size / 2f;
-        if (FullTransformed) {
+        bool drawArm = false;
+        if (TeleportCount >= 1 || FullTransformed) {
             _settingUpArms = true;
+            if (!FullTransformed) {
+                drawArm = true;
+            }
         }
         Main.PlayerRenderer.DrawPlayer(Main.Camera, _playerCopy, headPosition, 0f, Vector2.Zero, scale: opacity);
         _settingUpArms = false;
+        if (drawArm) {
+
+        }
 
         SpriteBatch batch = Main.spriteBatch;
 
@@ -610,10 +617,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         ref float headRotation = ref _playerCopy.headRotation;
         headRotation = Helper.Wave(VisualTimer2, - maxHeadRotation, maxHeadRotation, 5f, 0f);
         headRotation = MathHelper.Lerp(headRotation, -0.25f * _playerCopy.direction, 1f - TransformationFactor);
-        float velocityX = _playerCopy.velocity.X * _maxTransform;
-        headRotation += velocityX * 0.015f;
+        Vector2 velocity = _playerCopy.velocity * _maxTransform;
+        headRotation += velocity.X * -0.015f;
         _playerCopy.headPosition = new Vector2(0f, -24f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
-        _playerCopy.headPosition += -Vector2.UnitX * velocityX * 1.5f;
+        _playerCopy.headPosition += new Vector2(-1f, 1f) * velocity * 1.5f;
         _playerCopy.headPosition.Y += 1f;
         _playerCopy.eyeColor = Color.Lerp(_eyeColor, Color.White, TransformationFactor);
 
