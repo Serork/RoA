@@ -280,7 +280,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             SpriteFrame frame = new(2, 2, 1, (byte)(!flag).ToInt());
             Rectangle clip = frame.GetSourceRectangle(texture);
             Vector2 origin = clip.Centered() + new Vector2(0f, 2f);
-            Color color = Color.Lerp(_playerCopy.skinColor, SkinColor, 0.25f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * opacity;
+            Color color = Color.Lerp(_playerCopy.skinColor, SkinColor, 0.375f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * opacity;
             Vector2 scale = Vector2.One * opacity;
             SpriteEffects effects2 = _playerCopy.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             if (!flag) {
