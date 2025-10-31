@@ -192,7 +192,7 @@ sealed class TarArm : ModProjectile {
             });
             if (!Small && i == points.Count - 1) {
                 texture = flag2 ? headTexture : armTexture;
-                SpriteFrame frame = new(1, 2, 0, (byte)(!flag).ToInt());
+                SpriteFrame frame = new(2, 2, 0, (byte)(!flag).ToInt());
                 clip = frame.GetSourceRectangle(texture);
                 if (flag2) {
                     clip = texture.Bounds;

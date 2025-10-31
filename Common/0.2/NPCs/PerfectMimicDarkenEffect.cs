@@ -80,7 +80,7 @@ sealed class PerfectMimicDarkenEffect : ModSystem {
         }
         _lerpValue = INTENSITYLERPVALUE * (PerfectMimic.Talked ? 0.75f : 1f);
         float intensity = Intensity * 0.15f;
-        _intensity = Helper.Approach(_intensity, intensity * (PerfectMimic.Talked ? (PerfectMimic.TransformedEnough ? 1f : 1.5f) : 1f), _lerpValue);
+        _intensity = Helper.Approach(_intensity, intensity * (PerfectMimic.Talked && PerfectMimic.TeleportCount >= 2 ? (PerfectMimic.TransformedEnough ? 1f : 1.5f) : 1f), _lerpValue);
     }
 
     public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor) {
