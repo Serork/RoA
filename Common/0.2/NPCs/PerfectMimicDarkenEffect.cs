@@ -50,16 +50,17 @@ sealed class PerfectMimicDarkenEffect : ModSystem {
     private void On_ScreenDarkness_Update(On_ScreenDarkness.orig_Update orig) {
         orig();
 
-        _vignetteIntensity = Helper.Approach(_vignetteIntensity, (CanApplyEffect ? GetDistanceProgress() : 0f) * _intensity * 10f, _lerpValue);
+        bool hasNPC = NPCUtils.AnyNPCs<PerfectMimic>();
+        _vignetteIntensity = Helper.Approach(_vignetteIntensity, (CanApplyEffect ? GetDistanceProgress() * (PerfectMimic.TransformedEnough || (PerfectMimic.TeleportCount > 1 && PerfectMimic.Talked) ? Helper.Wave(0.5f, 1f, 5f, 0f) : 1f) : 0f) * _intensity * 10f, _lerpValue);
         foreach (Player player in Main.ActivePlayers) {
             VignettePlayer2 localVignettePlayer = player.GetModPlayer<VignettePlayer2>();
-            float opacity = 0.5f * _vignetteIntensity * Helper.Wave(0.5f, 1f, 5f, 0f);
+            float opacity = 0.5f * _vignetteIntensity * 1f;
             if (Main.netMode != NetmodeID.Server) {
                 localVignettePlayer.SetVignette(-100, MathHelper.Lerp(250, 100, opacity), opacity, Color.Lerp(PerfectMimic.LiquidColor, Color.Black, 0.5f) * opacity, player.Center);
             }
         }
 
-        float intensity = NPCUtils.AnyNPCs<PerfectMimic>() ? (Intensity * 2f) : 1f;
+        float intensity = hasNPC ? (Intensity * 2f) : 1f;
         if (!CanApplyEffect) {
             return;
         }
