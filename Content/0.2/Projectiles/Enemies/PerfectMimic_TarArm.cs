@@ -70,7 +70,9 @@ sealed class TarArm : ModProjectile {
         Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, Small ? 0.8f : 1f, 0.2f);
 
         if (Small) {
-            Projectile.localAI[0]++;
+            if (Owner.IsGrounded()) {
+                Projectile.localAI[0]++;
+            }
             if (Projectile.localAI[0] == (int)(ATTACKTIME * 0.95f)) {
                 float num15 = 0.1f;
                 float num16 = 0.5f;
