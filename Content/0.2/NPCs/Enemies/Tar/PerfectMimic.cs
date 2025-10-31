@@ -394,7 +394,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             }
             _settingUpHead = false;
 
-            if (_playerCopy.SpeedX() < 0.1f) {
+            if (!drawArm && _playerCopy.SpeedX() < 0.1f) {
                 texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2].Value;
                 position = ArmPosition() + (NPC.FacedRight() ? new Vector2(-14f, 0f) : Vector2.Zero);
                 clip = texture.Bounds;
