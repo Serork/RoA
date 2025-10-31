@@ -222,6 +222,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        if (NPC.IsABestiaryIconDummy) {
+            return false;
+        }
+
         if (!AssetInitializer.TryGetRequestedTextureAssets<PerfectMimic>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return false;
         }
