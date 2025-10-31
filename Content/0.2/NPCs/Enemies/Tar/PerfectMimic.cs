@@ -659,11 +659,13 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         Vector2 center = npc.GetTargetData().Center;
         float baseDistance = (npc.Center).Distance(center);
         float distance = MathUtils.Clamp01(baseDistance / CONTACTDISTANCE);
-        if (distance < 1f) {
-            speed = 0f;
-        }
-        if (baseDistance > STOPDISTANCE) {
-            speed = 0f;
+        if (NPC.IsGrounded()) {
+            if (distance < 1f) {
+                speed = 0f;
+            }
+            if (baseDistance > STOPDISTANCE) {
+                speed = 0f;
+            }
         }
         _walkingSpeedX = Helper.Approach(_walkingSpeedX, speed, 0.1f);
         speed = _walkingSpeedX;
