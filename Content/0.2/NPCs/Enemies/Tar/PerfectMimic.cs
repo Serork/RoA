@@ -263,74 +263,29 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
         Vector2 headPosition = NPC.Center - _playerCopy.Size / 2f;
         bool drawArm = false;
-        if (TeleportCount >= 1 || FullTransformed) {
+        bool transformed = false;
+        if (TeleportCount > 1 || FullTransformed) {
             _settingUpArms = true;
             if (!FullTransformed) {
                 drawArm = true;
             }
+            transformed = true;
         }
         Main.PlayerRenderer.DrawPlayer(Main.Camera, _playerCopy, headPosition, 0f, Vector2.Zero, scale: opacity);
         _settingUpArms = false;
-        if (drawArm) {
-
-        }
 
         SpriteBatch batch = Main.spriteBatch;
-
-        Texture2D texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer1].Value;
-        Vector2 position = BodyPosition() + (NPC.FacedRight() ? new Vector2(4f, 0f) : Vector2.Zero);
-        Rectangle clip = texture.Bounds;
-        Vector2 origin = clip.Centered();
-        Color color = Lighting.GetColor(position.ToTileCoordinates()) * opacity;
-        Vector2 scale = Vector2.One * opacity;
-        float rotation = 0f;
         SpriteEffects effects = NPC.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-        batch.DrawWithSnapshot(() => {
-            batch.Draw(texture, position + Vector2.UnitY * 20f * (1f - opacity) + _playerCopy.MovementOffset(), DrawInfo.Default with {
-                Clip = clip,
-                Origin = origin,
-                Color = color,
-                Scale = scale,
-                Rotation = rotation,
-                ImageFlip = effects
-            });
-        });
-        texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer1Glow].Value;
-        batch.DrawWithSnapshot(() => {
-            batch.Draw(texture, position + Vector2.UnitY * 20f * (1f - opacity) + _playerCopy.MovementOffset(), DrawInfo.Default with {
-                Clip = clip,
-                Origin = origin,
-                Color = color,
-                Scale = scale,
-                Rotation = rotation,
-                ImageFlip = effects
-            });
-        });
-
-        _headPosition = headPosition + new Vector2(6f, 6f) + _playerCopy.MovementOffset() - Main.screenPosition;
-        _settingUpHead = true;
-        Main.PlayerRenderer.DrawPlayerHead(Main.Camera, _playerCopy, _headPosition, alpha: Ease.CubeIn(opacity), scale: opacity);
-        _settingUpHead = false;
-
-        if (_playerCopy.SpeedX() < 0.1f) {
-            texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2].Value;
-            position = ArmPosition() + (NPC.FacedRight() ? new Vector2(-14f, 0f) : Vector2.Zero);
-            clip = texture.Bounds;
-            origin = clip.Centered();
-            color = Lighting.GetColor(position.ToTileCoordinates()) * Ease.CubeIn(opacity);
-            scale = Vector2.One * Ease.CubeIn(opacity);
-            rotation = 0f;
+        {
+            Texture2D texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer1].Value;
+            Vector2 position = BodyPosition() + (NPC.FacedRight() ? new Vector2(4f, 0f) : Vector2.Zero);
+            Rectangle clip = texture.Bounds;
+            Vector2 origin = clip.Centered();
+            Color color = Lighting.GetColor(position.ToTileCoordinates()) * opacity;
+            Vector2 scale = Vector2.One * opacity;
+            float rotation = 0f;
             batch.DrawWithSnapshot(() => {
-                batch.Draw(texture, position, DrawInfo.Default with {
-                    Clip = clip,
-                    Origin = origin,
-                    Color = color,
-                    Scale = scale,
-                    Rotation = rotation,
-                    ImageFlip = effects
-                });
-                texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2Glow].Value;
-                batch.Draw(texture, position, DrawInfo.Default with {
+                batch.Draw(texture, position + Vector2.UnitY * 20f * (1f - opacity) + _playerCopy.MovementOffset(), DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
                     Color = color,
@@ -339,6 +294,93 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                     ImageFlip = effects
                 });
             });
+            texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer1Glow].Value;
+            batch.DrawWithSnapshot(() => {
+                batch.Draw(texture, position + Vector2.UnitY * 20f * (1f - opacity) + _playerCopy.MovementOffset(), DrawInfo.Default with {
+                    Clip = clip,
+                    Origin = origin,
+                    Color = color,
+                    Scale = scale,
+                    Rotation = rotation,
+                    ImageFlip = effects
+                });
+            });
+
+            _headPosition = headPosition + new Vector2(6f, 6f) /*+ _playerCopy.MovementOffset()*/ - Main.screenPosition;
+            _settingUpHead = true;
+            if (!transformed) {
+                Main.PlayerRenderer.DrawPlayerHead(Main.Camera, _playerCopy, _headPosition, alpha: Ease.CubeIn(opacity), scale: opacity);
+            }
+            _settingUpHead = false;
+
+            if (_playerCopy.SpeedX() < 0.1f) {
+                texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2].Value;
+                position = ArmPosition() + (NPC.FacedRight() ? new Vector2(-14f, 0f) : Vector2.Zero);
+                clip = texture.Bounds;
+                origin = clip.Centered();
+                color = Lighting.GetColor(position.ToTileCoordinates()) * Ease.CubeIn(opacity);
+                scale = Vector2.One * Ease.CubeIn(opacity);
+                rotation = 0f;
+                batch.DrawWithSnapshot(() => {
+                    batch.Draw(texture, position, DrawInfo.Default with {
+                        Clip = clip,
+                        Origin = origin,
+                        Color = color,
+                        Scale = scale,
+                        Rotation = rotation,
+                        ImageFlip = effects
+                    });
+                    texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2Glow].Value;
+                    batch.Draw(texture, position, DrawInfo.Default with {
+                        Clip = clip,
+                        Origin = origin,
+                        Color = color,
+                        Scale = scale,
+                        Rotation = rotation,
+                        ImageFlip = effects
+                    });
+                });
+            }
+        }
+
+        if (drawArm) {
+            {
+                for (int i = 0; i < 2; i++) {
+                    bool flag = i != 0;
+                    Texture2D texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.PlayerArm].Value;
+                    Vector2 position = BodyPosition() + new Vector2(10f * flag.ToDirectionInt() * NPC.direction, 0f);
+                    SpriteFrame frame = new(1, 2, 0, (byte)(!flag).ToInt());
+                    Rectangle clip = frame.GetSourceRectangle(texture);
+                    Vector2 origin = clip.Centered() + new Vector2(0f, 2f);
+                    Color color = Color.Lerp(Color.White, SkinColor, 0.5f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates()));
+                    Vector2 scale = Vector2.One;
+                    SpriteEffects effects2 = effects;
+                    if (!flag) {
+                        effects2 = !NPC.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                    }
+                    else {
+                        effects2 |= SpriteEffects.FlipVertically;
+                        position.Y += 4f;
+                    }
+                    if (NPC.FacedRight()) {
+                        position.X += 4f;
+                    }
+                    Vector2 velocity = _playerCopy.velocity * _maxTransform;
+                    position += new Vector2(-1f, 1f) * velocity * 1.5f;
+                    position += Vector2.One.RotatedBy(Helper.Wave(0f, MathHelper.Pi, 5f, i * MathHelper.PiOver2));
+                    float rotation = velocity.X * -0.015f;
+                    batch.DrawWithSnapshot(() => {
+                        batch.Draw(texture, position + Vector2.UnitY * 20f * (1f - opacity) + _playerCopy.MovementOffset(), DrawInfo.Default with {
+                            Clip = clip,
+                            Origin = origin,
+                            Color = color,
+                            Scale = scale,
+                            ImageFlip = effects2,
+                            Rotation = rotation
+                        });
+                    });
+                }
+            }
         }
 
         NPC.position = basePosition;
@@ -580,7 +622,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
             if (!flag) {
                 if (_maxTransform == 0f) {
-                    _maxTransform = 0.05f;
+                    _maxTransform = 0.075f;
                 }
                 else {
                     TeleportCount++;
