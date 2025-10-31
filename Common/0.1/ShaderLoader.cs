@@ -176,8 +176,13 @@ sealed class ShaderLoader : ModSystem {
     public static readonly string EnragedLothorSky = RoA.ModName + "Enraged Lothor Sky";
     public static readonly string Vignette = RoA.ModName + "Vignette";
 
+    public static readonly string Vignette2 = RoA.ModName + "Vignette2";
+
     public static VignetteScreenShaderData VignetteShaderData { get; private set; } = null!;
     public static Effect VignetteEffectData { get; private set; } = null!;
+
+    public static VignetteScreenShaderData VignetteShaderData2 { get; private set; } = null!;
+    public static Effect VignetteEffectData2 { get; private set; } = null!;
 
     public static ArmorShaderData WreathDyeShaderData { get; private set; } = null!;
 
@@ -196,6 +201,11 @@ sealed class ShaderLoader : ModSystem {
             VignetteEffectData = vignetteShader.Value;
             VignetteShaderData = new VignetteScreenShaderData(vignetteShader.Value, "MainPS");
             Filters.Scene[Vignette] = new Filter(VignetteShaderData, (EffectPriority)100);
+
+            vignetteShader = ModContent.Request<Effect>(ResourceManager.Effects + "Vignette2", AssetRequestMode.ImmediateLoad);
+            VignetteEffectData2 = vignetteShader.Value;
+            VignetteShaderData2 = new VignetteScreenShaderData(vignetteShader.Value, "MainPS");
+            Filters.Scene[Vignette2] = new Filter(VignetteShaderData2, (EffectPriority)100);
 
             Filters.Scene[BackwoodsSky] = new Filter(new BackwoodsScreenShaderData("FilterBloodMoon").UseColor(0.2f, 0.2f, 0.2f).UseOpacity(0.05f), EffectPriority.High);
             SkyManager.Instance[BackwoodsSky] = new BackwoodsSky();

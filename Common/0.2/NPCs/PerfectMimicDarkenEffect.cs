@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Players;
 using RoA.Content.NPCs.Enemies.Tar;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -64,6 +65,15 @@ sealed class PerfectMimicDarkenEffect : ModSystem {
         ref float fade = ref Main.musicFade[Main.curMusic];
         float to = MathUtils.Clamp01(appliedEffectStrength);
         fade = Helper.Approach(fade, to, INTENSITYLERPVALUE);
+
+        appliedEffectStrength = GetDistanceProgress() * _intensity * 10f;
+        foreach (Player player in Main.ActivePlayers) {
+            VignettePlayer2 localVignettePlayer = player.GetModPlayer<VignettePlayer2>();
+            float opacity = 0.5f * appliedEffectStrength * Helper.Wave(0.5f, 1f, 5f, 0f);
+            if (Main.netMode != NetmodeID.Server) {
+                localVignettePlayer.SetVignette(-100, MathHelper.Lerp(250, 100, opacity), opacity, Color.Lerp(PerfectMimic.LiquidColor, Color.Black, 0.5f) * opacity, player.Center);
+            }
+        }
     }
 
     public override void ModifyLightingBrightness(ref float scale) {
