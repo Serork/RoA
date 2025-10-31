@@ -563,7 +563,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (CanTeleport && VisualTimer2 > max) {
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
-                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    //_teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    _teleportTimer = 60f;
                     NPC.netUpdate = true;
                 }
                 teleported = true;
@@ -593,9 +594,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             }
         }
 
-        if (Talked && NPC.IsGrounded()) {
-            NPC.velocity.X *= 0.8f;
-        }
+        //if (!FullTransformed && Talked && NPC.IsGrounded()) {
+        //    NPC.velocity.X *= 0.8f;
+        //}
 
         bool flag = IsTeleporting;
         if (IsTeleporting) {
