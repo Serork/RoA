@@ -381,7 +381,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
     }
 
-    public override bool CanChat() => (!CanTeleport || !TransformedEnough) && !IsTeleporting && !Talked;
+    public override bool CanChat() => NPC.Opacity >= 1f && (!CanTeleport || !TransformedEnough) && !IsTeleporting && !Talked;
 
     public override void ChatBubblePosition(ref Vector2 position, ref SpriteEffects spriteEffects) {
         position.Y += 32f - _maxTransform * 24f + 18f * (1f - NPC.Opacity);
