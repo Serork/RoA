@@ -207,7 +207,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     }
 
     public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
-        if (!TransformedEnough || IsTeleporting) {
+        if (!TransformedEnough || (Talked && !TransformedEnough) || IsTeleporting) {
             modifiers.Cancel();
         }
     }
