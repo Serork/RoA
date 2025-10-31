@@ -438,7 +438,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         if ((!Talked || TransformedEnough) && NPC.Opacity >= 1f) {
             if (Main.rand.NextBool(100)) {
                 SoundEngine.PlaySound(SoundID.PlayerHit with { Volume = 0.5f, PitchVariance = 0.4f, MaxInstances = 3 }, NPC.Center);
-                //SoundEngine.PlaySound(SoundID.PlayerKilled with { Volume = 0.45f, Pitch = -0.4f, MaxInstances = 3 }, NPC.Center);
+            }
+            if (Main.rand.NextBool(300)) {
+                SoundEngine.PlaySound(SoundID.PlayerKilled with { Volume = 0.5f, PitchVariance = 0.4f, MaxInstances = 3 }, NPC.Center);
             }
         }
         if (TransformedEnough && !IsTeleporting) {
