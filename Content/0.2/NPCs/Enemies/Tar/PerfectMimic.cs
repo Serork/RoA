@@ -622,7 +622,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
             if (!flag) {
                 if (_maxTransform == 0f) {
-                    _maxTransform = 0.01f;
+                    _maxTransform = 0.1f;
                 }
                 else {
                     TeleportCount++;
