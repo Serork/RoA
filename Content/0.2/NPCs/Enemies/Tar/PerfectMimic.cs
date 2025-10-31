@@ -296,7 +296,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             Vector2 velocity = _playerCopy.velocity * _maxTransform * 0.5f;
             position += new Vector2(-1f, 1f) * velocity * 1.5f;
             position += Vector2.One.RotatedBy(Helper.Wave(0f, MathHelper.Pi, 5f, i * MathHelper.PiOver2));
-            float rotation = velocity.X * -0.015f;
+            float rotation = velocity.X * 0.1f;
             batch.DrawWithSnapshot(() => {
                 batch.Draw(texture, position + Vector2.UnitY * 20f * (1f - opacity) + _playerCopy.MovementOffset(), DrawInfo.Default with {
                     Clip = clip,
