@@ -54,18 +54,20 @@ sealed class TarArm : ModProjectile {
     public override void AI() {
         Projectile.timeLeft = 10;
 
-        if (Small && Projectile.Opacity == 0f) {
-            if (Projectile.whoAmI % 2 == 0) {
-                Projectile.localAI[0] = -ATTACKTIME / 2;
-            }
-        }
-
-        Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, Small ? 0.8f : 1f, 0.1f);
-
         if (!Owner.active || Owner.type != ModContent.NPCType<PerfectMimic>()) {
             Projectile.Kill();
             return;
         }
+
+        Vector2 center = Owner.GetTargetPlayer().Center;
+        if (Small && Projectile.Opacity == 0f) {
+            if (Projectile.whoAmI % 2 == 0) {
+                Projectile.localAI[0] = -ATTACKTIME / 2;
+            }
+            Projectile.velocity = Projectile.Center.DirectionTo(center);
+        }
+
+        Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, Small ? 0.8f : 1f, 0.2f);
 
         if (Small) {
             Projectile.localAI[0]++;
@@ -105,11 +107,12 @@ sealed class TarArm : ModProjectile {
         Projectile.direction = Owner.direction;
         Projectile.Center = Owner.Center + Vector2.UnitY * Owner.gfxOffY;
         float distance = Small ? 150f : 350f;
-        Vector2 center = Owner.GetTargetPlayer().Center;
-        Projectile.ai[1] += TimeSystem.LogicDeltaTime * 2f;
+        Projectile.ai[1] += TimeSystem.LogicDeltaTime * 2f * Projectile.direction;
         Projectile.localAI[1] = MathF.Sin(Projectile.ai[1]);
-        Projectile.localAI[2] = Helper.Approach(Projectile.localAI[2], 1f, 0.1f);
-        Projectile.rotation = MathHelper.PiOver2 * Projectile.localAI[1];
+        float opacityFactor = Projectile.Opacity * (Small ? 1.2f : 1f);
+        Projectile.localAI[2] = Helper.Approach(Projectile.localAI[2], 1f * opacityFactor, 0.1f);
+        Projectile.rotation = MathHelper.PiOver2 * Projectile.localAI[1] * opacityFactor;
+        distance *= opacityFactor;
         Vector2 midControlDir = Projectile.Center.DirectionTo(center).RotatedBy(Projectile.rotation);
         float wave = Helper.Wave(Projectile.ai[1] * 0.1f, MathHelper.PiOver2, -MathHelper.PiOver2, 5f, Projectile.identity);
         Vector2 projCenterAfterVelocity = Projectile.Center + Projectile.velocity.RotatedBy(wave * 0.1f);

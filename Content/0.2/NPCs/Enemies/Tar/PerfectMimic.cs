@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -434,6 +435,12 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 VisualTimer2 = VisualTimer;
             }
         }
+        if ((!Talked || TransformedEnough) && NPC.Opacity >= 1f) {
+            if (Main.rand.NextBool(100)) {
+                SoundEngine.PlaySound(SoundID.PlayerHit with { Volume = 0.5f, PitchVariance = 0.4f, MaxInstances = 3 }, NPC.Center);
+                //SoundEngine.PlaySound(SoundID.PlayerKilled with { Volume = 0.45f, Pitch = -0.4f, MaxInstances = 3 }, NPC.Center);
+            }
+        }
         if (TransformedEnough && !IsTeleporting) {
             VisualTimer2 += TimeSystem.LogicDeltaTime * addFactor;
             float max = VisualTimer + (1f - _minTransform * 2f);
@@ -441,7 +448,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (CanTeleport && VisualTimer2 > max) {
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
-                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    //_teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    _teleportTimer = 60f;
                     NPC.netUpdate = true;
                 }
                 teleported = true;
@@ -458,8 +466,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (!CanTeleport) {
                 Walking();
             }
-            else {
-                //NPC.velocity.X *= 0.8f;
+            else if (NPC.IsGrounded()) {
+                NPC.velocity.X *= 0.8f;
             }
         }
         else {
@@ -479,6 +487,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (_teleportTimer == 1f) {
                 _teleportTimer--;
                 ActuallyTeleport();
+                NPC.velocity.X *= 0f;
                 flag = false;
             }
         }

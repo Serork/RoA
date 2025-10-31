@@ -176,7 +176,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             Projectile.position += Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation()) * Projectile.direction * MathF.Sin(bloodlyValues.SineYOffset++ * 0.1f) * SINEOFFSET;
         }
         void playSound() {
-            if(Main.rand.NextBool(150)) {
+            if (Main.rand.NextBool(150)) {
                 SoundEngine.PlaySound(SoundID.Zombie43 with { Volume = 0.25f, Pitch = 0.4f, MaxInstances = 3 }, Projectile.Center);
                 SoundEngine.PlaySound(SoundID.Zombie44 with { Volume = 0.45f, Pitch = -0.4f, MaxInstances = 3 }, Projectile.Center);
             }

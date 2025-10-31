@@ -19,7 +19,7 @@ sealed class PerfectMimicDarkenEffect : ModSystem {
     private static float INTENSITY => 0.5f;
     private static float INTENSITYLERPVALUE => TimeSystem.LogicDeltaTime;
 
-    private float _intensity, _intensity2;
+    private float _intensity, _vignetteIntensity, _colorFadeIntensity;
 
     public PerfectMimic PerfectMimic => TrackedEntitiesSystem.GetSingleTrackedNPC<PerfectMimic>().As<PerfectMimic>();
     public bool CanApplyEffect => NPCUtils.AnyNPCs<PerfectMimic>();
@@ -35,27 +35,29 @@ sealed class PerfectMimicDarkenEffect : ModSystem {
     private void On_ScreenDarkness_DrawFront(On_ScreenDarkness.orig_DrawFront orig, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch) {
         orig(spriteBatch);
 
-        if (!CanApplyEffect) {
-            return;
-        }
-        float appliedEffectStrength = GetDistanceProgress() * _intensity * 3.75f;
-        Color color = DarkenColor * appliedEffectStrength;
+        _colorFadeIntensity = Helper.Approach(_colorFadeIntensity, (CanApplyEffect ? GetDistanceProgress() : 0f) * _intensity * 3.75f, INTENSITYLERPVALUE);
+        Color color = DarkenColor * _colorFadeIntensity;
         spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(-2, -2, Main.screenWidth + 4, Main.screenHeight + 4), new Rectangle(0, 0, 1, 1), color);
     }
 
     private void On_ScreenDarkness_DrawBack(On_ScreenDarkness.orig_DrawBack orig, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch) {
         orig(spriteBatch);
 
-        if (!CanApplyEffect) {
-            return;
-        }
-        float appliedEffectStrength = GetDistanceProgress() * _intensity * 3.75f;
-        Color color = DarkenColor * appliedEffectStrength;
+        Color color = DarkenColor * _colorFadeIntensity;
         spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(-2, -2, Main.screenWidth + 4, Main.screenHeight + 4), new Rectangle(0, 0, 1, 1), color);
     }
 
     private void On_ScreenDarkness_Update(On_ScreenDarkness.orig_Update orig) {
         orig();
+
+        _vignetteIntensity = Helper.Approach(_vignetteIntensity, (CanApplyEffect ? GetDistanceProgress() : 0f) * _intensity * 10f, INTENSITYLERPVALUE);
+        foreach (Player player in Main.ActivePlayers) {
+            VignettePlayer2 localVignettePlayer = player.GetModPlayer<VignettePlayer2>();
+            float opacity = 0.5f * _vignetteIntensity * Helper.Wave(0.5f, 1f, 5f, 0f);
+            if (Main.netMode != NetmodeID.Server) {
+                localVignettePlayer.SetVignette(-100, MathHelper.Lerp(250, 100, opacity), opacity, Color.Lerp(PerfectMimic.LiquidColor, Color.Black, 0.5f) * opacity, player.Center);
+            }
+        }
 
         float intensity = NPCUtils.AnyNPCs<PerfectMimic>() ? (Intensity * 2f) : 1f;
         if (!CanApplyEffect) {
@@ -65,36 +67,21 @@ sealed class PerfectMimicDarkenEffect : ModSystem {
         ref float fade = ref Main.musicFade[Main.curMusic];
         float to = MathUtils.Clamp01(appliedEffectStrength);
         fade = Helper.Approach(fade, to, INTENSITYLERPVALUE);
-
-        appliedEffectStrength = GetDistanceProgress() * _intensity * 10f;
-        foreach (Player player in Main.ActivePlayers) {
-            VignettePlayer2 localVignettePlayer = player.GetModPlayer<VignettePlayer2>();
-            float opacity = 0.5f * appliedEffectStrength * Helper.Wave(0.5f, 1f, 5f, 0f);
-            if (Main.netMode != NetmodeID.Server) {
-                localVignettePlayer.SetVignette(-100, MathHelper.Lerp(250, 100, opacity), opacity, Color.Lerp(PerfectMimic.LiquidColor, Color.Black, 0.5f) * opacity, player.Center);
-            }
-        }
     }
 
     public override void ModifyLightingBrightness(ref float scale) {
+        float appliedEffectStrength = _colorFadeIntensity / 3.75f;
+        scale -= appliedEffectStrength;
         if (!CanApplyEffect) {
             _intensity = Helper.Approach(_intensity, 0f, INTENSITYLERPVALUE);
             return;
         }
         float intensity = Intensity * 0.15f;
         _intensity = Helper.Approach(_intensity, intensity, INTENSITYLERPVALUE);
-        float appliedEffectStrength = GetDistanceProgress() * _intensity;
-        scale -= appliedEffectStrength;
     }
 
     public override void ModifySunLightColor(ref Color tileColor, ref Color backgroundColor) {
-        if (!CanApplyEffect) {
-            _intensity2 = Helper.Approach(_intensity2, 0f, INTENSITYLERPVALUE);
-            return;
-        }
-        float intensity = Intensity * 0.5f;
-        _intensity2 = Helper.Approach(_intensity2, intensity, INTENSITYLERPVALUE);
-        float appliedEffectStrength = GetDistanceProgress() * _intensity2;
+        float appliedEffectStrength = _colorFadeIntensity / 3.75f * 3.5f;
         tileColor = Color.Lerp(tileColor, tileColor.MultiplyRGB(DarkenColor), appliedEffectStrength);
         backgroundColor = Color.Lerp(backgroundColor, backgroundColor.MultiplyRGB(DarkenColor), appliedEffectStrength);
     }
