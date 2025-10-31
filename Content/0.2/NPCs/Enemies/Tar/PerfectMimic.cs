@@ -306,7 +306,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 });
             });
 
-            _headPosition = headPosition + new Vector2(6f, 6f) /*+ _playerCopy.MovementOffset()*/ - Main.screenPosition;
+            _headPosition = headPosition + new Vector2(6f, 6f) + (TeleportCount >= 1 ? Vector2.Zero : _playerCopy.MovementOffset()) - Main.screenPosition;
             _settingUpHead = true;
             if (!transformed) {
                 Main.PlayerRenderer.DrawPlayerHead(Main.Camera, _playerCopy, _headPosition, alpha: Ease.CubeIn(opacity), scale: opacity);
