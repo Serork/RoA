@@ -595,7 +595,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
 
         if (!FullTransformed && Talked && NPC.IsGrounded()) {
-            NPC.velocity.X *= 0.9f;
+            NPC.velocity.X *= 0.8f;
         }
 
         if (FullTransformed && NPC.IsGrounded()) {
