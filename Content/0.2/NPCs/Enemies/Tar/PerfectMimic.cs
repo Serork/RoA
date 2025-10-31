@@ -594,9 +594,15 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             }
         }
 
-        //if (!FullTransformed && Talked && NPC.IsGrounded()) {
-        //    NPC.velocity.X *= 0.8f;
-        //}
+        if (!FullTransformed && Talked && NPC.IsGrounded()) {
+            NPC.velocity.X *= 0.9f;
+        }
+
+        if (FullTransformed && NPC.IsGrounded()) {
+            foreach (Projectile arm in TrackedEntitiesSystem.GetTrackedProjectile<TarArm>(checkProjectile => checkProjectile.As<TarArm>().Owner.whoAmI != NPC.whoAmI)) {
+                NPC.velocity.X *= Utils.Remap(Utils.GetLerpValue(TarArm.ATTACKTIME * 0.9f, TarArm.ATTACKTIME * 0.75f, arm.localAI[0], true), 0f, 1f, 0.95f, 1f);
+            }
+        }
 
         bool flag = IsTeleporting;
         if (IsTeleporting) {

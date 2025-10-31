@@ -24,7 +24,7 @@ namespace RoA.Content.Projectiles.Enemies;
 
 [Tracked]
 sealed class TarArm : ModProjectile {
-    private static ushort ATTACKTIME => 180;
+    public static ushort ATTACKTIME => 180;
 
     private GeometryUtils.BezierCurve _bezierCurve = null!;
     private Vector2[] _bezierControls = null!;
