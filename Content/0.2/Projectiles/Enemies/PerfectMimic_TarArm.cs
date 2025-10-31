@@ -72,37 +72,37 @@ sealed class TarArm : ModProjectile {
         if (Small) {
             if (Owner.IsGrounded()) {
                 Projectile.localAI[0]++;
-            }
-            if (Projectile.localAI[0] == (int)(ATTACKTIME * 0.95f)) {
-                float num15 = 0.1f;
-                float num16 = 0.5f;
-                float num10 = 6f;
-                float num18 = 0f;
-                Vector2 vector4 = _bezierCurve.GetPoints(PointCount)[PointCount - 1];
-                Vector2 v = Owner.GetTargetData().Center - vector4;
-                v.Y -= Math.Abs(v.X) * num15;
-                Vector2 vector5 = v.SafeNormalize(-Vector2.UnitY) * num10;
-                Vector2 vector6 = vector5;
-                Vector2 vector7 = vector4;
-                vector6 += Utils.RandomVector2(Main.rand, 0f - num16, num16);
+                if (Projectile.localAI[0] == (int)(ATTACKTIME * 0.95f)) {
+                    float num15 = 0.1f;
+                    float num16 = 0.5f;
+                    float num10 = 6f;
+                    float num18 = 0f;
+                    Vector2 vector4 = _bezierCurve.GetPoints(PointCount)[PointCount - 1];
+                    Vector2 v = Owner.GetTargetData().Center - vector4;
+                    v.Y -= Math.Abs(v.X) * num15;
+                    Vector2 vector5 = v.SafeNormalize(-Vector2.UnitY) * num10;
+                    Vector2 vector6 = vector5;
+                    Vector2 vector7 = vector4;
+                    vector6 += Utils.RandomVector2(Main.rand, 0f - num16, num16);
 
-                vector7 += vector5 * num18;
-                if (Main.netMode != 1)
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), vector7, vector6, ModContent.ProjectileType<TarMass>(), Projectile.damage, Projectile.knockBack, Main.myPlayer);
+                    vector7 += vector5 * num18;
+                    if (Main.netMode != 1)
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), vector7, vector6, ModContent.ProjectileType<TarMass>(), Projectile.damage, Projectile.knockBack, Main.myPlayer);
 
-                for (int num615 = 0; num615 < 10; num615++) {
-                    int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, ModContent.DustType<TarMetaball>(),
-                        vector6.X, vector6.Y, 0, default, Main.rand.NextFloat(1f, 1.2f));
-                    Main.dust[num616].noGravity = true;
-                    Dust dust2 = Main.dust[num616];
-                    dust2.scale *= 1.25f;
-                    dust2 = Main.dust[num616];
-                    dust2.velocity *= 0.5f;
-                    dust2.customData = 1f;
+                    for (int num615 = 0; num615 < 10; num615++) {
+                        int num616 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, ModContent.DustType<TarMetaball>(),
+                            vector6.X, vector6.Y, 0, default, Main.rand.NextFloat(1f, 1.2f));
+                        Main.dust[num616].noGravity = true;
+                        Dust dust2 = Main.dust[num616];
+                        dust2.scale *= 1.25f;
+                        dust2 = Main.dust[num616];
+                        dust2.velocity *= 0.5f;
+                        dust2.customData = 1f;
+                    }
                 }
-            }
-            if (Projectile.localAI[0] > ATTACKTIME) {
-                Projectile.localAI[0] = 0f; 
+                if (Projectile.localAI[0] > ATTACKTIME) {
+                    Projectile.localAI[0] = 0f;
+                }
             }
         }
 
