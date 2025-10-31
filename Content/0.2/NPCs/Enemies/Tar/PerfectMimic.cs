@@ -314,7 +314,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 batch.Draw(texture, position, DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
-                    Color = color,
+                    Color = Lighting.GetColor(position.ToTileCoordinates()),
                     Scale = scale,
                     ImageFlip = effects2,
                     Rotation = rotation
@@ -369,7 +369,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
             if (!drawArm && _playerCopy.SpeedX() < 0.1f) {
                 texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2].Value;
-                position = ArmPosition() - new Vector2(-5f, 13f);
+                position = ArmPosition() - new Vector2(-5f, 13f) + new Vector2(-12f, 0f);
                 clip = _playerCopy.bodyFrame;
                 origin = clip.Centered();
                 color = Lighting.GetColor(position.ToTileCoordinates()) * Ease.CubeIn(opacity);

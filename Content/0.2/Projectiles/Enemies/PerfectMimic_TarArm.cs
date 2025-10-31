@@ -217,7 +217,7 @@ sealed class TarArm : ModProjectile {
                     batch.Draw(texture, position, DrawInfo.Default with {
                         Clip = clip,
                         Origin = origin,
-                        Color = color,
+                        Color = Lighting.GetColor(position.ToTileCoordinates()) * Projectile.Opacity,
                         Scale = scale,
                         Rotation = rotation
                     });
