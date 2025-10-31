@@ -43,7 +43,7 @@ sealed class PerfectMimicDarkenEffect : ModSystem {
     private void On_ScreenDarkness_DrawBack(On_ScreenDarkness.orig_DrawBack orig, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch) {
         orig(spriteBatch);
 
-        Color color = Color.Lerp(DarkenColor, Color.Black, 0.5f) * _colorFadeIntensity;
+        Color color = Color.Black * _colorFadeIntensity;
         spriteBatch.Draw(TextureAssets.MagicPixel.Value, new Rectangle(-2, -2, Main.screenWidth + 4, Main.screenHeight + 4), new Rectangle(0, 0, 1, 1), color);
     }
 
