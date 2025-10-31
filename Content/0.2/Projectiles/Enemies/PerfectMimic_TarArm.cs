@@ -192,7 +192,7 @@ sealed class TarArm : ModProjectile {
             });
             if (!Small && i == points.Count - 1) {
                 texture = flag2 ? headTexture : armTexture;
-                SpriteFrame frame = new(2, 2, 0, (byte)(!flag).ToInt());
+                SpriteFrame frame = new(3, 2, 0, (byte)(!flag).ToInt());
                 clip = frame.GetSourceRectangle(texture);
                 if (flag2) {
                     clip = texture.Bounds;
@@ -201,6 +201,18 @@ sealed class TarArm : ModProjectile {
                 color = Color.Lerp(Color.White, SkinColor, 0.25f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * Projectile.Opacity;
                 scale = Vector2.One * (1f - (float)i / (points.Count * 3f)) * Projectile.Opacity * 2f;
                 //rotation += MathHelper.Pi;
+                batch.DrawWithSnapshot(() => {
+                    batch.Draw(texture, position, DrawInfo.Default with {
+                        Clip = clip,
+                        Origin = origin,
+                        Color = color,
+                        Scale = scale,
+                        Rotation = rotation
+                    });
+                });
+
+                frame = frame.With(2, frame.CurrentRow);
+                clip = frame.GetSourceRectangle(texture);
                 batch.DrawWithSnapshot(() => {
                     batch.Draw(texture, position, DrawInfo.Default with {
                         Clip = clip,
