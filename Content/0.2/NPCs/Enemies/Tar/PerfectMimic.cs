@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
+using ReLogic.Utilities;
 
 using RoA.Common;
 using RoA.Common.Metaballs;
@@ -37,6 +38,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     private static readonly LerpColor LerpColor = new();
 
     private static bool _settingUpHead, _settingUpArms;
+    private static bool _dontPlayNPCTalkSound, _dontPlayNPCTalkSound2;
 
     public static Color LiquidColor => LerpColor.GetLerpColor([Liquids.Tar.LiquidColor]);
     public static Color SkinColor => LerpColor.GetLerpColor([Liquids.Tar.LiquidColor, Color.Lerp(new Color(62, 53, 70), new Color(98, 85, 101), 0.5f)]);
@@ -84,6 +86,13 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     private float _visualTimer, _visualTimer2;
     private float _teleportTimer; // need sync
     private float _walkingSpeedX;
+
+    public static SoundStyle Interact1Sound { get; private set; } = new(ResourceManager.NPCSounds + "MimicInteract");
+    public static SoundStyle Interact2Sound { get; private set; } = new(ResourceManager.NPCSounds + "MimicInteract2");
+    public static SoundStyle Interact3Sound { get; private set; } = new(ResourceManager.NPCSounds + "MimicInteract3");
+    public static SoundStyle Interact4Sound { get; private set; } = new(ResourceManager.NPCSounds + "MimicTransform");
+
+    public static SoundStyle[] InteractSounds = [Interact1Sound, Interact2Sound, Interact3Sound, Interact4Sound];
 
     public ref float InitValue => ref _initValue;
     public ref float TalkedValue => ref _talkedValue; // need sync
@@ -135,6 +144,29 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
         On_PlayerDrawLayers.DrawPlayer_28_ArmOverItem += On_PlayerDrawLayers_DrawPlayer_28_ArmOverItem;
         On_PlayerDrawLayers.DrawPlayer_12_SkinComposite_BackArmShirt += On_PlayerDrawLayers_DrawPlayer_12_SkinComposite_BackArmShirt;
+
+        On_SoundEngine.PlaySound_refSoundStyle_Nullable1_SoundUpdateCallback += On_SoundEngine_PlaySound_refSoundStyle_Nullable1_SoundUpdateCallback;
+        On_SoundEngine.PlaySound_refNullable1_Nullable1_SoundUpdateCallback += On_SoundEngine_PlaySound_refNullable1_Nullable1_SoundUpdateCallback;
+    }
+
+    private ReLogic.Utilities.SlotId On_SoundEngine_PlaySound_refNullable1_Nullable1_SoundUpdateCallback(On_SoundEngine.orig_PlaySound_refNullable1_Nullable1_SoundUpdateCallback orig,
+        ref SoundStyle? style, Vector2? position, SoundUpdateCallback updateCallback) {
+        if (style != null && _dontPlayNPCTalkSound && !InteractSounds.Contains(style.Value)) {
+            _dontPlayNPCTalkSound = false;
+            _dontPlayNPCTalkSound2 = false;
+            return SlotId.Invalid;
+        }
+        return orig(ref style, position, updateCallback);
+    }
+
+    private ReLogic.Utilities.SlotId On_SoundEngine_PlaySound_refSoundStyle_Nullable1_SoundUpdateCallback(On_SoundEngine.orig_PlaySound_refSoundStyle_Nullable1_SoundUpdateCallback orig, 
+        ref SoundStyle style, Vector2? position, SoundUpdateCallback updateCallback) {
+        if (_dontPlayNPCTalkSound2 && !InteractSounds.Contains(style)) {
+            _dontPlayNPCTalkSound = false;
+            _dontPlayNPCTalkSound2 = false;
+            return SlotId.Invalid;
+        }
+        return orig(ref style, position, updateCallback);
     }
 
     private void On_PlayerDrawLayers_DrawPlayer_12_SkinComposite_BackArmShirt(On_PlayerDrawLayers.orig_DrawPlayer_12_SkinComposite_BackArmShirt orig, ref PlayerDrawSet drawinfo) {
@@ -167,6 +199,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     private void On_Player_SetTalkNPC(On_Player.orig_SetTalkNPC orig, Player self, int npcIndex, bool fromNet) {
         if (npcIndex >= 0 && Main.npc[npcIndex].type == ModContent.NPCType<PerfectMimic>()) {
+            _dontPlayNPCTalkSound = _dontPlayNPCTalkSound2 = true;
             return;
         }
 
@@ -393,6 +426,18 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     public override string GetChat() {
         if (!Talked && Helper.SinglePlayerOrServer) {
+            if (TeleportCount == 0) {
+                SoundEngine.PlaySound(Interact3Sound);
+            }
+            else {
+                if (TeleportCount == 2) {
+                    SoundEngine.PlaySound(Interact4Sound);
+                }
+                else {
+                    SoundEngine.PlaySound(Main.rand.NextBool() ? Interact1Sound : Interact2Sound);
+                }
+            }
+
             Talked = true;
             NPC.netUpdate = true;
         }
@@ -435,7 +480,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 VisualTimer2 = VisualTimer;
             }
         }
-        if ((!Talked || TransformedEnough) && NPC.Opacity >= 1f) {
+        if ((!Talked || TransformedEnough) && NPC.Opacity >= 1f && NPC.Distance(NPC.GetTargetData().Center) > CONTACTDISTANCE) {
             if (Main.rand.NextBool(200)) {
                 SoundEngine.PlaySound(SoundID.PlayerHit with { Volume = 0.5f, PitchVariance = 0.4f, MaxInstances = 3 }, NPC.Center);
             }
