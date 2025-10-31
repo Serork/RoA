@@ -450,7 +450,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (CanTeleport && VisualTimer2 > max) {
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
-                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    //_teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    _teleportTimer = 60f;
                     NPC.netUpdate = true;
                 }
                 teleported = true;
@@ -527,13 +528,13 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
             if (!flag) {
                 if (_maxTransform == 0f) {
-                    _maxTransform = 0.5f;
+                    _maxTransform = 0.05f;
                 }
                 else {
                     TeleportCount++;
                     if (TeleportCount == 1) {
                         _minTransform = 0.25f;
-                        _maxTransform = 0.75f;
+                        _maxTransform = 0.65f;
                     }
                     else {
                         _minTransform = 0.5f;
