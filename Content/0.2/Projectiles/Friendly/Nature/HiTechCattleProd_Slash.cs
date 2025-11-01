@@ -54,7 +54,7 @@ sealed class HiTechSlash : NatureProjectile {
             Projectile.localAI[2] = 1f;
             Projectile.direction = Main.rand.NextBool().ToDirectionInt();
         }
-        if (Projectile.frame < Projectile.GetFrameCount() - 1 && Projectile.localAI[0]++ > 1f) {
+        if (Projectile.frame < Projectile.GetFrameCount() - 1 && Projectile.localAI[0]++ > 3f) {
             Projectile.localAI[0] = 0f;
             Projectile.frame++;
         }
