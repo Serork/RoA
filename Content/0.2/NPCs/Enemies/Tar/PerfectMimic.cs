@@ -231,7 +231,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         PlayerCopy = new Player();
 
         NPC.DeathSound = DeathSound;
-        NPC.HitSound = SoundID.NPCHit1 with { Volume = 0.5f, Pitch = 0.5f };
+        NPC.HitSound = SoundID.NPCHit1 with { Volume = 0.75f, Pitch = 0.5f };
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
@@ -493,10 +493,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         if (TeleportCount == 0) {
             position.Y -= 6f;
         }
-        position.X += 6f * NPC.direction;
-        position.X += (NPC.width * 2f - 12f) * -NPC.direction;
+        position.X += 6f * PlayerCopy.direction;
+        position.X += (NPC.width * 2f - 12f) * -PlayerCopy.direction;
 
-        spriteEffects = (-NPC.direction).ToSpriteEffects();
+        spriteEffects = (-PlayerCopy.direction).ToSpriteEffects();
     }
 
     public override string GetChat() {
@@ -570,8 +570,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (CanTeleport && VisualTimer2 > max) {
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
-                    //_teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
-                    _teleportTimer = 60f;
+                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    //_teleportTimer = 60f;
                     NPC.netUpdate = true;
                 }
                 teleported = true;
