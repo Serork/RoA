@@ -42,9 +42,16 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
     public ref float BeamCounter => ref Projectile.localAI[1];
     public ref float ExtraOpacity => ref Projectile.localAI[2];
 
+    public ref float StartedAttackValue => ref Projectile.ai[0];
+
     public bool Init {
         get => InitValue == 1f;
         set => InitValue = value.ToInt();
+    }
+
+    public bool StartedAttack {
+        get => StartedAttackValue == 1f;
+        set => StartedAttackValue = value.ToInt();
     }
 
     public override string Texture => ResourceManager.NatureProjectileTextures + "HiTechCattleProd_Star";
@@ -102,7 +109,16 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         if (Projectile.timeLeft <= 60 * 2) {
             hasTarget = true;
         }
-        ExtraOpacity = Helper.Approach(ExtraOpacity, hasTarget ? 0.85f : 0f, TimeSystem.LogicDeltaTime * 5f);
+        if (hasTarget) {
+            if (!StartedAttack) {
+                Projectile.timeLeft = 60 * 2;
+                StartedAttack = true;
+            }
+        }
+        if (StartedAttack) {
+            hasTarget = true;
+        }
+        ExtraOpacity = Helper.Approach(ExtraOpacity, hasTarget ? 0.85f : 0f, TimeSystem.LogicDeltaTime * 2.5f);
         if (ExtraOpacity >= 0.75f && BeamCounter % 10f == 0f) {
             if (Projectile.IsOwnerLocal()) {
                 Vector2 position = Projectile.Center + Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 100f;
