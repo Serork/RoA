@@ -24,6 +24,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
     public static byte SLASHCOUNT => 30;
     private static ushort DANGERDISTANCEINPIXELS => 160;
     private static float SLASHATTACKFREQUENCYINTICKS => 10f;
+    private static ushort TIMELEFT => (ushort)MathUtils.SecondsToFrames(9);
 
     public record struct HiTechBeamInfo(float Rotation, float Opacity);
 
@@ -63,7 +64,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         Projectile.SetSizeValues(10);
 
         Projectile.friendly = true;
-        Projectile.timeLeft = MathUtils.SecondsToFrames(9);
+        Projectile.timeLeft = TIMELEFT;
 
         Projectile.tileCollide = false;
 
@@ -110,7 +111,8 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         if (Projectile.timeLeft <= 60 * 2) {
             hasTarget = true;
         }
-        if (hasTarget) {
+        bool justSpawned = Projectile.timeLeft > TIMELEFT - 30;
+        if (!justSpawned && hasTarget) {
             if (!StartedAttack) {
                 Projectile.timeLeft = 60 * 2;
                 StartedAttack = true;
@@ -118,6 +120,9 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         }
         if (StartedAttack) {
             hasTarget = true;
+        }
+        if (hasTarget && justSpawned) {
+            hasTarget = false;
         }
         ExtraOpacity = Helper.Approach(ExtraOpacity, hasTarget ? 0.85f : 0f, TimeSystem.LogicDeltaTime * 2.5f);
         if (ExtraOpacity >= 0.75f && BeamCounter % SLASHATTACKFREQUENCYINTICKS == 0f) {

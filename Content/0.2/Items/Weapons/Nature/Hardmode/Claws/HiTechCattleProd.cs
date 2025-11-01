@@ -7,8 +7,6 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
-using System.Runtime.InteropServices;
-
 using Terraria;
 using Terraria.ID;
 
