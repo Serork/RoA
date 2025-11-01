@@ -21,7 +21,8 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class HiTechStar : NatureProjectile, IRequestAssets {
     private static byte MAXBEAMCOUNT => 40;
-    public static byte SLASHCOUNT = 30;
+    public static byte SLASHCOUNT => 30;
+    private static ushort DANGERDISTANCEINPIXELS => 160;
 
     public record struct HiTechBeamInfo(float Rotation, float Opacity);
 
@@ -39,6 +40,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float BeamCounter => ref Projectile.localAI[1];
+    public ref float ExtraOpacity => ref Projectile.localAI[2];
 
     public bool Init {
         get => InitValue == 1f;
@@ -48,10 +50,12 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
     public override string Texture => ResourceManager.NatureProjectileTextures + "HiTechCattleProd_Star";
 
     protected override void SafeSetDefaults() {
+        SetNatureValues(Projectile, false, false);
+
         Projectile.SetSizeValues(10);
 
         Projectile.friendly = true;
-        Projectile.timeLeft = 180;
+        Projectile.timeLeft = MathUtils.SecondsToFrames(9);
 
         Projectile.tileCollide = false;
 
@@ -59,6 +63,9 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
 
         Projectile.Opacity = 0f;
     }
+
+    public override bool? CanDamage() => false;
+    public override bool? CanCutTiles() => false;
 
     public override void AI() {
         if (!Init) {
@@ -68,18 +75,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
                     Rotation = MathHelper.TwoPi * Main.rand.NextFloatDirection()
                 };
             }
-
-            Player owner = Projectile.GetOwnerAsPlayer();
-            if (Projectile.IsOwnerLocal()) {
-                ProjectileUtils.SpawnPlayerOwnedProjectile<HiTechSlash>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_FromAI()) {
-                    Damage = Projectile.damage,
-                    KnockBack = Projectile.knockBack,
-                    Position = Projectile.Center,
-                    Velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 5f,
-                    AI0 = Projectile.Center.X,
-                    AI1 = Projectile.Center.Y
-                });
-            }
+            ExtraOpacity = 0f;
         }
         else {
             for (int i = 0; i < _hiTechBeams.Length; i++) {
@@ -100,6 +96,36 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         }
         if (BeamCounter > 60f) {
             BeamCounter = 0f;
+        }
+        NPC? target = NPCUtils.FindClosestNPC(Projectile.Center, DANGERDISTANCEINPIXELS, false);
+        bool hasTarget = target is not null;
+        if (Projectile.timeLeft <= 60 * 2) {
+            hasTarget = true;
+        }
+        ExtraOpacity = Helper.Approach(ExtraOpacity, hasTarget ? 0.85f : 0f, TimeSystem.LogicDeltaTime * 5f);
+        if (ExtraOpacity >= 0.75f && BeamCounter % 10f == 0f) {
+            if (Projectile.IsOwnerLocal()) {
+                Vector2 position = Projectile.Center + Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 100f;
+                ProjectileUtils.SpawnPlayerOwnedProjectile<HiTechSlash>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromAI()) {
+                    Damage = Projectile.damage,
+                    KnockBack = Projectile.knockBack,
+                    Position = position,
+                    Velocity = /*Vector2.One.RotatedByRandom(MathHelper.TwoPi)*/position.DirectionTo(Projectile.Center) * 10f,
+                    AI0 = Projectile.Center.X,
+                    AI1 = Projectile.Center.Y
+                });
+            }
+        }
+
+        if (Main.rand.NextBool(10)) {
+            int num674 = Utils.SelectRandom<int>(Main.rand, 226, 229);
+            Vector2 center8 = Projectile.Center;
+            int num676 = DANGERDISTANCEINPIXELS / 2;
+            int num677 = Dust.NewDust(center8 + Vector2.One * -num676, num676 * 2, num676 * 2, num674, 0f, 0f, 100, default(Color), 1f);
+            Dust dust2 = Main.dust[num677];
+            dust2.velocity *= 0.1f;
+            if (Main.rand.Next(6) != 0)
+                Main.dust[num677].noGravity = true;
         }
     }
 
@@ -147,6 +173,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         Color circle2Color = circleColor * 0.45f;
         Vector2 circle2Scale = circleScale * 0.65f;
 
+        float opacity2 = (1f - ExtraOpacity) * Projectile.Opacity;
         for (int i = 0; i < _hiTechBeams.Length; i++) {
             HiTechBeamInfo hiTechBeamInfo = _hiTechBeams[i];
             if (hiTechBeamInfo.Opacity <= 0f) {
@@ -164,7 +191,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
                 batch.Draw(beamTexture, beamPosition, DrawInfo.Default with {
                     Clip = beamClip,
                     Origin = beamOrigin,
-                    Color = beamColor * Projectile.Opacity,
+                    Color = beamColor * opacity2,
                     Scale = beamScale,
                     Rotation = beamRotation
                 });
@@ -172,7 +199,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
                     batch.Draw(beamTexture, beamPosition, DrawInfo.Default with {
                         Clip = beamClip,
                         Origin = beamOrigin,
-                        Color = beamColor * 0.5f * Projectile.Opacity,
+                        Color = beamColor * 0.5f * opacity2,
                         Scale = beamScale * 1.25f,
                         Rotation = beamRotation
                     });
@@ -193,14 +220,14 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
             batch.Draw(starPartTexture, starPartPosition, DrawInfo.Default with {
                 Clip = starPartClip,
                 Origin = starPartOrigin,
-                Color = starPartColor * Projectile.Opacity,
+                Color = starPartColor * opacity2,
                 Scale = starPartScale
             });
             batch.DrawWithSnapshot(() => {
                 batch.Draw(starPartTexture, starPartPosition, DrawInfo.Default with {
                     Clip = starPartClip,
                     Origin = starPartOrigin,
-                    Color = starPartColor * 0.5f * Projectile.Opacity,
+                    Color = starPartColor * 0.5f * opacity2,
                     Scale = starPartScale * 1.25f
                 });
             }, blendState: BlendState.Additive);
@@ -209,14 +236,14 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         batch.Draw(starTexture, position, DrawInfo.Default with {
             Clip = starClip,
             Origin = starOrigin,
-            Color = starColor * Projectile.Opacity,
+            Color = starColor * opacity2,
             Scale = starScale
         });
         batch.DrawWithSnapshot(() => {
             batch.Draw(starTexture, position, DrawInfo.Default with {
                 Clip = starClip,
                 Origin = starOrigin,
-                Color = starColor * 0.5f * Projectile.Opacity,
+                Color = starColor * 0.5f * opacity2,
                 Scale = starScale * 1.25f
             });
         }, blendState: BlendState.Additive);

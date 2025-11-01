@@ -26,6 +26,8 @@ static partial class ProjectileExtensions {
         ProjectileID.Sets.TrailingMode[projectile.type] = trailingMode;
     }
 
+    public static int GetTrailCount(this Projectile projectile) => ProjectileID.Sets.TrailCacheLength[projectile.type];
+
     public static bool IsDamageable(this Projectile projectile) => projectile.damage > 0;
 
     public static bool IsNature(this Projectile projectile) => projectile.ModProjectile is NatureProjectile;
