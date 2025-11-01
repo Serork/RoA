@@ -29,7 +29,7 @@ namespace RoA.Content.NPCs.Enemies.Tar;
 
 [Tracked]
 sealed class PerfectMimic : ModNPC, IRequestAssets {
-    private static float CONTACTDISTANCE => 160f;
+    private static float CONTACTDISTANCE => 120f;
     private static float STOPDISTANCE => 320f;
     private static byte TELEPORTTIMEMININSECONDS => 5;
     private static byte TELEPORTTIMEMAXINSECONDS => 15;
@@ -494,14 +494,15 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     public override bool CanChat() => NPC.Opacity >= 1f && (!CanTeleport || !TransformedEnough) && !IsTeleporting && !Talked;
 
     public override void ChatBubblePosition(ref Vector2 position, ref SpriteEffects spriteEffects) {
+        int direction = NPC.direction;
         position.Y += 32f - _maxTransform * 24f + 18f * (1f - NPC.Opacity);
         if (TeleportCount == 0) {
             position.Y -= 6f;
         }
-        position.X += 6f * PlayerCopy.direction;
-        position.X += (NPC.width * 2f - 12f) * -PlayerCopy.direction;
+        position.X += 6f * direction;
+        position.X += (NPC.width * 2f - 12f) * -direction;
 
-        spriteEffects = (-PlayerCopy.direction).ToSpriteEffects();
+        spriteEffects = (-direction).ToSpriteEffects();
     }
 
     public override string GetChat() {
@@ -607,6 +608,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
 
         if (!FullTransformed && Talked && NPC.IsGrounded()) {
+            NPC.TargetClosest();
             NPC.velocity.X *= 0.8f;
         }
 
