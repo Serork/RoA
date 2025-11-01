@@ -70,7 +70,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
             }
 
             Player owner = Projectile.GetOwnerAsPlayer();
-            if (Projectile.IsOwnerLocal() && !owner.HasProjectile<HiTechSlash>()) {
+            if (Projectile.IsOwnerLocal()) {
                 ProjectileUtils.SpawnPlayerOwnedProjectile<HiTechSlash>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_FromAI()) {
                     Damage = Projectile.damage,
                     KnockBack = Projectile.knockBack,
