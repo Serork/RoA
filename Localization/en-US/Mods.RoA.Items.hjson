@@ -2301,3 +2301,8 @@ FocusedTar: {
 	DisplayName: Focused Tar
 	Tooltip: ""
 }
+
+HiTechCattleProd: {
+	DisplayName: Hi Tech Cattle Prod
+	Tooltip: ""
+}

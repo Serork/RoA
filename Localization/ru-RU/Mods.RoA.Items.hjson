@@ -2326,3 +2326,8 @@ FocusedTar: {
 	DisplayName: Сцеженная смола
 	// Tooltip: ""
 }
+
+HiTechCattleProd: {
+	// DisplayName: Hi Tech Cattle Prod
+	// Tooltip: ""
+}

@@ -106,7 +106,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
                 Damage = Projectile.damage,
                 KnockBack = Projectile.knockBack,
                 AI0 = target.whoAmI
-            });
+            }, centered: true);
         }
 
         public override void SafePostAI() {
