@@ -497,10 +497,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         int direction = NPC.direction;
         if (NPC.SpeedX() <= 0.1f) {
             direction = -PlayerCopy.direction;
-            position.X += 4f * direction;
+            position.X += 6f * direction;
         }
         else {
-            position.X += -(NPC.width + 10f) * direction;
+            position.X += -(NPC.width + 12f) * direction;
         }
         position.Y += 32f - _maxTransform * 24f + 18f * (1f - NPC.Opacity);
         if (TeleportCount == 0) {
@@ -611,8 +611,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             }
         }
 
-        if (!FullTransformed && Talked && NPC.IsGrounded()) {
-            NPC.TargetClosest();
+        if (!FullTransformed && NPC.IsGrounded() && NPC.Distance(NPC.GetTargetPlayer().Center) <= CONTACTDISTANCE) {
+            NPC.SetDirection(NPC.DirectionTo(NPC.GetTargetPlayer().Center).X.GetDirection());
+            PlayerCopy.ChangeDir(NPC.direction);
             NPC.velocity.X *= 0.8f;
         }
 
@@ -743,6 +744,17 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     private void Walking() {
         NPC.ApplyImprovedWalkerAI();
+
+        Player player = NPC.GetTargetPlayer();
+        if (player.dead || !player.active) {
+            NPC.TargetClosest(false);
+            player = Main.player[NPC.target];
+            if (player.dead || !player.active) {
+                if (NPC.velocity.Y < 5f) {
+                    NPC.velocity.Y += 0.5f;
+                }
+            }
+        }
 
         if (Main.rand.NextBool(200)) {
             SoundEngine.PlaySound(Main.rand.NextBool() ? Gurgle2Sound : Gurgle1Sound, NPC.Center);
