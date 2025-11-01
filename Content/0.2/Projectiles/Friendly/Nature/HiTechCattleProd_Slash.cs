@@ -49,7 +49,7 @@ sealed class HiTechSlash : NatureProjectile {
             Projectile.frame++;
         }
         Projectile.velocity *= 0.9f;
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true), 0.2f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true), 0.15f);
         Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
         Player owner = Projectile.GetOwnerAsPlayer();
         if (Projectile.timeLeft < 50) {
