@@ -63,6 +63,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         PlayerHead
     }
 
+    public Player PlayerCopy { get; private set; } = null!;
+
     (byte, string)[] IRequestAssets.IndexedPathsToTexture
         => [((byte)PerfectMimicRequstedTextureType.Part1, Texture + "_Part1"),
             ((byte)PerfectMimicRequstedTextureType.Part2, Texture + "_Part2"),
@@ -73,7 +75,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             ((byte)PerfectMimicRequstedTextureType.PlayerHead, Texture + "_PlayerHead")];
 
     private FluidBodyPart[] _fluidBodyParts = null!;
-    private Player _playerCopy = null!;
     private Color _eyeColor, _skinColor;
     private float _minTransform, _maxTransform;
     private Vector2 _headPosition;
@@ -89,6 +90,13 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     public static SoundStyle Interact4Sound { get; private set; } = new(ResourceManager.NPCSounds + "MimicTransform");
 
     public static SoundStyle[] InteractSounds = [Interact1Sound, Interact2Sound, Interact3Sound, Interact4Sound];
+
+    public static SoundStyle DeathSound { get; private set; } = new(ResourceManager.NPCSounds + "MimicDeath");
+    public static SoundStyle SplashSound { get; private set; } = new(ResourceManager.NPCSounds + "MimicSplash");
+    public static SoundStyle Shoot1Sound { get; private set; } = new(ResourceManager.NPCSounds + "MimicShoot");
+    public static SoundStyle Shoot2Sound { get; private set; } = new(ResourceManager.NPCSounds + "MimicShoot2");
+    public static SoundStyle Gurgle1Sound { get; private set; } = new SoundStyle(ResourceManager.NPCSounds + "MimicGurgle") with { MaxInstances = 2 };
+    public static SoundStyle Gurgle2Sound { get; private set; } = new SoundStyle(ResourceManager.NPCSounds + "MimicGurgle2") with { MaxInstances = 2 };
 
     public ref float InitValue => ref _initValue;
     public ref float TalkedValue => ref _talkedValue; // need sync
@@ -113,8 +121,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         set => TransformedEnoughValue = value.ToInt();
     }
 
-    private Vector2 BodyPosition() => _playerCopy.Center + _playerCopy.bodyPosition + new Vector2(-2f, 1f);
-    private Vector2 ArmPosition() => _playerCopy.Center + _playerCopy.bodyPosition + new Vector2(7f, 10f);
+    private Vector2 BodyPosition() => PlayerCopy.Center + PlayerCopy.bodyPosition + new Vector2(-2f, 1f);
+    private Vector2 ArmPosition() => PlayerCopy.Center + PlayerCopy.bodyPosition + new Vector2(7f, 10f);
 
     public bool CanTeleport => TeleportCount < 2;
     public bool IsTeleporting => _teleportTimer > 0;
@@ -202,6 +210,12 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         orig(self, npcIndex, fromNet);
     }
 
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        if (!FullTransformed) {
+            modifiers.FinalDamage *= 0f;
+        }
+    }
+
     public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
         if (!FullTransformed) {
             modifiers.Cancel();
@@ -214,7 +228,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
         NPC.aiStyle = -1;
 
-        _playerCopy = new Player();
+        PlayerCopy = new Player();
+
+        NPC.DeathSound = DeathSound;
+        NPC.HitSound = SoundID.NPCHit1 with { Volume = 0.5f, Pitch = 0.5f };
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
@@ -234,34 +251,34 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         float opacity = NPC.Opacity;
 
         Player other = NPC.GetTargetPlayer();
-        _playerCopy.selectedItem = other.selectedItem;
-        _playerCopy.extraAccessory = other.extraAccessory;
-        _playerCopy.position = other.position;
-        _playerCopy.velocity = other.velocity;
-        _playerCopy.statLife = other.statLife;
-        _playerCopy.statLifeMax = other.statLifeMax;
-        _playerCopy.statLifeMax2 = other.statLifeMax2;
-        _playerCopy.statMana = other.statMana;
-        _playerCopy.statManaMax = other.statManaMax;
-        _playerCopy.statManaMax2 = other.statManaMax2;
-        _playerCopy.hideMisc = other.hideMisc;
-        _playerCopy.ResetEffects();
-        _playerCopy.ResetVisibleAccessories();
-        _playerCopy.DisplayDollUpdate();
-        _playerCopy.UpdateSocialShadow();
-        _playerCopy.Center = NPC.Center;
-        //_playerCopy.direction = NPC.direction;
-        _playerCopy.velocity = NPC.velocity;
-        _playerCopy.PlayerFrame();
-        _playerCopy.head = _playerCopy.body = _playerCopy.legs = -1;
-        _playerCopy.dead = true;
+        PlayerCopy.selectedItem = other.selectedItem;
+        PlayerCopy.extraAccessory = other.extraAccessory;
+        PlayerCopy.position = other.position;
+        PlayerCopy.velocity = other.velocity;
+        PlayerCopy.statLife = other.statLife;
+        PlayerCopy.statLifeMax = other.statLifeMax;
+        PlayerCopy.statLifeMax2 = other.statLifeMax2;
+        PlayerCopy.statMana = other.statMana;
+        PlayerCopy.statManaMax = other.statManaMax;
+        PlayerCopy.statManaMax2 = other.statManaMax2;
+        PlayerCopy.hideMisc = other.hideMisc;
+        PlayerCopy.ResetEffects();
+        PlayerCopy.ResetVisibleAccessories();
+        PlayerCopy.DisplayDollUpdate();
+        PlayerCopy.UpdateSocialShadow();
+        PlayerCopy.Center = NPC.Center;
+        //PlayerCopy.direction = NPC.direction;
+        PlayerCopy.velocity = NPC.velocity;
+        PlayerCopy.PlayerFrame();
+        PlayerCopy.head = PlayerCopy.body = PlayerCopy.legs = -1;
+        PlayerCopy.dead = true;
 
-        //_playerCopy.opacityForAnimation = opacity;
-        _playerCopy.skinColor = Color.Lerp(_skinColor, Color.Lerp(_skinColor, SkinColor, 0.5f), TransformationFactor);
+        //PlayerCopy.opacityForAnimation = opacity;
+        PlayerCopy.skinColor = Color.Lerp(_skinColor, Color.Lerp(_skinColor, SkinColor, 0.5f), TransformationFactor);
 
-        _playerCopy.shimmerTransparency = 1f - opacity;
+        PlayerCopy.shimmerTransparency = 1f - opacity;
 
-        Vector2 headPosition = NPC.Center - _playerCopy.Size / 2f;
+        Vector2 headPosition = NPC.Center - PlayerCopy.Size / 2f;
         bool drawArm = false;
         bool transformed = false;
         if (TeleportCount > 1 || FullTransformed) {
@@ -276,15 +293,15 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         void drawArmOnPlayer(int i) {
             bool flag = i != 0;
             Texture2D texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.PlayerArm].Value;
-            Vector2 position = BodyPosition() + new Vector2(10f * flag.ToDirectionInt() * _playerCopy.direction, 0f);
+            Vector2 position = BodyPosition() + new Vector2(10f * flag.ToDirectionInt() * PlayerCopy.direction, 0f);
             SpriteFrame frame = new(3, 2, 1, (byte)(!flag).ToInt());
             Rectangle clip = frame.GetSourceRectangle(texture);
             Vector2 origin = clip.Centered() + new Vector2(0f, 2f);
-            Color color = Color.Lerp(_playerCopy.skinColor, SkinColor, 0.375f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * opacity;
+            Color color = Color.Lerp(PlayerCopy.skinColor, SkinColor, 0.375f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * opacity;
             Vector2 scale = Vector2.One * opacity;
-            SpriteEffects effects2 = _playerCopy.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            SpriteEffects effects2 = PlayerCopy.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             if (!flag) {
-                effects2 = !_playerCopy.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                effects2 = !PlayerCopy.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             }
             else {
                 effects2 |= SpriteEffects.FlipVertically;
@@ -293,10 +310,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (NPC.FacedRight()) {
                 position.X += 4f;
             }
-            Vector2 velocity = _playerCopy.velocity * _maxTransform * 0.5f;
+            Vector2 velocity = PlayerCopy.velocity * _maxTransform * 0.5f;
             position += new Vector2(-1f, 1f) * velocity * 1.5f;
             position += Vector2.One.RotatedBy(Helper.Wave(0f, MathHelper.Pi, 5f, i * MathHelper.PiOver2));
-            position += Vector2.UnitY * 20f * (1f - opacity) + _playerCopy.MovementOffset();
+            position += Vector2.UnitY * 20f * (1f - opacity) + PlayerCopy.MovementOffset();
             float rotation = velocity.X * 0.1f;
             batch.DrawWithSnapshot(() => {
                 batch.Draw(texture, position, DrawInfo.Default with {
@@ -329,7 +346,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             }
         }
 
-        Main.PlayerRenderer.DrawPlayer(Main.Camera, _playerCopy, headPosition, 0f, Vector2.Zero, scale: opacity);
+        Main.PlayerRenderer.DrawPlayer(Main.Camera, PlayerCopy, headPosition, 0f, Vector2.Zero, scale: opacity);
 
         if (drawArm) {
             {
@@ -340,17 +357,17 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
         _settingUpArms = false;
 
-        SpriteEffects effects = _playerCopy.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        SpriteEffects effects = PlayerCopy.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         {
             Texture2D texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer1].Value;
-            Vector2 position = BodyPosition() + (_playerCopy.FacedRight() ? new Vector2(4f, 0f) : Vector2.Zero);
+            Vector2 position = BodyPosition() + (PlayerCopy.FacedRight() ? new Vector2(4f, 0f) : Vector2.Zero);
             Rectangle clip = texture.Bounds;
             Vector2 origin = clip.Centered();
             Color color = Lighting.GetColor(position.ToTileCoordinates()) * opacity;
             Vector2 scale = Vector2.One * opacity;
             float rotation = 0f;
             batch.DrawWithSnapshot(() => {
-                batch.Draw(texture, Utils.Floor(position - Vector2.UnitX * (!_playerCopy.FacedRight() ? 0f : 0f) + Vector2.UnitY * 20f * (1f - opacity) + _playerCopy.MovementOffset()), DrawInfo.Default with {
+                batch.Draw(texture, Utils.Floor(position - Vector2.UnitX * (!PlayerCopy.FacedRight() ? 0f : 0f) + Vector2.UnitY * 20f * (1f - opacity) + PlayerCopy.MovementOffset()), DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
                     Color = color,
@@ -360,17 +377,17 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 });
             });
 
-            _headPosition = headPosition + new Vector2(6f, 6f) + (TeleportCount > 1 ? Vector2.Zero : _playerCopy.MovementOffset()) - Main.screenPosition;
+            _headPosition = headPosition + new Vector2(6f, 6f) + (TeleportCount > 1 ? Vector2.Zero : PlayerCopy.MovementOffset()) - Main.screenPosition;
             _settingUpHead = true;
             if (!transformed) {
-                Main.PlayerRenderer.DrawPlayerHead(Main.Camera, _playerCopy, _headPosition, alpha: Ease.CubeIn(opacity), scale: opacity);
+                Main.PlayerRenderer.DrawPlayerHead(Main.Camera, PlayerCopy, _headPosition, alpha: Ease.CubeIn(opacity), scale: opacity);
             }
             _settingUpHead = false;
 
-            if (!drawArm && _playerCopy.SpeedX() < 0.1f) {
+            if (!drawArm && PlayerCopy.SpeedX() < 0.1f) {
                 texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.OnPlayer2].Value;
                 position = ArmPosition() - new Vector2(-5f, 13f) + new Vector2(-12f, 0f);
-                clip = _playerCopy.bodyFrame;
+                clip = PlayerCopy.bodyFrame;
                 origin = clip.Centered();
                 color = Lighting.GetColor(position.ToTileCoordinates()) * Ease.CubeIn(opacity);
                 scale = Vector2.One * Ease.CubeIn(opacity);
@@ -399,8 +416,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             return;
         }
 
-        _playerCopy.Center = NPC.Center + Vector2.UnitY * NPC.gfxOffY;
-        _playerCopy.velocity = NPC.velocity;
+        PlayerCopy.Center = NPC.Center + Vector2.UnitY * NPC.gfxOffY;
+        PlayerCopy.velocity = NPC.velocity;
 
         float opacity = NPC.Opacity;
 
@@ -426,7 +443,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         });
 
         color = LiquidColor.MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * Ease.CubeIn(opacity);
-        Vector2 baseHeadPosition = _playerCopy.Center + _playerCopy.headPosition;
+        Vector2 baseHeadPosition = PlayerCopy.Center + PlayerCopy.headPosition;
         Vector2 headPosition = baseHeadPosition;
         headPosition += headPosition.DirectionFrom(position) * 10f * TransformationFactor * opacity;
         if (opacity > 0.5f) {
@@ -512,7 +529,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         TransformationFactor = Helper.Wave(VisualTimer, _minTransform, _maxTransform, 1f, 0f);
         TransformationFactor = Ease.SineOut(MathUtils.Clamp01(TransformationFactor));
 
-        _playerCopy.direction = NPC.SpeedX() > 0.1f ? NPC.velocity.X.GetDirection() : NPC.direction;
+        PlayerCopy.direction = NPC.SpeedX() > 0.1f ? NPC.velocity.X.GetDirection() : NPC.direction;
 
         ushort tarDustMetaball = (ushort)ModContent.DustType<TarMetaball>();
 
@@ -539,11 +556,11 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             }
         }
         if ((!Talked || TransformedEnough) && NPC.Opacity >= 1f && NPC.Distance(NPC.GetTargetData().Center) > CONTACTDISTANCE) {
-            if (Main.rand.NextBool(200)) {
-                SoundEngine.PlaySound(SoundID.PlayerHit with { Volume = 0.5f, PitchVariance = 0.4f, MaxInstances = 3 }, NPC.Center);
+            if (Main.rand.NextBool((int)(200 * (FullTransformed ? 1.5f : 1f)))) {
+                SoundEngine.PlaySound(SoundID.PlayerHit with { Volume = 0.5f, PitchVariance = 0.4f, MaxInstances = 2 }, NPC.Center);
             }
-            if (Main.rand.NextBool(500)) {
-                SoundEngine.PlaySound(SoundID.PlayerKilled with { Volume = 0.5f, PitchVariance = 0.4f, MaxInstances = 3 }, NPC.Center);
+            if (Main.rand.NextBool((int)(500 * (FullTransformed ? 1.5f : 1f)))) {
+                SoundEngine.PlaySound(SoundID.PlayerKilled with { Volume = 0.5f, PitchVariance = 0.4f, MaxInstances = 2 }, NPC.Center);
             }
         }
         if (TransformedEnough && !IsTeleporting) {
@@ -553,8 +570,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (CanTeleport && VisualTimer2 > max) {
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
-                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
-                    //_teleportTimer = 60f;
+                    //_teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    _teleportTimer = 60f;
                     NPC.netUpdate = true;
                 }
                 teleported = true;
@@ -675,15 +692,15 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
 
         float maxHeadRotation = MathHelper.PiOver4 / 3f;
-        ref float headRotation = ref _playerCopy.headRotation;
+        ref float headRotation = ref PlayerCopy.headRotation;
         headRotation = Helper.Wave(VisualTimer2, - maxHeadRotation, maxHeadRotation, 5f, 0f);
-        headRotation = MathHelper.Lerp(headRotation, -0.25f * _playerCopy.direction, 1f - TransformationFactor);
-        Vector2 velocity = _playerCopy.velocity * _maxTransform;
+        headRotation = MathHelper.Lerp(headRotation, -0.25f * PlayerCopy.direction, 1f - TransformationFactor);
+        Vector2 velocity = PlayerCopy.velocity * _maxTransform;
         headRotation += velocity.X * -0.015f;
-        _playerCopy.headPosition = new Vector2(0f, -24f).RotatedBy(_playerCopy.headRotation) * TransformationFactor;
-        _playerCopy.headPosition += new Vector2(-1f, 1f) * velocity * 1.5f;
-        _playerCopy.headPosition.Y += 1f;
-        _playerCopy.eyeColor = Color.Lerp(_eyeColor, Color.White, TransformationFactor);
+        PlayerCopy.headPosition = new Vector2(0f, -24f).RotatedBy(PlayerCopy.headRotation) * TransformationFactor;
+        PlayerCopy.headPosition += new Vector2(-1f, 1f) * velocity * 1.5f;
+        PlayerCopy.headPosition.Y += 1f;
+        PlayerCopy.eyeColor = Color.Lerp(_eyeColor, Color.White, TransformationFactor);
 
         NPC.TargetClosest();
 
@@ -696,17 +713,17 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         if (!flag && NPC.IsGrounded() && NPC.Opacity > 0.5f) {
             int chance = (int)(20 + 40 * (1f - TransformationFactor));
             if (Main.rand.NextBool(chance)) {
-                Dust dust = Dust.NewDustPerfect(ArmPosition() + new Vector2(2f * Main.rand.NextFloatDirection(), 2f * Main.rand.NextFloatDirection()), tarDustMetaball);
+                Dust dust = Dust.NewDustPerfect(ArmPosition() + Main.rand.NextVector2Circular(2f, 2f), tarDustMetaball);
                 dust.alpha = (int)(255 * NPC.Opacity);
                 dust.velocity.X *= 0.1f;
             }
             if (Main.rand.NextBool(chance)) {
-                Dust dust = Dust.NewDustPerfect(BodyPosition() + new Vector2(6f * Main.rand.NextFloatDirection(), 4f * Main.rand.NextFloatDirection()), tarDustMetaball);
+                Dust dust = Dust.NewDustPerfect(BodyPosition() + Main.rand.NextVector2Circular(6f, 4f), tarDustMetaball);
                 dust.alpha = (int)(255 * NPC.Opacity);
                 dust.velocity.X *= 0.1f;
             }
             if (TransformationFactor > 0.15f && Main.rand.NextBool((int)(chance + 40 * (1f - TransformationFactor)))) {
-                Dust dust = Dust.NewDustPerfect(BodyPosition() - Vector2.UnitY * 14f + new Vector2(20f * Main.rand.NextFloatDirection(), 20f * Main.rand.NextFloatDirection()), tarDustMetaball);
+                Dust dust = Dust.NewDustPerfect(BodyPosition() - Vector2.UnitY * 14f + Main.rand.NextVector2Circular(20f, 20f), tarDustMetaball);
                 dust.alpha = (int)(255 * NPC.Opacity);
                 dust.velocity.X *= 0.1f;
             }
@@ -715,6 +732,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     private void Walking() {
         NPC.ApplyImprovedWalkerAI();
+
+        if (Main.rand.NextBool(200)) {
+            SoundEngine.PlaySound(Main.rand.NextBool() ? Gurgle2Sound : Gurgle1Sound, NPC.Center);
+        }
     }
 
     private void SimpleMovement(bool super = false) {
@@ -936,7 +957,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     private static Vector3 GetRandomColorVector() => new Vector3(Main.rand.NextFloat(), Main.rand.NextFloat(), Main.rand.NextFloat());
 
     private void RandomizePlayer() {
-        Player player = _playerCopy;
+        Player player = PlayerCopy;
         player.hair = Main.rand.NextBool() ? Main.rand.Next(52) : Main.rand.Next(135, 163);
         int[] invalid = [2, 17, 136, 148, 151, 152, 153, 154, 155, 157, 158, 159];
         while (invalid.Contains(player.hair)) {

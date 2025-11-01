@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
@@ -86,6 +87,7 @@ sealed class TarArm : ModProjectile {
                     vector6 += Utils.RandomVector2(Main.rand, 0f - num16, num16);
 
                     vector7 += vector5 * num18;
+                    SoundEngine.PlaySound(Main.rand.NextBool() ? PerfectMimic.Shoot1Sound : PerfectMimic.Shoot2Sound, vector7);
                     if (Main.netMode != 1)
                         Projectile.NewProjectile(Projectile.GetSource_FromAI(), vector7, vector6, ModContent.ProjectileType<TarMass>(), Projectile.damage, Projectile.knockBack, Main.myPlayer);
 
@@ -194,13 +196,13 @@ sealed class TarArm : ModProjectile {
             });
             if (!Small && i == points.Count - 1) {
                 texture = flag2 ? headTexture : armTexture;
-                SpriteFrame frame = new(3, 2, 0, (byte)(!flag).ToInt());
+                SpriteFrame frame = new(3, 2, 1, (byte)(!flag).ToInt());
                 clip = frame.GetSourceRectangle(texture);
                 if (flag2) {
                     clip = texture.Bounds;
                 }
                 origin = clip.Centered() + new Vector2(0f, 2f);
-                color = Color.Lerp(Color.White, SkinColor, 0.25f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * Projectile.Opacity;
+                color = Color.Lerp(Owner.As<PerfectMimic>().PlayerCopy.skinColor, SkinColor, 0.375f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * Projectile.Opacity;
                 scale = Vector2.One * (1f - (float)i / (points.Count * 3f)) * Projectile.Opacity * 2f;
                 //rotation += MathHelper.Pi;
                 batch.DrawWithSnapshot(() => {

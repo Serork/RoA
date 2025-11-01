@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -98,6 +99,9 @@ sealed class TarMass : ModProjectile {
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
         if (Projectile.Opacity >= 0.5f) {
+            if (Projectile.ai[2] != 1f) {
+                SoundEngine.PlaySound(PerfectMimic.SplashSound, Projectile.Center);
+            }
             Projectile.ai[2] = 1f;
         }
 
