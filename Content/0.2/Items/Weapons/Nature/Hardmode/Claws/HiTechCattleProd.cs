@@ -58,6 +58,10 @@ sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdS
         protected override void SafeOnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
             target.AddBuff(BuffID.Electrified, Main.rand.Next(60, 180) * 2);
 
+            if (Projectile.localAI[2] != 0f) {
+                return;
+            }
+
             if (!target.CanActivateOnHitEffect()) {
                 return;
             }
@@ -68,6 +72,7 @@ sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdS
 
             SpawnStar(target);
             Projectile.GetOwnerAsPlayer().GetWreathHandler().HandleOnHitNPCForNatureProjectile(Projectile, true);
+            Projectile.localAI[2] = 1f;
         }
 
         private void SpawnStar(NPC target) {
