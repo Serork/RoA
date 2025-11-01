@@ -23,6 +23,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
     private static byte MAXBEAMCOUNT => 40;
     public static byte SLASHCOUNT => 30;
     private static ushort DANGERDISTANCEINPIXELS => 160;
+    private static float SLASHATTACKFREQUENCYINTICKS => 10f;
 
     public record struct HiTechBeamInfo(float Rotation, float Opacity);
 
@@ -119,7 +120,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
             hasTarget = true;
         }
         ExtraOpacity = Helper.Approach(ExtraOpacity, hasTarget ? 0.85f : 0f, TimeSystem.LogicDeltaTime * 2.5f);
-        if (ExtraOpacity >= 0.75f && BeamCounter % 10f == 0f) {
+        if (ExtraOpacity >= 0.75f && BeamCounter % SLASHATTACKFREQUENCYINTICKS == 0f) {
             if (Projectile.IsOwnerLocal()) {
                 Vector2 position = Projectile.Center + Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 100f;
                 ProjectileUtils.SpawnPlayerOwnedProjectile<HiTechSlash>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromAI()) {
