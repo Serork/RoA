@@ -109,7 +109,7 @@ sealed class HiTechSlash : NatureProjectile {
             int trailLength = Projectile.GetTrailCount();
             for (int i2 = 1; i2 < trailLength; i2++) {
                 Vector2 position2 = Projectile.oldPos[i2] + Projectile.Size / 2f;
-                Color color2 = color * (1f - i2 / (float)trailLength) * 0.25f;
+                Color color2 = color * (1f - i2 / (float)trailLength) * 0.5f;
                 batch.Draw(texture, position2, DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
