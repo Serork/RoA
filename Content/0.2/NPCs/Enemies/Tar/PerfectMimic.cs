@@ -495,13 +495,17 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     public override void ChatBubblePosition(ref Vector2 position, ref SpriteEffects spriteEffects) {
         int direction = NPC.direction;
+        if (NPC.SpeedX() <= 0.1f) {
+            direction = -PlayerCopy.direction;
+            position.X += 4f * direction;
+        }
+        else {
+            position.X += -(NPC.width + 10f) * direction;
+        }
         position.Y += 32f - _maxTransform * 24f + 18f * (1f - NPC.Opacity);
         if (TeleportCount == 0) {
             position.Y -= 6f;
         }
-        position.X += 6f * direction;
-        position.X += (NPC.width * 2f - 12f) * -direction;
-
         spriteEffects = (-direction).ToSpriteEffects();
     }
 
