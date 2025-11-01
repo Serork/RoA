@@ -230,6 +230,11 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
         PlayerCopy = new Player();
 
+        NPC.npcSlots = 5f;
+        NPC.rarity = 4;
+        NPC.knockBackResist = 0.25f;
+        NPC.netAlways = true;
+
         NPC.DeathSound = DeathSound;
         NPC.HitSound = SoundID.NPCHit1 with { Volume = 0.75f, Pitch = 0.5f };
     }
