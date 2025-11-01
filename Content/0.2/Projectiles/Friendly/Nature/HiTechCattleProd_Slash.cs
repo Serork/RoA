@@ -44,6 +44,10 @@ sealed class HiTechSlash : NatureProjectile {
             Projectile.Kill();
             return;
         }
+        if (Projectile.localAI[1] == 0f) {
+            Projectile.localAI[1] = 1f;
+            Projectile.direction = Main.rand.NextBool().ToDirectionInt();
+        }
         if (Projectile.frame < Projectile.GetFrameCount() - 1 && Projectile.localAI[0]++ > 1f) {
             Projectile.localAI[0] = 0f;
             Projectile.frame++;
@@ -82,6 +86,7 @@ sealed class HiTechSlash : NatureProjectile {
         color *= Ease.CircIn(MathUtils.Clamp01(Projectile.Opacity));
         float rotation = Projectile.rotation;
         Vector2 scale = Vector2.One;
+        SpriteEffects effects = Projectile.direction.ToSpriteEffects();
         for (int i2 = 0; i2 < 2; i2++) {
             float wave = Helper.Wave(0.25f, 1f, 10f, i2);
             batch.Draw(texture, position, DrawInfo.Default with {
@@ -89,7 +94,8 @@ sealed class HiTechSlash : NatureProjectile {
                 Origin = origin,
                 Color = color * wave,
                 Scale = scale,
-                Rotation = rotation
+                Rotation = rotation,
+                ImageFlip = effects
             });
             batch.DrawWithSnapshot(() => {
                 batch.Draw(texture, position, DrawInfo.Default with {
@@ -97,7 +103,8 @@ sealed class HiTechSlash : NatureProjectile {
                     Origin = origin,
                     Color = color * 0.5f,
                     Scale = scale * 1.1f,
-                    Rotation = rotation
+                    Rotation = rotation,
+                    ImageFlip = effects
                 });
             }, blendState: BlendState.Additive);
         }
