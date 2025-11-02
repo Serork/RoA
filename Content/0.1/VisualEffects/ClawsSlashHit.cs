@@ -25,7 +25,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
 
     public override void Update(ref ParticleRendererSettings settings) {
         float t = (float)((MaxTimeLeft - TimeLeft) / (double)MaxTimeLeft * 60.0);
-        float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 3f, t, true) * Utils.GetLerpValue((float)(MaxTimeLeft - MaxTimeLeft / 5f), MaxTimeLeft / 2f, t, true);
+        float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 3f, t, true) * Utils.GetLerpValue((float)(MaxTimeLeft), MaxTimeLeft / 2f, t, true);
         Scale = scale * _baseScale;
 
         if (Main.rand.NextChance(0.1) && TimeLeft > 5 && TimeLeft < MaxTimeLeft - 5) {
