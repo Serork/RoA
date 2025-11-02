@@ -16,7 +16,8 @@ sealed class VisualEffectSpawnPacket : NetPacket {
     public enum VisualEffectPacketType : byte {
         ClawsHit,
         BloodShedParticle,
-        MercuriumBulletParticle
+        MercuriumBulletParticle,
+        HardmodeClawsHit
     }
 
     public VisualEffectSpawnPacket(VisualEffectPacketType packetType, Player player, int layer, Vector2 position, Vector2 velocity, Color color, float scale, float rotation) {
@@ -60,6 +61,9 @@ sealed class VisualEffectSpawnPacket : NetPacket {
                 break;
             case VisualEffectPacketType.MercuriumBulletParticle:
                 createVisualEffect<MercuriumBulletParticle>();
+                break;
+            case VisualEffectPacketType.HardmodeClawsHit:
+                createVisualEffect<HardmodeClawsSlashHit>();
                 break;
         }
 

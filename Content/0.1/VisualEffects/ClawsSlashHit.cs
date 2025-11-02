@@ -36,7 +36,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
             dust.noGravity = true;
         }
 
-        Rotation += Main.rand.Next(7) * Main.rand.NextFloat(0.05f);
+        Rotation += Main.rand.Next(7) * Main.rand.NextFloatRange(0.05f);
 
         if (--TimeLeft <= 0) {
             RestInPool();
@@ -48,6 +48,10 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
     }
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spriteBatch) {
+        if (TimeLeft == MaxTimeLeft) {
+            return;
+        }
+
         Color color = DrawColor;
         Vector2 origin = Texture.Size() / 2f;
         Vector2 position = Position - Main.screenPosition;

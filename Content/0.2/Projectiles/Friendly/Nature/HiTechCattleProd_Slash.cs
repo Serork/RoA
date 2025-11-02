@@ -41,6 +41,8 @@ sealed class HiTechSlash : NatureProjectile {
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
 
+        Projectile.manualDirectionChange = true;
+
         SetNatureValues(Projectile, false, false);
     }
 

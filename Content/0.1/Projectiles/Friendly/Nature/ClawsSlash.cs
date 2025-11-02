@@ -147,6 +147,17 @@ class ClawsSlash : NatureProjectile {
             velocity = angle.ToRotationVector2() * velocity * 0.5f;
             float scale = Projectile.scale;
             int layer = VisualEffectLayer.ABOVENPCS;
+            if (selectedClaws.IsHardmodeClaws) {
+                VisualEffectSystem.New<HardmodeClawsSlashHit>(layer).
+                    Setup(position,
+                          velocity,
+                          color,
+                          scale: scale).DontEmitLight = !selectedClaws.HasLighting;
+                if (Main.netMode == NetmodeID.MultiplayerClient) {
+                    MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.HardmodeClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
+                }
+                return;
+            }
             VisualEffectSystem.New<ClawsSlashHit>(layer).
                 Setup(position,
                       velocity,
