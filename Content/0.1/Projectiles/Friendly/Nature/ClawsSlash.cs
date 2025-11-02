@@ -146,7 +146,7 @@ class ClawsSlash : NatureProjectile {
             position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
             velocity = angle.ToRotationVector2() * velocity * 0.5f;
             float scale = Projectile.scale;
-            int layer = VisualEffectLayer.ABOVENPCS;
+            int layer = VisualEffectLayer.ABOVEDUSTS;
             if (selectedClaws.IsHardmodeClaws) {
                 VisualEffectSystem.New<HardmodeClawsSlashHit>(layer).
                     Setup(position,
