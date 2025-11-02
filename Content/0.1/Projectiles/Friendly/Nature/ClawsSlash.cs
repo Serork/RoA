@@ -417,8 +417,7 @@ class ClawsSlash : NatureProjectile {
         ClawsBaseItem selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
         bool hasLighting = selectedClaws.HasLighting;
 
-        float light1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
-        float light2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
+        float light2 = 1f - MathUtils.Clamp01(Projectile.localAI[0] / Projectile.ai[1] * 0.75f);
 
         if (hasLighting) {
             Lighting.AddLight(Projectile.Center, GetLightingColor().ToVector3() * 0.75f * light2);
