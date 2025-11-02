@@ -416,15 +416,19 @@ class ClawsSlash : NatureProjectile {
 
         ClawsBaseItem selectedClaws = Owner.GetSelectedItem().As<ClawsBaseItem>();
         bool hasLighting = selectedClaws.HasLighting;
+
+        float light1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
+        float light2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
+
         if (hasLighting) {
-            Lighting.AddLight(Projectile.Center, GetLightingColor().ToVector3() * 0.75f);
+            Lighting.AddLight(Projectile.Center, GetLightingColor().ToVector3() * 0.75f * light2);
         }
 
         if (CanFunction) {
             for (float i = -MathHelper.PiOver4; i <= MathHelper.PiOver4; i += MathHelper.PiOver2) {
                 Vector2 position = Projectile.Center + (Projectile.rotation * player.gravDir + i).ToRotationVector2() * 60f * Projectile.scale;
                 if (hasLighting) {
-                    Lighting.AddLight(position, GetLightingColor().ToVector3() * 0.75f);
+                    Lighting.AddLight(position, GetLightingColor().ToVector3() * 0.75f * light2);
                 }
                 Rectangle rectangle = Utils.CenteredRectangle(position, new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
                 Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
