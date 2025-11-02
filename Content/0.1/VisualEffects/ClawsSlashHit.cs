@@ -28,7 +28,7 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
         float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 3f, t, true) * Utils.GetLerpValue((float)(MaxTimeLeft), MaxTimeLeft / 2f, t, true);
         Scale = scale * _baseScale;
 
-        if (Main.rand.NextChance(0.1) && TimeLeft > 5 && TimeLeft < MaxTimeLeft - 5) {
+        if (Main.rand.NextChance(0.2) && TimeLeft > 10 && TimeLeft < MaxTimeLeft - 5) {
             int type = ModContent.DustType<Slash>();
             Dust dust = Dust.NewDustPerfect(Position, type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, DrawColor * 1.25f, Main.rand.NextFloat(0.75f, 0.9f) * 1.2f);
             dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
