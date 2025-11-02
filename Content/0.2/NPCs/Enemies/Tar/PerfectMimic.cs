@@ -157,7 +157,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             Main.dust[dust].noLight = true;
         }
 
-        PerfectMimicHead.SkinColor = PlayerCopy.skinColor;
+        PerfectMimicHead.SkinColor = _skinColor;
         if (Helper.SinglePlayerOrServer) {
             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position, NPC.velocity, ModContent.ProjectileType<PerfectMimicHead>(),
                 0, 0, Main.myPlayer);
