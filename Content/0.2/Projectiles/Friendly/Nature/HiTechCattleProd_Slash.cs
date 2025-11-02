@@ -38,6 +38,9 @@ sealed class HiTechSlash : NatureProjectile {
 
         Projectile.extraUpdates = 1;
 
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
+
         SetNatureValues(Projectile, false, false);
     }
 
@@ -54,12 +57,12 @@ sealed class HiTechSlash : NatureProjectile {
             Projectile.localAI[2] = 1f;
             Projectile.direction = Main.rand.NextBool().ToDirectionInt();
         }
-        if (Projectile.frame < Projectile.GetFrameCount() - 1 && Projectile.localAI[0]++ > 3f) {
+        if (Projectile.Opacity >= 1f && Projectile.frame < Projectile.GetFrameCount() - 1 && Projectile.localAI[0]++ > 4f) {
             Projectile.localAI[0] = 0f;
             Projectile.frame++;
         }
         Projectile.velocity *= 0.95f;
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true), 0.15f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f * Utils.GetLerpValue(0, 20, Projectile.timeLeft, true), 0.1f);
         Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
 
         if (Main.rand.NextBool(20)) {

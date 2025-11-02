@@ -1,18 +1,54 @@
 HighlightModes: {
 	// Tooltip: ""
-	Normal.Label: Стандартно
-	Always.Label: Всегда
-	Off.Label: Выключено
+
+	Normal: {
+		Label: Стандартно
+		// Tooltip: ""
+	}
+
+	Always: {
+		Label: Всегда
+		// Tooltip: ""
+	}
+
+	Off: {
+		Label: Выключено
+		// Tooltip: ""
+	}
 }
 
 WreathDrawingModes: {
 	// Tooltip: ""
-	Normal.Label: Классический
-	Normal2.Label: Классический 2
-	Fancy.Label: Узорчатый
-	Bars.Label: Полоски
-	Fancy2.Label: Узорчатый 2
-	Bars2.Label: Полоски 2
+
+	Normal: {
+		Label: Классический
+		// Tooltip: ""
+	}
+
+	Normal2: {
+		Label: Классический 2
+		// Tooltip: ""
+	}
+
+	Fancy: {
+		Label: Узорчатый
+		// Tooltip: ""
+	}
+
+	Bars: {
+		Label: Полоски
+		// Tooltip: ""
+	}
+
+	Fancy2: {
+		Label: Узорчатый 2
+		// Tooltip: ""
+	}
+
+	Bars2: {
+		Label: Полоски 2
+		// Tooltip: ""
+	}
 }
 
 RoAClientConfig: {
@@ -123,21 +159,57 @@ RoAServerConfig: {
 
 WreathPositions: {
 	// Tooltip: ""
-	Health.Label: Сверху справа
-	Player.Label: Над игроком
+
+	Health: {
+		Label: Сверху справа
+		// Tooltip: ""
+	}
+
+	Player: {
+		Label: Над игроком
+		// Tooltip: ""
+	}
 }
 
 DamageTooltipOptions: {
 	// Tooltip: ""
-	// Option1.Label: "1"
-	// Option2.Label: "2"
-	// Option3.Label: "3"
-	// Option4.Label: "4"
-	// Option5.Label: "5"
+
+	Option1: {
+		// Label: "1"
+		// Tooltip: ""
+	}
+
+	Option2: {
+		// Label: "2"
+		// Tooltip: ""
+	}
+
+	Option3: {
+		// Label: "3"
+		// Tooltip: ""
+	}
+
+	Option4: {
+		// Label: "4"
+		// Tooltip: ""
+	}
+
+	Option5: {
+		// Label: "5"
+		// Tooltip: ""
+	}
 }
 
 WreathSoundModes: {
 	// Tooltip: ""
-	Normal.Label: Классический
-	Alt.Label: Узорчатый
+
+	Normal: {
+		Label: Классический
+		// Tooltip: ""
+	}
+
+	Alt: {
+		Label: Узорчатый
+		// Tooltip: ""
+	}
 }

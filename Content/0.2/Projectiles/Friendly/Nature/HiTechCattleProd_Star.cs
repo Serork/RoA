@@ -127,7 +127,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         ExtraOpacity = Helper.Approach(ExtraOpacity, hasTarget ? 0.85f : 0f, TimeSystem.LogicDeltaTime * 2.5f);
         if (ExtraOpacity >= 0.75f && BeamCounter % SLASHATTACKFREQUENCYINTICKS == 0f) {
             if (Projectile.IsOwnerLocal()) {
-                Vector2 position = Projectile.Center + Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 100f;
+                Vector2 position = Projectile.Center + Vector2.One.RotatedByRandom(MathHelper.TwoPi) * DANGERDISTANCEINPIXELS * 0.55f;
                 ProjectileUtils.SpawnPlayerOwnedProjectile<HiTechSlash>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromAI()) {
                     Damage = Projectile.damage,
                     KnockBack = Projectile.knockBack,
