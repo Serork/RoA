@@ -68,16 +68,16 @@ sealed partial class Tar : ModLiquid {
         //This is the viscosity of the liquid, only used visually.
         //Lava usually has this set to 200, while honey has this set to 240. All other liquids set this to 0 by default.
         //In Vanilla this property can be found at "Terraria.GameContent.Liquid.LiquidRenderer.VISCOSITY_MASK"
-        VisualViscosity = 240;
+        LiquidRenderer.VISCOSITY_MASK[Type] = 240;
 
         //This is the length the liquid will visually have when flowing/falling downwards or if there is a slope underneath.
         //In Vanilla This property can be found at "Terraria.GameContent.Liquid.LiquidRenderer.WATERFALL_LENGTH"
-        LiquidFallLength = 2;
+        LiquidRenderer.WATERFALL_LENGTH[Type] = 2;
 
         //This is the opacity of the liquid. How well you can see objects in the liquid.
         //The SlopeOpacity property is different, as slopes do not render the same as a normal liquid tile
         //DefaultOpacity in vanilla, can be found at "Terraria.GameContent.Liquid.LiquidRenderer.DEFAULT_OPACITY"
-        DefaultOpacity = 0.95f;
+        LiquidRenderer.DEFAULT_OPACITY[Type] = 0.95f;
         SlopeOpacity = 1f;
         //To change the old liquid rendering opacity, please see the RetroDrawEffects override.
 
@@ -334,7 +334,7 @@ sealed partial class Tar : ModLiquid {
         return false;
     }
 
-    public override bool PreDraw(int i, int j, LiquidDrawCache liquidDrawCache, Vector2 drawOffset, bool isBackgroundDraw) {
+    public override bool PreDraw(int i, int j, LiquidRenderer.LiquidDrawCache liquidDrawCache, Vector2 drawOffset, bool isBackgroundDraw) {
         Lighting.GetCornerColors(i, j, out VertexColors vertices);
         Texture2D texture = LiquidLoader.LiquidAssets[Type].Value;
         Rectangle sourceRectangle = liquidDrawCache.SourceRectangle;
@@ -349,7 +349,7 @@ sealed partial class Tar : ModLiquid {
 
         SetTarVertexColors(ref vertices, 1f, i, j);
 
-        float liquidOpacity = liquidDrawCache.Opacity * (isBackgroundDraw ? 1f : DefaultOpacity);
+        float liquidOpacity = liquidDrawCache.Opacity * (isBackgroundDraw ? 1f : LiquidRenderer.DEFAULT_OPACITY[Type]);
         liquidOpacity = Math.Min(1f, liquidOpacity);
         vertices.BottomLeftColor *= liquidOpacity;
         vertices.BottomRightColor *= liquidOpacity;
