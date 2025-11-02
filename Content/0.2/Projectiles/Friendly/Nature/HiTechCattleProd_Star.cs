@@ -25,6 +25,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
     private static ushort DANGERDISTANCEINPIXELS => 160;
     private static float SLASHATTACKFREQUENCYINTICKS => 10f;
     private static ushort TIMELEFT => (ushort)MathUtils.SecondsToFrames(9);
+    private static ushort BEFOREATTACKTIME => 20;
 
     public record struct HiTechBeamInfo(float Rotation, float Opacity);
 
@@ -111,7 +112,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         if (Projectile.timeLeft <= 60 * 2) {
             hasTarget = true;
         }
-        bool justSpawned = Projectile.timeLeft > TIMELEFT - 30;
+        bool justSpawned = Projectile.timeLeft > TIMELEFT - BEFOREATTACKTIME;
         if (!justSpawned && hasTarget) {
             if (!StartedAttack) {
                 Projectile.timeLeft = 60 * 2;
