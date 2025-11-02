@@ -19,7 +19,7 @@ sealed class HardmodeClawsSlashHit : VisualEffect<HardmodeClawsSlashHit> {
     private float _baseScale;
 
     protected override void SetDefaults() {
-        TimeLeft = 40;
+        TimeLeft = 35;
 
         _baseScale = Scale * 0.85f;
 
