@@ -44,7 +44,7 @@ sealed class HardmodeClawsSlashHit : VisualEffect<HardmodeClawsSlashHit> {
 
         float t = (float)((MaxTimeLeft - TimeLeft) / (double)MaxTimeLeft * 60.0);
         float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 2f, t, true) * Utils.GetLerpValue(MaxTimeLeft, MaxTimeLeft - MaxTimeLeft / 2f, t, true) * 1f;
-        Rotation = Utils.AngleLerp(Rotation, -0.1f + Main.rand.NextFloatRange(0.1f), 0.5f) * scale;
+        Rotation = Utils.AngleLerp(Rotation, -0.07f + Main.rand.NextFloatRange(0.1f), 0.5f) * scale;
 
         if (--TimeLeft <= 0) {
             RestInPool();

@@ -27,11 +27,13 @@ sealed class TectonicCaneProjectile2 : NatureProjectile {
         Projectile.localNPCHitCooldown = 20;
     }
 
-    protected override void SafeOnSpawn(IEntitySource source) {
-        Projectile.frame = Main.rand.NextBool().ToInt();
-    }
-
     public override void AI() {
+        if (Projectile.localAI[2] == 0f) {
+            Projectile.localAI[2] = 1f;
+
+            Projectile.frame = Main.rand.NextBool().ToInt();
+        }
+
         //Helper.ApplyWindPhysics(Projectile.Center, ref Projectile.velocity);
 
         float value = Projectile.velocity.Length();

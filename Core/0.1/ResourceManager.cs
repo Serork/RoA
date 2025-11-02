@@ -70,6 +70,10 @@ static class ResourceManager {
     public static string MeleeProjectileTextures => FriendlyProjectileTextures + "Melee/";
     public static string SummonProjectileTextures => FriendlyProjectileTextures + "Summon/";
 
+    public static string NPCTextures => Textures + "NPCs/";
+    public static string EnemyNPCTextures => NPCTextures + "Enemies/";
+    public static string TarEnemyNPCTextures => EnemyNPCTextures + "Tar/";
+
     public static string DustTextures => Textures + "Dusts/";
 
     public static string BuffTextures => Textures + "Buffs/";

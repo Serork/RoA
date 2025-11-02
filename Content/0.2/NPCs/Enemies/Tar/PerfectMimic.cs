@@ -128,6 +128,48 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     public bool IsTeleporting => _teleportTimer > 0;
     public bool FullTransformed => TransformedEnough && !CanTeleport;
 
+    public override void HitEffect(NPC.HitInfo hit) {
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0 * (1f - _maxTransform); num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
+            }
+
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0 * (_maxTransform); num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TarMetaball>(), hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num829 = 0; num829 < (int)(50 * (1f - _maxTransform)); num829++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
+        }
+
+        for (int num829 = 0; num829 < (int)(50 * _maxTransform); num829++) {
+            int alpha2 = Main.rand.Next(50, 100);
+            int dust = Dust.NewDust(NPC.position, NPC.width, NPC.height, ModContent.DustType<TarDebuff>(), 2.5f * (float)hit.HitDirection, -2.5f, Alpha: alpha2);
+            if (Main.rand.Next(2) == 0)
+                Main.dust[dust].alpha += 25;
+
+            if (Main.rand.Next(2) == 0)
+                Main.dust[dust].alpha += 25;
+
+            Main.dust[dust].noLight = true;
+        }
+
+        PerfectMimicHead.SkinColor = PlayerCopy.skinColor;
+        if (Helper.SinglePlayerOrServer) {
+            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position, NPC.velocity, ModContent.ProjectileType<PerfectMimicHead>(),
+                0, 0, Main.myPlayer);
+            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position + Vector2.UnitY * 20f, NPC.velocity, ModContent.ProjectileType<PerfectMimicBody>(),
+                0, 0, Main.myPlayer);
+            for (int i = 0; i < 2; i++) {
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position + Vector2.UnitY * 34, NPC.velocity, ModContent.ProjectileType<PerfectMimicLeg>(),
+                    0, 0, Main.myPlayer);
+            }
+        }
+    }
+
     public override void ModifyTypeName(ref string typeName) {
         if (!NPC.active) {
             return;
@@ -535,6 +577,13 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     }
 
     public override void AI() {
+        if (NPC.lavaWet) {
+            NPC.life = 0;
+            NPC.HitEffect(0, 100.0);
+            NPC.checkDead();
+            return;
+        }
+
         bool teleported = false;
         TransformationFactor = Helper.Wave(VisualTimer, _minTransform, _maxTransform, 1f, 0f);
         TransformationFactor = Ease.SineOut(MathUtils.Clamp01(TransformationFactor));
@@ -580,8 +629,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (CanTeleport && VisualTimer2 > max) {
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
-                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
-                    //_teleportTimer = 60f;
+                    //_teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    _teleportTimer = 60f;
                     NPC.netUpdate = true;
                 }
                 teleported = true;

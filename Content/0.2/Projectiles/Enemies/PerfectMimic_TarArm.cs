@@ -131,7 +131,27 @@ sealed class TarArm : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
+        List<Vector2> points = _bezierCurve.GetPoints(PointCount);
+        if (Helper.SinglePlayerOrServer) {
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), points[points.Count - 1], Projectile.velocity, ModContent.ProjectileType<PerfectMimicArm>(),
+                0, 0, Main.myPlayer);
+        }
 
+        for (int i = 0; i < points.Count - 1; i++) {
+            for (int num829 = 0; num829 < 4; num829++) {
+                int alpha2 = Main.rand.Next(50, 100);
+                int size = (int)(10 * (Small ? 0.8f : 1f));
+                int dust = Dust.NewDust(points[i] - Vector2.One * 5f, 10, 10, ModContent.DustType<TarDebuff>(), Alpha: alpha2);
+                Main.dust[dust].velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
+                if (Main.rand.Next(2) == 0)
+                    Main.dust[dust].alpha += 25;
+
+                if (Main.rand.Next(2) == 0)
+                    Main.dust[dust].alpha += 25;
+
+                Main.dust[dust].noLight = true;
+            }
+        }
     }
 
     public override bool PreDraw(ref Color lightColor) => false;
