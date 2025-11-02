@@ -321,11 +321,15 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
         position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
         velocity = angle.ToRotationVector2() * velocity * 0.5f;
         int layer = VisualEffectLayer.ABOVENPCS;
-        VisualEffectSystem.New<ClawsSlashHit>(layer)?.Setup(position,
+        var particle = VisualEffectSystem.New<ClawsSlashHit>(layer)?.Setup(position,
                   velocity,
                   color);
+        if (particle != null) {
+            particle.ShouldFullBright = true;
+            particle.BrightnessModifier = 1f;
+        }
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
+            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f, false, true, 1f));
         }
     }
 }

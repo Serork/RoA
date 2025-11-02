@@ -20,7 +20,8 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         HardmodeClawsHit
     }
 
-    public VisualEffectSpawnPacket(VisualEffectPacketType packetType, Player player, int layer, Vector2 position, Vector2 velocity, Color color, float scale, float rotation) {
+    public VisualEffectSpawnPacket(VisualEffectPacketType packetType, Player player, int layer, Vector2 position, Vector2 velocity, Color color, float scale, float rotation, 
+        bool dontEmitLight = false, bool shouldFullBright = false, float brightnessModifier = 0f) {
         Writer.TryWriteSenderPlayer(player);
         Writer.Write((byte)packetType);
         Writer.Write(layer);
@@ -29,6 +30,11 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         Writer.WriteRGBA(color);
         Writer.Write(scale);
         Writer.Write(rotation);
+        Writer.Write(dontEmitLight);
+        Writer.Write(shouldFullBright);
+        if (brightnessModifier > 0f) {
+            Writer.Write(brightnessModifier);
+        }
     }
 
     public override void Read(BinaryReader reader, int sender) {
@@ -43,14 +49,28 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         Color color = reader.ReadRGBA();
         float scale = reader.ReadSingle();
         float rotation = reader.ReadSingle();
+        bool dontEmitLight = reader.ReadBoolean();
+
+        bool shouldFullBright = reader.ReadBoolean();
+        float brightnessModifier = 0f;
+        if (shouldFullBright) {
+            brightnessModifier = reader.ReadSingle();
+        }
 
         void createVisualEffect<T>() where T : VisualEffect<T>, new() {
-            VisualEffectSystem.New<T>(layer, onServer: true)?.
+            var particle = VisualEffectSystem.New<T>(layer, onServer: true)?.
                         Setup(position,
                               velocity,
                               color,
                               scale,
                               rotation);
+            if (particle is not null) {
+                particle.DontEmitLight = dontEmitLight;
+                if (shouldFullBright) {
+                    particle.ShouldFullBright = shouldFullBright;
+                    particle.BrightnessModifier = brightnessModifier;
+                }
+            }
         }
         switch (packetType) {
             case VisualEffectPacketType.ClawsHit:
@@ -68,7 +88,7 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         }
 
         if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(packetType, player, layer, position, velocity, color, scale, rotation), ignoreClient: sender);
+            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(packetType, player, layer, position, velocity, color, scale, rotation, dontEmitLight, shouldFullBright, brightnessModifier), ignoreClient: sender);
         }
     }
 }

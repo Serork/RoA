@@ -25,6 +25,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -148,23 +149,29 @@ class ClawsSlash : NatureProjectile {
             float scale = Projectile.scale;
             int layer = VisualEffectLayer.ABOVEDUSTS;
             if (selectedClaws.IsHardmodeClaws) {
-                VisualEffectSystem.New<HardmodeClawsSlashHit>(layer).
+                HardmodeClawsSlashHit particle2 = VisualEffectSystem.New<HardmodeClawsSlashHit>(layer).
                     Setup(position,
                           velocity,
                           color,
-                          scale: scale).DontEmitLight = !selectedClaws.HasLighting;
+                          scale: scale);
+                particle2.DontEmitLight = !selectedClaws.HasLighting;
+                particle2.ShouldFullBright = ShouldFullBright;
+                particle2.BrightnessModifier = selectedClaws.BrightnessModifier;
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.HardmodeClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
+                    MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.HardmodeClawsHit, Owner, layer, position, velocity, color, 1f, 0f, !selectedClaws.HasLighting));
                 }
                 return;
             }
-            VisualEffectSystem.New<ClawsSlashHit>(layer).
+            var particle = VisualEffectSystem.New<ClawsSlashHit>(layer).
                 Setup(position,
                       velocity,
                       color,
-                      scale: scale).DontEmitLight = !selectedClaws.HasLighting;
+                      scale: scale);
+            particle.DontEmitLight = !selectedClaws.HasLighting;
+            particle.ShouldFullBright = ShouldFullBright;
+            particle.BrightnessModifier = selectedClaws.BrightnessModifier;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f));
+                MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f, !selectedClaws.HasLighting));
             }
         }
     }

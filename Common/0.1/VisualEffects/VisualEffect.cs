@@ -23,6 +23,9 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     public float AI0 = 0f;
     public object? CustomData;
 
+    public bool ShouldFullBright;
+    public float BrightnessModifier;
+
     public virtual int InitialPoolSize => 1;
 
     public virtual T CreateBaseInstance() {
@@ -85,7 +88,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         }
 
         if (!DontEmitLight) {
-            Lighting.AddLight(Position, DrawColor.ToVector3() * 0.5f);
+            Lighting.AddLight(Position, DrawColor.ToVector3() * 0.5f * Scale);
         }
         Position += Velocity;
     }

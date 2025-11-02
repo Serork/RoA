@@ -33,6 +33,9 @@ sealed class ClawsSlashHit : VisualEffect<ClawsSlashHit> {
             Dust dust = Dust.NewDustPerfect(Position, type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, DrawColor * 1.25f, Main.rand.NextFloat(0.75f, 0.9f) * 1.2f);
             dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
             dust.noLight = dust.noLightEmittence = true;
+            if (ShouldFullBright) {
+                dust.customData = BrightnessModifier;
+            }
             dust.noGravity = true;
         }
 
