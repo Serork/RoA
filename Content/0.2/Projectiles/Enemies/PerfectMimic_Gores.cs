@@ -72,9 +72,16 @@ class PerfectMimicHead : ModProjectile {
 
         int chance = 40;
         if (Main.rand.NextBool(chance) && Projectile.Opacity >= 1f) {
-            Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height) / 2f, ModContent.DustType<Dusts.TarDebuff>());
-            dust.alpha = 150;
+            int alpha2 = Main.rand.Next(50, 100);
+            Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(Projectile.width, Projectile.height) / 2f, ModContent.DustType<Dusts.TarDebuff>(), Alpha: alpha2);
             dust.velocity.X *= 0.1f;
+            if (Main.rand.Next(2) == 0)
+                dust.alpha += 25;
+
+            if (Main.rand.Next(2) == 0)
+                dust.alpha += 25;
+
+            dust.noLight = true;
         }
 
         if (Projectile.lavaWet) {
