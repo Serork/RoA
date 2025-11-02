@@ -61,7 +61,7 @@ sealed class HardmodeClawsSlashHit : VisualEffect<HardmodeClawsSlashHit> {
         Vector2 position = Position - Main.screenPosition;
         SpriteEffects effects = SpriteEffects.None;
 
-        color *= 0.875f;
+        color *= MathHelper.Lerp(0.75f, 0.875f, 0.5f);
 
         float t = (float)((MaxTimeLeft - TimeLeft) / (double)MaxTimeLeft * 60.0);
         float t2 = Utils.GetLerpValue(0f, MaxTimeLeft / 2f, t, true) * Utils.GetLerpValue(MaxTimeLeft, MaxTimeLeft - MaxTimeLeft / 2f, t, true) * 0.75f;
