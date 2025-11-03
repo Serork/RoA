@@ -139,7 +139,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
 
         if (!Main.dedServ) {
             NPC.position.X += 1f;
-            NPC.position.Y -= 2f;
+            NPC.position.Y -= 1f;
             int gore = Gore.NewGore(NPC.GetSource_Death(), NPC.position + Vector2.UnitY * 4f, Vector2.Zero, "Menhir_0".GetGoreType(), Scale: NPC.scale);
             Main.gore[gore].velocity *= 0.25f;
             Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
@@ -153,7 +153,7 @@ sealed class Menhir : ModNPC, IRequestAssets {
             Main.gore[gore].velocity *= 0.25f;
             Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
             NPC.position.X -= 1f;
-            NPC.position.Y += 2f;
+            NPC.position.Y += 1f;
         }
     }
 
