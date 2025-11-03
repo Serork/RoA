@@ -46,14 +46,12 @@ sealed class Menhir : ModNPC, IRequestAssets {
 
     public enum MenhirRequstedTextureType : byte {
         Glow,
-        Chain,
-        Lock
+        Vine
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture 
         => [((byte)MenhirRequstedTextureType.Glow, Texture + "_Glow"),
-            ((byte)MenhirRequstedTextureType.Chain, Texture + "_Chain"),
-            ((byte)MenhirRequstedTextureType.Lock, Texture + "_Lock")];
+            ((byte)MenhirRequstedTextureType.Vine, Texture + "_Vine")];
 
     public enum MenhirState : byte {
         Idle,
@@ -119,6 +117,8 @@ sealed class Menhir : ModNPC, IRequestAssets {
         NPC.HitSound = SoundID.Dig;
 
         NPC.aiStyle = -1;
+
+        NPC.lavaImmune = true;
     }
 
     public override bool? CanFallThroughPlatforms() => true;
