@@ -41,18 +41,18 @@ Bloodlust: {
 }
 
 DeathWard: {
-	DisplayName: Soul Ward
+	DisplayName: Death Ward
 	Description: Prevents fatal damage once
 }
 
 Willpower: {
 	DisplayName: Willpower
-	Description: 15% increased wreath charge rate
+	Description: Increased wreath charge rate
 }
 
 Resilience: {
-	DisplayName: Moon's Resilience
-	Description: Slightly delays the wreath from depleting
+	DisplayName: Resilience
+	Description: Increased delay before the wreath depletes
 }
 
 ExtraRegen: {
@@ -66,18 +66,18 @@ Hemorrhage: {
 }
 
 Brightstone: {
-	DisplayName: Brightstone Veil
+	DisplayName: Brightstone
 	Description: Leaving a trail of glowing dust
 }
 
 DryadBlood: {
-	DisplayName: Dryad Blood
-	Description: Debuffs deal 75% less damage
+	DisplayName: Dryad's Blood
+	Description: Decreased damage taken from debuffs
 }
 
 Heavy: {
 	DisplayName: Heavy
-	Description: Your terminal velocity is enhanced
+	Description: Increased terminal velocity
 }
 
 RavencallersCloakBuff: {
@@ -148,17 +148,17 @@ ToxicFumesNoTimeDisplay: {
 
 OniMask: {
 	DisplayName: Oni Mask
-	Description: Reduced enemy spawn rate
+	Description: Decreased enemy spawn rate
 }
 
 Weak: {
 	DisplayName: Weak
-	Description: Physical abilities are decreased
+	Description: Decreased physical capabilities
 }
 
 Unburning: {
 	DisplayName: Un-burning
-	Description: Flames reinvigorate you
+	Description: Reinvigorated by fire
 }
 
 Moth: {
@@ -168,12 +168,12 @@ Moth: {
 
 FlametrackerDebuff: {
 	DisplayName: Flametracker's Mark
-	Description: Mods.RoA.Buffs.FlametrackerDebuff.Description
+	Description: Increased magic damage taken
 }
 
 SolidifyingSap: {
 	DisplayName: Solidifying Sap
-	Description: Restrains movement
+	Description: Restrained movement
 }
 
 Fireblossom: {
@@ -192,7 +192,7 @@ OnFire: {
 }
 
 PrismaticFavor: {
-	DisplayName: Prismatic Favor
+	DisplayName: Iridescence
 	Description: Class damage enhancements are applied to all damage types
 }
 
@@ -213,7 +213,7 @@ LittleFleder: {
 
 EssenceDrain: {
 	DisplayName: Essence Drain
-	Description: Your life seeps through your fingers
+	Description: "'Life seeps through your fingers'"
 }
 
 SmallMoon: {
@@ -238,7 +238,7 @@ ElderwoodSetBonusBuff: {
 
 MercuriumZipperDebuff: {
 	DisplayName: Mercurium Zipper
-	Description: Mods.RoA.Buffs.MercuriumZipperDebuff.Description
+	Description: "'Bound by fate'"
 }
 
 CosmicHat_Buff: {

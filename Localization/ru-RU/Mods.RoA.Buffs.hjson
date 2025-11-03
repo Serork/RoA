@@ -41,18 +41,18 @@ Bloodlust: {
 }
 
 DeathWard: {
-	DisplayName: Оберег для души
+	DisplayName: Оберег жизни
 	Description: Единоразово защищает от смерти
 }
 
 Willpower: {
 	DisplayName: Сила воли
-	Description: Скорость заполнения венка увеличена на 15%
+	Description: Скорость заполнения венка увеличена
 }
 
 Resilience: {
-	DisplayName: Стойкость луны
-	Description: Слегка отсрочивает венок от опустошения
+	DisplayName: Стойкость
+	Description: Задержка перед разрядкой венка увеличена
 }
 
 ExtraRegen: {
@@ -66,18 +66,18 @@ Hemorrhage: {
 }
 
 Brightstone: {
-	DisplayName: Вуаль из светлокамня
-	Description: Оставляет шлейф из светящейся пыли
+	DisplayName: Светлокамень
+	Description: Шлейф из светящейся пыли остается позади
 }
 
 DryadBlood: {
 	DisplayName: Кровь дриады
-	Description: Дебаффы наносят на 75% меньше урона
+	Description: Урон от дебаффов снижен
 }
 
 Heavy: {
 	DisplayName: Тяжесть
-	Description: Ваша скорость витания увеличена
+	Description: Скорость витания увеличена
 }
 
 RavencallersCloakBuff: {
@@ -168,12 +168,12 @@ Moth: {
 
 FlametrackerDebuff: {
 	DisplayName: Метка ищущего пламя
-	// Description: Mods.RoA.Buffs.FlametrackerDebuff.Description
+	Description: Получаемый магический урон увеличен
 }
 
 SolidifyingSap: {
 	DisplayName: Затвердевающая живица
-	Description: Передвижение ограничено
+	Description: Скорость передвижения снижена
 }
 
 Fireblossom: {
@@ -192,7 +192,7 @@ OnFire: {
 }
 
 PrismaticFavor: {
-	DisplayName: Переливчатое благо
+	DisplayName: Иризация
 	Description: Увеличения урона распространяются на все виды урона
 }
 
@@ -213,7 +213,7 @@ LittleFleder: {
 
 EssenceDrain: {
 	DisplayName: Похищение сущности
-	Description: Ваша жизнь утекает сквозь пальцы
+	Description: "'Жизнь утекает сквозь пальцы'"
 }
 
 SmallMoon: {
@@ -238,7 +238,7 @@ ElderwoodSetBonusBuff: {
 
 MercuriumZipperDebuff: {
 	DisplayName: Ртутная застёжка
-	Description: Сцеплены судьбой
+	Description: "'Сцеплены судьбой'"
 }
 
 CosmicHat_Buff: {

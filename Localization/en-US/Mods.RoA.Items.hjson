@@ -1143,7 +1143,7 @@ ElderwoodWall: {
 }
 
 PrismaticPotion: {
-	DisplayName: Prismatic Potion
+	DisplayName: Iridescent Potion
 	Tooltip: Makes damage enhancements affect all damage types simultaneously
 }
 
