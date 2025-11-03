@@ -123,6 +123,28 @@ sealed class Menhir : ModNPC, IRequestAssets {
 
     public override bool? CanFallThroughPlatforms() => true;
 
+    public override void HitEffect(NPC.HitInfo hit) {
+        ushort stoneDustType = (ushort)ModContent.DustType<Dusts.Backwoods.Stone>();
+        if (NPC.life > 0) {
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, stoneDustType, hit.HitDirection, -1f);
+            }
+
+            return;
+        }
+
+        for (int num829 = 0; num829 < 50; num829++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, stoneDustType, 2.5f * (float)hit.HitDirection, -2.5f);
+        }
+
+        if (!Main.dedServ) {
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "Menhir_0".GetGoreType(), Scale: NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 22f), NPC.velocity, "Menhir_1".GetGoreType(), Scale: NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 40f), NPC.velocity, "Menhir_2".GetGoreType(), Scale: NPC.scale);
+            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 62f), NPC.velocity, "Menhir_3".GetGoreType(), Scale: NPC.scale);
+        }
+    }
+
     public override bool PreAI() {
         UnlockEnemies();
 
