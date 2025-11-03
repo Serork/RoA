@@ -126,22 +126,34 @@ sealed class Menhir : ModNPC, IRequestAssets {
     public override void HitEffect(NPC.HitInfo hit) {
         ushort stoneDustType = (ushort)ModContent.DustType<Dusts.Backwoods.Stone>();
         if (NPC.life > 0) {
-            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0; num828++) {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, stoneDustType, hit.HitDirection, -1f);
+            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 50.0; num828++) {
+                Dust.NewDust(NPC.position - Vector2.UnitY * 4f, NPC.width, NPC.height, stoneDustType, hit.HitDirection, 0f);
             }
 
             return;
         }
 
-        for (int num829 = 0; num829 < 50; num829++) {
-            Dust.NewDust(NPC.position, NPC.width, NPC.height, stoneDustType, 2.5f * (float)hit.HitDirection, -2.5f);
+        for (int num829 = 0; num829 < 25; num829++) {
+            Dust.NewDust(NPC.position - Vector2.UnitY * 4f, NPC.width, NPC.height, stoneDustType, hit.HitDirection, 0f);
         }
 
         if (!Main.dedServ) {
-            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, "Menhir_0".GetGoreType(), Scale: NPC.scale);
-            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 22f), NPC.velocity, "Menhir_1".GetGoreType(), Scale: NPC.scale);
-            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 40f), NPC.velocity, "Menhir_2".GetGoreType(), Scale: NPC.scale);
-            Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 62f), NPC.velocity, "Menhir_3".GetGoreType(), Scale: NPC.scale);
+            NPC.position.X += 1f;
+            NPC.position.Y -= 2f;
+            int gore = Gore.NewGore(NPC.GetSource_Death(), NPC.position + Vector2.UnitY * 4f, Vector2.Zero, "Menhir_0".GetGoreType(), Scale: NPC.scale);
+            Main.gore[gore].velocity *= 0.25f;
+            Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+            gore = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 20f), Vector2.Zero, "Menhir_1".GetGoreType(), Scale: NPC.scale);
+            Main.gore[gore].velocity *= 0.25f;
+            Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+            gore = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 32f), Vector2.Zero, "Menhir_2".GetGoreType(), Scale: NPC.scale);
+            Main.gore[gore].velocity *= 0.25f;
+            Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+            gore = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + 48f), Vector2.Zero, "Menhir_3".GetGoreType(), Scale: NPC.scale);
+            Main.gore[gore].velocity *= 0.25f;
+            Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+            NPC.position.X -= 1f;
+            NPC.position.Y += 2f;
         }
     }
 
