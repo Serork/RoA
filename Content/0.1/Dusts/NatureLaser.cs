@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 public class NatureLaser : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White;
+    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White * 0.9f;
 
     public override void OnSpawn(Dust dust) => UpdateType = 70;
 

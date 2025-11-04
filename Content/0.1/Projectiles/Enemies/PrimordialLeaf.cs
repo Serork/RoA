@@ -18,7 +18,7 @@ sealed class PrimordialLeaf : ModProjectile {
         Main.projFrames[Projectile.type] = 5;
     }
 
-    public override Color? GetAlpha(Color lightColor) => Color.White;
+    public override Color? GetAlpha(Color lightColor) => Color.White * 0.9f;
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;

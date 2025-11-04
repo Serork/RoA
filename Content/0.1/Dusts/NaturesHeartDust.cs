@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class NaturesHeartDust : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.Lerp(lightColor, Color.White, 0.5f);
+    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.Lerp(lightColor, Color.White * 0.9f, 0.5f);
 
     public override void OnSpawn(Dust dust) => UpdateType = 184;
 

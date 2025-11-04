@@ -26,7 +26,7 @@ sealed class AcalyphaTulip : NatureProjectile {
 
     private Color _tulipColor, _tulipColor2;
 
-    public override Color? GetAlpha(Color lightColor) => new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 63 - Projectile.alpha / 4);
+    public override Color? GetAlpha(Color lightColor) => new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 63 - Projectile.alpha / 4) * 0.9f;
 
     public override void Load() {
         if (Main.dedServ) {

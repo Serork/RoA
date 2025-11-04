@@ -23,7 +23,7 @@ sealed class FeatherinABottleGore2 : FeatherinABottleGore1 { }
 class FeatherinABottleGore1 : ModGore {
     protected virtual Color LightColor { get; } = new(170, 252, 134);
 
-    public override Color? GetAlpha(Gore gore, Color lightColor) => Color.White * 0.7f;
+    public override Color? GetAlpha(Gore gore, Color lightColor) => Color.White * 0.9f;
 
     public override void OnSpawn(Gore gore, IEntitySource source) {
         UpdateType = 11;

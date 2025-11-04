@@ -135,7 +135,7 @@ sealed class HunterProjectile2 : ModProjectile {
 
     public override string Texture => ResourceManager.EmptyTexture;
 
-    public override Color? GetAlpha(Color lightColor) => Color.White;
+    public override Color? GetAlpha(Color lightColor) => Color.White * 0.9f;
 
     public override void SetDefaults() {
         Projectile.width = 4;

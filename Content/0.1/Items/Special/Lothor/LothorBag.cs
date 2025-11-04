@@ -50,7 +50,7 @@ sealed class LothorBag : ModItem {
         itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Lothor>()));
     }
 
-    public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.4f);
+    public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White * 0.9f, 0.4f);
 
     public override void PostUpdate() {
         Lighting.AddLight(Item.Center, Color.White.ToVector3() * 0.4f);

@@ -165,5 +165,5 @@ sealed class MeltingStar : ModProjectile {
         return false;
     }
 
-    public override Color? GetAlpha(Color lightColor) => Color.White * Projectile.Opacity;
+    public override Color? GetAlpha(Color lightColor) => Color.White * 0.9f * Projectile.Opacity;
 }

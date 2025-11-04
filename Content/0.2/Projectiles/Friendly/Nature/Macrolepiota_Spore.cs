@@ -33,7 +33,7 @@ sealed class Spore : NatureProjectile {
         }
     }
 
-    public override Color? GetAlpha(Color lightColor) => new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
+    public override Color? GetAlpha(Color lightColor) => new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0) * 0.9f;
 
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: true);
@@ -102,7 +102,7 @@ sealed class Spore : NatureProjectile {
         Texture2D sporeTexture = TextureAssets.Projectile[Type].Value;
         Vector2 position = Projectile.Center;
         Rectangle clip = sporeTexture.Bounds;
-        Color color = Projectile.GetAlpha(Color.White);
+        Color color = Projectile.GetAlpha(Color.White * 0.9f);
         float rotation = Projectile.rotation;
         SporeValues sporeValues = new(Projectile);
         SpriteEffects flip = sporeValues.FacedRight ? SpriteEffects.FlipHorizontally : SpriteEffects.None;

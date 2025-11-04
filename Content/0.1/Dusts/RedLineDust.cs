@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class RedLineDust : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(255 - dust.alpha, 255 - dust.alpha, 255 - dust.alpha, 255 - dust.alpha);
+    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(255 - dust.alpha, 255 - dust.alpha, 255 - dust.alpha, 255 - dust.alpha) * 0.9f;
 
     public override void OnSpawn(Dust dust) {
         dust.velocity *= 0.3f;

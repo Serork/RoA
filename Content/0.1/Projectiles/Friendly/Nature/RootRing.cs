@@ -21,7 +21,7 @@ sealed class RootRing : NatureProjectile {
 
     private static float _factor;
 
-    public override Color? GetAlpha(Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 0);
+    public override Color? GetAlpha(Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 0) * 0.9f;
 
     protected override void SafeSetDefaults() {
         int width = 296; int height = width;

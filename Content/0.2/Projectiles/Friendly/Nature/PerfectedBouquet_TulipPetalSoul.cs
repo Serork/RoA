@@ -35,7 +35,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
     private static ushort BOUNCYTIMETODIVIDE => 30;
     private static float PSEUDODESTROYEDOPACITY => 0.5f;
 
-    public static Color SoulColor => new(Color.White.R, Color.White.G, Color.White.B, 150);
+    public static Color SoulColor => new Color(Color.White.R, Color.White.G, Color.White.B, 150) * 0.9f;
 
     private static Asset<Texture2D>? _sawEffectTexture;
 

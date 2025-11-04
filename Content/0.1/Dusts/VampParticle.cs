@@ -13,7 +13,7 @@ sealed class VampParticle : ModDust {
         dust.noLight = true;
     }
 
-    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(255, 255, 255, 0) * (1f - dust.alpha / 255f);
+    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(255, 255, 255, 0) * 0.9f * (1f - dust.alpha / 255f);
 
     public override bool Update(Dust dust) {
         if (dust.alpha > 0 && dust.scale > 0.75f) {

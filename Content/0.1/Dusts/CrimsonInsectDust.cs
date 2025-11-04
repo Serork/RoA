@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class CrimsonInsectDust : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(255, 255, 255, 0);
+    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(255, 255, 255, 0) * 0.9f;
 
     public override bool Update(Dust dust) {
         if (!dust.noGravity) {

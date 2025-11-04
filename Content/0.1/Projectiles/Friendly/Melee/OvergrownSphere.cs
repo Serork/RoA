@@ -187,7 +187,7 @@ sealed class OvergrownSphere : ModProjectile {
         return false;
     }
 
-    public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.5f);
+    public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White * 0.9f, 0.5f);
 
     public override bool? CanCutTiles() => false;
 

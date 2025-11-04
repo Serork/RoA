@@ -29,5 +29,5 @@ sealed class WeakDust : ModDust {
         }
         return false;
     }
-    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 120) * (1f - (float)dust.alpha / 255f);
+    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 120) * 0.9f * (1f - (float)dust.alpha / 255f);
 }

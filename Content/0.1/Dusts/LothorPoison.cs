@@ -11,7 +11,7 @@ class LothorPoison2 : ModDust {
     public override string Texture => base.Texture[..^1];
 
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-        Color result = Color.White * (float)(1f - (float)dust.alpha / 255);
+        Color result = Color.White * 0.9f * (float)(1f - (float)dust.alpha / 255);
         return result;
     }
 

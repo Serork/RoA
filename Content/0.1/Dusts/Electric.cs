@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class Electric : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White;
+    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White * 0.9f;
 
     public override void OnSpawn(Dust dust) {
         UpdateType = DustID.Electric;

@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class MoonSickle : NatureProjectile {
-    public override Color? GetAlpha(Color lightColor) => new Color(255, 255, 200, 200) * (1f - Projectile.alpha / 255f);
+    public override Color? GetAlpha(Color lightColor) => new Color(255, 255, 200, 200) * 0.9f * (1f - Projectile.alpha / 255f);
 
     private float rotationTimer = 3.14f * 2f;
     private float lightIntensity = 0;

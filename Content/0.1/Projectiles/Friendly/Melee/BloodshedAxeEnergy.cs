@@ -17,7 +17,7 @@ sealed class BloodshedAxeEnergy : ModProjectile {
 
     private int Direction => (int)Projectile.ai[1];
 
-    public override Color? GetAlpha(Color lightColor) => new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0);
+    public override Color? GetAlpha(Color lightColor) => new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0) * 0.9f;
 
     public override void SetDefaults() {
         int width = 54; int height = 50;

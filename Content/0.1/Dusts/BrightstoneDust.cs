@@ -15,7 +15,7 @@ public class BrightstoneDust : ModDust, IDrawDustPrePlayer {
 
     public override bool PreDraw(Dust dust) => false;
 
-    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White;
+    public override Color? GetAlpha(Dust dust, Color lightColor) => Color.White * 0.9f;
 
     public override bool Update(Dust dust) {
         dust.velocity *= 0.98f;

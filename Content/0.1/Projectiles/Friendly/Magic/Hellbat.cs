@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Magic;
 
 sealed class Hellbat : ModProjectile {
-    public override Color? GetAlpha(Color lightColor) => Color.White * (1f - Projectile.alpha / 255f) * Projectile.Opacity;
+    public override Color? GetAlpha(Color lightColor) => Color.White * 0.9f * (1f - Projectile.alpha / 255f) * Projectile.Opacity;
 
     public override void SetStaticDefaults() {
         Main.projFrames[Type] = 5;
