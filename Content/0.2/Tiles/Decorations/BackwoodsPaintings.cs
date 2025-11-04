@@ -50,7 +50,7 @@ sealed class Her : Painting {
         spriteBatch.Draw(texture,
                          new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + TileHelper.ScreenOffset,
                          new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16),
-                         Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                         Color.White * 0.9f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
     }
 }
 
