@@ -18,6 +18,8 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
+using SteelSeries.GameSense;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -665,6 +667,16 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                         for (int i = 0; i < 2; i++) {
                             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position + Vector2.UnitY * 44, NPC.velocity, ModContent.ProjectileType<PerfectMimicLeg>(),
                                 0, 0, Main.myPlayer);
+                        }
+                    }
+
+                    SoundEngine.PlaySound(Main.rand.NextBool() ? PerfectMimic.Shoot1Sound : PerfectMimic.Shoot2Sound, NPC.Center);
+                    if (Main.netMode != 1) {
+                        for (int i = 0; i < 6; i++) {
+                            Vector2 velocity = -Vector2.UnitY.RotatedBy(MathHelper.PiOver2) * Main.rand.NextFloat(0.95f, 1.05f) * Main.rand.NextFloat(5f, 10f) * 0.5f;
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Main.rand.RandomPointInArea(10f * NPC.ai[3]),
+                                                     velocity, ModContent.ProjectileType<TarMass>(),
+                                                     50, 1f, Main.myPlayer);
                         }
                     }
 
