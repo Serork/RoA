@@ -1115,9 +1115,21 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             Vector2 chosenTile2 = Vector2.Zero;
             if (NPC.AI_AttemptToFindTeleportSpot(ref chosenTile2, point15.X, point15.Y, 40, 12, 2, solidTileCheckCentered: true, teleportInAir: true)) {
                 NPC.Center = chosenTile2.ToWorldCoordinates();
-                while (NPC.XDistance(targetAsPlayer) < 300f) {
+                bool flag = true;
+                int attempts = 50;
+                while (attempts--> 0 && (NPC.XDistance(targetAsPlayer) < 300f || flag)) {
                     if (NPC.AI_AttemptToFindTeleportSpot(ref chosenTile2, point15.X, point15.Y, 40, 12, 2, solidTileCheckCentered: true, teleportInAir: true)) {
+                        flag = false;
                         NPC.Center = chosenTile2.ToWorldCoordinates();
+                        Point16 tilePosition = NPC.Center.ToTileCoordinates16();
+                        for (int i = -20; i < 21; i++) {
+                            for (int j = -20; j < 21; j++) {
+                                int x = tilePosition.X + i, y = tilePosition.Y + j;
+                                if (TileHelper.IsLava(x, y)) {
+                                    flag = true;
+                                }
+                            }
+                        }
                     }
                 }
             }
