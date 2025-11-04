@@ -670,16 +670,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                         }
                     }
 
-                    SoundEngine.PlaySound(Main.rand.NextBool() ? PerfectMimic.Shoot1Sound : PerfectMimic.Shoot2Sound, NPC.Center);
-                    if (Helper.SinglePlayerOrServer) {
-                        for (int i = 0; i < 10; i++) {
-                            Vector2 velocity = -Vector2.UnitY.RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(0.95f, 1.05f) * Main.rand.NextFloat(4f, 10f) * 0.25f;
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom + Main.rand.RandomPointInArea(10f * NPC.ai[3]),
-                                                     velocity, ModContent.ProjectileType<TarMass>(),
-                                                     50, 1f, Main.myPlayer, ai2: -1f);
-                        }
-                    }
-
                     SoundEngine.PlaySound(DeathSound, NPC.Center);
                 }
             }
