@@ -155,7 +155,7 @@ sealed class TarArm : ModProjectile {
 
     public override void OnKill(int timeLeft) {
         List<Vector2> points = _bezierCurve.GetPoints(PointCount);
-        if (Helper.SinglePlayerOrServer) {
+        if (!Small && Helper.SinglePlayerOrServer) {
             Projectile.NewProjectile(Projectile.GetSource_FromAI(), points[points.Count - 1], Vector2.One.RotatedByRandom(MathHelper.TwoPi), ModContent.ProjectileType<PerfectMimicArm>(),
                 0, 0, Main.myPlayer);
         }

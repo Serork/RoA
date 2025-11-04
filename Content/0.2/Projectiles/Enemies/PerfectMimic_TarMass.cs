@@ -29,7 +29,7 @@ sealed class TarMass : ModProjectile {
 
     private FluidBodyPart[] _fluidBodyParts = null!;
 
-    public bool OnDeath => Projectile.ai[1] == -1f;
+    public bool OnDeath => Projectile.ai[1] < 0f;
 
     public override string Texture => ResourceManager.EmptyTexture;
 
@@ -56,8 +56,10 @@ sealed class TarMass : ModProjectile {
 
     public override void AI() {
         Projectile.tileCollide = Projectile.timeLeft < TIMELEFT - TIMELEFT / 4;
-        if (OnDeath) {
-            Projectile.tileCollide = true;
+
+        if (Projectile.ai[1] == -1f) {
+            Projectile.ai[1] = -2f;
+            Projectile.Opacity = 1f;
         }
 
         float target = 0.75f;
@@ -72,6 +74,13 @@ sealed class TarMass : ModProjectile {
             if (Main.rand.Next(OnDeath ? 10 : 3) == 0) {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<TarMetaball>(), 0f, 0f, 50, default(Color), 1.3f);
             }
+        }
+        if (OnDeath) {
+            target = 0.75f;
+            if (Projectile.ai[2] == 1f) {
+                target = 0f;
+            }
+            Projectile.tileCollide = Projectile.timeLeft < TIMELEFT - TIMELEFT / 6;
         }
         Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, target, 0.25f);
 
