@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Enemies.Lothor;
 
 sealed class CursedAcorn : ModProjectile {
-    public override Color? GetAlpha(Color lightColor) => Color.White * 0.9f;
+    public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.9f);
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;

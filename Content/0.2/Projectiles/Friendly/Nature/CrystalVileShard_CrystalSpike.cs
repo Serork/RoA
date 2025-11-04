@@ -14,7 +14,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class CrystalSpikeTip : CrystalSpike { }
 
 class CrystalSpike : Vilethorn {
-    public override Color? GetAlpha(Color lightColor) => Color.White * 0.9f * Projectile.Opacity;
+    public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.9f) * Projectile.Opacity;
 
     protected override int AppearAlphaValue => 100;
     protected override int DisappearAlphaValue => 4;

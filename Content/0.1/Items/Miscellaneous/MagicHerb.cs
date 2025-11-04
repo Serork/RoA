@@ -121,7 +121,7 @@ class MagicHerb1 : ModItem {
         }
     }
 
-    public override Color? GetAlpha(Color lightColor) => Color.White * 0.9f;
+    public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.9f);
 
     public override void SetDefaults() {
         int width = 20; int height = width;
