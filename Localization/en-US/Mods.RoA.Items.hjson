@@ -2306,3 +2306,23 @@ HiTechCattleProd: {
 	DisplayName: Hi Tech Cattle Prod
 	Tooltip: ""
 }
+
+ElderSnailBanner: {
+	DisplayName: Elder Snail Banner
+	Tooltip: ""
+}
+
+MenhirBanner: {
+	DisplayName: Menhir Banner
+	Tooltip: ""
+}
+
+PerfectMimicBanner: {
+	DisplayName: Perfect Mimic Banner
+	Tooltip: ""
+}
+
+TarSlimeBanner: {
+	DisplayName: Tar Slime Banner
+	Tooltip: ""
+}
