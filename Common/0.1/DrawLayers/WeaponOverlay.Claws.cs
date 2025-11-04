@@ -4,7 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 
 using ReLogic.Content;
+using ReLogic.Utilities;
 
+using RoA.Common.GlowMasks;
 using RoA.Content.Items.Weapons;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Core.Graphics.Data;
@@ -19,6 +21,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static RoA.Common.GlowMasks.ItemGlowMaskHandler;
+
 namespace RoA.Common.DrawLayers;
 
 sealed partial class WeaponOverlay : PlayerDrawLayer {
@@ -29,12 +33,17 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
     //private const string CLAWSTEXTURESPATH = $"/{ResourceManager.TEXTURESPATH}/Items/Weapons/Druidic/Claws";
 
     private static readonly Dictionary<string, Asset<Texture2D>?> _clawsOutfitTextures = [];
+    private static readonly Dictionary<string, Asset<Texture2D>?> _clawsOutfitGlowTextures = [];
 
     private static void LoadClawsOutfitTextures() {
         for (int i = ItemID.Count; i < ItemLoader.ItemCount; i++) {
             ModItem item = ItemLoader.GetItem(i);
             if (item is ClawsBaseItem) {
                 _clawsOutfitTextures.Add(item.Name, ModContent.Request<Texture2D>(item.Texture + REQUIREMENT));
+                AutoloadGlowMaskAttribute? glowMaskAttribute = item.GetType().GetAttribute<AutoloadGlowMaskAttribute>();
+                if (glowMaskAttribute is not null) {
+                    _clawsOutfitGlowTextures.Add(item.Name, ModContent.Request<Texture2D>(item.Texture + REQUIREMENT + "_Glow"));
+                }
             }
         }
 
@@ -68,7 +77,7 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
 
     private static void DrawClawsOverArm(ref PlayerDrawSet drawinfo, CompositePlayerDrawContext context) {
         Player player = drawinfo.drawPlayer;
-        if (!HasClawsSelectedAndLoaded(player, out ClawsBaseItem clawsBaseItem, out WeaponOverlayAttribute weaponAttribute, out Asset<Texture2D> texture)) {
+        if (!HasClawsSelectedAndLoaded(player, out ClawsBaseItem clawsBaseItem, out WeaponOverlayAttribute weaponAttribute, out Asset<Texture2D> texture, out Asset<Texture2D> glowTexture)) {
             return;
         }
 
@@ -105,6 +114,16 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
                         item2.color = player.GetImmuneAlphaPure(Helper.FromHexRgb(weaponAttribute.Hex.Value), (float)drawinfo.shadow);
                     }
                     drawinfo.DrawDataCache.Add(item2);
+
+                    AutoloadGlowMaskAttribute? glowMaskAttribute = clawsBaseItem.Item.GetAttribute<AutoloadGlowMaskAttribute>();
+                    if (glowMaskAttribute is not null) {
+                        DrawData glowMask = item2;
+                        glowMask.texture = glowTexture.Value;
+                        float brightnessFactor = Lighting.Brightness((int)glowMask.position.X / 16, (int)glowMask.position.Y / 16);
+                        Color color = Color.Lerp(glowMaskAttribute.GlowColor, glowMask.color, brightnessFactor);
+                        glowMask.color = player.GetImmuneAlphaPure(glowMaskAttribute.ShouldApplyItemAlpha ? color * (1f - clawsBaseItem.Item.alpha / 255f) : glowMaskAttribute.GlowColor, (float)drawinfo.shadow);
+                        drawinfo.DrawDataCache.Add(glowMask);
+                    }
                     break;
                 }
             case CompositePlayerDrawContext.BackArm: {
@@ -129,6 +148,16 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
                         item2.color = player.GetImmuneAlphaPure(Helper.FromHexRgb(weaponAttribute.Hex.Value), (float)drawinfo.shadow);
                     }
                     drawinfo.DrawDataCache.Add(item2);
+
+                    AutoloadGlowMaskAttribute? glowMaskAttribute = clawsBaseItem.Item.GetAttribute<AutoloadGlowMaskAttribute>();
+                    if (glowMaskAttribute is not null) {
+                        DrawData glowMask = item2;
+                        glowMask.texture = glowTexture.Value;
+                        float brightnessFactor = Lighting.Brightness((int)glowMask.position.X / 16, (int)glowMask.position.Y / 16);
+                        Color color = Color.Lerp(glowMaskAttribute.GlowColor, glowMask.color, brightnessFactor);
+                        glowMask.color = player.GetImmuneAlphaPure(glowMaskAttribute.ShouldApplyItemAlpha ? color * (1f - clawsBaseItem.Item.alpha / 255f) : glowMaskAttribute.GlowColor, (float)drawinfo.shadow);
+                        drawinfo.DrawDataCache.Add(glowMask);
+                    }
                     break;
                 }
         }
@@ -136,7 +165,7 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
 
     private static void DrawClawsOnPlayer_PreHardmode(PlayerDrawSet drawInfo) {
         Player player = drawInfo.drawPlayer;
-        if (!HasClawsSelectedAndLoaded(player, out ClawsBaseItem clawsBaseItem, out WeaponOverlayAttribute weaponAttribute, out Asset<Texture2D> texture)) {
+        if (!HasClawsSelectedAndLoaded(player, out ClawsBaseItem clawsBaseItem, out WeaponOverlayAttribute weaponAttribute, out Asset<Texture2D> texture, out Asset<Texture2D> glowTexture)) {
             return;
         }
 
@@ -154,11 +183,12 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
         drawInfo.DrawDataCache.Add(drawData);
     }
 
-    private static bool HasClawsSelectedAndLoaded(Player player, out ClawsBaseItem clawsBaseItem, out WeaponOverlayAttribute weaponAttribute, out Asset<Texture2D> texture) {
+    private static bool HasClawsSelectedAndLoaded(Player player, out ClawsBaseItem clawsBaseItem, out WeaponOverlayAttribute weaponAttribute, out Asset<Texture2D> texture, out Asset<Texture2D> glowTexture) {
         Item item = player.GetSelectedItem();
         clawsBaseItem = null!;
         weaponAttribute = null!;
         texture = null!;
+        glowTexture = null!;
         if (item.IsEmpty() || !item.IsModded(out ModItem modItem)) {
             return false;
         }
@@ -178,6 +208,15 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
         }
 
         clawsBaseItem = clawsBaseItem2;
+
+        AutoloadGlowMaskAttribute? glowMaskAttribute = clawsBaseItem?.GetType().GetAttribute<AutoloadGlowMaskAttribute>();
+        if (glowMaskAttribute is not null) {
+            glowTexture = _clawsOutfitGlowTextures[GetItemNameForTexture(item)]!;
+            if (glowTexture?.IsLoaded != true) {
+                return false;
+            }
+        }
+
         return true;
     }
 }

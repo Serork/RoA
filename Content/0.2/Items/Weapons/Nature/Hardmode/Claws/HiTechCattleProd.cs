@@ -2,6 +2,7 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
+using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -12,6 +13,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 
+[AutoloadGlowMask]
 [WeaponOverlay(WeaponType.Claws)]
 sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdSlash> {
     public override bool IsHardmodeClaws => true;
