@@ -47,7 +47,7 @@ sealed class TooltipFallingLeaves() : InterfaceElement(RoA.ModName + ": Tooltip 
 
         Helper.AddClamp(ref _counter, -TimeSystem.LogicDeltaTime, 0f, CounterMax);
 
-        float maxY = 28f;
+        float maxY = 29f;
 
         SpriteBatch batch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
