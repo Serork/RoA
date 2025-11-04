@@ -11,14 +11,12 @@ using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
-using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 using static RoA.Content.NPCs.Enemies.Tar.PerfectMimic;

@@ -36,6 +36,9 @@ sealed class TarArm : ModProjectile {
     public float AttackProgress => (float)Projectile.localAI[0] / ATTACKTIME;
     private int PointCount => 30;
 
+    public float DeathProgress => MathUtils.Clamp01(Owner.ai[3]);
+    public bool MimicIsDead => Owner.damage == 0;
+
     public override string Texture => ResourceManager.EmptyTexture;
 
     public override void SetDefaults() {
@@ -52,6 +55,14 @@ sealed class TarArm : ModProjectile {
         behindNPCs.Add(index);
     }
 
+    private float GetDeathScale() {
+        float result = 1f;
+        if (MimicIsDead) {
+            result += Helper.Wave(0.5f, 1f, 10f, Projectile.whoAmI) * DeathProgress;
+        }
+        return result;
+    }
+
     public override void AI() {
         Projectile.timeLeft = 10;
 
@@ -61,8 +72,11 @@ sealed class TarArm : ModProjectile {
         }
 
         Vector2 center = Owner.GetTargetPlayer().Center;
-        if (Small && Projectile.Opacity == 0f) {
-            if (Projectile.whoAmI % 2 == 0) {
+        if (MimicIsDead) {
+            center = Vector2.Lerp(center, Owner.Center - Vector2.UnitY * 10f, DeathProgress);
+        }
+        if (Projectile.Opacity == 0f) {
+            if (Small && Projectile.whoAmI % 2 == 0) {
                 Projectile.localAI[0] = -ATTACKTIME / 2;
             }
             Projectile.velocity = Projectile.Center.DirectionTo(center);
@@ -106,12 +120,21 @@ sealed class TarArm : ModProjectile {
                     Projectile.localAI[0] = 0f;
                 }
             }
+            if (MimicIsDead) {
+                Projectile.localAI[0] = 0f;
+            }
         }
 
         Projectile.direction = Owner.direction;
         Projectile.Center = Owner.Center + Vector2.UnitY * Owner.gfxOffY;
         float distance = Small ? 150f : 350f;
-        Projectile.ai[1] += TimeSystem.LogicDeltaTime * 2f * Projectile.direction;
+        float add = TimeSystem.LogicDeltaTime * 2f * Projectile.direction;
+        if (MimicIsDead) {
+            float addFactor = MathF.Max(0.5f, 1f - DeathProgress);
+            add *= 1f + DeathProgress * 2f;
+            distance *= addFactor;
+        }
+        Projectile.ai[1] += add;
         Projectile.localAI[1] = MathF.Sin(Projectile.ai[1]);
         float opacityFactor = Projectile.Opacity * (Small ? 1.2f : 1f);
         Projectile.localAI[2] = Helper.Approach(Projectile.localAI[2], 1f * opacityFactor, 0.1f);
@@ -204,6 +227,7 @@ sealed class TarArm : ModProjectile {
                 scale *= Utils.Remap(Utils.GetLerpValue(min, max, AttackProgress, true) * Utils.GetLerpValue(max * 2f, max * 1.5f, AttackProgress, true)
                     * Utils.GetLerpValue(ATTACKTIME, ATTACKTIME * 0.9f, Projectile.localAI[0], true), 0f, 1f, 1f, 1.5f, true);
             }
+            scale *= GetDeathScale();
             float rotation = Helper.Wave(-MathHelper.Pi, MathHelper.Pi, 1f, i) * Projectile.direction;
             batch.DrawWithSnapshot(() => {
                 batch.Draw(texture, position, DrawInfo.Default with {
