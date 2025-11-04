@@ -646,7 +646,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                         if (!Main.rand.NextBool(4)) {
                             continue;
                         }
-                        Vector2 velocity = -Vector2.UnitY.RotatedBy((MathHelper.PiOver4 + MathHelper.PiOver2 * (int)((i + 5) / 5)) * Main.rand.NextFloat(0.85f, 1.15f)) * Main.rand.NextFloat(5f, 10f) * frequency;
+                        Vector2 velocity = -Vector2.UnitY.RotatedBy((MathHelper.PiOver4 + MathHelper.PiOver2 * (int)((i + 5) / 5)) * Main.rand.NextFloat(0.95f, 1.05f)) * Main.rand.NextFloat(5f, 10f) * frequency;
                         Dust dust = Dust.NewDustPerfect(NPC.Center + Main.rand.RandomPointInArea(10f * NPC.ai[3]), tarDustMetaball, velocity, 0, default, Main.rand.NextFloat(1f, 2f));
                         dust.customData = 2f;
                     }
