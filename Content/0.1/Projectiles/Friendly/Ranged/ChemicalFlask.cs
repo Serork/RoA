@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
+using RoA.Core.Utility;
 
 using System;
 
@@ -48,8 +49,12 @@ sealed class ChemicalFlask : ModProjectile {
         SpriteEffects spriteEffects = (SpriteEffects)(Projectile.velocity.X > 0f).ToInt();
         Vector2 position = Projectile.Center - Main.screenPosition;
         Rectangle sourceRectangle = new(0, 0, texture.Width, texture.Height);
-        Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity;
+        Color baseColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
+        Color color = baseColor * Projectile.Opacity;
         Vector2 origin = sourceRectangle.Size() / 2f;
+        Color color3 = new Color(223, 255, 95).MultiplyRGB(baseColor) * Projectile.Opacity;
+        color3.A = 150;
+        Main.EntitySpriteDraw(texture, position, sourceRectangle, color3 * 0.25f, Projectile.rotation, origin, Projectile.scale * 2f * Helper.Wave(0.95f, 1.05f, 5f, Projectile.whoAmI), spriteEffects);
         Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, origin, Projectile.scale, spriteEffects);
         texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.White, Projectile.rotation, origin, Projectile.scale, spriteEffects);
