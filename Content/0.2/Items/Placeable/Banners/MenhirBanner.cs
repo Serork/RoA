@@ -6,9 +6,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.Banners;
 
-sealed class EntBanner : ModItem {
+sealed class MenhirBanner : ModItem {
     public override void SetDefaults() {
-        Item.DefaultToPlaceableTile(ModContent.TileType<MonsterBanners>(), (int)MonsterBanners.StyleID.Ent);
+        Item.DefaultToPlaceableTile(ModContent.TileType<MonsterBanners>(), (int)MonsterBanners.StyleID.Menhir);
         Item.width = 12;
         Item.height = 28;
         Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(silver: 10));

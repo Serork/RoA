@@ -9,7 +9,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class MonsterBanners : ModBannerTile {
-    public enum StyleID {
+    public enum StyleID : byte {
         Archdruid,
         Grimdruid,
         Hog,
@@ -28,7 +28,11 @@ sealed class MonsterBanners : ModBannerTile {
         DeerSkull,
         MurkyCarcass,
         WardenOfTheWoods,
-        WardenOfTheWoods_Alt
+        WardenOfTheWoods_Alt,
+        Menhir,
+        TarSlime,
+        ElderSnail,
+        PerfectMimic
     }
 
     public override void NearbyEffects(int i, int j, bool closer) {
