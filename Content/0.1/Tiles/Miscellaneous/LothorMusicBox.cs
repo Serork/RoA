@@ -20,7 +20,7 @@ sealed class LothorMusicBox : MusicBox {
         if (tile.TileFrameX > 18) {
             float value = 1f;
             Color color = new Color(1f, 0.2f, 0.2f) * value * 0.75f;
-            r = color.R * 255f * 0.75f;
+            r = color.R / 255f * 0.75f;
             g = color.G / 255f * 0.75f;
             b = color.B / 255f * 0.75f;
         }
