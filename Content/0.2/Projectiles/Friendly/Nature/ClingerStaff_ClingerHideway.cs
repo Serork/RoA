@@ -241,7 +241,7 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 center = Projectile.Center;
             Player owner = Projectile.GetOwnerAsPlayer();
             if (hidewayValues.IsClingerSpawning) {
-                if (clingerAITimer == 20) {
+                if (clingerAITimer == CLINGERTIMETOSPAWNINTICKS - 5) {
                     SoundEngine.PlaySound(SoundID.Item100, Projectile.Center);
                     SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SteamBurst") { Volume = 0.7f, Pitch = -0.3f }, Projectile.Center);
                 }
@@ -266,7 +266,7 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
                     }
                 }
                 clingerFollowCursorFactor = Helper.Approach(clingerFollowCursorFactor, 0f, 0.01f);
-                _clingerPosition = Vector2.Lerp(_clingerPosition, destination, 0.15f/* * clingerFollowCursorFactor*/);
+                _clingerPosition = Vector2.Lerp(_clingerPosition, destination, 0.125f/* * clingerFollowCursorFactor*/);
                 float baseRotation = Projectile.DirectionTo(_clingerPosition).ToRotation() - MathHelper.PiOver2;
                 _clingerPosition += (Vector2.UnitY * Utils.Remap(1f - hidewayValues.ClingerAITimer / CLINGERTIMETOSPAWNINTICKS, 0f, 1f, 1.5f, 5f)).RotatedBy(baseRotation + Math.Sin(Projectile.whoAmI + Main.timeForVisualEffects / 10))/* * clingerFollowCursorFactor*/;
             }
@@ -428,7 +428,7 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += waveAnimationOffset(clingerRotation, SEGMENTCOUNT - 1);
             position += Vector2.UnitY.RotatedBy(clingerRotation) * 6f;
             Rectangle clip = _clingerHead1Clip;
-            Vector2 scale = Vector2.One;
+            Vector2 scale = Vector2.One * ((float)hidewayValues.ClingerAITimer / CLINGERTIMETOSPAWNINTICKS);
             Vector2 origin = clip.Size() / 2f;
             Color headColor = Lighting.GetColor(position.ToTileCoordinates()) * Projectile.Opacity;
             batch.Draw(texture, position, DrawInfo.Default with {
