@@ -671,12 +671,12 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                     }
 
                     SoundEngine.PlaySound(Main.rand.NextBool() ? PerfectMimic.Shoot1Sound : PerfectMimic.Shoot2Sound, NPC.Center);
-                    if (Main.netMode != 1) {
-                        for (int i = 0; i < 6; i++) {
-                            Vector2 velocity = -Vector2.UnitY.RotatedBy(MathHelper.PiOver2) * Main.rand.NextFloat(0.95f, 1.05f) * Main.rand.NextFloat(5f, 10f) * 0.5f;
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + Main.rand.RandomPointInArea(10f * NPC.ai[3]),
+                    if (Helper.SinglePlayerOrServer) {
+                        for (int i = 0; i < 10; i++) {
+                            Vector2 velocity = -Vector2.UnitY.RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(0.95f, 1.05f) * Main.rand.NextFloat(4f, 10f) * 0.15f;
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Bottom + Main.rand.RandomPointInArea(10f * NPC.ai[3]),
                                                      velocity, ModContent.ProjectileType<TarMass>(),
-                                                     50, 1f, Main.myPlayer);
+                                                     50, 1f, Main.myPlayer, ai1: -1f);
                         }
                     }
 
@@ -742,8 +742,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (CanTeleport && VisualTimer2 > max) {
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
-                    //_teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
-                    _teleportTimer = 60f;
+                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    //_teleportTimer = 60f;
                     NPC.netUpdate = true;
                 }
                 teleported = true;
