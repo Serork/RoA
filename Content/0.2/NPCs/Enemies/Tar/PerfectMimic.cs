@@ -179,18 +179,6 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
             Main.dust[dust].noLight = true;
         }
-
-        PerfectMimicHead.SkinColor = _skinColor;
-        if (Helper.SinglePlayerOrServer) {
-            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position, NPC.velocity, ModContent.ProjectileType<PerfectMimicHead>(),
-                0, 0, Main.myPlayer);
-            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position + Vector2.UnitY * 30, NPC.velocity, ModContent.ProjectileType<PerfectMimicBody>(),
-                0, 0, Main.myPlayer);
-            for (int i = 0; i < 2; i++) {
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position + Vector2.UnitY * 44, NPC.velocity, ModContent.ProjectileType<PerfectMimicLeg>(),
-                    0, 0, Main.myPlayer);
-            }
-        }
     }
 
     public override void ModifyTypeName(ref string typeName) {
@@ -667,6 +655,18 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                     NPC.life = 0;
                     NPC.HitEffect(0, 100.0);
                     NPC.checkDead();
+
+                    PerfectMimicHead.SkinColor = _skinColor;
+                    if (Helper.SinglePlayerOrServer) {
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position, NPC.velocity, ModContent.ProjectileType<PerfectMimicHead>(),
+                            0, 0, Main.myPlayer);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position + Vector2.UnitY * 30, NPC.velocity, ModContent.ProjectileType<PerfectMimicBody>(),
+                            0, 0, Main.myPlayer);
+                        for (int i = 0; i < 2; i++) {
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.position + Vector2.UnitY * 44, NPC.velocity, ModContent.ProjectileType<PerfectMimicLeg>(),
+                                0, 0, Main.myPlayer);
+                        }
+                    }
 
                     SoundEngine.PlaySound(DeathSound, NPC.Center);
                 }
