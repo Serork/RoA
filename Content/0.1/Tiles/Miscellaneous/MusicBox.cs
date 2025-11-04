@@ -20,6 +20,8 @@ abstract class MusicBox : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileObsidianKill[Type] = true;
 
+        Main.tileLighted[Type] = true;
+
         TileID.Sets.HasOutlines[Type] = true;
 
         TileID.Sets.DisableSmartCursor[Type] = true;
