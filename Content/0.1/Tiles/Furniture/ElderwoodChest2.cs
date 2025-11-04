@@ -1,11 +1,17 @@
+using Humanizer;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
+using RoA.Common.Players;
 using RoA.Common.Tiles;
 using RoA.Content.Achievements;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -25,9 +31,11 @@ namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
     // separate
-    private static List<Point> _drawPoints = [];
     private static float _rotationOffset, _scaleOffset;
     private float _opacity;
+
+    private static Asset<Texture2D> _chainTexture = null!,
+                                    _lockTexture = null!;
 
     public override void SetStaticDefaults() {
         Main.tileSpelunker[Type] = true;
@@ -76,6 +84,13 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
                 TileID.RollingCactus
             ];
         TileObjectData.addTile(Type);
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _chainTexture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "Rootbinded_Chain");
+        _lockTexture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "Rootbinded_Lock");
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
@@ -100,25 +115,69 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
         float directionMax = posX;
         Tile tile = Main.tile[i, j];
         float colorValue = MathHelper.Lerp(0.2f, 0.8f, (float)((Math.Sin(Main.GlobalTimeWrappedHourly * 1.3f) + 1f) * 0.5f));
-        var modTile = TileLoader.GetTile(tile.TileType);
-        if (modTile == null) {
+        ModTile? modTile = TileLoader.GetTile(tile.TileType);
+        if (modTile is null) {
             return;
         }
+
+        if (_chainTexture?.IsLoaded != true || _lockTexture?.IsLoaded != true) {
+            return;
+        }
+
         bool flag2 = modTile.IsLockedChest(i, j);
         if (flag2 && tile.TileFrameX == 36 && tile.TileFrameY == 0) {
+            Player player = Main.LocalPlayer;
+            Vector2 mouseWorldPosition = player.GetWorldMousePosition();
+            Point16 chestPosition = new(i, j);
+            Vector2 chestWorldPosition = chestPosition.ToWorldCoordinates();
+            float clampedDistanceProgress = MathUtils.ClampedDistanceProgress(mouseWorldPosition, chestWorldPosition, 75f, 200f);
+            _opacity = MathHelper.Lerp(_opacity, clampedDistanceProgress * 4.5f, TimeSystem.LogicDeltaTime);
+
             Vector2 zero = Vector2.Zero;
-            Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "WoodbinderRune").Value;
-            Vector2 origin = new Vector2(74, 74) / 2f;
             for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
+                Texture2D texture;
+                Vector2 origin;
+
+                Color color = Color.White.MultiplyAlpha((float)i);
+
+                texture = _chainTexture.Value;
+                origin = texture.Bounds.Centered();
                 Main.spriteBatch.Draw(texture,
-                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
-                                  new Vector2(-3.5f, 0.5f) +
-                                  Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
-                                  null,
-                                  Color.White * 0.1f * _opacity, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
+                                      new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
+                                      new Vector2(2.5f, 2.5f) +
+                                      Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 5f),
+                                      null,
+                                      color * 0.25f * _opacity,
+                                      Helper.Wave(-0.1f, 0.025f, 5f, i * j * 2),
+                                      origin,
+                                      1f + Helper.Wave(0f, 0.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
+
+                texture = _lockTexture.Value;
+                origin = texture.Bounds.Centered();
+                Main.spriteBatch.Draw(texture,
+                                      new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin +
+                                      new Vector2(5f, 2.5f) +
+                                      Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 5f),
+                                      null,
+                                      color * 0.25f * _opacity,
+                                      Helper.Wave(-0.15f, 0.15f, 2.5f, i * j),
+                                      origin,
+                                      1f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
             }
+
+            //Vector2 zero = Vector2.Zero;
+            //Texture2D texture = _chainTexture.Value;
+            //Vector2 origin = new Vector2(74, 74) / 2f;
+            //for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
+            //    Main.spriteBatch.Draw(texture,
+            //                      new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
+            //                      new Vector2(-3.5f, 0.5f) +
+            //                      Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
+            //                      null,
+            //                      Color.White * 0.1f * _opacity, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
+            //}
         }
-        if (_opacity > 0f) _opacity -= 0.0002f;
+        //if (_opacity > 0f) _opacity -= 0.0002f;
     }
 
     // separate

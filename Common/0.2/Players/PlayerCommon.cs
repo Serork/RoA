@@ -129,7 +129,10 @@ sealed partial class PlayerCommon : ModPlayer {
         DevilSkullLoad();
         CrystallizedSkullLoad();
         WiresLoad();
+        CursorEffectsLoad();
     }
+
+    public partial void CursorEffectsLoad();
 
     private Item On_ItemSlot_ArmorSwap(On_ItemSlot.orig_ArmorSwap orig, Item item, out bool success) {
         bool hornetSkull = item.type == ModContent.ItemType<HornetSkull>() && Main.LocalPlayer.GetCommon().ApplyHornetSkullSetBonus;
@@ -325,7 +328,11 @@ sealed partial class PlayerCommon : ModPlayer {
         ApplyHornetSkullSetBonus = false;
 
         StopFaceDrawing = false;
+
+        CursorEffectsResetEffects();
     }
+
+    public partial void CursorEffectsResetEffects();
 
     public delegate void PreItemCheckDelegate(Player player);
     public static event PreItemCheckDelegate PreItemCheckEvent;

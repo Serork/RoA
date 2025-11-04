@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.NPCs.Enemies.Tar;
 using RoA.Core.Utility.Extensions;
 
 using System;
@@ -9,6 +10,18 @@ using Terraria;
 namespace RoA.Core.Utility;
 
 static class MathUtils {
+    public static float ClampedDistanceProgress(Vector2 a, Vector2 b, float startOffset = 0f, float maxDistance = 0f) {
+        Vector2 center = a,
+                playerCenter = b;
+        float distance = playerCenter.Distance(center);
+        float distance2 = (playerCenter + b.DirectionTo(center) * startOffset).Distance(center);
+        float distanceProgress = Clamp01(distance2 / maxDistance);
+        if (distance < startOffset) {
+            distanceProgress = 0f;
+        }
+        return 1f - distanceProgress;
+    }
+
     public static int GetPercentageFromModifier(float value) => (int)(MathF.Round((value - 1f) * 100f));
 
     public static int SecondsToFrames(float seconds) => (int)MathF.Round(seconds * 60f);
