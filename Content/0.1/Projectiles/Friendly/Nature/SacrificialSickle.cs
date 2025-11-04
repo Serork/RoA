@@ -74,11 +74,12 @@ sealed class SacrificialSickle : NatureProjectile {
         pos += (player.itemRotation.ToRotationVector2() * 6f * player.direction).Floor();
         _spriteBatch.Draw(_texture, pos - Main.screenPosition + new Vector2(0f, 6f) * player.gravDir + _offset, _texture.Bounds, new Color(255, 255, 200, 255) * 0.9f * (1f - Projectile.alpha / 255f), player.itemRotation + _rotOffset, _origin, _item.scale, effects, 0);
 
-        void draw(Texture2D texture, Color lightColor, float opacity = 1f) {
+        void draw(Texture2D texture, Color lightColor, float opacity = 1f, bool hand = false) {
+            Color baseColor = hand ? lightColor * Projectile.Opacity : Projectile.GetAlpha(lightColor);
             Vector2 drawOrigin = new(texture.Width * 0.5f, texture.Height * 0.5f);
             for (int k = 0; k < Projectile.oldPos.Length; k++) {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition;
-                Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * MathHelper.Clamp(Projectile.localAI[0] * 2f / 30f, 0f, 1f);
+                Color color = baseColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * MathHelper.Clamp(Projectile.localAI[0] * 2f / 30f, 0f, 1f);
                 color *= 1f - Projectile.localAI[2] / 25f;
                 spriteBatch.Draw(texture, drawPos, null, color * opacity, Projectile.oldRot[k] - MathHelper.PiOver2, drawOrigin, Projectile.scale, SpriteEffects.FlipHorizontally, 0f);
             }
@@ -86,16 +87,17 @@ sealed class SacrificialSickle : NatureProjectile {
                 int length = Projectile.oldPos.Length / 2 + Projectile.oldPos.Length / 5;
                 for (int k = 0; k < length; k++) {
                     Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition;
-                    Color color = Projectile.GetAlpha(lightColor) * ((length - k) / (float)length * 0.75f) * MathHelper.Clamp(Projectile.localAI[0] * 2f / 30f, 0f, 1f);
+                    Color color = baseColor * ((length - k) / (float)length * 0.75f) * MathHelper.Clamp(Projectile.localAI[0] * 2f / 30f, 0f, 1f);
                     spriteBatch.Draw(texture, drawPos, null, color * opacity, Projectile.oldRot[k] - MathHelper.PiOver2, drawOrigin, Projectile.scale, SpriteEffects.FlipHorizontally, 0f);
                 }
             }
-            spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor) * opacity, Projectile.rotation - MathHelper.PiOver2, drawOrigin, Projectile.scale, SpriteEffects.FlipHorizontally, 0f);
+            spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, baseColor * opacity, Projectile.rotation - MathHelper.PiOver2, drawOrigin, Projectile.scale, SpriteEffects.FlipHorizontally, 0f);
         }
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture;
+        texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "2");
         float dist = player.Distance(Projectile.Center);
         draw(texture, lightColor);
-        texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "2");
+        texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         float value = MathHelper.Clamp(Utils.GetLerpValue(250f, 0f, dist, true) * 1.25f, 0f, 1f);
         draw(texture, lightColor);
         return false;
@@ -338,6 +340,6 @@ sealed class SacrificialSickle : NatureProjectile {
         return false;
     }
 
-    public override Color? GetAlpha(Color lightColor) => new Color(255, 255, 200, 200) * (1f - Projectile.alpha / 255f);
+    public override Color? GetAlpha(Color lightColor) => Color.White * 0.9f * (1f - Projectile.alpha / 255f);
 }
 
