@@ -14,7 +14,7 @@ namespace RoA.Content.Items.Tools;
 // also see ItemGlowMaskHandler
 sealed class RodOfTheLustrous : ModItem {
     public override Color? GetAlpha(Color lightColor) {
-        return Color.Lerp(lightColor, Color.Whit * 0.9fe, 1f);
+        return Color.Lerp(lightColor, Color.White * 0.9f, 1f);
     }
 
     public override void SetDefaults() {
