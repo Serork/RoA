@@ -155,8 +155,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
 
     public override void HitEffect(NPC.HitInfo hit) {
         if (NPC.life > 0) {
-            for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0 * (1f - _maxTransform); num828++) {
-                Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
+            if (!_isDead) {
+                for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0 * (1f - _maxTransform); num828++) {
+                    Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Blood, hit.HitDirection, -1f);
+                }
             }
 
             for (int num828 = 0; (double)num828 < hit.Damage / (double)NPC.lifeMax * 100.0 * (_maxTransform); num828++) {
@@ -166,8 +168,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             return;
         }
 
-        for (int num829 = 0; num829 < (int)(50 * (1f - _maxTransform)); num829++) {
-            Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
+        if (!_isDead) {
+            for (int num829 = 0; num829 < (int)(50 * (1f - _maxTransform)); num829++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, 5, 2.5f * (float)hit.HitDirection, -2.5f);
+            }
         }
 
         for (int num829 = 0; num829 < (int)(50 * _maxTransform); num829++) {
@@ -180,6 +184,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                 Main.dust[dust].alpha += 25;
 
             Main.dust[dust].noLight = true;
+            
+            if (_isDead) {
+                Main.dust[dust].scale *= Main.rand.NextFloat(2f, 3f);
+            }
         }
     }
 
