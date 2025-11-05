@@ -31,7 +31,7 @@ class PerfectMimicHead : ModProjectile {
     public override string Texture => ResourceManager.TarEnemyNPCTextures + "PerfectMimic_GoreHead";
 
     public override void SetDefaults() {
-        Projectile.Size = new Vector2(10, 10);
+        Projectile.Size = new Vector2(12, 12);
         Projectile.aiStyle = 0;
         Projectile.friendly = true;
         Projectile.timeLeft = Gore.goreTime;
