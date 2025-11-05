@@ -186,7 +186,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             Main.dust[dust].noLight = true;
             
             if (_isDead) {
-                Main.dust[dust].scale *= Main.rand.NextFloat(2f, 3f) * 0.75f;
+                Main.dust[dust].scale *= Main.rand.NextFloat(2f, 3f) * 0.625f;
             }
         }
     }
