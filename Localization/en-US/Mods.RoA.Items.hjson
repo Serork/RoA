@@ -2326,3 +2326,8 @@ TarSlimeBanner: {
 	DisplayName: Tar Slime Banner
 	Tooltip: ""
 }
+
+HandOfGod: {
+	DisplayName: Hand Of God
+	Tooltip: ""
+}

@@ -31,7 +31,7 @@ class PerfectMimicHead : ModProjectile {
     public override string Texture => ResourceManager.TarEnemyNPCTextures + "PerfectMimic_GoreHead";
 
     public override void SetDefaults() {
-        Projectile.Size = new Vector2(14, 14);
+        Projectile.Size = new Vector2(10, 10);
         Projectile.aiStyle = 0;
         Projectile.friendly = true;
         Projectile.timeLeft = Gore.goreTime;
@@ -50,6 +50,41 @@ class PerfectMimicHead : ModProjectile {
             Projectile.velocity.X += (float)Main.rand.Next(-20, 21) * 0.1f;
         }
 
+        if (Projectile.wet) {
+            Projectile.velocity.X *= 0.9f;
+            int num3 = (int)(Projectile.Center.X + (float)((Projectile.width / 2 + 8) * Projectile.direction)) / 16;
+            int num4 = (int)(Projectile.Center.Y / 16f);
+            _ = Projectile.position.Y / 16f;
+            int num5 = (int)((Projectile.position.Y + (float)Projectile.height) / 16f);
+
+            if (Projectile.velocity.Y > 0f)
+                Projectile.velocity.Y *= 0.5f;
+
+            num3 = (int)(Projectile.Center.X / 16f);
+            num4 = (int)(Projectile.Center.Y / 16f);
+            float num6 = AI_061_FishingBobber_GetWaterLine(num3, num4) - 2f;
+            if (Projectile.Center.Y > num6) {
+                Projectile.velocity.Y -= 0.1f;
+                if (Projectile.velocity.Y < -8f)
+                    Projectile.velocity.Y = -8f;
+
+                if (Projectile.Center.Y + Projectile.velocity.Y < num6)
+                    Projectile.velocity.Y = num6 - Projectile.Center.Y;
+            }
+            else {
+                Projectile.velocity.Y = num6 - Projectile.Center.Y;
+            }
+        }
+        else {
+            if (Projectile.velocity.Y == 0f)
+                Projectile.velocity.X *= 0.95f;
+
+            Projectile.velocity.X *= 0.98f;
+            Projectile.velocity.Y += 0.3f;
+            if (Projectile.velocity.Y > 15.9f)
+                Projectile.velocity.Y = 15.9f;
+        }
+
         if (Projectile.timeLeft <= 2) {
             Projectile.timeLeft = 2;
             Projectile.alpha += 1;
@@ -62,13 +97,13 @@ class PerfectMimicHead : ModProjectile {
 
         Projectile.direction = Projectile.velocity.X.GetDirection();
         Projectile.rotation += Projectile.velocity.X * 0.1f;
-        if (Projectile.velocity.Y == 0f) {
-            Projectile.velocity.X *= 0.97f;
-            if ((double)Projectile.velocity.X > -0.01 && (double)Projectile.velocity.X < 0.01)
-                Projectile.velocity.X = 0f;
-        }
-        Projectile.velocity.Y += 0.1f;
-        Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
+        //if (Projectile.velocity.Y == 0f) {
+        //    Projectile.velocity.X *= 0.97f;
+        //    if ((double)Projectile.velocity.X > -0.01 && (double)Projectile.velocity.X < 0.01)
+        //        Projectile.velocity.X = 0f;
+        //}
+        //Projectile.velocity.Y += 0.1f;
+        //Projectile.velocity.Y = Math.Min(10f, Projectile.velocity.Y);
 
         int chance = 40;
         if (Main.rand.NextBool(chance) && Projectile.Opacity >= 1f) {
@@ -87,6 +122,25 @@ class PerfectMimicHead : ModProjectile {
         if (Projectile.lavaWet) {
             Projectile.Kill();
         }
+    }
+
+    private float AI_061_FishingBobber_GetWaterLine(int X, int Y) {
+        float result = Projectile.position.Y + (float)Projectile.height;
+
+        if (Main.tile[X, Y - 1].LiquidAmount > 0) {
+            result = Y * 16;
+            result -= (float)((int)Main.tile[X, Y - 1].LiquidAmount / 16);
+        }
+        else if (Main.tile[X, Y].LiquidAmount > 0) {
+            result = (Y + 1) * 16;
+            result -= (float)((int)Main.tile[X, Y].LiquidAmount / 16);
+        }
+        else if (Main.tile[X, Y + 1].LiquidAmount > 0) {
+            result = (Y + 2) * 16;
+            result -= (float)((int)Main.tile[X, Y + 1].LiquidAmount / 16);
+        }
+
+        return result;
     }
 
     public override bool PreDraw(ref Color lightColor) {

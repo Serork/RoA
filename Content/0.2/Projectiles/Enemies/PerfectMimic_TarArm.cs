@@ -58,7 +58,7 @@ sealed class TarArm : ModProjectile {
     private float GetDeathScale() {
         float result = 1f;
         if (MimicIsDead) {
-            result += Helper.Wave(0.5f, 1f, 10f, Projectile.whoAmI) * DeathProgress;
+            result += Helper.Wave(0.5f, 1f, 10f, Projectile.whoAmI) * DeathProgress * Utils.GetLerpValue(1.5f, 1f, DeathProgress, true);
         }
         return result;
     }

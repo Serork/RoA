@@ -311,7 +311,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     private float GetDeadScale() {
         float result = 1f;
         if (_isDead) {
-            result += Helper.Wave(0.5f, 1f, 10f, NPC.whoAmI) * MathUtils.Clamp01(NPC.ai[3]);
+            result += Helper.Wave(0.5f, 1f, 10f, NPC.whoAmI) * MathUtils.Clamp01(NPC.ai[3]) * Utils.GetLerpValue(1.5f, 1f, NPC.ai[3], true);
         }
         return result;
     }
@@ -740,8 +740,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             if (CanTeleport && VisualTimer2 > max) {
                 Init = false;
                 if (Helper.SinglePlayerOrServer) {
-                    _teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
-                    //_teleportTimer = 60f;
+                    //_teleportTimer = (int)(Main.rand.NextFloat(MathUtils.SecondsToFrames(TELEPORTTIMEMININSECONDS), MathUtils.SecondsToFrames(TELEPORTTIMEMAXINSECONDS)));
+                    _teleportTimer = 60f;
                     NPC.netUpdate = true;
                 }
                 teleported = true;
