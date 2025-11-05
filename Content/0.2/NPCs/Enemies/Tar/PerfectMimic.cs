@@ -10,6 +10,7 @@ using RoA.Common;
 using RoA.Common.Metaballs;
 using RoA.Common.UI;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Consumables;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
 using RoA.Core.Data;
@@ -27,6 +28,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -151,6 +153,10 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         }
 
         return true;
+    }
+
+    public override void ModifyNPCLoot(NPCLoot npcLoot) {
+        npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PerfectClot>(), 1));
     }
 
     public override void HitEffect(NPC.HitInfo hit) {

@@ -1,5 +1,7 @@
 ﻿using RoA.Core.Utility.Vanilla;
 
+using System;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -7,6 +9,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Consumables;
 
 sealed class PerfectClot : ModItem {
+    public override void SetStaticDefaults() {
+        ItemID.Sets.ItemIconPulse[Type] = true;
+        ItemID.Sets.ItemNoGravity[Type] = true;
+    }
+
     public override void SetDefaults() {
         Item.useStyle = 4;
         Item.consumable = true;
@@ -17,6 +24,11 @@ sealed class PerfectClot : ModItem {
         Item.height = 34;
         Item.maxStack = Item.CommonMaxStack;
         Item.rare = 2;
+    }
+
+    public override void Update(ref float gravity, ref float maxFallSpeed) {
+        Item.velocity.Y = MathF.Abs(Item.velocity.Y) * -1f;
+        Item.velocity.X *= 0.925f;
     }
 
     public override bool? UseItem(Player player) {
