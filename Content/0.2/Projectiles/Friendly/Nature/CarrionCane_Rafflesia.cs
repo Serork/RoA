@@ -366,9 +366,9 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             //    continue;
             //}
 
-            if (!Main.rand.NextBool(4)) {
+            if (!Main.rand.NextBool(5)) {
                 Dust obj2 = Dust.NewDustPerfect(position + Main.rand.RandomPointInArea(4f), ModContent.DustType<Dusts.CarrionCane3>(), Vector2.Zero, 
-                    Scale: 1.5f * Utils.Clamp(scaleProgress, 0.425f, 1f) * extraScale + 0.15f * Main.rand.NextFloat());
+                    Scale: 1.5f * Utils.Clamp(scaleProgress, 0.45f, 1f) * extraScale + 0.15f * Main.rand.NextFloat());
                 obj2.noGravity = true;
                 obj2.alpha = (byte)(50 + 50 * Main.rand.NextFloat());
                 obj2.fadeIn = 0.5f;
