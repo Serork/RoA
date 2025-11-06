@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Core;
 using RoA.Core.Defaults;
@@ -17,9 +19,11 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+[Tracked]
 sealed class MagicalBifrostBlock : NatureProjectile {
     private static ushort TIMELEFT => 300;
     private static byte BLOCKCOUNTINFIGURE => 9;
+    private static float ATTACKTIME => 10f;
 
     public enum BifrostFigureType : byte {
         Red1,
@@ -56,12 +60,22 @@ sealed class MagicalBifrostBlock : NatureProjectile {
     public IEnumerable<MagicalBifrostBlockInfo> ActiveMagicalBifrostBlockData => MagicalBifrostBlockData.Where(blockInfo => blockInfo.Active);
 
     public ref float InitValue => ref Projectile.localAI[0];
-
+    public ref float MouseX => ref Projectile.localAI[1];
+    public ref float MouseY => ref Projectile.localAI[2];
     public ref float FigureTypeValue => ref Projectile.ai[0];
+    public ref float MoveFactor => ref Projectile.ai[1];
 
     public bool Init {
         get => InitValue == 1f;
         set => InitValue = value.ToInt();
+    }
+
+    public Vector2 SavedMousePosition {
+        get => new(MouseX, MouseY);
+        set {
+            MouseX = value.X;
+            MouseY = value.Y;
+        }
     }
 
     public BifrostFigureType FigureType {
@@ -86,10 +100,13 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 return;
             }
 
-            Player owner = Projectile.GetOwnerAsPlayer();
-            Projectile.Center = owner.GetWorldMousePosition();
-
             if (Projectile.IsOwnerLocal()) {
+                Player owner = Projectile.GetOwnerAsPlayer();
+                Vector2 mousePosition = owner.GetWorldMousePosition();
+                Vector2 screenStart = owner.Center - Vector2.UnitY * Main.screenHeight / 2f;
+                Projectile.Center = new Vector2(mousePosition.X, screenStart.Y);
+
+                SavedMousePosition = mousePosition;
                 FigureType = Main.rand.GetRandomEnumValue<BifrostFigureType>();
                 Projectile.netUpdate = true;
             }
@@ -99,12 +116,35 @@ sealed class MagicalBifrostBlock : NatureProjectile {
             Init = true;
         }
 
+        void moveSlowly() {
+            Player owner = Projectile.GetOwnerAsPlayer();
+            MoveFactor += 3f + 3f * WreathHandler.GetWreathChargeProgress(owner);
+            Projectile.position.Y += 5f;
+
+            if (Projectile.Center.Y > SavedMousePosition.Y) {
+                Projectile.Kill();
+            }
+        }
+
         init();
+        moveSlowly();
 
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
             Dust.NewDustPerfect(GetBlockPosition(blockInfo), DustID.Adamantite, Vector2.Zero).noGravity = true;
         }
     }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
+            if (GeometryUtils.CenteredSquare(GetBlockPosition(blockInfo), 16).Intersects(targetHitbox)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public override bool ShouldUpdatePosition() => false;
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch batch = Main.spriteBatch;
@@ -127,7 +167,7 @@ sealed class MagicalBifrostBlock : NatureProjectile {
 
     private Vector2 GetBlockPosition(MagicalBifrostBlockInfo blockInfo) {
         Vector2 result;
-        result = (Projectile.Center.ToTileCoordinates16() + blockInfo.StartOffset).ToWorldCoordinates();
+        result = Projectile.Center + blockInfo.StartOffset.ToWorldCoordinates();
         return result;
     }
 
