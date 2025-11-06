@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
@@ -26,7 +28,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class MagicalBifrostBlock : NatureProjectile {
-    private static ushort TIMELEFT => 300;
+    private static ushort TIMELEFT => 360;
     private static byte BLOCKCOUNTINFIGURE => 9;
     private static float ATTACKMOVESPEEDPERTICK => 10f;
     private static bool SHOULDSCALEWITHWREATHCHARGE => false;
@@ -61,9 +63,11 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         public readonly bool Active => FrameCoords != Point16.Zero;
     }
 
-    private HashSet<MagicalBifrostBlock> _checkedProjectiles = [];
+    private readonly HashSet<Projectile> _connectedWith = [];
+    private readonly HashSet<Projectile> _directlyConnectedWith = [];
+
     private float _trailOpacity;
-    private float _rayRotation;
+    private float _rayRotation, _rayStrength;
 
     public MagicalBifrostBlockInfo[] MagicalBifrostBlockData { get; private set; } = null!;
 
@@ -108,9 +112,18 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         Projectile.tileCollide = false;
 
         Projectile.aiStyle = -1;
+
+        Projectile.penetrate = 5;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
+
+        Projectile.hostile = true;
     }
 
     public override void AI() {
+        Projectile.Opacity = Utils.GetLerpValue(0f, 30f, Projectile.timeLeft, true);
+
         float trailOpacityTarget = 1f;
         if (StoppedMoving) {
             trailOpacityTarget = 0f;
@@ -159,6 +172,20 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 if (CollidingWith(otherMagicalBlock)) {
                     StopMoving();
 
+                    _directlyConnectedWith.Add(otherFigure);
+                    otherMagicalBlock._directlyConnectedWith.Add(Projectile);
+
+                    otherMagicalBlock._connectedWith.Add(Projectile);
+                    foreach (Projectile other in otherMagicalBlock._connectedWith) {
+                        _connectedWith.Add(other);
+                    }
+                    foreach (Projectile other in TrackedEntitiesSystem.GetTrackedProjectile<MagicalBifrostBlock>(checkProjectile => checkProjectile.SameAs(Projectile) || checkProjectile.SameAs(otherFigure))) {
+                        HashSet<Projectile> otherConnected = other.As<MagicalBifrostBlock>()._connectedWith;
+                        if (otherConnected.Contains(otherFigure)) {
+                            otherConnected.Add(Projectile);
+                        }
+                    }
+
                     return;
                 }
             }
@@ -174,6 +201,8 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         moveSlowly();
 
         Projectile.Center = Vector2.Lerp(Projectile.Center, Projectile.Center.ToTileCoordinates16().ToWorldCoordinates(), TimeSystem.LogicDeltaTime * 5f);
+
+        _rayStrength = MathHelper.Lerp(_rayStrength, Utils.Clamp(_connectedWith.Count / 5f, 0f, 1.25f) * (HasRay() ? 0.25f : 1f), 0.1f);
 
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
             Vector2 position = GetBlockPosition(blockInfo);
@@ -191,6 +220,17 @@ sealed class MagicalBifrostBlock : NatureProjectile {
 
         DelegateMethods.v3_1 = Projectile.GetFairyQueenWeaponsColor().ToVector3() * GetRayOpacity() * GetLightWaveValue();
         Utils.PlotTileLine(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(_rayRotation), 10f * GetLightWaveValue(), DelegateMethods.CastLight);
+
+        foreach (Projectile check in _connectedWith) {
+            if (!check.active) {
+                _connectedWith.Remove(check);
+            }
+        }
+        foreach (Projectile check in _directlyConnectedWith) {
+            if (!check.active) {
+                _directlyConnectedWith.Remove(check);
+            }
+        }
     }
 
     public override void OnKill(int timeLeft) {
@@ -235,7 +275,10 @@ sealed class MagicalBifrostBlock : NatureProjectile {
             }
         }
 
-        return false;
+        float strength = MathUtils.Clamp01(GetRayStrength() * GetRayOpacity());
+        bool result = targetHitbox.IntersectsConeFastInaccurate(Projectile.Center, 200f * strength, GetRayRotation() - MathHelper.PiOver2 - 0.1f, 
+            (float)Math.PI / 12f * strength);
+        return result;
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -243,13 +286,13 @@ sealed class MagicalBifrostBlock : NatureProjectile {
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = Projectile.GetTexture();
-        Color baseColor = Color.White * Projectile.Opacity;
+        Color baseColor = Color.White;
         Color color = baseColor;
         color.A /= 2;
         Color fairyQueenWeaponsColor = Projectile.GetFairyQueenWeaponsColor(0f) * 0.5f;
         Vector2 scale = Vector2.One * Projectile.scale;
 
-        DrawRaysIfNeeded(batch, Projectile.Center, fairyQueenWeaponsColor * GetRayOpacity(), _rayRotation);
+        DrawRaysIfNeeded(batch, Projectile.Center, fairyQueenWeaponsColor * GetRayOpacity() * Projectile.Opacity, GetRayRotation());
 
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
             Vector2 position = GetBlockPosition(blockInfo);
@@ -285,11 +328,13 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 batch.Draw(texture, position + vector2, DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
-                    Color = fairyQueenWeaponsColor * 0.3f,
+                    Color = fairyQueenWeaponsColor * 0.3f * Projectile.Opacity,
                     Scale = scale * 1.5f
                 });
             }
         }
+
+        //ChatManager.DrawColorCodedStringWithShadow(batch, FontAssets.ItemStack.Value, _directlyConnectedWith.Count.ToString(), Projectile.Center - Main.screenPosition, Color.White, 0f, Vector2.Zero, Vector2.One);
 
         return false;
     }
@@ -305,6 +350,7 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         position += Vector2.UnitY.RotatedBy(rotation) * origin * 0.0625f;
         position += Vector2.One * 8f;
         scale.Y *= waveValue;
+        float maxWaveRotation = 0.1f;
         batch.DrawWithSnapshot(() => {
             batch.Draw(texture, position, DrawInfo.Default with {
                 Clip = clip,
@@ -317,7 +363,10 @@ sealed class MagicalBifrostBlock : NatureProjectile {
     }
 
     private float GetLightWaveValue() => Helper.Wave(0.5f, 0.75f, 2.5f, Projectile.whoAmI);
-    private float GetRayOpacity() => 1f - _trailOpacity;
+    private float GetRayOpacity() => (1f - _trailOpacity) * GetRayStrength();
+    private float GetRayStrength() => _rayStrength;
+    private bool HasRay() => _directlyConnectedWith.Count <= 1;
+    private float GetRayRotation() => _rayRotation + Utils.Remap(GetLightWaveValue(), 0.5f, 0.75f, -0.1f, 0.1f, false);
 
     public Rectangle GetRect(MagicalBifrostBlockInfo blockInfo, int offsetX = 0, int offsetY = 0, bool tiled = false, int extraSize = 0) 
         => GeometryUtils.CenteredSquare(GetBlockPosition(blockInfo, offsetX, offsetY, tiled), (int)TileHelper.TileSize + extraSize);
