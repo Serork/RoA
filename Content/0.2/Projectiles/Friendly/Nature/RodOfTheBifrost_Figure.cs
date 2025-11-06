@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -12,13 +13,14 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.UI.Chat;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -59,7 +61,9 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         public readonly bool Active => FrameCoords != Point16.Zero;
     }
 
+    private HashSet<MagicalBifrostBlock> _checkedProjectiles = [];
     private float _trailOpacity;
+    private float _rayRotation;
 
     public MagicalBifrostBlockInfo[] MagicalBifrostBlockData { get; private set; } = null!;
 
@@ -127,6 +131,8 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 SavedMousePosition = mousePosition;
                 FigureType = owner.GetCommon().ActiveFigureType;
 
+                _rayRotation = MathHelper.TwoPi * Main.rand.NextFloatDirection();
+
                 Projectile.netUpdate = true;
             }
 
@@ -152,7 +158,8 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 }
                 if (CollidingWith(otherMagicalBlock)) {
                     StopMoving();
-                    return; ;
+
+                    return;
                 }
             }
             Player owner = Projectile.GetOwnerAsPlayer();
@@ -238,6 +245,9 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         color.A /= 2;
         Color fairyQueenWeaponsColor = Projectile.GetFairyQueenWeaponsColor(0f) * 0.5f;
         Vector2 scale = Vector2.One * Projectile.scale;
+
+        DrawRaysIfNeeded(batch, Projectile.Center, fairyQueenWeaponsColor * (1f - _trailOpacity), _rayRotation);
+
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
             Vector2 position = GetBlockPosition(blockInfo);
             Point16 frameCoords = blockInfo.FrameCoords;
@@ -281,9 +291,32 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         return false;
     }
 
-    public Rectangle GetRect(MagicalBifrostBlockInfo blockInfo, int offsetX = 0, int offsetY = 0, bool tiled = false) => GeometryUtils.CenteredSquare(GetBlockPosition(blockInfo, offsetX, offsetY, tiled), (int)TileHelper.TileSize);
+    private void DrawRaysIfNeeded(SpriteBatch batch, Vector2 position, Color fairyQueenWeaponsColor, float rotation = 0f) {
+        Texture2D texture = ResourceManager.Ray2;
+        Rectangle clip = texture.Bounds;
+        Vector2 origin = clip.BottomCenter();
+        Vector2 scale = Vector2.One;
+        fairyQueenWeaponsColor.A = 255;
+        float waveValue = Helper.Wave(0.5f, 0.75f, 2.5f, Projectile.whoAmI);
+        fairyQueenWeaponsColor = fairyQueenWeaponsColor.MultiplyAlpha(waveValue);
+        position += Vector2.UnitY.RotatedBy(rotation) * origin * 0.0625f;
+        position += Vector2.UnitX * 16f;
+        scale.Y *= waveValue;
+        batch.DrawWithSnapshot(() => {
+            batch.Draw(texture, position, DrawInfo.Default with {
+                Clip = clip,
+                Origin = origin,
+                Color = fairyQueenWeaponsColor * 0.85f,
+                Scale = scale * 0.75f,
+                Rotation = rotation
+            });
+        }, blendState: BlendState.Additive);
+    }
 
-    public bool CollidingWith(MagicalBifrostBlock otherMagicalBlock) {
+    public Rectangle GetRect(MagicalBifrostBlockInfo blockInfo, int offsetX = 0, int offsetY = 0, bool tiled = false, int extraSize = 0) 
+        => GeometryUtils.CenteredSquare(GetBlockPosition(blockInfo, offsetX, offsetY, tiled), (int)TileHelper.TileSize + extraSize);
+
+    public bool CollidingWith(MagicalBifrostBlock otherMagicalBlock, bool addOffset = true, int extraSize = 0, bool tiled = true) {
         bool result = false;
         MagicalBifrostBlockInfo[] otherData = otherMagicalBlock.MagicalBifrostBlockData;
         if (otherData is null) {
@@ -292,7 +325,8 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         IEnumerable<MagicalBifrostBlockInfo> otherActiveMagicalBifrostBlockData = otherData.Where(blockInfo => blockInfo.Active);
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
             foreach (MagicalBifrostBlockInfo otherBlockInfo in otherActiveMagicalBifrostBlockData) {
-                if (GetRect(blockInfo, offsetY: 1, tiled: true).Intersects(otherMagicalBlock.GetRect(otherBlockInfo, tiled: true))) {
+                bool colliding = GetRect(blockInfo, offsetY: addOffset.ToInt(), tiled: tiled, extraSize: extraSize).Intersects(otherMagicalBlock.GetRect(otherBlockInfo, tiled: tiled, extraSize: extraSize));
+                if (colliding) {
                     return result = true;
                 }
             }
