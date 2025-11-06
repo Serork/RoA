@@ -289,7 +289,6 @@ sealed class MagicalBifrostBlock : NatureProjectile {
 
         DrawRaysIfNeeded(batch, Projectile.Center, fairyQueenWeaponsColor * GetRayOpacity() * _opacity, GetRayRotation());
 
-        Main.NewText(_opacity);
         float opacity = MathF.Max(0.5f, _opacity);
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
             Vector2 position = GetBlockPosition(blockInfo);
