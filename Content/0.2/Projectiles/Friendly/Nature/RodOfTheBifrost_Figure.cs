@@ -188,6 +188,9 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 dust.scale *= 1.5f;
             }
         }
+
+        DelegateMethods.v3_1 = Projectile.GetFairyQueenWeaponsColor().ToVector3() * GetRayOpacity() * GetLightWaveValue();
+        Utils.PlotTileLine(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(_rayRotation), 10f * GetLightWaveValue(), DelegateMethods.CastLight);
     }
 
     public override void OnKill(int timeLeft) {
@@ -246,7 +249,7 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         Color fairyQueenWeaponsColor = Projectile.GetFairyQueenWeaponsColor(0f) * 0.5f;
         Vector2 scale = Vector2.One * Projectile.scale;
 
-        DrawRaysIfNeeded(batch, Projectile.Center, fairyQueenWeaponsColor * (1f - _trailOpacity), _rayRotation);
+        DrawRaysIfNeeded(batch, Projectile.Center, fairyQueenWeaponsColor * GetRayOpacity(), _rayRotation);
 
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
             Vector2 position = GetBlockPosition(blockInfo);
@@ -297,10 +300,10 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         Vector2 origin = clip.BottomCenter();
         Vector2 scale = Vector2.One;
         fairyQueenWeaponsColor.A = 255;
-        float waveValue = Helper.Wave(0.5f, 0.75f, 2.5f, Projectile.whoAmI);
+        float waveValue = GetLightWaveValue();
         fairyQueenWeaponsColor = fairyQueenWeaponsColor.MultiplyAlpha(waveValue);
         position += Vector2.UnitY.RotatedBy(rotation) * origin * 0.0625f;
-        position += Vector2.UnitX * 16f;
+        position += Vector2.One * 8f;
         scale.Y *= waveValue;
         batch.DrawWithSnapshot(() => {
             batch.Draw(texture, position, DrawInfo.Default with {
@@ -312,6 +315,9 @@ sealed class MagicalBifrostBlock : NatureProjectile {
             });
         }, blendState: BlendState.Additive);
     }
+
+    private float GetLightWaveValue() => Helper.Wave(0.5f, 0.75f, 2.5f, Projectile.whoAmI);
+    private float GetRayOpacity() => 1f - _trailOpacity;
 
     public Rectangle GetRect(MagicalBifrostBlockInfo blockInfo, int offsetX = 0, int offsetY = 0, bool tiled = false, int extraSize = 0) 
         => GeometryUtils.CenteredSquare(GetBlockPosition(blockInfo, offsetX, offsetY, tiled), (int)TileHelper.TileSize + extraSize);
