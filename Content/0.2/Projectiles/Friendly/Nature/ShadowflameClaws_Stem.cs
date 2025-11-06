@@ -89,7 +89,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
         public StemType Type {
             readonly get => (StemType)StemTypeValue;
             set {
-                byte frameToSet = Utils.Clamp((byte)value, (byte)StemType.Small, (byte)StemType.Count);
+                byte frameToSet = Utils.Clamp((byte)value, (byte)StemType.Small, (byte)(StemType.Count - 1));
                 StemTypeValue = frameToSet;
             }
         }

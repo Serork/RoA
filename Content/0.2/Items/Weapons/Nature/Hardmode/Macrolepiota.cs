@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid;
-using RoA.Common.Druid.Forms;
-using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;

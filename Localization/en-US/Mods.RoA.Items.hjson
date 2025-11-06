@@ -2331,3 +2331,8 @@ HandOfGod: {
 	DisplayName: Hand Of God
 	Tooltip: ""
 }
+
+RodOfTheBifrost: {
+	DisplayName: Rod Of The Bifrost
+	Tooltip: ""
+}
