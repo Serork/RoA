@@ -64,6 +64,7 @@ sealed class MagicalBifrostBlock : NatureProjectile {
 
     private float _trailOpacity;
     private float _rayRotation, _rayStrength;
+    private float _opacity;
 
     public MagicalBifrostBlockInfo[] MagicalBifrostBlockData { get; private set; } = null!;
 
@@ -116,7 +117,7 @@ sealed class MagicalBifrostBlock : NatureProjectile {
     }
 
     public override void AI() {
-        Projectile.Opacity = Utils.GetLerpValue(0f, 30f, Projectile.timeLeft, true);
+        _opacity = Utils.GetLerpValue(0f, 30f, Projectile.timeLeft, true);
 
         float trailOpacityTarget = 1f;
         if (StoppedMoving) {
@@ -286,8 +287,10 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         Color fairyQueenWeaponsColor = Projectile.GetFairyQueenWeaponsColor(0f) * 0.5f;
         Vector2 scale = Vector2.One * Projectile.scale;
 
-        DrawRaysIfNeeded(batch, Projectile.Center, fairyQueenWeaponsColor * GetRayOpacity() * Projectile.Opacity, GetRayRotation());
+        DrawRaysIfNeeded(batch, Projectile.Center, fairyQueenWeaponsColor * GetRayOpacity() * _opacity, GetRayRotation());
 
+        Main.NewText(_opacity);
+        float opacity = MathF.Max(0.5f, _opacity);
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
             Vector2 position = GetBlockPosition(blockInfo);
             Point16 frameCoords = blockInfo.FrameCoords;
@@ -301,7 +304,7 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 batch.Draw(texture, position + vector2, DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
-                    Color = fairyQueenWeaponsColor * Projectile.Opacity * (1f - num2) * _trailOpacity,
+                    Color = fairyQueenWeaponsColor * opacity * (1f - num2) * _trailOpacity,
                     Scale = scale
                 });
             }
@@ -322,7 +325,7 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 batch.Draw(texture, position + vector2, DrawInfo.Default with {
                     Clip = clip,
                     Origin = origin,
-                    Color = fairyQueenWeaponsColor * 0.3f * Projectile.Opacity,
+                    Color = fairyQueenWeaponsColor * 0.3f * opacity,
                     Scale = scale * 1.5f
                 });
             }
