@@ -281,7 +281,6 @@ static class ProjectileUtils {
         Main.projectileIdentity[Owner, num] = num;
         Projectile_FindBannerToAssociateTo(projectile, spawnSource, projectile);
 
-
         if (projectile.aiStyle == 1) {
             while (projectile.velocity.X >= 16f || projectile.velocity.X <= -16f || projectile.velocity.Y >= 16f || projectile.velocity.Y < -16f) {
                 projectile.velocity.X *= 0.97f;

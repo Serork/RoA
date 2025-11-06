@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Networking;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
 using System;

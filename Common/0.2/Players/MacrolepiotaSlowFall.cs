@@ -1,5 +1,4 @@
-﻿using RoA.Content.Items.Weapons.Nature.Hardmode;
-using RoA.Content.Projectiles.Friendly.Nature;
+﻿using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility.Extensions;
 
 using Terraria;

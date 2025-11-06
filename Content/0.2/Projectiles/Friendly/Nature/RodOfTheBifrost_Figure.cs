@@ -4,16 +4,19 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
-using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 
@@ -23,7 +26,8 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class MagicalBifrostBlock : NatureProjectile {
     private static ushort TIMELEFT => 300;
     private static byte BLOCKCOUNTINFIGURE => 9;
-    private static float ATTACKTIME => 10f;
+    private static float ATTACKMOVESPEEDPERTICK => 10f;
+    private static bool SHOULDSCALEWITHWREATHCHARGE => false;
 
     public enum BifrostFigureType : byte {
         Red1,
@@ -55,7 +59,9 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         public readonly bool Active => FrameCoords != Point16.Zero;
     }
 
-    public MagicalBifrostBlockInfo[] MagicalBifrostBlockData = null!;
+    private float _trailOpacity;
+
+    public MagicalBifrostBlockInfo[] MagicalBifrostBlockData { get; private set; } = null!;
 
     public IEnumerable<MagicalBifrostBlockInfo> ActiveMagicalBifrostBlockData => MagicalBifrostBlockData.Where(blockInfo => blockInfo.Active);
 
@@ -63,7 +69,8 @@ sealed class MagicalBifrostBlock : NatureProjectile {
     public ref float MouseX => ref Projectile.localAI[1];
     public ref float MouseY => ref Projectile.localAI[2];
     public ref float FigureTypeValue => ref Projectile.ai[0];
-    public ref float MoveFactor => ref Projectile.ai[1];
+    public ref float EmpressOfLightColor => ref Projectile.ai[1];
+    public ref float StoppedMovingValue => ref Projectile.ai[2];
 
     public bool Init {
         get => InitValue == 1f;
@@ -76,6 +83,11 @@ sealed class MagicalBifrostBlock : NatureProjectile {
             MouseX = value.X;
             MouseY = value.Y;
         }
+    }
+
+    public bool StoppedMoving {
+        get => StoppedMovingValue == 1f;
+        set => StoppedMovingValue = value.ToInt();
     }
 
     public BifrostFigureType FigureType {
@@ -95,6 +107,12 @@ sealed class MagicalBifrostBlock : NatureProjectile {
     }
 
     public override void AI() {
+        float trailOpacityTarget = 1f;
+        if (StoppedMoving) {
+            trailOpacityTarget = 0f;
+        }
+        _trailOpacity = MathHelper.Lerp(_trailOpacity, trailOpacityTarget, 0.2f);
+
         void init() {
             if (Init) {
                 return;
@@ -107,9 +125,12 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 Projectile.Center = new Vector2(mousePosition.X, screenStart.Y);
 
                 SavedMousePosition = mousePosition;
-                FigureType = Main.rand.GetRandomEnumValue<BifrostFigureType>();
+                FigureType = owner.GetCommon().ActiveFigureType;
+
                 Projectile.netUpdate = true;
             }
+
+            _trailOpacity = 1f;
 
             InitializeFigure();
 
@@ -117,26 +138,89 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         }
 
         void moveSlowly() {
-            Player owner = Projectile.GetOwnerAsPlayer();
-            MoveFactor += 3f + 3f * WreathHandler.GetWreathChargeProgress(owner);
-            Projectile.position.Y += 5f;
-
-            if (Projectile.Center.Y > SavedMousePosition.Y) {
-                Projectile.Kill();
+            bool reachedEnd = Projectile.Center.Y > SavedMousePosition.Y;
+            if (reachedEnd || StoppedMoving) {
+                if (reachedEnd) {
+                    StopMoving();
+                }
+                return;
             }
+            foreach (Projectile otherFigure in TrackedEntitiesSystem.GetTrackedProjectile<MagicalBifrostBlock>(checkProjectile => checkProjectile.SameAs(Projectile))) {
+                MagicalBifrostBlock otherMagicalBlock = otherFigure.As<MagicalBifrostBlock>();
+                if (!otherMagicalBlock.Init) {
+                    continue;
+                }
+                if (CollidingWith(otherMagicalBlock)) {
+                    StopMoving();
+                    return; ;
+                }
+            }
+            Player owner = Projectile.GetOwnerAsPlayer();
+            float attackMoveValue = ATTACKMOVESPEEDPERTICK;
+            if (SHOULDSCALEWITHWREATHCHARGE) {
+                attackMoveValue *= 1f + WreathHandler.GetWreathChargeProgress(owner);
+            }
+            Projectile.position.Y += attackMoveValue;
         }
 
         init();
         moveSlowly();
 
+        Projectile.Center = Vector2.Lerp(Projectile.Center, Projectile.Center.ToTileCoordinates16().ToWorldCoordinates(), TimeSystem.LogicDeltaTime * 5f);
+
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
-            Dust.NewDustPerfect(GetBlockPosition(blockInfo), DustID.Adamantite, Vector2.Zero).noGravity = true;
+            Vector2 position = GetBlockPosition(blockInfo);
+            if (Main.rand.Next(6) == 0) {
+                Dust dust = Dust.NewDustPerfect(position, 267);
+                dust.velocity.X *= 0.25f;
+                dust.fadeIn = 1f;
+                dust.noGravity = true;
+                dust.alpha = 100;
+                dust.color = Projectile.GetFairyQueenWeaponsColor(1f, Main.rand.NextFloat() * 0.4f);
+                dust.noLightEmittence = true;
+                dust.scale *= 1.5f;
+            }
+        }
+    }
+
+    public override void OnKill(int timeLeft) {
+        foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
+            Color fairyQueenWeaponsColor = Projectile.GetFairyQueenWeaponsColor();
+            Vector2 position = GetBlockPosition(blockInfo);
+            Vector2 target = position;
+            Main.rand.NextFloat();
+            int num20 = 10;
+            for (int num21 = 0; num21 < num20; num21++) {
+                Vector2 vector5 = position - Vector2.UnitY * num21;
+                int num22 = Main.rand.Next(1, 3);
+                float num23 = MathHelper.Lerp(0.3f, 1f, Utils.GetLerpValue(num20, 0f, num21, clamped: true));
+                vector5.DirectionTo(target).SafeNormalize(Vector2.Zero);
+                target = vector5;
+                for (float num24 = 0f; num24 < (float)num22; num24++) {
+                    int num25 = Dust.NewDust(vector5 - Vector2.One * 8f, 16, 16, 267, 0f, 0f, 0, fairyQueenWeaponsColor);
+                    Dust dust2 = Main.dust[num25];
+                    dust2.velocity *= Main.rand.NextFloat() * 0.8f;
+                    Main.dust[num25].noGravity = true;
+                    Main.dust[num25].scale = 0.9f + Main.rand.NextFloat() * 1.2f;
+                    Main.dust[num25].fadeIn = Main.rand.NextFloat() * 1.2f * num23;
+                    dust2 = Main.dust[num25];
+                    dust2.scale *= num23;
+                    if (num25 != 6000) {
+                        Dust dust11 = Dust.CloneDust(num25);
+                        dust2 = dust11;
+                        dust2.scale /= 2f;
+                        dust2 = dust11;
+                        dust2.fadeIn *= 0.85f;
+                        dust11.color = new Color(255, 255, 255, 255);
+                    }
+                }
+            }
         }
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
-            if (GeometryUtils.CenteredSquare(GetBlockPosition(blockInfo), 16).Intersects(targetHitbox)) {
+            if (GetRect(blockInfo).Intersects(targetHitbox)) {
                 return true;
             }
         }
@@ -149,7 +233,29 @@ sealed class MagicalBifrostBlock : NatureProjectile {
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = Projectile.GetTexture();
-        Color color = lightColor;
+        Color baseColor = Color.White * Projectile.Opacity;
+        Color color = baseColor;
+        color.A /= 2;
+        Color fairyQueenWeaponsColor = Projectile.GetFairyQueenWeaponsColor(0f) * 0.5f;
+        Vector2 scale = Vector2.One * Projectile.scale;
+        foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
+            Vector2 position = GetBlockPosition(blockInfo);
+            Point16 frameCoords = blockInfo.FrameCoords;
+            Rectangle clip = new(frameCoords.X * 18, frameCoords.Y * 18, 16, 16);
+            Vector2 origin = clip.Centered();
+            int count = 10;
+            float step = 1f / count;
+            float maxOffset = 12f * count;
+            for (float num2 = step; num2 < 1f; num2 += step) {
+                Vector2 vector2 = Vector2.UnitY * -maxOffset * num2;
+                batch.Draw(texture, position + vector2, DrawInfo.Default with {
+                    Clip = clip,
+                    Origin = origin,
+                    Color = fairyQueenWeaponsColor * Projectile.Opacity * (1f - num2) * _trailOpacity,
+                    Scale = scale
+                });
+            }
+        }
         foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
             Vector2 position = GetBlockPosition(blockInfo);
             Point16 frameCoords = blockInfo.FrameCoords;
@@ -158,16 +264,58 @@ sealed class MagicalBifrostBlock : NatureProjectile {
             batch.Draw(texture, position, DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
-                Color = color
+                Color = baseColor,
+                Scale = scale
             });
+            for (float num5 = 0f; num5 < 1f; num5 += 0.25f) {
+                Vector2 vector2 = (num5 * ((float)Math.PI * 2f)).ToRotationVector2() * 2f * scale;
+                batch.Draw(texture, position + vector2, DrawInfo.Default with {
+                    Clip = clip,
+                    Origin = origin,
+                    Color = fairyQueenWeaponsColor * 0.3f,
+                    Scale = scale * 1.5f
+                });
+            }
         }
 
         return false;
     }
 
-    private Vector2 GetBlockPosition(MagicalBifrostBlockInfo blockInfo) {
+    public Rectangle GetRect(MagicalBifrostBlockInfo blockInfo, int offsetX = 0, int offsetY = 0, bool tiled = false) => GeometryUtils.CenteredSquare(GetBlockPosition(blockInfo, offsetX, offsetY, tiled), (int)TileHelper.TileSize);
+
+    public bool CollidingWith(MagicalBifrostBlock otherMagicalBlock) {
+        bool result = false;
+        MagicalBifrostBlockInfo[] otherData = otherMagicalBlock.MagicalBifrostBlockData;
+        if (otherData is null) {
+            return result;
+        }
+        IEnumerable<MagicalBifrostBlockInfo> otherActiveMagicalBifrostBlockData = otherData.Where(blockInfo => blockInfo.Active);
+        foreach (MagicalBifrostBlockInfo blockInfo in ActiveMagicalBifrostBlockData) {
+            foreach (MagicalBifrostBlockInfo otherBlockInfo in otherActiveMagicalBifrostBlockData) {
+                if (GetRect(blockInfo, offsetY: 1, tiled: true).Intersects(otherMagicalBlock.GetRect(otherBlockInfo, tiled: true))) {
+                    return result = true;
+                }
+            }
+        }
+        return result;
+    }
+
+    private void StopMoving() {
+        if (StoppedMoving) {
+            return;
+        }
+
+        StoppedMoving = true;
+        SoundEngine.PlaySound(SoundID.Item10, Projectile.Center);
+    }
+
+    private Vector2 GetBlockPosition(MagicalBifrostBlockInfo blockInfo, int offsetX = 0, int offsetY = 0, bool tiled = false) {
         Vector2 result;
-        result = Projectile.Center + blockInfo.StartOffset.ToWorldCoordinates();
+        if (tiled) {
+            result = (Projectile.Center.ToTileCoordinates16() + blockInfo.StartOffset + Point16.NegativeOne + new Point16(offsetX, offsetY)).ToWorldCoordinates();
+            return result;
+        }
+        result = Projectile.Center + (blockInfo.StartOffset + Point16.NegativeOne + new Point16(offsetX, offsetY)).ToWorldCoordinates();
         return result;
     }
 
