@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
@@ -20,9 +18,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
-using Terraria.UI.Chat;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -117,8 +113,6 @@ sealed class MagicalBifrostBlock : NatureProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
-
-        Projectile.hostile = true;
     }
 
     public override void AI() {
@@ -333,8 +327,6 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 });
             }
         }
-
-        //ChatManager.DrawColorCodedStringWithShadow(batch, FontAssets.ItemStack.Value, _directlyConnectedWith.Count.ToString(), Projectile.Center - Main.screenPosition, Color.White, 0f, Vector2.Zero, Vector2.One);
 
         return false;
     }
