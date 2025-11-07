@@ -8,7 +8,7 @@
 
 //namespace RoA.Common.CameraSystem;
 
-//[Autoload(false)]
+////[Autoload(false)]
 //// starlight river
 //public class CameraSystem : ModSystem {
 //    public static int shake = 0;

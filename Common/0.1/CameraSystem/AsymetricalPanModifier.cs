@@ -8,7 +8,7 @@
 
 //namespace RoA.Common.CameraSystem;
 
-//[Autoload(false)]
+////[Autoload(false)]
 //// starlight river
 //internal class AsymetricalPanModifier : ICameraModifier {
 //    public Func<Vector2, Vector2, float, Vector2> EaseInFunction = Vector2.SmoothStep;

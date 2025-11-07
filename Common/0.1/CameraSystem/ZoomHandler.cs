@@ -6,7 +6,7 @@
 
 //namespace RoA.Common.CameraSystem;
 
-//[Autoload(false)]
+////[Autoload(false)]
 //public class ZoomHandler : ModSystem {
 //    private static int zoomTimer;
 //    public static float zoomOverride = 1;

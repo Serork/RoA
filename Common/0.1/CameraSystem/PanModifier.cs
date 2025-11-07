@@ -8,7 +8,7 @@
 
 //namespace RoA.Common.CameraSystem;
 
-//[Autoload(false)]
+////[Autoload(false)]
 //internal class PanModifier : ICameraModifier {
 //    public Func<Vector2, Vector2, float, Vector2> EaseInFunction = Vector2.SmoothStep;
 //    public Func<Vector2, Vector2, float, Vector2> EaseOutFunction = Vector2.SmoothStep;

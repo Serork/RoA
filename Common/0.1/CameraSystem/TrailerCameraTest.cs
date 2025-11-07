@@ -1,4 +1,5 @@
 ﻿//using Microsoft.Xna.Framework;
+//using Microsoft.Xna.Framework.Input;
 
 //using RoA.Common.Networking;
 //using RoA.Common.Networking.Packets;
@@ -11,11 +12,11 @@
 
 //namespace RoA.Common.CameraSystem;
 
-//[Autoload(false)]
+////[Autoload(false)]
 //sealed class TrailerCameraTest : ModSystem {
 //    private static bool _shifted = true;
 
-//    private static Point _point1, _point2;
+//    private static Vector2 _point1, _point2;
 //    private static int _durationIn;
 //    private static int _durationOut;
 //    private static int _durationHold;
@@ -25,9 +26,9 @@
 
 //    private static float EaseFunctionValue(float value1, float value2, float amount) {
 //        float result = MathHelper.Clamp(amount, 0f, 1f);
-//        //result = MathHelper.Hermite(value1, 0f, value2, 0f, result);
+//        result = MathHelper.Hermite(value1, 0f, value2, 0f, result);
 
-//        result = MathHelper.Lerp(value1, value2, Ease.SineIn(Ease.SineOut(amount)));
+//        //result = MathHelper.Lerp(value1, value2, Ease.SineIn(Ease.SineOut(amount)));
 
 //        return result;
 //    }
@@ -90,89 +91,89 @@
 //    //    }
 //    //}
 
-//    //private class SetDurationInCommand : ModCommand {
-//    //    public override CommandType Type => CommandType.Chat;
-//    //    public override string Command => "duration";
-//    //    public override string Usage => "/duration in out hold";
+//    private class SetDurationInCommand : ModCommand {
+//        public override CommandType Type => CommandType.Chat;
+//        public override string Command => "duration";
+//        public override string Usage => "/duration in out hold";
 
-//    //    public override void Action(CommandCaller caller, string input, string[] args) {
-//    //        if (!int.TryParse(args[0], out int durationIn)) {
-//    //            throw new UsageException(args[0] + " is not an integer");
-//    //        }
+//        public override void Action(CommandCaller caller, string input, string[] args) {
+//            if (!int.TryParse(args[0], out int durationIn)) {
+//                throw new UsageException(args[0] + " is not an integer");
+//            }
 
-//    //        if (!int.TryParse(args[1], out int durationOut)) {
-//    //            throw new UsageException(args[1] + " is not an integer");
-//    //        }
+//            if (!int.TryParse(args[1], out int durationOut)) {
+//                throw new UsageException(args[1] + " is not an integer");
+//            }
 
-//    //        if (!int.TryParse(args[2], out int durationHold)) {
-//    //            throw new UsageException(args[2] + " is not an integer");
-//    //        }
+//            if (!int.TryParse(args[2], out int durationHold)) {
+//                throw new UsageException(args[2] + " is not an integer");
+//            }
 
-//    //        _durationIn = durationIn;
-//    //        _durationOut = durationOut;
-//    //        _durationHold = durationHold;
-//    //    }
-//    //}
+//            _durationIn = durationIn;
+//            _durationOut = durationOut;
+//            _durationHold = durationHold;
+//        }
+//    }
 
-//    //private class StopCameraCommand : ModCommand {
-//    //    public override CommandType Type => CommandType.Chat;
-//    //    public override string Command => "stop";
-//    //    public override string Usage => "/stop";
+//    private class StopCameraCommand : ModCommand {
+//        public override CommandType Type => CommandType.Chat;
+//        public override string Command => "stop";
+//        public override string Usage => "/stop";
 
-//    //    public override void Action(CommandCaller caller, string input, string[] args) {
-//    //        CameraSystem.AsymetricalPanModifier.timer = 0;
-//    //        CameraSystem.AsymetricalPanModifier.target = CameraSystem.AsymetricalPanModifier.from = Vector2.Zero;
-//    //    }
-//    //}
+//        public override void Action(CommandCaller caller, string input, string[] args) {
+//            CameraSystem.AsymetricalPanModifier.timer = 0;
+//            CameraSystem.AsymetricalPanModifier.target = CameraSystem.AsymetricalPanModifier.from = Vector2.Zero;
+//        }
+//    }
 
-//    //private class StartCameraCommand : ModCommand {
-//    //    public override CommandType Type => CommandType.Chat;
-//    //    public override string Command => "start";
-//    //    public override string Usage => "/start";
+//    private class StartCameraCommand : ModCommand {
+//        public override CommandType Type => CommandType.Chat;
+//        public override string Command => "start";
+//        public override string Usage => "/start";
 
-//    //    public override void Action(CommandCaller caller, string input, string[] args) {
-//    //        _shifted = false;
-//    //    }
-//    //}
+//        public override void Action(CommandCaller caller, string input, string[] args) {
+//            _shifted = false;
+//        }
+//    }
 
-//    //private class Start2CameraCommand : ModCommand {
-//    //    public override CommandType Type => CommandType.Chat;
-//    //    public override string Command => "start2";
-//    //    public override string Usage => "/start2 time";
+//    private class Start2CameraCommand : ModCommand {
+//        public override CommandType Type => CommandType.Chat;
+//        public override string Command => "start2";
+//        public override string Usage => "/start2 time";
 
-//    //    public override void Action(CommandCaller caller, string input, string[] args) {
-//    //        if (!int.TryParse(args[0], out int time)) {
-//    //            throw new UsageException(args[0] + " is not an integer");
-//    //        }
+//        public override void Action(CommandCaller caller, string input, string[] args) {
+//            if (!int.TryParse(args[0], out int time)) {
+//                throw new UsageException(args[0] + " is not an integer");
+//            }
 
-//    //        _shifted = false;
-//    //        _beforeTime = time; 
-//    //    }
-//    //}
+//            _shifted = false;
+//            _beforeTime = time;
+//        }
+//    }
 
-//    //private class BeforeStartTimerCameraCommand : ModCommand {
-//    //    public override CommandType Type => CommandType.Chat;
-//    //    public override string Command => "beforetimer";
-//    //    public override string Usage => "/beforetimer time";
+//    private class BeforeStartTimerCameraCommand : ModCommand {
+//        public override CommandType Type => CommandType.Chat;
+//        public override string Command => "beforetimer";
+//        public override string Usage => "/beforetimer time";
 
-//    //    public override void Action(CommandCaller caller, string input, string[] args) {
-//    //        if (!int.TryParse(args[0], out int time)) {
-//    //            throw new UsageException(args[0] + " is not an integer");
-//    //        }
+//        public override void Action(CommandCaller caller, string input, string[] args) {
+//            if (!int.TryParse(args[0], out int time)) {
+//                throw new UsageException(args[0] + " is not an integer");
+//            }
 
-//    //        _beforeTime = time;
-//    //    }
-//    //}
+//            _beforeTime = time;
+//        }
+//    }
 
-//    //private class PauseCameraCommand : ModCommand {
-//    //    public override CommandType Type => CommandType.Chat;
-//    //    public override string Command => "pause";
-//    //    public override string Usage => "/pause";
+//    private class PauseCameraCommand : ModCommand {
+//        public override CommandType Type => CommandType.Chat;
+//        public override string Command => "pause";
+//        public override string Usage => "/pause";
 
-//    //    public override void Action(CommandCaller caller, string input, string[] args) {
-//    //        _pause = !_pause;
-//    //    }
-//    //}
+//        public override void Action(CommandCaller caller, string input, string[] args) {
+//            _pause = !_pause;
+//        }
+//    }
 
 //    public override void Load() {
 //        On_SceneMetrics.ScanAndExportToMain += On_SceneMetrics_ScanAndExportToMain;
@@ -190,6 +191,18 @@
 //    }
 
 //    public override void PostUpdatePlayers() {
+//        if (Keyboard.GetState().IsKeyDown(Keys.Z)) {
+//            _point1 = Main.LocalPlayer.Center;
+//            _shifted = false;
+//            _beforeTime = 0;
+//        }
+//        if (Keyboard.GetState().IsKeyDown(Keys.X)) {
+//            _point1 = Main.LocalPlayer.Center;
+//        }
+//        if (Keyboard.GetState().IsKeyDown(Keys.C)) {
+//            _point2 = Main.LocalPlayer.Center;
+//        }
+
 //        if (!_shifted) {
 //            if (_beforeTime > 0f) {
 //                _beforeTime--;
@@ -204,10 +217,8 @@
 //                return;
 //            }
 
-//            Point point1 = _point1;
-//            Point point2 = _point2;
 //            CameraSystem.AsymetricalPan(_durationOut, _durationHold, _durationIn,
-//                point1.ToWorldCoordinates(), point2.ToWorldCoordinates(), EaseFunction);
+//                _point1, _point2, EaseFunction);
 //            _shifted = true;
 //        }
 //    }
