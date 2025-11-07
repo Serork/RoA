@@ -214,7 +214,7 @@ sealed class MagicalBifrostBlock : NatureProjectile {
             }
         }
 
-        DelegateMethods.v3_1 = Projectile.GetFairyQueenWeaponsColor().ToVector3() * GetRayOpacity() * GetLightWaveValue();
+        DelegateMethods.v3_1 = Projectile.GetFairyQueenWeaponsColor().ToVector3() * 1.5f * GetRayOpacity() * GetLightWaveValue();
         Utils.PlotTileLine(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(_rayRotation), 10f * GetLightWaveValue(), DelegateMethods.CastLight);
 
         foreach (Projectile check in _connectedWith) {
