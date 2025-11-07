@@ -137,7 +137,8 @@ sealed class MagicalBifrostBlock : NatureProjectile {
                 Projectile.Center = new Vector2(mousePosition.X, screenStart.Y);
 
                 SavedMousePosition = mousePosition;
-                FigureType = owner.GetCommon().ActiveFigureType;
+                //FigureType = owner.GetCommon().ActiveFigureType;
+                FigureType = Main.rand.GetRandomEnumValue<BifrostFigureType>();
 
                 _rayRotation = MathHelper.TwoPi * Main.rand.NextFloatDirection();
 
