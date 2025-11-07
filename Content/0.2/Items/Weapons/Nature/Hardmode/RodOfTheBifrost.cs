@@ -30,7 +30,7 @@ sealed class RodOfTheBifrost : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        player.GetCommon().UseRodOfTheBifrostPattern();
+        //player.GetCommon().UseRodOfTheBifrostPattern();
         Projectile magicalBlock = ProjectileUtils.SpawnPlayerOwnedProjectile<MagicalBifrostBlock>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_ItemUse(Item)) {
             Damage = damage,
             KnockBack = knockback,
