@@ -110,7 +110,7 @@ sealed class LilPhoenixForm : BaseForm {
             flag = true;
         }
         bool flag4 = !flag || !IsInAir(player);
-        StrikeNPC(player, !player.wet && WorldGenHelper.CustomSolidCollision(player.position - Vector2.One * 3, player.width + 6, player.height + 6, TileID.Sets.Platforms));
+        StrikeNPC(player, WorldGenHelper.CustomSolidCollision(player.position - Vector2.One * 3, player.width + 6, player.height + 6, TileID.Sets.Platforms));
         if (flag4) {
             if (plr._charge3 < BaseFormHandler.MAXPHOENIXCHARGE) {
                 if (plr.Dashed) {

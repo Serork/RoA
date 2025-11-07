@@ -114,7 +114,7 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public void DoHornetDash(IDoubleTap.TapDirection direction) {
-        if (!Player.GetCommon().ApplyHornetSkullSetBonus) {
+        if (!Player.GetCommon().ApplyHornetSkullSetBonus || Player.GetFormHandler().IsInADruidicForm) {
             return;
         }
 
