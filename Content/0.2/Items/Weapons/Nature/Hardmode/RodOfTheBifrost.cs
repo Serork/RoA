@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
-using RoA.Common.Players;
+using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -17,13 +17,14 @@ using static Terraria.Player;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
+[AutoloadGlowMask]
 sealed class RodOfTheBifrost : NatureItem {
     public override void SetStaticDefaults() {
         Item.staff[Type] = true;
     }
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(28, 40);
+        Item.SetSizeValues(36, 36);
         Item.SetWeaponValues(60, 4f);
         Item.SetUsableValues(ItemUseStyleID.HiddenAnimation, 20, useSound: SoundID.Item7);
         Item.SetShopValues(ItemRarityColor.Yellow8, Item.sellPrice());
