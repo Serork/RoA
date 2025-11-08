@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Mono.Cecil;
+
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
 using RoA.Content.Buffs;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -13,6 +16,7 @@ using RoA.Core.Utility.Vanilla;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -153,6 +157,23 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         target.AddBuff<DeerSkullElectrified>(20);
 
+        Vector2 velocity = Projectile.Center.DirectionTo(target.Center) * 10f;
+        Vector2 hitPoint = target.Center + velocity.SafeNormalize(Vector2.UnitX) * 2f;
+        Vector2 normal = (-velocity).SafeNormalize(Vector2.UnitX);
+        Vector2 spinningpoint = Vector2.Reflect(velocity, normal);
+        float scale = 2.5f - Vector2.Distance(target.Center, Projectile.position) * 0.01f;
+        scale = MathHelper.Clamp(scale, 0.75f, 1.15f);
+        scale *= 0.925f;
+        for (int i = 0; i < 3; i++) {
+            int num156 = ModContent.DustType<Electric>();
+            Dust dust = Dust.NewDustPerfect(hitPoint, num156, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat() * 0.5f, 100, default, 0.5f + 0.3f * Main.rand.NextFloat());
+            dust.scale *= scale;
+            dust.noGravity = true;
+            dust.fadeIn = dust.scale / 2 + 0.1f;
+            Dust dust2 = Dust.CloneDust(dust);
+            dust2.color = Color.White;
+        }
+
         Projectile.damage /= 2;
 
         Player player = Projectile.GetOwnerAsPlayer();
@@ -245,6 +266,17 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
                 Main.spriteBatch.Draw(text, start - Main.screenPosition, null, borderColor * 0.375f, 0f, text.Size() / 2f, size * 0.25f * scaleOpacity, 0, 0);
                 start += start.DirectionTo(_nodes[index + 1]) * 5f;
             }
+
+            if (Scale > 1f && index > 1 && Main.rand.NextChance(0.025)) {
+                Dust dust = Dust.NewDustPerfect(_nodes[index], ModContent.DustType<Electric>(), Utils.SafeNormalize(_nodes[index].DirectionTo(_nodes[index + 1]), Vector2.Zero) * 7.5f * Main.rand.NextFloat(0.25f, 1f), 0, Color.White);
+                dust.rotation = Main.rand.NextFloat(MathHelper.TwoPi);
+                dust.scale *= 0.4f + Main.rand.NextFloatRange(0.15f);
+                dust.scale *= 0.925f;
+                dust.fadeIn = dust.scale + 0.1f;
+                dust.velocity *= 0.25f;
+                dust.noGravity = true;
+            }
+
             DrawLightning(Main.spriteBatch, (uint)Seed, _nodes[index], _nodes[index + 1], Scale, 0f, Color.White * scaleOpacity, borderColor.ModifyRGB(0.9f) * 0.9f * scaleOpacity);
         }
         for (int index = 0; index < _nodes.Count - 1; index++) {
