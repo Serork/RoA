@@ -126,7 +126,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
         if (!player.IsLocal()) {
             return;
         }
-        NPC? target2 = NPCUtils.FindClosestNPC(target.Center, PlayerCommon.DEERSKULLATTACKDISTANCE / 2, false, false, filter: (npc) => npc.HasBuff<DeerSkullElectrified>());
+        NPC? target2 = NPCUtils.FindClosestNPC(target.Center, PlayerCommon.DEERSKULLATTACKDISTANCE / 2, false, filter: (npc) => npc.HasBuff<DeerSkullElectrified>());
         if (target2 is not null) {
             ProjectileUtils.SpawnPlayerOwnedProjectile<HornsLightning>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("hornsattack")) {
                 Position = target.Center,

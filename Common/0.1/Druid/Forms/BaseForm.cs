@@ -377,7 +377,8 @@ abstract class BaseForm : ModMount {
                     float hornsBorderOpacity2 = MathUtils.Clamp01(drawPlayer.GetCommon().DeerSkullHornsBorderOpacity2);
                     for (float num5 = 0f; num5 < 1f; num5 += 0.25f) {
                         Vector2 vector2 = (num5 * ((float)Math.PI * 2f)).ToRotationVector2() * 2f * drawScale;
-                        Color color = new Color(35, 193, 179) * 0.75f;
+                        Color color = hornsBorderOpacity2 >= 0.925f ? Color.White : new(35, 193, 179);
+                        color *= 0.75f;
                         DrawData item2 = new(SolidTexture.Value, drawPosition + vector2, frame, color * hornsBorderOpacity, rotation, drawOrigin, drawScale, spriteEffects);
                         item2.shader = drawPlayer.cHead;
                         playerDrawData.Add(item2);

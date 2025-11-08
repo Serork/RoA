@@ -39,7 +39,7 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
 
         Vector2 checkPosition = Player.Center;
         int checkDistance = DEERSKULLATTACKDISTANCE;
-        NPC? target = NPCUtils.FindClosestNPC(checkPosition, checkDistance, false, false);
+        NPC? target = NPCUtils.FindClosestNPC(checkPosition, checkDistance, false);
         DeerSkullHornsTarget = target;
 
         DeerSkullHornsBorderOpacity = Helper.Approach(DeerSkullHornsBorderOpacity, 0f, lerpValue);

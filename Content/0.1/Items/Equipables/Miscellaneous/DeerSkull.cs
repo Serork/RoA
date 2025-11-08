@@ -19,7 +19,7 @@ namespace RoA.Content.Items.Equipables.Miscellaneous;
 [AutoloadEquip(EquipType.Head, EquipType.Face)]
 sealed class DeerSkull : ModItem {
     private static Asset<Texture2D> _extraTexture = null!;
-    private static bool _isDrawing;
+    private static bool _isDrawingHorns;
 
     public override void SetStaticDefaults() {
         ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[Item.headSlot] = true;
@@ -39,8 +39,8 @@ sealed class DeerSkull : ModItem {
     }
 
     private void ExtraDrawLayerSupport_PostFaceAccDrawEvent(ref PlayerDrawSet drawinfo) {
-        if (_isDrawing) {
-            _isDrawing = false;
+        if (_isDrawingHorns) {
+            _isDrawingHorns = false;
             return;
         }
         DrawHorns(ref drawinfo);
@@ -77,7 +77,7 @@ sealed class DeerSkull : ModItem {
             return;
         }
 
-        _isDrawing = true;
+        _isDrawingHorns = true;
 
         Texture2D texture = _extraTexture.Value;
         SpriteFrame hornsFrame = new(1, 3, 0, 0);
@@ -111,7 +111,7 @@ sealed class DeerSkull : ModItem {
         // border
         hornsFrame = new(1, 3, 0, 2);
         clip = hornsFrame.GetSourceRectangle(texture);
-        Color borderColor = new(35, 193, 179);
+        Color borderColor = hornsBorderOpacity2 >= 0.925f ? Color.White : new(35, 193, 179);
         item = new(texture, position, clip, borderColor * hornsBorderOpacity * 0.75f, drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect) {
             shader = drawinfo.cHead
         };
