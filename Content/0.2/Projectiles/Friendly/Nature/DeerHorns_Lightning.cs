@@ -100,6 +100,22 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
         if (!Init) {
             Init = true;
 
+            if (_skySpawn) {
+                int k = 10;
+                Vector2 velocity = Projectile.Center.DirectionTo(TargetPosition) * 10f;
+                for (int i = 0; i < k; i++) {
+                    int x = (int)((double)Projectile.Center.X);
+                    int y = (int)((double)Projectile.Center.Y);
+                    Vector2 vector3 = (new Vector2((float)Projectile.width / 2f, Projectile.height) * 0.25f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
+                    Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
+                    int dust = Dust.NewDust(vector3 - velocity * 3f + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, 226, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].noLight = true;
+                    Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat() + velocity * 0.75f * Main.rand.NextFloat(0.5f, 1f);
+                    Main.dust[dust].scale *= 0.5f;
+                }
+            }
+
             if (owner.IsLocal()) {
                 Seed = Main.rand.Next(100);
 
