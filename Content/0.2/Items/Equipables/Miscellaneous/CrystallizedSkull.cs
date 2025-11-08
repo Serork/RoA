@@ -11,6 +11,7 @@ namespace RoA.Content.Items.Equipables.Miscellaneous;
 sealed class CrystallizedSkull : ModItem {
     public override void SetStaticDefaults() {
         ArmorIDs.Face.Sets.PreventHairDraw[Item.faceSlot] = true;
+        ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
     }
 
     public override void SetDefaults() {

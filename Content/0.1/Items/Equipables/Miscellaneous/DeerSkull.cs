@@ -7,7 +7,6 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -16,7 +15,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.Graphics.CameraModifiers;
-using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -34,6 +32,7 @@ sealed class DeerSkull : ModItem {
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
+        ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
         ArmorIDs.Face.Sets.PreventHairDraw[Item.faceSlot] = true;
 
         if (!Main.dedServ) {
