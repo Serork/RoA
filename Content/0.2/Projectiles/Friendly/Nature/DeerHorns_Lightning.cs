@@ -52,13 +52,13 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
 
         if (!Init) {
             if (owner.IsLocal()) {
-                _startPosition = Vector2.UnitX * 45 * Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextFloatDirection() + Main.rand.RandomPointInArea(20f);
+                _startPosition = Vector2.UnitX * 26f * Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextFloatDirection() + Main.rand.RandomPointInArea(24f);
                 Projectile.netUpdate = true;
             }
         }
 
         Projectile.Center = owner.RotatedRelativePoint(owner.MountedCenter);
-        Projectile.Center = Utils.Floor(Projectile.Center) - new Vector2(0f, 20f) + _startPosition;
+        Projectile.Center = Utils.Floor(Projectile.Center) - new Vector2(0f, 28f) + _startPosition;
 
         if (!Init) {
             Init = true;
