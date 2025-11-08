@@ -75,12 +75,9 @@ sealed class WreathHandler : ModPlayer {
     private bool _onFullCreated;
     private bool _useAltSounds = true;
     private ushort _showForTime;
+    private bool _dontPlayStaySound;
 
     public ushort GetHitTimer { get; private set; }
-
-    public bool HasEnougthToJump;
-
-    private int[] _buffTypes = [ModContent.BuffType<WreathCharged>(), ModContent.BuffType<WreathFullCharged>(), ModContent.BuffType<WreathFullCharged2>()];
 
     public static Color StandardColor => new(170, 252, 134);
     public static Color PhoenixColor => new(251, 234, 94);
@@ -124,6 +121,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public bool StartSlowlyIncreasingUntilFull { get; private set; }
+    public bool StartSlowlyIncreasingUntilFull2 { get; private set; }
+    public bool CannotToggleOrGetWreathCharge { get; private set; }
+
+    public bool ShouldKeepSlowFill2, ChargedBySlowFill;
 
     public ushort TotalResource => (ushort)(MaxResource + ExtraResource);
 
@@ -140,7 +141,7 @@ sealed class WreathHandler : ModPlayer {
     public float ChangingProgress {
         get {
             float value = MathHelper.Clamp(ChangingTimeValue - _currentChangingTime, 0f, 1f);
-            return _shouldDecrease2 ? value : StartSlowlyIncreasingUntilFull ? value : Ease.CircOut(value);
+            return _shouldDecrease2 ? value : (StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2) ? value : Ease.CircOut(value);
         }
     }
     public bool IsEmpty => ActualProgress2 <= 0.01f;
@@ -203,17 +204,18 @@ sealed class WreathHandler : ModPlayer {
         OnWreathReset = null;
     }
 
-    internal void ReceivePlayerSync(ushort resource, ushort tempResource, float changingTimeValue, float currentChangingTime, bool shouldDecrease1, bool shouldDecrease2, float currentChangingMult, ushort increaseValue, float stayTime, bool startSlowlyIncreasingUntilFull) {
+    internal void ReceivePlayerSync(ushort resource/*, ushort tempResource, float changingTimeValue, float currentChangingTime, bool shouldDecrease1, bool shouldDecrease2, float currentChangingMult, ushort increaseValue, float stayTime, bool startSlowlyIncreasingUntilFull, bool startSlowlyIncreasingUntilFull2*/) {
         CurrentResource = resource;
-        _tempResource = tempResource;
-        ChangingTimeValue = changingTimeValue;
-        _currentChangingTime = currentChangingTime;
-        _shouldDecrease = shouldDecrease1;
-        _shouldDecrease2 = shouldDecrease2;
-        _currentChangingMult = currentChangingMult;
-        _increaseValue = increaseValue;
-        _stayTime = stayTime;
-        StartSlowlyIncreasingUntilFull = startSlowlyIncreasingUntilFull;
+        //_tempResource = tempResource;
+        //ChangingTimeValue = changingTimeValue;
+        //_currentChangingTime = currentChangingTime;
+        //_shouldDecrease = shouldDecrease1;
+        //_shouldDecrease2 = shouldDecrease2;
+        //_currentChangingMult = currentChangingMult;
+        //_increaseValue = increaseValue;
+        //_stayTime = stayTime;
+        //StartSlowlyIncreasingUntilFull = startSlowlyIncreasingUntilFull;
+        //StartSlowlyIncreasingUntilFull2 = startSlowlyIncreasingUntilFull2;
     }
 
     public override void CopyClientState(ModPlayer targetCopy) {
@@ -226,7 +228,7 @@ sealed class WreathHandler : ModPlayer {
 
     private void SendPacket(Player player, int toClient) {
         WreathHandler source = player.GetWreathHandler();
-        MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)player.whoAmI, source.CurrentResource, source._tempResource, source.ChangingTimeValue, source._currentChangingTime, source._shouldDecrease, source._shouldDecrease2, source._currentChangingMult, source._increaseValue, source._stayTime, source.StartSlowlyIncreasingUntilFull),
+        MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)player.whoAmI, source.CurrentResource/*, source._tempResource, source.ChangingTimeValue, source._currentChangingTime, source._shouldDecrease, source._shouldDecrease2, source._currentChangingMult, source._increaseValue, source._stayTime, source.StartSlowlyIncreasingUntilFull, source.StartSlowlyIncreasingUntilFull2*/),
             toClient: toClient);
     }
 
@@ -313,8 +315,13 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
+    public override void ResetEffects() {
+        ShouldKeepSlowFill2 = false;
+    }
+
     internal void ForcedHardReset() {
         StartSlowlyIncreasingUntilFull = false;
+        StartSlowlyIncreasingUntilFull2 = false;
         Reset();
         OnResetEffects();
         OnWreathReset?.Invoke();
@@ -362,6 +369,7 @@ sealed class WreathHandler : ModPlayer {
         ResetChangingValue();
 
         StartSlowlyIncreasingUntilFull = false;
+        StartSlowlyIncreasingUntilFull2 = false;
 
         for (int i = 0; i < 5; i++) {
             MakeDustsOnHit(1f);
@@ -369,6 +377,9 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void SlowlyActivateForm(FormInfo formInfo) {
+        if (CannotToggleOrGetWreathCharge) {
+            return;
+        }
         if (Player.GetFormHandler().IsInADruidicForm) {
             return;
         }
@@ -379,7 +390,39 @@ sealed class WreathHandler : ModPlayer {
             Player.mount.Dismount(Player);
         }
         StartSlowlyIncreasingUntilFull = true;
+        StartSlowlyIncreasingUntilFull2 = false;
         _formInfo = formInfo;
+        IncreaseResourceValue(increaseUntilFull: true);
+
+        if (Player.whoAmI == Main.myPlayer) {
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Twinkle") { Pitch = 0.3f, Volume = 0.2f }, Player.Center);
+            SoundEngine.PlaySound(SoundID.Item25 with { Pitch = -0.4f, Volume = 0.4f }, Player.Center);
+        }
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(Player, 16, Player.Center));
+        }
+    }
+
+    internal void SlowlyFill2() {
+        if (Player.GetFormHandler().IsInADruidicForm) {
+            return;
+        }
+        if (StartSlowlyIncreasingUntilFull) {
+            return;
+        }
+        if (CannotToggleOrGetWreathCharge) {
+            if (_currentChangingMult < 0.5f) {
+                Dusts_ResetStayTime();
+                ChargedBySlowFill = false;
+                Reset(true);
+                OnResetEffects();
+            }
+            return;
+        }
+        if (StartSlowlyIncreasingUntilFull2) {
+            return;
+        }
+        StartSlowlyIncreasingUntilFull2 = true;
         IncreaseResourceValue(increaseUntilFull: true);
 
         if (Player.whoAmI == Main.myPlayer) {
@@ -393,15 +436,16 @@ sealed class WreathHandler : ModPlayer {
 
     internal void Reset1() {
         StartSlowlyIncreasingUntilFull = false;
+        StartSlowlyIncreasingUntilFull2 = false;
     }
 
     public void Dusts_ResetStayTime() {
-        bool flag = IsFull1 && StartSlowlyIncreasingUntilFull;
-        bool flag2 = IsFull1 && !StartSlowlyIncreasingUntilFull;
+        bool flag = IsFull1 && (StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2);
+        bool flag2 = IsFull1 && !(StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2);
         for (int i = 0; i < (flag2 ? 10 : flag ? 5 : 3); i++) {
             MakeDusts_ActualMaking();
         }
-        for (int i = 0; i < (StartSlowlyIncreasingUntilFull ? 1 : 3); i++) {
+        for (int i = 0; i < (StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2 ? 1 : 3); i++) {
             MakeDustsOnHit();
         }
     }
@@ -474,7 +518,17 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public override void PostUpdate() {
-        if (!IsEmpty || Player.GetFormHandler().IsInADruidicForm) {
+        if (ChargedBySlowFill && !ShouldKeepSlowFill2) {
+            Dusts_ResetStayTime();
+            ChargedBySlowFill = false;
+            Reset(true);
+            OnResetEffects();
+        }
+        if (IsEmpty && CannotToggleOrGetWreathCharge) {
+            CannotToggleOrGetWreathCharge = false;
+            ChargedBySlowFill = false;
+        }
+        if (!IsEmpty || Player.GetFormHandler().IsInADruidicForm || ChargedBySlowFill) {
             _showForTime = SHOWTIMEBEFOREDISAPPEARING;
         }
         if (_showForTime > 0) {
@@ -534,71 +588,109 @@ sealed class WreathHandler : ModPlayer {
             //_hitEffectTimer = 0;
         }
 
-        if (StartSlowlyIncreasingUntilFull) {
-            if (!Player.GetFormHandler().HasDruidArmorSet) {
-                StartSlowlyIncreasingUntilFull = false;
-                ResetChangingValue();
-                Reset();
+        if (StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2) {
+            void effects() {
+                float progress = Ease.QuartIn(Progress);
+                if (((float)Main.rand.Next(425) < Progress * 200f || Main.rand.Next(40) == 0)) {
+                    int num8 = Dust.NewDust(Player.position, Player.width, Player.height, GetDustType(), 0f, 0f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
+                    Main.dust[num8].noGravity = true;
+                    Main.dust[num8].velocity *= 0.75f;
+                    Main.dust[num8].fadeIn = 1.3f;
+                    Main.dust[num8].noLight = true;
+                    Main.dust[num8].customData = DrawColorOpacity * PulseIntensity * 1.6f;
+                    Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
+                    vector.Normalize();
+                    vector *= (float)Main.rand.Next(50, 100) * 0.075f;
+                    Main.dust[num8].velocity = vector + Player.velocity;
+                    vector.Normalize();
+                    vector *= 100f;
+                    Main.dust[num8].position = Player.Center - vector;
+                }
+                if (Main.rand.NextBool(7)) {
+                    int num = 0;
+                    if (Player.gravDir == -1f)
+                        num -= Player.height;
+                    int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height + (float)num - 2), Player.width + 8, 4, GetDustType2(), (0f - Player.velocity.X) * 0.5f, Player.velocity.Y * 0.5f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
+                    Main.dust[num6].velocity.X = Main.dust[num6].velocity.X * 0.2f;
+                    Main.dust[num6].velocity.Y = -0.5f - Main.rand.NextFloat() * 1.5f;
+                    Main.dust[num6].velocity.Y *= Main.rand.NextFloat();
+                    Main.dust[num6].fadeIn = 0.1f;
+                    Main.dust[num6].scale *= Main.rand.NextFloat(1.1f, 1.25f);
+                    Main.dust[num6].scale *= 1.5f;
+                    Main.dust[num6].noGravity = true;
+                    Main.dust[num6].noLight = true;
+                    Main.dust[num6].customData = DrawColorOpacity * PulseIntensity * 1.6f;
+                }
+                float value = MathHelper.Clamp(MathHelper.Max(0.2f, progress), 0f, 1f);
+                Player.accRunSpeed *= value;
+                Player.runAcceleration *= value;
+                Player.maxRunSpeed *= value;
+                Player.jumpSpeed *= value;
             }
-            float progress = Ease.QuartIn(Progress);
-            if (((float)Main.rand.Next(425) < Progress * 200f || Main.rand.Next(40) == 0)) {
-                int num8 = Dust.NewDust(Player.position, Player.width, Player.height, GetDustType(), 0f, 0f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
-                Main.dust[num8].noGravity = true;
-                Main.dust[num8].velocity *= 0.75f;
-                Main.dust[num8].fadeIn = 1.3f;
-                Main.dust[num8].noLight = true;
-                Main.dust[num8].customData = DrawColorOpacity * PulseIntensity * 1.6f;
-                Vector2 vector = new Vector2(Main.rand.Next(-100, 101), Main.rand.Next(-100, 101));
-                vector.Normalize();
-                vector *= (float)Main.rand.Next(50, 100) * 0.075f;
-                Main.dust[num8].velocity = vector + Player.velocity;
-                vector.Normalize();
-                vector *= 100f;
-                Main.dust[num8].position = Player.Center - vector;
-            }
-            if (Main.rand.NextBool(7)) {
-                int num = 0;
-                if (Player.gravDir == -1f)
-                    num -= Player.height;
-                int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height + (float)num - 2), Player.width + 8, 4, GetDustType2(), (0f - Player.velocity.X) * 0.5f, Player.velocity.Y * 0.5f, (int)(DrawColorOpacity * 255f), BaseColor * DrawColorOpacity, MathHelper.Lerp(0.45f, 0.8f, progress));
-                Main.dust[num6].velocity.X = Main.dust[num6].velocity.X * 0.2f;
-                Main.dust[num6].velocity.Y = -0.5f - Main.rand.NextFloat() * 1.5f;
-                Main.dust[num6].velocity.Y *= Main.rand.NextFloat();
-                Main.dust[num6].fadeIn = 0.1f;
-                Main.dust[num6].scale *= Main.rand.NextFloat(1.1f, 1.25f);
-                Main.dust[num6].scale *= 1.5f;
-                Main.dust[num6].noGravity = true;
-                Main.dust[num6].noLight = true;
-                Main.dust[num6].customData = DrawColorOpacity * PulseIntensity * 1.6f;
-            }
-            float value = MathHelper.Clamp(MathHelper.Max(0.2f, progress), 0f, 1f);
-            Player.accRunSpeed *= value;
-            Player.runAcceleration *= value;
-            Player.maxRunSpeed *= value;
-            Player.jumpSpeed *= value;
-            if (_stayTime != 0f) {
-                Dusts_ResetStayTime();
-                _stayTime = 0f;
-            }
-            if (!IsFull6) {
-
-            }
-            else if (!Player.ItemAnimationActive) {
-                Dusts_ResetStayTime();
-                StartSlowlyIncreasingUntilFull = false;
-                if (!Main.dedServ) {
-                    BaseFormHandler.ApplyForm(Player, _formInfo);
+            if (StartSlowlyIncreasingUntilFull2) {
+                // should reset
+                if (!ShouldKeepSlowFill2) {
+                    Dusts_ResetStayTime();
+                    StartSlowlyIncreasingUntilFull2 = false;
+                    ResetChangingValue();
+                    Reset();
+                    _dontPlayStaySound = true;
                 }
 
-                if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new ResetFormPacket(Player));
+                effects();
+                if (_stayTime != 0f) {
+                    Dusts_ResetStayTime();
+                    _stayTime = 0f;
+                }
+                if (!IsFull6) {
+
+                }
+                else {
+                    Dusts_ResetStayTime();
+                    StartSlowlyIncreasingUntilFull2 = false;
+                    Reset(true, 0.1f);
+                    CannotToggleOrGetWreathCharge = true;
+                    ChargedBySlowFill = true;
+                    // on full
+                }
+            }
+            else {
+                if (!Player.GetFormHandler().HasDruidArmorSet) {
+                    StartSlowlyIncreasingUntilFull = false;
+                    ResetChangingValue();
+                    Reset();
+                    _dontPlayStaySound = true;
+                }
+                effects();
+                if (_stayTime != 0f) {
+                    Dusts_ResetStayTime();
+                    _stayTime = 0f;
+                }
+                if (!IsFull6) {
+
+                }
+                else if (!Player.ItemAnimationActive) {
+                    Dusts_ResetStayTime();
+                    StartSlowlyIncreasingUntilFull = false;
+                    if (!Main.dedServ) {
+                        BaseFormHandler.ApplyForm(Player, _formInfo);
+                    }
+
+                    if (ShouldKeepSlowFill2) {
+                        ChargedBySlowFill = true;
+                        CannotToggleOrGetWreathCharge = true;
+                    }
+
+                    if (Main.netMode == NetmodeID.MultiplayerClient) {
+                        MultiplayerSystem.SendPacket(new ResetFormPacket(Player));
+                    }
                 }
             }
         }
-        else if (_stayTime <= 0f && !_shouldDecrease) {
-            Reset(true);
+        else if (_stayTime <= 0f && !_shouldDecrease && !_shouldDecrease2) {
+            Reset(true, noEffects: _dontPlayStaySound);
         }
-        else if (!Player.GetFormHandler().IsInADruidicForm) {
+        else if (!Player.GetFormHandler().IsInADruidicForm && !ChargedBySlowFill) {
             CaneBaseProjectile? caneProjectile = GetHeldCane();
             bool flag = caneProjectile == null;
             bool flag2 = !flag && !caneProjectile!.PreparingAttack;
@@ -613,7 +705,7 @@ sealed class WreathHandler : ModPlayer {
         if (HasKeepTime) {
             _keepBonusesForTime -= 1f;
         }
-        if (Player.GetFormHandler().IsInADruidicForm && !IsFull1) {
+        if ((Player.GetFormHandler().IsInADruidicForm || ChargedBySlowFill) && !IsFull1) {
             _keepBonusesForTime = Math.Max(Math.Max(DruidPlayerStats.KeepBonusesForTime, 10), _keepBonusesForTime);
         }
 
@@ -707,6 +799,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void IncreaseResourceValue(float fine = 0f, bool increaseUntilFull = false, float extra2 = 1f) {
+        if (CannotToggleOrGetWreathCharge) {
+            return;
+        }
+
         if (_shouldDecrease2) {
             _shouldDecrease = _shouldDecrease2 = false;
         }
@@ -733,7 +829,7 @@ sealed class WreathHandler : ModPlayer {
         _stayTime = STAYTIMEMAX;
         ChangeItsValue();
         float extra = Player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier * extra2;
-        _increaseValue = StartSlowlyIncreasingUntilFull ? (ushort)((MaxResource - CurrentResource) * extra) :
+        _increaseValue = StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2 ? (ushort)((MaxResource - CurrentResource) * extra) :
             (ushort)(GetIncreaseValue(fine) * extra);
     }
 
@@ -773,7 +869,7 @@ sealed class WreathHandler : ModPlayer {
             }
         }
         float value2 = TimeSystem.LogicDeltaTime * _currentChangingMult * Math.Max((byte)1, _boost);
-        if (StartSlowlyIncreasingUntilFull) {
+        if (StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2) {
             value2 *= 0.15f;
         }
         CaneBaseProjectile? caneProjectile = GetHeldCane();
@@ -802,9 +898,9 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    internal void Reset(bool slowReset = false, float extraChangingValue = 1f) {
+    internal void Reset(bool slowReset = false, float extraChangingValue = 1f, bool noEffects = false) {
         if (!_shouldDecrease2) {
-            if (!_shouldDecrease) {
+            if (!_shouldDecrease && !noEffects) {
                 OnResetEffects();
             }
 
@@ -821,7 +917,7 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (slowReset) {
-            if (!_shouldDecrease2) {
+            if (!_shouldDecrease2 && !noEffects) {
                 OnResetEffects();
             }
 
@@ -831,6 +927,10 @@ sealed class WreathHandler : ModPlayer {
         }
         else {
             _shouldDecrease2 = false;
+        }
+
+        if (_dontPlayStaySound) {
+            _dontPlayStaySound = false;
         }
     }
 

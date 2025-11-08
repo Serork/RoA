@@ -9,6 +9,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Content;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
@@ -82,6 +83,7 @@ abstract class BaseForm : ModMount {
     }
     
     public Asset<Texture2D> HeadTexture { get; private set; }
+    public Asset<Texture2D> SolidTexture { get; private set; }
 
     public BaseFormBuff MountBuff { get; init; }
 
@@ -101,6 +103,7 @@ abstract class BaseForm : ModMount {
 
         if (!Main.dedServ) {
             HeadTexture = ModContent.Request<Texture2D>(Texture + "_Head");
+            SolidTexture = ModContent.Request<Texture2D>(Texture + "_Solid");
         }
 
         SafeLoad();
@@ -366,6 +369,27 @@ abstract class BaseForm : ModMount {
             GetSpriteEffects(drawPlayer, ref spriteEffects);
             drawPosition.X -= drawPlayer.mount.XOffset * drawPlayer.direction;
             drawPosition.X += drawPlayer.mount.XOffset * (spriteEffects == SpriteEffects.None).ToDirectionInt();
+
+            if (drawType == 0 && drawPlayer.GetCommon().ApplyDeerSkullSetBonus) {
+                if (drawPlayer.GetWreathHandler().ChargedBySlowFill && shadow == 0) {
+                    float hornsOpacity = drawPlayer.GetCommon().DeerSkullHornsOpacity;
+                    float hornsBorderOpacity = MathUtils.Clamp01(drawPlayer.GetCommon().DeerSkullHornsBorderOpacity);
+                    float hornsBorderOpacity2 = MathUtils.Clamp01(drawPlayer.GetCommon().DeerSkullHornsBorderOpacity2);
+                    for (float num5 = 0f; num5 < 1f; num5 += 0.25f) {
+                        Vector2 vector2 = (num5 * ((float)Math.PI * 2f)).ToRotationVector2() * 2f * drawScale;
+                        Color color = new Color(35, 193, 179) * 0.75f;
+                        DrawData item2 = new(SolidTexture.Value, drawPosition + vector2, frame, color * hornsBorderOpacity, rotation, drawOrigin, drawScale, spriteEffects);
+                        item2.shader = drawPlayer.cHead;
+                        playerDrawData.Add(item2);
+
+                        color.A /= 2;
+                        item2 = new(SolidTexture.Value, drawPosition + vector2 + Main.rand.RandomPointInArea(2f) * hornsBorderOpacity2, frame, color * 0.5f * hornsBorderOpacity, rotation, drawOrigin, drawScale, spriteEffects);
+                        item2.shader = drawPlayer.cBody;
+                        playerDrawData.Add(item2);
+                    }
+                }
+            }
+
             DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);

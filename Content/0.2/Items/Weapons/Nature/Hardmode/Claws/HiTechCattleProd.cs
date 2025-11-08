@@ -52,11 +52,11 @@ sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdS
 
     public sealed class HiTechCattleProdSlash : ClawsSlash {
         protected override void SafeOnHitPlayer(Player target, Player.HurtInfo info) {
-            target.AddBuff(BuffID.Electrified, Main.rand.Next(60, 180) * 2);
+            //target.AddBuff(BuffID.Electrified, Main.rand.Next(60, 180) * 2);
         }
 
         protected override void SafeOnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-            target.AddBuff(BuffID.Electrified, Main.rand.Next(60, 180) * 2);
+            //target.AddBuff(BuffID.Electrified, Main.rand.Next(60, 180) * 2);
 
             if (Projectile.localAI[2] != 0f) {
                 return;

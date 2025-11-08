@@ -45,6 +45,9 @@ static partial class PlayerExtensions {
             case EquipType.Legs:
                 check = player.legs;
                 break;
+            case EquipType.Face:
+                check = player.face;
+                break;
         }
         return check == EquipLoader.GetEquipSlot(RoA.Instance, typeof(T).Name, equipType);
     }

@@ -19,6 +19,16 @@ using Terraria.Utilities;
 namespace RoA.Core.Utility;
 
 static partial class NPCExtensions {
+    public static void AddBuff<T>(this NPC npc, int timeToAdd) where T : ModBuff {
+        npc.AddBuff(ModContent.BuffType<T>(), timeToAdd);
+    }
+
+    public static void DelBuff<T>(this NPC npc) where T : ModBuff {
+        if (npc.FindBuff(ModContent.BuffType<T>(), out int buffIndex)) {
+            npc.DelBuff(buffIndex);
+        }
+    }
+
     public static bool AnyNPCs(this NPC npc) => NPC.AnyNPCs(npc.type);
 
     public static void SetDirection(this NPC npc, int direction, bool setSpriteDirectionToo = true) {
@@ -122,7 +132,7 @@ static partial class NPCExtensions {
             bool targetPlayer = true;
             shouldTargetPlayer ??= Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_NotDiscouraged(npc.type, npc.position, npc);
 
-            //shouldTargetPlayer = npc.life < (int)(npc.lifeMax * 0.8f) || (Main.player[Player.FindClosest(npc.position, npc.width, npc.height)].InModBiome<BackwoodsBiome>() && targetPlayer);
+            //shouldTargetPlayer = npc.life < (int)(npc.lifeMax * 0.8f) || (Main.npc[Player.FindClosest(npc.position, npc.width, npc.height)].InModBiome<BackwoodsBiome>() && targetPlayer);
 
             bool flag = false;
             bool canOpenDoor2 = false;
@@ -176,7 +186,7 @@ static partial class NPCExtensions {
                     npc.directionY = -1;
             }
             else if (!(canBeBusyWithActionTimer > 0f) || !Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
-                bool flag12 = targetPlayer/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
+                bool flag12 = targetPlayer/*Main.npc[npc.target].InModBiome<BackwoodsBiome>()*/;
                 if (!flag12 && (double)(npc.position.Y / 16f) < Main.worldSurface/* && npc.type != 624 && npc.type != 631*/) {
                     npc.EncourageDespawn(10);
                 }

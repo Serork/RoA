@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.NPCs;
 using RoA.Content.Items.Equipables.Miscellaneous;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -56,16 +58,20 @@ static class NPCUtils {
         return false;
     }
 
-    public static NPC? FindClosestNPC(Vector2 checkPosition, int checkDistance, bool shouldCheckForCollisions = true, bool shouldCheckForImmortals = true) {
+    public static NPC? FindClosestNPC(Vector2 checkPosition, int checkDistance, bool shouldCheckForCollisions = true, bool shouldCheckForImmortals = true, Predicate<NPC>? filter = null) {
         NPC? target = null;
         int neededDistance = checkDistance;
         foreach (NPC checkNPC in Main.ActiveNPCs) {
             if (!CanBeChasedBy(checkNPC, checkForImmortals: shouldCheckForImmortals)) {
                 continue;
             }
-            float distance = (checkPosition - checkNPC.Center).Length();
+            if (filter != null && filter(checkNPC)) {
+                continue;
+            }
+            float distance = checkPosition.Distance(checkNPC.Center);
             if (distance < neededDistance && (!shouldCheckForCollisions || Collision.CanHitLine(checkPosition, 1, 1, checkNPC.Center, 1, 1))) {
                 target = checkNPC;
+                neededDistance = (int)distance;
             }
         }
         return target;

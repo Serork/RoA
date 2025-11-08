@@ -27,6 +27,24 @@ sealed class ExtraDrawLayerSupport : ILoadable {
     void ILoadable.Load(Mod mod) {
         On_PlayerDrawLayers.DrawPlayer_08_Backpacks += On_PlayerDrawLayers_DrawPlayer_08_Backpacks;
         On_PlayerDrawLayers.DrawPlayer_01_3_BackHead += On_PlayerDrawLayers_DrawPlayer_01_3_BackHead;
+        On_PlayerDrawLayers.DrawPlayer_21_Head += On_PlayerDrawLayers_DrawPlayer_21_Head;
+        On_PlayerDrawLayers.DrawPlayer_22_FaceAcc += On_PlayerDrawLayers_DrawPlayer_22_FaceAcc;
+    }
+
+    public delegate void PostFaceAccDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostFaceAccDrawDelegate PostFaceAccDrawEvent;
+    private void On_PlayerDrawLayers_DrawPlayer_22_FaceAcc(On_PlayerDrawLayers.orig_DrawPlayer_22_FaceAcc orig, ref PlayerDrawSet drawinfo) {
+        orig(ref drawinfo);
+
+        PostFaceAccDrawEvent?.Invoke(ref drawinfo);
+    }
+
+    public delegate void PostHeadDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostHeadDrawDelegate PostHeadDrawEvent;
+    private void On_PlayerDrawLayers_DrawPlayer_21_Head(On_PlayerDrawLayers.orig_DrawPlayer_21_Head orig, ref PlayerDrawSet drawinfo) {
+        orig(ref drawinfo);
+
+        PostHeadDrawEvent?.Invoke(ref drawinfo);
     }
 
     public delegate void PostBackHeadDrawDelegate(ref PlayerDrawSet drawinfo);

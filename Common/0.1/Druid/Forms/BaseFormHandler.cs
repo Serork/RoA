@@ -110,7 +110,7 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
 
     public static void ApplyForm<T>(Player player, T instance = null) where T : FormInfo {
         BaseFormHandler handler = player.GetFormHandler();
-        if (handler.IsInADruidicForm) {
+        if (handler.IsInADruidicForm || player.GetWreathHandler().CannotToggleOrGetWreathCharge) {
             return;
         }
 

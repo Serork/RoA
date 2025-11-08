@@ -8,11 +8,8 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
-using System;
-
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -22,6 +19,7 @@ namespace RoA.Content.Items.Equipables.Miscellaneous;
 [AutoloadEquip(EquipType.Head, EquipType.Face)]
 sealed class DeerSkull : ModItem {
     private static Asset<Texture2D> _extraTexture = null!;
+    private static bool _isDrawing;
 
     public override void SetStaticDefaults() {
         ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[Item.headSlot] = true;
@@ -36,22 +34,50 @@ sealed class DeerSkull : ModItem {
     }
 
     public override void Load() {
-        ExtraDrawLayerSupport.PostBackHeadDrawEvent += ExtraDrawLayerSupport_PostBackHeadDrawEvent;
+        ExtraDrawLayerSupport.PostHeadDrawEvent += ExtraDrawLayerSupport_PostHeadDrawEvent;
+        ExtraDrawLayerSupport.PostFaceAccDrawEvent += ExtraDrawLayerSupport_PostFaceAccDrawEvent;
     }
 
-    private void ExtraDrawLayerSupport_PostBackHeadDrawEvent(ref PlayerDrawSet drawinfo) {
-        Player player = drawinfo.drawPlayer;
-        if (!player.GetCommon().ApplyDeerSkullSetBonus) {
+    private void ExtraDrawLayerSupport_PostFaceAccDrawEvent(ref PlayerDrawSet drawinfo) {
+        if (_isDrawing) {
+            _isDrawing = false;
             return;
+        }
+        DrawHorns(ref drawinfo);
+    }
+
+    private void ExtraDrawLayerSupport_PostHeadDrawEvent(ref PlayerDrawSet drawinfo) {
+        DrawHorns(ref drawinfo);
+    }
+
+    private bool CanDrawDeerSkullHorns(PlayerDrawSet drawinfo) {
+        Player player = drawinfo.drawPlayer;
+        if (!player.GetCommon().ApplyDeerSkullSetBonus || !player.GetWreathHandler().ChargedBySlowFill) {
+            return false;
         }
 
         if (_extraTexture?.IsLoaded != true) {
-            return;
+            return false;
+        }
+
+        if (player.GetFormHandler().IsInADruidicForm) {
+            return false;
         }
 
         if (drawinfo.headOnlyRender) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void DrawHorns(ref PlayerDrawSet drawinfo) {
+        Player player = drawinfo.drawPlayer;
+        if (!CanDrawDeerSkullHorns(drawinfo)) {
             return;
         }
+
+        _isDrawing = true;
 
         Texture2D texture = _extraTexture.Value;
         SpriteFrame hornsFrame = new(1, 3, 0, 0);
@@ -71,13 +97,13 @@ sealed class DeerSkull : ModItem {
         };
         drawinfo.DrawDataCache.Add(item);
 
-        float hornsOpacity = player.GetCommon().HornsOpacity;
-        float hornsBorderOpacity = MathUtils.Clamp01(player.GetCommon().HornsBorderOpacity);
-        float hornsBorderOpacity2 = MathUtils.Clamp01(player.GetCommon().HornsBorderOpacity2);
+        float hornsOpacity = player.GetCommon().DeerSkullHornsOpacity;
+        float hornsBorderOpacity = MathUtils.Clamp01(player.GetCommon().DeerSkullHornsBorderOpacity);
+        float hornsBorderOpacity2 = MathUtils.Clamp01(player.GetCommon().DeerSkullHornsBorderOpacity2);
         // gradient
         hornsFrame = new(1, 3, 0, 1);
         clip = hornsFrame.GetSourceRectangle(texture);
-        item = new(texture, position, clip, drawinfo.colorArmorHead * hornsOpacity, drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect) {
+        item = new(texture, position, clip, drawinfo.colorArmorHead * hornsBorderOpacity2, drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect) {
             shader = drawinfo.cHead
         };
         drawinfo.DrawDataCache.Add(item);
@@ -116,6 +142,7 @@ sealed class DeerSkull : ModItem {
 
         if (player.GetCommon().PerfectClotActivated) {
             player.GetCommon().ApplyDeerSkullSetBonus = true;
+            player.GetWreathHandler().ShouldKeepSlowFill2 = true;
         }
     }
 
@@ -123,11 +150,13 @@ sealed class DeerSkull : ModItem {
 
     public override void UpdateArmorSet(Player player) {
         player.GetCommon().ApplyDeerSkullSetBonus = true;
+        player.GetWreathHandler().ShouldKeepSlowFill2 = true;
     }
 
     public override bool CanEquipAccessory(Player player, int slot, bool modded) => player.GetCommon().PerfectClotActivated;
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetCommon().ApplyDeerSkullSetBonus = true;
+        player.GetWreathHandler().ShouldKeepSlowFill2 = true;
     }
 }

@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Players;
 using RoA.Common.Projectiles;
+using RoA.Content.Buffs;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +16,6 @@ using System.IO;
 
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.Utilities;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -21,6 +23,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
     private readonly List<Vector2> _nodes = [];
 
     private Vector2 _startPosition;
+    private bool _onEnemy;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float Scale => ref Projectile.localAI[1];
@@ -40,25 +43,46 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
         Projectile.SetSizeValues(80);
 
         Projectile.friendly = true;
+        Projectile.hostile = false;
+
         Projectile.aiStyle = -1;
 
         Projectile.tileCollide = false;
 
         Projectile.penetrate = -1;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
     }
 
     public override void AI() {
         Player owner = Projectile.GetOwnerAsPlayer();
 
+        bool inDruidicForm = owner.GetFormHandler().IsInADruidicForm;
         if (!Init) {
             if (owner.IsLocal()) {
-                _startPosition = Vector2.UnitX * 26f * Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextFloatDirection() + Main.rand.RandomPointInArea(24f);
+                if (!inDruidicForm) {
+                    _startPosition = Vector2.UnitX * 25f * Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextFloatDirection() + Main.rand.RandomPointInArea(20f);
+                }
+                else {
+                    _startPosition = Main.rand.RandomPointInArea(owner.width / 2, owner.height / 2);
+                }
                 Projectile.netUpdate = true;
+            }
+            if (Seed != 0f) {
+                _onEnemy = true;
             }
         }
 
-        Projectile.Center = owner.RotatedRelativePoint(owner.MountedCenter);
-        Projectile.Center = Utils.Floor(Projectile.Center) - new Vector2(0f, 28f) + _startPosition;
+        if (!_onEnemy) {
+            Projectile.Center = owner.RotatedRelativePoint(owner.MountedCenter);
+            if (inDruidicForm) {
+                Projectile.Center = Utils.Floor(Projectile.Center) + _startPosition;
+            }
+            else {
+                Projectile.Center = Utils.Floor(Projectile.Center) - new Vector2(0f, 26f) + _startPosition;
+            }
+        }
 
         if (!Init) {
             Init = true;
@@ -91,6 +115,34 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
                 start += start.DirectionTo(_nodes[index + 1]) * 5f;
             }
         }
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        target.AddBuff<DeerSkullElectrified>(20);
+
+        Projectile.damage /= 2;
+
+        Player player = Projectile.GetOwnerAsPlayer();
+        if (!player.IsLocal()) {
+            return;
+        }
+        NPC? target2 = NPCUtils.FindClosestNPC(target.Center, PlayerCommon.DEERSKULLATTACKDISTANCE / 2, false, false, filter: (npc) => npc.HasBuff<DeerSkullElectrified>());
+        if (target2 is not null) {
+            ProjectileUtils.SpawnPlayerOwnedProjectile<HornsLightning>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("hornsattack")) {
+                Position = target.Center,
+                Damage = Projectile.damage,
+                KnockBack = Projectile.knockBack,
+                AI0 = target2.Center.X,
+                AI1 = target2.Center.Y,
+                AI2 = 1f
+            });
+        }
+    }
+
+    public override bool? CanHitNPC(NPC target) => !target.friendly && !target.HasBuff<DeerSkullElectrified>();
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+        //target.AddBuff<DeerSkullElectrified>(20);
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -129,7 +181,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
 
     public void CreateLightning(Vector2 start, Vector2 end, float jaggedness = 0.15f, int segments = 8, float maxOffset = 50f) {
         _nodes.Clear();
-        UnifiedRandom random = Main.rand;
+        var random = Main.rand;
         _nodes.Add(start);
         for (int i = 1; i < segments; i++) {
             float t = (float)i / segments;

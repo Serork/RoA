@@ -305,3 +305,8 @@ Crystallized: {
 	DisplayName: Crystallized
 	Description: Mods.RoA.Buffs.Crystallized.Description
 }
+
+DeerSkullElectrified: {
+	DisplayName: Deer Skull Electrified
+	Description: Mods.RoA.Buffs.DeerSkullElectrified.Description
+}
