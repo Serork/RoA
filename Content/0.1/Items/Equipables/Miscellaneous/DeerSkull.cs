@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -111,7 +112,7 @@ sealed class DeerSkull : ModItem {
             SpriteFrame hornsFrame = new(1, 3, 0, 0);
             Rectangle clip = hornsFrame.GetSourceRectangle(texture);
 
-            float scale = player.GetCommon().DeerSkullAppearanceProgress;
+            float scale = Ease.QuartOut(player.GetCommon().DeerSkullAppearanceProgress);
             Vector2 origin = player.FacedRight() ? new Vector2(66, 44) : new Vector2(50, 44);
             float rotation = MathHelper.Lerp(MathHelper.PiOver4 * leftHorn.ToDirectionInt() * player.direction, 0f, scale);
 
