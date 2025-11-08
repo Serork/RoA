@@ -23,7 +23,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
     private readonly List<Vector2> _nodes = [];
 
     private Vector2 _startPosition;
-    private bool _onEnemy;
+    private bool _onEnemy, _skySpawn;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float Scale => ref Projectile.localAI[1];
@@ -38,6 +38,9 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
     }
 
     public Vector2 TargetPosition => new(TargetX, TargetY);
+
+    public bool EnemySpawn => Seed == 1f;
+    public bool SkySpawn => Seed == 2f;
 
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(80);
@@ -60,7 +63,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
 
         bool inDruidicForm = owner.GetFormHandler().IsInADruidicForm;
         if (!Init) {
-            if (owner.IsLocal()) {
+            if (owner.IsLocal() && !EnemySpawn && !SkySpawn) {
                 if (!inDruidicForm) {
                     _startPosition = Vector2.UnitX * 25f * Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextFloatDirection() + Main.rand.RandomPointInArea(20f);
                 }
@@ -69,12 +72,18 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
                 }
                 Projectile.netUpdate = true;
             }
-            if (Seed != 0f) {
+            if (EnemySpawn) {
                 _onEnemy = true;
+            }
+            if (SkySpawn) {
+                _skySpawn = true;
             }
         }
 
-        if (!_onEnemy) {
+        if (_skySpawn) {
+
+        }
+        else if (!_onEnemy) {
             Projectile.Center = owner.RotatedRelativePoint(owner.MountedCenter);
             if (inDruidicForm) {
                 Projectile.Center = Utils.Floor(Projectile.Center) + _startPosition;
@@ -97,12 +106,36 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
                 Projectile.netUpdate = true;
             }
 
-            Scale = 5f;
+            Scale = _skySpawn ? 10f : 5f;
         }
 
-        Scale = MathHelper.Lerp(Scale, 0f, 0.15f);
+        Scale = MathHelper.Lerp(Scale, 0f, _skySpawn ? 0.3f : 0.15f);
+
+        if (Scale <= 2.25f) {
+            if (Projectile.timeLeft > 60) {
+                Projectile.timeLeft = 60;
+                for (int num770 = 0; num770 < 6; num770++) {
+                    float num771 = 0f + ((Main.rand.Next(2) == 1) ? (-1f) : 1f) * ((float)Math.PI / 2f);
+                    float num772 = (float)Main.rand.NextDouble() * 0.8f + 1f;
+                    Vector2 vector89 = new Vector2((float)Math.Cos(num771) * num772, (float)Math.Sin(num771) * num772);
+                    int num773 = Dust.NewDust(TargetPosition, 0, 0, 226, vector89.X, vector89.Y);
+                    Main.dust[num773].noGravity = true;
+                    Main.dust[num773].scale = 1.2f;
+
+                    if (Main.rand.Next(3) == 0) {
+                        Vector2 vector90 = Vector2.One.RotatedBy(MathHelper.TwoPi) * ((float)Main.rand.NextDouble() - 0.5f) * Projectile.width;
+                        int num774 = Dust.NewDust(TargetPosition + vector90 - Vector2.One * 4f, 8, 8, 31, 0f, 0f, 100, default(Color), 1.5f);
+                        Dust dust2 = Main.dust[num774];
+                        dust2.velocity *= 0.5f;
+                        Main.dust[num774].velocity.Y = 0f - Math.Abs(Main.dust[num774].velocity.Y);
+                    }
+                }
+            }
+        }
+
         if (Scale <= 0.1f) {
             Projectile.Kill();
+
             return;
         }
 

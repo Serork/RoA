@@ -16,6 +16,7 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
 
     public bool ApplyDeerSkullSetBonus;
 
+    public float DeerSkullAppearanceProgress;
     public float DeerSkullHornsOpacity;
     public float DeerSkullHornsBorderOpacity, DeerSkullHornsBorderOpacity2;
     public NPC? DeerSkullHornsTarget;
@@ -32,10 +33,19 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
     public partial void DeerSkullPostUpdateEquips() {
         float lerpValue = 0.1f;
 
-        if (!ApplyDeerSkullSetBonus || !Player.GetWreathHandler().ChargedBySlowFill) {
+        bool deerSkullEquippedAndActivated = !(!ApplyDeerSkullSetBonus || !Player.GetWreathHandler().ChargedBySlowFill);
+        if (DeerSkullAppearanceProgress <= 0f && !deerSkullEquippedAndActivated) {
             DeerSkullHornsOpacity = Helper.Approach(DeerSkullHornsOpacity, 0f, lerpValue);
             return;
         }
+
+        float targetValue = 1f;
+        if (!deerSkullEquippedAndActivated) {
+            targetValue = 0f;
+            lerpValue *= 1.5f;
+        }
+
+        DeerSkullAppearanceProgress = Helper.Approach(DeerSkullAppearanceProgress, targetValue, lerpValue);
 
         Vector2 checkPosition = Player.Center;
         int checkDistance = DEERSKULLATTACKDISTANCE;

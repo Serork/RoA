@@ -411,7 +411,7 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
         if (CannotToggleOrGetWreathCharge) {
-            if (_currentChangingMult < 0.5f) {
+            if (_currentChangingMult < 0.1f) {
                 Dusts_ResetStayTime();
                 ChargedBySlowFill = false;
                 Reset(true);
@@ -649,8 +649,8 @@ sealed class WreathHandler : ModPlayer {
                     Dusts_ResetStayTime();
                     StartSlowlyIncreasingUntilFull2 = false;
                     Reset(true, 0.1f);
-                    CannotToggleOrGetWreathCharge = true;
-                    ChargedBySlowFill = true;
+
+                    OnSlowCharged();
                     // on full
                 }
             }
@@ -677,8 +677,7 @@ sealed class WreathHandler : ModPlayer {
                     }
 
                     if (ShouldKeepSlowFill2) {
-                        ChargedBySlowFill = true;
-                        CannotToggleOrGetWreathCharge = true;
+                        OnSlowCharged();
                     }
 
                     if (Main.netMode == NetmodeID.MultiplayerClient) {
@@ -714,6 +713,16 @@ sealed class WreathHandler : ModPlayer {
         if (Player.IsLocal() && Player.GetSelectedItem().ModItem is NatureItem natureItem) {
             natureItem.WhileBeingHold(Player, Progress);
         }
+    }
+
+
+    public delegate void OnSlowChargedDelegate(Player player);
+    public static event OnSlowChargedDelegate OnSlowChargedEvent;
+    private void OnSlowCharged() {
+        CannotToggleOrGetWreathCharge = true;
+        ChargedBySlowFill = true;
+
+        OnSlowChargedEvent?.Invoke(Player);
     }
 
     public override void Load() {
