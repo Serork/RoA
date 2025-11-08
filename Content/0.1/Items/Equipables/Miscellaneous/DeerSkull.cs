@@ -7,26 +7,27 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
-
-using System;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
 using Terraria.Graphics.CameraModifiers;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 [AutoloadEquip(EquipType.Head, EquipType.Face)]
 sealed class DeerSkull : ModItem {
     private static Asset<Texture2D> _extraTexture = null!, _extraTexture2 = null!;
+
+    public static int DeerSkullAsHead { get; private set; } = -1;
+    public static int DeerSkullAsFace { get; private set; } = -1;
 
     public override void SetStaticDefaults() {
         ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[Item.headSlot] = true;
@@ -46,6 +47,19 @@ sealed class DeerSkull : ModItem {
         ExtraDrawLayerSupport.PostFaceAccDrawEvent += ExtraDrawLayerSupport_PostFaceAccDrawEvent;
 
         WreathHandler.OnSlowChargedEvent += WreathHandler_OnSlowChargedEvent;
+
+        DeerSkullAsHead = EquipLoader.AddEquipTexture(RoA.Instance, $"{Texture}_Head", EquipType.Head, this, Name + "_Head");
+        DeerSkullAsFace = EquipLoader.AddEquipTexture(RoA.Instance, $"{Texture}_Face", EquipType.Face, this, Name + "_Face");
+
+        On_PlayerDrawSet.BoringSetup_End += On_PlayerDrawSet_BoringSetup_End;
+    }
+
+    private void On_PlayerDrawSet_BoringSetup_End(On_PlayerDrawSet.orig_BoringSetup_End orig, ref PlayerDrawSet self) {
+        orig(ref self);
+
+        if (self.drawPlayer.GetCommon().DeerSkullAppearanceProgress > 0f) {
+            self.drawPlayer.head = DeerSkullAsHead;
+        }
     }
 
     private void WreathHandler_OnSlowChargedEvent(Player player) {
@@ -128,7 +142,7 @@ sealed class DeerSkull : ModItem {
             Vector2 position = helmetOffset + new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
             position -= clip.Centered();
             position.X += 16f;
-            position.Y -= 0f;
+            position.Y -= 0.4f;
             if (!player.FacedRight()) {
                 position.X += 0f;
             }
