@@ -51,7 +51,7 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
 
                 if (!Main.dedServ) {
                     var source = Player.GetSource_Misc("deerskullhorns");
-                    for (int i = 0; i < 6; i++) {
+                    for (int i = 0; i < 5; i++) {
                         int minX = -56;
                         int maxX = 0;
                         if (!Player.FacedRight()) {
@@ -75,7 +75,7 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
                         Main.gore[gore].velocity += Player.velocity;
                     }
 
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 0; i < 7; i++) {
                         int minX = -56;
                         int maxX = 0;
                         if (!Player.FacedRight()) {
