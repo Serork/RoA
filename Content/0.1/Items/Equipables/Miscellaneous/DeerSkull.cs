@@ -107,6 +107,7 @@ sealed class DeerSkull : ModItem {
 
         Texture2D texture = _extraTexture.Value;
 
+        bool deerSkullEquippedAndActivated = !(!player.GetCommon().ApplyDeerSkullSetBonus || !player.GetWreathHandler().ChargedBySlowFill);
         for (int i = 0; i < 2; i++) {
             bool leftHorn = i == 0;
             SpriteFrame hornsFrame = new(1, 3, 0, 0);
@@ -115,6 +116,13 @@ sealed class DeerSkull : ModItem {
             float scale = Ease.QuartOut(player.GetCommon().DeerSkullAppearanceProgress);
             Vector2 origin = player.FacedRight() ? new Vector2(66, 44) : new Vector2(50, 44);
             float rotation = MathHelper.Lerp(MathHelper.PiOver4 * leftHorn.ToDirectionInt() * player.direction, 0f, scale);
+            Color baseColor0 = Color.White;
+            float progress = Utils.GetLerpValue(0.75f, 1f, scale, true);
+            if (!deerSkullEquippedAndActivated) {
+                progress = 1f;
+            }
+            Color baseColor = Color.Lerp(baseColor0.MultiplyRGB(drawinfo.colorArmorHead) with { A = 0 }, drawinfo.colorArmorHead, progress);
+            Color baseColor2 = Color.Lerp(baseColor0 with { A = 0 }, new(35, 193, 179), progress);
 
             Vector2 helmetOffset = drawinfo.helmetOffset;
             Vector2 position = helmetOffset + new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
@@ -127,7 +135,7 @@ sealed class DeerSkull : ModItem {
             position.X += 13f;
             position += player.MovementOffset();
             position += origin / 2f;
-            DrawData item = new(texture, position, clip, drawinfo.colorArmorHead, drawinfo.drawPlayer.headRotation + rotation, origin, scale, drawinfo.playerEffect) {
+            DrawData item = new(texture, position, clip, baseColor, drawinfo.drawPlayer.headRotation + rotation, origin, scale, drawinfo.playerEffect) {
                 shader = drawinfo.cHead
             };
             drawinfo.DrawDataCache.Add(item);
@@ -138,7 +146,7 @@ sealed class DeerSkull : ModItem {
             // gradient
             hornsFrame = new(1, 3, 0, 1);
             clip = hornsFrame.GetSourceRectangle(texture);
-            item = new(texture, position, clip, drawinfo.colorArmorHead * hornsBorderOpacity2, drawinfo.drawPlayer.headRotation + rotation, origin, scale, drawinfo.playerEffect) {
+            item = new(texture, position, clip, baseColor * hornsBorderOpacity2, drawinfo.drawPlayer.headRotation + rotation, origin, scale, drawinfo.playerEffect) {
                 shader = drawinfo.cHead
             };
             drawinfo.DrawDataCache.Add(item);
@@ -146,7 +154,7 @@ sealed class DeerSkull : ModItem {
             // border
             hornsFrame = new(1, 3, 0, 2);
             clip = hornsFrame.GetSourceRectangle(texture);
-            Color borderColor = hornsBorderOpacity2 >= 0.925f ? Color.White : new(35, 193, 179);
+            Color borderColor = hornsBorderOpacity2 >= 0.925f ? Color.White : baseColor2;
             item = new(texture, position, clip, borderColor * hornsBorderOpacity * 0.75f, drawinfo.drawPlayer.headRotation + rotation, origin, scale, drawinfo.playerEffect) {
                 shader = drawinfo.cHead
             };
