@@ -158,15 +158,15 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
         target.AddBuff<DeerSkullElectrified>(20);
 
         Vector2 velocity = Projectile.Center.DirectionTo(target.Center) * 10f;
-        Vector2 hitPoint = target.Center + velocity.SafeNormalize(Vector2.UnitX) * 2f;
+        Vector2 hitPoint = _nodes[^2] + velocity.SafeNormalize(Vector2.UnitX) * 2f;
         Vector2 normal = (-velocity).SafeNormalize(Vector2.UnitX);
         Vector2 spinningpoint = Vector2.Reflect(velocity, normal);
         float scale = 2.5f - Vector2.Distance(target.Center, Projectile.position) * 0.01f;
         scale = MathHelper.Clamp(scale, 0.75f, 1.15f);
-        scale *= 0.925f;
-        for (int i = 0; i < 3; i++) {
+        scale *= 0.95f;
+        for (int i = 0; i < 4; i++) {
             int num156 = ModContent.DustType<Electric>();
-            Dust dust = Dust.NewDustPerfect(hitPoint, num156, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat() * 0.5f, 100, default, 0.5f + 0.3f * Main.rand.NextFloat());
+            Dust dust = Dust.NewDustPerfect(_nodes[^1], num156, spinningpoint.RotatedBy((float)Math.PI / 4f * Main.rand.NextFloatDirection()) * 0.6f * Main.rand.NextFloat() * 0.5f, 100, default, 0.5f + 0.3f * Main.rand.NextFloat());
             dust.scale *= scale;
             dust.noGravity = true;
             dust.fadeIn = dust.scale / 2 + 0.1f;
