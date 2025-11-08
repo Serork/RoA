@@ -34,7 +34,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public ushort ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
     public bool ControlUseItem;
-    public bool StopFaceDrawing;
+    public bool StopFaceDrawing, StopHeadDrawing;
 
     public bool ApplyBoneArmorVisuals;
 
@@ -122,6 +122,7 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.HorizontalMovement += On_Player_HorizontalMovement;
         On_Player.SetArmorEffectVisuals += On_Player_SetArmorEffectVisuals;
         On_PlayerDrawLayers.DrawPlayer_21_Head_TheFace += On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace;
+        On_PlayerDrawLayers.DrawPlayer_21_Head += On_PlayerDrawLayers_DrawPlayer_21_Head;
 
         On_ItemSlot.PickItemMovementAction += On_ItemSlot_PickItemMovementAction;
         On_ItemSlot.ArmorSwap += On_ItemSlot_ArmorSwap;
@@ -130,6 +131,15 @@ sealed partial class PlayerCommon : ModPlayer {
         CrystallizedSkullLoad();
         WiresLoad();
         CursorEffectsLoad();
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_21_Head(On_PlayerDrawLayers.orig_DrawPlayer_21_Head orig, ref PlayerDrawSet drawinfo) {
+        if (drawinfo.drawPlayer.GetCommon().StopHeadDrawing ||
+            drawinfo.drawPlayer.face == (HornetSkull.HornetSkullAsFace + 1)) {
+            return;
+        }
+
+        orig(ref drawinfo);
     }
 
     public partial void CursorEffectsLoad();
@@ -334,7 +344,7 @@ sealed partial class PlayerCommon : ModPlayer {
         ApplyHornetSkullSetBonus = false;
         ApplyDeerSkullSetBonus = false;
 
-        StopFaceDrawing = false;
+        StopFaceDrawing = StopHeadDrawing = false;
 
         CursorEffectsResetEffects();
         DeerSkullResetEffects();

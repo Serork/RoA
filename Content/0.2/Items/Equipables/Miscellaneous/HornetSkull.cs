@@ -6,17 +6,23 @@ using RoA.Core.Utility.Vanilla;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI;
 
 namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 [AutoloadEquip(EquipType.Head, EquipType.Face)]
 sealed class HornetSkull : ModItem, IDoubleTap {
+    // also see PlayerCommon
+    public static int HornetSkullAsFace { get; private set; } = -1;
+
     public override void SetStaticDefaults() {
         ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = false;
 
         ArmorIDs.Face.Sets.PreventHairDraw[Item.faceSlot] = true;
         ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
+    }
+
+    public override void Load() {
+        HornetSkullAsFace = EquipLoader.AddEquipTexture(RoA.Instance, $"{Texture}_Face", EquipType.Face, this, Name + "_Face");
     }
 
     public override void SetDefaults() {
@@ -37,7 +43,6 @@ sealed class HornetSkull : ModItem, IDoubleTap {
     public override void UpdateEquip(Player player) {
         if (player.GetCommon().PerfectClotActivated) {
             player.GetCommon().ApplyHornetSkullSetBonus = true;
-            player.GetCommon().StopFaceDrawing = true;
         }
     }
 

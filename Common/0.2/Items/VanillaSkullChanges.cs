@@ -68,7 +68,6 @@ sealed partial class ItemCommon : GlobalItem {
     public partial void VanillaSkullUpdateEquip(Item item, Player player) {
         if (item.type == ItemID.Skull && player.GetCommon().PerfectClotActivated) {
             player.GetCommon().ApplyVanillaSkullSetBonus = true;
-            player.GetCommon().StopFaceDrawing = true;
         }
     }
 
