@@ -175,6 +175,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
         }
 
         Projectile.damage /= 2;
+        Projectile.knockBack *= 0.75f;
 
         Player player = Projectile.GetOwnerAsPlayer();
         if (!player.IsLocal()) {

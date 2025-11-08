@@ -59,6 +59,7 @@ sealed class DeerSkull : ModItem {
 
         if (self.drawPlayer.GetCommon().DeerSkullAppearanceProgress > 0f) {
             self.drawPlayer.head = DeerSkullAsHead;
+            self.drawPlayer.face = DeerSkullAsFace;
         }
     }
 
