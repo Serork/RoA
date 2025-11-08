@@ -111,7 +111,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
 
         Scale = MathHelper.Lerp(Scale, 0f, _skySpawn ? 0.3f : 0.15f);
 
-        if (Scale <= 2.25f) {
+        if (_skySpawn && Scale <= 2.25f) {
             if (Projectile.timeLeft > 60) {
                 Projectile.timeLeft = 60;
                 for (int num770 = 0; num770 < 6; num770++) {
