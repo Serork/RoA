@@ -1,15 +1,58 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Content.NPCs.Enemies.Tar;
 using RoA.Core.Utility.Extensions;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 
 namespace RoA.Core.Utility;
 
 static class MathUtils {
+    public static Vector2 ClosestTo(this List<Vector2> list, Vector2 to) {
+        Vector2 vector2 = list[0];
+        float num1 = Vector2.DistanceSquared(list[0], to);
+        for (int index = 1; index < list.Count; ++index) {
+            float num2 = Vector2.DistanceSquared(list[index], to);
+            if ((double)num2 < (double)num1) {
+                num1 = num2;
+                vector2 = list[index];
+            }
+        }
+        return vector2;
+    }
+
+    public static Vector2 ClosestTo(this Vector2[] list, Vector2 to) {
+        Vector2 vector2 = list[0];
+        float num1 = Vector2.DistanceSquared(list[0], to);
+        for (int index = 1; index < list.Length; ++index) {
+            float num2 = Vector2.DistanceSquared(list[index], to);
+            if ((double)num2 < (double)num1) {
+                num1 = num2;
+                vector2 = list[index];
+            }
+        }
+        return vector2;
+    }
+
+    public static Vector2 ClosestTo(this Vector2[] list, Vector2 to, out int index) {
+        index = 0;
+        Vector2 vector2 = list[0];
+        float num1 = Vector2.DistanceSquared(list[0], to);
+        for (int index1 = 1; index1 < list.Length; ++index1) {
+            float num2 = Vector2.DistanceSquared(list[index1], to);
+            if ((double)num2 < (double)num1) {
+                index = index1;
+                num1 = num2;
+                vector2 = list[index1];
+            }
+        }
+        return vector2;
+    }
+
+    public static Vector2 TurnRight(this Vector2 vector2) => new Vector2(-vector2.Y, vector2.X);
+
     public static float ClampedDistanceProgress(Vector2 a, Vector2 b, float startOffset = 0f, float maxDistance = 0f) {
         Vector2 center = a,
                 playerCenter = b;

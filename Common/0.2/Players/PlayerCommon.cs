@@ -139,7 +139,8 @@ sealed partial class PlayerCommon : ModPlayer {
         bool devilSkull = item.type == ModContent.ItemType<DevilSkull>() && Main.LocalPlayer.GetCommon().ApplyDevilSkullSetBonus;
         bool vanillaSkull = item.type == ItemID.Skull && Main.LocalPlayer.GetCommon().ApplyVanillaSkullSetBonus;
         bool crystallizedSkull = item.type == ModContent.ItemType<CrystallizedSkull>() && Main.LocalPlayer.GetCommon().ApplyCrystallizedSkullSetBonus;
-        if (hornetSkull || devilSkull || vanillaSkull || crystallizedSkull) {
+        bool deerSkull = item.type == ModContent.ItemType<DeerSkull>() && Main.LocalPlayer.GetCommon().ApplyDeerSkullSetBonus;
+        if (hornetSkull || devilSkull || vanillaSkull || crystallizedSkull || deerSkull) {
             success = false;
             return item;
         }
@@ -154,8 +155,9 @@ sealed partial class PlayerCommon : ModPlayer {
         bool devilSkull = checkItem.type == ModContent.ItemType<DevilSkull>() && Main.LocalPlayer.GetCommon().ApplyDevilSkullSetBonus;
         bool vanillaSkull = checkItem.type == ItemID.Skull && Main.LocalPlayer.GetCommon().ApplyVanillaSkullSetBonus;
         bool crystallizedSkull = checkItem.type == ModContent.ItemType<CrystallizedSkull>() && Main.LocalPlayer.GetCommon().ApplyCrystallizedSkullSetBonus;
+        bool deerSkull = checkItem.type == ModContent.ItemType<DeerSkull>() && Main.LocalPlayer.GetCommon().ApplyDeerSkullSetBonus;
         if (result == 1 &&
-            (hornetSkull || devilSkull || vanillaSkull || crystallizedSkull)) {
+            (hornetSkull || devilSkull || vanillaSkull || crystallizedSkull || deerSkull)) {
             result = -1;
         }
         return result;
@@ -248,7 +250,11 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent;
     public override void PostUpdateEquips() {
         PostUpdateEquipsEvent?.Invoke(Player);
+
+        DeerSkullPostUpdateEquips();
     }
+
+    public partial void DeerSkullPostUpdateEquips();
 
     public delegate void UpdateEquipsDelegate(Player player);
     public static event UpdateEquipsDelegate UpdateEquipsEvent;
@@ -326,13 +332,16 @@ sealed partial class PlayerCommon : ModPlayer {
         ApplyDevilSkullSetBonus = false;
         ApplyCrystallizedSkullSetBonus = false;
         ApplyHornetSkullSetBonus = false;
+        ApplyDeerSkullSetBonus = false;
 
         StopFaceDrawing = false;
 
         CursorEffectsResetEffects();
+        DeerSkullResetEffects();
     }
 
     public partial void CursorEffectsResetEffects();
+    public partial void DeerSkullResetEffects();
 
     public delegate void PreItemCheckDelegate(Player player);
     public static event PreItemCheckDelegate PreItemCheckEvent;
