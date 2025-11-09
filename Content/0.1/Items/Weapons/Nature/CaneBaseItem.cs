@@ -35,7 +35,7 @@ abstract class CaneBaseItem<T> : NatureItem where T : CaneBaseProjectile {
 
     protected sealed override void SafeSetDefaults2() {
         Item.noMelee = true;
-        Item.autoReuse = false;
+        //Item.autoReuse = false;
         Item.channel = true;
         Item.noUseGraphic = true;
         Item.useStyle = ItemUseStyleID.HiddenAnimation;

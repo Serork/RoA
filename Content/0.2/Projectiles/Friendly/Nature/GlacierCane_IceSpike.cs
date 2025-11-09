@@ -123,7 +123,7 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
         if (IsStickingToTarget) {
             Projectile.timeLeft = 100;
 
-            _stickingPosition += Projectile.velocity.SafeNormalize();
+            _stickingPosition += Projectile.velocity.SafeNormalize() * 0.5f;
             Projectile.Center = _stickingPosition;
 
             _hitProgress = Helper.Approach(_hitProgress, 1f, TimeSystem.LogicDeltaTime * 5f);
@@ -134,25 +134,26 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
             for (int i = 0; i < (IsMedium ? 4 : 6); i++) {
                 float spawnOffsetValue = IsMedium ? 15 : 20;
                 float spawnOffsetValue2 = IsMedium ? 15 : 20;
-                Vector2 velocity3 = (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2().RotatedByRandom(MathHelper.PiOver4 * Main.rand.NextFloatDirection());
-                if (Main.rand.NextBool()) {
+                Vector2 dustOrigin = Vector2.One * 1f;
+                Vector2 velocity3 = Projectile.velocity.SafeNormalize().RotatedByRandom(MathHelper.PiOver4 * Main.rand.NextFloatDirection());
+                if (Main.rand.NextBool(3)) {
                     continue;
                 }
                 if (!Main.rand.NextBool(3)) {
                     Vector2 vector80 = velocity3.RotatedBy(1.5707963705062866) * ((float)Main.rand.NextDouble() - 0.5f) * spawnOffsetValue * Main.rand.NextFloat(1f, 2f);
-                    int num746 = Dust.NewDust(Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 - Vector2.One * 4f, 8, 8, DustID.BubbleBurst_Blue, 0f, 0f,
+                    int num746 = Dust.NewDust(Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 - Vector2.One * 4f - dustOrigin, 8, 8, DustID.BubbleBurst_Blue, 0f, 0f,
                         Main.rand.Next(50, 100), default(Color), 1.25f + 0.25f * Main.rand.NextFloat());
                     Dust dust2 = Main.dust[num746];
                     dust2.noGravity = true;
                     Main.dust[num746].velocity = -velocity3;
                     Main.dust[num746].velocity *= Main.rand.NextFloat(0f, 5f);
                 }
-                if (Main.rand.NextBool()) {
+                if (Main.rand.NextBool(3)) {
                     continue;
                 }
                 if (!Main.rand.NextBool(3)) {
                     Vector2 vector80 = velocity3.RotatedBy(1.5707963705062866) * ((float)Main.rand.NextDouble() - 0.5f) * spawnOffsetValue * Main.rand.NextFloat(1f, 1.5f);
-                    int num746 = Dust.NewDust(Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 - Vector2.One * 4f, 8, 8, DustID.BubbleBurst_Blue, 0f, 0f,
+                    int num746 = Dust.NewDust(Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 - Vector2.One * 4f - dustOrigin, 8, 8, DustID.BubbleBurst_Blue, 0f, 0f,
                         Main.rand.Next(50, 100), default(Color), 1.25f + 0.25f * Main.rand.NextFloat());
                     Dust dust2 = Main.dust[num746];
                     dust2.noGravity = true;
@@ -163,13 +164,13 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Vector2 vector80 = velocity3.RotatedBy(1.5707963705062866) * ((float)Main.rand.NextDouble() - 0.5f) * spawnOffsetValue * Main.rand.NextFloat(1f, 1.5f);
                     if (Main.rand.NextBool(6)) {
                         velocity3 = (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2().RotatedByRandom(MathHelper.PiOver4 * Main.rand.NextFloatDirection());
-                        Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 + Main.rand.RandomPointInArea(8),
+                        Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.Center - dustOrigin + velocity3 * spawnOffsetValue2 * 2.5f + vector80 + Main.rand.RandomPointInArea(8),
                             velocity3 * Main.rand.NextFloat(-2.5f, 2.5f), $"IceGore{Main.rand.Next(3) + 1}".GetGoreType(),
                             Scale: 0.75f + 0.25f * Main.rand.NextFloat() - IsMedium.ToInt() * 0.15f);
                     }
                     if (Main.rand.NextBool(6)) {
                         velocity3 = (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2().RotatedByRandom(MathHelper.PiOver4 * Main.rand.NextFloatDirection());
-                        Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 + Main.rand.RandomPointInArea(8),
+                        Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.Center - dustOrigin + velocity3 * spawnOffsetValue2 * 2.5f + vector80 + Main.rand.RandomPointInArea(8),
                             velocity3 * Main.rand.NextFloat(-2.5f, 2.5f), $"IceGore{Main.rand.Next(3) + 1}".GetGoreType(),
                             Scale: 0.75f + 0.25f * Main.rand.NextFloat() - IsMedium.ToInt() * 0.15f);
                     }
@@ -251,6 +252,8 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
         _lerpRotationTo = velocity2.ToRotation() - MathHelper.PiOver2;
         float aiProgress = AIProgress - timeToPrepareAttack;
         if (aiProgress < minProgress) {
+            AIProgress += 0.25f;
+
             float progress = aiProgress / minProgress;
             velocity2 *= Utils.GetLerpValue(0f, 0.4f, progress, true) * Utils.GetLerpValue(1f, 0.5f, progress, true);
             Projectile.Center -= velocity2 * 4f;

@@ -99,8 +99,8 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
         Draw_Inner(spritebatch, Texture);
     }
 
-    protected virtual void Draw_Inner(SpriteBatch batch, Texture2D? texture = null, Color? color = null) {
-        batch.Draw(texture ?? Texture, Position - Main.screenPosition, Frame, color ?? GetParticleColor(), Rotation, Origin, Scale, SpriteEffects.None, 0f);
+    protected virtual void Draw_Inner(SpriteBatch batch, Texture2D? texture = null, Color? color = null, float scaleModifier = 1f, float colorModifier = 1f) {
+        batch.Draw(texture ?? Texture, Position - Main.screenPosition, Frame, (color ?? GetParticleColor()) * colorModifier, Rotation, Origin, Scale * scaleModifier, SpriteEffects.None, 0f);
     }
 
     public virtual void RestInPool() {

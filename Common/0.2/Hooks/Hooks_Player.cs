@@ -47,7 +47,7 @@ sealed partial class Hooks : ModSystem {
         orig(self, sItem);
 
         bool flag = false;
-        if (self.autoReuseAllWeapons && sItem.IsANatureWeapon() && sItem.useStyle == ItemUseStyleID.HiddenAnimation && sItem.shoot == ProjectileID.WoodenArrowFriendly)
+        if ((self.autoReuseAllWeapons || sItem.autoReuse) && sItem.IsANatureWeapon() && sItem.useStyle == ItemUseStyleID.HiddenAnimation && sItem.shoot == ProjectileID.WoodenArrowFriendly)
             flag = true;
 
         if (flag)
