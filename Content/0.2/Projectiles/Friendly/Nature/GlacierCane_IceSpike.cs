@@ -85,7 +85,20 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
     public GlacierCaneBase ParentAsCane => Parent.As<GlacierCaneBase>();
     public float CaneAttackProgress => ParentAsCane.AttackProgress01;
     public Vector2 CaneCorePosition => ParentAsCane.CorePosition;
-    public int IcicleSize => (int)IcicleType * 7;
+    public int IcicleSize {
+        get {
+            int result = 0;
+            switch (IcicleType) {
+                case GlacierSpikeType.Medium:
+                    result = 10;
+                    break;
+                case GlacierSpikeType.Large:
+                    result = 14;
+                    break;
+            }
+            return result;
+        }
+    }
     public bool IsSmall => IcicleType == GlacierSpikeType.Small;
     public bool IsMedium => IcicleType == GlacierSpikeType.Medium;
     public bool IsLarge => IcicleType == GlacierSpikeType.Large;
