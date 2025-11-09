@@ -365,9 +365,9 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpriteEffects effects = Projectile.spriteDirection.ToSpriteEffects();
 
         int length = ProjectileID.Sets.TrailCacheLength[Type];
-        for (int i = 1; i < length; i += 2) {
+        for (int i = 0; i < length - 2; i++) {
             Vector2 vector6 = Projectile.oldPos[i];
-            if (vector6 == Vector2.Zero) {
+            if (vector6 == Vector2.Zero || i == 0) {
                 continue;
             }
             Color color2 = Color.SkyBlue.MultiplyRGB(color);
@@ -375,7 +375,7 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
             batch.Draw(texture, position2, DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
-                Color = color2 * 0.5f * (1f - (float)i / length),
+                Color = color2 * (_prepared ? 0.5f : 0.25f) * (1f - (float)i / length),
                 Rotation = rotation,
                 ImageFlip = effects,
             });
