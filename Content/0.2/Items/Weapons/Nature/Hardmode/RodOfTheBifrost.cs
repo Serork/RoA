@@ -35,7 +35,7 @@ sealed class RodOfTheBifrost : NatureItem {
     }
 
     public override void UseStyle(Player player, Rectangle heldItemFrame) {
-        player.itemLocation = player.Center + new Vector2(player.direction * 4f, 6f * player.gravDir);
+        player.itemLocation = player.Center + player.MovementOffset() + new Vector2(player.direction * 4f, 6f * player.gravDir);
         float maxRotation = -0.15f;
         player.itemRotation = player.DirectionTo(player.Center + new Vector2(player.direction * 100f, -10f)).ToRotation() 
             + Helper.Wave(-maxRotation, maxRotation, 10f, player.whoAmI) * player.direction
