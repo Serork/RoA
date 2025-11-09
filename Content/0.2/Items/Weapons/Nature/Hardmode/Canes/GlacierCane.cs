@@ -4,6 +4,7 @@ using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Enums;
@@ -26,6 +27,8 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
     protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<GlacierSpike>();
 
     public sealed class GlacierCaneBase : CaneBaseProjectile {
+        public override bool IsInUse => Owner.IsAliveAndFree() && Owner.controlUseItem;
+
         public override void SetStaticDefaults() {
             ProjectileID.Sets.NeedsUUID[Type] = true;
         }
@@ -42,7 +45,9 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
         }
 
         protected override void AfterProcessingCane() {
-            if (AttackProgress01 >= 1f) {
+            if (AttackProgress01 >= 1f || !IsInUse) {
+                Shot2 = true;
+
                 ReleaseCane();
             }
         }
