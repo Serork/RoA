@@ -26,6 +26,7 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     private Vector2 _lerpPositionTo, _stickingPosition;
     private float _lerpRotationTo;
+    private float _hitProgress;
 
     public enum GlacierSpikeType : byte {
         Small,
@@ -92,6 +93,9 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.friendly = true;
 
         Projectile.penetrate = -1;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
     }
 
     public override void AI() {
@@ -99,6 +103,11 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         if (IsStickingToTarget) {
             Projectile.Center = _stickingPosition;
+
+            _hitProgress = Helper.Approach(_hitProgress, 1f, TimeSystem.LogicDeltaTime);
+            if (_hitProgress >= 1f) {
+                Projectile.Kill();
+            }
 
             return;
         }
@@ -146,7 +155,7 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
-        bool notEnoughDistance = Projectile.Distance(_lerpPositionTo) > 5f;
+        bool notEnoughDistance = Projectile.Distance(_lerpPositionTo) > 1f;
         float timeToPrepareAttack = MINPROGRESS / 2f;
         if (AIProgress <= timeToPrepareAttack) {
             AIProgress++;
@@ -226,9 +235,11 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpriteBatch batch = Main.spriteBatch;
         Vector2 position = Projectile.Center;
         Rectangle clip = texture.Bounds;
+        clip.Height = (int)(texture.Height * (1f - _hitProgress));
+        float rotation = Projectile.rotation;
+        position += Vector2.UnitY.RotatedBy(rotation) * (int)(texture.Height * _hitProgress) / 2f;
         Vector2 origin = clip.Centered();
         Color color = lightColor;
-        float rotation = Projectile.rotation;
         SpriteEffects effects = Projectile.spriteDirection.ToSpriteEffects();
         batch.Draw(texture, position, DrawInfo.Default with {
             Clip = clip,
@@ -237,6 +248,7 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
             Rotation = rotation,
             ImageFlip = effects,
         });
+
         if (Shot) {
             return;
         }
