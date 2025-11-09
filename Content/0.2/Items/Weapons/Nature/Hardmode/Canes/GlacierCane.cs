@@ -7,6 +7,7 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;

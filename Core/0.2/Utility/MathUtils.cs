@@ -52,6 +52,7 @@ static class MathUtils {
     }
 
     public static Vector2 TurnRight(this Vector2 vector2) => new Vector2(-vector2.Y, vector2.X);
+    public static Vector2 TurnLeft(this Vector2 vector2) => vector2.TurnRight().TurnRight().TurnRight();
 
     public static float ClampedDistanceProgress(Vector2 a, Vector2 b, float startOffset = 0f, float maxDistance = 0f) {
         Vector2 center = a,

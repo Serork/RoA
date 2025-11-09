@@ -12,11 +12,15 @@ using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 
 using static RoA.Content.Items.Weapons.Nature.Hardmode.Canes.GlacierCane;
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -27,6 +31,7 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
     private Vector2 _lerpPositionTo, _stickingPosition;
     private float _lerpRotationTo;
     private float _hitProgress;
+    private bool _prepared;
 
     public enum GlacierSpikeType : byte {
         Small,
@@ -80,6 +85,12 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
     public GlacierCaneBase ParentAsCane => Parent.As<GlacierCaneBase>();
     public float CaneAttackProgress => ParentAsCane.AttackProgress01;
     public Vector2 CaneCorePosition => ParentAsCane.CorePosition;
+    public int IcicleSize => (int)IcicleType * 7;
+    public bool IsSmall => IcicleType == GlacierSpikeType.Small;
+    public bool IsMedium => IcicleType == GlacierSpikeType.Medium;
+    public bool IsLarge => IcicleType == GlacierSpikeType.Large;
+
+    public override void SetStaticDefaults() => Projectile.SetTrail(0, 6);
 
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile);
@@ -99,20 +110,75 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void AI() {
-        Projectile.timeLeft = 2;
+        if (!Shot) {
+            Projectile.timeLeft = 2;
+        }
+
+        Player owner = Projectile.GetOwnerAsPlayer();
+
+        if (!IsSmall) {
+            Projectile.localNPCHitCooldown = !IsMedium ? 3 : 5;
+        }
 
         if (IsStickingToTarget) {
+            Projectile.timeLeft = 100;
+
+            _stickingPosition += Projectile.velocity.SafeNormalize();
             Projectile.Center = _stickingPosition;
 
-            _hitProgress = Helper.Approach(_hitProgress, 1f, TimeSystem.LogicDeltaTime);
+            _hitProgress = Helper.Approach(_hitProgress, 1f, TimeSystem.LogicDeltaTime * 5f);
             if (_hitProgress >= 1f) {
                 Projectile.Kill();
+            }
+
+            for (int i = 0; i < (IsMedium ? 4 : 6); i++) {
+                float spawnOffsetValue = IsMedium ? 15 : 20;
+                float spawnOffsetValue2 = IsMedium ? 15 : 20;
+                Vector2 velocity3 = (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2().RotatedByRandom(MathHelper.PiOver4 * Main.rand.NextFloatDirection());
+                if (Main.rand.NextBool()) {
+                    continue;
+                }
+                if (!Main.rand.NextBool(3)) {
+                    Vector2 vector80 = velocity3.RotatedBy(1.5707963705062866) * ((float)Main.rand.NextDouble() - 0.5f) * spawnOffsetValue * Main.rand.NextFloat(1f, 2f);
+                    int num746 = Dust.NewDust(Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 - Vector2.One * 4f, 8, 8, DustID.BubbleBurst_Blue, 0f, 0f,
+                        Main.rand.Next(50, 100), default(Color), 1.25f + 0.25f * Main.rand.NextFloat());
+                    Dust dust2 = Main.dust[num746];
+                    dust2.noGravity = true;
+                    Main.dust[num746].velocity = -velocity3;
+                    Main.dust[num746].velocity *= Main.rand.NextFloat(0f, 5f);
+                }
+                if (Main.rand.NextBool()) {
+                    continue;
+                }
+                if (!Main.rand.NextBool(3)) {
+                    Vector2 vector80 = velocity3.RotatedBy(1.5707963705062866) * ((float)Main.rand.NextDouble() - 0.5f) * spawnOffsetValue * Main.rand.NextFloat(1f, 1.5f);
+                    int num746 = Dust.NewDust(Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 - Vector2.One * 4f, 8, 8, DustID.BubbleBurst_Blue, 0f, 0f,
+                        Main.rand.Next(50, 100), default(Color), 1.25f + 0.25f * Main.rand.NextFloat());
+                    Dust dust2 = Main.dust[num746];
+                    dust2.noGravity = true;
+                    Main.dust[num746].velocity = -velocity3;
+                    Main.dust[num746].velocity *= Main.rand.NextFloat(0f, 2.5f);
+                }
+                if (!Main.dedServ) {
+                    Vector2 vector80 = velocity3.RotatedBy(1.5707963705062866) * ((float)Main.rand.NextDouble() - 0.5f) * spawnOffsetValue * Main.rand.NextFloat(1f, 1.5f);
+                    if (Main.rand.NextBool(6)) {
+                        velocity3 = (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2().RotatedByRandom(MathHelper.PiOver4 * Main.rand.NextFloatDirection());
+                        Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 + Main.rand.RandomPointInArea(8),
+                            velocity3 * Main.rand.NextFloat(-2.5f, 2.5f), $"IceGore{Main.rand.Next(3) + 1}".GetGoreType(),
+                            Scale: 0.75f + 0.25f * Main.rand.NextFloat() - IsMedium.ToInt() * 0.15f);
+                    }
+                    if (Main.rand.NextBool(6)) {
+                        velocity3 = (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2().RotatedByRandom(MathHelper.PiOver4 * Main.rand.NextFloatDirection());
+                        Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.Center + velocity3 * spawnOffsetValue2 * 2.5f + vector80 + Main.rand.RandomPointInArea(8),
+                            velocity3 * Main.rand.NextFloat(-2.5f, 2.5f), $"IceGore{Main.rand.Next(3) + 1}".GetGoreType(),
+                            Scale: 0.75f + 0.25f * Main.rand.NextFloat() - IsMedium.ToInt() * 0.15f);
+                    }
+                }
             }
 
             return;
         }
 
-        Player owner = Projectile.GetOwnerAsPlayer();
         owner.SyncMousePosition();
         Vector2 velocity = Projectile.DirectionTo(owner.GetWorldMousePosition());
         float lerpValue = 0.1f;
@@ -134,9 +200,15 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
 
             if (CaneAttackProgress >= 1f) {
+                if (IcicleType != GlacierSpikeType.Large) {
+                    SoundEngine.PlaySound(SoundID.MaxMana with { Pitch = 0.5f }, Projectile.Center);
+                }
                 IcicleType = GlacierSpikeType.Large;
             }
             else if (CaneAttackProgress >= 0.5f) {
+                if (IcicleType != GlacierSpikeType.Medium) {
+                    SoundEngine.PlaySound(SoundID.MaxMana with { Pitch = 0.25f }, Projectile.Center);
+                }
                 IcicleType = GlacierSpikeType.Medium;
             }
 
@@ -155,10 +227,18 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
-        bool notEnoughDistance = Projectile.Distance(_lerpPositionTo) > 1f;
+        bool notEnoughDistance = Projectile.Distance(_lerpPositionTo) > 5f;
         float timeToPrepareAttack = MINPROGRESS / 2f;
-        if (AIProgress <= timeToPrepareAttack) {
-            AIProgress++;
+        bool preparing = AIProgress <= timeToPrepareAttack;
+        if (preparing || !_prepared) {
+            Projectile.timeLeft = 65;
+
+            if (!_prepared && !notEnoughDistance) {
+                _prepared = true;
+            }
+            if (preparing) {
+                AIProgress++;
+            }
             Projectile.Center = Vector2.Lerp(Projectile.Center, _lerpPositionTo, lerpValue);
             Projectile.rotation = Utils.AngleLerp(Projectile.rotation, _lerpRotationTo, lerpValue);
 
@@ -177,16 +257,51 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
 
             progress = 1f - progress;
             Projectile.rotation = Utils.AngleLerp(Projectile.rotation, _lerpRotationTo, lerpValue * progress);
+
+            //if (aiProgress == 5f) {
+            //    SoundEngine.PlaySound(SoundID.Item28, Projectile.Center);
+            //}
         }
         else {
             AIProgress++;
             float progress = (aiProgress - minProgress) / (minProgress / 3.5f);
-            Projectile.Center += velocity2 * MathHelper.Lerp(2.5f, 7.5f, progress);
+            Vector2 velocity3 = velocity2 * MathHelper.Lerp(2.5f, 7.5f, progress);
+            velocity3 = velocity3.NormalizeWithMaxLength(20f);
+            Projectile.Center += velocity3;
+        }
+
+        int size = 10;
+        if (!IsStickingToTarget && Projectile.timeLeft < 25 && Collision.SolidCollision(Projectile.Center + Vector2.UnitY.RotatedBy(Projectile.rotation) * size * 0.25f - Vector2.One * size / 2f, size, size)) {
+            DustsOnKill();
+
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
+
+            Projectile.Kill();
+        }
+    }
+
+    private void DustsOnKill() {
+        Vector2 vector48 = Projectile.position;
+        Vector2 vector49 = Projectile.oldVelocity;
+        vector49.Normalize();
+        vector48 += vector49 * 16f;
+        for (int num443 = 0; num443 < 10 + (byte)(IcicleSize * 0.8f); num443++) {
+            for (int i = 0; i < (byte)IcicleType + 1; i++) {
+                float sizeModifier = 4f;
+                int num444 = Dust.NewDust(vector48 - Vector2.One * IcicleSize * (sizeModifier / 2f), (int)(IcicleSize * sizeModifier), (int)(IcicleSize * sizeModifier), DustID.BubbleBurst_Blue, Alpha: Main.rand.Next(50, 100));
+                Main.dust[num444].position = (Main.dust[num444].position + Projectile.Center) / 2f;
+                Dust dust2 = Main.dust[num444];
+                dust2.velocity += Projectile.oldVelocity * 0.4f;
+                dust2 = Main.dust[num444];
+                dust2.velocity *= 0.5f;
+                Main.dust[num444].noGravity = true;
+            }
+            vector48 -= vector49 * 8f;
         }
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        int size = (int)IcicleType * 10;
+        int size = Math.Max(10, IcicleSize * 2);
         if (GeometryUtils.CenteredSquare(Projectile.Center + Vector2.UnitY.RotatedBy(Projectile.rotation) * size, size).Intersects(targetHitbox)) {
             return true;
         }
@@ -197,7 +312,9 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool? CanDamage() => Shot && AIProgress >= MINPROGRESS;
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        if (IcicleType == GlacierSpikeType.Small) {
+        SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
+
+        if (IsSmall) {
             Projectile.Kill();
             return;
         }
@@ -216,7 +333,10 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool ShouldUpdatePosition() => false;
 
     public override void OnKill(int timeLeft) {
-
+        if (IsSmall || !IsStickingToTarget) {
+            DustsOnKill();
+            SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
+        }
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -235,12 +355,32 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpriteBatch batch = Main.spriteBatch;
         Vector2 position = Projectile.Center;
         Rectangle clip = texture.Bounds;
-        clip.Height = (int)(texture.Height * (1f - _hitProgress));
+        int height = texture.Height;
+        clip.Height = (int)(height * (1f - _hitProgress));
         float rotation = Projectile.rotation;
-        position += Vector2.UnitY.RotatedBy(rotation) * (int)(texture.Height * _hitProgress) / 2f;
+        Vector2 extraPosition = Vector2.UnitY.RotatedBy(rotation) * (int)(height * _hitProgress) / 2f;
+        position += Vector2.UnitY.RotatedBy(rotation) * (int)(height * _hitProgress) / 2f;
         Vector2 origin = clip.Centered();
         Color color = lightColor;
         SpriteEffects effects = Projectile.spriteDirection.ToSpriteEffects();
+
+        int length = ProjectileID.Sets.TrailCacheLength[Type];
+        for (int i = 1; i < length; i += 2) {
+            Vector2 vector6 = Projectile.oldPos[i];
+            if (vector6 == Vector2.Zero) {
+                continue;
+            }
+            Color color2 = Color.SkyBlue.MultiplyRGB(color);
+            Vector2 position2 = vector6 + extraPosition + Projectile.Size / 2f;
+            batch.Draw(texture, position2, DrawInfo.Default with {
+                Clip = clip,
+                Origin = origin,
+                Color = color2 * 0.5f * (1f - (float)i / length),
+                Rotation = rotation,
+                ImageFlip = effects,
+            });
+        }
+
         batch.Draw(texture, position, DrawInfo.Default with {
             Clip = clip,
             Origin = origin,
