@@ -27,6 +27,8 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
     protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<GlacierSpike>();
 
     public sealed class GlacierCaneBase : CaneBaseProjectile {
+        public bool ShouldReleaseCane => AttackProgress01 >= 1f || !IsInUse;
+
         public override bool IsInUse => Owner.IsAliveAndFree() && Owner.controlUseItem;
 
         public override void SetStaticDefaults() {
@@ -45,8 +47,8 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
         }
 
         protected override void AfterProcessingCane() {
-            if (AttackProgress01 >= 1f || !IsInUse) {
-                Shot2 = true;
+            if (ShouldReleaseCane) {
+                ShotWhenEndedAttackAnimation = true;
 
                 ReleaseCane();
             }

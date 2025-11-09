@@ -70,7 +70,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     private bool _shouldDrawGlowMask;
     protected Projectile LastShotProjectile { get; private set; }
 
-    protected bool Shot, Shot2;
+    protected bool Shot, ShotWhenEndedAttackAnimation;
 
     protected Player Owner => Projectile.GetOwnerAsPlayer();
     protected bool FacedLeft => Owner.direction == -1;
@@ -167,7 +167,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         writer.Write(_penaltyTime);
         writer.Write(_maxUseTime);
         writer.Write(Shot);
-        writer.Write(Shot2);
+        writer.Write(ShotWhenEndedAttackAnimation);
         writer.Write(_rotation);
         writer.WriteVector2(_positionOffset);
     }
@@ -176,7 +176,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         _penaltyTime = reader.ReadUInt16();
         _maxUseTime = reader.ReadSingle();
         Shot = reader.ReadBoolean();
-        Shot2 = reader.ReadBoolean();
+        ShotWhenEndedAttackAnimation = reader.ReadBoolean();
         _rotation = reader.ReadSingle();
         _positionOffset = reader.ReadVector2();
     }
@@ -292,8 +292,8 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
 
             SpawnCoreDustsBeforeShoot(AttackProgress01, Owner, CorePosition);
         }
-        else if (!Shot2) {
-            Shot2 = true;
+        else if (!ShotWhenEndedAttackAnimation) {
+            ShotWhenEndedAttackAnimation = true;
             if (ShouldPlayShootSound()) {
                 PlayAttackSound();
             }

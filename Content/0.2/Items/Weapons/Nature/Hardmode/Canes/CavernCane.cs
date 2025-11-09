@@ -87,9 +87,9 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                     }
                 }
                 float timeNeededToCastAnAttack = 0f/*0.33f*/;
-                if (caneAttackProgress >= timeNeededToCastAnAttack && !Shot2) {
+                if (caneAttackProgress >= timeNeededToCastAnAttack && !ShotWhenEndedAttackAnimation) {
                     shootRocks();
-                    Shot2 = true;
+                    ShotWhenEndedAttackAnimation = true;
                 }
             }
             void releaseCaneWhenIsNotInUse() {
