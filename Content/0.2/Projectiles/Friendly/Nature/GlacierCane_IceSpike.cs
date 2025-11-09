@@ -304,7 +304,7 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
         for (int num443 = 0; num443 < 10 + (byte)(IcicleSize * 0.8f); num443++) {
             for (int i = 0; i < (byte)IcicleType + 1; i++) {
                 float sizeModifier = 4f;
-                int num444 = Dust.NewDust(vector48 - Vector2.One * IcicleSize * (sizeModifier / 2f), (int)(IcicleSize * sizeModifier), (int)(IcicleSize * sizeModifier), DustID.BubbleBurst_Blue, Alpha: Main.rand.Next(50, 100));
+                int num444 = Dust.NewDust(vector48 - Vector2.One * IcicleSize * (sizeModifier / 2f), (int)(MathF.Max(4, IcicleSize) * sizeModifier), (int)(MathF.Max(4, IcicleSize) * sizeModifier), DustID.BubbleBurst_Blue, Alpha: Main.rand.Next(50, 100));
                 Main.dust[num444].position = (Main.dust[num444].position + Projectile.Center) / 2f;
                 Dust dust2 = Main.dust[num444];
                 dust2.velocity += Projectile.oldVelocity * 0.4f;
