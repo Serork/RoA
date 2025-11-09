@@ -55,7 +55,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
 
         public override bool IsInUse => Owner.IsAliveAndFree() && (Owner.controlUseItem || !MinPassed);
 
-        protected override bool ShouldWaitUntilProjDespawns() => false;
+        protected override bool ShouldWaitUntilProjDespawn() => false;
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.07f, 0.08f);
 

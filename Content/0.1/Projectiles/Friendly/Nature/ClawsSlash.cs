@@ -382,7 +382,7 @@ class ClawsSlash : NatureProjectile {
     }
 
     //public override void PostAI() {
-    //    Player player = Owner;
+    //    Player player = Parent;
 
     //    float value = 1f - Projectile.localAI[0] / Projectile.ai[1];
     //    value = Ease.ExpoInSinOut(value);

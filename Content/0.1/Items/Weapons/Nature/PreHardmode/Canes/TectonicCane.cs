@@ -45,7 +45,7 @@ sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
 
         protected override void SetAttackSound(ref SoundStyle attackSound) => attackSound = SoundID.Item69 with { Pitch = 0.25f, Volume = 0.625f };
 
-        protected override bool ShouldWaitUntilProjDespawns() => false;
+        protected override bool ShouldWaitUntilProjDespawn() => false;
 
         protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
             int count = 10;

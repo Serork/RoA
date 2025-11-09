@@ -58,7 +58,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
 
         (byte, string)[] IRequestAssets.IndexedPathsToTexture => [(0, ResourceManager.DustTextures + "CarrionCane")];
 
-        protected override bool ShouldWaitUntilProjDespawns() => false;
+        protected override bool ShouldWaitUntilProjDespawn() => false;
 
         protected override void Initialize() {
             _chargeData = new ChargeInfo[CHARGECOUNT];

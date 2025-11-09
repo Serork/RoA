@@ -117,7 +117,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
             }
         }
 
-        //protected override bool ShouldStopUpdatingRotationAndDirection() => Shot && _penaltyTime < TimeAfterShootToExist(Owner) / 5f;
+        //protected override bool ShouldStopUpdatingRotationAndDirection() => Shot && _penaltyTime < TimeAfterShootToExist(Parent) / 5f;
 
         protected override ushort TimeAfterShootToExist(Player player) => (byte)(NatureWeaponHandler.GetUseSpeed(AttachedNatureWeapon, player) * 4);
 
@@ -125,7 +125,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.1f, 0.15f);
 
-        protected override bool ShouldWaitUntilProjDespawns() => true;
+        protected override bool ShouldWaitUntilProjDespawn() => true;
 
         protected override bool DespawnWithProj() => true;
 

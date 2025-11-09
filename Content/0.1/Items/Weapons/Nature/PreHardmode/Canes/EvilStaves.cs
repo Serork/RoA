@@ -67,7 +67,7 @@ abstract class EvilStaffBase : CaneBaseProjectile {
 
     protected override Vector2 CorePositionOffsetFactor() => new(0.05f, 0.05f);
 
-    protected override bool ShouldWaitUntilProjDespawns() => false;
+    protected override bool ShouldWaitUntilProjDespawn() => false;
 
     protected override void SetSpawnProjectileSettings2(Player player, ref int damage, ref float knockBack) => damage = NatureWeaponHandler.GetBasePotentialDamage(AttachedNatureWeapon!, player);
 

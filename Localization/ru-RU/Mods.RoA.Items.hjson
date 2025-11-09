@@ -2361,3 +2361,8 @@ RodOfTheBifrost: {
 	// DisplayName: Rod Of The Bifrost
 	// Tooltip: ""
 }
+
+GlacierCane: {
+	// DisplayName: Glacier Cane
+	// Tooltip: ""
+}

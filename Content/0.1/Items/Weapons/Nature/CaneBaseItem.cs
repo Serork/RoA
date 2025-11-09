@@ -115,7 +115,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
 
     protected virtual ushort TimeAfterShootToExist(Player player) => 0;
 
-    protected virtual bool ShouldWaitUntilProjDespawns() => true;
+    protected virtual bool ShouldWaitUntilProjDespawn() => true;
 
     protected virtual float MinUseTimeToShootFactor() => 0f;
 
@@ -328,7 +328,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
 
     protected void ApplyWeaponPenalty(ushort? timeAfterShootToExist = null) {
         timeAfterShootToExist ??= GetTimeAfterShootToExist();
-        if (ShouldWaitUntilProjDespawns()) {
+        if (ShouldWaitUntilProjDespawn()) {
             if (timeAfterShootToExist != 0) {
                 _penaltyTime = timeAfterShootToExist.Value;
                 _maxPenaltyTime = _penaltyTime;
@@ -358,7 +358,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         }
         bool haveProjsActive = Owner.ownedProjectileCounts[ShootType] >= ProjActiveCount();
         if (!ShouldBeActive) {
-            if (!haveProjsActive || !ShouldWaitUntilProjDespawns()) {
+            if (!haveProjsActive || !ShouldWaitUntilProjDespawn()) {
                 if (IsActive()) {
                     _penaltyTime--;
                 }

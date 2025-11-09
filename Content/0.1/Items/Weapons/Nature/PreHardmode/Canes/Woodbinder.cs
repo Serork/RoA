@@ -47,7 +47,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.275f, 0f);
 
-        protected override bool ShouldWaitUntilProjDespawns() => false;
+        protected override bool ShouldWaitUntilProjDespawn() => false;
 
         public override bool IsInUse => Owner.IsAliveAndFree() && Owner.controlUseItem;
 

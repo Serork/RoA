@@ -329,7 +329,7 @@ static class ProjectileUtils {
 
         // Copied at the bottom. Gotos would be messy.
         /*
-		if (Main.netMode != 0 && Owner == Main.myPlayer)
+		if (Main.netMode != 0 && Parent == Main.myPlayer)
 			NetMessage.SendData(27, -1, -1, null, num);
 		*/
 
