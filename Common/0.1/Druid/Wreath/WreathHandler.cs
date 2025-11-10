@@ -704,7 +704,7 @@ sealed class WreathHandler : ModPlayer {
         if (HasKeepTime) {
             _keepBonusesForTime -= 1f;
         }
-        if ((Player.GetFormHandler().IsInADruidicForm || ChargedBySlowFill) && !IsFull1) {
+        if ((Player.GetFormHandler().IsInADruidicForm/* || ChargedBySlowFill*/) && !IsFull1) {
             _keepBonusesForTime = Math.Max(Math.Max(DruidPlayerStats.KeepBonusesForTime, 10), _keepBonusesForTime);
         }
 
