@@ -58,5 +58,5 @@ sealed class NewMoney : ModItem {
         return false;
     }
 
-    public override Vector2? HoldoutOffset() => new Vector2(-8f, 4f);
+    public override Vector2? HoldoutOffset() => new Vector2(-6f, 4f);
 }
