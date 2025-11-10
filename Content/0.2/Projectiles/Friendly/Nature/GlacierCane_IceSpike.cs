@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -18,6 +19,8 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 
 using static RoA.Content.Items.Weapons.Nature.Hardmode.Canes.GlacierCane;
 using static tModPorter.ProgressUpdate;
@@ -213,14 +216,64 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
                 return;
             }
 
+            if (CaneAttackProgress < 0.5f) {
+                float step = Utils.Remap(CaneAttackProgress, 0f, 0.5f, 0f, 1f, true);
+                step = Ease.CubeIn(step);
+                for (int i = 0; i < 2; i++) {
+                    Vector2 corePosition = Projectile.Center;
+                    float offsetX = 30 * 2f * (1f - MathHelper.Clamp(step, 0.4f, 1f));
+                    float offsetY = 64 * 1.5f * (1f - MathHelper.Clamp(step, 0.4f, 1f));
+                    Vector2 spawnPosition = corePosition + Main.rand.NextVector2Circular(offsetX, offsetY).RotatedBy(Projectile.rotation) * 1.5f * step * 1.5f;
+                    spawnPosition -= Vector2.UnitY.RotatedBy(Projectile.rotation) * 10;
+                    int dustType = Main.rand.NextBool(3) ? ModContent.DustType<Ice>() : ModContent.DustType<Ice2>();
+                    float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / (offsetX + offsetY) / 2f, 0.25f, 1f) * 2f * Math.Max(step, 0.25f) + 0.25f;
+                    Dust dust = Dust.NewDustPerfect(spawnPosition, dustType,
+                        Scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f));
+                    dust.velocity = (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor;
+                    dust.velocity *= 4f;
+                    dust.velocity *= Main.rand.NextFloat(0.75f, 1f);
+                    dust.noGravity = true;
+                    dust.scale *= Main.rand.NextFloat(1f, 1.25f);
+                    dust.alpha = Main.rand.Next(50, 100);
+                    if (dust.position.Distance(corePosition) < (offsetX + offsetY) / 4f) {
+                        dust.active = false;
+                    }
+                }
+            }
+            else if (CaneAttackProgress < 1f) {
+                float step = Utils.Remap(CaneAttackProgress, 0.5f, 1f, 0f, 1f, true);
+                step = Ease.CubeIn(step);
+                for (int i = 0; i < 2; i++) {
+                    Vector2 corePosition = Projectile.Center;
+                    float offsetX = 42 * 2f * (1f - MathHelper.Clamp(step, 0.4f, 1f));
+                    float offsetY = 86 * 1.5f * (1f - MathHelper.Clamp(step, 0.4f, 1f));
+                    Vector2 spawnPosition = corePosition + Main.rand.NextVector2Circular(offsetX, offsetY).RotatedBy(Projectile.rotation) * 1f * step * 3f;
+                    spawnPosition -= Vector2.UnitY.RotatedBy(Projectile.rotation) * 15;
+                    int dustType = Main.rand.NextBool(3) ? ModContent.DustType<Ice>() : ModContent.DustType<Ice2>();
+                    float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / (offsetX + offsetY) / 2f, 0.25f, 1f) * 2f * Math.Max(step, 0.25f) + 0.25f;
+                    Dust dust = Dust.NewDustPerfect(spawnPosition, dustType,
+                        Scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f));
+                    dust.velocity = (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor;
+                    dust.velocity *= 5f;
+                    dust.velocity *= Main.rand.NextFloat(0.75f, 1f);
+                    dust.noGravity = true;
+                    dust.scale *= Main.rand.NextFloat(1f, 1.25f);
+                    dust.scale *= 1.25f;
+                    dust.alpha = Main.rand.Next(50, 100);
+                    if (dust.position.Distance(corePosition) < (offsetX + offsetY) / 4f) {
+                        dust.active = false;
+                    }
+                }
+            }
+
             if (CaneAttackProgress >= 1f) {
-                if (IcicleType != GlacierSpikeType.Large) {
+                if (!IsLarge) {
                     SoundEngine.PlaySound(SoundID.MaxMana with { Pitch = 0.5f }, Projectile.Center);
                 }
                 IcicleType = GlacierSpikeType.Large;
             }
             else if (CaneAttackProgress >= 0.5f) {
-                if (IcicleType != GlacierSpikeType.Medium) {
+                if (!IsMedium) {
                     SoundEngine.PlaySound(SoundID.MaxMana with { Pitch = 0.25f }, Projectile.Center);
                 }
                 IcicleType = GlacierSpikeType.Medium;

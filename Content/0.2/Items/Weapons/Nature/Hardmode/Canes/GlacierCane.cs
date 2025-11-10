@@ -3,10 +3,8 @@
 using RoA.Common.Druid;
 using RoA.Common.Players;
 using RoA.Common.VisualEffects;
-using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Content.VisualEffects;
-using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -18,8 +16,6 @@ using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 
@@ -74,7 +70,10 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
             player.SyncMousePosition();
             Vector2 mousePosition = player.GetViableMousePosition();
-            if (Main.rand.NextBool()) {
+            if (Main.rand.Next(10) < 5) {
+                if (Main.rand.NextBool(6)) {
+                    return;
+                }
                 float progress = 1f - MathHelper.Clamp(step, 0f, 1f);
                 float offset = 40f * progress;
                 Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition + randomOffset;
@@ -89,9 +88,10 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
                 if (Main.rand.NextChance(0.4f)) {
                     Vector2 velocity = Helper.VelocityToPoint(CorePosition - Vector2.One * 1f, mousePosition, 2.5f + Main.rand.NextFloatRange(1f));
                     Vector2 vector2 = velocity.RotatedBy(MathHelper.Pi * Main.rand.NextFloatDirection() * 0.75f);
-                    Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, DustID.BubbleBurst_Blue, Scale: Main.rand.NextFloat(1.05f, 1.35f));
+                    Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, Main.rand.NextBool(3) ? DustID.Ice : DustID.BubbleBurst_Blue, Scale: Main.rand.NextFloat(1.05f, 1.35f) * 1.25f);
                     dust.velocity = vector2 * Main.rand.NextFloat(0.8f, 1.1f);
                     dust.noGravity = true;
+                    dust.alpha = Main.rand.Next(50, 100);
                 }
             }
         }
@@ -99,9 +99,12 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
         protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
             player.SyncMousePosition();
             Vector2 mousePosition = player.GetViableMousePosition();
-            int count = 10 + (int)(AttackProgress01 * 3);
+            int count = 10 + (int)(AttackProgress01 * 4);
             for (int i = 0; i < count; i++) {
                 if (Main.rand.NextBool()) {
+                    continue;
+                }
+                if (Main.rand.NextBool(5)) {
                     continue;
                 }
                 float progress = (float)i / count;
@@ -112,9 +115,10 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
                     velocity,
                     scale: Main.rand.NextFloat(0.9f, 1.1f) * 1.25f * 0.9f);
                 velocity = corePosition.DirectionTo(mousePosition).RotatedByRandom(MathHelper.Pi * Main.rand.NextFloatDirection() * 0.75f).SafeNormalize(Vector2.One) * Main.rand.NextFloat(5f, 10f) * MathHelper.Lerp(0.5f, 0.75f, AttackProgress01);
-                Dust dust = Dust.NewDustDirect(corePosition + Main.rand.RandomPointInArea(10f, 10f), 0, 0, 176, 0f, 0f, 0, default, Scale: Main.rand.NextFloat(1.05f, 1.35f) * 0.9f);
+                Dust dust = Dust.NewDustDirect(corePosition + Main.rand.RandomPointInArea(10f, 10f), 0, 0, Main.rand.NextBool(3) ? DustID.Ice : DustID.BubbleBurst_Blue, 0f, 0f, 0, default, Scale: Main.rand.NextFloat(1.05f, 1.35f) * 0.9f * 1.25f);
                 dust.noGravity = true;
                 dust.fadeIn = 0.9f;
+                dust.alpha = Main.rand.Next(50, 100);
                 dust.velocity = velocity;
             }
             for (int i = 0; i < count; i++) {
@@ -123,10 +127,11 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
                 }
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
-                Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, 176, 0f, 0f, 0, default, Scale: Main.rand.NextFloat(1.05f, 1.35f) * 0.9f);
+                Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, Main.rand.NextBool(3) ? DustID.Ice : DustID.BubbleBurst_Blue, 0f, 0f, 0, default, Scale: Main.rand.NextFloat(1.05f, 1.35f) * 0.9f * 1.5f);
                 dust.noGravity = true;
                 dust.fadeIn = 0.9f;
                 dust.velocity = new Vector2(Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f);
+                dust.alpha = Main.rand.Next(50, 100);
             }
         }
     }
