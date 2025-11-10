@@ -340,7 +340,8 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
 
         int size = 10;
-        if (!IsStickingToTarget && Projectile.timeLeft < 25 && Collision.SolidCollision(Projectile.Center + Vector2.UnitY.RotatedBy(Projectile.rotation) * size * 0.25f - Vector2.One * size / 2f, size, size)) {
+        if (!IsStickingToTarget && Projectile.timeLeft < 25
+            && Collision.SolidCollision(Projectile.Center + Vector2.UnitY.RotatedBy(Projectile.rotation) * MathF.Max(2, MathF.Min(IcicleSize, 10)) * 1.75f - Vector2.One * size / 2f, size, size)) {
             DustsOnKill();
 
             SoundEngine.PlaySound(SoundID.Item27, Projectile.Center);
