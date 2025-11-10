@@ -54,8 +54,7 @@ sealed class NewMoneyBite : ModProjectile {
             Projectile.hostile = true;
         }
 
-        Projectile.localAI[0]++;
-        if (Projectile.localAI[0] >= NewMoney.BITE_FIRSTFRAMETIME && Projectile.frameCounter++ > NewMoney.BITE_ANIMATIONTIME) {
+        if (Projectile.localAI[0]++ > NewMoney.BITE_FIRSTFRAMETIME && Projectile.frameCounter++ > NewMoney.BITE_ANIMATIONTIME) {
             Projectile.frameCounter = 0;
             Projectile.frame++;
             if (Projectile.frame > Projectile.GetFrameCount()) {
