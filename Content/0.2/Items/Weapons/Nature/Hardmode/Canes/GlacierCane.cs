@@ -79,11 +79,10 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
                 Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition + randomOffset;
                 float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / offset, 0.25f, 1f) * 2f * Math.Max(step, 0.25f) + 0.25f;
                 if (Main.rand.NextChance(progress)) {
-                    VisualEffectSystem.New<Snowflake>(VisualEffectLayer.ABOVEPLAYERS)?.
-                            Setup(
-                            spawnPosition,
-                            (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor * 0.9f,
-                            scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f) * 0.75f).CorePosition = corePosition;
+                    Snowflake? snowFlake = VisualEffectSystem.New<Snowflake>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(spawnPosition, (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor * 0.9f, scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f) * 0.75f);
+                    if (snowFlake is not null) {
+                        snowFlake.CorePosition = corePosition;
+                    }
                 }
                 if (Main.rand.NextChance(0.4f)) {
                     Vector2 velocity = Helper.VelocityToPoint(CorePosition - Vector2.One * 1f, mousePosition, 2.5f + Main.rand.NextFloatRange(1f));
