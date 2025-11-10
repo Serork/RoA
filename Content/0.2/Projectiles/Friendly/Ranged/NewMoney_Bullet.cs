@@ -77,6 +77,7 @@ sealed class NewMoneyBullet : ModProjectile {
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
         if (!Projectile.GetOwnerAsPlayer().HasProjectile<NewMoneyBat>()) {
+            target.GetCommon().NewMoneyEffectByPlayerWhoAmI = Projectile.owner;
             target.AddBuff<NewMoneyDebuff>(300);
         }
     }

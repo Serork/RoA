@@ -44,9 +44,15 @@ sealed class NewMoneyBite : ModProjectile {
     public override bool? CanDamage() => true;
     public override bool? CanCutTiles() => false;
 
-    public override bool? CanHitNPC(NPC target) => target.whoAmI == (int)Projectile.ai[0];
+    public override bool? CanHitNPC(NPC target) => Projectile.ai[2] == 0f && target.whoAmI == (int)Projectile.ai[0];
+    public override bool CanHitPlayer(Player target) => Projectile.ai[2] != 0f && target.whoAmI == (int)Projectile.ai[0];
 
     public override void AI() {
+        if (Projectile.ai[2] != 0f) {
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+        }
+
         Projectile.localAI[0]++;
         if (Projectile.localAI[0] >= 8 && Projectile.frameCounter++ > 4) {
             Projectile.frameCounter = 0;
