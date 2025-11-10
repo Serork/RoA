@@ -41,7 +41,11 @@ sealed partial class NPCCommon : GlobalNPC {
 
     public override void PostAI(NPC npc) {
         TouchGround(npc);
+
+        NewMoneyPostAI(npc);
     }
+
+    public partial void NewMoneyPostAI(NPC npc);
 
     private void TouchGround(NPC npc) {
         if (npc.noGravity) {

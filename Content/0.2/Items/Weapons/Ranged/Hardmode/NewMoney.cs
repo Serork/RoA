@@ -10,6 +10,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Ranged.Hardmode;
 
 sealed class NewMoney : ModItem {
+    public static ushort DEBUFFTIMEPERHIT => 60 * 5;
+    public static ushort DEBUFFTIMENEEDFORBUFRST => 60 * 20;
+
+    public static ushort BURSTDAMAGE => 150;
+    public static float BURSTKNOCKBACK => 0f;
+
     public override void SetDefaults() {
         Item.width = 50; Item.height = 36;
 
@@ -37,8 +43,8 @@ sealed class NewMoney : ModItem {
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         float num50 = velocity.X;
         float num51 = velocity.Y;
-        num50 += (float)Main.rand.Next(-30, 31) * 0.03f;
-        num51 += (float)Main.rand.Next(-30, 31) * 0.03f;
+        num50 += (float)Main.rand.Next(-30, 31) * 0.015f;
+        num51 += (float)Main.rand.Next(-30, 31) * 0.015f;
         if (type == ProjectileID.Bullet) {
             type = ModContent.ProjectileType<NewMoneyBullet>();
         }
@@ -47,5 +53,5 @@ sealed class NewMoney : ModItem {
         return false;
     }
 
-    public override Vector2? HoldoutOffset() => new Vector2(-8f, 2f);
+    public override Vector2? HoldoutOffset() => new Vector2(-8f, 4f);
 }

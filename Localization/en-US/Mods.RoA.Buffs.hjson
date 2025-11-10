@@ -310,3 +310,8 @@ DeerSkullElectrified: {
 	DisplayName: Deer Skull Electrified
 	Description: Mods.RoA.Buffs.DeerSkullElectrified.Description
 }
+
+NewMoneyDebuff: {
+	DisplayName: New Money Debuff
+	Description: Mods.RoA.Buffs.NewMoneyDebuff.Description
+}
