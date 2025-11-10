@@ -17,7 +17,7 @@ sealed class NewMoney : ModItem {
     public static float BURSTKNOCKBACK => 0f;
 
     public override void SetDefaults() {
-        Item.width = 50; Item.height = 36;
+        Item.width = 40; Item.height = 36;
 
         Item.autoReuse = true;
         Item.useStyle = ItemUseStyleID.Shoot;
