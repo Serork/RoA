@@ -1,52 +1,29 @@
-﻿//using System.Collections.Generic;
+﻿using RoA.Content.Items.Weapons.Nature.Hardmode;
+using RoA.Core.Utility.Extensions;
 
-//using Terraria;
-//using Terraria.ModLoader;
+using Terraria;
+using Terraria.ModLoader;
 
-//using static RoA.Content.Projectiles.Friendly.Nature.MagicalBifrostBlock;
+using static RoA.Content.Projectiles.Friendly.Nature.MagicalBifrostBlock;
 
-//namespace RoA.Common.Players;
+namespace RoA.Common.Players;
 
-//sealed partial class PlayerCommon : ModPlayer {
-//    public enum PatternType : byte {
-//        Pattern1,
-//        Pattern2,
-//        Pattern3,
-//        Count
-//    }
+sealed partial class PlayerCommon : ModPlayer {
+    public MagicalBifrostBlockInfo[]? ActiveMagicalBlockData { get; private set; }
 
-//    public static Dictionary<PatternType, BifrostFigureType[]> Patterns { get; private set; } = new Dictionary<PatternType, BifrostFigureType[]> {
-//        { PatternType.Pattern1, new BifrostFigureType[] { 
-//            BifrostFigureType.Green2, BifrostFigureType.Blue2, BifrostFigureType.Purple3, BifrostFigureType.Blue1, BifrostFigureType.Purple2, BifrostFigureType.Orange1 
-//        } },
-//        { PatternType.Pattern2, new BifrostFigureType[] { 
+    public BifrostFigureType ActiveFigureType { get; private set; }
+    public BifrostFigureType NextFigureType { get; private set; }
 
-//        } },
-//        { PatternType.Pattern3, new BifrostFigureType[] { 
+    public partial void RodOfTheBifrostItemCheck(Player player) {
+        if (player.IsHolding<RodOfTheBifrost>() && ActiveMagicalBlockData is null) {
+            NextFigureType = Main.rand.GetRandomEnumValue<BifrostFigureType>(1);
+            ChooseNextBifrostPattern();
+        }
+    }
 
-//        } }
-//    };
-
-//    public PatternType ActivePattern { get; private set; }
-//    public BifrostFigureType ActiveFigureType { get; private set; }
-//    public byte CurrentFigureType { get; private set; }
-
-//    public void UseRodOfTheBifrostPattern() {
-//        ActivePattern = PatternType.Pattern1;
-//        BifrostFigureType[] figureTypes = Patterns[ActivePattern];
-//        ActiveFigureType = figureTypes[CurrentFigureType];
-//        CurrentFigureType++;
-//        if (CurrentFigureType >= figureTypes.Length) {
-//            CurrentFigureType = 0;
-//            ActivePattern++;
-//            if (ActivePattern == PatternType.Count) {
-//                ActivePattern = PatternType.Pattern1;
-//            }
-//        }
-//    }
-
-//    public override void Unload() {
-//        Patterns.Clear();
-//        Patterns = null!;
-//    }
-//}
+    public void ChooseNextBifrostPattern() {
+        ActiveFigureType = NextFigureType;
+        NextFigureType = Main.rand.GetRandomEnumValue<BifrostFigureType>(1);
+        ActiveMagicalBlockData = GetBlockInfoForBlockType(NextFigureType);
+    }
+}

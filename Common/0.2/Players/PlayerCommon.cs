@@ -358,8 +358,12 @@ sealed partial class PlayerCommon : ModPlayer {
     public override bool PreItemCheck() {
         PreItemCheckEvent?.Invoke(Player);
 
+        RodOfTheBifrostItemCheck(Player);
+
         return base.PreItemCheck();
     }
+
+    public partial void RodOfTheBifrostItemCheck(Player player);
 
     public override void PostUpdate() {
         if (Player.controlUseItem) {
