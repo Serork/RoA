@@ -16,6 +16,11 @@ sealed class NewMoney : ModItem {
     public static ushort BURSTDAMAGE => 150;
     public static float BURSTKNOCKBACK => 0f;
 
+    public static byte BITE_FIRSTFRAMETIME => 8;
+    public static byte BITE_ANIMATIONTIME => 4;
+
+    public static byte BAT_ANIMATIONTIME => 4;
+
     public override void SetDefaults() {
         Item.width = 40; Item.height = 36;
 

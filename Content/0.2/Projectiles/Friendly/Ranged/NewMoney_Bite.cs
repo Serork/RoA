@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Content.Items.Weapons.Ranged.Hardmode;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -54,7 +55,7 @@ sealed class NewMoneyBite : ModProjectile {
         }
 
         Projectile.localAI[0]++;
-        if (Projectile.localAI[0] >= 8 && Projectile.frameCounter++ > 4) {
+        if (Projectile.localAI[0] >= NewMoney.BITE_FIRSTFRAMETIME && Projectile.frameCounter++ > NewMoney.BITE_ANIMATIONTIME) {
             Projectile.frameCounter = 0;
             Projectile.frame++;
             if (Projectile.frame > Projectile.GetFrameCount()) {

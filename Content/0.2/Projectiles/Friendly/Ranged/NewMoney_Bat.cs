@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Content.Items.Weapons.Ranged.Hardmode;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -35,7 +36,7 @@ sealed class NewMoneyBat : ModProjectile {
     }
 
     public override void AI() {
-        Projectile.Animate(4);
+        Projectile.Animate(NewMoney.BAT_ANIMATIONTIME);
 
         Projectile.rotation = Projectile.velocity.X * 0.025f;
 
