@@ -2341,3 +2341,8 @@ GlacierCane: {
 	DisplayName: Glacier Cane
 	Tooltip: ""
 }
+
+NewMoney: {
+	DisplayName: New Money
+	Tooltip: ""
+}
