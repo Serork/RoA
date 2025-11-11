@@ -2031,7 +2031,7 @@ TarAbsorbantSponge: {
 
 IceRod: {
 	DisplayName: Ice Rod
-	Tooltip: ""
+	Tooltip: "{$ItemTooltip.IceRod}"
 }
 
 PerfectedBouquet: {
@@ -2147,7 +2147,7 @@ ToothFairy: {
 	DisplayName: Tooth Fairy
 	Tooltip:
 		'''
-		Shoots calcific deposits that merge into an hungry eater
+		Shoots calcific deposits that merge into a hungry eater
 		'Rip and tear'
 		'''
 }
@@ -2204,7 +2204,7 @@ ShadowflameClaws: {
 	DisplayName: Shadowflame Claws
 	Tooltip:
 		'''
-		Consume a full wreath charge bless foes with a shadowflame blossom
+		Consume a full wreath charge to bless foes with a shadowflame blossom
 		'To your grave I'll bring flowers'
 		'''
 }
@@ -2300,7 +2300,11 @@ StarFusion: {
 
 DruidsEyes: {
 	DisplayName: Druid's Eyes
-	Tooltip: Taking damage charges up wreath
+	Tooltip:
+		'''
+		Taking damage charges up wreath and increases wreath charge rate by 20%
+		While wreath is charged, increases life regeneration
+		'''
 }
 
 RodOfTheLustrous: {
