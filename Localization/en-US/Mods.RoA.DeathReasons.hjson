@@ -3,33 +3,26 @@ ToxicFumesDeathMessage0: "{0} forgot not to play with a thermometer."
 ToxicFumesDeathMessage1: "{0}'s end was quick... silver."
 ToxicFumesDeathMessage2: "{0} forgot a respirator."
 ToxicFumesDeathMessage3: "{0} couldn't handle the toxicity."
-
 //Killed by a Beartrap
 Root0: "{0} is dead by daylight."
 Root1: "{0} took a step too far."
-
 //Killed by Hunter
 HunterRifle0: "{0} became prey."
 HunterRifle1: "{0} got hunted."
-
 //Killed by Stalactites
 Stalactite0: "{0}'s head is concave."
 Stalactite1: "{0} had his head pop off."
 Stalactite2: "{0} died from acute migrane."
-
 //Suffocated in Tar
 TarSuffocated0: "{0} was assimilated."
 TarSuffocated1: "{0} wasn't ready for symbiosis."
-
 //Killed by Tar Explosion
 TarExplosion0: "{0} was spread thin."
 TarExplosion1: "{0} is now here and there."
-
 //Burned down when on Tar
 TarDebuff0: "{0} became glazed barbeque."
 TarDebuff1: "{0} reached 4000 degrees Kelvin."
 TarDebuff2: "{0} was baked and then there was cake."
-
 //Died from Perfect Mimic
 PerfectMimic0: "{0} is still alive..."
 PerfectMimic1: "{0} is fine and dandy..."

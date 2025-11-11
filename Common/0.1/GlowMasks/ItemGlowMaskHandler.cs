@@ -148,6 +148,37 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                 if (item.shimmered)
                     spriteBatch.Draw(glowMaskTexture, position.Value, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, scale, SpriteEffects.None, 0f);
             }
+            // special cases
+            if (item.type == ModContent.ItemType<RodOfTheLustrous>()) {
+                Texture2D glowMaskTexture = RodOfTheLustrous.RodOfTheLustrous_Glow.Value;
+                Vector2 origin = glowMaskTexture.Size() / 2f;
+                Vector2 colorPosition = position ?? item.Center;
+                if (position != null) {
+                    colorPosition -= TileHelper.ScreenOffset;
+                    colorPosition -= new Point(1, 1).ToWorldCoordinates();
+                    colorPosition += Main.screenPosition;
+                }
+                float brightnessFactor = Lighting.Brightness((int)colorPosition.X / 16, (int)colorPosition.Y / 16);
+                Color color = Color.Lerp(Color.White * 0.9f, lightColor, brightnessFactor);
+                if (item.shimmered) {
+                    color.R = (byte)(255f * (1f - item.shimmerTime));
+                    color.G = (byte)(255f * (1f - item.shimmerTime));
+                    color.B = (byte)(255f * (1f - item.shimmerTime));
+                    color.A = (byte)(255f * (1f - item.shimmerTime));
+                }
+                else if (item.shimmerTime > 0f) {
+                    color.R = (byte)((float)(int)color.R * (1f - item.shimmerTime));
+                    color.G = (byte)((float)(int)color.G * (1f - item.shimmerTime));
+                    color.B = (byte)((float)(int)color.B * (1f - item.shimmerTime));
+                    color.A = (byte)((float)(int)color.A * (1f - item.shimmerTime));
+                }
+
+                position ??= item.Center - Main.screenPosition;
+                spriteBatch.Draw(glowMaskTexture, position.Value, null, color * (1f - item.alpha / 255f),
+                    rotation, origin, scale, SpriteEffects.None, 0f);
+                if (item.shimmered)
+                    spriteBatch.Draw(glowMaskTexture, position.Value, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, scale, SpriteEffects.None, 0f);
+            }
         }
     }
 
@@ -288,14 +319,20 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             float rotation = player.itemRotation + rotOffset;
             Color color = Color.Lerp(glowMaskInfo.Color, drawInfo.itemColor, Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
             if (item.type == ModContent.ItemType<RodOfTheLustrous>()) {
+                texture = RodOfTheLustrous.RodOfTheLustrous_Glow.Value;
                 handler.UpdateOldUseItemInfo(4, position, rotation);
                 var oldPos = handler.OldUseItemPos!;
                 var oldRot = handler.OldUseItemRot!;
                 for (int n = 0; n < oldPos.Length; n++) {
                     drawInfo.DrawDataCache.Add(new DrawData(texture, oldPos[n] - Main.screenPosition, texture.Bounds,
-                                                            Color.Lerp(item.GetAlpha(color), Color.White, 0.5f) with { A = 100 } * 0.75f * MathUtils.Clamp01((1f - (float)n / oldPos.Length) * 1.5f), oldRot[n], origin, item.scale, drawInfo.itemEffect, 0));
+                                                            Color.Lerp(item.GetAlpha(color), Color.White, 0.5f) * 0.75f * MathUtils.Clamp01((1f - (float)n / oldPos.Length) * 1.5f), oldRot[n], origin, item.scale, drawInfo.itemEffect, 0));
                 }
                 color = Color.Lerp(item.GetAlpha(color), Color.White, 0.5f);
+
+                drawInfo.DrawDataCache.Add(new DrawData(texture, position - Main.screenPosition, texture.Bounds,
+                                                        color, rotation, origin, item.scale, drawInfo.itemEffect, 0));
+
+                return;
             }
 
             drawInfo.DrawDataCache.Add(new DrawData(texture, position - Main.screenPosition, texture.Bounds,

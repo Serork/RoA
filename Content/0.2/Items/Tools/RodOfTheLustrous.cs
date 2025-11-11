@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
 
 using RoA.Content.Dusts;
 using RoA.Core.Defaults;
@@ -13,9 +16,19 @@ namespace RoA.Content.Items.Tools;
 
 // also see ItemGlowMaskHandler
 sealed class RodOfTheLustrous : ModItem {
-    public override Color? GetAlpha(Color lightColor) {
-        return Color.Lerp(lightColor, Color.White * 0.9f, 1f);
+    public static Asset<Texture2D> RodOfTheLustrous_Glow { get; private set; } = null!;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        RodOfTheLustrous_Glow = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
+
+    //public override Color? GetAlpha(Color lightColor) {
+    //    return Color.Lerp(lightColor, Color.White * 0.9f, 1f);
+    //}
 
     public override void SetDefaults() {
         Item.SetSizeValues(34, 44);

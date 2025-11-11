@@ -1,8 +1,29 @@
+//Died from Quicksilver
 ToxicFumesDeathMessage0: " заигрался с градусником."
 ToxicFumesDeathMessage1: " утек из жизни, как ртуть."
 ToxicFumesDeathMessage2: " не надел респиратор."
 ToxicFumesDeathMessage3: " не справился с токсичностью."
+//Killed by a Beartrap
 Root0: " умер до рассвета."
 Root1: " зашёл слишком далеко."
+//Killed by Hunter
 HunterRifle0: " стал жертвой."
 HunterRifle1: " отследили."
+//Killed by Stalactites
+// Stalactite0: "{0}'s head is concave."
+// Stalactite1: "{0} had his head pop off."
+// Stalactite2: "{0} died from acute migrane."
+//Suffocated in Tar
+// TarSuffocated0: "{0} was assimilated."
+// TarSuffocated1: "{0} wasn't ready for symbiosis."
+//Killed by Tar Explosion
+// TarExplosion0: "{0} was spread thin."
+// TarExplosion1: "{0} is now here and there."
+//Burned down when on Tar
+// TarDebuff0: "{0} became glazed barbeque."
+// TarDebuff1: "{0} reached 4000 degrees Kelvin."
+// TarDebuff2: "{0} was baked and then there was cake."
+//Died from Perfect Mimic
+// PerfectMimic0: "{0} is still alive..."
+// PerfectMimic1: "{0} is fine and dandy..."
+// PerfectMimic2: "{0} is right here, look..."
