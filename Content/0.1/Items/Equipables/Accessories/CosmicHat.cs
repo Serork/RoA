@@ -35,7 +35,7 @@ sealed class CosmicHat : ModItem {
             Player player = drawInfo.drawPlayer;
             if (player.face == EquipLoader.GetEquipSlot(RoA.Instance, typeof(CosmicHat).Name, EquipType.Face)) {
                 Texture2D glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<CosmicHat>()).Texture + "_Face_Glow").Value;
-                Color glowMaskColor = Color.White;
+                Color glowMaskColor = Color.White * 0.9f;
                 glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                 DrawData drawData;
                 var drawinfo = drawInfo;
@@ -43,7 +43,7 @@ sealed class CosmicHat : ModItem {
                 Texture2D maskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<CosmicHat>()).Texture + "_Face_Mask").Value;
                 drawData = GetHeadGlowMask(ref drawInfo, maskTexture, glowMaskColor);
                 //DrawColor color = Lighting.GetColor((int)((double)player.position.X + (double)player.width * 0.5) / 16, (int)(((double)player.position.Y + (double)player.height * 0.25) / 16.0));
-                glowMaskColor = GameShaders.Hair.GetColor(12, player, Color.White);
+                glowMaskColor = GameShaders.Hair.GetColor(12, player, Color.White * 0.9f);
                 glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                 int head = drawInfo.drawPlayer.head;
                 drawInfo.drawPlayer.head = 1;

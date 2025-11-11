@@ -62,7 +62,7 @@ sealed class HereticHood : ModItem {
                     //drawData.shader = drawInfo.cHead;
                     //drawInfo.DrawDataCache.Add(drawData);
 
-                    Color glowMaskColor = Color.White;
+                    Color glowMaskColor = Color.White * 0.9f;
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                     Texture2D glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<HereticHood>()).Texture + "_Head_Glow2").Value;
                     DrawData drawData = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);

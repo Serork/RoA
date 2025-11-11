@@ -30,7 +30,7 @@ sealed class NFAWings : ModItem {
             Vector2 vector2 = new Vector2(0f, 7f);
             vector = drawinfo.Position - Main.screenPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + vector2;
             Vector2 vector12 = vector + new Vector2(num12 - 9, num11 + 2) * directions;
-            Color glowMaskColor = Color.White;
+            Color glowMaskColor = Color.White * 0.9f;
             glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
             DrawData item = new DrawData(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<NFAWings>()).Texture + "_Wings_Glow").Value,
                 vector12.Floor(), new Rectangle(0, TextureAssets.Wings[drawinfo.drawPlayer.wings].Height() / num13 * drawinfo.drawPlayer.wingFrame, TextureAssets.Wings[drawinfo.drawPlayer.wings].Width(), TextureAssets.Wings[drawinfo.drawPlayer.wings].Height() / num13),

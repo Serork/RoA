@@ -95,7 +95,7 @@ sealed class SerorkMask : ModItem {
                         if (typeof(T).Name == nameof(SerorkMask)) {
                             glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<T>()).Texture + "_Head_Glow2").Value;
                             drawData = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
-                            glowMaskColor = Color.White;
+                            glowMaskColor = Color.White * 0.9f;
                             glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                             drawData.color = glowMaskColor;
                             drawData.shader = drawinfo.cHead;
@@ -184,7 +184,7 @@ sealed class SerorkMask : ModItem {
 
                     glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkGreaves>()).Texture + "_Legs_Glow2").Value;
                     drawData = new(glowMaskTexture, drawPos.Floor() + legsOffset, player.legFrame, default, player.legRotation, legsOffset, 1f, drawInfo.playerEffect, 0);
-                    glowMaskColor = Color.White;
+                    glowMaskColor = Color.White * 0.9f;
                     glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                     drawData.color = glowMaskColor;
                     drawData.shader = drawinfo.cLegs;
@@ -280,7 +280,7 @@ sealed class SerorkMask : ModItem {
                 case CompositePlayerDrawContext.Torso: {
                     DrawData item = data;
                     item.texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkBreastplate>()).Texture + "_Body_Glow2").Value;
-                    Color glowMaskColor = Color.White;
+                    Color glowMaskColor = Color.White * 0.9f;
                     glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                     item.color = glowMaskColor;
                     Rectangle value = item.sourceRect.Value;
