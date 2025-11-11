@@ -376,7 +376,11 @@ SoulOfTheWoods: {
 
 BrightstonePotion: {
 	DisplayName: Зелье из светлокамня
-	Tooltip: Оставляет шлейф из светящейся пыли
+		Tooltip: 
+		'''
+		Оставляет шлейф из светящейся пыли
+		'Ты никогда не засияешь, если не светишься'
+		'''
 }
 
 DryadBloodPotion: {

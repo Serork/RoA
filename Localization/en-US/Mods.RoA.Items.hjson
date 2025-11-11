@@ -360,7 +360,11 @@ SoulOfTheWoods: {
 
 BrightstonePotion: {
 	DisplayName: Brightstone Potion
-	Tooltip: Creates a trail of glowing dust
+	Tooltip: 
+		'''
+		Creates a trail of glowing dust
+		'You'll never shine if you don't glow'
+		'''
 }
 
 DryadBloodPotion: {
