@@ -16,7 +16,8 @@ sealed partial class RoARecipes : ModSystem {
     }
 
     private static void AddDruidEmblem() {
-        Recipe.Create(ModContent.ItemType<DruidEmblem>())
+        Recipe.Create(ItemID.AvengerEmblem)
+		    .AddIngredient(ModContent.ItemType<DruidEmblem>())
             .AddIngredient(ItemID.SoulofMight, 5)
             .AddIngredient(ItemID.SoulofSight, 5)
             .AddIngredient(ItemID.SoulofFright, 5)
