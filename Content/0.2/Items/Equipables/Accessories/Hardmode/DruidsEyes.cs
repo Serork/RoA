@@ -1,4 +1,5 @@
-﻿using RoA.Common.Druid.Wreath;
+﻿using RoA.Common.Druid;
+using RoA.Common.Druid.Wreath;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -30,8 +31,10 @@ sealed class DruidsEyes : NatureItem {
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetDruidStats().IsDruidsEyesEffectActive = true;
 
+        player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.2f;
+
         if (player.GetWreathHandler().IsFull1) {
-            player.statDefense += 6;
+            //player.statDefense += 6;
             player.lifeRegen += 3;
         }
     }
