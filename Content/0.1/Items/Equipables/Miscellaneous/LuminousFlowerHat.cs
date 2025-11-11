@@ -73,6 +73,6 @@ sealed class LuminousFlowerHat : ModItem {
 
     public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
         glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
-        glowMaskColor = Color.White * GetLerpValue(drawPlayer) * (1f - shadow);
+        glowMaskColor = Color.White * GetLerpValue(drawPlayer) * (1f - shadow) * 0.9f;
     }
 }

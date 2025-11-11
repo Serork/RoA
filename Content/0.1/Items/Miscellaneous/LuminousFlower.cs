@@ -44,6 +44,6 @@ sealed class LuminousFlower : ModItem {
         color ??= Color.White;
         color *= progress;
         position ??= item.Center - Main.screenPosition;
-        spriteBatch.Draw(glowMaskTexture, position.Value, null, color.Value, rotation, origin, scale, SpriteEffects.None, 0f);
+        spriteBatch.Draw(glowMaskTexture, position.Value, null, color.Value * 0.9f, rotation, origin, scale, SpriteEffects.None, 0f);
     }
 }

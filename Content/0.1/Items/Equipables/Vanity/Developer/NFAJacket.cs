@@ -16,7 +16,7 @@ sealed class NFAJacket : ModItem {
         //Tooltip.SetDefault("'Great for impersonating RoA devs?' Sure!");
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
-        ItemGlowMaskHandler.BodyGlowMaskHandler2.RegisterData(Item.bodySlot, () => Color.White);
+        ItemGlowMaskHandler.BodyGlowMaskHandler2.RegisterData(Item.bodySlot, () => Color.White * 0.9f);
     }
 
     public override void SetDefaults() {

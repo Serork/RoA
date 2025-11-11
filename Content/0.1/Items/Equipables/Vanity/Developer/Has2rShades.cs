@@ -29,7 +29,7 @@ sealed class Has2rShades : ModItem {
     public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {
         if (drawPlayer.active && drawPlayer.hair == 26) {
             glowMask = VanillaGlowMaskHandler.GetID(Texture + "_Head_Glow");
-            glowMaskColor = Color.White;
+            glowMaskColor = Color.White * 0.9f;
         }
     }
 

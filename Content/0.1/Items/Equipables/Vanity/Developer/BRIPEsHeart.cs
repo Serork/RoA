@@ -19,7 +19,7 @@ sealed class BRIPEsHeart : ModItem {
         //if (!Main.dedServ)
         //	BodyGlowmask.RegisterData(Item.bodySlot, () => new DrawColor(255, 255, 255, 0) * 0.8f * 0.75f);
 
-        ItemGlowMaskHandler.BodyGlowMaskHandler2.RegisterData(Item.bodySlot, () => Color.White);
+        ItemGlowMaskHandler.BodyGlowMaskHandler2.RegisterData(Item.bodySlot, () => Color.White * 0.9f);
     }
 
     public override void SetDefaults() {
