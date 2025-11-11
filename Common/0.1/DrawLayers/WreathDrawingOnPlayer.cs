@@ -110,7 +110,7 @@ sealed class WreathDrawingOnPlayer : PlayerDrawLayer {
                 return;
             }
             texture = asset.Value;
-            immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(wreathGlowMask.GlowColor, drawInfo.shadow);
+            immuneAlphaPure = drawInfo.drawPlayer.GetImmuneAlphaPure(wreathGlowMask.GlowColor * 0.9f, drawInfo.shadow);
             immuneAlphaPure *= drawInfo.drawPlayer.stealth;
             drawData = new(texture,
                            position + drawInfo.drawPlayer.MovementOffset(),

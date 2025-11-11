@@ -120,8 +120,8 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
                         DrawData glowMask = item2;
                         glowMask.texture = glowTexture.Value;
                         float brightnessFactor = Lighting.Brightness((int)glowMask.position.X / 16, (int)glowMask.position.Y / 16);
-                        Color color = Color.Lerp(glowMaskAttribute.GlowColor, glowMask.color, brightnessFactor);
-                        glowMask.color = player.GetImmuneAlphaPure(glowMaskAttribute.ShouldApplyItemAlpha ? color * (1f - clawsBaseItem.Item.alpha / 255f) : glowMaskAttribute.GlowColor, (float)drawinfo.shadow);
+                        Color color = Color.Lerp(glowMaskAttribute.GlowColor * 0.9f, glowMask.color, brightnessFactor);
+                        glowMask.color = player.GetImmuneAlphaPure(glowMaskAttribute.ShouldApplyItemAlpha ? color * (1f - clawsBaseItem.Item.alpha / 255f) : (glowMaskAttribute.GlowColor * 0.9f), (float)drawinfo.shadow);
                         drawinfo.DrawDataCache.Add(glowMask);
                     }
                     break;
@@ -154,8 +154,8 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
                         DrawData glowMask = item2;
                         glowMask.texture = glowTexture.Value;
                         float brightnessFactor = Lighting.Brightness((int)glowMask.position.X / 16, (int)glowMask.position.Y / 16);
-                        Color color = Color.Lerp(glowMaskAttribute.GlowColor, glowMask.color, brightnessFactor);
-                        glowMask.color = player.GetImmuneAlphaPure(glowMaskAttribute.ShouldApplyItemAlpha ? color * (1f - clawsBaseItem.Item.alpha / 255f) : glowMaskAttribute.GlowColor, (float)drawinfo.shadow);
+                        Color color = Color.Lerp(glowMaskAttribute.GlowColor * 0.9f, glowMask.color, brightnessFactor);
+                        glowMask.color = player.GetImmuneAlphaPure(glowMaskAttribute.ShouldApplyItemAlpha ? color * (1f - clawsBaseItem.Item.alpha / 255f) : (glowMaskAttribute.GlowColor * 0.9f), (float)drawinfo.shadow);
                         drawinfo.DrawDataCache.Add(glowMask);
                     }
                     break;
