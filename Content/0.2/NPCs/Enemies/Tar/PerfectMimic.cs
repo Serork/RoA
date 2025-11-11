@@ -8,7 +8,6 @@ using ReLogic.Utilities;
 
 using RoA.Common;
 using RoA.Common.Metaballs;
-using RoA.Common.UI;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Consumables;
 using RoA.Content.Projectiles.Enemies;
@@ -19,8 +18,6 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
-using SteelSeries.GameSense;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +25,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -36,6 +34,12 @@ namespace RoA.Content.NPCs.Enemies.Tar;
 
 [Tracked]
 sealed class PerfectMimic : ModNPC, IRequestAssets {
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(PerfectMimic)}")
+        ]);
+    }
+
     private static float CONTACTDISTANCE => 120f;
     private static float STOPDISTANCE => 320f;
     private static byte TELEPORTTIMEMININSECONDS => 5;

@@ -17,6 +17,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -24,6 +25,12 @@ namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
 [Tracked]
 sealed class Woodpecker : ModNPC {
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(Woodpecker)}")
+        ]);
+    }
+
     private static byte FRAMECOUNT => 16;
     private static float PECKINGCHECKTIME => 20f;
     private static float TONGUEATTACKCHECKTIME => 120f;

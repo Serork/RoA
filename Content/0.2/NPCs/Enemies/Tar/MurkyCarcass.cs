@@ -13,6 +13,7 @@ using System;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -20,6 +21,12 @@ namespace RoA.Content.NPCs.Enemies.Tar;
 
 [Tracked]
 sealed class MurkyCarcass : ModNPC {
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(MurkyCarcass)}")
+        ]);
+    }
+
     private static Point16 _spawnPosition;
 
     public override void SetStaticDefaults() {

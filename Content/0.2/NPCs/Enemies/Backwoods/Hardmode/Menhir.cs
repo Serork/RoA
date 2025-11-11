@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.UI;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -21,6 +22,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
 sealed class Menhir : ModNPC, IRequestAssets {
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(Menhir)}")
+        ]);
+    }
+
     private static byte FRAMECOUNT => 9;
     private static byte MAXENEMYCOUNTTOLOCK => 3;
     private static ushort PICKAXEEMOTESPAWNTIME => 300;

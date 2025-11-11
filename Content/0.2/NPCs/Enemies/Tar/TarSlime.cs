@@ -1,18 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common;
-using RoA.Content.Dusts;
 using RoA.Content.Items.LiquidsSpecific;
 using RoA.Content.Projectiles.LiquidsSpecific;
-using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using System;
 
 using Terraria;
-using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -20,6 +17,12 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Tar;
 
 sealed class TarSlime : ModNPC {
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(TarSlime)}")
+        ]);
+    }
+
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(2);
     }

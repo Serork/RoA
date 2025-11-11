@@ -21,16 +21,29 @@ using System.IO;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
 class WardenOfTheWoods2 : WardenOfTheWoods {
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(WardenOfTheWoods2)}")
+        ]);
+    }
+
     public override bool Alt => true;
 }
 
 class WardenOfTheWoods : ModNPC, IRequestAssets {
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(WardenOfTheWoods)}")
+        ]);
+    }
+
     private static byte FRAMECOUNT => 9;
     public static float TARGETDISTANCE => 400f;
     public static float ATTACKTIME => 100f;
