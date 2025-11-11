@@ -52,7 +52,7 @@ sealed class NewMoneyBat : ModProjectile {
         Player player = Projectile.GetOwnerAsPlayer();
         Projectile.SlightlyMoveTo(player.Center, speed: 7.5f);
         Projectile.localAI[1] += 2f;
-        if (player.Distance(Projectile.Center) < 40f) {
+        if (player.Distance(Projectile.Center) < 40f || Projectile.localAI[0] > 0f) {
             Projectile.localAI[0]++;
             if (Projectile.localAI[0] > 20f) {
                 Projectile.Kill();
