@@ -204,9 +204,11 @@ sealed class EvilBranch : NatureProjectile {
                 }
                 direction *= -_direction;
                 Vector2 leafTwigPosition = -new Vector2(14, 122) + leafPosition;
-                int projectile = Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(AttachedNatureWeapon, Main.player[Projectile.owner]), Projectile.knockBack,
-                    Projectile.owner, direction, Projectile.identity, index);
-                Main.projectile[projectile].As<EvilLeaf>().SetUpTwigPosition(leafTwigPosition);
+                if (AttachedNatureWeapon is not null) {
+                    int projectile = Projectile.NewProjectile(Projectile.GetSource_NaturalSpawn(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<EvilLeaf>(), NatureWeaponHandler.GetNatureDamage(AttachedNatureWeapon, Main.player[Projectile.owner]), Projectile.knockBack,
+                        Projectile.owner, direction, Projectile.identity, index);
+                    Main.projectile[projectile].As<EvilLeaf>().SetUpTwigPosition(leafTwigPosition);
+                }
                 index++;
             }
 

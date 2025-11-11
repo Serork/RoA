@@ -54,8 +54,10 @@ sealed class BloodCloudRaining : NatureProjectile {
                 Projectile.ai[0] = 0f;
                 if (Projectile.owner == Main.myPlayer) {
                     num352 += Main.rand.Next(-14, 15);
-                    Projectile.damage = NatureWeaponHandler.GetNatureDamage(AttachedNatureWeapon, Main.player[Projectile.owner]);
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), num352, num353, 0f, 5f, ModContent.ProjectileType<BloodRain>(), Projectile.damage, 0f, Projectile.owner);
+                    if (AttachedNatureWeapon is not null) {
+                        Projectile.damage = NatureWeaponHandler.GetNatureDamage(AttachedNatureWeapon, Main.player[Projectile.owner]);
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), num352, num353, 0f, 5f, ModContent.ProjectileType<BloodRain>(), Projectile.damage, 0f, Projectile.owner);
+                    }
                 }
             }
         }
