@@ -2090,7 +2090,7 @@ SolidifiedTarWall: {
 
 SolidifiedTar: {
 	DisplayName: Solidified Tar
-	Tooltip: 'It's all congealed by now'
+	Tooltip: "'It's all congealed by now'"
 }
 
 MurkyCarcassBanner: {
