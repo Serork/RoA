@@ -53,13 +53,15 @@ sealed class NewMoneyBite : ModProjectile {
         if (Projectile.localAI[0]++ > NewMoney.BITE_FIRSTFRAMETIME && Projectile.frameCounter++ > NewMoney.BITE_ANIMATIONTIME) {
             Projectile.frameCounter = 0;
             Projectile.frame++;
-            if (Projectile.frame >= Projectile.GetFrameCount()) {
-                Projectile.Kill();
+            if (Projectile.frame == Projectile.GetFrameCount() - 1) {
                 if (Projectile.IsOwnerLocal()) {
                     ProjectileUtils.SpawnPlayerOwnedProjectile<NewMoneyBat>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
                         Position = Projectile.Center
                     });
                 }
+            }
+            if (Projectile.frame >= Projectile.GetFrameCount()) {
+                Projectile.Kill();
             }
         }
     }

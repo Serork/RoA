@@ -43,6 +43,10 @@ sealed class NewMoneyBat : ModProjectile {
     }
 
     public override void AI() {
+        if (Projectile.localAI[1] == 0f && Projectile.localAI[2] == 0f) {
+            Projectile.localAI[1] = 0f;
+            Projectile.localAI[2] = 1f;
+        }
         Lighting.AddLight(Projectile.Center, NewMoneyBullet.BulletColor.ToVector3() * 0.5f);
 
         Projectile.Animate(NewMoney.BAT_ANIMATIONTIME);
@@ -50,8 +54,10 @@ sealed class NewMoneyBat : ModProjectile {
         Projectile.rotation = Projectile.velocity.X * 0.025f;
 
         Player player = Projectile.GetOwnerAsPlayer();
-        Projectile.SlightlyMoveTo(player.Center, speed: 7.5f);
-        Projectile.localAI[1] += 2f;
+        if (Projectile.localAI[1] >= 0f) {
+            Projectile.SlightlyMoveTo(player.Center, speed: 7.5f);
+        }
+        Projectile.localAI[1] += 1f;
         if (player.Distance(Projectile.Center) < 40f || Projectile.localAI[0] > 0f) {
             Projectile.localAI[0]++;
             if (Projectile.localAI[0] > 20f) {
@@ -125,7 +131,7 @@ sealed class NewMoneyBat : ModProjectile {
             }
         }
 
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color, projectile.rotation,
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color * trailOpacity, projectile.rotation,
                               origin, scale, effects, 0);
 
         float trailOpacity2 = trailOpacity;
@@ -138,8 +144,8 @@ sealed class NewMoneyBat : ModProjectile {
             Vector2 spinningpoint = new Vector2((float)Math.Sin((double)((float)Projectile.whoAmI / 1f) + Main.timeForVisualEffects / (double)num10 + (double)(num14 * 2f * ((float)Math.PI * 2f))) * num8, 0f - num7) * num15;
             vector2 += spinningpoint.RotatedBy(num12);
             Color color3 = NewMoneyBullet.BulletColor;
-            Main.spriteBatch.Draw(_trailTexture.Value, projectile.Center - Main.screenPosition + vector2, frameBox, color3 * num14 * 1f * trailOpacity, projectile.rotation, origin,
-                scale * Utils.Remap(num14 * num14, 0f, 1f, 0f, 2.5f) * 1f * trailOpacity * 1f, effects, 0f);
+            Main.spriteBatch.Draw(_trailTexture.Value, projectile.Center - Main.screenPosition + vector2, frameBox, color3 * num14 * 0.5f, projectile.rotation, origin,
+                scale * Utils.Remap(num14 * num14, 0f, 1f, 0.25f, 2.5f) * 1f * trailOpacity, effects, 0f);
         }
 
         return false;
