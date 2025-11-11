@@ -139,7 +139,7 @@ sealed class NewMoneyBat : ModProjectile {
             vector2 += spinningpoint.RotatedBy(num12);
             Color color3 = NewMoneyBullet.BulletColor;
             Main.spriteBatch.Draw(_trailTexture.Value, projectile.Center - Main.screenPosition + vector2, frameBox, color3 * num14 * 1f * trailOpacity, projectile.rotation, origin,
-                scale * Utils.Remap(num14 * num14, 0f, 1f, 0f, 2.5f) * 1f * trailOpacity * 0.875f, effects, 0f);
+                scale * Utils.Remap(num14 * num14, 0f, 1f, 0f, 2.5f) * 1f * trailOpacity * 1f, effects, 0f);
         }
 
         return false;
