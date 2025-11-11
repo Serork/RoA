@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Projectiles.Friendly.Ranged;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -30,7 +32,7 @@ sealed class NewMoney : ModItem {
         Item.useAnimation = 14; Item.useTime = Item.useAnimation;
         
         Item.useAmmo = AmmoID.Bullet;
-        Item.UseSound = SoundID.Item11;
+        Item.UseSound = SoundID.Item41;
 
         Item.noMelee = true;
 
@@ -43,20 +45,23 @@ sealed class NewMoney : ModItem {
 
         Item.shoot = ProjectileID.Bullet;
         Item.shootSpeed = 10f;
+
+        Item.scale = 0.85f;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         float num50 = velocity.X;
         float num51 = velocity.Y;
-        num50 += (float)Main.rand.Next(-30, 31) * 0.015f;
-        num51 += (float)Main.rand.Next(-30, 31) * 0.015f;
+        num50 += (float)Main.rand.Next(-30, 31) * 0.01f;
+        num51 += (float)Main.rand.Next(-30, 31) * 0.01f;
         if (type == ProjectileID.Bullet) {
             type = ModContent.ProjectileType<NewMoneyBullet>();
         }
+        position -= velocity.TurnLeft().SafeNormalize() * 7.5f * -player.direction;
         Projectile.NewProjectile(source, position.X, position.Y, num50, num51, type, damage, knockback, player.whoAmI);
 
         return false;
     }
 
-    public override Vector2? HoldoutOffset() => new Vector2(-6f, 4f);
+    public override Vector2? HoldoutOffset() => new Vector2(-2f, 0f);
 }

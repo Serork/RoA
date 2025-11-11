@@ -41,10 +41,12 @@ sealed class ChemicalPrisoner : ModItem {
         Item.shoot = ProjectileID.PurificationPowder;
 
         Item.value = Item.sellPrice(0, 2, 25, 0);
+
+        Item.scale = 0.85f;
     }
 
     public override Vector2? HoldoutOffset()
-        => new Vector2(-4, 0);
+        => new Vector2(2f, 0);
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelocity = new Vector2(velocity.X, velocity.Y).SafeNormalize(Vector2.Zero);

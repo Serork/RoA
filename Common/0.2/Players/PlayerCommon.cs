@@ -39,8 +39,6 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool ControlUseItem;
     public bool StopFaceDrawing, StopHeadDrawing;
 
-    public int NewMoneyEffectByPlayerWhoAmI;
-
     public bool ApplyBoneArmorVisuals;
 
     public bool DoingBackflip => _backflipTimer > 0f;
@@ -383,24 +381,6 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         TouchGround();
-    }
-
-    public override void PostUpdateBuffs() {
-        if (Player.FindBuff(ModContent.BuffType<NewMoneyDebuff>(), out int buffIndex) && Player.buffTime[buffIndex] >= NewMoney.DEBUFFTIMENEEDFORBUFRST) {
-            Player.DelBuff<NewMoneyDebuff>();
-
-            int damage = NewMoney.BURSTDAMAGE;
-            float knockBack = NewMoney.BURSTKNOCKBACK;
-            Player player = Main.player[NewMoneyEffectByPlayerWhoAmI];
-            if (player.IsLocal()) {
-                Projectile.NewProjectile(Player.GetSource_Misc("newmoneyburst"), Player.Center, Vector2.Zero, ModContent.ProjectileType<NewMoneyBite>(),
-                    damage,
-                    knockBack,
-                    NewMoneyEffectByPlayerWhoAmI,
-                    Player.whoAmI,
-                    ai2: 1f);
-            }
-        }
     }
 
     private void TouchGround() {
