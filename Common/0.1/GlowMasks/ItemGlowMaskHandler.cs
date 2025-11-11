@@ -193,7 +193,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                 string modItemTexture = item.Texture;
                 Asset<Texture2D> texture = ModContent.Request<Texture2D>(modItemTexture + attribute.Requirement, AssetRequestMode.ImmediateLoad);
                 texture.Value.Name = modItemTexture;
-                GlowMaskInfo glowMaskInfo = new(texture, attribute.GlowColor, attribute.ShouldApplyItemAlpha);
+                GlowMaskInfo glowMaskInfo = new(texture, attribute.GlowColor * 0.9f, attribute.ShouldApplyItemAlpha);
                 GlowMasks[item.Type] = glowMaskInfo;
             }
         }

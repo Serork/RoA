@@ -8,20 +8,15 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
-using System.Runtime.InteropServices;
-
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 
 [WeaponOverlay(WeaponType.Claws, 0xffffff)]
 sealed class HellfireClaws : ClawsBaseItem<HellfireClaws.HellfireClawsSlash> {
-    public override Color? GetAlpha(Color lightColor) => Color.White * 0.95f;
+    public override Color? GetAlpha(Color lightColor) => Color.White * 0.9f;
 
     public override float BrightnessModifier => 1f;
     public override bool HasLighting => true;

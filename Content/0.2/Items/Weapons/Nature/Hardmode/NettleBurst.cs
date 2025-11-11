@@ -11,7 +11,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(127, 127, 127, 127)]
 sealed class NettleBurst : NatureItem {
     public override void SetStaticDefaults() {
         Item.staff[Type] = true;

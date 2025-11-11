@@ -27,7 +27,7 @@ using static Terraria.Player;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(127, 127, 127, 127)]
 sealed class RodOfTheBifrost : NatureItem {
     private static Asset<Texture2D> _outlineBlockTexture = null!;
 
