@@ -35,6 +35,6 @@ sealed class LivingBorealWoodHelmet : NatureItem {
 
     public override void UpdateArmorSet(Player player) {
         player.setBonus = Language.GetTextValue("Mods.RoA.Items.Tooltips.LivingBorealSetBonus");
-        player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
+        player.GetModPlayer<DruidStats>().WreathChargeRateMultiplier += 0.1f;
     }
 }

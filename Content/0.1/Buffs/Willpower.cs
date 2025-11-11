@@ -11,5 +11,5 @@ sealed class Willpower : ModBuff {
         // Description.SetDefault("Wreath is charged 10% faster");
     }
 
-    public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.15f;
+    public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<DruidStats>().WreathChargeRateMultiplier += 0.15f;
 }

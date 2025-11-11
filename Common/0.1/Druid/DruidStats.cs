@@ -22,7 +22,7 @@ sealed partial class DruidStats : ModPlayer {
         }
     }
 
-    public float DruidDamageExtraIncreaseValueMultiplier {
+    public float WreathChargeRateMultiplier {
         get => _druidDamageExtraIncreaseValueMultiplier;
         set {
             _druidDamageExtraIncreaseValueMultiplier = MathHelper.Clamp(value, 0f, 3f);
@@ -68,7 +68,7 @@ sealed partial class DruidStats : ModPlayer {
 
     public override void ResetEffects() {
         DruidPotentialDamageMultiplier = 1f;
-        DruidDamageExtraIncreaseValueMultiplier = 1f;
+        WreathChargeRateMultiplier = 1f;
         DischargeTimeDecreaseMultiplier = 1f;
         DruidPotentialUseTimeMultiplier = 1f;
 

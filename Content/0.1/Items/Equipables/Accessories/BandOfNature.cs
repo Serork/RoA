@@ -28,6 +28,6 @@ sealed class BandOfNature : NatureItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.15f;
+        player.GetModPlayer<DruidStats>().WreathChargeRateMultiplier += 0.15f;
     }
 }

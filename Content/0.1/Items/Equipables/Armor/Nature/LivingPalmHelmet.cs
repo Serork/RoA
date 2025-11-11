@@ -33,6 +33,6 @@ sealed class LivingPalmHelmet : NatureItem {
 
     public override void UpdateArmorSet(Player player) {
         player.setBonus = Language.GetTextValue("Mods.RoA.Items.Tooltips.LivingPalmSetBonus");
-        player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.1f;
+        player.GetModPlayer<DruidStats>().WreathChargeRateMultiplier += 0.1f;
     }
 }

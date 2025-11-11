@@ -31,7 +31,7 @@ sealed class DruidsEyes : NatureItem {
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetDruidStats().IsDruidsEyesEffectActive = true;
 
-        player.GetModPlayer<DruidStats>().DruidDamageExtraIncreaseValueMultiplier += 0.2f;
+        player.GetModPlayer<DruidStats>().WreathChargeRateMultiplier += 0.2f;
 
         if (player.GetWreathHandler().IsFull1) {
             //player.statDefense += 6;
