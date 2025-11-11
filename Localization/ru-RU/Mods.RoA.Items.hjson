@@ -1972,12 +1972,12 @@ SnowWreathTier3: {
 
 CavernCane: {
 	DisplayName: Пещерная трость
-	// Tooltip: Channel a geode that explodes into shrapnel
+	Tooltip: Сотворяет жеоду, что крошится в дребезги шрапнелью
 }
 
 Macrolepiota: {
 	DisplayName: Макролепиота
-	// Tooltip: Use it like an umbrella, to fall slowly and release stray spores
+	Tooltip: Используйте словно зонт, чтобы медленно парить, выпуская грибные споры
 }
 
 DruidEmblem: {
@@ -1987,7 +1987,7 @@ DruidEmblem: {
 
 LeafySeahorse: {
 	DisplayName: Лиственный морской конёк
-	// Tooltip: Spews bubbles that merge together
+	Tooltip: Пускает пузыри, которые сливаются воедино
 }
 
 FlamewardenHood: {
@@ -2056,16 +2056,16 @@ IceRod: {
 
 PerfectedBouquet: {
 	DisplayName: Безупречный букет
-	/* Tooltip:
+	Tooltip:
 		'''
-		Shoots a bouquet of soul-infused petals, each with a powerful effect
-		While wreath is charged, they cross-pollinate
-		''' */
+		Выстреливает букетом лепестков, наполненных душами, каждый с мощным эффектом
+		Когда венок заполнен, они перекрестно опыляются
+		'''
 }
 
 SacredAcalypha: {
 	DisplayName: Святая акалифа
-	// Tooltip: Shoots a hurricane of bright red petals
+	Tooltip: Стреляет бурей ярко-красных лепестков
 }
 
 BottomlessTarBucket: {
@@ -2115,7 +2115,7 @@ SolidifiedTarWall: {
 
 SolidifiedTar: {
 	DisplayName: Отвердевшая смола
-	// Tooltip: "'It's all congealed by now'"
+	Tooltip: "'Всё уже застыло'"
 }
 
 MurkyCarcassBanner: {
@@ -2130,12 +2130,12 @@ TarDye: {
 
 ClingerStaff: {
 	DisplayName: Посох цеплятеля
-	// Tooltip: Summons a clinger to blaze foes with cursed flames
+	Tooltip: Призывает хватателя, чтобы обжечь врагов проклятым пламенем
 }
 
 Pixiellation: {
 	DisplayName: '''"Офеевание"'''
-	// Tooltip: Pester foes with an onslaught of fairies
+	Tooltip: Раздражает врагов натиском феечек
 }
 
 CrystalVileShard: {
@@ -2170,7 +2170,11 @@ CarrionCane: {
 
 ToothFairy: {
 	DisplayName: Зубная фея
-	Tooltip: "'Рви и кромсай!'"
+	Tooltip:
+		'''
+	Стреляет отложениями кальция, которые сливаются в голодного пожирателя
+	'Рви и кромсай'
+		'''
 }
 
 AerialConcussion: {
@@ -2189,12 +2193,12 @@ TarLiquidSensor: {
 
 NixieTube: {
 	DisplayName: Лампа тлеющего свечения
-	// Tooltip: Displays letters, numbers and symbols and accepts wiring input
+	Tooltip: Отображает буквы, цифры и символы и принимает сигналы от проводов
 }
 
 Crimsonest: {
 	DisplayName: Багрянездо
-	// Tooltip: Grows pustulas that erupt with flesh-eating insects
+	Tooltip: Выращивает прыщи, из которых вырываются плотоядные насекомые
 }
 
 HallowedTopfhelm: {
@@ -2204,7 +2208,11 @@ HallowedTopfhelm: {
 
 SolScorchers: {
 	DisplayName: Палящее солнце
-	Tooltip: "'Золотые лучи прекрасного солнца'"
+	Tooltip:
+		'''
+		Тратит полный заряд венка, чтобы испеплить врагов малым солнцем
+		'Золотые лучи прекрасного солнца'
+		'''
 }
 
 WardenOfTheWoods2Banner: {
@@ -2219,11 +2227,11 @@ WardenOfTheWoodsBanner: {
 
 ShadowflameClaws: {
 	DisplayName: Когти пламени тьмы
-	/* Tooltip:
+	Tooltip:
 		'''
-		Consume a full wreath charge to bless foes with a shadowflame blossom
-		'To your grave I'll bring flowers'
-		''' */
+		Тратят полный заряд венка, чтобы благославить врагов бутонами пламени тьмы
+		'На твою могилу я принесу цветы'
+		'''
 }
 
 CarcassChestguard: {
@@ -2317,11 +2325,12 @@ StarFusion: {
 
 DruidsEyes: {
 	DisplayName: Глаза друида
-	/* Tooltip:
+	Tooltip:
 		'''
-		Taking damage charges up wreath and increases wreath charge rate by 20%
-		While wreath is charged, increases life regeneration
-		''' */
+		Получение урона заполняет венок
+		Увеличивает скорость заполнения венка на 20%
+		Когда венок заполнен, увеличивает регенерацию здоровья
+		'''
 }
 
 RodOfTheLustrous: {
@@ -2340,59 +2349,59 @@ FocusedTar: {
 }
 
 HiTechCattleProd: {
-	// DisplayName: Hi-Tech Cattle Prod
-	/* Tooltip:
+	DisplayName: Высокотехнологичное электропогоняло
+	Tooltip:
 		'''
-		Consume a full wreath charge to tenderize foes into mulch
-		'From Earth to space and back to Earth'
-		''' */
+		Тратит полный заряд венка, чтобы измельчить врагов в удобрение
+		'С Земли с любовью!'
+		'''
 }
 
 ElderSnailBanner: {
-	// DisplayName: Elder Snail Banner
+	DisplayName: Знамя древней улитки
 	// Tooltip: ""
 }
 
 MenhirBanner: {
-	// DisplayName: Menhir Banner
+	DisplayName: Знамя мейнхира
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Menhir.DisplayName}"
 }
 
 PerfectMimicBanner: {
-	// DisplayName: Perfect Mimic Banner
+	DisplayName: Знамя точной копии
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PerfectMimic.DisplayName}"
 }
 
 TarSlimeBanner: {
-	// DisplayName: Tar Slime Banner
+	DisplayName: Знамя смоляного слизня
 	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.TarSlime.DisplayName}"
 }
 
 HandOfGod: {
-	// DisplayName: Hand Of God
+	DisplayName: Длань божья
 	// Tooltip: ""
 }
 
 RodOfTheBifrost: {
-	// DisplayName: Rod Of The Bifrost
-	/* Tooltip:
+	DisplayName: Жезл биврёста
+	Tooltip:
 		'''
-		Calls pearlescent figures to fall from the sky
-		Stack figures in a row or a column for a blast of light
-		'Blinded by my light!'
-		''' */
+		Сниспускает с неба фигуры цвета опала
+		Сложите фигуры в ряд или столбец, чтобы вызвать взрыв цвета
+		'Ослеплён моим светом!'
+		'''
 }
 
 GlacierCane: {
-	// DisplayName: Glacier Cane
-	// Tooltip: Channels a big icicle that shatters enemies like glass
+	DisplayName: Ледниковая трость
+	Tooltip: Сотворяет большую сосульку, которая разбивает врагов, словно стекло.
 }
 
 NewMoney: {
-	// DisplayName: New Money
-	/* Tooltip:
+	DisplayName: Новые бабки
+	Tooltip:
 		'''
-		Shoots bullets that build-up into a big burst of damage
-		'Bleed for me.'
-		''' */
+		Стреляет бронебойными пулями, которые со временем приносят большой всплеск урона врагам.
+		'Истекай кровью.'
+		'''
 }
