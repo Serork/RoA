@@ -45,7 +45,7 @@ sealed class NewMoneyDust : ModDust {
         }
 
         if (!dust.noLight && !dust.noLightEmittence) {
-            Lighting.AddLight(dust.position, NewMoneyBullet.BulletColor.ToVector3() * dust.scale * 0.25f);
+            Lighting.AddLight(dust.position, NewMoneyBullet.BulletColor.ToVector3() * dust.scale * 0.3f);
         }
 
         return false;
