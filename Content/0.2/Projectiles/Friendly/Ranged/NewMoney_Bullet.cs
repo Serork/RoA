@@ -46,22 +46,22 @@ sealed class NewMoneyBullet : ModProjectile {
     }
 
     public override void AI() {
-        Lighting.AddLight(Projectile.Center, Color.Red.ToVector3() * 0.5f);
+        Lighting.AddLight(Projectile.Center, NewMoneyBullet.BulletColor.ToVector3() * 0.5f);
 
-        if (Main.rand.Next(3) == 0) {
+        if (Projectile.Distance(Projectile.GetOwnerAsPlayer().Center) > 25f && Main.rand.Next(3) == 0) {
             int num179 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y) - Vector2.One, Projectile.width, Projectile.height, ModContent.DustType<NewMoneyDust>(),
-                Projectile.velocity.X, Projectile.velocity.Y, 100, default(Color), 0.8f + 0.2f * Main.rand.NextFloat());
-            Main.dust[num179].noLightEmittence = true;
+                Projectile.velocity.X, Projectile.velocity.Y, 50, default(Color), 0.8f + 0.2f * Main.rand.NextFloat());
             Main.dust[num179].noGravity = true;
-            Main.dust[num179].velocity *= 0.25f;
+            Main.dust[num179].velocity *= 0.375f;
             Main.dust[num179].velocity *= Main.rand.NextFloat(0.75f, 1f);
+            Main.dust[num179].fadeIn = Main.rand.NextFloat(0.5f, 1f);
         }
     }
 
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = TextureAssets.Projectile[Type].Value;
 
-        Color baseColor = lightColor.MultiplyRGB(BulletColor);
+        Color baseColor = BulletColor;
 
         // Redraw the projectile with the color not influenced by light
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
@@ -83,6 +83,19 @@ sealed class NewMoneyBullet : ModProjectile {
         SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
 
         // special hit effect
+        int num697 = 6;
+        for (int num698 = 0; num698 < num697; num698++) {
+            int num699 = Dust.NewDust(Projectile.Center + Main.rand.NextVector2Circular(2f, 2f), 0, 0, ModContent.DustType<NewMoneyDust>(), 0f, 0f, 0);
+            Dust dust2 = Main.dust[num699];
+            dust2.fadeIn = Main.rand.NextFloat(0.5f, 1f);
+            dust2.noGravity = true;
+            Main.dust[num699].velocity += Vector2.One.RotatedByRandom(MathHelper.TwoPi);
+            dust2 = Main.dust[num699];
+            dust2.position -= Vector2.One * 4f;
+            Main.dust[num699].position = Vector2.Lerp(Main.dust[num699].position, Projectile.Center, 0.5f);
+            Main.dust[num699].velocity *= Main.rand.NextFloat(0.5f, 1f);
+            Main.dust[num699].velocity += Projectile.oldVelocity * 0.15f;
+        }
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {

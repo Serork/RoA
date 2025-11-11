@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ReLogic.Content;
-
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -17,14 +15,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
 sealed class NewMoneyBite : ModProjectile {
-    private static Asset<Texture2D> _glowTexture = null!;
-
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(3);
-
-        if (!Main.dedServ) {
-            _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
-        }
     }
 
     public override void SetDefaults() {
@@ -51,6 +43,8 @@ sealed class NewMoneyBite : ModProjectile {
     public override bool CanHitPlayer(Player target) => Projectile.ai[2] != 0f && target.whoAmI == (int)Projectile.ai[0];
 
     public override void AI() {
+        Lighting.AddLight(Projectile.Center, NewMoneyBullet.BulletColor.ToVector3() * 0.5f);
+
         if (Projectile.ai[2] != 0f) {
             Projectile.friendly = false;
             Projectile.hostile = true;
@@ -101,11 +95,6 @@ sealed class NewMoneyBite : ModProjectile {
             origin = frameBox.Size() / 2;
             Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color, projectile.rotation,
                                   origin, scale, effects, 0);
-
-            if (_glowTexture?.IsLoaded == true) {
-                Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color * 0.9f, projectile.rotation,
-                                      origin, scale, effects, 0);
-            }
         }
 
         //Projectile.QuickDrawAnimated(color);
