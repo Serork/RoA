@@ -425,7 +425,7 @@ abstract class BaseForm : ModMount {
         }
     }
 
-    protected virtual Color GlowColor(Player player, Color drawColor, float progress) => Color.White * progress;
+    protected virtual Color GlowColor(Player player, Color drawColor, float progress) => Color.White * 0.9f * progress;
 
     protected virtual void GetSpriteEffects(Player player, ref SpriteEffects spriteEffects) {
         if (!ForcedChangeDirectionIfNeeded(player)) {
