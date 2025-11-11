@@ -2,6 +2,7 @@
 
 using RoA.Common.Configs;
 using RoA.Common.Druid;
+using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
@@ -15,6 +16,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
+[AutoloadGlowMask]
 sealed class NimbusRod : NatureItem {
     public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? base.Texture : $"Terraria/Images/Item_{ItemID.NimbusRod}";
 
