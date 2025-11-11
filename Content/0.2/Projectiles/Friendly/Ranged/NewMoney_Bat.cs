@@ -44,7 +44,7 @@ sealed class NewMoneyBat : ModProjectile {
 
     public override void AI() {
         if (Projectile.localAI[1] == 0f && Projectile.localAI[2] == 0f) {
-            Projectile.localAI[1] = 2.5f;
+            Projectile.localAI[1] = NewMoney.BITE_ANIMATIONTIME * 0.625f;
             Projectile.localAI[2] = 1f;
         }
         Lighting.AddLight(Projectile.Center, NewMoneyBullet.BulletColor.ToVector3() * 0.5f);
