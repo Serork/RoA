@@ -68,7 +68,7 @@ sealed class NewMoneyBite : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Color color = NewMoneyBullet.BulletColor;
-        color.A = (byte)(color.A * 0.75f);
+        color.A /= 2;
 
         Projectile projectile = Projectile;
         Texture2D mainTex = projectile.GetTexture();
