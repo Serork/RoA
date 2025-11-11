@@ -10,8 +10,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.Buffs;
 
 sealed class FlametrackerDebuff : ModBuff {
-    public override string Texture => ResourceManager.EmptyTexture;
-
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Hemorrhage");
         //Description.SetDefault("Losing life");
