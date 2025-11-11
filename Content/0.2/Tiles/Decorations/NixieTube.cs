@@ -8,6 +8,8 @@ using RoA.Common.UI;
 using RoA.Content.Tiles.Mechanisms;
 using RoA.Core.Utility;
 
+using System.Collections.Generic;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -133,10 +135,10 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
         AddMapEntry(new Color(153, 38, 0), CreateMapEntryName());
     }
 
+    public override bool CanDrop(int i, int j) => false;
+
     public override void KillMultiTile(int i, int j, int frameX, int frameY) {
-        if (frameX != 0 && frameY != 0) {
-            Terraria.Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j) * 16, ModContent.ItemType<Items.Placeable.Decorations.NixieTube>());
-        }
+        Terraria.Item.NewItem(new EntitySource_TileBreak(i, j), new Vector2(i, j) * 16, ModContent.ItemType<Items.Placeable.Decorations.NixieTube>());
     }
 
     public override bool HasSmartInteract(int i, int j, SmartInteractScanSettings settings) {
