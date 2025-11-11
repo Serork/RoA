@@ -9,6 +9,8 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
+using System;
+
 using Terraria;
 using Terraria.ModLoader;
 
@@ -57,7 +59,7 @@ sealed class NewMoneyBite : ModProjectile {
         if (Projectile.localAI[0]++ > NewMoney.BITE_FIRSTFRAMETIME && Projectile.frameCounter++ > NewMoney.BITE_ANIMATIONTIME) {
             Projectile.frameCounter = 0;
             Projectile.frame++;
-            if (Projectile.frame > Projectile.GetFrameCount()) {
+            if (Projectile.frame >= Projectile.GetFrameCount()) {
                 Projectile.Kill();
                 if (Projectile.IsOwnerLocal()) {
                     ProjectileUtils.SpawnPlayerOwnedProjectile<NewMoneyBat>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
@@ -71,10 +73,45 @@ sealed class NewMoneyBite : ModProjectile {
     public override bool ShouldUpdatePosition() => false;
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDrawAnimated(lightColor);
-        if (_glowTexture?.IsLoaded == true) {
-            Projectile.QuickDrawAnimated(Color.White * 0.9f, texture: _glowTexture.Value);
+        Color color = NewMoneyBullet.BulletColor;
+        color.A /= 2;
+
+        Projectile projectile = Projectile;
+        Texture2D mainTex = projectile.GetTexture();
+
+        int frameSize = mainTex.Height / Main.projFrames[projectile.type];
+        float progress = Projectile.localAI[0] / (NewMoney.BITE_FIRSTFRAMETIME * 1.5f);
+        int frame = (int)(progress * Main.projFrames[projectile.type]);
+        frame = Math.Min(frame, Main.projFrames[projectile.type]);
+        Rectangle frameBox = new(0, frameSize * (Main.projFrames[projectile.type] - frame), mainTex.Width, frameSize);
+        SpriteEffects effects = projectile.spriteDirection.ToSpriteEffects();
+        Vector2 origin = frameBox.Size() / 2;
+        float colorModifier = Utils.GetLerpValue(1.5f, 1.25f, progress, true);
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color * 0.5f * colorModifier, projectile.rotation,
+                      origin, projectile.scale * 2f * progress, effects, 0);
+
+
+        if (Projectile.localAI[0] >= NewMoney.BITE_FIRSTFRAMETIME) {
+            float scaleModifier = 1f + 1f - colorModifier;
+            float scale = Projectile.scale + scaleModifier * 0.1f;
+
+            frameSize = mainTex.Height / Main.projFrames[projectile.type];
+            frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
+            effects = projectile.spriteDirection.ToSpriteEffects();
+            origin = frameBox.Size() / 2;
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color, projectile.rotation,
+                                  origin, scale, effects, 0);
+
+            if (_glowTexture?.IsLoaded == true) {
+                Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color * 0.9f, projectile.rotation,
+                                      origin, scale, effects, 0);
+            }
         }
+
+        //Projectile.QuickDrawAnimated(color);
+        //if (_glowTexture?.IsLoaded == true) {
+        //    Projectile.QuickDrawAnimated(color * 0.9f, texture: _glowTexture.Value);
+        //}
 
         return false;
     }

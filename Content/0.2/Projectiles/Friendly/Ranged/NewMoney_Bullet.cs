@@ -5,6 +5,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.VisualEffects;
 using RoA.Content.Buffs;
+using RoA.Content.Dusts;
 using RoA.Content.VisualEffects;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -19,8 +20,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
 sealed class NewMoneyBullet : ModProjectile {
+    public static Color BulletColor => Color.Lerp(new Color(244, 76, 78), new Color(255, 128, 129), Helper.Wave(0f, 1f, 15f, 0f));
+
     public override void SetStaticDefaults() {
-        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4; // The length of old position to be recorded
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // The recording mode
     }
 
@@ -44,20 +47,34 @@ sealed class NewMoneyBullet : ModProjectile {
 
     public override void AI() {
         Lighting.AddLight(Projectile.Center, Color.Red.ToVector3() * 0.5f);
+
+        if (Main.rand.Next(3) == 0) {
+            int num179 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y) - Vector2.One, Projectile.width, Projectile.height, ModContent.DustType<NewMoneyDust>(),
+                Projectile.velocity.X, Projectile.velocity.Y, 100, default(Color), 0.8f + 0.2f * Main.rand.NextFloat());
+            Main.dust[num179].noLightEmittence = true;
+            Main.dust[num179].noGravity = true;
+            Main.dust[num179].velocity *= 0.25f;
+            Main.dust[num179].velocity *= Main.rand.NextFloat(0.75f, 1f);
+        }
     }
 
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = TextureAssets.Projectile[Type].Value;
 
+        Color baseColor = lightColor.MultiplyRGB(BulletColor);
+
         // Redraw the projectile with the color not influenced by light
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-        for (int k = 0; k < Projectile.oldPos.Length; k++) {
+        for (int k = 0; k < Projectile.oldPos.Length - 2; k++) {
             Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-            Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+            Color color = baseColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
             Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
         }
 
-        return true;
+        Main.EntitySpriteDraw(texture, Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY), 
+            null, baseColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+
+        return false;
     }
 
     public override void OnKill(int timeLeft) {
