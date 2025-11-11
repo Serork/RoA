@@ -79,7 +79,8 @@ sealed class ToxicFumesPlayer : ModPlayer {
 
     public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource) {
         if (toxicFumes && (int)damage == 10) {
-            damageSource = PlayerDeathReason.ByCustomReason(Player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.ToxicFumesDeathMessage{Main.rand.Next(4)}").Value);
+            damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.ToxicFumesDeathMessage{Main.rand.Next(4)}").ToNetworkText(Player.name));
+            //damageSource = PlayerDeathReason.ByCustomReason(Player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.ToxicFumesDeathMessage{Main.rand.Next(4)}").Value);
         }
 
         return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);

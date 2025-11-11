@@ -126,7 +126,7 @@ sealed class HunterProjectile2 : ModProjectile {
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource) {
             int? sourceProjectileType = damageSource.SourceProjectileType;
             if (sourceProjectileType.HasValue && sourceProjectileType == ModContent.ProjectileType<HunterProjectile2>()) {
-                damageSource = PlayerDeathReason.ByCustomReason(Player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.HunterRifle{Main.rand.Next(2)}").Value);
+                damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.HunterRifle{Main.rand.Next(2)}").ToNetworkText(Player.name));
             }
 
             return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);

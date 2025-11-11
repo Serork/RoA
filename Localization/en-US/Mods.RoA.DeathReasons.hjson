@@ -1,8 +1,28 @@
-ToxicFumesDeathMessage0: " forgot not to play with a thermometer."
-ToxicFumesDeathMessage1: "'s end was quick... silver."
-ToxicFumesDeathMessage2: " forgot a respirator."
-ToxicFumesDeathMessage3: " couldn't handle the toxicity."
-Root0: " is dead by daylight."
-Root1: " took a step too far."
-HunterRifle0: " became prey."
-HunterRifle1: " got hunted."
+ToxicFumesDeathMessage0: "{0} forgot not to play with a thermometer."
+ToxicFumesDeathMessage1: "{0}'s end was quick... silver."
+ToxicFumesDeathMessage2: "{0} forgot a respirator."
+ToxicFumesDeathMessage3: "{0} couldn't handle the toxicity."
+Root0: "{0} is dead by daylight."
+Root1: "{0} took a step too far."
+HunterRifle0: "{0} became prey."
+HunterRifle1: "{0} got hunted."
+
+// Died from Stalactites
+Stalactite0: ""
+Stalactite1: ""
+
+// Suffocated in Tar
+TarSuffocated0: ""
+TarSuffocated1: ""
+
+// Died from Tar Explosion
+TarExplosion0: ""
+TarExplosion1: ""
+
+// Burned down when on Tar
+TarDebuff0: ""
+TarDebuff1: ""
+
+// Died from Perfect Mimic
+PerfectMimic0: ""
+PerfectMimic1: ""

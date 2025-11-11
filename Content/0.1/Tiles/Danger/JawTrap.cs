@@ -56,7 +56,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
                 player.AddBuff(ModContent.BuffType<Root>(), ActivatedTimer / 2);
                 int num = 40;
                 num = Main.DamageVar(num, 0f - player.luck);
-                player.Hurt(PlayerDeathReason.ByCustomReason(player.name + Language.GetOrRegister($"Mods.RoA.DeathReasons.Root{Main.rand.Next(2)}").Value),
+                player.Hurt(PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.Root{Main.rand.Next(2)}").ToNetworkText(player.name)),
                     num, 0, cooldownCounter: 4);
                 player.AddBuff(BuffID.Bleeding, 600);
             }
