@@ -2302,7 +2302,8 @@ DruidsEyes: {
 	DisplayName: Druid's Eyes
 	Tooltip:
 		'''
-		Taking damage charges up wreath and increases wreath charge rate by 20%
+		Taking damage charges up wreath
+		Increases wreath charge rate by 20%
 		While wreath is charged, increases life regeneration
 		'''
 }
@@ -2327,7 +2328,7 @@ HiTechCattleProd: {
 	Tooltip:
 		'''
 		Consume a full wreath charge to tenderize foes into mulch
-		'From Earth to space and back to Earth'
+		'From Earth with love!'
 		'''
 }
 
@@ -2360,7 +2361,7 @@ RodOfTheBifrost: {
 	DisplayName: Rod Of The Bifrost
 	Tooltip:
 		'''
-		Calls pearlescent figures to fall from the sky
+		Calls opalescent figures to fall from the sky
 		Stack figures in a row or a column for a blast of light
 		'Blinded by my light!'
 		'''
@@ -2375,7 +2376,7 @@ NewMoney: {
 	DisplayName: New Money
 	Tooltip:
 		'''
-		Shoots bullets that build-up into a big burst of damage
+		Shoots armour-piercing bullets that eventually inflict a burst of damage onto foes
 		'Bleed for me.'
 		'''
 }
