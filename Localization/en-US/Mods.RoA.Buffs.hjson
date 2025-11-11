@@ -262,28 +262,28 @@ SunflowerBuff: {
 }
 
 AerialConcussion: {
-	DisplayName: Mods.RoA.Buffs.AerialConcussion.DisplayName
+	DisplayName: Equally Concussed
 	Description: Mods.RoA.Buffs.AerialConcussion.Description
 }
 
 EnduranceCloud1: {
-	DisplayName: Endurance Cloud1
+	DisplayName: Protective Mist
 	Description: Mods.RoA.Buffs.EnduranceCloud1.Description
 }
 
 EnduranceCloud2: {
-	DisplayName: Endurance Cloud2
+	DisplayName: Protective Cloud
 	Description: Mods.RoA.Buffs.EnduranceCloud2.Description
 }
 
 EnduranceCloud3: {
-	DisplayName: Endurance Cloud3
+	DisplayName: Protective Storm
 	Description: Mods.RoA.Buffs.EnduranceCloud3.Description
 }
 
 TarDebuff: {
 	DisplayName: Tar Debuff
-	Description: Mods.RoA.Buffs.TarDebuff.Description
+	Description: Movement is almost impossible
 }
 
 HallowEnt: {
@@ -308,10 +308,10 @@ Crystallized: {
 
 DeerSkullElectrified: {
 	DisplayName: Deer Skull Electrified
-	Description: Mods.RoA.Buffs.DeerSkullElectrified.Description
+	Description: Foes nearby are struck with bolts of lightning
 }
 
 NewMoneyDebuff: {
 	DisplayName: New Money Debuff
-	Description: Mods.RoA.Buffs.NewMoneyDebuff.Description
+	Description: Reaching full stacks has palpable consequences
 }

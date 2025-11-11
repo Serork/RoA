@@ -1900,7 +1900,7 @@ DruidSoul: {
 	Tooltip:
 		'''
 		Can be caught with a special bug net
-		'A spirit surrendered awaiting an ancient ritual'
+		'The spirit surrendered and awaits an ancient ritual'
 		'''
 }
 
@@ -1956,12 +1956,12 @@ SnowWreathTier3: {
 
 CavernCane: {
 	DisplayName: Cavern Cane
-	Tooltip: ""
+	Tooltip: Channel a geode that explodes into shrapnel
 }
 
 Macrolepiota: {
 	DisplayName: Macrolepiota
-	Tooltip: ""
+	Tooltip: Use it like an umbrella, to fall slowly and release stray spores
 }
 
 DruidEmblem: {
@@ -1971,7 +1971,7 @@ DruidEmblem: {
 
 LeafySeahorse: {
 	DisplayName: Leafy Seahorse
-	Tooltip: ""
+	Tooltip: Spews bubbles that merge together
 }
 
 FlamewardenHood: {
@@ -2036,12 +2036,16 @@ IceRod: {
 
 PerfectedBouquet: {
 	DisplayName: Perfected Bouquet
-	Tooltip: ""
+	Tooltip:
+		'''
+		Shoots a bouquet of soul-infused petals, each with a powerful effect
+		While wreath is charged, they cross-pollinate
+		'''
 }
 
 SacredAcalypha: {
 	DisplayName: Sacred Acalypha
-	Tooltip: ""
+	Tooltip: Shoots a hurricane of bright red petals
 }
 
 BottomlessTarBucket: {
@@ -2056,17 +2060,17 @@ MagicTarDropper: {
 
 FourPixels: {
 	DisplayName: Four Pixels
-	Tooltip: ""
+	Tooltip: "'N.F.A.'"
 }
 
 Him: {
 	DisplayName: Him
-	Tooltip: ""
+	Tooltip: "'N.F.A.'"
 }
 
 NightsShroud: {
 	DisplayName: Night's Shroud
-	Tooltip: ""
+	Tooltip: "'N.F.A.'"
 }
 
 TarfallBlock: {
@@ -2086,12 +2090,12 @@ SolidifiedTarWall: {
 
 SolidifiedTar: {
 	DisplayName: Solidified Tar
-	Tooltip: ""
+	Tooltip: 'It's all congealed by now'
 }
 
 MurkyCarcassBanner: {
 	DisplayName: Murky Carcass Banner
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.MurkyCarcass.DisplayName}"
 }
 
 TarDye: {
@@ -2101,27 +2105,27 @@ TarDye: {
 
 ClingerStaff: {
 	DisplayName: Clinger Staff
-	Tooltip: ""
+	Tooltip: Summons a clinger to blaze foes with cursed flames
 }
 
 Pixiellation: {
 	DisplayName: Pixiellation
-	Tooltip: ""
+	Tooltip: Pester foes with an onslaught of fairies
 }
 
 CrystalVileShard: {
 	DisplayName: Crystal Vile Shard
-	Tooltip: ""
+	Tooltip: "{$ItemTooltip.CrystalVileShard}"
 }
 
 NimbusRod: {
 	DisplayName: Nimbus Rod
-	Tooltip: ""
+	Tooltip: "{$ItemTooltip.NimbusRod}"
 }
 
 NettleBurst: {
 	DisplayName: Nettle Burst
-	Tooltip: ""
+	Tooltip: "{$ItemTooltip.NettleBurst}"
 }
 
 TarBomb: {
@@ -2141,7 +2145,11 @@ CarrionCane: {
 
 ToothFairy: {
 	DisplayName: Tooth Fairy
-	Tooltip: "'Rip and tear'"
+	Tooltip:
+		'''
+		Shoots calcific deposits that merge into an hungry eater
+		'Rip and tear'
+		'''
 }
 
 AerialConcussion: {
@@ -2160,12 +2168,12 @@ TarLiquidSensor: {
 
 NixieTube: {
 	DisplayName: Nixie Tube
-	Tooltip: ""
+	Tooltip: Displays letters, numbers and symbols and accepts wiring input
 }
 
 Crimsonest: {
 	DisplayName: Crimsonest
-	Tooltip: ""
+	Tooltip: Grows pustulas that erupt with flesh-eating insects
 }
 
 HallowedTopfhelm: {
@@ -2175,22 +2183,30 @@ HallowedTopfhelm: {
 
 SolScorchers: {
 	DisplayName: Sol Scorchers
-	Tooltip: "'Golden rays of the glorious sunshine'"
+	Tooltip:
+		'''
+		Consume a full wreath charge to scorch foes with a lesser sun
+		'Golden rays of the glorious sunshine'
+		'''
 }
 
 WardenOfTheWoods2Banner: {
 	DisplayName: Backwoods Warden Banner
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.WardenOfTheWoods2.DisplayName}"
 }
 
 WardenOfTheWoodsBanner: {
 	DisplayName: Woodlands Keeper Banner
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.WardenOfTheWoods.DisplayName}"
 }
 
 ShadowflameClaws: {
 	DisplayName: Shadowflame Claws
-	Tooltip: ""
+	Tooltip:
+		'''
+		Consume a full wreath charge bless foes with a shadowflame blossom
+		'To your grave I'll bring flowers'
+		'''
 }
 
 CarcassChestguard: {
@@ -2284,7 +2300,7 @@ StarFusion: {
 
 DruidsEyes: {
 	DisplayName: Druid's Eyes
-	Tooltip: ""
+	Tooltip: Taking damage charges up wreath
 }
 
 RodOfTheLustrous: {
@@ -2303,8 +2319,12 @@ FocusedTar: {
 }
 
 HiTechCattleProd: {
-	DisplayName: Hi Tech Cattle Prod
-	Tooltip: ""
+	DisplayName: Hi-Tech Cattle Prod
+	Tooltip:
+		'''
+		Consume a full wreath charge to tenderize foes into mulch
+		'From Earth to space and back to Earth'
+		'''
 }
 
 ElderSnailBanner: {
@@ -2314,17 +2334,17 @@ ElderSnailBanner: {
 
 MenhirBanner: {
 	DisplayName: Menhir Banner
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.Menhir.DisplayName}"
 }
 
 PerfectMimicBanner: {
 	DisplayName: Perfect Mimic Banner
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PerfectMimic.DisplayName}"
 }
 
 TarSlimeBanner: {
 	DisplayName: Tar Slime Banner
-	Tooltip: ""
+	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.TarSlime.DisplayName}"
 }
 
 HandOfGod: {
@@ -2334,15 +2354,24 @@ HandOfGod: {
 
 RodOfTheBifrost: {
 	DisplayName: Rod Of The Bifrost
-	Tooltip: ""
+	Tooltip:
+		'''
+		Calls pearlescent figures to fall from the sky
+		Stack figures in a row or a column for a blast of light
+		'Blinded by my light!'
+		'''
 }
 
 GlacierCane: {
 	DisplayName: Glacier Cane
-	Tooltip: ""
+	Tooltip: Channels a big icicle that shatters enemies like glass
 }
 
 NewMoney: {
 	DisplayName: New Money
-	Tooltip: ""
+	Tooltip:
+		'''
+		Shoots bullets that build-up into a big burst of damage
+		'Bleed for me.'
+		'''
 }
