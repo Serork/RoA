@@ -34,6 +34,8 @@ sealed class NewMoneyBite : ModProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = -1;
+
+        Projectile.ArmorPenetration = 10;
     }
 
     public override bool? CanDamage() => true;
