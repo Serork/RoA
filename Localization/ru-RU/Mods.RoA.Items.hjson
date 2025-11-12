@@ -2182,7 +2182,7 @@ ToothFairy: {
 }
 
 AerialConcussion: {
-	DisplayName: Небесное сотрясение
+	DisplayName: '''"Небесное сотрясение"'''
 	/* Tooltip:
 		'''
 		{$CommonItemTooltip.SummonTagDamage}
@@ -2319,7 +2319,7 @@ CrystallizedSkull: {
 }
 
 StarFusion: {
-	DisplayName: Слияние звезд
+	DisplayName: '''"Слияние звёзд"'''
 	Tooltip:
 		'''
 		Призывает созвездие при атаке
@@ -2402,7 +2402,7 @@ GlacierCane: {
 }
 
 NewMoney: {
-	DisplayName: Новые бабки
+	DisplayName: '''"Новые бабки"'''
 	Tooltip:
 		'''
 		Стреляет бронебойными пулями, которые со временем приносят большой всплеск урона врагам.
