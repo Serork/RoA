@@ -7,7 +7,6 @@ using RoA.Common;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
 using RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
-using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -18,7 +17,6 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 

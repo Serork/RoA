@@ -132,7 +132,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
 
                 //AI_GetMyGroupIndexAndFillBlackList(out int index, out _);
                 Player owner = Projectile.GetOwnerAsPlayer();
-                _index = owner.GetModPlayer<Crimsonest_AttackEncounter>().AttackCount;
+                _index = owner.GetModPlayer<Crimsonest.Crimsonest_AttackEncounter>().AttackCount;
                 if (_index > AMOUNTNEEDFORATTACK - 1) {
                     _index = 0;
                 }
@@ -253,7 +253,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                     break;
                 }
             }
-            if (timeLeft <= revealTime && (!canReveal || !owner.GetModPlayer<Crimsonest_AttackEncounter>().CanReveal)) {
+            if (timeLeft <= revealTime && (!canReveal || !owner.GetModPlayer<Crimsonest.Crimsonest_AttackEncounter>().CanReveal)) {
                 Projectile.timeLeft = (int)revealTime;
             }
             if (Projectile.timeLeft < revealTime) {

@@ -2384,3 +2384,8 @@ NewMoney: {
 		'Bleed for me.'
 		'''
 }
+
+DesertTendril: {
+	DisplayName: Desert Tendril
+	Tooltip: ""
+}

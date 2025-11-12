@@ -54,26 +54,26 @@ sealed class Crimsonest : NatureItem {
 
         return base.UseItem(player);
     }
-}
 
-sealed class Crimsonest_AttackEncounter : ModPlayer {
-    public int AttackCount;
-    public bool CanReveal;
+    public sealed class Crimsonest_AttackEncounter : ModPlayer {
+        public int AttackCount;
+        public bool CanReveal;
 
-    public override void ResetEffects() {
-        CanReveal = AttackCount >= Bloodly.AMOUNTNEEDFORATTACK - 1;
-        if (AttackCount >= Bloodly.AMOUNTNEEDFORATTACK) {
-            AttackCount = 0;
+        public override void ResetEffects() {
+            CanReveal = AttackCount >= Bloodly.AMOUNTNEEDFORATTACK - 1;
+            if (AttackCount >= Bloodly.AMOUNTNEEDFORATTACK) {
+                AttackCount = 0;
+            }
         }
-    }
 
-    public override void PostUpdate() {
-        if (Player.ownedProjectileCounts[ModContent.ProjectileType<Bloodly>()] <= 0) {
-            AttackCount = 0;
+        public override void PostUpdate() {
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<Bloodly>()] <= 0) {
+                AttackCount = 0;
+            }
         }
-    }
 
-    public override void OnEnterWorld() {
-        AttackCount = -1;
+        public override void OnEnterWorld() {
+            AttackCount = -1;
+        }
     }
 }

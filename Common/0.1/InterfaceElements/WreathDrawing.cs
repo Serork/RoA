@@ -387,7 +387,7 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         //void drawFilling(Rectangle sourceRectangle, float progress, float progress2, Vector2? offset = null, float opacity = 1f) {
         //    batch.End();
         //    batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
-        //    VerticalAppearanceShader.Progress = progress2;
+        //    VerticalAppearanceShader.ActualProgress = progress2;
         //    wreathSpriteData2.VisualPosition = position - Vector2.UnitY * frameOffsetY;
         //    wreathSpriteData2.Color = color * opacity;
         //    VerticalAppearanceShader.DrawColor = wreathSpriteData2.Color;
@@ -431,7 +431,7 @@ sealed class WreathDrawing2() : InterfaceElement(RoA.ModName + ": Wreath", Inter
         //    ref float mainFactor = ref storage.MainFactor;
         //    mainFactor = MathHelper.Lerp(mainFactor, factor, mainFactor < factor ? 0.1f : 0.025f);
         //    factor = mainFactor * stats.PulseIntensity;
-        //    VerticalAppearanceShader.Progress = progress2;
+        //    VerticalAppearanceShader.ActualProgress = progress2;
         //    wreathSpriteData2.Color = color * factor * opacity * 2f;
         //    wreathSpriteData2.Scale = factor + 0.475f;
         //    VerticalAppearanceShader.DrawColor = wreathSpriteData2.Color;
