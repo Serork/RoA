@@ -183,9 +183,13 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
             currentSegmentData.ActualProgress = Helper.Approach(currentSegmentData.ActualProgress, VineBodyInfo.MAXPROGRESS2, 0.5f);
             float progress3 = currentSegmentData.Progress3;
+            float progress2 = currentSegmentData.Progress2;
             Vector2 position = Projectile.Center + currentSegmentData.Position;
             bool active = currentSegmentData.Active;
-            if (active && progress3 > 0f && progress3 < 1f && Main.rand.NextBool()) {
+            if (!active) {
+                continue;
+            }
+            if (progress3 > 0f && progress3 < 1f && Main.rand.NextBool()) {
                 Dust dust = Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(20f, 20f), DustID.Sand);
                 dust.color = Color.Lerp(Color.White, new Color(100, 82, 58), Main.rand.NextFloat());
                 dust.velocity.Y = MathF.Abs(dust.velocity.Y);
@@ -194,7 +198,16 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 dust.fadeIn = Main.rand.NextFloat(0.25f);
                 dust.alpha = Main.rand.Next(100);
             }
-            if (active && currentSegmentData.ActualProgress >= VineBodyInfo.MAXPROGRESS2) {
+            if (progress2 > 0f && progress2 < 1f && Main.rand.NextChance(progress2 * 0.75f) && Main.rand.NextBool()) {
+                Dust dust = Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(20f, 20f), DustID.Sand);
+                dust.color = Color.Lerp(Color.White, new Color(100, 82, 58), Main.rand.NextFloat());
+                dust.velocity.Y = MathF.Abs(dust.velocity.Y);
+                dust.velocity.X *= 0.4f;
+                dust.velocity.Y *= Main.rand.NextFloat(1f, 7.5f);
+                dust.fadeIn = Main.rand.NextFloat(0.25f);
+                dust.alpha = Main.rand.Next(100);
+            }
+            if (currentSegmentData.ActualProgress >= VineBodyInfo.MAXPROGRESS2) {
                 // explosion effect
                 if (!Main.dedServ) {
                     int gore = Gore.NewGore(Projectile.GetSource_FromAI(), position - Vector2.UnitY * 6f + Main.rand.NextVector2Circular(10f, 10f),
@@ -202,6 +215,16 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Main.gore[gore].velocity *= 0.5f;
                     Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
                     Main.gore[gore].position -= new Vector2(Main.gore[gore].Width, Main.gore[gore].Height) / 2f;
+                }
+
+                for (int k = 0; k < 3; k++) {
+                    float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
+                    Dust dust = Main.dust[Dust.NewDust(position + Main.rand.NextVector2Circular(10f, 10f) * 0.75f, 
+                        0, 0, DustID.WoodFurniture, 0f, 0f, Main.rand.Next(50), Color.Lerp(new Color(100, 82, 58), default, 0.25f * Main.rand.NextFloat()), dustScale)];
+                    dust.noGravity = true;
+                    dust.fadeIn = 0.5f;
+                    dust.noLight = true;
+                    dust.velocity *= 0.5f;
                 }
 
                 currentSegmentData.Active = false;
