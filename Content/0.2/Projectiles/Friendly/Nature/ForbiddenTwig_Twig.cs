@@ -182,7 +182,7 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 continue;
             }
             float progress = i / (float)ActiveData.Count;
-            float slowValue = 0.5f + MathF.Max(0.5f, 1f - MathUtils.YoYo(progress));
+            float slowValue = 0.65f + MathF.Max(0.25f, 1f - MathUtils.YoYo(progress));
             if (currentSegmentData.Progress >= 1f) {
                 slowValue = 1f;
             }
