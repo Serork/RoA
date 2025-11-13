@@ -30,7 +30,8 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     public struct VineBodyInfo() {
         public static float MAXPROGRESS => 30f;
-        public static float MAXPROGRESS2 => MAXPROGRESS + 10f;
+        public static float SANDFALLSTATETIME => MAXPROGRESS;
+        public static float MAXPROGRESS2 => MAXPROGRESS + SANDFALLSTATETIME;
 
         public enum VineBodyType : byte {
             End,
@@ -203,7 +204,6 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                     nextPosition = nextVineBodyInfo.Position;
             float rotation = position.DirectionTo(nextPosition).ToRotation() + MathHelper.PiOver2;
             Vector2 scale = Vector2.One;
-
             Color color = Color.White;
             batch.Draw(body3Texture, Projectile.Center + position, DrawInfo.Default with {
                 Clip = clip,
@@ -229,20 +229,20 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Scale = scale,
                 Color = color * (1f - currentVineBodyInfo.Progress2)
             });
-
             uint seed = (uint)(position.GetHashCode() * 100 + Projectile.whoAmI);
             float randomValue = MathUtils.PseudoRandRange(ref seed, 0.625f, 1f);
             Rectangle sandfallClip = new(0, (int)(SandfallProgress + i * 138 + Projectile.whoAmI) % 138, sandfallTexture.Width, 138);
-            float num = 400f * randomValue;
+            float num = MathF.Abs(Projectile.Center.Y - (Projectile.Center + position).Y) * randomValue * 2f;
             Vector2 sandfallScale = new(Projectile.scale, (float)((double)num / sandfallTexture.Height));
             float sandfallRotation = 0f;
             Vector2 sandfallOrigin = sandfallClip.TopCenter();
-            Color sandfallColor = new Color(212, 192, 100) * 0.75f * currentVineBodyInfo.Progress4;
+            Color sandfallColor = new Color(212, 192, 100) * 0.75f * currentVineBodyInfo.Progress4 * currentVineBodyInfo.Progress5;
             batch.DrawWithSnapshot(() => {
                 Effect sandfallShader = ShaderLoader.Sandfall.Value;
                 sandfallShader.Parameters["borderTop"].SetValue(0.05f + 0.95f * (1f - currentVineBodyInfo.Progress5));
                 sandfallShader.Parameters["borderBottom"].SetValue(0.25f);
                 sandfallShader.Parameters["uColor"].SetValue(sandfallColor.ToVector3());
+                sandfallShader.Parameters["uOpacity"].SetValue(1f);
                 sandfallShader.Parameters["uSourceRect"].SetValue(new Vector4(sandfallClip.X / (float)sandfallTexture.Width,
                                                                               sandfallClip.Y / (float)sandfallTexture.Height,
                                                                               sandfallClip.Width / (float)sandfallTexture.Width,

@@ -187,7 +187,7 @@ sealed class ShaderLoader : ModSystem {
     public static ArmorShaderData WreathDyeShaderData { get; private set; } = null!;
 
     public static Asset<Effect> TarDye => _loadedShaders["TarDye"];
-    public static Asset<Effect> WreathDye => _loadedShaders["WreathDye"];
+    public static Asset<Effect> Wreath => _loadedShaders["Wreath"];
     public static Asset<Effect> MetaballEdgeShader => _loadedShaders["MetaballEdgeShader"];
     public static Asset<Effect> TarBorder => _loadedShaders["TarBorder"];
     public static Asset<Effect> Sandfall => _loadedShaders["Sandfall"];
@@ -245,7 +245,7 @@ sealed class ShaderLoader : ModSystem {
         load01Shaders();
         load02Shaders();
 
-        WreathDyeShaderData = new WreathDyeArmorShaderData(ShaderLoader.WreathDye, "WreathDyePass");
+        WreathDyeShaderData = new WreathDyeArmorShaderData(ShaderLoader.Wreath, "WreathDyePass");
     }
 
     public override void OnModUnload() {

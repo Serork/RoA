@@ -7,7 +7,7 @@
 
 //namespace RoA.Content.Items.Dyes;
 
-//sealed class WreathDye : ItemIcon {
+//sealed class Wreath : ItemIcon {
 //    public override void SetStaticDefaults() {
 //        if (!Main.dedServ) {
 //            GameShaders.Armor.BindShader(Type, ShaderLoader.WreathDyeShaderData);
