@@ -173,7 +173,8 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
-        for (int i = 0; i < _bodyData.Length; i++) {
+        int length2 = _bodyData.Length;
+        for (int i = 0; i < length2; i++) {
             int currentSegmentIndex = i,
                 previousSegmentIndex = Math.Max(0, i - 1);
             ref VineBodyInfo currentSegmentData = ref _bodyData[currentSegmentIndex],
@@ -181,6 +182,8 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (currentSegmentIndex > 0 && previousSegmentData.ActualProgress < 1f) {
                 continue;
             }
+            float progress = i / (float)length2;
+            float slowValue = MathF.Max(0.5f, 1f - MathUtils.YoYo(progress));
             currentSegmentData.ActualProgress = Helper.Approach(currentSegmentData.ActualProgress, VineBodyInfo.MAXPROGRESS2, 0.5f);
             float progress3 = currentSegmentData.Progress3;
             float progress2 = currentSegmentData.Progress2;
