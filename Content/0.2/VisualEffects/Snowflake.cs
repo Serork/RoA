@@ -57,7 +57,10 @@ sealed class Snowflake : VisualEffect<Snowflake> {
                 Velocity.Y = Math.Min(10f, Velocity.Y);
             }
 
-            Position.X += Helper.Wave(-1f, 1f, 5f, _seed) * Velocity.Length();
+            float velocityX = Helper.Wave(-1f, 1f, 5f, _seed) * Velocity.Length();
+            Position.X += velocityX;
+
+            Rotation += velocityX * 0.025f;
         }
 
         Position += Velocity;
