@@ -17,7 +17,7 @@ sealed class ForbiddenTwig : NatureItem {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(38, 42);
         Item.SetWeaponValues(30, 5f);
-        Item.SetUsableValues(ItemUseStyleID.Shoot, 40, autoReuse: true, showItemOnUse: false);
+        Item.SetUsableValues(ItemUseStyleID.Shoot, 40, autoReuse: true);
         Item.SetShootableValues((ushort)ModContent.ProjectileType<Projectiles.Friendly.Nature.ForbiddenTwig>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice());
 
