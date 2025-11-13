@@ -19,8 +19,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 
-using static tModPorter.ProgressUpdate;
-
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
@@ -182,9 +180,12 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (currentSegmentIndex > 0 && previousSegmentData.ActualProgress < 1f) {
                 continue;
             }
-            float progress = i / (float)length2;
-            float slowValue = MathF.Max(0.5f, 1f - MathUtils.YoYo(progress));
-            currentSegmentData.ActualProgress = Helper.Approach(currentSegmentData.ActualProgress, VineBodyInfo.MAXPROGRESS2, 0.5f);
+            float progress = i / (float)ActiveData.Count;
+            float slowValue = 0.5f + MathF.Max(0.5f, 1f - MathUtils.YoYo(progress));
+            if (currentSegmentData.Progress >= 1f) {
+                slowValue = 1f;
+            }
+            currentSegmentData.ActualProgress = Helper.Approach(currentSegmentData.ActualProgress, VineBodyInfo.MAXPROGRESS2, 0.5f * slowValue);
             float progress3 = currentSegmentData.Progress3;
             float progress2 = currentSegmentData.Progress2;
             Vector2 position = Projectile.Center + currentSegmentData.Position;
