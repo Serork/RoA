@@ -198,7 +198,7 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 dust.fadeIn = Main.rand.NextFloat(0.25f);
                 dust.alpha = Main.rand.Next(100);
             }
-            if (progress2 > 0f && progress2 < 1f && Main.rand.NextChance(progress2 * 0.75f) && Main.rand.NextBool()) {
+            if (progress2 > 0f && progress2 < 1f && Main.rand.NextChance(progress2 * 0.5f) && Main.rand.NextBool()) {
                 Dust dust = Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(20f, 20f), DustID.Sand);
                 dust.color = Color.Lerp(Color.White, new Color(100, 82, 58), Main.rand.NextFloat());
                 dust.velocity.Y = MathF.Abs(dust.velocity.Y);
