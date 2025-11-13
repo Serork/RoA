@@ -35,10 +35,12 @@ sealed class WreathHandler : ModPlayer {
     public static ushort GETHITEFFECTTIME => 30;
 
     public override void UpdateDead() {
+        CommonUpdate(); 
         if (_shouldDecrease || CurrentResource <= 0) {
             return;
         }
         ForcedHardReset2();
+        _dontPlayStaySound = true;
     }
 
     public static Color GetArmorGlowColor1(Player player, Color baseColor, float progress = -1f, byte a = 255) {
@@ -329,17 +331,23 @@ sealed class WreathHandler : ModPlayer {
     internal void ForcedHardReset() {
         StartSlowlyIncreasingUntilFull = false;
         StartSlowlyIncreasingUntilFull2 = false;
+        ChargedBySlowFill = ShouldKeepSlowFill2 = false;
         Reset();
         OnResetEffects();
         OnWreathReset?.Invoke();
+        _addExtraValue = _boost = 0;
     }
 
 
     internal void ForcedHardReset2() {
         StartSlowlyIncreasingUntilFull = false;
         StartSlowlyIncreasingUntilFull2 = false;
-        Reset();
-        OnResetEffects();
+        ChargedBySlowFill = ShouldKeepSlowFill2 = false;
+        if (!_dontPlayStaySound) {
+            OnResetEffects();
+        }
+        _addExtraValue = _boost = 0;
+        Reset(noEffects: _dontPlayStaySound);
         if (_stayTime != 0f) {
             Dusts_ResetStayTime();
             _stayTime = 0f;
@@ -544,22 +552,25 @@ sealed class WreathHandler : ModPlayer {
             Reset(true);
             OnResetEffects();
         }
+        if (!IsEmpty || Player.GetFormHandler().IsInADruidicForm || ChargedBySlowFill) {
+            _showForTime = SHOWTIMEBEFOREDISAPPEARING;
+        }
+        CommonUpdate();
+        if (Player.dead && !IsChangingValue && CurrentResource > 0) {
+            ForcedHardReset();
+        }
+    }
+
+    private void CommonUpdate() {
         if (IsEmpty && CannotToggleOrGetWreathCharge) {
             CannotToggleOrGetWreathCharge = false;
             ChargedBySlowFill = false;
-        }
-        if (!IsEmpty || Player.GetFormHandler().IsInADruidicForm || ChargedBySlowFill) {
-            _showForTime = SHOWTIMEBEFOREDISAPPEARING;
         }
         if (_showForTime > 0) {
             _showForTime--;
         }
         GetHitTimer = (ushort)Helper.Approach(GetHitTimer, 0, 1);
-        ShouldDrawItself = _showForTime > 0 /* || Player.GetFormHandler().HasDruidArmorSet*/; 
-        if (Player.dead && !IsChangingValue && CurrentResource > 0) {
-            ForcedHardReset();
-        }
-
+        ShouldDrawItself = _showForTime > 0 /* || Player.GetFormHandler().HasDruidArmorSet*/;
         YAdjustAmountInPixels = 0;
     }
 
