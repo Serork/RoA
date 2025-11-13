@@ -190,6 +190,7 @@ sealed class ShaderLoader : ModSystem {
     public static Asset<Effect> WreathDye => _loadedShaders["WreathDye"];
     public static Asset<Effect> MetaballEdgeShader => _loadedShaders["MetaballEdgeShader"];
     public static Asset<Effect> TarBorder => _loadedShaders["TarBorder"];
+    public static Asset<Effect> Sandfall => _loadedShaders["Sandfall"];
 
     public override void OnModLoad() {
         if (Main.dedServ) {
