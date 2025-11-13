@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
@@ -11,7 +10,6 @@ using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
-using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +17,9 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.Graphics.Shaders;
+using Terraria.ID;
+
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -92,9 +92,33 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
 
+        Projectile.friendly = true;
+
+        Projectile.penetrate = -1;
+
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.manualDirectionChange = true;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 2;
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        foreach (VineBodyInfo bodyInfo in ActiveData) {
+            float progress3 = MathUtils.Clamp01(bodyInfo.Progress3 * 2f);
+            Vector2 position = bodyInfo.Position;
+            float height = MathF.Abs(Projectile.Center.Y - (Projectile.Center + position).Y) * progress3 * 1.5f;
+            position.Y += height;
+            position += Projectile.Center;
+            if (progress3 > 0f && progress3 < 1f) {
+                if (GeometryUtils.CenteredSquare(position, (int)(50 * MathUtils.YoYo(progress3))).Intersects(targetHitbox)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public override void AI() {
@@ -107,15 +131,17 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
             SandfallProgress = 0f;
         }
 
+        float stepLength = 22f;
         if (!Init) {
             Init = true;
+
+            Projectile.position.Y = owner.Bottom.Y;
 
             Projectile.direction = owner.direction;
 
             Vector2 position = Vector2.Zero,
                     startPosition = position;
             _bodyData = new VineBodyInfo[BODYCOUNT];
-            float stepLength = 22f;
             int direction = Projectile.direction;
             float startAngle = MathHelper.Pi * direction;
             float angleStepLength = 0.2f;
@@ -156,8 +182,27 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 continue;
             }
             currentSegmentData.ActualProgress = Helper.Approach(currentSegmentData.ActualProgress, VineBodyInfo.MAXPROGRESS2, 0.5f);
-            if (currentSegmentData.Active && currentSegmentData.ActualProgress >= VineBodyInfo.MAXPROGRESS2) {
+            float progress3 = currentSegmentData.Progress3;
+            Vector2 position = Projectile.Center + currentSegmentData.Position;
+            bool active = currentSegmentData.Active;
+            if (active && progress3 > 0f && progress3 < 1f && Main.rand.NextBool()) {
+                Dust dust = Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(20f, 20f), DustID.Sand);
+                dust.color = Color.Lerp(Color.White, new Color(100, 82, 58), Main.rand.NextFloat());
+                dust.velocity.Y = MathF.Abs(dust.velocity.Y);
+                dust.velocity.X *= 0.4f;
+                dust.velocity.Y *= Main.rand.NextFloat(1f, 7.5f);
+                dust.fadeIn = Main.rand.NextFloat(0.25f);
+                dust.alpha = Main.rand.Next(100);
+            }
+            if (active && currentSegmentData.ActualProgress >= VineBodyInfo.MAXPROGRESS2) {
                 // explosion effect
+                if (!Main.dedServ) {
+                    int gore = Gore.NewGore(Projectile.GetSource_FromAI(), position - Vector2.UnitY * 6f + Main.rand.NextVector2Circular(10f, 10f),
+                        Vector2.Zero, $"ForbiddenTwig{(byte)currentSegmentData.BodyType + 1}".GetGoreType());
+                    Main.gore[gore].velocity *= 0.5f;
+                    Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+                    Main.gore[gore].position -= new Vector2(Main.gore[gore].Width, Main.gore[gore].Height) / 2f;
+                }
 
                 currentSegmentData.Active = false;
             }
@@ -204,8 +249,9 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                     nextPosition = nextVineBodyInfo.Position;
             float rotation = position.DirectionTo(nextPosition).ToRotation() + MathHelper.PiOver2;
             Vector2 scale = Vector2.One;
-            Color color = Color.White;
-            batch.Draw(body3Texture, Projectile.Center + position, DrawInfo.Default with {
+            Vector2 drawPosition = Projectile.Center + position;
+            Color color = Lighting.GetColor(drawPosition.ToTileCoordinates());
+            batch.Draw(body3Texture, drawPosition, DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation + MathHelper.Pi,
@@ -213,7 +259,7 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Scale = scale,
                 Color = color * currentVineBodyInfo.Progress3
             });
-            batch.Draw(body2Texture, Projectile.Center + position, DrawInfo.Default with {
+            batch.Draw(body2Texture, drawPosition, DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation + MathHelper.Pi,
@@ -221,7 +267,7 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Scale = scale,
                 Color = color * (1f - currentVineBodyInfo.Progress3)
             });
-            batch.Draw(bodyTexture, Projectile.Center + position, DrawInfo.Default with {
+            batch.Draw(bodyTexture, drawPosition, DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation + MathHelper.Pi,
@@ -230,13 +276,15 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Color = color * (1f - currentVineBodyInfo.Progress2)
             });
             uint seed = (uint)(position.GetHashCode() * 100 + Projectile.whoAmI);
-            float randomValue = MathUtils.PseudoRandRange(ref seed, 0.625f, 1f);
+            float randomValue = MathUtils.PseudoRandRange(ref seed, 0.625f, 1f),
+                  randomValue2 = MathUtils.PseudoRandRange(ref seed, 0f, 1f);
             Rectangle sandfallClip = new(0, (int)(SandfallProgress + i * 138 + Projectile.whoAmI) % 138, sandfallTexture.Width, 138);
-            float num = MathF.Abs(Projectile.Center.Y - (Projectile.Center + position).Y) * randomValue * 2f;
+            float num = MathF.Abs(Projectile.Center.Y - (Projectile.Center + position).Y) * randomValue * 2.5f;
             Vector2 sandfallScale = new(Projectile.scale, (float)((double)num / sandfallTexture.Height));
             float sandfallRotation = 0f;
             Vector2 sandfallOrigin = sandfallClip.TopCenter();
-            Color sandfallColor = new Color(212, 192, 100) * 0.75f * currentVineBodyInfo.Progress4 * currentVineBodyInfo.Progress5;
+            Color sandfallColor = Color.Lerp(new Color(212, 192, 100), new Color(100, 82, 58), randomValue2) * 1f * currentVineBodyInfo.Progress4 * currentVineBodyInfo.Progress5;
+            sandfallColor = color.MultiplyRGB(sandfallColor);
             batch.DrawWithSnapshot(() => {
                 Effect sandfallShader = ShaderLoader.Sandfall.Value;
                 sandfallShader.Parameters["borderTop"].SetValue(0.05f + 0.95f * (1f - currentVineBodyInfo.Progress5));
@@ -248,7 +296,7 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                                                                               sandfallClip.Width / (float)sandfallTexture.Width,
                                                                               sandfallClip.Height / (float)sandfallTexture.Height));
                 sandfallShader.CurrentTechnique.Passes[0].Apply();
-                batch.Draw(sandfallTexture, Projectile.Center + position, DrawInfo.Default with {
+                batch.Draw(sandfallTexture, drawPosition, DrawInfo.Default with {
                     Clip = sandfallClip,
                     Origin = sandfallOrigin,
                     Rotation = sandfallRotation,
