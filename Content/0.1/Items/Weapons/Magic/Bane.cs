@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-[AutoloadGlowMask(shouldApplyItemAlpha: true)]
+[AutoloadGlowMask(185, 185, 185, shouldApplyItemAlpha: true)]
 sealed class Bane : ModItem {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Bane");

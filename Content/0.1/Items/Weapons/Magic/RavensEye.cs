@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(185, 185, 185)]
 sealed class RavensEye : ModItem {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Raven's Eye");

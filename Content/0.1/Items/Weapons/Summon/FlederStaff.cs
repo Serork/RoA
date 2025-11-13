@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.GlowMasks;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -7,6 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Summon;
 
+[AutoloadGlowMask(127, 127, 127)]
 sealed class FlederStaff : ModItem {
     public override void SetStaticDefaults() {
         ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true;

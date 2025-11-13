@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Ranged;
 
-[AutoloadGlowMask]
+[AutoloadGlowMask(127, 127, 127)]
 sealed class ChemicalPrisoner : ModItem {
     public override void SetStaticDefaults() {
         // Tooltip.SetDefault("");
