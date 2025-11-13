@@ -220,11 +220,11 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 for (int k = 0; k < 3; k++) {
                     float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
                     Dust dust = Main.dust[Dust.NewDust(position + Main.rand.NextVector2Circular(10f, 10f) * 0.75f, 
-                        0, 0, DustID.WoodFurniture, 0f, 0f, Main.rand.Next(50), Color.Lerp(new Color(100, 82, 58), default, 0.25f * Main.rand.NextFloat()), dustScale)];
+                        0, 0, DustID.WoodFurniture, 0f, 0f, Main.rand.Next(100), Color.Lerp(new Color(100, 82, 58), default, 0.25f * Main.rand.NextFloat()), dustScale)];
                     dust.noGravity = true;
                     dust.fadeIn = 0.5f;
                     dust.noLight = true;
-                    dust.velocity *= 0.5f;
+                    dust.velocity *= Main.rand.NextFloat(0.5f, 1f);
                 }
 
                 currentSegmentData.Active = false;
