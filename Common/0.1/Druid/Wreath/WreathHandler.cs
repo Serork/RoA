@@ -556,9 +556,6 @@ sealed class WreathHandler : ModPlayer {
             _showForTime = SHOWTIMEBEFOREDISAPPEARING;
         }
         CommonUpdate();
-        if (Player.dead && !IsChangingValue && CurrentResource > 0) {
-            ForcedHardReset();
-        }
     }
 
     private void CommonUpdate() {
