@@ -2385,7 +2385,7 @@ NewMoney: {
 		'''
 }
 
-DesertTendril: {
-	DisplayName: Desert Tendril
+ForbiddenTwig: {
+	DisplayName: Forbidden Twig
 	Tooltip: ""
 }

@@ -18,16 +18,13 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
-
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class DesertTendrilVine : NatureProjectile_NoTextureLoad, IRequestAssets {
+sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static byte BODYCOUNT => 100;
     private static ushort TIMELEFT => (ushort)MathUtils.SecondsToFrames(5);
-    private static byte BODYFRAMECOUNT => 5;
+    private static byte BODYFRAMECOUNT => 4;
 
     public struct VineBodyInfo() {
         public static float MAXPROGRESS => 20f;
@@ -36,12 +33,12 @@ sealed class DesertTendrilVine : NatureProjectile_NoTextureLoad, IRequestAssets 
             End,
             Mid1,
             Mid2,
-            Mid3,
             Start
         }
 
         public VineBodyType BodyType;
         public Vector2 Position;
+        public bool Flip;
         public float ActualProgress;
 
         public bool Active {
@@ -71,11 +68,15 @@ sealed class DesertTendrilVine : NatureProjectile_NoTextureLoad, IRequestAssets 
     public List<VineBodyInfo> ActiveData => [.. _bodyData.Where(x => x.Active)];
 
     public enum DesertTendrilVineRequstedTextureType : byte {
-        Vine
+        Twig1,
+        Twig2,
+        Twig3
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
-        [((byte)DesertTendrilVineRequstedTextureType.Vine, ResourceManager.NatureProjectileTextures + "DesertTendril_Vine")];
+        [((byte)DesertTendrilVineRequstedTextureType.Twig1, ResourceManager.NatureProjectileTextures + "ForbiddenTwig1"),
+         ((byte)DesertTendrilVineRequstedTextureType.Twig2, ResourceManager.NatureProjectileTextures + "ForbiddenTwig2"),
+         ((byte)DesertTendrilVineRequstedTextureType.Twig3, ResourceManager.NatureProjectileTextures + "ForbiddenTwig3")];
 
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(10);
@@ -103,16 +104,17 @@ sealed class DesertTendrilVine : NatureProjectile_NoTextureLoad, IRequestAssets 
             Vector2 position = Vector2.Zero,
                     startPosition = position;
             _bodyData = new VineBodyInfo[BODYCOUNT];
-            float stepLength = 16f;
+            float stepLength = 22f;
             int direction = Projectile.direction;
             float startAngle = MathHelper.Pi * direction;
-            float angleStepLength = 0.15f;
+            float angleStepLength = 0.2f;
             int length = _bodyData.Length;
             for (int i = 0; i < length; i++) {
                 bool first = i < 2;
                 _bodyData[i] = new VineBodyInfo() {
                     Position = position,
-                    BodyType = first ? VineBodyInfo.VineBodyType.Start : Main.rand.GetRandomEnumValue<VineBodyInfo.VineBodyType>(1, 1)
+                    BodyType = first ? VineBodyInfo.VineBodyType.Start : Main.rand.GetRandomEnumValue<VineBodyInfo.VineBodyType>(1, 1),
+                    Flip = Main.rand.NextBool()
                 };
                 float angleTo = MathHelper.Pi * 2f * direction;
                 float progress = (MathF.Abs(startAngle) - MathHelper.Pi) / (MathF.Abs(angleTo) - MathHelper.Pi);
@@ -144,16 +146,7 @@ sealed class DesertTendrilVine : NatureProjectile_NoTextureLoad, IRequestAssets 
             }
             currentSegmentData.ActualProgress = Helper.Approach(currentSegmentData.ActualProgress, VineBodyInfo.MAXPROGRESS, 0.5f);
             if (currentSegmentData.Active && currentSegmentData.Progress2 >= 1f) {
-
                 // explosion effect
-
-                if (i % 2 == 0 && Projectile.IsOwnerLocal()) {
-                    ProjectileUtils.SpawnPlayerOwnedProjectile<SandExplosion>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_FromAI()) {
-                        Position = Projectile.Center + Main.rand.RandomPointInArea(4f) + currentSegmentData.Position,
-                        Damage = Projectile.damage,
-                        KnockBack = Projectile.knockBack
-                    });
-                }
 
                 currentSegmentData.Active = false;
             }
@@ -167,11 +160,11 @@ sealed class DesertTendrilVine : NatureProjectile_NoTextureLoad, IRequestAssets 
     }
 
     protected override void Draw(ref Color lightColor) {
-        if (!AssetInitializer.TryGetRequestedTextureAssets<DesertTendrilVine>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+        if (!AssetInitializer.TryGetRequestedTextureAssets<ForbiddenTwig>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return;
         }
 
-        Texture2D bodyTexture = indexedTextureAssets[(byte)DesertTendrilVineRequstedTextureType.Vine].Value;
+        Texture2D bodyTexture = indexedTextureAssets[(byte)DesertTendrilVineRequstedTextureType.Twig1].Value;
         SpriteBatch batch = Main.spriteBatch;
         List<VineBodyInfo> data = ActiveData;
         int count = data.Count;
@@ -185,6 +178,9 @@ sealed class DesertTendrilVine : NatureProjectile_NoTextureLoad, IRequestAssets 
             }
             byte currentFrame = (byte)currentVineBodyInfo.BodyType;
             SpriteEffects effects = SpriteEffects.FlipVertically;
+            if (currentVineBodyInfo.Flip) {
+                effects |= SpriteEffects.FlipHorizontally;
+            }
             Rectangle clip = frame.With(0, currentFrame).GetSourceRectangle(bodyTexture);
             Vector2 origin = clip.Centered();
             int progressHeight = (int)(initialHeight * currentVineBodyInfo.Progress);
@@ -192,9 +188,7 @@ sealed class DesertTendrilVine : NatureProjectile_NoTextureLoad, IRequestAssets 
             Vector2 position = currentVineBodyInfo.Position,
                     nextPosition = nextVineBodyInfo.Position;
             float rotation = position.DirectionTo(nextPosition).ToRotation() + MathHelper.PiOver2;
-            float waveRotation = 0.2f;
-            rotation += MathF.Sin(WaveRotationFactor) * waveRotation * MathUtils.YoYo(i / (float)(count - 1));
-            Vector2 scale = Vector2.One * (1f + 0.25f * currentVineBodyInfo.Progress2);
+            Vector2 scale = Vector2.One;
             batch.Draw(bodyTexture, Projectile.Center + position, DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
