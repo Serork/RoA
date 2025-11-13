@@ -125,7 +125,7 @@ sealed class LuminousFlower : ModTile {
         float[] lengths = new float[Main.CurrentFrameFlags.ActivePlayersCount];
         for (int k = 0; k < Main.CurrentFrameFlags.ActivePlayersCount; k++) {
             Player player = Main.player[k];
-            if (!player.active || player.dead) {
+            if (!player.active) {
                 continue;
             }
             lengths[k] = player.Distance(new Point(i, j).ToWorldCoordinates());

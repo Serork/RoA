@@ -93,7 +93,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         var storage = player.GetModPlayer<ValuesStorage>();
         ref Vector2 oldPosition = ref storage.OldPosition;
         playerPosition.Y += breathUI ? (float)(-(float)offsetY * ((player.breathMax - 1) / 200 + 1)) : -offsetY;
-        if (player.dead || player.ghost || player.ShouldNotDraw || !stats.ShouldDrawItself) {
+        if (/*player.dead || */player.ghost || player.ShouldNotDraw || !stats.ShouldDrawItself) {
             oldPosition = playerPosition;
 
             return;
@@ -247,19 +247,21 @@ sealed class WreathDrawing : PlayerDrawLayer {
         }
 
         // on hit special visuals 
-        batch.DrawWithSnapshot(() => {
-            wreathSpriteData = wreathSpriteData.Framed(1, 0);
-            int fluff = WreathHandler.GETHITEFFECTTIME / 4;
-            float opacity = Utils.GetLerpValue(0, fluff, stats.GetHitTimer, true) * Utils.GetLerpValue(WreathHandler.GETHITEFFECTTIME, WreathHandler.GETHITEFFECTTIME - fluff, stats.GetHitTimer, true);
-            wreathSpriteData.Color = Color.White * opacity;
-            wreathSpriteData.VisualPosition = position;
-            wreathSpriteData.Rotation = rotation;
-            wreathSpriteData.Scale = 1f + 0.1f * opacity;
-            ShaderLoader.WreathDyeShaderData.UseSaturation(opacity * 2f);
-            ShaderLoader.WreathDyeShaderData.UseColor(new Color(57, 197, 71));
-            ShaderLoader.WreathDyeShaderData.Apply(player, wreathSpriteData.AsDrawData());
-            wreathSpriteData.DrawSelf();
-        }, sortMode: SpriteSortMode.Immediate);
+        if (player.GetDruidStats().IsDruidsEyesEffectActive) {
+            batch.DrawWithSnapshot(() => {
+                wreathSpriteData = wreathSpriteData.Framed(1, 0);
+                int fluff = WreathHandler.GETHITEFFECTTIME / 4;
+                float opacity = Utils.GetLerpValue(0, fluff, stats.GetHitTimer, true) * Utils.GetLerpValue(WreathHandler.GETHITEFFECTTIME, WreathHandler.GETHITEFFECTTIME - fluff, stats.GetHitTimer, true);
+                wreathSpriteData.Color = Color.White * opacity;
+                wreathSpriteData.VisualPosition = position;
+                wreathSpriteData.Rotation = rotation;
+                wreathSpriteData.Scale = 1f + 0.1f * opacity;
+                ShaderLoader.WreathDyeShaderData.UseSaturation(opacity * 2f);
+                ShaderLoader.WreathDyeShaderData.UseColor(new Color(57, 197, 71));
+                ShaderLoader.WreathDyeShaderData.Apply(player, wreathSpriteData.AsDrawData());
+                wreathSpriteData.DrawSelf();
+            }, sortMode: SpriteSortMode.Immediate);
+        }
 
         // adapted vanilla
         Microsoft.Xna.Framework.Rectangle mouseRectangle = new Microsoft.Xna.Framework.Rectangle((int)((float)Main.mouseX + Main.screenPosition.X), (int)((float)Main.mouseY + Main.screenPosition.Y), 1, 1);

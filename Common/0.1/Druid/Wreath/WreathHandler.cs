@@ -34,6 +34,13 @@ sealed class WreathHandler : ModPlayer {
     private static ushort SHOWTIMEBEFOREDISAPPEARING => 120;
     public static ushort GETHITEFFECTTIME => 30;
 
+    public override void UpdateDead() {
+        if (_shouldDecrease || CurrentResource <= 0) {
+            return;
+        }
+        ForcedHardReset2();
+    }
+
     public static Color GetArmorGlowColor1(Player player, Color baseColor, float progress = -1f, byte a = 255) {
         if (progress < 0f || progress > 1f) {
             progress = GetWreathChargeProgress_ForArmorGlow(player);
@@ -325,6 +332,19 @@ sealed class WreathHandler : ModPlayer {
         Reset();
         OnResetEffects();
         OnWreathReset?.Invoke();
+    }
+
+
+    internal void ForcedHardReset2() {
+        StartSlowlyIncreasingUntilFull = false;
+        StartSlowlyIncreasingUntilFull2 = false;
+        Reset();
+        OnResetEffects();
+        if (_stayTime != 0f) {
+            Dusts_ResetStayTime();
+            _stayTime = 0f;
+            GetHitTimer = 0;
+        }
     }
 
     private void ClawsReset(Projectile projectile, bool nonDataReset) {
