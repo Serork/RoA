@@ -21,6 +21,7 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+// NOTE: 138 is half of Sandfall height
 sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static byte BODYCOUNT => 100;
     private static ushort TIMELEFT => (ushort)MathUtils.SecondsToFrames(15);
