@@ -168,7 +168,7 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
         });
     }
 
-    public override bool? CanCutTiles() => false;
+    //public override bool? CanCutTiles() => false;
 
     public override void OnKill(int timeLeft) {
         CoralValues coralValues = new(Projectile);

@@ -1,7 +1,10 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Placeable.Solid;
+
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -32,6 +35,8 @@ sealed class DullDaikatana : ModTile {
         TileObjectData.newTile.AnchorWall = true;
 
         AddMapEntry(new Color(137, 151, 164), CreateMapEntryName());
+
+        FlexibleTileWand.RubblePlacementLarge.AddVariations(ModContent.ItemType<Items.Materials.DullDaikatana>(), Type, 0);
 
         TileObjectData.addTile(Type);
 

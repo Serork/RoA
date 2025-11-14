@@ -88,7 +88,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
 
     public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity * 0.75f;
 
-    public override bool? CanCutTiles() => false;
+    //public override bool? CanCutTiles() => false;
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;

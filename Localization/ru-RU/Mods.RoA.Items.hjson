@@ -2414,3 +2414,8 @@ ForbiddenTwig: {
 	// DisplayName: Forbidden Twig
 	// Tooltip: ""
 }
+
+CoralClarionet: {
+	// DisplayName: Coral Clarionet
+	// Tooltip: ""
+}

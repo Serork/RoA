@@ -323,7 +323,7 @@ sealed class Moth : ModProjectile {
 
     public override bool? CanDamage() => Projectile.velocity.Length() > 5f && Projectile.ai[1] > 0f;
 
-    public override bool? CanCutTiles() => false;
+    public override bool? CanCutTiles() => Projectile.velocity.Length() > 5f && Projectile.ai[1] > 0f;
 
     public override bool MinionContactDamage() => true;
 }

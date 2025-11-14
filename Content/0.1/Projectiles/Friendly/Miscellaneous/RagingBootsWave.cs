@@ -28,7 +28,7 @@ sealed class RagingBootsWave : NatureProjectile {
         ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
-    public override bool? CanCutTiles() => false;
+    //public override bool? CanCutTiles() => false;
 
     public override void AI() {
         if (Projectile.localAI[2] == 0f) {
