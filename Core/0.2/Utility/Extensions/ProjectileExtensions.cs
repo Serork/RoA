@@ -46,8 +46,8 @@ static partial class ProjectileExtensions {
     }
 
     public static void OffsetTheSameProjectile(this Projectile checkProjectile, float offsetSpeed = 0.05f) {
-        if (checkProjectile.NearestTheSame(out Projectile npc2)) {
-            checkProjectile.OffsetTheSameProjectile(npc2, offsetSpeed);
+        if (checkProjectile.NearestTheSame(out Projectile projectile)) {
+            checkProjectile.OffsetTheSameProjectile(projectile, offsetSpeed);
         }
     }
 }

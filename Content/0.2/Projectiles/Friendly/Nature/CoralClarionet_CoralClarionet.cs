@@ -10,6 +10,7 @@ using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static float SPAWNTIMEINTICKS => 10f;
+    private static float ATTACKTIME => 20f;
 
     public enum CoralClarionetRequstedTextureType : byte {
         Part1,
@@ -39,6 +41,8 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
     public ref float DesiredRotation => ref Projectile.localAI[2];
 
     public ref float SpawnValue => ref Projectile.ai[0];
+    public ref float AttackValue => ref Projectile.ai[1];
+    public ref float AttackSpawnTypeValue => ref Projectile.ai[2];
 
     public float Opacity => Utils.GetLerpValue(0f, 0.25f, SpawnValue / SPAWNTIMEINTICKS, true);
 
@@ -64,7 +68,7 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         owner.SyncMousePosition();
         Vector2 mousePosition = owner.GetViableMousePosition();
         ref float rotation = ref Projectile.rotation;
-        float lerpValue = 0.1f;
+        float lerpValue = 0.075f;
         float desiredRotation = Projectile.Center.AngleTo(mousePosition) + MathHelper.PiOver2;
         float maxRotation = 0.1f;
         float desiredRotationValue = MathF.Abs(desiredRotation);
@@ -77,6 +81,36 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
         DesiredRotation = Utils.AngleLerp(DesiredRotation, desiredRotation, lerpValue2);
         rotation = Utils.AngleLerp(rotation, DesiredRotation, lerpValue);
+
+        if (AttackValue++ > ATTACKTIME) {
+            AttackValue = 0;
+
+            if (owner.IsLocal()) {
+                AttackSpawnTypeValue = Main.rand.Next(4);
+                Projectile.netUpdate = true;
+
+                Vector2 position = Projectile.Center;
+                switch (AttackSpawnTypeValue) {
+                    case 0:
+                        position += new Vector2(36, -90).RotatedBy(rotation);
+                        break;
+                    case 1:
+                        position += new Vector2(-12, -118).RotatedBy(rotation);
+                        break;
+                    case 2:
+                        position += new Vector2(36, -36).RotatedBy(rotation);
+                        break;
+                    case 3:
+                        position += new Vector2(-32, -66).RotatedBy(rotation);
+                        break;
+                }
+                ProjectileUtils.SpawnPlayerOwnedProjectile<CoralBubble>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_FromAI()) {
+                    Position = position,
+                    Damage = Projectile.damage,
+                    KnockBack = Projectile.knockBack
+                });
+            }
+        }
     }
 
     protected override void Draw(ref Color lightColor) {
