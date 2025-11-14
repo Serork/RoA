@@ -2411,11 +2411,11 @@ NewMoney: {
 }
 
 ForbiddenTwig: {
-	// DisplayName: Forbidden Twig
-	// Tooltip: ""
+	DisplayName: Запретная ветвь
+	// Tooltip: Trail a withered branch that shatters into ash and dust
 }
 
 CoralClarionet: {
-	// DisplayName: Coral Clarionet
-	// Tooltip: ""
+	DisplayName: Коралловый кларнет
+	Tooltip: Призывает музыкальный коралл, выпускающий пузырьки приятной мелодией
 }

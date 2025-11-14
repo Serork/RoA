@@ -2387,10 +2387,10 @@ NewMoney: {
 
 ForbiddenTwig: {
 	DisplayName: Forbidden Twig
-	Tooltip: ""
+	Tooltip: Trail a withered branch that shatters into ash and dust
 }
 
 CoralClarionet: {
 	DisplayName: Coral Clarionet
-	Tooltip: ""
+	Tooltip: Summons a musical coral that bursts out bubbles for a lovely melody
 }
