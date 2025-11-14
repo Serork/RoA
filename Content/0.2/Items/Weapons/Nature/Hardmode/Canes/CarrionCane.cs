@@ -111,8 +111,8 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
             player.SyncCappedMousePosition();
             Vector2 mousePosition = player.GetCappedWorldMousePosition(CAPPEDMOUSEPOSITIONWIDTH, CAPPEDMOUSEPOSITIONHEIGHT);
             Vector2 position = GetTilePosition(player, mousePosition, false, cappedWidth: (int)CAPPEDMOUSEPOSITIONWIDTH, cappedHeight: (int)CAPPEDMOUSEPOSITIONHEIGHT).ToWorldCoordinates() - Vector2.UnitY * 4f,
-                    velocity = (mousePosition + Main.rand.NextVector2Circular(8f, 8f) - position).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.PiOver2) * 3f * velocityFactor;
-            Vector2 dustPos = position + Vector2.UnitY * 4f + Main.rand.NextVector2Circular(8f, 8f).RotatedByRandom(MathHelper.Pi);
+                    velocity = (mousePosition + Main.rand.NextVector2Circular(10f, 10f) - position).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.PiOver2) * 3f * velocityFactor;
+            Vector2 dustPos = position + Vector2.UnitY * 4f + Main.rand.NextVector2Circular(10f, 10f).RotatedByRandom(MathHelper.Pi);
             //int x = (int)dustPos.X / 16, y = (int)dustPos.Y / 16;
 
             bool flag = true;
@@ -132,7 +132,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                 return;
             }
 
-            Dust dust = Dust.NewDustPerfect(dustPos,
+            Dust dust = Dust.NewDustPerfect(dustPos - Vector2.UnitY * 2f,
                                             dustType,
                                             Scale: Main.rand.NextFloat(1.5f, 2f));
             dust.velocity = velocity;
