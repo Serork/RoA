@@ -2,8 +2,6 @@ ClawsSlash.DisplayName: Разрез когтями
 HemorrhageWave.DisplayName: Кровоточащая волна
 InfectedWave.DisplayName: Инфицирующая волна
 MushroomSpore.DisplayName: Грибная спора
-// CaneBaseProjectile.DisplayName: Cane
-// PastoralRodBase.DisplayName: Pastoral Rod Base
 // PastoralRodEnergy.DisplayName: Pastoral Rod Energy
 ShepherdLeaves.DisplayName: Пастушьи листья
 RipePumpkin.DisplayName: Спелая тыква
@@ -15,11 +13,9 @@ TulipFlower.DisplayName: Цветок тюльпана
 TulipPetal.DisplayName: Лепесток тюльпана
 Bone.DisplayName: Кость тюльпана
 PineCone.DisplayName: Сосновая шишка
-// CactiCasterBase.DisplayName: Cacti Caster Base
 Cacti.DisplayName: Кактус
 CactiExplosion.DisplayName: Кактусовый взрыв
 SharpIcicle.DisplayName: Острая сосулька
-// SpikedIceStaffBase.DisplayName: Spiked Ice Staff Base
 // LumberjackAxeSlash.DisplayName: Lumberjack Axe Slash
 GrimBranch.DisplayName: Мрачная ветвь
 VileSpike.DisplayName: Мерзкий шип
@@ -47,19 +43,15 @@ Brightstone.DisplayName: Светлокамень
 HellfireFractureTestProjectile.DisplayName: Разрыв адского пламени
 HellfireFracture.DisplayName: Разрыв адского пламени
 GalipotStream.DisplayName: Поток живицы
-// WoodbinderBase.DisplayName: Woodbinder Base
 ProtectiveRoots.DisplayName: Защищающие корни
 SlipperyBomb.DisplayName: Скользкая бомба
 SlipperyDynamite.DisplayName: Скользкий динамит
 SlipperyGlowstick.DisplayName: Скользкая светящаяся палочка
 SlipperyGrenade.DisplayName: Скользкая граната
-// EbonwoodStaffBase.DisplayName: Ebonwood Staff Base
-// ShadewoodStaffBase.DisplayName: Shadewood Staff Base
 Bee.DisplayName: "{$ProjectileName.Bee}"
 TulipPetalOld.DisplayName: Лепесток тюльпана
 TulipTrailOld.DisplayName: Лепесток тюльпана
 // WeepingTulipExplosion.DisplayName: Weeping Tulip Explosion
-// BloomingDoomBase.DisplayName: Blooming Doom Base
 EvilBranch.DisplayName: Злая ветвь
 EvilLeaf.DisplayName: Злой лепесток
 MoonlightBeam.DisplayName: Луч луны
@@ -71,7 +63,6 @@ SacrificialSickle.DisplayName: Жертвенный серп
 // ToxicStream.DisplayName: Toxic Stream
 // CorruptionInsect.DisplayName: Corruption Insect
 // CrimsonInsect.DisplayName: Crimson Insect
-// TectonicCaneBase.DisplayName: Tectonic Cane Base
 // TectonicCaneProjectile.DisplayName: Tectonic Cane
 // TectonicCaneProjectile2.DisplayName: Tectonic Cane
 // LilPhoenixFlames.DisplayName: Firebird Flames
@@ -162,7 +153,6 @@ PoisonBubble_Small.DisplayName: Ядовитый пузырь
 // Thorns.DisplayName: Thorns
 // Cloudberry.DisplayName: Cloudberry
 // Coral.DisplayName: Coral
-// CavernCaneBase.DisplayName: Cavern Cane Base
 // Rocks.DisplayName: Rocks
 // Macrolepiota_Hold.DisplayName: Macrolepiota_ Hold
 // Macrolepiota_HeldProjectile.DisplayName: Macrolepiota_ Held Projectile
@@ -193,7 +183,6 @@ PoisonBubble_Small.DisplayName: Ядовитый пузырь
 // NettleThorn.DisplayName: Nettle Thorn
 // TarBomb.DisplayName: Tar Bomb
 // TarRocket.DisplayName: Tar Rocket
-// CarrionCaneBase.DisplayName: Carrion Flower Base
 // Rafflesia.DisplayName: Carrion Flower
 // Fly.DisplayName: Fly
 // CorruptorBone.DisplayName: Corruptor Bone
@@ -239,11 +228,9 @@ PoisonBubble_Small.DisplayName: Ядовитый пузырь
 // BifrostFigure.DisplayName: Bifrost Figure
 // MagicalBifrostBlock.DisplayName: Magical Bifrost Block
 // HornsLightning.DisplayName: Horns Lightning
-// GlacierCaneBase.DisplayName: Glacier Cane Base
 // GlacierSpike.DisplayName: Glacier Spike
 // NewMoneyBullet.DisplayName: New Money Bullet
 // NewMoneyBite.DisplayName: New Money Bite
 // NewMoneyBat.DisplayName: New Money Bat
 // ForbiddenTwig.DisplayName: Forbidden Twig
-// CoralClarionetBase.DisplayName: Coral Clarionet Base
 // CoralClarionet.DisplayName: Coral Clarionet

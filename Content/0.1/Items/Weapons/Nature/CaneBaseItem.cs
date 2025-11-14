@@ -20,6 +20,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature;
@@ -57,6 +58,8 @@ abstract class CaneBaseItem<T> : NatureItem where T : CaneBaseProjectile {
 abstract class CaneBaseItem : CaneBaseItem<CaneBaseProjectile> { }
 
 abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
+    public override LocalizedText DisplayName => LocalizedText.Empty;
+
     private const float STARTROTATION = 1.4f;
     private const float MINROTATION = -0.24f, MAXROTATION = 0.24f;
     private const int BASEPENALTY = 30;

@@ -2,8 +2,6 @@ ClawsSlash.DisplayName: Claws Slash
 HemorrhageWave.DisplayName: Hemorrhage Wave
 InfectedWave.DisplayName: Infected Wave
 MushroomSpore.DisplayName: Mushroom Spore
-CaneBaseProjectile.DisplayName: Cane
-PastoralRodBase.DisplayName: Pastoral Rod Base
 PastoralRodEnergy.DisplayName: Pastoral Rod Energy
 ShepherdLeaves.DisplayName: Shepherd Leaves
 RipePumpkin.DisplayName: Ripe Pumpkin
@@ -15,11 +13,9 @@ TulipFlower.DisplayName: Tulip Flower
 TulipPetal.DisplayName: Tulip Petal
 Bone.DisplayName: Tulip Bone
 PineCone.DisplayName: Pine Cone
-CactiCasterBase.DisplayName: Cacti Caster Base
 Cacti.DisplayName: Cacti
 CactiExplosion.DisplayName: Cacti Explosion
 SharpIcicle.DisplayName: Sharp Icicle
-SpikedIceStaffBase.DisplayName: Spiked Ice Staff Base
 LumberjackAxeSlash.DisplayName: Lumberjack Axe Slash
 GrimBranch.DisplayName: Grim Branch
 VileSpike.DisplayName: Vile Spike
@@ -47,19 +43,15 @@ HellfireFault.DisplayName: Hellfire Fault
 HellfireFractureTestProjectile.DisplayName: Hellfire Fracture
 HellfireFracture.DisplayName: Hellfire Fracture
 GalipotStream.DisplayName: Galipot Stream
-WoodbinderBase.DisplayName: Woodbinder Base
 ProtectiveRoots.DisplayName: Protective Roots
 SlipperyBomb.DisplayName: Slippery Bomb
 SlipperyDynamite.DisplayName: Slippery Dynamite
 SlipperyGlowstick.DisplayName: Slippery Glowstick
 SlipperyGrenade.DisplayName: Slippery Grenade
-EbonwoodStaffBase.DisplayName: Ebonwood Staff Base
-ShadewoodStaffBase.DisplayName: Shadewood Staff Base
 Bee.DisplayName: "{$ProjectileName.Bee}"
 TulipPetalOld.DisplayName: Tulip Petal
 TulipTrailOld.DisplayName: Tulip Petal
 WeepingTulipExplosion.DisplayName: Weeping Tulip Explosion
-BloomingDoomBase.DisplayName: Blooming Doom Base
 EvilBranch.DisplayName: Evil Branch
 EvilLeaf.DisplayName: Evil Leaf
 MoonlightBeam.DisplayName: Moonlight Beam
@@ -71,7 +63,6 @@ FlederFlame.DisplayName: Fleder Flame
 ToxicStream.DisplayName: Toxic Stream
 CorruptionInsect.DisplayName: Corruption Insect
 CrimsonInsect.DisplayName: Crimson Insect
-TectonicCaneBase.DisplayName: Tectonic Cane Base
 TectonicCaneProjectile.DisplayName: Tectonic Cane
 TectonicCaneProjectile2.DisplayName: Tectonic Cane
 LilPhoenixFlames.DisplayName: Firebird Flames
@@ -162,7 +153,6 @@ Sunflower.DisplayName: Sunflower
 Thorns.DisplayName: Thorns
 Cloudberry.DisplayName: Cloudberry
 Coral.DisplayName: Coral
-CavernCaneBase.DisplayName: Cavern Cane Base
 Rocks.DisplayName: Rocks
 Macrolepiota_Hold.DisplayName: Macrolepiota_ Hold
 Macrolepiota_HeldProjectile.DisplayName: Macrolepiota_ Held Projectile
@@ -193,7 +183,6 @@ NettleSpikeTip.DisplayName: Nettle Spike Tip
 NettleThorn.DisplayName: Nettle Thorn
 TarBomb.DisplayName: Tar Bomb
 TarRocket.DisplayName: Tar Rocket
-CarrionCaneBase.DisplayName: Carrion Flower Base
 Rafflesia.DisplayName: Carrion Flower
 Fly.DisplayName: Fly
 CorruptorBone.DisplayName: Corruptor Bone
@@ -239,11 +228,9 @@ PerfectMimicArm.DisplayName: Perfect Mimic Arm
 BifrostFigure.DisplayName: Bifrost Figure
 MagicalBifrostBlock.DisplayName: Magical Bifrost Block
 HornsLightning.DisplayName: Horns Lightning
-GlacierCaneBase.DisplayName: Glacier Cane Base
 GlacierSpike.DisplayName: Glacier Spike
 NewMoneyBullet.DisplayName: New Money Bullet
 NewMoneyBite.DisplayName: New Money Bite
 NewMoneyBat.DisplayName: New Money Bat
 ForbiddenTwig.DisplayName: Forbidden Twig
-CoralClarionetBase.DisplayName: Coral Clarionet Base
 CoralClarionet.DisplayName: Coral Clarionet
