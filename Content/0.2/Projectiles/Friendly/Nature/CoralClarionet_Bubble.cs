@@ -76,7 +76,7 @@ sealed class CoralBubble : NatureProjectile {
         }
         Projectile.rotation = Projectile.velocity.X * 0.025f;
         float squishVelocityBlend = 0.1f;
-        float interpolationBlend = 0.1f;
+        float interpolationBlend = 0.15f;
         float movementInfluence = 0.5f;
         float maxSquishDeformation = 0.1f;
         float velocityChangeThreshold = 10f;
