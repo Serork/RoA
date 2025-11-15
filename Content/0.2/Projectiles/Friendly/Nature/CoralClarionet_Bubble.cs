@@ -222,6 +222,8 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
             else
                 dust41.velocity = vector35 * Main.rand.Next(45, 91) / 10f;
 
+            dust41.velocity += Projectile.velocity * 0.5f;
+
             dust41.color = Main.hslToRgb((float)(0.4000000059604645 + Main.rand.NextDouble() * 0.45000000298023224), (float)(0.8000000059604645 + Main.rand.NextFloatDirection() * 0.20000000298023224), 0.5f);
             dust41.color = Color.Lerp(dust41.color, Color.White, 0.3f);
             dust41.alpha = Main.rand.Next(100, 200);

@@ -253,10 +253,12 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpriteFrame waterFrame = new(1, 3,  0, (byte)((WaveValue * 2) % 3));
         Rectangle waterClip = waterFrame.GetSourceRectangle(waterTexture);
         Vector2 waterOrigin = waterClip.Centered();
-        Vector2 waterScale = Vector2.One * Ease.QuartOut(spawnProgress) * 0.875f;
-        float disappearProgress3 = 1f - Utils.GetLerpValue(0, 10, Projectile.timeLeft, true);
-        waterScale.X = MathHelper.Lerp(waterScale.X, 0.25f, Ease.CubeIn(disappearProgress3));
+        Vector2 waterScale = Vector2.One * Ease.QuartOut(spawnProgress);
+        float disappearProgress3 = 1f - Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
+        float progress2 = Ease.CubeIn(disappearProgress3);
+        waterScale.X = MathHelper.Lerp(waterScale.X, 0.25f, progress2);
         waterScale.Y = MathHelper.Lerp(waterScale.Y, 0.5f, Ease.CubeIn(disappearProgress3));
+        waterScale *= 0.875f;
         waterScale.Y *= 0.375f;
         Color waterColor = color * 0.75f;
         waterColor = waterColor.MultiplyAlpha(Helper.Wave(WaveValue2, 0.625f, 1f, 10f, Projectile.whoAmI));
@@ -271,8 +273,9 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
             Rotation = waterRotation
         };
         Vector2 waterPosition = position;
-        waterPosition.Y -= 20f;
+        waterPosition.Y -= 18f;
         waterPosition.X -= 2f;
+        waterPosition.Y += 8f * progress2;
         batch.Draw(waterTexture, waterPosition, waterDrawInfo);
         for (float num5 = 0f; num5 < 1f; num5 += 0.25f) {
             Color waterColor2 = color * 0.75f;
