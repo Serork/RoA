@@ -163,6 +163,8 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
                 ProjectileUtils.SpawnPlayerOwnedProjectile<CoralBubble>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_FromAI()) {
                     Position = position,
                     Damage = Projectile.damage,
+                    AI1 = _mousePosition.X,
+                    AI2 = _mousePosition.Y,
                     KnockBack = Projectile.knockBack
                 });
             }
