@@ -240,13 +240,14 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         Color waterColor = color * 0.75f;
         waterColor = waterColor.MultiplyAlpha(Helper.Wave(WaveValue2, 0.625f, 1f, 10f, Projectile.whoAmI));
         float maxRotation = 0.05f;
-        float rotation = Projectile.rotation;
+        float rotation = Projectile.rotation,
+              waterRotation = rotation * 0.75f;
         DrawInfo waterDrawInfo = DrawInfo.Default with {
             Clip = waterClip,
             Origin = waterOrigin,
             Color = waterColor,
             Scale = waterScale,
-            Rotation = rotation * 0.5f
+            Rotation = waterRotation
         };
         Vector2 waterPosition = position;
         waterPosition.Y -= 20f;
