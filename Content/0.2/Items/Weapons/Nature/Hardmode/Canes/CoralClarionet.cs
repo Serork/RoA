@@ -1,5 +1,9 @@
-﻿using RoA.Common.Druid;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Druid;
+using RoA.Common.Players;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Enums;
@@ -25,5 +29,13 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
 
     public sealed class CoralClarionetBase : CaneBaseProjectile {
         protected override bool ShouldWaitUntilProjDespawn() => false;
+
+        protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
+            spawnPosition = player.Center;
+            int maxChecks = 50;
+            while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
+                spawnPosition += spawnPosition.DirectionTo(Owner.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
+            }
+        }
     }
 }

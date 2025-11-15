@@ -87,7 +87,7 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
         Vector2 mousePosition = _mousePosition;
         if (SpawnValue == 0f) {
-            Projectile.Center = mousePosition + Vector2.UnitY * 50f * 3f;
+            //Projectile.Center += Vector2.UnitY * 50f * 3f;
         }
 
         SpawnValue = Helper.Approach(SpawnValue, SPAWNTIMEINTICKS, 1f);
@@ -237,7 +237,7 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpriteBatch batch = Main.spriteBatch;
         float spawnProgress = SpawnValue / SPAWNTIMEINTICKS;
         float opacity = Opacity;
-        Color color = Color.White * opacity;
+        Color color = Lighting.GetColor((position - Vector2.UnitY * 45f).ToTileCoordinates()) * opacity;
         Vector2 scale = Vector2.One * Ease.QuartOut(spawnProgress);
         scale.X *= Utils.Remap(spawnProgress * Ease.CubeOut(spawnProgress), 0f, 1f, 2f, 1f);
         scale.Y *= Utils.Remap(spawnProgress * Ease.CubeIn(spawnProgress), 0f, 1f, 0.75f, 1f);
@@ -245,7 +245,8 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         float disappearProgress2 = 1f - Utils.GetLerpValue(0, 25, Projectile.timeLeft, true);
         scale.X = MathHelper.Lerp(scale.X, 0.25f, Ease.CubeIn(disappearProgress2));
         scale.Y = MathHelper.Lerp(scale.Y, 0.5f, Ease.CubeIn(disappearProgress));
-        color *= Utils.GetLerpValue(1f, 0.875f, disappearProgress, true);
+        float colorFactor = Utils.GetLerpValue(1f, 0.875f, disappearProgress, true);
+        color *= colorFactor;
         DrawInfo drawInfo = DrawInfo.Default with {
             Clip = clip,
             Origin = origin,
