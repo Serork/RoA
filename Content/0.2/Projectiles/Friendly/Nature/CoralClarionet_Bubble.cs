@@ -78,6 +78,9 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
         if (heldCane is not null && heldCane.PreparingAttack) {
             flag = true;
         }
+        if (flag && Projectile.timeLeft > TIMELEFT - 2) {
+            flag = false;
+        }
         if (!flag) {
             owner.SyncMousePosition();
             _mousePosition = owner.GetWorldMousePosition();
