@@ -6,7 +6,6 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
-using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -26,6 +25,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static float SPAWNTIMEINTICKS => 10f;
     private static float ATTACKTIME => 20f;
+    private static ushort TIMELEFT => 480;
 
     public enum CoralClarionetRequstedTextureType : byte {
         Base,
@@ -61,6 +61,8 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.tileCollide = false;
 
         Projectile.friendly = true;
+
+        Projectile.timeLeft = TIMELEFT;
     }
 
     public override bool? CanDamage() => false;
@@ -88,8 +90,8 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
             desiredRotation = Utils.AngleLerp(desiredRotation, maxRotation * desiredRotation.GetDirection(), 0.75f);
         }
         float lerpValue2 = lerpValue;
-        if (mousePosition.Y > Projectile.Center.Y) {
-            lerpValue2 *= 0.5f;
+        if (mousePosition.Y > Projectile.Center.Y - 30f) {
+            lerpValue2 *= 0.25f;
         }
         DesiredRotation = Utils.AngleLerp(DesiredRotation, desiredRotation, lerpValue2);
         rotation = Utils.AngleLerp(rotation, DesiredRotation, lerpValue);
@@ -226,6 +228,11 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 scale = Vector2.One * Ease.QuartOut(spawnProgress);
         scale.X *= Utils.Remap(spawnProgress * Ease.CubeOut(spawnProgress), 0f, 1f, 2f, 1f);
         scale.Y *= Utils.Remap(spawnProgress * Ease.CubeIn(spawnProgress), 0f, 1f, 0.75f, 1f);
+        float disappearProgress = 1f - Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
+        float disappearProgress2 = 1f - Utils.GetLerpValue(0, 25, Projectile.timeLeft, true);
+        scale.X = MathHelper.Lerp(scale.X, 0.25f, Ease.CubeIn(disappearProgress2));
+        scale.Y = MathHelper.Lerp(scale.Y, 0.5f, Ease.CubeIn(disappearProgress));
+        color *= Utils.GetLerpValue(1f, 0.875f, disappearProgress, true);
         DrawInfo drawInfo = DrawInfo.Default with {
             Clip = clip,
             Origin = origin,
@@ -235,7 +242,10 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpriteFrame waterFrame = new(1, 3,  0, (byte)((WaveValue * 2) % 3));
         Rectangle waterClip = waterFrame.GetSourceRectangle(waterTexture);
         Vector2 waterOrigin = waterClip.Centered();
-        Vector2 waterScale = scale * 0.875f;
+        Vector2 waterScale = Vector2.One * Ease.QuartOut(spawnProgress) * 0.875f;
+        float disappearProgress3 = 1f - Utils.GetLerpValue(0, 10, Projectile.timeLeft, true);
+        waterScale.X = MathHelper.Lerp(waterScale.X, 0.25f, Ease.CubeIn(disappearProgress3));
+        waterScale.Y = MathHelper.Lerp(waterScale.Y, 0.5f, Ease.CubeIn(disappearProgress3));
         waterScale.Y *= 0.375f;
         Color waterColor = color * 0.75f;
         waterColor = waterColor.MultiplyAlpha(Helper.Wave(WaveValue2, 0.625f, 1f, 10f, Projectile.whoAmI));

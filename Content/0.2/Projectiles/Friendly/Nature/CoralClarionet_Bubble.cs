@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -16,6 +17,8 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -32,6 +35,7 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)CoralBubbleRequstedTextureType.Outline, ResourceManager.NatureProjectileTextures + "CoralBubble_Outline")];
 
     private float _wave;
+    private Vector2 _mousePosition;
 
     public ref float BubbleSquishX => ref Projectile.ai[1];
     public ref float BubbleSquishY => ref Projectile.ai[2];
@@ -69,11 +73,20 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     public override void AI() {
         Player owner = Projectile.GetOwnerAsPlayer();
-        Vector2 destination = owner.GetWorldMousePosition();
+        CaneBaseProjectile? heldCane = owner.GetWreathHandler().GetHeldCane();
+        bool flag = false;
+        if (heldCane is not null && heldCane.PreparingAttack) {
+            flag = true;
+        }
+        if (!flag) {
+            owner.SyncMousePosition();
+            _mousePosition = owner.GetWorldMousePosition();
+        }
+        Vector2 destination = _mousePosition;
 
         int num606 = -1;
         Vector2 vector52 = Projectile.Center;
-        float num607 = 500f;
+        float num607 = 250;
         if (Projectile.localAI[0] > 0f)
             Projectile.localAI[0]--;
 
@@ -104,7 +117,7 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         bool flag33 = false;
         if (Projectile.ai[0] != 0f) {
-            int num610 = (int)(this.ai[0] - 1f);
+            int num610 = (int)(Projectile.ai[0] - 1f);
             if (Main.npc[num610].active && !Main.npc[num610].dontTakeDamage && Main.npc[num610].immune[Projectile.owner] == 0) {
                 float num611 = Main.npc[num610].position.X + (float)(Main.npc[num610].width / 2);
                 float num612 = Main.npc[num610].position.Y + (float)(Main.npc[num610].height / 2);
@@ -131,7 +144,6 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
         float inertia = inertiaValue + extraInertiaValue * extraInertiaFactor;
         float speed = 7.5f;
         Helper.InertiaMoveTowards(ref Projectile.velocity, Projectile.position, destination, speed: speed, inertia: inertia);
-        owner.SyncMousePosition();
         float offsetSpeed = 2.5f;
         Projectile.OffsetTheSameProjectile(offsetSpeed);
         if (Projectile.NearestTheSame(out Projectile projectile)) {
@@ -192,5 +204,29 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
         color = color.MultiplyRGB(lightColor);
         color *= 0.75f;
         Projectile.QuickDraw(color, scale: scale, texture: outlineTexture);
+    }
+
+    public override void OnKill(int timeLeft) {
+        SoundEngine.PlaySound(SoundID.Item54, Projectile.position);
+
+        float sizeFactor = 4;
+        for (int num269 = 0; num269 < 5 + 8 * sizeFactor; num269++) {
+            int type = Utils.IsPowerOfTwo(num269) ? DustID.Water_Desert : DustID.BubbleBurst_Blue;
+            int num270 = (int)(3f * sizeFactor);
+            int num271 = Dust.NewDust(Projectile.Center - Vector2.One * num270, num270 * 2, num270 * 2, type);
+            Dust dust41 = Main.dust[num271];
+            Vector2 vector35 = Vector2.Normalize(dust41.position - Projectile.Center);
+            dust41.position = Projectile.Center + vector35 * num270 * Projectile.scale;
+            if (num269 < 30)
+                dust41.velocity = vector35 * dust41.velocity.Length();
+            else
+                dust41.velocity = vector35 * Main.rand.Next(45, 91) / 10f;
+
+            dust41.color = Main.hslToRgb((float)(0.4000000059604645 + Main.rand.NextDouble() * 0.45000000298023224), (float)(0.8000000059604645 + Main.rand.NextFloatDirection() * 0.20000000298023224), 0.5f);
+            dust41.color = Color.Lerp(dust41.color, Color.White, 0.3f);
+            dust41.alpha = Main.rand.Next(100, 200);
+            dust41.noGravity = true;
+            dust41.scale = 0.7f + 0.1f * sizeFactor;
+        }
     }
 }
