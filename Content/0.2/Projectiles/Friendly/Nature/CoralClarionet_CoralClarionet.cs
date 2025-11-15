@@ -26,7 +26,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static float SPAWNTIMEINTICKS => 10f;
     private static float ATTACKTIME => 20f;
-    private static ushort TIMELEFT => 480;
+    private static ushort TIMELEFT => 360;
 
     public enum CoralClarionetRequstedTextureType : byte {
         Base,
