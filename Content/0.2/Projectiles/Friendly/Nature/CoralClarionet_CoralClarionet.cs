@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -73,7 +74,7 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         owner.SyncMousePosition();
         Vector2 mousePosition = owner.GetViableMousePosition();
         if (SpawnValue == 0f) {
-            Projectile.Center = mousePosition + Vector2.UnitY * 50f;
+            Projectile.Center = mousePosition + Vector2.UnitY * 50f * 3f;
         }
 
         SpawnValue = Helper.Approach(SpawnValue, SPAWNTIMEINTICKS, 1f);
@@ -93,14 +94,39 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         DesiredRotation = Utils.AngleLerp(DesiredRotation, desiredRotation, lerpValue2);
         rotation = Utils.AngleLerp(rotation, DesiredRotation, lerpValue);
 
+        Vector2 position = Projectile.Center;
+        switch (AttackSpawnTypeValue) {
+            case 0:
+                position += new Vector2(36, -90).RotatedBy(rotation);
+                break;
+            case 1:
+                position += new Vector2(-12, -118).RotatedBy(rotation);
+                break;
+            case 2:
+                position += new Vector2(36, -36).RotatedBy(rotation);
+                break;
+            case 3:
+                position += new Vector2(-32, -66).RotatedBy(rotation);
+                break;
+        }
+        float chance = MathF.Max(0.5f, MathUtils.Clamp01(AttackValue / (float)ATTACKTIME));
+        chance /= 10;
+        int bubbleDustType = ModContent.DustType<Dusts.CoralBubble>();
+        Vector2 dustSpawnPosition = position - new Vector2(8f, 0f);
+        int spawnAreaWidth = Projectile.width + 4,
+            spawnAreaHeight = 4;
+        Vector2 dustVelocity = -Vector2.One.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver2)) * Main.rand.NextBool().ToDirectionInt();
+        dustVelocity += Vector2.UnitY.RotatedBy(MathHelper.TwoPi - rotation) * Main.rand.NextFloat(2.5f, 5f);
+        if (Main.rand.NextChance(chance)) {
+            Dust.NewDustDirect(dustSpawnPosition, spawnAreaWidth, spawnAreaHeight, bubbleDustType, SpeedX: dustVelocity.X, SpeedY: dustVelocity.Y);
+        }
+
         if (AttackValue++ > ATTACKTIME) {
             AttackValue = 0;
 
-            if (owner.IsLocal()) {
-                AttackSpawnTypeValue = Main.rand.Next(4);
-                Projectile.netUpdate = true;
-
-                Vector2 position = Projectile.Center;
+            void getSpawnPosition() {
+                position = Projectile.Center;
+                float rotation = Projectile.rotation;
                 switch (AttackSpawnTypeValue) {
                     case 0:
                         position += new Vector2(36, -90).RotatedBy(rotation);
@@ -115,11 +141,23 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
                         position += new Vector2(-32, -66).RotatedBy(rotation);
                         break;
                 }
+            }
+            if (owner.IsLocal()) {
+                AttackSpawnTypeValue = Main.rand.Next(4);
+                Projectile.netUpdate = true;
+
+                getSpawnPosition();
                 ProjectileUtils.SpawnPlayerOwnedProjectile<CoralBubble>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_FromAI()) {
                     Position = position,
                     Damage = Projectile.damage,
                     KnockBack = Projectile.knockBack
                 });
+            }
+
+            for (int i = 0; i < 3; i++) {
+                getSpawnPosition();
+                dustSpawnPosition = position - new Vector2(8f, 0f);
+                Dust.NewDustDirect(dustSpawnPosition, spawnAreaWidth, spawnAreaHeight, bubbleDustType, SpeedX: dustVelocity.X, SpeedY: dustVelocity.Y);
             }
         }
 
@@ -128,16 +166,16 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
                 yVelocity = new Vector2(scale, -scale) * 0.75f;
         ushort dustType = (ushort)DustID.Water;
         for (int i = 0; i < 10; i++) {
-            if (!Main.rand.NextBool(10)) {
+            if (!Main.rand.NextBool(15)) {
                 continue;
             }
             float rotation2 = 0f;
             Vector2 center = Projectile.Center - Vector2.One * 3f;
-            Vector2 position = center - xVelocity.RotatedBy(rotation2) * i;
-            Dust dust = Dust.NewDustDirect(position - yVelocity, 0, 0, dustType);
+            Vector2 position2 = center - xVelocity.RotatedBy(rotation2) * i;
+            Dust dust = Dust.NewDustDirect(position2 - yVelocity, 0, 0, dustType);
             dust.noGravity = true;
             dust.velocity = dust.position.DirectionTo(center) * Main.rand.NextFloat(-2.5f, 5f);
-            dust.alpha = Main.rand.Next(150, 225);
+            dust.alpha = (byte)(Main.rand.Next(150, 225) * 0.75f);
             if (Main.rand.NextBool()) {
                 dust.scale = 0.5f;
                 dust.fadeIn = Main.rand.NextFloat(1f, 2f);
@@ -149,10 +187,10 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
                 dust.velocity.Y -= Main.rand.NextFloat(0.5f, 1f);
             }
             dust.velocity.X *= 1.5f;
-            Dust dust2 = Dust.NewDustDirect(position + yVelocity, 0, 0, dustType);
+            Dust dust2 = Dust.NewDustDirect(position2 + yVelocity, 0, 0, dustType);
             dust2.noGravity = true;
             dust2.velocity = dust2.position.DirectionTo(center) * Main.rand.NextFloat(-2.5f, 5f);
-            dust2.alpha = Main.rand.Next(150, 225);
+            dust.alpha = (byte)(Main.rand.Next(150, 225) * 0.75f);
             if (Main.rand.NextBool()) {
                 dust2.scale = 0.5f;
                 dust2.fadeIn = Main.rand.NextFloat(1f, 2f);
