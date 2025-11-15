@@ -31,6 +31,8 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
         [((byte)CoralBubbleRequstedTextureType.Base, ResourceManager.NatureProjectileTextures + "CoralBubble"),
          ((byte)CoralBubbleRequstedTextureType.Outline, ResourceManager.NatureProjectileTextures + "CoralBubble_Outline")];
 
+    private float _wave;
+
     public ref float BubbleSquishX => ref Projectile.ai[1];
     public ref float BubbleSquishY => ref Projectile.ai[2];
     public ref float SquishVelocityX => ref Projectile.localAI[1];
@@ -61,11 +63,67 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.friendly = true;
 
         Projectile.timeLeft = TIMELEFT;
+
+        Projectile.ignoreWater = true;
     }
 
     public override void AI() {
         Player owner = Projectile.GetOwnerAsPlayer();
         Vector2 destination = owner.GetWorldMousePosition();
+
+        int num606 = -1;
+        Vector2 vector52 = Projectile.Center;
+        float num607 = 500f;
+        if (Projectile.localAI[0] > 0f)
+            Projectile.localAI[0]--;
+
+        if (Projectile.ai[0] == 0f && Projectile.localAI[0] == 0f) {
+            for (int num608 = 0; num608 < 200; num608++) {
+                NPC nPC7 = Main.npc[num608];
+                if (nPC7.CanBeChasedBy(this) && (Projectile.ai[0] == 0f || Projectile.ai[0] == (float)(num608 + 1))) {
+                    Vector2 center7 = nPC7.Center;
+                    float num609 = Vector2.Distance(center7, vector52);
+                    if (num609 < num607 && Collision.CanHit(Projectile.Center - Vector2.One * 60, 30, 30, nPC7.position, nPC7.width, nPC7.height)) {
+                        num607 = num609;
+                        vector52 = center7;
+                        num606 = num608;
+                    }
+                }
+            }
+
+            if (num606 >= 0) {
+                Projectile.ai[0] = num606 + 1;
+                Projectile.netUpdate = true;
+            }
+
+            num606 = -1;
+        }
+
+        if (Projectile.localAI[0] == 0f && Projectile.ai[0] == 0f)
+            Projectile.localAI[0] = 30f;
+
+        bool flag33 = false;
+        if (Projectile.ai[0] != 0f) {
+            int num610 = (int)(this.ai[0] - 1f);
+            if (Main.npc[num610].active && !Main.npc[num610].dontTakeDamage && Main.npc[num610].immune[Projectile.owner] == 0) {
+                float num611 = Main.npc[num610].position.X + (float)(Main.npc[num610].width / 2);
+                float num612 = Main.npc[num610].position.Y + (float)(Main.npc[num610].height / 2);
+                float num613 = Math.Abs(Projectile.position.X + (float)(Projectile.width / 2) - num611) + Math.Abs(Projectile.position.Y + (float)(Projectile.height / 2) - num612);
+                if (num613 < 1000f) {
+                    flag33 = true;
+                    vector52 = Main.npc[num610].Center;
+                }
+            }
+            else {
+                Projectile.ai[0] = 0f;
+                flag33 = false;
+                Projectile.netUpdate = true;
+            }
+        }
+        if (flag33) {
+            destination = vector52;
+        }
+
         float distanceToDestination = Vector2.Distance(Projectile.position, destination);
         float minDistance = 60f;
         float inertiaValue = 5f, extraInertiaValue = inertiaValue * 5f;
@@ -112,7 +170,7 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 clampedSquish = new(MathHelper.Clamp(BubbleSquish.X, 1f - maxSquishDeformation, 1f + maxSquishDeformation), MathHelper.Clamp(BubbleSquish.Y, 1f - maxSquishDeformation, 1f + maxSquishDeformation));
         BubbleSquish = Vector2.Lerp(BubbleSquish, clampedSquish, interpolationBlend);
 
-        Projectile.localAI[0] += 0.15f;
+        _wave += 0.15f;
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -124,7 +182,7 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
         Texture2D baseTexture = indexedTextureAssets[(byte)CoralBubbleRequstedTextureType.Base].Value,
                   outlineTexture = indexedTextureAssets[(byte)CoralBubbleRequstedTextureType.Outline].Value;
         Vector2 scale = Vector2.One * BubbleSquish;
-        float hslFactor = Projectile.localAI[0] + Projectile.whoAmI;
+        float hslFactor = _wave + Projectile.whoAmI;
         Color color = Color.Lerp(Color.White, Main.hslToRgb(hslFactor / 15f % 1f, 1f, 0.5f), 0.5f);
         color = color.MultiplyRGB(lightColor);
         color.A /= 2;
