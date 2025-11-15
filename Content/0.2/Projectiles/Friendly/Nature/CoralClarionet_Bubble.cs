@@ -1,19 +1,35 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
+using RoA.Common;
 using RoA.Common.Players;
+using RoA.Common.Projectiles;
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class CoralBubble : NatureProjectile {
+sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static ushort TIMELEFT => 120;
+
+    public enum CoralBubbleRequstedTextureType : byte {
+        Base,
+        Outline
+    }
+
+    (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
+        [((byte)CoralBubbleRequstedTextureType.Base, ResourceManager.NatureProjectileTextures + "CoralBubble"),
+         ((byte)CoralBubbleRequstedTextureType.Outline, ResourceManager.NatureProjectileTextures + "CoralBubble_Outline")];
 
     public ref float BubbleSquishX => ref Projectile.ai[1];
     public ref float BubbleSquishY => ref Projectile.ai[2];
@@ -95,12 +111,28 @@ sealed class CoralBubble : NatureProjectile {
         BubbleSquish += SquishVelocity * squishVelocityBlend;
         Vector2 clampedSquish = new(MathHelper.Clamp(BubbleSquish.X, 1f - maxSquishDeformation, 1f + maxSquishDeformation), MathHelper.Clamp(BubbleSquish.Y, 1f - maxSquishDeformation, 1f + maxSquishDeformation));
         BubbleSquish = Vector2.Lerp(BubbleSquish, clampedSquish, interpolationBlend);
+
+        Projectile.localAI[0] += 0.15f;
     }
 
-    public override bool PreDraw(ref Color lightColor) {
-        Vector2 scale = Vector2.One * BubbleSquish;
-        Projectile.QuickDraw(lightColor, scale: scale);
+    protected override void Draw(ref Color lightColor) {
+        if (!AssetInitializer.TryGetRequestedTextureAssets<CoralBubble>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+            return;
+        }
 
-        return false;
+
+        Texture2D baseTexture = indexedTextureAssets[(byte)CoralBubbleRequstedTextureType.Base].Value,
+                  outlineTexture = indexedTextureAssets[(byte)CoralBubbleRequstedTextureType.Outline].Value;
+        Vector2 scale = Vector2.One * BubbleSquish;
+        float hslFactor = Projectile.localAI[0] + Projectile.whoAmI;
+        Color color = Color.Lerp(Color.White, Main.hslToRgb(hslFactor / 15f % 1f, 1f, 0.5f), 0.5f);
+        color = color.MultiplyRGB(lightColor);
+        color.A /= 2;
+        color *= 0.75f;
+        Projectile.QuickDraw(color, scale: scale, texture: baseTexture);
+        color = Color.Lerp(Color.White, Main.hslToRgb((hslFactor / 15f + 0.5f) % 1f, 1f, 0.5f), 0.5f);
+        color = color.MultiplyRGB(lightColor);
+        color *= 0.75f;
+        Projectile.QuickDraw(color, scale: scale, texture: outlineTexture);
     }
 }
