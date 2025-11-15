@@ -35,10 +35,10 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)CoralBubbleRequstedTextureType.Outline, ResourceManager.NatureProjectileTextures + "CoralBubble_Outline")];
 
     private float _wave;
-    private Vector2 _mousePosition;
+    private Vector2 _bubbleSquish;
 
-    public ref float BubbleSquishX => ref Projectile.ai[1];
-    public ref float BubbleSquishY => ref Projectile.ai[2];
+    public ref float MousePositionX => ref Projectile.ai[1];
+    public ref float MousePositionY => ref Projectile.ai[2];
     public ref float SquishVelocityX => ref Projectile.localAI[1];
     public ref float SquishVelocityY => ref Projectile.localAI[2];
 
@@ -51,10 +51,17 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public Vector2 BubbleSquish {
-        get => new(BubbleSquishX, BubbleSquishY);
+        get => _bubbleSquish;
         set {
-            BubbleSquishX = value.X;
-            BubbleSquishY = value.Y;
+            _bubbleSquish = value;
+        }
+    }
+
+    public Vector2 MousePosition {
+        get => new(MousePositionX, MousePositionY);
+        set {
+            MousePositionX = value.X;
+            MousePositionY = value.Y;
         }
     }
 
@@ -78,14 +85,11 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
         if (heldCane is not null && heldCane.PreparingAttack) {
             flag = true;
         }
-        if (flag && Projectile.timeLeft > TIMELEFT - 2) {
-            flag = false;
-        }
         if (!flag) {
             owner.SyncMousePosition();
-            _mousePosition = owner.GetWorldMousePosition();
+            MousePosition = owner.GetWorldMousePosition();
         }
-        Vector2 destination = _mousePosition;
+        Vector2 destination = MousePosition;
 
         int num606 = -1;
         Vector2 vector52 = Projectile.Center;
