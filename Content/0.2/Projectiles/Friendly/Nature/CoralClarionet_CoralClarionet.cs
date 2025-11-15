@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
+using RoA.Content.Items.Weapons.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -44,6 +45,8 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)CoralClarionetRequstedTextureType.Part4, ResourceManager.NatureProjectileTextures + "CoralClarionet_4"),
          ((byte)CoralClarionetRequstedTextureType.Water, ResourceManager.NatureProjectileTextures + "CoralClarionet_Water")];
 
+    private Vector2 _mousePosition;
+
     public ref float WaveValue => ref Projectile.localAI[0];
     public ref float WaveValue2 => ref Projectile.localAI[1];
     public ref float DesiredRotation => ref Projectile.localAI[2];
@@ -73,8 +76,16 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         WaveValue = Projectile.whoAmI + (float)(Main.timeForVisualEffects / 10 % MathHelper.TwoPi);
 
         Player owner = Projectile.GetOwnerAsPlayer();
-        owner.SyncMousePosition();
-        Vector2 mousePosition = owner.GetViableMousePosition();
+        CaneBaseProjectile? heldCane = owner.GetWreathHandler().GetHeldCane();
+        bool flag = false;
+        if (heldCane is not null && heldCane.PreparingAttack) {
+            flag = true;
+        }
+        if (!flag) {
+            owner.SyncMousePosition();
+            _mousePosition = owner.GetWorldMousePosition();
+        }
+        Vector2 mousePosition = _mousePosition;
         if (SpawnValue == 0f) {
             Projectile.Center = mousePosition + Vector2.UnitY * 50f * 3f;
         }
