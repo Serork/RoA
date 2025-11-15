@@ -163,9 +163,7 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
                 ProjectileUtils.SpawnPlayerOwnedProjectile<CoralBubble>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_FromAI()) {
                     Position = position,
                     Damage = Projectile.damage,
-                    KnockBack = Projectile.knockBack,
-                    AI1 = _mousePosition.X,
-                    AI2 = _mousePosition.Y,
+                    KnockBack = Projectile.knockBack
                 });
             }
 
@@ -278,13 +276,11 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         waterPosition.Y -= 18f;
         waterPosition.X -= 2f;
         waterPosition.Y += 8f * progress2;
-        batch.Draw(waterTexture, waterPosition, waterDrawInfo);
+        //batch.Draw(waterTexture, waterPosition, waterDrawInfo);
         for (float num5 = 0f; num5 < 1f; num5 += 0.25f) {
-            Color waterColor2 = color * 0.75f;
-            waterColor2 = waterColor.MultiplyAlpha(Helper.Wave(WaveValue2, 0.625f, 1f, 10f, Projectile.whoAmI + num5 * 5f));
-            waterColor2 *= 0.5f;
-            Vector2 vector2 = (num5 * ((float)Math.PI * 2f)).ToRotationVector2() * 4f * scale * MathF.Sin(WaveValue2 * 10f + num5);
-            batch.Draw(waterTexture, waterPosition + vector2, waterDrawInfo with { Color = waterColor2 });
+            Color waterColor2 = color * (1f - num5);
+            Vector2 vector2 = num5 * scale * MathF.Sin(WaveValue2 * 10f + num5) * new Vector2(0, -5f) + new Vector2(0, -20f) * (num5 - 0.4f);
+            batch.Draw(waterTexture, waterPosition + vector2, waterDrawInfo with { Color = waterColor2, Scale = waterScale * (0.8f + num5), Rotation = waterRotation * (1f + num5 * 0.3f)});
         }
         ShaderLoader.WavyShader.WaveFactor = WaveValue;
         ShaderLoader.WavyShader.StrengthX = 0.15f;
