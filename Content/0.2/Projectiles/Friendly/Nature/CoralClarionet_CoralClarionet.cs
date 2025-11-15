@@ -179,7 +179,7 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
                 yVelocity = new Vector2(scale, -scale) * 0.75f;
         ushort dustType = (ushort)DustID.Water;
         for (int i = 0; i < 10; i++) {
-            if (!Main.rand.NextBool(15)) {
+            if (!Main.rand.NextBool(20)) {
                 continue;
             }
             float rotation2 = 0f;
