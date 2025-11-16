@@ -1,20 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using ReLogic.Content;
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
-using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
-using RoA.Core.Utility.Extensions;
-using RoA.Core.Utility.Vanilla;
-
-using System;
 
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ID;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
@@ -23,7 +14,7 @@ namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 sealed class HandOfGod : ClawsBaseItem {
     public override bool IsHardmodeClaws => true;
 
-    public override float BrightnessModifier => 0f;
+    public override float BrightnessModifier => 1f;
     public override bool HasLighting => true;
 
     public override float FirstAttackSpeedModifier => 1.5f;

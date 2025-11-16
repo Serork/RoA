@@ -491,6 +491,7 @@ class ClawsSlash : NatureProjectile {
 
         float fromValue = 1f - Projectile.localAI[0] / Projectile.ai[1] * 0.9f;
         player.itemAnimation = player.itemTime = (int)(Projectile.ai[1] * fromValue);
+        player.itemAnimationMax = player.itemTimeMax = (int)Projectile.ai[1];
 
         Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity + 
             Vector2.UnitX * player.direction * (Owner.GetClawsHandler().AttackCount * 20f);
