@@ -44,11 +44,16 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
         protected override bool ShouldWaitUntilProjDespawn() => false;
 
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
-            spawnPosition = player.Center;
+            spawnPosition = GetSpawnPosition();
+        }
+
+        private Vector2 GetSpawnPosition() {
+            Vector2 spawnPosition = Owner.Center;
             int maxChecks = 50;
             while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
                 spawnPosition += spawnPosition.DirectionTo(Owner.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
             }
+            return spawnPosition;
         }
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.3f, 0.025f);
@@ -123,7 +128,10 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
             }
 
             player.SyncMousePosition();
-            Vector2 destination = player.GetWorldMousePosition();
+            Vector2 destination = GetSpawnPosition();
+            if (Collision.SolidCollision(destination, 0, 0)) {
+                destination -= Vector2.UnitY * 50f * 3f;
+            }
             float progress = Ease.CircIn(Ease.CircOut(MathUtils.Clamp01(AttackProgress01 * 1.5f)));
             if (progress < 1f) {
                 for (int i = -1; i < 2; i += 2) {
