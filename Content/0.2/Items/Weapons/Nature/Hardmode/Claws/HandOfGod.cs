@@ -20,7 +20,7 @@ namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 sealed class HandOfGod : ClawsBaseItem {
     public override bool IsHardmodeClaws => true;
 
-    public override float BrightnessModifier => 1f;
+    public override float BrightnessModifier => 0.75f;
     public override bool HasLighting => true;
 
     public override float FirstAttackSpeedModifier => 1.5f;
