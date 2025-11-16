@@ -59,8 +59,6 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool? CanCutTiles() => false;
 
     public override void AI() {
-        Projectile.timeLeft = 2;
-
         Player owner = Projectile.GetOwnerAsPlayer();
         owner.SyncMousePosition();
         Vector2 mousePosition = owner.GetWorldMousePosition();
@@ -88,6 +86,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
+        float spawnProgress = Ease.CircOut(Utils.GetLerpValue(TIMELEFT, TIMELEFT - 20, Projectile.timeLeft, true));
+
         Texture2D baseTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base].Value,
                   glowTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Glow].Value,
                   closedEyeTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Eye].Value;
@@ -95,14 +95,14 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         int count = 8;
         float waveOffset = Projectile.whoAmI;
         for (int i = 0; i < count; i++) {
-            float rotation = (float)i / count * MathHelper.TwoPi;
+            float rotation = Utils.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver2, (float)i / count * MathHelper.TwoPi, spawnProgress);
             rotation += Projectile.rotation;
             Vector2 position = Projectile.Center;
             float distance = 6f;
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
-            Color color = lightColor;
+            Color color = lightColor * spawnProgress;
             rotation += MathHelper.Pi;
             Vector2 scale = Vector2.One;
             DrawInfo drawInfo = DrawInfo.Default with {
@@ -119,7 +119,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (second) {
                 batch.Draw(glowTexture, position, drawInfo with {
                     Scale = scale * 1.5f,
-                    Color = color.MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f,
+                    Color = Color.LightYellow.MultiplyRGB(color).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.5f * spawnProgress,
                     Rotation = rotation + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
@@ -129,21 +129,21 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (!second) {
                 batch.Draw(glowTexture, position, drawInfo with {
                     Scale = scale * 1.5f * Helper.Wave(WaveValue, 0.75f, 1.25f, 5f, waveOffset + i * count),
-                    Color = color.MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.5f,
+                    Color = color.MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f * spawnProgress,
                     Rotation = rotation + MathHelper.PiOver4 + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
         }
 
         for (int i = 0; i < count; i++) {
-            float rotation = (float)i / count * MathHelper.TwoPi;
+            float rotation = Utils.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver2, (float)i / count * MathHelper.TwoPi, spawnProgress);
             rotation += Projectile.rotation;
             Vector2 position = Projectile.Center;
             float distance = 6f;
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
-            Color color = lightColor;
+            Color color = lightColor * spawnProgress;
             rotation += MathHelper.Pi;
             Vector2 scale = Vector2.One;
             DrawInfo drawInfo = DrawInfo.Default with {
