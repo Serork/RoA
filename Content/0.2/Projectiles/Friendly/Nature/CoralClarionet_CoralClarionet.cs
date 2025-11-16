@@ -249,7 +249,7 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         float disappearProgress2 = 1f - Utils.GetLerpValue(0, 25, Projectile.timeLeft, true);
         scale.X = MathHelper.Lerp(scale.X, 0.25f, Ease.CubeIn(disappearProgress2));
         scale.Y = MathHelper.Lerp(scale.Y, 0.5f, Ease.CubeIn(disappearProgress));
-        float colorFactor = Utils.GetLerpValue(1f, 0.875f, disappearProgress, true);
+        float colorFactor = Utils.GetLerpValue(1f, 0.825f, disappearProgress, true);
         color *= colorFactor;
         DrawInfo drawInfo = DrawInfo.Default with {
             Clip = clip,
@@ -281,7 +281,7 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         };
         Vector2 waterPosition = position;
         waterPosition.Y -= 18f;
-        waterPosition.X -= 2f;
+        waterPosition.X -= 4f;
         waterPosition.Y += 8f * progress2;
         //batch.Draw(waterTexture, waterPosition, waterDrawInfo);
         for (float num5 = 0f; num5 < 1f; num5 += 0.25f) {
