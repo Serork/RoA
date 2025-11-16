@@ -220,6 +220,7 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Main.gore[gore].velocity *= 0.5f;
                     Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
                     Main.gore[gore].position -= new Vector2(Main.gore[gore].Width, Main.gore[gore].Height) / 2f;
+                    Main.gore[gore].rotation = MathHelper.TwoPi * Main.rand.NextFloat();
                 }
 
                 for (int k = 0; k < 3; k++) {
