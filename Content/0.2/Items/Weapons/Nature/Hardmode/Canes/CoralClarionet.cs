@@ -124,22 +124,24 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
 
             player.SyncMousePosition();
             Vector2 destination = player.GetWorldMousePosition();
-            float progress = Ease.CircIn(Ease.CircOut(AttackProgress01));
-            for (int i = -1; i < 2; i += 2) {
-                Vector2 spawnPosition = destination + new Vector2(MathHelper.Lerp(50f, 25f, MathUtils.YoYo(progress)) * i, MathHelper.Lerp(-60f, 40f, progress));
-                for (int num807 = 0; (float)num807 < 10f; num807++) {
-                    if (Main.rand.NextBool()) {
-                        continue;
+            float progress = Ease.CircIn(Ease.CircOut(MathUtils.Clamp01(AttackProgress01 * 1.5f)));
+            if (progress < 1f) {
+                for (int i = -1; i < 2; i += 2) {
+                    Vector2 spawnPosition = destination + new Vector2(MathHelper.Lerp(50f, 25f, MathUtils.YoYo(progress)) * i, MathHelper.Lerp(-60f, 40f, progress));
+                    for (int num807 = 0; (float)num807 < 10f; num807++) {
+                        if (Main.rand.NextBool()) {
+                            continue;
+                        }
+                        Vector2 velocity = spawnPosition.DirectionTo(destination);
+                        int num808 = Dust.NewDust(spawnPosition + Main.rand.RandomPointInArea(10f), width, height, Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>(),
+                            velocity.X, velocity.Y, Main.rand.Next(100, 200), default(Color), 1.1f);
+                        Main.dust[num808].noGravity = true;
+                        Dust dust2 = Main.dust[num808];
+                        dust2.velocity *= 0.1f;
+                        dust2 = Main.dust[num808];
+                        dust2.velocity += velocity * Main.rand.NextFloat(1f, 10f);
+                        dust2 = Main.dust[num808];
                     }
-                    Vector2 velocity = spawnPosition.DirectionTo(destination);
-                    int num808 = Dust.NewDust(spawnPosition + Main.rand.RandomPointInArea(10f), width, height, Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>(), 
-                        velocity.X, velocity.Y, Main.rand.Next(100, 200), default(Color), 1.1f);
-                    Main.dust[num808].noGravity = true;
-                    Dust dust2 = Main.dust[num808];
-                    dust2.velocity *= 0.1f;
-                    dust2 = Main.dust[num808];
-                    dust2.velocity += velocity * Main.rand.NextFloat(1f, 10f);
-                    dust2 = Main.dust[num808];
                 }
             }
         }
