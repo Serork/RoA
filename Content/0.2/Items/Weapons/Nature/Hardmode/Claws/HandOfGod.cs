@@ -55,5 +55,5 @@ sealed class HandOfGod : ClawsBaseItem {
     }
 
     protected override (Color, Color) SetSlashColors(Player player) 
-        => (new Color(255, 249, 181), new Color(203, 179, 73));
+        => (new Color(229, 214, 127), new Color(203, 179, 73));
 }
