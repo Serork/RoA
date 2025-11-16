@@ -11,10 +11,12 @@ using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -23,10 +25,12 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+[Tracked]
 sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static float SPAWNTIMEINTICKS => 10f;
     private static float ATTACKTIME => 20f;
     private static ushort TIMELEFT => 360;
+    private static byte MAXCOUNT => 2;
 
     public enum CoralClarionetRequstedTextureType : byte {
         Base,
@@ -223,6 +227,21 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
                 dust2.velocity.Y -= Main.rand.NextFloat(0.5f, 1f);
             }
             dust2.velocity.X *= 1.5f;
+        }
+
+        UpdateMaxCount(owner);
+    }
+
+    private void UpdateMaxCount(Player player) {
+        IEnumerable<Projectile> list2 = TrackedEntitiesSystem.GetTrackedProjectile<CoralClarionet>(checkProjectile => checkProjectile.SameAs(Projectile) || checkProjectile.owner != player.whoAmI);
+        List<Projectile> list = [];
+        foreach (Projectile projectile in list2) {
+            if (projectile.timeLeft > Projectile.timeLeft) {
+                list.Add(projectile);
+            }
+        }
+        if (list.Count >= MAXCOUNT && Projectile.timeLeft > 25) {
+            Projectile.timeLeft = 25;
         }
     }
 
