@@ -361,7 +361,9 @@ sealed class BackwoodsFogHandler : ModSystem {
         //if (y >= Main.worldSurface) {
         //    return;
         //}
-        TestAirCloud(x, y);
+        if (Main.rand.NextChance(MathUtils.Clamp01(Opacity * 2f))) {
+            TestAirCloud(x, y);
+        }
         if (!tile.HasTile/* || tile.Slope > 0 || tile.IsHalfBlock*/ || !(Main.tileSolid[tile.TileType] || WorldGenHelper.IsPlatform(x, y))) {
             return;
         }
