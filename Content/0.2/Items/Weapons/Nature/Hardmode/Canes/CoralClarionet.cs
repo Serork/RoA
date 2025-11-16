@@ -130,8 +130,11 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
 
             player.SyncMousePosition();
             Vector2 destination = GetSpawnPosition();
-            if (Collision.SolidCollision(destination, 0, 0)) {
-                destination -= Vector2.UnitY * 50f * 3f;
+            Vector2 destination2 = GetSpawnPosition() + Vector2.UnitY * 50f * 3f;
+            int attempt = 50;
+            while (attempt > 0 && Collision.SolidCollision(destination2, 0, 0)) {
+                destination -= Vector2.UnitY * 1f * 3f;
+                attempt--;
             }
             float progress = Ease.CircIn(Ease.CircOut(MathUtils.Clamp01(AttackProgress01 * 1.5f)));
             if (progress < 1f) {
