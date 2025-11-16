@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Projectiles;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -18,6 +19,7 @@ using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -215,7 +217,7 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (currentSegmentData.ActualProgress >= VineBodyInfo.MAXPROGRESS2) {
                 // explosion effect
                 if (!Main.dedServ) {
-                    int gore = Gore.NewGore(Projectile.GetSource_FromAI(), position - Vector2.UnitY * 6f + Main.rand.NextVector2Circular(10f, 10f),
+                    int gore = Gore.NewGore(Projectile.GetSource_FromAI(), position - Vector2.UnitY * 4f + Main.rand.NextVector2Circular(10f, 10f),
                         Vector2.Zero, $"ForbiddenTwig{(byte)currentSegmentData.BodyType + 1}".GetGoreType());
                     Main.gore[gore].velocity *= 0.5f;
                     Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
@@ -225,8 +227,8 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
 
                 for (int k = 0; k < 3; k++) {
                     float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
-                    Dust dust = Main.dust[Dust.NewDust(position + Main.rand.NextVector2Circular(10f, 10f) * 0.75f, 
-                        0, 0, DustID.WoodFurniture, 0f, 0f, Main.rand.Next(100), Color.Lerp(new Color(100, 82, 58), default, 0.25f * Main.rand.NextFloat()), dustScale)];
+                    Dust dust = Main.dust[Dust.NewDust(position + Vector2.UnitY * 2f + Main.rand.NextVector2Circular(10f, 10f) * 0.75f, 
+                        0, 0, ModContent.DustType<ForbiddenTwigDust>(), 0f, 0f, Main.rand.Next(100), default, dustScale)];
                     dust.noGravity = true;
                     dust.fadeIn = 0.5f;
                     dust.noLight = true;
