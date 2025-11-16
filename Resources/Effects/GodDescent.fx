@@ -16,30 +16,35 @@ float2 uTargetPosition;
 float4 uLegacyArmorSourceRect;
 float2 uLegacyArmorSheetSize;
 
+float NormalSin(float time)
+{
+    return (sin(time) + 1) / 2;
+}
+
 float2 FrameFix(float2 coords)
 {
-    float pixelSize = 2;
     float frameSizeX = uSourceRect.z / uImageSize0.x;
-    float x = floor(coords.x * uImageSize0.x / pixelSize) / uImageSize0.x * pixelSize % frameSizeX;
-    float frameSizeY = uSourceRect.w / uImageSize0.y;
-    float y = floor(coords.y * uImageSize0.y / pixelSize) / uImageSize0.y * pixelSize % frameSizeY;
-    return float2(x / frameSizeX, y / frameSizeY);
+    float x = coords.x % frameSizeX;
+    float frameSizeY = uLegacyArmorSourceRect.w / uImageSize0.y;
+    float y = coords.y % frameSizeY;
+    return float2(x * 1 / frameSizeX, y * 1 / frameSizeY);
 }
 
 float4 Recolor(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
-    float4 color = tex2D(uImage0, coords);
+    float4 origColor = tex2D(uImage0, coords);
+    float time = uTime * 10;
     float2 textureCoords = FrameFix(coords);
-    color = lerp(color, tex2D(uImage0, float2((coords.x + sin(uTime * 10 + textureCoords.y * 30 * uSaturation) * (2 / uImageSize0.x)) % 1, coords.y)), 0.5f);
-    color.r *= uColor.r;
-    color.g *= uColor.g;
-    color.b *= uColor.b;
-    return color * sampleColor;
+    float r = NormalSin(origColor.r * 5 + time + textureCoords.y);
+    origColor.r = lerp(origColor.r, r, 0.5 * origColor.a);
+    float g = NormalSin(origColor.g * 5 + time + textureCoords.x);
+    origColor.g = lerp(origColor.g, g, 0.5 * origColor.a);
+    return origColor * sampleColor;
 }
 
 technique Technique1
 {
-    pass WreathPass
+    pass GodDescentPass
     {
         PixelShader = compile ps_2_0 Recolor();
     }

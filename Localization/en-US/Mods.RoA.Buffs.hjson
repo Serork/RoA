@@ -315,3 +315,8 @@ NewMoneyDebuff: {
 	DisplayName: New Money Debuff
 	Description: Reaching full stacks has palpable consequences
 }
+
+GodDescent: {
+	DisplayName: God Descent
+	Description: Mods.RoA.Buffs.GodDescent.Description
+}

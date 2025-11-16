@@ -6,8 +6,6 @@ using ReLogic.Content;
 using RoA.Common.Cache;
 using RoA.Common.WorldEvents;
 using RoA.Content.Backgrounds;
-using RoA.Content.Items.Dyes;
-using RoA.Content.Items.LiquidsSpecific;
 using RoA.Core;
 
 using System;
@@ -16,6 +14,7 @@ using System.Linq;
 using System.Reflection;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
@@ -184,13 +183,14 @@ sealed class ShaderLoader : ModSystem {
     public static VignetteScreenShaderData VignetteShaderData2 { get; private set; } = null!;
     public static Effect VignetteEffectData2 { get; private set; } = null!;
 
-    public static ArmorShaderData WreathDyeShaderData { get; private set; } = null!;
+    public static ArmorShaderData WreathShaderData { get; private set; } = null!;
 
     public static Asset<Effect> TarDye => _loadedShaders["TarDye"];
     public static Asset<Effect> Wreath => _loadedShaders["Wreath"];
     public static Asset<Effect> MetaballEdgeShader => _loadedShaders["MetaballEdgeShader"];
     public static Asset<Effect> TarBorder => _loadedShaders["TarBorder"];
     public static Asset<Effect> Sandfall => _loadedShaders["Sandfall"];
+    public static Asset<Effect> GodDescent => _loadedShaders["GodDescent"];
 
     public override void OnModLoad() {
         if (Main.dedServ) {
@@ -245,7 +245,13 @@ sealed class ShaderLoader : ModSystem {
         load01Shaders();
         load02Shaders();
 
-        WreathDyeShaderData = new WreathDyeArmorShaderData(ShaderLoader.Wreath, "WreathDyePass");
+        WreathShaderData = new WreathArmorShaderData(ShaderLoader.Wreath, "WreathPass");
+    }
+
+    public sealed class WreathArmorShaderData(Asset<Effect> shader, string passName) : ArmorShaderData(shader, passName) {
+        public override void Apply(Entity entity, DrawData? drawData) {
+            base.Apply(entity, drawData);
+        }
     }
 
     public override void OnModUnload() {

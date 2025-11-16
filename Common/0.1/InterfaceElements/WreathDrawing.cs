@@ -5,11 +5,7 @@ using ReLogic.Graphics;
 
 using RoA.Common.Cache;
 using RoA.Common.Configs;
-using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
-using RoA.Content.Forms;
-using RoA.Content.Items.Dyes;
-using RoA.Content.Items.Equipables.Accessories;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
@@ -22,7 +18,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.ResourceSets;
-using Terraria.Graphics.Shaders;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -256,9 +251,9 @@ sealed class WreathDrawing : PlayerDrawLayer {
                 wreathSpriteData.VisualPosition = position;
                 wreathSpriteData.Rotation = rotation;
                 wreathSpriteData.Scale = 1f + 0.1f * opacity;
-                ShaderLoader.WreathDyeShaderData.UseSaturation(opacity * 2f);
-                ShaderLoader.WreathDyeShaderData.UseColor(new Color(57, 197, 71));
-                ShaderLoader.WreathDyeShaderData.Apply(player, wreathSpriteData.AsDrawData());
+                ShaderLoader.WreathShaderData.UseSaturation(opacity * 2f);
+                ShaderLoader.WreathShaderData.UseColor(new Color(57, 197, 71));
+                ShaderLoader.WreathShaderData.Apply(player, wreathSpriteData.AsDrawData());
                 wreathSpriteData.DrawSelf();
             }, sortMode: SpriteSortMode.Immediate);
         }

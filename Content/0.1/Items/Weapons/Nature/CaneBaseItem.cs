@@ -161,6 +161,8 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         Projectile.tileCollide = false;
         Projectile.netImportant = true;
 
+        Projectile.friendly = true;
+
         ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
     }
 
