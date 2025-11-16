@@ -139,7 +139,10 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
 
         float spawnProgress = Ease.CircOut(Utils.GetLerpValue(TIMELEFT, TIMELEFT - 20, Projectile.timeLeft, true));
-        float fadeOutProgress = Ease.CircOut(Utils.GetLerpValue(0, 20, Projectile.timeLeft, true));
+        float fadeOutProgress = Utils.GetLerpValue(0, 25, Projectile.timeLeft, true);
+        float fadeOutProgress2 = Utils.GetLerpValue(0.75f, 0.2f, fadeOutProgress, true);
+        float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
+        float fadeOutProgress4 = Utils.GetLerpValue(0f, 0.2f, fadeOutProgress, true);
 
         Texture2D baseTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base].Value,
                   glowTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Glow].Value,
@@ -157,9 +160,11 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 origin = clip.BottomCenter();
             Color color = lightColor * 0.875f;
             color.A = (byte)MathHelper.Lerp(255, 185, Activated2Value);
+            color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
             color *= spawnProgress;
+            color *= fadeOutProgress3;
             rotation += MathHelper.Pi;
-            Vector2 scale = Vector2.One;
+            Vector2 scale = Vector2.One * fadeOutProgress4;
             DrawInfo drawInfo = DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
@@ -198,9 +203,12 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
-            Color color = Color.Lerp(new Color(61, 72, 73), Color.Yellow, Activated2Value).MultiplyRGB(lightColor) * spawnProgress;
+            Color color = Color.Lerp(new Color(61, 72, 73), Color.Yellow, Activated2Value).MultiplyRGB(lightColor);
+            color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
+            color *= spawnProgress;
+            color *= fadeOutProgress3;
             rotation += MathHelper.Pi;
-            Vector2 scale = Vector2.One;
+            Vector2 scale = Vector2.One * fadeOutProgress4;
             DrawInfo drawInfo = DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
