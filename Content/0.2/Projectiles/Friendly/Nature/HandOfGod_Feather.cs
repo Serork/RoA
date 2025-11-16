@@ -59,6 +59,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool? CanCutTiles() => false;
 
     public override void AI() {
+        Projectile.timeLeft = 2;
+
         Player owner = Projectile.GetOwnerAsPlayer();
         owner.SyncMousePosition();
         Vector2 mousePosition = owner.GetWorldMousePosition();
@@ -102,7 +104,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
-            Color color = lightColor * spawnProgress;
+            Color color = lightColor * spawnProgress * 0.875f;
             rotation += MathHelper.Pi;
             Vector2 scale = Vector2.One;
             DrawInfo drawInfo = DrawInfo.Default with {
@@ -119,7 +121,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (second) {
                 batch.Draw(glowTexture, position, drawInfo with {
                     Scale = scale * 1.5f,
-                    Color = Color.LightYellow.MultiplyRGB(color).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.5f * spawnProgress,
+                    Color = Color.LightYellow.MultiplyRGB(color).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.5f * spawnProgress * 0.375f,
                     Rotation = rotation + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
@@ -129,7 +131,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (!second) {
                 batch.Draw(glowTexture, position, drawInfo with {
                     Scale = scale * 1.5f * Helper.Wave(WaveValue, 0.75f, 1.25f, 5f, waveOffset + i * count),
-                    Color = color.MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f * spawnProgress,
+                    Color = color.MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f * spawnProgress * 0.375f,
                     Rotation = rotation + MathHelper.PiOver4 + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
