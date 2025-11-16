@@ -135,7 +135,7 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         int spawnAreaWidth = Projectile.width + 4,
             spawnAreaHeight = 4;
         Vector2 dustVelocity = -Vector2.One.RotatedBy(Main.rand.NextFloatRange(MathHelper.PiOver2)) * Main.rand.NextBool().ToDirectionInt();
-        dustVelocity += Vector2.UnitY.RotatedBy(MathHelper.TwoPi - rotation) * Main.rand.NextFloat(2.5f, 5f);
+        dustVelocity += Vector2.UnitY.RotatedBy(MathHelper.TwoPi - rotation) * Main.rand.NextFloat(2.5f, 5f) * 2f;
         if (Main.rand.NextChance(chance)) {
             Dust.NewDustDirect(dustSpawnPosition, spawnAreaWidth, spawnAreaHeight, bubbleDustType, SpeedX: dustVelocity.X, SpeedY: dustVelocity.Y);
         }
