@@ -299,8 +299,10 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                                 int num36 = num35 + 1;
                                 Tile tile = Main.tile[x2, num36];
                                 if (!tile.HasTile) {
-                                    tile.TileType = type7;
-                                    tile.HasTile = true;
+                                    if (Main.tile[x2, num36 - 1].TileType == leafBlockTileType || Main.tile[x2, num36 - 1].TileType == type7) {
+                                        tile.TileType = type7;
+                                        tile.HasTile = true;
+                                    }
                                 }
                             }
                         }
@@ -1744,8 +1746,10 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                                 int num36 = num35 + 1;
                                 Tile tile = Main.tile[x2, num36];
                                 if (!tile.HasTile) {
-                                    tile.TileType = type7;
-                                    tile.HasTile = true;
+                                    if (Main.tile[x2, num36 - 1].TileType == leafBlockTileType || Main.tile[x2, num36 - 1].TileType == type7) {
+                                        tile.TileType = type7;
+                                        tile.HasTile = true;
+                                    }
                                 }
                             }
                         }
