@@ -1519,7 +1519,11 @@ PlanetomaStaff: {
 
 JawTrap: {
 	DisplayName: Jaw Trap
-	Tooltip: Clenches its teeth when someone steps inside
+	Tooltip: 
+		'''
+		Clenches its teeth when someone steps inside
+		'Let it happen'
+		'''
 }
 
 TealMoss: {
@@ -2008,23 +2012,8 @@ LivingPearlwoodHelmet: {
 	Tooltip: ""
 }
 
-PerfafrostBucket: {
-	DisplayName: Perfafrost Bucket
-	Tooltip: ""
-}
-
 TarBucket: {
 	DisplayName: Tar Bucket
-	Tooltip: ""
-}
-
-PermafrostBucket: {
-	DisplayName: Permafrost Bucket
-	Tooltip: ""
-}
-
-PermafrostAbsorbantSponge: {
-	DisplayName: Permafrost Absorbant Sponge
 	Tooltip: ""
 }
 
