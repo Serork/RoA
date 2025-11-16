@@ -87,7 +87,11 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
         Vector2 mousePosition = _mousePosition;
         if (SpawnValue == 0f) {
-            //Projectile.Center += Vector2.UnitY * 50f * 3f;
+            int attempt = 50;
+            while (attempt > 0 && !Collision.SolidCollision(Projectile.Center, 0, 0)) {
+                Projectile.Center += Vector2.UnitY * 1f * 3f;
+                attempt--;
+            }
         }
 
         SpawnValue = Helper.Approach(SpawnValue, SPAWNTIMEINTICKS, 1f);
