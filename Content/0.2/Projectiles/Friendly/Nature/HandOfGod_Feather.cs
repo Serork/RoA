@@ -20,7 +20,7 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static ushort TIMELEFT => 360;
+    private static ushort TIMELEFT => 600;
     public static ushort DEBUFFTIME => 60;
 
     public enum GodFeatherRequstedTextureType : byte {
@@ -127,6 +127,19 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                 activeProjectile.GetGlobalProjectile<GodDescent.GodDescent_ProjectileHandler>().IsEffectActive = true;
             }
         }
+
+        float spawnProgress = Ease.CircOut(Utils.GetLerpValue(TIMELEFT, TIMELEFT - 20, Projectile.timeLeft, true));
+        int count = 8;
+        for (int i = 0; i < count; i++) {
+            float rotation = Utils.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver2, (float)i / count * MathHelper.TwoPi, spawnProgress);
+            rotation += Utils.AngleLerp(Projectile.rotation, 0f, 1f - spawnProgress);
+            Vector2 position = Projectile.Center;
+            float distance2 = 6f;
+            position += Vector2.UnitY.RotatedBy(rotation) * distance2;
+            float fadeOutProgress = Utils.GetLerpValue(0, 25, Projectile.timeLeft, true);
+            float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
+            Lighting.AddLight(position, Color.LightYellow.ToVector3() * spawnProgress * 0.5f * fadeOutProgress3);
+        }
     }
 
     public override void OnKill(int timeLeft) {
@@ -143,6 +156,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         float fadeOutProgress2 = Utils.GetLerpValue(0.75f, 0.2f, fadeOutProgress, true);
         float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
         float fadeOutProgress4 = Utils.GetLerpValue(0f, 0.2f, fadeOutProgress, true);
+        float lightingModifier = 0.25f;
 
         Texture2D baseTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base].Value,
                   glowTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Glow].Value,
@@ -158,7 +172,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
-            Color color = lightColor * 0.875f;
+            Color color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, lightingModifier) * 0.875f;
             color.A = (byte)MathHelper.Lerp(255, 185, Activated2Value);
             color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
             color *= spawnProgress;
@@ -203,7 +217,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
-            Color color = Color.Lerp(new Color(61, 72, 73), Color.Yellow, Activated2Value).MultiplyRGB(lightColor);
+            Color color = Color.Lerp(new Color(61, 72, 73), Color.Yellow, Activated2Value).MultiplyRGB(Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, lightingModifier));
             color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
             color *= spawnProgress;
             color *= fadeOutProgress3;
