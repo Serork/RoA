@@ -130,7 +130,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
 
             player.SyncMousePosition();
             Vector2 destination = GetSpawnPosition();
-            Vector2 destination2 = GetSpawnPosition() + Vector2.UnitY * 50f * 3f;
+            Vector2 destination2 = destination + Vector2.UnitY * 50f * 3f;
             int attempt = 50;
             while (attempt > 0 && Collision.SolidCollision(destination2, 0, 0)) {
                 destination -= Vector2.UnitY * 1f * 3f;
