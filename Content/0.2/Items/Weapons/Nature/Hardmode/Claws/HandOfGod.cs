@@ -7,6 +7,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -46,9 +47,11 @@ sealed class HandOfGod : ClawsBaseItem {
 
     protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
         ushort type = (ushort)ModContent.ProjectileType<GodFeather>();
+        bool hasShieldAlready = player.HasProjectile<GodFeather>();
+        args.ShouldSpawn = !hasShieldAlready;
         args.SpawnPosition = player.Center;
         args.ProjectileTypeToSpawn = type;
-        args.ShouldReset = true;
+        args.ShouldReset = !hasShieldAlready;
     }
 
     protected override (Color, Color) SetSlashColors(Player player) 
