@@ -5,9 +5,11 @@ using RoA.Common.VisualEffects;
 using RoA.Content.Achievements;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Tiles.Platforms;
+using RoA.Content.VisualEffects;
 using RoA.Core.Utility;
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
@@ -15,6 +17,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.Utilities;
 
 namespace RoA.Common.WorldEvents;
 
@@ -45,6 +48,9 @@ sealed class BackwoodsFogHandler : ModSystem {
 
     private static float _fogTime;
     private static Vector2 _oldPosition;
+
+    private static List<Point> _spotsForAirboneWind = new List<Point>();
+    private static int _updatesCounter;
 
     public static bool IsFogActive { get; private set; } = false;
     public static float Opacity { get; internal set; } = 0f;
@@ -216,6 +222,15 @@ sealed class BackwoodsFogHandler : ModSystem {
                 }
             }
 
+            _updatesCounter++;
+            for (int i = tileWorkSpace.X; i < num; i++) {
+                for (int j = tileWorkSpace.Y; j < num2; j++) {
+                    //TrySpawningWind(i, j);
+                }
+            }
+            if (_updatesCounter % 10 == 0)
+                SpawnAirborneWind();
+
             if (player.whoAmI == Main.myPlayer && Vector2.Distance(_oldPosition, player.position) > 600f && !player.InModBiome<BackwoodsBiome>()) {
                 Opacity = Opacity2 = 0.01f;
             }
@@ -249,6 +264,91 @@ sealed class BackwoodsFogHandler : ModSystem {
         _oldPosition = Main.LocalPlayer.position;
     }
 
+    private void SpawnAirborneWind() {
+        foreach (Point item in _spotsForAirboneWind) {
+            SpawnAirborneCloud(item.X, item.Y);
+        }
+
+        _spotsForAirboneWind.Clear();
+    }
+
+    private void TestAirCloud(int x, int y) {
+        UnifiedRandom random = Main.rand;
+        if (random.Next(120000) != 0)
+            return;
+
+        for (int i = -5; i <= 5; i++) {
+            if (i != 0) {
+                Tile t = Main.tile[x + i, y];
+                if (!DoesTileAllowWind(t))
+                    return;
+
+                t = Main.tile[x, y + i];
+                if (!DoesTileAllowWind(t))
+                    return;
+            }
+        }
+
+        _spotsForAirboneWind.Add(new Point(x, y));
+    }
+
+    private bool DoesTileAllowWind(Tile t) {
+        if (t.HasTile)
+            return !Main.tileSolid[t.TileType];
+
+        return true;
+    }
+
+    private void SpawnAirborneCloud(int x, int y) {
+        UnifiedRandom random = Main.rand;
+        int num = random.Next(2, 6);
+        float num2 = 1.1f;
+        float num3 = 2.2f;
+        float num4 = 0.023561945f * random.NextFloatDirection();
+        float num5 = 0.023561945f * random.NextFloatDirection();
+        while (num5 > -0.011780973f && num5 < 0.011780973f) {
+            num5 = 0.023561945f * random.NextFloatDirection();
+        }
+
+        if (random.Next(4) == 0) {
+            num = random.Next(9, 16);
+            num2 = 1.1f;
+            num3 = 1.2f;
+        }
+        else if (random.Next(4) == 0) {
+            num = random.Next(9, 16);
+            num2 = 1.1f;
+            num3 = 0.2f;
+        }
+
+        Vector2 vector = new Vector2(-10f, 0f);
+        Vector2 vector2 = new Point(x, y).ToWorldCoordinates();
+        num4 -= num5 * (float)num * 0.5f;
+        float num6 = num4;
+        for (int i = 0; i < num; i++) {
+            if (Main.rand.Next(10) == 0)
+                num5 *= random.NextFloatDirection();
+
+            Vector2 vector3 = random.NextVector2Circular(4f, 4f);
+
+            //int type = 1091 + random.Next(2) * 2;
+
+            float num7 = 1.4f;
+            num7 *= 2f;
+            float num8 = num2 + random.NextFloat() * num3;
+            float num9 = num6 + num5;
+            Vector2 vector4 = Vector2.UnitX.RotatedBy(num9) * num7;
+            if (Main.netMode != NetmodeID.Server) {
+                for (int i2 = 0; i2 < 3; i2++) {
+                    VisualEffectSystem.New<Fog2>(VisualEffectLayer.ABOVEPLAYERS)?.
+                        Setup(vector2 + vector3 - vector + random.RandomPointInArea(6f), vector4 * Main.WindForVisuals, scale: num8 * 0.9f);
+                }
+            }
+            vector2 += vector4 * 6.5f * num8;
+            num6 = num9;
+        }
+    }
+
     private Rectangle GetTileWorkSpace() {
         Point point = Main.LocalPlayer.Center.ToTileCoordinates();
         int num = 120;
@@ -261,6 +361,7 @@ sealed class BackwoodsFogHandler : ModSystem {
         //if (y >= Main.worldSurface) {
         //    return;
         //}
+        TestAirCloud(x, y);
         if (!tile.HasTile/* || tile.Slope > 0 || tile.IsHalfBlock*/ || !(Main.tileSolid[tile.TileType] || WorldGenHelper.IsPlatform(x, y))) {
             return;
         }

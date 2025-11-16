@@ -18,7 +18,7 @@ float2 uLegacyArmorSheetSize;
 
 float NormalSin(float time)
 {
-    return (sin(time) + 1) / 2;
+    return 1 - (sin(time) + 1) / 2;
 }
 
 float2 FrameFix(float2 coords)
