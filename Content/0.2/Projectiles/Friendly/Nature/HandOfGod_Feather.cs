@@ -156,7 +156,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         float fadeOutProgress2 = Utils.GetLerpValue(0.75f, 0.2f, fadeOutProgress, true);
         float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
         float fadeOutProgress4 = Utils.GetLerpValue(0f, 0.2f, fadeOutProgress, true);
-        float lightingModifier = MathHelper.Lerp(0.25f, 0.5f, Activated2Value);
+        float lightingModifier = MathHelper.Lerp(0.375f, 0.625f, Activated2Value);
 
         Texture2D baseTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base].Value,
                   glowTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Glow].Value,
@@ -172,11 +172,15 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
-            Color color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, lightingModifier) * 0.875f;
-            color.A = (byte)MathHelper.Lerp(255, 185, Activated2Value);
-            color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
-            color *= spawnProgress;
-            color *= fadeOutProgress3;
+            Color getColor(bool glow = false) {
+                Color color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, lightingModifier * glow.ToInt()) * 0.875f;
+                color.A = (byte)MathHelper.Lerp(255, 185, Activated2Value);
+                color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
+                color *= spawnProgress;
+                color *= fadeOutProgress3;
+                return color;
+            }
+            Color color = getColor();
             rotation += MathHelper.Pi;
             Vector2 scale = Vector2.One * fadeOutProgress4;
             DrawInfo drawInfo = DrawInfo.Default with {
@@ -193,17 +197,21 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (second) {
                 batch.Draw(glowTexture, position, drawInfo with {
                     Scale = scale * 1.5f,
-                    Color = Color.LightYellow.MultiplyRGB(color).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.5f * spawnProgress * 0.375f,
+                    Color = Color.LightYellow.MultiplyRGB(getColor(true)).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.5f * spawnProgress * 0.375f,
                     Rotation = rotation + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
             batch.Draw(baseTexture, position, drawInfo with {
                 Scale = scale * Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count)
             });
+            batch.Draw(glowTexture, position, drawInfo with {
+                Color = getColor(true) * 0.5f,
+                Scale = scale * Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count)
+            });
             if (!second) {
                 batch.Draw(glowTexture, position, drawInfo with {
                     Scale = scale * 1.5f * Helper.Wave(WaveValue, 0.75f, 1.25f, 5f, waveOffset + i * count),
-                    Color = color.MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f * spawnProgress * 0.375f,
+                    Color = getColor(true).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f * spawnProgress * 0.375f,
                     Rotation = rotation + MathHelper.PiOver4 + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
