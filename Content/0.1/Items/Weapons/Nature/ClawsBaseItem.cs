@@ -81,7 +81,7 @@ abstract class ClawsBaseItem : NatureItem {
         player.SetCompositeArmBack(enabled: true, compositeArmStretchAmount, !back ? 0f : rotation);
     }
 
-    protected virtual void SetSpecialAttackData(Player player,ref ClawsHandler.AttackSpawnInfoArgs args) { }
+    protected virtual void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) { }
 
     protected sealed override void SafeSetDefaults2() {
         Item.SetShootableValues(SetClawsSlash<ClawsSlash>(), 1.2f);

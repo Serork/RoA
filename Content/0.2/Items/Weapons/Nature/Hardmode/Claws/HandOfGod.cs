@@ -2,11 +2,16 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 
@@ -40,7 +45,10 @@ sealed class HandOfGod : ClawsBaseItem {
     }
 
     protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
-        args.ShouldReset = false;
+        ushort type = (ushort)ModContent.ProjectileType<GodFeather>();
+        args.SpawnPosition = player.Center;
+        args.ProjectileTypeToSpawn = type;
+        args.ShouldReset = true;
     }
 
     protected override (Color, Color) SetSlashColors(Player player) 
