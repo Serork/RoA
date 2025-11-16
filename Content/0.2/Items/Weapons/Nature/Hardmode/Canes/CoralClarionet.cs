@@ -104,6 +104,9 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                 if (Main.rand.NextBool()) {
                     continue;
                 }
+                if (Main.rand.NextBool()) {
+                    continue;
+                }
                 int type = Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>();
                 Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
                 Vector2 center = CorePosition + Vector2.UnitX.RotatedBy(Projectile.rotation) * 4f * -Projectile.direction + new Vector2(Projectile.direction == 1 ? 3f : -3f, 0f) + spinningpoint * 15;
@@ -158,7 +161,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
             }
 
             for (int i = 0; i < 4; i++) {
-                if (Main.rand.NextBool()) {
+                if (!Main.rand.NextBool(3)) {
                     continue;
                 }
                 int type = Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>();
@@ -182,7 +185,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                 return;
             }
 
-            Texture2D waterTexture = indexedTextureAssets[(byte)CoralClarionetRequstedTextureType.Water].Value;
+            Texture2D waterTexture = indexedTextureAssets[(byte)CoralClarionetRequstedTextureType.Water2].Value;
             float attackProgress = AttackProgress01;
             float waveValue = Owner.miscCounter * MathHelper.Lerp(0.1f, 0.2f, attackProgress);
             SpriteFrame waterFrame = new(1, 3, 0, (byte)(waveValue % 3));
@@ -192,7 +195,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
             //waterColor.A = (byte)MathHelper.Lerp(255, 200, attackProgress);
             waterColor *= 0.25f;
             waterColor *= attackProgress;
-            Vector2 waterScale = new Vector2(0.75f, 0.625f) * 1.125f * MathHelper.Lerp(0.5f, 0.75f, attackProgress);
+            Vector2 waterScale = new Vector2(0.75f, 0.625f) * 2f * MathHelper.Lerp(0.5f, 0.75f, attackProgress);
             float waterRotation = Projectile.rotation + Helper.Wave(waveValue, -0.25f, 0.25f, 10f, Projectile.whoAmI);
             DrawInfo waterDrawInfo = DrawInfo.Default with {
                 Clip = waterClip,

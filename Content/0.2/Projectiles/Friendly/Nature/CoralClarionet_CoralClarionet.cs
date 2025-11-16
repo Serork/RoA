@@ -34,7 +34,8 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
         Part2,
         Part3,
         Part4,
-        Water
+        Water,
+        Water2
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
@@ -43,7 +44,8 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)CoralClarionetRequstedTextureType.Part2, ResourceManager.NatureProjectileTextures + "CoralClarionet_2"),
          ((byte)CoralClarionetRequstedTextureType.Part3, ResourceManager.NatureProjectileTextures + "CoralClarionet_3"),
          ((byte)CoralClarionetRequstedTextureType.Part4, ResourceManager.NatureProjectileTextures + "CoralClarionet_4"),
-         ((byte)CoralClarionetRequstedTextureType.Water, ResourceManager.NatureProjectileTextures + "CoralClarionet_Water")];
+         ((byte)CoralClarionetRequstedTextureType.Water, ResourceManager.NatureProjectileTextures + "CoralClarionet_Water"),
+         ((byte)CoralClarionetRequstedTextureType.Water2, ResourceManager.NatureProjectileTextures + "CoralClarionet_Water2")];
 
     private Vector2 _mousePosition;
 
