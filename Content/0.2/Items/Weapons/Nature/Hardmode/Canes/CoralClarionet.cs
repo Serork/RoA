@@ -11,6 +11,7 @@ using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -115,7 +116,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                 int type = Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>();
                 Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
                 Vector2 center = CorePosition + Vector2.UnitX.RotatedBy(Projectile.rotation) * 4f * -Projectile.direction + new Vector2(Projectile.direction == 1 ? 3f : -3f, 0f) + spinningpoint * 15;
-                Vector2 rotationPoint = spinningpoint.RotatedBy(0.785);
+                Vector2 rotationPoint = spinningpoint.RotatedBy(0.785 * Projectile.direction);
                 Vector2 position = center + rotationPoint * 5f;
                 int dust = Dust.NewDust(position, 0, 0, type);
                 Main.dust[dust].position = position;
@@ -198,7 +199,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                 int type = Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>();
                 Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
                 Vector2 center = CorePosition + Vector2.UnitX.RotatedBy(Projectile.rotation) * 4f * -Projectile.direction + new Vector2(Projectile.direction == 1 ? 3f : -3f, 0f) + spinningpoint * 15;
-                Vector2 rotationPoint = spinningpoint.RotatedBy(0.785);
+                Vector2 rotationPoint = spinningpoint.RotatedBy(0.785 * Projectile.direction);
                 Vector2 position = center + rotationPoint * 5f;
                 int dust = Dust.NewDust(position, 0, 0, type);
                 Main.dust[dust].position = position;
@@ -219,7 +220,8 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
             Texture2D waterTexture = indexedTextureAssets[(byte)CoralClarionetRequstedTextureType.Water2].Value;
             float attackProgress = AttackProgress01;
             float waveValue = Owner.miscCounter * MathHelper.Lerp(0.1f, 0.2f, attackProgress);
-            SpriteFrame waterFrame = new(1, 3, 0, (byte)(waveValue % 3));
+            bool facedRight = Projectile.FacedRight();
+            SpriteFrame waterFrame = new(1, 3, 0, (byte)(facedRight ? (3 - waveValue % 3) : (waveValue % 3)));
             Rectangle waterClip = waterFrame.GetSourceRectangle(waterTexture);
             Vector2 waterOrigin = waterClip.Centered();
             Color waterColor = lightColor;
