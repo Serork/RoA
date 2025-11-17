@@ -2337,7 +2337,11 @@ MenhirBanner: {
 
 PerfectMimicBanner: {
 	DisplayName: Perfect Mimic Banner
-	Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PerfectMimic.DisplayName}"
+	Tooltip: 
+		'''
+		{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PerfectMimic.DisplayName}
+		'I'm forever alone'
+		'''
 }
 
 TarSlimeBanner: {
