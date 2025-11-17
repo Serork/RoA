@@ -256,7 +256,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             color *= spawnProgress;
             color *= fadeOutProgress3;
             rotation += MathHelper.Pi;
-            Vector2 baseScale = _scales[i];
+            Vector2 baseScale = Vector2.One;
             Vector2 scale = baseScale * fadeOutProgress4;
             DrawInfo drawInfo = DrawInfo.Default with {
                 Clip = clip,
