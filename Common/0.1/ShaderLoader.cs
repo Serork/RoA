@@ -188,7 +188,6 @@ sealed class ShaderLoader : ModSystem {
     public static Asset<Effect> TarDye => _loadedShaders["TarDye"];
     public static Asset<Effect> Wreath => _loadedShaders["Wreath"];
     public static Asset<Effect> MetaballEdgeShader => _loadedShaders["MetaballEdgeShader"];
-    public static Asset<Effect> TarBorder => _loadedShaders["TarBorder"];
     public static Asset<Effect> Sandfall => _loadedShaders["Sandfall"];
     public static Asset<Effect> GodDescent => _loadedShaders["GodDescent"];
 

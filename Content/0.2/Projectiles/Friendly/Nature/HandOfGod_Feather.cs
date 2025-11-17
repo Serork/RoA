@@ -14,6 +14,7 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 
@@ -35,6 +36,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)GodFeatherRequstedTextureType.Glow, ResourceManager.NatureProjectileTextures + "GodFeather_Glow"),
          ((byte)GodFeatherRequstedTextureType.Eye, ResourceManager.NatureProjectileTextures + "GodFeather_Eye"),
          ((byte)GodFeatherRequstedTextureType.Eye2, ResourceManager.NatureProjectileTextures + "GodFeather_Eye2")];
+
+    private readonly Vector2[] _scales = new Vector2[8];
 
     public ref float WaveValue => ref Projectile.localAI[1];
     public ref float RotationLerpValue => ref Projectile.localAI[2];
@@ -75,6 +78,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool? CanCutTiles() => false;
 
     public override void AI() {
+        Projectile.timeLeft = 30;
+
         ActivatedValue = Helper.Approach(ActivatedValue, 0f, TimeSystem.LogicDeltaTime);
         Activated2Value = Helper.Approach(Activated2Value, ActivatedValue, TimeSystem.LogicDeltaTime * 5f);
 
@@ -92,6 +97,12 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         RotationLerpValue = Helper.Approach(RotationLerpValue, 0.0375f * (1f + 0.5f * Activated2Value) * Projectile.direction, TimeSystem.LogicDeltaTime);
         float rotationValue = RotationLerpValue;
         Projectile.rotation += rotationValue;
+
+        if (WaveValue == 0) {
+            for (int i = 0; i < _scales.Length; i++) {
+                _scales[i] = Vector2.One;
+            }
+        }
 
         WaveValue += TimeSystem.LogicDeltaTime;
 
@@ -165,12 +176,35 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpriteBatch batch = Main.spriteBatch;
         int count = 8;
         float waveOffset = Projectile.whoAmI;
+        Player owner = Projectile.GetOwnerAsPlayer();
+        List<(float, Vector2)> positions = [];
         for (int i = 0; i < count; i++) {
             float rotation = Utils.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver2, (float)i / count * MathHelper.TwoPi, spawnProgress);
             rotation += Utils.AngleLerp(Projectile.rotation, 0f, 1f - spawnProgress);
             Vector2 position = Projectile.Center;
             float distance = 6f;
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
+            positions.Add((rotation, position));
+        }
+        List<Vector2> scales = [];
+        for (int i = 0; i < positions.Count; i++) {
+            Vector2 baseScale = Vector2.One;
+            Vector2 position = positions[i].Item2;
+            bool last = owner.Distance(Projectile.Center) < owner.Distance(position);
+            if (last) {
+                baseScale.Y *= 0.9f;
+            }
+            else {
+                baseScale.Y *= 1.1f;
+            }
+            scales.Add(baseScale);
+        }
+        for (int i = 0; i < scales.Count; i++) {
+            _scales[i] = Helper.Approach(_scales[i], scales[i], TimeSystem.LogicDeltaTime);
+        }
+        for (int i = 0; i < positions.Count; i++) {
+            float rotation = positions[i].Item1;
+            Vector2 position = positions[i].Item2;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
             Color getColor(bool glow = false) {
@@ -183,7 +217,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
             Color color = getColor();
             rotation += MathHelper.Pi;
-            Vector2 scale = Vector2.One * fadeOutProgress4;
+            Vector2 baseScale = _scales[i];
+            Vector2 scale = baseScale * fadeOutProgress4;
             DrawInfo drawInfo = DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
@@ -218,12 +253,9 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
         }
 
-        for (int i = 0; i < count; i++) {
-            float rotation = Utils.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver2, (float)i / count * MathHelper.TwoPi, spawnProgress);
-            rotation += Utils.AngleLerp(Projectile.rotation, 0f, 1f - spawnProgress);
-            Vector2 position = Projectile.Center;
-            float distance = 6f;
-            position += Vector2.UnitY.RotatedBy(rotation) * distance;
+        for (int i = 0; i < positions.Count; i++) {
+            float rotation = positions[i].Item1;
+            Vector2 position = positions[i].Item2;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
             Color color = Color.Lerp(new Color(61, 72, 73), Color.Yellow, Activated2Value).MultiplyRGB(Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, lightingModifier));
@@ -231,7 +263,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             color *= spawnProgress;
             color *= fadeOutProgress3;
             rotation += MathHelper.Pi;
-            Vector2 scale = Vector2.One * fadeOutProgress4;
+            Vector2 baseScale = _scales[i];
+            Vector2 scale = baseScale * fadeOutProgress4;
             DrawInfo drawInfo = DrawInfo.Default with {
                 Clip = clip,
                 Origin = origin,
