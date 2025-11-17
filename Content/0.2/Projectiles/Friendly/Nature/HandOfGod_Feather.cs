@@ -78,8 +78,6 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool? CanCutTiles() => false;
 
     public override void AI() {
-        Projectile.timeLeft = 30;
-
         ActivatedValue = Helper.Approach(ActivatedValue, 0f, TimeSystem.LogicDeltaTime);
         Activated2Value = Helper.Approach(Activated2Value, ActivatedValue, TimeSystem.LogicDeltaTime * 5f);
 
