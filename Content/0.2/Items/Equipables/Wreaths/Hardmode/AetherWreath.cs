@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility.Vanilla;
+
 using Terraria;
 using Terraria.ID;
 
@@ -18,5 +20,11 @@ sealed class AetherWreath : WreathItem, WreathItem.IWreathGlowMask {
         Item.rare = ItemRarityID.Orange;
 
         Item.value = Item.sellPrice(0, 0, 2, 0);
+    }
+
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        if (player.GetWreathHandler().IsFull1) {
+            player.GetCommon().IsAetherInvincibilityActive = true;
+        }
     }
 }

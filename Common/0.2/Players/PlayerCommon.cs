@@ -41,6 +41,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool ApplyBoneArmorVisuals;
 
+    public bool IsAetherInvincibilityActive;
+
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
 
@@ -130,10 +132,26 @@ sealed partial class PlayerCommon : ModPlayer {
         On_ItemSlot.PickItemMovementAction += On_ItemSlot_PickItemMovementAction;
         On_ItemSlot.ArmorSwap += On_ItemSlot_ArmorSwap;
 
+        On_PlayerDrawSet.BoringSetup_2 += On_PlayerDrawSet_BoringSetup_21;
+
         DevilSkullLoad();
         CrystallizedSkullLoad();
         WiresLoad();
         CursorEffectsLoad();
+    }
+
+    private void On_PlayerDrawSet_BoringSetup_21(On_PlayerDrawSet.orig_BoringSetup_2 orig, ref PlayerDrawSet self, Player player, System.Collections.Generic.List<DrawData> drawData, System.Collections.Generic.List<int> dust, System.Collections.Generic.List<int> gore, Vector2 drawPosition, float shadowOpacity, float rotation, Vector2 rotationOrigin) {
+        bool reset = false;
+        if (player.GetCommon().IsAetherInvincibilityActive) {
+            player.noItems = false;
+            reset = true;
+        }
+
+        orig(ref self, player, drawData, dust, gore, drawPosition, shadowOpacity, rotation, rotationOrigin);
+
+        if (reset) {
+            player.noItems = true;
+        }
     }
 
     private void On_PlayerDrawLayers_DrawPlayer_21_Head(On_PlayerDrawLayers.orig_DrawPlayer_21_Head orig, ref PlayerDrawSet drawinfo) {
@@ -337,6 +355,17 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        if (IsAetherInvincibilityActive) {
+            Player.shimmerTransparency += 0.03f;
+            if (Player.shimmerTransparency > 0.5f)
+                Player.shimmerTransparency = 0.5f;
+        }
+        else if (!Player.shimmering && Player.shimmerTransparency > 0f) {
+            Player.shimmerTransparency -= 0.015f;
+            if (Player.shimmerTransparency < 0f)
+                Player.shimmerTransparency = 0f;
+        }
+
         ResetEffectsEvent?.Invoke(Player);
 
         ApplyBoneArmorVisuals = false;
@@ -348,6 +377,8 @@ sealed partial class PlayerCommon : ModPlayer {
         ApplyDeerSkullSetBonus = false;
 
         StopFaceDrawing = StopHeadDrawing = false;
+
+        IsAetherInvincibilityActive = false;
 
         CursorEffectsResetEffects();
         DeerSkullResetEffects();
@@ -363,7 +394,17 @@ sealed partial class PlayerCommon : ModPlayer {
 
         RodOfTheBifrostItemCheck(Player);
 
+        if (IsAetherInvincibilityActive) {
+            Player.noItems = true;
+        }
+
         return base.PreItemCheck();
+    }
+
+    public override void ModifyHurt(ref Player.HurtModifiers modifiers) {
+        if (IsAetherInvincibilityActive) {
+            modifiers.Cancel();
+        }
     }
 
     public partial void RodOfTheBifrostItemCheck(Player player);
