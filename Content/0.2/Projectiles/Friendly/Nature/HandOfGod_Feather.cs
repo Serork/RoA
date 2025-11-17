@@ -86,7 +86,9 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 mousePosition = owner.GetWorldMousePosition();
         Vector2 center = owner.Center;
         float distance = 50f;
-        Projectile.velocity = Vector2.Lerp(Projectile.velocity, center.DirectionTo(mousePosition) * distance, 0.05f * MathUtils.Clamp01(1f - WaveValue));
+
+        float moveFactor = MathUtils.Clamp01(1f - WaveValue);
+        Projectile.velocity = Vector2.Lerp(Projectile.velocity, center.DirectionTo(mousePosition) * distance, 0.05f * moveFactor);
         Projectile.Center = Utils.Floor(center) + Projectile.velocity + Vector2.UnitY * owner.gfxOffY;
 
         int direction = Projectile.DirectionTo(owner.Center).X.GetDirection();
