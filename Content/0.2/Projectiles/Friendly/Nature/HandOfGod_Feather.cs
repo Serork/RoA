@@ -105,6 +105,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                 activeNPC.AddBuff<GodDescent>(DEBUFFTIME);
             }
         }
+        // TODO: pvp support?
         foreach (Player activePlayer in Main.ActivePlayers) {
             if (activePlayer.whoAmI == owner.whoAmI) {
                 continue;
