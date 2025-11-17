@@ -2308,10 +2308,7 @@ RodOfTheLustrous: {
 
 PerfectClot: {
 	DisplayName: Perfect Clot
-	Tooltip:
-		'''
-		'I'm forever alone'
-		'''
+	Tooltip: "'I'm forever alone'"
 }
 
 FocusedTar: {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -54,7 +55,7 @@ sealed class BloodCloudRaining : NatureProjectile {
                 Projectile.ai[0] = 0f;
                 if (Projectile.owner == Main.myPlayer) {
                     num352 += Main.rand.Next(-14, 15);
-                    if (AttachedNatureWeapon is not null) {
+                    if (!AttachedNatureWeapon.IsEmpty()) {
                         Projectile.damage = NatureWeaponHandler.GetNatureDamage(AttachedNatureWeapon, Main.player[Projectile.owner]);
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), num352, num353, 0f, 5f, ModContent.ProjectileType<BloodRain>(), Projectile.damage, 0f, Projectile.owner);
                     }
