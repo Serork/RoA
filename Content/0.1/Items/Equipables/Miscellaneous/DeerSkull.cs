@@ -21,7 +21,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 [AutoloadEquip(EquipType.Head, EquipType.Face)]
-sealed class DeerSkull : ModItem {
+sealed class DeerSkull : NatureItem {
     private static Asset<Texture2D> _extraTexture = null!, _extraTexture2 = null!;
 
     public static int DeerSkullAsHead { get; private set; } = -1;
@@ -184,7 +184,7 @@ sealed class DeerSkull : ModItem {
         }
     }
 
-    public override void SetDefaults() {
+    protected override void SafeSetDefaults() {
         int width = 32; int height = 24;
         Item.Size = new Vector2(width, height);
 

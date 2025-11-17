@@ -2383,3 +2383,8 @@ CoralClarionet: {
 	DisplayName: Coral Clarionet
 	Tooltip: Summons a musical coral that bursts out bubbles for a lovely melody
 }
+
+AetherWreath: {
+	DisplayName: Aether Wreath
+	Tooltip: ""
+}

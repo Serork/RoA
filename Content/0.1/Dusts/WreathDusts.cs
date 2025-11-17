@@ -11,6 +11,8 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
+sealed class WreathDust4 : WreathDust { }
+
 sealed class WreathDust3 : WreathDust { }
 
 sealed class WreathDust2 : WreathDust { }
@@ -32,6 +34,10 @@ class WreathDust : ModDust, IDrawDustPrePlayer {
         color.A = (byte)Utils.Remap(Math.Clamp((float)dust.customData * 120f, 175, 255), 175, 255, 255, 175, false);
         Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
     }
+}
+
+sealed class WreathDust4_2 : WreathDust_2 {
+    public override string Texture => DustLoader.GetDust(ModContent.DustType<WreathDust4>()).Texture;
 }
 
 sealed class WreathDust3_2 : WreathDust_2 {

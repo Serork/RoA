@@ -157,7 +157,9 @@ sealed class WreathDrawing : PlayerDrawLayer {
         batch.Begin(in snapshot, true);
         float gravOffset = 0f;
         // filling
-        SpriteData wreathSpriteData2 = wreathSpriteData.Framed((byte)(0 + stats.IsPhoenixWreath.ToInt()), 1);
+        byte x = (byte)(0 + stats.IsAetherWreath.ToInt() * 2 + stats.IsPhoenixWreath.ToInt());
+        byte y = 1;
+        SpriteData wreathSpriteData2 = wreathSpriteData.Framed(x, y);
         int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
         VerticalAppearanceShader.Min = 0.5f;
@@ -234,7 +236,10 @@ sealed class WreathDrawing : PlayerDrawLayer {
             batch.Begin(in snapshot, true);
         }
         if (flag) {
-            drawEffect(progress, 1f - Utils.Remap(progress, 0f, 1f, 0.35f, 0.675f, true), sourceRectangle, opacity: progress3, frameX: (byte)(3 + stats.IsPhoenixWreath.ToInt()), frameY: 1);
+            byte x2 = (byte)(3 + stats.IsAetherWreath.ToInt() * 2 + stats.IsPhoenixWreath.ToInt());
+            byte y2 = 1;
+            drawEffect(progress, 1f - Utils.Remap(progress, 0f, 1f, 0.35f, 0.675f, true), sourceRectangle, opacity: progress3, 
+                frameX: x2, frameY: y2);
         }
         if (soulOfTheWoods) {
             float filling2Progress = 1f - Utils.Remap(progress2, 0f, 1f, 0.725f, 1f, true);

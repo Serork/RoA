@@ -10,9 +10,11 @@ using RoA.Content.Buffs;
 using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Wreaths;
+using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
+using RoA.Core.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -64,7 +66,8 @@ sealed class WreathHandler : ModPlayer {
 
     public enum WreathType : byte {
         Normal,
-        Phoenix
+        Phoenix,
+        Aether
     }
 
     private const float BASEADDVALUE = 0.115f;
@@ -88,9 +91,12 @@ sealed class WreathHandler : ModPlayer {
 
     public ushort GetHitTimer { get; private set; }
 
+    public static LerpColor AetherLerpColor { get; private set; } = new(0.03f);
+
     public static Color StandardColor => new(170, 252, 134);
     public static Color PhoenixColor => new(251, 234, 94);
     public static Color SoulOfTheWoodsColor => new(248, 119, 119);
+    public static Color AetherColor => AetherLerpColor.GetLerpColor([new(242, 182, 248), new(155, 196, 156), new(255, 155, 155), new(88, 146, 164)]);
 
     public static Color GetCurrentColor(Player player) {
         if (Main.gameMenu) {
@@ -98,13 +104,20 @@ sealed class WreathHandler : ModPlayer {
         }
 
         var self = player.GetWreathHandler();
-        if (Main.HoverItem.type == ModContent.ItemType<SoulOfTheWoods>()) {
+        int hoverItemType = Main.HoverItem.type;
+        if (hoverItemType == ModContent.ItemType<SoulOfTheWoods>()) {
             return SoulOfTheWoodsColor;
         }
-        else if (Main.HoverItem.type == ModContent.ItemType<FenethsBlazingWreath>()) {
+        else if (hoverItemType == ModContent.ItemType<AetherWreath>()) {
+            return AetherColor;
+        }
+        else if (hoverItemType == ModContent.ItemType<FenethsBlazingWreath>()) {
             return PhoenixColor;
         }
-        return self.SoulOfTheWoods ? SoulOfTheWoodsColor : self.IsPhoenixWreath ? PhoenixColor : StandardColor;
+        return self.SoulOfTheWoods ? SoulOfTheWoodsColor :
+            self.IsAetherWreath ? AetherColor :
+            self.IsPhoenixWreath ? PhoenixColor :
+            StandardColor;
     }
 
     public delegate void OnResetedDelegate();
@@ -204,6 +217,7 @@ sealed class WreathHandler : ModPlayer {
 
     public bool SoulOfTheWoods => DruidPlayerStats.SoulOfTheWoods && Progress > 1f && Progress <= 2f;
     public bool IsPhoenixWreath => CurrentType == WreathType.Phoenix;
+    public bool IsAetherWreath => CurrentType == WreathType.Aether;
 
     public ushort AddResourceValue() => (ushort)(AddValue * MaxResource);
 
@@ -559,6 +573,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void CommonUpdate() {
+        AetherLerpColor.Update();
         if (IsEmpty && CannotToggleOrGetWreathCharge) {
             CannotToggleOrGetWreathCharge = false;
             ChargedBySlowFill = false;
@@ -814,8 +829,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void GetWreathType() {
-        bool phoenixWreathEquipped = WreathSlot.GetFunctionalItem(Player).type == ModContent.ItemType<FenethsBlazingWreath>();
-        CurrentType = phoenixWreathEquipped ? WreathType.Phoenix : WreathType.Normal;
+        Item wreathSlotItem = WreathSlot.GetFunctionalItem(Player);
+        bool phoenixWreathEquipped = wreathSlotItem.type == ModContent.ItemType<FenethsBlazingWreath>();
+        bool aetherWreathEquipped = wreathSlotItem.type == ModContent.ItemType<AetherWreath>();
+        CurrentType = aetherWreathEquipped ? WreathType.Aether : phoenixWreathEquipped ? WreathType.Phoenix : WreathType.Normal;
     }
 
     public override void PreUpdate() {
@@ -1080,13 +1097,17 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private ushort GetDustType() {
-        ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3>() : ModContent.DustType<Content.Dusts.WreathDust>());
+        ushort basicDustType = (ushort)(IsAetherWreath ? ModContent.DustType<Content.Dusts.WreathDust4>() :
+                                        IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3>() :
+                                        ModContent.DustType<Content.Dusts.WreathDust>());
         ushort dustType = (ushort)(IsFull1 && !IsFull3 ? ModContent.DustType<Content.Dusts.WreathDust2>() : basicDustType);
         return dustType;
     }
 
     private ushort GetDustType2() {
-        ushort basicDustType = (ushort)(IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3_2>() : ModContent.DustType<Content.Dusts.WreathDust_2>());
+        ushort basicDustType = (ushort)(IsAetherWreath ? ModContent.DustType<Content.Dusts.WreathDust4_2>() : 
+                                        IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3_2>() : 
+                                        ModContent.DustType<Content.Dusts.WreathDust_2>());
         ushort dustType = (ushort)(IsFull1 && !IsFull3 ? ModContent.DustType<Content.Dusts.WreathDust2_2>() : basicDustType);
         return dustType;
     }

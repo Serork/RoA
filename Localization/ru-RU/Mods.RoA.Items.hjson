@@ -2408,3 +2408,8 @@ CoralClarionet: {
 	DisplayName: Коралловый кларнет
 	Tooltip: Призывает музыкальный коралл, выпускающий пузырьки приятной мелодией
 }
+
+AetherWreath: {
+	// DisplayName: Aether Wreath
+	// Tooltip: ""
+}
