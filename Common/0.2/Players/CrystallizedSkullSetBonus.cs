@@ -127,12 +127,7 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     private static void PlayerCommon_PreUpdateEvent(Player player) {
-        if (!player.GetCommon().ApplyCrystallizedSkullSetBonus) {
-            return;
-        }
-
         var handler = player.GetCommon();
-
         void breakCrystal(int index) {
             ref var info = ref handler._crystalData[index];
             if (info.Opacity == 0f) {
@@ -160,7 +155,10 @@ sealed partial class PlayerCommon : ModPlayer {
                         }
                     }
                     if (index == 2) {
-                        rotation -= 0.1f * player.direction;
+                        rotation -= 0.15f * player.direction;
+                    }
+                    if (index == 1) {
+                        rotation += 0.075f * player.direction;
                     }
                     if (index == 0) {
                         rotation += 0.3f * player.direction;
@@ -169,7 +167,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     Vector2 vector3 = (new Vector2(0f, y) + info.Offset * new Vector2(direction, 1f)).RotatedBy(rotation);
                     int currentIndex = i + 1;
                     float progress = currentIndex / goreCount;
-                    Vector2 gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 + 
+                    Vector2 gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 +
                         (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
                     int gore = Gore.NewGore(player.GetSource_Misc("manacrystalgore"),
                         gorePosition,
@@ -183,7 +181,7 @@ sealed partial class PlayerCommon : ModPlayer {
                             continue;
                         }
                         int dustType = ModContent.DustType<ManaCrystalShard>();
-                        Dust dust = Dust.NewDustPerfect(gorePosition, dustType, Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, 
+                        Dust dust = Dust.NewDustPerfect(gorePosition, dustType, Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f,
                             0, info.Color, 1f + Main.rand.NextFloatRange(0.1f));
                         dust.velocity *= 0.5f;
                     }
@@ -194,6 +192,10 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         int max = 3;
+        if (!handler.ApplyCrystallizedSkullSetBonus) {
+            return;
+        }
+
         if (player.statMana >= 0) {
             if (!handler._initializingCrystals) {
                 handler._initializingCrystals = true;
@@ -255,6 +257,10 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         if (_crystalOnPlayerTexture?.IsLoaded != true) {
+            return;
+        }
+        
+        if (player.dead) {
             return;
         }
 
