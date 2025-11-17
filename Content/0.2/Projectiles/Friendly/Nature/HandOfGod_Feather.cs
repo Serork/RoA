@@ -204,14 +204,14 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             float distanceX = MathF.Abs(position.X - Projectile.Center.X);
 
             if (distanceY < distance / 2) {
-                baseScale.Y *= 0.75f;
+                baseScale.Y *= 0.7f;
             }
             else if (distanceX < distance / 2) {
-                baseScale.X *= 0.75f;
+                baseScale.X *= 0.7f;
             }
             else {
-                baseScale.X *= 0.825f;
-                baseScale.Y *= 0.825f;
+                baseScale.X *= 0.775f;
+                baseScale.Y *= 0.775f;
             }
 
             scales.Add(baseScale);
