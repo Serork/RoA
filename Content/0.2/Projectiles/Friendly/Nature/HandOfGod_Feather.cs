@@ -86,7 +86,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 mousePosition = owner.GetWorldMousePosition();
         Vector2 center = owner.Center;
         float distance = 50f;
-        Projectile.velocity = Vector2.Lerp(Projectile.velocity, center.DirectionTo(mousePosition) * distance, 0.05f);
+        Projectile.velocity = Vector2.Lerp(Projectile.velocity, center.DirectionTo(mousePosition) * distance, 0.05f * MathUtils.Clamp01(1f - WaveValue));
         Projectile.Center = Utils.Floor(center) + Projectile.velocity + Vector2.UnitY * owner.gfxOffY;
 
         int direction = Projectile.DirectionTo(owner.Center).X.GetDirection();
@@ -184,17 +184,17 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
             positions.Add((rotation, position));
         }
-        List<Vector2> scales = [];
-        for (int i = 0; i < positions.Count; i++) {
-            Vector2 baseScale = Vector2.One;
-            Vector2 position = positions[i].Item2;
-            bool last = owner.Distance(Projectile.Center) < owner.Distance(position);
-            baseScale *= 1f + (0.15f * (!last).ToDirectionInt());
-            scales.Add(baseScale);
-        }
-        for (int i = 0; i < scales.Count; i++) {
-            _scales[i] = Helper.Approach(_scales[i], scales[i], TimeSystem.LogicDeltaTime);
-        }
+        //List<Vector2> scales = [];
+        //for (int i = 0; i < positions.Count; i++) {
+        //    Vector2 baseScale = Vector2.One;
+        //    Vector2 position = positions[i].Item2;
+        //    bool last = owner.Distance(Projectile.Center) < owner.Distance(position);
+        //    baseScale *= 1f + (0.15f * (!last).ToDirectionInt());
+        //    scales.Add(baseScale);
+        //}
+        //for (int i = 0; i < scales.Count; i++) {
+        //    _scales[i] = Helper.Approach(_scales[i], scales[i], TimeSystem.LogicDeltaTime);
+        //}
         float getScaleWave(int i) => Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count);
         for (int i = 0; i < positions.Count; i++) {
             float rotation = positions[i].Item1;
