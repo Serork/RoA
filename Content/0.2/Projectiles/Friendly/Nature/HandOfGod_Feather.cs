@@ -108,7 +108,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         WaveValue += TimeSystem.LogicDeltaTime;
 
-        int minDistance = (int)TileHelper.TileSize * 8;
+        int minDistance = (int)TileHelper.TileSize * 7;
         foreach (NPC activeNPC in Main.ActiveNPCs) {
             if (!activeNPC.CanBeChasedBy()) {
                 continue;
