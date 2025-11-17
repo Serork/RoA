@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using ReLogic.Content;
 
@@ -158,12 +159,18 @@ sealed partial class PlayerCommon : ModPlayer {
                             rotation += MathHelper.Pi;
                         }
                     }
-                    float y = -player.width * 2f * Main.rand.NextFloat(0.5f, 1.25f);
+                    if (index == 2) {
+                        rotation -= 0.1f * player.direction;
+                    }
+                    if (index == 0) {
+                        rotation += 0.3f * player.direction;
+                    }
+                    float y = -player.width * 2f * Main.rand.NextFloat(0.5f, 1.375f);
                     Vector2 vector3 = (new Vector2(0f, y) + info.Offset * new Vector2(direction, 1f)).RotatedBy(rotation);
                     int currentIndex = i + 1;
                     float progress = currentIndex / goreCount;
                     Vector2 gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 + 
-                        (Vector2.UnitY * 42f * Main.rand.NextFloat(0.5f, 0.7f)).RotatedBy(rotation + 0.2f + Main.rand.NextFloat() * 0.05f);
+                        (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
                     int gore = Gore.NewGore(player.GetSource_Misc("manacrystalgore"),
                         gorePosition,
                         Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/ManaCrystalGore").Type, 1f);
