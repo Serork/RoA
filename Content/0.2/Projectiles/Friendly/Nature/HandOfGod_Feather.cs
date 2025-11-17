@@ -181,7 +181,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         Player owner = Projectile.GetOwnerAsPlayer();
         List<(float, Vector2)> positions = [];
         List<Vector2> positions2 = [];
-        float distance = 6f;
+        float distance = 4f;
         for (int i = 0; i < count; i++) {
             float rotation = Utils.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver2, (float)i / count * MathHelper.TwoPi, spawnProgress);
             float rotation2 = rotation;
