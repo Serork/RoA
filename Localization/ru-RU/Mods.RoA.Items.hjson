@@ -2362,11 +2362,7 @@ MenhirBanner: {
 
 PerfectMimicBanner: {
 	DisplayName: Знамя точной копии
-	Tooltip: 
-		'''
-		{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PerfectMimic.DisplayName}
-		'Я всегда одинок'
-		'''
+	// Tooltip: "{$CommonItemTooltip.BannerBonus}{$Mods.RoA.NPCs.PerfectMimic.DisplayName}"
 }
 
 TarSlimeBanner: {
