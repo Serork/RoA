@@ -331,8 +331,8 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
 
         // fill
-        frame.X = 6;
-        frame.Y = stats.IsPhoenixWreath ? 102 : 54;
+        frame.X = stats.IsAetherWreath ? 52 : 6;
+        frame.Y = stats.IsPhoenixWreath || stats.IsAetherWreath ? 102 : 54;
         frame.Width = 30;
         float progress = MathHelper.Clamp(stats.ActualProgress2 * 1.1f, 0f, 1f);
         frame.Height = (int)(30 * progress);
@@ -346,8 +346,8 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
 
         // full icon
         if (stats.IsFull1) {
-            frame.X = 170;
-            frame.Y = stats.IsPhoenixWreath ? 130 : 82;
+            frame.X = stats.IsAetherWreath ? 216 : 170;
+            frame.Y = stats.IsPhoenixWreath || stats.IsAetherWreath ? 130 : 82;
             frame.Width = 6;
             frame.Height = 6;
             Vector2 origin2 = origin;
@@ -552,8 +552,8 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
 
         // fill
-        frame.X = 8;
-        frame.Y = stats.IsPhoenixWreath ? 104 : 56;
+        frame.X = stats.IsAetherWreath ? 54 : 8;
+        frame.Y = stats.IsPhoenixWreath || stats.IsAetherWreath ? 104 : 56;
         frame.Width = 28;
         float progress = MathHelper.Clamp(stats.ActualProgress2 * 1.1f, 0f, 1f);
         frame.Height = (int)(28 * progress);
@@ -565,8 +565,8 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
 
         // full icon
         if (stats.IsFull1) {
-            frame.X = 144;
-            frame.Y = stats.IsPhoenixWreath ? 104 : 56;
+            frame.X = stats.IsAetherWreath ? 190 : 144;
+            frame.Y = stats.IsPhoenixWreath || stats.IsAetherWreath ? 104 : 56;
             frame.Width = 28;
             frame.Height = 28;
             Vector2 origin2 = origin;
