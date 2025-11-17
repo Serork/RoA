@@ -195,6 +195,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         for (int i = 0; i < scales.Count; i++) {
             _scales[i] = Helper.Approach(_scales[i], scales[i], TimeSystem.LogicDeltaTime);
         }
+        float getScaleWave(int i) => Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count);
         for (int i = 0; i < positions.Count; i++) {
             float rotation = positions[i].Item1;
             Vector2 position = positions[i].Item2;
@@ -231,11 +232,11 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                 });
             }
             batch.Draw(baseTexture, position, drawInfo with {
-                Scale = scale * Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count)
+                Scale = scale * getScaleWave(i)
             });
             batch.Draw(glowTexture, position, drawInfo with {
                 Color = getColor(true) * 0.5f,
-                Scale = scale * Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count)
+                Scale = scale * getScaleWave(i)
             });
             if (!second) {
                 batch.Draw(glowTexture, position, drawInfo with {
@@ -256,7 +257,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             color *= spawnProgress;
             color *= fadeOutProgress3;
             rotation += MathHelper.Pi;
-            Vector2 baseScale = Vector2.One;
+            Vector2 baseScale = _scales[i];
             Vector2 scale = baseScale * fadeOutProgress4;
             DrawInfo drawInfo = DrawInfo.Default with {
                 Clip = clip,
@@ -265,9 +266,10 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Rotation = rotation,
                 Scale = scale
             };
-            origin += Vector2.UnitY * -16f;
-            position += Vector2.UnitY.RotatedBy(rotation) * 25.5f;
-            scale *= Helper.Wave(WaveValue, 1f, 1.5f, 5f, waveOffset + i * count);
+            scale *= getScaleWave(i);
+            float scale2 = Helper.Wave(WaveValue, 1f, 1.5f, 5f, waveOffset + i * count);
+            scale *= scale2;
+            position += Vector2.UnitY.RotatedBy(rotation) * 3f * scale2;
             batch.Draw(closedEyeTexture, position, drawInfo with {
                 Scale = scale,
                 Origin = origin
