@@ -24,13 +24,14 @@ sealed partial class PlayerCommon : ModPlayer {
     //public static ushort BUFFTIMEMAX => 0; // we use 5 minutes if BUFFTIMEMAX value is zero
     public static ushort USECHECKTIME => 0; // we use useTime * 1.5 if USECHECKTIME value is zero
 
-    private struct CrystalInfo(Vector2 offset, bool secondFrame, float extraRotation = 0f, Color? color = null) {
+    private struct CrystalInfo(Vector2 offset, bool secondFrame, float extraRotation = 0f, Color? color = null, byte? colorIndex = null) {
         private float _opacity = 0f;
 
         public readonly Vector2 Offset = offset;
         public readonly bool SecondFrame = secondFrame;
         public readonly float ExtraRotation = extraRotation;
         public readonly Color Color = color ?? Color.White;
+        public readonly byte ColorIndex = colorIndex ?? 0;
 
         public float Opacity {
             readonly get => _opacity;
@@ -137,8 +138,6 @@ sealed partial class PlayerCommon : ModPlayer {
                 return;
             }
 
-            info.Opacity = 0f;
-
             // here we spawn dusts and gores
             SoundEngine.PlaySound(SoundID.Item27, player.Center);
             if (!Main.dedServ) {
@@ -168,7 +167,7 @@ sealed partial class PlayerCommon : ModPlayer {
                         gorePosition,
                         Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/ManaCrystalGore").Type, 1f);
                     Main.gore[gore].velocity *= 0.5f;
-                    Main.gore[gore].frameCounter = (byte)Main.rand.Next(3);
+                    Main.gore[gore].frameCounter = info.ColorIndex;
                     gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 + (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
 
                     for (int k = 0; k < 4; k++) {
@@ -182,6 +181,8 @@ sealed partial class PlayerCommon : ModPlayer {
                     }
                 }
             }
+
+            info.Opacity = 0f;
         }
 
         int max = 3;
@@ -211,7 +212,8 @@ sealed partial class PlayerCommon : ModPlayer {
                         Main.rand.RandomPointInArea(4f) - Vector2.UnitY * player.height * 0.6f,
                         Main.rand.NextBool(),
                         MathHelper.Lerp(-MathHelper.PiOver4, MathHelper.PiOver4, (float)i / max + Main.rand.NextFloatRange(0.05f) + (float)i / max / 2f),
-                        colors[colorIndex]);
+                        colors[colorIndex],
+                        (byte)colorIndex);
                 }
             }
             else {
