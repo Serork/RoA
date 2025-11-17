@@ -189,12 +189,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 baseScale = Vector2.One;
             Vector2 position = positions[i].Item2;
             bool last = owner.Distance(Projectile.Center) < owner.Distance(position);
-            if (last) {
-                baseScale.Y *= 0.9f;
-            }
-            else {
-                baseScale.Y *= 1.1f;
-            }
+            baseScale *= 1f + (0.15f * (!last).ToDirectionInt());
             scales.Add(baseScale);
         }
         for (int i = 0; i < scales.Count; i++) {
