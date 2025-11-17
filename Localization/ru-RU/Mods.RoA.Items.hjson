@@ -1535,7 +1535,7 @@ PlanetomaStaff: {
 
 JawTrap: {
 	DisplayName: Капкан-ловушка
-	Tooltip: 
+	Tooltip:
 		'''
 		Стискивает зубы, когда в него наступают
 		'Позволь этому случиться'
@@ -2028,23 +2028,8 @@ LivingPearlwoodHelmet: {
 	// Tooltip: ""
 }
 
-PerfafrostBucket: {
-	// DisplayName: Perfafrost Bucket
-	// Tooltip: ""
-}
-
 TarBucket: {
 	DisplayName: Ведро смолы
-	// Tooltip: ""
-}
-
-PermafrostBucket: {
-	// DisplayName: Permafrost Bucket
-	// Tooltip: ""
-}
-
-PermafrostAbsorbantSponge: {
-	// DisplayName: Permafrost Absorbant Sponge
 	// Tooltip: ""
 }
 

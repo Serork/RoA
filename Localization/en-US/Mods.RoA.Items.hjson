@@ -1519,7 +1519,7 @@ PlanetomaStaff: {
 
 JawTrap: {
 	DisplayName: Jaw Trap
-	Tooltip: 
+	Tooltip:
 		'''
 		Clenches its teeth when someone steps inside
 		'Let it happen'
