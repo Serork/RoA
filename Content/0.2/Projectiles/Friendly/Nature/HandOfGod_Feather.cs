@@ -13,6 +13,7 @@ using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -88,6 +89,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         float distance = 50f;
 
         float moveFactor = MathUtils.Clamp01(1f - WaveValue);
+        moveFactor = 1f;
         Projectile.velocity = Vector2.Lerp(Projectile.velocity, center.DirectionTo(mousePosition) * distance, 0.05f * moveFactor);
         Projectile.Center = Utils.Floor(center) + Projectile.velocity + Vector2.UnitY * owner.gfxOffY;
 
@@ -178,25 +180,43 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         float waveOffset = Projectile.whoAmI;
         Player owner = Projectile.GetOwnerAsPlayer();
         List<(float, Vector2)> positions = [];
+        List<Vector2> positions2 = [];
+        float distance = 6f;
         for (int i = 0; i < count; i++) {
             float rotation = Utils.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver2, (float)i / count * MathHelper.TwoPi, spawnProgress);
+            float rotation2 = rotation;
             rotation += Utils.AngleLerp(Projectile.rotation, 0f, 1f - spawnProgress);
             Vector2 position = Projectile.Center;
-            float distance = 6f;
+            positions2.Add(position + Vector2.UnitY.RotatedBy(rotation2) * distance);
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
             positions.Add((rotation, position));
         }
-        //List<Vector2> scales = [];
-        //for (int i = 0; i < positions.Count; i++) {
-        //    Vector2 baseScale = Vector2.One;
-        //    Vector2 position = positions[i].Item2;
-        //    bool last = owner.Distance(Projectile.Center) < owner.Distance(position);
-        //    baseScale *= 1f + (0.15f * (!last).ToDirectionInt());
-        //    scales.Add(baseScale);
-        //}
-        //for (int i = 0; i < scales.Count; i++) {
-        //    _scales[i] = Helper.Approach(_scales[i], scales[i], TimeSystem.LogicDeltaTime);
-        //}
+        List<Vector2> scales = [];
+        for (int i = 0; i < positions.Count; i++) {
+            Vector2 baseScale = Vector2.One;
+            Vector2 position = positions[i].Item2;
+
+            //bool last = owner.Distance(Projectile.Center) < owner.Distance(position);
+            //baseScale *= 1f + (0.15f * (!last).ToDirectionInt());
+
+            float distanceY = MathF.Abs(position.Y - Projectile.Center.Y);
+            float distanceX = MathF.Abs(position.X - Projectile.Center.X);
+
+            if (distanceY < distance / 2) {
+                baseScale.Y *= 0.75f;
+            }
+            else if (distanceX < distance / 2) {
+                baseScale.X *= 0.75f;
+            }
+            else {
+                baseScale *= 0.875f;
+            }
+
+            scales.Add(baseScale);
+        }
+        for (int i = 0; i < scales.Count; i++) {
+            _scales[i] = Helper.Approach(_scales[i], scales[i], TimeSystem.LogicDeltaTime);
+        }
         float getScaleWave(int i) => Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count);
         for (int i = 0; i < positions.Count; i++) {
             float rotation = positions[i].Item1;
