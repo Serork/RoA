@@ -2333,7 +2333,10 @@ RodOfTheLustrous: {
 
 PerfectClot: {
 	DisplayName: Идеальный комок
-	// Tooltip: ""
+	Tooltip:
+		'''
+		'Я всегда одинок'
+		'''
 }
 
 FocusedTar: {
