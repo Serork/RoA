@@ -98,7 +98,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         RotationLerpValue = Helper.Approach(RotationLerpValue, 0.0375f * (1f + 0.5f * Activated2Value) * Projectile.direction, TimeSystem.LogicDeltaTime);
         float rotationValue = RotationLerpValue;
-        Projectile.rotation += rotationValue;
+        //Projectile.rotation += rotationValue;
+        Projectile.rotation = Projectile.velocity.ToRotation();
 
         if (WaveValue == 0) {
             for (int i = 0; i < _scales.Length; i++) {
@@ -194,7 +195,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         List<Vector2> scales = [];
         for (int i = 0; i < positions.Count; i++) {
             Vector2 baseScale = Vector2.One;
-            Vector2 position = positions[i].Item2;
+            Vector2 position = positions2[i];
 
             //bool last = owner.Distance(Projectile.Center) < owner.Distance(position);
             //baseScale *= 1f + (0.15f * (!last).ToDirectionInt());
@@ -209,7 +210,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                 baseScale.X *= 0.75f;
             }
             else {
-                baseScale *= 0.875f;
+                baseScale.X *= 0.825f;
+                baseScale.Y *= 0.825f;
             }
 
             scales.Add(baseScale);
