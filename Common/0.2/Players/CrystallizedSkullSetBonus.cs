@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Content.Buffs;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -174,8 +175,9 @@ sealed partial class PlayerCommon : ModPlayer {
                         if (Main.rand.NextBool(3)) {
                             continue;
                         }
-                        int dustType = Main.rand.NextBool() ? DustID.BlueCrystalShard : Main.rand.NextBool() ? DustID.PinkCrystalShard : DustID.PurpleCrystalShard;
-                        Dust dust = Dust.NewDustPerfect(gorePosition, dustType, Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, 150, default, 1f + Main.rand.NextFloatRange(0.1f));
+                        int dustType = ModContent.DustType<ManaCrystalShard>();
+                        Dust dust = Dust.NewDustPerfect(gorePosition, dustType, Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, 
+                            0, info.Color, 1f + Main.rand.NextFloatRange(0.1f));
                         dust.velocity *= 0.5f;
                     }
                 }
