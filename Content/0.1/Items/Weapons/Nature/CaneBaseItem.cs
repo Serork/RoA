@@ -164,7 +164,12 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         Projectile.friendly = true;
 
         ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+
+        Projectile.penetrate = -1;
     }
+
+    public override bool? CanDamage() => false;
+    public override bool? CanCutTiles() => false;
 
     protected sealed override void SafeSetDefaults2() { }
 
