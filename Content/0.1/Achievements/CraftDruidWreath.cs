@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Achievements;
 
 sealed class CraftDruidWreath : ModAchievement {
-    public CustomFlagCondition CraftAnyWreathCondition { get; private set; }
+    public CustomFlagCondition CraftAnyWreathCondition { get; private set; } = null!;
 
     public override void SetStaticDefaults() {
         Achievement.SetCategory(AchievementCategory.Collector);

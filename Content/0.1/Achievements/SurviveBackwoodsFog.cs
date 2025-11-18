@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Achievements;
 
 sealed class SurviveBackwoodsFog : ModAchievement {
-    public CustomFlagCondition SurviveBackwoodsFogCondition { get; private set; }
+    public CustomFlagCondition SurviveBackwoodsFogCondition { get; private set; } = null!;
     //public CustomFlagCondition SurviveBackwoodsFogCondition_End { get; private set; }
 
     public override void SetStaticDefaults() {

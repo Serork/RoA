@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Enemies.Lothor;
 
 sealed class PoisonBubble_Large : ModProjectile {
-    public override Color? GetAlpha(Color lightColor) => (int)Projectile.ai[0] == 1 ? Color.White * Projectile.Opacity : (lightColor * Projectile.Opacity);
+    public override Color? GetAlpha(Color lightColor) => (int)Projectile.ai[0] == 1 ? Color.White * 0.9f * Projectile.Opacity : (lightColor * Projectile.Opacity);
 
     public override void SetStaticDefaults() {
         Main.projFrames[Projectile.type] = 4;

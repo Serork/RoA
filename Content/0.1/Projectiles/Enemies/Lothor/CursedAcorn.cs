@@ -41,7 +41,7 @@ sealed class CursedAcorn : ModProjectile {
         SpriteEffects spriteEffects = (SpriteEffects)(Projectile.velocity.X > 0f).ToInt();
         Vector2 position = Projectile.Center - Main.screenPosition;
         Rectangle sourceRectangle = new(0, 0, texture.Width, texture.Height);
-        Color color = Color.White;
+        Color color = Color.White * 0.9f;
         Vector2 origin = sourceRectangle.Size() / 2f;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, origin, Projectile.scale, spriteEffects);
 

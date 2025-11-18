@@ -83,6 +83,7 @@ sealed partial class Lothor : ModNPC {
         lifeProgress = MathF.Max(lifeProgress, altarOpacity);
         glowMaskOpacity = MathF.Max(glowMaskOpacity, altarOpacity);
         Color glowMaskColor = (_isDead ? Color.Lerp(Color.White, Color.Black.MultiplyRGB(drawColor), MathHelper.Clamp(_deadStateProgress, 0f, 1f)) : Color.White) * glowMaskOpacity;
+        glowMaskColor *= 0.95f;
         if (!_isDead) {
             for (int num173 = 1; num173 < length; num173 += 2) {
                 _ = ref NPC.oldPos[num173];
@@ -149,7 +150,7 @@ sealed partial class Lothor : ModNPC {
             spriteBatch.Draw(GlowMask, NPC.position + offset +
                 Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                 * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
-                NPC.frame, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress * NPC.Opacity, NPC.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
+                NPC.frame, (Color.White * 0.95f).MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress * NPC.Opacity, NPC.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
         }
         spriteBatch.Begin(snapshot, true);
 
@@ -179,14 +180,14 @@ sealed partial class Lothor : ModNPC {
         Vector2 position = NPC.Center - Main.screenPosition + WreathOffset();
         SpriteEffects spriteEffects = SpriteEffects.FlipHorizontally;
         float rotation = MathHelper.Pi;
-        spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
+        spriteBatch.Draw(texture, position, sourceRectangle, Color.White * 0.95f, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
         sourceRectangle = frame.GetSourceRectangle(texture);
         float progress = _distanceProgress2 == 0f || _distanceProgress2 == -1f ? 1f : _distanceProgress / _distanceProgress2;
         int height = (int)(texture.Height * progress);
         sourceRectangle.Height = height;
         height = (int)(texture.Height * (1f - progress));
         position.Y += height / 2f;
-        spriteBatch.Draw(texture, position, sourceRectangle, Color.White, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
+        spriteBatch.Draw(texture, position, sourceRectangle, Color.White * 0.95f, rotation, sourceRectangle.Size() / 2f, 1f, spriteEffects, 0);
 
         if (!Main.dedServ) {
             Lighting.AddLight(NPC.Center + WreathOffset(), new Vector3(1f, 0.2f, 0.2f) * 1.25f * progress);

@@ -182,7 +182,7 @@ sealed class LothorSpike : ModProjectile {
             origin = new Vector2(width, height) / 2f;
             Vector2 drawPosition = start;
 
-            Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, sourceRectangle, Color.White * Projectile.Opacity, velocity.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi, origin, Projectile.scale, effects);
+            Main.EntitySpriteDraw(texture, drawPosition - Main.screenPosition, sourceRectangle, Color.White * 0.95f * Projectile.Opacity, velocity.ToRotation() + MathHelper.PiOver2 + MathHelper.Pi, origin, Projectile.scale, effects);
             start += height * velocity;
             start += velocity * offset;
             index++;

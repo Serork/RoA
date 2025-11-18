@@ -90,7 +90,7 @@ sealed class Pipistrelle : ModNPC {
                 position + origin + bestiaryOffset +
                 new Vector2(-27f, 4f - (NPC.spriteDirection != 1 ? progress * -20f : 0f)) + Vector2.UnitX * -40f * progress -
                 Vector2.UnitY * 12f,
-                null, Color.White, rotation * 0.5f, origin / 2f, 1f, effects, 0);
+                null, Color.White * 0.9f, rotation * 0.5f, origin / 2f, 1f, effects, 0);
         }
 
         void enrage(ref Color color) {
@@ -119,7 +119,7 @@ sealed class Pipistrelle : ModNPC {
         glowMaskOpacity = MathF.Max(glowMaskOpacity, altarOpacity);
         float value = MathHelper.Clamp(flag ? glowMaskOpacity : Math.Max(glowMaskOpacity, lifeProgress), 0f, 1f);
 
-        Color glowColor = Color.White * value;
+        Color glowColor = Color.White * 0.95f * value;
         spriteBatch.Draw(GlowMask, position, NPC.frame, glowColor, rotation, origin, NPC.scale, effects, 0f);
 
         NPC npc = Main.npc[(int)NPC.ai[0]];

@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Achievements;
 
 sealed class DefeatLothor : ModAchievement {
-    public CustomFlagCondition KillLothorCondition { get; private set; }
+    public CustomFlagCondition KillLothorCondition { get; private set; } = null!;
 
     public override void SetStaticDefaults() {
         Achievement.SetCategory(AchievementCategory.Slayer);
