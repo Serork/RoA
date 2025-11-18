@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Dusts;
 
 using System;
@@ -11,15 +12,26 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class WreathDust4 : WreathDust { }
+sealed class WreathDust4 : WreathDust {
+    public override Color? GetAlpha(Dust dust, Color lightColor) {
+        Color color = WreathHandler.AetherBaseColor;
+        return color;
+    }
+}
 
-sealed class WreathDust3 : WreathDust { }
+sealed class WreathDust3 : WreathDust {
+}
 
-sealed class WreathDust2 : WreathDust { }
+sealed class WreathDust2 : WreathDust {
+    public override Color? GetAlpha(Dust dust, Color lightColor) {
+        Color color = WreathHandler.SoulOfTheWoodsBaseColor;
+        return color;
+    }
+}
 
 class WreathDust : ModDust, IDrawDustPrePlayer {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-        Color color = new(255, 255, 200, 200);
+        Color color = WreathHandler.BaseColor;
         return color;
     }
 
@@ -38,6 +50,11 @@ class WreathDust : ModDust, IDrawDustPrePlayer {
 
 sealed class WreathDust4_2 : WreathDust_2 {
     public override string Texture => DustLoader.GetDust(ModContent.DustType<WreathDust4>()).Texture;
+
+    public override Color? GetAlpha(Dust dust, Color lightColor) {
+        Color color = WreathHandler.AetherBaseColor;
+        return color;
+    }
 }
 
 sealed class WreathDust3_2 : WreathDust_2 {
@@ -46,13 +63,18 @@ sealed class WreathDust3_2 : WreathDust_2 {
 
 sealed class WreathDust2_2 : WreathDust_2 {
     public override string Texture => DustLoader.GetDust(ModContent.DustType<WreathDust2>()).Texture;
+
+    public override Color? GetAlpha(Dust dust, Color lightColor) {
+        Color color = WreathHandler.SoulOfTheWoodsBaseColor;
+        return color;
+    }
 }
 
 class WreathDust_2 : ModDust {
     public override string Texture => DustLoader.GetDust(ModContent.DustType<WreathDust>()).Texture;
 
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-        Color color = new(255, 255, 200, 200);
+        Color color = WreathHandler.BaseColor;
         return color;
     }
 

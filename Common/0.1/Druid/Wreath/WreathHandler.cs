@@ -196,8 +196,10 @@ sealed class WreathHandler : ModPlayer {
             return opacity;
         }
     }
-    public Color BaseColor => new(255, 255, 200, 200);
-    public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)NormalWreathPosition.X / 16, (int)NormalWreathPosition.Y / 16)) * DrawColorOpacity);
+    public static Color BaseColor => new(255, 255, 200, 200);
+    public static Color AetherBaseColor => new(255, 255, 255, 100);
+    public static Color SoulOfTheWoodsBaseColor => new(255, 255, 255, 100);
+    //public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)NormalWreathPosition.X / 16, (int)NormalWreathPosition.Y / 16)) * DrawColorOpacity);
     public Vector2 NormalWreathPosition {
         get {
             var config = ModContent.GetInstance<RoAClientConfig>();

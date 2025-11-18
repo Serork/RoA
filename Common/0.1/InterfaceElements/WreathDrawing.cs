@@ -135,7 +135,10 @@ sealed class WreathDrawing : PlayerDrawLayer {
         //float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
         //alpha = (alpha + 1f) / 2f;
         //DrawColor color = DrawColor.Multiply(Stats.DrawColor, alpha);
-        Color color = stats.BaseColor;
+        Color color = WreathHandler.BaseColor;
+        if (stats.IsAetherWreath) {
+            color = WreathHandler.AetherBaseColor;
+        }
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
         //position = position.Floor();
         // dark border
@@ -196,17 +199,25 @@ sealed class WreathDrawing : PlayerDrawLayer {
             drawFilling(sourceRectangle, progress, 1f - Utils.Remap(progress, 0f, 1f, 0.35f, 0.675f, true), opacity: value3);
         }
         if (soulOfTheWoods) {
+            color = WreathHandler.SoulOfTheWoodsBaseColor;
             float filling2Progress = 1f - Utils.Remap(progress2, 0f, 1f, 0.725f, 1f, true);
             drawFilling(sourceRectangle2, progress2, filling2Progress, offset);
         }
         float mult2 = 5f; // first transition mult
         progress3 = 1f - MathHelper.Clamp(progress2 * mult2, 0f, 1f);
         // effect
-        void drawEffect(float progress, float progress2, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1) {
+        void drawEffect(float progress, float progress2, Rectangle sourceRectangle, Vector2? offset = null, float opacity = 1f, byte frameX = 3, byte frameY = 1,
+            bool soulOfTheWoods = false) {
             batch.End();
             batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, SamplerState.AnisotropicClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
             //color = DrawColor.Multiply(Stats.DrawColor, alpha);
-            color = stats.BaseColor;
+            color = WreathHandler.BaseColor;
+            if (stats.IsAetherWreath) {
+                color = WreathHandler.AetherBaseColor;
+            }
+            if (soulOfTheWoods) {
+                color = WreathHandler.SoulOfTheWoodsBaseColor;
+            }
             color *= 1.4f;
             color.A = 80;
             color *= opacity;

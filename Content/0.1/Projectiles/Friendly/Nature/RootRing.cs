@@ -121,7 +121,7 @@ sealed class RootRing : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         var stats = player.GetWreathHandler();
         float projOpacity = 1f - (float)_alpha / 255f;
-        Color color = stats.BaseColor * (0.5f + 0.5f * (1f - Projectile.ai[0]));
+        Color color = WreathHandler.SoulOfTheWoodsBaseColor * 0.9f * (0.5f + 0.5f * (1f - Projectile.ai[0]));
         float multiplier = 0.035f;
         //for (int i = 0; i < 2; i++)
         //batch.DrawSelf(texture, position, null, color * _fading2, Projectile._rotation, new Vector2(Projectile.width / 2, Projectile.height / 2), Projectile.scale + (i < 1 ? multiplier : -multiplier) * _fading2, SpriteEffects.None, 0);
