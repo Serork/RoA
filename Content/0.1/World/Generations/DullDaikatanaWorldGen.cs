@@ -60,6 +60,8 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                             }
                         }
                         int tileType = ModContent.TileType<DullDaikatana>();
+                        int extraX = genRand.Next(0, 3);
+                        int extraY = genRand.Next(-1, 2);
                         if (flag) {
                             check = 100;
                             int checkX = 400;
@@ -68,7 +70,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                     break;
                                 }
                                 for (int y = -check; y < check + 2; y++) {
-                                    if (WorldGenHelper.GetTileSafely(num438 + 1 + x, num439 - 1 + y).TileType == tileType) {
+                                    if (WorldGenHelper.GetTileSafely(num438 + extraX + x, num439 - extraY + y).TileType == tileType) {
                                         flag = false;
                                         break;
                                     }
@@ -83,7 +85,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                 }
                             }
                             if (flag4) {
-                                WorldGen.PlaceTile(num438 + 1, num439 - 1, tileType);
+                                WorldGen.PlaceTile(num438 + extraX, num439 - extraY, tileType);
                             }
                             else {
                                 flag24 = true;
@@ -131,7 +133,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                 }
                             }
                         }
-                        if (WorldGenHelper.GetTileSafely(num438 + 1, num439 - 1).TileType == tileType) {
+                        if (WorldGenHelper.GetTileSafely(num438 + extraX, num439 - extraY).TileType == tileType) {
                             flag24 = true;
                         }
                         else {
