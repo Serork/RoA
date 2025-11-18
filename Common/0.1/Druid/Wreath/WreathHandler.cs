@@ -854,6 +854,12 @@ sealed class WreathHandler : ModPlayer {
         LockWreathPosition = false;
     }
 
+    public void CapMax1() {
+        if (CurrentResource > MaxResource) {
+            CurrentResource = MaxResource;
+        }
+    }
+
     public void IncreaseResourceValue(float fine = 0f, bool increaseUntilFull = false, float extra2 = 1f) {
         if (CannotToggleOrGetWreathCharge) {
             return;

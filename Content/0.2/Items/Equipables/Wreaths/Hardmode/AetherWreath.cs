@@ -25,6 +25,7 @@ sealed class AetherWreath : WreathItem, WreathItem.IWreathGlowMask {
     public override void UpdateAccessory(Player player, bool hideVisual) {
         if (player.GetWreathHandler().IsFull1) {
             player.GetCommon().IsAetherInvincibilityActive = true;
+            player.GetWreathHandler().CapMax1();
         }
     }
 }
