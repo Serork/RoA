@@ -28,6 +28,8 @@ sealed class Fog : VisualEffect<Fog> {
     }
 
     protected override void SetDefaults() {
+        _brightness = 0f;
+
         Frame = new Rectangle(0, 12 * Main.rand.Next(4), 42, 12);
         Alpha = 255;
         FadeIn = 3f;

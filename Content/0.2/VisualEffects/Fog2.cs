@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Common;
 using RoA.Common.VisualEffects;
@@ -9,7 +8,6 @@ using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Graphics.Renderers;
-using Terraria.ModLoader;
 
 namespace RoA.Content.VisualEffects;
 
@@ -17,6 +15,8 @@ sealed class Fog2 : VisualEffect<Fog2> {
     private float _brightness;
 
     public float FadeIn { get; private set; }
+    public float FadeIn2 { get; private set; }
+
     public int Alpha { get; private set; }
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
@@ -28,9 +28,11 @@ sealed class Fog2 : VisualEffect<Fog2> {
     }
 
     protected override void SetDefaults() {
+        _brightness = 0f;
+
         Frame = new Rectangle(0, 12 * Main.rand.Next(4), 42, 12);
         Alpha = 255;
-        FadeIn = Main.rand.NextFloat(7.5f, 10f);
+        FadeIn = FadeIn2 = Main.rand.NextFloat(10f, 20f);
 
         DontEmitLight = true;
 
@@ -74,21 +76,21 @@ sealed class Fog2 : VisualEffect<Fog2> {
         }
 
         Helper.ApplyWindPhysics(Position, ref Velocity);
-        Velocity.X *= !Helper.OnSurface(Position, ref Velocity) ? 0.99f : 0.825f;
+        Velocity.X *= !Helper.OnSurface(Position, ref Velocity) ? 0.99f : (0.9f + (FadeIn2 * 0.0025f));
         Velocity.Y = 0f;
         if (!flag) {
             if (Alpha > 200) {
-                Alpha--;
+                Alpha = (int)Utils.Remap(FadeIn, FadeIn2, FadeIn2 * 0.8f, 255, 200);
             }
         }
         else {
-            Alpha++;
+            Alpha = (int)Utils.Remap(FadeIn, 0f, FadeIn2 * 0.2f, 255, 200);
             if (Alpha >= 255) {
                 RestInPool();
                 return;
             }
         }
 
-        Position += Velocity;
+        Position = Vector2.Lerp(Position, Position + Velocity, 0.5f);
     }
 }
