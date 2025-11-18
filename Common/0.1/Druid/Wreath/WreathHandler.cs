@@ -91,12 +91,13 @@ sealed class WreathHandler : ModPlayer {
 
     public ushort GetHitTimer { get; private set; }
 
-    public static LerpColor AetherLerpColor { get; private set; } = new(0.03f);
+    //public static LerpColor AetherLerpColor { get; private set; } = new(0.03f);
 
     public static Color StandardColor => new(170, 252, 134);
     public static Color PhoenixColor => new(251, 234, 94);
     public static Color SoulOfTheWoodsColor => new(248, 119, 119);
-    public static Color AetherColor => AetherLerpColor.GetLerpColor([new(242, 182, 248), new(155, 196, 156), new(255, 155, 155), new(88, 146, 164)]);
+    public static Color AetherColor => Color.Lerp(new(233, 191, 255), new(252, 134, 241), 0.5f);
+    //public static Color AetherColor => AetherLerpColor.GetLerpColor([new(242, 182, 248), new(155, 196, 156), new(255, 155, 155), new(88, 146, 164)]);
 
     public static Color GetCurrentColor(Player player) {
         if (Main.gameMenu) {
@@ -575,7 +576,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     private void CommonUpdate() {
-        AetherLerpColor.Update();
+        //AetherLerpColor.Update();
         if (IsEmpty && CannotToggleOrGetWreathCharge) {
             CannotToggleOrGetWreathCharge = false;
             ChargedBySlowFill = false;
