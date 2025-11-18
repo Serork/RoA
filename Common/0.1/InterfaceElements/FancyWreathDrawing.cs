@@ -266,7 +266,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
 
         Rectangle frame = new(0, 0, width, height);
-        Color color = stats.IsAetherWreath ? WreathHandler.AetherBaseColor : WreathHandler.BaseColor;
+        Color color = WreathHandler.BaseColor;
         Vector2 origin = new(width / 2, height / 2);
         float scale = Main.UIScale;
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
@@ -326,6 +326,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
                 Main.mouseText = true;
                 IsHoveringUI = true;
             }
+        }
+
+        if (stats.IsAetherWreath) {
+            color = WreathHandler.AetherBaseColor;
         }
 
         // fill
@@ -484,7 +488,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
 
         Rectangle frame = new(0, 0, width, height);
-        Color color = stats.IsAetherWreath ? WreathHandler.AetherBaseColor : WreathHandler.BaseColor;
+        Color color = WreathHandler.BaseColor;
         Vector2 origin = new(width / 2, height / 2);
         float scale = Main.UIScale;
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
@@ -546,6 +550,10 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
                 Main.mouseText = true;
                 IsHoveringUI = true;
             }
+        }
+
+        if (stats.IsAetherWreath) {
+            color = WreathHandler.AetherBaseColor;
         }
 
         // fill
