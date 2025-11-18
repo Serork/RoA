@@ -109,6 +109,11 @@ static partial class PlayerExtensions {
         return index != -1;
     }
 
+    public static bool FindBuff<T>(this Player player, out int index) where T : ModBuff {
+        index = player.FindBuffIndex(ModContent.BuffType<T>());
+        return index != -1;
+    }
+
     public static bool HasBuff(this Player player, int type) => player.FindBuffIndex(type) != -1;
 
     public static Item GetSelectedItem(this Player player) => player.inventory[player.selectedItem];

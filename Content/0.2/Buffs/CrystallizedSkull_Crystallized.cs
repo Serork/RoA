@@ -12,8 +12,10 @@ sealed class Crystallized : ModBuff {
     }
 
     public override void Update(Player player, ref int buffIndex) {
-        player.noItems = true;
-        player.cursed = true;
-        player.buffTime[buffIndex]++;
+        if (player.statMana < -1) {
+            player.noItems = true;
+            player.cursed = true;
+            player.buffTime[buffIndex]++;
+        }
     }
 }

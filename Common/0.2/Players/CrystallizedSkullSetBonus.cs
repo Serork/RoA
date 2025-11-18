@@ -73,9 +73,9 @@ sealed partial class PlayerCommon : ModPlayer {
                 }
             }
         }
-        if (self.statMana >= 0 && self.HasBuff<Crystallized>()) {
-            self.DelBuff<Crystallized>();
-        }
+        //if (self.statMana >= 0 && self.FindBuff<Crystallized>(out int buffIndex) && self.buffTime[buffIndex] >= 2) {
+        //    self.buffTime[buffIndex] = 1;
+        //}
     }
 
     public override void SetStaticDefaults() {
@@ -100,7 +100,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     private void On_PlayerDrawSet_BoringSetup_2(On_PlayerDrawSet.orig_BoringSetup_2 orig, ref PlayerDrawSet self, Player player, List<DrawData> drawData, List<int> dust, List<int> gore, Vector2 drawPosition, float shadowOpacity, float rotation, Vector2 rotationOrigin) {
         bool reset = false;
-        if ((player.HasBuff<Crystallized>() || (player.mount.Type == MountID.Drill))) {
+        if (((player.HasBuff<Crystallized>() && player.statMana < 0) || (player.mount.Type == MountID.Drill))) {
             player.noItems = false;
             reset = true;
         }
@@ -137,7 +137,7 @@ sealed partial class PlayerCommon : ModPlayer {
             // here we spawn dusts and gores
             SoundEngine.PlaySound(SoundID.Item27, player.Center);
             if (!Main.dedServ) {
-                int goreCount = 4;
+                int goreCount = (int)(info.Opacity * 6);
                 for (int i = 0; i < goreCount; i++) {
                     float rotation = info.ExtraRotation;
                     int direction = (int)(player.direction * player.gravDir);
@@ -164,7 +164,7 @@ sealed partial class PlayerCommon : ModPlayer {
                         rotation += 0.3f * player.direction;
                     }
                     float y = -player.width * 2f * Main.rand.NextFloat(0.5f, 1.375f);
-                    Vector2 vector3 = (new Vector2(0f, y) + info.Offset * new Vector2(direction, 1f)).RotatedBy(rotation);
+                    Vector2 vector3 = (new Vector2(0f, y) + info.Offset * info.Opacity * new Vector2(direction, 1f)).RotatedBy(rotation);
                     int currentIndex = i + 1;
                     float progress = currentIndex / goreCount;
                     Vector2 gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 +
@@ -176,13 +176,23 @@ sealed partial class PlayerCommon : ModPlayer {
                     Main.gore[gore].frameCounter = info.ColorIndex;
                     gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 + (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
 
+                    Color color = info.Color;
                     for (int k = 0; k < 4; k++) {
+                        int dustType = ModContent.DustType<TintableDustGlow>();
+                        Dust dust = Dust.NewDustPerfect(gorePosition, dustType, Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f,
+                            0, color * 0.8f, 1f + Main.rand.NextFloatRange(0.1f));
+                        dust.velocity *= 0.5f;
+                        dust.customData = 1f;
+                        dust.noLightEmittence = true;
+                        dust.noGravity = true;
+                        dust.fadeIn = 1f;
+
                         if (Main.rand.NextBool(3)) {
                             continue;
                         }
-                        int dustType = ModContent.DustType<ManaCrystalShard>();
-                        Dust dust = Dust.NewDustPerfect(gorePosition, dustType, Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f,
-                            0, info.Color, 1f + Main.rand.NextFloatRange(0.1f));
+                        dustType = ModContent.DustType<ManaCrystalShard>();
+                        dust = Dust.NewDustPerfect(gorePosition, dustType, Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f,
+                            0, color, 1f + Main.rand.NextFloatRange(0.1f));
                         dust.velocity *= 0.5f;
                     }
                 }
