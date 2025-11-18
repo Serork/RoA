@@ -46,6 +46,12 @@ class WreathDust : ModDust, IDrawDustPrePlayer {
         Color color = dust.GetAlpha(dust.color);
         color *= 1.4f;
         color.A = (byte)Utils.Remap(Math.Clamp((float)dust.customData * 120f, 175, 255), 175, 255, 255, 175, false);
+        if (DustLoader.GetDust(dust.type) is WreathDust4) {
+            color.A -= 37;
+        }
+        if (DustLoader.GetDust(dust.type) is WreathDust2) {
+            color.A -= 25;
+        }
         Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
     }
 }
@@ -89,6 +95,12 @@ class WreathDust_2 : ModDust {
         Color color = dust.GetAlpha(dust.color);
         color *= 1.4f;
         color.A = (byte)Utils.Remap(Math.Clamp((float)dust.customData * 120f, 175, 255), 175, 255, 255, 175, false);
+        if (DustLoader.GetDust(dust.type) is WreathDust4_2) {
+            color.A -= 37;
+        }
+        if (DustLoader.GetDust(dust.type) is WreathDust2_2) {
+            color.A -= 25;
+        }
         Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture).Value, dust.position - Main.screenPosition, dust.frame, color, dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
 
         return false;
