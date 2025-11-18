@@ -23,10 +23,7 @@ sealed class WreathCharger : NatureItem {
         if (player.ItemAnimationJustStarted) {
             WreathHandler handler = player.GetWreathHandler();
             handler.IncreaseResourceValue();
-
-            if (!handler.ChargedBySlowFill) {
-                handler.MakeDustsOnHit();
-            }
+            handler.MakeDustsOnHit();
         }
 
         return true;
