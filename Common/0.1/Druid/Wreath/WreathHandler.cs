@@ -98,7 +98,7 @@ sealed class WreathHandler : ModPlayer {
     public static Color StandardColor => new(170, 252, 134);
     public static Color PhoenixColor => new(251, 234, 94);
     public static Color SoulOfTheWoodsColor => new(248, 119, 119);
-    public static Color AetherColor => Color.Lerp(Color.Lerp(new(233, 191, 255), new(252, 134, 241), 0.5f), LiquidRenderer.GetShimmerGlitterColor(top: true, 0f, 0f).MultiplyAlpha(1.25f), 0.25f);
+    public static Color AetherColor => Color.Lerp(Color.Lerp(new(233, 191, 255), new(252, 134, 241), 0.5f), LiquidRenderer.GetShimmerGlitterColor(top: true, 0f, 0f).MultiplyAlpha(1.25f), 0.25f) with { A = 75 } * 1.075f;
     //public static Color AetherColor => AetherLerpColor.GetLerpColor([new(242, 182, 248), new(155, 196, 156), new(255, 155, 155), new(88, 146, 164)]);
 
     public static Color GetCurrentColor(Player player) {
@@ -291,7 +291,13 @@ sealed class WreathHandler : ModPlayer {
         }
 
         IncreaseResourceValue(0f);
-        MakeDustsOnHit();
+
+        if (!ChargedBySlowFill) {
+            if (_hitEffectTimer <= 0) {
+                MakeDustsOnHit();
+                _hitEffectTimer = 4;
+            }
+        }
     }
 
     internal void HandleOnHitNPCForNatureProjectile(Projectile proj, bool nonDataReset = false, NPC target = null) {
@@ -308,9 +314,11 @@ sealed class WreathHandler : ModPlayer {
 
             IncreaseResourceValue(natureProjectile.WreathFillingFine);
 
-            if (_hitEffectTimer <= 0) {
-                MakeDustsOnHit();
-                _hitEffectTimer = 4;
+            if (!ChargedBySlowFill) {
+                if (_hitEffectTimer <= 0) {
+                    MakeDustsOnHit();
+                    _hitEffectTimer = 4;
+                }
             }
 
             return;
@@ -324,9 +332,11 @@ sealed class WreathHandler : ModPlayer {
 
                     IncreaseResourceValue(handler.WreathFillingFine);
 
-                    if (_hitEffectTimer <= 0) {
-                        MakeDustsOnHit();
-                        _hitEffectTimer = 4;
+                    if (!ChargedBySlowFill) {
+                        if (_hitEffectTimer <= 0) {
+                            MakeDustsOnHit();
+                            _hitEffectTimer = 4;
+                        }
                     }
                 }
             }
