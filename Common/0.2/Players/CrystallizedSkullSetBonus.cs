@@ -180,12 +180,12 @@ sealed partial class PlayerCommon : ModPlayer {
                     for (int k = 0; k < 4; k++) {
                         int dustType = ModContent.DustType<TintableDustGlow>();
                         Dust dust = Dust.NewDustPerfect(gorePosition, dustType, Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f,
-                            0, color * 0.8f, 1f + Main.rand.NextFloatRange(0.1f));
+                            0, color * 0.9f, 1f + Main.rand.NextFloatRange(0.1f));
                         dust.velocity *= 0.5f;
                         dust.customData = 1f;
                         dust.noLightEmittence = true;
                         dust.noGravity = true;
-                        dust.fadeIn = 1f;
+                        dust.fadeIn = 1f * Main.rand.NextFloat(0.25f, 1f);
 
                         if (Main.rand.NextBool(3)) {
                             continue;
