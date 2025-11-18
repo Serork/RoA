@@ -60,7 +60,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                             }
                         }
                         int tileType = ModContent.TileType<DullDaikatana>();
-                        int extraX = genRand.Next(0, 3);
+                        int extraX = genRand.Next(0, 4);
                         int extraY = genRand.Next(-1, 2);
                         if (flag) {
                             check = 100;
