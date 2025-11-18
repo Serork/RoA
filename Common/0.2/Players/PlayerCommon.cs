@@ -42,6 +42,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool ApplyBoneArmorVisuals;
 
     public bool IsAetherInvincibilityActive;
+    public float AetherShimmerAlpha;
 
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
@@ -422,6 +423,20 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         TouchGround();
+
+        if (IsAetherInvincibilityActive) {
+            return;
+        }
+
+        float num7 = AetherShimmerAlpha;
+        if (num7 > 0f) {
+             num7 -= 0.05f;
+
+            if (num7 < 0f)
+                num7 = 0f;
+        }
+
+        AetherShimmerAlpha = num7;
     }
 
     private void TouchGround() {

@@ -3,15 +3,67 @@
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
+using System;
+
 using Terraria;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 
 namespace RoA.Content.Items.Equipables.Wreaths.Hardmode;
 
 sealed class AetherWreath : WreathItem, WreathItem.IWreathGlowMask {
+    private static float _shimmerAlpha;
+
     public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.9f);
 
     Color IWreathGlowMask.GlowColor => Color.White;
+
+    public override void Load() {
+        On_Main.DoLightTiles += On_Main_DoLightTiles;
+        On_Main.DrawCapture += On_Main_DrawCapture;
+        On_OverlayManager.Draw += On_OverlayManager_Draw;
+    }
+
+    private void On_OverlayManager_Draw(On_OverlayManager.orig_Draw orig, OverlayManager self, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, RenderLayers layer, bool beginSpriteBatch) {
+        orig(self, spriteBatch, layer, beginSpriteBatch);
+
+        if (!Main.gameMenu && !Main.LocalPlayer.CanSeeShimmerEffects()) {
+            if (Main.LocalPlayer.GetCommon().IsAetherInvincibilityActive ||
+                Main.LocalPlayer.GetCommon().AetherShimmerAlpha > 0f) {
+                if (layer == RenderLayers.InWorldUI && _shimmerAlpha != 0f) {
+                    Main.shimmerAlpha = _shimmerAlpha;
+                    _shimmerAlpha = 0f;
+                }
+            }
+        }
+    }
+
+    private void On_Main_DoLightTiles(On_Main.orig_DoLightTiles orig, Main self) {
+        orig(self);
+
+        if (!Main.gameMenu && !Main.LocalPlayer.CanSeeShimmerEffects()) {
+            if (Main.LocalPlayer.GetCommon().IsAetherInvincibilityActive ||
+                Main.LocalPlayer.GetCommon().AetherShimmerAlpha > 0f) {
+                _shimmerAlpha = Main.LocalPlayer.GetCommon().AetherShimmerAlpha;
+                Main.shimmerAlpha = 0f;
+            }
+        }
+    }
+
+    private void On_Main_DrawCapture(On_Main.orig_DrawCapture orig, Main self, Rectangle area, Terraria.Graphics.Capture.CaptureSettings settings) {
+        if (!Main.gameMenu && !Main.LocalPlayer.CanSeeShimmerEffects()) {
+            if (Main.LocalPlayer.GetCommon().IsAetherInvincibilityActive ||
+                Main.LocalPlayer.GetCommon().AetherShimmerAlpha > 0f) {
+                float alpha = Main.LocalPlayer.GetCommon().AetherShimmerAlpha;
+                Main.shimmerAlpha = 0f;
+                orig(self, area, settings);
+                Main.shimmerAlpha = alpha;
+                return;
+            }
+        }
+
+        orig(self, area, settings);
+    }
 
     protected override void SafeSetDefaults() {
         int width = 30; int height = 30;
@@ -28,6 +80,10 @@ sealed class AetherWreath : WreathItem, WreathItem.IWreathGlowMask {
             player.GetCommon().IsAetherInvincibilityActive = true;
             player.GetWreathHandler().CapMax1();
             player.noItems = true;
+
+            if (player.CanSeeShimmerEffects()) {
+                return;
+            }
 
             if (!player.IsLocal()) {
                 return;
@@ -53,6 +109,7 @@ sealed class AetherWreath : WreathItem, WreathItem.IWreathGlowMask {
             }
 
             Main.shimmerAlpha = num7;
+            player.GetCommon().AetherShimmerAlpha = Main.shimmerAlpha;
 
             if (num5 != Player.airLightDecay) {
                 if (Player.airLightDecay >= num5) {
