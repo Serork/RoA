@@ -85,7 +85,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
         }
 
         protected override void SpawnDustsWhenReady(Player player, Vector2 corePosition) {
-            int dustCount = 20;
+            int dustCount = 30;
             float num12 = 6f;
             for (int i = 0; i < dustCount; i++) {
                 Vector2 vector = Vector2.UnitX.RotatedBy(MathUtils.Clamp01(i / (float)dustCount + Main.rand.NextFloatRange(1f)) * ((float)Math.PI * 2f));
