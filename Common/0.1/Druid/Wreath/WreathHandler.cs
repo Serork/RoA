@@ -37,8 +37,8 @@ sealed class WreathHandler : ModPlayer {
     public static ushort GETHITEFFECTTIME => 30;
 
     public override void UpdateDead() {
-        CommonUpdate(); 
-        if (_shouldDecrease || CurrentResource <= 0) {
+        CommonUpdate();
+        if (_dontPlayStaySound) {
             return;
         }
         ForcedHardReset2();

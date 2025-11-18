@@ -33,6 +33,81 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
         }
     }
 
+    public override void UpdateDead() {
+        Reset();
+    }
+
+    private bool Reset() {
+        if (DeerSkullAppearanceProgress != 0f) {
+            DeerSkullAppearanceProgress = 0f;
+
+            // gores
+
+            if (!Main.dedServ) {
+                var source = Player.GetSource_Misc("deerskullhorns");
+                for (int i = 0; i < 6; i++) {
+                    int minX = -56;
+                    int maxX = 0;
+                    if (!Player.FacedRight()) {
+                        minX = 0;
+                        maxX = 56 - 16;
+                    }
+                    int gore = Gore.NewGore(source, Player.Top + Main.rand.Random2(minX, maxX, -20, 0).RotatedBy(Player.fullRotation), Vector2.Zero, ("DeerSkullFormGore" + (Main.rand.Next(3) + 1)).GetGoreType());
+                    Main.gore[gore].velocity.X *= Main.rand.NextFloat(0.1f, 1f);
+                    Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+                    Main.gore[gore].velocity += Player.velocity;
+
+                    minX = 0;
+                    maxX = 56 - 16;
+                    if (!Player.FacedRight()) {
+                        minX = -56;
+                        maxX = 0;
+                    }
+                    gore = Gore.NewGore(source, Player.Top + Main.rand.Random2(minX, maxX, -20, 0).RotatedBy(Player.fullRotation), Vector2.Zero, ("DeerSkullFormGore" + (Main.rand.Next(3) + 1)).GetGoreType());
+                    Main.gore[gore].velocity.X *= Main.rand.NextFloat(0.1f, 1f);
+                    Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+                    Main.gore[gore].velocity += Player.velocity;
+                }
+
+                for (int i = 0; i < 8; i++) {
+                    int minX = -56;
+                    int maxX = 0;
+                    if (!Player.FacedRight()) {
+                        minX = 0;
+                        maxX = 56 - 16;
+                    }
+                    Dust dust = Dust.NewDustPerfect(Player.Top + Main.rand.Random2(minX, maxX, -20, 0).RotatedBy(Player.fullRotation), DustID.Bone, Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 2f), Scale: 1f + 0.1f * Main.rand.NextFloatDirection());
+                    dust.noGravity = !Main.rand.NextBool(3);
+                    Dust dust2 = dust;
+                    if (dust.noGravity) {
+                        dust2.scale *= 1.25f;
+                    }
+                    dust2 = dust;
+                    dust2.velocity *= 0.5f;
+
+                    minX = 0;
+                    maxX = 56 - 16;
+                    if (!Player.FacedRight()) {
+                        minX = -56;
+                        maxX = 0;
+                    }
+                    dust = Dust.NewDustPerfect(Player.Top + Main.rand.Random2(minX, maxX, -20, 0).RotatedBy(Player.fullRotation), DustID.Bone, Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 2f), Scale: 1f + 0.1f * Main.rand.NextFloatDirection());
+                    dust.noGravity = !Main.rand.NextBool(3);
+                    dust2 = dust;
+                    if (dust.noGravity) {
+                        dust2.scale *= 1.25f;
+                    }
+                    dust2 = dust;
+                    dust2.velocity *= 0.5f;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public partial void DeerSkullPostUpdateEquips() {
         float lerpValue = 0.1f;
 
@@ -44,70 +119,7 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
 
         float targetValue = 1f;
         if (!deerSkullEquippedAndActivated) {
-            if (DeerSkullAppearanceProgress != 0f) {
-                DeerSkullAppearanceProgress = 0f;
-
-                // gores
-
-                if (!Main.dedServ) {
-                    var source = Player.GetSource_Misc("deerskullhorns");
-                    for (int i = 0; i < 6; i++) {
-                        int minX = -56;
-                        int maxX = 0;
-                        if (!Player.FacedRight()) {
-                            minX = 0;
-                            maxX = 56 - 16;
-                        }
-                        int gore = Gore.NewGore(source, Player.Top + Main.rand.Random2(minX, maxX, -20, 0).RotatedBy(Player.fullRotation), Vector2.Zero, ("DeerSkullFormGore" + (Main.rand.Next(3) + 1)).GetGoreType());
-                        Main.gore[gore].velocity.X *= Main.rand.NextFloat(0.1f, 1f);
-                        Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
-                        Main.gore[gore].velocity += Player.velocity;
-
-                        minX = 0;
-                        maxX = 56 - 16;
-                        if (!Player.FacedRight()) {
-                            minX = -56;
-                            maxX = 0;
-                        }
-                        gore = Gore.NewGore(source, Player.Top + Main.rand.Random2(minX, maxX, -20, 0).RotatedBy(Player.fullRotation), Vector2.Zero, ("DeerSkullFormGore" + (Main.rand.Next(3) + 1)).GetGoreType());
-                        Main.gore[gore].velocity.X *= Main.rand.NextFloat(0.1f, 1f);
-                        Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
-                        Main.gore[gore].velocity += Player.velocity;
-                    }
-
-                    for (int i = 0; i < 8; i++) {
-                        int minX = -56;
-                        int maxX = 0;
-                        if (!Player.FacedRight()) {
-                            minX = 0;
-                            maxX = 56 - 16;
-                        }
-                        Dust dust = Dust.NewDustPerfect(Player.Top + Main.rand.Random2(minX, maxX, -20, 0).RotatedBy(Player.fullRotation), DustID.Bone, Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 2f), Scale: 1f + 0.1f * Main.rand.NextFloatDirection());
-                        dust.noGravity = !Main.rand.NextBool(3);
-                        Dust dust2 = dust;
-                        if (dust.noGravity) {
-                            dust2.scale *= 1.25f;
-                        }
-                        dust2 = dust;
-                        dust2.velocity *= 0.5f;
-
-                        minX = 0;
-                        maxX = 56 - 16;
-                        if (!Player.FacedRight()) {
-                            minX = -56;
-                            maxX = 0;
-                        }
-                        dust = Dust.NewDustPerfect(Player.Top + Main.rand.Random2(minX, maxX, -20, 0).RotatedBy(Player.fullRotation), DustID.Bone, Vector2.One.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(0.5f, 2f), Scale: 1f + 0.1f * Main.rand.NextFloatDirection());
-                        dust.noGravity = !Main.rand.NextBool(3);
-                        dust2 = dust;
-                        if (dust.noGravity) {
-                            dust2.scale *= 1.25f;
-                        }
-                        dust2 = dust;
-                        dust2.velocity *= 0.5f;
-                    }
-                }
-
+            if (Reset()) {
                 return;
             }
             //targetValue = 0f;

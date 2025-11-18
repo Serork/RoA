@@ -134,7 +134,7 @@ sealed class SerpentChain : ModProjectile_NoTextureLoad, IRequestAssets {
         float maxDistance = 16f * 20;
         float inertia = 15f;
         float deceleration = 0.97f - DistanceToTargetFactor * 0.17f / 2f;
-        if (!owner.HasMinionAttackTargetNPC) {
+        if (!owner.HasMinionAttackTargetNPC || owner.dead) {
             DistanceToTargetFactor = 1f - MathUtils.Clamp01(center.Distance(Projectile.Center) / minDistance2);
             inertia *= 1f - DistanceToTargetFactor;
             Projectile.SlightlyMoveTo2(center, speed, inertia, deceleration);
