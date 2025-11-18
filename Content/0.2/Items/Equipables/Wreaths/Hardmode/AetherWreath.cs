@@ -45,7 +45,7 @@ sealed class AetherWreath : WreathItem, WreathItem.IWreathGlowMask {
             if (Main.LocalPlayer.GetCommon().IsAetherInvincibilityActive ||
                 Main.LocalPlayer.GetCommon().AetherShimmerAlpha > 0f) {
                 _shimmerAlpha = Main.LocalPlayer.GetCommon().AetherShimmerAlpha;
-                Main.shimmerAlpha = 0f;
+                Main.shimmerAlpha *= 0.25f;
             }
         }
     }
@@ -55,7 +55,7 @@ sealed class AetherWreath : WreathItem, WreathItem.IWreathGlowMask {
             if (Main.LocalPlayer.GetCommon().IsAetherInvincibilityActive ||
                 Main.LocalPlayer.GetCommon().AetherShimmerAlpha > 0f) {
                 float alpha = Main.LocalPlayer.GetCommon().AetherShimmerAlpha;
-                Main.shimmerAlpha = 0f;
+                Main.shimmerAlpha *= 0.25f;
                 orig(self, area, settings);
                 Main.shimmerAlpha = alpha;
                 return;
