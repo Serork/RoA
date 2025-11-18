@@ -52,18 +52,26 @@ sealed class NewMoneyBite : ModProjectile {
             Projectile.hostile = true;
         }
 
-        if (Projectile.localAI[0]++ > NewMoney.BITE_FIRSTFRAMETIME && Projectile.frameCounter++ > NewMoney.BITE_ANIMATIONTIME) {
-            Projectile.frameCounter = 0;
-            Projectile.frame++;
-            if (Projectile.frame == Projectile.GetFrameCount() - 1) {
-                if (Projectile.IsOwnerLocal()) {
-                    ProjectileUtils.SpawnPlayerOwnedProjectile<NewMoneyBat>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
-                        Position = Projectile.Center
-                    });
+        if (Projectile.frame < Projectile.GetFrameCount() - 1) {
+            if (Projectile.localAI[0]++ > NewMoney.BITE_FIRSTFRAMETIME && Projectile.frameCounter++ > NewMoney.BITE_ANIMATIONTIME) {
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
+                if (Projectile.frame == Projectile.GetFrameCount() - 1) {
+                    if (Projectile.IsOwnerLocal()) {
+                        ProjectileUtils.SpawnPlayerOwnedProjectile<NewMoneyBat>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
+                            Position = Projectile.Center
+                        });
+                    }
                 }
             }
-            if (Projectile.frame >= Projectile.GetFrameCount()) {
-                Projectile.Kill();
+        }
+        else {
+            Projectile.localAI[2]++;
+            if (Projectile.localAI[2] >= 3f) {
+                Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.3f);
+                if (Projectile.Opacity <= 0f) {
+                    Projectile.Kill();
+                }
             }
         }
     }
@@ -72,7 +80,7 @@ sealed class NewMoneyBite : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Color color = NewMoneyBullet.BulletColor;
-        color.A /= 2;
+        color.A = (byte)(color.A * 0.625f);
 
         Projectile projectile = Projectile;
         Texture2D mainTex = projectile.GetTexture();
@@ -85,7 +93,7 @@ sealed class NewMoneyBite : ModProjectile {
         SpriteEffects effects = projectile.spriteDirection.ToSpriteEffects();
         Vector2 origin = frameBox.Size() / 2;
         float colorModifier = Utils.GetLerpValue(1.5f, 1.25f, progress, true);
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color * 0.5f * colorModifier, projectile.rotation,
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color * 0.5f * colorModifier * Projectile.Opacity, projectile.rotation,
                       origin, projectile.scale * 2f * progress, effects, 0);
 
 
@@ -97,7 +105,7 @@ sealed class NewMoneyBite : ModProjectile {
             frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
             effects = projectile.spriteDirection.ToSpriteEffects();
             origin = frameBox.Size() / 2;
-            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color, projectile.rotation,
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color * Projectile.Opacity, projectile.rotation,
                                   origin, scale, effects, 0);
         }
 

@@ -12,7 +12,7 @@ namespace RoA.Content.Dusts;
 sealed class NewMoneyDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         Color color = NewMoneyBullet.BulletColor * MathHelper.Min(dust.scale, 1f);
-        color.A /= 2;
+        color.A = (byte)(color.A * 0.625f);
         return color;
     }
 
