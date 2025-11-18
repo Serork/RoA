@@ -45,6 +45,9 @@ sealed class DoubleTapHandler : ModPlayer, IPostSetupContent {
     }
 
     public override void SetControls() {
+        if (Player.shimmering) {
+            return;
+        }
         for (int i = 0; i < 4; i++) {
             bool justPressed = false;
             switch (i) {
