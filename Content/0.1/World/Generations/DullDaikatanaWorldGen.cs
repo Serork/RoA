@@ -68,7 +68,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                     break;
                                 }
                                 for (int y = -check; y < check + 2; y++) {
-                                    if (WorldGenHelper.GetTileSafely(num438 + x, num439 + y).TileType == tileType) {
+                                    if (WorldGenHelper.GetTileSafely(num438 + 1 + x, num439 - 1 + y).TileType == tileType) {
                                         flag = false;
                                         break;
                                     }
@@ -83,7 +83,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                 }
                             }
                             if (flag4) {
-                                WorldGen.PlaceTile(num438, num439, tileType);
+                                WorldGen.PlaceTile(num438 + 1, num439 - 1, tileType);
                             }
                             else {
                                 flag24 = true;
@@ -131,7 +131,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                                 }
                             }
                         }
-                        if (WorldGenHelper.GetTileSafely(num438, num439).TileType == tileType) {
+                        if (WorldGenHelper.GetTileSafely(num438 + 1, num439 - 1).TileType == tileType) {
                             flag24 = true;
                         }
                         else {
