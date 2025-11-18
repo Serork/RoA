@@ -266,9 +266,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
 
         Rectangle frame = new(0, 0, width, height);
-        int num5 = 255;
-        int a = (int)((double)num5 * 1);
-        Color color = new(num5, num5, num5, a);
+        Color color = stats.IsAetherWreath ? WreathHandler.AetherBaseColor : WreathHandler.BaseColor;
         Vector2 origin = new(width / 2, height / 2);
         float scale = Main.UIScale;
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
@@ -364,6 +362,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             spriteBatch.Draw(mainTexture, position2 + offset, frame, color, rotation, origin, scale, effects, 0f);
         }
 
+        color = WreathHandler.SoulOfTheWoodsBaseColor;
         // soul of the woods fill
         float value = stats.ActualProgress2 - 1f;
         value = MathHelper.Clamp(value * 1.1f, 0f, 1f);
@@ -485,9 +484,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
         }
 
         Rectangle frame = new(0, 0, width, height);
-        int num5 = 255;
-        int a = (int)((double)num5 * 1);
-        Color color = new(num5, num5, num5, a);
+        Color color = stats.IsAetherWreath ? WreathHandler.AetherBaseColor : WreathHandler.BaseColor;
         Vector2 origin = new(width / 2, height / 2);
         float scale = Main.UIScale;
         if (wreathPosition == RoAClientConfig.WreathPositions.Player) {
@@ -579,6 +576,7 @@ sealed class FancyWreathDrawing() : InterfaceElement(RoA.ModName + ": Wreath Dra
             spriteBatch.Draw(mainTexture, position2 + offset, frame, color, MathHelper.Pi + rotation, origin, scale, effects, 0f);
         }
 
+        color = WreathHandler.SoulOfTheWoodsBaseColor;
         // soul of the woods fill
         float value = stats.ActualProgress2 - 1f;
         value = MathHelper.Clamp(value * 1.1f, 0f, 1f);
