@@ -430,7 +430,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
         float num7 = AetherShimmerAlpha;
         if (num7 > 0f) {
-             num7 -= 0.025f;
+             num7 -= 0.05f;
 
             if (num7 < 0f)
                 num7 = 0f;
