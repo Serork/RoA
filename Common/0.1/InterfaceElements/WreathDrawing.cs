@@ -136,8 +136,10 @@ sealed class WreathDrawing : PlayerDrawLayer {
         //alpha = (alpha + 1f) / 2f;
         //DrawColor color = DrawColor.Multiply(Stats.DrawColor, alpha);
         Color color = WreathHandler.BaseColor;
+        bool customWreath = false;
         if (stats.IsAetherWreath) {
             color = WreathHandler.AetherBaseColor;
+            customWreath = true;
         }
         float opacity = Math.Max(Utils.GetLerpValue(1f, 0.75f, progress, true), 0.7f);
         //position = position.Floor();
@@ -153,7 +155,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         }
         batch.End();
         batch.Begin(SpriteSortMode.Deferred, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
-        wreathSpriteData.Color = color * opacity;
+        wreathSpriteData.Color = Color.Lerp(WreathHandler.BaseColor, color, progress * customWreath.ToInt()) * opacity;
         wreathSpriteData.VisualPosition = position;
         wreathSpriteData.Rotation = rotation;
         wreathSpriteData.DrawSelf();

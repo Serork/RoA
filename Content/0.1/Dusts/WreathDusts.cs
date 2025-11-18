@@ -15,7 +15,7 @@ namespace RoA.Content.Dusts;
 sealed class WreathDust4 : WreathDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         Color color = WreathHandler.AetherBaseColor;
-        color.A -= 25;
+        color.A = 25;
         return color;
     }
 }
@@ -26,7 +26,7 @@ sealed class WreathDust3 : WreathDust {
 sealed class WreathDust2 : WreathDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         Color color = WreathHandler.SoulOfTheWoodsBaseColor;
-        color.A -= 25;
+        color.A = 25;
         return color;
     }
 }
@@ -55,7 +55,7 @@ sealed class WreathDust4_2 : WreathDust_2 {
 
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         Color color = WreathHandler.AetherBaseColor;
-        color.A -= 25;
+        color.A = 25;
         return color;
     }
 }
@@ -69,7 +69,7 @@ sealed class WreathDust2_2 : WreathDust_2 {
 
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         Color color = WreathHandler.SoulOfTheWoodsBaseColor;
-        color.A -= 25;
+        color.A = 25;
         return color;
     }
 }
