@@ -31,6 +31,9 @@ static class MousePositionStorageExtensions {
         if (result) {
             player.mouseInterface = true;
         }
+        if (player.noItems) {
+            result = false;
+        }
         return result;
     }
     public static Vector2 GetWorldMousePosition(this Player player) => player.GetModPlayer<MouseVariables>().MousePosition;
@@ -101,7 +104,7 @@ sealed class MouseVariables : ModPlayer {
 
             bool syncControls = false;
             if (MouseInterfaceLock <= 0) {
-                HoldingLMB = Player.controlUseItem && !Main.blockMouse;
+                HoldingLMB = Player.controlUseItem && !Main.blockMouse && !Player.noItems;
                 if (HoldingLMB) {
                     OnHoldingLMBEvent?.Invoke(Player);
                 }

@@ -31,9 +31,9 @@ class WreathSlot : ModAccessorySlot {
 
     public static WreathSlot GetSlot(Player player) {
         return player.CurrentLoadoutIndex switch {
-            1 => LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot2>().Type, player) as WreathSlot2,
-            2 => LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot3>().Type, player) as WreathSlot3,
-            _ => LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player) as WreathSlot,
+            1 => (LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot2>().Type, player) as WreathSlot2)!,
+            2 => (LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot3>().Type, player) as WreathSlot3)!,
+            _ => (LoaderManager.Get<AccessorySlotLoader>().Get(ModContent.GetInstance<WreathSlot>().Type, player) as WreathSlot)!,
         };
     }
     public static Item GetFunctionalItem(Player player) => GetSlot(player).FunctionalItem;

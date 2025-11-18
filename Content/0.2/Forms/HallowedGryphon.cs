@@ -137,7 +137,7 @@ sealed class HallowedGryphon : BaseForm {
         float num19 = (float)Math.PI * 2f / (float)(num15 / 2);
         int perAttack = (int)(num15 / (float)attackPerCycle);
 
-        bool isAttacking = player.controlUseItem && Main.mouseLeft;
+        bool isAttacking = player.HoldingLMB(true);
         if (isAttacking && canDoLoopAttack) {
             if (!justStartedDoingLoopAttack) {
                 justStartedDoingLoopAttack = true;

@@ -27,6 +27,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.UI;
 
 using static RoA.Common.Druid.Forms.BaseFormHandler;
 
@@ -227,7 +228,7 @@ sealed class WreathHandler : ModPlayer {
     public bool HasEnough(float percentOfMax, bool total = false) => CurrentResource >= (ushort)((total ? TotalResource : MaxResource) * percentOfMax);
 
     public override void Unload() {
-        OnWreathReset = null;
+        OnWreathReset = null!;
     }
 
     internal void ReceivePlayerSync(ushort resource/*, ushort tempResource, float changingTimeValue, float currentChangingTime, bool shouldDecrease1, bool shouldDecrease2, float currentChangingMult, ushort increaseValue, float stayTime, bool startSlowlyIncreasingUntilFull, bool startSlowlyIncreasingUntilFull2*/) {

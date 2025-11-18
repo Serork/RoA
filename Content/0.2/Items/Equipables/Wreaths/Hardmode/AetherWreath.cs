@@ -27,6 +27,7 @@ sealed class AetherWreath : WreathItem, WreathItem.IWreathGlowMask {
         if (player.GetWreathHandler().IsFull1) {
             player.GetCommon().IsAetherInvincibilityActive = true;
             player.GetWreathHandler().CapMax1();
+            player.noItems = true;
 
             if (!player.IsLocal()) {
                 return;
