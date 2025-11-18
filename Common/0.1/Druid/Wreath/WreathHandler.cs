@@ -98,7 +98,7 @@ sealed class WreathHandler : ModPlayer {
     public static Color StandardColor => new(170, 252, 134);
     public static Color PhoenixColor => new(251, 234, 94);
     public static Color SoulOfTheWoodsColor => new(248, 119, 119);
-    public static Color AetherColor => Color.Lerp(Color.Lerp(new(233, 191, 255), new(252, 134, 241), 0.5f), (LiquidRenderer.GetShimmerGlitterColor(top: true, 0f, 0f) * 3f).MultiplyAlpha(1.25f), 0.25f) with { A = 75 } * 1.075f;
+    public static Color AetherColor => Color.Lerp(Color.Lerp(new(233, 191, 255), new(252, 134, 241), 0.5f), (LiquidRenderer.GetShimmerGlitterColor(top: true, 0f, 0f) * 1.5f).MultiplyAlpha(1.25f), 0.25f) with { A = 75 } * 1.075f;
     //public static Color AetherColor => AetherLerpColor.GetLerpColor([new(242, 182, 248), new(155, 196, 156), new(255, 155, 155), new(88, 146, 164)]);
 
     public static Color GetCurrentColor(Player player) {
@@ -200,7 +200,7 @@ sealed class WreathHandler : ModPlayer {
         }
     }
     public static Color BaseColor => new(255, 255, 200, 200);
-    public static Color AetherBaseColor => Color.Lerp(new Color(255, 255, 255, 100), (LiquidRenderer.GetShimmerGlitterColor(top: true, 0f, 0f) * 3f).MultiplyAlpha(1.25f), 0.25f) with { A = 75 } * 1.075f;
+    public static Color AetherBaseColor => Color.Lerp(new Color(255, 255, 255, 100), (LiquidRenderer.GetShimmerGlitterColor(top: true, 0f, 0f) * 1.5f).MultiplyAlpha(1.25f), 0.25f) with { A = 75 } * 1.075f;
     public static Color SoulOfTheWoodsBaseColor => new(255, 255, 255, 100);
     //public Color DrawColor => Utils.MultiplyRGB(BaseColor, Lighting.GetColor(new Point((int)NormalWreathPosition.X / 16, (int)NormalWreathPosition.Y / 16)) * DrawColorOpacity);
     public Vector2 NormalWreathPosition {
