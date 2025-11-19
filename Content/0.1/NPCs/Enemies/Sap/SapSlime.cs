@@ -197,7 +197,7 @@ sealed class SapSlime : ModNPC {
         }
 
         for (int num42 = 0; num42 < num39; num42++) {
-            Dust dust6 = Main.dust[Dust.NewDust(NPC.position, NPC.width, NPC.height, num41, 2 * hit.HitDirection, -1f, 80, default(Color), num40)];
+            Dust dust6 = Main.dust[Dust.NewDust(NPC.position, NPC.width, NPC.height, num41, 2 * hit.HitDirection, -1f, 120, default(Color), num40)];
             if (Main.rand.Next(3) != 0)
                 dust6.noGravity = true;
 
