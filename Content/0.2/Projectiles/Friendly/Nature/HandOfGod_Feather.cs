@@ -171,7 +171,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * 50f;
             float distance2 = 26f;
             position += Vector2.UnitY.RotatedBy(rotation) * distance2;
-            float fadeOutProgress = Utils.GetLerpValue(0, 25, Projectile.timeLeft, true);
+            float fadeOutProgress = Utils.GetLerpValue(0, 50, Projectile.timeLeft, true);
             float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
             Lighting.AddLight(position, Color.LightYellow.ToVector3() * spawnProgress * MathHelper.Lerp(0.5f, 0.75f, Activated2Value) * fadeOutProgress3);
         }
