@@ -66,7 +66,7 @@ sealed class OvergrownSphere : ModProjectile {
             Projectile.oldRot[num29] = Projectile.oldRot[num29 - 1];
             Projectile.oldSpriteDirection[num29] = Projectile.oldSpriteDirection[num29 - 1];
         }
-        Projectile.oldPos[0] = Projectile.position;
+        Projectile.oldPos[0] = Vector2.Lerp(Projectile.oldPos[0], Projectile.position, 0.5f);
         Projectile.oldRot[0] = Projectile.rotation;
         Projectile.oldSpriteDirection[0] = Projectile.spriteDirection;
         float amount = 0.65f;
