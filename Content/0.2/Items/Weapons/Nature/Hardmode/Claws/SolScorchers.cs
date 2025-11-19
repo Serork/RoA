@@ -42,7 +42,7 @@ sealed class SolScorchers : ClawsBaseItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
-    public override bool ResetOnHit => true;
+    public override bool ResetOnHit => false;
 
     protected override (Color, Color) SetSlashColors(Player player) => (new Color(255, 221, 71), new Color(175, 152, 49));
 
