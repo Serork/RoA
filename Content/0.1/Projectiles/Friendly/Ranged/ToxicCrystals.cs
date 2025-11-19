@@ -68,7 +68,7 @@ class ToxicCrystal1 : ModProjectile {
 
         if (Main.rand.NextBool()) {
             float num3 = 0f;
-            float y = 0f;
+            //float y = 0f;
             Vector2 vector6 = Projectile.position;
             Vector2 vector7 = Projectile.oldPosition;
             vector7.Y -= num3 / 2f;

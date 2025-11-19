@@ -466,7 +466,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             player.ChangeDir(Projectile.spriteDirection);
         }
         Projectile.Center += _offset;
-        int trailTimeLeft = 5;
+        //int trailTimeLeft = 5;
         _trails[0] = new TrailInfo(Projectile.Center, Projectile.rotation);
         Projectile.oldPos[0] = _trails[0].Position;
         Projectile.oldRot[0] = _trails[0].Rotation;

@@ -146,7 +146,7 @@ sealed class HunterSpawnSystem : ModSystem {
         bool flag13 = false;
         int num2 = 0;
         int num3 = 0;
-        int num4 = 0;
+        //int num4 = 0;
         for (int k = 0; k < 255; k++) {
             if (!Main.player[k].active || Main.player[k].dead)
                 continue;

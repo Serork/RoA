@@ -2405,22 +2405,22 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             return;
         }
 
-        bool painting1 = false, painting2 = false, painting3 = false;
-        for (int i = Left + 15; i < Right - 15; i++) {
-            for (int j = BackwoodsVars.FirstTileYAtCenter; j < Bottom - 20; j++) {
-                if (WorldGenHelper.GetTileSafely(i, j).HasTile) {
-                    if (WorldGenHelper.GetTileSafely(i, j).TileType == ModContent.TileType<MillionDollarPainting>()) {
-                        painting1 = true;
-                    }
-                    if (WorldGenHelper.GetTileSafely(i, j).TileType == ModContent.TileType<Moss>()) {
-                        painting2 = true;
-                    }
-                    if (WorldGenHelper.GetTileSafely(i, j).TileType == ModContent.TileType<TheLegend>()) {
-                        painting3 = true;
-                    }
-                }
-            }
-        }
+        //bool painting1 = false, painting2 = false, painting3 = false;
+        //for (int i = Left + 15; i < Right - 15; i++) {
+        //    for (int j = BackwoodsVars.FirstTileYAtCenter; j < Bottom - 20; j++) {
+        //        if (WorldGenHelper.GetTileSafely(i, j).HasTile) {
+        //            if (WorldGenHelper.GetTileSafely(i, j).TileType == ModContent.TileType<MillionDollarPainting>()) {
+        //                painting1 = true;
+        //            }
+        //            if (WorldGenHelper.GetTileSafely(i, j).TileType == ModContent.TileType<Moss>()) {
+        //                painting2 = true;
+        //            }
+        //            if (WorldGenHelper.GetTileSafely(i, j).TileType == ModContent.TileType<TheLegend>()) {
+        //                painting3 = true;
+        //            }
+        //        }
+        //    }
+        //}
 
         houseBuilder.ChestChance = origin.Y < Main.worldSurface ? 0.75 : 0.95;
         houseBuilder.Place(new HouseBuilderContext(), GenVars.structures);
@@ -2650,7 +2650,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                     void addItemInChest(int itemType, int itemStack, double chance = 1.0) {
                         if (_random.NextChance(chance)) {
                             Item item = chest.item[slotId];
-                            (bool, Item) hasItemInChest = (false, null);
+                            (bool, Item?) hasItemInChest = (false, null);
                             foreach (Item chestItem in chest.item) {
                                 if (chestItem.IsEmpty()) {
                                     continue;
@@ -4604,7 +4604,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             int num786 = (int)(_biomeWidth * 2 - _biomeWidth * attemptProgress);
             flag50 = true;
             int num796 = Main.maxTilesX / 2;
-            int num797 = 200;
+            //int num797 = 200;
             if (attemtps <= 100) {
                 attemtps++;
             }

@@ -129,7 +129,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             SpriteEffects effects = ((!(proj.ai[0] >= 0f)) ? SpriteEffects.FlipVertically : SpriteEffects.None);
             float num2 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
             float num3 = Utils.Remap(num2, 0f, 0.6f, 0f, 1f) * Utils.Remap(num2, 0.6f, 1f, 1f, 0f);
-            float num4 = 0.975f;
+            //float num4 = 0.975f;
             float fromValue = Lighting.GetColor(proj.Center.ToTileCoordinates()).ToVector3().Length() / (float)Math.Sqrt(3.0);
             fromValue = Utils.Remap(fromValue, 0.2f, 1f, 0f, 1f);
             Microsoft.Xna.Framework.Color color = new Microsoft.Xna.Framework.Color(40, 20, 60);

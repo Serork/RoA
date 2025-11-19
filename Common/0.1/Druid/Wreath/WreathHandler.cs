@@ -1139,27 +1139,27 @@ sealed class WreathHandler : ModPlayer {
     private void AddLight() {
         return;
 
-        if (Player.whoAmI != Main.myPlayer) {
-            return;
-        }
+        //if (Player.whoAmI != Main.myPlayer) {
+        //    return;
+        //}
 
-        bool flag = RoAClientConfig.IsBars;
-        if (flag) {
-            return;
-        }
+        //bool flag = RoAClientConfig.IsBars;
+        //if (flag) {
+        //    return;
+        //}
 
-        float value0 = ActualProgress2;
-        float progress = value0;
-        float progress2 = MathHelper.Clamp(progress, 0f, 1f);
-        float value = 0.5f;
-        float value2 = value0 - 1f;
-        if (value2 > 0f) {
-            progress2 *= MathHelper.Clamp(1f - value2 * 1.5f, 0f, 1f);
-        }
-        Lighting.AddLight(NormalWreathPosition, (IsPhoenixWreath ? new Color(251, 234, 94) : new Color(170, 252, 134)).ToVector3() * 0.35f * progress2 * (1.35f + value));
-        if (SoulOfTheWoods) {
-            progress = value2;
-            Lighting.AddLight(NormalWreathPosition, new Color(248, 119, 119).ToVector3() * 0.35f * (progress * (2f + value)));
-        }
+        //float value0 = ActualProgress2;
+        //float progress = value0;
+        //float progress2 = MathHelper.Clamp(progress, 0f, 1f);
+        //float value = 0.5f;
+        //float value2 = value0 - 1f;
+        //if (value2 > 0f) {
+        //    progress2 *= MathHelper.Clamp(1f - value2 * 1.5f, 0f, 1f);
+        //}
+        //Lighting.AddLight(NormalWreathPosition, (IsPhoenixWreath ? new Color(251, 234, 94) : new Color(170, 252, 134)).ToVector3() * 0.35f * progress2 * (1.35f + value));
+        //if (SoulOfTheWoods) {
+        //    progress = value2;
+        //    Lighting.AddLight(NormalWreathPosition, new Color(248, 119, 119).ToVector3() * 0.35f * (progress * (2f + value)));
+        //}
     }
 }

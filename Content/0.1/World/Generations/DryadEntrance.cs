@@ -1302,7 +1302,7 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                 vector2D.Y = j;
                 vector2D2.X = x * 0.01;
                 vector2D2.Y = 20 * -0.05;
-                Vector2D vector2D22 = default(Vector2D);
+                //Vector2D vector2D22 = default(Vector2D);
                 int tileCount = 0;
                 int num4 = size;
                 while (num4 > 0) {

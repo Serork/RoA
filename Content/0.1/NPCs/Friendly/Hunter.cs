@@ -514,11 +514,11 @@ sealed class Hunter : ModNPC {
 
     private string GetDropFireLighterQuote() {
         int currentFireLighterQuote = _currentFireLighterQuote;
-        if (MAXFIRELIGHTERQUOTES > 1) {
-            while (_currentFireLighterQuote == currentFireLighterQuote) {
-                _currentFireLighterQuote = Main.rand.Next(MAXFIRELIGHTERQUOTES);
-            }
-        }
+        //if (MAXFIRELIGHTERQUOTES > 1) {
+        //    while (_currentFireLighterQuote == currentFireLighterQuote) {
+        //        _currentFireLighterQuote = Main.rand.Next(MAXFIRELIGHTERQUOTES);
+        //    }
+        //}
         return Language.GetTextValue($"Mods.RoA.NPCs.Town.{nameof(Hunter)}.DropFireLighterQuote{_currentFireLighterQuote + 1}");
     }
 

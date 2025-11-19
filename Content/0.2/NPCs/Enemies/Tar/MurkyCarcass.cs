@@ -375,36 +375,36 @@ sealed class MurkyCarcass : ModNPC {
                     if (NPC.velocity.Y < -5f)
                         NPC.velocity.Y = -4f;
                 }
-                else if (NPC.type == 65 || NPC.type == 102) {
-                    NPC.velocity.X += (float)NPC.direction * 0.15f;
-                    NPC.velocity.Y += (float)NPC.directionY * 0.15f;
-                    if (NPC.velocity.X > 5f)
-                        NPC.velocity.X = 5f;
+                //else if (NPC.type == 65 || NPC.type == 102) {
+                //    NPC.velocity.X += (float)NPC.direction * 0.15f;
+                //    NPC.velocity.Y += (float)NPC.directionY * 0.15f;
+                //    if (NPC.velocity.X > 5f)
+                //        NPC.velocity.X = 5f;
 
-                    if (NPC.velocity.X < -5f)
-                        NPC.velocity.X = -5f;
+                //    if (NPC.velocity.X < -5f)
+                //        NPC.velocity.X = -5f;
 
-                    if (NPC.velocity.Y > 3f)
-                        NPC.velocity.Y = 3f;
+                //    if (NPC.velocity.Y > 3f)
+                //        NPC.velocity.Y = 3f;
 
-                    if (NPC.velocity.Y < -3f)
-                        NPC.velocity.Y = -3f;
-                }
-                else {
-                    NPC.velocity.X += (float)NPC.direction * 0.1f;
-                    NPC.velocity.Y += (float)NPC.directionY * 0.1f;
-                    if (NPC.velocity.X > 3f)
-                        NPC.velocity.X = 3f;
+                //    if (NPC.velocity.Y < -3f)
+                //        NPC.velocity.Y = -3f;
+                //}
+                //else {
+                //    NPC.velocity.X += (float)NPC.direction * 0.1f;
+                //    NPC.velocity.Y += (float)NPC.directionY * 0.1f;
+                //    if (NPC.velocity.X > 3f)
+                //        NPC.velocity.X = 3f;
 
-                    if (NPC.velocity.X < -3f)
-                        NPC.velocity.X = -3f;
+                //    if (NPC.velocity.X < -3f)
+                //        NPC.velocity.X = -3f;
 
-                    if (NPC.velocity.Y > 2f)
-                        NPC.velocity.Y = 2f;
+                //    if (NPC.velocity.Y > 2f)
+                //        NPC.velocity.Y = 2f;
 
-                    if (NPC.velocity.Y < -2f)
-                        NPC.velocity.Y = -2f;
-                }
+                //    if (NPC.velocity.Y < -2f)
+                //        NPC.velocity.Y = -2f;
+                //}
             }
             else {
                 if (true/*NPC.type == 157*/) {
@@ -442,26 +442,26 @@ sealed class MurkyCarcass : ModNPC {
                             NPC.ai[0] = -1f;
                     }
                 }
-                else {
-                    NPC.velocity.X += (float)NPC.direction * 0.1f;
-                    float num266 = 1f;
-                    if (NPC.type == 615)
-                        num266 = 3f;
+                //else {
+                //    NPC.velocity.X += (float)NPC.direction * 0.1f;
+                //    float num266 = 1f;
+                //    if (NPC.type == 615)
+                //        num266 = 3f;
 
-                    if (NPC.velocity.X < 0f - num266 || NPC.velocity.X > num266)
-                        NPC.velocity.X *= 0.95f;
+                //    if (NPC.velocity.X < 0f - num266 || NPC.velocity.X > num266)
+                //        NPC.velocity.X *= 0.95f;
 
-                    if (NPC.ai[0] == -1f) {
-                        NPC.velocity.Y -= 0.01f;
-                        if ((double)NPC.velocity.Y < -0.3)
-                            NPC.ai[0] = 1f;
-                    }
-                    else {
-                        NPC.velocity.Y += 0.01f;
-                        if ((double)NPC.velocity.Y > 0.3)
-                            NPC.ai[0] = -1f;
-                    }
-                }
+                //    if (NPC.ai[0] == -1f) {
+                //        NPC.velocity.Y -= 0.01f;
+                //        if ((double)NPC.velocity.Y < -0.3)
+                //            NPC.ai[0] = 1f;
+                //    }
+                //    else {
+                //        NPC.velocity.Y += 0.01f;
+                //        if ((double)NPC.velocity.Y > 0.3)
+                //            NPC.ai[0] = -1f;
+                //    }
+                //}
 
                 int num267 = (int)(NPC.position.X + (float)(NPC.width / 2)) / 16;
                 int num268 = (int)(NPC.position.Y + (float)(NPC.height / 2)) / 16;

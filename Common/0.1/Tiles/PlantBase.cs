@@ -429,56 +429,56 @@ abstract class PlantBase : ModTile, TileHooks.IGetTileDrawData {
             orig(self);
             return;
 
-            Item item = self.inventory[self.selectedItem];
-            int tileToCreate = item.createTile;
-            if (tileToCreate < 0 || !(self.position.X / 16f - (float)Player.tileRangeX - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetX) || !((self.position.X + (float)self.width) / 16f + (float)Player.tileRangeX + (float)item.tileBoost - 1f + (float)self.blockRange >= (float)Player.tileTargetX) || !(self.position.Y / 16f - (float)Player.tileRangeY - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetY) || !((self.position.Y + (float)self.height) / 16f + (float)Player.tileRangeY + (float)item.tileBoost - 2f + (float)self.blockRange >= (float)Player.tileTargetY))
-                return;
+            //Item item = self.inventory[self.selectedItem];
+            //int tileToCreate = item.createTile;
+            //if (tileToCreate < 0 || !(self.position.X / 16f - (float)Player.tileRangeX - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetX) || !((self.position.X + (float)self.width) / 16f + (float)Player.tileRangeX + (float)item.tileBoost - 1f + (float)self.blockRange >= (float)Player.tileTargetX) || !(self.position.Y / 16f - (float)Player.tileRangeY - (float)item.tileBoost - (float)self.blockRange <= (float)Player.tileTargetY) || !((self.position.Y + (float)self.height) / 16f + (float)Player.tileRangeY + (float)item.tileBoost - 2f + (float)self.blockRange >= (float)Player.tileTargetY))
+            //    return;
 
-            self.cursorItemIconEnabled = true;
-            bool flag = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckLavaBlocking(self);
-            bool canUse = true;
-            canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckGamepadTorchUsability(self, canUse);
-            canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckWandUsability(self, canUse);
-            canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckRopeUsability(self, canUse);
-            canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckFlexibleWand(self, canUse);
-            if (self.TileReplacementEnabled)
-                canUse = PlaceCheckHooks.Player_PlaceThing_TryReplacingTiles(self, canUse);
+            //self.cursorItemIconEnabled = true;
+            //bool flag = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckLavaBlocking(self);
+            //bool canUse = true;
+            //canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckGamepadTorchUsability(self, canUse);
+            //canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckWandUsability(self, canUse);
+            //canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckRopeUsability(self, canUse);
+            //canUse = PlaceCheckHooks.Player_PlaceThing_Tiles_CheckFlexibleWand(self, canUse);
+            //if (self.TileReplacementEnabled)
+            //    canUse = PlaceCheckHooks.Player_PlaceThing_TryReplacingTiles(self, canUse);
 
-            Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
-            if (tile.HasTile) {
-                if (tileToCreate == 23 && tile.TileType == 59)
-                    tileToCreate = 661;
+            //Tile tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
+            //if (tile.HasTile) {
+            //    if (tileToCreate == 23 && tile.TileType == 59)
+            //        tileToCreate = 661;
 
-                if (tileToCreate == 199 && tile.TileType == 59)
-                    tileToCreate = 662;
-            }
+            //    if (tileToCreate == 199 && tile.TileType == 59)
+            //        tileToCreate = 662;
+            //}
 
-            if (canUse && ((!tile.HasTile && !flag) || (Main.tileCut[tile.TileType] && tile.TileType != 484) || (tile.TileType >= 373 && tile.TileType <= 375) || tile.TileType == 461 || tileToCreate == 199 || tileToCreate == 23 || tileToCreate == 662 || tileToCreate == 661 || tileToCreate == 2 || tileToCreate == 109 || tileToCreate == 60 || tileToCreate == 70 || tileToCreate == 633 || tileToCreate == ModContent.TileType<BackwoodsGrass>() || Main.tileMoss[tileToCreate] || TileID.Sets.BreakableWhenPlacing[tile.TileType]) && self.ItemTimeIsZero && self.itemAnimation > 0 && self.controlUseItem) {
-                bool canPlace = false;
-                bool newObjectType = false;
-                bool? overrideCanPlace = null;
-                int? forcedRandom = null;
-                TileObject objectData = default(TileObject);
-                PlaceCheckHooks.Player_FigureOutWhatToPlace(self, tile, item, out tileToCreate, out var previewPlaceStyle, out overrideCanPlace, out forcedRandom);
-                if (overrideCanPlace.HasValue) {
-                    canPlace = overrideCanPlace.Value;
-                }
-                else if (TileObjectData.CustomPlace(tileToCreate, previewPlaceStyle) && !(tileToCreate >= TileID.Count && TileLoader.GetTile(tileToCreate) is PlantBase) && tileToCreate != 82 && tileToCreate != 227) {
-                    newObjectType = true;
-                    canPlace = TileObject.CanPlace(Player.tileTargetX, Player.tileTargetY, (ushort)tileToCreate, previewPlaceStyle, self.direction, out objectData, onlyCheck: false, forcedRandom);
-                    PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementIfOverPlayers(self, ref canPlace, ref objectData);
-                    PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForRepeatedPigronatas(self, ref canPlace, ref objectData);
-                    PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForRepeatedPumpkins(self, ref canPlace, ref objectData);
-                    PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForRepeatedCoralAndBeachPiless(self, ref canPlace, ref objectData);
-                }
-                else {
-                    canPlace = PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(self, canPlace);
-                }
+            //if (canUse && ((!tile.HasTile && !flag) || (Main.tileCut[tile.TileType] && tile.TileType != 484) || (tile.TileType >= 373 && tile.TileType <= 375) || tile.TileType == 461 || tileToCreate == 199 || tileToCreate == 23 || tileToCreate == 662 || tileToCreate == 661 || tileToCreate == 2 || tileToCreate == 109 || tileToCreate == 60 || tileToCreate == 70 || tileToCreate == 633 || tileToCreate == ModContent.TileType<BackwoodsGrass>() || Main.tileMoss[tileToCreate] || TileID.Sets.BreakableWhenPlacing[tile.TileType]) && self.ItemTimeIsZero && self.itemAnimation > 0 && self.controlUseItem) {
+            //    bool canPlace = false;
+            //    bool newObjectType = false;
+            //    bool? overrideCanPlace = null;
+            //    int? forcedRandom = null;
+            //    TileObject objectData = default(TileObject);
+            //    PlaceCheckHooks.Player_FigureOutWhatToPlace(self, tile, item, out tileToCreate, out var previewPlaceStyle, out overrideCanPlace, out forcedRandom);
+            //    if (overrideCanPlace.HasValue) {
+            //        canPlace = overrideCanPlace.Value;
+            //    }
+            //    else if (TileObjectData.CustomPlace(tileToCreate, previewPlaceStyle) && !(tileToCreate >= TileID.Count && TileLoader.GetTile(tileToCreate) is PlantBase) && tileToCreate != 82 && tileToCreate != 227) {
+            //        newObjectType = true;
+            //        canPlace = TileObject.CanPlace(Player.tileTargetX, Player.tileTargetY, (ushort)tileToCreate, previewPlaceStyle, self.direction, out objectData, onlyCheck: false, forcedRandom);
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementIfOverPlayers(self, ref canPlace, ref objectData);
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForRepeatedPigronatas(self, ref canPlace, ref objectData);
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForRepeatedPumpkins(self, ref canPlace, ref objectData);
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForRepeatedCoralAndBeachPiless(self, ref canPlace, ref objectData);
+            //    }
+            //    else {
+            //        canPlace = PlaceCheckHooks.Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(self, canPlace);
+            //    }
 
-                if (canPlace) {
-                    PlaceCheckHooks.Player_PlaceThing_Tiles_PlaceIt(self, newObjectType, objectData, tileToCreate);
-                }
-            }
+            //    if (canPlace) {
+            //        PlaceCheckHooks.Player_PlaceThing_Tiles_PlaceIt(self, newObjectType, objectData, tileToCreate);
+            //    }
+            //}
         }
 
         public void Unload() { }
