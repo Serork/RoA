@@ -95,6 +95,12 @@ sealed class AcalyphaTulip : NatureProjectile {
             if (Projectile.timeLeft <= MAXTIMELEFT / 2) {
                 Projectile.tileCollide = true;
             }
+            if (factor <= 0.03f && Projectile.localAI[2] == 0f) {
+                for (int i = 0; i < 3; i++) {
+                    MakeTulipDust();
+                }
+                Projectile.localAI[2] = 1f;
+            }
             float angle = MathHelper.WrapAngle((Projectile.localAI[0] - num829) / MathHelper.TwoPi * -Projectile.direction * Projectile.ai[2] * factor);
             Projectile.position -= Projectile.velocity;
             Vector2 newVelocity = Projectile.velocity.RotatedBy(angle).SafeNormalize() * Projectile.velocity.Length();
@@ -104,7 +110,7 @@ sealed class AcalyphaTulip : NatureProjectile {
         else {
             Projectile.rotation = Projectile.velocity.ToRotation() + (float)Math.PI / 2f;
         }
-            Projectile.alpha = 100;
+        Projectile.alpha = 100;
         int num830 = Projectile.owner;
 
         if (Main.rand.NextChance(0.05)) {
