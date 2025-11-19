@@ -711,7 +711,7 @@ sealed class WoodpeckerTongue : ModNPC {
                 heightProgress = 1f;
             }
             sourceRectangle.Height = (int)(sourceRectangle.Height * heightProgress);
-            Vector2 velocity = point.DirectionTo(nextPosition) * (sourceRectangle.Height * 1f);
+            Vector2 velocity = point.DirectionTo(nextPosition) * (sourceRectangle.Height * 0.95f);
             if (previousPosition == Vector2.Zero) {
                 Vector2 tongueStartPosition = point - velocity * 0.7f;
                 previousPosition = tongueStartPosition;
