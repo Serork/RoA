@@ -211,6 +211,7 @@ class ClawsSlash : NatureProjectile {
 
     protected void DrawItself(ref Color lightColor) {
         float rot = GetRotation();
+        Color baseLightColor = lightColor;
         lightColor *= 2f;
         lightColor.A = 100;
         Vector2 position = Projectile.Center - Main.screenPosition;
@@ -287,16 +288,65 @@ class ClawsSlash : NatureProjectile {
 
                 spriteBatch.Begin(snapshot, true);
 
-                if (player.gravDir < 0) {
-                    rot -= MathHelper.PiOver4 * 0.3725f * Projectile.direction;
-                }
-
-                Vector2 drawpos2 = position + (rot + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
-                DrawPrettyStarSparkle(Projectile.Opacity, effects, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
-
-                drawpos2 = position + (rot + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
-                DrawPrettyStarSparkle(Projectile.Opacity, effects, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
+                DrawStars(ref baseLightColor);
             }
+        }
+    }
+
+    protected virtual void DrawStars(ref Color lightColor) {
+        float rot = GetRotation();
+        lightColor *= 2f;
+        lightColor.A = 100;
+        Vector2 position = Projectile.Center - Main.screenPosition;
+        Asset<Texture2D> asset = TextureAssets.Projectile[Type];
+        Asset<Texture2D> asset2 = _secondSlashTexture;
+        Rectangle r = asset.Frame(verticalFrames: 2);
+        Rectangle r2 = asset2.Frame(verticalFrames: 2);
+        Vector2 origin = r.Size() / 2f;
+        Vector2 origin2 = r2.Size() / 2f;
+        float scale = Projectile.scale * 1.1f;
+        SpriteEffects effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
+        Player player = Projectile.GetOwnerAsPlayer();
+        if (player.gravDir < 0) {
+            effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
+        }
+        float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
+        float num2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
+        float num3 = 0.975f;
+        Point tilePosition = Projectile.Center.ToTileCoordinates();
+        float num4 = Utils.Remap((Lighting.GetColor(tilePosition) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f) * Projectile.Opacity;
+        if (FirstSlashColor != null && SecondSlashColor != null) {
+            Color color1 = FirstSlashColor.Value;
+            Color color2 = SecondSlashColor.Value;
+            if (ShouldFullBright) {
+                num4 = Owner.GetSelectedItem().As<ClawsBaseItem>().BrightnessModifier;
+            }
+            if (!ShouldFullBright) {
+                color1 = color1.MultiplyRGB(lightColor);
+                color2 = color2.MultiplyRGB(lightColor);
+            }
+
+            Color lightColor2 = ShouldFullBright ? Color.Lerp(Color.White, lightColor, 1f - num4) : lightColor;
+            lightColor2 *= MathUtils.Clamp01(num4 * 3f);
+            Color lightColor3 = ShouldFullBright ? Color.Lerp(Color.White, lightColor, 1f - num4) : lightColor;
+
+            float num12 = MathHelper.Clamp(Projectile.timeLeft / 2, 0f, 5f);
+            Color shineColor = new Color(255, 200, 150);
+            Color color3 = lightColor * num2 * 0.5f;
+            color3.A = (byte)(color3.A * (1.0 - (double)num4));
+            Color color4 = color3 * num4 * 0.5f;
+            color4.G = (byte)(color4.G * (double)num4);
+            color4.B = (byte)(color4.R * (0.25 + (double)num4 * 0.75));
+
+            if (player.gravDir < 0) {
+                rot -= MathHelper.PiOver4 * 0.3725f * Projectile.direction;
+            }
+
+            Vector2 drawpos2 = position + (rot + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
+            DrawPrettyStarSparkle(Projectile.Opacity, effects, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
+
+            drawpos2 = position + (rot + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
+            DrawPrettyStarSparkle(Projectile.Opacity, effects, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
         }
     }
 

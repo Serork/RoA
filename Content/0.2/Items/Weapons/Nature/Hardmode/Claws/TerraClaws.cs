@@ -184,6 +184,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
 
         public override bool PreDraw(ref Color lightColor) {
             Projectile proj = Projectile;
+            Color baseLightColor = lightColor;
             SpriteBatch spriteBatch = Main.spriteBatch;
             Vector2 vector = proj.Center - Main.screenPosition;
             Asset<Texture2D> asset = TextureAssets.Projectile[ProjectileID.TerraBlade2Shot];
@@ -231,6 +232,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                         proj.rotation + i * Projectile.direction - MathHelper.Lerp(MathHelper.Pi * 0.5f, 0f, num2) * Projectile.direction, origin, num, effects, 0f);
                 }
             }, blendState: BlendState.Additive);
+
+            DrawStars(ref baseLightColor);
 
             return false;
         }
