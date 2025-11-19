@@ -219,7 +219,7 @@ sealed class TarArm : ModProjectile {
             Vector2 position = current;
             Rectangle clip = texture.Bounds;
             Vector2 origin = clip.Centered();
-            Color color = Lighting.GetColor(position.ToTileCoordinates()) * Projectile.Opacity;
+            Color color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, 0.25f) * Projectile.Opacity;
             Vector2 scale = Vector2.One * (1f - (float)i / (points.Count * 3f)) * Projectile.Opacity;
             if (Small) {
                 float min = (float)i / points.Count;
@@ -246,7 +246,7 @@ sealed class TarArm : ModProjectile {
                     clip = texture.Bounds;
                 }
                 origin = clip.Centered() + new Vector2(0f, 2f);
-                color = Color.Lerp(Owner.As<PerfectMimic>().PlayerCopy.skinColor, SkinColor, 0.375f).MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * Projectile.Opacity;
+                color = Color.Lerp(Owner.As<PerfectMimic>().PlayerCopy.skinColor, SkinColor, 0.375f).MultiplyRGB(Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, 0.25f)) * Projectile.Opacity;
                 scale = Vector2.One * (1f - (float)i / (points.Count * 3f)) * Projectile.Opacity * 2f;
                 //rotation += MathHelper.Pi;
                 batch.DrawWithSnapshot(() => {
@@ -265,7 +265,7 @@ sealed class TarArm : ModProjectile {
                     batch.Draw(texture, position, DrawInfo.Default with {
                         Clip = clip,
                         Origin = origin,
-                        Color = Lighting.GetColor(position.ToTileCoordinates()) * Projectile.Opacity,
+                        Color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, 0.25f) * Projectile.Opacity,
                         Scale = scale,
                         Rotation = rotation
                     });

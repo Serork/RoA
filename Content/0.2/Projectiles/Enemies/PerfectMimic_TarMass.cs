@@ -128,6 +128,10 @@ sealed class TarMass : ModProjectile {
             return;
         }
 
+        if (Projectile.localAI[0] == 0f) {
+            return;
+        }
+
         Texture2D texture;
         foreach (var part in _fluidBodyParts) {
             switch (part.Type) {
@@ -145,7 +149,7 @@ sealed class TarMass : ModProjectile {
             Vector2 position = Projectile.Center;
             Rectangle clip = texture.Bounds;
             Vector2 origin = clip.Centered() + part.Position + part.Velocity;
-            Color color = Lighting.GetColor(position.ToTileCoordinates());
+            Color color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, 0.25f);
             float velRotation = ((float)Math.Atan2((double)Projectile.velocity.Y, (double)Projectile.velocity.X) + (float)Math.PI / 2f);
             float rotation = velRotation + part.Rotation * 0.25f;
             Vector2 scale = new(Projectile.localAI[2], Projectile.scale);

@@ -54,7 +54,9 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
     public static Color LiquidColor => LerpColor.GetLerpColor([Liquids.Tar.LiquidColor]);
     public static Color SkinColor => LerpColor.GetLerpColor([Liquids.Tar.LiquidColor, Color.Lerp(new Color(62, 53, 70), new Color(98, 85, 101), 0.5f)]);
     public static Color OutlineColor => LerpColor.GetLerpColor([/*new Color(62, 53, 70), */new Color(98, 85, 101)]);
-    public static Color OutlineColorWorld => OutlineColor.MultiplyRGB(Lighting.GetColor(TrackedEntitiesSystem.GetSingleTrackedNPC<PerfectMimic>().position.ToTileCoordinates()));
+    public static Color OutlineColorWorld => OutlineColor.MultiplyRGB(
+        Color.Lerp(Lighting.GetColor(TrackedEntitiesSystem.GetSingleTrackedNPC<PerfectMimic>().position.ToTileCoordinates()), Color.White, 0.25f)
+        );
 
     public enum FluidBodyPartType : byte {
         Part1,
@@ -519,7 +521,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
         Vector2 position = basePosition;
         Rectangle clip = texture.Bounds;
         Vector2 origin = clip.Centered();
-        Color color = Lighting.GetColor(position.ToTileCoordinates()) * opacity;
+        Color color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, 0.25f) * opacity;
         Vector2 scale = Vector2.One * TransformationFactor * opacity;
         float rotation = 0f;
         SpriteEffects effects = NPC.FacedRight() ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -534,7 +536,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             });
         });
 
-        color = LiquidColor.MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * Ease.CubeIn(opacity);
+        color = LiquidColor.MultiplyRGB(Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, 0.25f)) * Ease.CubeIn(opacity);
         Vector2 baseHeadPosition = PlayerCopy.Center + PlayerCopy.headPosition;
         Vector2 headPosition = baseHeadPosition;
         headPosition += headPosition.DirectionFrom(position) * 10f * TransformationFactor * opacity;
@@ -557,7 +559,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             position = basePosition;
             clip = texture.Bounds;
             origin = clip.Centered() + part.Position + part.Velocity;
-            color = Lighting.GetColor(position.ToTileCoordinates()) * opacity;
+            color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, 0.25f) * opacity;
             rotation = part.Rotation;
             batch.DrawWithSnapshot(() => {
                 batch.Draw(texture, position, DrawInfo.Default with {
@@ -1337,7 +1339,8 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
                     continue;
                 if (dust.type == ModContent.DustType<TarMetaball>()) {
                     Texture2D texture = DustLoader.GetDust(dust.type).Texture2D.Value;
-                    Main.EntitySpriteDraw(texture, dust.position - Main.screenPosition, dust.frame, Lighting.GetColor(dust.position.ToTileCoordinates()), dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
+                    Main.EntitySpriteDraw(texture, dust.position - Main.screenPosition, dust.frame, 
+                        Color.Lerp(Lighting.GetColor(dust.position.ToTileCoordinates()), Color.White, 0.25f), dust.rotation, dust.frame.Size() / 2f, dust.scale, 0, 0);
                 }
             }
             foreach (NPC perfectMimic in TrackedEntitiesSystem.GetTrackedNPC<PerfectMimic>()) {
