@@ -503,7 +503,8 @@ class ClawsSlash : NatureProjectile {
                 if (hasLighting) {
                     Lighting.AddLight(position, GetLightingColor().ToVector3() * 0.75f * light2);
                 }
-                Rectangle rectangle = Utils.CenteredRectangle(position, new Vector2(55f * Projectile.scale, 55f * Projectile.scale));
+                float size = 55f + (OffsetX1 + OffsetX2) / 2f;
+                Rectangle rectangle = Utils.CenteredRectangle(position, new Vector2(size * Projectile.scale, size * Projectile.scale));
                 Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
             }
         }
