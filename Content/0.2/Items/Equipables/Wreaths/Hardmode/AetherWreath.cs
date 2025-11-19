@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.GlowMasks;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
-
-using System;
 
 using Terraria;
 using Terraria.Graphics.Effects;
@@ -11,10 +10,9 @@ using Terraria.ID;
 
 namespace RoA.Content.Items.Equipables.Wreaths.Hardmode;
 
+[AutoloadGlowMask]
 sealed class AetherWreath : WreathItem, WreathItem.IWreathGlowMask {
     private static float _shimmerAlpha;
-
-    public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.9f);
 
     Color IWreathGlowMask.GlowColor => Color.White;
 
