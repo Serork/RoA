@@ -70,10 +70,10 @@ sealed class HardmodeClawsSlashHit : VisualEffect<HardmodeClawsSlashHit> {
 
         Texture2D sparkle = ResourceManager.DefaultSparkle;
 
-        spriteBatch.Draw(sparkle, position, null, color * 1f, MathHelper.PiOver2 + Rotation, origin, Scale * scale, effects, 0f);
-        spriteBatch.Draw(sparkle, position, null, color * 1f, Rotation, origin, Scale * scale, effects, 0f);
-        spriteBatch.Draw(sparkle, position, null, color * 1f, MathHelper.PiOver2 + Rotation, origin, Scale * 0.6f * scale, effects, 0f);
-        spriteBatch.Draw(sparkle, position, null, color * 1f, Rotation, origin, Scale * 0.6f * scale, effects, 0f);
+        spriteBatch.Draw(sparkle, position, null, color * 0.875f, MathHelper.PiOver2 + Rotation, origin, Scale * scale, effects, 0f);
+        spriteBatch.Draw(sparkle, position, null, color * 0.875f, Rotation, origin, Scale * scale, effects, 0f);
+        spriteBatch.Draw(sparkle, position, null, color * 0.875f, MathHelper.PiOver2 + Rotation, origin, Scale * 0.6f * scale, effects, 0f);
+        spriteBatch.Draw(sparkle, position, null, color * 0.875f, Rotation, origin, Scale * 0.6f * scale, effects, 0f);
 
         SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
         spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
