@@ -35,7 +35,8 @@ sealed class HardmodeClawsSlashHit : VisualEffect<HardmodeClawsSlashHit> {
         float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 2f, t, true) * Utils.GetLerpValue(MaxTimeLeft, MaxTimeLeft - MaxTimeLeft / 2f, t, true) * 1f;
         if (Main.rand.NextChance(0.4) && TimeLeft > 15 && TimeLeft < MaxTimeLeft - 5) {
             int type = ModContent.DustType<Slash>();
-            Dust dust = Dust.NewDustPerfect(Position + Main.rand.NextVector2Circular(20f, 10f), type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, DrawColor * 1.25f, Main.rand.NextFloat(0.75f, 0.9f) * 1.5f * scale);
+            Dust dust = Dust.NewDustPerfect(Position + Main.rand.NextVector2Circular(20f, 10f), type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, DrawColor * 1.25f, 
+                Main.rand.NextFloat(0.75f, 0.9f) * 2f * scale);
             //dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15) / 2f;
             dust.noLight = dust.noLightEmittence = true;
             if (ShouldFullBright) {
