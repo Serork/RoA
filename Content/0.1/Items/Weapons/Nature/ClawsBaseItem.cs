@@ -45,7 +45,7 @@ abstract class ClawsBaseItem : NatureItem {
     protected virtual ushort SetClawsSlash<T>() where T : ClawsSlash => (ushort)ModContent.ProjectileType<T>();
 
     public override void UseStyle(Player player, Rectangle heldItemFrame) {
-        if (!IsHardmodeClaws || player.ItemAnimationJustStarted) {
+        if (!IsHardmodeClaws || player.ItemAnimationJustStarted || Item.useStyle == ItemUseStyleID.Shoot) {
             return;
         }
 
@@ -104,12 +104,13 @@ abstract class ClawsBaseItem : NatureItem {
 
     public virtual bool ResetOnHit => false;
 
-
     public override bool? UseItem(Player player) {
         if (!ResetOnHit && player.GetWreathHandler().ShouldClawsReset()) {
+            Item.shootSpeed = 1f;
             Item.useStyle = ItemUseStyleID.Shoot;
         }
         else {
+            Item.shootSpeed = 0f;
             Item.useStyle = IsHardmodeClaws ? -1 : ItemUseStyleID.Swing;
         }
 
