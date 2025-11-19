@@ -2389,3 +2389,8 @@ AetherWreath: {
 	DisplayName: Aether Wreath
 	Tooltip: ""
 }
+
+TerraClaws: {
+	DisplayName: Terra Claws
+	Tooltip: ""
+}

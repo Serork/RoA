@@ -19,6 +19,7 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
+using System.Media;
 
 using Terraria;
 using Terraria.Audio;
@@ -35,6 +36,8 @@ class ClawsSlash : NatureProjectile {
     private float _clawsExtraScale;
     private Color? _firstSlashColor = null, _secondSlashColor = null;
     private bool _soundPlayed;
+    private ushort _attackTime;
+    private float _delayTime;
 
     private static Asset<Texture2D> _secondSlashTexture;
 
@@ -398,13 +401,33 @@ class ClawsSlash : NatureProjectile {
     //}
 
     protected virtual void UpdateMainCycle() {
-        Projectile.localAI[0] += 1f;
+        if (_attackTime == 0) {
+            _attackTime = (ushort)Projectile.ai[1];
+            if (_delayTime == 0) {
+                _delayTime = Projectile.ai[2] / 2f;
+            }
+        }
+
+        if (_delayTime > 0) {
+            _delayTime--;
+        }
+        else {
+            Projectile.localAI[0] += 1f;
+            if (_delayTime != -1) {
+                _soundPlayed = false;
+                for (int i = 0; i < Projectile.localNPCImmunity.Length; i++) {
+                    Projectile.localNPCImmunity[i] = 0;
+                }
+                Projectile.GetOwnerAsPlayer().ResetMeleeHitCooldowns();
+                _delayTime = -1;
+            }
+        }
         Update();
     }
 
     protected virtual void Update(float extraRotation = 0f) {
-        Player player = Owner;
         float fromValue = Projectile.localAI[0] / Projectile.ai[1];
+        Player player = Owner;
         float num1 = Projectile.ai[0];
         float num2 = 0.2f;
         float num3 = 1f;
@@ -489,12 +512,15 @@ class ClawsSlash : NatureProjectile {
             }
         }
 
-        float fromValue = 1f - Projectile.localAI[0] / Projectile.ai[1] * 0.9f;
-        player.itemAnimation = player.itemTime = (int)(Projectile.ai[1] * fromValue);
-        player.itemAnimationMax = player.itemTimeMax = (int)Projectile.ai[1];
+        if (_delayTime <= 0) {
+            float fromValue = 1f - Projectile.localAI[0] / Projectile.ai[1] * 0.9f;
+            player.itemAnimation = player.itemTime = (int)(Projectile.ai[1] * fromValue);
+            player.itemAnimationMax = player.itemTimeMax = (int)Projectile.ai[1];
+        }
 
         Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity + 
-            Vector2.UnitX * player.direction * (Owner.GetClawsHandler().AttackCount * 20f);
+            Vector2.UnitX * player.direction * (Owner.GetClawsHandler().AttackCount * 20f) +
+            Vector2.UnitX * Projectile.ai[2] * player.direction;
 
         UpdateMainCycle();
 

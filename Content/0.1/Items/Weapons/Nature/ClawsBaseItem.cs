@@ -11,6 +11,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
+using static System.Net.Mime.MediaTypeNames;
 using static Terraria.Player;
 
 namespace RoA.Content.Items.Weapons.Nature;
@@ -153,9 +154,13 @@ abstract class ClawsBaseItem : NatureItem {
                 attackTime = (ushort)(attackTime * ThirdAttackSpeedModifier);
                 break;
         }
-        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), SpawnClawsProjectileType(player) ?? type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/,
-            attackTime);
+        SpawnClawsSlash(player, position, type, damage, knockback, attackTime);
 
         return false;
+    }
+
+    protected virtual void SpawnClawsSlash(Player player, Vector2 position, int type, int damage, float knockback, int attackTime) {
+        Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), SpawnClawsProjectileType(player) ?? type, damage, knockback, player.whoAmI, player.direction/* * player.gravDir*/,
+            attackTime);
     }
 }
