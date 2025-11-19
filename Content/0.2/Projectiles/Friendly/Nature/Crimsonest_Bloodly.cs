@@ -239,7 +239,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
                         int currentIndex = i + 1;
                         Vector2 gorePosition = Projectile.Top/* + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 2f*/;
                         int gore = Gore.NewGore(Projectile.GetSource_Misc("crimsonest"),
-                            gorePosition,
+                            gorePosition - Vector2.UnitY * 4f,
                             Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{1 + Main.rand.NextBool().ToInt()}").Type, 1f);
                         Main.gore[gore].velocity *= 1f;
                     }
@@ -324,7 +324,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             int goreCount = Main.rand.NextBool().ToInt() + 1;
             for (int i = 0; i < goreCount; i++) {
                 int currentIndex = i + 1;
-                Vector2 gorePosition = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 2f;
+                Vector2 gorePosition = Projectile.Center - Vector2.UnitY * 4f + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 3f;
                 int gore = Gore.NewGore(Projectile.GetSource_Misc("crimsonest"),
                     gorePosition + Projectile.velocity,
                     Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/CrimsonestGore{3 + Main.rand.Next(3)}").Type, 1f);
