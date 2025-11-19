@@ -101,26 +101,28 @@ static partial class ProjectileExtensions {
         }
     }
 
-    public static void EmitEnchantmentVisualsAtForNonMelee(this Projectile projectile, Vector2 boxPosition, int boxWidth, int boxHeight) {
+    public static void EmitEnchantmentVisualsAtForNonMelee(this Projectile projectile, Vector2 boxPosition, int boxWidth, int boxHeight, bool melee = true) {
         CombinedHooks.EmitEnchantmentVisualsAt(projectile, boxPosition, boxWidth, boxHeight);
         Player player = Main.player[projectile.owner];
 
-        //if (player.frostBurn && projectile.friendly && !projectile.hostile && Main.rand.Next(2 * (1 + projectile.extraUpdates)) == 0) {
-        //    int num = Dust.NewDust(boxPosition, boxWidth, boxHeight, 135, projectile.velocity.X * 0.2f + (float)(projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, default(Color), 2f);
-        //    Main.dust[num].noGravity = true;
-        //    Main.dust[num].velocity *= 0.7f;
-        //    Main.dust[num].velocity.Y -= 0.5f;
-        //}
+        if (melee) {
+            if (player.frostBurn && projectile.friendly && !projectile.hostile && Main.rand.Next(2 * (1 + projectile.extraUpdates)) == 0) {
+                int num = Dust.NewDust(boxPosition, boxWidth, boxHeight, 135, projectile.velocity.X * 0.2f + (float)(projectile.direction * 3), projectile.velocity.Y * 0.2f, 100, default(Color), 2f);
+                Main.dust[num].noGravity = true;
+                Main.dust[num].velocity *= 0.7f;
+                Main.dust[num].velocity.Y -= 0.5f;
+            }
 
-        //if (player.magmaStone && Main.rand.Next(3) != 0) {
-        //    int num2 = Dust.NewDust(new Vector2(boxPosition.X - 4f, boxPosition.Y - 4f), boxWidth + 8, boxHeight + 8, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 2f);
-        //    if (Main.rand.Next(2) == 0)
-        //        Main.dust[num2].scale = 1.5f;
+            if (player.magmaStone && Main.rand.Next(3) != 0) {
+                int num2 = Dust.NewDust(new Vector2(boxPosition.X - 4f, boxPosition.Y - 4f), boxWidth + 8, boxHeight + 8, 6, projectile.velocity.X * 0.2f, projectile.velocity.Y * 0.2f, 100, default(Color), 2f);
+                if (Main.rand.Next(2) == 0)
+                    Main.dust[num2].scale = 1.5f;
 
-        //    Main.dust[num2].noGravity = true;
-        //    Main.dust[num2].velocity.X *= 2f;
-        //    Main.dust[num2].velocity.Y *= 2f;
-        //}
+                Main.dust[num2].noGravity = true;
+                Main.dust[num2].velocity.X *= 2f;
+                Main.dust[num2].velocity.Y *= 2f;
+            }
+        }
 
         if (player.meleeEnchant <= 0)
             return;

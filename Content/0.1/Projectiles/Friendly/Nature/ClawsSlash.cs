@@ -505,7 +505,7 @@ class ClawsSlash : NatureProjectile {
                 }
                 float size = 55f + (OffsetX1 + OffsetX2) / 2f;
                 Rectangle rectangle = Utils.CenteredRectangle(position, new Vector2(size * Projectile.scale, size * Projectile.scale));
-                Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height);
+                Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height, melee: false);
             }
         }
 
