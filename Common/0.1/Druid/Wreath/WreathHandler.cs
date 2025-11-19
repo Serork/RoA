@@ -131,6 +131,7 @@ sealed class WreathHandler : ModPlayer {
     public ushort ExtraResource { get; private set; } = 0;
     public float ChangingTimeValue { get; private set; }
     public WreathType CurrentType { get; private set; } = WreathType.Normal;
+    public WreathType CurrentVisualType { get; private set; } = WreathType.Normal;
 
     public ushort CurrentResource {
         get => _currentResource;
@@ -221,8 +222,8 @@ sealed class WreathHandler : ModPlayer {
     public DruidStats DruidPlayerStats => Player.GetModPlayer<DruidStats>();
 
     public bool SoulOfTheWoods => DruidPlayerStats.SoulOfTheWoods && Progress > 1f && Progress <= 2f;
-    public bool IsPhoenixWreath => CurrentType == WreathType.Phoenix;
-    public bool IsAetherWreath => CurrentType == WreathType.Aether;
+    public bool IsPhoenixWreath => CurrentVisualType == WreathType.Phoenix || CurrentType == WreathType.Phoenix;
+    public bool IsAetherWreath => CurrentVisualType == WreathType.Aether || CurrentType == WreathType.Aether;
 
     public ushort AddResourceValue() => (ushort)(AddValue * MaxResource);
 
@@ -637,6 +638,7 @@ sealed class WreathHandler : ModPlayer {
 
         ApplyBuffs();
         GetWreathType();
+        GetWreathVisualType();
         MakeDusts();
 
         VisualEffectOnFull();
@@ -851,6 +853,13 @@ sealed class WreathHandler : ModPlayer {
         bool phoenixWreathEquipped = wreathSlotItem.type == ModContent.ItemType<FenethsBlazingWreath>();
         bool aetherWreathEquipped = wreathSlotItem.type == ModContent.ItemType<AetherWreath>();
         CurrentType = aetherWreathEquipped ? WreathType.Aether : phoenixWreathEquipped ? WreathType.Phoenix : WreathType.Normal;
+    }
+
+    private void GetWreathVisualType() {
+        Item wreathSlotItem = WreathSlot.GetVanityItem(Player);
+        bool phoenixWreathEquipped = wreathSlotItem.type == ModContent.ItemType<FenethsBlazingWreath>();
+        bool aetherWreathEquipped = wreathSlotItem.type == ModContent.ItemType<AetherWreath>();
+        CurrentVisualType = aetherWreathEquipped ? WreathType.Aether : phoenixWreathEquipped ? WreathType.Phoenix : WreathType.Normal;
     }
 
     public override void PreUpdate() {
