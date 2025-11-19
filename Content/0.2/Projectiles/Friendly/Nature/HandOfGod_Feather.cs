@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -45,6 +46,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     public ref float ActivatedValue => ref Projectile.ai[0];
     public ref float Activated2Value => ref Projectile.ai[1];
+    public ref float SpawnDirection => ref Projectile.ai[2];
 
     public bool Activated {
         get => ActivatedValue > 0f;
@@ -69,6 +71,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.manualDirectionChange = true;
 
         Projectile.hide = true;
+
+        Projectile.rotation = 0f;
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
@@ -99,6 +103,11 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         int direction = Projectile.DirectionTo(owner.Center).X.GetDirection();
         Projectile.SetDirection(direction);
+
+        //if (SpawnDirection == 0f) {
+        //    SpawnDirection = Projectile.direction;
+        //}
+        SpawnDirection = 1f;
 
         RotationLerpValue = Helper.Approach(RotationLerpValue, 0.0375f * (1f + 0.5f * Activated2Value) * Projectile.direction, TimeSystem.LogicDeltaTime);
         float rotationValue = RotationLerpValue;
@@ -150,10 +159,17 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         float spawnProgress = Ease.CircOut(Utils.GetLerpValue(TIMELEFT, TIMELEFT - 20, Projectile.timeLeft, true));
         int count = 8;
         for (int i = 0; i < count; i++) {
-            float rotation = Utils.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver2, (float)i / count * MathHelper.TwoPi, spawnProgress);
-            rotation += Utils.AngleLerp(Projectile.rotation, 0f, 1f - spawnProgress);
+            float baseRotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
+            //baseRotation += MathHelper.Pi;
+            float partRotation = (float)i / count * MathHelper.TwoPi;
+            float spawnProgress3 = spawnProgress;
+            if (i == count / 4 || i == count - 2) {
+                spawnProgress3 = 1f;
+            }
+            float rotation = Utils.AngleLerp(baseRotation, partRotation + Projectile.rotation, spawnProgress3 * SpawnDirection);
             Vector2 position = Projectile.Center;
-            float distance2 = 14f;
+            position += Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * 50f;
+            float distance2 = 26f;
             position += Vector2.UnitY.RotatedBy(rotation) * distance2;
             float fadeOutProgress = Utils.GetLerpValue(0, 25, Projectile.timeLeft, true);
             float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
@@ -170,7 +186,9 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
-        float spawnProgress = Ease.CircOut(Utils.GetLerpValue(TIMELEFT, TIMELEFT - 20, Projectile.timeLeft, true));
+        int max = TIMELEFT;
+        float spawnProgress = Ease.CircOut(Utils.GetLerpValue(max, max - 40, Projectile.timeLeft, true));
+        float spawnProgress2 = Ease.CircOut(Utils.GetLerpValue(max, max - 60, Projectile.timeLeft, true));
         float fadeOutProgress = Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
         float fadeOutProgress2 = Utils.GetLerpValue(0.75f, 0.2f, fadeOutProgress, true);
         float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
@@ -183,14 +201,19 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpriteBatch batch = Main.spriteBatch;
         int count = 8;
         float waveOffset = Projectile.whoAmI;
-        Player owner = Projectile.GetOwnerAsPlayer();
         List<(float, Vector2)> positions = [];
         List<Vector2> positions2 = [];
         float distance = 4f;
         for (int i = 0; i < count; i++) {
-            float rotation = Utils.AngleLerp(Projectile.velocity.ToRotation() - MathHelper.PiOver2, (float)i / count * MathHelper.TwoPi, spawnProgress);
-            float rotation2 = rotation;
-            rotation += Utils.AngleLerp(Projectile.rotation, 0f, 1f - spawnProgress);
+            float baseRotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
+            //baseRotation += MathHelper.Pi;
+            float partRotation = (float)i / count * MathHelper.TwoPi;
+            float spawnProgress3 = spawnProgress;
+            if (i == count / 4 || i == count - 2) {
+                spawnProgress3 = 1f;
+            }
+            float rotation = Utils.AngleLerp(baseRotation, partRotation + Projectile.rotation, spawnProgress3 * SpawnDirection);
+            float rotation2 = Utils.AngleLerp(baseRotation, partRotation, spawnProgress3 * SpawnDirection);
             Vector2 position = Projectile.Center;
             positions2.Add(position + Vector2.UnitY.RotatedBy(rotation2) * distance);
             position += Vector2.UnitY.RotatedBy(rotation) * distance;
@@ -201,12 +224,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 baseScale = Vector2.One;
             Vector2 position = positions2[i];
 
-            //bool last = owner.Distance(Projectile.Center) < owner.Distance(position);
-            //baseScale *= 1f + (0.15f * (!last).ToDirectionInt());
-
             float distanceY = MathF.Abs(position.Y - Projectile.Center.Y);
             float distanceX = MathF.Abs(position.X - Projectile.Center.X);
-
             if (distanceY < distance / 2) {
                 baseScale.Y *= 0.7f;
             }
@@ -217,7 +236,6 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                 baseScale.X *= 0.775f;
                 baseScale.Y *= 0.775f;
             }
-
             scales.Add(baseScale);
         }
         for (int i = 0; i < scales.Count; i++) {
@@ -233,7 +251,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Color color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, lightingModifier * glow.ToInt()) * 0.875f;
                 color.A = (byte)MathHelper.Lerp(255, 185, Activated2Value);
                 color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
-                color *= spawnProgress;
+                color *= spawnProgress2;
                 color *= fadeOutProgress3;
                 return color;
             }
@@ -282,7 +300,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 origin = clip.BottomCenter();
             Color color = Color.Lerp(new Color(61, 72, 73), Color.Yellow, Activated2Value).MultiplyRGB(Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, lightingModifier));
             color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
-            color *= spawnProgress;
+            color *= spawnProgress2;
             color *= fadeOutProgress3;
             rotation += MathHelper.Pi;
             Vector2 baseScale = _scales[i];
