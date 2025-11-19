@@ -34,7 +34,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 class ClawsSlash : NatureProjectile {
     private float _clawsExtraScale;
-    private Color? _firstSlashColor = null, _secondSlashColor = null;
+    protected Color? _firstSlashColor = null, _secondSlashColor = null;
     private bool _soundPlayed;
     private ushort _attackTime;
     private float _delayTime;
