@@ -227,7 +227,7 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
 
                 for (int k = 0; k < 3; k++) {
                     float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
-                    Dust dust = Main.dust[Dust.NewDust(position + Vector2.UnitY * 2f + Main.rand.NextVector2Circular(10f, 10f) * 0.75f, 
+                    Dust dust = Main.dust[Dust.NewDust(position - Vector2.UnitY * 2f + Main.rand.NextVector2Circular(10f, 10f) * 0.75f, 
                         0, 0, ModContent.DustType<ForbiddenTwigDust>(), 0f, 0f, Main.rand.Next(100), default, dustScale)];
                     dust.noGravity = true;
                     dust.fadeIn = 0.5f;
