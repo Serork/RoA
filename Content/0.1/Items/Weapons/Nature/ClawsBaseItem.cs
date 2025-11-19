@@ -9,9 +9,9 @@ using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
-using static System.Net.Mime.MediaTypeNames;
 using static Terraria.Player;
 
 namespace RoA.Content.Items.Weapons.Nature;
@@ -104,7 +104,15 @@ abstract class ClawsBaseItem : NatureItem {
 
     public virtual bool ResetOnHit => false;
 
+
     public override bool? UseItem(Player player) {
+        if (!ResetOnHit && player.GetWreathHandler().ShouldClawsReset()) {
+            Item.useStyle = ItemUseStyleID.Shoot;
+        }
+        else {
+            Item.useStyle = IsHardmodeClaws ? -1 : ItemUseStyleID.Swing;
+        }
+
         if (player.whoAmI == Main.myPlayer && player.ItemAnimationJustStarted) {
             (Color, Color) slashColors = SetSlashColors(player);
             ClawsHandler clawsStats = player.GetModPlayer<ClawsHandler>();
