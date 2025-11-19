@@ -311,7 +311,7 @@ sealed class WreathHandler : ModPlayer {
                 return;
             }
 
-            ClawsReset(proj, nonDataReset);
+            ClawsReset_OnHit(proj, nonDataReset);
 
             IncreaseResourceValue(natureProjectile.WreathFillingFine);
 
@@ -329,7 +329,7 @@ sealed class WreathHandler : ModPlayer {
             if (CrossmodNatureContent.IsProjectileNature(proj)) {
                 CrossmodNatureProjectileHandler handler = proj.GetGlobalProjectile<CrossmodNatureProjectileHandler>();
                 if (!(!handler.ShouldChargeWreathOnDamage && !nonDataReset)) {
-                    ClawsReset(proj, nonDataReset);
+                    ClawsReset_OnHit(proj, nonDataReset);
 
                     IncreaseResourceValue(handler.WreathFillingFine);
 
@@ -385,11 +385,44 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    private void ClawsReset(Projectile projectile, bool nonDataReset) {
+    public bool ShouldClawsReset() => IsActualFull6 && SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn;
+
+    internal void TryToClawsReset(Item item, bool nonDataReset) {
+        Item selectedItem = item;
+        bool playerUsingClaws = selectedItem.IsNatureClaws();
+        if (playerUsingClaws && Player.ItemAnimationActive) {
+            if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {
+                if (SpecialAttackData.Owner == selectedItem && (ShouldClawsReset() || nonDataReset)) {
+                    if (!SpecialAttackData.OnlySpawn || nonDataReset) {
+                        ForcedHardReset();
+                    }
+
+                    if (!nonDataReset) {
+                        SpecialAttackData.OnSpawn?.Invoke();
+
+                        if (SpecialAttackData.ShouldSpawn) {
+                            if (SpecialAttackData.SpawnProjectile != null) {
+                                SpecialAttackData.SpawnProjectile.Invoke();
+                            }
+                            else if (Player.whoAmI == Main.myPlayer) {
+                                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition ?? Player.Center, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
+                            }
+
+                            SpecialAttackData.OnAttack?.Invoke();
+
+                            SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void ClawsReset_OnHit(Projectile projectile, bool nonDataReset) {
         Item attachedItem = projectile.ModProjectile is NatureProjectile natureProjectile ? natureProjectile.AttachedNatureWeapon : projectile.GetGlobalProjectile<CrossmodNatureProjectileHandler>().AttachedNatureWeapon;
         Item selectedItem = Player.GetSelectedItem();
         bool playerUsingClaws = selectedItem.IsNatureClaws();
-        if (playerUsingClaws && Player.ItemAnimationActive && attachedItem == selectedItem) {
+        if (playerUsingClaws && Player.ItemAnimationActive && attachedItem == selectedItem && selectedItem.As<ClawsBaseItem>().ResetOnHit) {
             selectedItem.As<ClawsBaseItem>().OnHit(Player, Progress);
             if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {

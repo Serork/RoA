@@ -102,6 +102,8 @@ abstract class ClawsBaseItem : NatureItem {
 
     protected virtual bool ShouldModifyShootStats => true;
 
+    public virtual bool ResetOnHit => false;
+
     public override bool? UseItem(Player player) {
         if (player.whoAmI == Main.myPlayer && player.ItemAnimationJustStarted) {
             (Color, Color) slashColors = SetSlashColors(player);
@@ -122,6 +124,10 @@ abstract class ClawsBaseItem : NatureItem {
             }
 
             SafeOnUse(player, clawsStats);
+
+            if (!ResetOnHit) {
+                player.GetWreathHandler().TryToClawsReset(Item, false);
+            }
         }
 
         return base.UseItem(player);
@@ -141,6 +147,10 @@ abstract class ClawsBaseItem : NatureItem {
     protected virtual ushort? SpawnClawsProjectileType(Player player) => null;
 
     public sealed override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        if (!ResetOnHit && player.GetWreathHandler().ShouldClawsReset()) {
+            return false;
+        }
+
         ushort attackTime = NatureWeaponHandler.GetUseSpeedForClaws(Item, player);
         ClawsHandler.ClawsAttackType clawsAttackType = player.GetClawsHandler().AttackType;
         switch (clawsAttackType) {

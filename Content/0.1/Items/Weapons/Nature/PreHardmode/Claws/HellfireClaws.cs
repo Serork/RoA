@@ -35,6 +35,8 @@ sealed class HellfireClaws : ClawsBaseItem<HellfireClaws.HellfireClawsSlash> {
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
+    public override bool ResetOnHit => true;
+
     protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
         args.ShouldReset = false;
     }
