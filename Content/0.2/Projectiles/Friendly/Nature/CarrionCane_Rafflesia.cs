@@ -205,7 +205,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         for (int i = 0; i < tulipCount + 1; i++) {
             Vector2 position = center;
             Rectangle clip = tulipTexture.Bounds;
-            Color color = lightColor;
+            Color color = lightColor * Ease.QuintOut(Projectile.Opacity);
             float progress = (float)i / MathHelper.Lerp(tulipCount, tulipCount + 1, Projectile.ai[0]);
             float progress3 = (float)(i + 1) / MathHelper.Lerp(tulipCount, tulipCount + 1, Projectile.ai[0]);
             float desiredRotation = (MathHelper.Pi * progress + Projectile.rotation - MathHelper.PiOver2) * Projectile.direction;
@@ -216,13 +216,13 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
             float mid = tulipCount / 2f;
             float progress2 = MathF.Abs(i - mid) / mid;
-            Vector2 scale = Vector2.One * MathHelper.Lerp(Utils.Remap(1f - progress2, 0f, 1f, 0.5f, 1f, true) * 1.25f, 1f, Projectile.ai[0]);
+            Vector2 scale = Vector2.One * MathHelper.Lerp(Utils.Remap(1f - progress2, 0f, 1f, 0.5f, 1f, true) * 1.25f, 1f, MathF.Max(0.15f, Projectile.ai[0]));
             Main.spriteBatch.Draw(tulipTexture, position, DrawInfo.Default with {
                 Clip = clip,
                 Color = color,
                 Rotation = rotation,
                 Origin = Utils.Bottom(clip),
-                Scale = scale * Projectile.Opacity
+                Scale = scale * MathF.Max(0.15f, Projectile.Opacity)
             });
         }
     }
@@ -328,7 +328,7 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
             Main.EntitySpriteDraw(textureToDraw,
                                   position - Main.screenPosition,
                                   new Rectangle(0, 10 * frameToUse, 18, height),
-                                  Lighting.GetColor(position.ToTileCoordinates()),
+                                  Lighting.GetColor(position.ToTileCoordinates()) * Ease.QuintOut(Projectile.Opacity),
                                   velocityToAdd.ToRotation() + MathHelper.PiOver2,
                                   new Vector2(9, height / 2),
                                   scale,
