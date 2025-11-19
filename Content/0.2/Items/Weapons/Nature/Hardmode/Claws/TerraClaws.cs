@@ -10,6 +10,7 @@ using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Runtime.InteropServices;
@@ -55,7 +56,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
     }
 
     protected override (Color, Color) SetSlashColors(Player player)
-        => (new Color(47, 239, 102), new Color(181, 230, 29));
+        => (Color.Transparent, Color.Transparent);
 
     protected override void SpawnClawsSlash(Player player, Vector2 position, int type, int damage, float knockback, int attackTime) {
         Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), SpawnClawsProjectileType(player) ?? type, damage, knockback, player.whoAmI,
@@ -70,8 +71,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
 
             Projectile proj = Projectile;
             float num2 = proj.localAI[0] / proj.ai[1];
-            _firstSlashColor = Color.Lerp(new Color(45, 124, 205), new Color(47, 239, 102), num2);
-            _secondSlashColor = new Color(181, 230, 29);
+            _firstSlashColor = Color.Lerp(new Color(45, 124, 205), new Color(47, 239, 102), num2).ModifyRGB(1f);
+            _secondSlashColor = new Color(181, 230, 29).ModifyRGB(1f);
         }
 
         protected override bool OnSlashDustSpawn(float progress) {
@@ -187,6 +188,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             Color baseLightColor = lightColor;
             SpriteBatch spriteBatch = Main.spriteBatch;
             Vector2 vector = proj.Center - Main.screenPosition;
+            Main.instance.LoadProjectile(ProjectileID.TerraBlade2Shot);
             Asset<Texture2D> asset = TextureAssets.Projectile[ProjectileID.TerraBlade2Shot];
             Microsoft.Xna.Framework.Rectangle rectangle = asset.Frame(1, 4);
             Vector2 origin = rectangle.Size() / 2f;
@@ -210,7 +212,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                     spriteBatch.Draw(asset.Value, vector, rectangle,
                         GetLightingColor2(Color.Blue) *
                         fromValue * num3 * 1f * 0.375f,
-                        proj.rotation + i * Projectile.direction - MathHelper.Lerp(MathHelper.PiOver2, MathHelper.PiOver2 * 0.25f, num2) * Projectile.direction, origin, num * 0.8f, effects, 0f);
+                        proj.rotation + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.PiOver2, MathHelper.PiOver2 * 0.25f, num2) * Projectile.direction, origin, num * 0.8f, effects, 0f);
                 }
             }, blendState: BlendState.Additive);
 
@@ -220,8 +222,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                 float num7 = proj.rotation + MathHelper.PiOver2 * 0.25f * Projectile.direction + proj.ai[0] * (num6 - 2f) * ((float)Math.PI * -2f) * 0.025f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * proj.ai[0];
                 Vector2 drawpos = vector + num7.ToRotationVector2() * ((float)asset.Width() * 0.5f - 6f) * num * 0.8f;
                 float num8 = num6 / 12f;
-                DrawPrettyStarSparkle(proj.Opacity, SpriteEffects.None, drawpos, new Microsoft.Xna.Framework.Color(255, 255, 255, 0) * num3 * num8, color3, 
-                    num2, 0f, 0.5f, 0.5f, 1f, num7, new Vector2(0f, Utils.Remap(num2, 0f, 1f, 3f, 0f)) * num, Vector2.One * num);
+                DrawPrettyStarSparkle(proj.Opacity * 0.5f, SpriteEffects.None, drawpos, new Microsoft.Xna.Framework.Color(255, 255, 255, 0) * num3 * num8, color3, 
+                    num2, 0f, 0.5f, 0.5f, 1f, num7, new Vector2(0f, Utils.Remap(num2, 0f, 1f, 3f, 0f)) * num, Vector2.One * num * 2f);
             }
 
             spriteBatch.DrawWithSnapshot(() => {
@@ -229,7 +231,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                     spriteBatch.Draw(TextureAssets.Projectile[Type].Value, vector, rectangle,
                         GetLightingColor2(Color.Lerp(new Color(181, 230, 29), new Color(45, 124, 205), Ease.CircOut(MathUtils.Clamp01(i / MathHelper.PiOver2)))) *
                         fromValue * num3 * 1f * 0.5f,
-                        proj.rotation + i * Projectile.direction - MathHelper.Lerp(MathHelper.Pi * 0.5f, 0f, num2) * Projectile.direction, origin, num, effects, 0f);
+                        proj.rotation + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.Pi * 0.5f, 0f, num2) * Projectile.direction, origin, num, effects, 0f);
                 }
             }, blendState: BlendState.Additive);
 
