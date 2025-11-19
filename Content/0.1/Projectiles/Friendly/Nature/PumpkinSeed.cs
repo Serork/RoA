@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -20,12 +22,16 @@ sealed class PumpkinSeed : NatureProjectile {
         Projectile.aiStyle = 1;
         AIType = ProjectileID.Bullet;
 
+        Projectile.Opacity = 0f;
+
         Projectile.timeLeft = 90;
 
         DrawOffsetX = -2;
     }
 
     public override void SafePostAI() {
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.25f);
+
         Projectile.velocity *= 0.99f;
         if (Projectile.timeLeft <= 50) {
             Projectile.velocity.Y += 0.4f;

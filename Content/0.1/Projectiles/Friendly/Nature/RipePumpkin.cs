@@ -40,17 +40,19 @@ sealed class RipePumpkin : NatureProjectile {
     //public override void Unload() => _rotateWiggler = null;
 
     public override bool PreDraw(ref Color lightColor) {
+        SpriteBatch spriteBatch = Main.spriteBatch;
+        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+        Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
+        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
+        Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin / 2f;
+        Color baseColor = Projectile.GetAlpha(lightColor);
         if (Projectile.owner == Main.myPlayer) {
-            SpriteBatch spriteBatch = Main.spriteBatch;
-            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-            int frameHeight = texture.Height / Main.projFrames[Projectile.type];
-            Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-            Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
-            Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
-            Color color = Projectile.GetAlpha(lightColor) * _pulseAlpha;
+            Color color = baseColor * _pulseAlpha;
             spriteBatch.Draw(texture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale * _pulseScale, SpriteEffects.None, 0f);
         }
-        return true;
+        spriteBatch.Draw(texture, drawPos, frameRect, baseColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+        return false;
     }
 
     public override void AI() {
@@ -112,7 +114,8 @@ sealed class RipePumpkin : NatureProjectile {
                             Vector2 direction = new Vector2(mousePos.X - projectilePos.X, mousePos.Y - projectilePos.Y);
                             direction.Normalize();
                             direction *= 15 * Main.rand.NextFloat(0.9f, 1.1f);
-                            Projectile.NewProjectile(player.GetSource_ItemUse(player.GetSelectedItem()), new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
+                            Projectile.NewProjectile(player.GetSource_ItemUse(player.GetSelectedItem()),
+                                new Vector2(Projectile.Center.X + posX, Projectile.Center.Y + posY), direction, ModContent.ProjectileType<PumpkinSeed>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 0f, 0f);
                             //Main.projectile[projectile].CritChance = Projectile.CritChance;
                             //Main.newT
                         }
@@ -132,7 +135,8 @@ sealed class RipePumpkin : NatureProjectile {
     public override void OnKill(int timeLeft) {
         if (!Main.dedServ) {
             for (int i = 0; i < 4; i++)
-                Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 3f, Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/PumpkinGore").Type, 1f);
+                Gore.NewGore(Projectile.GetSource_Death(), Projectile.Center - Projectile.Size / 2f + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) / 3f,
+                    Projectile.oldVelocity * 0.2f, ModContent.Find<ModGore>(RoA.ModName + "/PumpkinGore").Type, 1f);
         }
         for (int i = 0; i < 10; i++) {
             int dust = Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(Projectile.width, Projectile.height) - Projectile.velocity * 2f, 0, 0, DustID.Water_Desert, Projectile.velocity.X * 0.3f, 0, 0, new Color(250, 200, 100), 1.5f);
