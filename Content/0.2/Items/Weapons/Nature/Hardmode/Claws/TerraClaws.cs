@@ -52,7 +52,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
     }
 
     protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
-        args.ShouldSpawn = false;
+        args.ShouldReset = false;
     }
 
     protected override (Color, Color) SetSlashColors(Player player)
