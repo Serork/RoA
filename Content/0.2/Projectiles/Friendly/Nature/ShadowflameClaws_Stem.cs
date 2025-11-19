@@ -361,7 +361,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
                 dust2.scale += (float)Main.rand.Next(150) * 0.001f;
             }
         }
-        for (int num389 = 0; num389 < 8; num389++) {
+        for (int num389 = 0; num389 < 9; num389++) {
             int num390 = Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(10), 0, 0, DustID.Shadowflame, Alpha: 125);
             Main.dust[num390].noGravity = true;
             Main.dust[num390].fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
