@@ -217,7 +217,7 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (currentSegmentData.ActualProgress >= VineBodyInfo.MAXPROGRESS2) {
                 // explosion effect
                 if (!Main.dedServ) {
-                    int gore = Gore.NewGore(Projectile.GetSource_FromAI(), position - Vector2.UnitY * 4f + Main.rand.NextVector2Circular(10f, 10f),
+                    int gore = Gore.NewGore(Projectile.GetSource_FromAI(), position - Vector2.UnitY * 8f + Main.rand.NextVector2Circular(10f, 10f),
                         Vector2.Zero, $"ForbiddenTwig{(byte)currentSegmentData.BodyType + 1}".GetGoreType());
                     Main.gore[gore].velocity *= 0.5f;
                     Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
