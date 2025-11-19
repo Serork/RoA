@@ -142,7 +142,10 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                             if (!Main.rand.NextChance(startProgress * 2f)) {
                                 continue;
                             }
-                            if (Main.rand.NextBool()) {
+                            if (Main.rand.NextChance(1f - startProgress)) {
+                                continue;
+                            }
+                            if (Main.rand.NextBool(4)) {
                                 continue;
                             }
                             Color color1 = FirstSlashColor.Value;
