@@ -31,9 +31,11 @@ sealed class HardmodeClawsSlashHit : VisualEffect<HardmodeClawsSlashHit> {
         //float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 3f, t, true) * Utils.GetLerpValue((float)(MaxTimeLeft - MaxTimeLeft / 5f), MaxTimeLeft / 2f, t, true) * t3;
         //Scale = scale * _baseScale;
 
+        float t = (float)((MaxTimeLeft - TimeLeft) / (double)MaxTimeLeft * 60.0);
+        float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 2f, t, true) * Utils.GetLerpValue(MaxTimeLeft, MaxTimeLeft - MaxTimeLeft / 2f, t, true) * 1f;
         if (Main.rand.NextChance(0.4) && TimeLeft > 15 && TimeLeft < MaxTimeLeft - 5) {
             int type = ModContent.DustType<Slash>();
-            Dust dust = Dust.NewDustPerfect(Position + Main.rand.NextVector2Circular(20f, 10f), type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, DrawColor * 1.25f, Main.rand.NextFloat(0.75f, 0.9f) * 1.5f);
+            Dust dust = Dust.NewDustPerfect(Position + Main.rand.NextVector2Circular(20f, 10f), type, new Vector2?((Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2() * Main.rand.NextFloat(2.5f)), 0, DrawColor * 1.25f, Main.rand.NextFloat(0.75f, 0.9f) * 1.5f * scale);
             //dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15) / 2f;
             dust.noLight = dust.noLightEmittence = true;
             if (ShouldFullBright) {
@@ -42,8 +44,6 @@ sealed class HardmodeClawsSlashHit : VisualEffect<HardmodeClawsSlashHit> {
             dust.noGravity = true;
         }
 
-        float t = (float)((MaxTimeLeft - TimeLeft) / (double)MaxTimeLeft * 60.0);
-        float scale = Utils.GetLerpValue(0f, MaxTimeLeft / 2f, t, true) * Utils.GetLerpValue(MaxTimeLeft, MaxTimeLeft - MaxTimeLeft / 2f, t, true) * 1f;
         Rotation = Utils.AngleLerp(Rotation, -0.07f + Main.rand.NextFloatRange(0.1f), 0.5f) * scale;
 
         if (--TimeLeft <= 0) {
