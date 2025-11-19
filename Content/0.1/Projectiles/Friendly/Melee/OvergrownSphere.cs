@@ -24,8 +24,6 @@ sealed class OvergrownSphere : ModProjectile {
         //DisplayName.SetDefault("Overgrown Sphere");
         //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
         //ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
-
-        ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
     }
 
     public override void SetDefaults() {
@@ -109,8 +107,8 @@ sealed class OvergrownSphere : ModProjectile {
         double deg = (double)(Projectile.ai[1] + Projectile.ai[0] * 240) / 2;
         double rad = deg * (Math.PI / 180);
         double dist = 70;
-        Projectile.position.X = player.MountedCenter.X - (int)(Math.Cos(rad) * dist) - player.width / 2;
-        Projectile.position.Y = player.MountedCenter.Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + 4 + player.gfxOffY;
+        Projectile.position.X = Utils.Floor(player.MountedCenter).X - (int)(Math.Cos(rad) * dist) - player.width / 2;
+        Projectile.position.Y = Utils.Floor(player.MountedCenter).Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + 4 + Projectile.GetOwnerAsPlayer().gfxOffY;
         Projectile.ai[1] += 2f;
         Projectile.rotation = Projectile.velocity.ToRotation();
 
