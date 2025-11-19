@@ -38,7 +38,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
     public override float ThirdAttackScaleModifier => 1.8f;
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(38, 36);
+        Item.SetSizeValues(36, 28);
         Item.SetWeaponValues(40, 4.2f);
 
         Item.rare = ItemRarityID.Yellow;
