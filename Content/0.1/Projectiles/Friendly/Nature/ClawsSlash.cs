@@ -192,13 +192,13 @@ class ClawsSlash : NatureProjectile {
     public override bool? CanCutTiles() => CanFunction;
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        float coneLength = 75f * Projectile.scale;
+        float coneLength = (75f + (OffsetX1 + OffsetX2) / 2f) * Projectile.scale;
         SetCollisionScale(ref coneLength);
         float num1 = 0.5105088f * Projectile.ai[0];
         float maximumAngle = (float)Math.PI / 4f;
         Player player = Projectile.GetOwnerAsPlayer();
         float coneRotation = Projectile.rotation + num1;
-        bool result = targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center, coneLength, coneRotation, maximumAngle);
+        bool result = targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center - GetPositionOffset(player), coneLength, coneRotation, maximumAngle);
         return result;
     }
 
@@ -518,9 +518,7 @@ class ClawsSlash : NatureProjectile {
             player.itemAnimationMax = player.itemTimeMax = (int)Projectile.ai[1];
         }
 
-        Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity + 
-            Vector2.UnitX * player.direction * (Owner.GetClawsHandler().AttackCount * 20f) +
-            Vector2.UnitX * Projectile.ai[2] * player.direction;
+        Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity + GetPositionOffset(player);
 
         UpdateMainCycle();
 
@@ -529,6 +527,10 @@ class ClawsSlash : NatureProjectile {
         }
         Projectile.Kill();
     }
+
+    protected virtual float OffsetX1 => Owner.GetClawsHandler().AttackCount * 20f;
+    protected virtual float OffsetX2 => Projectile.ai[2];
+    protected virtual Vector2 GetPositionOffset(Player player) => Vector2.UnitX * player.direction * OffsetX1 + Vector2.UnitX * OffsetX2 * player.direction;
 
     protected virtual void SetScaleOnSpawn(ref float scale) { }
 
