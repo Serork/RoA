@@ -11,8 +11,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-using static RoA.Common.GlowMasks.ItemGlowMaskHandler;
-
 namespace RoA.Core.Utility.Vanilla;
 
 static class ItemUtils {
