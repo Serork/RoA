@@ -45,7 +45,7 @@ sealed class SunSigil : ModDust {
 
     public override bool PreDraw(Dust dust) {
         Main.EntitySpriteDraw(ResourceManager.Bloom, dust.position - Main.screenPosition, null,
-                (dust.GetAlpha(Lighting.GetColor(dust.position.ToTileCoordinates())) with { A = 0 }) * 0.425f, dust.rotation, ResourceManager.Bloom.Size() / 2f, dust.scale * 0.125f, 0, 0);
+                (dust.GetAlpha(Lighting.GetColor(dust.position.ToTileCoordinates())) with { A = 0 }) * 0.375f, dust.rotation, ResourceManager.Bloom.Size() / 2f, dust.scale * 0.125f, 0, 0);
 
         dust.QuickDraw(Texture2D.Value);
 
