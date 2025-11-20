@@ -156,11 +156,10 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         Texture2D texture = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part].Value;
         SpriteBatch batch = Main.spriteBatch;
 
-        int i = 0;
         for (LinkedListNode<FracturePartInfo> node = _fractureParts.First; node != null; node = node.Next) {
             var fracturePart = node.Value;
             var nextFracturePart = (node.Next ?? node).Value;
-            SpriteFrame frame = new(4, 1, (byte)i, 0);
+            SpriteFrame frame = new(4, 1, 0, 0);
             float length = fracturePart.StartPosition.Distance(fracturePart.EndPosition) * 0.1f;
             Rectangle clip = frame.GetSourceRectangle(texture);
             Vector2 origin = new(10, 2);
@@ -173,9 +172,6 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                         new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale),
                         Projectile.ai[0] > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
                         0f);
-            if (i > 3) {
-                i = 0;
-            }
         }
     }
 
