@@ -108,12 +108,12 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                             endPosition = startPosition + getMoveVector();
                     for (int k = 0; k < count; k++) {
                         float baseProgress = k / (float)count;
-                        float progress = Ease.SineOut(baseProgress);
+                        float progress = Ease.CubeOut(baseProgress);
                         float progress2 = 1f - Ease.QuintIn(baseProgress);
                         _fractureParts.AddLast(new LinkedListNode<FracturePartInfo>(new FracturePartInfo() {
                             StartPosition = startPosition,
                             EndPosition = endPosition,
-                            Color = Color.Lerp(Color.Lerp(new Color(45, 124, 205), new Color(34, 177, 76), progress), Color.White, Utils.GetLerpValue(0.95f, 1f, progress, true)),
+                            Color = Color.Lerp(Color.Lerp(new Color(45, 124, 205), new Color(34, 177, 76), progress), new Color(34, 177, 76), Utils.GetLerpValue(0.95f, 1f, progress, true)),
                             Scale = progress2
                         }));
                         startPosition = endPosition;
