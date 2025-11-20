@@ -143,7 +143,7 @@ class ClawsSlash : NatureProjectile {
             color.A = 25;
             if (!ShouldFullBright) {
                 Point pos = Projectile.Center.ToTileCoordinates();
-                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.8f, 1f);
+                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), selectedClaws.IsHardmodeClaws ? 0.8f : 0.65f, 1f);
                 color *= brightness;
             }
             color *= selectedClaws.HitEffectOpacity;
