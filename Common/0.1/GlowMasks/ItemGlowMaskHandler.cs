@@ -150,7 +150,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                 if (item.IsModded(out ModItem modItem) && modItem is TerraClaws) {
                     spriteBatch.DrawWithSnapshot(() => {
                         DrawData data = new(glowMaskTexture, position.Value, null,
-                            glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.Color,
+                            (glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.Color) * 0.9f,
                             rotation, origin, scale, SpriteEffects.None, 0f);
                         GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TerraDye>()), item, data);
                         data.Draw(spriteBatch);

@@ -127,6 +127,7 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
                         Color color = Color.Lerp(glowMaskAttribute.GlowColor * 0.9f, glowMask.color, brightnessFactor);
                         glowMask.color = player.GetImmuneAlphaPure(glowMaskAttribute.ShouldApplyItemAlpha ? color * (1f - clawsBaseItem.Item.alpha / 255f) : (glowMaskAttribute.GlowColor * 0.9f), (float)drawinfo.shadow);
                         if (clawsBaseItem is TerraClaws) {
+                            glowMask.color *= 0.9f;
                             glowMask.shader = GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TerraDye>());
                         }
                         drawinfo.DrawDataCache.Add(glowMask);
@@ -164,6 +165,7 @@ sealed partial class WeaponOverlay : PlayerDrawLayer {
                         Color color = Color.Lerp(glowMaskAttribute.GlowColor * 0.9f, glowMask.color, brightnessFactor);
                         glowMask.color = player.GetImmuneAlphaPure(glowMaskAttribute.ShouldApplyItemAlpha ? color * (1f - clawsBaseItem.Item.alpha / 255f) : (glowMaskAttribute.GlowColor * 0.9f), (float)drawinfo.shadow);
                         if (clawsBaseItem is TerraClaws) {
+                            glowMask.color *= 0.9f;
                             glowMask.shader = GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TerraDye>());
                         }
                         drawinfo.DrawDataCache.Add(glowMask);

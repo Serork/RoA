@@ -24,7 +24,7 @@ namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 
 // also see ItemGlowMaskHandler
 
-[AutoloadGlowMask(127, 127, 127, 127, shouldApplyItemAlpha: true)]
+[AutoloadGlowMask]
 [WeaponOverlay(WeaponType.Claws)]
 sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
     public override bool IsHardmodeClaws => true;

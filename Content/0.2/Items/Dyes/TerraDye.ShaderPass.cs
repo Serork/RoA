@@ -11,10 +11,15 @@ using Terraria.Graphics.Shaders;
 namespace RoA.Content.Items.LiquidsSpecific;
 
 sealed class TerraDyeArmorShaderData(Asset<Effect> shader, string passName) : ArmorShaderData(shader, passName) {
+    public static float Opacity = 1f;
+
     public override void Apply(Entity entity, DrawData? drawData) {
+        Shader.Parameters["uOpacity"].SetValue(Opacity);
         Shader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 10f);
         Main.instance.GraphicsDevice.Textures[1] = TerraDye.TerraShaderMap.Value;
 
         base.Apply(entity, drawData);
+
+        Opacity = 1f;
     }
 }
