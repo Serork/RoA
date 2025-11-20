@@ -19,9 +19,8 @@ static class ItemUtils {
     public static string GetTexturePath<T>() where T : ModItem => ItemLoader.GetItem(ModContent.ItemType<T>()).Texture;
 
     public static void DrawHeldItem(Item heldItem, ref PlayerDrawSet drawinfo, Texture2D? texture = null, Texture2D? glowMaskTexture = null) {
-        if (drawinfo.drawPlayer.ItemTimeIsZero) {
+        if (drawinfo.drawPlayer.JustDroppedAnItem)
             return;
-        }
 
         float adjustedItemScale = drawinfo.drawPlayer.GetAdjustedItemScale(heldItem);
         //Main.instance.LoadItem(num);
