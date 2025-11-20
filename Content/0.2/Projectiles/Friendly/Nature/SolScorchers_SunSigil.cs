@@ -151,7 +151,6 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         int chance = Math.Max(1, 10 - (int)(MathF.Max(100, num718) / 100));
         chance /= 2;
-        Main.NewText(chance);
         if (Main.rand.NextBool(chance)) {
             Dust dust = Dust.NewDustPerfect(samplingPoint + Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * num718 * Main.rand.NextFloat(0.1f, 0.9f) + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(10f * Projectile.direction, -2f),
                 ModContent.DustType<Dusts.SunSigil>(),
