@@ -210,7 +210,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
                     dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                     dust.scale *= 0.35f * startProgress;
                     dust.scale *= Projectile.scale;
-                    dust.scale *= Utils.GetLerpValue(0f, 1f, position.Distance(player.Center) / 50f, true) * startProgress;
+                    dust.scale *= Utils.GetLerpValue(0.25f, 1f, position.Distance(player.Center) / 50f, true) * startProgress;
                     dust.noGravity = true;
                     Dust dust2 = dust;
                     dust2 = dust;
