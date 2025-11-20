@@ -136,7 +136,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                 break;
             }
 
-            if (Main.rand.NextBool(100)) {
+            if (Main.rand.NextBool(125)) {
                 Dust dust = Dust.NewDustPerfect(samplingPoint + Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * distance * 0.375f + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(10f * Projectile.direction, -2f),
                     ModContent.DustType<Dusts.SunSigil>(),
                     Vector2.UnitY.RotatedByRandom(Projectile.rotation - MathHelper.PiOver2) * Main.rand.NextFloat(3f, 5f) * 1.25f,
