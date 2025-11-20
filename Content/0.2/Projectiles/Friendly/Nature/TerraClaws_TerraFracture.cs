@@ -14,6 +14,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -103,7 +104,10 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                 for (float i = -MathHelper.PiOver4; i < MathHelper.PiOver4; i += MathHelper.PiOver4 / 3f) {
                     int count = 25;
                     float size = 10f;
-                    Vector2 getMoveVector() => Vector2.UnitY.RotatedBy(Projectile.rotation + MathHelper.PiOver2 * Main.rand.NextFloatDirection() + i) * Main.rand.NextFloat(1f, size) * 5f;
+                    Vector2 getMoveVector() {
+                        Vector2 result = Vector2.UnitY.RotatedBy(Projectile.rotation + MathHelper.PiOver2 * Main.rand.NextFloatDirection() + i) * Main.rand.NextFloat(1f, size) * 5f;
+                        return result;
+                    }
                     Vector2 startPosition = Vector2.Zero,
                             endPosition = startPosition + getMoveVector();
                     for (int k = 0; k < count; k++) {
@@ -118,6 +122,11 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                         }));
                         startPosition = endPosition;
                         endPosition += getMoveVector();
+                        Vector2 beforePosition = endPosition;
+                        int attempt = _fractureParts.Count;
+                        while (attempt-- > 0 && _fractureParts.Any(x => x.StartPosition.Distance(endPosition) < 20f)) {
+                            endPosition = beforePosition + getMoveVector();
+                        }
                         size *= 0.9f;
                         if (size < 5f) {
                             size = 10f;
