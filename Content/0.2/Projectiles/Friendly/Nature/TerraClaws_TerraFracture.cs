@@ -35,7 +35,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)TerraFractureRequstedTextureType.Part, ResourceManager.NatureProjectileTextures + "TerraFracturePart")];
 
-    public readonly record struct FracturePartInfo(Vector2 StartPosition, Vector2 EndPosition, Color Color);
+    public readonly record struct FracturePartInfo(Vector2 StartPosition, Vector2 EndPosition, Color Color, float Scale);
 
     private readonly LinkedList<FracturePartInfo> _fractureParts = [];
 
@@ -74,10 +74,16 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Player owner = Projectile.GetOwnerAsPlayer();
 
+        if (Projectile.ai[0] == 0f) {
+            Projectile.ai[0] = owner.direction;
+        }
+
         if (Keyboard.GetState().IsKeyDown(Keys.Z)) {
             Init = false;
 
             Projectile.Opacity = 0f;
+
+            Projectile.ai[0] = 0f;
         }
 
         Projectile.Center = Utils.Floor(owner.MountedCenter) + Vector2.UnitY * owner.gfxOffY;
@@ -101,11 +107,14 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Vector2 startPosition = Vector2.Zero,
                             endPosition = startPosition + getMoveVector();
                     for (int k = 0; k < count; k++) {
-                        float progress = Ease.SineOut(k / (float)count);
+                        float baseProgress = k / (float)count;
+                        float progress = Ease.SineOut(baseProgress);
+                        float progress2 = 1f - Ease.QuintIn(baseProgress);
                         _fractureParts.AddLast(new LinkedListNode<FracturePartInfo>(new FracturePartInfo() {
                             StartPosition = startPosition,
                             EndPosition = endPosition,
-                            Color = Color.Lerp(Color.Lerp(new Color(45, 124, 205), new Color(34, 177, 76), progress), Color.White, Utils.GetLerpValue(0.95f, 1f, progress, true))
+                            Color = Color.Lerp(Color.Lerp(new Color(45, 124, 205), new Color(34, 177, 76), progress), Color.White, Utils.GetLerpValue(0.95f, 1f, progress, true)),
+                            Scale = progress2
                         }));
                         startPosition = endPosition;
                         endPosition += getMoveVector();
@@ -158,11 +167,11 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
             batch.Draw(texture,
                         Projectile.Center + fracturePart.StartPosition * Projectile.Opacity - Main.screenPosition,
                         clip,
-                        Color.Lerp(Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f), Color.Black, 0.15f) with { A = 200 } * Projectile.Opacity,
+                        Color.Lerp(Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f), Color.Black, 0.1f) with { A = 255 } * Projectile.Opacity * fracturePart.Scale,
                         fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2,
                         origin,
-                        new Vector2(1f, length),
-                        SpriteEffects.None,
+                        new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale),
+                        Projectile.ai[0] > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
                         0f);
             if (i > 3) {
                 i = 0;
