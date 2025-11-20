@@ -143,7 +143,7 @@ class ClawsSlash : NatureProjectile {
             color.A = 25;
             if (!ShouldFullBright) {
                 Point pos = Projectile.Center.ToTileCoordinates();
-                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), selectedClaws.IsHardmodeClaws ? 0.8f : 0.7f, 1f);
+                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), selectedClaws.IsHardmodeClaws ? 0.8f : 0.5f, 1f);
                 color *= brightness;
             }
             color *= selectedClaws.HitEffectOpacity;
@@ -427,6 +427,10 @@ class ClawsSlash : NatureProjectile {
         num *= 0.95f;
         Vector2 vector = new Vector2(fatness.X * 0.5f, scale.X) * num * 1f;
         Vector2 vector2 = new Vector2(fatness.Y * 0.5f, scale.Y) * num * 1f;
+        Vector2 projCenter = drawpos + Main.screenPosition;
+        float brightness = MathUtils.Clamp01(Lighting.Brightness((int)projCenter.X / 16, (int)projCenter.Y / 16) * 5f);
+        brightness = Ease.SineIn(brightness);
+        num *= brightness;
         color *= num;
         color2 *= num;
         Main.EntitySpriteDraw(value, drawpos, null, color, (float)Math.PI / 2f + rotation, origin, vector, dir);
