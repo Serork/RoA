@@ -17,6 +17,11 @@ using Terraria.ModLoader;
 namespace RoA.Common.Items;
 
 // TODO: separate
+
+// mushroom spear
+// hammush
+// terra blade
+
 sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
     private static Asset<Texture2D>? _mushroomSpearTexture, _mushroomSpearGlowMaskTexture;
     internal static Asset<Texture2D>? _terraBladeGlowMaskTexture;
