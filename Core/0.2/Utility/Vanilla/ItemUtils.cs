@@ -99,7 +99,7 @@ static class ItemUtils {
         if (glowMaskTexture != null) {
             // glowmask
             if (heldItem.type == ItemID.TerraBlade) {
-                color = Color.White * 0.8f;
+                color = Color.White * 0.75f;
             }
             item = new DrawData(glowMaskTexture, position, itemDrawFrame, color, num5, origin, adjustedItemScale, drawinfo.itemEffect);
             if (heldItem.type == ItemID.TerraBlade) {
@@ -131,7 +131,7 @@ static class ItemUtils {
         Vector2 vector2 = new Vector2((float)(item.width / 2) - vector.X, item.height - frame.Height);
         position ??= item.position - Main.screenPosition + vector + vector2;
 
-        if (item.type == ItemID.TerraBlade && color == Color.White * 0.8f) {
+        if (item.type == ItemID.TerraBlade && color == Color.White * 0.75f) {
             Main.spriteBatch.DrawWithSnapshot(() => {
                 DrawData data = new(texture, position.Value, null,
                                     color,

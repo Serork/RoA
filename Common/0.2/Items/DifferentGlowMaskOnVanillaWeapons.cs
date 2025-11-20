@@ -80,7 +80,7 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
             }
 
             ItemUtils.DrawItem(item, color, 0f, TextureAssets.Item[ItemID.TerraBlade].Value, scale, position);
-            ItemUtils.DrawItem(item, Color.White * 0.8f, 0f, _terraBladeGlowMaskTexture.Value, scale, position);
+            ItemUtils.DrawItem(item, Color.White * 0.75f, 0f, _terraBladeGlowMaskTexture.Value, scale, position);
 
             return false;
         }
@@ -117,7 +117,7 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
             }
 
             ItemUtils.DrawItem(item, lightColor, rotation, TextureAssets.Item[ItemID.TerraBlade].Value);
-            ItemUtils.DrawItem(item, Color.White * 0.8f, rotation, _terraBladeGlowMaskTexture.Value);
+            ItemUtils.DrawItem(item, Color.White * 0.75f, rotation, _terraBladeGlowMaskTexture.Value);
             return false;
         }
 
