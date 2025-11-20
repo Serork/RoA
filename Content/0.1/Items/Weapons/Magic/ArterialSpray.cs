@@ -105,7 +105,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
             obj13.velocity *= 0.25f;
             obj13.position = Projectile.position - offset2 - Vector2.UnitX * _direction * 5f + Vector2.UnitX * _direction * 50f * f;
         }
-        Main.spriteBatch.Draw(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, player.fullRotation + Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0);
+        Main.spriteBatch.Draw(texture, Projectile.position + offset2 - Main.screenPosition + offset, texture.Bounds, lightColor, Projectile.ai[1] - rotOffset, origin, heldItem.scale, effects, 0);
 
         return false;
     }
