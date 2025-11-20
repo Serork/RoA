@@ -490,12 +490,12 @@ LivingMahoganyChestplate: {
 
 LivingMahoganyGreaves: {
 	DisplayName: Живые джунглевые поножи
-	Tooltip: Увеличивает шанс на критический удар природным уроном на 3%
+	Tooltip: Увеличивает скорость атаки природой на 4%
 }
 
 LivingMahoganyHelmet: {
 	DisplayName: Живой джунглевый шлем
-	Tooltip: Увеличивает шанс на критический удар природным уроном на 3%
+	Tooltip: Увеличивает скорость атаки природой на 4%
 }
 
 EbonwoodStaff: {
@@ -534,7 +534,11 @@ ElathaAmulet: {
 
 LivingElderwoodBreastplate: {
 	DisplayName: Живой чащобный нагрудник
-	Tooltip: Когда венок заполнен, увеличивает защиту на 4
+	Tooltip:
+		'''
+		Увеличивает отбрасывание природным оружием
+		Когда венок заполнен, увеличивает защиту на 4
+		'''
 }
 
 LivingElderwoodCrown: {
@@ -552,7 +556,7 @@ DreadheartCorruptionChestplate: {
 	Tooltip:
 		'''
 		Увеличивает возможный природный урон на 8%
-		Увеличивает отбрасывание природного оружия
+		Увеличивает скорость атаки природой на 7%
 		'''
 }
 
@@ -571,7 +575,7 @@ DreadheartCrimsonChestplate: {
 	Tooltip:
 		'''
 		Увеличивает возможный природный урон на 8%
-		Увеличивает отбрасывание природного оружия
+		Увеличивает скорость атаки природой на 7%
 		'''
 }
 
@@ -2373,7 +2377,11 @@ TarSlimeBanner: {
 
 HandOfGod: {
 	DisplayName: Длань божья
-	// Tooltip: ""
+	Tooltip:
+		'''
+		Тратит полный заряд венка, чтобы сотворить верный щит
+		'Глас бога, глас народа'
+		'''
 }
 
 RodOfTheBifrost: {
@@ -2411,16 +2419,16 @@ CoralClarionet: {
 }
 
 AetherWreath: {
-	// DisplayName: Aether Wreath
+	DisplayName: Эфирный венок
 	// Tooltip: ""
 }
 
 TerraClaws: {
-	// DisplayName: Terra Claws
+	DisplayName: Терра-когти
 	// Tooltip: ""
 }
 
 TerraDye: {
-	// DisplayName: Terra Dye
+	DisplayName: Терра-краситель
 	// Tooltip: ""
 }

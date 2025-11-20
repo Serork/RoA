@@ -474,12 +474,12 @@ LivingMahoganyChestplate: {
 
 LivingMahoganyGreaves: {
 	DisplayName: Living Mahogany Greaves
-	Tooltip: 3% increased nature critical strike chance
+	Tooltip: 4% increased nature attack speed
 }
 
 LivingMahoganyHelmet: {
 	DisplayName: Living Mahogany Helmet
-	Tooltip: 3% increased nature critical strike chance
+	Tooltip: 4% increased nature attack speed
 }
 
 EbonwoodStaff: {
@@ -518,7 +518,11 @@ ElathaAmulet: {
 
 LivingElderwoodBreastplate: {
 	DisplayName: Living Everwood Breastplate
-	Tooltip: When wreath is charged, increases defense by 4
+	Tooltip:
+		'''
+		Increased nature damage knockback
+		When wreath is charged, increases defense by 4
+		'''
 }
 
 LivingElderwoodCrown: {
@@ -536,7 +540,7 @@ DreadheartCorruptionChestplate: {
 	Tooltip:
 		'''
 		8% increased nature potential damage
-		Increases nature knockback
+		7% increased nature attack speed
 		'''
 }
 
@@ -555,7 +559,7 @@ DreadheartCrimsonChestplate: {
 	Tooltip:
 		'''
 		8% increased nature potential damage
-		Increases nature knockback
+		7% increased nature attack speed
 		'''
 }
 
@@ -2348,7 +2352,11 @@ TarSlimeBanner: {
 
 HandOfGod: {
 	DisplayName: Hand Of God
-	Tooltip: ""
+	Tooltip:
+		'''
+		Consume a full wreath charge to create a faithful shield
+		'Vox Dei, Vox Populi'
+		'''
 }
 
 RodOfTheBifrost: {

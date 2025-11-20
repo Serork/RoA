@@ -32,5 +32,7 @@ sealed class LivingElderwoodBreastplate : NatureItem {
         if (player.GetWreathHandler().IsFull1) {
             player.statDefense += 4;
         }
+		
+		player.GetKnockback(DruidClass.Nature) += 0.5f;
     }
 }
