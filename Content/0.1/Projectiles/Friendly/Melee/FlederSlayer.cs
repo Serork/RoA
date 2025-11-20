@@ -134,7 +134,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         if (Projectile.owner == Main.myPlayer) {
             if (!_init) {
                 _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
-                Projectile.Center = player.MountedCenter;
+                Projectile.Center = Utils.Floor(player.MountedCenter);
                 Projectile.direction = Projectile.spriteDirection = _direction;
                 player.ChangeDir(Projectile.spriteDirection);
                 _timeLeft = Projectile.timeLeft;
@@ -609,7 +609,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                                 0f);
             spriteBatch.Begin(snapshot, true);
             spriteBatch.Draw(bladeTexture2D,
-                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f * charge % 1f * player.direction)) * 3f * charge + shiftFix,
+                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f % 1f * player.direction)) * 3f * charge + shiftFix,
                             glowRectangle,
                             color * Projectile.Opacity * 0.3f * charge,
                             Projectile.rotation + 0.78f,
