@@ -578,7 +578,7 @@ static class ProjectileUtils {
         Vector2 vector2 = proj.Center;
         Color color = Lighting.GetColor((int)proj.Center.X / 16, (int)proj.Center.Y / 16);
         Main.EntitySpriteDraw(texture, vector2 - Main.screenPosition, value, color, num, vector, proj.scale, dir);
-        color = Color.White * (1f - proj.alpha / 255f);
+        color = Color.White * 0.9f * (1f - proj.alpha / 255f);
 
         if (projectile.type == ProjectileID.MushroomSpear) {
             DelegateMethods.v3_1 = new Vector3(0.1f, 0.4f, 1f);

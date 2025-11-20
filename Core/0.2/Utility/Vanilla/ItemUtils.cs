@@ -1,12 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Items.Dyes;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
+
+using static RoA.Common.GlowMasks.ItemGlowMaskHandler;
 
 namespace RoA.Core.Utility.Vanilla;
 
@@ -14,6 +19,10 @@ static class ItemUtils {
     public static string GetTexturePath<T>() where T : ModItem => ItemLoader.GetItem(ModContent.ItemType<T>()).Texture;
 
     public static void DrawHeldItem(Item heldItem, ref PlayerDrawSet drawinfo, Texture2D? texture = null, Texture2D? glowMaskTexture = null) {
+        if (drawinfo.drawPlayer.ItemTimeIsZero) {
+            return;
+        }
+
         float adjustedItemScale = drawinfo.drawPlayer.GetAdjustedItemScale(heldItem);
         //Main.instance.LoadItem(num);
         int num = heldItem.type;
@@ -74,7 +83,7 @@ static class ItemUtils {
 
             if (glowMaskTexture != null) {
                 // glowmask
-                item = new DrawData(glowMaskTexture, position, itemDrawFrame, new Color(250, 250, 250, heldItem.alpha), num5, origin, adjustedItemScale, drawinfo.itemEffect);
+                item = new DrawData(glowMaskTexture, position, itemDrawFrame, new Color(250, 250, 250, heldItem.alpha) * 0.9f, num5, origin, adjustedItemScale, drawinfo.itemEffect);
                 drawinfo.DrawDataCache.Add(item);
             }
             return;
@@ -92,7 +101,13 @@ static class ItemUtils {
 
         if (glowMaskTexture != null) {
             // glowmask
+            if (heldItem.type == ItemID.TerraBlade) {
+                color = Color.White * 0.9f;
+            }
             item = new DrawData(glowMaskTexture, position, itemDrawFrame, color, num5, origin, adjustedItemScale, drawinfo.itemEffect);
+            if (heldItem.type == ItemID.TerraBlade) {
+                item.shader = GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TerraDye>());
+            }
             drawinfo.DrawDataCache.Add(item);
         }
     }
@@ -119,11 +134,22 @@ static class ItemUtils {
         Vector2 vector2 = new Vector2((float)(item.width / 2) - vector.X, item.height - frame.Height);
         position ??= item.position - Main.screenPosition + vector + vector2;
 
-        Main.spriteBatch.Draw(texture, position.Value, null,
-            color,
-            rotation, origin, scale, SpriteEffects.None, 0f);
+        if (item.type == ItemID.TerraBlade && color == Color.White * 0.8f) {
+            Main.spriteBatch.DrawWithSnapshot(() => {
+                DrawData data = new(texture, position.Value, null,
+                                    color,
+                                    rotation, origin, scale, SpriteEffects.None, 0f);
+                GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TerraDye>()), item, data);
+                data.Draw(Main.spriteBatch);
+            }, sortMode: SpriteSortMode.Immediate);
+        }
+        else {
+            Main.spriteBatch.Draw(texture, position.Value, null,
+                                  color,
+                                  rotation, origin, scale, SpriteEffects.None, 0f);
+        }
 
-        if (!TileHelper.DrawingTiles) {
+        if ((item.type == ItemID.MushroomSpear || item.type == ItemID.Hammush) && !TileHelper.DrawingTiles) {
             Lighting.AddLight(position.Value + Main.screenPosition, new Vector3(0.1f, 0.4f, 1f));
         }
 

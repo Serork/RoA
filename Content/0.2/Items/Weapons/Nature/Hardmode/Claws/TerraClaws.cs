@@ -243,7 +243,9 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                 }
             }, blendState: BlendState.Additive);
 
-            DrawStars(ref baseLightColor);
+            if (num2 > 0.225f) {
+                DrawStars(ref baseLightColor);
+            }
 
             return false;
         }
