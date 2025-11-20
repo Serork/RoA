@@ -123,7 +123,9 @@ static class ItemUtils {
             color,
             rotation, origin, scale, SpriteEffects.None, 0f);
 
-        Lighting.AddLight(position.Value + Main.screenPosition, new Vector3(0.1f, 0.4f, 1f));
+        if (!TileHelper.DrawingTiles) {
+            Lighting.AddLight(position.Value + Main.screenPosition, new Vector3(0.1f, 0.4f, 1f));
+        }
 
         if (item.shimmered) {
             Main.spriteBatch.Draw(texture, position.Value, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, scale, SpriteEffects.None, 0f);

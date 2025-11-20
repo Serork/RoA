@@ -18,8 +18,8 @@ sealed class RodOfTheTerra : Rod {
     protected override Color? LightingColor => new(73, 170, 104);
 
     public override void SetStaticDefaults() {
-        // DisplayName.SetDefault("Rod of the Terra");
-        // Tooltip.SetDefault("Casts a damaging beam of earth energy\n'Forged with Terra'");
+        // DisplayName.SetDefault("Rod of the TerraDye");
+        // Tooltip.SetDefault("Casts a damaging beam of earth energy\n'Forged with TerraDye'");
 
         Item.ResearchUnlockCount = 1;
 

@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
+using RoA.Common.GlowMasks;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
@@ -13,7 +14,6 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System;
-using System.Runtime.InteropServices;
 
 using Terraria;
 using Terraria.GameContent;
@@ -22,6 +22,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 
+// also see ItemGlowMaskHandler
+
+[AutoloadGlowMask(127, 127, 127, 127, shouldApplyItemAlpha: true)]
 [WeaponOverlay(WeaponType.Claws)]
 sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
     public override bool IsHardmodeClaws => true;

@@ -57,7 +57,9 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeapons_GlowMaskInWorld : GlobalIt
                 return base.PreDrawInWorld(item, spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
             }
 
-            Lighting.AddLight(item.Center + Main.screenPosition, new Vector3(0.1f, 0.4f, 1f));
+            if (!TileHelper.DrawingTiles) {
+                Lighting.AddLight(item.Center + Main.screenPosition, new Vector3(0.1f, 0.4f, 1f));
+            }
 
             if (hammush) {
                 ItemUtils.DrawItem(item, lightColor, rotation, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushTexture!.Value);

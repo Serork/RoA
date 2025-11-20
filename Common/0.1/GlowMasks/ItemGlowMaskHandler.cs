@@ -4,7 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 
+using RoA.Content.Items.Dyes;
+using RoA.Content.Items.LiquidsSpecific;
 using RoA.Content.Items.Tools;
+using RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -16,6 +19,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -105,9 +109,9 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 
     private class ItemGlowMaskWorld : GlobalItem {
         public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
-            if (!TileHelper.DrawingTiles) {
-                return;
-            }
+            //if (!TileHelper.DrawingTiles) {
+            //    return;
+            //}
 
             DrawGlowMask(item, spriteBatch, itemColor, 0f, scale, position);
         }
@@ -142,9 +146,21 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                 }
 
                 position ??= item.Center - Main.screenPosition;
-                spriteBatch.Draw(glowMaskTexture, position.Value, null,
-                    glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.Color,
-                    rotation, origin, scale, SpriteEffects.None, 0f);
+
+                if (item.IsModded(out ModItem modItem) && modItem is TerraClaws) {
+                    spriteBatch.DrawWithSnapshot(() => {
+                        DrawData data = new(glowMaskTexture, position.Value, null,
+                            glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.Color,
+                            rotation, origin, scale, SpriteEffects.None, 0f);
+                        GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TerraDye>()), item, data);
+                        data.Draw(spriteBatch);
+                    }, sortMode: SpriteSortMode.Immediate);
+                }
+                else {
+                    spriteBatch.Draw(glowMaskTexture, position.Value, null,
+                        glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - item.alpha / 255f) : glowMaskInfo.Color,
+                        rotation, origin, scale, SpriteEffects.None, 0f);
+                }
                 if (item.shimmered)
                     spriteBatch.Draw(glowMaskTexture, position.Value, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, scale, SpriteEffects.None, 0f);
             }

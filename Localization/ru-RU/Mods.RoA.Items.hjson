@@ -2419,3 +2419,8 @@ TerraClaws: {
 	// DisplayName: Terra Claws
 	// Tooltip: ""
 }
+
+TerraDye: {
+	// DisplayName: Terra Dye
+	// Tooltip: ""
+}
