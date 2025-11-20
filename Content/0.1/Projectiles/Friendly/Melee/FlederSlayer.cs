@@ -134,7 +134,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         if (Projectile.owner == Main.myPlayer) {
             if (!_init) {
                 _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
-                Projectile.Center = Utils.Floor(player.MountedCenter);
+                Projectile.Center = player.MountedCenter;
                 Projectile.direction = Projectile.spriteDirection = _direction;
                 player.ChangeDir(Projectile.spriteDirection);
                 _timeLeft = Projectile.timeLeft;
@@ -589,10 +589,10 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         SpriteBatch spriteBatch = Main.spriteBatch;
         float charge = Math.Clamp(_charge - 0.5f + _charge * 1.5f, 0f, 1f);
         float osc = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 10f);
-        Vector2 offset = -new Vector2(15f * (Projectile.localAI[2] - 0.5f), 0f).RotatedBy(Projectile.rotation);
+        Vector2 offset = -new Vector2((_released ? 24f : 18f) * (Projectile.localAI[2] - 0.5f), 0f).RotatedBy(Projectile.rotation);
         offset += Projectile.rotation.ToRotationVector2() * (-30f * (MathHelper.Clamp(Projectile.scale - 1.25f, 0f, 1f)));
         Player player = Main.player[Projectile.owner];
-        Vector2 center = Projectile.Center + Vector2.UnitY * player.gfxOffY;
+        Vector2 center = Utils.Floor(Projectile.Center) + Vector2.UnitY * player.gfxOffY;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
         Vector2 position = center - Main.screenPosition + offset;
         Vector2 shiftFix = -(Projectile.spriteDirection == -1 ? new Vector2(0, -2) : Vector2.Zero);
