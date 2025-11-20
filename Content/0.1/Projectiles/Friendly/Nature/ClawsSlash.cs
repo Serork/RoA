@@ -184,8 +184,11 @@ class ClawsSlash : NatureProjectile {
 
     public override void CutTiles() {
         DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-        float coneLength = 55f * Projectile.scale;
+        float coneLength = (55f + (OffsetX1 + OffsetX2) / 2f) * Projectile.scale;
         SetCollisionScale(ref coneLength);
+        if (Projectile.localAI[0] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.2f)) {
+            return;
+        }
         Utils.PlotTileLine(Projectile.Center + (Projectile.rotation - 0.7853982f).ToRotationVector2() * coneLength, Projectile.Center + (Projectile.rotation + 0.7853982f).ToRotationVector2() * coneLength, coneLength, DelegateMethods.CutTiles);
     }
 
@@ -198,6 +201,12 @@ class ClawsSlash : NatureProjectile {
         float maximumAngle = (float)Math.PI / 4f;
         Player player = Projectile.GetOwnerAsPlayer();
         float coneRotation = Projectile.rotation + num1;
+        if (Projectile.localAI[0] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.2f)) {
+            return false;
+        }
+        if (MathF.Abs(targetHitbox.Location.ToVector2().Y - Projectile.Center.Y) > coneLength * 0.75f) {
+            return false;
+        }
         bool result = targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center - GetPositionOffset(player), coneLength, coneRotation, maximumAngle);
         return result;
     }
