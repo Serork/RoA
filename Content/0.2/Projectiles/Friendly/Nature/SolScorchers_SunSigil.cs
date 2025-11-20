@@ -21,6 +21,7 @@ using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -108,10 +109,18 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         _laserDirection = Projectile.velocity.RotatedBy((MathHelper.PiOver2 + MathHelper.PiOver4 * Helper.Wave(Projectile.localAI[0] * 0.05f, -1f, 1f, speed: 1f)) * Projectile.direction);
         Projectile.rotation = _laserDirection.ToRotation();
 
+        if (Opacity > 0.75f && Main.rand.NextBool(4)) {
+            Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(12f * Projectile.direction, -2f),
+                ModContent.DustType<Dusts.SunSigil>(), 
+                Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(2f, 5f),
+                0, SelectedColor, Main.rand.NextFloat(0.825f, 1f) * 1.75f * Projectile.scale);
+            dust.noGravity = true;
+        }
+
         Vector2 samplingPoint = Projectile.Center;
         float distance = 0f;
         float opacity = Opacity * startVelocityModifier2;
-        float maxdistance = 400f * opacity;
+        float maxdistance = 1000f * opacity;
         while (distance < maxdistance) {
             Vector2 start = Projectile.Center;
             NPC[] sortedNPC = Main.npc.Where(n => n.active && !n.friendly && !n.CountsAsACritter).OrderBy(n => (n.Center - start).Length()).ToArray();
@@ -126,6 +135,15 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (flag) {
                 break;
             }
+
+            if (Main.rand.NextBool(100)) {
+                Dust dust = Dust.NewDustPerfect(samplingPoint + Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * distance * 0.375f + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(10f * Projectile.direction, -2f),
+                    ModContent.DustType<Dusts.SunSigil>(),
+                    Vector2.UnitY.RotatedByRandom(Projectile.rotation - MathHelper.PiOver2) * Main.rand.NextFloat(3f, 5f) * 1.25f,
+                    0, SelectedColor, Main.rand.NextFloat(0.825f, 1f) * 1.5f * Projectile.scale);
+                dust.noGravity = true;
+            }
+
             distance += 16f;
         }
         float num716 = 3f;

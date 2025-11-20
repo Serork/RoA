@@ -47,6 +47,7 @@ static class ResourceManager {
     public static Texture2D Laser1 => ModContent.Request<Texture2D>(Textures + "Laser1", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Star => ModContent.Request<Texture2D>(Textures + "Star", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Ray2 => ModContent.Request<Texture2D>(Textures + "Ray2", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Bloom => ModContent.Request<Texture2D>(Textures + "Bloom0", AssetRequestMode.ImmediateLoad).Value;
 
     public static string VisualEffectTextures => Textures + "VisualEffects/";
 
