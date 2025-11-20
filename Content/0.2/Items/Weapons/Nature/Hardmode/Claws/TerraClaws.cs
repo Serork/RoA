@@ -196,7 +196,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             Microsoft.Xna.Framework.Rectangle rectangle = asset.Frame(1, 4);
             Vector2 origin = rectangle.Size() / 2f;
             float num = proj.scale * 1.1f;
-            SpriteEffects effects = ((!(proj.ai[0] >= 0f)) ? SpriteEffects.FlipVertically : SpriteEffects.None);
+            bool flip = !(proj.ai[0] >= 0f);
+            SpriteEffects effects = flip ? SpriteEffects.FlipVertically : SpriteEffects.None;
             float num2 = proj.localAI[0] / proj.ai[1];
             float num3 = Utils.Remap(num2, 0f, 0.6f, 0f, 1f) * Utils.Remap(num2, 0.6f, 1f, 1f, 0f);
             float num4 = 0.975f;
@@ -230,8 +231,9 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             }
 
             spriteBatch.DrawWithSnapshot(() => {
+                Rectangle rectangle2 = rectangle with { Y = rectangle.Y - 6 };
                 for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
-                    spriteBatch.Draw(TextureAssets.Projectile[Type].Value, vector, rectangle,
+                    spriteBatch.Draw(TextureAssets.Projectile[Type].Value, vector, rectangle2,
                         GetLightingColor2(Color.Lerp(new Color(181, 230, 29), new Color(45, 124, 205), Ease.CircOut(MathUtils.Clamp01(i / MathHelper.PiOver2)))) *
                         fromValue * num3 * 1f * 0.5f,
                         proj.rotation + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.Pi * 0.5f, 0f, num2) * Projectile.direction, origin, num, effects, 0f);
