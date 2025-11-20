@@ -496,7 +496,7 @@ class ClawsSlash : NatureProjectile {
         float num3 = 1f;
 
         float rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver4 / 2f * Math.Sign(Projectile.velocity.X) + extraRotation;
-        Projectile.rotation = (float)(MathHelper.Pi * (double)num1 * (double)fromValue + (double)rotation + (double)num1 * MathHelper.Pi) + player.fullRotation;
+        Projectile.rotation = (float)(MathHelper.Pi * (double)num1 * (double)fromValue + (double)rotation + (double)num1 * MathHelper.Pi);
 
         Projectile.scale = num3 + fromValue * num2;
         Projectile.scale *= _clawsExtraScale;
