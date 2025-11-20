@@ -92,7 +92,7 @@ sealed class HardmodeClawsSlashHit : VisualEffect<HardmodeClawsSlashHit> {
         spriteBatch.Draw(Texture, position, null, color3, MathHelper.PiOver2 + Rotation, origin, new Vector2(Scale * scale * t3, Scale * 0.625f), effects, 0f);
         spriteBatch.Draw(Texture, position, null, color4, Rotation, origin, new Vector2(Scale, Scale * scale) * 0.6f, effects, 0f);
 
-        spriteBatch.Draw(Texture, position, null, color * 1f, MathHelper.PiOver2 + Rotation, origin, new Vector2(Scale * scale * t3, Scale), effects, 0f);
+        spriteBatch.Draw(Texture, position, null, color * 1f, MathHelper.PiOver2 + Rotation, origin, new Vector2(Scale * scale * t3, Scale * 0.65f), effects, 0f);
         spriteBatch.Draw(Texture, position, null, color * 1f, Rotation, origin, new Vector2(Scale, Scale * scale), effects, 0f);
         spriteBatch.Draw(Texture, position, null, color * 1f, MathHelper.PiOver2 + Rotation, origin, new Vector2(Scale * scale * t3, Scale) * 0.6f, effects, 0f);
         spriteBatch.Draw(Texture, position, null, color * 1f, Rotation, origin, new Vector2(Scale, Scale * scale) * 0.6f, effects, 0f);
