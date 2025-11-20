@@ -16,6 +16,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
+// also see ItemGlowMaskHandler
 [AutoloadGlowMask]
 sealed class NimbusRod : NatureItem {
     public override string Texture => ModContent.GetInstance<RoAClientConfig>().VanillaResprites ? base.Texture : $"Terraria/Images/Item_{ItemID.NimbusRod}";

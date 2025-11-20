@@ -4,9 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 
+using RoA.Common.Configs;
 using RoA.Content.Items.Dyes;
 using RoA.Content.Items.LiquidsSpecific;
 using RoA.Content.Items.Tools;
+using RoA.Content.Items.Weapons.Nature.Hardmode;
 using RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -204,6 +206,10 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
 
     private static void LoadGlowMasks() {
         foreach (ModItem item in RoA.Instance.GetContent<ModItem>()) {
+            if (item.Type == ModContent.ItemType<NimbusRod>() && !ModContent.GetInstance<RoAClientConfig>().VanillaResprites) {
+                continue;
+            }
+
             AutoloadGlowMaskAttribute? attribute = item?.GetType().GetAttribute<AutoloadGlowMaskAttribute>();
             if (attribute != null) {
                 string modItemTexture = item.Texture;
