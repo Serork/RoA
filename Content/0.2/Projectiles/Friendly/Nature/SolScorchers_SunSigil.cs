@@ -110,7 +110,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.rotation = _laserDirection.ToRotation();
 
         if (Opacity > 0.75f && Main.rand.NextBool(4)) {
-            Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(12f * Projectile.direction, -2f),
+            Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(10f * Projectile.direction, -2f),
                 ModContent.DustType<Dusts.SunSigil>(), 
                 Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(2f, 5f),
                 0, SelectedColor, Main.rand.NextFloat(0.825f, 1f) * 1.75f * Projectile.scale);
@@ -136,14 +136,6 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                 break;
             }
 
-            if (Main.rand.NextBool(125)) {
-                Dust dust = Dust.NewDustPerfect(samplingPoint + Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * distance * 0.375f + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(10f * Projectile.direction, -2f),
-                    ModContent.DustType<Dusts.SunSigil>(),
-                    Vector2.UnitY.RotatedByRandom(Projectile.rotation - MathHelper.PiOver2) * Main.rand.NextFloat(3f, 5f) * 1.25f,
-                    0, SelectedColor, Main.rand.NextFloat(0.825f, 1f) * 1.5f * Projectile.scale);
-                dust.noGravity = true;
-            }
-
             distance += 16f;
         }
         float num716 = 3f;
@@ -156,6 +148,14 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
         num718 /= num716;
         Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], num718 / 7f, 0.2f);
+
+        if (Main.rand.NextBool(3)) {
+            Dust dust = Dust.NewDustPerfect(samplingPoint + Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * num718 * Main.rand.NextFloat(0.1f, 0.9f) + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(10f * Projectile.direction, -2f),
+                ModContent.DustType<Dusts.SunSigil>(),
+                Vector2.UnitY.RotatedByRandom(Projectile.rotation - MathHelper.PiOver2) * Main.rand.NextFloat(3f, 4f) * 1.25f,
+                0, SelectedColor, Main.rand.NextFloat(0.825f, 1f) * 1.375f * Projectile.scale);
+            dust.noGravity = true;
+        }
 
         DelegateMethods.v3_1 = SelectedColor.ToVector3();
         Lighting.AddLight(Projectile.Center, DelegateMethods.v3_1);
