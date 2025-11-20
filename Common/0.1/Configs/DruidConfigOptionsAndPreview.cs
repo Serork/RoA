@@ -511,10 +511,10 @@ sealed class DamageTooltipOptionConfigElement : ConfigElement {
                         new Vector2(drawableLines[k].X, drawableLines[k].Y), realLineColor, drawableLines[k].Rotation, drawableLines[k].Origin, drawableLines[k].BaseScale, drawableLines[k].MaxWidth, drawableLines[k].Spread);
                 }
 
-            //PostDraw:
-            //    ItemLoader.PostDrawTooltipLine(_hoverItem, drawableLines[k]);
+            PostDraw:
+                ItemLoader.PostDrawTooltipLine(_hoverItem, drawableLines[k]);
 
-            //    num16 += (int)(FontAssets.MouseText.Value.MeasureString(drawableLines[k].Text).Y + (float)num12);
+                num16 += (int)(FontAssets.MouseText.Value.MeasureString(drawableLines[k].Text).Y + (float)num12);
             }
 
             ItemLoader.PostDrawTooltip(_hoverItem, drawableLines.AsReadOnly());
@@ -1035,10 +1035,10 @@ sealed class DamageTooltipOptionConfigElement2 : ConfigElement {
                     new Vector2(drawableLines[k].X, drawableLines[k].Y), realLineColor, drawableLines[k].Rotation, drawableLines[k].Origin, drawableLines[k].BaseScale, drawableLines[k].MaxWidth, drawableLines[k].Spread);
             }
 
-        //PostDraw:
-        //    ItemLoader.PostDrawTooltipLine(_hoverItem, drawableLines[k]);
+        PostDraw:
+            ItemLoader.PostDrawTooltipLine(_hoverItem, drawableLines[k]);
 
-        //    num16 += (int)(FontAssets.MouseText.Value.MeasureString(drawableLines[k].Text).Y + (float)num12);
+            num16 += (int)(FontAssets.MouseText.Value.MeasureString(drawableLines[k].Text).Y + (float)num12);
         }
 
         ItemLoader.PostDrawTooltip(_hoverItem, drawableLines.AsReadOnly());

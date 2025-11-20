@@ -27,7 +27,7 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
     internal static Asset<Texture2D>? _terraBladeGlowMaskTexture;
 
     public override Color? GetAlpha(Item item, Color lightColor) {
-        if (item.type == ItemID.TerraBlade) {
+        if (ModContent.GetInstance<RoAClientConfig>().VanillaResprites && item.type == ItemID.TerraBlade) {
             return lightColor * (1f - item.alpha / 255f);
         }
 
