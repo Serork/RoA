@@ -5,9 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
 
 using RoA.Common;
-using RoA.Common.Metaballs;
 using RoA.Common.Projectiles;
-using RoA.Content.Items.Dyes;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -18,8 +16,6 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.Graphics.Shaders;
-using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -27,14 +23,14 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static ushort TIMELEFT => 60;
 
-    private static bool _drawMetaballs;
-
     public enum TerraFractureRequstedTextureType : byte {
-        Part
+        Part,
+        Part2
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
-        [((byte)TerraFractureRequstedTextureType.Part, ResourceManager.NatureProjectileTextures + "TerraFracturePart")];
+        [((byte)TerraFractureRequstedTextureType.Part, ResourceManager.NatureProjectileTextures + "TerraFracturePart"),
+         ((byte)TerraFractureRequstedTextureType.Part2, ResourceManager.NatureProjectileTextures + "TerraFracturePart2")];
 
     public readonly record struct FracturePartInfo(Vector2 StartPosition, Vector2 EndPosition, Color Color, float Scale);
 
@@ -138,49 +134,95 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     protected override void Draw(ref Color lightColor) {
-        //DrawWithMetaballs();
-        _drawMetaballs = true;
-
-        //Texture2D texture = ResourceManager.Bloom;
-        //SpriteBatch batch = Main.spriteBatch;
-        //foreach (FracturePartInfo fracturePart in _fractureParts) {
-        //    Rectangle clip = texture.Bounds;
-        //    Vector2 origin = clip.Centered();
-        //    float length = fracturePart.StartPosition.Distance(fracturePart.EndPosition) * 0.1f;
-        //    batch.Draw(texture,
-        //               Projectile.Center + Vector2.Lerp(fracturePart.StartPosition, fracturePart.EndPosition, 0.5f) * Projectile.Opacity - Main.screenPosition,
-        //               clip,
-        //               fracturePart.Color with { A = 50 } * 0.5f * Projectile.Opacity,
-        //               fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2,
-        //               origin,
-        //               new Vector2(1f, length) * 0.25f,
-        //               SpriteEffects.None,
-        //               0f);
-        //}
-
         if (!AssetInitializer.TryGetRequestedTextureAssets<TerraFracture>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return;
         }
 
-        Texture2D texture = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part].Value;
+        Texture2D texture = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part].Value,
+                  texture2 = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part2].Value;
         SpriteBatch batch = Main.spriteBatch;
+        bool right = Projectile.ai[0] > 0;
+        SpriteEffects effects = SpriteEffects.None;
 
-        for (LinkedListNode<FracturePartInfo> node = _fractureParts.First; node != null; node = node.Next) {
+        float colorWaveSpeed = 7.5f;
+        float getColorWave(float offset = 0f) => Helper.Wave(0f, 1f, colorWaveSpeed, Projectile.whoAmI + offset);
+        Color blue = new(45, 124, 205);
+        Color green = new(34, 177, 76);
+
+        for (LinkedListNode<FracturePartInfo> node = _fractureParts.First!; node != null; node = node.Next!) {
             var fracturePart = node.Value;
             var nextFracturePart = (node.Next ?? node).Value;
-            SpriteFrame frame = new(4, 1, 0, 0);
+            SpriteFrame frame = new(2, 1, (byte)(!right).ToInt(), 0);
             float length = fracturePart.StartPosition.Distance(fracturePart.EndPosition) * 0.1f;
             Rectangle clip = frame.GetSourceRectangle(texture);
             Vector2 origin = new(10, 2);
+
+            Vector2 position = Projectile.Center + fracturePart.StartPosition * Projectile.Opacity - Main.screenPosition;
+            float rotation = fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2;
+            float opacity2 = Projectile.Opacity * fracturePart.Scale;
+            Vector2 scale = new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale);
+
+            Color baseColor = Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f);
             batch.Draw(texture,
-                        Projectile.Center + fracturePart.StartPosition * Projectile.Opacity - Main.screenPosition,
-                        clip,
-                        Color.Lerp(Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f), Color.Black, 0.1f) with { A = 255 } * Projectile.Opacity * fracturePart.Scale,
-                        fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2,
-                        origin,
-                        new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale),
-                        Projectile.ai[0] > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
-                        0f);
+                       position,
+                       clip,
+                       Color.Lerp(baseColor, Color.Black, 0.1f) with { A = 255 } * opacity2,
+                       rotation,
+                       origin,
+                       scale,
+                       effects,
+                       0f);
+
+            batch.DrawWithSnapshot(() => {
+                for (float i = 1f; i > 0f; i -= 0.25f) {
+                    float colorWave = getColorWave(i);
+                    Color color = Color.Lerp(Color.Lerp(baseColor, Color.Lerp(blue, green, Math.Max(0.25f, Ease.SineInOut(1f - colorWave))), colorWave), Color.Black, 0.1f) with { A = 255 };
+                    batch.Draw(texture,
+                               position,
+                               clip,
+                               color * opacity2 * 0.5f,
+                               rotation,
+                               origin,
+                               scale * i,
+                               effects,
+                               0f);
+                }
+            }, blendState: BlendState.Additive);
+        }
+
+        for (LinkedListNode<FracturePartInfo> node = _fractureParts.First!; node != null; node = node.Next!) {
+            var fracturePart = node.Value;
+            var nextFracturePart = (node.Next ?? node).Value;
+            SpriteFrame frame = new(2, 1, (byte)(!right).ToInt(), 0);
+            float length = fracturePart.StartPosition.Distance(fracturePart.EndPosition) * 0.1f;
+            Rectangle clip = frame.GetSourceRectangle(texture);
+            Vector2 origin = new(10, 2);
+
+            Vector2 position = Projectile.Center + fracturePart.StartPosition * Projectile.Opacity - Main.screenPosition;
+            float rotation = fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2;
+            float opacity2 = Projectile.Opacity * fracturePart.Scale;
+            Vector2 scale = new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale);
+
+            Color baseColor = Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f);
+
+            for (float i2 = 1f; i2 < 2f; i2 += 1f) {
+                batch.DrawWithSnapshot(() => {
+                    for (float i = 1f; i > 0f; i -= 0.25f) {
+                        float colorWave = getColorWave(i + i2);
+                        byte a = (byte)(100 - i2 * 25);
+                        Color color = Color.Lerp(baseColor, Color.Lerp(blue, green, Math.Max(0.25f, Ease.SineInOut(1f - colorWave))), colorWave) with { A = a };
+                        batch.Draw(texture2,
+                                   position,
+                                   clip,
+                                   color * opacity2 * 0.5f,
+                                   rotation,
+                                   origin,
+                                   scale * i * i2,
+                                   effects,
+                                   0f);
+                    }
+                }, blendState: BlendState.Additive);
+            }
         }
     }
 
