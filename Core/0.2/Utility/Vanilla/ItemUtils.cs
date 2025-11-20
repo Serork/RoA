@@ -102,7 +102,7 @@ static class ItemUtils {
         if (glowMaskTexture != null) {
             // glowmask
             if (heldItem.type == ItemID.TerraBlade) {
-                color = Color.White * 0.9f;
+                color = Color.White * 0.8f;
             }
             item = new DrawData(glowMaskTexture, position, itemDrawFrame, color, num5, origin, adjustedItemScale, drawinfo.itemEffect);
             if (heldItem.type == ItemID.TerraBlade) {
