@@ -280,7 +280,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         else if (_init2) {
             _f = 1f - _time / (float)itemAnimationMax + 0.5f - (_time < itemAnimationMax * 0.45f ? 1f - _time / (float)itemAnimationMax + 0.5f : 0f);
             Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
-            Projectile.Center = player.MountedCenter;
+            Projectile.Center = Utils.Floor(player.MountedCenter);
             if (Projectile.timeLeft > min) {
                 //float value2 = f * 1.25f;
                 float value2 = _f * 1.15f;
