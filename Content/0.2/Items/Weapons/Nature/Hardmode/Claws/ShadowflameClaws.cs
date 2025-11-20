@@ -191,7 +191,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             Projectile.scale *= Charged ? 1.05f : 1f;
             Player player = Projectile.GetOwnerAsPlayer();
             float rot = GetRotation();
-            if (Projectile.localAI[0] >= Projectile.ai[1] * 0.5f && Projectile.localAI[0] < max) {
+            if (Projectile.localAI[0] >= Projectile.ai[1] * 0.25f && Projectile.localAI[0] < max) {
                 float startProgress = Utils.Remap(Utils.GetLerpValue(Projectile.ai[1] * 0.5f, Projectile.ai[1] * 0.7f, Projectile.localAI[0], true), 0f, 1f, 0.5f, 1f, true);
                 float endProgress = Utils.GetLerpValue(max, max * 0.75f, Projectile.localAI[0], true);
                 startProgress *= endProgress;
