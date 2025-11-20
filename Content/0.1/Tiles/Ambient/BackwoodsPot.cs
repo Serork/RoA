@@ -149,7 +149,7 @@ sealed class BackwoodsPot : ModTile {
         //    SoundEngine.PlaySound(13, i * 16, j * 16);
         for (int m = num; m < num + 2; m++) {
             for (int n = num9; n < num9 + 2; n++) {
-                if (Main.tile[m, n].TileType == Type && Main.tile[m, n].HasTile) {
+                if (Main.tile[m, n].TileType == ModContent.TileType<BackwoodsPot>() && Main.tile[m, n].HasTile) {
                     WorldGen.KillTile(m, n);
                 }
             }

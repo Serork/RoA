@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
+using RoA.Content.Tiles.Ambient;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -151,8 +152,8 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
     void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 pos) {
         int i = pos.X;
         int j = pos.Y;
-        if (!(WorldGenHelper.GetTileSafely(i, j + 1).TileType == Type &&
-              WorldGenHelper.GetTileSafely(i, j - 1).TileType == Type)) {
+        if (!(WorldGenHelper.GetTileSafely(i, j + 1).TileType == ModContent.TileType<Beacon>() &&
+              WorldGenHelper.GetTileSafely(i, j - 1).TileType == ModContent.TileType<Beacon>())) {
             return;
         }
         BeaconTE beaconTE = GetTE(i, j);

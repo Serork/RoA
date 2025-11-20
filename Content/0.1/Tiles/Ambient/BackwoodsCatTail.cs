@@ -84,7 +84,7 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
         for (int i = landX - 30; i <= landX + 30; i++) {
             for (int j = landY - 20; j <= landY + 20; j++) {
                 Tile tile = Main.tile[i, j];
-                if (tile != null && tile.HasTile && (tile.TileType == 519 || tile.TileType == Type) && tile.TileFrameX >= 180 && Main.rand.Next(num) == 0) {
+                if (tile != null && tile.HasTile && (tile.TileType == 519 || tile.TileType == ModContent.TileType<BackwoodsCatTail>()) && tile.TileFrameX >= 180 && Main.rand.Next(num) == 0) {
                     cattailX = i;
                     cattailY = j;
                     num++;
@@ -200,7 +200,7 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
                         num3 -= num4 - 1;
                         break;
                 }
-                if (Main.tile[x, num3].TileType == Type) {
+                if (Main.tile[x, num3].TileType == ModContent.TileType<BackwoodsCatTail>()) {
                     sizeX = 1;
                     num4 = ClimbCatTail(x, num3);
                     num3 -= num4 - 1;
@@ -216,7 +216,7 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
         int num2 = originy;
         while (num2 > 10) {
             Tile tile = Main.tile[originx, num2];
-            if (!(tile.HasTile && (tile.TileType == Type || tile.TileType == 519)))
+            if (!(tile.HasTile && (tile.TileType == ModContent.TileType<BackwoodsCatTail>() || tile.TileType == 519)))
                 break;
 
             if (tile.TileFrameX >= 180) {
@@ -391,7 +391,7 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
                 if (Main.tile[x, num6] == null)
                     return;
 
-                if (Main.tile[x, num6].HasTile && Main.tile[x, num6].TileType == Type) {
+                if (Main.tile[x, num6].HasTile && Main.tile[x, num6].TileType == ModContent.TileType<BackwoodsCatTail>()) {
                     num = num6;
                     break;
                 }
@@ -428,7 +428,7 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
 
             num7 -= 4;
             for (int i = num7; i <= num2; i++) {
-                if (Main.tile[x, i] != null && Main.tile[x, i].HasTile && Main.tile[x, i].TileType == Type) {
+                if (Main.tile[x, i] != null && Main.tile[x, i].HasTile && Main.tile[x, i].TileType == ModContent.TileType<BackwoodsCatTail>()) {
                     WorldGen.KillTile(x, i);
                     if (Main.netMode == 2)
                         NetMessage.SendData(17, -1, -1, null, 0, x, i);
@@ -442,7 +442,7 @@ sealed class BackwoodsCatTail : ModTile, TileHooks.IGetTileDrawData {
                 return;
 
             for (int k = num; k < num2; k++) {
-                if (Main.tile[x, k] != null && Main.tile[x, k].HasTile && Main.tile[x, k].TileType == Type) {
+                if (Main.tile[x, k] != null && Main.tile[x, k].HasTile && Main.tile[x, k].TileType == ModContent.TileType<BackwoodsCatTail>()) {
                     Main.tile[x, k].TileFrameY = (short)num5;
                     if (Main.netMode == 2)
                         NetMessage.SendTileSquare(-1, x, num);

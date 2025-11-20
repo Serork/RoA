@@ -157,7 +157,7 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
         if (Main.tileAlch[tile4.TileType]) {
             WorldGen.CheckAlch(num, num2);
         }
-        else if (tile4.TileType == 518 || tile4.TileType == Type) {
+        else if (tile4.TileType == 518 || tile4.TileType == ModContent.TileType<BackwoodsLilypad>()) {
             if (Liquid.quickFall) {
                 if (tile4.TileType == 518) {
                     WorldGen.CheckLilyPad(num, num2);
@@ -289,7 +289,7 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
     private void On_Main_DrawTileInWater(On_Main.orig_DrawTileInWater orig, Vector2 drawOffset, int x, int y) {
         orig(drawOffset, x, y);
 
-        if (Main.tile[x, y].HasTile && Main.tile[x, y].TileType == Type) {
+        if (Main.tile[x, y].HasTile && Main.tile[x, y].TileType == ModContent.TileType<BackwoodsLilypad>()) {
             //Main.instance.LoadTiles(Main.tile[x, y].TileType);
             Tile tile = Main.tile[x, y];
             int num = (int)tile.LiquidAmount / 16;
