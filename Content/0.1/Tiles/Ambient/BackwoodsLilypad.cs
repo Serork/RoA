@@ -42,7 +42,7 @@ sealed class BackwoodsLilypad : ModTile, TileHooks.IGetTileDrawData {
     }
 
     private void On_TileDrawing_DrawSingleTile(On_TileDrawing.orig_DrawSingleTile orig, TileDrawing self, Terraria.DataStructures.TileDrawInfo drawData, bool solidLayer, int waterStyleOverride, Vector2 screenPosition, Vector2 screenOffset, int tileX, int tileY) {
-        if (drawData.tileCache.TileType == Type && drawData.tileCache.LiquidAmount > 0) {
+        if (drawData.tileCache.TileType == ModContent.TileType<BackwoodsLilypad>() && drawData.tileCache.LiquidAmount > 0) {
             return;
         }
 
