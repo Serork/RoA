@@ -510,7 +510,7 @@ sealed class PerfectMimic : ModNPC, IRequestAssets {
             return;
         }
 
-        PlayerCopy.Center  = NPC.Center + Vector2.UnitY * NPC.gfxOffY + GetDeadOffset();
+        PlayerCopy.Center = NPC.Center + Vector2.UnitY * NPC.gfxOffY + GetDeadOffset();
         PlayerCopy.velocity = NPC.velocity;
 
         float opacity = NPC.Opacity;

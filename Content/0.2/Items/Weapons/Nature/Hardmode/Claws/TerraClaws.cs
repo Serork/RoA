@@ -54,8 +54,12 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 
-    protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {
-        args.ShouldReset = false;
+    public override bool ResetOnHit => false;
+
+    public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
+        clawsStats.SetSpecialAttackData<TerraFracture>(new ClawsHandler.AttackSpawnInfoArgs() {
+            Owner = Item
+        });
     }
 
     protected override (Color, Color) SetSlashColors(Player player)

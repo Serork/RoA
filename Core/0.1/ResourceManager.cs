@@ -33,6 +33,7 @@ static class ResourceManager {
 
     public static string Effects => RoA.ModName + $"/{EFFECTSPATH}/";
 
+    public static Texture2D Empty => ModContent.Request<Texture2D>(EmptyTexture, AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Pixel => ModContent.Request<Texture2D>(PixelTexture, AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D DefaultSparkle => ModContent.Request<Texture2D>("RoA/Resources/Textures/VisualEffects/DefaultSparkle", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D BasicCircle => ModContent.Request<Texture2D>(Textures + "BasicCircle", AssetRequestMode.ImmediateLoad).Value;
