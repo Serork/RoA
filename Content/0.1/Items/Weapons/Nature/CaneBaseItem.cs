@@ -315,7 +315,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             ReleaseCane();
         }
 
-        Projectile.rotation = Owner.fullRotation + _rotation;
+        Projectile.rotation = _rotation;
 
         AfterProcessingCane();
     }
