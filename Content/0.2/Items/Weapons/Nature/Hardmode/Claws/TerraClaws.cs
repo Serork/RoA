@@ -265,20 +265,12 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
 
             DrawItself(ref lightColor);
 
-            if (GravDir() < 0) {
-                rot -= 0.3f * Projectile.direction;
-            }
-
             for (float num6 = 0f; num6 < 12f; num6 += 1f) {
                 float num7 = rot + MathHelper.PiOver2 * 0.25f * Projectile.direction + proj.ai[0] * (num6 - 2f) * ((float)Math.PI * -2f) * 0.025f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * proj.ai[0];
                 Vector2 drawpos = vector + num7.ToRotationVector2() * ((float)asset.Width() * 0.5f - 6f) * num * 0.8f;
                 float num8 = num6 / 12f;
                 DrawPrettyStarSparkle(proj.Opacity * 0.5f * Utils.GetLerpValue(0.2f, 0.4f, num2, true), SpriteEffects.None, drawpos, new Microsoft.Xna.Framework.Color(255, 255, 255, 0) * num3 * num8, color3,
                     num2, 0f, 0.5f, 0.5f, 1f, num7, new Vector2(0f, Utils.Remap(num2, 0f, 1f, 3f, 0f)) * num, Vector2.One * num * 2f);
-            }
-
-            if (GravDir() < 0) {
-                rot += 0.3f * Projectile.direction;
             }
 
             spriteBatch.DrawWithSnapshot(() => {
