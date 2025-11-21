@@ -520,7 +520,7 @@ LivingElderwoodBreastplate: {
 	DisplayName: Living Everwood Breastplate
 	Tooltip:
 		'''
-		15% increased claw speed
+		Increases claw speed by 15%
 		'''
 }
 
