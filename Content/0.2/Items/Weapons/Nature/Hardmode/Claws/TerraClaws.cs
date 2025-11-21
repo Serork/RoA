@@ -237,7 +237,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
 
         public override bool PreDraw(ref Color lightColor) {
             float shakeFactor = 1f - StarOpacity();
-            Vector2 getShakeValue() => Main.rand.NextVector2Circular(4f * shakeFactor, 4f * shakeFactor);
+            Vector2 getShakeValue() => Main.rand.NextVector2Circular(6f * shakeFactor, 6f * shakeFactor);
             Vector2 prevCenter = Projectile.Center;
             Projectile.Center += getShakeValue();
 
