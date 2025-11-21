@@ -1,4 +1,8 @@
-DamageClasses.DruidClass.DisplayName: природный урон
+DamageClasses: {
+	DruidClass.DisplayName: природный урон
+	DruidClass_Claws.DisplayName: природный урон
+}
+
 NoNeededLargeGem: Вам необходим большой самоцвет, чтобы воспользоваться маяком
 TooFar: Вы слишком далеко от маяка, чтобы переместиться
 WreathUI: Слот венка

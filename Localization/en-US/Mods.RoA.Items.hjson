@@ -521,7 +521,7 @@ LivingElderwoodBreastplate: {
 	Tooltip:
 		'''
 		Increased nature damage knockback
-		When wreath is charged, increases defense by 4
+		When wreath is charged, increases claw speed by 10%
 		'''
 }
 

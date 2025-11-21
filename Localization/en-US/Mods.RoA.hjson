@@ -1,4 +1,8 @@
-DamageClasses.DruidClass.DisplayName: nature damage
+DamageClasses: {
+	DruidClass.DisplayName: nature damage
+	DruidClass_Claws.DisplayName: nature damage
+}
+
 NoNeededLargeGem: You must have a large gem to teleport to the Beacon
 TooFar: You are not close enough to the Beacon to teleport
 WreathUI: Wreath Slot

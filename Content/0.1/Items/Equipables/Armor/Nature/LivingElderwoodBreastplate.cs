@@ -31,7 +31,7 @@ sealed class LivingElderwoodBreastplate : NatureItem {
 
     public override void UpdateEquip(Player player) {
         if (player.GetWreathHandler().IsFull1) {
-            player.statDefense += 4;
+            player.GetAttackSpeed(DruidClass_Claws.Nature) += 0.1f;
         }
 		
 		player.GetKnockback(DruidClass.Nature) += 0.5f;

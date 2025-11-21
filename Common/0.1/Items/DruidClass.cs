@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.Items;
 
 class DruidClass_Claws : DruidClass {
-    public static DruidClass_Claws Nature_Claws => ModContent.GetInstance<DruidClass_Claws>();
+    public static new DruidClass_Claws Nature => ModContent.GetInstance<DruidClass_Claws>();
 
     public override StatInheritanceData GetModifierInheritance(DamageClass damageClass) {
         if (damageClass == Melee)

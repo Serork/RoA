@@ -1,4 +1,5 @@
-﻿using RoA.Content;
+﻿using RoA.Common.Items;
+using RoA.Content;
 using RoA.Core.Utility;
 
 using Terraria;
