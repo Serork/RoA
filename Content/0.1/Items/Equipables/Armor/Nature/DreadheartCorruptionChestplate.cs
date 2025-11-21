@@ -29,7 +29,7 @@ sealed class DreadheartCorruptionChestplate : NatureItem {
 
     public override void UpdateEquip(Player player) {
         player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.08f;
-        //player.GetKnockback(DruidClass.Nature) += 0.5f;
-		player.GetAttackSpeed(DruidClass.Nature) += 0.07f;
+        player.GetKnockback(DruidClass.Nature) += 0.5f;
+		//player.GetAttackSpeed(DruidClass.Nature) += 0.07f;
     }
 }

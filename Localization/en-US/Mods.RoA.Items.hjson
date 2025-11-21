@@ -540,7 +540,7 @@ DreadheartCorruptionChestplate: {
 	Tooltip:
 		'''
 		8% increased nature potential damage
-		7% increased nature attack speed
+		Increases nature knockback
 		'''
 }
 
@@ -559,7 +559,7 @@ DreadheartCrimsonChestplate: {
 	Tooltip:
 		'''
 		8% increased nature potential damage
-		7% increased nature attack speed
+		Increases nature knockback
 		'''
 }
 

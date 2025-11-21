@@ -12,6 +12,7 @@ sealed partial class DruidStats : ModPlayer {
     private float _dischargeTimeDecreaseMultiplier = 1f;
     private float _druidPotentialUseTimeMultiplier = 1f;
     private int _druidBaseDamage = 0, _druidPotentialDamage = 0;
+    private float _clawsAttacKSpeedModifier;
 
     public bool IsDruidsEyesEffectActive;
 
@@ -64,6 +65,13 @@ sealed partial class DruidStats : ModPlayer {
         }
     }
 
+    public float ClawsAttacKSpeedModifier {
+        get => _clawsAttacKSpeedModifier;
+        set {
+            _clawsAttacKSpeedModifier = MathHelper.Clamp(value, 0f, 2f);
+        }
+    }
+
     public bool SoulOfTheWoods { get; set; }
 
     public override void ResetEffects() {
@@ -71,6 +79,7 @@ sealed partial class DruidStats : ModPlayer {
         WreathChargeRateMultiplier = 1f;
         DischargeTimeDecreaseMultiplier = 1f;
         DruidPotentialUseTimeMultiplier = 1f;
+        ClawsAttacKSpeedModifier = 1f;
 
         KeepBonusesForTime = 0f;
 
