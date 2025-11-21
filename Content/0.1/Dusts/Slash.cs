@@ -10,8 +10,14 @@ sealed class Slash : ModDust {
         Color color = dust.color;
         color.A = 50;
 
-        bool flag = dust.customData is float v && v == 1f;
-        if (!flag) {
+        if (dust.customData is float v) {
+            if (v < 1f) {
+                Point pos = dust.position.ToTileCoordinates();
+                float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y) + v, 0.1f, 1f);
+                color *= brightness;
+            }
+        }
+        else {
             Point pos = dust.position.ToTileCoordinates();
             float brightness = MathHelper.Clamp(Lighting.Brightness(pos.X, pos.Y), 0.1f, 1f);
             color *= brightness;
