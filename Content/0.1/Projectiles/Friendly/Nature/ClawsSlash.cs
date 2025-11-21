@@ -18,6 +18,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Media;
 

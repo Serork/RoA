@@ -15,9 +15,11 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -80,6 +82,18 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
     public sealed class TerraClawsSlash : ClawsSlash {
         private static bool _spawnFracture;
 
+        protected override void SafeSetDefaults2() {
+            Projectile.hide = true;
+        }
+
+        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+            if (Projectile.localAI[2] > 0f) {
+                overPlayers.Add(index);
+                return;
+            }
+            behindProjectiles.Add(index);
+        }
+
         protected override void UpdateMainCycle() {
             base.UpdateMainCycle();
 
@@ -100,7 +114,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                 }
                 proj.localAI[2] += 0.75f;
                 if (proj.localAI[2] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.3f)) {
-                    Projectile.Kill();
+                    proj.localAI[0] += 3f;
+                    //Projectile.Kill();
                 }
             }
 
@@ -109,14 +124,22 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
 
                 if (Projectile.IsOwnerLocal()) {
                     Vector2 position = Utils .Floor(owner.MountedCenter) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitX * CollidingSize() * 1f * owner.direction;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, Vector2.Zero, ModContent.ProjectileType<TerraFracture>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    if (Main.netMode != NetmodeID.Server) {
+                        string tag = "Terra Claws";
+                        float strength = Main.rand.NextFloat(15f, 26f) / 3f * 0.175f * 0.75f;
+                        PunchCameraModifier punchCameraModifier = new PunchCameraModifier(position, MathHelper.TwoPi.ToRotationVector2(), strength, 10f, 20, 1000f, tag);
+                        Main.instance.CameraModifiers.Add(punchCameraModifier);
+                    }
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, Vector2.Zero, ModContent.ProjectileType<TerraFracture>(), 
+                        Projectile.damage * 5, Projectile.knockBack * 2.5f, Projectile.owner,
+                        ai2: MathF.Min(Projectile.scale * 0.55f, 1.25f));
                 }
 
                 _spawnFracture = true;
             }
         }
 
-        protected override float StarOpacity() => Projectile.localAI[2] > 0f ? (1f - Utils.GetLerpValue(Projectile.localAI[0], Projectile.ai[1], Projectile.localAI[2], true)) : 1f;
+        protected override float StarOpacity() => Projectile.localAI[2] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.3f) ? 0f : Projectile.localAI[2] > 0f ? (1f - Utils.GetLerpValue(Projectile.localAI[0], Projectile.ai[1], Projectile.localAI[2], true)) : 1f;
 
         protected override bool OnSlashDustSpawn(float progress) {
             float max = Projectile.ai[1] + Projectile.ai[1] * 0.5f;
