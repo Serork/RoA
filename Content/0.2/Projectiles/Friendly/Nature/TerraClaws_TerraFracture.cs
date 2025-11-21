@@ -112,7 +112,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                 rotation2 += 0.35f;
             }
 
-            Projectile.Center -= Projectile.velocity * 40f;
+            Projectile.Center -= Projectile.velocity * 50f;
 
             _fractureParts.Clear();
 
