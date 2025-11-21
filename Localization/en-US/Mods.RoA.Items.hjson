@@ -520,7 +520,7 @@ LivingElderwoodBreastplate: {
 	DisplayName: Living Everwood Breastplate
 	Tooltip:
 		'''
-		When wreath is charged, increases claw speed by 15%
+		15% increased claw speed
 		'''
 }
 

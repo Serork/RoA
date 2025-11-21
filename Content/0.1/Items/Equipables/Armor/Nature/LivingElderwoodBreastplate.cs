@@ -30,7 +30,8 @@ sealed class LivingElderwoodBreastplate : NatureItem {
     }
 
     public override void UpdateEquip(Player player) {
-        if (player.GetWreathHandler().IsFull1) {
+        //if (player.GetWreathHandler().IsFull1) 
+        {
             player.GetDruidStats().ClawsAttackSpeedModifier += 0.15f;
         }
 		
