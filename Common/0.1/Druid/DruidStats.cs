@@ -65,7 +65,7 @@ sealed partial class DruidStats : ModPlayer {
         }
     }
 
-    public float ClawsAttackSpeedModifier {
+    public float ClawsAttacKSpeedModifier {
         get => _clawsAttacKSpeedModifier;
         set {
             _clawsAttacKSpeedModifier = MathHelper.Clamp(value, 0f, 2f);
@@ -79,7 +79,7 @@ sealed partial class DruidStats : ModPlayer {
         WreathChargeRateMultiplier = 1f;
         DischargeTimeDecreaseMultiplier = 1f;
         DruidPotentialUseTimeMultiplier = 1f;
-        ClawsAttackSpeedModifier = 1f;
+        ClawsAttacKSpeedModifier = 1f;
 
         KeepBonusesForTime = 0f;
 

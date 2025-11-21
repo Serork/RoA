@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.Items;
-using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -27,5 +26,5 @@ sealed class LivingMahoganyGreaves : NatureItem {
         Item.defense = 2;
     }
 
-    public override void UpdateEquip(Player player) => player.GetDruidStats().ClawsAttackSpeedModifier += 0.04f; //player.GetCritChance(DruidClass.Nature_Claws) += 3;
+    public override void UpdateEquip(Player player) => player.GetAttackSpeed(DruidClass_Claws.Nature) += 0.04f; //player.GetCritChance(DruidClass.Nature) += 3;
 }

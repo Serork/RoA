@@ -23,7 +23,7 @@ sealed class SnowWreathTier2 : WreathItem {
         //float value = 0.1f * handler.ActualProgress4;
         //player.endurance += value;
         //if (handler.IsFull1) {
-        //    player.GetCritChance(DruidClass.Nature_Claws) += 8;
+        //    player.GetCritChance(DruidClass.Nature) += 8;
         //}
 
         DruidStats.ApplyUpTo5ReducedDamageTaken(player);

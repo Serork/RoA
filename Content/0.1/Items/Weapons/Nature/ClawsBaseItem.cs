@@ -2,7 +2,6 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
-using RoA.Common.Items;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -162,8 +161,6 @@ abstract class ClawsBaseItem : NatureItem {
         }
 
         ushort attackTime = NatureWeaponHandler.GetUseSpeedForClaws(Item, player);
-        Main.NewText(attackTime);
-
         ClawsHandler.ClawsAttackType clawsAttackType = player.GetClawsHandler().AttackType;
         switch (clawsAttackType) {
             case ClawsHandler.ClawsAttackType.Back:

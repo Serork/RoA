@@ -17,7 +17,7 @@ sealed class NaturesHeart : ModItem {
     public override Color? GetAlpha(Color lightColor) => lightColor;
 
     public override void SetStaticDefaults() {
-        //DisplayName.SetDefault("Nature_Claws's Heart");
+        //DisplayName.SetDefault("Nature's Heart");
         //Tooltip.SetDefault("'Seems like is was a source of life for higher beings...'");
         Main.RegisterItemAnimation(Type, new DrawAnimationVertical(10, 6));
         ItemID.Sets.AnimatesAsSoul[Type] = true;
