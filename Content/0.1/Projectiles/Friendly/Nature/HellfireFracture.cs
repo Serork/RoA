@@ -130,35 +130,33 @@ sealed class HellfireFracture : NatureProjectile {
         }
         BlendState multiplyBlendState = _multiplyBlendState;
 
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Deferred, multiplyBlendState, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-        for (int i = 0; i < 4; i++) {
-            Vector2 extraPosition = Vector2.Zero;
-            float offset = 2f;
-            switch (i) {
-                case 0:
-                    extraPosition.X += offset;
-                    break;
-                case 1:
-                    extraPosition.X -= offset;
-                    break;
-                case 20:
-                    extraPosition.Y += offset;
-                    break;
-                case 3:
-                    extraPosition.Y -= offset;
-                    break;
+        Color color = lightColor;
+        spriteBatch.DrawWithSnapshot(() => {
+            for (int i = 0; i < 4; i++) {
+                Vector2 extraPosition = Vector2.Zero;
+                float offset = 2f;
+                switch (i) {
+                    case 0:
+                        extraPosition.X += offset;
+                        break;
+                    case 1:
+                        extraPosition.X -= offset;
+                        break;
+                    case 20:
+                        extraPosition.Y += offset;
+                        break;
+                    case 3:
+                        extraPosition.Y -= offset;
+                        break;
+                }
+                extraPosition *= Helper.Wave(-1f * Main.rand.NextFloat(), 1f * Main.rand.NextFloat(), 10f * Main.rand.NextFloat(), Projectile.whoAmI + i * 10);
+                DrawSlash((num13 / 2f * 0.3f + 0.85f), Color.Lerp(color, Color.DarkOrange, 0.75f), extraPosition);
             }
-            extraPosition *= Helper.Wave(-1f * Main.rand.NextFloat(), 1f * Main.rand.NextFloat(), 10f * Main.rand.NextFloat(), Projectile.whoAmI + i * 10);
-            DrawSlash((num13 / 2f * 0.3f + 0.85f), Color.Lerp(lightColor, Color.DarkOrange, 0.75f), extraPosition);
-        }
-        //for (float num14 = -4f; num14 < 4f; num14 += 1f) {
-        //    DrawSlash((num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);
-        //}
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Deferred, multiplyBlendState, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-        DrawSlash(num13 / 2f * 0.3f + 0.85f, Color.Lerp(lightColor, Color.DarkOrange, 0.75f) * 0.25f, Vector2.Zero, 3f);
-        spriteBatch.EndBlendState();
+            //for (float num14 = -4f; num14 < 4f; num14 += 1f) {
+            //    DrawSlash((num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);
+            //}
+            DrawSlash(num13 / 2f * 0.3f + 0.85f, Color.Lerp(color, Color.DarkOrange, 0.75f) * 0.25f, Vector2.Zero, 3f);
+        }, blendState: multiplyBlendState, samplerState: SamplerState.LinearClamp);
 
         return base.PreDraw(ref lightColor);
     }
