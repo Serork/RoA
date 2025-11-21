@@ -184,7 +184,7 @@ class ClawsSlash : NatureProjectile {
 
     public override void CutTiles() {
         DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-        float coneLength = (55f + (OffsetX1 + OffsetX2) / 2f) * Projectile.scale;
+        float coneLength = CollidingSize2();
         SetCollisionScale(ref coneLength);
         if (Projectile.localAI[0] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.2f)) {
             return;
@@ -194,8 +194,11 @@ class ClawsSlash : NatureProjectile {
 
     public override bool? CanCutTiles() => CanFunction;
 
+    protected float CollidingSize() => (75f + (OffsetX1 + OffsetX2) / 2f) * Projectile.scale;
+    protected float CollidingSize2() => (55f + (OffsetX1 + OffsetX2) / 2f) * Projectile.scale;
+
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        float coneLength = (75f + (OffsetX1 + OffsetX2) / 2f) * Projectile.scale;
+        float coneLength = CollidingSize();
         SetCollisionScale(ref coneLength);
         float num1 = 0.5105088f * Projectile.ai[0];
         float maximumAngle = (float)Math.PI / 4f;
@@ -218,6 +221,8 @@ class ClawsSlash : NatureProjectile {
         return false;
     }
 
+    protected float GravDir() => Projectile.GetOwnerAsPlayer().gravDir * -(Projectile.ai[2] < 0f).ToDirectionInt();
+
     protected void DrawItself(ref Color lightColor) {
         float rot = GetRotation();
         Color baseLightColor = lightColor;
@@ -233,7 +238,7 @@ class ClawsSlash : NatureProjectile {
         float scale = Projectile.scale * 1.1f;
         SpriteEffects effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
         Player player = Projectile.GetOwnerAsPlayer();
-        if (player.gravDir < 0) {
+        if (GravDir() < 0) {
             effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
         }
         float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
@@ -344,8 +349,8 @@ class ClawsSlash : NatureProjectile {
             color4.G = (byte)(color4.G * (double)num4);
             color4.B = (byte)(color4.R * (0.25 + (double)num4 * 0.75));
 
-            float to = (float)Math.PI / 4f * player.gravDir;
-            if (player.gravDir < 0) {
+            float to = (float)Math.PI / 4f * GravDir();
+            if (GravDir() < 0) {
                 rot -= MathHelper.PiOver2 * 0.75f * -Projectile.direction;
             }
             Vector2 drawpos2 = position + (rot + Utils.Remap(num2, 0f, 1f, 0f, to) * Projectile.ai[0] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
@@ -359,7 +364,7 @@ class ClawsSlash : NatureProjectile {
     protected float GetRotation() {
         float rot = Projectile.rotation;
         Player player = Projectile.GetOwnerAsPlayer();
-        if (player.gravDir < 0) {
+        if (GravDir() < 0) {
             rot = MathHelper.TwoPi - MathHelper.WrapAngle(rot);
         }
         return rot;
@@ -403,7 +408,7 @@ class ClawsSlash : NatureProjectile {
                     Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
                     if (position.Distance(player.Center) >= 10f/*45f*/) {
                         int type = ModContent.DustType<Slash>();
-                        Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(color1, color2, Main.rand.NextFloat(0.5f, 1f) * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
+                        Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * GravDir()), 0, Color.Lerp(color1, color2, Main.rand.NextFloat(0.5f, 1f) * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
                         dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                         dust.noLight = dust.noLightEmittence = !selectedClaws.HasLighting;
                         dust.scale *= Projectile.scale;
@@ -508,12 +513,12 @@ class ClawsSlash : NatureProjectile {
 
         if (CanFunction) {
             for (float i = -MathHelper.PiOver4; i <= MathHelper.PiOver4; i += MathHelper.PiOver2) {
-                Vector2 position = Projectile.Center + (Projectile.rotation * player.gravDir + i).ToRotationVector2() * 60f * Projectile.scale;
+                Vector2 position = Projectile.Center + (Projectile.rotation * GravDir() + i).ToRotationVector2() * 60f * Projectile.scale;
                 if (hasLighting) {
                     Lighting.AddLight(position, GetLightingColor().ToVector3() * 0.75f * light2);
                 }
-                float size = 55f + (OffsetX1 + OffsetX2) / 2f;
-                Rectangle rectangle = Utils.CenteredRectangle(position, new Vector2(size * Projectile.scale, size * Projectile.scale));
+                float size = CollidingSize2();
+                Rectangle rectangle = Utils.CenteredRectangle(position, new Vector2(size, size));
                 Projectile.EmitEnchantmentVisualsAtForNonMelee(rectangle.TopLeft(), rectangle.Width, rectangle.Height, melee: false);
             }
         }

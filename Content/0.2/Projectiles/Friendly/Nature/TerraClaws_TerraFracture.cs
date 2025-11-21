@@ -65,11 +65,6 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override void AI() {
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.025f);
         Projectile.Opacity = Ease.CircOut(Projectile.Opacity);
-        Projectile.Opacity *= Utils.GetLerpValue(0, 3, Projectile.timeLeft, true);
-
-        if (Projectile.timeLeft <= 30) {
-            Projectile.timeLeft = TIMELEFT;
-        }
 
         Player owner = Projectile.GetOwnerAsPlayer();
 
@@ -85,7 +80,6 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.ai[0] = 0f;
         }
 
-        Projectile.Center = Utils.Floor(owner.MountedCenter) + Vector2.UnitY * owner.gfxOffY;
 
         if (!Init) {
             Init = true;
@@ -169,7 +163,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
                 Vector2 position = Projectile.Center + fracturePart.StartPosition * Projectile.Opacity - Main.screenPosition;
                 float rotation = fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2;
-                float opacity2 = Projectile.Opacity * fracturePart.Scale * opacity;
+                float opacity2 = Projectile.Opacity * fracturePart.Scale * opacity * Utils.GetLerpValue(0, 10, Projectile.timeLeft, true);
                 Vector2 scale = new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale);
 
                 Color baseColor = Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f);

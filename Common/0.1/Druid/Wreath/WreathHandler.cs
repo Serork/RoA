@@ -385,7 +385,7 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    public bool ShouldClawsReset() => IsActualFull6 && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn);
+    public bool ShouldClawsReset(bool skipCondition = false) => IsActualFull6 && (!skipCondition || SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn);
 
     internal void TryToClawsReset(Item item, bool nonDataReset) {
         Item selectedItem = item;
@@ -393,27 +393,31 @@ sealed class WreathHandler : ModPlayer {
         if (playerUsingClaws && Player.ItemAnimationActive) {
             if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {
                 if (SpecialAttackData.Owner == selectedItem && (ShouldClawsReset() || nonDataReset)) {
-                    if (!SpecialAttackData.OnlySpawn || nonDataReset) {
-                        ForcedHardReset();
-                    }
-
-                    if (!nonDataReset) {
-                        SpecialAttackData.OnSpawn?.Invoke();
-
-                        if (SpecialAttackData.ShouldSpawn) {
-                            if (SpecialAttackData.SpawnProjectile != null) {
-                                SpecialAttackData.SpawnProjectile.Invoke();
-                            }
-                            else if (Player.whoAmI == Main.myPlayer) {
-                                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition ?? Player.Center, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
-                            }
-
-                            SpecialAttackData.OnAttack?.Invoke();
-
-                            SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
-                        }
-                    }
+                    ClawsReset(selectedItem, nonDataReset);
                 }
+            }
+        }
+    }
+
+    internal void ClawsReset(Item selectedItem, bool nonDataReset = false) {
+        if (!SpecialAttackData.OnlySpawn || nonDataReset) {
+            ForcedHardReset();
+        }
+
+        if (!nonDataReset) {
+            SpecialAttackData.OnSpawn?.Invoke();
+
+            if (SpecialAttackData.ShouldSpawn) {
+                if (SpecialAttackData.SpawnProjectile != null) {
+                    SpecialAttackData.SpawnProjectile.Invoke();
+                }
+                else if (Player.whoAmI == Main.myPlayer) {
+                    Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition ?? Player.Center, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
+                }
+
+                SpecialAttackData.OnAttack?.Invoke();
+
+                SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
             }
         }
     }
@@ -426,26 +430,7 @@ sealed class WreathHandler : ModPlayer {
             selectedItem.As<ClawsBaseItem>().OnHit(Player, Progress);
             if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
-                    if (!SpecialAttackData.OnlySpawn || nonDataReset) {
-                        ForcedHardReset();
-                    }
-
-                    if (!nonDataReset) {
-                        SpecialAttackData.OnSpawn?.Invoke();
-
-                        if (SpecialAttackData.ShouldSpawn) {
-                            if (SpecialAttackData.SpawnProjectile != null) {
-                                SpecialAttackData.SpawnProjectile.Invoke();
-                            }
-                            else if (Player.whoAmI == Main.myPlayer) {
-                                Projectile.NewProjectile(Player.GetSource_ItemUse(selectedItem), SpecialAttackData.SpawnPosition ?? Player.Center, SpecialAttackData.StartVelocity, SpecialAttackData.ProjectileTypeToSpawn, Player.GetWeaponDamage(selectedItem), Player.GetWeaponKnockback(selectedItem), Player.whoAmI);
-                            }
-
-                            SpecialAttackData.OnAttack?.Invoke();
-
-                            SoundEngine.PlaySound(SpecialAttackData.PlaySoundStyle, SpecialAttackData.SpawnPosition);
-                        }
-                    }
+                    ClawsReset(selectedItem, nonDataReset);
                 }
             }
         }

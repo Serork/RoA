@@ -12,6 +12,7 @@ using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -58,7 +59,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
 
     public override void SafeOnUse(Player player, ClawsHandler clawsStats) {
         clawsStats.SetSpecialAttackData<TerraFracture>(new ClawsHandler.AttackSpawnInfoArgs() {
-            Owner = Item
+            ShouldReset = false,
+            ShouldSpawn = false
         });
     }
 
@@ -68,11 +70,15 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
     protected override void SpawnClawsSlash(Player player, Vector2 position, int type, int damage, float knockback, int attackTime) {
         Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), SpawnClawsProjectileType(player) ?? type, damage, knockback, player.whoAmI,
             player.direction, attackTime);
-        //Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), SpawnClawsProjectileType(player) ?? type, damage, knockback, player.whoAmI,
-        //    player.direction, attackTime, ai2: 30f);
+        if (player.GetWreathHandler().ShouldClawsReset(true)) {
+            Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), SpawnClawsProjectileType(player) ?? type, damage, knockback, player.whoAmI,
+                player.direction, attackTime, ai2: -1f);
+        }
     }
 
     public sealed class TerraClawsSlash : ClawsSlash {
+        private bool _spawnFracture;
+
         protected override void UpdateMainCycle() {
             base.UpdateMainCycle();
 
@@ -80,6 +86,18 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             float num2 = proj.localAI[0] / proj.ai[1];
             _firstSlashColor = Color.Lerp(new Color(45, 124, 205), new Color(47, 239, 102), num2).ModifyRGB(1f);
             _secondSlashColor = new Color(181, 230, 29).ModifyRGB(1f);
+
+            Player owner = Projectile.GetOwnerAsPlayer();
+            if (owner.GetWreathHandler().ShouldClawsReset() && proj.ai[2] < 0f && !_spawnFracture && num2 >= 0.75f) {
+                owner.GetWreathHandler().ClawsReset(AttachedNatureWeapon);
+
+                if (Projectile.IsOwnerLocal()) {
+                    Vector2 position = Utils .Floor(owner.MountedCenter) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitX * CollidingSize() * 0.7f * owner.direction;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, Vector2.Zero, ModContent.ProjectileType<TerraFracture>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                }
+
+                _spawnFracture = true;
+            }
         }
 
         protected override bool OnSlashDustSpawn(float progress) {
@@ -117,7 +135,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                     int type = 278;
                     Color value = new(64, 220, 96);
                     Color value2 = new(15, 84, 125);
-                    Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 125, Color.Lerp(value, value2, Main.rand.NextFloat()), Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
+                    Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * GravDir()), 125, Color.Lerp(value, value2, Main.rand.NextFloat()), Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
                     dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                     dust.scale *= 0.35f * startProgress;
                     dust.scale *= Projectile.scale;
@@ -182,7 +200,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                             Vector2 position = Projectile.Center + (f - offset).ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 20.0 * Projectile.scale);
                             if (position.Distance(player.Center) >= 10f/*45f*/) {
                                 int type = ModContent.DustType<Slash>();
-                                Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * player.gravDir), 0, Color.Lerp(color1, color2, Main.rand.NextFloat(0.5f, 1f) * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
+                                Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * GravDir()), 0, Color.Lerp(color1, color2, Main.rand.NextFloat(0.5f, 1f) * 0.3f) * 2f, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
                                 dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
                                 dust.noLight = dust.noLightEmittence = !selectedClaws.HasLighting;
                                 dust.scale *= Projectile.scale;
@@ -211,7 +229,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             float num = proj.scale * 1.1f;
             bool flip = !(proj.ai[0] >= 0f);
             SpriteEffects effects = flip ? SpriteEffects.FlipVertically : SpriteEffects.None;
-            if (Owner.gravDir < 0) {
+            if (GravDir() < 0) {
                 effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
             }
             float num2 = proj.localAI[0] / proj.ai[1];
