@@ -149,18 +149,12 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
                 for (int k = 0; k < 2; k++) {
                     for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
                         float progress = i / MathHelper.PiOver2;
-                        Color baseColor = Color.Lerp(FirstSlashColor!.Value with { A = 150 }, SecondSlashColor!.Value with { A = 150 }, Helper.Wave(0f, 1f, 20f, Projectile.whoAmI + 3 * i));
+                        Color baseColor = Color.Lerp(FirstSlashColor!.Value with { A = 150 }, SecondSlashColor!.Value with { A = 150 }, Helper.Wave(0f, 1f, 20f, Projectile.whoAmI + 3 * i))
+                            .ModifyRGB(0.75f);
+                        float rotation = Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation;
                         spriteBatch.Draw(asset.Value, vector, rectangle,
-                            baseColor * 0.375f * fromValue * num3 * 0.3f * 1f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
+                            baseColor * 0.375f * fromValue * num3 * 0.3f * 1f * Opacity * progress * 1f, rotation, origin,
                             num * 0.8f * 1f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
-                    }
-
-                    for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
-                        float progress = i / MathHelper.PiOver2;
-                        Color baseColor = Color.Lerp(FirstSlashColor!.Value with { A = 150 }, SecondSlashColor!.Value with { A = 150 }, Helper.Wave(0f, 1f, 20f, Projectile.whoAmI + 3 * i));
-                        spriteBatch.Draw(asset.Value, vector, rectangle,
-                            baseColor * 0.375f * fromValue * num3 * 0.3f * 0.75f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
-                            num * 0.8f * 0.5f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
                     }
                 }
             }
@@ -170,16 +164,22 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             if (charged) {
                 spriteBatch.DrawWithSnapshot(() => {
                     for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
-                        spriteBatch.Draw(asset.Value, vector, rectangle, GetLightingColor() * fromValue * num3 * 0.3f * Opacity * 1f, rot + i * Projectile.direction + offsetRotation, origin, num * 0.8f, effects, 0f);
+                        spriteBatch.Draw(asset.Value, vector, rectangle, GetLightingColor() * fromValue * num3 * 0.3f * Opacity * 1f * 0.5f, rot + i * Projectile.direction + offsetRotation, origin, num * 0.8f, effects, 0f);
                     }
                 }, blendState: BlendState.Additive);
             }
 
             if (charged) {
+                float dir = Projectile.ai[0] * GravDir();
+                Color baseColor = Color.Lerp(FirstSlashColor!.Value with { A = 150 }, SecondSlashColor!.Value with { A = 150 }, Helper.Wave(0f, 1f, 20f, Projectile.whoAmI));
+                baseColor = Color.Lerp(baseColor, Color.White, 0.25f);
+                baseColor *= fromValue * num3 * 0.75f;
+                spriteBatch.Draw(asset.Value, vector, new Rectangle?(asset.Frame(verticalFrames: 4, frameY: 3)), baseColor * 0.65f * num2, rot, origin, num * 0.8f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0.0f);
+
                 if (player.gravDir < 0) {
                     rot -= MathHelper.PiOver4 * 0.3725f * Projectile.direction;
                 }
-                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 2f) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f) * num * 1f;
+                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 2f) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f) * num * 0.975f;
                 DrawPrettyStarSparkle(proj.Opacity, SpriteEffects.None, drawpos, GetLightingColor() with { A = 0 } * num3 * 0.5f, color2, num2, 0f, 0.5f, 0.5f, 1f, (float)Math.PI / 4f, new Vector2(2f, 2f), Vector2.One);
             }
 
