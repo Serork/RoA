@@ -157,7 +157,7 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
     }
 
     public Vector2 GetPos(float extraRot = 0f) {
-        float rot = GetRotation() + (float)(Projectile.ai[0] * extraRot);
+        float rot = GetRotation() + (float)(Projectile.ai[0] * (extraRot + MathHelper.PiOver4 * 0.25f));
         float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float offset = Owner.gravDir == 1 ? 0f : (-MathHelper.PiOver4 * num1);
@@ -167,7 +167,7 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        for (int index = 0; index < 8; index += 2) {
+        for (int index = 0; index < 4; index += 2) {
             DrawItself(ref lightColor/*, oldRot[index]*/);
         }
         Texture2D value = TextureAssets.Extra[98].Value;
@@ -202,7 +202,7 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
     protected override void UpdateMainCycle() {
         if (!Hit) {
             Projectile.localAI[0] += 1f;
-            Update((MathHelper.PiOver2 / 2f + MathHelper.PiOver4 * 0.5f) * Projectile.ai[0]);
+            Update((MathHelper.PiOver2 / 2f + MathHelper.PiOver4 * 0.25f) * Projectile.ai[0]);
             UpdateOldInfo();
         }
     }
@@ -226,6 +226,9 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
             //    int index2 = Math.Max(0, index - 2);
             //if (OldUseItemRot[index2] != 0f) {
             for (int i = 0; i < 2; i++) {
+                if (Main.rand.NextBool()) {
+                    continue;
+                }
                 float spriteWidth = 15, spriteHeight = spriteWidth;
                 float num = (float)Math.Sqrt(spriteWidth * spriteWidth + spriteHeight * spriteHeight);
                 float normalizedPointOnPath = 0.2f + 0.8f * Main.rand.NextFloat();
