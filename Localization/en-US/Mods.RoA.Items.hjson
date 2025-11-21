@@ -518,10 +518,7 @@ ElathaAmulet: {
 
 LivingElderwoodBreastplate: {
 	DisplayName: Living Everwood Breastplate
-	Tooltip:
-		'''
-		Increases claw speed by 15%
-		'''
+	Tooltip: Increases claw speed by 15%
 }
 
 LivingElderwoodCrown: {

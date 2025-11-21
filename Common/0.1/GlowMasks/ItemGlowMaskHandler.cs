@@ -483,7 +483,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     }
 
     private class BodyGlowMaskHandler : PlayerDrawLayer {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.ArmOverItem);
+        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Torso);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
             if (drawInfo.hideEntirePlayer) {

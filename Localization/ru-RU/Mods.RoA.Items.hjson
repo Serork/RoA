@@ -534,10 +534,7 @@ ElathaAmulet: {
 
 LivingElderwoodBreastplate: {
 	DisplayName: Живой чащобный нагрудник
-	Tooltip:
-		'''
-		Увеличивает скорость атаки когтями на 15%
-		'''
+	Tooltip: Увеличивает скорость атаки когтями на 15%
 }
 
 LivingElderwoodCrown: {

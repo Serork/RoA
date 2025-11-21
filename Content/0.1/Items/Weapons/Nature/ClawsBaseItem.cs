@@ -2,6 +2,7 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
+using RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -78,8 +79,17 @@ abstract class ClawsBaseItem : NatureItem {
                 front = back = true;
                 break;
         }
-        player.SetCompositeArmFront(enabled: true, compositeArmStretchAmount, !front ? 0f : rotation);
-        player.SetCompositeArmBack(enabled: true, compositeArmStretchAmount, !back ? 0f : rotation);
+
+        float frontRotation = rotation,
+              backRotation = rotation;
+        if (player.ownedProjectileCounts[ModContent.ProjectileType<TerraClaws.TerraClawsSlash>()] > 1) {
+            front = true;
+            back = true;
+            backRotation = MathHelper.Pi - backRotation + -MathHelper.PiOver4 * player.direction;
+        }
+
+        player.SetCompositeArmFront(enabled: true, compositeArmStretchAmount, !front ? 0f : frontRotation);
+        player.SetCompositeArmBack(enabled: true, compositeArmStretchAmount, !back ? 0f : backRotation);
     }
 
     protected virtual void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) { }
