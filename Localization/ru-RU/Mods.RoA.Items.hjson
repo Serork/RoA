@@ -495,7 +495,7 @@ LivingMahoganyGreaves: {
 
 LivingMahoganyHelmet: {
 	DisplayName: Живой джунглевый шлем
-	Tooltip: Увеличивает скорость атаки природой на 4%
+	Tooltip: Увеличивает скорость атаки когтями на 4%
 }
 
 EbonwoodStaff: {
