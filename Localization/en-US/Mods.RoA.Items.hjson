@@ -474,12 +474,12 @@ LivingMahoganyChestplate: {
 
 LivingMahoganyGreaves: {
 	DisplayName: Living Mahogany Greaves
-	Tooltip: 4% increased claw speed
+	Tooltip: 3% increased nature critical strike chance
 }
 
 LivingMahoganyHelmet: {
 	DisplayName: Living Mahogany Helmet
-	Tooltip: 4% increased claw speed
+	Tooltip: 3% increased nature critical strike chance
 }
 
 EbonwoodStaff: {
@@ -521,7 +521,7 @@ LivingElderwoodBreastplate: {
 	Tooltip:
 		'''
 		Increased nature damage knockback
-		When wreath is charged, increases claw speed by 10%
+		When wreath is charged, increases claw speed by 15%
 		'''
 }
 
