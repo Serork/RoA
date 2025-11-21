@@ -282,7 +282,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             }
 
             spriteBatch.DrawWithSnapshot(() => {
-                Rectangle rectangle2 = rectangle with { Y = rectangle.Y - 6 };
+                Rectangle rectangle2 = rectangle with { Y = rectangle.Y - 8 };
                 Vector2 origin2 = origin;
                 for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
                     float rot2 = MathHelper.Lerp(MathHelper.Pi * 0.5f, MathHelper.Pi * 0f, num2) * Projectile.direction;
