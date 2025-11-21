@@ -148,7 +148,7 @@ sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdS
                     for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
                         float progress = i / MathHelper.PiOver2;
                         Color baseColor = Color.Lerp(FirstSlashColor!.Value with { A = 150 }, SecondSlashColor!.Value with { A = 150 }, Helper.Wave(0f, 1f, 20f, Projectile.whoAmI + 3 * i))
-                            .ModifyRGB(0.75f);
+                            .ModifyRGB(0.825f);
                         float rotation = Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation;
                         spriteBatch.Draw(asset.Value, vector, rectangle,
                             baseColor * 0.375f * fromValue * num3 * 0.3f * 1f * Opacity * progress * 1f, rotation, origin,
