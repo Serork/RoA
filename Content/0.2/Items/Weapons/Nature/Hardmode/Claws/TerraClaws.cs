@@ -70,6 +70,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
     protected override void SpawnClawsSlash(Player player, Vector2 position, int type, int damage, float knockback, int attackTime) {
         Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), SpawnClawsProjectileType(player) ?? type, damage, knockback, player.whoAmI,
             player.direction, attackTime);
+
         if (player.GetWreathHandler().ShouldClawsReset(true)) {
             Projectile.NewProjectile(player.GetSource_ItemUse(Item), position, new Vector2(player.direction, 0f), SpawnClawsProjectileType(player) ?? type, damage, knockback, player.whoAmI,
                 player.direction, attackTime, ai2: -1f);
@@ -88,7 +89,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             _secondSlashColor = new Color(181, 230, 29).ModifyRGB(1f);
 
             Player owner = Projectile.GetOwnerAsPlayer();
-            if (owner.GetWreathHandler().ShouldClawsReset() && proj.ai[2] < 0f && !_spawnFracture && num2 >= 0.75f) {
+            if (owner.GetWreathHandler().ShouldClawsReset(true) && proj.ai[2] < 0f && !_spawnFracture && num2 >= 0.75f) {
                 owner.GetWreathHandler().ClawsReset(AttachedNatureWeapon);
 
                 if (Projectile.IsOwnerLocal()) {

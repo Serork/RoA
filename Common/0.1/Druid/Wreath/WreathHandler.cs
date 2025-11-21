@@ -385,7 +385,7 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    public bool ShouldClawsReset(bool skipCondition = false) => IsActualFull6 && (!skipCondition || SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn);
+    public bool ShouldClawsReset(bool skipCondition = false) => IsActualFull6 && (skipCondition || SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn);
 
     internal void TryToClawsReset(Item item, bool nonDataReset) {
         Item selectedItem = item;
