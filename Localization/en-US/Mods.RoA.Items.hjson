@@ -520,7 +520,6 @@ LivingElderwoodBreastplate: {
 	DisplayName: Living Everwood Breastplate
 	Tooltip:
 		'''
-		Increased nature damage knockback
 		When wreath is charged, increases claw speed by 15%
 		'''
 }

@@ -34,6 +34,6 @@ sealed class LivingElderwoodBreastplate : NatureItem {
             player.GetDruidStats().ClawsAttackSpeedModifier += 0.15f;
         }
 		
-		player.GetKnockback(DruidClass.Nature) += 0.5f;
+		//player.GetKnockback(DruidClass.Nature) += 0.5f;
     }
 }
