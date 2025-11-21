@@ -82,7 +82,7 @@ abstract class ClawsBaseItem : NatureItem {
 
         float frontRotation = rotation,
               backRotation = rotation;
-        if (player.ownedProjectileCounts[ModContent.ProjectileType<TerraClaws.TerraClawsSlash>()] > 1) {
+        if (player.ownedProjectileCounts[Item.shoot] > 1) {
             front = true;
             back = true;
             backRotation = MathHelper.Pi - backRotation + -MathHelper.PiOver4 * player.direction;
