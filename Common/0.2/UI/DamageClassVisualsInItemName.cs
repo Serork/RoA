@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common.Cache;
 using RoA.Common.Configs;
 using RoA.Common.InterfaceElements;
+using RoA.Common.Items;
 using RoA.Content;
 using RoA.Core;
 using RoA.Core.Graphics.Data;

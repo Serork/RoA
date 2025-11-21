@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Druid.Forms;
+using RoA.Common.Items;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Players;

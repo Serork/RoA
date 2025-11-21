@@ -2,6 +2,7 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Items;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;

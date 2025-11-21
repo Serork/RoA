@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
+using RoA.Common.Items;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;

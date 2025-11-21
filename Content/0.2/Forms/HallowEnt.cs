@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Items;
 using RoA.Common.Players;
 using RoA.Common.VisualEffects;
 using RoA.Content.Items.Equipables.Accessories;

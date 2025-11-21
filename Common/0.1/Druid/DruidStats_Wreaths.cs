@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Items;
 using RoA.Content;
 using RoA.Core.Utility;
 

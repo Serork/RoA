@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Druid;
+using RoA.Common.Items;
 using RoA.Core.Defaults;
 
 using Terraria;

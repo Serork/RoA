@@ -2,6 +2,7 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Items;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Utility.Vanilla;

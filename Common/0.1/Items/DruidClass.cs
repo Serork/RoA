@@ -10,9 +10,23 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content;
+namespace RoA.Common.Items;
 
-sealed class DruidClass : DamageClass {
+class DruidClass_Claws : DruidClass {
+    public static DruidClass_Claws Nature_Claws => ModContent.GetInstance<DruidClass_Claws>();
+
+    public override StatInheritanceData GetModifierInheritance(DamageClass damageClass) {
+        if (damageClass == Melee)
+            return new StatInheritanceData(attackSpeedInheritance: 1f);
+
+        if (damageClass == Generic || damageClass == DruidClass.Nature)
+            return StatInheritanceData.Full;
+
+        return StatInheritanceData.None;
+    }
+}
+
+class DruidClass : DamageClass {
     public override void Load() {
         On_WorldGen.GiveItemGoodPrefixes += On_WorldGen_GiveItemGoodPrefixes;
     }

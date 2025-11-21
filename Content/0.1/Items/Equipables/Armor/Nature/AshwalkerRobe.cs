@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
+using RoA.Common.Items;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;

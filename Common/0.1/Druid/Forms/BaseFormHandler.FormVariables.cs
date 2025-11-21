@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Items;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
-using RoA.Content;
 using RoA.Content.Forms;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
@@ -12,7 +12,6 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
-using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
