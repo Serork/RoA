@@ -27,14 +27,12 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     public enum TerraFractureRequstedTextureType : byte {
         Part,
         Part2,
-        Part3,
         Flash
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)TerraFractureRequstedTextureType.Part, ResourceManager.NatureProjectileTextures + "TerraFracturePart"),
          ((byte)TerraFractureRequstedTextureType.Part2, ResourceManager.NatureProjectileTextures + "TerraFracturePart2"),
-         ((byte)TerraFractureRequstedTextureType.Part3, ResourceManager.NatureProjectileTextures + "TerraFracturePart3"),
          ((byte)TerraFractureRequstedTextureType.Flash, ResourceManager.NatureProjectileTextures + "TerraFractureFlash")];
 
     public readonly record struct FracturePartInfo(Vector2 StartPosition, Vector2 EndPosition, Color Color, float Scale);
@@ -134,8 +132,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
 
         Texture2D texture = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part].Value,
-                  texture2 = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part2].Value,
-                  texture3 = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part3].Value;
+                  texture2 = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part2].Value;
         SpriteBatch batch = Main.spriteBatch;
         bool right = Projectile.ai[0] > 0;
         SpriteEffects effects = SpriteEffects.None;
@@ -155,10 +152,15 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 center = Projectile.Center;
             Projectile.Center = center + offset.Value + getShakeValue();
 
+            int index = 0;
             for (LinkedListNode<FracturePartInfo> node = _fractureParts.First!; node != null; node = node.Next!) {
                 var fracturePart = node.Value;
                 var nextFracturePart = (node.Next ?? node).Value;
-                SpriteFrame frame = new(2, 1, (byte)(!right).ToInt(), 0);
+                SpriteFrame frame = new(2, 3, (byte)(!right).ToInt(), (byte)index);
+                index++;
+                if (index > 2) {
+                    index = 0;
+                }
                 float length = fracturePart.StartPosition.Distance(fracturePart.EndPosition) * 0.1f;
                 Rectangle clip = frame.GetSourceRectangle(texture);
                 Vector2 origin = new(10, 2);
@@ -209,7 +211,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                     for (float i = 1f; i > 0f; i -= 0.25f) {
                         float colorWave = getColorWave(i);
                         Color color = Color.Lerp(Color.Lerp(baseColor, Color.Lerp(blue, green, Math.Max(0.25f, Ease.SineInOut(1f - colorWave))), colorWave), Color.Black, 0.5f);
-                        batch.Draw(texture3,
+                        batch.Draw(texture2,
                                    position,
                                    clip,
                                    color.MultiplyAlpha(alpha) * opacity2 * 0.9f,
