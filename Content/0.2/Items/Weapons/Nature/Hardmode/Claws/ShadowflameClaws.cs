@@ -124,6 +124,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             Projectile proj = Projectile;
             SpriteBatch spriteBatch = Main.spriteBatch;
             Vector2 vector = proj.Center - Main.screenPosition;
+            Main.instance.LoadProjectile(ProjectileID.NightsEdge);
             Asset<Texture2D> asset = TextureAssets.Projectile[ProjectileID.NightsEdge];
             Microsoft.Xna.Framework.Rectangle rectangle = asset.Frame(1, 4);
             Vector2 origin = rectangle.Size() / 2f;
@@ -134,8 +135,8 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             //float num4 = 0.975f;
             float fromValue = Lighting.GetColor(proj.Center.ToTileCoordinates()).ToVector3().Length() / (float)Math.Sqrt(3.0);
             fromValue = Utils.Remap(fromValue, 0.2f, 1f, 0f, 1f);
-            Microsoft.Xna.Framework.Color color = new Microsoft.Xna.Framework.Color(40, 20, 60);
-            Microsoft.Xna.Framework.Color color2 = new Microsoft.Xna.Framework.Color(80, 40, 180);
+            Microsoft.Xna.Framework.Color color = SecondSlashColor!.Value;
+            Microsoft.Xna.Framework.Color color2 = FirstSlashColor!.Value;
             Microsoft.Xna.Framework.Color color3 = Microsoft.Xna.Framework.Color.White * num3 * 0.5f;
             color3.A = (byte)((float)(int)color3.A * (1f - fromValue));
             Microsoft.Xna.Framework.Color color4 = color3 * fromValue * 0.5f;
@@ -145,20 +146,20 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             float offsetRotation = -MathHelper.PiOver2 * 0.75f * Projectile.direction;
             bool charged = Opacity > 0f;
             if (charged) {
-                Color baseColor = FirstSlashColor!.Value;
-                baseColor.A = 150;
                 for (int k = 0; k < 2; k++) {
                     for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
                         float progress = i / MathHelper.PiOver2;
+                        Color baseColor = Color.Lerp(FirstSlashColor!.Value with { A = 150 }, SecondSlashColor!.Value with { A = 150 }, Helper.Wave(0f, 1f, 20f, Projectile.whoAmI + 3 * i));
                         spriteBatch.Draw(asset.Value, vector, rectangle,
-                            baseColor * fromValue * num3 * 0.3f * 1f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
+                            baseColor * 0.375f * fromValue * num3 * 0.3f * 1f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
                             num * 0.8f * 1f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
                     }
 
                     for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
                         float progress = i / MathHelper.PiOver2;
+                        Color baseColor = Color.Lerp(FirstSlashColor!.Value with { A = 150 }, SecondSlashColor!.Value with { A = 150 }, Helper.Wave(0f, 1f, 20f, Projectile.whoAmI + 3 * i));
                         spriteBatch.Draw(asset.Value, vector, rectangle,
-                            baseColor * fromValue * num3 * 0.3f * 0.75f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
+                            baseColor * 0.375f * fromValue * num3 * 0.3f * 0.75f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
                             num * 0.8f * 0.5f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
                     }
                 }
@@ -178,7 +179,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
                 if (player.gravDir < 0) {
                     rot -= MathHelper.PiOver4 * 0.3725f * Projectile.direction;
                 }
-                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 2f) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f) * num;
+                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 2f) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f) * num * 1f;
                 DrawPrettyStarSparkle(proj.Opacity, SpriteEffects.None, drawpos, GetLightingColor() with { A = 0 } * num3 * 0.5f, color2, num2, 0f, 0.5f, 0.5f, 1f, (float)Math.PI / 4f, new Vector2(2f, 2f), Vector2.One);
             }
 

@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
@@ -8,7 +11,11 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
+using System;
+using System.Runtime.InteropServices;
+
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
@@ -53,6 +60,18 @@ sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdS
         => (new Color(97, 200, 225), new Color(98, 154, 179));
 
     public sealed class HiTechCattleProdSlash : ClawsSlash {
+        private bool Charged => (!CanFunction && Projectile.GetOwnerAsPlayer().GetWreathHandler().IsActualFull6) || Opacity == 1f;
+
+        public ref float Opacity => ref Projectile.localAI[1];
+
+        protected override void SetCollisionScale(ref float coneLength) {
+            if (!Charged) {
+                return;
+            }
+
+            coneLength *= 1.2f;
+        }
+
         protected override void SafeOnHitPlayer(Player target, Player.HurtInfo info) {
             //target.AddBuff(BuffID.Electrified, Main.rand.Next(60, 180) * 2);
         }
@@ -68,7 +87,7 @@ sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdS
                 return;
             }
 
-            if (!Projectile.GetOwnerAsPlayer().GetWreathHandler().IsActualFull6) {
+            if (!Charged) {
                 return;
             }
 
@@ -87,6 +106,81 @@ sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdS
                 Damage = Projectile.damage,
                 KnockBack = Projectile.knockBack
             });
+        }
+
+        public override void SafePostAI() {
+            if (Charged) {
+                Opacity = 1f;
+            }
+        }
+
+        public override bool PreDraw(ref Color lightColor) {
+            Player player = Projectile.GetOwnerAsPlayer();
+            float rot = GetRotation();
+
+            Projectile proj = Projectile;
+            SpriteBatch spriteBatch = Main.spriteBatch;
+            Vector2 vector = proj.Center - Main.screenPosition;
+            Main.instance.LoadProjectile(ProjectileID.NightsEdge);
+            Asset<Texture2D> asset = TextureAssets.Projectile[ProjectileID.NightsEdge];
+            Microsoft.Xna.Framework.Rectangle rectangle = asset.Frame(1, 4);
+            Vector2 origin = rectangle.Size() / 2f;
+            float num = proj.scale * 1.1f;
+            SpriteEffects effects = ((!(proj.ai[0] >= 0f)) ? SpriteEffects.FlipVertically : SpriteEffects.None);
+            float num2 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
+            float num3 = Utils.Remap(num2, 0f, 0.6f, 0f, 1f) * Utils.Remap(num2, 0.6f, 1f, 1f, 0f);
+            //float num4 = 0.975f;
+            float fromValue = Lighting.GetColor(proj.Center.ToTileCoordinates()).ToVector3().Length() / (float)Math.Sqrt(3.0);
+            fromValue = Utils.Remap(fromValue, 0.2f, 1f, 0f, 1f);
+            Microsoft.Xna.Framework.Color color = SecondSlashColor!.Value;
+            Microsoft.Xna.Framework.Color color2 = FirstSlashColor!.Value;
+            Microsoft.Xna.Framework.Color color3 = Microsoft.Xna.Framework.Color.White * num3 * 0.5f;
+            color3.A = (byte)((float)(int)color3.A * (1f - fromValue));
+            Microsoft.Xna.Framework.Color color4 = color3 * fromValue * 0.5f;
+            color4.G = (byte)((float)(int)color4.G * fromValue);
+            color4.R = (byte)((float)(int)color4.R * (0.25f + fromValue * 0.75f));
+
+            float offsetRotation = -MathHelper.PiOver2 * 0.75f * Projectile.direction;
+            bool charged = Opacity > 0f;
+            if (charged) {
+                for (int k = 0; k < 2; k++) {
+                    for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
+                        float progress = i / MathHelper.PiOver2;
+                        Color baseColor = Color.Lerp(FirstSlashColor!.Value with { A = 150 }, SecondSlashColor!.Value with { A = 150 }, Helper.Wave(0f, 1f, 20f, Projectile.whoAmI + 3 * i));
+                        spriteBatch.Draw(asset.Value, vector, rectangle,
+                            baseColor * 0.375f * fromValue * num3 * 0.3f * 1f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
+                            num * 0.8f * 1f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
+                    }
+
+                    for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
+                        float progress = i / MathHelper.PiOver2;
+                        Color baseColor = Color.Lerp(FirstSlashColor!.Value with { A = 150 }, SecondSlashColor!.Value with { A = 150 }, Helper.Wave(0f, 1f, 20f, Projectile.whoAmI + 3 * i));
+                        spriteBatch.Draw(asset.Value, vector, rectangle,
+                            baseColor * 0.375f * fromValue * num3 * 0.3f * 0.75f * Opacity * progress * 1f, Main.rand.NextFloatRange(0.1f) + rot + i * Projectile.direction + offsetRotation, origin,
+                            num * 0.8f * 0.5f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0f);
+                    }
+                }
+            }
+
+            DrawItself(ref lightColor);
+
+            if (charged) {
+                spriteBatch.DrawWithSnapshot(() => {
+                    for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
+                        spriteBatch.Draw(asset.Value, vector, rectangle, GetLightingColor() * fromValue * num3 * 0.3f * Opacity * 1f, rot + i * Projectile.direction + offsetRotation, origin, num * 0.8f, effects, 0f);
+                    }
+                }, blendState: BlendState.Additive);
+            }
+
+            if (charged) {
+                if (player.gravDir < 0) {
+                    rot -= MathHelper.PiOver4 * 0.3725f * Projectile.direction;
+                }
+                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 2f) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f) * num * 1f;
+                DrawPrettyStarSparkle(proj.Opacity, SpriteEffects.None, drawpos, GetLightingColor() with { A = 0 } * num3 * 0.5f, color2, num2, 0f, 0.5f, 0.5f, 1f, (float)Math.PI / 4f, new Vector2(2f, 2f), Vector2.One);
+            }
+
+            return false;
         }
     }
 }
