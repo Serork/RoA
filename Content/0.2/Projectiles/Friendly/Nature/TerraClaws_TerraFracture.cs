@@ -154,9 +154,14 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         float num7 = MathUtils.Clamp01((1f - num5) * 6.5f);
         Color green = new Color(34, 177, 76) * num5;
         Color blue = Color.Lerp(new Color(45, 124, 205), green, num6) * num5;
+        float opacity = Opacity * 0.5f * Projectile.scale;
+        Vector3 lightColor = green.ToVector3() * opacity;
         foreach (FracturePartInfo part in _fractureParts) {
-            Lighting.AddLight(Projectile.Center + Vector2.Lerp(part.StartPosition, part.EndPosition, 0.5f), green.ToVector3() * Opacity * 0.5f * Projectile.scale);
+            Lighting.AddLight(Projectile.Center + Vector2.Lerp(part.StartPosition, part.EndPosition, 0.5f), lightColor);
         }
+        lightColor *= 0.5f;
+        DelegateMethods.v3_1 = lightColor;
+        Utils.PlotTileLine(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(Projectile.rotation) * Projectile.velocity.SafeNormalize() * 450 * opacity, 75 * opacity, DelegateMethods.CastLight);
 
         Projectile.velocity *= 0.8f;
     }
