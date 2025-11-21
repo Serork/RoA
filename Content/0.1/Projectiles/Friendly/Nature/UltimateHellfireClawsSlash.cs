@@ -231,7 +231,7 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
                 float normalizedPointOnPath = 0.2f + 0.8f * Main.rand.NextFloat();
                 float rotation = GetRotation() + MathHelper.PiOver4 / 2f * Projectile.ai[0]; /*+ MathHelper.PiOver4 * Projectile.ai[0];*/
                 if (Owner.gravDir < 0) {
-                    rotation += 0.35f * Projectile.direction;
+                    rotation += 0.5f * Projectile.direction;
                 }
                 if (Projectile.ai[0] == -1) {
                     rotation += MathHelper.PiOver4 / 2f;
