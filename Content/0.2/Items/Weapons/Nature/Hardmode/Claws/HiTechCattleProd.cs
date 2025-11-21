@@ -174,10 +174,18 @@ sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdS
                 baseColor *= fromValue * num3 * 0.75f;
                 spriteBatch.Draw(asset.Value, vector, new Rectangle?(asset.Frame(verticalFrames: 4, frameY: 3)), baseColor * 0.65f * num2, rot, origin, num * 0.8f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0.0f);
 
-                if (player.gravDir < 0) {
-                    rot -= MathHelper.PiOver4 * 0.3725f * Projectile.direction;
+                float to = (float)Math.PI / 2f * GravDir();
+                if (GravDir() < 0) {
+                    rot += MathHelper.PiOver4 / 4.75f * -Projectile.direction;
                 }
-                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 2f) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f) * num * 0.975f;
+                if (GravDir() < 0) {
+                    rot += MathHelper.PiOver4 * -Projectile.direction;
+                    rot -= MathHelper.PiOver2 * 0.75f * -Projectile.direction;
+                }
+                if (GravDir() < 0) {
+                    rot -= MathHelper.PiOver2 * 0.875f * -Projectile.direction;
+                }
+                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, to) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f) * num * 0.975f;
                 DrawPrettyStarSparkle(proj.Opacity, SpriteEffects.None, drawpos, GetLightingColor() with { A = 0 } * num3 * 0.5f, color2, num2, 0f, 0.5f, 0.5f, 1f, (float)Math.PI / 4f, new Vector2(2f, 2f), Vector2.One);
             }
 

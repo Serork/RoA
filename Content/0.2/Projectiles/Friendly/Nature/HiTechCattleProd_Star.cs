@@ -25,7 +25,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
     private static ushort DANGERDISTANCEINPIXELS => 160;
     private static float SLASHATTACKFREQUENCYINTICKS => 10f;
     private static ushort TIMELEFT => (ushort)MathUtils.SecondsToFrames(9);
-    private static ushort BEFOREATTACKTIME => 20;
+    private static ushort BEFOREATTACKTIME => 25;
 
     public record struct HiTechBeamInfo(float Rotation, float Opacity);
 
