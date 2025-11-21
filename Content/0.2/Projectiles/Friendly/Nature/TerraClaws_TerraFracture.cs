@@ -22,7 +22,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static ushort TIMELEFT => 60;
+    private static ushort TIMELEFT => 30;
 
     public enum TerraFractureRequstedTextureType : byte {
         Part,
@@ -63,13 +63,15 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         ShouldChargeWreathOnDamage = false;
 
         Projectile.Opacity = 0f;
+
+        Projectile.penetrate = -1;
     }
 
     public override void AI() {
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, TimeSystem.LogicDeltaTime * 2f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, TimeSystem.LogicDeltaTime * 3f);
         Projectile.Opacity = Ease.CircOut(Projectile.Opacity);
 
-        Projectile.localAI[2] = Helper.Approach(Projectile.localAI[2], 1f, TimeSystem.LogicDeltaTime * 4f);
+        Projectile.localAI[2] = Helper.Approach(Projectile.localAI[2], 1f, TimeSystem.LogicDeltaTime * 3f);
 
         Player owner = Projectile.GetOwnerAsPlayer();
 
@@ -143,11 +145,15 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         Color green = new Color(34, 177, 76);
         Color blue = new Color(45, 124, 205);
 
+        float shakeFactor = 1f - Utils.GetLerpValue(0.25f, 0.875f, Projectile.localAI[2], true);
+
+        Vector2 getShakeValue() => Main.rand.NextVector2Circular(6f * shakeFactor, 6f * shakeFactor);
+
         void drawSelf(Vector2? offset = null, float alpha = 1f, float opacity = 1f) {
             offset ??= Vector2.Zero;
 
             Vector2 center = Projectile.Center;
-            Projectile.Center = center + offset.Value;
+            Projectile.Center = center + offset.Value + getShakeValue();
 
             for (LinkedListNode<FracturePartInfo> node = _fractureParts.First!; node != null; node = node.Next!) {
                 var fracturePart = node.Value;
@@ -160,7 +166,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Vector2 position = Projectile.Center + fracturePart.StartPosition * Projectile.Opacity - Main.screenPosition;
                 float rotation = fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2;
                 float opacity2 = Projectile.Opacity * fracturePart.Scale * opacity * Utils.GetLerpValue(0, 10, Projectile.timeLeft, true);
-                Vector2 scale = new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale);
+                Vector2 scale = new Vector2(Utils.Remap(Ease.SineInOut(opacity2), 0f, 1f, 0.75f, 1f), length) * MathF.Max(0.65f, fracturePart.Scale);
 
                 Color baseColor = Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f);
                 batch.Draw(texture,
@@ -172,6 +178,18 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                            scale,
                            effects,
                            0f);
+
+                batch.DrawWithSnapshot(() => {
+                    batch.Draw(ResourceManager.Bloom,
+                               position,
+                               ResourceManager.Bloom.Bounds,
+                               Color.Lerp(baseColor, Color.Black, 0.1f).MultiplyAlpha(alpha) * opacity2 * 0.75f,
+                               rotation,
+                               ResourceManager.Bloom.Bounds.Centered(),
+                               scale * 0.25f,
+                               effects,
+                               0f);
+                }, blendState: BlendState.Additive);
 
                 batch.DrawWithSnapshot(() => {
                     for (float i = 1f; i > 0f; i -= 0.25f) {
@@ -221,14 +239,16 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Texture2D flashTexture = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Flash].Value;
         batch.DrawWithSnapshot(() => {
-            float opacity = (1f - Utils.GetLerpValue(0.5f, 1f, Projectile.localAI[2], true));
-            batch.Draw(flashTexture, Projectile.Center + Projectile.velocity * 50f, DrawInfo.Default with {
-                Clip = flashTexture.Bounds,
-                Origin = flashTexture.Bounds.BottomCenter() * new Vector2(1f, 0.85f),
-                Rotation = Projectile.rotation - MathHelper.Pi,
-                Scale = new Vector2(1f, 7.5f) * Ease.CircOut(opacity),
-                Color = Color.Lerp(green, blue, getColorWave()) * opacity
-            });
+            for (float i2 = 0.5f; i2 < 1.5f; i2 += 0.5f) {
+                float opacity = shakeFactor;
+                batch.Draw(flashTexture, Projectile.Center + getShakeValue() / 2f + Projectile.velocity * 50f, DrawInfo.Default with {
+                    Clip = flashTexture.Bounds,
+                    Origin = flashTexture.Bounds.BottomCenter() * new Vector2(1f, 0.85f),
+                    Rotation = Projectile.rotation - MathHelper.Pi,
+                    Scale = new Vector2(1.25f, 7.5f * i2) * Ease.CircOut(opacity),
+                    Color = Color.Lerp(green, blue, getColorWave(i2 * 5f)) * opacity
+                });
+            }
         }, blendState: BlendState.Additive);
     }
 

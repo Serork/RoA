@@ -23,12 +23,12 @@ sealed class HandOfGod : ClawsBaseItem {
     public override float BrightnessModifier => 0.75f;
     public override bool HasLighting => true;
 
-    public override float FirstAttackSpeedModifier => 0.9f;
-    public override float SecondAttackSpeedModifier => 0.9f;
-    public override float ThirdAttackSpeedModifier => 1.5f;
+    public override float FirstAttackSpeedModifier => 0.85f;
+    public override float SecondAttackSpeedModifier => 0.925f;
+    public override float ThirdAttackSpeedModifier => 1f;
 
-    public override float FirstAttackScaleModifier => 1.1f;
-    public override float SecondAttackScaleModifier => 1.1f;
+    public override float FirstAttackScaleModifier => 1f;
+    public override float SecondAttackScaleModifier => 1.25f;
     public override float ThirdAttackScaleModifier => 1.5f;
 
     protected override void SafeSetDefaults() {

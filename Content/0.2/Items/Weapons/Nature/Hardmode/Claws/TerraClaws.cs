@@ -78,7 +78,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
     }
 
     public sealed class TerraClawsSlash : ClawsSlash {
-        private bool _spawnFracture;
+        private static bool _spawnFracture;
 
         protected override void UpdateMainCycle() {
             base.UpdateMainCycle();
@@ -88,7 +88,22 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             _firstSlashColor = Color.Lerp(new Color(45, 124, 205), new Color(47, 239, 102), num2).ModifyRGB(1f);
             _secondSlashColor = new Color(181, 230, 29).ModifyRGB(1f);
 
+            if (proj.localAI[0] < 2f) {
+                _spawnFracture = false;
+            }
+
             Player owner = Projectile.GetOwnerAsPlayer();
+            if (num2 >= 0.75f && _spawnFracture) {
+                proj.localAI[0]--;
+                if (proj.localAI[2] < proj.localAI[0]) {
+                    proj.localAI[2] = proj.localAI[0];
+                }
+                proj.localAI[2] += 0.75f;
+                if (proj.localAI[2] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.3f)) {
+                    Projectile.Kill();
+                }
+            }
+
             if (owner.GetWreathHandler().ShouldClawsReset(true) && proj.ai[2] < 0f && !_spawnFracture && num2 >= 0.75f) {
                 owner.GetWreathHandler().ClawsReset(AttachedNatureWeapon);
 
@@ -100,6 +115,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                 _spawnFracture = true;
             }
         }
+
+        protected override float StarOpacity() => Projectile.localAI[2] > 0f ? (1f - Utils.GetLerpValue(Projectile.localAI[0], Projectile.ai[1], Projectile.localAI[2], true)) : 1f;
 
         protected override bool OnSlashDustSpawn(float progress) {
             float max = Projectile.ai[1] + Projectile.ai[1] * 0.5f;
@@ -219,6 +236,11 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
         }
 
         public override bool PreDraw(ref Color lightColor) {
+            float shakeFactor = 1f - StarOpacity();
+            Vector2 getShakeValue() => Main.rand.NextVector2Circular(4f * shakeFactor, 4f * shakeFactor);
+            Vector2 prevCenter = Projectile.Center;
+            Projectile.Center += getShakeValue();
+
             Projectile proj = Projectile;
             Color baseLightColor = lightColor;
             SpriteBatch spriteBatch = Main.spriteBatch;
@@ -291,6 +313,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             if (num2 > 0.225f) {
                 DrawStars(ref baseLightColor);
             }
+
+            Projectile.Center = prevCenter;
 
             return false;
         }
