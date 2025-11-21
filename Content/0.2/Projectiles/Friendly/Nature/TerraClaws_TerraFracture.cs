@@ -25,12 +25,14 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     public enum TerraFractureRequstedTextureType : byte {
         Part,
-        Part2
+        Part2,
+        Part3
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)TerraFractureRequstedTextureType.Part, ResourceManager.NatureProjectileTextures + "TerraFracturePart"),
-         ((byte)TerraFractureRequstedTextureType.Part2, ResourceManager.NatureProjectileTextures + "TerraFracturePart2")];
+         ((byte)TerraFractureRequstedTextureType.Part2, ResourceManager.NatureProjectileTextures + "TerraFracturePart2"),
+         ((byte)TerraFractureRequstedTextureType.Part3, ResourceManager.NatureProjectileTextures + "TerraFracturePart3")];
 
     public readonly record struct FracturePartInfo(Vector2 StartPosition, Vector2 EndPosition, Color Color, float Scale);
 
@@ -61,13 +63,13 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void AI() {
-        if (Projectile.timeLeft < 40) {
-            Projectile.timeLeft = 40;
-        }
-
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.025f);
         Projectile.Opacity = Ease.CircOut(Projectile.Opacity);
-        Projectile.Opacity *= Utils.GetLerpValue(0, 5, Projectile.timeLeft, true);
+        Projectile.Opacity *= Utils.GetLerpValue(0, 3, Projectile.timeLeft, true);
+
+        if (Projectile.timeLeft <= 30) {
+            Projectile.timeLeft = TIMELEFT;
+        }
 
         Player owner = Projectile.GetOwnerAsPlayer();
 
@@ -97,7 +99,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
             _fractureParts.Clear();
 
             if (Projectile.IsOwnerLocal()) {
-                for (float i = -MathHelper.PiOver4; i < MathHelper.PiOver4; i += MathHelper.PiOver4 / 3f) {
+                for (float i = -MathHelper.PiOver4; i < MathHelper.PiOver4; i += MathHelper.PiOver4 / 2f) {
                     int count = 25;
                     float size = 10f;
                     Vector2 getMoveVector() {
@@ -113,7 +115,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                         _fractureParts.AddLast(new LinkedListNode<FracturePartInfo>(new FracturePartInfo() {
                             StartPosition = startPosition,
                             EndPosition = endPosition,
-                            Color = Color.Lerp(Color.Lerp(new Color(45, 124, 205), new Color(34, 177, 76), progress), new Color(34, 177, 76), Utils.GetLerpValue(0.95f, 1f, progress, true)),
+                            Color = Color.Lerp(Color.Lerp(Color.Lerp(new Color(34, 177, 76), new Color(45, 124, 205), 0.75f), new Color(34, 177, 76), progress), new Color(34, 177, 76), Utils.GetLerpValue(0.95f, 1f, progress, true)),
                             Scale = progress2
                         }));
                         startPosition = endPosition;
@@ -123,6 +125,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                         while (attempt-- > 0 && _fractureParts.Any(x => x.StartPosition.Distance(endPosition) < 20f)) {
                             endPosition = beforePosition + getMoveVector();
                         }
+                        endPosition += endPosition.DirectionTo(Projectile.Center);
                         size *= 0.9f;
                         if (size < 5f) {
                             size = 10f;
@@ -139,91 +142,92 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
 
         Texture2D texture = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part].Value,
-                  texture2 = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part2].Value;
+                  texture2 = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part2].Value,
+                  texture3 = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Part3].Value;
         SpriteBatch batch = Main.spriteBatch;
         bool right = Projectile.ai[0] > 0;
         SpriteEffects effects = SpriteEffects.None;
 
-        float colorWaveSpeed = 7.5f;
+        float colorWaveSpeed = 15f;
         float getColorWave(float offset = 0f) => Helper.Wave(0f, 1f, colorWaveSpeed, Projectile.whoAmI + offset);
-        Color blue = new(45, 124, 205);
-        Color green = new(34, 177, 76);
+        Color green = new Color(34, 177, 76);
+        Color blue = new Color(45, 124, 205);
 
-        for (LinkedListNode<FracturePartInfo> node = _fractureParts.First!; node != null; node = node.Next!) {
-            var fracturePart = node.Value;
-            var nextFracturePart = (node.Next ?? node).Value;
-            SpriteFrame frame = new(2, 1, (byte)(!right).ToInt(), 0);
-            float length = fracturePart.StartPosition.Distance(fracturePart.EndPosition) * 0.1f;
-            Rectangle clip = frame.GetSourceRectangle(texture);
-            Vector2 origin = new(10, 2);
+        void drawSelf(Vector2? offset = null, float alpha = 1f, float opacity = 1f) {
+            offset ??= Vector2.Zero;
 
-            Vector2 position = Projectile.Center + fracturePart.StartPosition * Projectile.Opacity - Main.screenPosition;
-            float rotation = fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2;
-            float opacity2 = Projectile.Opacity * fracturePart.Scale;
-            Vector2 scale = new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale);
+            Vector2 center = Projectile.Center;
+            Projectile.Center = center + offset.Value;
 
-            Color baseColor = Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f);
-            batch.Draw(texture,
-                       position,
-                       clip,
-                       Color.Lerp(baseColor, Color.Black, 0.1f) with { A = 255 } * opacity2,
-                       rotation,
-                       origin,
-                       scale,
-                       effects,
-                       0f);
+            for (LinkedListNode<FracturePartInfo> node = _fractureParts.First!; node != null; node = node.Next!) {
+                var fracturePart = node.Value;
+                var nextFracturePart = (node.Next ?? node).Value;
+                SpriteFrame frame = new(2, 1, (byte)(!right).ToInt(), 0);
+                float length = fracturePart.StartPosition.Distance(fracturePart.EndPosition) * 0.1f;
+                Rectangle clip = frame.GetSourceRectangle(texture);
+                Vector2 origin = new(10, 2);
 
-            batch.DrawWithSnapshot(() => {
-                for (float i = 1f; i > 0f; i -= 0.25f) {
-                    float colorWave = getColorWave(i);
-                    Color color = Color.Lerp(Color.Lerp(baseColor, Color.Lerp(blue, green, Math.Max(0.25f, Ease.SineInOut(1f - colorWave))), colorWave), Color.Black, 0.1f) with { A = 255 };
-                    batch.Draw(texture,
-                               position,
-                               clip,
-                               color * opacity2 * 0.5f,
-                               rotation,
-                               origin,
-                               scale * i,
-                               effects,
-                               0f);
-                }
-            }, blendState: BlendState.Additive);
-        }
+                Vector2 position = Projectile.Center + fracturePart.StartPosition * Projectile.Opacity - Main.screenPosition;
+                float rotation = fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2;
+                float opacity2 = Projectile.Opacity * fracturePart.Scale * opacity;
+                Vector2 scale = new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale);
 
-        for (LinkedListNode<FracturePartInfo> node = _fractureParts.First!; node != null; node = node.Next!) {
-            var fracturePart = node.Value;
-            var nextFracturePart = (node.Next ?? node).Value;
-            SpriteFrame frame = new(2, 1, (byte)(!right).ToInt(), 0);
-            float length = fracturePart.StartPosition.Distance(fracturePart.EndPosition) * 0.1f;
-            Rectangle clip = frame.GetSourceRectangle(texture);
-            Vector2 origin = new(10, 2);
+                Color baseColor = Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f);
+                batch.Draw(texture,
+                           position,
+                           clip,
+                           Color.Lerp(baseColor, Color.Black, 0.1f).MultiplyAlpha(alpha) * opacity2 * 1.5f,
+                           rotation,
+                           origin,
+                           scale,
+                           effects,
+                           0f);
 
-            Vector2 position = Projectile.Center + fracturePart.StartPosition * Projectile.Opacity - Main.screenPosition;
-            float rotation = fracturePart.StartPosition.DirectionTo(fracturePart.EndPosition).ToRotation() - MathHelper.PiOver2;
-            float opacity2 = Projectile.Opacity * fracturePart.Scale;
-            Vector2 scale = new Vector2(1f, length) * MathF.Max(0.65f, fracturePart.Scale);
-
-            Color baseColor = Color.Lerp(fracturePart.Color, nextFracturePart.Color, 0.5f);
-
-            for (float i2 = 1f; i2 < 2f; i2 += 1f) {
                 batch.DrawWithSnapshot(() => {
                     for (float i = 1f; i > 0f; i -= 0.25f) {
-                        float colorWave = getColorWave(i + i2);
-                        byte a = (byte)(100 - i2 * 25);
-                        Color color = Color.Lerp(baseColor, Color.Lerp(blue, green, Math.Max(0.25f, Ease.SineInOut(1f - colorWave))), colorWave) with { A = a };
-                        batch.Draw(texture2,
+                        float colorWave = getColorWave(i);
+                        Color color = Color.Lerp(Color.Lerp(baseColor, Color.Lerp(blue, green, 1f - colorWave), colorWave), Color.Black, 0.1f);
+                        batch.Draw(texture,
                                    position,
                                    clip,
-                                   color * opacity2 * 0.5f,
+                                   color.MultiplyAlpha(alpha) * opacity2 * 0.25f,
                                    rotation,
                                    origin,
-                                   scale * i * i2,
+                                   scale * i,
                                    effects,
                                    0f);
                     }
+
+                    for (float i = 1f; i > 0f; i -= 0.25f) {
+                        float colorWave = getColorWave(i);
+                        Color color = Color.Lerp(Color.Lerp(baseColor, Color.Lerp(blue, green, Math.Max(0.25f, Ease.SineInOut(1f - colorWave))), colorWave), Color.Black, 0.5f);
+                        batch.Draw(texture3,
+                                   position,
+                                   clip,
+                                   color.MultiplyAlpha(alpha) * opacity2 * 0.9f,
+                                   rotation,
+                                   origin,
+                                   scale * i * 1.25f,
+                                   effects,
+                                   0f);
+                    }
+
+                    batch.Draw(texture,
+                               position,
+                               clip,
+                               Color.Lerp(baseColor, Color.White, 0.25f).MultiplyAlpha(alpha) * opacity2 * 1.5f,
+                               rotation,
+                               origin,
+                               scale,
+                               effects,
+                               0f);
                 }, blendState: BlendState.Additive);
             }
+
+            Projectile.Center = center;
         }
+
+        drawSelf();
     }
 
     public void DrawWithMetaballs() {

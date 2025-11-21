@@ -316,9 +316,6 @@ class ClawsSlash : NatureProjectile {
         float scale = Projectile.scale * 1.1f;
         SpriteEffects effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
         Player player = Projectile.GetOwnerAsPlayer();
-        if (player.gravDir < 0) {
-            effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
-        }
         float num1 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num2 = Utils.Remap(num1, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num1, 0.6f, 1f, 1f, 0.0f);
         float num3 = 0.975f;
@@ -347,14 +344,14 @@ class ClawsSlash : NatureProjectile {
             color4.G = (byte)(color4.G * (double)num4);
             color4.B = (byte)(color4.R * (0.25 + (double)num4 * 0.75));
 
+            float to = (float)Math.PI / 4f * player.gravDir;
             if (player.gravDir < 0) {
-                rot -= MathHelper.PiOver4 * 0.3725f * Projectile.direction;
+                rot -= MathHelper.PiOver2 * 0.75f * -Projectile.direction;
             }
-
-            Vector2 drawpos2 = position + (rot + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
+            Vector2 drawpos2 = position + (rot + Utils.Remap(num2, 0f, 1f, 0f, to) * Projectile.ai[0] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
             DrawPrettyStarSparkle(Projectile.Opacity, effects, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
 
-            drawpos2 = position + (rot + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[0] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
+            drawpos2 = position + (rot + Utils.Remap(num2, 0f, 1f, 0f, to) * Projectile.ai[0] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)asset.Width() * 0.5f - 10f) * scale;
             DrawPrettyStarSparkle(Projectile.Opacity, effects, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(FirstSlashColor.Value, SecondSlashColor.Value, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 1.5f);
         }
     }
@@ -363,8 +360,7 @@ class ClawsSlash : NatureProjectile {
         float rot = Projectile.rotation;
         Player player = Projectile.GetOwnerAsPlayer();
         if (player.gravDir < 0) {
-            rot = MathHelper.TwoPi - rot;
-            rot += MathHelper.PiOver4 * 0.3725f * Projectile.direction;
+            rot = MathHelper.TwoPi - MathHelper.WrapAngle(rot);
         }
         return rot;
     }
@@ -582,7 +578,7 @@ class ClawsSlash : NatureProjectile {
             player.itemAnimationMax = player.itemTimeMax = (int)Projectile.ai[1];
         }
 
-        Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity + GetPositionOffset(player);
+        Projectile.Center = Utils.Floor(player.MountedCenter) - Projectile.velocity + GetPositionOffset(player);
 
         UpdateMainCycle();
 

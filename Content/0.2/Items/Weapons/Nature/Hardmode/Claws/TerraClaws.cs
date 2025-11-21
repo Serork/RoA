@@ -211,6 +211,9 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             float num = proj.scale * 1.1f;
             bool flip = !(proj.ai[0] >= 0f);
             SpriteEffects effects = flip ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            if (Owner.gravDir < 0) {
+                effects = Projectile.ai[0] >= 0.0 ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            }
             float num2 = proj.localAI[0] / proj.ai[1];
             float num3 = Utils.Remap(num2, 0f, 0.6f, 0f, 1f) * Utils.Remap(num2, 0.6f, 1f, 1f, 0f);
             float num4 = 0.975f;
@@ -232,14 +235,14 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                     spriteBatch.Draw(asset.Value, vector, rectangle,
                         GetLightingColor2(Color.Blue) *
                         fromValue * num3 * 1f * MathHelper.Lerp(0.375f, 1.375f, brightness),
-                        proj.rotation + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.PiOver2, MathHelper.PiOver2 * 0.25f, num2) * Projectile.direction, origin, num * 0.8f, effects, 0f);
+                        GetRotation() + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.PiOver2, MathHelper.PiOver2 * 0.25f, num2) * Projectile.direction, origin, num * 0.8f, effects, 0f);
                 }
             }, blendState: BlendState.Additive);
 
             DrawItself(ref lightColor);
 
             for (float num6 = 0f; num6 < 12f; num6 += 1f) {
-                float num7 = proj.rotation + MathHelper.PiOver2 * 0.25f * Projectile.direction + proj.ai[0] * (num6 - 2f) * ((float)Math.PI * -2f) * 0.025f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * proj.ai[0];
+                float num7 = GetRotation() + MathHelper.PiOver2 * 0.25f * Projectile.direction + proj.ai[0] * (num6 - 2f) * ((float)Math.PI * -2f) * 0.025f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * proj.ai[0];
                 Vector2 drawpos = vector + num7.ToRotationVector2() * ((float)asset.Width() * 0.5f - 6f) * num * 0.8f;
                 float num8 = num6 / 12f;
                 DrawPrettyStarSparkle(proj.Opacity * 0.5f * Utils.GetLerpValue(0.2f, 0.4f, num2, true), SpriteEffects.None, drawpos, new Microsoft.Xna.Framework.Color(255, 255, 255, 0) * num3 * num8, color3, 
@@ -252,7 +255,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                     spriteBatch.Draw(TextureAssets.Projectile[Type].Value, vector, rectangle2,
                         GetLightingColor2(Color.Lerp(new Color(181, 230, 29), new Color(45, 124, 205), Ease.CircOut(MathUtils.Clamp01(i / MathHelper.PiOver2)))) *
                         fromValue * num3 * 1f * MathHelper.Lerp(0.5f, 1.375f, brightness),
-                        proj.rotation + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.Pi * 0.5f, 0f, num2) * Projectile.direction, origin, num, effects, 0f);
+                        GetRotation() + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.Pi * 0.5f, 0f, num2) * Projectile.direction, origin, num, effects, 0f);
                 }
             }, blendState: BlendState.Additive);
 
