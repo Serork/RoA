@@ -309,6 +309,9 @@ class ClawsSlash : NatureProjectile {
 
     protected virtual void DrawStars(ref Color lightColor) {
         float rot = GetRotation();
+        if (GravDir() < 0) {
+            rot += MathHelper.PiOver4 / 4.75f * -Projectile.direction;
+        }
         lightColor *= 2f;
         lightColor.A = 100;
         Vector2 position = Projectile.Center - Main.screenPosition;
@@ -366,6 +369,10 @@ class ClawsSlash : NatureProjectile {
         Player player = Projectile.GetOwnerAsPlayer();
         if (GravDir() < 0) {
             rot = MathHelper.TwoPi - MathHelper.WrapAngle(rot);
+        }
+        if (GravDir() < 0) {
+            rot += MathHelper.PiOver4 * -Projectile.direction;
+            rot -= MathHelper.PiOver2 * 0.75f * -Projectile.direction;
         }
         return rot;
     }

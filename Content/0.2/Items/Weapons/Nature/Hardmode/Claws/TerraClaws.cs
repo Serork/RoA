@@ -249,32 +249,50 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             float brightness = 1f - MathUtils.Clamp01(Lighting.Brightness((int)proj.Center.X / 16, (int)proj.Center.Y / 16) * 0.825f);
             brightness = Ease.SineIn(brightness);
 
+            float rot = GetRotation();
+            if (GravDir() < 0) {
+                rot -= 0.5f * Projectile.direction;
+            }
+
             spriteBatch.DrawWithSnapshot(() => {
                 for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
                     spriteBatch.Draw(asset.Value, vector, rectangle,
                         GetLightingColor2(Color.Blue) *
                         fromValue * num3 * 1f * MathHelper.Lerp(0.375f, 1.375f, brightness),
-                        GetRotation() + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.PiOver2, MathHelper.PiOver2 * 0.25f, num2) * Projectile.direction, origin, num * 0.8f, effects, 0f);
+                        rot + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.PiOver2, MathHelper.PiOver2 * 0.25f, num2) * Projectile.direction, origin, num * 0.8f, effects, 0f);
                 }
             }, blendState: BlendState.Additive);
 
             DrawItself(ref lightColor);
 
+            if (GravDir() < 0) {
+                rot -= 0.3f * Projectile.direction;
+            }
+
             for (float num6 = 0f; num6 < 12f; num6 += 1f) {
-                float num7 = GetRotation() + MathHelper.PiOver2 * 0.25f * Projectile.direction + proj.ai[0] * (num6 - 2f) * ((float)Math.PI * -2f) * 0.025f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * proj.ai[0];
+                float num7 = rot + MathHelper.PiOver2 * 0.25f * Projectile.direction + proj.ai[0] * (num6 - 2f) * ((float)Math.PI * -2f) * 0.025f + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * proj.ai[0];
                 Vector2 drawpos = vector + num7.ToRotationVector2() * ((float)asset.Width() * 0.5f - 6f) * num * 0.8f;
                 float num8 = num6 / 12f;
-                DrawPrettyStarSparkle(proj.Opacity * 0.5f * Utils.GetLerpValue(0.2f, 0.4f, num2, true), SpriteEffects.None, drawpos, new Microsoft.Xna.Framework.Color(255, 255, 255, 0) * num3 * num8, color3, 
+                DrawPrettyStarSparkle(proj.Opacity * 0.5f * Utils.GetLerpValue(0.2f, 0.4f, num2, true), SpriteEffects.None, drawpos, new Microsoft.Xna.Framework.Color(255, 255, 255, 0) * num3 * num8, color3,
                     num2, 0f, 0.5f, 0.5f, 1f, num7, new Vector2(0f, Utils.Remap(num2, 0f, 1f, 3f, 0f)) * num, Vector2.One * num * 2f);
+            }
+
+            if (GravDir() < 0) {
+                rot += 0.3f * Projectile.direction;
             }
 
             spriteBatch.DrawWithSnapshot(() => {
                 Rectangle rectangle2 = rectangle with { Y = rectangle.Y - 6 };
+                Vector2 origin2 = origin;
                 for (float i = 0; i < MathHelper.PiOver2; i += 0.25f) {
+                    float rot2 = MathHelper.Lerp(MathHelper.Pi * 0.5f, MathHelper.Pi * 0f, num2) * Projectile.direction;
+                    if (GravDir() < 0f) {
+                        rot2 = MathHelper.Lerp(MathHelper.Pi * 0f, MathHelper.Pi * 0.5f, num2) * Projectile.direction;
+                    }
                     spriteBatch.Draw(TextureAssets.Projectile[Type].Value, vector, rectangle2,
                         GetLightingColor2(Color.Lerp(new Color(181, 230, 29), new Color(45, 124, 205), Ease.CircOut(MathUtils.Clamp01(i / MathHelper.PiOver2)))) *
                         fromValue * num3 * 1f * MathHelper.Lerp(0.5f, 1.375f, brightness),
-                        GetRotation() + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - MathHelper.Lerp(MathHelper.Pi * 0.5f, 0f, num2) * Projectile.direction, origin, num, effects, 0f);
+                        rot + MathHelper.PiOver4 * 0.175f * Projectile.direction + i * Projectile.direction - rot2, origin2, num, effects, 0f);
                 }
             }, blendState: BlendState.Additive);
 
