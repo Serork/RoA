@@ -350,6 +350,7 @@ static partial class Helper {
         float result = player.GetAdjustedItemScale(item);
         if (item.IsNatureClaws()) {
             result *= NatureWeaponHandler.GetSize(item);
+            player.ApplyMeleeScale(ref result);
         }
         return Math.Clamp(result, 0.5f * item.scale, 2f * item.scale);
     }
