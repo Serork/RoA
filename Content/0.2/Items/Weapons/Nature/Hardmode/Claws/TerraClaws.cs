@@ -93,7 +93,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                 owner.GetWreathHandler().ClawsReset(AttachedNatureWeapon);
 
                 if (Projectile.IsOwnerLocal()) {
-                    Vector2 position = Utils .Floor(owner.MountedCenter) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitX * CollidingSize() * 0.5f * owner.direction;
+                    Vector2 position = Utils .Floor(owner.MountedCenter) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitX * CollidingSize() * 1f * owner.direction;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, Vector2.Zero, ModContent.ProjectileType<TerraFracture>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                 }
 

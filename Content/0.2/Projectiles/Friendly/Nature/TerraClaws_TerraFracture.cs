@@ -8,6 +8,7 @@ using RoA.Common;
 using RoA.Common.Projectiles;
 using RoA.Core;
 using RoA.Core.Defaults;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using System;
@@ -26,13 +27,15 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     public enum TerraFractureRequstedTextureType : byte {
         Part,
         Part2,
-        Part3
+        Part3,
+        Flash
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)TerraFractureRequstedTextureType.Part, ResourceManager.NatureProjectileTextures + "TerraFracturePart"),
          ((byte)TerraFractureRequstedTextureType.Part2, ResourceManager.NatureProjectileTextures + "TerraFracturePart2"),
-         ((byte)TerraFractureRequstedTextureType.Part3, ResourceManager.NatureProjectileTextures + "TerraFracturePart3")];
+         ((byte)TerraFractureRequstedTextureType.Part3, ResourceManager.NatureProjectileTextures + "TerraFracturePart3"),
+         ((byte)TerraFractureRequstedTextureType.Flash, ResourceManager.NatureProjectileTextures + "TerraFractureFlash")];
 
     public readonly record struct FracturePartInfo(Vector2 StartPosition, Vector2 EndPosition, Color Color, float Scale);
 
@@ -63,23 +66,16 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void AI() {
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.025f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, TimeSystem.LogicDeltaTime * 2f);
         Projectile.Opacity = Ease.CircOut(Projectile.Opacity);
+
+        Projectile.localAI[2] = Helper.Approach(Projectile.localAI[2], 1f, TimeSystem.LogicDeltaTime * 4f);
 
         Player owner = Projectile.GetOwnerAsPlayer();
 
         if (Projectile.ai[0] == 0f) {
             Projectile.ai[0] = owner.direction;
         }
-
-        if (Keyboard.GetState().IsKeyDown(Keys.Z)) {
-            Init = false;
-
-            Projectile.Opacity = 0f;
-
-            Projectile.ai[0] = 0f;
-        }
-
 
         if (!Init) {
             Init = true;
@@ -88,7 +84,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
 
-            Projectile.velocity *= 0f;
+            Projectile.Center -= Projectile.velocity * 50f;
 
             _fractureParts.Clear();
 
@@ -222,7 +218,21 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
 
         drawSelf();
+
+        Texture2D flashTexture = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Flash].Value;
+        batch.DrawWithSnapshot(() => {
+            float opacity = (1f - Utils.GetLerpValue(0.5f, 1f, Projectile.localAI[2], true));
+            batch.Draw(flashTexture, Projectile.Center + Projectile.velocity * 50f, DrawInfo.Default with {
+                Clip = flashTexture.Bounds,
+                Origin = flashTexture.Bounds.BottomCenter() * new Vector2(1f, 0.85f),
+                Rotation = Projectile.rotation - MathHelper.Pi,
+                Scale = new Vector2(1f, 7.5f) * Ease.CircOut(opacity),
+                Color = Color.Lerp(green, blue, getColorWave()) * opacity
+            });
+        }, blendState: BlendState.Additive);
     }
+
+    public override bool ShouldUpdatePosition() => false;
 
     public void DrawWithMetaballs() {
         if (!AssetInitializer.TryGetRequestedTextureAssets<TerraFracture>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
