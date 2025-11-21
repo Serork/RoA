@@ -474,7 +474,7 @@ LivingMahoganyChestplate: {
 
 LivingMahoganyGreaves: {
 	DisplayName: Living Mahogany Greaves
-	Tooltip: 4% increased nature attack speed
+	Tooltip: 4% increased claw speed
 }
 
 LivingMahoganyHelmet: {

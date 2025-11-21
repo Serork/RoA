@@ -490,7 +490,7 @@ LivingMahoganyChestplate: {
 
 LivingMahoganyGreaves: {
 	DisplayName: Живые джунглевые поножи
-	Tooltip: Увеличивает скорость атаки природой на 4%
+	Tooltip: Увеличивает скорость атаки когтями на 4%
 }
 
 LivingMahoganyHelmet: {
