@@ -113,7 +113,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                     proj.localAI[2] = proj.localAI[0];
                 }
                 proj.localAI[2] += 0.75f;
-                if (proj.localAI[2] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.3f)) {
+                if (proj.localAI[2] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.6f)) {
                     proj.localAI[0] += 3f;
                     //Projectile.Kill();
                 }
