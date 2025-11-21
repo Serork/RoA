@@ -23,8 +23,6 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static ushort TIMELEFT => 25;
-
     public enum TerraFractureRequstedTextureType : byte {
         Part,
         Part2,
@@ -55,8 +53,6 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.friendly = true;
         Projectile.tileCollide = false;
 
-        Projectile.timeLeft = TIMELEFT;
-
         Projectile.aiStyle = -1;
 
         ShouldChargeWreathOnDamage = false;
@@ -72,9 +68,8 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         int x = (int)Projectile.Center.X;
         int y = (int)Projectile.Center.Y;
-        int width = (int)(1000 * Projectile.scale);
+        int width = (int)(500 * Projectile.scale * Projectile.ai[0]);
         int height = (int)(200 * Projectile.scale);
-        x -= width / 2;
         y -= height / 2;
         if (new Rectangle(x, y, width, height).Intersects(targetHitbox)) {
             return true;
@@ -83,7 +78,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         return false;
     }
 
-    private float Opacity => Utils.GetLerpValue(0, TIMELEFT / 3, Projectile.timeLeft, true);
+    private float Opacity => Utils.GetLerpValue(0, Projectile.ai[2] / 3, Projectile.timeLeft, true);
 
     public override void AI() {
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, TimeSystem.LogicDeltaTime * 3f);
@@ -91,12 +86,13 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Projectile.localAI[2] = Helper.Approach(Projectile.localAI[2], 1f, TimeSystem.LogicDeltaTime * 3f);
 
-        Projectile.scale = Projectile.ai[2];
+        Projectile.scale = Projectile.ai[1];
 
         Player owner = Projectile.GetOwnerAsPlayer();
 
         if (Projectile.ai[0] == 0f) {
             Projectile.ai[0] = owner.direction;
+            Projectile.timeLeft = (int)Projectile.ai[2];
         }
 
         if (!Init) {
@@ -112,7 +108,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                 rotation2 += 0.35f;
             }
 
-            Projectile.Center -= Projectile.velocity * 50f;
+            Projectile.Center -= Projectile.velocity * 40f;
 
             _fractureParts.Clear();
 
@@ -291,7 +287,8 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         Texture2D flashTexture = indexedTextureAssets[(byte)TerraFractureRequstedTextureType.Flash].Value;
         float opacity = Opacity;
         Rectangle clip = flashTexture.Bounds;
-        batch.Draw(flashTexture, Projectile.Center + getShakeValue() / 2f + Projectile.velocity.SafeNormalize() * 30f, DrawInfo.Default with {
+        float offset = 30f;
+        batch.Draw(flashTexture, Projectile.Center + getShakeValue() / 2f + Projectile.velocity.SafeNormalize() * offset, DrawInfo.Default with {
             Clip = clip,
             Origin = clip.BottomCenter() * new Vector2(1f, 0.85f),
             Rotation = Projectile.rotation - MathHelper.Pi,
@@ -300,7 +297,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         });
         batch.DrawWithSnapshot(() => {
             for (float i2 = 0.5f; i2 < 1.5f; i2 += 0.5f) {
-                batch.Draw(flashTexture, Projectile.Center + getShakeValue() / 2f + Projectile.velocity.SafeNormalize() * 30f, DrawInfo.Default with {
+                batch.Draw(flashTexture, Projectile.Center + getShakeValue() / 2f + Projectile.velocity.SafeNormalize() * offset, DrawInfo.Default with {
                     Clip = clip,
                     Origin = clip.BottomCenter() * new Vector2(1f, 0.85f),
                     Rotation = Projectile.rotation - MathHelper.Pi,
