@@ -143,7 +143,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
         }
 
         protected override float StarOpacity() => Projectile.localAI[2] > UltimateAttackTime ? 0f : 
-            Projectile.localAI[2] > 0f ? (1f - Utils.GetLerpValue(Projectile.localAI[0], UltimateAttackTime * 0.5f, Projectile.localAI[2], true)) : 1f;
+            Projectile.localAI[2] > 0f ? (1f - Utils.GetLerpValue(Projectile.localAI[0], UltimateAttackTime * 0.875f, Projectile.localAI[2], true)) : 1f;
 
         protected override bool OnSlashDustSpawn(float progress) {
             float max = Projectile.ai[1] + Projectile.ai[1] * 0.5f;
@@ -263,7 +263,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
         }
 
         public override bool PreDraw(ref Color lightColor) {
-            float shakeFactor = 1f - StarOpacity();
+            float shakeFactor = Utils.GetLerpValue(Projectile.localAI[0], UltimateAttackTime * 0.5f, Projectile.localAI[2], true);
             shakeFactor *= 1f - Utils.GetLerpValue(0.9f, 1f, (Projectile.localAI[2] - Projectile.localAI[0]) / ShakeTime, true);
             Vector2 getShakeValue() => Main.rand.NextVector2Circular(4f * shakeFactor, 4f * shakeFactor);
 

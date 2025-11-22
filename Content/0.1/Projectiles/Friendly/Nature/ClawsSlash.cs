@@ -453,6 +453,7 @@ class ClawsSlash : NatureProjectile {
         brightness = Ease.SineIn(brightness);
         num *= brightness;
         num *= opacity;
+        color2.A /= 2;
         color *= num;
         color2 *= num;
         Main.EntitySpriteDraw(value, drawpos, null, color, (float)Math.PI / 2f + rotation, origin, vector, dir);

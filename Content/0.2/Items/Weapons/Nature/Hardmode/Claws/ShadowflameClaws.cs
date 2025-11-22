@@ -130,6 +130,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
             Vector2 origin = rectangle.Size() / 2f;
             float num = proj.scale * 1.1f;
             SpriteEffects effects = ((!(proj.ai[0] >= 0f)) ? SpriteEffects.FlipVertically : SpriteEffects.None);
+            float num2_2 = Projectile.localAI[0] / Projectile.ai[1];
             float num2 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
             float num3 = Utils.Remap(num2, 0f, 0.6f, 0f, 1f) * Utils.Remap(num2, 0.6f, 1f, 1f, 0f);
             //float num4 = 0.975f;
@@ -176,7 +177,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
                 baseColor *= fromValue * num3 * 0.75f;
                 spriteBatch.Draw(asset.Value, vector, new Rectangle?(asset.Frame(verticalFrames: 4, frameY: 3)), baseColor * 0.65f * num2, rot, origin, num * 0.8f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f)), effects, 0.0f);
 
-                float to = (float)Math.PI / 2f * GravDir();
+                float to = (float)Math.PI / 2f * GravDir() * 1.1f;
                 if (GravDir() < 0) {
                     rot += MathHelper.PiOver4 / 4.75f * -Projectile.direction;
                 }
@@ -187,7 +188,8 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
                 if (GravDir() < 0) {
                     rot -= MathHelper.PiOver2 * 0.875f * -Projectile.direction;
                 }
-                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, to) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f) * num * 0.975f;
+                Vector2 drawpos = vector + (rot + offsetRotation * 0.75f + Utils.Remap(num2, 0f, 1f, 0f, to) * proj.ai[0]).ToRotationVector2() * ((float)asset.Width() * 0.5f - 5.5f)
+                    * num * 0.825f * MathHelper.Lerp(1f, 1.25f, MathUtils.Clamp01(num2 * 1.5f));
                 DrawPrettyStarSparkle(proj.Opacity, SpriteEffects.None, drawpos, GetLightingColor() with { A = 0 } * num3 * 0.5f, color2, num2, 0f, 0.5f, 0.5f, 1f, (float)Math.PI / 4f, new Vector2(2f, 2f), Vector2.One);
             }
 
