@@ -18,6 +18,8 @@ using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.ID;
 
+using static Terraria.GameContent.Animations.Actions.Sprites;
+
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 // TODO: optimize (rewrite)
@@ -33,6 +35,7 @@ sealed class Snatcher : NatureProjectile {
     private int _startDirection;
     private bool _shouldPlayAttackSound, _shouldPlayAttackSound2;
     private int _timeLeft;
+    private bool _setScale;
 
     private Vector2[] _oldPositions = new Vector2[18];
 
@@ -209,7 +212,7 @@ sealed class Snatcher : NatureProjectile {
             return false;
         }
 
-        return Collision.CheckAABBvAABBCollision(GetCenter() + (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2() * Projectile.height * 0.25f, Projectile.Size, targetHitbox.Location.ToVector2(), targetHitbox.Size());
+        return Collision.CheckAABBvAABBCollision(GetCenter() + (Projectile.rotation + MathHelper.PiOver2).ToRotationVector2() * Projectile.height * 0.25f, Projectile.Size * Projectile.scale, targetHitbox.Location.ToVector2(), targetHitbox.Size());
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
@@ -458,6 +461,13 @@ sealed class Snatcher : NatureProjectile {
         else {
             Projectile.frame = 0;
         }
+
+        if (!_setScale) {
+            _setScale = true;
+
+            float scale = Projectile.GetOwnerAsPlayer().CappedMeleeOrDruidScale();
+            Projectile.scale = scale;
+        }
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -489,7 +499,7 @@ sealed class Snatcher : NatureProjectile {
         rectangle = new Rectangle(0, 62, width, 18);
         float distance = Vector2.Distance(vector, position);
         for (int i = 0; i < 250; i++) {
-            if (distance < rectangle.Height) {
+            if (distance < rectangle.Height * Projectile.scale) {
                 break;
             }
             ulong randomSeed = (ulong)i;

@@ -26,7 +26,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
     public static string TipTexture => ResourceManager.NatureProjectileTextures + "VileSpikeTip";
     public static string StartTexture => ResourceManager.NatureProjectileTextures + "VileSpikeStart";
 
-    private int Length => (int)Projectile.ai[0];
+    private int Length => (int)(Projectile.ai[0] * Projectile.scale);
     private bool Temporary => Projectile.ai[1] >= 1f;
 
     protected override void SafeSetDefaults() {
@@ -61,6 +61,9 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
 
     public override void AI() {
         if (!_init) {
+            float scale = Projectile.GetOwnerAsPlayer().CappedMeleeOrDruidScale();
+            Projectile.scale = scale;
+
             Offset();
             Projectile.ai[2] = Projectile.position.Y;
             if (Temporary) {
@@ -165,13 +168,13 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
                 Rectangle rectangle = new(0, 0, texture.Width, flag ? value4 : texture.Height);
                 Color color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16 - 1);
                 Vector2 origin = new(texture.Width / 2f, texture.Height);
-                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, rectangle, color, Projectile.rotation, origin, Projectile.scale, effects);
+                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, rectangle, color, Projectile.rotation, origin, 1f, effects);
                 if (flag) {
                     texture = ModContent.Request<Texture2D>(StartTexture).Value;
                     pos.Y += value4;
                     color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
                     origin = new(texture.Width / 2f, texture.Height);
-                    Main.EntitySpriteDraw(texture, pos - Main.screenPosition, null, color, Projectile.rotation, origin, Projectile.scale, effects);
+                    Main.EntitySpriteDraw(texture, pos - Main.screenPosition, null, color, Projectile.rotation, origin, 1f, effects);
                 }
             }
             next();

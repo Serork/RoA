@@ -63,7 +63,7 @@ abstract class Wave : NatureProjectile {
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Vector2 lineEnd = Projectile.Center + Vector2.Normalize(Projectile.velocity) * Projectile.height * 2f;
-        return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 26f);
+        return Helper.DeathrayHitbox(Projectile.Center, lineEnd, targetHitbox, 26f * Projectile.scale);
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
@@ -90,6 +90,7 @@ abstract class Wave : NatureProjectile {
             Main.dust[dust].noLight = true;
             Main.dust[dust].rotation = Main.rand.NextFloat(5f);
             Main.dust[dust].velocity += player.velocity;
+            Main.dust[dust].scale *= Projectile.scale;
         }
         for (int i = 0; i < Main.rand.Next(2, 4); i++) {
             int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustTypes.Item2, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
@@ -98,6 +99,7 @@ abstract class Wave : NatureProjectile {
             Main.dust[dust].noLight = true;
             Main.dust[dust].rotation = Main.rand.NextFloat(5f);
             Main.dust[dust].velocity += player.velocity;
+            Main.dust[dust].scale *= Projectile.scale;
         }
         for (int i = 0; i < Main.rand.Next(2, 4); i++) {
             int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustTypes.Item3, Projectile.velocity.X * 8f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
@@ -105,6 +107,7 @@ abstract class Wave : NatureProjectile {
             Main.dust[dust].noLight = true;
             Main.dust[dust].rotation = Main.rand.NextFloat(5f);
             Main.dust[dust].velocity += player.velocity;
+            Main.dust[dust].scale *= Projectile.scale;
         }
     }
 
@@ -118,6 +121,12 @@ abstract class Wave : NatureProjectile {
         }
         if (!player.IsAliveAndFree()) {
             Projectile.Kill();
+        }
+        if (Projectile.localAI[2] == 0f) {
+            Projectile.localAI[2] = 1f;
+
+            float scale = Main.player[Projectile.owner].CappedMeleeOrDruidScale();
+            Projectile.scale = scale;
         }
         player.heldProj = Projectile.whoAmI;
         if (Main.myPlayer == Projectile.owner) {
@@ -147,9 +156,9 @@ abstract class Wave : NatureProjectile {
 
         SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
         spriteBatch.Begin(snapshot with { blendState = BlendState.NonPremultiplied, samplerState = SamplerState.PointClamp }, true);
-        spriteBatch.Draw(texture, position, null, color, Projectile.rotation, drawOrigin, 1f, SpriteEffects.None, 0f);
+        spriteBatch.Draw(texture, position, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
-        spriteBatch.Draw(texture, position, null, color.MultiplyAlpha((float)(1.0 - (double)(Projectile.Opacity - 0.5f))), Projectile.rotation, drawOrigin, 1f, SpriteEffects.None, 0f);
+        spriteBatch.Draw(texture, position, null, color.MultiplyAlpha((float)(1.0 - (double)(Projectile.Opacity - 0.5f))), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         spriteBatch.Begin(snapshot, true);
         return false;
     }
