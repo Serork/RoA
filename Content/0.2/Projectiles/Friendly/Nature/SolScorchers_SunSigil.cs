@@ -120,7 +120,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         if (Opacity > 0.75f && Main.rand.NextBool(4)) {
             Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f) * (Projectile.scale * 1.25f) + new Vector2(10f * Projectile.direction, -2f) * (Projectile.scale * 1.25f),
                 ModContent.DustType<Dusts.SunSigil>(), 
-                Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(2f, 5f) * (Projectile.scale * 1.25f),
+                Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(2f, 5f),
                 0, SelectedColor, Main.rand.NextFloat(0.825f, 1f) * 1.75f * Projectile.scale);
             dust.noGravity = true;
         }
