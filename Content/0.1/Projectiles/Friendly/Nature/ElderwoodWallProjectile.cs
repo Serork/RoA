@@ -51,10 +51,10 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        Vector2 basePos = new Vector2(Projectile.position.X, Projectile.ai[2] + _currentLength - 35 * (Length - 1));
+        Vector2 basePos = new Vector2(Projectile.position.X - 30 * Projectile.scale / 5f, Projectile.ai[2] + _currentLength - 35 * (Length - 1));
         return Collision.CheckAABBvAABBCollision(
             basePos,
-            new Vector2(30, -(_currentLength - 35 * (Length - 1))),
+            new Vector2(30 * Projectile.scale, -(_currentLength - 35 * (Length - 1))),
             targetHitbox.Location.ToVector2(),
             targetHitbox.Size());
     }
@@ -168,13 +168,13 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
                 Rectangle rectangle = new(0, 0, texture.Width, flag ? value4 : texture.Height);
                 Color color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16 - 1);
                 Vector2 origin = new(texture.Width / 2f, texture.Height);
-                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, rectangle, color, Projectile.rotation, origin, 1f, effects);
+                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, rectangle, color, Projectile.rotation, origin, new Vector2(Projectile.scale, 1f), effects);
                 if (flag) {
                     texture = ModContent.Request<Texture2D>(StartTexture).Value;
                     pos.Y += value4;
                     color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
                     origin = new(texture.Width / 2f, texture.Height);
-                    Main.EntitySpriteDraw(texture, pos - Main.screenPosition, null, color, Projectile.rotation, origin, 1f, effects);
+                    Main.EntitySpriteDraw(texture, pos - Main.screenPosition, null, color, Projectile.rotation, origin, new Vector2(Projectile.scale, 1f), effects);
                 }
             }
             next();
