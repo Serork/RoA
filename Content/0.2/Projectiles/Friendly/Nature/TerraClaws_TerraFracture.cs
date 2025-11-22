@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using ReLogic.Content;
 
@@ -79,6 +78,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     private float Opacity => Utils.GetLerpValue(0, Projectile.ai[2] / 3, Projectile.timeLeft, true);
+    private float Opacity2 => Utils.GetLerpValue(Projectile.ai[2] / 3 / 2f, Projectile.ai[2] / 3, Projectile.timeLeft, true);
 
     public override void AI() {
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, TimeSystem.LogicDeltaTime * 3f);
@@ -112,15 +112,12 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
             _fractureParts.Clear();
 
-            for (float i = -MathHelper.PiOver4; i < MathHelper.PiOver4; i += MathHelper.PiOver4 / 2f) {
-                int count = 30;
-                float size = 5f, size2 = size;
-                Vector2 getMoveVector() {
-                    Vector2 result = Vector2.UnitY.RotatedBy(rotation2 + MathHelper.PiOver2 * Main.rand.NextFloatDirection() + i + i) * Main.rand.NextFloat(1f, size) * 5f;
-                    return result;
+            void addFracture(Vector2 startPosition, Func<float, Vector2, Vector2> moveVector, int count, float size = 5f, Action<int, Vector2, Vector2>? onAdd = null, Vector2? startVelocity = null) {
+                float size2 = size;
+                Vector2 endPosition = startPosition + moveVector(size, Vector2.Zero);
+                if (startVelocity.HasValue) {
+                    endPosition += startVelocity.Value;
                 }
-                Vector2 startPosition = Vector2.Zero,
-                        endPosition = startPosition + getMoveVector();
                 for (int k = 0; k < count; k++) {
                     float baseProgress = k / (float)count;
                     float progress = Ease.CubeOut(baseProgress);
@@ -129,21 +126,46 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                         StartPosition = startPosition,
                         EndPosition = endPosition,
                         Color = Color.Lerp(Color.Lerp(Color.Lerp(new Color(34, 177, 76), new Color(45, 124, 205), 0.75f), new Color(34, 177, 76), progress), new Color(34, 177, 76), Utils.GetLerpValue(0.95f, 1f, progress, true)),
-                        Scale = progress2
+                        Scale = progress2 * 1.25f
                     }));
+                    Vector2 moveVector2 = startPosition.DirectionTo(endPosition);
                     startPosition = endPosition;
-                    endPosition += getMoveVector();
+                    endPosition += moveVector(size, moveVector2);
                     Vector2 beforePosition = endPosition;
                     int attempt = _fractureParts.Count;
-                    while (attempt-- > 0 && _fractureParts.Any(x => x.StartPosition.Distance(endPosition) < 10f)) {
-                        endPosition = beforePosition + getMoveVector();
+                    if (!startVelocity.HasValue) {
+                        while (attempt-- > 0 && _fractureParts.Any(x => x.StartPosition.Distance(endPosition) < 10f)) {
+                            endPosition = beforePosition + moveVector(size, moveVector2);
+                        }
                     }
-                    endPosition += endPosition.DirectionTo(Projectile.Center) * 5f * new Vector2(Projectile.ai[0], 1f);
+                    endPosition += endPosition.DirectionTo(Projectile.Center) * 2.5f * new Vector2(Projectile.ai[0], 1f);
+                    onAdd?.Invoke(k, startPosition, moveVector2);
                     size *= 0.9f;
                     if (size < size2 / 2f) {
                         size = size2;
                     }
                 }
+            }
+            float move = MathHelper.PiOver4 / 2f;
+            float from = -MathHelper.PiOver4,
+                  to = MathHelper.PiOver4;
+            for (float i = from; i < to; i += move) {
+                Vector2 getMoveVector(float size, Vector2 moveVector) {
+                    float randomAngle = MathHelper.PiOver2 * Main.rand.NextFloatDirection() * 0.875f;
+                    Vector2 result = moveVector.RotatedBy(rotation2 + randomAngle + i * 1.5f) * Main.rand.NextFloat(1f, size) * 5f;
+                    return result;
+                }
+                Vector2 getMoveVector2(float size, Vector2 moveVector) {
+                    float randomAngle = MathHelper.PiOver2 * Main.rand.NextFloatDirection() * 0.175f;
+                    return moveVector.RotatedBy(randomAngle) * Main.rand.NextFloat(1f, size) * 5f;
+                }
+                int count = 26;
+                addFracture(Vector2.Zero, (size, moveVector2) => getMoveVector(size, Vector2.UnitY), count, onAdd: (index, startPosition, moveVector) => {
+                    if (index >= 5 && index % 7 == 0 && index < count * 0.75f) {
+                        Vector2 startVelocity = moveVector.RotatedBy(MathHelper.PiOver2 * ((Projectile.Center + startPosition).Y > Projectile.Center.Y).ToDirectionInt() * -Projectile.ai[0]);
+                        addFracture(startPosition, (size, moveVector2) => getMoveVector2(size, moveVector2), (count - index) / 2, startVelocity: startVelocity);
+                    }
+                });
             }
         }
 
@@ -193,6 +215,8 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Vector2 getShakeValue() => Main.rand.NextVector2Circular(6f * shakeFactor, 6f * shakeFactor);
 
+        Color to = Color.Black * 0.25f;
+        float toLerp = (1f - Ease.CircOut(Opacity2)) * 0.5f;
 
         void drawSelf(Vector2? offset = null, float alpha = 1f, float opacity = 1f, bool onlyBase = false) {
             offset ??= Vector2.Zero;
@@ -223,7 +247,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                 batch.Draw(texture,
                            position,
                            clip,
-                           baseColor2,
+                           Color.Lerp(baseColor2, to * opacity2 * 1.5f, toLerp),
                            rotation,
                            origin,
                            scale,
@@ -234,7 +258,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                         batch.Draw(ResourceManager.Bloom,
                                    position,
                                    ResourceManager.Bloom.Bounds,
-                                   Color.Lerp(baseColor, Color.Black, 0.1f).MultiplyAlpha(alpha) * opacity2 * 0.75f,
+                                   Color.Lerp(Color.Lerp(baseColor, Color.Black, 0.1f).MultiplyAlpha(alpha) * opacity2 * 0.75f, to * opacity2 * 0.75f, toLerp),
                                    rotation,
                                    ResourceManager.Bloom.Bounds.Centered(),
                                    scale * 0.25f,
@@ -248,7 +272,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                             batch.Draw(texture,
                                        position,
                                        clip,
-                                       color.MultiplyAlpha(alpha) * opacity2 * 0.25f,
+                                       Color.Lerp(color.MultiplyAlpha(alpha) * opacity2 * 0.25f, to * opacity2 * 0.25f, toLerp),
                                        rotation,
                                        origin,
                                        scale * i,
@@ -261,7 +285,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                             batch.Draw(texture2,
                                        position,
                                        clip,
-                                       color.MultiplyAlpha(alpha) * opacity2 * 0.9f,
+                                       Color.Lerp(color.MultiplyAlpha(alpha) * opacity2 * 0.9f, to * opacity2 * 0.9f, toLerp),
                                        rotation,
                                        origin,
                                        scale * i * 1.25f,
@@ -271,7 +295,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                         batch.Draw(texture,
                                    position,
                                    clip,
-                                   Color.Lerp(baseColor, Color.Lerp(Color.White, green, num7), 0.25f).MultiplyAlpha(alpha) * opacity2 * 1.5f,
+                                   Color.Lerp(Color.Lerp(baseColor, Color.Lerp(Color.White, green, num7), 0.25f).MultiplyAlpha(alpha) * opacity2 * 1.5f, to * opacity2 * 1.5f, toLerp),
                                    rotation,
                                    origin,
                                    scale,
