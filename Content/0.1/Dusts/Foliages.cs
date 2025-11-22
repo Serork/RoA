@@ -20,7 +20,7 @@ abstract class FolliageDust : ModDust {
     }
 
     public override bool Update(Dust dust) {
-        Helper.ApplyWindPhysics(dust.position, ref dust.velocity);
+        //Helper.ApplyWindPhysics(dust.position, ref dust.velocity);
 
         dust.position += dust.velocity;
         dust.rotation += 0.05f * dust.velocity.X;
