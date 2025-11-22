@@ -86,6 +86,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         ActivatedValue = Helper.Approach(ActivatedValue, 0f, TimeSystem.LogicDeltaTime);
         Activated2Value = Helper.Approach(Activated2Value, ActivatedValue, TimeSystem.LogicDeltaTime * 5f);
 
+
         Player owner = Projectile.GetOwnerAsPlayer();
         owner.SyncMousePosition();
         Vector2 mousePosition = owner.GetWorldMousePosition();
@@ -107,6 +108,10 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         //if (SpawnDirection == 0f) {
         //    SpawnDirection = Projectile.direction;
         //}
+        if (SpawnDirection == 0f) {
+            float scale = owner.CappedMeleeOrDruidScale();
+            Projectile.scale = scale;
+        }
         SpawnDirection = 1f;
 
         RotationLerpValue = Helper.Approach(RotationLerpValue, 0.0375f * (1f + 0.5f * Activated2Value) * Projectile.direction, TimeSystem.LogicDeltaTime);
@@ -122,7 +127,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         WaveValue += TimeSystem.LogicDeltaTime;
 
-        int minDistance = (int)TileHelper.TileSize * 7;
+        int minDistance = (int)(TileHelper.TileSize * 7 * Projectile.scale);
         foreach (NPC activeNPC in Main.ActiveNPCs) {
             if (!activeNPC.CanBeChasedBy()) {
                 continue;
@@ -142,7 +147,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                 activePlayer.AddBuff<GodDescent>(DEBUFFTIME);
             }
         }
-        minDistance = (int)TileHelper.TileSize * 3;
+        minDistance = (int)(TileHelper.TileSize * 3 * Projectile.scale);
         foreach (Projectile activeProjectile in Main.ActiveProjectiles) {
             if (activeProjectile.type == Type) {
                 continue;
@@ -173,7 +178,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += Vector2.UnitY.RotatedBy(rotation) * distance2;
             float fadeOutProgress = Utils.GetLerpValue(0, 50, Projectile.timeLeft, true);
             float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
-            Lighting.AddLight(position, Color.LightYellow.ToVector3() * spawnProgress * MathHelper.Lerp(0.5f, 0.75f, Activated2Value) * fadeOutProgress3);
+            Lighting.AddLight(position, Color.LightYellow.ToVector3() * spawnProgress * MathHelper.Lerp(0.5f, 0.75f, Activated2Value) * fadeOutProgress3 * Projectile.scale);
         }
     }
 
@@ -257,7 +262,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
             Color color = getColor();
             rotation += MathHelper.Pi;
-            Vector2 baseScale = _scales[i];
+            Vector2 baseScale = _scales[i] * Projectile.scale;
             Vector2 scale = baseScale * fadeOutProgress4;
             DrawInfo drawInfo = DrawInfo.Default with {
                 Clip = clip,
@@ -303,7 +308,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             color *= spawnProgress2;
             color *= fadeOutProgress3;
             rotation += MathHelper.Pi;
-            Vector2 baseScale = _scales[i];
+            Vector2 baseScale = _scales[i] * Projectile.scale;
             Vector2 scale = baseScale * fadeOutProgress4;
             DrawInfo drawInfo = DrawInfo.Default with {
                 Clip = clip,
