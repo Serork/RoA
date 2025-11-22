@@ -47,7 +47,8 @@ sealed class HiTechSlash : NatureProjectile {
     }
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox) {
-        hitbox.Inflate(20, 20);
+        int size = (int)(20 * Projectile.scale);
+        hitbox.Inflate(size, size);
     }
 
     public override void AI() {
@@ -71,8 +72,8 @@ sealed class HiTechSlash : NatureProjectile {
         if (Main.rand.NextBool(20)) {
             int num674 = Utils.SelectRandom<int>(Main.rand, 226, 229);
             Vector2 center8 = Projectile.Center + Projectile.velocity.SafeNormalize() * 35f;
-            int num676 = 20;
-            int num677 = Dust.NewDust(center8 + Vector2.One * -num676, num676 * 2, num676 * 2, num674, 0f, 0f, 100, default(Color), 1f);
+            int num676 = (int)(20 * Projectile.scale);
+            int num677 = Dust.NewDust(center8 + Vector2.One * -num676, num676 * 2, num676 * 2, num674, 0f, 0f, 100, default(Color), 1f * Projectile.scale);
             Dust dust2 = Main.dust[num677];
             dust2.velocity *= 0.1f;
             if (Main.rand.Next(6) != 0)

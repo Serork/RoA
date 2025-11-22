@@ -39,6 +39,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     private Color _firstSlashColor, _secondSlashColor;
     private Vector2 _laserDirection;
+    private float? _scale;
 
     private Color SelectedColor => Color.Lerp(_firstSlashColor, _secondSlashColor, Helper.Wave(0f, 1f, 5f, Projectile.whoAmI));
     private float Opacity => Utils.GetLerpValue(TIMELEFT, TIMELEFT - 15, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
@@ -67,7 +68,9 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         Vector2 position = Projectile.Center;
         float _ = 0f;
-        bool flag = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), position, position + Vector2.Normalize(_laserDirection) * Projectile.localAI[2] * 8.35f, 20, ref _);
+        int size = (int)(20 * (Projectile.scale * 1.25f));
+        bool flag = Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), position,
+            position + Vector2.Normalize(_laserDirection) * Projectile.localAI[2] * 8.35f, size, ref _);
         return flag;
     }
 
@@ -82,7 +85,12 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         float startVelocityModifier = Ease.CubeIn(Utils.GetLerpValue(TIMELEFT + 1, TIMELEFT - 10, Projectile.timeLeft, true));
         float startVelocityModifier2 = Ease.CubeOut(Utils.GetLerpValue(TIMELEFT + 1, TIMELEFT - 20, Projectile.timeLeft, true));
 
-        Projectile.scale = 0.75f;
+        if (_scale == null) {
+            float scale = Projectile.GetOwnerAsPlayer().CappedMeleeOrDruidScale();
+            _scale = scale;
+        }
+
+        Projectile.scale = 0.75f * _scale.Value;
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.Center = owner.Top;
@@ -110,9 +118,9 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.rotation = _laserDirection.ToRotation();
 
         if (Opacity > 0.75f && Main.rand.NextBool(4)) {
-            Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(10f * Projectile.direction, -2f),
+            Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2Circular(20f, 20f) * (Projectile.scale * 1.25f) + new Vector2(10f * Projectile.direction, -2f) * (Projectile.scale * 1.25f),
                 ModContent.DustType<Dusts.SunSigil>(), 
-                Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(2f, 5f),
+                Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi) * Main.rand.NextFloat(2f, 5f) * (Projectile.scale * 1.25f),
                 0, SelectedColor, Main.rand.NextFloat(0.825f, 1f) * 1.75f * Projectile.scale);
             dust.noGravity = true;
         }
@@ -152,7 +160,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         int chance = Math.Max(1, 10 - (int)(MathF.Max(100, num718) / 100));
         chance /= 2;
         if (Main.rand.NextBool(chance)) {
-            Dust dust = Dust.NewDustPerfect(samplingPoint + Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * num718 * Main.rand.NextFloat(0.1f, 0.9f) + Main.rand.NextVector2Circular(20f, 20f) + new Vector2(10f * Projectile.direction, -2f),
+            Dust dust = Dust.NewDustPerfect(samplingPoint + Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * num718 * Main.rand.NextFloat(0.1f, 0.9f) + Main.rand.NextVector2Circular(20f, 20f) * (Projectile.scale * 1.25f) + new Vector2(10f * Projectile.direction, -2f) * (Projectile.scale * 1.25f),
                 ModContent.DustType<Dusts.SunSigil>(),
                 Vector2.UnitY.RotatedByRandom(Projectile.rotation - MathHelper.PiOver2) * Main.rand.NextFloat(3f, 4f) * 1.25f,
                 0, SelectedColor, Main.rand.NextFloat(0.825f, 1f) * 1.375f * Projectile.scale);
@@ -173,7 +181,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Vector2 vector73 = new Vector2((float)Math.Cos(num731) * num732, (float)Math.Sin(num731) * num732);
                 int num733 = Dust.NewDust(vector72 - last.DirectionTo(Projectile.Center) * -20f, 0, 0, DustID.FireworksRGB, vector73.X, vector73.Y);
                 Main.dust[num733].noGravity = true;
-                Main.dust[num733].scale = Opacity * 1.2f;
+                Main.dust[num733].scale = Opacity * 1.2f * (Projectile.scale * 1.25f);
                 Main.dust[num733].velocity = velocity;
                 Main.dust[num733].color = SelectedColor;
             }
@@ -185,7 +193,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 position = last;
         velocity = last.DirectionTo(Projectile.Center).RotatedByRandom(MathHelper.PiOver2) * Main.rand.NextFloat(0.25f, 1.25f);
         VisualEffectSystem.New<VisualEffects.SunSigil>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
-            scale: Opacity * Main.rand.NextFloat(1f, 1.5f),
+            scale: Opacity * Main.rand.NextFloat(1f, 1.5f) * (Projectile.scale * 1.25f),
             color: SelectedColor);
     }
 
