@@ -80,6 +80,10 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
     public override void AI() {
         if (!Init) {
             Init = true;
+
+            float scale = Projectile.GetOwnerAsPlayer().CappedMeleeOrDruidScale();
+            Projectile.scale = scale;
+
             for (int i = 0; i < _hiTechBeams.Length; i++) {
                 _hiTechBeams[i] = new HiTechBeamInfo {
                     Rotation = MathHelper.TwoPi * Main.rand.NextFloatDirection()
@@ -107,7 +111,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         if (BeamCounter > 60f) {
             BeamCounter = 0f;
         }
-        NPC? target = NPCUtils.FindClosestNPC(Projectile.Center, DANGERDISTANCEINPIXELS, false);
+        NPC? target = NPCUtils.FindClosestNPC(Projectile.Center, (int)(DANGERDISTANCEINPIXELS * Projectile.scale), false);
         bool hasTarget = target is not null;
         if (Projectile.timeLeft <= 60 * 2) {
             hasTarget = true;
@@ -135,7 +139,8 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
                     Position = position,
                     Velocity = /*Vector2.One.RotatedByRandom(MathHelper.TwoPi)*/position.DirectionTo(Projectile.Center) * 10f,
                     AI0 = Projectile.Center.X,
-                    AI1 = Projectile.Center.Y
+                    AI1 = Projectile.Center.Y,
+                    AI2 = Projectile.scale
                 });
             }
         }
@@ -180,7 +185,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         Color starColor = Color.White;
         starColor.A = 255;
         float waveSpeed = 20f;
-        Vector2 baseScale = Vector2.One * Projectile.Opacity;
+        Vector2 baseScale = Vector2.One * Projectile.Opacity * Projectile.scale;
         Vector2 starScale = baseScale * Helper.Wave(0.75f, 1.1f, waveSpeed, Projectile.whoAmI);
 
         Texture2D circle = ResourceManager.Circle3;
@@ -239,7 +244,7 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
             starColor.A = 255;
             Vector2 starPartPosition = position - starOrigin / 4f + new Vector2(-3f, -3f) + starPartOrigin * 0.625f;
             ulong partSeed = (ulong)(i * i * Projectile.GetHashCode() / 2f + Projectile.position.GetHashCode() + Projectile.whoAmI);
-            Vector2 starPartScale = Vector2.One * Helper.Wave(0.75f, 0.9f, waveSpeed, i * MathF.Pow(Utils.RandomInt(ref partSeed, 100), 2));
+            Vector2 starPartScale = Vector2.One * Projectile.scale * Helper.Wave(0.75f, 0.9f, waveSpeed, i * MathF.Pow(Utils.RandomInt(ref partSeed, 100), 2));
             batch.Draw(starPartTexture, starPartPosition, DrawInfo.Default with {
                 Clip = starPartClip,
                 Origin = starPartOrigin,

@@ -51,13 +51,14 @@ sealed class HiTechSlash : NatureProjectile {
     }
 
     public override void AI() {
-        if (Projectile.ai[2] >= HiTechStar.SLASHCOUNT) {
-            Projectile.Kill();
-            return;
-        }
+        //if (Projectile.ai[2] >= HiTechStar.SLASHCOUNT) {
+        //    Projectile.Kill();
+        //    return;
+        //}
         if (Projectile.localAI[2] == 0f) {
             Projectile.localAI[2] = 1f;
             Projectile.direction = Projectile.velocity.X.GetDirection();
+            Projectile.scale = Projectile.ai[2];
         }
         if (Projectile.Opacity >= 1f && Projectile.frame < Projectile.GetFrameCount() - 1 && Projectile.localAI[0]++ > 3f) {
             Projectile.localAI[0] = 0f;
@@ -107,7 +108,7 @@ sealed class HiTechSlash : NatureProjectile {
         color.A = 100;
         color *= Ease.CircIn(MathUtils.Clamp01(Projectile.Opacity));
         float rotation = Projectile.rotation;
-        Vector2 scale = Vector2.One;
+        Vector2 scale = Vector2.One * Projectile.scale;
         SpriteEffects effects = Projectile.direction.ToSpriteEffects();
         for (int i = 0; i < 2; i++) {
             float wave = Helper.Wave(0.25f, 1f, 10f, i);
