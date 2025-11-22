@@ -135,7 +135,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                     }
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, Vector2.Zero, ModContent.ProjectileType<TerraFracture>(), 
                         Projectile.damage * 5, Projectile.knockBack * 2.5f, Projectile.owner,
-                        ai1: MathF.Min(Projectile.scale * 0.55f, 1.25f), ai2: UltimateAttackTime * 1.625f);
+                        ai1: MathF.Min(Projectile.scale * 0.55f, 1.25f),
+                        ai2: UltimateAttackTime * 1.625f);
                 }
 
                 _spawnFracture = true;

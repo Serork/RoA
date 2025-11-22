@@ -79,6 +79,15 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     private float Opacity => Utils.GetLerpValue(0, Projectile.ai[2] / 3, Projectile.timeLeft, true);
     private float Opacity2 => Utils.GetLerpValue(Projectile.ai[2] / 3 / 2f, Projectile.ai[2] / 3, Projectile.timeLeft, true);
+    private float DamageModifier => 2f - (int)Projectile.ai[2] / 37f;
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        modifiers.FinalDamage *= DamageModifier;
+    }
+
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        modifiers.FinalDamage *= DamageModifier;
+    }
 
     public override void AI() {
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, TimeSystem.LogicDeltaTime * 3f);
