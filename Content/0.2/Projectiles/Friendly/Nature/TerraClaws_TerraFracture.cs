@@ -224,8 +224,8 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Vector2 getShakeValue() => Main.rand.NextVector2Circular(6f * shakeFactor, 6f * shakeFactor);
 
-        Color to = Color.Black * 0.25f;
-        float toLerp = (1f - Ease.CircOut(Opacity2)) * 0.5f;
+        Color to = Color.Black * 0.375f;
+        float toLerp = (1f - Ease.CircOut(Opacity2)) * 0.75f;
 
         void drawSelf(Vector2? offset = null, float alpha = 1f, float opacity = 1f, bool onlyBase = false) {
             offset ??= Vector2.Zero;
