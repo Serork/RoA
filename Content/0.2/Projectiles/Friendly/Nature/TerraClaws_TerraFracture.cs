@@ -143,7 +143,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Vector2 beforePosition = endPosition;
                     int attempt = _fractureParts.Count;
                     if (!startVelocity.HasValue) {
-                        while (attempt-- > 0 && _fractureParts.Any(x => x.StartPosition.Distance(endPosition) < 10f)) {
+                        while (attempt-- > 0 && _fractureParts.Any(x => x.StartPosition.Distance(endPosition) < 20f)) {
                             endPosition = beforePosition + moveVector(size, moveVector2);
                         }
                     }
@@ -160,7 +160,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                   to = MathHelper.PiOver4;
             for (float i = from; i < to; i += move) {
                 Vector2 getMoveVector(float size, Vector2 moveVector) {
-                    float randomAngle = MathHelper.PiOver2 * Main.rand.NextFloatDirection() * 0.875f;
+                    float randomAngle = MathHelper.PiOver2 * Main.rand.NextFloatDirection() * 0.75f;
                     Vector2 result = moveVector.RotatedBy(rotation2 + randomAngle + i * 1.75f) * Main.rand.NextFloat(1f, size) * 5f;
                     return result;
                 }
