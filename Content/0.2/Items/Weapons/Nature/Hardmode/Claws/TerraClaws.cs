@@ -191,7 +191,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                     Color color1 = FirstSlashColor.Value;
                     Color color2 = SecondSlashColor.Value;
 
-                    int type = 278;
+                    int type = Main.rand.NextBool() ? 278 : (Main.rand.NextBool() ? DustID.Terra : DustID.TerraBlade);
                     Color value = new(64, 220, 96);
                     Color value2 = new(15, 84, 125);
                     Dust dust = Dust.NewDustPerfect(position, type, new Vector2?(rotationVector2 * GravDir()), 125, Color.Lerp(value, value2, Main.rand.NextFloat()), Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
