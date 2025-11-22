@@ -110,6 +110,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             }
 
             Player owner = Projectile.GetOwnerAsPlayer();
+            Vector2 position = Utils.Floor(owner.MountedCenter) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitX * CollidingSize() * 1f * owner.direction;
             if (num2 >= 0.75f && _spawnFracture) {
                 proj.localAI[0]--;
                 if (proj.localAI[2] < proj.localAI[0]) {
@@ -126,7 +127,6 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                 owner.GetWreathHandler().ClawsReset(AttachedNatureWeapon);
 
                 if (Projectile.IsOwnerLocal()) {
-                    Vector2 position = Utils .Floor(owner.MountedCenter) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitX * CollidingSize() * 1f * owner.direction;
                     if (Main.netMode != NetmodeID.Server) {
                         string tag = "Terra Claws";
                         float strength = Main.rand.NextFloat(15f, 26f) / 3f * 0.175f * 0.75f;
@@ -140,6 +140,19 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
                 }
 
                 _spawnFracture = true;
+
+                int count = 30;
+                for (int i = 0; i < count; i++) {
+                    bool last = i > count / 2;
+                    if (Main.rand.NextBool(3)) {
+                        Vector2 pos = position;
+                        Vector2 to = pos.DirectionTo(position - Vector2.One * new Vector2(Projectile.direction * 0.5f, 1f));
+                        Dust dust = Dust.NewDustPerfect(pos, Main.rand.NextBool() ? DustID.Terra : DustID.TerraBlade,
+                            new Vector2(1f, last.ToDirectionInt()) * to.RotatedBy(Main.rand.NextFloat(-0.8f, 0.7f)) * Main.rand.NextFloat(3f, 6f) * Main.rand.NextFloat(0.75f, 1f) * 7.5f, 100, 
+                            default, 1.5f + Main.rand.NextFloat(0.1f, 0.25f));
+                        //dust.noGravity = true;
+                    }
+                }
             }
         }
 
