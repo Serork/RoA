@@ -155,7 +155,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
             num718 += array2[num719];
         }
         num718 /= num716;
-        Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], num718 / 7f, 0.2f);
+        Projectile.localAI[2] = MathHelper.Lerp(Projectile.localAI[2], num718 / 7.2f * (1f - (_scale!.Value - 1f) * 0.15f), 0.2f);
 
         int chance = Math.Max(1, 10 - (int)(MathF.Max(100, num718) / 100));
         chance /= 2;
@@ -274,7 +274,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                     rayColor,
                     Projectile.rotation,
                     new Vector2(0.0f, (float)(laser.Width / 4f)),
-                    new Vector2((float)((double)num / laser.Width), Projectile.scale) * scale2, SpriteEffects.None, 0.0f);
+                    new Vector2((float)((double)num / laser.Width) * (1f - (_scale!.Value - 1f) * 0.15f), 0.75f) * scale2, SpriteEffects.None, 0.0f);
 
                 if (i % 3 == 0) {
                     batch.Draw(flash, position2 + Vector2.UnitY * 6f, DrawInfo.Default with {
