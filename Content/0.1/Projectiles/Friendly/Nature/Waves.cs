@@ -82,33 +82,6 @@ abstract class Wave : NatureProjectile {
             Projectile.velocity = velocity;
             Projectile.netUpdate = true;
         }
-        (int, int, int) dustTypes = UsedDustTypes();
-        for (int i = 0; i < Main.rand.Next(2, 4); i++) {
-            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustTypes.Item1, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, 1f);
-            Main.dust[dust].fadeIn = 1f;
-            Main.dust[dust].noGravity = false;
-            Main.dust[dust].noLight = true;
-            Main.dust[dust].rotation = Main.rand.NextFloat(5f);
-            Main.dust[dust].velocity += player.velocity;
-            Main.dust[dust].scale *= Projectile.scale;
-        }
-        for (int i = 0; i < Main.rand.Next(2, 4); i++) {
-            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustTypes.Item2, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
-            Main.dust[dust].fadeIn = 1f;
-            Main.dust[dust].noGravity = true;
-            Main.dust[dust].noLight = true;
-            Main.dust[dust].rotation = Main.rand.NextFloat(5f);
-            Main.dust[dust].velocity += player.velocity;
-            Main.dust[dust].scale *= Projectile.scale;
-        }
-        for (int i = 0; i < Main.rand.Next(2, 4); i++) {
-            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustTypes.Item3, Projectile.velocity.X * 8f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
-            Main.dust[dust].noGravity = true;
-            Main.dust[dust].noLight = true;
-            Main.dust[dust].rotation = Main.rand.NextFloat(5f);
-            Main.dust[dust].velocity += player.velocity;
-            Main.dust[dust].scale *= Projectile.scale;
-        }
     }
 
     public override void AI() {
@@ -127,6 +100,34 @@ abstract class Wave : NatureProjectile {
 
             float scale = Main.player[Projectile.owner].CappedMeleeOrDruidScale();
             Projectile.scale = scale;
+
+            (int, int, int) dustTypes = UsedDustTypes();
+            for (int i = 0; i < Main.rand.Next(2, 4); i++) {
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustTypes.Item1, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, 1f);
+                Main.dust[dust].fadeIn = 1f;
+                Main.dust[dust].noGravity = false;
+                Main.dust[dust].noLight = true;
+                Main.dust[dust].rotation = Main.rand.NextFloat(5f);
+                Main.dust[dust].velocity += player.velocity;
+                Main.dust[dust].scale *= Projectile.scale;
+            }
+            for (int i = 0; i < Main.rand.Next(2, 4); i++) {
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustTypes.Item2, Projectile.velocity.X * 10f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+                Main.dust[dust].fadeIn = 1f;
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].noLight = true;
+                Main.dust[dust].rotation = Main.rand.NextFloat(5f);
+                Main.dust[dust].velocity += player.velocity;
+                Main.dust[dust].scale *= Projectile.scale;
+            }
+            for (int i = 0; i < Main.rand.Next(2, 4); i++) {
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustTypes.Item3, Projectile.velocity.X * 8f * Main.rand.NextFloat(0.9f, 1.2f), Projectile.velocity.Y * 5f * Main.rand.NextFloat(0.9f, 1.2f), 0, default, Main.rand.NextFloat(0.9f, 1.2f));
+                Main.dust[dust].noGravity = true;
+                Main.dust[dust].noLight = true;
+                Main.dust[dust].rotation = Main.rand.NextFloat(5f);
+                Main.dust[dust].velocity += player.velocity;
+                Main.dust[dust].scale *= Projectile.scale;
+            }
         }
         player.heldProj = Projectile.whoAmI;
         if (Main.myPlayer == Projectile.owner) {
