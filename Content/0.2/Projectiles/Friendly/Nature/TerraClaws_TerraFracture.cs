@@ -135,7 +135,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
                         StartPosition = startPosition,
                         EndPosition = endPosition,
                         Color = Color.Lerp(Color.Lerp(Color.Lerp(new Color(34, 177, 76), new Color(45, 124, 205), 0.75f), new Color(34, 177, 76), progress), new Color(34, 177, 76), Utils.GetLerpValue(0.95f, 1f, progress, true)),
-                        Scale = progress2 * 1.25f
+                        Scale = progress2 * 1.15f
                     }));
                     Vector2 moveVector2 = startPosition.DirectionTo(endPosition);
                     startPosition = endPosition;
@@ -161,7 +161,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
             for (float i = from; i < to; i += move) {
                 Vector2 getMoveVector(float size, Vector2 moveVector) {
                     float randomAngle = MathHelper.PiOver2 * Main.rand.NextFloatDirection() * 0.875f;
-                    Vector2 result = moveVector.RotatedBy(rotation2 + randomAngle + i * 1.5f) * Main.rand.NextFloat(1f, size) * 5f;
+                    Vector2 result = moveVector.RotatedBy(rotation2 + randomAngle + i * 1.75f) * Main.rand.NextFloat(1f, size) * 5f;
                     return result;
                 }
                 Vector2 getMoveVector2(float size, Vector2 moveVector) {
