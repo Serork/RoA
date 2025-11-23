@@ -196,26 +196,26 @@ sealed partial class PlayerCommon : ModPlayer {
                     self.GetCommon().LifeIncrease = increase;
                     self.statLife -= increase;
                     self.statLife += (int)(increase * self.GetCommon().ExtraLifeFromHeartsModifier);
+                    self.GetCommon().DontShowHealEffect = false;
                     if (Main.myPlayer == self.whoAmI) {
                         self.HealEffect(increase);
                     }
                     if (self.statLife > self.statLifeMax2) {
                         self.statLife = self.statLifeMax2;
                     }
-                    self.GetCommon().DontShowHealEffect = false;
                 }
                 if (self.GetCommon().DontShowManaEffect && manaStars.Contains(itemToPickUp2.type)) {
                     int increase = self.statMana - manaBefore;
                     self.GetCommon().ManaIncrease = increase;
                     self.statMana -= increase;
                     self.statMana += (int)(increase * self.GetCommon().ExtraManaFromStarsModifier);
+                    self.GetCommon().DontShowManaEffect = false;
                     if (Main.myPlayer == self.whoAmI) {
                         self.ManaEffect(increase);
                     }
                     if (self.statMana > self.statManaMax2) {
                         self.statMana = self.statManaMax2;
                     }
-                    self.GetCommon().DontShowManaEffect = false;
                 }
             }
         }
