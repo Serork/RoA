@@ -2433,3 +2433,18 @@ UnhingedPotion: {
 	// DisplayName: Unhinged Potion
 	// Tooltip: ""
 }
+
+LittleElixir: {
+	// DisplayName: Little Elixir
+	// Tooltip: ""
+}
+
+ManaDraught: {
+	// DisplayName: Mana Draught
+	// Tooltip: ""
+}
+
+PerfectedConcoction: {
+	// DisplayName: Perfected Concoction
+	// Tooltip: ""
+}
