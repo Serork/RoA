@@ -28,6 +28,7 @@ sealed class PrismaticPotion : ModItem {
 
         Item.useTime = Item.useAnimation = 15;
         Item.useStyle = ItemUseStyleID.DrinkLiquid;
+        Item.useTurn = true;
 
         Item.UseSound = SoundID.Item3;
         Item.consumable = true;

@@ -44,6 +44,10 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsAetherInvincibilityActive;
     public float AetherShimmerAlpha;
 
+    public float ExtraManaFromStarsModifier;
+    public float ExtraLifeFromHeartsModifier;
+    public int PickupItemType;
+
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
 
@@ -139,6 +143,34 @@ sealed partial class PlayerCommon : ModPlayer {
         CrystallizedSkullLoad();
         WiresLoad();
         CursorEffectsLoad();
+
+        On_Player.PickupItem += On_Player_PickupItem;
+        On_Player.Heal += On_Player_Heal;
+        On_Player.ManaEffect += On_Player_ManaEffect;
+    }
+
+    private void On_Player_ManaEffect(On_Player.orig_ManaEffect orig, Player self, int manaAmount) {
+        int[] manaStars = [ItemID.Star, ItemID.SoulCake, ItemID.SugarPlum];
+        if (manaStars.Contains(PickupItemType)) {
+            manaAmount = (int)(manaAmount * self.GetCommon().ExtraManaFromStarsModifier);
+        }
+
+        orig(self, manaAmount);
+    }
+
+    private void On_Player_Heal(On_Player.orig_Heal orig, Player self, int amount) {
+        int[] hearts = [ItemID.Heart, ItemID.CandyApple, ItemID.CandyCane];
+        if (hearts.Contains(PickupItemType)) {
+            amount = (int)(amount * self.GetCommon().ExtraLifeFromHeartsModifier);
+        }
+
+        orig(self, amount);
+    }
+
+    private Item On_Player_PickupItem(On_Player.orig_PickupItem orig, Player self, int playerIndex, int worldItemArrayIndex, Item itemToPickUp) {
+        PickupItemType = itemToPickUp.type;
+
+        return orig(self, playerIndex, worldItemArrayIndex, itemToPickUp);
     }
 
     private void On_PlayerDrawSet_BoringSetup_21(On_PlayerDrawSet.orig_BoringSetup_2 orig, ref PlayerDrawSet self, Player player, System.Collections.Generic.List<DrawData> drawData, System.Collections.Generic.List<int> dust, System.Collections.Generic.List<int> gore, Vector2 drawPosition, float shadowOpacity, float rotation, Vector2 rotationOrigin) {
@@ -380,6 +412,8 @@ sealed partial class PlayerCommon : ModPlayer {
         StopFaceDrawing = StopHeadDrawing = false;
 
         IsAetherInvincibilityActive = false;
+
+        ExtraManaFromStarsModifier = ExtraLifeFromHeartsModifier = 1f;
 
         CursorEffectsResetEffects();
         DeerSkullResetEffects();
