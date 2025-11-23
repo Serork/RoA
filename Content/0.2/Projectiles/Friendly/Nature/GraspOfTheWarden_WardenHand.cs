@@ -63,6 +63,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.manualDirectionChange = true;
 
         Projectile.Opacity = 0f;
+
+        Projectile.tileCollide = false;
     }
 
     public override void AI() {
@@ -82,13 +84,12 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Projectile.SetDirection(-Projectile.velocity.X.GetDirection());
 
-        float lerpValue = 0.25f + MathUtils.Clamp01(RotationValue - 0.25f);
-        float to = -Projectile.velocity.SafeNormalize().X * MathUtils.Clamp01(MathF.Abs(Projectile.velocity.X) + MathF.Abs(Projectile.velocity.Y)) * (1f - RotationValue);
-        Projectile.rotation = Utils.AngleLerp(Projectile.rotation, to * 0.5f, lerpValue);
-
         float max = GRASPTIMEINTICKS;
         if (AITimer < max * 2f) {
             AITimer++;
+            float lerpValue = 0.25f + MathUtils.Clamp01(RotationValue - 0.25f);
+            float to = -Projectile.velocity.SafeNormalize().X * MathUtils.Clamp01(MathF.Abs(Projectile.velocity.X) + MathF.Abs(Projectile.velocity.Y)) * (1f - RotationValue);
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, to * 0.5f, lerpValue);
         }
         if (AITimer >= max * 0.5f) {
             RotationValue = MathHelper.Lerp(RotationValue, 1f, 0.1f);
