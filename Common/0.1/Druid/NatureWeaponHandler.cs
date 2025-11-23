@@ -20,6 +20,8 @@ using Terraria.Utilities;
 namespace RoA.Common.Druid;
 
 sealed partial class NatureWeaponHandler : GlobalItem {
+    public static float MAXCLAWSATTACKSPEED => 2f;
+
     private ushort _basePotentialDamage;
     private float _fillingRateModifier = 1f;
     private ushort _basePotentialUseSpeed;
@@ -154,7 +156,7 @@ sealed partial class NatureWeaponHandler : GlobalItem {
     public static ushort GetNatureDamage(Item item, Player player) => !item.GetGlobalItem<NatureWeaponHandler>().HasPotentialDamage() ? GetFinalBaseDamage(item, player) : (ushort)(GetFinalBaseDamage(item, player) + GetExtraDamage(item, player));
     public static ushort GetUseSpeed(Item item, Player player) => !item.GetGlobalItem<NatureWeaponHandler>().HasPotentialUseSpeed() ? GetFinalUseTime(item, player) : (ushort)(GetFinalUseTime(item, player) - GetExtraUseSpeed(item, player));
     public static ushort GetUseSpeedForClaws(Item item, Player player) =>
-(ushort)(GetUseSpeed(item, player) - (Math.Min(player.GetAttackSpeed(DamageClass.Melee) * player.GetModPlayer<DruidStats>().ClawsAttackSpeedModifier, 2f) - 1f) * GetUseSpeed(item, player) * 0.5f);
+(ushort)(GetUseSpeed(item, player) - (Math.Min(player.GetAttackSpeed(DamageClass.Melee) * player.GetModPlayer<DruidStats>().ClawsAttackSpeedModifier, MAXCLAWSATTACKSPEED) - 1f) * GetUseSpeed(item, player) * 0.5f);
 
     public static WreathHandler GetWreathStats(Player player) => player.GetWreathHandler();
 

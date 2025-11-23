@@ -165,6 +165,15 @@ abstract class ClawsBaseItem : NatureItem {
 
     protected virtual ushort? SpawnClawsProjectileType(Player player) => null;
 
+    public override float UseSpeedMultiplier(Player player) {
+        if (!ResetOnHit && player.GetWreathHandler().ShouldClawsReset()) {
+            ushort attackTime = NatureWeaponHandler.GetUseSpeedForClaws(Item, player);
+            return NatureWeaponHandler.MAXCLAWSATTACKSPEED - (float)attackTime / Item.useTime;
+        }
+
+        return base.UseSpeedMultiplier(player);
+    }
+
     public sealed override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         if (!ResetOnHit && player.GetWreathHandler().ShouldClawsReset()) {
             return false;
