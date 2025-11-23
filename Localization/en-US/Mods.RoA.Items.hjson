@@ -2411,7 +2411,7 @@ UnhingedPotion: {
 
 LittleElixir: {
 	DisplayName: Little Elixir
-	Tooltip: 
+	Tooltip:
 		'''
 		Picking up tiny hearts restores additional life
 		'Soda-pop'
@@ -2426,4 +2426,9 @@ ManaDraught: {
 PerfectedConcoction: {
 	DisplayName: Perfected Concoction
 	Tooltip: Picking up tiny hearts or stars restores additional life or mana respectively
+}
+
+HoneyPunch: {
+	DisplayName: Honey Punch
+	Tooltip: ""
 }

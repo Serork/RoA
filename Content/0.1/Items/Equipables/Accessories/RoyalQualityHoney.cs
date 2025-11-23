@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.ID;
@@ -9,7 +10,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories;
 
 sealed class RoyalQualityHoney : ModItem {
-    private class RoyalQualityHoneyHandler : ModPlayer {
+    public sealed class RoyalQualityHoneyHandler : ModPlayer {
         public bool IsEffectActive;
 
         public override void ResetEffects() => IsEffectActive = false;
@@ -19,7 +20,7 @@ sealed class RoyalQualityHoney : ModItem {
                 return;
             }
 
-            if (Player.dead) {
+            if (!Player.IsAlive()) {
                 return;
             }
 
