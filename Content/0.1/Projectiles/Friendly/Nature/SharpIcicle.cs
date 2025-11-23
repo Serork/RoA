@@ -33,6 +33,7 @@ sealed class SharpIcicle : NatureProjectile {
 
     protected override void SafeOnSpawn(IEntitySource source) {
         Projectile.ai[2] = Projectile.velocity.Length();
+        Projectile.netUpdate = true;
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
