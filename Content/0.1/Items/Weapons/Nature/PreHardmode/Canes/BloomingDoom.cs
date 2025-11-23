@@ -136,7 +136,7 @@ abstract class TulipBase : CaneBaseProjectile {
     }
 
     protected override void SpawnDustsWhenReady(Player player, Vector2 corePosition) {
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 10; i++) {
             float offset = 10f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset),
                     spawnPosition = corePosition + randomOffset - Vector2.One * 1f;
