@@ -89,7 +89,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             AITimer++;
             float lerpValue = 0.25f + MathUtils.Clamp01(RotationValue - 0.25f);
             float to = -Projectile.velocity.SafeNormalize().X * MathUtils.Clamp01(MathF.Abs(Projectile.velocity.X) + MathF.Abs(Projectile.velocity.Y)) * (1f - RotationValue);
-            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, to * 0.5f, lerpValue);
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, to * 0.75f, lerpValue);
         }
         if (AITimer >= max * 0.5f) {
             RotationValue = MathHelper.Lerp(RotationValue, 1f, 0.1f);
