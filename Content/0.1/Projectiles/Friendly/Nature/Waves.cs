@@ -86,7 +86,7 @@ abstract class Wave : NatureProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        Projectile.Center = player.MountedCenter + Projectile.velocity * 50f;
+        Projectile.Center = Utils.Floor(player.MountedCenter) + Vector2.UnitY * player.gfxOffY + Projectile.velocity * 50f * Projectile.scale;
         Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
         Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
         if (Projectile.Opacity == 0f) {
@@ -143,6 +143,7 @@ abstract class Wave : NatureProjectile {
         else {
             Projectile.Kill();
         }
+
         //Projectile.netUpdate = true;
     }
 
@@ -152,7 +153,7 @@ abstract class Wave : NatureProjectile {
         SpriteBatch spriteBatch = Main.spriteBatch;
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-        Vector2 position = Projectile.Center - Main.screenPosition + Projectile.velocity * 50f;
+        Vector2 position = Projectile.Center - Main.screenPosition + Projectile.velocity * 50f * Projectile.scale;
         Color color = Projectile.GetAlpha(lightColor) * Projectile.Opacity;
 
         SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
