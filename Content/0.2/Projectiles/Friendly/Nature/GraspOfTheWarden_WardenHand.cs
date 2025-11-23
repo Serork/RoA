@@ -45,6 +45,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     public ref float AITimer => ref Projectile.localAI[1];
     public ref float RotationValue => ref Projectile.localAI[2];
 
+    public ref float SpawnValue => ref Projectile.ai[0];
+
     public bool Init {
         get => InitValue == 1f;
         set => InitValue = value.ToInt();
@@ -70,7 +72,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override void AI() {
         Player owner = Projectile.GetOwnerAsPlayer();
 
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
+        SpawnValue = Helper.Approach(SpawnValue, 1f, 0.05f);
 
         if (!Init) {
             Init = true;
@@ -79,10 +81,16 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.velocity = Projectile.velocity.SafeNormalize() * baseSpeed;
 
             owner.SyncMousePosition();
-            Projectile.Center = owner.GetViableMousePosition() - Projectile.velocity * baseSpeed * 1.25f;
+            Projectile.Center = owner.GetViableMousePosition() - Projectile.velocity * baseSpeed * 2f;
         }
 
         Projectile.SetDirection(-Projectile.velocity.X.GetDirection());
+
+        if (SpawnValue < 1f) {
+            return;
+        }
+
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
 
         float max = GRASPTIMEINTICKS;
         if (AITimer < max * 2f) {
@@ -129,13 +137,25 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             };
             batch.Draw(baseTexture, basePosition, baseDrawInfo);
         }
+
+        float getBaseProgress(float offset = 0f) => Ease.SineInOut(MathUtils.Clamp01(1f - (AITimer - GRASPTIMEINTICKS * 0.9f) / (GRASPTIMEINTICKS * 1.1f) + offset));
+
+        void drawCore(float opacity = 1f) {
+            batch.DrawWithSnapshot(() => {
+                batch.Draw(ResourceManager.Circle5, Projectile.Center - Main.screenPosition, null,
+                    Color.White * opacity, 0f, ResourceManager.Circle5.Size() / 2f, 0.5f, 0, 0);
+            }, blendState: BlendState.Additive);
+        }
+
+        drawCore();
+
         int fingerIndex = 0;
         Rectangle fingerClip = fingerPartTexture.Bounds;
         Vector2 fingerOrigin = fingerClip.BottomCenter();
         int fingerCount = (byte)FingerType.Count;
         while (fingerIndex < fingerCount) {
             float fingerProgress = fingerIndex / (float)fingerCount;
-            float fingerWaveValue = Ease.SineInOut(MathUtils.Clamp01(1f - (AITimer - GRASPTIMEINTICKS * 0.9f) / (GRASPTIMEINTICKS * 1.1f) + fingerProgress * 0.5f));
+            float fingerWaveValue = getBaseProgress(fingerProgress * 0.5f);
             Vector2 fingerOffsetValue = new(fingerPartTexture.Width / 2f, fingerPartTexture.Height);
             Vector2 fingerOffset = new Vector2(0f, -0.75f) * fingerOffsetValue;
             Vector2 fingerPosition = basePosition + fingerOffset;
@@ -196,5 +216,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
             fingerIndex++;
         }
+
+        drawCore(0.25f);
     }
 }
