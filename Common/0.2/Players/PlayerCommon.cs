@@ -182,10 +182,10 @@ sealed partial class PlayerCommon : ModPlayer {
         int[] hearts = [ItemID.Heart, ItemID.CandyApple, ItemID.CandyCane];
         int[] manaStars = [ItemID.Star, ItemID.SoulCake, ItemID.SugarPlum, 4143];
         Item itemToPickUp2 = itemToPickUp;
-        if (self.GetCommon().ExtraLifeFromHeartsModifier > 0) {
+        if (self.GetCommon().ExtraLifeFromHeartsModifier != 1f) {
             self.GetCommon().DontShowHealEffect = true;
         }
-        if (self.GetCommon().ExtraManaFromStarsModifier > 0) {
+        if (self.GetCommon().ExtraManaFromStarsModifier != 1f) {
             self.GetCommon().DontShowManaEffect = true;
         }
         Item result = orig(self, playerIndex, worldItemArrayIndex, itemToPickUp);
