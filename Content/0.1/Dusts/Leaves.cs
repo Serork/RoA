@@ -15,7 +15,10 @@ abstract class Leaves : ModDust {
         dust.rotation += dust.velocity.X * 0.15f;
         dust.scale *= 0.99f;
         if (dust.scale < 0.5f) {
-            dust.active = false;
+            dust.alpha += 5;
+            if (dust.alpha >= 255) {
+                dust.active = false;
+            }
         }
         return false;
     }
