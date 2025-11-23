@@ -47,6 +47,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public float ExtraManaFromStarsModifier;
     public float ExtraLifeFromHeartsModifier;
     public int ManaIncrease, LifeIncrease;
+    public bool DontShowHealEffect, DontShowManaEffect;
 
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
@@ -150,6 +151,10 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     private void On_Player_ManaEffect(On_Player.orig_ManaEffect orig, Player self, int manaAmount) {
+        if (self.GetCommon().DontShowManaEffect) {
+            return;
+        }
+
         if (self.GetCommon().ManaIncrease > 0) {
             manaAmount += self.GetCommon().ManaIncrease;
             self.GetCommon().ManaIncrease = 0;
@@ -159,6 +164,10 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     private void On_Player_HealEffect(On_Player.orig_HealEffect orig, Player self, int healAmount, bool broadcast) {
+        if (self.GetCommon().DontShowHealEffect) {
+            return;
+        }
+
         if (self.GetCommon().LifeIncrease > 0) {
             healAmount += self.GetCommon().LifeIncrease;
             self.GetCommon().LifeIncrease = 0;
@@ -173,19 +182,41 @@ sealed partial class PlayerCommon : ModPlayer {
         int[] hearts = [ItemID.Heart, ItemID.CandyApple, ItemID.CandyCane];
         int[] manaStars = [ItemID.Star, ItemID.SoulCake, ItemID.SugarPlum, 4143];
         Item itemToPickUp2 = itemToPickUp;
+        if (self.GetCommon().ExtraLifeFromHeartsModifier > 0) {
+            self.GetCommon().DontShowHealEffect = true;
+        }
+        if (self.GetCommon().ExtraManaFromStarsModifier > 0) {
+            self.GetCommon().DontShowManaEffect = true;
+        }
         Item result = orig(self, playerIndex, worldItemArrayIndex, itemToPickUp);
-        if (!itemToPickUp2.IsEmpty()) {
-            if (hearts.Contains(itemToPickUp2.type)) {
-                int increase = self.statLife - healthBefore;
-                self.GetCommon().LifeIncrease = increase;
-                self.statLife -= increase;
-                self.statLife += (int)(increase * self.GetCommon().ExtraLifeFromHeartsModifier);
-            }
-            if (manaStars.Contains(itemToPickUp2.type)) {
-                int increase = self.statMana - manaBefore;
-                self.GetCommon().ManaIncrease = increase;
-                self.statMana -= increase;
-                self.statMana += (int)(increase * self.GetCommon().ExtraManaFromStarsModifier);
+        if (self.GetCommon().DontShowHealEffect || self.GetCommon().DontShowManaEffect) {
+            if (!itemToPickUp2.IsEmpty()) {
+                if (self.GetCommon().DontShowHealEffect && hearts.Contains(itemToPickUp2.type)) {
+                    int increase = self.statLife - healthBefore;
+                    self.GetCommon().LifeIncrease = increase;
+                    self.statLife -= increase;
+                    self.statLife += (int)(increase * self.GetCommon().ExtraLifeFromHeartsModifier);
+                    if (Main.myPlayer == self.whoAmI) {
+                        self.HealEffect(increase);
+                    }
+                    if (self.statLife > self.statLifeMax2) {
+                        self.statLife = self.statLifeMax2;
+                    }
+                    self.GetCommon().DontShowHealEffect = false;
+                }
+                if (self.GetCommon().DontShowManaEffect && manaStars.Contains(itemToPickUp2.type)) {
+                    int increase = self.statMana - manaBefore;
+                    self.GetCommon().ManaIncrease = increase;
+                    self.statMana -= increase;
+                    self.statMana += (int)(increase * self.GetCommon().ExtraManaFromStarsModifier);
+                    if (Main.myPlayer == self.whoAmI) {
+                        self.ManaEffect(increase);
+                    }
+                    if (self.statMana > self.statManaMax2) {
+                        self.statMana = self.statManaMax2;
+                    }
+                    self.GetCommon().DontShowManaEffect = false;
+                }
             }
         }
         return result;
