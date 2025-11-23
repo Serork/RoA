@@ -115,14 +115,20 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 baseOrigin = baseClip.Centered();
         SpriteEffects baseEffects = Projectile.spriteDirection.ToSpriteEffects();
         Color color = Color.White * Projectile.Opacity;
-        DrawInfo baseDrawInfo = DrawInfo.Default with {
-            Clip = baseClip,
-            Origin = baseOrigin,
-            ImageFlip = baseEffects,
-            Color = color
-        };
         Vector2 basePosition = Projectile.Center;
-        batch.Draw(baseTexture, basePosition, baseDrawInfo);
+        Vector2 baseScale = Vector2.One;
+        int baseCount = 3;
+        for (int baseIndex = 0; baseIndex < 3; baseIndex++) {
+            float progress = baseIndex / (float)baseCount;
+            DrawInfo baseDrawInfo = DrawInfo.Default with {
+                Clip = baseClip,
+                Origin = baseOrigin,
+                ImageFlip = baseEffects,
+                Scale = baseScale * MathHelper.Lerp(1f, 0.25f, progress),
+                Color = color.ModifyRGB(MathHelper.Lerp(1f, 0.75f, progress))
+            };
+            batch.Draw(baseTexture, basePosition, baseDrawInfo);
+        }
         int fingerIndex = 0;
         Rectangle fingerClip = fingerPartTexture.Bounds;
         Vector2 fingerOrigin = fingerClip.BottomCenter();
@@ -134,7 +140,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 fingerOffset = new Vector2(0f, -0.75f) * fingerOffsetValue;
             Vector2 fingerPosition = basePosition + fingerOffset;
             float baseFingerRotation = Projectile.rotation + -0.25f * Projectile.direction;
-            Vector2 baseFingerScale = Vector2.One;
             FingerType fingerType = (FingerType)fingerIndex;
             switch (fingerType) {
                 case FingerType.Pointer:
@@ -166,14 +171,14 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                     rotationIncreaseValue *= MathHelper.Lerp(1f, 2f, fingerWaveValue);
                 }
                 fingerRotation += rotationIncreaseValue * 2.5f * progress;
-                Vector2 fingerScale = baseFingerScale * MathHelper.Lerp(1f, 0.75f + 0.25f * (1f - progress), 1f - fingerWaveValue);
+                Vector2 fingerScale = baseScale * MathHelper.Lerp(1f, 0.75f + 0.25f * (1f - progress), 1f - fingerWaveValue);
                 DrawInfo fingerDrawInfo = DrawInfo.Default with {
                     Clip = fingerClip,
                     Origin = fingerOrigin,
                     ImageFlip = baseEffects,
                     Rotation = fingerRotation,
                     Scale = fingerScale,
-                    Color = color
+                    Color = color.ModifyRGB(MathHelper.Lerp(0.75f, 1f, progress))
                 };
                 batch.Draw(fingerPartTexture, fingerPosition, fingerDrawInfo);
                 fingerPosition += (fingerOffset * MathHelper.Lerp(1f, 0.25f, 1f - fingerWaveValue)).RotatedBy(fingerRotation);
