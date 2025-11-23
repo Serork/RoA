@@ -2428,3 +2428,8 @@ TerraDye: {
 	DisplayName: Терра-краситель
 	// Tooltip: ""
 }
+
+UnhingedPotion: {
+	// DisplayName: Unhinged Potion
+	// Tooltip: ""
+}

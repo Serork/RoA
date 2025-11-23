@@ -320,3 +320,8 @@ GodDescent: {
 	DisplayName: God Descent
 	Description: Mods.RoA.Buffs.GodDescent.Description
 }
+
+Unhinged: {
+	DisplayName: Unhinged
+	Description: Mods.RoA.Buffs.Unhinged.Description
+}
