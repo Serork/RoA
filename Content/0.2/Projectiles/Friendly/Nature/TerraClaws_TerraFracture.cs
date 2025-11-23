@@ -68,7 +68,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         int x = (int)Projectile.Center.X;
         int y = (int)Projectile.Center.Y;
         int width = (int)(500 * Projectile.scale * Projectile.ai[0]);
-        int height = (int)(200 * Projectile.scale);
+        int height = (int)(350 * Projectile.scale);
         y -= height / 2;
         if (new Rectangle(x, y, width, height).Intersects(targetHitbox)) {
             return true;
