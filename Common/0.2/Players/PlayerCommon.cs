@@ -156,6 +156,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         orig(self, manaAmount);
+
     }
 
     private void On_Player_Heal(On_Player.orig_Heal orig, Player self, int amount) {
@@ -168,7 +169,9 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     private Item On_Player_PickupItem(On_Player.orig_PickupItem orig, Player self, int playerIndex, int worldItemArrayIndex, Item itemToPickUp) {
-        self.GetCommon().PickupItemType = itemToPickUp.type;
+        if (!itemToPickUp.IsEmpty()) {
+            self.GetCommon().PickupItemType = itemToPickUp.type;
+        }
 
         return orig(self, playerIndex, worldItemArrayIndex, itemToPickUp);
     }
