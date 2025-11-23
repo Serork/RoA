@@ -2396,7 +2396,7 @@ AetherWreath: {
 
 TerraClaws: {
 	DisplayName: Terra Claws
-	Tooltip: ""
+	Tooltip: Consume a full wreath charge to send tremors along the ground
 }
 
 TerraDye: {
@@ -2406,20 +2406,24 @@ TerraDye: {
 
 UnhingedPotion: {
 	DisplayName: Unhinged Potion
-	Tooltip: ""
+	Tooltip: Increases attack speed
 }
 
 LittleElixir: {
 	DisplayName: Little Elixir
-	Tooltip: ""
+	Tooltip: 
+		'''
+		Picking up tiny hearts restores additional life
+		'Soda-pop'
+		'''
 }
 
 ManaDraught: {
 	DisplayName: Mana Draught
-	Tooltip: ""
+	Tooltip: Picking up tiny stars restores additional mana
 }
 
 PerfectedConcoction: {
 	DisplayName: Perfected Concoction
-	Tooltip: ""
+	Tooltip: Picking up tiny hearts or stars restores additional life or mana respectively
 }

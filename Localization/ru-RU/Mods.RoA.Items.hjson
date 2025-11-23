@@ -2421,7 +2421,7 @@ AetherWreath: {
 
 TerraClaws: {
 	DisplayName: Терра-когти
-	// Tooltip: ""
+	Tooltip: Тратят полный заряд венка, чтобы разверзнуть землю
 }
 
 TerraDye: {
@@ -2430,21 +2430,21 @@ TerraDye: {
 }
 
 UnhingedPotion: {
-	// DisplayName: Unhinged Potion
-	// Tooltip: ""
+	DisplayName: Зелье отвёртки
+	Tooltip: Скорость атаки увеличена
 }
 
 LittleElixir: {
-	// DisplayName: Little Elixir
-	// Tooltip: ""
+	DisplayName: Маленький эликсир
+	Tooltip: Маленькие сердечки восстанавливают больше здоровья
 }
 
 ManaDraught: {
-	// DisplayName: Mana Draught
-	// Tooltip: ""
+	DisplayName: Настойка маны
+	Tooltip: Маленькие звёзды восстанавливают больше маны
 }
 
 PerfectedConcoction: {
-	// DisplayName: Perfected Concoction
-	// Tooltip: ""
+	DisplayName: Идеальная смесь
+	Tooltip: Маленькие сердечки и звёзды восстанавливают больше здоровья или маны соответственно
 }

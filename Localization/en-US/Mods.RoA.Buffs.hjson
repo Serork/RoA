@@ -282,7 +282,7 @@ EnduranceCloud3: {
 }
 
 TarDebuff: {
-	DisplayName: Tar Debuff
+	DisplayName: Tarred
 	Description: Movement is almost impossible
 }
 
@@ -312,16 +312,16 @@ DeerSkullElectrified: {
 }
 
 NewMoneyDebuff: {
-	DisplayName: New Money Debuff
+	DisplayName: Love Bites
 	Description: Reaching full stacks has palpable consequences
 }
 
 GodDescent: {
-	DisplayName: God Descent
-	Description: Mods.RoA.Buffs.GodDescent.Description
+	DisplayName: Divine Punishment
+	Description: Unable to inflict harm onto others
 }
 
 Unhinged: {
 	DisplayName: Unhinged
-	Description: Mods.RoA.Buffs.Unhinged.Description
+	Description: Attack speed is increased
 }

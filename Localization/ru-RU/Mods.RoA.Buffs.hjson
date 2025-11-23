@@ -282,8 +282,8 @@ EnduranceCloud3: {
 }
 
 TarDebuff: {
-	// DisplayName: Tar Debuff
-	// Description: Movement is almost impossible
+	DisplayName: В смоле
+	Description: Передвижение практически невозможно
 }
 
 HallowEnt: {
@@ -312,16 +312,16 @@ DeerSkullElectrified: {
 }
 
 NewMoneyDebuff: {
-	// DisplayName: New Money Debuff
-	// Description: Reaching full stacks has palpable consequences
+	DisplayName: Любовь зла
+	Description: Ощутимые последствия при достижении полного зарядя
 }
 
 GodDescent: {
-	// DisplayName: God Descent
-	// Description: Mods.RoA.Buffs.GodDescent.Description
+	DisplayName: Небесное наказание
+	Description: Невозможно ранить других
 }
 
 Unhinged: {
-	// DisplayName: Unhinged
-	// Description: Mods.RoA.Buffs.Unhinged.Description
+	DisplayName: Отвёртка
+	Description: Скорость атаки увеличена
 }
