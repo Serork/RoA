@@ -136,7 +136,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         while (fingerIndex < fingerCount) {
             float fingerProgress = fingerIndex / (float)fingerCount;
             float fingerWaveValue = Ease.SineInOut(MathUtils.Clamp01(1f - (AITimer - GRASPTIMEINTICKS * 0.9f) / (GRASPTIMEINTICKS * 1.1f) + fingerProgress * 0.5f));
-
             Vector2 fingerOffsetValue = new(fingerPartTexture.Width / 2f, fingerPartTexture.Height);
             Vector2 fingerOffset = new Vector2(0f, -0.75f) * fingerOffsetValue;
             Vector2 fingerPosition = basePosition + fingerOffset;
@@ -167,10 +166,10 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             int fingerPartCount = 3;
             for (int i = 0; i < fingerPartCount; i++) {
                 float progress = (float)(i + 1) / fingerPartCount;
-                float rotationIncreaseValue = -MathHelper.Lerp(0.875f, 0.25f, fingerWaveValue) * Projectile.direction;
+                float rotationIncreaseValue = -MathHelper.Lerp(1f, 0.25f, fingerWaveValue) * Projectile.direction;
                 float fingerExtraRotation = -0.375f * Projectile.direction;
                 if (fingerType == FingerType.Thumb) {
-                    rotationIncreaseValue *= MathHelper.Lerp(1f, 2f, fingerWaveValue);
+                    rotationIncreaseValue *= MathHelper.Lerp(0.5f, 2f, fingerWaveValue);
                 }
                 else if (fingerType == FingerType.Pointer) {
                     rotationIncreaseValue *= MathHelper.Lerp(1f, 0.5f, 1f - fingerWaveValue);
@@ -193,7 +192,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Color = color.ModifyRGB(MathHelper.Lerp(0.875f, 1f, progress))
                 };
                 batch.Draw(fingerPartTexture, fingerPosition, fingerDrawInfo);
-                fingerPosition += (fingerOffset * MathHelper.Lerp(1f, 0f, 1f - fingerWaveValue)).RotatedBy(fingerRotation);
+                fingerPosition += (fingerOffset * MathHelper.Lerp(1f, 0.1f, 1f - fingerWaveValue)).RotatedBy(fingerRotation);
             }
             fingerIndex++;
         }
