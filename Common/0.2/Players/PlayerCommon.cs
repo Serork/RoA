@@ -156,7 +156,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         if (self.GetCommon().ManaIncrease > 0) {
-            manaAmount += self.GetCommon().ManaIncrease;
+            manaAmount = self.GetCommon().ManaIncrease;
             self.GetCommon().ManaIncrease = 0;
         }
 
@@ -169,7 +169,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         if (self.GetCommon().LifeIncrease > 0) {
-            healAmount += self.GetCommon().LifeIncrease;
+            healAmount = self.GetCommon().LifeIncrease;
             self.GetCommon().LifeIncrease = 0;
         }
 
