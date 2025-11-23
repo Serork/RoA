@@ -150,8 +150,8 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     private void On_Player_ManaEffect(On_Player.orig_ManaEffect orig, Player self, int manaAmount) {
-        int[] manaStars = [ItemID.Star, ItemID.SoulCake, ItemID.SugarPlum];
-        if (manaStars.Contains(PickupItemType)) {
+        int[] manaStars = [ItemID.Star, ItemID.SoulCake, ItemID.SugarPlum, 4143];
+        if (manaStars.Contains(self.GetCommon().PickupItemType)) {
             manaAmount = (int)(manaAmount * self.GetCommon().ExtraManaFromStarsModifier);
         }
 
@@ -160,7 +160,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     private void On_Player_Heal(On_Player.orig_Heal orig, Player self, int amount) {
         int[] hearts = [ItemID.Heart, ItemID.CandyApple, ItemID.CandyCane];
-        if (hearts.Contains(PickupItemType)) {
+        if (hearts.Contains(self.GetCommon().PickupItemType)) {
             amount = (int)(amount * self.GetCommon().ExtraLifeFromHeartsModifier);
         }
 
@@ -168,7 +168,7 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     private Item On_Player_PickupItem(On_Player.orig_PickupItem orig, Player self, int playerIndex, int worldItemArrayIndex, Item itemToPickUp) {
-        PickupItemType = itemToPickUp.type;
+        self.GetCommon().PickupItemType = itemToPickUp.type;
 
         return orig(self, playerIndex, worldItemArrayIndex, itemToPickUp);
     }
