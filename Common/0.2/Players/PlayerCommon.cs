@@ -46,7 +46,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public float ExtraManaFromStarsModifier;
     public float ExtraLifeFromHeartsModifier;
-    public int PickupItemType;
+    public int ManaIncrease, LifeIncrease;
 
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
@@ -124,6 +124,10 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override void Load() {
+        On_Player.PickupItem += On_Player_PickupItem;
+        On_Player.HealEffect += On_Player_HealEffect;
+        On_Player.ManaEffect += On_Player_ManaEffect;
+
         On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull;
         On_Player.DryCollision += On_Player_DryCollision;
 
@@ -143,37 +147,48 @@ sealed partial class PlayerCommon : ModPlayer {
         CrystallizedSkullLoad();
         WiresLoad();
         CursorEffectsLoad();
-
-        On_Player.PickupItem += On_Player_PickupItem;
-        On_Player.Heal += On_Player_Heal;
-        On_Player.ManaEffect += On_Player_ManaEffect;
     }
 
     private void On_Player_ManaEffect(On_Player.orig_ManaEffect orig, Player self, int manaAmount) {
-        int[] manaStars = [ItemID.Star, ItemID.SoulCake, ItemID.SugarPlum, 4143];
-        if (manaStars.Contains(self.GetCommon().PickupItemType)) {
-            manaAmount = (int)(manaAmount * self.GetCommon().ExtraManaFromStarsModifier);
+        if (self.GetCommon().ManaIncrease > 0) {
+            manaAmount += self.GetCommon().ManaIncrease;
+            self.GetCommon().ManaIncrease = 0;
         }
 
         orig(self, manaAmount);
-
     }
 
-    private void On_Player_Heal(On_Player.orig_Heal orig, Player self, int amount) {
-        int[] hearts = [ItemID.Heart, ItemID.CandyApple, ItemID.CandyCane];
-        if (hearts.Contains(self.GetCommon().PickupItemType)) {
-            amount = (int)(amount * self.GetCommon().ExtraLifeFromHeartsModifier);
+    private void On_Player_HealEffect(On_Player.orig_HealEffect orig, Player self, int healAmount, bool broadcast) {
+        if (self.GetCommon().LifeIncrease > 0) {
+            healAmount += self.GetCommon().LifeIncrease;
+            self.GetCommon().LifeIncrease = 0;
         }
 
-        orig(self, amount);
+        orig(self, healAmount, broadcast);
     }
 
     private Item On_Player_PickupItem(On_Player.orig_PickupItem orig, Player self, int playerIndex, int worldItemArrayIndex, Item itemToPickUp) {
-        if (!itemToPickUp.IsEmpty()) {
-            self.GetCommon().PickupItemType = itemToPickUp.type;
+        int healthBefore = self.statLife;
+        int manaBefore = self.statMana;
+        int[] hearts = [ItemID.Heart, ItemID.CandyApple, ItemID.CandyCane];
+        int[] manaStars = [ItemID.Star, ItemID.SoulCake, ItemID.SugarPlum, 4143];
+        Item itemToPickUp2 = itemToPickUp;
+        Item result = orig(self, playerIndex, worldItemArrayIndex, itemToPickUp);
+        if (!itemToPickUp2.IsEmpty()) {
+            if (hearts.Contains(itemToPickUp2.type)) {
+                int increase = self.statLife - healthBefore;
+                self.GetCommon().LifeIncrease = increase;
+                self.statLife -= increase;
+                self.statLife += (int)(increase * self.GetCommon().ExtraLifeFromHeartsModifier);
+            }
+            if (manaStars.Contains(itemToPickUp2.type)) {
+                int increase = self.statMana - manaBefore;
+                self.GetCommon().ManaIncrease = increase;
+                self.statMana -= increase;
+                self.statMana += (int)(increase * self.GetCommon().ExtraManaFromStarsModifier);
+            }
         }
-
-        return orig(self, playerIndex, worldItemArrayIndex, itemToPickUp);
+        return result;
     }
 
     private void On_PlayerDrawSet_BoringSetup_21(On_PlayerDrawSet.orig_BoringSetup_2 orig, ref PlayerDrawSet self, Player player, System.Collections.Generic.List<DrawData> drawData, System.Collections.Generic.List<int> dust, System.Collections.Generic.List<int> gore, Vector2 drawPosition, float shadowOpacity, float rotation, Vector2 rotationOrigin) {
