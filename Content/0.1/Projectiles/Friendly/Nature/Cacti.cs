@@ -107,6 +107,9 @@ sealed class Cacti : NatureProjectile {
                 color *= 1.125f;
                 float scale = Projectile.scale * Math.Clamp(progress, 0.5f, 1f);
                 float offsetYBetween = Projectile.Size.Y * 0.2f * scale;
+                if (i == 4) {
+                    offsetYBetween *= 0.875f;
+                }
                 Vector2 last = Projectile.position;
                 Vector2 dif = (last - Projectile.oldPos[i]).SafeNormalize(Vector2.UnitY);
                 Main.EntitySpriteDraw(trailTexture,
@@ -258,7 +261,7 @@ sealed class Cacti : NatureProjectile {
                 break;
             case State.Enchanted:
                 float baseRotation = (Projectile.velocity.SafeNormalize(Vector2.One) * 2f).ToRotation() - MathHelper.PiOver2;
-                Projectile.rotation = baseRotation + Projectile.localAI[2];
+                Projectile.rotation = baseRotation + Projectile.localAI[2] * Projectile.localAI[1];
                 if (Main.rand.NextBool(5)) {
                     Dust dust2 = Dust.NewDustDirect(Projectile.Center, Projectile.width, Projectile.height, ModContent.DustType<CactiCasterDust>(), 0f, 0f, 0, default(Color), Main.rand.NextFloat(0.8f, 1f) * 1.4f * 0.95f);
                     dust2.noGravity = true;
@@ -266,6 +269,7 @@ sealed class Cacti : NatureProjectile {
                     dust2.velocity = Projectile.velocity * 0.5f;
                     dust2.fadeIn = 1f;
                 }
+                Projectile.localAI[1] = Helper.Approach(Projectile.localAI[1], 1.05f, 0.075f);
                 Projectile.localAI[2] += Projectile.velocity.X * 0.0075f;
                 for (int i = 0; i < 2; i++) {
                     int direction = i != 0 ? 1 : -1;
