@@ -79,7 +79,7 @@ sealed class SharpIcicle : NatureProjectile {
             Main.dust[dust].noLight = true;
         }
         else {
-            if (Projectile.Opacity < 1f) {
+            if (Projectile.Opacity < 0.8f) {
                 Projectile.Opacity += 0.2f;
             }
         }
