@@ -20,7 +20,7 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static ushort TIMELEFT => 3600;
+    private static ushort TIMELEFT => 360;
     private static float GRASPTIMEINTICKS => 15f;
 
     public enum WardenHandRequstedTextureType : byte {
