@@ -190,7 +190,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                     ImageFlip = baseEffects,
                     Rotation = fingerRotation + fingerExtraRotation,
                     Scale = fingerScale,
-                    Color = color.ModifyRGB(MathHelper.Lerp(0.75f, 1f, progress))
+                    Color = color.ModifyRGB(MathHelper.Lerp(0.875f, 1f, progress))
                 };
                 batch.Draw(fingerPartTexture, fingerPosition, fingerDrawInfo);
                 fingerPosition += (fingerOffset * MathHelper.Lerp(1f, 0f, 1f - fingerWaveValue)).RotatedBy(fingerRotation);
