@@ -2453,3 +2453,8 @@ HoneyPunch: {
 	// DisplayName: Honey Punch
 	// Tooltip: ""
 }
+
+GraspOfTheWarden: {
+	// DisplayName: Grasp Of The Warden
+	// Tooltip: ""
+}
