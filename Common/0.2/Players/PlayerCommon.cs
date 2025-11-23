@@ -193,12 +193,12 @@ sealed partial class PlayerCommon : ModPlayer {
             if (!itemToPickUp2.IsEmpty()) {
                 if (self.GetCommon().DontShowHealEffect && hearts.Contains(itemToPickUp2.type)) {
                     int increase = self.statLife - healthBefore;
-                    self.GetCommon().LifeIncrease = increase;
                     self.statLife -= increase;
-                    self.statLife += (int)(increase * self.GetCommon().ExtraLifeFromHeartsModifier);
+                    self.GetCommon().LifeIncrease = (int)(increase * self.GetCommon().ExtraLifeFromHeartsModifier);
+                    self.statLife += self.GetCommon().LifeIncrease;
                     self.GetCommon().DontShowHealEffect = false;
                     if (Main.myPlayer == self.whoAmI) {
-                        self.HealEffect(increase);
+                        self.HealEffect(self.GetCommon().LifeIncrease - increase);
                     }
                     if (self.statLife > self.statLifeMax2) {
                         self.statLife = self.statLifeMax2;
@@ -206,12 +206,12 @@ sealed partial class PlayerCommon : ModPlayer {
                 }
                 if (self.GetCommon().DontShowManaEffect && manaStars.Contains(itemToPickUp2.type)) {
                     int increase = self.statMana - manaBefore;
-                    self.GetCommon().ManaIncrease = increase;
                     self.statMana -= increase;
-                    self.statMana += (int)(increase * self.GetCommon().ExtraManaFromStarsModifier);
+                    self.GetCommon().ManaIncrease = (int)(increase * self.GetCommon().ExtraManaFromStarsModifier);
+                    self.statMana += self.GetCommon().ManaIncrease;
                     self.GetCommon().DontShowManaEffect = false;
                     if (Main.myPlayer == self.whoAmI) {
-                        self.ManaEffect(increase);
+                        self.ManaEffect(self.GetCommon().ManaIncrease - increase);
                     }
                     if (self.statMana > self.statManaMax2) {
                         self.statMana = self.statManaMax2;
