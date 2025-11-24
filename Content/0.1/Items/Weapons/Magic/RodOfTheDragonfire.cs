@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
+using RoA.Common.Players;
 using RoA.Content.Items.Special;
 using RoA.Content.Projectiles.Friendly.Magic;
 using RoA.Core;
@@ -58,6 +59,8 @@ sealed class RodOfTheDragonfire : Rod {
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         int amount = 2;
+
+        velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
 
         Vector2 dustPosition = position - Vector2.One * 2f;
         for (int i = -amount + 1; i < amount; i++) {
