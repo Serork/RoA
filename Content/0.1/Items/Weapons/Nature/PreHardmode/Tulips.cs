@@ -61,9 +61,9 @@ sealed class WeepingTulip : NatureItem {
         velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 2);
         if (Main.rand.NextChance(0.6)) {
-            float offset2 = 10f;
+            float offset2 = 6f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
-                    spawnPosition = position - randomOffset / 2f + randomOffset;
+                    spawnPosition = position + randomOffset;
 
             //ushort dustType = CoreDustType();
             Dust dust = Dust.NewDustPerfect(spawnPosition,
@@ -126,9 +126,9 @@ sealed class SweetTulip : NatureItem {
         velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 1);
         if (Main.rand.NextChance(0.6)) {
-            float offset2 = 10f;
+            float offset2 = 6f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
-                    spawnPosition = position - randomOffset / 2f + randomOffset;
+                    spawnPosition = position + randomOffset;
 
             //ushort dustType = CoreDustType();
             Dust dust = Dust.NewDustPerfect(spawnPosition,
@@ -191,9 +191,9 @@ sealed class ExoticTulip : NatureItem {
         velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, 0);
         if (Main.rand.NextChance(0.6)) {
-            float offset2 = 10f;
+            float offset2 = 6f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
-                    spawnPosition = position - randomOffset / 2f + randomOffset;
+                    spawnPosition = position + randomOffset;
 
             //ushort dustType = CoreDustType();
             Dust dust = Dust.NewDustPerfect(spawnPosition,
