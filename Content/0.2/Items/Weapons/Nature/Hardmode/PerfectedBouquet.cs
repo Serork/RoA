@@ -97,9 +97,9 @@ sealed class PerfectedBouquet : NatureItem {
 
 
         for (int i = 0; i < 2; i++) {
-            float offset2 = 10f;
+            float offset2 = 6f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
-                    spawnPosition = position - randomOffset / 2f + randomOffset;
+                    spawnPosition = position + randomOffset;
             Dust dust = Dust.NewDustPerfect(spawnPosition,
                                             ModContent.DustType<Dusts.Tulip>(),
                                             (spawnPosition - position).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f),
