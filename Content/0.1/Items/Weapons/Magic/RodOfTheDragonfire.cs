@@ -53,12 +53,13 @@ sealed class RodOfTheDragonfire : Rod {
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelocity = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
         position += newVelocity * -2f;
-        position += new Vector2(player.direction == -1 ? 4f : -4f, -6f * player.direction).RotatedBy(newVelocity.ToRotation());
+        position += new Vector2(-2f, -2f * player.direction).RotatedBy(newVelocity.ToRotation());
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         int amount = 2;
-        Vector2 dustPosition = position;
+
+        Vector2 dustPosition = position - Vector2.One * 2f;
         for (int i = -amount + 1; i < amount; i++) {
             Vector2 vector2 = Utils.RotatedBy(velocity, (double)(i / 10f)) * Main.rand.NextFloat(0.75f, 1.35f);
             if (Main.rand.NextBool()) {
@@ -72,7 +73,7 @@ sealed class RodOfTheDragonfire : Rod {
         if (base.Shoot(player, source, position, velocity, type, damage, knockback)) {
             for (int i = -amount + 1; i < amount; i++) {
                 Vector2 vector2 = Utils.RotatedBy(velocity, (double)(i / 10f)) * Main.rand.NextFloat(0.75f, 1.35f);
-                Vector2 spawnPosition = position + vector2.SafeNormalize(Vector2.Zero) * -4f + vector2 + vector2 + new Vector2(0f, 12f * player.direction).RotatedBy(velocity.ToRotation());
+                Vector2 spawnPosition = position + vector2.SafeNormalize(Vector2.Zero) * -4f + vector2 + vector2 + new Vector2(0f, 0f * player.direction).RotatedBy(velocity.ToRotation());
                 Projectile.NewProjectileDirect(source, spawnPosition, vector2, type, damage, knockback, player.whoAmI);
             }
         }

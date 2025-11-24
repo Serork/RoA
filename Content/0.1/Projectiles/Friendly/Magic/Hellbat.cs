@@ -2,6 +2,7 @@
 
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -39,6 +40,12 @@ sealed class Hellbat : ModProjectile {
         Projectile.timeLeft = 70;
 
         DrawOriginOffsetY = 1;
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity);
+
+        return false;
     }
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox) {
