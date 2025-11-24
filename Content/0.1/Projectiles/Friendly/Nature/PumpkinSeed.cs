@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Audio;
@@ -11,7 +12,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class PumpkinSeed : NatureProjectile {
     protected override void SafeSetDefaults() {
-        int width = 16, height = width;
+        int width = 20, height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.ignoreWater = true;
@@ -37,6 +38,12 @@ sealed class PumpkinSeed : NatureProjectile {
             Projectile.velocity.Y += 0.4f;
             Projectile.rotation += Projectile.velocity.Y * Projectile.direction;
         }
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity);
+
+        return false;
     }
 
     protected override void SafeOnSpawn(IEntitySource source) => Projectile.scale = Main.rand.NextFloat(0.8f, 1.2f);
