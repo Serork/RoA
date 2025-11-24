@@ -16,7 +16,7 @@ abstract class SkeletonBodyPart : ModProjectile {
     }
 
     public override void SetDefaults() {
-        int width = 20; int height = width;
+        int width = 24; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.friendly = true;
@@ -71,12 +71,13 @@ abstract class SkeletonBodyPart : ModProjectile {
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
+        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
         for (int i = 0; i < Projectile.oldPos.Length; i++) {
-            Vector2 drawPos = Projectile.oldPos[i] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+            Vector2 drawPos = Projectile.oldPos[i] - Main.screenPosition + Projectile.Size / 2f;
             Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - i) / Projectile.oldPos.Length);
             spriteBatch.Draw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         }
-        return true;
+        spriteBatch.Draw(texture, Projectile.Center, null, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+        return false;
     }
 }
