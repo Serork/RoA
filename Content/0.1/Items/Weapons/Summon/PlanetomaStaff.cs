@@ -258,6 +258,12 @@ sealed class PlanetomaStaffProjectile2 : ModProjectile {
 
     public override void PostAI() => ProjectileUtils.Animate(Projectile, 4);
 
+    public override bool PreDraw(ref Color lightColor) {
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity);
+
+        return false;
+    }
+
     public override void AI() {
         if (_previousCenter != Projectile.Center) {
             _previousCenter = Projectile.Center;
