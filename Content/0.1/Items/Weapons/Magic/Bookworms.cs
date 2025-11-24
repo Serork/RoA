@@ -50,7 +50,7 @@ sealed class Bookworms : ModItem, IRecipeDuplicatorItem {
     public override Vector2? HoldoutOffset() => new Vector2(5f, 0f);
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        position = player.Center + velocity.SafeNormalize(Vector2.Zero) * 5f;
+        position = player.MountedCenter + velocity.SafeNormalize(Vector2.Zero) * 5f;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
