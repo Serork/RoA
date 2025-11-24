@@ -81,6 +81,11 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
         Projectile.penetrate = PENETRATEAMOUNT;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Y -= 10;
+        hitbox.Inflate(6, 12);
+    }
+
     public override void AI() {
         void randomizeTypeOnSpawn() {
             CoralValues coralValues = new(Projectile);
