@@ -86,7 +86,7 @@ sealed class Moth : ModProjectile {
 
         #region General behavior
 
-        Vector2 idlePosition = player.Center;
+        Vector2 idlePosition = Utils.Floor(player.MountedCenter) + Vector2.UnitY * player.gfxOffY;
         mothCount = player.ownedProjectileCounts[ModContent.ProjectileType<Moth>()];
         if (mothCount == 0) mothCount++;
         if (player.whoAmI == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && player.inventory[player.selectedItem].type == ModContent.ItemType<MothStaff>()) {
@@ -98,17 +98,17 @@ sealed class Moth : ModProjectile {
         else mothRotation = 0;
 
         if (player.inventory[player.selectedItem].type == ModContent.ItemType<MothStaff>()) {
-            idlePosition += new Vector2(32.5f * player.direction, -12.5f);
+            idlePosition += new Vector2(34f * player.direction, -12.5f);
             if (player.direction == -1) {
-                idlePosition.X -= 8f;
+                idlePosition.X -= 2f;
             }
             Vector2 minionPositionOffset = new Vector2(0f, 18f + mothCount * 4f);
             float deg = mothRotation * 2f * player.direction + 360 / mothCount * Projectile.minionPos;
             idlePosition += minionPositionOffset.RotatedBy(MathHelper.ToRadians(deg));
         }
         else {
-            idlePosition.X -= 2f;
-            idlePosition.Y += 4f;
+            idlePosition.X -= 0f;
+            idlePosition.Y += 0f;
             Vector2 minionPositionOffset = new Vector2(0f, 50f + mothCount * 4f);
             float deg = mothRotation * player.direction + 360 / mothCount * Projectile.minionPos;
             idlePosition += minionPositionOffset.RotatedBy(MathHelper.ToRadians(deg));
