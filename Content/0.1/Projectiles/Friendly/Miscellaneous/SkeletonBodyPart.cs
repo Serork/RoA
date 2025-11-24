@@ -28,6 +28,8 @@ abstract class SkeletonBodyPart : ModProjectile {
     }
 
     public override void AI() {
+        ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
+
         Player player = Main.player[Projectile.owner];
         Vector2 targetPos = player.Center;
         float speed = 10f;
@@ -74,10 +76,10 @@ abstract class SkeletonBodyPart : ModProjectile {
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
         for (int i = 0; i < Projectile.oldPos.Length; i++) {
             Vector2 drawPos = Projectile.oldPos[i] - Main.screenPosition + Projectile.Size / 2f;
-            Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - i) / Projectile.oldPos.Length);
+            Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length) * 0.5f;
             spriteBatch.Draw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         }
-        spriteBatch.Draw(texture, Projectile.Center, null, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+        spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         return false;
     }
 }

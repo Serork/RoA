@@ -40,7 +40,7 @@ sealed class BoneSkull : ModProjectile {
         SpriteBatch spriteBatch = Main.spriteBatch;
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
-        spriteBatch.Draw(texture, Projectile.Center, null, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+        spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         return false;
     }
 }
