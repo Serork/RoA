@@ -87,11 +87,10 @@ sealed class BrilliantBouquet : NatureItem {
         velocity = position.DirectionTo(player.GetWorldMousePosition()) * velocity.Length();
         Projectile.NewProjectile(source, position.X, position.Y, velocity.X, velocity.Y, type, damage, knockback, player.whoAmI, petalType);
 
-        position += velocity2 * amount / 7f;
         if (Main.rand.NextChance(0.7)) {
-            float offset2 = 10f;
+            float offset2 = 6f;
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
-                    spawnPosition = position - randomOffset / 2f + randomOffset;
+                    spawnPosition = position + randomOffset;
 
             //ushort dustType = CoreDustType();
             Dust dust = Dust.NewDustPerfect(spawnPosition,
