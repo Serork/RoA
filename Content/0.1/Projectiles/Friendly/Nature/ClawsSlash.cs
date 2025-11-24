@@ -185,7 +185,7 @@ class ClawsSlash : NatureProjectile {
 
     public override void CutTiles() {
         DelegateMethods.tilecut_0 = TileCuttingContext.AttackProjectile;
-        float coneLength = CollidingSize2();
+        float coneLength = CollidingSize2() * 0.8f;
         SetCollisionScale(ref coneLength);
         if (Projectile.localAI[0] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.2f)) {
             return;
