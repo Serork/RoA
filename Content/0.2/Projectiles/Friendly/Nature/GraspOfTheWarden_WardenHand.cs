@@ -25,7 +25,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     public enum WardenHandRequstedTextureType : byte {
         Base,
-        Part1
+        Part1,
+        Seed
     }
 
     public enum FingerType : byte {
@@ -39,11 +40,16 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)WardenHandRequstedTextureType.Base, ResourceManager.NatureProjectileTextures + "WardenHand_Base"),
-         ((byte)WardenHandRequstedTextureType.Part1, ResourceManager.NatureProjectileTextures + "WardenHand_Part1")];
+         ((byte)WardenHandRequstedTextureType.Part1, ResourceManager.NatureProjectileTextures + "WardenHand_Part1"),
+         ((byte)WardenHandRequstedTextureType.Seed, ResourceManager.NatureProjectileTextures + "WardenHand_Seed")];
+
+    private Vector2 _seedPosition, _goToPosition;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float AITimer => ref Projectile.localAI[1];
     public ref float RotationValue => ref Projectile.localAI[2];
+
+    public ref float SpawnValue => ref Projectile.ai[0];
 
     public bool Init {
         get => InitValue == 1f;
@@ -70,6 +76,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override void AI() {
         Player owner = Projectile.GetOwnerAsPlayer();
 
+        SpawnValue = Helper.Approach(SpawnValue, 1f, 0.1f);
+
         if (!Init) {
             Init = true;
 
@@ -78,9 +86,27 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
             owner.SyncMousePosition();
             Projectile.Center = owner.GetViableMousePosition() - Projectile.velocity * baseSpeed * 1.5f;
+
+            Projectile.SetDirection(-Projectile.velocity.X.GetDirection());
+
+            _goToPosition = Projectile.Center + Projectile.velocity * baseSpeed * 1.5f;
+            _seedPosition = Projectile.Center + Projectile.velocity.TurnRight() * new Vector2(Projectile.direction, -Projectile.direction) * 20f;
         }
 
-        Projectile.SetDirection(-Projectile.velocity.X.GetDirection());
+        _seedPosition = Vector2.Lerp(_seedPosition, _goToPosition, 0.1f);
+
+        if (SpawnValue < 1f) {
+            return;
+        }
+
+        if (_seedPosition.Distance(Projectile.Center) < 50f) {
+            _goToPosition = Projectile.Center;
+            _seedPosition = Vector2.Lerp(_seedPosition, _goToPosition, 0.2f);
+        }
+
+        if (!ShouldUpdatePosition()) {
+            return;
+        }
 
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
 
@@ -99,6 +125,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
     }
 
+    public override bool ShouldUpdatePosition() => _seedPosition.Distance(_goToPosition) < 100f;
+
     public override void OnKill(int timeLeft) {
 
     }
@@ -109,7 +137,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
 
         Texture2D baseTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.Base].Value,
-                  fingerPartTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.Part1].Value;
+                  fingerPartTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.Part1].Value,
+                  seedTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.Seed].Value;
         SpriteBatch batch = Main.spriteBatch;
         Rectangle baseClip = baseTexture.Bounds;
         Vector2 baseOrigin = baseClip.Centered();
@@ -132,14 +161,20 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         float getBaseProgress(float offset = 0f) => Ease.SineInOut(MathUtils.Clamp01(1f - (AITimer - GRASPTIMEINTICKS * 0.9f) / (GRASPTIMEINTICKS * 1.1f) + offset));
 
-        void drawCore(float opacity = 1f) {
-            batch.DrawWithSnapshot(() => {
-                batch.Draw(ResourceManager.Circle5, Projectile.Center - Main.screenPosition, null,
-                    Color.White * opacity, 0f, ResourceManager.Circle5.Size() / 2f, 0.5f, 0, 0);
-            }, blendState: BlendState.Additive);
+        void drawSeed(float opacity = 1f) {
+            Vector2 seedPosition = _seedPosition;
+            Rectangle seedClip = seedTexture.Bounds;
+            Vector2 seedOrigin = seedClip.Centered();
+            float seedRotation = 0f;
+            DrawInfo seedDrawInfo = DrawInfo.Default with {
+                Clip = seedClip,
+                Origin = seedOrigin,
+                Rotation = seedRotation
+            };
+            batch.Draw(seedTexture, seedPosition, seedDrawInfo);
         }
 
-        drawCore();
+        drawSeed();
 
         int fingerIndex = 0;
         Rectangle fingerClip = fingerPartTexture.Bounds;
@@ -209,6 +244,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             fingerIndex++;
         }
 
-        drawCore(0.25f);
+        drawSeed(0.25f);
     }
 }
