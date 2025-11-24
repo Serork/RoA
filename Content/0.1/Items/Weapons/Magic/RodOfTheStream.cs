@@ -53,7 +53,7 @@ sealed class RodOfTheStream : Rod {
     public override void ModifyShootCustom(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         Vector2 newVelocity = Utils.SafeNormalize(new Vector2(velocity.X, velocity.Y), Vector2.Zero);
         position += newVelocity * -2f;
-        position += new Vector2(player.direction == -1 ? 4f : 0f, 2f * player.direction).RotatedBy(newVelocity.ToRotation());
+        position += new Vector2(6f, 0f * player.direction).RotatedBy(newVelocity.ToRotation());
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
@@ -62,7 +62,7 @@ sealed class RodOfTheStream : Rod {
             int amount = 2;
             for (int i = 0; i < 20; i++) {
                 Vector2 dustPosition = position;
-                dustPosition += new Vector2(6f, 2f * player.direction).RotatedBy(velocity.ToRotation());
+                dustPosition += new Vector2(4f, 2f * player.direction).RotatedBy(velocity.ToRotation());
                 Vector2 direction = velocity;
                 int dust = Dust.NewDust(dustPosition - Vector2.One * 10, 20, 20, DustID.DungeonWater, direction.X * Main.rand.NextFloat(), direction.Y * Main.rand.NextFloat(), 100, default(Color), Main.rand.NextFloat(0.8f, 1.2f));
                 Main.dust[dust].noGravity = true;
