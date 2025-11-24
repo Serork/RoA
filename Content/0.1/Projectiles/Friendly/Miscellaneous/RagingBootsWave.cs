@@ -71,7 +71,7 @@ sealed class RagingBootsWave : NatureProjectile {
         int frameHeight = projectileTexture.Height / Main.projFrames[Type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, projectileTexture.Width, frameHeight);
         Vector2 drawOrigin = new Vector2(projectileTexture.Width / 2f, projectileTexture.Height / Main.projFrames[Projectile.type] * 0.5f);
-        Vector2 drawPos = Projectile.position + drawOrigin - Main.screenPosition;
+        Vector2 drawPos = Projectile.Center - Main.screenPosition;
         Color color = Projectile.GetAlpha(lightColor);
         spriteBatch.Draw(projectileTexture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, 1f, Projectile.velocity.X > 0f ? SpriteEffects.FlipVertically : SpriteEffects.None, 0f);
 
