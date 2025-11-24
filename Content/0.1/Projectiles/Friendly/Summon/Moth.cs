@@ -291,6 +291,19 @@ sealed class Moth : ModProjectile {
         Projectile.spriteDirection = -Projectile.direction;
     }
 
+    public override bool PreDraw(ref Color lightColor) {
+        SpriteBatch spriteBatch = Main.spriteBatch;
+        Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        int frameHeight = projectileTexture.Height / Main.projFrames[Projectile.type];
+        Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, projectileTexture.Width, frameHeight);
+        Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);
+        Vector2 drawPos = Projectile.Center - Main.screenPosition + new Vector2(0f, -10f);
+        spriteBatch.Draw(projectileTexture, drawPos, frameRect, lightColor, Projectile.rotation, drawOrigin, Projectile.scale * 1.1f, Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+
+        return false;
+    }
+      
+
     public override void PostDraw(Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
         if (dashTimer >= 40 && dashTrailTimer < Projectile.oldPos.Length)
@@ -303,7 +316,7 @@ sealed class Moth : ModProjectile {
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, glowTexture.Width, frameHeight);
         Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);
         for (int k = 0; k < dashTrailTimer; k++) {
-            Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, -16f);
+            Vector2 drawPos = Projectile.oldPos[k] + Projectile.Size / 2f - Main.screenPosition + new Vector2(0f, -10f);
             Color color = new Color(255, 140, 0, 0) * ((dashTrailTimer - k) / (float)dashTrailTimer);
             spriteBatch.Draw(glowTexture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale * 1.1f, Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
         }
