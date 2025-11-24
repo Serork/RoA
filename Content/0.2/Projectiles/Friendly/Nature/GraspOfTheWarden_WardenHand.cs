@@ -45,8 +45,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     public ref float AITimer => ref Projectile.localAI[1];
     public ref float RotationValue => ref Projectile.localAI[2];
 
-    public ref float SpawnValue => ref Projectile.ai[0];
-
     public bool Init {
         get => InitValue == 1f;
         set => InitValue = value.ToInt();
@@ -72,8 +70,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override void AI() {
         Player owner = Projectile.GetOwnerAsPlayer();
 
-        SpawnValue = Helper.Approach(SpawnValue, 1f, 0.05f);
-
         if (!Init) {
             Init = true;
 
@@ -81,14 +77,10 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.velocity = Projectile.velocity.SafeNormalize() * baseSpeed;
 
             owner.SyncMousePosition();
-            Projectile.Center = owner.GetViableMousePosition() - Projectile.velocity * baseSpeed * 2f;
+            Projectile.Center = owner.GetViableMousePosition() - Projectile.velocity * baseSpeed * 1.5f;
         }
 
         Projectile.SetDirection(-Projectile.velocity.X.GetDirection());
-
-        if (SpawnValue < 1f) {
-            return;
-        }
 
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
 
