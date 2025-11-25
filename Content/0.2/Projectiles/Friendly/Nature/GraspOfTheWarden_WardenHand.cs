@@ -346,11 +346,9 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Scale = rootScale
                 };
                 batch.Draw(rootTexture, rootPosition, rootDrawInfo);
-                rootPosition += Vector2.UnitY.RotatedBy(rootRotation) * rootClip.Height * rootProgress;
+                rootPosition += Vector2.UnitY.RotatedBy(rootRotation) * rootClip.Height * Ease.SineInOut(rootProgress);
             }
         }
-
-        batch.Draw(baseTopTexture, basePosition, baseDrawInfo);
 
         Rectangle baseGlowClip = baseGlowTexture.Bounds;
         Vector2 baseGlowOrigin = baseGlowClip.Centered();
@@ -362,6 +360,9 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Color = baseGlowColor,
             ImageFlip = baseEffects
         });
+
+        batch.Draw(baseTopTexture, basePosition, baseDrawInfo);
+
         Vector2 baseGlowScale = Vector2.Lerp(Vector2.One, Vector2.One * 2f, glowProgress2) * 1f;
         batch.Draw(baseGlowTexture, baseGlowPosition, baseDrawInfo with {
             Clip = baseGlowClip,
@@ -370,6 +371,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Scale = baseGlowScale,
             ImageFlip = baseEffects
         });
+
 
         //int fingerIndex = 0;
         //Rectangle fingerClip = fingerPartTexture.Bounds;
