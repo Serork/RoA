@@ -84,7 +84,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void SetStaticDefaults() {
-        Projectile.SetTrail(2, 5);
+        Projectile.SetTrail(2, 3);
     }
 
     protected override void SafeSetDefaults() {
@@ -272,12 +272,13 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Rotation = baseRotation
         };
 
-        int trailCount = 4;
+        int trailCount = Projectile.GetTrailCount();
         for (int i = 1; i < trailCount; i++) {
             float maxAlpha = 0.5f;
             float alphaStep = maxAlpha / trailCount;
             batch.Draw(baseTexture, Projectile.oldPos[i] + Projectile.Size / 2f + shakeVelocity, baseDrawInfo with {
-                Color = baseColor * (maxAlpha - (i * alphaStep))
+                Color = baseColor * (maxAlpha - (i * alphaStep)),
+                Rotation = Projectile.oldRot[i]
             });
         }
         batch.Draw(baseTexture, basePosition, baseDrawInfo);
@@ -286,7 +287,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 seedPosition = SeedPosition;
             Rectangle seedClip = seedTexture.Bounds;
             Vector2 seedOrigin = seedClip.Centered();
-            Color seedColor = baseColor * Ease.CubeOut(seedProgress);
+            float colorOpacity = Ease.CubeOut(seedProgress);
+            Color seedColor = baseColor * colorOpacity;
             seedPosition += Vector2.UnitX.RotatedBy(SeedRotation) * GetArmProgress() * 7f * -Projectile.direction;
             Vector2 seedScale = Vector2.One * Projectile.Opacity;
             DrawInfo seedDrawInfo = DrawInfo.Default with {
@@ -297,6 +299,14 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 ImageFlip = baseEffects,
                 Scale = seedScale
             };
+            for (int i = 1; i < trailCount; i++) {
+                float maxAlpha = 0.5f;
+                float alphaStep = maxAlpha / trailCount;
+                batch.Draw(seedTexture, _seedPositions[i] + shakeVelocity, seedDrawInfo with {
+                    Color = seedColor * (maxAlpha - (i * alphaStep)) * (1f - GetArmProgress()),
+                    Rotation = _seedRotations[i]
+                });
+            }
             batch.Draw(seedTexture, seedPosition, seedDrawInfo);
             Color seedGlowColor = baseColor * (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
             batch.Draw(seedGlowTexture, seedPosition, seedDrawInfo with {
