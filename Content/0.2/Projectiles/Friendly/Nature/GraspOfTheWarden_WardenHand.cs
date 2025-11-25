@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 
+using static RoA.Content.Projectiles.Friendly.Nature.WardenHand;
+
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
@@ -252,7 +254,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 baseOrigin = baseClip.Centered();
         SpriteEffects baseEffects = Projectile.spriteDirection.ToSpriteEffects();
         Color baseColor = Color.White * Projectile.Opacity,
-              baseGlowColor = Color.Lerp(new Color(49, 75, 188), Color.White, 0.5f) * Projectile.Opacity;
+              baseGlowColor = Color.Lerp(new Color(49, 75, 188), Color.White, 0.5f) * Projectile.Opacity,
+              baseGlowColor2 = Color.Lerp(new Color(49, 75, 188), Color.White, 0.1f) * Projectile.Opacity;
         Vector2 shakeVelocity = Main.rand.RandomPointInArea(1.5f, 3f) * MathUtils.YoYo(1f - glowProgress2) * Ease.CubeIn(1f - glowProgress3);
         Vector2 basePosition = Projectile.Center + shakeVelocity;
         Vector2 baseScale = Vector2.One;
@@ -330,42 +333,48 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         drawSeed();
 
-        for (int i = 0; i < _rootData.Length; i++) {
-            RootInfo rootInfo = _rootData[i];
-            RootInfo.RootPartInfo[] rootParts = rootInfo.RootParts;
-            Vector2 rootPosition = basePosition;
-            for (int k = 0; k < rootParts.Length; k++) {
-                RootInfo.RootPartInfo rootPart = rootParts[k];
-                Rectangle rootClip;
-                int clipX = 42 * rootPart.LeftFramed.ToInt();
-                switch (rootPart.RootPartType) {
-                    case RootInfo.RootPartType.Start:
-                        rootClip = new Rectangle(clipX, 2, 42, 52);
-                        break;
-                    case RootInfo.RootPartType.Mid:
-                        rootClip = new Rectangle(clipX, 56, 42, 68);
-                        break;
-                    default:
-                        rootClip = new Rectangle(clipX, 126, 42, 22);
-                        break;
-                };
-                Vector2 rootOrigin = rootClip.BottomCenter();
-                float rootRotation = rootInfo.Rotation;
-                SpriteEffects rootEffects = rootInfo.Flip.ToInt().ToSpriteEffects();
-                float rootProgress = getRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset));
-                Vector2 rootScale = Vector2.One * new Vector2(Ease.CubeOut(rootProgress), Ease.SineInOut(rootProgress));
-                DrawInfo rootDrawInfo = DrawInfo.Default with {
-                    Clip = rootClip,
-                    Origin = rootOrigin,
-                    Color = baseColor,
-                    Rotation = rootRotation + MathHelper.Pi,
-                    ImageFlip = rootEffects,
-                    Scale = rootScale
-                };
-                batch.Draw(rootTexture, rootPosition, rootDrawInfo);
-                rootPosition += Vector2.UnitY.RotatedBy(rootRotation) * rootClip.Height * Ease.SineInOut(rootProgress);
+        void drawRoots(Func<RootInfo, float> rootProgress, Color baseColor, float opacity = 1f) {
+            for (int i = 0; i < _rootData.Length; i++) {
+                RootInfo rootInfo = _rootData[i];
+                RootInfo.RootPartInfo[] rootParts = rootInfo.RootParts;
+                Vector2 rootPosition = basePosition;
+                for (int k = 0; k < rootParts.Length; k++) {
+                    RootInfo.RootPartInfo rootPart = rootParts[k];
+                    Rectangle rootClip;
+                    int clipX = 42 * rootPart.LeftFramed.ToInt();
+                    switch (rootPart.RootPartType) {
+                        case RootInfo.RootPartType.Start:
+                            rootClip = new Rectangle(clipX, 2, 42, 52);
+                            break;
+                        case RootInfo.RootPartType.Mid:
+                            rootClip = new Rectangle(clipX, 56, 42, 68);
+                            break;
+                        default:
+                            rootClip = new Rectangle(clipX, 126, 42, 22);
+                            break;
+                    }
+                    ;
+                    Vector2 rootOrigin = rootClip.BottomCenter();
+                    float rootRotation = rootInfo.Rotation;
+                    SpriteEffects rootEffects = rootInfo.Flip.ToInt().ToSpriteEffects();
+                    Vector2 rootScale = Vector2.One * new Vector2(Ease.CubeOut(rootProgress(rootInfo)), Ease.SineInOut(rootProgress(rootInfo)));
+                    Color rootColor = baseColor * opacity;
+                    DrawInfo rootDrawInfo = DrawInfo.Default with {
+                        Clip = rootClip,
+                        Origin = rootOrigin,
+                        Color = rootColor,
+                        Rotation = rootRotation + MathHelper.Pi,
+                        ImageFlip = rootEffects,
+                        Scale = rootScale
+                    };
+                    batch.Draw(rootTexture, rootPosition, rootDrawInfo);
+                    rootPosition += Vector2.UnitY.RotatedBy(rootRotation) * rootClip.Height * Ease.SineInOut(rootProgress(rootInfo));
+                }
             }
         }
+
+        drawRoots((rootInfo) => getRootProgress(-0.08f + MathUtils.Clamp01(rootInfo.SpawnOffset)), baseGlowColor2 with { A = 25 }, 0.4f);
+        drawRoots((rootInfo) => getRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)), baseColor);
 
         Rectangle baseGlowClip = baseGlowTexture.Bounds;
         Vector2 baseGlowOrigin = baseGlowClip.Centered();
