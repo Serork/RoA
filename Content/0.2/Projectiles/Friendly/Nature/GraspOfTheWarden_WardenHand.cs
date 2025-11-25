@@ -331,7 +331,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Rectangle seedClip = seedTexture.Bounds;
             Vector2 seedOrigin = seedClip.Centered();
             float colorOpacity = Ease.CubeOut(seedProgress);
-            Color seedColor = baseColor * colorOpacity;
+            Color seedColor = Lighting.GetColor(SeedPosition.ToTileCoordinates()) * Projectile.Opacity * colorOpacity;
             float velocityRotation = SeedPosition.DirectionTo(_goToPosition).ToRotation() - MathHelper.PiOver2;
             if (float.IsNaN(velocityRotation)) {
                 velocityRotation = 0f;
