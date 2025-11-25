@@ -284,7 +284,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 velocityRotation = 0f;
             }
             float seedRotation = Utils.AngleLerp(velocityRotation, MathHelper.PiOver4 * Projectile.direction, Ease.SineInOut(GetArmProgress()));
-            seedPosition += Vector2.UnitX.RotatedBy(seedRotation) * GetArmProgress() * 6f * -Projectile.direction;
+            seedPosition += Vector2.UnitX.RotatedBy(seedRotation) * GetArmProgress() * 7f * -Projectile.direction;
             Vector2 seedScale = Vector2.One * Projectile.Opacity;
             DrawInfo seedDrawInfo = DrawInfo.Default with {
                 Clip = seedClip,
