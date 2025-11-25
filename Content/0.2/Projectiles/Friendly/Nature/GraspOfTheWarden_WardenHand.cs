@@ -25,13 +25,25 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static float GRASPTIMEINTICKS => 15f;
     private static byte FISTFRAMECOUNT => 3;
     private static float SEEDGOTODISTANCE => 45f;
+    private static byte ROOTCOUNT => 6;
 
     public enum WardenHandRequstedTextureType : byte {
         Base,
         BaseGlow,
         BaseTop,
         Seed,
-        SeedGlow
+        SeedGlow,
+        Root
+    }
+
+    public readonly record struct RootInfo(float Rotation, RootInfo.RootPartInfo[] RootParts, float SpawnOffset) {
+        public enum RootPartType {
+            End,
+            Mid,
+            Start
+        }
+
+        public readonly record struct RootPartInfo(RootPartType RootPartType, bool LeftFramed, bool Flip);
     }
 
     //public enum FingerType : byte {
@@ -48,9 +60,12 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)WardenHandRequstedTextureType.BaseGlow, ResourceManager.NatureProjectileTextures + "FistOfTheWarden_Glow"),
          ((byte)WardenHandRequstedTextureType.BaseTop, ResourceManager.NatureProjectileTextures + "FistOfTheWarden_Top"),
          ((byte)WardenHandRequstedTextureType.Seed, ResourceManager.NatureProjectileTextures + "SeedOfTheWarden"),
-         ((byte)WardenHandRequstedTextureType.SeedGlow, ResourceManager.NatureProjectileTextures + "SeedOfTheWarden_Glow")];
+         ((byte)WardenHandRequstedTextureType.SeedGlow, ResourceManager.NatureProjectileTextures + "SeedOfTheWarden_Glow"),
+         ((byte)WardenHandRequstedTextureType.Root, ResourceManager.NatureProjectileTextures + "RootOfTheWarden")];
+
 
     private Vector2 _seedPosition, _goToPosition;
+    private RootInfo[] _rootData = null!;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float SpawnValue => ref Projectile.localAI[1];
@@ -99,6 +114,25 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
             _goToPosition = Projectile.Center + Projectile.velocity * baseSpeed * 1.5f;
             _seedPosition = Projectile.Center + Projectile.velocity.SafeNormalize().TurnRight() * new Vector2(Projectile.direction, -Projectile.direction) * 20f;
+
+            _rootData = new RootInfo[ROOTCOUNT];
+            for (int i = 0; i < _rootData.Length; i++) {
+                byte rootPartCount = 3;
+                RootInfo.RootPartInfo[] rootParts = new RootInfo.RootPartInfo[rootPartCount];
+                int count = rootParts.Length;
+                for (int k = 0; k < count; k++) {
+                    rootParts[k] = new RootInfo.RootPartInfo() {
+                        RootPartType = (RootInfo.RootPartType)k,
+                        LeftFramed = Main.rand.NextBool(),
+                        Flip = Main.rand.NextBool()
+                    };
+                }
+                _rootData[i] = new RootInfo() {
+                    Rotation = (float)i / ROOTCOUNT * MathHelper.TwoPi + Main.rand.NextFloatDirection() * MathHelper.PiOver4 / 2f,
+                    RootParts = rootParts,
+                    SpawnOffset = Main.rand.NextFloat(0.5f)
+                };
+            }
         }
 
         _seedPosition = Vector2.Lerp(_seedPosition, _goToPosition, 0.1f);
@@ -161,7 +195,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                   seedTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.Seed].Value,
                   baseTopTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.BaseTop].Value,
                   baseGlowTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.BaseGlow].Value,
-                  seedGlowTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.SeedGlow].Value;
+                  seedGlowTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.SeedGlow].Value,
+                  rootTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.Root].Value;
         float getBaseProgress(float offset = 0f) => Ease.SineInOut(MathUtils.Clamp01(1f - (AITimer - GRASPTIMEINTICKS * 1.05f) / (GRASPTIMEINTICKS * 0.95f) + offset));
         SpriteBatch batch = Main.spriteBatch;
         float animationProgress = 1f - getBaseProgress();
@@ -174,6 +209,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         float glowProgress = Utils.GetLerpValue(startTime * 1.65f, startTime * 1.65f + animationTime * 0.2f, AITimer2, true);
         float glowProgress2 = Utils.GetLerpValue(startTime * 1.65f + animationTime * 0f, startTime * 1.65f + animationTime * 0.4f, AITimer2, true);
         float glowProgress3 = Utils.GetLerpValue(startTime * 1.65f + animationTime * 0.2f, startTime * 1.65f + animationTime * 0.8f, AITimer2, true);
+        float getRootProgress(float offset = 0f) => Utils.GetLerpValue(startTime * 1.65f + animationTime * (0.4f + offset), startTime * 1.65f + animationTime * (1f + offset), AITimer2, true);
         seedProgress *= 1f - glowProgress;
         seedProgress2 *= 1f - glowProgress;
         glowProgress *= 1f - glowProgress3;
@@ -183,7 +219,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 baseOrigin = baseClip.Centered();
         SpriteEffects baseEffects = Projectile.spriteDirection.ToSpriteEffects();
         Color baseColor = Color.White * Projectile.Opacity;
-        Vector2 basePosition = Projectile.Center + Main.rand.RandomPointInArea(2f, 4f) * MathUtils.YoYo(1f - glowProgress2) * Ease.CubeIn(1f - glowProgress3);
+        Vector2 basePosition = Projectile.Center + Main.rand.RandomPointInArea(1.5f, 3f) * MathUtils.YoYo(1f - glowProgress2) * Ease.CubeIn(1f - glowProgress3);
         Vector2 baseScale = Vector2.One;
         float baseRotation = Projectile.rotation;
 
@@ -220,17 +256,55 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Clip = seedClip,
                 Origin = seedOrigin,
                 Rotation = seedRotation,
-                Color = seedColor
+                Color = seedColor,
+                ImageFlip = baseEffects
             };
             batch.Draw(seedTexture, seedPosition, seedDrawInfo);
             Color seedGlowColor = baseColor * (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
             batch.Draw(seedGlowTexture, seedPosition, seedDrawInfo with {
                 Color = seedGlowColor with { A = 0 },
-                Scale = Vector2.One * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.25f)
+                Scale = Vector2.One * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.25f),
+                ImageFlip = baseEffects
             });
         }
 
         drawSeed();
+
+        for (int i = 0; i < _rootData.Length; i++) {
+            RootInfo rootInfo = _rootData[i];
+            RootInfo.RootPartInfo[] rootParts = rootInfo.RootParts;
+            Vector2 rootPosition = basePosition;
+            for (int k = 0; k < rootParts.Length; k++) {
+                RootInfo.RootPartInfo rootPart = rootParts[k];
+                Rectangle rootClip;
+                switch (rootPart.RootPartType) {
+                    case RootInfo.RootPartType.Start:
+                        rootClip = new Rectangle(42 * rootPart.LeftFramed.ToInt(), 0, 42, 54);
+                        break;
+                    case RootInfo.RootPartType.Mid:
+                        rootClip = new Rectangle(42 * rootPart.LeftFramed.ToInt(), 56, 42, 68);
+                        break;
+                    default:
+                        rootClip = new Rectangle(42 * rootPart.LeftFramed.ToInt(), 126, 42, 24);
+                        break;
+                };
+                Vector2 rootOrigin = rootClip.BottomCenter();
+                float rootRotation = rootInfo.Rotation;
+                SpriteEffects rootEffects = rootPart.Flip.ToInt().ToSpriteEffects();
+                float rootProgress = getRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset));
+                Vector2 rootScale = Vector2.One * new Vector2(Ease.CubeOut(rootProgress), Ease.SineInOut(rootProgress));
+                DrawInfo rootDrawInfo = DrawInfo.Default with {
+                    Clip = rootClip,
+                    Origin = rootOrigin,
+                    Color = baseColor,
+                    Rotation = rootRotation + MathHelper.Pi,
+                    ImageFlip = rootEffects,
+                    Scale = rootScale
+                };
+                batch.Draw(rootTexture, rootPosition, rootDrawInfo);
+                rootPosition += Vector2.UnitY.RotatedBy(rootRotation) * rootClip.Height * rootProgress;
+            }
+        }
 
         batch.Draw(baseTopTexture, basePosition, baseDrawInfo);
 
@@ -241,14 +315,16 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         batch.Draw(baseGlowTexture, baseGlowPosition, baseDrawInfo with {
             Clip = baseGlowClip,
             Origin = baseGlowOrigin,
-            Color = baseGlowColor
+            Color = baseGlowColor,
+            ImageFlip = baseEffects
         });
         Vector2 baseGlowScale = Vector2.Lerp(Vector2.One, Vector2.One * 2f, glowProgress2) * 1f;
         batch.Draw(baseGlowTexture, baseGlowPosition, baseDrawInfo with {
             Clip = baseGlowClip,
             Origin = baseGlowOrigin,
             Color = baseGlowColor with { A = 100 } * 1.25f * MathUtils.YoYo(1f - glowProgress2),
-            Scale = baseGlowScale
+            Scale = baseGlowScale,
+            ImageFlip = baseEffects
         });
 
         //int fingerIndex = 0;
