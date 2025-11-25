@@ -346,7 +346,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Scale = rootScale
                 };
                 batch.Draw(rootTexture, rootPosition, rootDrawInfo);
-                rootPosition += Vector2.UnitY.RotatedBy(rootRotation) * rootClip.Height * Ease.SineIn(rootProgress);
+                rootPosition += Vector2.UnitY.RotatedBy(rootRotation) * rootClip.Height * Ease.SineInOut(rootProgress);
             }
         }
 
