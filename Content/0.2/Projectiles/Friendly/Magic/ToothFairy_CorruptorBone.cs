@@ -64,7 +64,7 @@ sealed class CorruptorBone : ModProjectile {
 
     public override void AI() {
         ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
-        if (Projectile.velocity.Length() > 1f && Main.rand.NextBool(30)) {
+        if (Projectile.velocity.Length() > 1f && Main.rand.NextBool(32)) {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
             dust.noGravity = true;
             dust.scale *= Main.rand.NextFloat(1f, 1.5f) * 0.8f;
