@@ -422,9 +422,9 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             ImageFlip = baseEffects
         });
 
-        batch.Draw(baseTopTexture, basePosition, baseDrawInfo with {
-            Color = baseDrawInfo.Color * MathUtils.Clamp01(2f * glowProgress)
-        });
+        //batch.Draw(baseTopTexture, basePosition, baseDrawInfo with {
+        //    Color = baseDrawInfo.Color * MathUtils.Clamp01(1f * glowProgress)
+        //});
 
         Vector2 baseGlowScale = Vector2.Lerp(Vector2.One, Vector2.One * 2f, glowProgress2) * 1f;
         batch.Draw(baseGlowTexture, baseGlowPosition, baseDrawInfo with {
