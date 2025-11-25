@@ -235,7 +235,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         float glowProgress = Utils.GetLerpValue(startTime * 1.65f, startTime * 1.65f + animationTime * 0.2f, AITimer2, true);
         float glowProgress2 = Utils.GetLerpValue(startTime * 1.65f + animationTime * 0f, startTime * 1.65f + animationTime * 0.4f, AITimer2, true);
         float glowProgress3 = Utils.GetLerpValue(startTime * 1.65f + animationTime * 0.2f, startTime * 1.65f + animationTime * 0.8f, AITimer2, true);
-        float getRootProgress(float offset = 0f) => Utils.GetLerpValue(startTime * 0.5f + animationTime * (0.4f + offset), startTime * 0.5f + animationTime * (1f + offset), AITimer2, true);
+        float getRootProgress(float offset = 0f) => Utils.GetLerpValue(startTime * 0.5f + animationTime * (0.4f + offset), startTime * 0.5f + animationTime * (0.8f + offset), AITimer2, true);
         seedProgress *= 1f - glowProgress;
         seedProgress2 *= 1f - glowProgress;
         glowProgress *= 1f - glowProgress3;
@@ -311,7 +311,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Color seedGlowColor = baseColor * (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
             batch.Draw(seedGlowTexture, seedPosition, seedDrawInfo with {
                 Color = seedGlowColor with { A = 0 },
-                Scale = seedScale * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.5f),
+                Scale = seedScale * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.375f),
                 ImageFlip = baseEffects
             });
         }
