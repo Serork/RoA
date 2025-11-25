@@ -358,7 +358,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Color seedGlowColor = baseGlowColor * (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
             batch.Draw(seedGlowTexture, seedPosition, seedDrawInfo with {
                 Color = seedGlowColor with { A = 0 },
-                Scale = seedScale * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.375f),
+                Scale = seedScale * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.5f),
                 ImageFlip = baseEffects
             });
         }
