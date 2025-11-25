@@ -204,17 +204,17 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         float animationTime = 40f;
         float seedProgress = 1f - Utils.GetLerpValue(startTime * 0.75f, startTime * 0.75f + animationTime * 0.5f, AITimer2, true);
         float seedProgress2 = Utils.GetLerpValue(animationTime * 0.625f + startTime * 0.875f, startTime * 0.875f, AITimer2, true);
-        float seedProgress3 = Utils.GetLerpValue(animationTime / 5f + startTime, startTime, AITimer2, true);
-        float seedProgress4 = 1f - Utils.GetLerpValue(animationTime / 3f + startTime * 1.1f, animationTime / 5f + startTime * 1.05f, AITimer2, true);
+        float seedProgress3 = Utils.GetLerpValue(animationTime / 6f + startTime * 1.25f, startTime * 1.25f, AITimer2, true);
+        float seedProgress4 = 1f - Utils.GetLerpValue(animationTime / 5f + startTime * 1.25f, animationTime / 6f + startTime * 1.25f, AITimer2, true);
         float glowProgress = Utils.GetLerpValue(startTime * 1.65f, startTime * 1.65f + animationTime * 0.2f, AITimer2, true);
         float glowProgress2 = Utils.GetLerpValue(startTime * 1.65f + animationTime * 0f, startTime * 1.65f + animationTime * 0.4f, AITimer2, true);
         float glowProgress3 = Utils.GetLerpValue(startTime * 1.65f + animationTime * 0.2f, startTime * 1.65f + animationTime * 0.8f, AITimer2, true);
-        float getRootProgress(float offset = 0f) => Utils.GetLerpValue(startTime * 1.65f + animationTime * (0.4f + offset), startTime * 1.65f + animationTime * (1f + offset), AITimer2, true);
+        float getRootProgress(float offset = 0f) => Utils.GetLerpValue(startTime * 0.5f + animationTime * (0.4f + offset), startTime * 0.5f + animationTime * (1f + offset), AITimer2, true);
         seedProgress *= 1f - glowProgress;
         seedProgress2 *= 1f - glowProgress;
         glowProgress *= 1f - glowProgress3;
         byte glowAlpha = (byte)MathHelper.Lerp(100, 255, glowProgress);
-        animationProgress *= MathF.Max(seedProgress4, seedProgress3);
+        //animationProgress *= MathUtils.Clamp01(MathF.Max(seedProgress4, seedProgress3) * 0.5f + 0.5f);
         Rectangle baseClip = new SpriteFrame(1, FISTFRAMECOUNT, 0, (byte)(animationProgress * (FISTFRAMECOUNT - 1))).GetSourceRectangle(baseTexture);
         Vector2 baseOrigin = baseClip.Centered();
         SpriteEffects baseEffects = Projectile.spriteDirection.ToSpriteEffects();
@@ -250,8 +250,14 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 seedPosition = _seedPosition;
             Rectangle seedClip = seedTexture.Bounds;
             Vector2 seedOrigin = seedClip.Centered();
-            float seedRotation = 0f;
+            float armProgress = 1f - getBaseProgress();
+            float velocityRotation = _seedPosition.DirectionTo(_goToPosition).ToRotation() - MathHelper.PiOver2;
+            if (float.IsNaN(velocityRotation)) {
+                velocityRotation = 0f;
+            }
+            float seedRotation = Utils.AngleLerp(velocityRotation, MathHelper.PiOver4 * Projectile.direction, Ease.SineInOut(armProgress));
             Color seedColor = baseColor * Ease.CubeOut(seedProgress);
+            seedPosition += Vector2.UnitX.RotatedBy(seedRotation) * armProgress * 7f * -Projectile.direction;
             DrawInfo seedDrawInfo = DrawInfo.Default with {
                 Clip = seedClip,
                 Origin = seedOrigin,
@@ -260,10 +266,11 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 ImageFlip = baseEffects
             };
             batch.Draw(seedTexture, seedPosition, seedDrawInfo);
-            Color seedGlowColor = baseColor * (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
+            float seedOpacity = (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
+            Color seedGlowColor = baseColor * seedOpacity;
             batch.Draw(seedGlowTexture, seedPosition, seedDrawInfo with {
                 Color = seedGlowColor with { A = 0 },
-                Scale = Vector2.One * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.25f),
+                Scale = Vector2.One * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.5f) * seedOpacity,
                 ImageFlip = baseEffects
             });
         }
