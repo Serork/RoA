@@ -285,7 +285,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Rectangle baseClip = new SpriteFrame(1, FISTFRAMECOUNT, 0, (byte)(animationProgress * (FISTFRAMECOUNT - 1))).GetSourceRectangle(baseTexture);
         Vector2 baseOrigin = baseClip.Centered();
         SpriteEffects baseEffects = Projectile.spriteDirection.ToSpriteEffects();
-        Color baseColor = Color.White * Projectile.Opacity,
+        Color baseColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity,
               baseGlowColor = Color.Lerp(new Color(49, 75, 188), Color.White, 0.5f) * Projectile.Opacity,
               baseGlowColor2 = Color.Lerp(new Color(49, 75, 188), Color.White, 0.1f) * Projectile.Opacity;
         Vector2 shakeVelocity = Main.rand.RandomPointInArea(1.5f, 3f) * MathUtils.YoYo(1f - glowProgress2) * Ease.CubeIn(1f - glowProgress3);
