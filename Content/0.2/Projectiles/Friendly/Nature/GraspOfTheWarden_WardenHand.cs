@@ -128,7 +128,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                     };
                 }
                 _rootData[i] = new RootInfo() {
-                    Rotation = (float)i / ROOTCOUNT * MathHelper.TwoPi + Main.rand.NextFloatDirection() * MathHelper.PiOver4 / 2f,
+                    Rotation = (float)i / ROOTCOUNT * MathHelper.TwoPi + Main.rand.NextFloatDirection() * MathHelper.PiOver4 / 2.5f,
                     RootParts = rootParts,
                     SpawnOffset = Main.rand.NextFloat(0.5f)
                 };
