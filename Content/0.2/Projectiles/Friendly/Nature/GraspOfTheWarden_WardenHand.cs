@@ -64,7 +64,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)WardenHandRequstedTextureType.Root, ResourceManager.NatureProjectileTextures + "RootOfTheWarden")];
 
     private Vector2[] _seedPositions = null!;
-    private float[] _seedRotations = null!;
     private Vector2 _goToPosition;
     private RootInfo[] _rootData = null!;
 
@@ -76,7 +75,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     public ref float AITimer2 => ref Projectile.ai[1];
 
     public ref Vector2 SeedPosition => ref _seedPositions[0];
-    public ref float SeedRotation => ref _seedRotations[0];
 
     public bool Init {
         get => InitValue == 1f;
@@ -111,12 +109,10 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         if (!Init) {
             _seedPositions = new Vector2[Projectile.GetTrailCount()];
-            _seedRotations = new float[_seedPositions.Length];
         }
 
         for (int num6 = _seedPositions.Length - 1; num6 > 0; num6--) {
             _seedPositions[num6] = _seedPositions[num6 - 1];
-            _seedRotations[num6] = _seedRotations[num6 - 1];
         }
 
         if (!Init) {
@@ -152,12 +148,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 };
             }
         }
-
-        float velocityRotation = SeedPosition.DirectionTo(_goToPosition).ToRotation() - MathHelper.PiOver2;
-        if (float.IsNaN(velocityRotation)) {
-            velocityRotation = 0f;
-        }
-        SeedRotation = Utils.AngleLerp(velocityRotation, MathHelper.PiOver4 * Projectile.direction, Ease.SineInOut(GetArmProgress()));
 
         SeedPosition = Vector2.Lerp(SeedPosition, _goToPosition, 0.1f);
 
@@ -289,12 +279,17 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 seedOrigin = seedClip.Centered();
             float colorOpacity = Ease.CubeOut(seedProgress);
             Color seedColor = baseColor * colorOpacity;
-            seedPosition += Vector2.UnitX.RotatedBy(SeedRotation) * GetArmProgress() * 6f * -Projectile.direction;
+            float velocityRotation = SeedPosition.DirectionTo(_goToPosition).ToRotation() - MathHelper.PiOver2;
+            if (float.IsNaN(velocityRotation)) {
+                velocityRotation = 0f;
+            }
+            float seedRotation = Utils.AngleLerp(velocityRotation, MathHelper.PiOver4 * Projectile.direction, Ease.SineInOut(GetArmProgress()));
+            seedPosition += Vector2.UnitX.RotatedBy(seedRotation) * GetArmProgress() * 6f * -Projectile.direction;
             Vector2 seedScale = Vector2.One * Projectile.Opacity;
             DrawInfo seedDrawInfo = DrawInfo.Default with {
                 Clip = seedClip,
                 Origin = seedOrigin,
-                Rotation = SeedRotation,
+                Rotation = seedRotation,
                 Color = seedColor,
                 ImageFlip = baseEffects,
                 Scale = seedScale
@@ -303,8 +298,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 float maxAlpha = 0.5f;
                 float alphaStep = maxAlpha / trailCount;
                 batch.Draw(seedTexture, _seedPositions[i] + shakeVelocity, seedDrawInfo with {
-                    Color = seedColor * (maxAlpha - (i * alphaStep)) * (1f - GetArmProgress()),
-                    Rotation = _seedRotations[i]
+                    Color = seedColor * (maxAlpha - (i * alphaStep)) * (1f - GetArmProgress())
                 });
             }
             batch.Draw(seedTexture, seedPosition, seedDrawInfo);
