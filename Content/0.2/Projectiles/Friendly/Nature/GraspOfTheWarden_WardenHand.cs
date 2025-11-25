@@ -18,8 +18,6 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 
-using static RoA.Common.Tiles.TileHooks.ITileFluentlyDrawn;
-
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
@@ -96,7 +94,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.SetDirection(-Projectile.velocity.X.GetDirection());
 
             _goToPosition = Projectile.Center + Projectile.velocity * baseSpeed * 1.5f;
-            _seedPosition = Projectile.Center + Projectile.velocity.TurnRight() * new Vector2(Projectile.direction, -Projectile.direction) * 20f;
+            _seedPosition = Projectile.Center + Projectile.velocity.SafeNormalize().TurnRight() * new Vector2(Projectile.direction, -Projectile.direction) * 20f;
         }
 
         _seedPosition = Vector2.Lerp(_seedPosition, _goToPosition, 0.1f);
@@ -110,7 +108,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         float distanceProgress = distance / neededDistance;
         if (distance < neededDistance) {
             _goToPosition = Projectile.Center;
-            _seedPosition = Vector2.Lerp(_seedPosition, _goToPosition, 0.2f + 0.3f * (1f - distanceProgress));
+            _seedPosition = Vector2.Lerp(_seedPosition, _goToPosition, 0.1f + 0.1f * (1f - distanceProgress));
             if (_seedPosition.Distance(_goToPosition) < 5f) {
                 _seedPosition = _goToPosition;
             }
@@ -135,7 +133,9 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             RotationValue = MathHelper.Lerp(RotationValue, 1f, 0.025f);
         }
         if (AITimer >= max) {
-            Projectile.velocity *= 0.9f;
+            float lerpValue2 = 0.1f;
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Zero, lerpValue2);
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, 0f, lerpValue2);
         }
     }
 
