@@ -20,8 +20,10 @@ using Terraria.DataStructures;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+[Tracked]
 sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static ushort TIMELEFT => 360;
+    private static byte MAXCOUNT => 3;
+    private static ushort TIMELEFT => 9000;
     private static float GRASPTIMEINTICKS => 15f;
     private static byte FISTFRAMECOUNT => 3;
     private static float SEEDGOTODISTANCE => 45f;
@@ -102,8 +104,23 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.tileCollide = false;
     }
 
+    private void UpdateMaxCount(Player player) {
+        IEnumerable<Projectile> list2 = TrackedEntitiesSystem.GetTrackedProjectile<WardenHand>(checkProjectile => checkProjectile.SameAs(Projectile) || checkProjectile.owner != player.whoAmI);
+        List<Projectile> list = [];
+        foreach (Projectile projectile in list2) {
+            if (projectile.timeLeft > Projectile.timeLeft) {
+                list.Add(projectile);
+            }
+        }
+        if (list.Count >= MAXCOUNT && Projectile.timeLeft > 25) {
+            Projectile.timeLeft = 25;
+        }
+    }
+
     public override void AI() {
         Player owner = Projectile.GetOwnerAsPlayer();
+
+        UpdateMaxCount(owner);
 
         SpawnValue = Helper.Approach(SpawnValue, 1f, 0.1f);
 
