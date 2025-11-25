@@ -36,14 +36,14 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Root
     }
 
-    public readonly record struct RootInfo(float Rotation, RootInfo.RootPartInfo[] RootParts, float SpawnOffset) {
+    public readonly record struct RootInfo(float Rotation, RootInfo.RootPartInfo[] RootParts, float SpawnOffset, bool Flip) {
         public enum RootPartType {
             End,
             Mid,
             Start
         }
 
-        public readonly record struct RootPartInfo(RootPartType RootPartType, bool LeftFramed, bool Flip);
+        public readonly record struct RootPartInfo(RootPartType RootPartType, bool LeftFramed);
     }
 
     //public enum FingerType : byte {
@@ -137,14 +137,14 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 for (int k = 0; k < count; k++) {
                     rootParts[k] = new RootInfo.RootPartInfo() {
                         RootPartType = (RootInfo.RootPartType)k,
-                        LeftFramed = Main.rand.NextBool(),
-                        Flip = Main.rand.NextBool()
+                        LeftFramed = Main.rand.NextBool()
                     };
                 }
                 _rootData[i] = new RootInfo() {
                     Rotation = (float)i / ROOTCOUNT * MathHelper.TwoPi + Main.rand.NextFloatDirection() * MathHelper.PiOver4 / 2.5f,
                     RootParts = rootParts,
-                    SpawnOffset = Main.rand.NextFloat(0.5f)
+                    SpawnOffset = Main.rand.NextFloat(0.5f),
+                    Flip = Main.rand.NextBool()
                 };
             }
         }
@@ -234,7 +234,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Rectangle baseClip = new SpriteFrame(1, FISTFRAMECOUNT, 0, (byte)(animationProgress * (FISTFRAMECOUNT - 1))).GetSourceRectangle(baseTexture);
         Vector2 baseOrigin = baseClip.Centered();
         SpriteEffects baseEffects = Projectile.spriteDirection.ToSpriteEffects();
-        Color baseColor = Color.White * Projectile.Opacity;
+        Color baseColor = Color.White * Projectile.Opacity,
+              baseGlowColor = Color.Lerp(new Color(49, 75, 188), Color.White, 0.5f) * Projectile.Opacity;
         Vector2 shakeVelocity = Main.rand.RandomPointInArea(1.5f, 3f) * MathUtils.YoYo(1f - glowProgress2) * Ease.CubeIn(1f - glowProgress3);
         Vector2 basePosition = Projectile.Center + shakeVelocity;
         Vector2 baseScale = Vector2.One;
@@ -284,7 +285,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 velocityRotation = 0f;
             }
             float seedRotation = Utils.AngleLerp(velocityRotation, MathHelper.PiOver4 * Projectile.direction, Ease.SineInOut(GetArmProgress()));
-            seedPosition += Vector2.UnitX.RotatedBy(seedRotation) * GetArmProgress() * 7f * -Projectile.direction;
+            seedPosition += Vector2.UnitX.RotatedBy(seedRotation) * GetArmProgress() * 6f * -Projectile.direction;
             Vector2 seedScale = Vector2.One * Projectile.Opacity;
             DrawInfo seedDrawInfo = DrawInfo.Default with {
                 Clip = seedClip,
@@ -302,7 +303,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 });
             }
             batch.Draw(seedTexture, seedPosition, seedDrawInfo);
-            Color seedGlowColor = baseColor * (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
+            Color seedGlowColor = baseGlowColor * (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
             batch.Draw(seedGlowTexture, seedPosition, seedDrawInfo with {
                 Color = seedGlowColor with { A = 0 },
                 Scale = seedScale * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.375f),
@@ -319,20 +320,21 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             for (int k = 0; k < rootParts.Length; k++) {
                 RootInfo.RootPartInfo rootPart = rootParts[k];
                 Rectangle rootClip;
+                int clipX = 42 * rootPart.LeftFramed.ToInt();
                 switch (rootPart.RootPartType) {
                     case RootInfo.RootPartType.Start:
-                        rootClip = new Rectangle(42 * rootPart.LeftFramed.ToInt(), 0, 42, 54);
+                        rootClip = new Rectangle(clipX, 2, 42, 52);
                         break;
                     case RootInfo.RootPartType.Mid:
-                        rootClip = new Rectangle(42 * rootPart.LeftFramed.ToInt(), 56, 42, 68);
+                        rootClip = new Rectangle(clipX, 56, 42, 68);
                         break;
                     default:
-                        rootClip = new Rectangle(42 * rootPart.LeftFramed.ToInt(), 126, 42, 24);
+                        rootClip = new Rectangle(clipX, 126, 42, 22);
                         break;
                 };
                 Vector2 rootOrigin = rootClip.BottomCenter();
                 float rootRotation = rootInfo.Rotation;
-                SpriteEffects rootEffects = rootPart.Flip.ToInt().ToSpriteEffects();
+                SpriteEffects rootEffects = rootInfo.Flip.ToInt().ToSpriteEffects();
                 float rootProgress = getRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset));
                 Vector2 rootScale = Vector2.One * new Vector2(Ease.CubeOut(rootProgress), Ease.SineInOut(rootProgress));
                 DrawInfo rootDrawInfo = DrawInfo.Default with {
@@ -353,7 +355,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Rectangle baseGlowClip = baseGlowTexture.Bounds;
         Vector2 baseGlowOrigin = baseGlowClip.Centered();
         Vector2 baseGlowPosition = basePosition + new Vector2(-4f * Projectile.direction, -12f);
-        Color baseGlowColor = baseColor with { A = glowAlpha } * glowProgress;
+        baseGlowColor = baseGlowColor with { A = glowAlpha } * glowProgress;
         batch.Draw(baseGlowTexture, baseGlowPosition, baseDrawInfo with {
             Clip = baseGlowClip,
             Origin = baseGlowOrigin,
