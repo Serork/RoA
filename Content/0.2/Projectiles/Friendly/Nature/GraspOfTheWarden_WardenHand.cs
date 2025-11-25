@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
@@ -14,6 +15,7 @@ using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -63,8 +65,9 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)WardenHandRequstedTextureType.SeedGlow, ResourceManager.NatureProjectileTextures + "SeedOfTheWarden_Glow"),
          ((byte)WardenHandRequstedTextureType.Root, ResourceManager.NatureProjectileTextures + "RootOfTheWarden")];
 
-
-    private Vector2 _seedPosition, _goToPosition;
+    private Vector2[] _seedPositions = null!;
+    private float[] _seedRotations = null!;
+    private Vector2 _goToPosition;
     private RootInfo[] _rootData = null!;
 
     public ref float InitValue => ref Projectile.localAI[0];
@@ -74,9 +77,16 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     public ref float AITimer => ref Projectile.ai[0];
     public ref float AITimer2 => ref Projectile.ai[1];
 
+    public ref Vector2 SeedPosition => ref _seedPositions[0];
+    public ref float SeedRotation => ref _seedRotations[0];
+
     public bool Init {
         get => InitValue == 1f;
         set => InitValue = value.ToInt();
+    }
+
+    public override void SetStaticDefaults() {
+        Projectile.SetTrail(2, 5);
     }
 
     protected override void SafeSetDefaults() {
@@ -102,6 +112,16 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpawnValue = Helper.Approach(SpawnValue, 1f, 0.1f);
 
         if (!Init) {
+            _seedPositions = new Vector2[Projectile.GetTrailCount()];
+            _seedRotations = new float[_seedPositions.Length];
+        }
+
+        for (int num6 = _seedPositions.Length - 1; num6 > 0; num6--) {
+            _seedPositions[num6] = _seedPositions[num6 - 1];
+            _seedRotations[num6] = _seedRotations[num6 - 1];
+        }
+
+        if (!Init) {
             Init = true;
 
             float baseSpeed = 15f;
@@ -113,7 +133,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.SetDirection(-Projectile.velocity.X.GetDirection());
 
             _goToPosition = Projectile.Center + Projectile.velocity * baseSpeed * 1.5f;
-            _seedPosition = Projectile.Center + Projectile.velocity.SafeNormalize().TurnRight() * new Vector2(Projectile.direction, -Projectile.direction) * 20f;
+            SeedPosition = Projectile.Center + Projectile.velocity.SafeNormalize().TurnRight() * new Vector2(Projectile.direction, -Projectile.direction) * 20f;
 
             _rootData = new RootInfo[ROOTCOUNT];
             for (int i = 0; i < _rootData.Length; i++) {
@@ -135,20 +155,26 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
         }
 
-        _seedPosition = Vector2.Lerp(_seedPosition, _goToPosition, 0.1f);
+        float velocityRotation = SeedPosition.DirectionTo(_goToPosition).ToRotation() - MathHelper.PiOver2;
+        if (float.IsNaN(velocityRotation)) {
+            velocityRotation = 0f;
+        }
+        SeedRotation = Utils.AngleLerp(velocityRotation, MathHelper.PiOver4 * Projectile.direction, Ease.SineInOut(GetArmProgress()));
+
+        SeedPosition = Vector2.Lerp(SeedPosition, _goToPosition, 0.1f);
 
         if (SpawnValue < 1f) {
             return;
         }
 
-        float distance = _seedPosition.Distance(Projectile.Center);
+        float distance = SeedPosition.Distance(Projectile.Center);
         float neededDistance = SEEDGOTODISTANCE;
         float distanceProgress = distance / neededDistance;
         if (distance < neededDistance) {
             _goToPosition = Projectile.Center;
-            _seedPosition = Vector2.Lerp(_seedPosition, _goToPosition, 0.01f + 0.055f * (1f - distanceProgress));
-            if (_seedPosition.Distance(_goToPosition) < 5f) {
-                _seedPosition = _goToPosition;
+            SeedPosition = Vector2.Lerp(SeedPosition, _goToPosition, 0.01f + 0.055f * (1f - distanceProgress));
+            if (SeedPosition.Distance(_goToPosition) < 5f) {
+                SeedPosition = _goToPosition;
             }
         }
 
@@ -180,11 +206,14 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
     }
 
-    public override bool ShouldUpdatePosition() => _seedPosition.Distance(_goToPosition) < 100f;
+    public override bool ShouldUpdatePosition() => SeedPosition.Distance(_goToPosition) < 100f;
 
     public override void OnKill(int timeLeft) {
 
     }
+
+    private float GetBaseProgress(float offset = 0f) => Ease.SineInOut(MathUtils.Clamp01(1f - (AITimer - GRASPTIMEINTICKS * 1.05f) / (GRASPTIMEINTICKS * 0.95f) + offset));
+    private float GetArmProgress() => 1f - GetBaseProgress();
 
     protected override void Draw(ref Color lightColor) {
         if (!AssetInitializer.TryGetRequestedTextureAssets<WardenHand>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
@@ -197,9 +226,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                   baseGlowTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.BaseGlow].Value,
                   seedGlowTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.SeedGlow].Value,
                   rootTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.Root].Value;
-        float getBaseProgress(float offset = 0f) => Ease.SineInOut(MathUtils.Clamp01(1f - (AITimer - GRASPTIMEINTICKS * 1.05f) / (GRASPTIMEINTICKS * 0.95f) + offset));
         SpriteBatch batch = Main.spriteBatch;
-        float animationProgress = 1f - getBaseProgress();
+        float animationProgress = 1f - GetBaseProgress();
         float startTime = 20f;
         float animationTime = 40f;
         float seedProgress = 1f - Utils.GetLerpValue(startTime * 0.75f, startTime * 0.75f + animationTime * 0.5f, AITimer2, true);
@@ -219,7 +247,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 baseOrigin = baseClip.Centered();
         SpriteEffects baseEffects = Projectile.spriteDirection.ToSpriteEffects();
         Color baseColor = Color.White * Projectile.Opacity;
-        Vector2 basePosition = Projectile.Center + Main.rand.RandomPointInArea(1.5f, 3f) * MathUtils.YoYo(1f - glowProgress2) * Ease.CubeIn(1f - glowProgress3);
+        Vector2 shakeVelocity = Main.rand.RandomPointInArea(1.5f, 3f) * MathUtils.YoYo(1f - glowProgress2) * Ease.CubeIn(1f - glowProgress3);
+        Vector2 basePosition = Projectile.Center + shakeVelocity;
         Vector2 baseScale = Vector2.One;
         float baseRotation = Projectile.rotation;
 
@@ -244,33 +273,37 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Color = baseColor,
             Rotation = baseRotation
         };
+
+        int trailCount = 4;
+        for (int i = 1; i < trailCount; i++) {
+            float maxAlpha = 0.5f;
+            float alphaStep = maxAlpha / trailCount;
+            batch.Draw(baseTexture, Projectile.oldPos[i] + Projectile.Size / 2f + shakeVelocity, baseDrawInfo with {
+                Color = baseColor * (maxAlpha - (i * alphaStep))
+            });
+        }
         batch.Draw(baseTexture, basePosition, baseDrawInfo);
 
         void drawSeed() {
-            Vector2 seedPosition = _seedPosition;
+            Vector2 seedPosition = SeedPosition;
             Rectangle seedClip = seedTexture.Bounds;
             Vector2 seedOrigin = seedClip.Centered();
-            float armProgress = 1f - getBaseProgress();
-            float velocityRotation = _seedPosition.DirectionTo(_goToPosition).ToRotation() - MathHelper.PiOver2;
-            if (float.IsNaN(velocityRotation)) {
-                velocityRotation = 0f;
-            }
-            float seedRotation = Utils.AngleLerp(velocityRotation, MathHelper.PiOver4 * Projectile.direction, Ease.SineInOut(armProgress));
             Color seedColor = baseColor * Ease.CubeOut(seedProgress);
-            seedPosition += Vector2.UnitX.RotatedBy(seedRotation) * armProgress * 7f * -Projectile.direction;
+            seedPosition += Vector2.UnitX.RotatedBy(SeedRotation) * GetArmProgress() * 7f * -Projectile.direction;
+            Vector2 seedScale = Vector2.One * Projectile.Opacity;
             DrawInfo seedDrawInfo = DrawInfo.Default with {
                 Clip = seedClip,
                 Origin = seedOrigin,
-                Rotation = seedRotation,
+                Rotation = SeedRotation,
                 Color = seedColor,
-                ImageFlip = baseEffects
+                ImageFlip = baseEffects,
+                Scale = seedScale
             };
             batch.Draw(seedTexture, seedPosition, seedDrawInfo);
-            float seedOpacity = (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
-            Color seedGlowColor = baseColor * seedOpacity;
+            Color seedGlowColor = baseColor * (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
             batch.Draw(seedGlowTexture, seedPosition, seedDrawInfo with {
                 Color = seedGlowColor with { A = 0 },
-                Scale = Vector2.One * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.5f) * seedOpacity,
+                Scale = seedScale * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.5f),
                 ImageFlip = baseEffects
             });
         }
@@ -340,7 +373,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         //int fingerCount = (byte)FingerType.Count;
         //while (fingerIndex < fingerCount) {
         //    float fingerProgress = fingerIndex / (float)fingerCount;
-        //    float fingerWaveValue = getBaseProgress(fingerProgress * 0.5f);
+        //    float fingerWaveValue = GetBaseProgress(fingerProgress * 0.5f);
         //    Vector2 fingerOffsetValue = new(fingerPartTexture.Width / 2f, fingerPartTexture.Height);
         //    Vector2 fingerOffset = new Vector2(0f, -0.75f) * fingerOffsetValue;
         //    Vector2 fingerPosition = basePosition + fingerOffset;

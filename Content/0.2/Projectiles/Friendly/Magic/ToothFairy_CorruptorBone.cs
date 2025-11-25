@@ -42,7 +42,10 @@ sealed class CorruptorBone : ModProjectile {
         }
     }
 
-    public override void SetStaticDefaults() => Projectile.SetFrameCount(FRAMECOUNT);
+    public override void SetStaticDefaults() {
+        Projectile.SetFrameCount(FRAMECOUNT);
+        Projectile.SetTrail(0, 3);
+    }
 
     public override void SetDefaults() {
         Projectile.SetSizeValues(14);
@@ -60,6 +63,13 @@ sealed class CorruptorBone : ModProjectile {
     }
 
     public override void AI() {
+        ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
+        if (Projectile.velocity.Length() > 1f && Main.rand.NextBool(30)) {
+            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, type);
+            dust.noGravity = true;
+            dust.scale *= Main.rand.NextFloat(1f, 1.5f) * 0.8f;
+        }
+
         Projectile.Opacity = Utils.GetLerpValue(0, 7, Projectile.timeLeft, true) * Utils.GetLerpValue(TIMELEFT, TIMELEFT - 1, Projectile.timeLeft, true);
 
         void init() {
@@ -110,6 +120,13 @@ sealed class CorruptorBone : ModProjectile {
         }
 
         return base.OnTileCollide(oldVelocity);
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Projectile.QuickDrawShadowTrails(lightColor * Projectile.Opacity, 0.5f, 1, Projectile.rotation);
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, 0f);
+
+        return false;
     }
 
     private class ConnectBones : ModSystem {
