@@ -17,8 +17,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
-
-using static RoA.Content.Projectiles.Friendly.Nature.WardenHand;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -30,6 +29,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static byte FISTFRAMECOUNT => 3;
     private static float SEEDGOTODISTANCE => 45f;
     private static byte ROOTCOUNT => 6;
+    private static float STARTTIME => 20f;
+    private static float ANIMATIONTIME => 40f;
 
     public enum WardenHandRequstedTextureType : byte {
         Base,
@@ -85,6 +86,13 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         set => InitValue = value.ToInt();
     }
 
+    private bool IsMoving => Projectile.velocity.Length() > 1f;
+    private bool ShouldUpdatePositionWithVelocity => SeedPosition.Distance(_goToPosition) < 100f;
+
+    private float GetBaseProgress(float offset = 0f) => Ease.SineInOut(MathUtils.Clamp01(1f - (AITimer - GRASPTIMEINTICKS * 1.05f) / (GRASPTIMEINTICKS * 0.95f) + offset));
+    private float GetArmProgress() => 1f - GetBaseProgress();
+    private float GetRootProgress(float offset = 0f) => Utils.GetLerpValue(STARTTIME * 0.5f + ANIMATIONTIME * (0.4f + offset), STARTTIME * 0.5f + ANIMATIONTIME * (0.8f + offset), AITimer2, true);
+
     public override void SetStaticDefaults() {
         Projectile.SetTrail(2, 3);
     }
@@ -104,6 +112,30 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.Opacity = 0f;
 
         Projectile.tileCollide = false;
+
+        Projectile.usesLocalNPCImmunity = true;
+    }
+
+    public override bool? CanDamage() => true;
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        if (IsMoving) {
+            if (Helper.DeathrayHitbox(Projectile.Center - Vector2.UnitY.RotatedBy(Projectile.rotation) * 25f, Projectile.Center + Vector2.UnitY.RotatedBy(Projectile.rotation) * 30f,
+                targetHitbox, 65f)) {
+                return true;
+            }
+        }
+        else {
+            foreach (RootInfo rootInfo in _rootData) {
+                float progress = Ease.SineInOut(GetRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)));
+                if (Helper.DeathrayHitbox(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 140f,
+                    targetHitbox, 40f)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private void UpdateMaxCount(Player player) {
@@ -120,6 +152,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void AI() {
+        Projectile.localNPCHitCooldown = IsMoving ? 10 : 15;
+
         Player owner = Projectile.GetOwnerAsPlayer();
 
         UpdateMaxCount(owner);
@@ -148,23 +182,25 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             _goToPosition = Projectile.Center + Projectile.velocity * baseSpeed * 1.5f;
             SeedPosition = Projectile.Center + Projectile.velocity.SafeNormalize().TurnRight() * new Vector2(Projectile.direction, -Projectile.direction) * 20f;
 
-            _rootData = new RootInfo[ROOTCOUNT];
-            for (int i = 0; i < _rootData.Length; i++) {
-                byte rootPartCount = 3;
-                RootInfo.RootPartInfo[] rootParts = new RootInfo.RootPartInfo[rootPartCount];
-                int count = rootParts.Length;
-                for (int k = 0; k < count; k++) {
-                    rootParts[k] = new RootInfo.RootPartInfo() {
-                        RootPartType = (RootInfo.RootPartType)k,
-                        LeftFramed = Main.rand.NextBool()
+            if (Projectile.IsOwnerLocal()) {
+                _rootData = new RootInfo[ROOTCOUNT];
+                for (int i = 0; i < _rootData.Length; i++) {
+                    byte rootPartCount = 3;
+                    RootInfo.RootPartInfo[] rootParts = new RootInfo.RootPartInfo[rootPartCount];
+                    int count = rootParts.Length;
+                    for (int k = 0; k < count; k++) {
+                        rootParts[k] = new RootInfo.RootPartInfo() {
+                            RootPartType = (RootInfo.RootPartType)k,
+                            LeftFramed = Main.rand.NextBool()
+                        };
+                    }
+                    _rootData[i] = new RootInfo() {
+                        Rotation = (float)i / ROOTCOUNT * MathHelper.TwoPi + Main.rand.NextFloatDirection() * MathHelper.PiOver4 / 5f,
+                        RootParts = rootParts,
+                        SpawnOffset = Main.rand.NextFloat(0.5f),
+                        Flip = Main.rand.NextBool()
                     };
                 }
-                _rootData[i] = new RootInfo() {
-                    Rotation = (float)i / ROOTCOUNT * MathHelper.TwoPi + Main.rand.NextFloatDirection() * MathHelper.PiOver4 / 2.5f,
-                    RootParts = rootParts,
-                    SpawnOffset = Main.rand.NextFloat(0.5f),
-                    Flip = Main.rand.NextBool()
-                };
             }
         }
 
@@ -213,14 +249,11 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
     }
 
-    public override bool ShouldUpdatePosition() => SeedPosition.Distance(_goToPosition) < 100f;
+    public override bool ShouldUpdatePosition() => ShouldUpdatePositionWithVelocity;
 
     public override void OnKill(int timeLeft) {
 
     }
-
-    private float GetBaseProgress(float offset = 0f) => Ease.SineInOut(MathUtils.Clamp01(1f - (AITimer - GRASPTIMEINTICKS * 1.05f) / (GRASPTIMEINTICKS * 0.95f) + offset));
-    private float GetArmProgress() => 1f - GetBaseProgress();
 
     protected override void Draw(ref Color lightColor) {
         if (!AssetInitializer.TryGetRequestedTextureAssets<WardenHand>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
@@ -235,8 +268,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                   rootTexture = indexedTextureAssets[(byte)WardenHandRequstedTextureType.Root].Value;
         SpriteBatch batch = Main.spriteBatch;
         float animationProgress = 1f - GetBaseProgress();
-        float startTime = 20f;
-        float animationTime = 40f;
+        float startTime = STARTTIME;
+        float animationTime = ANIMATIONTIME;
         float seedProgress = 1f - Utils.GetLerpValue(startTime * 0.75f, startTime * 0.75f + animationTime * 0.5f, AITimer2, true);
         float seedProgress2 = Utils.GetLerpValue(animationTime * 0.625f + startTime * 0.875f, startTime * 0.875f, AITimer2, true);
         float seedProgress3 = Utils.GetLerpValue(animationTime / 6f + startTime * 1.25f, startTime * 1.25f, AITimer2, true);
@@ -244,7 +277,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         float glowProgress = Utils.GetLerpValue(startTime * 1.65f, startTime * 1.65f + animationTime * 0.2f, AITimer2, true);
         float glowProgress2 = Utils.GetLerpValue(startTime * 1.65f + animationTime * 0f, startTime * 1.65f + animationTime * 0.4f, AITimer2, true);
         float glowProgress3 = Utils.GetLerpValue(startTime * 1.65f + animationTime * 0.2f, startTime * 1.65f + animationTime * 0.8f, AITimer2, true);
-        float getRootProgress(float offset = 0f) => Utils.GetLerpValue(startTime * 0.5f + animationTime * (0.4f + offset), startTime * 0.5f + animationTime * (0.8f + offset), AITimer2, true);
         seedProgress *= 1f - glowProgress;
         seedProgress2 *= 1f - glowProgress;
         glowProgress *= 1f - glowProgress3;
@@ -373,8 +405,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
         }
 
-        drawRoots((rootInfo) => getRootProgress(-0.08f + MathUtils.Clamp01(rootInfo.SpawnOffset)), baseGlowColor2 with { A = 25 }, 0.4f);
-        drawRoots((rootInfo) => getRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)), baseColor);
+        drawRoots((rootInfo) => GetRootProgress(-0.08f + MathUtils.Clamp01(rootInfo.SpawnOffset)), baseGlowColor2 with { A = 25 }, 0.4f);
+        drawRoots((rootInfo) => GetRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)), baseColor);
 
         Rectangle baseGlowClip = baseGlowTexture.Bounds;
         Vector2 baseGlowOrigin = baseGlowClip.Centered();
