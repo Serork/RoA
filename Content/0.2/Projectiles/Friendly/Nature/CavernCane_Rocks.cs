@@ -216,7 +216,6 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
             if (!rocksValues.Init) {
                 rocksValues.Init = true;
 
-
                 CustomImmunityFramesHandler.Initialize(Projectile, (ushort)(ROCKATTACKCOUNT * 2));
 
                 //if (Projectile.IsOwnerLocal()) {

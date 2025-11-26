@@ -13,6 +13,7 @@ using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -20,16 +21,16 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Graphics.Light;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-using static tModPorter.ProgressUpdate;
+using static RoA.Content.Projectiles.Friendly.Nature.CavernCane_Rocks;
+using static RoA.Content.Projectiles.Friendly.Nature.WardenHand;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
-sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
+sealed class WardenHand : NatureProjectile_NoTextureLoad, IUseCustomImmunityFrames, IRequestAssets {
     private static byte MAXCOUNT => 3;
     private static ushort TIMELEFT => 9000;
     private static ushort MINTIMELEFT => 25;
@@ -40,6 +41,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static float STARTTIME => 20f;
     private static float ANIMATIONTIME => 40f;
     private static float MAXDISTANCEPLAYER => TileHelper.TileSize * 35;
+    private static ushort HITCOUNTPERROOT => 50;
 
     public enum WardenHandRequstedTextureType : byte {
         Base,
@@ -82,6 +84,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     private Vector2[] _seedPositions = null!;
     private Vector2 _goToPosition;
     private RootInfo[] _rootData = null!;
+    private ushort[] _hitCountPerRoot = null!;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float SpawnValue => ref Projectile.localAI[1];
@@ -136,15 +139,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 return true;
             }
         }
-        else {
-            foreach (RootInfo rootInfo in _rootData) {
-                float progress = Ease.SineInOut(GetRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)));
-                if (Helper.DeathrayHitbox(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 140f,
-                    targetHitbox, 40f)) {
-                    return true;
-                }
-            }
-        }
 
         return false;
     }
@@ -163,7 +157,55 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void AI() {
-        Projectile.localNPCHitCooldown = IsMoving ? 10 : 15;
+        ushort hitCooldown = (ushort)(IsMoving ? 10 : 15);
+        if (Init) {
+            void resetDamageInfo() {
+                for (int k = 0; k < _rootData.Length; k++) {
+                    if (!_rootData[k].Active) {
+                        continue;
+                    }
+                    for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
+                        ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)k, npcId);
+                        if (immuneTime > 0) {
+                            immuneTime--;
+                        }
+                    }
+                }
+            }
+            resetDamageInfo();
+            void damageNPCs() {
+                if (!Projectile.IsOwnerLocal()) {
+                    return;
+                }
+
+                RocksValues rocksValues = new(Projectile);
+                for (int k = 0; k < _rootData.Length; k++) {
+                    RootInfo rootInfo = _rootData[k];
+                    if (!rootInfo.Active) {
+                        continue;
+                    }
+                    float progress = Ease.SineInOut(GetRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)));
+                    foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
+                        if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
+                                                                         ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)k, npcForCollisionCheck.whoAmI),
+                                                                         collided: (targetHitbox) => Helper.DeathrayHitbox(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 150f, targetHitbox, 40f),
+                                                                         direction: MathF.Sign(Projectile.Center.X - npcForCollisionCheck.Center.X),
+                                                                         immuneTimeAfterHit: hitCooldown)) {
+                            continue;
+                        }
+                        else {
+                            _hitCountPerRoot[k]++;
+                            if (_hitCountPerRoot[k] > HITCOUNTPERROOT) {
+                                _rootData[k].SpawnOffset = -2f;
+                            }
+                        }
+                    }
+                }
+            }
+            damageNPCs();
+        }
+
+        Projectile.localNPCHitCooldown = hitCooldown;
 
         Player owner = Projectile.GetOwnerAsPlayer();
 
@@ -182,6 +224,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         if (!Init) {
             Init = true;
 
+            CustomImmunityFramesHandler.Initialize(Projectile, ROOTCOUNT);
+
             float baseSpeed = 15f;
             Projectile.velocity = Projectile.velocity.SafeNormalize() * baseSpeed;
 
@@ -198,6 +242,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
             _goToPosition = Projectile.Center + Projectile.velocity * baseSpeed * 1.5f;
             SeedPosition = Projectile.Center + Projectile.velocity.SafeNormalize().TurnRight() * new Vector2(Projectile.direction, -Projectile.direction) * 20f;
+
+            _hitCountPerRoot = new ushort[ROOTCOUNT];
 
             if (Projectile.IsOwnerLocal()) {
                 _rootData = new RootInfo[ROOTCOUNT];
@@ -326,14 +372,15 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.position.Y += Helper.Wave(AITimer2 * TimeSystem.LogicDeltaTime, -offset, offset, 5f, 0f);
         }
 
-        if (Projectile.timeLeft < MINTIMELEFT) {
-            if (Main.netMode != NetmodeID.Server) {
-                for (int k = 0; k < _rootData.Length; k++) {
-                    ref RootInfo rootInfo = ref _rootData[k];
+        if (Main.netMode != NetmodeID.Server) {
+            for (int k = 0; k < _rootData.Length; k++) {
+                ref RootInfo rootInfo = ref _rootData[k];
+                bool flag = rootInfo.SpawnOffset == -2f;
+                if (flag || Projectile.timeLeft < MINTIMELEFT) {
                     if (rootInfo.SpawnOffset == -1f) {
                         continue;
                     }
-                    if (Projectile.timeLeft > MINTIMELEFT * (rootInfo.SpawnOffset * 2f)) {
+                    if (!flag && Projectile.timeLeft > MINTIMELEFT * (rootInfo.SpawnOffset * 2f)) {
                         continue;
                     }
                     float progress = Ease.SineInOut(GetRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)));

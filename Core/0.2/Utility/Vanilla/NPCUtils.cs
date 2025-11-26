@@ -77,7 +77,7 @@ static class NPCUtils {
         return target;
     }
 
-    public static bool DamageNPCWithPlayerOwnedProjectile(NPC target, Projectile damageSourceAsProjectile, ref ushort immuneTime, ushort immuneTimeAfterHit = 10, Rectangle? damageSourceHitbox = null, int? direction = null) {
+    public static bool DamageNPCWithPlayerOwnedProjectile(NPC target, Projectile damageSourceAsProjectile, ref ushort immuneTime, ushort immuneTimeAfterHit = 10, Rectangle? damageSourceHitbox = null, int? direction = null, Predicate<Rectangle>? collided = null) {
         if (target.dontTakeDamage || damageSourceAsProjectile.owner < 0) {
             return false;
         }
@@ -90,7 +90,7 @@ static class NPCUtils {
         direction ??= damageSourceAsProjectile.direction;
         damageSourceHitbox ??= damageSourceAsProjectile.getRect();
         Player owner = damageSourceAsProjectile.GetOwnerAsPlayer();
-        if (immuneTime == 0 && damageSourceHitbox.Value.Intersects(target.getRect())) {
+        if (immuneTime == 0 && ((collided != null && collided.Invoke(target.getRect())) || damageSourceHitbox.Value.Intersects(target.getRect()))) {
             var modifiers = target.GetIncomingStrikeModifiers(damageSourceAsProjectile.DamageType, direction.Value);
             modifiers.ArmorPenetration += damageSourceAsProjectile.ArmorPenetration;
             bool crit = false;
