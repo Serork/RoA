@@ -34,6 +34,12 @@ class CorruptionInsect : FormProjectile {
         Projectile.hostile = false;
     }
 
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 8;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     public override void AI() {
         //if (Projectile.timeLeft == 220) {
         //    Projectile.tileCollide = true;

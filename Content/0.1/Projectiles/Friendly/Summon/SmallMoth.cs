@@ -24,7 +24,7 @@ sealed class SmallMoth : ModProjectile {
         Projectile.extraUpdates = 0;
         Projectile.noEnchantmentVisuals = true;
 
-        int width = 14; int height = width;
+        int width = 12; int height = width;
         Projectile.Size = new Vector2(width, height);
 
         Projectile.scale = 1f;
@@ -41,6 +41,12 @@ sealed class SmallMoth : ModProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 8;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
     public override bool? CanCutTiles() {

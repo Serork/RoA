@@ -28,7 +28,7 @@ sealed class GalipotArrowProjectile : ModProjectile {
 
         public override void SetDefaults() {
             Projectile.width = 14;
-            Projectile.height = 18;
+            Projectile.height = 14;
             Projectile.aiStyle = -1;
             Projectile.friendly = true;
             Projectile.ignoreWater = false;
@@ -43,6 +43,12 @@ sealed class GalipotArrowProjectile : ModProjectile {
             Projectile.hide = true;
 
             Projectile.frame = Main.rand.Next(3);
+        }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+            width = height = 10;
+
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {

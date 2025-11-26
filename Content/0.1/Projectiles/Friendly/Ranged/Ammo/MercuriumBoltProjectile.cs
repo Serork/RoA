@@ -10,13 +10,19 @@ namespace RoA.Content.Projectiles.Friendly.Ranged.Ammo;
 sealed class MercuriumBoltProjectile : ModProjectile {
     public override void SetDefaults() {
         Projectile.arrow = true;
-        Projectile.width = 10;
-        Projectile.height = 10;
+        Projectile.width = 14;
+        Projectile.height = 14;
         Projectile.aiStyle = 1;
         Projectile.friendly = true;
         Projectile.DamageType = DamageClass.Ranged;
         Projectile.extraUpdates = 1;
         Projectile.timeLeft = 1200;
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 10;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
     public override void AI() {

@@ -41,6 +41,12 @@ sealed class Bee : NatureProjectile {
         ShouldApplyAttachedNatureWeaponCurrentDamage = false;
     }
 
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 8;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     protected override void SafeOnSpawn(IEntitySource source) {
         base.SafeOnSpawn(source);
 

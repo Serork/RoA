@@ -31,6 +31,10 @@ sealed class MoonlightBeam : NatureProjectile {
         Projectile.extraUpdates = 100;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Inflate(5, 5);
+    }
+
     public override void AI() {
         Lighting.AddLight(Projectile.Center, 0.2f, 0.2f, 0.1f);
         if (Projectile.velocity.X != Projectile.velocity.X) {
