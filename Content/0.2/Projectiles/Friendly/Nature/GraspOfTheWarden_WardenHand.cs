@@ -50,7 +50,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         Root
     }
 
-    public readonly record struct RootInfo(float Rotation, RootInfo.RootPartInfo[] RootParts, float SpawnOffset, bool Flip) {
+    public record struct RootInfo(float Rotation, RootInfo.RootPartInfo[] RootParts, float SpawnOffset, bool Flip) {
         public enum RootPartType {
             End,
             Mid,
@@ -58,6 +58,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
 
         public readonly record struct RootPartInfo(RootPartType RootPartType, bool LeftFramed);
+
+        public readonly bool Active => SpawnOffset >= 0f;
     }
 
     //public enum FingerType : byte {
@@ -320,8 +322,49 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         lightMax *= 1f;
         if (AITimer2 > lightMax) {
             float progress = Ease.CubeOut(Utils.GetLerpValue(lightMax, lightMax * 1.5f, AITimer2, true));
-            float offset = 0.5f * progress;
+            float offset = 0.1f * progress;
             Projectile.position.Y += Helper.Wave(AITimer2 * TimeSystem.LogicDeltaTime, -offset, offset, 5f, 0f);
+        }
+
+        if (Projectile.timeLeft < MINTIMELEFT) {
+            if (Main.netMode != NetmodeID.Server) {
+                for (int k = 0; k < _rootData.Length; k++) {
+                    ref RootInfo rootInfo = ref _rootData[k];
+                    if (rootInfo.SpawnOffset == -1f) {
+                        continue;
+                    }
+                    if (Projectile.timeLeft > MINTIMELEFT * (rootInfo.SpawnOffset * 2f)) {
+                        continue;
+                    }
+                    float progress = Ease.SineInOut(GetRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)));
+                    if (AITimer2 >= GRASPTIMEINTICKS * 3.4f) {
+                        int count2 = 4;
+                        for (int i = 0; i < count2; i++) {
+                            int gore = Gore.NewGore(Projectile.GetSource_Death(),
+                                                    Vector2.Lerp(Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 30f, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 140f, i / (float)count2) +
+                                                    Main.rand.RandomPointInArea(6f),
+                                                    Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/RootOfTheWardenGore{Main.rand.Next(3) + 1}").Type, 1f);
+                            Main.gore[gore].velocity.Y *= 0.5f;
+                            Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+                            Main.gore[gore].position -= new Vector2(Main.gore[gore].Width, Main.gore[gore].Height) / 2f;
+                            Main.gore[gore].rotation = MathHelper.TwoPi * Main.rand.NextFloat();
+                        }
+                    }
+
+                    int count = 14;
+                    for (int i = 0; i < count; i++) {
+                        float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
+                        Dust dust = Main.dust[Dust.NewDust(Vector2.Lerp(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 140f, i / (float)count) - Vector2.UnitY * 2f + Main.rand.NextVector2Circular(10f, 10f) * 0.75f,
+                            0, 0, ModContent.DustType<RootOfTheWardenDust>(), 0f, 0f, Main.rand.Next(100), default, dustScale)];
+                        dust.noGravity = true;
+                        dust.fadeIn = 0.5f;
+                        dust.noLight = true;
+                        dust.velocity *= Main.rand.NextFloat(0.5f, 1f);
+                    }
+
+                    rootInfo.SpawnOffset = -1f;
+                }
+            }
         }
     }
 
@@ -342,33 +385,6 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                                         Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/FistOfTheWardenGore{Main.rand.Next(4) + 1}").Type, 1f);
                 Main.gore[gore].velocity.Y *= 0.5f;
                 Main.gore[gore].rotation = MathHelper.TwoPi * Main.rand.NextFloat();
-            }
-            foreach (RootInfo rootInfo in _rootData) {
-                float progress = Ease.SineInOut(GetRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)));
-                if (AITimer2 >= GRASPTIMEINTICKS * 3.4f) {
-                    int count2 = 4;
-                    for (int i = 0; i < count2; i++) {
-                        int gore = Gore.NewGore(Projectile.GetSource_Death(),
-                                                Vector2.Lerp(Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 30f, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 140f, i / (float)count2) +
-                                                Main.rand.RandomPointInArea(6f),
-                                                Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/RootOfTheWardenGore{Main.rand.Next(3) + 1}").Type, 1f);
-                        Main.gore[gore].velocity.Y *= 0.5f;
-                        Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
-                        Main.gore[gore].position -= new Vector2(Main.gore[gore].Width, Main.gore[gore].Height) / 2f;
-                        Main.gore[gore].rotation = MathHelper.TwoPi * Main.rand.NextFloat();
-                    }
-                }
-
-                int count = 14;
-                for (int i = 0; i < count; i++) {
-                    float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
-                    Dust dust = Main.dust[Dust.NewDust(Vector2.Lerp(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 140f, i / (float)count) - Vector2.UnitY * 2f + Main.rand.NextVector2Circular(10f, 10f) * 0.75f,
-                        0, 0, ModContent.DustType<RootOfTheWardenDust>(), 0f, 0f, Main.rand.Next(100), default, dustScale)];
-                    dust.noGravity = true;
-                    dust.fadeIn = 0.5f;
-                    dust.noLight = true;
-                    dust.velocity *= Main.rand.NextFloat(0.5f, 1f);
-                }
             }
         }
     }
@@ -485,6 +501,9 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         void drawRoots(Func<RootInfo, float> rootProgress, Color baseColor, float opacity = 1f) {
             for (int i = 0; i < _rootData.Length; i++) {
                 RootInfo rootInfo = _rootData[i];
+                if (!rootInfo.Active) {
+                    continue;
+                }
                 RootInfo.RootPartInfo[] rootParts = rootInfo.RootParts;
                 Vector2 rootPosition = basePosition;
                 for (int k = 0; k < rootParts.Length; k++) {
