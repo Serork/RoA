@@ -128,7 +128,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         Vector2 samplingPoint = Projectile.Center;
         float distance = 0f;
         float opacity = Opacity * startVelocityModifier2;
-        float maxdistance = 1000f * opacity;
+        float maxdistance = 600f * opacity;
         while (distance < maxdistance) {
             Vector2 start = Projectile.Center;
             NPC[] sortedNPC = Main.npc.Where(n => n.active && !n.friendly && !n.CountsAsACritter).OrderBy(n => (n.Center - start).Length()).ToArray();
@@ -159,7 +159,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         int chance = Math.Max(1, 10 - (int)(MathF.Max(100, num718) / 100));
         chance /= 2;
-        if (Main.rand.NextBool(chance)) {
+        if (Main.rand.NextBool(Math.Max(1, chance))) {
             Dust dust = Dust.NewDustPerfect(samplingPoint + Vector2.UnitY.RotatedBy(Projectile.rotation - MathHelper.PiOver2) * num718 * Main.rand.NextFloat(0.1f, 0.9f) + Main.rand.NextVector2Circular(20f, 20f) * (Projectile.scale * 1.25f) + new Vector2(10f * Projectile.direction, -2f) * (Projectile.scale * 1.25f),
                 ModContent.DustType<Dusts.SunSigil>(),
                 Vector2.UnitY.RotatedByRandom(Projectile.rotation - MathHelper.PiOver2) * Main.rand.NextFloat(3f, 4f) * 1.25f,

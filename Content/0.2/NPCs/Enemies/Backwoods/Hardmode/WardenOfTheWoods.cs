@@ -131,6 +131,8 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
 
     public virtual bool Alt { get; } = false;
 
+    public static SoundStyle HitSound => new SoundStyle(ResourceManager.ItemSounds + "WoodBreakStrong") with { Pitch = 0.3f, Volume = 0.3f, PitchVariance = 0.2f };
+
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
     }
@@ -142,7 +144,7 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
         NPC.aiStyle = -1;
         NPC.noGravity = true;
         NPC.noTileCollide = true;
-        NPC.HitSound = new SoundStyle(ResourceManager.ItemSounds + "WoodBreakStrong") with { Pitch = 0.3f, Volume = 0.3f, PitchVariance = 0.2f };
+        NPC.HitSound = HitSound;
 
         Banner = Type;
         BannerItem = Alt ? ModContent.ItemType<WardenOfTheWoods2Banner>() : ModContent.ItemType<WardenOfTheWoodsBanner>();
@@ -241,10 +243,15 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
 
                     //if (Main.rand.NextBool(1000)) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Active") with { PitchVariance = 0.1f, Pitch = -0.5f, Volume = 0.3f, MaxInstances = 2 }, NPC.Center);
                     if (Main.rand.NextChance(1f - GetFadeOutProgress()) && Main.rand.NextBool(3)) {
-                        int num730 = Dust.NewDust(NPC.position + new Vector2(10f, 32.5f + 15f * Main.rand.NextFloat()), NPC.width / 2, 8, Main.rand.NextBool() ? DustID.WoodFurniture : ModContent.DustType<WoodFurniture>(), 0, 1f, 0, Alt ? new Color(85, 90, 80) : new Color(100, 100, 80), 1f + Main.rand.NextFloatRange(0.1f));
+                        int num730 = Dust.NewDust(NPC.position + new Vector2(10f, 32.5f + 15f * Main.rand.NextFloat()), NPC.width / 2, 8, Main.rand.NextBool() ? DustID.WoodFurniture : ModContent.DustType<WoodFurniture>(),
+                            0, 1f, Main.rand.Next(100), Alt ? new Color(85, 90, 80) : new Color(100, 100, 80), 1f + Main.rand.NextFloatRange(0.1f));
                         Main.dust[num730].noGravity = true;
                         Main.dust[num730].velocity = new Vector2(0, Main.rand.NextFloat(6f) * Main.rand.NextFloat(0.25f, 0.9f));
-                        Main.dust[num730].velocity.X += Main.dust[num730].position.DirectionTo(NPC.Center).X * Main.rand.NextFloat(0f, 0.75f);
+                        Main.dust[num730].velocity.X += Main.dust[num730].position.DirectionTo(NPC.Center).X * Main.rand.NextFloat(0.25f, 0.75f);
+                        Main.dust[num730].velocity.Y *= Main.rand.NextFloat(0.875f, 1f);
+                        if (MathF.Abs(Main.dust[num730].position.X - NPC.Center.X) < NPC.width * 0.125f && MathF.Abs(Main.dust[num730].position.Y - NPC.Center.Y) < NPC.height / 3.5f) {
+                            Main.dust[num730].active = false;
+                        }
                     }
 
                     break;
@@ -252,9 +259,9 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
                 case WardenOfTheWoodsValues.AIState.Attacking:
                     int type = DustID.TintableDustLighted;
                     for (int i = 0; i < 1; i++) {
-                        if (Main.rand.NextBool(10)) {
+                        if (Main.rand.NextBool(10 + (int)(40 * (1f - GetFadeOutProgress())))) {
                             Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
-                            Vector2 center = _initialPosition + new Vector2(NPC.direction == 1 ? 3f : -3f, 0f) + spinningpoint * (NPC.width * 4f * NPC.scale);
+                            Vector2 center = _initialPosition + new Vector2(NPC.direction == 1 ? 3f : -3f, 0f) + spinningpoint * (NPC.width * 3.75f * NPC.scale);
                             Vector2 rotationPoint = spinningpoint.RotatedBy(0.785) * NPC.direction;
                             Vector2 position = center + rotationPoint * 5f;
                             int dust = Dust.NewDust(position, 0, 0, type, newColor: _areaColor!.Value, Alpha: 200);
@@ -342,7 +349,7 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
                 position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(TARGETDISTANCE, TARGETDISTANCE) / 3f;
                 Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
                 WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
-                    scale: Main.rand.NextFloat(0.3f, num67 * 0.6f) * GetFadeOutProgress());
+                    scale: Main.rand.NextFloat(0.6f, num67 * 0.6f) * GetFadeOutProgress());
                 if (wardenParticle != null) {
                     wardenParticle.CustomData = GetFadeOutProgress();
                     wardenParticle.AI0 = _timerForVisualEffects;

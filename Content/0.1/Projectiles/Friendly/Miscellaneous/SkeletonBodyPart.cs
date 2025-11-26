@@ -12,7 +12,7 @@ namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 abstract class SkeletonBodyPart : ModProjectile {
     public override void SetStaticDefaults() {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
-        ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+        ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
     }
 
     public override void SetDefaults() {
@@ -77,7 +77,7 @@ abstract class SkeletonBodyPart : ModProjectile {
         for (int i = 0; i < Projectile.oldPos.Length; i++) {
             Vector2 drawPos = Projectile.oldPos[i] - Main.screenPosition + Projectile.Size / 2f;
             Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - i) / (float)Projectile.oldPos.Length) * 0.5f;
-            spriteBatch.Draw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, drawPos, null, color, Projectile.oldRot[i], drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         }
         spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         return false;

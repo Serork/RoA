@@ -15,7 +15,7 @@ namespace RoA.Content.Projectiles.Friendly.Magic;
 sealed class Corruptor : ModProjectile {
     private static ushort TIMELEFT => 300;
 
-    public override void SetStaticDefaults() => Projectile.SetTrail(0, 3);
+    public override void SetStaticDefaults() => Projectile.SetTrail(2, 3);
 
     public override void SetDefaults() {
         Projectile.SetSizeValues(40);
@@ -74,7 +74,7 @@ sealed class Corruptor : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDrawShadowTrails(lightColor * Projectile.Opacity, 0.5f, 1, Projectile.rotation);
+        Projectile.QuickDrawShadowTrails(lightColor * Projectile.Opacity, 0.5f, 1, 0f);
         Projectile.QuickDraw(lightColor * Projectile.Opacity, 0f);
 
         return false;

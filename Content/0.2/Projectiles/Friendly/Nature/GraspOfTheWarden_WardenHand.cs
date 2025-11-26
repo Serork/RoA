@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -18,6 +19,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -25,12 +27,14 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static byte MAXCOUNT => 3;
     private static ushort TIMELEFT => 9000;
+    private static ushort MINTIMELEFT => 25;
     private static float GRASPTIMEINTICKS => 15f;
     private static byte FISTFRAMECOUNT => 3;
     private static float SEEDGOTODISTANCE => 45f;
     private static byte ROOTCOUNT => 6;
     private static float STARTTIME => 20f;
     private static float ANIMATIONTIME => 40f;
+    private static float MAXDISTANCEPLAYER => TileHelper.TileSize * 35;
 
     public enum WardenHandRequstedTextureType : byte {
         Base,
@@ -146,8 +150,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 list.Add(projectile);
             }
         }
-        if (list.Count >= MAXCOUNT && Projectile.timeLeft > 25) {
-            Projectile.timeLeft = 25;
+        if (list.Count >= MAXCOUNT && Projectile.timeLeft > MINTIMELEFT) {
+            Projectile.timeLeft = MINTIMELEFT;
         }
     }
 
@@ -175,7 +179,13 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             Projectile.velocity = Projectile.velocity.SafeNormalize() * baseSpeed;
 
             owner.SyncMousePosition();
-            Projectile.Center = owner.GetViableMousePosition() - Projectile.velocity * baseSpeed * 1.5f;
+            Projectile.Center = owner.GetViableMousePosition();
+            Vector2 center = owner.Center;
+            if (Projectile.Center.Distance(center) > MAXDISTANCEPLAYER) {
+                Projectile.Center = center + center.DirectionTo(Projectile.Center) * MAXDISTANCEPLAYER;
+            }
+
+            Projectile.Center -= Projectile.velocity * baseSpeed * 1.5f;
 
             Projectile.SetDirection(-Projectile.velocity.X.GetDirection());
 
@@ -195,7 +205,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                         };
                     }
                     _rootData[i] = new RootInfo() {
-                        Rotation = (float)i / ROOTCOUNT * MathHelper.TwoPi + Main.rand.NextFloatDirection() * MathHelper.PiOver4 / 5f,
+                        Rotation = (float)i / ROOTCOUNT * MathHelper.TwoPi + Main.rand.NextFloatDirection() * MathHelper.PiOver4 / 4f,
                         RootParts = rootParts,
                         SpawnOffset = Main.rand.NextFloat(0.5f),
                         Flip = Main.rand.NextBool()
@@ -225,16 +235,16 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
-
-        float rotationFactor = 1f - RotationValue;
-        float lerpValue = 0.25f + MathUtils.Clamp01(RotationValue - 0.25f);
-        float to = -Projectile.velocity.SafeNormalize().X * MathUtils.Clamp01(MathF.Abs(Projectile.velocity.X) + MathF.Abs(Projectile.velocity.Y)) * rotationFactor;
-        Projectile.rotation = Utils.AngleLerp(Projectile.rotation, -to * 0.75f * rotationFactor * rotationFactor, lerpValue);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f * Utils.GetLerpValue(0, MINTIMELEFT / 2, Projectile.timeLeft, true), 0.1f);
 
         float max = GRASPTIMEINTICKS;
         if (AITimer < max * 2f) {
             AITimer++;
+
+            float rotationFactor = 1f - RotationValue;
+            float lerpValue = 0.25f + MathUtils.Clamp01(RotationValue - 0.25f);
+            float to = -Projectile.velocity.SafeNormalize().X * MathUtils.Clamp01(MathF.Abs(Projectile.velocity.X) + MathF.Abs(Projectile.velocity.Y)) * rotationFactor;
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, -to * 0.75f * rotationFactor * rotationFactor, lerpValue);
         }
         else {
             AITimer2++;
@@ -246,6 +256,65 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             float lerpValue2 = 0.1f;
             Projectile.velocity = Vector2.Lerp(Projectile.velocity, Vector2.Zero, lerpValue2);
             Projectile.rotation = Utils.AngleLerp(Projectile.rotation, 0f, lerpValue2);
+        }
+
+        float velocityFactor = Ease.QuintIn(MathUtils.Clamp01(Projectile.velocity.Length() / 5f));
+        int dustCount = (int)(4 * velocityFactor);
+        Color woodColor = new Color(85, 90, 80).ModifyRGB(1.375f);
+        Color blueColor = new(35, 105, 230);
+        for (int k = 0; k < dustCount; k++) {
+            if (Main.rand.NextBool()) {
+                continue;
+            }
+            if (Main.rand.NextBool(3)) {
+                continue;
+            }
+            int dust = Dust.NewDust(Projectile.Center + Main.rand.RandomPointInArea(20f) - Projectile.velocity * 2.5f, 0, 0, Main.rand.NextBool() ? DustID.WoodFurniture : ModContent.DustType<WoodFurniture>(),
+                0, 1f, Main.rand.Next(100), woodColor, 1f + Main.rand.NextFloatRange(0.1f));
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].velocity = new Vector2(0, Main.rand.NextFloat(6f) * Main.rand.NextFloat(0.25f, 0.9f));
+            Main.dust[dust].velocity.X += Main.dust[dust].position.DirectionTo(Projectile.Center).X * Main.rand.NextFloat(0f, 0.75f);
+        }
+
+        if (AITimer2 == max * 2.4f) {
+            for (int k = 0; k < 20; k++) {
+                Vector2 dustPosition = Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width, Projectile.height);
+                Vector2 dustVelocity = Projectile.Center.DirectionTo(dustPosition).RotatedBy(MathHelper.PiOver2 * Projectile.direction) * Main.rand.NextFloat(3f, 10f) * 0.75f;
+                dustVelocity.Y *= 0.5f;
+                dustVelocity = dustVelocity.RotatedBy(MathHelper.PiOver4 * -Projectile.direction);
+                Dust dust = Dust.NewDustPerfect(dustPosition - Vector2.UnitY * 12f, DustID.TintableDustLighted, dustVelocity, 200, blueColor);
+                dust.noGravity = true;
+                dust.fadeIn = Main.rand.NextFloat() * 1.2f;
+                dust.scale = Main.rand.NextFloat() * Main.rand.NextFloat(1f, 1.25f);
+                dust.scale *= 1.75f;
+                dust.noLight = true;
+            }
+        }
+
+        if (Main.rand.NextChance(1f - velocityFactor) && Main.rand.NextBool(3)) {
+            int num730 = Dust.NewDust(Projectile.position + new Vector2(-9f + (Projectile.direction < 0 ? -6f : 0f), 35f + 15f * Main.rand.NextFloat()), 30, 8, Main.rand.NextBool() ? DustID.WoodFurniture : ModContent.DustType<WoodFurniture>(),
+                0, 1f, Main.rand.Next(100), woodColor, 1f + Main.rand.NextFloatRange(0.1f));
+            Main.dust[num730].noGravity = true;
+            Main.dust[num730].velocity = new Vector2(0, Main.rand.NextFloat(6f) * Main.rand.NextFloat(0.25f, 0.9f));
+            Main.dust[num730].velocity.X += Main.dust[num730].position.DirectionTo(Projectile.Center).X * Main.rand.NextFloat(0.25f, 0.75f);
+            Main.dust[num730].velocity.Y *= Main.rand.NextFloat(0.875f, 1f);
+        }
+
+        float lightMin = max * 1.6f,
+              lightMax = max * 3.4f;
+        if (AITimer2 >= lightMin && AITimer2 < lightMax) {
+            float baseProgress = Utils.GetLerpValue(lightMin, lightMax, AITimer2, true);
+            float progress = MathUtils.YoYo(baseProgress);
+            Color baseColor = Color.Lerp(new Color(49, 75, 188), Color.White, 0.75f);
+            Vector3 lightColor = Color.Lerp(baseColor, Color.Lerp(baseColor, blueColor, 0.25f), Ease.CubeIn(baseProgress)).ToVector3();
+            lightColor *= progress;
+            Lighting.AddLight(Projectile.Center - Vector2.UnitY * 12f, lightColor * 1.075f);
+        }
+        lightMax *= 1f;
+        if (AITimer2 > lightMax) {
+            float progress = Ease.CubeOut(Utils.GetLerpValue(lightMax, lightMax * 1.5f, AITimer2, true));
+            float offset = 0.5f * progress;
+            Projectile.position.Y += Helper.Wave(AITimer2 * TimeSystem.LogicDeltaTime, -offset, offset, 5f, 0f);
         }
     }
 
@@ -281,13 +350,12 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         seedProgress2 *= 1f - glowProgress;
         glowProgress *= 1f - glowProgress3;
         byte glowAlpha = (byte)MathHelper.Lerp(100, 255, glowProgress);
-        //animationProgress *= MathUtils.Clamp01(MathF.Max(seedProgress4, seedProgress3) * 0.5f + 0.5f);
         Rectangle baseClip = new SpriteFrame(1, FISTFRAMECOUNT, 0, (byte)(animationProgress * (FISTFRAMECOUNT - 1))).GetSourceRectangle(baseTexture);
         Vector2 baseOrigin = baseClip.Centered();
         SpriteEffects baseEffects = Projectile.spriteDirection.ToSpriteEffects();
         Color baseColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity,
-              baseGlowColor = Color.Lerp(new Color(49, 75, 188), Color.White, 0.5f) * Projectile.Opacity,
-              baseGlowColor2 = Color.Lerp(new Color(49, 75, 188), Color.White, 0.1f) * Projectile.Opacity;
+              baseGlowColor = Color.Lerp(new Color(49, 75, 188), Color.White, 0.5f),
+              baseGlowColor2 = Color.Lerp(new Color(49, 75, 188), Color.White, 0.1f);
         Vector2 shakeVelocity = Main.rand.RandomPointInArea(1.5f, 3f) * MathUtils.YoYo(1f - glowProgress2) * Ease.CubeIn(1f - glowProgress3);
         Vector2 basePosition = Projectile.Center + shakeVelocity;
         Vector2 baseScale = Vector2.One;
@@ -357,7 +425,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             batch.Draw(seedTexture, seedPosition, seedDrawInfo);
             Color seedGlowColor = baseGlowColor * (1f - seedProgress) * Ease.CubeOut(seedProgress2) * 0.75f;
             batch.Draw(seedGlowTexture, seedPosition, seedDrawInfo with {
-                Color = seedGlowColor with { A = 0 },
+                Color = seedGlowColor with { A = 0 } * Projectile.Opacity,
                 Scale = seedScale * (0.75f + MathUtils.YoYo(1f - seedProgress2) * 0.5f),
                 ImageFlip = baseEffects
             });
@@ -405,7 +473,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
         }
 
-        drawRoots((rootInfo) => GetRootProgress(-0.08f + MathUtils.Clamp01(rootInfo.SpawnOffset)), baseGlowColor2 with { A = 25 }, 0.4f);
+        drawRoots((rootInfo) => GetRootProgress(-0.08f + MathUtils.Clamp01(rootInfo.SpawnOffset)), baseGlowColor2 with { A = 25 } * Projectile.Opacity, 0.5f);
         drawRoots((rootInfo) => GetRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)), baseColor);
 
         Rectangle baseGlowClip = baseGlowTexture.Bounds;
@@ -418,7 +486,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         batch.Draw(baseGlowTexture, baseGlowPosition, baseDrawInfo with {
             Clip = baseGlowClip,
             Origin = baseGlowOrigin,
-            Color = baseGlowColor,
+            Color = baseGlowColor * Projectile.Opacity,
             ImageFlip = baseEffects
         });
 
@@ -430,7 +498,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
         batch.Draw(baseGlowTexture, baseGlowPosition, baseDrawInfo with {
             Clip = baseGlowClip,
             Origin = baseGlowOrigin,
-            Color = baseGlowColor with { A = 100 } * 1.25f * MathUtils.YoYo(1f - glowProgress2),
+            Color = baseGlowColor with { A = 100 } * 1.25f * MathUtils.YoYo(1f - glowProgress2) * Projectile.Opacity,
             Scale = baseGlowScale,
             ImageFlip = baseEffects
         });

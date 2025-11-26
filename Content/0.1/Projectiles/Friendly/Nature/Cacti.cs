@@ -275,7 +275,7 @@ sealed class Cacti : NatureProjectile {
                     int direction = i != 0 ? 1 : -1;
                     Vector2 vector32 = new(Projectile.Size.X * 0.4f * direction, Projectile.Size.Y * 0.15f);
                     vector32 = vector32.RotatedBy(baseRotation);
-                    int type = Dust.NewDust(Projectile.Center - Vector2.One * 2f + Projectile.velocity + vector32, 4, 4, ModContent.DustType<CactiCasterDust>());
+                    int type = Dust.NewDust(Projectile.Center - Vector2.One * 4f + Projectile.velocity + vector32, 4, 4, ModContent.DustType<CactiCasterDust>());
                     Dust dust = Main.dust[type];
                     dust.scale = Main.rand.NextFloat(0.8f, 1f) * 1.4f;
                     dust.noGravity = true;

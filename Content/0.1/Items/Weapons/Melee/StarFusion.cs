@@ -53,7 +53,7 @@ sealed class StarFusion : ModItem {
 
     public override bool? UseItem(Player player) {
         if (player.whoAmI == Main.myPlayer && Main.rand.NextChance(0.5)) {
-            GetPointOnSwungItemPath(player, 58f, 58f, 0.3f + Main.rand.NextFloat(0.6f), 1f, out var location, out var outwardDirection);
+            GetPointOnSwungItemPath(player, 58f, 58f, 0.2f + Main.rand.NextFloat(0.8f), 1f, out var location, out var outwardDirection);
             Vector2 vector = outwardDirection.RotatedBy((float)Math.PI / 2f * (float)player.direction * player.gravDir);
             Dust dust = Dust.NewDustPerfect(location, Main.rand.NextBool(3) ? DustID.Enchanted_Gold : DustID.YellowStarDust, vector * 4f, 255, default(Color), 1.2f);
             dust.noGravity = true;

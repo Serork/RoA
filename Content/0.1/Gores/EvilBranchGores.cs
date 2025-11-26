@@ -1,18 +1,20 @@
-//using Terraria;
-//using Terraria.DataStructures;
-//using Terraria.GameContent;
-//using Terraria.ModLoader;
+using RoA.Core.Utility;
 
-//namespace RoA.Content.Gores;
+using Terraria;
+using Terraria.ModLoader;
 
-//class EvilBranchGore2 : EvilBranchGore1 { }
+namespace RoA.Content.Gores;
 
-//class EvilBranchGore1 : ModGore {
-//	public override void OnSpawn(Gore gore, IEntitySource source) {
-//		ChildSafety.SafeGore[gore.type] = true;
+class EvilBranchGore23 : EvilBranchGore11 { }
+class EvilBranchGore22 : EvilBranchGore11 { }
+class EvilBranchGore21 : EvilBranchGore11 { }
 
-//		gore.UsedFrame = new SpriteFrame(1, 3) {
-//			CurrentRow = (byte)Main.rand.Next(3)
-//		};
-//	}
-//}
+class EvilBranchGore13 : EvilBranchGore11 { }
+class EvilBranchGore12 : EvilBranchGore11 { }
+class EvilBranchGore11 : ModGore {
+    public override bool Update(Gore gore) {
+        GoreHelper.FadeOutOverTime(gore);
+
+        return base.Update(gore);
+    }
+}

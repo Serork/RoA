@@ -319,7 +319,7 @@ sealed class Moth : ModProjectile {
         for (int k = 0; k < dashTrailTimer; k++) {
             Vector2 drawPos = Projectile.oldPos[k] + Projectile.Size / 2f - Main.screenPosition;
             Color color = new Color(255, 140, 0, 0) * ((dashTrailTimer - k) / (float)dashTrailTimer);
-            spriteBatch.Draw(glowTexture, drawPos, frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale * 1.1f, Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+            spriteBatch.Draw(glowTexture, drawPos, frameRect, color, Projectile.oldRot[k], drawOrigin, Projectile.scale * 1.1f, Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
         }
         if (dashTimer >= 40) {
             if (Projectile.direction < 0) {

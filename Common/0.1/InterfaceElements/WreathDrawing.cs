@@ -132,6 +132,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         WreathHandler stats = player.GetWreathHandler();
         var storage = player.GetModPlayer<ValuesStorage>();
         float progress = MathHelper.Clamp(stats.ActualProgress2, 0f, 1f);
+        float progress2 = stats.ActualProgress2 - 1f;
         //float alpha = Lighting.Brightness((int)Stats.LightingPosition.X / 16, (int)Stats.LightingPosition.Y / 16);
         //alpha = (alpha + 1f) / 2f;
         //DrawColor color = DrawColor.Multiply(Stats.DrawColor, alpha);
@@ -156,6 +157,10 @@ sealed class WreathDrawing : PlayerDrawLayer {
         batch.End();
         batch.Begin(SpriteSortMode.Deferred, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
         wreathSpriteData.Color = Color.Lerp(WreathHandler.BaseColor, color, progress * customWreath.ToInt()) * opacity;
+        float soulOfTheWoodsExtraProgress = Ease.CubeOut(progress2);
+        if (progress2 > 0f) {
+            wreathSpriteData.Color = Color.Lerp(wreathSpriteData.Color, Color.White * 0.125f, soulOfTheWoodsExtraProgress);
+        }
         wreathSpriteData.VisualPosition = position;
         wreathSpriteData.Rotation = rotation;
         wreathSpriteData.DrawSelf();
@@ -171,7 +176,6 @@ sealed class WreathDrawing : PlayerDrawLayer {
         bool soulOfTheWoods = stats.SoulOfTheWoods;
         VerticalAppearanceShader.Size2 = 0.025f * (1f - Utils.GetLerpValue(0.8f, 1f, progress, true));
         Rectangle sourceRectangle = new(wreathSpriteData2.FrameX, wreathSpriteData2.FrameY + frameOffsetY, wreathSpriteData2.FrameWidth, frameHeight);
-        float progress2 = stats.ActualProgress2 - 1f;
         float value = progress2;
         float mult = 0.5f; // second transition mult
         float progress3 = 1f - MathHelper.Clamp(progress2 * mult, 0f, mult);
@@ -198,7 +202,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
             flag = false;
         }
         if (flag) {
-            drawFilling(sourceRectangle, progress, 1f - Utils.Remap(progress, 0f, 1f, 0.35f, 0.675f, true), opacity: value3);
+            drawFilling(sourceRectangle, progress, 1f - Utils.Remap(progress, 0f, 1f, 0.35f, 0.675f, true), opacity: value3 * MathUtils.Clamp01(MathF.Max(0.625f, 1f - soulOfTheWoodsExtraProgress)));
         }
         if (soulOfTheWoods) {
             color = WreathHandler.SoulOfTheWoodsBaseColor;

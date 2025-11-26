@@ -64,7 +64,7 @@ sealed class RootRing : NatureProjectile {
         Player player = Main.player[Projectile.owner];
 
         float projOpacity = 1f - (float)_alpha / 255f;
-        Lighting.AddLight(Projectile.Center, new Color(248, 119, 119).ToVector3() * projOpacity);
+        Lighting.AddLight(Projectile.Center, new Color(248, 119, 119).ToVector3() * projOpacity * 1.125f);
 
         Vector2 position = new((float)(player.Center.X - (Projectile.width / 2)), (float)(player.Center.Y - 90 + (float)(player.gfxOffY - 60.0 +
             (player.gravDir == -1f ? -120f : 0f))));
@@ -134,7 +134,7 @@ sealed class RootRing : NatureProjectile {
         _factor = MathHelper.Lerp(_factor, factor, _factor < factor ? 0.1f : 0.025f);
         factor = _factor * Projectile.ai[0];
         color *= 1.4f;
-        color.A = 80;
+        color.A = 70;
         color *= opacity;
         opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
         color *= factor * opacity * 2f;
