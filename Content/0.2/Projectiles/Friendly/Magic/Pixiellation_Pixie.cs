@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core;
 using RoA.Core.Defaults;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -20,11 +22,34 @@ namespace RoA.Content.Projectiles.Friendly.Magic;
 sealed class Pixie : ModProjectile {
     private static ushort TIMELEFT = 300;
     private static byte FRAMECOUNT => 4;
+    private static byte MAXCOPIES => 3;
+
+    private struct CopyInfo {
+        private float _opacity;
+        private byte _usedFrame;
+
+        public Vector2 Position;
+        public float Rotation;
+        public float Scale;
+
+        public float Opacity {
+            readonly get => _opacity;
+            set => _opacity = MathUtils.Clamp01(value);
+        }
+
+        public byte UsedFrame {
+            readonly get => _usedFrame;
+            set => _usedFrame = Utils.Clamp<byte>(value, 0, FRAMECOUNT);
+        }
+    }
+
+    private CopyInfo[] _copyData = null!;
 
     private Vector2 _magnetAccelerations;
     private Vector2 _magnetPointTarget;
     private Vector2 _positionVsMagnet;
     private Vector2 _velocityVsMagnet;
+    private byte _currentCopyIndex;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float SpawnedExplosionValue => ref Projectile.localAI[1];
@@ -85,6 +110,8 @@ sealed class Pixie : ModProjectile {
         if (InitValue == 0f) {
             InitValue = 1f;
 
+            _copyData = new CopyInfo[MAXCOPIES];
+
             Projectile.Opacity = 0f;
 
             Projectile.direction = Projectile.velocity.X.GetDirection();
@@ -110,6 +137,15 @@ sealed class Pixie : ModProjectile {
             }
             VelocityRotationValue = rotation;
             VelocitySlowFactor = 1f;
+        }
+
+        for (int i = 0; i < MAXCOPIES; i++) {
+            ref CopyInfo copyData = ref _copyData![i];
+            if (copyData.Opacity > 0f) {
+                copyData.Scale -= 0.05f;
+                copyData.Opacity -= 0.05f;
+                copyData.Opacity = MathF.Max(0f, copyData.Opacity);
+            }
         }
 
         float timeToSpawnAttack = TIMELEFT / 3;
@@ -160,6 +196,10 @@ sealed class Pixie : ModProjectile {
         num94 *= 0.5f;
         Lighting.AddLight(Projectile.Center, num94, num94, num94 * 0.6f);
 
+        if (Projectile.frame == FRAMECOUNT - 1 && Projectile.frameCounter == 0f) {
+            MakeCopy();
+        }
+
         //if (Main.rand.Next(100) == 0)
         //    SoundEngine.PlaySound(SoundID.Pixie, Projectile.position);
     }
@@ -203,5 +243,58 @@ sealed class Pixie : ModProjectile {
         _magnetAccelerations = accelerations;
         _magnetPointTarget = targetOffset;
         Projectile.netUpdate = true;
+    }
+
+    private void MakeCopy() {
+        if (_currentCopyIndex >= MAXCOPIES) {
+            _currentCopyIndex = 0;
+        }
+        _copyData![_currentCopyIndex++] = new CopyInfo() {
+            Position = Projectile.Center,
+            UsedFrame = (byte)Projectile.frame,
+            Rotation = Projectile.rotation,
+            Opacity = 1.25f,
+            Scale = 1f
+        };
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Texture2D texture = Projectile.GetTexture();
+        int width = texture.Width,
+            height = texture.Height / FRAMECOUNT;
+        Color color = lightColor;
+        SpriteBatch batch = Main.spriteBatch;
+
+        SpriteEffects effects = Projectile.spriteDirection.ToSpriteEffects();
+
+        void drawTrails() {
+            for (int i = 0; i < MAXCOPIES; i++) {
+                CopyInfo copyInfo = _copyData![i];
+                if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
+                    continue;
+                }
+                batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
+                    Color = color with { A = 200 } * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f,
+                    Rotation = copyInfo.Rotation,
+                    Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
+                    Origin = new Vector2(width, height) / 2f,
+                    Clip = new Rectangle(0, copyInfo.UsedFrame * height, width, height),
+                    ImageFlip = effects
+                });
+            }
+        }
+
+        drawTrails();
+
+        batch.Draw(texture, Projectile.Center, DrawInfo.Default with {
+            Color = color * Projectile.Opacity,
+            Rotation = Projectile.rotation,
+            Scale = Vector2.One,
+            Origin = new Vector2(width, height) / 2f,
+            Clip = new Rectangle(0, Projectile.frame * height, width, height),
+            ImageFlip = effects
+        });
+
+        return false;
     }
 }
