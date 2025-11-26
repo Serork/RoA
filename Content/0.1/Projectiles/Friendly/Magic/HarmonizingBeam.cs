@@ -30,7 +30,7 @@ sealed class HarmonizingBeam : ModProjectile {
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
-        width = height = 8;
+        width = height = 6;
         return true;
     }
 
@@ -40,6 +40,9 @@ sealed class HarmonizingBeam : ModProjectile {
         else Projectile.ai[0] += 1;
         if (Projectile.ai[0] <= -6) Projectile.ai[1] = 1f;
         if (Projectile.ai[0] >= 6) Projectile.ai[1] = 0f;
+        if (Collision.SolidTiles(Projectile.Center - Vector2.One * 6, 3, 3)) {
+            Projectile.Kill();
+        }
 
 
         if (Projectile.timeLeft > 120 - 1) {
