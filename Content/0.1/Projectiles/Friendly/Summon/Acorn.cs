@@ -71,6 +71,12 @@ sealed class Acorn : ModProjectile {
         Projectile.rotation = Helper.VelocityAngle(Projectile.velocity) + MathHelper.Pi;
     }
 
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 8;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     public override void OnKill(int timeLeft) {
         for (int k = 0; k < 3; k++)
             Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, 1, Projectile.oldVelocity.X * 0.2f, Projectile.oldVelocity.Y * 0.2f, newColor: Color.Lerp(new Color(129, 111, 67), new Color(107, 97, 55), Main.rand.NextFloat()));

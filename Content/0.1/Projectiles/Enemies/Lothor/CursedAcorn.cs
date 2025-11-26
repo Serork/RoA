@@ -29,6 +29,16 @@ sealed class CursedAcorn : ModProjectile {
         Projectile.hostile = true;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox = GeometryUtils.CenteredSquare(Projectile.Center, 12);
+    }
+
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 8;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
@@ -83,7 +93,7 @@ sealed class CursedAcorn : ModProjectile {
         damage /= 4;
         int knockBack = (int)MathHelper.Lerp(NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_KNOCKBACK, NPCs.Enemies.Bosses.Lothor.Lothor.WREATH_KNOCKBACK2, lifeProgress);
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center + Vector2.UnitY * 22f, -Vector2.UnitY, ModContent.ProjectileType<LothorSpike>(),
+            Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center + Vector2.UnitY * 20f, -Vector2.UnitY, ModContent.ProjectileType<LothorSpike>(),
                 damage, knockBack, Main.myPlayer, ai2: 12.5f);
         }
     }
