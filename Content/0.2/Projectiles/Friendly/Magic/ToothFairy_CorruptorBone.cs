@@ -62,6 +62,12 @@ sealed class CorruptorBone : ModProjectile {
         Projectile.penetrate = -1;
     }
 
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 10;
+
+        return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
+    }
+
     public override void AI() {
         ushort type = (ushort)ModContent.DustType<Dusts.Corruptor2>();
         if (Projectile.velocity.Length() > 2.5f && Main.rand.NextBool(32)) {
