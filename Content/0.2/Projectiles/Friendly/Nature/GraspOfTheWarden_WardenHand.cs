@@ -7,6 +7,7 @@ using RoA.Common;
 using RoA.Common.Players;
 using RoA.Common.Projectiles;
 using RoA.Content.Dusts;
+using RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -17,9 +18,13 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.Graphics.Light;
 using Terraria.ID;
 using Terraria.ModLoader;
+
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -235,7 +240,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f * Utils.GetLerpValue(0, MINTIMELEFT / 2, Projectile.timeLeft, true), 0.1f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f/* * Utils.GetLerpValue(0, MINTIMELEFT / 2, Projectile.timeLeft, true)*/, 0.1f);
 
         float max = GRASPTIMEINTICKS;
         if (AITimer < max * 2f) {
@@ -289,6 +294,8 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                 dust.scale *= 1.75f;
                 dust.noLight = true;
             }
+
+            SoundEngine.PlaySound(WardenOfTheWoods.HitSound with { Pitch = -0.25f }, Projectile.Center);
         }
 
         if (Main.rand.NextChance(1f - velocityFactor) && Main.rand.NextBool(3)) {
@@ -321,7 +328,49 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool ShouldUpdatePosition() => ShouldUpdatePositionWithVelocity;
 
     public override void OnKill(int timeLeft) {
+        Color woodColor = new Color(85, 90, 80).ModifyRGB(1.375f);
+        for (int i = 0; i < 24; i++) {
+            int num730 = Dust.NewDust(Projectile.Center - new Vector2(10f, 4f) + Main.rand.NextVector2(-14f, -38f, 14f, 30f), 0, 0, 
+                Main.rand.NextBool() ? DustID.WoodFurniture : ModContent.DustType<WoodFurniture>(),
+                0, 1f, Main.rand.Next(100), woodColor, 1f + Main.rand.NextFloatRange(0.1f));
+            Main.dust[num730].noGravity = Main.rand.NextBool(3);
+        }
+        if (Main.netMode != NetmodeID.Server) {
+            for (int i = 0; i < 6; i++) {
+                int gore = Gore.NewGore(Projectile.GetSource_Death(),
+                                        Projectile.Center - new Vector2(10f, 4f) + Main.rand.NextVector2(-14f, -38f, 14f, 30f),
+                                        Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/FistOfTheWardenGore{Main.rand.Next(4) + 1}").Type, 1f);
+                Main.gore[gore].velocity.Y *= 0.5f;
+                Main.gore[gore].rotation = MathHelper.TwoPi * Main.rand.NextFloat();
+            }
+            foreach (RootInfo rootInfo in _rootData) {
+                float progress = Ease.SineInOut(GetRootProgress(MathUtils.Clamp01(rootInfo.SpawnOffset)));
+                if (AITimer2 >= GRASPTIMEINTICKS * 3.4f) {
+                    int count2 = 4;
+                    for (int i = 0; i < count2; i++) {
+                        int gore = Gore.NewGore(Projectile.GetSource_Death(),
+                                                Vector2.Lerp(Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 30f, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 140f, i / (float)count2) +
+                                                Main.rand.RandomPointInArea(6f),
+                                                Vector2.Zero, ModContent.Find<ModGore>(RoA.ModName + $"/RootOfTheWardenGore{Main.rand.Next(3) + 1}").Type, 1f);
+                        Main.gore[gore].velocity.Y *= 0.5f;
+                        Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+                        Main.gore[gore].position -= new Vector2(Main.gore[gore].Width, Main.gore[gore].Height) / 2f;
+                        Main.gore[gore].rotation = MathHelper.TwoPi * Main.rand.NextFloat();
+                    }
+                }
 
+                int count = 20;
+                for (int i = 0; i < count; i++) {
+                    float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
+                    Dust dust = Main.dust[Dust.NewDust(Vector2.Lerp(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 140f, i / (float)count) - Vector2.UnitY * 2f + Main.rand.NextVector2Circular(10f, 10f) * 0.75f,
+                        0, 0, ModContent.DustType<RootOfTheWardenDust>(), 0f, 0f, Main.rand.Next(100), default, dustScale)];
+                    dust.noGravity = true;
+                    dust.fadeIn = 0.5f;
+                    dust.noLight = true;
+                    dust.velocity *= Main.rand.NextFloat(0.5f, 1f);
+                }
+            }
+        }
     }
 
     protected override void Draw(ref Color lightColor) {
