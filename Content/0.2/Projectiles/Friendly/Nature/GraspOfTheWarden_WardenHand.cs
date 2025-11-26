@@ -25,7 +25,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using static RoA.Content.Projectiles.Friendly.Nature.CavernCane_Rocks;
-using static RoA.Content.Projectiles.Friendly.Nature.WardenHand;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -188,12 +187,13 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IUseCustomImmunityFram
                     foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
                         if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
                                                                          ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)k, npcForCollisionCheck.whoAmI),
-                                                                         collided: (targetHitbox) => Helper.DeathrayHitbox(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 150f, targetHitbox, 40f),
+                                                                         collided: (targetHitbox) => Helper.DeathrayHitbox(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 150f, targetHitbox, 35f),
                                                                          direction: MathF.Sign(Projectile.Center.X - npcForCollisionCheck.Center.X),
                                                                          immuneTimeAfterHit: hitCooldown)) {
                             continue;
                         }
                         else {
+                            // need sync
                             _hitCountPerRoot[k]++;
                             if (_hitCountPerRoot[k] > HITCOUNTPERROOT) {
                                 _rootData[k].SpawnOffset = -2f;
