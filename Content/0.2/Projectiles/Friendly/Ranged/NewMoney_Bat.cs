@@ -42,6 +42,11 @@ sealed class NewMoneyBat : ModProjectile {
 
         Projectile.tileCollide = false;
     }
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 8;
+
+        return true;
+    }
 
     public override void AI() {
         if (Projectile.localAI[1] == 0f && Projectile.localAI[2] == 0f) {
