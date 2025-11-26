@@ -79,6 +79,10 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     public override void AI() {
+        if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
+            Projectile.timeLeft -= 1;
+        }
+
         Player owner = Projectile.GetOwnerAsPlayer();
         CaneBaseProjectile? heldCane = owner.GetWreathHandler().GetHeldCane();
         bool flag = false;

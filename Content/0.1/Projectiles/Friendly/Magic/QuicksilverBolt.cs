@@ -39,6 +39,12 @@ sealed class QuicksilverBolt : ModProjectile {
         Projectile.alpha = 255;
     }
 
+    public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
+        width = height = 8;
+
+        return true;
+    }
+
     public override void AI() {
         Lighting.AddLight(Projectile.Center, new Color(79, 211, 123).ToVector3() * 0.5f);
 
