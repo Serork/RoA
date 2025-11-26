@@ -329,7 +329,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     public override void OnKill(int timeLeft) {
         Color woodColor = new Color(85, 90, 80).ModifyRGB(1.375f);
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 20; i++) {
             int num730 = Dust.NewDust(Projectile.Center - new Vector2(10f, 4f) + Main.rand.NextVector2(-14f, -38f, 14f, 30f), 0, 0, 
                 Main.rand.NextBool() ? DustID.WoodFurniture : ModContent.DustType<WoodFurniture>(),
                 0, 1f, Main.rand.Next(100), woodColor, 1f + Main.rand.NextFloatRange(0.1f));
@@ -359,7 +359,7 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IRequestAssets {
                     }
                 }
 
-                int count = 20;
+                int count = 14;
                 for (int i = 0; i < count; i++) {
                     float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
                     Dust dust = Main.dust[Dust.NewDust(Vector2.Lerp(Projectile.Center, Projectile.Center + Vector2.UnitY.RotatedBy(rootInfo.Rotation) * progress * 140f, i / (float)count) - Vector2.UnitY * 2f + Main.rand.NextVector2Circular(10f, 10f) * 0.75f,
