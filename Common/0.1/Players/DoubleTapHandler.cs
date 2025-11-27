@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items;
+using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ sealed class DoubleTapHandler : ModPlayer, IPostSetupContent {
     }
 
     public override void SetControls() {
-        if (Player.shimmering) {
+        if (Player.shimmering && !Player.GetFormHandler().IsInADruidicForm) {
             return;
         }
         for (int i = 0; i < 4; i++) {

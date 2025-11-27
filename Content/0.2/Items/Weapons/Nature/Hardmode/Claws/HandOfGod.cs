@@ -2,15 +2,12 @@
 
 using RoA.Common.Druid;
 using RoA.Common.Druid.Claws;
-using RoA.Common.Networking;
-using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -32,16 +29,16 @@ sealed class HandOfGod : ClawsBaseItem {
     public override float ThirdAttackScaleModifier => 1.5f;
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(34, 36);
-        Item.SetWeaponValues(40, 4.2f);
+        Item.SetSizeValues(26, 36);
+        Item.SetWeaponValues(70, 3.75f);
 
         Item.rare = ItemRarityID.Pink;
 
         Item.value = Item.sellPrice(0, 2, 50, 0);
 
-        Item.SetUsableValues(ItemUseStyleID.Swing, 18, false, autoReuse: true);
+        Item.SetUsableValues(ItemUseStyleID.Swing, 16, false, autoReuse: true);
 
-        NatureWeaponHandler.SetPotentialDamage(Item, 60);
+        NatureWeaponHandler.SetPotentialDamage(Item, 80);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
     }
 

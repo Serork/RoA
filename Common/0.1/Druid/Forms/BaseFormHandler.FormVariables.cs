@@ -171,7 +171,6 @@ sealed partial class BaseFormHandler : ModPlayer {
         if (!player.GetFormHandler().IsConsideredAs<HallowedGryphon>()) {
             return;
         }
-
         player.GetFormHandler().GainGryphonMoveSpeedBuff();
     }
 

@@ -201,7 +201,6 @@ sealed class HallowedGryphon : BaseForm {
             attackFactor2 = 0f;
         }
         if (attackFactor++ > num15 / 2 - 2) {
-
             SoundEngine.PlaySound(SoundID.Item77 with { Pitch = 1.1f }, player.Center);
             bool doneEnough = attackCount >= 2;
 

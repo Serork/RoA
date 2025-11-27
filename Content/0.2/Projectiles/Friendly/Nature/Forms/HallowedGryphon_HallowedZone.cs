@@ -10,6 +10,7 @@ using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
@@ -40,6 +41,8 @@ sealed class HallowedZone : FormProjectile_NoTextureLoad, IRequestAssets {
         Projectile.tileCollide = false;
 
         Projectile.penetrate = -1;
+
+        Projectile.manualDirectionChange = true;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -53,6 +56,12 @@ sealed class HallowedZone : FormProjectile_NoTextureLoad, IRequestAssets {
     public override bool? CanDamage() => Projectile.ai[0] >= 30f;
 
     public override void AI() {
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = 1f;
+
+            Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
+        }
+
         Projectile.ai[0]++;
         int num67 = Main.rand.Next(4) - 2;
         if (Projectile.ai[0] >= 30f && Projectile.ai[0] <= 35f) num67 = 7;
@@ -74,6 +83,8 @@ sealed class HallowedZone : FormProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
+        float timeLeftOpacity = Utils.GetLerpValue(0f, 6f, Projectile.timeLeft, true);
+
         Texture2D lightTexture = indexedTextureAssets[(byte)HallowedZoneRequstedTextureType.Light].Value;
         Rectangle clip = lightTexture.Bounds;
         SpriteBatch batch = Main.spriteBatch;
@@ -94,7 +105,7 @@ sealed class HallowedZone : FormProjectile_NoTextureLoad, IRequestAssets {
                 Clip = clip,
                 Origin = origin,
                 Scale = scale,
-                Color = color * 0.75f,
+                Color = color * 0.75f * timeLeftOpacity,
                 Rotation = rotation
             });
         }
@@ -112,7 +123,7 @@ sealed class HallowedZone : FormProjectile_NoTextureLoad, IRequestAssets {
                 Clip = clip,
                 Origin = origin,
                 Scale = scale,
-                Color = color,
+                Color = color * timeLeftOpacity,
                 Rotation = rotation
             });
         }
