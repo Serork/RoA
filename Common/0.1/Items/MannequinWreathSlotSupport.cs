@@ -120,8 +120,11 @@ sealed class MannequinWreathSlotSupport : ILoadable {
             if (data == null) {
                 return orig(self);
             }
+            else if (!data.Wreath.IsEmpty() || !data.Dye.IsEmpty()) {
+                return true;
+            }
 
-            return !data.Wreath.IsEmpty() || !data.Dye.IsEmpty();
+            return orig(self);
         }
 
         private void On_TEDisplayDoll_Draw(On_TEDisplayDoll.orig_Draw orig, TEDisplayDoll self, int tileLeftX, int tileTopY) {
