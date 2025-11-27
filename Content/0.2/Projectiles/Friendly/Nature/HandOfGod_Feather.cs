@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
@@ -18,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
@@ -25,6 +27,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static ushort TIMELEFT => 600;
     public static ushort DEBUFFTIME => 60;
+    private static ushort MINTIMELEFT => 30;
 
     public enum GodFeatherRequstedTextureType : byte {
         Base,
@@ -48,11 +51,17 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
     public ref float Activated2Value => ref Projectile.ai[1];
     public ref float SpawnDirection => ref Projectile.ai[2];
 
+    public static SoundStyle ActivationSound { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "DivineShieldAttack");
+    public static SoundStyle DeathSound { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "DivineShieldDeath");
+    public static SoundStyle FadeSound { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "DivineShieldFade");
+    public static SoundStyle CastSound { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "DivineShieldCast");
+
     public bool Activated {
         get => ActivatedValue > 0f;
         set {
             if (ActivatedValue < 0.5f) {
                 ActivatedValue = 1f;
+                SoundEngine.PlaySound(ActivationSound with { PitchVariance = 0.1f }, Projectile.Center);
             }
         }
     }
@@ -86,7 +95,6 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         ActivatedValue = Helper.Approach(ActivatedValue, 0f, TimeSystem.LogicDeltaTime);
         Activated2Value = Helper.Approach(Activated2Value, ActivatedValue, TimeSystem.LogicDeltaTime * 5f);
 
-
         Player owner = Projectile.GetOwnerAsPlayer();
         owner.SyncMousePosition();
         Vector2 mousePosition = owner.GetWorldMousePosition();
@@ -98,8 +106,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.velocity = Vector2.Lerp(Projectile.velocity, center.DirectionTo(mousePosition) * distance, 0.05f * moveFactor);
         Projectile.Center = Utils.Floor(center) + Projectile.velocity + Vector2.UnitY * owner.gfxOffY;
 
-        if (!owner.IsAlive() && Projectile.timeLeft > 30) {
-            Projectile.timeLeft = 30;
+        if (!owner.IsAlive() && Projectile.timeLeft > MINTIMELEFT) {
+            Projectile.timeLeft = MINTIMELEFT;
         }
 
         int direction = Projectile.DirectionTo(owner.Center).X.GetDirection();
@@ -111,6 +119,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         if (SpawnDirection == 0f) {
             float scale = owner.CappedMeleeOrDruidScale();
             Projectile.scale = scale * 1.1f;
+
+            SoundEngine.PlaySound(CastSound, Projectile.Center);
         }
         SpawnDirection = 1f;
 
@@ -126,6 +136,10 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
 
         WaveValue += TimeSystem.LogicDeltaTime;
+
+        if (Projectile.timeLeft == MINTIMELEFT) {
+            SoundEngine.PlaySound(FadeSound, Projectile.Center);
+        }
 
         int minDistance = (int)(TileHelper.TileSize * 7 * Projectile.scale);
         foreach (NPC activeNPC in Main.ActiveNPCs) {
@@ -194,7 +208,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         int max = TIMELEFT;
         float spawnProgress = Ease.CircOut(Utils.GetLerpValue(max, max - 40, Projectile.timeLeft, true));
         float spawnProgress2 = Ease.CircOut(Utils.GetLerpValue(max, max - 60, Projectile.timeLeft, true));
-        float fadeOutProgress = Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
+        float fadeOutProgress = Utils.GetLerpValue(0, MINTIMELEFT, Projectile.timeLeft, true);
         float fadeOutProgress2 = Utils.GetLerpValue(0.75f, 0.2f, fadeOutProgress, true);
         float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
         float fadeOutProgress4 = Utils.GetLerpValue(0f, 0.2f, fadeOutProgress, true);

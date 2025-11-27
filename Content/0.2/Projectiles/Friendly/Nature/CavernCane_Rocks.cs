@@ -168,7 +168,7 @@ sealed class CavernCane_Rocks : NatureProjectile_NoTextureLoad, IUseCustomImmuni
     private RocksInfo[]? _rocks;
 
     public static SoundStyle GetStoneHitSound(float geodeProgress) => SoundID.DD2_MonkStaffGroundImpact with { Pitch = 1f - 0.5f * geodeProgress };
-    public static SoundStyle StoneExplosion => SoundID.Item89 with { Pitch = 1f };
+    public static SoundStyle StoneExplosion { get; private set; } = SoundID.Item89 with { Pitch = 1f };
 
     public override void SetStaticDefaults() {
         LoadRocksTexture();

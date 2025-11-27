@@ -131,7 +131,7 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
 
     public virtual bool Alt { get; } = false;
 
-    public static SoundStyle HitSound => new SoundStyle(ResourceManager.ItemSounds + "WoodBreakStrong") with { Pitch = 0.3f, Volume = 0.3f, PitchVariance = 0.2f };
+    public static SoundStyle HitSound { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "WoodBreakStrong") with { Pitch = 0.3f, Volume = 0.3f, PitchVariance = 0.2f };
 
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
