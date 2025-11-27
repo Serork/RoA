@@ -110,7 +110,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         //}
         if (SpawnDirection == 0f) {
             float scale = owner.CappedMeleeOrDruidScale();
-            Projectile.scale = scale;
+            Projectile.scale = scale * 1.1f;
         }
         SpawnDirection = 1f;
 
@@ -318,7 +318,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Scale = scale
             };
             scale *= getScaleWave(i);
-            float scale2 = Helper.Wave(WaveValue, 1f, 1.5f, 5f, waveOffset + i * count);
+            float scale2 = Helper.Wave(WaveValue, 1.05f, 1.5f, 5f, waveOffset + i * count);
             scale *= scale2;
             position += Vector2.UnitY.RotatedBy(rotation) * 3f * scale2;
             batch.Draw(closedEyeTexture, position, drawInfo with {
