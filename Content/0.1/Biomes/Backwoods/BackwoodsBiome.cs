@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Common.BackwoodsSystems;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
 using RoA.Core;
@@ -131,7 +132,20 @@ sealed partial class BackwoodsBiome : ModBiome {
 
     public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface");
 
-    public override int Music => BackwoodsFogHandler.IsFogActive ? MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Fog") : /*Main.IsItDay() ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") :*/ MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "ThicketNight");
+    public override int Music => BackwoodsFogHandler.IsFogActive ? MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Fog") : 
+        /*Main.IsItDay() ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") :*/
+        IsUndergroundBackwoods() ? MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Backwoods") : MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "ThicketNight");
+
+    public static bool IsUndergroundBackwoods() {
+        bool result = false;
+
+        Player player = Main.LocalPlayer;
+        if (player.position.Y / 16 > BackwoodsVars.FirstTileYAtCenter + 35) {
+            result = true;
+        }
+
+        return result;
+    }
 
     public override string MapBackground => ResourceManager.BackwoodsTextures + "DruidBiomeMapBG";
 
