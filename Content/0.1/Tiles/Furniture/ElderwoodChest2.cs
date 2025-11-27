@@ -130,7 +130,11 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
             Vector2 mouseWorldPosition = player.GetWorldMousePosition();
             Point16 chestPosition = new(i, j);
             Vector2 chestWorldPosition = chestPosition.ToWorldCoordinates();
-            float clampedDistanceProgress = MathUtils.ClampedDistanceProgress(mouseWorldPosition, chestWorldPosition, 75f, 200f);
+            float maxDistance = 200f;
+            float clampedDistanceProgress = MathUtils.ClampedDistanceProgress(mouseWorldPosition, chestWorldPosition, 75f, maxDistance);
+            if (player.Center.Distance(chestPosition.ToWorldCoordinates()) > maxDistance) {
+                clampedDistanceProgress = 0f;
+            }
             _opacity = MathHelper.Lerp(_opacity, clampedDistanceProgress * 4.5f, TimeSystem.LogicDeltaTime);
 
             Vector2 zero = Vector2.Zero;
