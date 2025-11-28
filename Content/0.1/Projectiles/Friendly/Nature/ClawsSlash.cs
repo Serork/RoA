@@ -208,7 +208,8 @@ class ClawsSlash : NatureProjectile {
         if (Projectile.localAI[0] > (double)(Projectile.ai[1] + Projectile.ai[1] * 0.2f)) {
             return false;
         }
-        if (MathF.Abs(targetHitbox.Location.ToVector2().Y - Projectile.Center.Y) > coneLength * 0.75f) {
+        float dif = targetHitbox.Location.ToVector2().Y - Projectile.Center.Y;
+        if (dif > 0f && MathF.Abs(dif) > coneLength * 0.75f) {
             return false;
         }
         bool result = targetHitbox.IntersectsConeSlowMoreAccurate(Projectile.Center - GetPositionOffset(player), coneLength, coneRotation, maximumAngle);

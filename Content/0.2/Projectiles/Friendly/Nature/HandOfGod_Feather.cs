@@ -120,7 +120,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             float scale = owner.CappedMeleeOrDruidScale();
             Projectile.scale = scale * 1.1f;
 
-            SoundEngine.PlaySound(CastSound, Projectile.Center);
+            SoundEngine.PlaySound(CastSound with { Volume = 0.5f }, Projectile.Center);
         }
         SpawnDirection = 1f;
 
@@ -138,7 +138,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         WaveValue += TimeSystem.LogicDeltaTime;
 
         if (Projectile.timeLeft == MINTIMELEFT) {
-            SoundEngine.PlaySound(FadeSound, Projectile.Center);
+            SoundEngine.PlaySound(FadeSound with { Volume = 0.75f }, Projectile.Center);
         }
 
         int minDistance = (int)(TileHelper.TileSize * 7 * Projectile.scale);
