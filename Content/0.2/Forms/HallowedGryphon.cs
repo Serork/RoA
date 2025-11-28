@@ -174,8 +174,6 @@ sealed class HallowedGryphon : BaseForm {
             return;
         }
 
-        player.controlLeft = player.controlRight = false;
-
         player.gravity *= 0f;
 
         player.shimmering = true;
