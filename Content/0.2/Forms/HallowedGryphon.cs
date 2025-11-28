@@ -37,15 +37,14 @@ sealed class HallowedGryphon : BaseForm {
         MountData.totalFrames = FRAMECOUNT;
         MountData.fallDamage = 0f;
         MountData.flightTimeMax = 125;
-       
-        MountData.yOffset = -3;
-        MountData.playerHeadOffset = -16;
+
+        MountData.xOffset = -12;
+
+        MountData.yOffset = -7;
+        MountData.playerHeadOffset = -10;
     }
 
     protected override void SafePostUpdate(Player player) {
-        MountData.yOffset = -7;
-        MountData.playerHeadOffset = -16;
-
         player.GetFormHandler().UsePlayerSpeed = true;
         bool flag = player.mount.FlyTime > 0;
         if (IsInAir(player)) {
