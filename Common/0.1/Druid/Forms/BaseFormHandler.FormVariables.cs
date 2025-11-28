@@ -154,6 +154,8 @@ sealed partial class BaseFormHandler : ModPlayer {
     }
 
     public void ResetGryphonStats() {
+        JustJumped = false;
+        JustJumpedForAnimation = false;
         JustStartedDoingLoopAttack = LoopAttackIsDone = false;
         SavedVelocity = Vector2.Zero;
         CanDoLoopAttackTimer = 0;

@@ -19,6 +19,7 @@ using Terraria.ID;
 namespace RoA.Content.Forms;
 
 sealed class HallowedGryphon : BaseForm {
+    private static byte FRAMECOUNT => 19;
     private static float MOVESPEEDBOOSTMODIFIER => 3f;
     private static float LOOPATTACKSIZEMODIFIER => 0.7f;
 
@@ -33,7 +34,7 @@ sealed class HallowedGryphon : BaseForm {
     //protected override _color LightingColor => _color.Yellow;
 
     protected override void SafeSetDefaults() {
-        MountData.totalFrames = 11;
+        MountData.totalFrames = FRAMECOUNT;
         MountData.fallDamage = 0f;
         MountData.flightTimeMax = 125;
        
@@ -42,6 +43,9 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     protected override void SafePostUpdate(Player player) {
+        MountData.yOffset = -7;
+        MountData.playerHeadOffset = -16;
+
         player.GetFormHandler().UsePlayerSpeed = true;
         bool flag = player.mount.FlyTime > 0;
         if (IsInAir(player)) {
@@ -85,6 +89,12 @@ sealed class HallowedGryphon : BaseForm {
         player.fullRotationOrigin = player.getRect().Centered() + Vector2.UnitY * 4f;
 
         HandleLoopAttack(player);
+
+        BaseFormHandler formHandler = player.GetFormHandler();
+        if (!IsInAir(player)) {
+            formHandler.JustJumped = false;
+            formHandler.JustJumpedForAnimation = false;
+        }
 
         if (!player.GetFormHandler().IncreasedMoveSpeed) {
             return;
@@ -223,11 +233,26 @@ sealed class HallowedGryphon : BaseForm {
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
+        var handler = player.GetFormHandler();
+
         float walkingFrameFrequiency = 14f;
         int minMovingFrame = 1;
-        int maxMovingFrame = minMovingFrame + 5;
-        int minFlyingFrame = maxMovingFrame + 1, maxFlyingFrame = minFlyingFrame + 3;
-        var handler = player.GetFormHandler();
+        int maxMovingFrame = minMovingFrame + 8;
+
+        byte swingAnimationStartFrame = (byte)(maxMovingFrame + 1),
+             swingAnimationEndFrame = (byte)(swingAnimationStartFrame + 2);
+
+        byte flightAnimationStartFrame = (byte)(swingAnimationEndFrame + 1),
+             flightAnimationEndFrame = (byte)(flightAnimationStartFrame + 5);
+
+        byte slowFallFrame1 = (byte)(flightAnimationEndFrame - 2),
+             slowFallFrame2 = (byte)(flightAnimationEndFrame - 3);
+
+        float startSwingAnimationFrequency = 10f;
+        float flightFrameFrequency = 14f;
+
+        float flightAnimationCounterSpeed = handler.IncreasedMoveSpeed ? 3f : 2f;
+
         void playFlapSound(bool reset = false) {
             if (reset) {
                 player.flapSound = false;
@@ -238,55 +263,87 @@ sealed class HallowedGryphon : BaseForm {
             }
             player.flapSound = true;
         }
+
+        BaseFormHandler formHandler = player.GetFormHandler();
+
         if (handler.IsInLoopAttack) {
             var attackTime = GetLoopAttackTime(player);
             var attackFactor = handler.AttackFactor;
-            if (attackFactor < attackTime * 0.2f || attackFactor > attackTime * 0.4f) {
-                float flightFrameFrequency = 14f;
-                frameCounter += handler.IncreasedMoveSpeed ? 3f : 2f;
+            bool slowFall2 = false;
+            //if (!(attackFactor < attackTime * 0.2f || attackFactor > attackTime * 0.4f)) {
+            //    if (frame == slowFallFrame2) {
+            //        slowFall2 = true;
+            //    }
+            //}
+            if (!slowFall2) {
+                frameCounter += flightAnimationCounterSpeed;
                 float frequency = flightFrameFrequency;
                 while (frameCounter > frequency) {
                     frameCounter -= frequency;
                     frame++;
-                    if (frame == maxFlyingFrame) {
+                    if (frame == flightAnimationEndFrame) {
                         playFlapSound();
                     }
                     else {
                         playFlapSound(true);
                     }
                 }
-                if (frame < minFlyingFrame || frame > maxFlyingFrame) {
-                    frame = minFlyingFrame;
+                if (frame < flightAnimationStartFrame || frame > flightAnimationEndFrame) {
+                    frame = flightAnimationStartFrame;
                 }
-            }
-            else {
-                frame = maxFlyingFrame - 2;
             }
         }
         else if (IsInAir(player)) {
-            float flightFrameFrequency = 14f;
-            float speedY = Math.Abs(player.velocity.Y);
-            frameCounter += Utils.Clamp(speedY, 3f, 5f) * (player.controlJump && player.velocity.Y > 0f ? 1f : 0.5f);
-            float frequency = flightFrameFrequency;
-            while (frameCounter > frequency) {
-                frameCounter -= frequency;
-                frame++;
-                if (frame == maxFlyingFrame) {
-                    playFlapSound();
+            if (!formHandler.JustJumped) {
+                if (!formHandler.JustJumpedForAnimation) {
+                    formHandler.JustJumpedForAnimation = true;
+                    frame = swingAnimationStartFrame;
+                    frameCounter = 0;
                 }
                 else {
-                    playFlapSound(true);
+                    frameCounter += flightAnimationCounterSpeed;
+                    float frequency = startSwingAnimationFrequency;
+                    while (frameCounter > frequency) {
+                        frameCounter -= frequency;
+                        frame++;
+                        if (frame == swingAnimationEndFrame) {
+                            formHandler.JustJumped = true;
+                        }
+                    }
                 }
             }
-            if (frame < minFlyingFrame || frame > maxFlyingFrame) {
-                frame = minFlyingFrame;
-            }
-            if (player.velocity.Y > 2.5f) {
-                if (player.controlJump) {
-                    frame = maxFlyingFrame - 1;
+            else {
+                bool slowFall1 = false,
+                     slowFall2 = false;
+                if (player.velocity.Y > 2.5f) {
+                    if (player.controlJump) {
+                        if (frame == slowFallFrame1) {
+                            slowFall1 = true;
+                        }
+                    }
+                    else {
+                        if (frame == slowFallFrame2) {
+                            slowFall1 = true;
+                        }
+                    }
                 }
-                else {
-                    frame = maxFlyingFrame - 2;
+                if (!slowFall1 && !slowFall2) {
+                    float speedY = Math.Abs(player.velocity.Y);
+                    frameCounter += Utils.Clamp(speedY, 3f, 5f) * (player.controlJump && player.velocity.Y > 0f ? 1f : 0.5f);
+                    float frequency = flightFrameFrequency;
+                    while (frameCounter > frequency) {
+                        frameCounter -= frequency;
+                        frame++;
+                        if (frame == flightAnimationEndFrame) {
+                            playFlapSound();
+                        }
+                        else {
+                            playFlapSound(true);
+                        }
+                    }
+                }
+                if (frame < flightAnimationStartFrame || frame > flightAnimationEndFrame) {
+                    frame = flightAnimationStartFrame;
                 }
             }
         }

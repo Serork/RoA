@@ -396,6 +396,10 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
+        player.GetFormHandler().JustJumped = false;
+        player.GetFormHandler().JustJumpedForAnimation = false;
+        player.GetFormHandler().JustJumpedForAnimation2 = false;
+
         player.GetFormHandler().ResetPhoenixDash(true);
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 32; i++) {
