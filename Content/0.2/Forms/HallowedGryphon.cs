@@ -174,6 +174,8 @@ sealed class HallowedGryphon : BaseForm {
             return;
         }
 
+        player.controlLeft = player.controlRight = false;
+
         player.gravity *= 0f;
 
         player.shimmering = true;
@@ -234,7 +236,6 @@ sealed class HallowedGryphon : BaseForm {
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
         var handler = player.GetFormHandler();
 
-        float walkingFrameFrequiency = 14f;
         int minMovingFrame = 1;
         int maxMovingFrame = minMovingFrame + 8;
 
@@ -247,6 +248,7 @@ sealed class HallowedGryphon : BaseForm {
         byte slowFallFrame1 = (byte)(flightAnimationEndFrame - 2),
              slowFallFrame2 = (byte)(flightAnimationEndFrame - 3);
 
+        float walkingFrameFrequiency = 14f;
         float startSwingAnimationFrequency = 10f;
         float flightFrameFrequency = 14f;
 
