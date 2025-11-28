@@ -174,6 +174,8 @@ sealed class HallowedGryphon : BaseForm {
             return;
         }
 
+        player.GetCommon().LockHorizontalMovement = true;
+
         player.gravity *= 0f;
 
         player.shimmering = true;
