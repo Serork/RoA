@@ -68,11 +68,11 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
             else {
                 Projectile.Kill();
                 for (int num729 = 0; num729 < 10; num729++) {
-                    int num730 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 0, Color.Yellow, 1f + Main.rand.NextFloatRange(0.1f));
+                    int num730 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, Main.rand.Next(100), Color.Lerp(Color.LightYellow, Color.Yellow, Main.rand.NextFloat()), 1f + Main.rand.NextFloatRange(0.1f));
                     Main.dust[num730].noGravity = true;
                     Main.dust[num730].fadeIn = 1.35f - Main.rand.NextFloat(0.4f);
                     Main.dust[num730].scale = 0.35f;
-                    Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 0, Color.Yellow, 1f + Main.rand.NextFloatRange(0.1f));
+                    Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, Main.rand.Next(100), Color.Lerp(Color.LightYellow, Color.Yellow, Main.rand.NextFloat()), 1f + Main.rand.NextFloatRange(0.1f));
                 }
             }
         }
@@ -84,21 +84,21 @@ sealed class HallowedFeather : FormProjectile, IRequestAssets {
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         for (int num729 = 0; num729 < 10; num729++) {
-            int num730 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 0, Color.Yellow, 1f + Main.rand.NextFloatRange(0.1f));
+            int num730 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, Main.rand.Next(100), Color.Lerp(Color.LightYellow, Color.Yellow, Main.rand.NextFloat()), 1f + Main.rand.NextFloatRange(0.1f));
             Main.dust[num730].noGravity = true;
             Main.dust[num730].fadeIn = 1.35f - Main.rand.NextFloat(0.4f);
             Main.dust[num730].scale = 0.35f;
-            Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 0, Color.Yellow, 1f + Main.rand.NextFloatRange(0.1f));
+            Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, Main.rand.Next(100), Color.Lerp(Color.LightYellow, Color.Yellow, Main.rand.NextFloat()), 1f + Main.rand.NextFloatRange(0.1f));
         }
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
         for (int num729 = 0; num729 < 10; num729++) {
-            int num730 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 0, Color.Yellow, 1f + Main.rand.NextFloatRange(0.1f));
+            int num730 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, Main.rand.Next(100), Color.Lerp(Color.LightYellow, Color.Yellow, Main.rand.NextFloat()), 1f + Main.rand.NextFloatRange(0.1f));
             Main.dust[num730].noGravity = true;
             Main.dust[num730].fadeIn = 1.35f - Main.rand.NextFloat(0.4f);
             Main.dust[num730].scale = 0.35f;
-            Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, 0, Color.Yellow, 1f + Main.rand.NextFloatRange(0.1f));
+            Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, DustID.TintableDustLighted, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f, Main.rand.Next(100), Color.Lerp(Color.LightYellow, Color.Yellow, Main.rand.NextFloat()), 1f + Main.rand.NextFloatRange(0.1f));
         }
     }
 

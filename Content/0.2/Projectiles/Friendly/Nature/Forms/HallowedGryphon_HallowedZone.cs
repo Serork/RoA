@@ -67,7 +67,7 @@ sealed class HallowedZone : FormProjectile_NoTextureLoad, IRequestAssets {
         if (Projectile.ai[0] >= 30f && Projectile.ai[0] <= 35f) num67 = 7;
         for (int m = 0; m < num67; m++) {
             Color newColor2 = Color.Lerp(Color.LightYellow, Color.Yellow, Main.rand.NextFloat());
-            int num69 = Dust.NewDust(Projectile.Center + Main.rand.NextVector2Circular(70, 70), 0, 0, DustID.TintableDustLighted, 0f, 0f, 0, newColor2);
+            int num69 = Dust.NewDust(Projectile.Center + Main.rand.NextVector2Circular(70, 70), 0, 0, DustID.TintableDustLighted, 0f, 0f, Main.rand.Next(100), newColor2);
             Main.dust[num69].position = Projectile.Center + Main.rand.NextVector2Circular(100, 100);
             Main.dust[num69].velocity *= 0f;
             Main.dust[num69].noGravity = true;
