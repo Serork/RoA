@@ -126,7 +126,7 @@ abstract class BaseForm : ModMount {
             }
         }
         bool onTile = Math.Abs(player.velocity.Y) < 1.25f && flag;
-        return !player.sliding && !onTile && player.gfxOffY == 0f;
+        return (!player.sliding && !onTile && player.gfxOffY == 0f) || player.shimmering;
     }
 
     protected virtual void OnJump(Player player) { }
