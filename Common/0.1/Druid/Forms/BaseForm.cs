@@ -370,6 +370,8 @@ abstract class BaseForm : ModMount {
             drawPosition.X -= drawPlayer.mount.XOffset * drawPlayer.direction;
             drawPosition.X += drawPlayer.mount.XOffset * (spriteEffects == SpriteEffects.None).ToDirectionInt();
 
+            drawPosition = Utils.Floor(drawPosition);
+
             if (drawType == 0 && drawPlayer.GetCommon().ApplyDeerSkullSetBonus) {
                 if (drawPlayer.GetWreathHandler().ChargedBySlowFill && shadow == 0) {
                     float hornsOpacity = drawPlayer.GetCommon().DeerSkullHornsOpacity;

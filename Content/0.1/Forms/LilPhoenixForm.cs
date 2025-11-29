@@ -77,7 +77,7 @@ sealed class LilPhoenixForm : BaseForm {
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         var plr = player.GetFormHandler();
         if (plr.Dashed) {
-            player.fullRotation = (float)Math.Atan2((double)player.velocity.Y, (double)player.velocity.X) + (float)Math.PI / 2f;
+            player.fullRotation = Utils.AngleLerp(player.fullRotation, (float)Math.Atan2((double)player.velocity.Y, (double)player.velocity.X) + (float)Math.PI / 2f, 1f);
         }
         else if (plr.IsPreparing) {
             float length = 9f - player.velocity.Length();
@@ -88,7 +88,7 @@ sealed class LilPhoenixForm : BaseForm {
             player.fullRotation = IsInAir(player) ? 0f : fullRotation;
         }
 
-        player.fullRotationOrigin = player.getRect().Size() / 2f + new Vector2(0f, 3f);
+        player.fullRotationOrigin = player.getRect().Size() / 2f + new Vector2(1f * player.direction, 2f);
 
         ActivateExtraJumps(player);
         UltraAttackHandler(player);
@@ -382,6 +382,7 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
+        drawPosition = Utils.Floor(drawPosition);
         if (glowTexture != null) {
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * 0.85f * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
