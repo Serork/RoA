@@ -291,8 +291,10 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             _scales[i] = Helper.Approach(_scales[i], scales[i], TimeSystem.LogicDeltaTime);
         }
 
+        Color lightColor2 = lightColor;
+
         Color getColor(bool glow = false) {
-            Color color = Color.Lerp(Lighting.GetColor(Projectile.Center.ToTileCoordinates()), Color.White, lightingModifier * glow.ToInt()) * 0.875f;
+            Color color = Color.Lerp(lightColor2, Color.White, lightingModifier * glow.ToInt()) * 0.875f;
             color.A = (byte)MathHelper.Lerp(255, 185, Activated2Value);
             color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
             color *= spawnProgress2;
@@ -300,7 +302,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             return color;
         }
         Color getEyeColor() {
-            Color color = Color.Lerp(new Color(85, 85, 153), Color.Yellow, Activated2Value).MultiplyRGB(Color.Lerp(Lighting.GetColor(Projectile.Center.ToTileCoordinates()), Color.White, lightingModifier));
+            Color color = Color.Lerp(new Color(85, 85, 153), Color.Yellow, Activated2Value).MultiplyRGB(Color.Lerp(lightColor2, Color.White, lightingModifier));
             color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
             color *= spawnProgress2;
             color *= fadeOutProgress3;
