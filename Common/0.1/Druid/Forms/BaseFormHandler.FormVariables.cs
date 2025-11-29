@@ -177,7 +177,7 @@ sealed partial class BaseFormHandler : ModPlayer {
     }
 
     public partial void OnDoubleTap2(Player player, IDoubleTap.TapDirection direction) {
-        bool flag = direction == IDoubleTap.TapDirection.Right | direction == IDoubleTap.TapDirection.Left;
+        bool flag = direction == IDoubleTap.TapDirection.Right || direction == IDoubleTap.TapDirection.Left;
         if (!flag) {
             return;
         }
@@ -246,7 +246,7 @@ sealed partial class BaseFormHandler : ModPlayer {
     }
 
     public partial void OnDoubleTap1(Player player, IDoubleTap.TapDirection direction) {
-        bool flag = direction == IDoubleTap.TapDirection.Right | direction == IDoubleTap.TapDirection.Left;
+        bool flag = direction == IDoubleTap.TapDirection.Right || direction == IDoubleTap.TapDirection.Left;
         if (!flag) {
             return;
         }
