@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using System.Collections.Generic;
 
 using Terraria;
@@ -10,12 +12,18 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace RoA.Content.Tiles.Ambient;
+namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class NexusGateway : ModTile {
     private const byte FRAMERATE = 12;
 
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        }
+
         Main.tileLighted[Type] = true;
         Main.tileLavaDeath[Type] = false;
         Main.tileFrameImportant[Type] = true;
@@ -133,7 +141,7 @@ sealed class NexusGateway : ModTile {
         int height = 16;
         TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref tile.TileFrameX, ref tile.TileFrameY);
         //var flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
-        var glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        var glowMaskTexture = _glowTexture.Value;
         Main.spriteBatch.Draw(glowMaskTexture, new Vector2(i * 16 - (int)Main.screenPosition.X - (width - 16f) / 2f, j * 16 - (int)Main.screenPosition.Y + offsetY) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, 16), new Color(100, 100, 100, 0), 0f, default, 1f, SpriteEffects.None, 0f);
         float progress = Main.tileFrameCounter[Type] / (float)FRAMERATE;
         int frame = Main.tileFrame[Type] + 1;

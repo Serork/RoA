@@ -19,6 +19,7 @@ using RoA.Content.Tiles.Danger;
 using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
 using RoA.Content.Tiles.LiquidsSpecific;
+using RoA.Content.Tiles.Miscellaneous;
 using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;

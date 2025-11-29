@@ -83,6 +83,8 @@ static class ResourceManager {
     public static string BuffTextures => Textures + "Buffs/";
 
     public static string TileTextures => Textures + "Tiles/";
+    public static string TreeTileTextures => TileTextures + "Trees/";
+    public static string MiscTileTextures => TileTextures + "Miscellaneous/";
     public static string WaterTextures => TileTextures + "Waters/";
     public static string GlowMaskTileTextures => TileTextures + "Glow/";
     public static string GlowMaskItemTextures => ItemTextures + "Glow/";
