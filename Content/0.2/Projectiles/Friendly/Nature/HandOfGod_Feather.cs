@@ -32,13 +32,25 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
     public enum GodFeatherRequstedTextureType : byte {
         Base,
         Glow,
-        Eye
+        Eye,
+        Base_New,
+        Base_New_Glow,
+        Base_New_Eye,
+        Base_Sun,
+        Base_Sun_Glow,
+        Base_Sun_Eye
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)GodFeatherRequstedTextureType.Base, ResourceManager.NatureProjectileTextures + "GodFeather"),
          ((byte)GodFeatherRequstedTextureType.Glow, ResourceManager.NatureProjectileTextures + "GodFeather_Glow"),
-         ((byte)GodFeatherRequstedTextureType.Eye, ResourceManager.NatureProjectileTextures + "GodFeather_Eye")];
+         ((byte)GodFeatherRequstedTextureType.Eye, ResourceManager.NatureProjectileTextures + "GodFeather_Eye"),
+         ((byte)GodFeatherRequstedTextureType.Base_New, ResourceManager.NatureProjectileTextures + "GodFeather_New"),
+         ((byte)GodFeatherRequstedTextureType.Base_New_Glow, ResourceManager.NatureProjectileTextures + "GodFeather_New_Glow"),
+         ((byte)GodFeatherRequstedTextureType.Base_New_Eye, ResourceManager.NatureProjectileTextures + "GodFeather_New_Eye"),
+         ((byte)GodFeatherRequstedTextureType.Base_Sun, ResourceManager.NatureProjectileTextures + "GodFeather_New_Sun"),
+         ((byte)GodFeatherRequstedTextureType.Base_Sun_Glow, ResourceManager.NatureProjectileTextures + "GodFeather_New_Sun_Glow"),
+         ((byte)GodFeatherRequstedTextureType.Base_Sun_Eye, ResourceManager.NatureProjectileTextures + "GodFeather_New_Sun_Eye")];
 
     private readonly Vector2[] _scales = new Vector2[8];
 
@@ -190,7 +202,14 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             position += Vector2.UnitY.RotatedBy(rotation) * distance2;
             float fadeOutProgress = Utils.GetLerpValue(0, 50, Projectile.timeLeft, true);
             float fadeOutProgress3 = Utils.GetLerpValue(0f, 0.375f, fadeOutProgress, true);
-            Lighting.AddLight(position, Color.LightYellow.ToVector3() * spawnProgress * MathHelper.Lerp(0.5f, 0.75f, Activated2Value) * fadeOutProgress3 * Projectile.scale);
+
+            Vector3 lightColor = Color.LightYellow.ToVector3() * spawnProgress * MathHelper.Lerp(0.5f, 0.75f, Activated2Value) * fadeOutProgress3 * Projectile.scale;
+
+            Lighting.AddLight(position, lightColor);
+
+            if (i == 0) {
+                Lighting.AddLight(Projectile.Center, lightColor);
+            }
         }
     }
 
@@ -215,12 +234,20 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         Texture2D baseTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base].Value,
                   glowTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Glow].Value,
                   eyeTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Eye].Value;
+
+        Texture2D baseTexture_New = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_New].Value,
+                  baseTexture_New_Glow = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_New_Glow].Value,
+                  baseTexture_New_Eye = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_New_Eye].Value,
+                  sunTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_Sun].Value,
+                  sunGlowTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_Sun_Glow].Value,
+                  sunEyeTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_Sun_Eye].Value;
+
         SpriteBatch batch = Main.spriteBatch;
         int count = 8;
         float waveOffset = Projectile.whoAmI;
         List<(float, Vector2)> positions = [];
         List<Vector2> positions2 = [];
-        float distance = 4f;
+        float distance = 16f;
         for (int i = 0; i < count; i++) {
             float baseRotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
             //baseRotation += MathHelper.Pi;
@@ -258,20 +285,42 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         for (int i = 0; i < scales.Count; i++) {
             _scales[i] = Helper.Approach(_scales[i], scales[i], TimeSystem.LogicDeltaTime);
         }
+
+        Color getColor(bool glow = false) {
+            Color color = Color.Lerp(Lighting.GetColor(Projectile.Center.ToTileCoordinates()), Color.White, lightingModifier * glow.ToInt()) * 0.875f;
+            color.A = (byte)MathHelper.Lerp(255, 185, Activated2Value);
+            color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
+            color *= spawnProgress2;
+            color *= fadeOutProgress3;
+            return color;
+        }
+
+        Rectangle sunClip = sunTexture.Bounds;
+        Vector2 sunOrigin = sunClip.Centered();
+        Vector2 sunPosition = Projectile.Center;
+        Color sunColor = getColor(),
+              sunGlowColor = getColor(true) * 0.5f;
+        Vector2 sunScale = Vector2.One * Projectile.scale * fadeOutProgress4 * 0.75f;
+        float sunRotation = Projectile.rotation;
+        DrawInfo sunDrawInfo = DrawInfo.Default with {
+            Clip = sunClip,
+            Origin = sunOrigin,
+            Color = sunColor,
+            Scale = sunScale,
+            Rotation = sunRotation
+        };
+        batch.Draw(sunTexture, sunPosition, sunDrawInfo);
+        batch.Draw(sunGlowTexture, sunPosition, sunDrawInfo with {
+            Color = sunGlowColor
+        });
+        batch.Draw(sunEyeTexture, sunPosition, sunDrawInfo);
+
         float getScaleWave(int i) => Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count);
         for (int i = 0; i < positions.Count; i++) {
             float rotation = positions[i].Item1;
             Vector2 position = positions[i].Item2;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
-            Color getColor(bool glow = false) {
-                Color color = Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, lightingModifier * glow.ToInt()) * 0.875f;
-                color.A = (byte)MathHelper.Lerp(255, 185, Activated2Value);
-                color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
-                color *= spawnProgress2;
-                color *= fadeOutProgress3;
-                return color;
-            }
             Color color = getColor();
             rotation += MathHelper.Pi;
             Vector2 baseScale = _scales[i] * Projectile.scale;
@@ -294,10 +343,17 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Rotation = rotation + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
-            batch.Draw(baseTexture, position, drawInfo with {
+            //batch.Draw(baseTexture, position, drawInfo with {
+            //    Scale = scale * getScaleWave(i)
+            //});
+            //batch.Draw(glowTexture, position, drawInfo with {
+            //    Color = getColor(true) * 0.5f,
+            //    Scale = scale * getScaleWave(i)
+            //});
+            batch.Draw(baseTexture_New, position, drawInfo with {
                 Scale = scale * getScaleWave(i)
             });
-            batch.Draw(glowTexture, position, drawInfo with {
+            batch.Draw(baseTexture_New_Glow, position, drawInfo with {
                 Color = getColor(true) * 0.5f,
                 Scale = scale * getScaleWave(i)
             });
@@ -333,7 +389,11 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             float scale2 = Helper.Wave(WaveValue, 1.05f, 1.5f, 5f, waveOffset + i * count);
             scale *= scale2;
             position += Vector2.UnitY.RotatedBy(rotation) * 3f * scale2;
-            batch.Draw(eyeTexture, position, drawInfo with {
+            //batch.Draw(eyeTexture, position, drawInfo with {
+            //    Scale = scale,
+            //    Origin = origin
+            //});
+            batch.Draw(baseTexture_New_Eye, position, drawInfo with {
                 Scale = scale,
                 Origin = origin
             });
