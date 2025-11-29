@@ -77,7 +77,7 @@ sealed class LilPhoenixForm : BaseForm {
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         var plr = player.GetFormHandler();
         if (plr.Dashed) {
-            player.fullRotation = Utils.AngleLerp(player.fullRotation, (float)Math.Atan2((double)player.velocity.Y, (double)player.velocity.X) + (float)Math.PI / 2f, 1f);
+            player.fullRotation = Utils.AngleLerp(player.fullRotation, (float)(Math.Atan2(player.velocity.Y, (double)player.velocity.X) + Math.PI / 2f), 1f);
         }
         else if (plr.IsPreparing) {
             float length = 9f - player.velocity.Length();
