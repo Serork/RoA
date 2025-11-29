@@ -54,7 +54,7 @@ sealed class FlederForm : BaseForm {
         bool flag = IsInAir(player);
 
         float yOffset = flag ? -3 : 1;
-        player.GetFormHandler().AttackFactor = Helper.Approach(player.GetFormHandler().AttackFactor, yOffset, 4f);
+        player.GetFormHandler().AttackFactor = Helper.Approach(player.GetFormHandler().AttackFactor, yOffset, 5f);
 
         MountData.yOffset = (int)player.GetFormHandler().AttackFactor;
 
@@ -254,8 +254,8 @@ sealed class FlederForm : BaseForm {
         int flightAnimationStartFrame = 6, flightAnimationEndFrame = 9;
         float flightFrameFrequency = 14f, walkingFrameFrequiency = 20f;
 
-        byte runAnimationEndFrame = 2,
-             runAnimationStartFrame = 1;
+        byte runAnimationEndFrame = 5,
+             runAnimationStartFrame = 0;
 
         byte swingAnimationStartFrame = 3,
              swingAnimationEndFrame = 5;
@@ -283,17 +283,13 @@ sealed class FlederForm : BaseForm {
                     player.GetFormHandler().JustJumpedForAnimation = true;
                 }
                 else {
-                    frameCounter += flightAnimationCounterSpeed;
+                    frameCounter += flightAnimationCounterSpeed * 1.5f;
                     float frequency = flightFrameFrequency;
                     while (frameCounter > frequency) {
                         frameCounter -= frequency;
                         frame++;
                         if (frame == swingAnimationEndFrame) {
-                            playFlapSound();
                             player.GetFormHandler().JustJumped = true;
-                        }
-                        else {
-                            playFlapSound(true);
                         }
                     }
                 }
@@ -306,7 +302,16 @@ sealed class FlederForm : BaseForm {
                         frameCounter -= frequency;
                         frame++;
                     }
-                    if (frame < flightAnimationStartFrame || frame > flightAnimationEndFrame) {
+
+                    if (frame == flightAnimationEndFrame - 1) {
+                        playFlapSound();
+                    }
+                    else {
+                        playFlapSound(true);
+                    }
+
+                    bool end = frame > flightAnimationEndFrame;
+                    if (frame < flightAnimationStartFrame || end) {
                         frame = flightAnimationStartFrame;
                     }
                 }
