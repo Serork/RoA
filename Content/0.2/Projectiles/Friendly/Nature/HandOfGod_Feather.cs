@@ -242,6 +242,10 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                   sunGlowTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_Sun_Glow].Value,
                   sunEyeTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_Sun_Eye].Value;
 
+        float backgroundEffectOpacity = 1f;
+        float sunEyeOpacity = 1f,
+              featherEyeOpacity = 1f;
+
         SpriteBatch batch = Main.spriteBatch;
         int count = 8;
         float waveOffset = Projectile.whoAmI;
@@ -313,7 +317,9 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         batch.Draw(sunGlowTexture, sunPosition, sunDrawInfo with {
             Color = sunGlowColor
         });
-        batch.Draw(sunEyeTexture, sunPosition, sunDrawInfo);
+        batch.Draw(sunEyeTexture, sunPosition, sunDrawInfo with {
+            Color = sunDrawInfo.Color * sunEyeOpacity
+        });
 
         float getScaleWave(int i) => Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count);
         for (int i = 0; i < positions.Count; i++) {
@@ -339,7 +345,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (second) {
                 batch.Draw(glowTexture, position, drawInfo with {
                     Scale = scale * 1.5f,
-                    Color = Color.LightYellow.MultiplyRGB(getColor(true)).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.5f * spawnProgress * 0.375f,
+                    Color = Color.LightYellow.MultiplyRGB(getColor(true)).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.5f * spawnProgress * 0.375f * backgroundEffectOpacity,
                     Rotation = rotation + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
@@ -360,7 +366,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (!second) {
                 batch.Draw(glowTexture, position, drawInfo with {
                     Scale = scale * 1.5f * Helper.Wave(WaveValue, 0.75f, 1.25f, 5f, waveOffset + i * count),
-                    Color = getColor(true).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f * spawnProgress * 0.375f,
+                    Color = getColor(true).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f * spawnProgress * 0.375f * backgroundEffectOpacity,
                     Rotation = rotation + MathHelper.PiOver4 + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
@@ -375,6 +381,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
             color *= spawnProgress2;
             color *= fadeOutProgress3;
+            color *= featherEyeOpacity;
             rotation += MathHelper.Pi;
             Vector2 baseScale = _scales[i] * Projectile.scale;
             Vector2 scale = baseScale * fadeOutProgress4;
