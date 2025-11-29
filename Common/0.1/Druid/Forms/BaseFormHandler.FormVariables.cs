@@ -172,6 +172,7 @@ sealed partial class BaseFormHandler : ModPlayer {
         JustJumped = false;
         JustJumpedForAnimation = false;
         DashDirection = IDoubleTap.TapDirection.None;
+        AttackFactor = 0;
     }
 
     public partial void OnDoubleTap2(Player player, IDoubleTap.TapDirection direction) {

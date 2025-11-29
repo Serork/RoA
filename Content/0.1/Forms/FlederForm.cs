@@ -44,7 +44,7 @@ sealed class FlederForm : BaseForm {
         MountData.flightTimeMax = 60;
         MountData.fatigueMax = 40;
 
-        //MountData.yOffset = 1;
+        MountData.yOffset = 1;
         MountData.playerHeadOffset = -20;
     }
 
@@ -53,7 +53,10 @@ sealed class FlederForm : BaseForm {
 
         bool flag = IsInAir(player);
 
-        MountData.yOffset = flag ? -3 : 1;
+        float yOffset = flag ? -3 : 1;
+        player.GetFormHandler().AttackFactor = Helper.Approach(player.GetFormHandler().AttackFactor, yOffset, 4f);
+
+        MountData.yOffset = (int)player.GetFormHandler().AttackFactor;
 
         if (!flag) {
             player.GetFormHandler().JustJumped = false;
