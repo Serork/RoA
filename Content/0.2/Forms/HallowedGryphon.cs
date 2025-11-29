@@ -100,22 +100,23 @@ sealed class HallowedGryphon : BaseForm {
             }
         }
 
-        bool alreadyStarted = (formHandler.DashDelay >= SWINGPREPARINGANIMATIONTIME * 0.5f && formHandler.DashDelay < SWINGPREPARINGANIMATIONTIME);
+        bool alreadyStarted = (formHandler.DashDelay >= GetSwingTime(player) * 0.5f && formHandler.DashDelay < GetSwingTime(player));
         bool controlJump = player.controlJump || alreadyStarted;
         if (!IsInAir(player) || alreadyStarted) {
-            if (controlJump && formHandler.DashDelay < SWINGPREPARINGANIMATIONTIME) {
+            if (controlJump && formHandler.DashDelay < GetSwingTime(player)) {
                 formHandler.DashDelay++;
                 player.velocity.X *= 0.9f;
             }
             if (!controlJump) {
                 formHandler.DashDelay = 0;
             }
-            if (formHandler.DashDelay < SWINGPREPARINGANIMATIONTIME) {
+            if (formHandler.DashDelay < GetSwingTime(player)) {
                 player.controlJump = false;
             }
         }
-        float startTime = SWINGPREPARINGANIMATIONTIME,
-              endTime = SWINGPREPARINGANIMATIONTIME * 2f;
+        float startTime = GetSwingTime(player),
+              endTime = GetSwingTime(player) * 2f;
+        bool increaseFromStart = false;
         if (formHandler.DashDelay >= startTime && formHandler.DashDelay < endTime) {
             formHandler.DashDelay++;
 
@@ -127,6 +128,8 @@ sealed class HallowedGryphon : BaseForm {
             Player.jumpSpeed *= 1f + progress2 * ySpeedFactor;
             player.runAcceleration *= 1f + progress2 * xSpeedFactor;
             player.maxRunSpeed *= 1f + progress2 * xSpeedFactor;
+
+            increaseFromStart = true;
         }
 
         if (!player.GetFormHandler().IncreasedMoveSpeed) {
@@ -136,6 +139,9 @@ sealed class HallowedGryphon : BaseForm {
         BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f, false);
 
         float progress = (MOVESPEEDBOOSTMODIFIER - 1f) * GetMoveSpeedFactor(player);
+        if (increaseFromStart) {
+            progress *= 0.5f;
+        }
         player.accRunSpeed *= 1f + progress;
         Player.jumpSpeed *= 1f + progress;
         player.runAcceleration *= 1f + progress;
@@ -267,6 +273,8 @@ sealed class HallowedGryphon : BaseForm {
         velocity *= 0f;
     }
 
+    private float GetSwingTime(Player player) => SWINGPREPARINGANIMATIONTIME * (player.GetFormHandler().IncreasedMoveSpeed ? 0.666f : 1f);
+
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
         var handler = player.GetFormHandler();
 
@@ -326,7 +334,7 @@ sealed class HallowedGryphon : BaseForm {
             }
         }
 
-        if (handler.DashDelay > 0 && handler.DashDelay < SWINGPREPARINGANIMATIONTIME) {
+        if (handler.DashDelay > 0 && handler.DashDelay < GetSwingTime(player)) {
             playSwingAnimation(ref frame, ref frameCounter);
         }
         else if (handler.IsInLoopAttack) {
