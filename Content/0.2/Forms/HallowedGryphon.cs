@@ -341,7 +341,9 @@ sealed class HallowedGryphon : BaseForm {
             var attackTime = GetLoopAttackTime(player);
             var attackFactor = handler.AttackFactor;
             bool slowFall2 = false;
-            if (!(attackFactor < attackTime * 0.2f || attackFactor > attackTime * 0.4f)) {
+            bool isInLoop0 = attackFactor < attackTime * 0.2f;
+            bool isInLoop = isInLoop0 || attackFactor > attackTime * 0.4f;
+            if (!isInLoop) {
                 if (frame >= flightAnimationEndFrame) {
                     slowFall2 = true;
                     frame = flightAnimationEndFrame;
@@ -361,7 +363,7 @@ sealed class HallowedGryphon : BaseForm {
                     }
                 }
             }
-            bool end = frame > flightAnimationEndFrame;
+            bool end =  frame > flightAnimationEndFrame;
             if (frame < flightAnimationStartFrame || end) {
                 if (!end || (end && !slowFall2)) {
                     frame = flightAnimationStartFrame;
@@ -369,6 +371,9 @@ sealed class HallowedGryphon : BaseForm {
                 if (end && slowFall2) {
                     frame = flightAnimationEndFrame;
                 }
+            }
+            if (slowFall2) {
+                frame = flightAnimationEndFrame;
             }
         }
         else if (IsInAir(player)) {
