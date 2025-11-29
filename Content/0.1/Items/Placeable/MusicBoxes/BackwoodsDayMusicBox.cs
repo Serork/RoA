@@ -14,7 +14,7 @@ sealed class BackwoodsDayMusicBox : ModItem {
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "ThicketNight"), ModContent.ItemType<BackwoodsDayMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>());
+        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Backwoodsday"), ModContent.ItemType<BackwoodsDayMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>());
     }
 
     public override void SetDefaults() {

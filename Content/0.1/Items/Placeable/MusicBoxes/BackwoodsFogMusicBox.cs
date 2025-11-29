@@ -13,7 +13,7 @@ sealed class BackwoodsFogMusicBox : ModItem {
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Fog"), ModContent.ItemType<BackwoodsFogMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsFogMusicBox>());
+        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "BackwoodsFog"), ModContent.ItemType<BackwoodsFogMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsFogMusicBox>());
     }
 
     public override void SetDefaults() {
