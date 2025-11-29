@@ -100,7 +100,7 @@ sealed class HallowedGryphon : BaseForm {
             }
         }
 
-        bool alreadyStarted = (formHandler.DashDelay >= GetSwingTime(player) * 0.5f && formHandler.DashDelay < GetSwingTime(player));
+        bool alreadyStarted = formHandler.DashDelay > 0f && formHandler.DashDelay < GetSwingTime(player);
         bool controlJump = player.controlJump || alreadyStarted;
         if (!IsInAir(player) || alreadyStarted) {
             if (controlJump && formHandler.DashDelay < GetSwingTime(player)) {
@@ -341,23 +341,22 @@ sealed class HallowedGryphon : BaseForm {
         else if (handler.IsInLoopAttack) {
             var attackTime = GetLoopAttackTime(player);
             var attackFactor = handler.AttackFactor;
-            bool slowFall2 = false;
             bool isInLoop0 = attackFactor < attackTime * 0.2f;
             bool isInLoop1 = attackFactor > attackTime * 0.4f;
             bool isInLoop = isInLoop0 || isInLoop1;
             if (!isInLoop) {
                 if (frame >= flightAnimationEndFrame) {
                     isInLoopAnimation = true;
+                    frameCounter = 0;
                 }
             }
             else {
                 isInLoopAnimation = false;
             }
             if (isInLoopAnimation) {
-                slowFall2 = true;
                 frame = flightAnimationEndFrame;
             }
-            if (!slowFall2) {
+            if (!isInLoopAnimation) {
                 frameCounter += flightAnimationCounterSpeed;
                 float frequency = flightFrameFrequency;
                 while (frameCounter > frequency) {
@@ -371,22 +370,25 @@ sealed class HallowedGryphon : BaseForm {
                     }
                 }
             }
-            bool end = frame > flightAnimationEndFrame;
-            if (frame < flightAnimationStartFrame || end) {
-                if (!end || (end && !slowFall2)) {
-                    frame = flightAnimationStartFrame;
-                }
-                if (end && slowFall2) {
-                    frame = flightAnimationEndFrame;
+            if (!isInLoopAnimation) {
+                bool end = frame > flightAnimationEndFrame;
+                if (frame < flightAnimationStartFrame || end) {
+                    if (!end || (end && !isInLoopAnimation)) {
+                        frame = flightAnimationStartFrame;
+                    }
+                    if (end && isInLoopAnimation) {
+                        frame = flightAnimationEndFrame;
+                    }
                 }
             }
         }
         else if (IsInAir(player)) {
             isInLoopAnimation = false;
 
-            playSwingAnimation(ref frame, ref frameCounter);
+            //playSwingAnimation(ref frame, ref frameCounter);
 
-            if (formHandler.JustJumped) {
+            //if (formHandler.JustJumped)
+            {
                 bool slowFall1 = false,
                      slowFall2 = false;
                 if (player.velocity.Y > 2.5f) {
