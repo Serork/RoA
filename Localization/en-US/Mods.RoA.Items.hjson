@@ -2437,3 +2437,8 @@ GraspOfTheWarden: {
 	DisplayName: Grasp of the Warden
 	Tooltip: ""
 }
+
+BackwoodsNightMusicBox: {
+	DisplayName: Backwoods Night Music Box
+	Tooltip: ""
+}

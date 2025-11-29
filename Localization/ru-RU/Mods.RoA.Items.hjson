@@ -2458,3 +2458,8 @@ GraspOfTheWarden: {
 	DisplayName: Хватка Стража
 	Tooltip: ""
 }
+
+BackwoodsNightMusicBox: {
+	// DisplayName: Backwoods Night Music Box
+	// Tooltip: ""
+}
