@@ -67,9 +67,11 @@ sealed class FlederForm : BaseForm {
         player.npcTypeNoAggro[ModContent.NPCType<BabyFleder>()] = true;
         player.statDefense -= 6;
 
-        float rotation = player.velocity.X * (IsInAir(player) ? 0.2f : 0.15f);
+        float velocityX = player.velocity.X;
+        float maxVelocityX = flag ? 2.5f : 1.75f;
+        velocityX = MathHelper.Clamp(velocityX, -maxVelocityX, maxVelocityX);
+        float rotation = velocityX * (IsInAir(player) ? 0.2f : 0.15f);
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
-        float maxRotation = flag ? 0.3f : 0.2f;
         if (flag) {
             float maxFlightSpeedX = Math.Min(3.5f, player.maxRunSpeed * 0.75f);
             float acceleration = player.runAcceleration / 2f;
@@ -86,7 +88,8 @@ sealed class FlederForm : BaseForm {
         else {
             player.fullRotation = fullRotation;
         }
-        player.fullRotation = MathHelper.Clamp(player.fullRotation, -maxRotation, maxRotation);
+        //float maxRotation = flag ? 0.3f : 0.2f;
+        //player.fullRotation = MathHelper.Clamp(player.fullRotation, -maxRotation, maxRotation);
         Player.jumpHeight = 1;
         Player.jumpSpeed = 4f;
         player.gravity *= 0.75f;
