@@ -193,7 +193,7 @@ GiantTreeSapling: {
 	DisplayName: Giant Tree Sapling
 	Tooltip:
 		'''
-		15% decreased wreath discharge rate
+		Decreases wreath discharge rate by 15% 
 		While wreath is charged, increases defense by 5
 		'''
 }
@@ -750,7 +750,7 @@ AlchemicalSkull: {
 
 Coffin: {
 	DisplayName: Coffin
-	Tooltip: Releases bones upon taking damage, then returns them to the coffin
+	Tooltip: Taking damage releases bones which return back to the coffin
 }
 
 Herbarium: {
@@ -758,7 +758,7 @@ Herbarium: {
 	Tooltip:
 		'''
 		Enemies occasionally drop healing herbs
-		If wreath is charged, consumes it to restore additional life
+		If wreath is charged, consumes it together with the herb to restore additional life
 		'''
 }
 
@@ -1126,7 +1126,7 @@ CosmicHat: {
 	DisplayName: Stargazer's Hat
 	Tooltip:
 		'''
-		Briefly reduces mana cost to zero when your will is too low
+		Briefly reduces mana cost to 0 when your will is low
 		'How does it feel to be free?'
 		'''
 }
