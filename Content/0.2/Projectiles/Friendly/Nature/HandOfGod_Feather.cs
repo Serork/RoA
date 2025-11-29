@@ -291,7 +291,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             _scales[i] = Helper.Approach(_scales[i], scales[i], TimeSystem.LogicDeltaTime);
         }
 
-        Color lightColor2 = lightColor;
+        Color lightColor2 = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
 
         Color getColor(bool glow = false) {
             Color color = Color.Lerp(lightColor2, Color.White, lightingModifier * glow.ToInt()) * 0.875f;
