@@ -299,6 +299,14 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             color *= fadeOutProgress3;
             return color;
         }
+        Color getEyeColor() {
+            Color color = Color.Lerp(new Color(85, 85, 153), Color.Yellow, Activated2Value).MultiplyRGB(Color.Lerp(Lighting.GetColor(Projectile.Center.ToTileCoordinates()), Color.White, lightingModifier));
+            color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
+            color *= spawnProgress2;
+            color *= fadeOutProgress3;
+            color *= featherEyeOpacity;
+            return color;
+        }
 
         Rectangle sunClip = sunTexture.Bounds;
         Vector2 sunOrigin = sunClip.Centered();
@@ -319,7 +327,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             Color = sunGlowColor
         });
         batch.Draw(sunEyeTexture, sunPosition, sunDrawInfo with {
-            Color = sunDrawInfo.Color * sunEyeOpacity
+            Color = getEyeColor() * sunEyeOpacity
         });
 
         float getScaleWave(int i) => Helper.Wave(WaveValue, 0.9f, 1.1f, 2.5f, waveOffset + i * count);
@@ -378,11 +386,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 position = positions[i].Item2;
             Rectangle clip = baseTexture.Bounds;
             Vector2 origin = clip.BottomCenter();
-            Color color = Color.Lerp(new Color(61, 72, 73), Color.Yellow, Activated2Value).MultiplyRGB(Color.Lerp(Lighting.GetColor(position.ToTileCoordinates()), Color.White, lightingModifier));
-            color.A = (byte)MathHelper.Lerp(color.A, 100, fadeOutProgress2);
-            color *= spawnProgress2;
-            color *= fadeOutProgress3;
-            color *= featherEyeOpacity;
+            Color color = getEyeColor();
             rotation += MathHelper.Pi;
             Vector2 baseScale = _scales[i] * Projectile.scale;
             Vector2 scale = baseScale * fadeOutProgress4;
