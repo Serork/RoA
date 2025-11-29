@@ -133,8 +133,8 @@ sealed partial class BackwoodsBiome : ModBiome {
     public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface");
 
     public override int Music => BackwoodsFogHandler.IsFogActive ? MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Fog") : 
-        /*Main.IsItDay() ? MusicLoader.GetMusicSlot(ResourceManager.Music + "ThicketDay") :*/
-        IsUndergroundBackwoods() ? MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Backwoods") : MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "ThicketNight");
+        !Main.IsItDay() ? MusicLoader.GetMusicSlot(ResourceManager.Music + "Backwoods") :
+        /*IsUndergroundBackwoods() ? MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "Backwoods") : */MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "ThicketNight");
 
     public static bool IsUndergroundBackwoods() {
         bool result = false;
