@@ -12,7 +12,6 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using System;
-using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -22,6 +21,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class FlederForm : BaseForm {
+    private static byte FRAMECOUNT => 10;
+
     public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 1.5f);
     public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * 1f);
 
@@ -37,18 +38,27 @@ sealed class FlederForm : BaseForm {
     public override float GetRunAccelerationMultiplier(Player player) => 1.25f;
 
     protected override void SafeSetDefaults() {
-        MountData.totalFrames = 8;
+        MountData.totalFrames = FRAMECOUNT;
         MountData.spawnDust = 59;
         MountData.fallDamage = 0f;
         MountData.flightTimeMax = 60;
         MountData.fatigueMax = 40;
 
-        MountData.yOffset = -3;
-        MountData.playerHeadOffset = -14;
+        //MountData.yOffset = 1;
+        MountData.playerHeadOffset = -20;
     }
 
     protected override void SafePostUpdate(Player player) {
         player.GetFormHandler().UsePlayerSpeed = true;
+
+        bool flag = IsInAir(player);
+
+        MountData.yOffset = flag ? -3 : 1;
+
+        if (!flag) {
+            player.GetFormHandler().JustJumped = false;
+            player.GetFormHandler().JustJumpedForAnimation = false;
+        }
 
         player.npcTypeNoAggro[ModContent.NPCType<Fleder>()] = true;
         player.npcTypeNoAggro[ModContent.NPCType<BabyFleder>()] = true;
@@ -56,9 +66,7 @@ sealed class FlederForm : BaseForm {
 
         float rotation = player.velocity.X * (IsInAir(player) ? 0.2f : 0.15f);
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
-        bool flag = IsInAir(player);
         float maxRotation = flag ? 0.3f : 0.2f;
-        fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         if (flag) {
             float maxFlightSpeedX = Math.Min(3.5f, player.maxRunSpeed * 0.75f);
             float acceleration = player.runAcceleration / 2f;
@@ -75,6 +83,7 @@ sealed class FlederForm : BaseForm {
         else {
             player.fullRotation = fullRotation;
         }
+        player.fullRotation = MathHelper.Clamp(player.fullRotation, -maxRotation, maxRotation);
         Player.jumpHeight = 1;
         Player.jumpSpeed = 4f;
         player.gravity *= 0.75f;
@@ -239,22 +248,68 @@ sealed class FlederForm : BaseForm {
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
-        int minFrame = 4, maxFrame = 7;
-        float flightFrameFrequency = 14f, walkingFrameFrequiency = 16f;
+        int flightAnimationStartFrame = 6, flightAnimationEndFrame = 9;
+        float flightFrameFrequency = 14f, walkingFrameFrequiency = 20f;
+
+        byte runAnimationEndFrame = 2,
+             runAnimationStartFrame = 1;
+
+        byte swingAnimationStartFrame = 3,
+             swingAnimationEndFrame = 5;
+
+        float flightAnimationCounterSpeed = Math.Abs(player.velocity.Y) * 0.5f;
+
+        void playFlapSound(bool reset = false) {
+            if (reset) {
+                player.flapSound = false;
+                return;
+            }
+            if (!player.flapSound) {
+                SoundEngine.PlaySound(SoundID.Item32, player.Center);
+            }
+            player.flapSound = true;
+        }
+
         if (IsInAir(player)) {
-            if (player.velocity.Y < 0f) {
-                frameCounter += Math.Abs(player.velocity.Y) * 0.5f;
-                float frequency = flightFrameFrequency;
-                while (frameCounter > frequency) {
-                    frameCounter -= frequency;
-                    frame++;
+            if (!player.GetFormHandler().JustJumped) {
+                if (!player.GetFormHandler().JustJumpedForAnimation) {
+
+                    frame = swingAnimationStartFrame;
+                    frameCounter = 0;
+
+                    player.GetFormHandler().JustJumpedForAnimation = true;
                 }
-                if (frame < minFrame || frame > maxFrame) {
-                    frame = minFrame;
+                else {
+                    frameCounter += flightAnimationCounterSpeed;
+                    float frequency = flightFrameFrequency;
+                    while (frameCounter > frequency) {
+                        frameCounter -= frequency;
+                        frame++;
+                        if (frame == swingAnimationEndFrame) {
+                            playFlapSound();
+                            player.GetFormHandler().JustJumped = true;
+                        }
+                        else {
+                            playFlapSound(true);
+                        }
+                    }
                 }
             }
-            else if (player.velocity.Y > 0f) {
-                frame = maxFrame;
+            else {
+                if (player.velocity.Y < 0f) {
+                    frameCounter += flightAnimationCounterSpeed;
+                    float frequency = flightFrameFrequency;
+                    while (frameCounter > frequency) {
+                        frameCounter -= frequency;
+                        frame++;
+                    }
+                    if (frame < flightAnimationStartFrame || frame > flightAnimationEndFrame) {
+                        frame = flightAnimationStartFrame;
+                    }
+                }
+                else if (player.velocity.Y > 0f) {
+                    frame = flightAnimationEndFrame;
+                }
             }
         }
         else if (player.velocity.X != 0f) {
@@ -264,8 +319,8 @@ sealed class FlederForm : BaseForm {
                 frameCounter -= frequency;
                 frame++;
             }
-            if (frame > minFrame - 1) {
-                frame = 0;
+            if (frame > runAnimationEndFrame) {
+                frame = runAnimationStartFrame;
             }
         }
         else {
@@ -288,6 +343,8 @@ sealed class FlederForm : BaseForm {
         }
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "PipistrelleScream1") { Pitch = -0.3f, PitchVariance = 0.1f, Volume = 0.8f }, player.Center);
         skipDust = true;
+
+        player.GetFormHandler().ResetFlederStats();
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
@@ -302,7 +359,6 @@ sealed class FlederForm : BaseForm {
         }
         skipDust = true;
 
-        player.GetFormHandler().DashDirection = IDoubleTap.TapDirection.None;
-        player.GetFormHandler().DashDelay = player.GetFormHandler().DashTimer = 0;
+        player.GetFormHandler().ResetFlederStats();
     }
 }

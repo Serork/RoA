@@ -166,6 +166,14 @@ sealed partial class BaseFormHandler : ModPlayer {
         AttackFactor2 = 0f;
     }
 
+    public void ResetFlederStats() {
+        DashDelay = 0;
+        DashTimer = 0;
+        JustJumped = false;
+        JustJumpedForAnimation = false;
+        DashDirection = IDoubleTap.TapDirection.None;
+    }
+
     public partial void OnDoubleTap2(Player player, IDoubleTap.TapDirection direction) {
         bool flag = direction == IDoubleTap.TapDirection.Right | direction == IDoubleTap.TapDirection.Left;
         if (!flag) {
