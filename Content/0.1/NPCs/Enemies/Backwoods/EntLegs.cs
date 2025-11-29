@@ -192,13 +192,16 @@ sealed class EntLegs : RoANPC {
                     int num1 = 0;
                     Vector2 center = NPC.Center - Vector2.UnitY * 32f + Vector2.UnitY * 4f;
                     while (num1 < dustCount) {
-                        Vector2 vector = Vector2.UnitX * 0f;
-                        vector += -Vector2.UnitY.RotatedBy(num1 * (7f / dustCount)) * new Vector2(3f, 3f);
-                        vector = vector.RotatedBy(NPC.velocity.ToRotation());
-                        int num3 = Dust.NewDust(center, 0, 0, DustID.MagicMirror, 0f, 0f, 40, default, 1f);
-                        Main.dust[num3].noGravity = true;
-                        Main.dust[num3].position = new Vector2(center.X + 10f * NPC.direction, center.Y + 10) + vector;
-                        Main.dust[num3].velocity = NPC.velocity * 0f + vector.SafeNormalize(Vector2.UnitY) * 0.8f;
+                        if (!Main.rand.NextBool(5)) {
+                            Vector2 vector = Vector2.UnitX * 0f;
+                            vector += -Vector2.UnitY.RotatedBy(num1 * (7f / dustCount)) * new Vector2(3f, 3f);
+                            vector = vector.RotatedBy(NPC.velocity.ToRotation());
+                            int num3 = Dust.NewDust(center, 0, 0, DustID.MagicMirror, 0f, 0f, 40, default, 1f);
+                            Main.dust[num3].noGravity = true;
+                            Main.dust[num3].position = new Vector2(center.X + 10f * NPC.direction, center.Y + 10) + vector;
+                            Main.dust[num3].velocity = NPC.velocity * 0f + vector.SafeNormalize(Vector2.UnitY) * 0.8f;
+                            Main.dust[num3].scale *= Main.rand.NextFloat(1f, 1.75f);
+                        }
                         int num4 = num1;
                         num1 = num4 + 1;
                     }
