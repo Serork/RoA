@@ -154,6 +154,7 @@ sealed partial class BaseFormHandler : ModPlayer {
     }
 
     public void ResetGryphonStats() {
+        DashDelay = 0;
         JustJumped = false;
         JustJumpedForAnimation = false;
         JustStartedDoingLoopAttack = LoopAttackIsDone = false;
@@ -249,8 +250,6 @@ sealed partial class BaseFormHandler : ModPlayer {
     public override void PreUpdateMovement() {
         bool flag = DashDirection != IDoubleTap.TapDirection.None || ActiveDash;
         if (flag && !Player.GetFormHandler().IsConsideredAs<FlederForm>()) {
-            DashDirection = IDoubleTap.TapDirection.None;
-            DashDelay = DashTimer = 0;
             return;
         }
 

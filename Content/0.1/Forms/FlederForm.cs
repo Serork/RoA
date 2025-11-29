@@ -301,5 +301,8 @@ sealed class FlederForm : BaseForm {
             Main.dust[dust].noGravity = true;
         }
         skipDust = true;
+
+        player.GetFormHandler().DashDirection = IDoubleTap.TapDirection.None;
+        player.GetFormHandler().DashDelay = player.GetFormHandler().DashTimer = 0;
     }
 }
