@@ -23,6 +23,7 @@ using RoA.Content.Tiles.Miscellaneous;
 using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.Tiles.Station;
 using RoA.Content.Tiles.Walls;
 using RoA.Content.WorldGenerations;
 using RoA.Core.Utility;

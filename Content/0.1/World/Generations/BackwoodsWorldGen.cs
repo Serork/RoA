@@ -2,6 +2,7 @@
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Miscellaneous;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Content.Tiles.Station;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 

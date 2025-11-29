@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
@@ -23,9 +25,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace RoA.Content.Tiles.Ambient;
+namespace RoA.Content.Tiles.Station;
 
 sealed class OvergrownAltar : ModTile {
+    private static Asset<Texture2D> _glowTexture = null;
+
     public override void Load() {
         //On_WorldGen.SpreadGrass += On_WorldGen_SpreadGrass;
 
@@ -191,6 +195,10 @@ sealed class OvergrownAltar : ModTile {
     //}
 
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        }
+
         AnimationFrameHeight = 36;
 
         Main.tileLighted[Type] = true;
@@ -302,7 +310,7 @@ sealed class OvergrownAltar : ModTile {
             return false;
         }
 
-        texture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "OvergrownAltar_Glow").Value;
+        texture = _glowTexture.Value;
         float mult = flag ? 1f : Helper.EaseInOut3(strength);
         float factor3 = flag ? 1f : AltarHandler.GetAltarFactor();
         float factor4 = factor3 * 1.5f;

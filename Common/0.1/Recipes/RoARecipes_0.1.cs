@@ -274,7 +274,7 @@ sealed partial class RoARecipes : ModSystem {
         item.AddIngredient<ForestWreathTier1>(1);
         item.AddIngredient(ItemID.Sunflower, 1);
         item.AddIngredient<NaturesHeart>(1);
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfter(temp);
         item.AddOnCraftCallback(CompleteWreathCraftAchievement);
         item.Register();
@@ -292,7 +292,7 @@ sealed partial class RoARecipes : ModSystem {
         item.AddIngredient<JungleWreathTier1>(1);
         item.AddIngredient(ItemID.JungleRose, 1);
         item.AddIngredient<NaturesHeart>(1);
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfter(temp);
         item.AddOnCraftCallback(CompleteWreathCraftAchievement);
         item.Register();
@@ -310,7 +310,7 @@ sealed partial class RoARecipes : ModSystem {
         item.AddIngredient<BeachWreathTier1>(1);
         item.AddIngredient(ItemID.Coral, 1);
         item.AddIngredient<NaturesHeart>(1);
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfter(temp);
         item.AddOnCraftCallback(CompleteWreathCraftAchievement);
         item.Register();
@@ -328,7 +328,7 @@ sealed partial class RoARecipes : ModSystem {
         item.AddIngredient<SnowWreathTier1>(1);
         item.AddIngredient<Cloudberry>(1);
         item.AddIngredient<NaturesHeart>(1);
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfter(temp);
         item.AddOnCraftCallback(CompleteWreathCraftAchievement);
         item.Register();
@@ -379,21 +379,21 @@ sealed partial class RoARecipes : ModSystem {
         Recipe item = Recipe.Create(ModContent.ItemType<DreadheartCrimsonHelmet>());
         item.AddIngredient(ItemID.TissueSample, 10);
         item.AddIngredient<NaturesHeart>();
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfterFirstRecipesOf(ItemID.CrimsonGreaves);
         item.Register();
         Recipe temp = item;
         item = Recipe.Create(ModContent.ItemType<DreadheartCrimsonChestplate>());
         item.AddIngredient(ItemID.TissueSample, 20);
         item.AddIngredient<NaturesHeart>();
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfter(temp);
         item.Register();
         temp = item;
         item = Recipe.Create(ModContent.ItemType<DreadheartCrimsonLeggings>());
         item.AddIngredient(ItemID.TissueSample, 15);
         item.AddIngredient<NaturesHeart>();
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfter(temp);
         item.Register();
 
@@ -418,21 +418,21 @@ sealed partial class RoARecipes : ModSystem {
         Recipe item = Recipe.Create(ModContent.ItemType<DreadheartCorruptionHelmet>());
         item.AddIngredient(ItemID.ShadowScale, 10);
         item.AddIngredient<NaturesHeart>();
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfterFirstRecipesOf(ItemID.ShadowGreaves);
         item.Register();
         Recipe temp = item;
         item = Recipe.Create(ModContent.ItemType<DreadheartCorruptionChestplate>());
         item.AddIngredient(ItemID.ShadowScale, 20);
         item.AddIngredient<NaturesHeart>();
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfter(temp);
         item.Register();
         temp = item;
         item = Recipe.Create(ModContent.ItemType<DreadheartCorruptionLeggings>());
         item.AddIngredient(ItemID.ShadowScale, 15);
         item.AddIngredient<NaturesHeart>();
-        item.AddTile<Content.Tiles.Ambient.OvergrownAltar>();
+        item.AddTile<Content.Tiles.Station.OvergrownAltar>();
         item.SortAfter(temp);
         item.Register();
 

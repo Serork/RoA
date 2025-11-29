@@ -7,6 +7,7 @@ using RoA.Common.VisualEffects;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Station;
 using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
