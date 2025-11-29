@@ -120,7 +120,7 @@ abstract class BaseForm : ModMount {
     public static bool IsInAir(Player player) {
         bool flag = false;
         for (int i = -1; i < 2; i++) {
-            if (WorldGenHelper.SolidTile2((int)(player.Center.X + i * 16f) / 16, (int)(player.Bottom.Y + 10f) / 16)) {
+            if (WorldGenHelper.SolidTile2((int)(player.Center.X + i * 16f) / 16, (int)(player.Bottom.Y + 5f) / 16)) {
                 flag = true;
                 break;
             }
