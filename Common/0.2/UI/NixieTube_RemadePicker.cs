@@ -55,8 +55,8 @@ sealed class NixieTubePicker_TextureLoader : IInitializer {
 
         NixieTubeLanguageButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LanguageButton");
         NixieTubeLanguageButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LanguageButton_Border");
-        NixieTubePickButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2");
-        NixieTubePickButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton2_Border");
+        NixieTubePickButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton");
+        NixieTubePickButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_PickButton_Border");
 
         NixieTubeLightButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LightButton");
         NixieTubeLightButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LanguageButton_Border");
