@@ -334,6 +334,7 @@ sealed class HallowedGryphon : BaseForm {
             }
         }
 
+        ref bool isInLoopAnimation = ref handler.JustJumpedForAnimation2;
         if (handler.DashDelay > 0 && handler.DashDelay < GetSwingTime(player)) {
             playSwingAnimation(ref frame, ref frameCounter);
         }
@@ -342,12 +343,19 @@ sealed class HallowedGryphon : BaseForm {
             var attackFactor = handler.AttackFactor;
             bool slowFall2 = false;
             bool isInLoop0 = attackFactor < attackTime * 0.2f;
-            bool isInLoop = isInLoop0 || attackFactor > attackTime * 0.4f;
+            bool isInLoop1 = attackFactor > attackTime * 0.4f;
+            bool isInLoop = isInLoop0 || isInLoop1;
             if (!isInLoop) {
                 if (frame >= flightAnimationEndFrame) {
-                    slowFall2 = true;
-                    frame = flightAnimationEndFrame;
+                    isInLoopAnimation = true;
                 }
+            }
+            else {
+                isInLoopAnimation = false;
+            }
+            if (isInLoopAnimation) {
+                slowFall2 = true;
+                frame = flightAnimationEndFrame;
             }
             if (!slowFall2) {
                 frameCounter += flightAnimationCounterSpeed;
@@ -363,7 +371,7 @@ sealed class HallowedGryphon : BaseForm {
                     }
                 }
             }
-            bool end =  frame > flightAnimationEndFrame;
+            bool end = frame > flightAnimationEndFrame;
             if (frame < flightAnimationStartFrame || end) {
                 if (!end || (end && !slowFall2)) {
                     frame = flightAnimationStartFrame;
@@ -372,11 +380,10 @@ sealed class HallowedGryphon : BaseForm {
                     frame = flightAnimationEndFrame;
                 }
             }
-            if (slowFall2) {
-                frame = flightAnimationEndFrame;
-            }
         }
         else if (IsInAir(player)) {
+            isInLoopAnimation = false;
+
             playSwingAnimation(ref frame, ref frameCounter);
 
             if (formHandler.JustJumped) {

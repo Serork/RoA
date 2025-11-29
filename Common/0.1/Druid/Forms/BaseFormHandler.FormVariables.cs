@@ -157,6 +157,7 @@ sealed partial class BaseFormHandler : ModPlayer {
         DashDelay = 0;
         JustJumped = false;
         JustJumpedForAnimation = false;
+        JustJumpedForAnimation2 = false;
         JustStartedDoingLoopAttack = LoopAttackIsDone = false;
         SavedVelocity = Vector2.Zero;
         CanDoLoopAttackTimer = 0;
