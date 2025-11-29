@@ -249,7 +249,7 @@ sealed class HallowedGryphon : BaseForm {
              slowFallFrame2 = (byte)(flightAnimationEndFrame - 3);
 
         float walkingFrameFrequiency = 14f;
-        float startSwingAnimationFrequency = 10f;
+        float startSwingAnimationFrequency = 12f;
         float flightFrameFrequency = 14f;
 
         float flightAnimationCounterSpeed = handler.IncreasedMoveSpeed ? 3f : 2f;
@@ -271,11 +271,12 @@ sealed class HallowedGryphon : BaseForm {
             var attackTime = GetLoopAttackTime(player);
             var attackFactor = handler.AttackFactor;
             bool slowFall2 = false;
-            //if (!(attackFactor < attackTime * 0.2f || attackFactor > attackTime * 0.4f)) {
-            //    if (frame == slowFallFrame2) {
-            //        slowFall2 = true;
-            //    }
-            //}
+            if (!(attackFactor < attackTime * 0.2f || attackFactor > attackTime * 0.4f)) {
+                if (frame >= flightAnimationEndFrame) {
+                    slowFall2 = true;
+                    frame = flightAnimationEndFrame;
+                }
+            }
             if (!slowFall2) {
                 frameCounter += flightAnimationCounterSpeed;
                 float frequency = flightFrameFrequency;
@@ -289,8 +290,14 @@ sealed class HallowedGryphon : BaseForm {
                         playFlapSound(true);
                     }
                 }
-                if (frame < flightAnimationStartFrame || frame > flightAnimationEndFrame) {
+            }
+            bool end = frame > flightAnimationEndFrame;
+            if (frame < flightAnimationStartFrame || end) {
+                if (!end || (end && !slowFall2)) {
                     frame = flightAnimationStartFrame;
+                }
+                if (end && slowFall2) {
+                    frame = flightAnimationEndFrame;
                 }
             }
         }
