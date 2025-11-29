@@ -32,15 +32,13 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
     public enum GodFeatherRequstedTextureType : byte {
         Base,
         Glow,
-        Eye,
-        Eye2
+        Eye
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)GodFeatherRequstedTextureType.Base, ResourceManager.NatureProjectileTextures + "GodFeather"),
          ((byte)GodFeatherRequstedTextureType.Glow, ResourceManager.NatureProjectileTextures + "GodFeather_Glow"),
-         ((byte)GodFeatherRequstedTextureType.Eye, ResourceManager.NatureProjectileTextures + "GodFeather_Eye"),
-         ((byte)GodFeatherRequstedTextureType.Eye2, ResourceManager.NatureProjectileTextures + "GodFeather_Eye2")];
+         ((byte)GodFeatherRequstedTextureType.Eye, ResourceManager.NatureProjectileTextures + "GodFeather_Eye")];
 
     private readonly Vector2[] _scales = new Vector2[8];
 
@@ -216,7 +214,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         Texture2D baseTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base].Value,
                   glowTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Glow].Value,
-                  closedEyeTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Eye].Value;
+                  eyeTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Eye].Value;
         SpriteBatch batch = Main.spriteBatch;
         int count = 8;
         float waveOffset = Projectile.whoAmI;
@@ -335,7 +333,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             float scale2 = Helper.Wave(WaveValue, 1.05f, 1.5f, 5f, waveOffset + i * count);
             scale *= scale2;
             position += Vector2.UnitY.RotatedBy(rotation) * 3f * scale2;
-            batch.Draw(closedEyeTexture, position, drawInfo with {
+            batch.Draw(eyeTexture, position, drawInfo with {
                 Scale = scale,
                 Origin = origin
             });
