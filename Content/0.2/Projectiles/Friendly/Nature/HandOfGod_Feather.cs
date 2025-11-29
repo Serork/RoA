@@ -242,7 +242,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
                   sunGlowTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_Sun_Glow].Value,
                   sunEyeTexture = indexedTextureAssets[(byte)GodFeatherRequstedTextureType.Base_Sun_Eye].Value;
 
-        float backgroundEffectOpacity = 1f;
+        float backgroundEffectOpacity = 1f,
+              backgroundEffect2Opacity = 0.5f;
         float sunEyeOpacity = 1f,
               featherEyeOpacity = 1f;
 
@@ -366,7 +367,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             if (!second) {
                 batch.Draw(glowTexture, position, drawInfo with {
                     Scale = scale * 1.5f * Helper.Wave(WaveValue, 0.75f, 1.25f, 5f, waveOffset + i * count),
-                    Color = getColor(true).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f * spawnProgress * 0.375f * backgroundEffectOpacity,
+                    Color = getColor(true).MultiplyAlpha(Helper.Wave(WaveValue, 0.25f, 0.75f, 10f, waveOffset)) * 0.625f * spawnProgress * 0.375f * backgroundEffectOpacity * backgroundEffect2Opacity,
                     Rotation = rotation + MathHelper.PiOver4 + Helper.Wave(WaveValue, -maxRotation, maxRotation, 5f, waveOffset)
                 });
             }
