@@ -94,9 +94,6 @@ sealed class LilPhoenixForm : BaseForm {
             float charge = plr._charge;
             float progress = Utils.Remap(charge * 1.5f, 0f, 3.5f, 0f, max);
             player.fullRotation += (0.4f + progress) * length * player.direction * 0.75f;
-
-            player.eocDash = (int)(charge * 15f);
-            player.armorEffectDrawShadowEOCShield = true;
         }
         else {
             player.fullRotation = 0f/*IsInAir(player) ? 0f : fullRotation*/;
@@ -146,7 +143,8 @@ sealed class LilPhoenixForm : BaseForm {
             flag = true;
         }
         bool flag4 = !IsInAir(player);
-        StrikeNPC(player, WorldGenHelper.CustomSolidCollision(player.position - Vector2.One * 3, player.width + 6, player.height + 6, TileID.Sets.Platforms));
+        int size = 8;
+        StrikeNPC(player, WorldGenHelper.CustomSolidCollision(player.position - Vector2.One * size / 2, player.width + size, player.height + size, TileID.Sets.Platforms));
         if (flag4) {
             if (plr._charge3 < BaseFormHandler.MAXPHOENIXCHARGE) {
                 if (plr.Dashed) {
