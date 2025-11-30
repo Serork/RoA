@@ -89,7 +89,7 @@ sealed class LilPhoenixForm : BaseForm {
         else if (plr.IsPreparing) {
             float length = 9f - player.velocity.Length();
             length *= 0.075f;
-            player.fullRotation += (0.4f + Utils.Remap(plr._charge * 1.5f, 0f, 3.5f, 0f, 0.4f)) * length * player.direction * 0.75f;
+            player.fullRotation += (0.4f + Utils.Remap(plr._charge * 2f, 0f, 3.5f, 0f, 0.35f)) * length * player.direction * 0.75f;
         }
         else {
             player.fullRotation = 0f/*IsInAir(player) ? 0f : fullRotation*/;
@@ -103,7 +103,7 @@ sealed class LilPhoenixForm : BaseForm {
 
         float swingTime = SWINGTIME;
         BaseFormHandler formHandler = player.GetFormHandler();
-        bool alreadyStarted = formHandler.DashDelay > swingTime * 0.5f && formHandler.DashDelay < swingTime;
+        bool alreadyStarted = formHandler.DashDelay > swingTime * 0.375f && formHandler.DashDelay < swingTime;
         bool controlJump = player.controlJump || alreadyStarted;
         if (!IsInAir(player) || alreadyStarted) {
             if (controlJump && formHandler.DashDelay < swingTime) {
