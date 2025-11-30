@@ -247,6 +247,9 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         float sunEyeOpacity = 1f,
               featherEyeOpacity = 1f;
 
+        backgroundEffectOpacity *= 1f;
+        backgroundEffect2Opacity *= 1f;
+
         SpriteBatch batch = Main.spriteBatch;
         int count = 8;
         float waveOffset = Projectile.whoAmI;
@@ -402,7 +405,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             scale *= getScaleWave(i);
             float scale2 = Helper.Wave(WaveValue, 1.05f, 1.5f, 5f, waveOffset + i * count);
             scale *= scale2;
-            position += Vector2.UnitY.RotatedBy(rotation) * 3f * scale2;
+            position += Vector2.UnitY.RotatedBy(rotation) * 2f * scale2;
             //batch.Draw(eyeTexture, position, drawInfo with {
             //    Scale = scale,
             //    Origin = origin

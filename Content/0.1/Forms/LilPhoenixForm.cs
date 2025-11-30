@@ -388,7 +388,7 @@ sealed class LilPhoenixForm : BaseForm {
             playerDrawData.Add(item);
         }
         if (_glowMask2?.IsLoaded == true) {
-            float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
+            float value = BaseFormDataStorage.GetAttackCharge(drawPlayer);
             DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.9f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
