@@ -247,8 +247,8 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
         float sunEyeOpacity = 1f,
               featherEyeOpacity = 1f;
 
-        backgroundEffectOpacity *= 0.8375f;
-        backgroundEffect2Opacity *= 0.8375f;
+        backgroundEffectOpacity *= 0.825f;
+        backgroundEffect2Opacity *= 0.825f;
 
         SpriteBatch batch = Main.spriteBatch;
         int count = 8;

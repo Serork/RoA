@@ -25,6 +25,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Forms;
 
 sealed class LilPhoenixForm : BaseForm {
+    private static byte FRAMECOUNT => 18;
+
     private static Asset<Texture2D>? _glowMask2;
 
     public override ushort SetHitboxWidth(Player player) => Player.defaultWidth;
@@ -55,7 +57,7 @@ sealed class LilPhoenixForm : BaseForm {
         MountData.fatigueMax = 0;
         MountData.jumpHeight = 15;
         MountData.jumpSpeed = 6f;
-        MountData.totalFrames = 12;
+        MountData.totalFrames = FRAMECOUNT;
         MountData.constantJump = false;
         MountData.usesHover = false;
 
@@ -324,12 +326,26 @@ sealed class LilPhoenixForm : BaseForm {
         int maxFrame = 4;
         float walkingFrameFrequiency = 24f;
         var plr = player.GetFormHandler();
+
+        byte preparingFrame = 10;
+
+        byte dashedAnimationStartFrame = (byte)(preparingFrame + 1),
+             dashedAnimationEndFrame = (byte)(dashedAnimationStartFrame + 6);
+        float dashedFrameFrequency = 10f;
+
         if (plr.Dashed) {
-            frame = 11;
-            frameCounter = 0f;
+            frameCounter += 1f;
+            float frequency = dashedFrameFrequency;
+            while (frameCounter > frequency) {
+                frameCounter -= frequency;
+                frame++;
+            }
+            if (frame < dashedAnimationStartFrame || frame > dashedAnimationEndFrame) {
+                frame = dashedAnimationStartFrame;
+            }
         }
         else if (plr.IsPreparing) {
-            frame = 10;
+            frame = preparingFrame;
             frameCounter = 0f;
         }
         else if (IsInAir(player)) {
