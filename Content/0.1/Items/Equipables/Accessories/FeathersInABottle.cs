@@ -74,7 +74,11 @@ sealed class FeathersInABottle : NatureItem {
 
         public override void OnStarted(Player player, ref bool playSound) {
             var handler = player.GetWreathHandler();
-            handler.Consume(0.25f);        
+            handler.Consume(0.25f);
+
+            playSound = false;
+
+            OnJumpEffects(player);
         }
 
         public static void OnJumpEffects(Player player) {
