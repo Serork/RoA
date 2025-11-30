@@ -22,7 +22,7 @@ namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 [AutoloadEquip(EquipType.Head)]
 sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask, IDoubleTap {
     void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) 
-        => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorHead);
+        => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorHead) * 0.5f;
 
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
@@ -30,10 +30,10 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
         ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Head, this);
 
         void setDrawSettings1(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) 
-            => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorBody);
+            => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorBody) * 0.5f;
         ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Body.HallowedPlateMail, EquipType.Body, (ushort)ItemID.HallowedPlateMail, setDrawSettings1);
         void setDrawSettings2(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo)
-            => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorLegs);
+            => color = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorLegs) * 0.5f;
         ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Legs.HallowedGreaves, EquipType.Legs, (ushort)ItemID.HallowedGreaves, setDrawSettings2);
 
         BaseFormHandler.RegisterForm<HallowedGryphon>();
