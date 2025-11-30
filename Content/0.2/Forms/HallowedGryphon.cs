@@ -112,7 +112,7 @@ sealed class HallowedGryphon : BaseForm {
             }
         }
 
-        bool alreadyStarted = formHandler.DashDelay > 0f && formHandler.DashDelay < GetSwingTime(player);
+        bool alreadyStarted = formHandler.DashDelay > GetSwingTime(player) * 0.5f && formHandler.DashDelay < GetSwingTime(player);
         bool controlJump = player.controlJump || alreadyStarted;
         if (!IsInAir(player) || alreadyStarted) {
             if (controlJump && formHandler.DashDelay < GetSwingTime(player)) {

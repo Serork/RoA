@@ -27,7 +27,7 @@ namespace RoA.Content.Forms;
 
 sealed class LilPhoenixForm : BaseForm {
     private static byte FRAMECOUNT => 18;
-    private static float SWINGTIME => 12f;
+    private static float SWINGTIME => 14f;
 
     private static Asset<Texture2D>? _glowMask2;
 
@@ -92,7 +92,7 @@ sealed class LilPhoenixForm : BaseForm {
             player.fullRotation += (0.4f + Utils.Remap(plr._charge * 1.5f, 0f, 3.5f, 0f, 0.4f)) * length * player.direction * 0.75f;
         }
         else {
-            player.fullRotation = IsInAir(player) ? 0f : fullRotation;
+            player.fullRotation = 0f/*IsInAir(player) ? 0f : fullRotation*/;
         }
 
         player.fullRotationOrigin = player.getRect().Size() / 2f;
@@ -103,7 +103,7 @@ sealed class LilPhoenixForm : BaseForm {
 
         float swingTime = SWINGTIME;
         BaseFormHandler formHandler = player.GetFormHandler();
-        bool alreadyStarted = formHandler.DashDelay > 0f && formHandler.DashDelay < swingTime;
+        bool alreadyStarted = formHandler.DashDelay > swingTime * 0.5f && formHandler.DashDelay < swingTime;
         bool controlJump = player.controlJump || alreadyStarted;
         if (!IsInAir(player) || alreadyStarted) {
             if (controlJump && formHandler.DashDelay < swingTime) {
@@ -113,7 +113,7 @@ sealed class LilPhoenixForm : BaseForm {
             if (!controlJump) {
                 formHandler.DashDelay = 0;
             }
-            if (formHandler.DashDelay < swingTime * 0.625f) {
+            if (formHandler.DashDelay < swingTime * 0.5f) {
                 player.controlJump = false;
             }
         }
