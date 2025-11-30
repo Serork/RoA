@@ -281,6 +281,11 @@ abstract class BaseForm : ModMount {
 
         SafeDismountMount(player, ref skipDust);
 
+        for (int i = 0; i < MAXCOPIES; i++) {
+            ref CopyInfo copyData = ref _copyData![i];
+            copyData.Opacity = copyData.Scale = 0f;
+        }
+
         IsDrawing = false;
         _drawFor = ushort.MaxValue;
     }

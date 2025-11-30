@@ -31,7 +31,7 @@ sealed class LilPhoenixForm : BaseForm {
 
     private static Asset<Texture2D>? _glowMask2;
 
-    public override ushort SetHitboxWidth(Player player) => Player.defaultWidth;
+    public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 1.4f);
     public override ushort SetHitboxHeight(Player player) => Player.defaultHeight;
 
     public override SoundStyle? HurtSound => SoundID.NPCHit31;
@@ -138,7 +138,7 @@ sealed class LilPhoenixForm : BaseForm {
         if (plr.IsPreparing) {
             flag = true;
         }
-        bool flag4 = !flag || !IsInAir(player);
+        bool flag4 = !IsInAir(player);
         StrikeNPC(player, WorldGenHelper.CustomSolidCollision(player.position - Vector2.One * 3, player.width + 6, player.height + 6, TileID.Sets.Platforms));
         if (flag4) {
             if (plr._charge3 < BaseFormHandler.MAXPHOENIXCHARGE) {
@@ -160,11 +160,14 @@ sealed class LilPhoenixForm : BaseForm {
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 10, player.Center));
             }
-            Vector2 vector_ = player.GetViableMousePosition();
+
+            Vector2 mousePosition = player.GetViableMousePosition();
             player.controlLeft = player.controlRight = false;
-            player.direction = -(player.Center - vector_).X.GetDirection();
+            player.direction = -(player.Center - mousePosition).X.GetDirection();
+
             float speed = 5f * plr._charge;
-            Vector2 vector = new(vector_.X - player.Center.X, vector_.Y - player.Center.Y);
+
+            Vector2 vector = new(mousePosition.X - player.Center.X, mousePosition.Y - player.Center.Y);
             float acceleration = Math.Abs(player.velocity.X) + Math.Abs(player.velocity.Y);
             acceleration += 10f - acceleration;
             vector.X -= player.velocity.X * acceleration;
@@ -173,6 +176,7 @@ sealed class LilPhoenixForm : BaseForm {
             sqrt = speed / sqrt;
             player.velocity.X = vector.X * sqrt;
             player.velocity.Y = vector.Y * sqrt;
+
             plr.Prepared = false;
             plr.Dashed2 = plr.Dashed = true;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
@@ -505,7 +509,7 @@ sealed class LilPhoenixForm : BaseForm {
         player.GetFormHandler().ResetPhoenixDash(true);
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 32; i++) {
-            Point size = new(40, 55);
+            Point size = new(44, 55);
             Vector2 offset = new Vector2(-2.5f, 10f);
             if (player.FacedRight()) {
                 offset.X += 2f;
@@ -532,9 +536,6 @@ sealed class LilPhoenixForm : BaseForm {
         player.GetFormHandler().ResetPhoenixDash(true);
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 56; i++) {
-            if (!Main.rand.NextBool(30)) {
-                continue;
-            }
             Point size = new(40, 55);
             Vector2 offset = new Vector2(-2.5f, -5f);
             int dust = Dust.NewDust(center - size.ToVector2() / 2f + offset, size.X, size.Y, 6, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
