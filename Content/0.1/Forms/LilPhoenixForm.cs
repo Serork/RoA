@@ -11,6 +11,7 @@ using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -26,6 +27,7 @@ namespace RoA.Content.Forms;
 
 sealed class LilPhoenixForm : BaseForm {
     private static byte FRAMECOUNT => 18;
+    private static float SWINGTIME => 12f;
 
     private static Asset<Texture2D>? _glowMask2;
 
@@ -61,7 +63,7 @@ sealed class LilPhoenixForm : BaseForm {
         MountData.constantJump = false;
         MountData.usesHover = false;
 
-        MountData.yOffset = 2;
+        MountData.yOffset = -5;
         MountData.playerHeadOffset = -24;
 
         if (!Main.dedServ) {
@@ -78,18 +80,43 @@ sealed class LilPhoenixForm : BaseForm {
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         var plr = player.GetFormHandler();
         if (plr.Dashed) {
-            player.fullRotation = Utils.AngleLerp(player.fullRotation, (float)(Math.Atan2(player.velocity.Y, (double)player.velocity.X) + Math.PI / 2f), 1f);
+            float rotation2 = 0f;
+            if (!player.FacedRight()) {
+                rotation2 = MathHelper.Pi;
+            }
+            player.fullRotation = Utils.AngleLerp(player.fullRotation, (float)(Math.Atan2(player.velocity.Y, (double)player.velocity.X) + rotation2), 1f);
         }
         else if (plr.IsPreparing) {
             float length = 9f - player.velocity.Length();
             length *= 0.075f;
-            player.fullRotation += (0.4f + Utils.Remap(plr._charge * 2f, 0f, 3.5f, 0f, 0.2f)) * length * player.direction;
+            player.fullRotation += (0.4f + Utils.Remap(plr._charge * 1.5f, 0f, 3.5f, 0f, 0.4f)) * length * player.direction * 0.75f;
         }
         else {
             player.fullRotation = IsInAir(player) ? 0f : fullRotation;
         }
 
-        player.fullRotationOrigin = player.getRect().Size() / 2f + new Vector2(1f * player.direction, 2f);
+        player.fullRotationOrigin = player.getRect().Size() / 2f;
+
+        if (!IsInAir(player)) {
+            plr.JustJumped = false;
+        }
+
+        float swingTime = SWINGTIME;
+        BaseFormHandler formHandler = player.GetFormHandler();
+        bool alreadyStarted = formHandler.DashDelay > 0f && formHandler.DashDelay < swingTime;
+        bool controlJump = player.controlJump || alreadyStarted;
+        if (!IsInAir(player) || alreadyStarted) {
+            if (controlJump && formHandler.DashDelay < swingTime) {
+                formHandler.DashDelay++;
+                player.velocity.X *= 0.9f;
+            }
+            if (!controlJump) {
+                formHandler.DashDelay = 0;
+            }
+            if (formHandler.DashDelay < swingTime * 0.625f) {
+                player.controlJump = false;
+            }
+        }
 
         ActivateExtraJumps(player);
         UltraAttackHandler(player);
@@ -171,7 +198,7 @@ sealed class LilPhoenixForm : BaseForm {
                 int k = 36;
                 for (int i = 0; i < k; i++) {
                     int x = (int)((double)player.Center.X - 2.5);
-                    int y = (int)((double)player.Center.Y + 2.0);
+                    int y = (int)((double)player.Center.Y - 0.5);
                     Vector2 vector3 = (new Vector2((float)player.width / 2f, player.height) * 0.5f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
                     Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
                     int dust = Dust.NewDust(vector3 - player.velocity * 3f + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
@@ -201,7 +228,7 @@ sealed class LilPhoenixForm : BaseForm {
                 int k = 36;
                 for (int i = 0; i < k; i++) {
                     int x = (int)((double)player.Center.X - 2.5);
-                    int y = (int)((double)player.Center.Y + 2.0);
+                    int y = (int)((double)player.Center.Y - 0.5);
                     Vector2 vector = (new Vector2((float)player.width / 2f, player.height) * 0.5f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
                     Vector2 vector2 = vector - new Vector2((float)x, (float)y);
                     int dust = Dust.NewDust(vector + vector2 - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
@@ -301,7 +328,8 @@ sealed class LilPhoenixForm : BaseForm {
         if (player.whoAmI == Main.myPlayer) {
             for (int i = 0; i < 2; i++) {
                 int proj = Projectile.NewProjectile(player.GetSource_Misc("phoenixjump"),
-                    player.Center + new Vector2(14f * i * (i == 1 ? -1f : 1f), -4f) + Vector2.UnitX * player.direction * 6f + (player.direction == -1 ? new Vector2(8f, 0f) : Vector2.Zero),
+                    player.Center + new Vector2(6f * (i == 0).ToDirectionInt(), (i + (player.direction < 0).ToInt()) == 1 ? -6f : -10f) + 
+                    new Vector2(3f * player.direction + (player.direction < 0 ? -5f : 0), 10f),
                     Vector2.Zero, projType, damage, knockBack, player.whoAmI);
                 //if (Main.netMode != NetmodeID.SinglePlayer)
                 //    NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
@@ -323,18 +351,60 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
-        int maxFrame = 4;
-        float walkingFrameFrequiency = 24f;
+        int walkingEndFrame = 4;
+        float walkingFrameFrequiency = 14f;
         var plr = player.GetFormHandler();
+
+        byte jumpFrame = 7;
+        byte firstJumpStartFrame = 5;
 
         byte preparingFrame = 10;
 
         byte dashedAnimationStartFrame = (byte)(preparingFrame + 1),
              dashedAnimationEndFrame = (byte)(dashedAnimationStartFrame + 6);
-        float dashedFrameFrequency = 10f;
+        float dashedFrameFrequency = 6f;
 
-        if (plr.Dashed) {
-            frameCounter += 1f;
+        byte extraJumpStartFrame = jumpFrame,
+             extraJumpEndFrame = 9;
+        float extraJumpFrameFrequency = 4f;
+
+        float firstJumpFrameFrequency = SWINGTIME / 3f;
+
+        void playFlapSound(bool reset = false) {
+            if (reset) {
+                player.flapSound = false;
+                return;
+            }
+            if (!player.flapSound) {
+                SoundEngine.PlaySound(SoundID.Item32, player.Center);
+            }
+            player.flapSound = true;
+        }
+
+        if (plr.DashDelay > 0 && plr.DashDelay < SWINGTIME) {
+            if (!plr.JustJumped) {
+                if (!plr.JustJumpedForAnimation && plr.DashDelay <= 1) {
+                    frame = firstJumpStartFrame;
+                    frameCounter = 0f;
+                    plr.JustJumpedForAnimation = true;
+                }
+                else {
+                    frameCounter += 1f;
+                    float frequency = firstJumpFrameFrequency;
+                    while (frameCounter > frequency) {
+                        frameCounter -= frequency;
+                        frame++;
+                        if (frame > jumpFrame) {
+                            frame = jumpFrame;
+                            plr.JustJumped = true;
+                            plr.JustJumpedForAnimation = false;
+                        }
+                    }
+                }
+            }
+        }
+        else if (plr.Dashed) {
+            frameCounter += MathF.Max(0.5f, player.velocity.Length() * 0.15f) * 0.75f;
             float frequency = dashedFrameFrequency;
             while (frameCounter > frequency) {
                 frameCounter -= frequency;
@@ -352,14 +422,21 @@ sealed class LilPhoenixForm : BaseForm {
             if (plr.JustJumpedForAnimation) {
                 if (!plr.JustJumpedForAnimation2) {
                     plr.JustJumpedForAnimation2 = true;
-                    frameCounter = 4f;
+                    frame = extraJumpStartFrame;
+                    frameCounter = 0f;
                 }
-                if (++frameCounter >= 4.0) {
-                    int maxMovingFrame = 9;
-                    if (frame < maxMovingFrame)
+                if (++frameCounter >= extraJumpFrameFrequency) {
+                    int maxMovingFrame = extraJumpEndFrame;
+                    if (frame < maxMovingFrame) {
                         frame++;
+                        if (frame == maxMovingFrame - 1) {
+                            playFlapSound();
+                        }
+                        else {
+                            playFlapSound(true);
+                        }
+                    }
                     else {
-                        frame = 5;
                         plr.JustJumpedForAnimation = false;
                         plr.JustJumpedForAnimation2 = false;
                     }
@@ -367,24 +444,30 @@ sealed class LilPhoenixForm : BaseForm {
                 }
             }
             else {
-                frame = 5;
-                frameCounter = 0f;
+                frameCounter += 1f;
+                float frequency = extraJumpFrameFrequency * 0.75f;
+                while (frameCounter > frequency) {
+                    frameCounter -= frequency;
+                    frame--;
+                }
+                if (frame < jumpFrame) {
+                    frame = jumpFrame;
+                }
             }
         }
         else if (player.velocity.X != 0f) {
-            int maxMovingFrame = maxFrame;
-            if (frame >= maxMovingFrame) {
-                frame = 0;
-            }
             frameCounter += Math.Abs(player.velocity.X) * 1f;
             if (frameCounter >= walkingFrameFrequiency) {
-                if (frame < maxMovingFrame) {
+                if (frame < walkingEndFrame) {
                     frame++;
                 }
                 else {
                     frame = 0;
                 }
                 frameCounter = 0f;
+            }
+            if (frame > walkingEndFrame) {
+                frame = 0;
             }
         }
         else {
@@ -410,9 +493,11 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
-        player.GetFormHandler().JustJumped = false;
-        player.GetFormHandler().JustJumpedForAnimation = false;
-        player.GetFormHandler().JustJumpedForAnimation2 = false;
+        BaseFormHandler formHandler = player.GetFormHandler();
+        formHandler.JustJumped = false;
+        formHandler.JustJumpedForAnimation = false;
+        formHandler.JustJumpedForAnimation2 = false;
+        formHandler.DashDelay = 0;
 
         player.GetFormHandler().ResetPhoenixDash(true);
         Vector2 center = player.Center + player.velocity;
@@ -431,6 +516,12 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
+        BaseFormHandler formHandler = player.GetFormHandler();
+        formHandler.JustJumped = false;
+        formHandler.JustJumpedForAnimation = false;
+        formHandler.JustJumpedForAnimation2 = false;
+        formHandler.DashDelay = 0;
+
         player.GetFormHandler().ResetPhoenixDash(true);
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 56; i++) {

@@ -50,8 +50,9 @@ sealed class LilPhoenixTrailFlame : FormProjectile {
             offset = (float)Math.Cos((Projectile.ai[1] / 30) * Math.PI);
         else
             offset = (float)Math.Cos((Projectile.ai[1] / 30 + 1) * Math.PI);
-        Vector2 pos = player.Center + player.fullRotationOrigin - player.Size / 2f;
-        Vector2 vector2 = pos + new Vector2(-10f * player.direction, 5f * offset).RotatedBy(player.velocity.SafeNormalize(Vector2.Zero).ToRotation()) * 2f * player.direction;
+        float rotation = player.velocity.SafeNormalize(Vector2.Zero).ToRotation();
+        Vector2 pos = player.Center + Vector2.UnitY.RotatedBy(rotation) * 6f * -player.direction;
+        Vector2 vector2 = pos + new Vector2(-2f * player.direction, 6f * offset).RotatedBy(rotation) * 2f * player.direction;
         vector2 = vector2.RotatedBy(player.fullRotation, vector2);
         if (!player.GetFormHandler().Dashed) {
             Projectile.ai[2] = 1f;
@@ -59,22 +60,22 @@ sealed class LilPhoenixTrailFlame : FormProjectile {
         }
         if (Projectile.ai[2] != 1f) {
             Projectile.timeLeft = 260;
-            Projectile.position = vector2;
+            Projectile.Center = vector2;
             bool flag = true;
             foreach (Vector2 trailPosition in _positions) {
-                if (trailPosition.Distance(Projectile.position) <= 1.5f) {
+                if (trailPosition.Distance(Projectile.Center) <= 1.5f) {
                     flag = false;
                     break;
                 }
             }
             if (flag) {
-                _positions.Add(Projectile.position);
+                _positions.Add(Projectile.Center);
             }
             Projectile.netUpdate = true;
         }
         foreach (Vector2 trailPosition in _positions) {
             if (Main.rand.NextBool(8)) {
-                int dust = Dust.NewDust(trailPosition, 2, 2, 6, 0f, -0.5f, Projectile.alpha, default, Main.rand.NextFloat(1f, 2f));
+                int dust = Dust.NewDust(trailPosition - Vector2.One, 2, 2, 6, 0f, -0.5f, Projectile.alpha, default, Main.rand.NextFloat(1f, 2f));
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].fadeIn = Main.rand.NextFloat(0.5f, 1.5f);
             }
