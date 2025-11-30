@@ -41,7 +41,9 @@ sealed partial class NPCCommon : GlobalNPC {
             Color baseGlowColor = Color.Lerp(drawColor, GlowColor * NPC.Opacity, 0.9f);
             Menhir menhir = npc.As<Menhir>();
             Color glowColor = baseGlowColor * menhir.GlowOpacityFactor;
-            NPC.QuickDraw(spriteBatch, screenPos, glowColor, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
+			glowColor.A = 0;
+			
+            //NPC.QuickDraw(spriteBatch, screenPos, glowColor * 0.5f, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
             NPC.position = position;
 
             foreach (NPC checkNPC in Main.ActiveNPCs) {
@@ -71,9 +73,9 @@ sealed partial class NPCCommon : GlobalNPC {
                     NPC.position = position2;
                 }
             }
-            if (menhir.IsTeleporting || menhir.IsInIdle) {
-                NPC.QuickDraw(spriteBatch, screenPos, glowColor, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
-            }
+            //if (menhir.IsTeleporting || menhir.IsInIdle) {
+                NPC.QuickDraw(spriteBatch, screenPos, glowColor * 0.8f, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
+            //}
             NPC.position = position;
         }
 
