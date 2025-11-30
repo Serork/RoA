@@ -236,6 +236,9 @@ sealed class LilPhoenixForm : BaseForm {
             else if (!plr.Prepared) {
                 int k = 36;
                 for (int i = 0; i < k; i++) {
+                    if (Main.rand.NextBool(5)) {
+                        continue;
+                    }
                     int x = (int)((double)player.Center.X - 2);
                     int y = (int)((double)player.Center.Y - 0.5);
                     Vector2 vector = (new Vector2((float)player.width / 2f, player.height) * 0.5f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
