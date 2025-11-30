@@ -7,7 +7,6 @@ using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Defaults;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -22,7 +21,7 @@ namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 [AutoloadEquip(EquipType.Head)]
 sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask, IDoubleTap {
     void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
-        Color glowColor = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorHead) * 1.5f;
+        Color glowColor = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorHead) * 2f;
         if (drawInfo.shadow != 0) {
             color = glowColor;
         }
@@ -37,7 +36,7 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
         ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Head, this);
 
         void setDrawSettings1(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
-            Color glowColor = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorBody) * 1.5f;
+            Color glowColor = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorBody) * 2f;
             if (drawInfo.shadow != 0) {
                 color = glowColor;
             }
@@ -47,7 +46,7 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
         }
         ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Body.HallowedPlateMail, EquipType.Body, (ushort)ItemID.HallowedPlateMail, setDrawSettings1);
         void setDrawSettings2(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
-            Color glowColor = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorLegs) * 1.5f;
+            Color glowColor = WreathHandler.GetArmorGlowColor1(player, drawInfo.colorArmorLegs) * 2f;
             if (drawInfo.shadow != 0) {
                 color = glowColor;
             }
