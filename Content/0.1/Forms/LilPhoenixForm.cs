@@ -15,7 +15,6 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -384,13 +383,13 @@ sealed class LilPhoenixForm : BaseForm {
     protected override void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         drawPosition = Utils.Floor(drawPosition);
         if (glowTexture != null) {
-            DrawData item = new(glowTexture, drawPosition, frame, Color.White * 0.85f * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
+            DrawData item = new(glowTexture, drawPosition, frame, Color.White * 0.9f * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
         }
         if (_glowMask2?.IsLoaded == true) {
             float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
-            DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.85f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+            DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.9f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
         }

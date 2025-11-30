@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
 
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
@@ -11,14 +14,19 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
 
 sealed class HallowedGryphon : BaseForm {
+    private static Asset<Texture2D>? _glowMask2;
+
     private static byte FRAMECOUNT => 19;
     private static float MOVESPEEDBOOSTMODIFIER => 3f;
     private static float LOOPATTACKSIZEMODIFIER => 0.7f;
@@ -45,6 +53,10 @@ sealed class HallowedGryphon : BaseForm {
 
         MountData.yOffset = -7;
         MountData.playerHeadOffset = -10;
+
+        if (!Main.dedServ) {
+            _glowMask2 = ModContent.Request<Texture2D>(Texture + "_Glow2");
+        }
     }
 
     protected override void SafePostUpdate(Player player) {
@@ -273,10 +285,38 @@ sealed class HallowedGryphon : BaseForm {
         velocity *= 0f;
     }
 
+    protected override void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
+        drawPosition = Utils.Floor(drawPosition);
+        if (glowTexture != null) {
+            DrawData item = new(glowTexture, drawPosition, frame, Color.White * 0.9f * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
+            item.shader = drawPlayer.cBody;
+            playerDrawData.Add(item);
+        }
+        if (shadow != 0) {
+            if (_glowMask2?.IsLoaded == true) {
+                float value = MathHelper.Clamp(Math.Max(drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge2, drawPlayer.GetModPlayer<BaseFormDataStorage>()._attackCharge), 0f, 1f);
+                DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.2f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+                item.shader = drawPlayer.cBody;
+                playerDrawData.Add(item);
+            }
+        }
+    }
+
     private float GetSwingTime(Player player) => SWINGPREPARINGANIMATIONTIME * (player.GetFormHandler().IncreasedMoveSpeed ? 0.666f : 1f);
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
         var handler = player.GetFormHandler();
+
+        bool activateShadows = false;
+
+        if (handler.IncreasedMoveSpeed || handler.IsInLoopAttack) {
+            activateShadows = true;
+        }
+
+        if (!activateShadows) {
+            player.armorEffectDrawOutlines = false;
+            player.armorEffectDrawShadow = false;
+        }
 
         int minMovingFrame = 1;
         int maxMovingFrame = minMovingFrame + 8;
