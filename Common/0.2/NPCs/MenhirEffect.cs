@@ -46,16 +46,18 @@ sealed partial class NPCCommon : GlobalNPC {
             //NPC.QuickDraw(spriteBatch, screenPos, glowColor * 0.5f, texture: indexedTextureAssets[(byte)MenhirRequstedTextureType.Glow].Value);
             NPC.position = position;
 
-            foreach (NPC checkNPC in Main.ActiveNPCs) {
-                if (checkNPC.whoAmI == npc.whoAmI) {
-                    continue;
-                }
-                var handler = checkNPC.GetCommon();
-                if (!(handler.IsMenhirEffectActive && handler.MenhirEffectAppliedBy == npc.whoAmI)) {
-                    continue;
-                }
+            if (npc.active && !npc.IsABestiaryIconDummy) {
+                foreach (NPC checkNPC in Main.ActiveNPCs) {
+                    if (checkNPC.whoAmI == npc.whoAmI) {
+                        continue;
+                    }
+                    var handler = checkNPC.GetCommon();
+                    if (!(handler.IsMenhirEffectActive && handler.MenhirEffectAppliedBy == npc.whoAmI)) {
+                        continue;
+                    }
 
-                DrawChain(spriteBatch, npc, checkNPC, drawColor, screenPos);
+                    DrawChain(spriteBatch, npc, checkNPC, drawColor, screenPos);
+                }
             }
 
             position = NPC.position;

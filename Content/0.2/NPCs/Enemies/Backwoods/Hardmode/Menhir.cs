@@ -81,6 +81,8 @@ sealed class Menhir : ModNPC, IRequestAssets {
         Count
     }
 
+    private HashSet<ushort> _appliedEffectToWhoAmI = [];
+
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
 
@@ -139,6 +141,8 @@ sealed class Menhir : ModNPC, IRequestAssets {
 
             return;
         }
+
+        UnlockEnemies();
 
         for (int num829 = 0; num829 < 25; num829++) {
             Dust.NewDust(NPC.position - Vector2.UnitY * 4f, NPC.width, NPC.height, stoneDustType, hit.HitDirection, 0f);
@@ -226,6 +230,9 @@ sealed class Menhir : ModNPC, IRequestAssets {
             if (checkNPC.whoAmI == NPC.whoAmI) {
                 continue;
             }
+            if (_appliedEffectToWhoAmI.Contains((ushort)checkNPC.whoAmI)) {
+                continue;
+            }
             var handler = checkNPC.GetCommon();
             if (!(handler.IsMenhirEffectActive && handler.MenhirEffectAppliedBy == NPC.whoAmI)) {
                 continue;
@@ -257,13 +264,16 @@ sealed class Menhir : ModNPC, IRequestAssets {
             if (taken.Contains(checkNPC.whoAmI) || taken.Count >= MAXENEMYCOUNTTOLOCK) {
                 continue;
             }
+            _appliedEffectToWhoAmI.Add((ushort)checkNPC.whoAmI);
             ApplyEffect(checkNPC, NPC.whoAmI);
             taken.Add(checkNPC.whoAmI);
         }
     }
 
-    private IEnumerable<NPC> CheckNPCs => Main.npc.Where(checkNPC => checkNPC.active && checkNPC.Distance(NPC.Center) < MINDISTANCETOENEMY).OrderBy(x => x.Distance(NPC.Center));
-    private Predicate<NPC> ValidNPC => (checkNPC) => !(checkNPC.type == Type || checkNPC.whoAmI == NPC.whoAmI) && !(!checkNPC.CanActivateOnHitEffect() || checkNPC.friendly || checkNPC.boss);
+    private IEnumerable<NPC> CheckNPCs => Main.npc.Where(checkNPC => checkNPC.type != Type && checkNPC.active && checkNPC.Distance(NPC.Center) < MINDISTANCETOENEMY).OrderBy(x => x.Distance(NPC.Center));
+    private Predicate<NPC> ValidNPC => (checkNPC) => !(checkNPC.type == Type || checkNPC.whoAmI == NPC.whoAmI) 
+        && Collision.CanHitLine(NPC.Center, 0, 0, checkNPC.Center, 0, 0)
+        && !(!checkNPC.CanActivateOnHitEffect() || checkNPC.friendly || checkNPC.boss);
 
     private void ApplyEffect(NPC npc, int whoAmI) {
         var handler = npc.GetCommon();
@@ -389,6 +399,8 @@ sealed class Menhir : ModNPC, IRequestAssets {
     }
 
     private void ActuallyTeleport() {
+        _appliedEffectToWhoAmI.Clear();
+
         Entity? target = null;
         foreach (NPC checkNPC in CheckNPCs) {
             if (ValidNPC(checkNPC)) {
