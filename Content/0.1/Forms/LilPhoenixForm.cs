@@ -428,7 +428,11 @@ sealed class LilPhoenixForm : BaseForm {
         }
         else if (plr.IsPreparing) {
             frame = preparingFrame;
-            frameCounter = 0f;
+            frameCounter += 1f;
+            if (frameCounter > 10) {
+                frameCounter = 0;
+                MakeCopy(player.Center, (byte)frame, player.fullRotation, player.direction > 0);
+            }
         }
         else if (IsInAir(player)) {
             if (plr.JustJumpedForAnimation) {
