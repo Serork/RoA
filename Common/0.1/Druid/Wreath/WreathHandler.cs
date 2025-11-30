@@ -14,7 +14,6 @@ using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
-using RoA.Core.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -28,7 +27,6 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Liquid;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.UI;
 
 using static RoA.Common.Druid.Forms.BaseFormHandler;
 

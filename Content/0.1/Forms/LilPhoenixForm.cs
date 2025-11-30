@@ -174,7 +174,6 @@ sealed class LilPhoenixForm : BaseForm {
                     Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
                     int dust = Dust.NewDust(vector3 - player.velocity * 3f + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
                     Main.dust[dust].noGravity = true;
-                    Main.dust[dust].noLight = true;
                     Main.dust[dust].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat() + player.velocity * 0.75f * Main.rand.NextFloat(0.5f, 1f);
                 }
             }
@@ -205,7 +204,6 @@ sealed class LilPhoenixForm : BaseForm {
                     Vector2 vector2 = vector - new Vector2((float)x, (float)y);
                     int dust = Dust.NewDust(vector + vector2 - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
                     Main.dust[dust].noGravity = true;
-                    Main.dust[dust].noLight = true;
                     Main.dust[dust].velocity = -Vector2.Normalize(vector2) * 2f;
                 }
                 plr.Prepared = true;
@@ -389,7 +387,7 @@ sealed class LilPhoenixForm : BaseForm {
         }
         if (_glowMask2?.IsLoaded == true) {
             float value = BaseFormDataStorage.GetAttackCharge(drawPlayer);
-            DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.85f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+            DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.7f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
         }
