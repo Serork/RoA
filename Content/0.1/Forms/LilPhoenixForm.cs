@@ -94,6 +94,9 @@ sealed class LilPhoenixForm : BaseForm {
             float charge = plr._charge;
             float progress = Utils.Remap(charge * 1.5f, 0f, 3.5f, 0f, max);
             player.fullRotation += (0.4f + progress) * length * player.direction * 0.75f;
+
+            player.eocDash = 10;
+            player.armorEffectDrawShadowEOCShield = true;
         }
         else {
             player.fullRotation = 0f/*IsInAir(player) ? 0f : fullRotation*/;
@@ -128,24 +131,27 @@ sealed class LilPhoenixForm : BaseForm {
 
     private void UltraAttackHandler(Player player) {
         var plr = player.GetFormHandler();
+
+        // check for solid beneath
         int testY = (int)player.Center.Y / 16;
         int value = 5;
-        bool flag = true;
+        bool noSolidBeneath = true;
         testY = Math.Min(Main.maxTilesY - value, testY);
         for (int i = testY; i < testY + value; i++) {
             Tile tile = Main.tile[(int)player.Center.X / 16, i];
             if (tile.HasTile && (Main.tileSolid[(int)tile.TileType] || tile.LiquidType != 0)) {
-                flag = false;
+                noSolidBeneath = false;
                 break;
             }
         }
         if (plr.IsPreparing) {
-            flag = true;
+            noSolidBeneath = true;
         }
-        bool flag4 = !IsInAir(player);
+
+        bool isInAir = !IsInAir(player);
         int size = 8;
         StrikeNPC(player, WorldGenHelper.CustomSolidCollision(player.position - Vector2.One * size / 2, player.width + size, player.height + size, TileID.Sets.Platforms));
-        if (flag4) {
+        if (isInAir) {
             if (plr._charge3 < BaseFormHandler.MAXPHOENIXCHARGE) {
                 if (plr.Dashed) {
                     plr.ClearPhoenixProjectiles();
@@ -216,7 +222,7 @@ sealed class LilPhoenixForm : BaseForm {
                 }
             }
         }
-        if (flag && player.HoldingLMB() && !plr.WasPreparing && !plr.Dashed) {
+        if (noSolidBeneath && player.HoldingLMB() && !plr.WasPreparing && !plr.Dashed) {
             player.controlJump = false;
             player.controlLeft = player.controlRight = false;
             player.velocity *= 0.7f;
@@ -224,6 +230,9 @@ sealed class LilPhoenixForm : BaseForm {
             player.position.X = Helper.Approach(player.position.X, plr.TempPosition.X, 0.5f);
             player.position.Y = Helper.Approach(player.position.Y, plr.TempPosition.Y, 0.5f);
             plr.TempPosition = Vector2.Lerp(plr.TempPosition, player.position, 0.25f);
+            if (!plr.IsPreparing) {
+                player.GetCommon().ResetSocialShadows();
+            }
             plr.IsPreparing = true;
             plr.WasPreparing = false;
             float max = BaseFormHandler.MAXPHOENIXCHARGE;
@@ -428,11 +437,12 @@ sealed class LilPhoenixForm : BaseForm {
         }
         else if (plr.IsPreparing) {
             frame = preparingFrame;
-            frameCounter += 1f;
-            if (frameCounter > 10) {
-                frameCounter = 0;
-                MakeCopy(player.Center, (byte)frame, player.fullRotation, player.direction > 0);
-            }
+            frameCounter = 0f;
+            //frameCounter += 1f;
+            //if (frameCounter > 6) {
+            //    frameCounter = 0;
+            //    MakeCopy(player.Center, (byte)frame, player.fullRotation, player.direction > 0);
+            //}
         }
         else if (IsInAir(player)) {
             if (plr.JustJumpedForAnimation) {

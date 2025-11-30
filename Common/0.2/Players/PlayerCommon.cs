@@ -391,6 +391,22 @@ sealed partial class PlayerCommon : ModPlayer {
         HandleHornetDash();
     }
 
+    public void ResetSocialShadows() {
+        for (int i = 0; i < Player.shadowDirection.Length; i++) {
+            Player.shadowDirection[i] = 0;
+        }
+        Player.shadowCount = 0;
+        for (int i = 0; i < Player.shadowPos.Length; i++) {
+            Player.shadowPos[i] = Vector2.Zero;
+        }
+        for (int i = 0; i < Player.shadowOrigin.Length; i++) {
+            Player.shadowOrigin[i] = Vector2.Zero;
+        }
+        for (int i = 0; i < Player.shadowRotation.Length; i++) {
+            Player.shadowRotation[i] = 0f;
+        }
+    }
+
     private void HandleBackflip() {
         if (!DoingBackflip) {
             return;
