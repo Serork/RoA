@@ -3,11 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
-using RoA.Content;
-using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -16,7 +13,6 @@ using RoA.Core.Utility.Vanilla;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 using Terraria;
 using Terraria.Audio;
@@ -48,6 +44,26 @@ sealed class BaseFormBuff(BaseForm parent) : ModBuff {
 }
 
 abstract class BaseForm : ModMount {
+    private static byte MAXCOPIES => 6;
+
+    private struct CopyInfo {
+        private float _opacity;
+
+        public Vector2 Position;
+        public float Rotation;
+        public float Scale;
+        public byte UsedFrame;
+        public bool FacedRight;
+
+        public float Opacity {
+            readonly get => _opacity;
+            set => _opacity = MathUtils.Clamp01(value);
+        }
+    }
+
+    private CopyInfo[] _copyData = null!;
+    private byte _currentCopyIndex;
+
     internal sealed class BaseFormDataStorage : ModPlayer {
         internal float _attackCharge, _attackCharge2;
 
@@ -231,6 +247,8 @@ abstract class BaseForm : ModMount {
             MountData.textureWidth = MountData.backTexture.Width();
             MountData.textureHeight = MountData.backTexture.Height();
         }
+
+        _copyData = new CopyInfo[MAXCOPIES];
     }
 
     protected virtual bool ForcedChangeDirectionIfNeeded(Player player) => true;
@@ -270,6 +288,15 @@ abstract class BaseForm : ModMount {
     public sealed override void UpdateEffects(Player player) {
         MountData.buff = MountBuff.Type;
 
+        for (int i = 0; i < MAXCOPIES; i++) {
+            ref CopyInfo copyData = ref _copyData![i];
+            if (copyData.Opacity > 0f) {
+                copyData.Scale -= 0.05f;
+                copyData.Opacity -= 0.05f;
+                copyData.Opacity = MathF.Max(0f, copyData.Opacity);
+            }
+        }
+
         if (!IsInAir(player)) {
             player.GetFormHandler().JustJumpedForAnimation = player.GetFormHandler().JustJumpedForAnimation2 = false;
         }
@@ -283,6 +310,20 @@ abstract class BaseForm : ModMount {
         }
         float value = MathHelper.Clamp(player.GetModPlayer<BaseFormDataStorage>()._attackCharge, 0f, 1f);
         Lighting.AddLight(GetLightingPos(player) == Vector2.Zero ? player.Center : GetLightingPos(player), LightingColor.ToVector3() * value);
+    }
+
+    protected void MakeCopy(Vector2 position, byte frame, float rotation, bool facedRight, float scale = 1f) {
+        if (_currentCopyIndex >= MAXCOPIES) {
+            _currentCopyIndex = 0;
+        }
+        _copyData![_currentCopyIndex++] = new CopyInfo() {
+            Position = position,
+            UsedFrame = frame,
+            Rotation = rotation,
+            Opacity = 1.25f,
+            Scale = scale,
+            FacedRight = facedRight
+        };
     }
 
     private static void SpawnRunDusts(Player player) {
@@ -391,6 +432,20 @@ abstract class BaseForm : ModMount {
                         playerDrawData.Add(item2);
                     }
                 }
+            }
+
+            for (int i = 0; i < MAXCOPIES; i++) {
+                CopyInfo copyInfo = _copyData![i];
+                if (MathUtils.Approximately(copyInfo.Position, drawPosition, 2f)) {
+                    continue;
+                }
+
+                DrawData item3 = new(texture, copyInfo.Position - Main.screenPosition, frame with { Y = texture.Height / MountData.totalFrames * copyInfo.UsedFrame }, drawColor * MathUtils.Clamp01(copyInfo.Opacity) * 0.5f, 
+                    copyInfo.Rotation, 
+                    drawOrigin, drawScale * MathF.Max(copyInfo.Scale, 1f), copyInfo.FacedRight.ToInt().ToSpriteEffects());
+                item3.shader = drawPlayer.cBody;
+                item3.ignorePlayerRotation = true;
+                playerDrawData.Add(item3);
             }
 
             DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);

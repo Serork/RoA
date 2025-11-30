@@ -103,7 +103,7 @@ sealed class LilPhoenixForm : BaseForm {
 
         float swingTime = SWINGTIME;
         BaseFormHandler formHandler = player.GetFormHandler();
-        bool alreadyStarted = formHandler.DashDelay > swingTime * 0.375f && formHandler.DashDelay < swingTime;
+        bool alreadyStarted = formHandler.DashDelay > swingTime * 0.25f && formHandler.DashDelay < swingTime;
         bool controlJump = player.controlJump || alreadyStarted;
         if (!IsInAir(player) || alreadyStarted) {
             if (controlJump && formHandler.DashDelay < swingTime) {
@@ -113,7 +113,7 @@ sealed class LilPhoenixForm : BaseForm {
             if (!controlJump) {
                 formHandler.DashDelay = 0;
             }
-            if (formHandler.DashDelay < swingTime * 0.5f) {
+            if (formHandler.DashDelay < swingTime * 0.25f) {
                 player.controlJump = false;
             }
         }
@@ -429,6 +429,9 @@ sealed class LilPhoenixForm : BaseForm {
                     int maxMovingFrame = extraJumpEndFrame;
                     if (frame < maxMovingFrame) {
                         frame++;
+
+                        MakeCopy(player.Center, (byte)frame, 0f, player.direction > 0);
+
                         if (frame == maxMovingFrame - 1) {
                             playFlapSound();
                         }
@@ -503,7 +506,11 @@ sealed class LilPhoenixForm : BaseForm {
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 32; i++) {
             Point size = new(40, 55);
-            int dust = Dust.NewDust(center - size.ToVector2() / 2f + new Vector2(-3f, 10f), size.X, size.Y, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
+            Vector2 offset = new Vector2(-2.5f, 10f);
+            if (player.FacedRight()) {
+                offset.X += 2f;
+            }
+            int dust = Dust.NewDust(center - size.ToVector2() / 2f + offset, size.X, size.Y, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
             Main.dust[dust].noGravity = true;
             Main.dust[dust].fadeIn = 1f;
             Main.dust[dust].velocity.X *= 0.1f;
@@ -525,8 +532,12 @@ sealed class LilPhoenixForm : BaseForm {
         player.GetFormHandler().ResetPhoenixDash(true);
         Vector2 center = player.Center + player.velocity;
         for (int i = 0; i < 56; i++) {
+            if (!Main.rand.NextBool(30)) {
+                continue;
+            }
             Point size = new(40, 55);
-            int dust = Dust.NewDust(center - size.ToVector2() / 2f + new Vector2(-3f, -5f), size.X, size.Y, MountData.spawnDust, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
+            Vector2 offset = new Vector2(-2.5f, -5f);
+            int dust = Dust.NewDust(center - size.ToVector2() / 2f + offset, size.X, size.Y, 6, 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
             Main.dust[dust].noGravity = true;
             Main.dust[dust].fadeIn = 1f;
             Main.dust[dust].velocity.X *= 0.1f;
