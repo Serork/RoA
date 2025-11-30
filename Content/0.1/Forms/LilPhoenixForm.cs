@@ -89,7 +89,14 @@ sealed class LilPhoenixForm : BaseForm {
         else if (plr.IsPreparing) {
             float length = 9f - player.velocity.Length();
             length *= 0.075f;
-            player.fullRotation += (0.4f + Utils.Remap(plr._charge * 2f, 0f, 3.5f, 0f, 0.35f)) * length * player.direction * 0.75f;
+
+            float max = 0.35f;
+            float charge = plr._charge;
+            float progress = Utils.Remap(charge * 1.5f, 0f, 3.5f, 0f, max);
+            player.fullRotation += (0.4f + progress) * length * player.direction * 0.75f;
+
+            player.eocDash = (int)(charge * 15f);
+            player.armorEffectDrawShadowEOCShield = true;
         }
         else {
             player.fullRotation = 0f/*IsInAir(player) ? 0f : fullRotation*/;
