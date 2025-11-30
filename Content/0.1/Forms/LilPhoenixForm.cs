@@ -64,7 +64,7 @@ sealed class LilPhoenixForm : BaseForm {
         MountData.usesHover = false;
 
         MountData.yOffset = -5;
-        MountData.playerHeadOffset = -24;
+        MountData.playerHeadOffset = -20;
 
         if (!Main.dedServ) {
             _glowMask2 = ModContent.Request<Texture2D>(Texture + "_Glow2");
