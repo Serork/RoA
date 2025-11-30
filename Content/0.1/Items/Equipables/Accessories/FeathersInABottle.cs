@@ -76,7 +76,7 @@ sealed class FeathersInABottle : NatureItem {
             var handler = player.GetWreathHandler();
             handler.Consume(0.25f);
 
-            playSound = false;
+            //playSound = false;
 
             OnJumpEffects(player);
         }
