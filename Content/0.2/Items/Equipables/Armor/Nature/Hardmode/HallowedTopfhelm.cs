@@ -8,6 +8,7 @@ using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -26,7 +27,7 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
             color = glowColor;
         }
         else {
-            color = glowColor * 0f;
+            color = Color.White * player.GetWreathHandler().ActualProgress5 * 0.5f;
         }
     }
 
@@ -41,7 +42,7 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
                 color = glowColor;
             }
             else {
-                color = glowColor * 0f;
+                color = Color.White * player.GetWreathHandler().ActualProgress5 * 0.5f;
             }
         }
         ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Body.HallowedPlateMail, EquipType.Body, (ushort)ItemID.HallowedPlateMail, setDrawSettings1);
@@ -51,7 +52,7 @@ sealed class HallowedTopfhelm : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
                 color = glowColor;
             }
             else {
-                color = glowColor * 0f;
+                color = Color.White * player.GetWreathHandler().ActualProgress5 * 0.5f;
             }
         }
         ItemGlowMaskHandler.RegisterArmorGlowMask(ArmorIDs.Legs.HallowedGreaves, EquipType.Legs, (ushort)ItemID.HallowedGreaves, setDrawSettings2);

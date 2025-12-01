@@ -292,10 +292,17 @@ sealed class HallowedGryphon : BaseForm {
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
         }
-        if (shadow != 0) {
-            if (_glowMask2?.IsLoaded == true) {
-                float value = BaseFormDataStorage.GetAttackCharge(drawPlayer);
-                DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.2f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
+        if (_glowMask2?.IsLoaded == true) {
+            float value = BaseFormDataStorage.GetAttackCharge(drawPlayer);
+            float colorFactor = (float)(int)drawColor.A / 255f * value;
+            Texture2D glowMaskTexture = _glowMask2.Value;
+            if (shadow != 0) {
+                DrawData item = new(glowMaskTexture, drawPosition, frame, Color.White * 0.2f * colorFactor, rotation, drawOrigin, drawScale, spriteEffects);
+                item.shader = drawPlayer.cBody;
+                playerDrawData.Add(item);
+            }
+            else {
+                DrawData item = new(glowMaskTexture, drawPosition, frame, Color.White * 0.15f * colorFactor, rotation, drawOrigin, drawScale, spriteEffects);
                 item.shader = drawPlayer.cBody;
                 playerDrawData.Add(item);
             }
