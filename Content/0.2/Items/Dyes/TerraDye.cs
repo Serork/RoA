@@ -14,8 +14,6 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Dyes;
 
 sealed class TerraDye : ModItem {
-    public override string Texture => ResourceManager.EmptyTexture;
-
     public static Asset<Texture2D> TerraShaderMap { get; private set; } = null!;
 
     public override void SetStaticDefaults() {
