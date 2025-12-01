@@ -1,31 +1,24 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using ReLogic.Content;
 using ReLogic.Utilities;
 
 using RoA.Common.GlowMasks;
-using RoA.Content.Items.Dyes;
-using RoA.Content.Items.LiquidsSpecific;
+using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Weapons;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static RoA.Common.GlowMasks.ItemGlowMaskHandler;
 
 namespace RoA.Common.DrawLayers;
 

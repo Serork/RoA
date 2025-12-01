@@ -2,7 +2,7 @@
 
 using ReLogic.Content;
 
-using RoA.Content.Items.Dyes;
+using RoA.Content.Items.Miscellaneous;
 
 using Terraria;
 using Terraria.DataStructures;

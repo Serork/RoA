@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Content.Items.Dyes;
+using RoA.Content.Items.Miscellaneous;
 
 using Terraria;
 using Terraria.DataStructures;

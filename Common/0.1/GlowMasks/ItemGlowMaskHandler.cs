@@ -5,8 +5,7 @@ using ReLogic.Content;
 using ReLogic.Utilities;
 
 using RoA.Common.Configs;
-using RoA.Content.Items.Dyes;
-using RoA.Content.Items.LiquidsSpecific;
+using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Tools;
 using RoA.Content.Items.Weapons.Nature.Hardmode;
 using RoA.Content.Items.Weapons.Nature.Hardmode.Claws;

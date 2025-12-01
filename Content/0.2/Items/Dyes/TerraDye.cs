@@ -11,7 +11,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Dyes;
+namespace RoA.Content.Items.Miscellaneous;
 
 sealed class TerraDye : ModItem {
     public static Asset<Texture2D> TerraShaderMap { get; private set; } = null!;
