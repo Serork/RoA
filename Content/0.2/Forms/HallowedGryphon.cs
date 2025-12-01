@@ -129,6 +129,9 @@ sealed class HallowedGryphon : BaseForm {
         float startTime = GetSwingTime(player),
               endTime = GetSwingTime(player) * 2f;
         bool increaseFromStart = false;
+        if (IsInAir(player) && formHandler.DashDelay > 0f && formHandler.DashDelay < endTime) {
+            formHandler.DashDelay++;
+        }
         if (formHandler.DashDelay >= startTime && formHandler.DashDelay < endTime) {
             formHandler.DashDelay++;
 
