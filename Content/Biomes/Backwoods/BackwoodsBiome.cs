@@ -32,9 +32,9 @@ sealed class LightColorFix : ILoadable {
             return;
         }
 
-        _mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "DruidBiomeMapBG");
-        _glowMapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "DruidBiomeMapBG_Fog");
-        _mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "DruidBiomeMapBG_Glow");
+        _mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG");
+        _glowMapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG_Fog");
+        _mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG_Glow");
     }
 
     private void On_Main_DrawMapFullscreenBackground(On_Main.orig_DrawMapFullscreenBackground orig, Vector2 screenPosition, int screenWidth, int screenHeight) {
@@ -64,12 +64,11 @@ sealed class LightColorFix : ILoadable {
 sealed partial class BackwoodsBiomeFog : ModBiome {
     public static BackwoodsBiomeFog Instance => ModContent.GetInstance<BackwoodsBiomeFog>();
 
-    public override string MapBackground => ResourceManager.BackwoodsTextures + "DruidBiomeMapBG_Fog";
+    public override string MapBackground => ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG_Fog";
 
     public override string BackgroundPath => MapBackground;
 
-
-    public override string BestiaryIcon => ResourceManager.BackwoodsTextures + "Backwoods_Bestiary_Fog";
+    public override string BestiaryIcon => ResourceManager.BackwoodsBiomeTextures + "Backwoods_Bestiary_Fog";
 }
 
 sealed partial class BackwoodsBiome : ModBiome {
@@ -158,7 +157,7 @@ sealed partial class BackwoodsBiome : ModBiome {
         return result;
     }
 
-    public override string MapBackground => ResourceManager.BackwoodsTextures + "DruidBiomeMapBG";
+    public override string MapBackground => ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG";
 
     public override string BackgroundPath => MapBackground;
 
@@ -166,7 +165,7 @@ sealed partial class BackwoodsBiome : ModBiome {
 
     public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Normal;
 
-    public override string BestiaryIcon => ResourceManager.BackwoodsTextures + "Backwoods_Bestiary";
+    public override string BestiaryIcon => ResourceManager.BackwoodsBiomeTextures + "Backwoods_Bestiary";
 
     public override ModWaterStyle WaterStyle => ModContent.Find<ModWaterStyle>(RoA.ModName + "/DruidBiomeWaterStyle");
 }

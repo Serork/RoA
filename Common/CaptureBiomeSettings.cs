@@ -29,7 +29,7 @@ sealed class CaptureBiomeSettings : ModSystem {
             return;
         }
 
-        _backwoodsBGIcon = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "BackwoodsBGIcon");
+        _backwoodsBGIcon = ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "BackwoodsBGIcon");
     }
 
     public override void Load() {

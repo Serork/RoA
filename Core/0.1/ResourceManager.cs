@@ -102,7 +102,8 @@ static class ResourceManager {
     public static string DecorationTileTextures => TileTextures + "Decorations/";
 
     public static string BiomeTextures => Textures + "Biomes/";
-    public static string BackwoodsTextures => BiomeTextures + "Backwoods/";
+    public static string BackwoodsBiomeTextures => BiomeTextures + "Backwoods/";
+    public static string TarBiomeTextures => BiomeTextures + "Tar/";
 
     public static string Sounds => RoA.ModName + $"/{SOUNDSPATH}/";
     public static string AmbientSounds => Sounds + "Ambient/";

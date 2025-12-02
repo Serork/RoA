@@ -9,3 +9,8 @@ BackwoodsBiomeFog: {
 	DisplayName: Туман
 	TownNPCDialogueName: туман
 }
+
+TarpitBiome: {
+	// DisplayName: Tarpit Biome
+	// TownNPCDialogueName: the Tarpit Biome
+}

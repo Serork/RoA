@@ -13,11 +13,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Biomes.Backwoods;
 
 sealed class DruidBiomeWaterfallStyle : ModWaterfallStyle {
-    public override string Texture => ResourceManager.BackwoodsTextures + GetType().Name;
+    public override string Texture => ResourceManager.BackwoodsBiomeTextures + GetType().Name;
 }
 
 sealed class DruidBiomeWaterStyle : ModWaterStyle {
-    public override string Texture => ResourceManager.BackwoodsTextures + GetType().Name;
+    public override string Texture => ResourceManager.BackwoodsBiomeTextures + GetType().Name;
 
     public override int ChooseWaterfallStyle() => ModContent.Find<ModWaterfallStyle>(RoA.ModName + "/DruidBiomeWaterfallStyle").Slot;
 
@@ -25,7 +25,7 @@ sealed class DruidBiomeWaterStyle : ModWaterStyle {
 
     public override int GetDropletGore() => ModContent.Find<ModGore>(RoA.ModName + "/DruidBiomeWaterDroplet").Type;
 
-    public override Asset<Texture2D> GetRainTexture() => ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "DruidBiomeRain");
+    public override Asset<Texture2D> GetRainTexture() => ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "DruidBiomeRain");
 
     public override byte GetRainVariant() => (byte)Main.rand.Next(3);
 
