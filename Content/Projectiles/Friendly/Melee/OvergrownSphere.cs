@@ -111,7 +111,7 @@ sealed class OvergrownSphere : ModProjectile {
         double rad = deg * (Math.PI / 180);
         double dist = 70;
         Projectile.position.X = Utils.Floor(player.MountedCenter).X - (int)(Math.Cos(rad) * dist) - player.width / 2;
-        Projectile.position.Y = Utils.Floor(player.MountedCenter).Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + 4 + Projectile.GetOwnerAsPlayer().gfxOffY;
+        Projectile.position.Y = Utils.Floor(player.MountedCenter).Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + player.height / 4f + Projectile.GetOwnerAsPlayer().gfxOffY;
         Projectile.ai[1] += 2f;
         Projectile.rotation = Projectile.velocity.ToRotation();
 
