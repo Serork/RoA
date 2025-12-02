@@ -6,7 +6,7 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Common.CustomCollision;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Content.World.Generations;
+using RoA.Content.WorldGenerations;
 
 using System;
 using System.Collections.Generic;

@@ -5,7 +5,7 @@ using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.Utilities.Extensions;
 using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Content.World.Generations;
+using RoA.Content.WorldGenerations;
 
 using System;
 using System.Collections.Generic;
