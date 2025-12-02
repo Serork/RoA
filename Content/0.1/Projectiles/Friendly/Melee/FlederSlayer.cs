@@ -665,7 +665,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              Projectile.scale * 0.6f,
                              SpriteEffects.None,
                              0f);
-            Texture2D bloom = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "Bloom0");
+            Texture2D bloom = ResourceManager.Bloom;
             spriteBatch.Draw(bloom,
                              center + shiftFix + offset + Vector2.Normalize(Projectile.velocity) * 110f * Projectile.scale - Main.screenPosition,
                              null,

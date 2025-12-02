@@ -40,7 +40,7 @@ sealed class TreeDryad : ModTile, IRequestAssets, TileHooks.IPreDraw, TileHooks.
         Glow
     }
 
-    (byte, string)[] IRequestAssets.IndexedPathsToTexture => [((byte)TreeDryadRequstedTextureType.Ray, ResourceManager.Textures + "Ray"),
+    (byte, string)[] IRequestAssets.IndexedPathsToTexture => [((byte)TreeDryadRequstedTextureType.Ray, ResourceManager.VisualEffectTextures + "Ray"),
                                                              ((byte)TreeDryadRequstedTextureType.Glow, TileLoader.GetTile(ModContent.TileType<TreeDryad>()).Texture + "_Glow")];
 
     void TileHooks.IPreDraw.PreDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition) {

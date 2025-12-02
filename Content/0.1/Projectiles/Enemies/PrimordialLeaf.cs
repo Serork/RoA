@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
+using RoA.Core;
 
 using System;
 
@@ -22,7 +23,7 @@ sealed class PrimordialLeaf : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>("RoA/Resources/Textures/VisualEffects/DefaultSparkle");
+        Texture2D texture = ResourceManager.DefaultSparkle;
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
         SpriteEffects effects = (Projectile.spriteDirection == -1) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         for (int k = 0; k < Projectile.oldPos.Length - 1; k++) {

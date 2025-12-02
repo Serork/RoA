@@ -91,7 +91,7 @@ sealed class HunterProjectile1 : ModProjectile {
     public override bool PreDraw(ref Color lightColor) {
         Color color = Color.White;
         Texture2D sparkle = ModContent.Request<Texture2D>(ProjectileLoader.GetProjectile(ModContent.ProjectileType<FlederSlayer>()).Texture + "_Spark").Value;
-        Texture2D bloom = ModContent.Request<Texture2D>(ResourceManager.Textures + "Bloom0").Value;
+        Texture2D bloom = ResourceManager.Bloom;
 
         Vector2 drawPosition = Projectile.Center - Main.screenPosition;
         float scale = Projectile.ai[0] / 3f;

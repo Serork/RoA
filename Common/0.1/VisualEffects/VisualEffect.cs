@@ -40,7 +40,7 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
 
     public bool IsRestingInPool => ShouldBeRemovedFromRenderer;
 
-    protected virtual string TexturePath => ResourceManager.DustTextures + typeof(T).Name;
+    protected virtual string TexturePath => ResourceManager.AdvancedDustTextures + typeof(T).Name;
     public virtual Texture2D Texture => ModContent.Request<Texture2D>(TexturePath, ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
     protected void SetFramedTexture(int frames, int frameChoice = -1) {

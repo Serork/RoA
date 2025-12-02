@@ -273,7 +273,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
         }
         for (int index = 0; index < _nodes.Count - 1; index++) {
             float scaleOpacity = Utils.GetLerpValue(0.375f, 1f, Scale, true);
-            Texture2D text = ModContent.Request<Texture2D>(ResourceManager.Textures + "Bloom0").Value;
+            Texture2D text = ResourceManager.Bloom;
             Vector2 start = _nodes[index];
             ulong seed = (ulong)(index + Projectile.whoAmI);
             Color borderColor = new Color(49, 183, 184);
@@ -298,7 +298,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
         }
         for (int index = 0; index < _nodes.Count - 1; index++) {
             float scaleOpacity = Utils.GetLerpValue(0.375f, 1f, Scale, true);
-            Texture2D text = ModContent.Request<Texture2D>(ResourceManager.Textures + "Bloom0").Value;
+            Texture2D text = ResourceManager.Bloom;
             Vector2 start = _nodes[index];
             Color borderColor = new Color(49, 183, 184);
             while (start.Distance(_nodes[index + 1]) > 10f) {

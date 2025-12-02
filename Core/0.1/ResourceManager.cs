@@ -35,20 +35,20 @@ static class ResourceManager {
 
     public static Texture2D Empty => ModContent.Request<Texture2D>(EmptyTexture, AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Pixel => ModContent.Request<Texture2D>(PixelTexture, AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D DefaultSparkle => ModContent.Request<Texture2D>("RoA/Resources/Textures/VisualEffects/DefaultSparkle", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D BasicCircle => ModContent.Request<Texture2D>(Textures + "BasicCircle", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Circle => ModContent.Request<Texture2D>(Textures + "Circle", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Circle2 => ModContent.Request<Texture2D>(Textures + "Circle2", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Circle3 => ModContent.Request<Texture2D>(Textures + "Circle3", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Circle4 => ModContent.Request<Texture2D>(Textures + "Circle4", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Circle5 => ModContent.Request<Texture2D>(Textures + "Circle5", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Blood => ModContent.Request<Texture2D>(Textures + "Blood", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D DefaultSparkle => ModContent.Request<Texture2D>(AdvancedDustTextures + "DefaultSparkle", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D BasicCircle => ModContent.Request<Texture2D>(VisualEffectTextures + "BasicCircle", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Circle => ModContent.Request<Texture2D>(VisualEffectTextures + "Circle", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Circle2 => ModContent.Request<Texture2D>(VisualEffectTextures + "Circle2", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Circle3 => ModContent.Request<Texture2D>(VisualEffectTextures + "Circle3", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Circle4 => ModContent.Request<Texture2D>(VisualEffectTextures + "Circle4", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Circle5 => ModContent.Request<Texture2D>(VisualEffectTextures + "Circle5", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Blood => ModContent.Request<Texture2D>(VisualEffectTextures + "Blood", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Flash => ModContent.Request<Texture2D>(VisualEffectTextures + "Flash", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Laser0 => ModContent.Request<Texture2D>(VisualEffectTextures + "Laser0", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Laser1 => ModContent.Request<Texture2D>(VisualEffectTextures + "Laser1", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Star => ModContent.Request<Texture2D>(VisualEffectTextures + "Star", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Ray2 => ModContent.Request<Texture2D>(Textures + "Ray2", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Bloom => ModContent.Request<Texture2D>(Textures + "Bloom0", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Ray2 => ModContent.Request<Texture2D>(VisualEffectTextures + "Ray2", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Bloom => ModContent.Request<Texture2D>(VisualEffectTextures + "Bloom", AssetRequestMode.ImmediateLoad).Value;
 
     public static string VisualEffectTextures => Textures + "VisualEffects/";
 
@@ -88,6 +88,7 @@ static class ResourceManager {
     public static string TarEnemyNPCTextures => EnemyNPCTextures + "Tar/";
 
     public static string DustTextures => Textures + "Dusts/";
+    public static string AdvancedDustTextures => Textures + "AdvancedDusts/";
     public static string BackwoodsDustTextures => DustTextures + "Backwoods";
 
     public static string BuffTextures => Textures + "Buffs/";
@@ -114,7 +115,7 @@ static class ResourceManager {
 
     public static Asset<Texture2D> NoiseRGB {
         get {
-            _noiseRGB ??= ModContent.Request<Texture2D>(Textures + "Noise3");
+            _noiseRGB ??= ModContent.Request<Texture2D>(VisualEffectTextures + "Noise3");
             return _noiseRGB;
         }
     }

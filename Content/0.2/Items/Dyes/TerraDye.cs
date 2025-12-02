@@ -20,7 +20,7 @@ sealed class TerraDye : ModItem {
         if (!Main.dedServ) {
             GameShaders.Armor.BindShader(Type, new TerraDyeArmorShaderData(ShaderLoader.TerraDye, "TerraDyePass"));
 
-            TerraShaderMap = ModContent.Request<Texture2D>(ResourceManager.Textures + "TerraMap");
+            TerraShaderMap = ModContent.Request<Texture2D>(ResourceManager.VisualEffectTextures + "TerraMap");
         }
     }
 
