@@ -24,7 +24,7 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
     private static Asset<Texture2D> _flameTexture = null!;
 
     public override void SetStaticDefaults() {
-        if (Main.dedServ) {
+        if (!Main.dedServ) {
             _flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
         }
 
