@@ -1,1 +1,1 @@
-- Fixed rare cases of server crashing upon entering the Backwoods in multiplayer
+- Updated to the new tModLoader monthly build

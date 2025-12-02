@@ -111,12 +111,12 @@ sealed class BackwoodsWorldGen : ModSystem {
     }
 
     public override void Load() {
-        On_WorldGen.Convert_int_int_int_int += On_WorldGen_Convert_int_int_int_int;
+        On_WorldGen.Convert_int_int_int_int_bool_bool += On_WorldGen_Convert_int_int_int_int_bool_bool;
         On_WorldGen.PaintTheLivingTrees += On_WorldGen_PaintTheLivingTrees;
         On_WorldGen.NotTheBees += On_WorldGen_NotTheBees;
     }
 
-    private void On_WorldGen_Convert_int_int_int_int(On_WorldGen.orig_Convert_int_int_int_int orig, int i, int j, int conversionType, int size) {
+    private void On_WorldGen_Convert_int_int_int_int_bool_bool(On_WorldGen.orig_Convert_int_int_int_int_bool_bool orig, int i, int j, int conversionType, int size, bool tiles, bool walls) {
         if (WorldGen.gen) {
             for (int k = i - size; k <= i + size; k++) {
                 for (int l = j - size; l <= j + size; l++) {
@@ -139,7 +139,7 @@ sealed class BackwoodsWorldGen : ModSystem {
             }
         }
 
-        orig(i, j, conversionType, size);
+        orig(i, j, conversionType, size, tiles, walls);
     }
 
     private void On_WorldGen_NotTheBees(On_WorldGen.orig_NotTheBees orig) {

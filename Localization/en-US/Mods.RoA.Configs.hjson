@@ -1,18 +1,54 @@
 HighlightModes: {
 	Tooltip: ""
-	Normal.Label: Normal
-	Always.Label: Always
-	Off.Label: Off
+
+	Normal: {
+		Label: Normal
+		Tooltip: ""
+	}
+
+	Always: {
+		Label: Always
+		Tooltip: ""
+	}
+
+	Off: {
+		Label: Off
+		Tooltip: ""
+	}
 }
 
 WreathDrawingModes: {
 	Tooltip: ""
-	Normal.Label: Classic
-	Normal2.Label: Classic 2
-	Fancy.Label: Fancy
-	Bars.Label: Bars
-	Fancy2.Label: Fancy 2
-	Bars2.Label: Bars 2
+
+	Normal: {
+		Label: Classic
+		Tooltip: ""
+	}
+
+	Normal2: {
+		Label: Classic 2
+		Tooltip: ""
+	}
+
+	Fancy: {
+		Label: Fancy
+		Tooltip: ""
+	}
+
+	Bars: {
+		Label: Bars
+		Tooltip: ""
+	}
+
+	Fancy2: {
+		Label: Fancy 2
+		Tooltip: ""
+	}
+
+	Bars2: {
+		Label: Bars 2
+		Tooltip: ""
+	}
 }
 
 RoAClientConfig: {
@@ -118,21 +154,57 @@ RoAServerConfig: {
 
 WreathPositions: {
 	Tooltip: ""
-	Health.Label: Top Right
-	Player.Label: Above Player
+
+	Health: {
+		Label: Top Right
+		Tooltip: ""
+	}
+
+	Player: {
+		Label: Above Player
+		Tooltip: ""
+	}
 }
 
 DamageTooltipOptions: {
 	Tooltip: ""
-	Option1.Label: "1"
-	Option2.Label: "2"
-	Option3.Label: "3"
-	Option4.Label: "4"
-	Option5.Label: "5"
+
+	Option1: {
+		Label: "1"
+		Tooltip: ""
+	}
+
+	Option2: {
+		Label: "2"
+		Tooltip: ""
+	}
+
+	Option3: {
+		Label: "3"
+		Tooltip: ""
+	}
+
+	Option4: {
+		Label: "4"
+		Tooltip: ""
+	}
+
+	Option5: {
+		Label: "5"
+		Tooltip: ""
+	}
 }
 
 WreathSoundModes: {
 	Tooltip: ""
-	Normal.Label: Classic
-	Alt.Label: Fancy
+
+	Normal: {
+		Label: Classic
+		Tooltip: ""
+	}
+
+	Alt: {
+		Label: Fancy
+		Tooltip: ""
+	}
 }
