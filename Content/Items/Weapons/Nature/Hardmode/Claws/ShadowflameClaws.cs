@@ -75,11 +75,11 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
         }
 
         protected override void SafeOnHitPlayer(Player target, Player.HurtInfo info) {
-            target.AddBuff(153, Main.rand.Next(60, 180) * 2);
+            target.AddBuff(BuffID.ShadowFlame, Main.rand.Next(60, 181) * 2);
         }
 
         protected override void SafeOnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-            target.AddBuff(153, Main.rand.Next(60, 180) * 2);
+            target.AddBuff(BuffID.ShadowFlame, Main.rand.Next(60, 181) * 2);
 
             if (!target.CanActivateOnHitEffect()) {
                 return;

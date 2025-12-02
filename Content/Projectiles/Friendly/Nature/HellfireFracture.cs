@@ -222,15 +222,13 @@ sealed class HellfireFracture : NatureProjectile {
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
         base.OnHitPlayer(target, info);
 
-        float num2 = (float)Main.rand.Next(75, 150) * 0.0075f * (Projectile.ai[0] / 5f);
-        target.AddBuff(BuffID.OnFire, (int)(60f * num2));
+        target.AddBuff(BuffID.OnFire, Main.rand.Next(60, 181));
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         base.OnHitNPC(target, hit, damageDone);
 
-        float num2 = (float)Main.rand.Next(75, 150) * 0.0075f * (Projectile.ai[0] / 5f);
-        target.AddBuff(BuffID.OnFire, (int)(60f * num2));
+        target.AddBuff(BuffID.OnFire, Main.rand.Next(60, 181));
     }
 
     private void DrawSlash(float mult, Color lightColor, Vector2? posExtra = null, float scale = 1f, float step = 5f, bool spikes = true, float opacity = 1f) {

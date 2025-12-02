@@ -106,7 +106,7 @@ sealed class Fleder : ModNPC {
         ]);
     }
 
-    public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) => target.AddBuff(ModContent.BuffType<BeastPoison>(), 85);
+    public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) => target.AddBuff(ModContent.BuffType<BeastPoison>(), 90);
 
     public override bool? CanFallThroughPlatforms() => true;
 

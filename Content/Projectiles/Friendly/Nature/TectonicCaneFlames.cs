@@ -59,12 +59,10 @@ sealed class TectonicCaneFlames : NatureProjectile {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(BuffID.OnFire, (int)(60f * num2 * 2f), true);
+        target.AddBuff(BuffID.OnFire, Main.rand.Next(90, 181));
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(BuffID.OnFire, (int)(60f * num2 * 2f), true);
+        target.AddBuff(BuffID.OnFire, Main.rand.Next(90, 181));
     }
 }

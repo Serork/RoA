@@ -182,7 +182,7 @@ sealed class Fireblossom : NatureProjectile {
         int onFireForEnemiesType = ModContent.BuffType<OnFire>();
         if (Main.player[Projectile.owner].GetWreathHandler().IsFull1) {
             if (Projectile.ai[2] == 0f) {
-                float num2 = (float)Main.rand.Next(75, 150) * 0.025f;
+                float num2 = (float)Main.rand.Next(90, 180) * 0.025f;
                 int time = (int)(60f * num2 * 2f);
                 if (flag) {
                     targetPlayer.AddBuff(ModContent.BuffType<OnFire>(), time);
@@ -197,7 +197,7 @@ sealed class Fireblossom : NatureProjectile {
         }
         else {
             if (Projectile.ai[2] == 0f) {
-                float num2 = (float)Main.rand.Next(75, 150) * 0.025f;
+                float num2 = (float)Main.rand.Next(90, 180) * 0.025f;
                 int time = (int)(60f * num2 * 2f);
                 if (flag) {
                     targetPlayer.AddBuff(ModContent.BuffType<OnFire>(), time);
@@ -228,7 +228,7 @@ sealed class Fireblossom : NatureProjectile {
             if (!targetNPC.HasBuff(onFireForEnemiesType)) {
                 Projectile.localAI[2] = !CanExplode ? Projectile.ai[2] * 0.015f : 2f;
             }
-            targetNPC.AddBuff(ModContent.BuffType<Buffs.Fireblossom>(), 150);
+            targetNPC.AddBuff(ModContent.BuffType<Buffs.Fireblossom>(), 180);
             Vector2 center = targetNPC.Center + _position + new Vector2(0f, targetNPC.gfxOffY);
             while (!targetNPC.getRect().Contains(center.ToPoint())) {
                 center += (targetNPC.Center - center).SafeNormalize(Vector2.Zero);

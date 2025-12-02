@@ -216,13 +216,11 @@ sealed class Snatcher : NatureProjectile {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(20, (int)(60f * num2 * 2f));
+        target.AddBuff(20, Main.rand.Next(90, 181));
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(20, (int)(60f * num2 * 2f));
+        target.AddBuff(20, Main.rand.Next(90, 181));
     }
 
     private void ResetAttackState() {

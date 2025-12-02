@@ -53,8 +53,10 @@ sealed class Hellbat : ModProjectile {
     }
 
     public override void AI() {
-        if (Collision.WetCollision(Projectile.position, Projectile.width, Projectile.height)) {
-            Projectile.Kill();
+        if (Projectile.wet && !Projectile.lavaWet) {
+            if (Collision.WetCollision(Projectile.position, Projectile.width, Projectile.height)) {
+                Projectile.Kill();
+            }
         }
 
         if (Projectile.alpha < 65 && Main.rand.NextBool(6)) {
@@ -188,7 +190,7 @@ sealed class Hellbat : ModProjectile {
             target.DelBuff(buffIndex);
         }
         if (!Projectile.wet && !target.wet) {
-            target.AddBuff(BuffID.OnFire, Main.rand.Next(30, 90), false);
+            target.AddBuff(BuffID.OnFire3, Main.rand.Next(30, 91), false);
         }
     }
 
@@ -200,7 +202,7 @@ sealed class Hellbat : ModProjectile {
             target.DelBuff(buffIndex);
         }
         if (!Projectile.wet && !target.wet) {
-            target.AddBuff(BuffID.OnFire, Main.rand.Next(30, 90), false);
+            target.AddBuff(BuffID.OnFire3, Main.rand.Next(30, 91), false);
         }
     }
 

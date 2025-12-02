@@ -304,11 +304,11 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
     public override bool ShouldUpdatePosition() => false;
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        target.AddBuff(153, Main.rand.Next(60, 180));
+        target.AddBuff(153, Main.rand.Next(60, 181));
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        target.AddBuff(153, Main.rand.Next(60, 180));
+        target.AddBuff(153, Main.rand.Next(60, 181));
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {

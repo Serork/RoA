@@ -41,11 +41,11 @@ public class MercuriumHammer : ModItem {
     }
 
     public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone) {
-        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 80);
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 90);
     }
 
     public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo) {
-        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 80);
+        target.AddBuff(ModContent.BuffType<Buffs.ToxicFumes>(), 90);
     }
 
     public override void MeleeEffects(Player player, Rectangle hitbox) {

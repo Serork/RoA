@@ -57,8 +57,7 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
             return;
         }
 
-        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(BuffID.OnFire, (int)(60f * num2 * 2f));
+        target.AddBuff(BuffID.OnFire, 180);
     }
 
     private void UpdateOldInfo() {
@@ -111,8 +110,9 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
         if (!Charged) {
             return;
         }
-        float num2 = (float)Main.rand.Next(75, 150) * 0.01f;
-        target.AddBuff(BuffID.OnFire, (int)(60f * num2 * 2f));
+
+        target.AddBuff(BuffID.OnFire, 180);
+
         if (!target.CanActivateOnHitEffect()) {
             return;
         }

@@ -171,13 +171,11 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         }
     }
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        float num2 = (float)Main.rand.Next(75, 150) * 0.005f;
-        target.AddBuff(ModContent.BuffType<Burning>(), (int)(60f * num2 * 2f));
+        target.AddBuff(ModContent.BuffType<Burning>(), Main.rand.Next(60, 150));
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        float num2 = (float)Main.rand.Next(75, 150) * 0.005f;
-        target.AddBuff(ModContent.BuffType<Burning>(), (int)(60f * num2 * 2f));
+        target.AddBuff(ModContent.BuffType<Burning>(), Main.rand.Next(60, 150));
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {

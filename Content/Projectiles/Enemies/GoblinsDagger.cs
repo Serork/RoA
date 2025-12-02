@@ -49,7 +49,7 @@ sealed class GoblinsDagger : ModProjectile {
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        target.AddBuff(BuffID.Bleeding, 75);
+        target.AddBuff(BuffID.Bleeding, 90);
         if (info.Damage <= 0) {
             return;
         }
