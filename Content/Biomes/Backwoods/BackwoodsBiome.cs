@@ -33,8 +33,8 @@ sealed class LightColorFix : ILoadable {
         }
 
         _mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG");
-        _glowMapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG_Fog");
-        _mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG_Glow");
+        _fogMapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG_Fog");
+        _glowMapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsBiomeTextures + "DruidBiomeMapBG_Glow");
     }
 
     private void On_Main_DrawMapFullscreenBackground(On_Main.orig_DrawMapFullscreenBackground orig, Vector2 screenPosition, int screenWidth, int screenHeight) {
