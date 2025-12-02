@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.VisualEffects;
 
-abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffect<T>, new() {
+abstract class AdvancedDust<T> : IPooledParticle, ILoadable where T : AdvancedDust<T>, new() {
     public Vector2 Position;
     public Vector2 Velocity;
     public Color DrawColor;
@@ -112,14 +112,14 @@ abstract class VisualEffect<T> : IPooledParticle, ILoadable where T : VisualEffe
     }
 
     public void Load(Mod mod) {
-        VisualEffectSystem.ParticlePools<T>.Pool = new ParticlePool<T>(InitialPoolSize, CreateBaseInstance);
+        AdvancedDustSystem.ParticlePools<T>.Pool = new ParticlePool<T>(InitialPoolSize, CreateBaseInstance);
         OnLoad(mod);
     }
 
     public virtual void OnLoad(Mod mod) { }
 
     public void Unload() {
-        VisualEffectSystem.ParticlePools<T>.Pool = null;
+        AdvancedDustSystem.ParticlePools<T>.Pool = null;
         OnUnload();
     }
 

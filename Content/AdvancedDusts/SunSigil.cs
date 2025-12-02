@@ -10,9 +10,9 @@ using System;
 using Terraria;
 using Terraria.Graphics.Renderers;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class SunSigil : VisualEffect<SunSigil> {
+sealed class SunSigil : AdvancedDust<SunSigil> {
     public float AI1;
 
     public override Texture2D Texture => ResourceManager.DefaultSparkle;

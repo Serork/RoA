@@ -6,7 +6,7 @@ using RoA.Common.Projectiles;
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Nature;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -51,7 +51,7 @@ sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
             int count = 10;
             for (int i = 0; i < count; i++) {
                 float progress = (float)i / count;
-                VisualEffectSystem.New<TectonicDebris>(VisualEffectLayer.BEHINDPROJS)?.
+                AdvancedDustSystem.New<TectonicDebris>(AdvancedDustLayer.BEHINDPROJS)?.
                     Setup(
                     corePosition - Vector2.One * 5f + Main.rand.RandomPointInArea(10f, 10f),
                     Vector2.One.RotatedByRandom(MathHelper.TwoPi * progress).SafeNormalize(Vector2.One) * Main.rand.NextFloat(2f, 5f),

@@ -3,9 +3,8 @@
 using RoA.Common.Players;
 using RoA.Common.VisualEffects;
 using RoA.Content.Achievements;
+using RoA.Content.AdvancedDusts;
 using RoA.Content.Biomes.Backwoods;
-using RoA.Content.Tiles.Platforms;
-using RoA.Content.VisualEffects;
 using RoA.Core.Utility;
 
 using System;
@@ -340,7 +339,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             Vector2 vector4 = Vector2.UnitX.RotatedBy(num9) * num7;
             if (Main.netMode != NetmodeID.Server) {
                 for (int i2 = 0; i2 < 3; i2++) {
-                    VisualEffectSystem.New<Fog2>(VisualEffectLayer.ABOVEPLAYERS)?.
+                    AdvancedDustSystem.New<Fog2>(AdvancedDustLayer.ABOVEPLAYERS)?.
                         Setup(vector2 + vector3 - vector + random.RandomPointInArea(6f), vector4 * Main.WindForVisuals, scale: num8 * 0.9f);
                 }
             }
@@ -412,7 +411,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             float scale = 0.8f + Main.rand.NextFloat() * 0.2f;
 
             if (Main.netMode != NetmodeID.Server) {
-                VisualEffectSystem.New<Content.VisualEffects.Fog>(VisualEffectLayer.ABOVEPLAYERS)?.
+                AdvancedDustSystem.New<Content.AdvancedDusts.Fog>(AdvancedDustLayer.ABOVEPLAYERS)?.
                     Setup(position + Main.rand.RandomPointInArea(5f, 5f), new Vector2(num2 * Main.WindForVisuals, 0f), scale: scale);
             }
         }

@@ -14,9 +14,9 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class GalipotDrop : VisualEffect<GalipotDrop> {
+sealed class GalipotDrop : AdvancedDust<GalipotDrop> {
     private static Asset<Texture2D> _lightBallTexture = null!;
 
     public Projectile Projectile;

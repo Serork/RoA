@@ -192,7 +192,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
         Vector2 position = last;
         velocity = last.DirectionTo(Projectile.Center).RotatedByRandom(MathHelper.PiOver2) * Main.rand.NextFloat(0.25f, 1.25f);
-        VisualEffectSystem.New<VisualEffects.SunSigil>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+        AdvancedDustSystem.New<AdvancedDusts.SunSigil>(AdvancedDustLayer.ABOVEPLAYERS)?.Setup(position, velocity,
             scale: Opacity * Main.rand.NextFloat(1f, 1.5f) * (Projectile.scale * 1.25f),
             color: SelectedColor);
     }

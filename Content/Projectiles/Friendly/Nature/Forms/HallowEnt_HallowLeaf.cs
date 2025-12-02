@@ -7,7 +7,7 @@ using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.VisualEffects;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -120,7 +120,7 @@ sealed class HallowLeaf : FormProjectile, IRequestAssets {
         for (int i = 0; i < count; i++) {
             Vector2 position = Projectile.Center;
             Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
-            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
+            Leaf? leafParticle = AdvancedDustSystem.New<Leaf>(AdvancedDustLayer.ABOVEPLAYERS)?.Setup(position, velocity);
             if (leafParticle != null) {
                 leafParticle.CustomData = owner;
                 leafParticle.AI0 = -2f;

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.VisualEffects;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 
 using Terraria;
 using Terraria.Audio;
@@ -81,15 +81,15 @@ sealed class MercuriumBulletProjectile : ModProjectile {
         Color color = new Color(242, 255, 214) * 0.75f;
         position = Projectile.Center;
         velocity = Vector2.Zero;
-        int layer = VisualEffectLayer.ABOVENPCS;
+        int layer = AdvancedDustLayer.ABOVENPCS;
         float scale = Main.rand.NextFloat(0.7f, 1.3f);
-        VisualEffectSystem.New<MercuriumBulletParticle>(layer).
+        AdvancedDustSystem.New<MercuriumBulletParticle>(layer).
             Setup(position,
                   velocity,
                   color,
                   scale);
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.MercuriumBulletParticle, Main.player[Projectile.owner], layer, position, velocity, color,
+            MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(AdvancedDustSpawnPacket.VisualEffectPacketType.MercuriumBulletParticle, Main.player[Projectile.owner], layer, position, velocity, color,
                 scale, 0f));
         }
     }

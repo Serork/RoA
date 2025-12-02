@@ -11,9 +11,9 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.Graphics.Renderers;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class HornetHit : VisualEffect<HornetHit> {
+sealed class HornetHit : AdvancedDust<HornetHit> {
     public override Texture2D Texture => ResourceManager.DefaultSparkle;
 
     protected override void SetDefaults() {

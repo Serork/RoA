@@ -9,9 +9,9 @@ using System;
 using Terraria;
 using Terraria.Graphics.Renderers;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class BloodShedDust : VisualEffect<BloodShedDust> {
+sealed class BloodShedDust : AdvancedDust<BloodShedDust> {
     private float _opacity;
 
     protected override void SetDefaults() {

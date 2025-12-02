@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.VisualEffects;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 
 using RoA.Core.Utility;
 
@@ -12,7 +12,7 @@ using Terraria.ID;
 
 namespace RoA.Common.Networking.Packets;
 
-sealed class VisualEffectSpawnPacket : NetPacket {
+sealed class AdvancedDustSpawnPacket : NetPacket {
     public enum VisualEffectPacketType : byte {
         ClawsHit,
         BloodShedParticle,
@@ -20,7 +20,7 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         HardmodeClawsHit
     }
 
-    public VisualEffectSpawnPacket(VisualEffectPacketType packetType, Player player, int layer, Vector2 position, Vector2 velocity, Color color, float scale, float rotation, 
+    public AdvancedDustSpawnPacket(VisualEffectPacketType packetType, Player player, int layer, Vector2 position, Vector2 velocity, Color color, float scale, float rotation, 
         bool dontEmitLight = false, bool shouldFullBright = false, float brightnessModifier = 0f) {
         Writer.TryWriteSenderPlayer(player);
         Writer.Write((byte)packetType);
@@ -57,8 +57,8 @@ sealed class VisualEffectSpawnPacket : NetPacket {
             brightnessModifier = reader.ReadSingle();
         }
 
-        void createVisualEffect<T>() where T : VisualEffect<T>, new() {
-            var particle = VisualEffectSystem.New<T>(layer, onServer: true)?.
+        void createVisualEffect<T>() where T : AdvancedDust<T>, new() {
+            var particle = AdvancedDustSystem.New<T>(layer, onServer: true)?.
                         Setup(position,
                               velocity,
                               color,
@@ -88,7 +88,7 @@ sealed class VisualEffectSpawnPacket : NetPacket {
         }
 
         if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(packetType, player, layer, position, velocity, color, scale, rotation, dontEmitLight, shouldFullBright, brightnessModifier), ignoreClient: sender);
+            MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(packetType, player, layer, position, velocity, color, scale, rotation, dontEmitLight, shouldFullBright, brightnessModifier), ignoreClient: sender);
         }
     }
 }

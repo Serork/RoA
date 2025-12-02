@@ -9,9 +9,9 @@ using System;
 using Terraria;
 using Terraria.Graphics.Renderers;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class Snowflake : VisualEffect<Snowflake> {
+sealed class Snowflake : AdvancedDust<Snowflake> {
     private byte _seed;
 
     public Vector2 CorePosition;

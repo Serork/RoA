@@ -9,9 +9,9 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class Fog : VisualEffect<Fog> {
+sealed class Fog : AdvancedDust<Fog> {
     private float _brightness;
 
     public float FadeIn { get; private set; }

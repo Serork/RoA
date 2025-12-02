@@ -10,7 +10,7 @@ using RoA.Common.Projectiles;
 using RoA.Common.VisualEffects;
 using RoA.Content.Buffs;
 using RoA.Content.Forms;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -103,7 +103,7 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
                 velocity = vector * (0f - num5);
             }
             velocity *= Main.rand.NextFloat(0.75f);
-            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(Projectile.Center + vector * num4, velocity);
+            Leaf? leafParticle = AdvancedDustSystem.New<Leaf>(AdvancedDustLayer.ABOVEPLAYERS)?.Setup(Projectile.Center + vector * num4, velocity);
             if (leafParticle != null) {
                 leafParticle.CustomData = owner;
                 leafParticle.Scale *= 0.85f;

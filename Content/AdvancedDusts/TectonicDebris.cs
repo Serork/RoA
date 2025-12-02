@@ -7,9 +7,9 @@ using System;
 using Terraria;
 using Terraria.Graphics.Renderers;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class TectonicDebris : VisualEffect<TectonicDebris> {
+sealed class TectonicDebris : AdvancedDust<TectonicDebris> {
     protected override void SetDefaults() {
         MaxTimeLeft = TimeLeft = 120;
 

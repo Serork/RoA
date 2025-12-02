@@ -10,9 +10,9 @@ using RoA.Core.Utility;
 using Terraria;
 using Terraria.Graphics.Renderers;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class Fog2 : VisualEffect<Fog2> {
+sealed class Fog2 : AdvancedDust<Fog2> {
     private float _brightness;
 
     public float FadeIn { get; private set; }

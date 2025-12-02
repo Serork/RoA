@@ -7,7 +7,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Common.VisualEffects;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -326,8 +326,8 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
         color.A = 50;
         position = target.Center + target.velocity + position + Main.rand.NextVector2Circular(target.width / 3f, target.height / 3f);
         velocity = angle.ToRotationVector2() * velocity * 0.5f;
-        int layer = VisualEffectLayer.ABOVENPCS;
-        var particle = VisualEffectSystem.New<ClawsSlashHit>(layer)?.Setup(position,
+        int layer = AdvancedDustLayer.ABOVENPCS;
+        var particle = AdvancedDustSystem.New<ClawsSlashHit>(layer)?.Setup(position,
                   velocity,
                   color);
         if (particle != null) {
@@ -335,7 +335,7 @@ sealed class UltimateHellfireClawsSlash : ClawsSlash {
             particle.BrightnessModifier = 1f;
         }
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f, false, true, 1f));
+            MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(AdvancedDustSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f, false, true, 1f));
         }
     }
 }

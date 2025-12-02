@@ -4,7 +4,7 @@ using RoA.Common.Druid;
 using RoA.Common.Players;
 using RoA.Common.VisualEffects;
 using RoA.Content.Projectiles.Friendly.Nature;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -79,7 +79,7 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
                 Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition + randomOffset;
                 float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / offset, 0.25f, 1f) * 2f * Math.Max(step, 0.25f) + 0.25f;
                 if (Main.rand.NextChance(progress)) {
-                    Snowflake? snowFlake = VisualEffectSystem.New<Snowflake>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(spawnPosition, (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor * 0.9f, scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f) * 0.75f);
+                    Snowflake? snowFlake = AdvancedDustSystem.New<Snowflake>(AdvancedDustLayer.ABOVEPLAYERS)?.Setup(spawnPosition, (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor * 0.9f, scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f) * 0.75f);
                     if (snowFlake is not null) {
                         snowFlake.CorePosition = corePosition;
                     }
@@ -108,7 +108,7 @@ sealed class GlacierCane : CaneBaseItem<GlacierCane.GlacierCaneBase> {
                 }
                 float progress = (float)i / count;
                 Vector2 velocity = corePosition.DirectionTo(mousePosition).RotatedByRandom(MathHelper.Pi * Main.rand.NextFloatDirection() * 0.75f).SafeNormalize(Vector2.One) * Main.rand.NextFloat(5f, 10f) * MathHelper.Lerp(0.5f, 0.75f, AttackProgress01);
-                VisualEffectSystem.New<Snowflake>(VisualEffectLayer.ABOVEPLAYERS)?.
+                AdvancedDustSystem.New<Snowflake>(AdvancedDustLayer.ABOVEPLAYERS)?.
                     Setup(
                     corePosition + Main.rand.RandomPointInArea(10f, 10f),
                     velocity,

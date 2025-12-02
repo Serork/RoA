@@ -7,18 +7,18 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.VisualEffects;
 
-sealed class VisualEffectSystem : ModSystem {
-    internal class ParticlePools<T> where T : VisualEffect<T>, new() {
+sealed class AdvancedDustSystem : ModSystem {
+    internal class ParticlePools<T> where T : AdvancedDust<T>, new() {
         public static ParticlePool<T> Pool;
     }
 
     private static ParticleRenderer[] _layers;
 
-    public static T Fetch<T>() where T : VisualEffect<T>, new() => ParticlePools<T>.Pool.RequestParticle();
+    public static T Fetch<T>() where T : AdvancedDust<T>, new() => ParticlePools<T>.Pool.RequestParticle();
 
     public static ParticleRenderer GetLayer(int i) => _layers[i];
 
-    public static T New<T>(int layer, Action<T>? preInitializer = null, bool onServer = false) where T : VisualEffect<T>, new() {
+    public static T New<T>(int layer, Action<T>? preInitializer = null, bool onServer = false) where T : AdvancedDust<T>, new() {
         if (Main.dedServ && !onServer) {
             return null;
         }
@@ -29,8 +29,8 @@ sealed class VisualEffectSystem : ModSystem {
     }
 
     public override void Load() {
-        _layers = new ParticleRenderer[VisualEffectLayer.COUNT];
-        for (int i = 0; i < VisualEffectLayer.COUNT; i++) {
+        _layers = new ParticleRenderer[AdvancedDustLayer.COUNT];
+        for (int i = 0; i < AdvancedDustLayer.COUNT; i++) {
             _layers[i] = new ParticleRenderer();
         }
     }

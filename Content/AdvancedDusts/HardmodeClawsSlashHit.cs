@@ -13,9 +13,9 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class HardmodeClawsSlashHit : VisualEffect<HardmodeClawsSlashHit> {
+sealed class HardmodeClawsSlashHit : AdvancedDust<HardmodeClawsSlashHit> {
     private float _baseScale;
 
     protected override void SetDefaults() {

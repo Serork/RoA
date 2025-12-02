@@ -11,7 +11,7 @@ using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -152,9 +152,9 @@ class ClawsSlash : NatureProjectile {
             velocity = angle.ToRotationVector2() * velocity * 0.5f;
             float scale = Projectile.scale;
             scale = MathF.Min(1.75f, scale);
-            int layer = VisualEffectLayer.ABOVEDUSTS;
+            int layer = AdvancedDustLayer.ABOVEDUSTS;
             if (selectedClaws.IsHardmodeClaws) {
-                HardmodeClawsSlashHit particle2 = VisualEffectSystem.New<HardmodeClawsSlashHit>(layer).
+                HardmodeClawsSlashHit particle2 = AdvancedDustSystem.New<HardmodeClawsSlashHit>(layer).
                     Setup(position,
                           velocity,
                           color,
@@ -163,11 +163,11 @@ class ClawsSlash : NatureProjectile {
                 particle2.ShouldFullBright = ShouldFullBright;
                 particle2.BrightnessModifier = selectedClaws.BrightnessModifier;
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.HardmodeClawsHit, Owner, layer, position, velocity, color, 1f, 0f, !selectedClaws.HasLighting));
+                    MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(AdvancedDustSpawnPacket.VisualEffectPacketType.HardmodeClawsHit, Owner, layer, position, velocity, color, 1f, 0f, !selectedClaws.HasLighting));
                 }
                 return;
             }
-            var particle = VisualEffectSystem.New<ClawsSlashHit>(layer).
+            var particle = AdvancedDustSystem.New<ClawsSlashHit>(layer).
                 Setup(position,
                       velocity,
                       color,
@@ -176,7 +176,7 @@ class ClawsSlash : NatureProjectile {
             particle.ShouldFullBright = ShouldFullBright;
             particle.BrightnessModifier = selectedClaws.BrightnessModifier;
             if (Main.netMode == NetmodeID.MultiplayerClient) {
-                MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f, !selectedClaws.HasLighting));
+                MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(AdvancedDustSpawnPacket.VisualEffectPacketType.ClawsHit, Owner, layer, position, velocity, color, 1f, 0f, !selectedClaws.HasLighting));
             }
         }
     }

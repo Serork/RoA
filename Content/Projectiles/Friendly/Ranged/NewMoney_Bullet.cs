@@ -6,7 +6,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Common.VisualEffects;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;

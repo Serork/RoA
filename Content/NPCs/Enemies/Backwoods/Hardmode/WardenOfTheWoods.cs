@@ -8,7 +8,7 @@ using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Projectiles.Enemies;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -348,7 +348,7 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
                 Vector2 position = _initialPosition;
                 position = position + Vector2.UnitY * 20f + Main.rand.NextVector2Circular(TARGETDISTANCE, TARGETDISTANCE) / 3f;
                 Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
-                WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+                WardenDust? wardenParticle = AdvancedDustSystem.New<WardenDust>(AdvancedDustLayer.ABOVEPLAYERS)?.Setup(position, velocity,
                     scale: Main.rand.NextFloat(0.6f, num67 * 0.6f) * GetFadeOutProgress());
                 if (wardenParticle != null) {
                     wardenParticle.CustomData = GetFadeOutProgress();
@@ -451,7 +451,7 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
             if (m < 20) position = _initialPosition + Vector2.UnitY.RotatedBy(Math.PI * m * 0.1f) * 100f;
             Vector2 velocity = -Vector2.UnitY * 5f * Main.rand.NextFloat(0.25f, 1f);
             if (m < 20) velocity = Vector2.Normalize(position - _initialPosition) * 5f * Main.rand.NextFloat(0.25f, 1f);
-            WardenDust? wardenParticle = VisualEffectSystem.New<WardenDust>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity,
+            WardenDust? wardenParticle = AdvancedDustSystem.New<WardenDust>(AdvancedDustLayer.ABOVEPLAYERS)?.Setup(position, velocity,
                 scale: Main.rand.NextFloat(0.5f, 2f));
             if (wardenParticle != null) {
                 wardenParticle.Alt = Alt;

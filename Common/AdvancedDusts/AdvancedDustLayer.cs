@@ -1,6 +1,6 @@
 ﻿namespace RoA.Common.VisualEffects;
 
-static class VisualEffectLayer {
+static class AdvancedDustLayer {
     public const int BEHINDNPCS = 0;
     public const int ABOVENPCS = 1;
     public const int BEHINDPROJS = 2;

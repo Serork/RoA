@@ -8,7 +8,7 @@ using RoA.Common.Players;
 using RoA.Common.VisualEffects;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -180,11 +180,11 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 Vector2 velocity = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(0.5f, 2f) - new Vector2(0f, 0.5f);
                 float rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                 Color color = new(82, 15, 15, 255);
-                VisualEffectSystem.New<BloodShedDust>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity,
+                AdvancedDustSystem.New<BloodShedDust>(AdvancedDustLayer.BEHINDPLAYERS)?.Setup(position, velocity,
                     color, rotation: rotation);
 
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new VisualEffectSpawnPacket(VisualEffectSpawnPacket.VisualEffectPacketType.BloodShedParticle, player, VisualEffectLayer.BEHINDPLAYERS, position, velocity, color, 1f, rotation));
+                    MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(AdvancedDustSpawnPacket.VisualEffectPacketType.BloodShedParticle, player, AdvancedDustLayer.BEHINDPLAYERS, position, velocity, color, 1f, rotation));
                 }
             }
 

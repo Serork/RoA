@@ -4,11 +4,10 @@ using ReLogic.Utilities;
 
 using RoA.Common;
 using RoA.Common.VisualEffects;
-﻿using RoA.Common.World;
+using RoA.Common.World;
+using RoA.Content.AdvancedDusts;
 using RoA.Content.Biomes.Backwoods;
-using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Station;
-using RoA.Content.VisualEffects;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -538,7 +537,7 @@ sealed partial class DruidSoul : RoANPC {
                     center.Y += Main.rand.Next(-100, 100) * 0.05f;
                     Vector2 npcVelocity = NPC.velocity + _velocity + _velocity2 + _velocity3 + _velocity4;
                     Vector2 position = center;
-                    VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDTILESBEHINDNPCS)?.
+                    AdvancedDustSystem.New<SoulPart>(AdvancedDustLayer.BEHINDTILESBEHINDNPCS)?.
                             SetupPart(1,
                                     Vector2.Zero,
                                     position,
@@ -568,7 +567,7 @@ sealed partial class DruidSoul : RoANPC {
                 Vector2 center = NPC.position + new Vector2(6f + Main.rand.Next(NPC.width - 6), NPC.height / 2f + 10f);
                 center.X += Main.rand.Next(-100, 100) * 0.05f;
                 center.Y += Main.rand.Next(-100, 100) * 0.05f;
-                VisualEffectSystem.New<SoulPart>(VisualEffectLayer.BEHINDNPCS)?.
+                AdvancedDustSystem.New<SoulPart>(AdvancedDustLayer.BEHINDNPCS)?.
                         SetupPart(0,
                                 _velocity2 + _velocity3 + _velocity,
                                 center - Vector2.UnitY * (2f + -8f * Ease.CircIn(altarStrength)),

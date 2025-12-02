@@ -11,9 +11,9 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-class WardenDust : VisualEffect<WardenDust> {
+class WardenDust : AdvancedDust<WardenDust> {
     private static Asset<Texture2D>? _altTexture;
 
     public bool Alt;

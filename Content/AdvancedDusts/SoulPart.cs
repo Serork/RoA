@@ -14,9 +14,9 @@ using Terraria;
 using Terraria.Graphics.Renderers;
 using Terraria.ModLoader;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class SoulPart : VisualEffect<SoulPart> {
+sealed class SoulPart : AdvancedDust<SoulPart> {
     public int Type { get; private set; }
     public Vector2 MoveTo { get; private set; }
     public Vector2[] Positions { get; private set; }

@@ -9,7 +9,7 @@ using RoA.Common.Players;
 using RoA.Common.VisualEffects;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -225,7 +225,7 @@ sealed class HallowEnt : BaseForm {
             Vector2 position = player.Center + size * 5f * (i / (float)count) * Main.rand.Random2(0.5f);
             position.Y -= 15f;
             Vector2 velocity = Vector2.One * Main.rand.Random2(0.25f, 1f, 0.25f, 1f) * new Vector2(0.25f, 1f) * new Vector2(1f * Main.rand.NextFloatDirection(), 1f);
-            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
+            Leaf? leafParticle = AdvancedDustSystem.New<Leaf>(AdvancedDustLayer.ABOVEPLAYERS)?.Setup(position, velocity);
             if (leafParticle != null) {
                 leafParticle.CustomData = player;
                 leafParticle.OnDismount = false;
@@ -245,7 +245,7 @@ sealed class HallowEnt : BaseForm {
             Vector2 size = new Vector2(15f, 20f) * 0.75f;
             Vector2 position = player.Center + size * 5f * (i / (float)count) * Main.rand.Random2(0.5f);
             Vector2 velocity = Vector2.One * Main.rand.Random2(0.25f, 1f, 0.25f, 1f) * new Vector2(0.25f, 1f) * new Vector2(1f * Main.rand.NextFloatDirection(), 1f);
-            Leaf? leafParticle = VisualEffectSystem.New<Leaf>(VisualEffectLayer.ABOVEPLAYERS)?.Setup(position, velocity);
+            Leaf? leafParticle = AdvancedDustSystem.New<Leaf>(AdvancedDustLayer.ABOVEPLAYERS)?.Setup(position, velocity);
             if (leafParticle != null) {
                 leafParticle.CustomData = player;
                 leafParticle.OnDismount = true;

@@ -16,9 +16,9 @@ using Terraria.ModLoader;
 
 using static RoA.Common.Druid.Forms.BaseForm;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class Leaf : VisualEffect<Leaf> {
+sealed class Leaf : AdvancedDust<Leaf> {
     private static float BASECHANGEVALUE => 10f;
 
     private static Asset<Texture2D>? _glowTexture = null!;

@@ -7,9 +7,9 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.Graphics.Renderers;
 
-namespace RoA.Content.VisualEffects;
+namespace RoA.Content.AdvancedDusts;
 
-sealed class MercuriumBulletParticle : VisualEffect<MercuriumBulletParticle> {
+sealed class MercuriumBulletParticle : AdvancedDust<MercuriumBulletParticle> {
     private float _scale;
 
     protected override void SetDefaults() {

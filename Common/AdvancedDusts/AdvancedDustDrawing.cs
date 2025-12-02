@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.VisualEffects;
 
-sealed class VisualEffectDrawing : ILoadable {
+sealed class AdvancedDustDrawing : ILoadable {
     public void Load(Mod mod) {
         LoadHooks();
     }
@@ -25,7 +25,7 @@ sealed class VisualEffectDrawing : ILoadable {
 
     private static void Main_DrawProjectiles(On_Main.orig_DrawProjectiles orig, Main self) {
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
-        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDPROJS).Draw(Main.spriteBatch);
+        AdvancedDustSystem.GetLayer(AdvancedDustLayer.BEHINDPROJS).Draw(Main.spriteBatch);
         Main.spriteBatch.End();
 
         orig(self);
@@ -51,23 +51,23 @@ sealed class VisualEffectDrawing : ILoadable {
     }
 
     private static void DrawBehindTilesBehindNPCs() {
-        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Draw(Main.spriteBatch);
+        AdvancedDustSystem.GetLayer(AdvancedDustLayer.BEHINDTILESBEHINDNPCS).Draw(Main.spriteBatch);
     }
 
     private static void DrawBehindTilesAboveNPCs() {
     }
 
     private static void DrawBehindNPCs(ref ParticleRendererSettings particleSettings) {
-        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDNPCS).Draw(Main.spriteBatch);
+        AdvancedDustSystem.GetLayer(AdvancedDustLayer.BEHINDNPCS).Draw(Main.spriteBatch);
     }
 
     private static void DrawAboveNPCs(ref ParticleRendererSettings particleSettings) {
-        VisualEffectSystem.GetLayer(VisualEffectLayer.ABOVENPCS).Draw(Main.spriteBatch);
+        AdvancedDustSystem.GetLayer(AdvancedDustLayer.ABOVENPCS).Draw(Main.spriteBatch);
     }
 
     private void On_LegacyPlayerRenderer_DrawPlayers(On_LegacyPlayerRenderer.orig_DrawPlayers orig, LegacyPlayerRenderer self, Camera camera, System.Collections.Generic.IEnumerable<Player> players) {
         Main.spriteBatch.BeginWorld(shader: false);
-        VisualEffectSystem.GetLayer(VisualEffectLayer.BEHINDPLAYERS).Draw(Main.spriteBatch);
+        AdvancedDustSystem.GetLayer(AdvancedDustLayer.BEHINDPLAYERS).Draw(Main.spriteBatch);
         Main.spriteBatch.End();
 
         orig(self, camera, players);
@@ -75,13 +75,13 @@ sealed class VisualEffectDrawing : ILoadable {
 
     private static void Main_DrawDust(On_Main.orig_DrawDust orig, Main self) {
         Main.spriteBatch.BeginWorld(shader: false);
-        VisualEffectSystem.GetLayer(VisualEffectLayer.ABOVEPLAYERS).Draw(Main.spriteBatch);
+        AdvancedDustSystem.GetLayer(AdvancedDustLayer.ABOVEPLAYERS).Draw(Main.spriteBatch);
         Main.spriteBatch.End();
 
         orig(self);
 
         Main.spriteBatch.BeginWorld(shader: false);
-        VisualEffectSystem.GetLayer(VisualEffectLayer.ABOVEDUSTS).Draw(Main.spriteBatch);
+        AdvancedDustSystem.GetLayer(AdvancedDustLayer.ABOVEDUSTS).Draw(Main.spriteBatch);
         Main.spriteBatch.End();
     }
 }

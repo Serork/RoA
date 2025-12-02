@@ -2,7 +2,7 @@
 
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core.Utility;
 
 using System;
@@ -106,7 +106,7 @@ sealed class GalipotStream : NatureProjectile {
         void drop() {
             if (Projectile.timeLeft < 500 - 1) {
                 if (Main.rand.NextBool(2)) {
-                    GalipotDrop drop = VisualEffectSystem.New<GalipotDrop>(VisualEffectLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2],
+                    GalipotDrop drop = AdvancedDustSystem.New<GalipotDrop>(AdvancedDustLayer.BEHINDTILESBEHINDNPCS).Setup(Projectile.Center - Vector2.UnitY * Projectile.ai[2],
                         Projectile.velocity);
                     drop.Projectile = Projectile;
                     drop.Scale = Main.rand.NextFloat(8f, 10f) * Projectile.scale;

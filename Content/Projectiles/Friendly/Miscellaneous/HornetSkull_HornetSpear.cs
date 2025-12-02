@@ -3,7 +3,7 @@
 using RoA.Common;
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
-using RoA.Content.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -77,8 +77,8 @@ sealed class HornetSpear : ModProjectile {
                 dust.customData = 1f;
             }
 
-            int layer = VisualEffectLayer.ABOVEPLAYERS;
-            VisualEffectSystem.New<HornetHit>(layer).
+            int layer = AdvancedDustLayer.ABOVEPLAYERS;
+            AdvancedDustSystem.New<HornetHit>(layer).
                 Setup(position,
                       Vector2.Zero,
                       Color.White,
