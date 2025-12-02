@@ -371,8 +371,6 @@ static partial class TileHelper {
         Main.NewText($"Time: {intTime}:{text2} {text}", 255, 240, 20);
     }
 
-    public static Texture2D GetTileGlowTexture(this ModTile modTile) => ModContent.Request<Texture2D>(ResourceManager.GlowMaskTileTextures + modTile.Name).Value;
-
     public static void LanternFluentDraw(Vector2 screenPosition, Point pos, SpriteBatch spriteBatch, TileDrawing tileDrawing) {
         int top = pos.Y - Main.tile[pos].TileFrameY / 18;
         HangingObjectFluentDraw(screenPosition, pos, spriteBatch, tileDrawing, new Point(pos.X, top), 0);

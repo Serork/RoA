@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
@@ -19,6 +21,8 @@ using Terraria.Utilities;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class LuminousFlower : ModTile {
+    public static Asset<Texture2D> GlowTexture { get; private set; } = null!;
+
     public const float MINLIGHTMULT = 0.5f;
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) => [new((ushort)ModContent.ItemType<Items.Miscellaneous.LuminousFlower>())];
@@ -63,6 +67,10 @@ sealed class LuminousFlower : ModTile {
     }
 
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            GlowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        }
+
         Main.tileFrameImportant[Type] = true;
         Main.tileCut[Type] = true;
         Main.tileLavaDeath[Type] = true;
@@ -151,7 +159,7 @@ sealed class LuminousFlower : ModTile {
                         zero = Vector2.Zero;
                     }
                     int height = tile.TileFrameY == 36 ? 18 : 16;
-                    Main.spriteBatch.Draw(modTile.GetTileGlowTexture(),
+                    Main.spriteBatch.Draw(GlowTexture.Value,
                                           new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                                           new Rectangle(tile.TileFrameX, tile.TileFrameY + Main.tileFrame[modTile.Type] * 18 * 3 - 2, 16, height),
                                           Color.White * progress * 0.9f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);

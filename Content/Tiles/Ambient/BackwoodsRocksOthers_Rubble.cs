@@ -109,8 +109,10 @@ class BackwoodsRocks0Rubble : BackwoodsRocks1Rubble {
 }
 
 sealed class BackwoodsRocks2Rubble : BackwoodsRocks1Rubble, TileHooks.IGetTileDrawData {
+    public override string Texture => TileLoader.GetTile(ModContent.TileType<BackwoodsRocks2>()).Texture;
+
     public void GetTileDrawData(TileDrawing self, int x, int y, Tile tileCache, ushort typeCache, ref short tileFrameX, ref short tileFrameY, ref int tileWidth, ref int tileHeight, ref int tileTop, ref int halfBrickHeight, ref int addFrX, ref int addFrY, ref SpriteEffects tileSpriteEffect, ref Texture2D glowTexture, ref Rectangle glowSourceRect, ref Color glowColor) {
-        glowTexture = this.GetTileGlowTexture();
+        glowTexture = BackwoodsRocks2.GlowTexture.Value;
         glowColor = TileDrawingExtra.BackwoodsMossGlowColor;
         glowSourceRect = new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight);
     }

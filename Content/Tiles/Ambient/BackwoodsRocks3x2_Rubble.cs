@@ -3,10 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
 using RoA.Content.Dusts;
-using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
-using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -19,8 +17,10 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class BackwoodsRocks3x2Rubble : ModTile, TileHooks.IGetTileDrawData {
+    public override string Texture => TileLoader.GetTile(ModContent.TileType<BackwoodsRocks3x2>()).Texture;
+
     public void GetTileDrawData(TileDrawing self, int x, int y, Tile tileCache, ushort typeCache, ref short tileFrameX, ref short tileFrameY, ref int tileWidth, ref int tileHeight, ref int tileTop, ref int halfBrickHeight, ref int addFrX, ref int addFrY, ref SpriteEffects tileSpriteEffect, ref Texture2D glowTexture, ref Rectangle glowSourceRect, ref Color glowColor) {
-        glowTexture = this.GetTileGlowTexture();
+        glowTexture = BackwoodsRocks3x2.GlowTexture.Value;
         glowColor = TileDrawingExtra.BackwoodsMossGlowColor;
         glowSourceRect = new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight);
     }

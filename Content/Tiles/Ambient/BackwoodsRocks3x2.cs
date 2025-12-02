@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Tiles;
 using RoA.Content.Dusts;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -17,13 +19,19 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class BackwoodsRocks3x2 : ModTile, TileHooks.IGetTileDrawData {
+    public static Asset<Texture2D> GlowTexture { get; private set; } = null!;
+
     public void GetTileDrawData(TileDrawing self, int x, int y, Tile tileCache, ushort typeCache, ref short tileFrameX, ref short tileFrameY, ref int tileWidth, ref int tileHeight, ref int tileTop, ref int halfBrickHeight, ref int addFrX, ref int addFrY, ref SpriteEffects tileSpriteEffect, ref Texture2D glowTexture, ref Rectangle glowSourceRect, ref Color glowColor) {
-        glowTexture = this.GetTileGlowTexture();
+        glowTexture = GlowTexture.Value;
         glowColor = TileDrawingExtra.BackwoodsMossGlowColor;
         glowSourceRect = new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight);
     }
 
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            GlowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        }
+
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;

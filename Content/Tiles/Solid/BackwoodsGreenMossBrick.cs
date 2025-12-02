@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Tiles;
 ﻿using RoA.Common.World;
 using RoA.Content.Dusts;
@@ -20,6 +22,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Solid;
 
 sealed class BackwoodsGreenMossBrick : ModTile, IPostSetupContent {
+    public static Asset<Texture2D> GlowTexture { get; private set; } = null!;
+
     void IPostSetupContent.PostSetupContent() {
         for (int i = 0; i < TileLoader.TileCount; i++) {
             TileObjectData objData = TileObjectData.GetTileData(i, 0);
@@ -39,6 +43,10 @@ sealed class BackwoodsGreenMossBrick : ModTile, IPostSetupContent {
     }
 
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            GlowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        }
+
         ushort stoneType = (ushort)ModContent.TileType<BackwoodsStone>();
         TileHelper.Solid(Type, blendAll: true);
         TileHelper.MergeWith(Type, stoneType);
@@ -109,7 +117,7 @@ sealed class BackwoodsGreenMossBrick : ModTile, IPostSetupContent {
             zero = Vector2.Zero;
         }
         int height = tile.TileFrameY == 36 ? 18 : 16;
-        Main.spriteBatch.Draw(this.GetTileGlowTexture(),
+        Main.spriteBatch.Draw(GlowTexture.Value,
                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero,
                               new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
                               TileDrawingExtra.BackwoodsMossGlowColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
