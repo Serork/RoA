@@ -2303,7 +2303,7 @@ DruidsEyes: {
 }
 
 RodOfTheLustrous: {
-	DisplayName: Rod Of The Lustrous
+	DisplayName: Rod of the Lustrous
 	Tooltip: ""
 }
 
@@ -2356,7 +2356,7 @@ HandOfGod: {
 }
 
 RodOfTheBifrost: {
-	DisplayName: Rod Of The Bifrost
+	DisplayName: Rod of the Bifrost
 	Tooltip:
 		'''
 		Calls opalescent figures to fall from the sky
