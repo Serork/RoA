@@ -250,7 +250,7 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
     }
 
     public static void RegisterArmorGlowMask(int slotId, EquipType equipType, ushort type, DrawSettings? drawSettings = null) {
-        string textureTypePath = ResourceManager.GlowMaskItemTextures + $"Item_{type}";
+        string textureTypePath = ResourceManager.ItemTextures + $"Item_{type}";
         switch (equipType) {
             case EquipType.Head:
                 textureTypePath += "_Head_Glow";
