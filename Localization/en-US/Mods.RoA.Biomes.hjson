@@ -14,3 +14,8 @@ TarpitBiome: {
 	DisplayName: Tarpit Biome
 	TownNPCDialogueName: the Tarpit Biome
 }
+
+TarBiome: {
+	DisplayName: Tar Biome
+	TownNPCDialogueName: the Tar Biome
+}
