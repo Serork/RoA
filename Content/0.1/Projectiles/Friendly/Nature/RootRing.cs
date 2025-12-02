@@ -116,7 +116,7 @@ sealed class RootRing : NatureProjectile {
         SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
         batch.End();
         batch.Begin(SpriteSortMode.Deferred, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 position = Projectile.Center - Main.screenPosition;
         Player player = Main.player[Projectile.owner];
         var stats = player.GetWreathHandler();

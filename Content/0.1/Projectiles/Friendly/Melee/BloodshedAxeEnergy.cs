@@ -127,7 +127,7 @@ sealed class BloodshedAxeEnergy : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 position = Projectile.Center - Main.screenPosition;
         Color color = Projectile.GetAlpha(lightColor);
         spriteBatch.Draw(texture,

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Data;
@@ -17,10 +19,22 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
 sealed class JudgementSlash : ModProjectile {
+    private static Asset<Texture2D> _slashTexture = null!,
+                                    _slashShadowTexture = null!;
+
     private Vector2 _startCenter;
     private Color _baseColor, _slashColor;
 
     public override string Texture => ResourceManager.EmptyTexture;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _slashTexture = ModContent.Request<Texture2D>(ResourceManager.MeleeProjectileTextures + "JudgementSlash");
+        _slashShadowTexture = ModContent.Request<Texture2D>(ResourceManager.MeleeProjectileTextures + "JudgementSlashShadow");
+    }
 
     public override void OnSpawn(IEntitySource source) {
         if (Projectile.owner == Main.myPlayer) {
@@ -115,7 +129,7 @@ sealed class JudgementSlash : ModProjectile {
                                new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
                                new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
         //Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
-        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.MeleeProjectileTextures + "JudgementSlashShadow").Value;
+        Main.graphics.GraphicsDevice.Textures[0] = _slashShadowTexture.Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
         color = _slashColor.MultiplyRGB(lightColor);
@@ -125,7 +139,7 @@ sealed class JudgementSlash : ModProjectile {
                 new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
                 new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
                 new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
-        Main.graphics.GraphicsDevice.Textures[0] = ModContent.Request<Texture2D>(ResourceManager.MeleeProjectileTextures + "JudgementSlash").Value;
+        Main.graphics.GraphicsDevice.Textures[0] = _slashTexture.Value;
         Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
         Main.spriteBatch.End();

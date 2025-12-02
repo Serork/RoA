@@ -13,8 +13,16 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
 sealed class OvergrownSpear : ModProjectile {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override void SetStaticDefaults() {
         ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetDefaults() {
@@ -72,6 +80,6 @@ sealed class OvergrownSpear : ModProjectile {
         float num2 = 0f;
         Vector2 vector2 = proj.Center + new Vector2(0f, proj.gfxOffY);
         Color color = Color.Lerp(new Color(127, 127, 127), Lighting.GetColor((int)proj.Center.X / 16, (int)proj.Center.Y / 16), Lighting.Brightness((int)proj.Center.X / 16, (int)proj.Center.Y / 16));
-        Main.EntitySpriteDraw(ModContent.Request<Texture2D>(Texture + "_Glow").Value, vector2 - Main.screenPosition, value, color, num, vector, proj.scale, dir);
+        Main.EntitySpriteDraw(_glowTexture.Value, vector2 - Main.screenPosition, value, color, num, vector, proj.scale, dir);
     }
 }

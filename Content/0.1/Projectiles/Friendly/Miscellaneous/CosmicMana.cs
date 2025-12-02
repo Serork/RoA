@@ -83,7 +83,7 @@ sealed class CosmicMana : ModProjectile {
         vertexStrip.DrawTrail();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         spriteBatch.EndBlendState();
-        Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D projectileTexture = Projectile.GetTexture();
         spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(),
             new Color(0.1f + Utils.Remap(Projectile.ai[1], 0, 300, 0, 0.9f), 0.1f + Utils.Remap(Projectile.ai[1], 0, 300, 0, 0.9f), 1f, 1f) * Projectile.Opacity, Projectile.rotation, projectileTexture.Size() / 2f,
             Projectile.scale, SpriteEffects.None, 0.0f);

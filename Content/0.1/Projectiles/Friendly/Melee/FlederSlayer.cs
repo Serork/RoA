@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
 using ReLogic.Utilities;
 
 using RoA.Common.Cache;
@@ -26,6 +27,10 @@ namespace RoA.Content.Projectiles.Friendly.Melee;
 // my first attempt at something special
 // its super unoptimized but it is what it is
 sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFixShoulderWhileActive {
+    private static Asset<Texture2D> _bladeTexture = null!,
+                                    _bladeGlowTexture = null!,
+                                    _glowTexture = null!;
+
     private TrailInfo[] _trails;
     private float _charge;
     private Vector2 _offset;
@@ -42,6 +47,14 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.AllowsContactDamageFromJellyfish[Type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _bladeTexture = ModContent.Request<Texture2D>(Texture + "_Blade");
+        _bladeGlowTexture = ModContent.Request<Texture2D>(Texture + "_Blade_Glow");
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetDefaults() {
@@ -576,11 +589,11 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        Texture2D glowTexture2D = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
-        Texture2D bladeTexture2D = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Blade");
-        Texture2D glowBladeTexture2D = (Texture2D)ModContent.Request<Texture2D>(Texture + "_BladeGlow");
-        Texture2D sparkTexture2D = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spark");
+        Texture2D texture2D = Projectile.GetTexture();
+        Texture2D glowTexture2D = _glowTexture.Value;
+        Texture2D bladeTexture2D = _bladeTexture.Value;
+        Texture2D glowBladeTexture2D = _bladeGlowTexture.Value;
+        Texture2D sparkTexture2D = ResourceManager.DefaultSparkle;
         Color color = Projectile.GetAlpha(lightColor) * Projectile.Opacity;
         Rectangle? rectangle = new Rectangle?(new Rectangle(100 * (Projectile.spriteDirection != 1 ? 1 : 0), 0, 100, 100));
         Rectangle? glowRectangle = new Rectangle?(new Rectangle(0, 0, 100, 100));
@@ -739,7 +752,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         public override bool PreDraw(ref Color lightColor) {
             SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
             Main.spriteBatch.BeginBlendState(BlendState.AlphaBlend);
-            Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+            Texture2D texture2D = Projectile.GetTexture();
             bool flag = Main.player[Projectile.owner].gravDir == -1f;
             var effects = Main.player[Projectile.owner].direction == -1 ? (SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically) :
                 (SpriteEffects.None | SpriteEffects.FlipVertically);

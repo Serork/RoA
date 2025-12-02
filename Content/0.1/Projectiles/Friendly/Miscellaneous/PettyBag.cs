@@ -6,6 +6,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Common.PopupTexts;
 using RoA.Common.Projectiles;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -351,7 +352,7 @@ sealed class PettyBag : InteractableProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D projectileTexture = Projectile.GetTexture();
         int frameHeight = projectileTexture.Height / Main.projFrames[Type];
         Rectangle frameRect = new(0, Projectile.frame * frameHeight, projectileTexture.Width, frameHeight);
         Vector2 drawOrigin = new(projectileTexture.Width / 2f, projectileTexture.Height / Main.projFrames[Projectile.type] * 0.5f);

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 using RoA.Content.Projectiles.Enemies;
 using RoA.Core;
@@ -14,6 +16,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class ElderwoodWallProjectile : NatureProjectile {
+    private static Asset<Texture2D> _tipTexture = null!,
+                                    _startTexture = null!;
+
     private const int MAX_TIMELEFT = 180;
     private const float EXTRA = 2f;
 
@@ -23,11 +28,18 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
     private bool _init;
 
     public override string Texture => ResourceManager.NatureProjectileTextures + "VileSpike";
-    public static string TipTexture => ResourceManager.NatureProjectileTextures + "VileSpikeTip";
-    public static string StartTexture => ResourceManager.NatureProjectileTextures + "VileSpikeStart";
 
     private int Length => (int)(Projectile.ai[0] * Projectile.scale);
     private bool Temporary => Projectile.ai[1] >= 1f;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _tipTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "VileSpikeTip");
+        _startTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "VileSpikeStart");
+    }
 
     protected override void SafeSetDefaults() {
         int width = 30; int height = 32;
@@ -137,25 +149,25 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+        Texture2D texture = Projectile.GetTexture();
         Vector2 start = Projectile.Center + Vector2.UnitY * texture.Height * EXTRA;
         int index = 0;
         int length = Length + (int)EXTRA;
-        Texture2D startTexture = ModContent.Request<Texture2D>(StartTexture).Value;
+        Texture2D startTexture = _startTexture.Value;
         SpriteEffects effects = _direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         while (index < length) {
             if (index == 0) {
                 texture = startTexture;
             }
             else {
-                texture = ModContent.Request<Texture2D>(Texture).Value;
+                texture = Projectile.GetTexture();
             }
             void next() {
                 start.Y -= texture.Height;
                 index++;
             }
             if (index == length - 1) {
-                texture = ModContent.Request<Texture2D>(TipTexture).Value;
+                texture = _tipTexture.Value;
             }
             float value = Projectile.ai[2] + texture.Height;
             float value2 = Projectile.ai[2] + texture.Height * 2;
@@ -170,7 +182,7 @@ sealed class ElderwoodWallProjectile : NatureProjectile {
                 Vector2 origin = new(texture.Width / 2f, texture.Height);
                 Main.EntitySpriteDraw(texture, pos - Main.screenPosition, rectangle, color, Projectile.rotation, origin, new Vector2(Projectile.scale, 1f), effects);
                 if (flag) {
-                    texture = ModContent.Request<Texture2D>(StartTexture).Value;
+                    texture = _startTexture.Value;
                     pos.Y += value4;
                     color = Lighting.GetColor((int)pos.X / 16, (int)pos.Y / 16);
                     origin = new(texture.Width / 2f, texture.Height);

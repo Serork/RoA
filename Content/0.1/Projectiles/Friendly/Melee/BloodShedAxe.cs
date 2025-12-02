@@ -356,7 +356,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         => false;
 
     public override bool PreDraw(ref Color lightColor) {
-        Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture2D = Projectile.GetTexture();
         float extraRotation = Projectile.ai[1] != 2f ? Projectile.ai[0] * -(float)Projectile.spriteDirection : 0f;
         Player player = Main.player[Projectile.owner];
         Rectangle? rectangle = new Rectangle?(new Rectangle(66 * (Projectile.spriteDirection != 1 ? 1 : 0), 0, 66, 66));

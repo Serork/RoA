@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Audio;
@@ -39,7 +40,7 @@ sealed class MoonSickle : NatureProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 drawOrigin = new(texture.Width * 0.5f, texture.Height * 0.5f);
         float rotation = Projectile.rotation;
         SpriteEffects effects = (SpriteEffects)(Projectile.ai[2] == 1).ToInt();

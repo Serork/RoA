@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Items.Equipables.Accessories;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.Audio;
@@ -38,7 +39,7 @@ sealed class BoneSkull : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
         spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, Projectile.GetAlpha(lightColor), Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
         return false;

@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -26,7 +28,7 @@ sealed class Hedgehog : ModProjectile {
     public override bool? CanDamage() => false;
 
     public override bool PreDraw(ref Color lightColor) {
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 origin = Projectile.Size / 2f;
         Main.spriteBatch.Draw(texture, Projectile.position - Main.screenPosition + origin, new Rectangle(0, Projectile.height * Projectile.frame, Projectile.width, Projectile.height), lightColor, Projectile.rotation, origin, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 

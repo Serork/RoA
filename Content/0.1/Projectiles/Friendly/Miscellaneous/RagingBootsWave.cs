@@ -67,7 +67,7 @@ sealed class RagingBootsWave : NatureProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D projectileTexture = Projectile.GetTexture();
         int frameHeight = projectileTexture.Height / Main.projFrames[Type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, projectileTexture.Width, frameHeight);
         Vector2 drawOrigin = new Vector2(projectileTexture.Width / 2f, projectileTexture.Height / Main.projFrames[Projectile.type] * 0.5f);

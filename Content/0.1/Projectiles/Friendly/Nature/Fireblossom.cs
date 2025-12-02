@@ -75,12 +75,20 @@ sealed class FireblossomExplosion : NatureProjectile {
 }
 
 sealed class Fireblossom : NatureProjectile {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     private Vector2 _position;
 
     public override void SetStaticDefaults() {
         Main.projFrames[Projectile.type] = 3;
 
         ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void Load() {
@@ -327,7 +335,7 @@ sealed class Fireblossom : NatureProjectile {
         if (Projectile.ai[2] == 0f) {
             return;
         }
-        Asset<Texture2D> glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        Asset<Texture2D> glowMaskTexture = _glowTexture;
         Texture2D texture = glowMaskTexture.Value;
         SpriteBatch sb = Main.spriteBatch;
         Vector2 offset = new((float)(Projectile.width * 0.5f), (float)(Projectile.height * 0.5f));

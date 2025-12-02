@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core.Utility;
+
 using System;
 
 using Terraria;
@@ -72,7 +74,7 @@ abstract class SkeletonBodyPart : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
         for (int i = 0; i < Projectile.oldPos.Length; i++) {
             Vector2 drawPos = Projectile.oldPos[i] - Main.screenPosition + Projectile.Size / 2f;
