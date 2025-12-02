@@ -35,7 +35,7 @@ sealed partial class DruidSoul : RoANPC {
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
 
-        if (Main.dedServ) {
+        if (!Main.dedServ) {
             _chainTexture = ModContent.Request<Texture2D>(Texture + "_Chain");
             _eyeTexture = ModContent.Request<Texture2D>(Texture + "_Eye");
         }
