@@ -119,7 +119,7 @@ sealed class WaterStream : ModProjectile {
     public override bool? CanDamage() => Projectile.ai[1] != -5f;
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        int buff = BuffID.OnFire3;
+        int buff = BuffID.OnFire;
         //int buff = BuffID.Wet;
         if (target.FindBuff(buff, out int buffIndex)) {
             target.DelBuff(buffIndex);
@@ -130,7 +130,7 @@ sealed class WaterStream : ModProjectile {
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-        int buff = BuffID.OnFire3;
+        int buff = BuffID.OnFire;
         //int buff = BuffID.Wet;
         if (target.FindBuff(buff, out int buffIndex)) {
             target.DelBuff(buffIndex);
