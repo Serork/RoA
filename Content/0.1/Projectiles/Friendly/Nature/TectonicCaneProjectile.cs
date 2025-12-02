@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.Projectiles;
 using RoA.Content.Buffs;
@@ -22,6 +24,16 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class TectonicCaneProjectile : NatureProjectile {
+    private static Asset<Texture2D> _glowTexture = null!;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+    }
+
     protected override void SafeSetDefaults() {
         Projectile.Size = Vector2.One;
         Projectile.aiStyle = -1;
@@ -205,7 +217,7 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         //Main.EntitySpriteDraw(texture, position + Vector2.One, null, drawColor, Projectile._rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
         texture = TextureAssets.Projectile[Type].Value;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, drawColor * Projectile.Opacity, Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
-        texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        texture = _glowTexture.Value;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.Lerp(drawColor, Color.White, 0.5f) * (drawColor.A / 255f) * Ease.QuartIn(Projectile.Opacity), Projectile.rotation, sourceRectangle.BottomCenter(), Projectile.scale, spriteEffects);
 
         return false;

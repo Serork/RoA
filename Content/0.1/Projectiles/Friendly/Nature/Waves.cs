@@ -151,7 +151,7 @@ abstract class Wave : NatureProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
         Vector2 position = Projectile.Center - Main.screenPosition + Projectile.velocity * 50f * Projectile.scale;
         Color color = Projectile.GetAlpha(lightColor) * Projectile.Opacity;

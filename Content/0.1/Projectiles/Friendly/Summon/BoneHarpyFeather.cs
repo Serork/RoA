@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core.Utility;
+
 using System;
 
 using Terraria;
@@ -57,7 +59,7 @@ sealed class BoneHarpyFeather : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture2D = Projectile.GetTexture();
         Vector2 origin = new(texture2D.Width * 0.5f, Projectile.height * 0.5f);
         for (int i = 0; i < Projectile.oldPos.Length; i++) {
             Vector2 position = Projectile.oldPos[i] - Main.screenPosition + origin + new Vector2(0f, Projectile.gfxOffY);

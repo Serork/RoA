@@ -112,7 +112,7 @@ partial class Tapper : ModTile, TileHooks.IPostDraw {
 
             TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
             if (tapperTE != null && tapperTE.IsReadyToCollectGalipot) {
-                texture = ModContent.Request<Texture2D>((TileLoader.GetTile(type) as Tapper).GalipotTexture).Value;
+                texture = GalipotTexture.Value;
 
                 int frameXOffset = uniqueAnimationFrame * num12;
                 rect.Y = num12 * uniqueAnimationFrame;
@@ -122,7 +122,7 @@ partial class Tapper : ModTile, TileHooks.IPostDraw {
             if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
                 int num = (color.R + color.G + color.B) / 3;
                 if (num > 10) {
-                    Texture2D highlightTexture = ModContent.Request<Texture2D>(Texture + "_Highlight_Galipot").Value;
+                    Texture2D highlightTexture = HighlightGalipotTexture.Value;
                     Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
                     rect = new(0, num12 * uniqueAnimationFrame, coordinateWidth, num12);
                     Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
@@ -163,7 +163,7 @@ partial class Tapper : ModTile, TileHooks.IPostDraw {
                             Vector2 zero = Vector2.Zero;
                             Vector2 position = unscaledPosition - zero;
                             Color color = Lighting.GetColor(i, j);
-                            var texture = PaintsRenderer.TryGetPaintedTexture(flag ? i - 1 : (i + 1), j, (TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
+                            var texture = PaintsRenderer.TryGetPaintedTexture(flag ? i - 1 : (i + 1), j, (TileLoader.GetTile(tapperTileType) as Tapper)!.BracingTexturePath);
                             Main.spriteBatch.Draw(texture,
                                 new Vector2((float)(i * 16 - (int)position.X),
                                             (float)(j * 16 - (int)position.Y) - 6),
@@ -198,7 +198,7 @@ partial class Tapper : ModTile, TileHooks.IPostDraw {
                             Vector2 zero = Vector2.Zero;
                             Vector2 position = unscaledPosition - zero;
                             Color color = Lighting.GetColor(i, j);
-                            var texture = PaintsRenderer.TryGetPaintedTexture(flag ? i - 1 : (i + 1), j, (TileLoader.GetTile(tapperTileType) as Tapper).BracingTexture);
+                            var texture = PaintsRenderer.TryGetPaintedTexture(flag ? i - 1 : (i + 1), j, (TileLoader.GetTile(tapperTileType) as Tapper)!.BracingTexturePath);
                             Main.spriteBatch.Draw(texture,
                                 new Vector2((float)(i * 16 - (int)position.X),
                                             (float)(j * 16 - (int)position.Y) - 6),

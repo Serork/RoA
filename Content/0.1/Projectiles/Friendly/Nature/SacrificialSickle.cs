@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Core.Utility;
 
 using System;
@@ -14,6 +16,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class SacrificialSickle : NatureProjectile {
+    private static Asset<Texture2D> _mainTexture = null!,
+                                    _mainTexture2 = null!,
+                                    _mainTexture3 = null!;
+
     private Vector2 _to;
     private float _rotation;
     private int _direction;
@@ -23,6 +29,14 @@ sealed class SacrificialSickle : NatureProjectile {
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Sacrificial Sickle");
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _mainTexture = ModContent.Request<Texture2D>(base.Texture);
+        _mainTexture2 = ModContent.Request<Texture2D>(base.Texture + "2");
+        _mainTexture3 = ModContent.Request<Texture2D>(Texture + "2");
     }
 
     protected override void SafeSetDefaults() {
@@ -48,7 +62,7 @@ sealed class SacrificialSickle : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         bool flag = player.direction != 1;
         Item _item = player.HeldItem;
-        Texture2D _texture = (Texture2D)ModContent.Request<Texture2D>(base.Texture);
+        Texture2D _texture = _mainTexture.Value;
         Vector2 _origin = new(_texture.Width * 0.5f * (1 - player.direction), (player.gravDir == -1f) ? 0 : _texture.Height);
         int x = -(int)_origin.X;
         ItemLoader.HoldoutOrigin(player, ref _origin);
@@ -73,7 +87,7 @@ sealed class SacrificialSickle : NatureProjectile {
         }
         pos += (player.itemRotation.ToRotationVector2() * 6f * player.direction).Floor();
         _spriteBatch.Draw(_texture, pos - Main.screenPosition + new Vector2(0f, 6f) * player.gravDir + _offset, _texture.Bounds, Color.White * 0.9f * (1f - Projectile.alpha / 255f), player.itemRotation + _rotOffset, _origin, _item.scale, effects, 0);
-        _texture = (Texture2D)ModContent.Request<Texture2D>(base.Texture + "2");
+        _texture = _mainTexture2.Value;
         _spriteBatch.Draw(_texture, pos - Main.screenPosition + new Vector2(0f, 6f) * player.gravDir + _offset, _texture.Bounds, lightColor * (1f - Projectile.alpha / 255f), player.itemRotation + _rotOffset, _origin, _item.scale, effects, 0);
 
         void draw(Texture2D texture, Color lightColor, float opacity = 1f, bool hand = false) {
@@ -96,10 +110,10 @@ sealed class SacrificialSickle : NatureProjectile {
             spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, baseColor * opacity, Projectile.rotation - MathHelper.PiOver2, drawOrigin, Projectile.scale, SpriteEffects.FlipHorizontally, 0f);
         }
         Texture2D texture;
-        texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "2");
+        texture = _mainTexture3.Value;
         float dist = player.Distance(Projectile.Center);
         draw(texture, lightColor);
-        texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        texture = Projectile.GetTexture();
         float value = MathHelper.Clamp(Utils.GetLerpValue(250f, 0f, dist, true) * 1.25f, 0f, 1f);
         draw(texture, lightColor);
         return false;

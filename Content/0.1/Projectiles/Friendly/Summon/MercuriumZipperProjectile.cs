@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Summon;
@@ -104,7 +106,7 @@ sealed class MercuriumZipper_MercuriumCenserToxicFumes : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         int frameHeight = texture.Height / Main.projFrames[Projectile.type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
@@ -355,7 +357,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
         }
         int index = 0;
         while (true) {
-            Texture2D texture = ModContent.Request<Texture2D>(zipperWhip.Texture + "_Segment").Value;
+            Texture2D texture = MercuriumZipperProjectile.SegmentTexture.Value;
             int width = 16;
             float dist = Vector2.Distance(startPosition, endPosition);
             if (dist <= height) {
@@ -401,7 +403,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
         Vector2 drawPosition = Vector2.Lerp(Projectile.position, basePosition, Progress);
         Color color2 = Lighting.GetColor(drawPosition.ToTileCoordinates());
         color2 *= opacity;
-        Main.EntitySpriteDraw(ModContent.Request<Texture2D>(zipperWhip.Texture + "_Slider").Value,
+        Main.EntitySpriteDraw(MercuriumZipperProjectile.SliderTexture.Value,
             drawPosition +
             offset2 -
             Main.screenPosition, frame2,
@@ -412,7 +414,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
         origin2 = frame2.Size() / 2f;
         scale2 = 1f;
         offset2 = new Vector2(0f, height + 2).RotatedBy(rotation2);
-        Main.EntitySpriteDraw(ModContent.Request<Texture2D>(zipperWhip.Texture + "_Puller").Value,
+        Main.EntitySpriteDraw(MercuriumZipperProjectile.PullerTexture.Value,
             drawPosition +
             -offset2 -
             Main.screenPosition, frame2,
@@ -423,6 +425,10 @@ sealed class MercuriumZipper_Effect : ModProjectile {
 }
 
 sealed class MercuriumZipperProjectile : ModProjectile {
+    public static Asset<Texture2D> SegmentTexture { get; private set; } = null!;
+    public static Asset<Texture2D> SliderTexture { get; private set; } = null!;
+    public static Asset<Texture2D> PullerTexture { get; private set; } = null!;
+
     private sealed class AttackCountStorage : ModPlayer {
         public byte MercuriumZipperAttackCount;
 
@@ -438,6 +444,14 @@ sealed class MercuriumZipperProjectile : ModProjectile {
     public override void SetStaticDefaults() {
         ProjectileID.Sets.IsAWhip[Type] = true;
         //ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        SegmentTexture = ModContent.Request<Texture2D>(Texture + "_Segment");
+        SliderTexture = ModContent.Request<Texture2D>(Texture + "_Slider");
+        PullerTexture = ModContent.Request<Texture2D>(Texture + "_Puller");
     }
 
     public override void SetDefaults() {

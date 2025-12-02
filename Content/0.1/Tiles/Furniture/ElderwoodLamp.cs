@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using System.Collections.Generic;
 
 using Terraria;
@@ -15,7 +17,13 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodLamp : ModTile {
+    private static Asset<Texture2D> _flameTexture = null!;
+
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            _flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
+        }
+
         Main.tileLighted[Type] = true;
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
@@ -97,7 +105,7 @@ sealed class ElderwoodLamp : ModTile {
         int offsetY = 0;
         int height = 16;
         TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref tile.TileFrameX, ref tile.TileFrameY);
-        var flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame").Value;
+        var flameTexture = _flameTexture.Value;
         ulong seed = Main.TileFrameSeed ^ (ulong)((long)j << 32 | (uint)i);
         for (int c = 0; c < 7; c++) {
             float shakeX = Utils.RandomInt(ref seed, -10, 11) * 0.15f;

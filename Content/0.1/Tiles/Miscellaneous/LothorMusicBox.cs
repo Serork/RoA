@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -11,6 +13,18 @@ using Terraria.ModLoader;
 namespace RoA.Content.Tiles.Miscellaneous;
 
 sealed class LothorMusicBox : MusicBox {
+    private static Asset<Texture2D> _glowTexture = null!,
+                                    _highlightTexture = null!;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        _highlightTexture = ModContent.Request<Texture2D>(Texture + "_Highlight");
+    }
+
     protected override int CursorItemType => ModContent.ItemType<Items.Special.Lothor.LothorMusicBox>();
 
     protected override int GoreOffsetX => 4;
@@ -52,7 +66,7 @@ sealed class LothorMusicBox : MusicBox {
                       new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
                       color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>(Texture + "_Glow").Value,
+        Main.spriteBatch.Draw(_glowTexture.Value,
                               drawPosition,
                               new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),
                               Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
@@ -60,7 +74,7 @@ sealed class LothorMusicBox : MusicBox {
         if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
             int num = (color.R + color.G + color.B) / 3;
             if (num > 10) {
-                Texture2D highlightTexture = ModContent.Request<Texture2D>(Texture + "_Highlight").Value;
+                Texture2D highlightTexture = _highlightTexture.Value;
                 Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
                 Rectangle rect = new(tile.TileFrameX, tile.TileFrameY, 16, height);
                 Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f,

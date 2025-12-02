@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
@@ -14,11 +16,19 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
 sealed class ChemicalFlask : ModProjectile {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Chemical Flask");
 
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetDefaults() {
@@ -44,7 +54,7 @@ sealed class ChemicalFlask : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
         for (int k = 0; k < Projectile.oldPos.Length; k++) {
             Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
@@ -62,7 +72,7 @@ sealed class ChemicalFlask : ModProjectile {
         color3.A = 150;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, color3 * 0.25f, Projectile.rotation, origin, Projectile.scale * 2f * Helper.Wave(0.95f, 1.05f, 5f, Projectile.whoAmI), spriteEffects);
         Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, origin, Projectile.scale, spriteEffects);
-        texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        texture = _glowTexture.Value;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.White, Projectile.rotation, origin, Projectile.scale, spriteEffects);
 
         return false;

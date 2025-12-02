@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.WorldEvents;
@@ -19,6 +21,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Ambient;
 
 sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.IPostDraw {
+    public static Asset<Texture2D> GlowTexture { get; private set; } = null!;
+
     int TileHooks.IRequireMinAxePower.MinAxe => PrimordialTree.MINAXEREQUIRED;
 
     public override void SetStaticDefaults() {
@@ -48,6 +52,12 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.IPos
 
         DustType = ModContent.DustType<WoodTrash>();
         AddMapEntry(new Microsoft.Xna.Framework.Color(91, 74, 67), CreateMapEntryName());
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        GlowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override bool CanExplode(int i, int j) {
@@ -85,7 +95,7 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.IPos
             int directionX = Utils.RandomInt(ref speed, 2) == 0 ? 1 : -1;
             int directionY = Utils.RandomInt(ref speed, 2) != 0 ? 1 : -1;
             float opacity = BackwoodsFogHandler.Opacity > 0f ? BackwoodsFogHandler.Opacity : 1f;
-            Main.spriteBatch.Draw(ModContent.Request<Texture2D>(TileLoader.GetTile(ModContent.TileType<FallenTree>()).Texture + "_Glow").Value,
+            Main.spriteBatch.Draw(GlowTexture.Value,
                                   new Vector2(i * 16 - (int)Main.screenPosition.X - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionX * posX,
                                   j * 16 - (int)Main.screenPosition.Y + 2 - Helper.Wave(-1.75f, 1.75f, 2f, (i * 16) + (j * 16) + (j << 32) | i) * directionY * posY),
                                   new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height),

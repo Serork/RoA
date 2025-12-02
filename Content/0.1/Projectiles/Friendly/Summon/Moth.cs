@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Items.Weapons.Summon;
+using RoA.Core.Utility;
 
 using System;
 using System.IO;
@@ -14,6 +17,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
 sealed class Moth : ModProjectile {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     private float mothRotation, mothCount;
     private int dashTimer;
     private int dashTrailTimer;
@@ -33,6 +38,12 @@ sealed class Moth : ModProjectile {
 
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SendExtraAI(BinaryWriter writer) {
@@ -294,7 +305,7 @@ sealed class Moth : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D projectileTexture = Projectile.GetTexture();
         int frameHeight = projectileTexture.Height / Main.projFrames[Projectile.type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, projectileTexture.Width, frameHeight);
         Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, frameHeight * 0.5f);
@@ -311,8 +322,8 @@ sealed class Moth : ModProjectile {
             dashTrailTimer++;
         else if (dashTrailTimer > 0)
             dashTrailTimer--;
-        Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        Texture2D glowTexture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+        Texture2D projectileTexture = Projectile.GetTexture();
+        Texture2D glowTexture = _glowTexture.Value;
         int frameHeight = glowTexture.Height / Main.projFrames[Projectile.type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, glowTexture.Width, frameHeight);
         Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, frameHeight * 0.5f);

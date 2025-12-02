@@ -301,7 +301,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                                  new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                                  new Rectangle(frameX % 36, frameY % 56, 16, height),
                                  highlightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                //Main.spriteBatch.DrawSelf(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, _rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+                //Main.spriteBatch.DrawSelf(sourceRectangle: rect, texture: _highlightTexture, position: drawPosition, color: highlightColor, _rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
             }
         }
 

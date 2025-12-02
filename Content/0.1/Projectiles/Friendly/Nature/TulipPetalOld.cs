@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -15,6 +17,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class TulipPetalOld : NatureProjectile {
+    private static Asset<Texture2D> _beeTexture = null!,
+                                    _largeBeeTexture = null!;
+
     private float _rotationTimer = MathHelper.Pi;
     private float _rotationSpeed = 2.5f;
     private bool _initialize = false;
@@ -32,6 +37,13 @@ sealed class TulipPetalOld : NatureProjectile {
 
         ProjectileID.Sets.TrailCacheLength[Type] = 3;
         ProjectileID.Sets.TrailingMode[Type] = 0;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _beeTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "Bee");
+        _largeBeeTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "LargeBee");
     }
 
     protected override void SafeSendExtraAI(BinaryWriter writer) {
@@ -157,11 +169,11 @@ sealed class TulipPetalOld : NatureProjectile {
         SpriteBatch spriteBatch = Main.spriteBatch;
         if (Projectile.ai[0] == 1 || Projectile.ai[0] == 3) {
             for (int k = 0; k < _beeCounter + 1; k++) {
-                Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "Bee");
+                Texture2D texture = _beeTexture.Value;
                 if (_largeBee[k]) {
-                    texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "LargeBee");
+                    texture = _largeBeeTexture.Value;
                 }
-                Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+                Texture2D projectileTexture = Projectile.GetTexture();
                 Rectangle frameRect = new Rectangle(0, texture.Height / 4 * beeFrame, texture.Width, texture.Height / 4);
                 Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);
                 Vector2 drawPos = Projectile.oldPos[0] - Main.screenPosition + drawOrigin + new Vector2(0, _beeDrawOffset[k]).RotatedBy(MathHelper.ToRadians(_beeDrawRotation * Projectile.direction + k * 120));
@@ -222,7 +234,7 @@ sealed class TulipPetalOld : NatureProjectile {
 
     public override void OnKill(int timeLeft) {
         Player player = Main.player[Projectile.owner];
-        Texture2D projectileTexture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D projectileTexture = Projectile.GetTexture();
         if (Projectile.ai[0] == 1 || Projectile.ai[0] == 3) {
             if (Projectile.owner == Main.myPlayer) {
                 Vector2 spawnOrigin = new Vector2(projectileTexture.Width * 0.5f, Projectile.height * 0.5f);

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Content.Items.Miscellaneous;
@@ -16,6 +18,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
 sealed class LittleFleder : ModProjectile {
+    private static Asset<Texture2D> _acornTexture = null!,
+                                    _glowTexture = null!;
+
     private const float ATTACKRATE = 35f;
 
     private bool _hasTarget;
@@ -38,6 +43,13 @@ sealed class LittleFleder : ModProjectile {
         ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true;
         ProjectileID.Sets.MinionTargettingFeature[Projectile.type] = true;
         ProjectileID.Sets.MinionSacrificable[Projectile.type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _acornTexture = ModContent.Request<Texture2D>(Texture + "_Acorn");
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetDefaults() {
@@ -72,27 +84,27 @@ sealed class LittleFleder : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         SpriteEffects spriteEffects = (SpriteEffects)(Projectile.spriteDirection != 1).ToInt();
         int height = texture.Height / Main.projFrames[Projectile.type];
         Rectangle sourceRectangle = new(0, height * Projectile.frame, texture.Width, height);
         Vector2 origin = sourceRectangle.Size() / 2f;
         Vector2 position = Projectile.Center - Main.screenPosition;
-        texture = ModContent.Request<Texture2D>(Texture + "_Acorn").Value;
+        texture = _acornTexture.Value;
         float progress = Math.Abs(Projectile.rotation) / MathHelper.PiOver2 * Projectile.spriteDirection;
         sourceRectangle = new(0, 0, texture.Width, texture.Height);
         spriteBatch.Draw(texture,
             position +
             new Vector2(-8f - (Projectile.spriteDirection == -1 ? 4f : 0f), 10f + (Projectile.spriteDirection == 1 ? 16f * progress : 0f)), sourceRectangle,
             lightColor * AcornOpacity, Projectile.rotation * 0.5f + MathHelper.Pi, origin / 2f, Projectile.scale, spriteEffects, 0);
-        texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        texture = Projectile.GetTexture();
         position = Projectile.Center - Main.screenPosition;
         sourceRectangle = new(0, height * Projectile.frame, texture.Width, height);
         Color color = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * Projectile.Opacity;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, origin, Projectile.scale, spriteEffects);
 
         if (_hasTarget) {
-            texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+            texture = _glowTexture.Value;
             SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
             spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             float lifeProgress = 1f;

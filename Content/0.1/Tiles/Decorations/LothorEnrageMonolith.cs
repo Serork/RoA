@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Content.Dusts;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
@@ -112,7 +114,13 @@ sealed class LothorEnrageScene : ModSceneEffect {
 }
 
 sealed class LothorEnrageMonolith : ModTile {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        }
+
         Main.tileFrameImportant[Type] = true;
 
         TileID.Sets.HasOutlines[Type] = true;
@@ -246,7 +254,7 @@ sealed class LothorEnrageMonolith : ModTile {
                 Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
                 spriteBatch.Draw(highlightTexture, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f),
                     new Rectangle(frameX, frameY - (isOn ? frameHeight : 0), 16, height), highlightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                //Main.spriteBatch.DrawSelf(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, _rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+                //Main.spriteBatch.DrawSelf(sourceRectangle: rect, texture: _highlightTexture, position: drawPosition, color: highlightColor, _rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
             }
         }
 
@@ -267,7 +275,7 @@ sealed class LothorEnrageMonolith : ModTile {
         TileLoader.SetDrawPositions(i, j, ref width, ref offsetY, ref height, ref frameX2, ref frameY2);
         TileLoader.SetAnimationFrame(Type, i, j, ref addFrX, ref addFrY);
 
-        t = ModContent.Request<Texture2D>(Texture + "_Draw").Value;
+        t = _glowTexture.Value;
         spriteBatch.Draw(t, new Vector2(i * 16f, j * 16f) + zero - Main.screenPosition + new Vector2(0f, 2f), new Rectangle(frameX, frameY + addFrY, 16, height),
             Color.White * Main.LocalPlayer.GetModPlayer<EnragedVisuals>()._opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         //Lighting.AddLight(new Vector2(i, j).ToWorldCoordinates(), DrawColor.Red.ToVector3());

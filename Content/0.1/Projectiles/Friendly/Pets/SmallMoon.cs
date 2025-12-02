@@ -131,7 +131,7 @@ sealed class SmallMoon : ModProjectile {
             }
         }
 
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Texture2D glowTexture = _lightTexture.Value;
         int frameHeight = texture.Height / Main.projFrames[Projectile.type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);

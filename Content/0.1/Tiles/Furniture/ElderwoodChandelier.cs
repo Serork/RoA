@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Tiles;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Core.Utility;
@@ -19,7 +21,13 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Furniture;
 
 sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHooks.ITileFlameData {
+    private static Asset<Texture2D> _flameTexture = null!;
+
     public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            _flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
+        }
+
         Main.tileLighted[Type] = true;
         Main.tileFrameImportant[Type] = true;
         Main.tileLavaDeath[Type] = true;
@@ -120,7 +128,7 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
 
     TileHooks.ITileFlameData.TileFlameData TileHooks.ITileFlameData.GetTileFlameData(int tileX, int tileY, int type, int tileFrameY) {
         TileHooks.ITileFlameData.TileFlameData tileFlameData = default;
-        tileFlameData.flameTexture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Flame");
+        tileFlameData.flameTexture = _flameTexture.Value;
         tileFlameData.flameColor = new Color(100, 100, 100, 0);
         tileFlameData.flameCount = 7;
         tileFlameData.flameRangeXMin = -10;

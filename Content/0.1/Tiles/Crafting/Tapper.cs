@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
@@ -19,12 +21,21 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Crafting;
 
 partial class Tapper : ModTile {
+    public static Asset<Texture2D> BracingTexture { get; private set; } = null!;
+    public static Asset<Texture2D> GalipotTexture { get; private set; } = null!;
+    public static Asset<Texture2D> HighlightGalipotTexture { get; private set; } = null!;
+
+    public string BracingTexturePath => Texture + "_Bracing";
+
     public static bool[] ImATapper = TileID.Sets.Factory.CreateBoolSet();
 
-    public string BracingTexture => Texture + "_Bracing";
-    public string GalipotTexture => Texture + "_Galipot";
-
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            BracingTexture = ModContent.Request<Texture2D>(BracingTexturePath);
+            GalipotTexture = ModContent.Request<Texture2D>(Texture + "_Galipot");
+            HighlightGalipotTexture = ModContent.Request<Texture2D>(Texture + "_Highlight_Galipot");
+        }
+
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = true;

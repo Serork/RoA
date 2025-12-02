@@ -24,22 +24,20 @@ abstract class SimplePylonTile<T> : ModPylon where T : ModItem {
     public const int CrystalVerticalFrameCount = 8;
     public const int CrystalFrameHeight = 64;
 
-    public Asset<Texture2D> crystalTexture;
-    public Asset<Texture2D> highlightTexture;
-    public Asset<Texture2D> mapIcon;
+    private static Asset<Texture2D> _crystalTexture = null!,
+                                    _highlightTexture = null!,
+                                    _mapIcon = null!;
 
     internal abstract string MapKeyName { get; }
     protected abstract Color MapColor { get; }
 
-    public override void Unload() => crystalTexture = highlightTexture = mapIcon = null;
-
-    public override void Load() {
-        crystalTexture = ModContent.Request<Texture2D>(Texture + "_Crystal");
-        highlightTexture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "PylonHighlight");
-        mapIcon = ModContent.Request<Texture2D>(Texture + "_MapIcon");
-    }
-
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            _crystalTexture = ModContent.Request<Texture2D>(Texture + "_Crystal");
+            _highlightTexture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "PylonHighlight");
+            _mapIcon = ModContent.Request<Texture2D>(Texture + "_MapIcon");
+        }
+
         Main.tileLighted[Type] = true;
         Main.tileFrameImportant[Type] = true;
 
@@ -73,12 +71,12 @@ abstract class SimplePylonTile<T> : ModPylon where T : ModItem {
     public override void KillMultiTile(int i, int j, int frameX, int frameY) => ModContent.GetInstance<SimplePylonEntity>().Kill(i, j); //Kill pylon tile entity
 
     public override void SpecialDraw(int i, int j, SpriteBatch spriteBatch)
-        => DefaultDrawPylonCrystal(spriteBatch, i, j, crystalTexture, highlightTexture, new Vector2(0f, -12f),
+        => DefaultDrawPylonCrystal(spriteBatch, i, j, _crystalTexture, _highlightTexture, new Vector2(0f, -12f),
     Color.White * 0.1f, Color.White, 4, CrystalVerticalFrameCount);
 
     public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon,
     Color drawColor, float deselectedScale, float selectedScale) {
-        bool mouseOver = DefaultDrawMapIcon(ref context, mapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
+        bool mouseOver = DefaultDrawMapIcon(ref context, _mapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
         DefaultMapClickHandle(mouseOver, pylonInfo, MapKeyName, ref mouseOverText);
     }
 }

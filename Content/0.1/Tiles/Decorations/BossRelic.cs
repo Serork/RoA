@@ -26,7 +26,7 @@ class BossRelic : ModTile {
     public const int HorizontalFrames = 1;
     public const int VerticalFrames = 1; // Optional: Increase this number to match the amount of relics you have on your extra sheet, if you choose to use the Item.placeStyle approach
 
-    public Asset<Texture2D> RelicTexture;
+    public static Asset<Texture2D> RelicTexture { get; private set; } = null!;
 
     // Every relic has its own extra floating part, should be 50x50. Optional: Expand this sheet if you want to add more, stacked vertically
     // If you do not use the Item.placeStyle approach, and you extend from this class, you can override this to point to a different texture
@@ -35,12 +35,11 @@ class BossRelic : ModTile {
     // All relics use the same pedestal texture, this one is copied from vanilla
     public override string Texture => ResourceManager.TileTextures + "RelicPedestal";
 
-    public override void Load() {
-        // Cache the extra texture displayed on the pedestal
-        RelicTexture = ModContent.Request<Texture2D>(RelicTextureName);
-    }
-
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            RelicTexture = ModContent.Request<Texture2D>(RelicTextureName);
+        }
+
         Main.tileShine[Type] = 400; // Responsible for golden particles
         Main.tileFrameImportant[Type] = true; // Any multitile requires this
         TileID.Sets.InteractibleByNPCs[Type] = true; // Town NPCs will palm their hand at this tile

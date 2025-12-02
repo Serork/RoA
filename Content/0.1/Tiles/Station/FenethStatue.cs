@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 using RoA.Content.Tiles.Ambient;
@@ -22,6 +24,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Station;
 
 sealed class FenethStatue : ModTile {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override void Load() {
         On_TileObject.DrawPreview += On_TileObject_DrawPreview;
     }
@@ -149,6 +153,10 @@ sealed class FenethStatue : ModTile {
     }
 
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            _glowTexture = ModContent.Request<Texture2D>(TileLoader.GetTile(Type).Texture + "_Glow");
+        }
+
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = false;
@@ -273,7 +281,7 @@ sealed class FenethStatue : ModTile {
                               new Rectangle(frameX, frameY, width, height),
                               Lighting.GetColor(i, j), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
-        Main.spriteBatch.Draw(ModContent.Request<Texture2D>(TileLoader.GetTile(Type).Texture + "_Glow").Value,
+        Main.spriteBatch.Draw(_glowTexture.Value,
                               new Vector2(i * 16 - (int)Main.screenPosition.X + offsetX, j * 16 - (int)Main.screenPosition.Y - (flag ? 4 : 0)) + zero,
                               new Rectangle(frameX, frameY, width, height),
                               Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);

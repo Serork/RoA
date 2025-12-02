@@ -83,7 +83,7 @@ sealed class BackwoodsWaterFountain : ModTile {
                 Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
                 spriteBatch.Draw(highlightTexture, new Vector2(i * 16, j * 16) - Main.screenPosition + zero + Vector2.UnitY * 2f,
                     new Rectangle(tile.TileFrameX, tile.TileFrameY + animate, 16, 16), highlightColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                //Main.spriteBatch.DrawSelf(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, _rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
+                //Main.spriteBatch.DrawSelf(sourceRectangle: rect, texture: _highlightTexture, position: drawPosition, color: highlightColor, _rotation: 0f, origin: Vector2.Zero, scale: 1f, effects: spriteEffects, layerDepth: 0f);
             }
         }
 

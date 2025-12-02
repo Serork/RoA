@@ -24,18 +24,17 @@ namespace RoA.Content.Tiles.Miscellaneous;
 sealed class BackwoodsPylonTile : ModPylon {
     public const int CrystalVerticalFrameCount = 8;
 
-    public Asset<Texture2D> crystalTexture;
-    public Asset<Texture2D> crystalHighlightTexture;
-    public Asset<Texture2D> mapIcon;
-
-    public override void Load() {
-        // We'll need these textures for later, it's best practice to cache them on load instead of continually requesting every draw call.
-        crystalTexture = ModContent.Request<Texture2D>(Texture + "_Crystal");
-        crystalHighlightTexture = ModContent.Request<Texture2D>(Texture + "_CrystalHighlight");
-        mapIcon = ModContent.Request<Texture2D>(Texture + "_MapIcon");
-    }
+    private static Asset<Texture2D> _crystalTexture = null!;
+    private static Asset<Texture2D> _crystalHighlightTexture = null!;
+    private static Asset<Texture2D> _mapIcon = null!;
 
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            _crystalTexture = ModContent.Request<Texture2D>(Texture + "_Crystal");
+            _crystalHighlightTexture = ModContent.Request<Texture2D>(Texture + "_CrystalHighlight");
+            _mapIcon = ModContent.Request<Texture2D>(Texture + "_MapIcon");
+        }
+
         Main.tileLighted[Type] = true;
         Main.tileFrameImportant[Type] = true;
 
@@ -110,8 +109,8 @@ sealed class BackwoodsPylonTile : ModPylon {
         NewDefaultDrawPylonCrystal(spriteBatch,
             i,
             j,
-            crystalTexture,
-            crystalHighlightTexture,
+            _crystalTexture,
+            _crystalHighlightTexture,
             new Vector2(0f, -12f),
             new Color(255, 255, 255, 0) * 0.1f,
             new Color(79, 172, 211),
@@ -203,7 +202,7 @@ sealed class BackwoodsPylonTile : ModPylon {
 
     public override void DrawMapIcon(ref MapOverlayDrawContext context, ref string mouseOverText, TeleportPylonInfo pylonInfo, bool isNearPylon, Color drawColor, float deselectedScale, float selectedScale) {
         // Just like in SpecialDraw, we want things to be handled the EXACT same way vanilla would handle it, which ModPylon also has built in methods for:
-        bool mouseOver = DefaultDrawMapIcon(ref context, mapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
+        bool mouseOver = DefaultDrawMapIcon(ref context, _mapIcon, pylonInfo.PositionInTiles.ToVector2() + new Vector2(1.5f, 2f), drawColor, deselectedScale, selectedScale);
         DefaultMapClickHandle(mouseOver, pylonInfo, ModContent.GetInstance<BackwoodsPylon>().DisplayName.Key, ref mouseOverText);
     }
 }

@@ -254,7 +254,7 @@ sealed class BoneHarpy : InteractableProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         if (TrailOpacity > 0f) {
-            Texture2D texture2D = (Texture2D)ModContent.Request<Texture2D>(Texture);
+            Texture2D texture2D = Projectile.GetTexture();
             Vector2 origin = new Vector2(texture2D.Width * 0.5f, Projectile.height * 0.5f);
             int length = (int)(Projectile.oldPos.Length * TrailOpacity);
             for (int i = 1; i < length; i += 3) {

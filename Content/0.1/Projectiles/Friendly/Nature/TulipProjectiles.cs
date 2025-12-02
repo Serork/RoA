@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -19,6 +21,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class TulipPetal : NatureProjectile {
+    private static Asset<Texture2D> _flowerStemTexture = null!;
+
+    public static Asset<Texture2D> FlowerStemTexture { get; private set; } = null!;
+    public static Asset<Texture2D> FlowerTexture { get; private set; } = null!;
+
     internal const byte PETALCOUNT = 4;
     internal const int HEIGHT = 30;
 
@@ -34,6 +41,17 @@ sealed class TulipPetal : NatureProjectile {
     private Vector2 Offset => Vector2.UnitY * (146 * 0.55f - HEIGHT);
 
     public override string Texture => ResourceManager.EmptyTexture;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _flowerStemTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "FlowerStem");
+
+        FlowerStemTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "FlowerPetal");
+        FlowerTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "Flower");
+    }
 
     protected override void SafeSetDefaults() {
         Projectile.Size = new Vector2(35, HEIGHT);
@@ -148,7 +166,7 @@ sealed class TulipPetal : NatureProjectile {
         }
 
         if (IsFirst) {
-            DrawStem(ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "FlowerStem").Value, Parent.Center - Vector2.UnitY * 10f, SpawnPosition);
+            DrawStem(_flowerStemTexture.Value, Parent.Center - Vector2.UnitY * 10f, SpawnPosition);
         }
 
         //Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.ProjectileTextures + "FlowerPetal").Value;
@@ -297,7 +315,7 @@ sealed class TulipFlower : NatureProjectile {
     private void DrawPetals() {
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             if (projectile.owner == Projectile.owner && projectile.type == ModContent.ProjectileType<TulipPetal>() && projectile.As<TulipPetal>().Parent == Projectile) {
-                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "FlowerPetal").Value;
+                Texture2D texture = TulipPetal.FlowerStemTexture.Value;
 
                 Vector2 position = projectile.position + Vector2.UnitY * -3f;
 
@@ -325,7 +343,7 @@ sealed class TulipFlower : NatureProjectile {
     public override bool PreDraw(ref Color lightColor) {
         DrawPetals();
 
-        Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "Flower").Value;
+        Texture2D texture = TulipPetal.FlowerTexture.Value;
         Vector2 position = Projectile.Center - Main.screenPosition;
         float rotation = Projectile.rotation;
         float scale = Projectile.scale * 1.2f;

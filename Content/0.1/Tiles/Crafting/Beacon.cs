@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
 
+using ReLogic.Content;
+
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Tiles;
@@ -28,6 +30,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Crafting;
 
 sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
+    private static Asset<Texture2D> _lightTexture = null;
+
     public static bool DoesBeaconHaveThoriumGem(int i, int j) => WorldGenHelper.GetTileSafely(i, j).TileFrameX == 18;
 
     private static int _variantToShow;
@@ -129,6 +133,12 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<BeaconTE>().Hook_AfterPlacement, -1, 0, false);
         TileObjectData.addTile(Type);
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _lightTexture = ModContent.Request<Texture2D>(ResourceManager.VisualEffectTextures + "Beacon_Light");
     }
 
     public override void PlaceInWorld(int i, int j, Item item) {
@@ -166,7 +176,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
 
             Vector2 zero = Vector2.Zero;
             Vector2 position = new Point(i, j).ToWorldCoordinates();
-            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.VisualEffectTextures + "Beacon_Light");
+            Texture2D texture = _lightTexture.Value;
             Vector2 drawPos = position - Main.screenPosition;
             drawPos.X += 1f;
             drawPos.Y -= 4f;

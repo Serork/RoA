@@ -41,10 +41,10 @@ sealed class BackwoodsFogMusicBox : MusicBox {
     //        if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
     //            int num = (color.R + color.G + color.B) / 3;
     //            if (num > 10) {
-    //                Texture2D highlightTexture = ModContent.Request<Texture2D>(Texture + "_Highlight_Galipot").Value;
+    //                Texture2D _highlightTexture = ModContent.Request<Texture2D>(Texture + "_Highlight_Galipot").Value;
     //                Color highlightColor = Colors.GetSelectionGlowColor(actuallySelected, num);
     //                Rectangle rect = new(0, 0, coordinateWidth, num12);
-    //                Main.spriteBatch.Draw(sourceRectangle: rect, texture: highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f,
+    //                Main.spriteBatch.Draw(sourceRectangle: rect, texture: _highlightTexture, position: drawPosition, color: highlightColor, rotation: 0f, origin: Vector2.Zero, scale: 1f,
     //                    effects: spriteEffects, layerDepth: 0f);
     //            }
     //        }

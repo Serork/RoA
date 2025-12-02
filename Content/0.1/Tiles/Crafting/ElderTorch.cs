@@ -18,7 +18,7 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Crafting;
 
 class ElderTorch : ModTile {
-    private Asset<Texture2D> _flameTexture;
+    private static Asset<Texture2D> _flameTexture = null!;
 
     public override void SetStaticDefaults() {
         Main.tileLighted[Type] = true;
@@ -54,6 +54,10 @@ class ElderTorch : ModTile {
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(253, 221, 3), Language.GetText("ItemName.Torch"));
+
+        if (Main.dedServ) {
+            return;
+        }
 
         _flameTexture = ModContent.Request<Texture2D>(Texture + "_Flame");
     }
