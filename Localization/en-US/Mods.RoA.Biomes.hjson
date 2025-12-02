@@ -10,12 +10,7 @@ BackwoodsBiomeFog: {
 	TownNPCDialogueName: the fog
 }
 
-TarpitBiome: {
-	DisplayName: Tarpit Biome
-	TownNPCDialogueName: the Tarpit Biome
-}
-
 TarBiome: {
-	DisplayName: Tar Biome
-	TownNPCDialogueName: the Tar Biome
+	DisplayName: Tar Pit
+	TownNPCDialogueName: the tar pit
 }

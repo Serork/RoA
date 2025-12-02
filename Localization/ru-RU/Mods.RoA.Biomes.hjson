@@ -10,12 +10,7 @@ BackwoodsBiomeFog: {
 	TownNPCDialogueName: туман
 }
 
-TarpitBiome: {
-	// DisplayName: Tarpit Biome
-	// TownNPCDialogueName: the Tarpit Biome
-}
-
 TarBiome: {
-	// DisplayName: Tar Biome
-	// TownNPCDialogueName: the Tar Biome
+	DisplayName: Смоляная яма
+	TownNPCDialogueName: смоляная яма
 }
