@@ -7,6 +7,7 @@ using RoA.Content.Items.Miscellaneous;
 using System;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -37,11 +38,11 @@ sealed class LuminousFlowerHat : ModItem {
     }
 
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
-        LuminousFlower.LightUp(Item, spriteBatch, Texture, rotation);
+        LuminousFlower.LightUp(Item, spriteBatch, TextureAssets.Item[Type].Value, rotation);
     }
 
     public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
-        LuminousFlower.LightUp(Item, spriteBatch, Texture, 0f, position, scale, Color.White, shouldLightUp: false);
+        LuminousFlower.LightUp(Item, spriteBatch, TextureAssets.Item[Type].Value, 0f, position, scale, Color.White, shouldLightUp: false);
     }
 
     public override void SetStaticDefaults() {

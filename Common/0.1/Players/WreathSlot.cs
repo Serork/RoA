@@ -87,7 +87,7 @@ class WreathSlot : ModAccessorySlot {
 
         if (context == AccessorySlotType.FunctionalSlot) {
             Item[] items = [FunctionalItem];
-            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 8, 0, position, mainTexture: _functionalTexture.Value;
+            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 8, 0, position, mainTexture: _functionalTexture.Value);
 
             return false;
         }
