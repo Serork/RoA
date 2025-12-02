@@ -192,6 +192,8 @@ sealed class DiabolicDaikatana : ModItem {
 
 // adapted aequus 
 sealed class DiabolicDaikatanaProj : ModProjectile {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     private float _armRotation;
     private int _swingTime;
     private int _swingTimeMax;
@@ -210,6 +212,12 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         ProjectileID.Sets.AllowsContactDamageFromJellyfish[Type] = true;
 
         ProjectileID.Sets.HeldProjDoesNotUsePlayerGfxOffY[Type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetDefaults() {
@@ -321,7 +329,7 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         for (int i = 0; i < 2; i++) {
             Color drawColor = Lighting.GetColor((int)((double)player.position.X + (double)player.width * 0.5) / 16, (int)(((double)player.position.Y + (double)player.height * 0.5) / 16.0));
             if (i != 0) {
-                texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+                texture = _glowTexture.Value;
                 drawColor = Color.Lerp(Color.Blue * 0.7f, Lighting.GetColor((int)handPosition.X / 16, (int)handPosition.Y / 16), Lighting.Brightness((int)handPosition.X / 16, (int)handPosition.Y / 16) * 0.75f);
             }
             DrawSword(texture, handPosition,

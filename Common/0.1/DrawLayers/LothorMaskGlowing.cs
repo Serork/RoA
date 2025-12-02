@@ -18,7 +18,7 @@ using Terraria.ModLoader;
 namespace RoA.Common.DrawLayers;
 
 sealed class LothorMaskGlowing : ModSystem {
-    private Asset<Texture2D> _lothorGlowMaskTexture;
+    private static Asset<Texture2D> _lothorGlowMaskTexture = null!;
 
     public override void SetStaticDefaults() {
         if (Main.dedServ) {

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 
@@ -11,8 +13,16 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Miscellaneous;
 
 sealed class LuminousFlower : ModItem {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override void SetStaticDefaults() {
         Item.ResearchUnlockCount = 1;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetDefaults() {
@@ -23,14 +33,14 @@ sealed class LuminousFlower : ModItem {
     }
 
     public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
-        LightUp(Item, spriteBatch, Texture, 0f, color: Color.White, position: position, scale: scale, shouldLightUp: false);
+        LightUp(Item, spriteBatch, _glowTexture.Value, 0f, color: Color.White, position: position, scale: scale, shouldLightUp: false);
     }
 
     public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI) {
-        LightUp(Item, spriteBatch, Texture, rotation);
+        LightUp(Item, spriteBatch, _glowTexture.Value, rotation);
     }
 
-    public static void LightUp(Item item, SpriteBatch spriteBatch, string texture, float rotation, Vector2? position = null, float scale = 1f, Color? color = null, bool shouldLightUp = true) {
+    public static void LightUp(Item item, SpriteBatch spriteBatch, Texture2D glowMaskTexture, float rotation, Vector2? position = null, float scale = 1f, Color? color = null, bool shouldLightUp = true) {
         Vector2 pos = item.getRect().Center();
         if (position != null) {
             pos = position.Value - new Point(1, 1).ToWorldCoordinates() + Main.screenPosition - TileHelper.ScreenOffset;
@@ -39,7 +49,6 @@ sealed class LuminousFlower : ModItem {
         int j = (int)(pos.Y / 16f);
         Tiles.Miscellaneous.LuminousFlower.LuminiousFlowerLightUp(i, j, out float progress, shouldLightUp: shouldLightUp);
 
-        Texture2D glowMaskTexture = ModContent.Request<Texture2D>(texture + "_Glow").Value;
         Vector2 origin = glowMaskTexture.Size() / 2f;
         color ??= Color.White;
         color *= progress;

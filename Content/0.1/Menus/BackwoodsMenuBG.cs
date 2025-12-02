@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Utilities.Extensions;
 using RoA.Core;
 
@@ -15,6 +17,18 @@ namespace RoA.Content.Menus;
 
 // it stinks
 sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
+    public static Asset<Texture2D> SkyTexture { get; private set; } = null!;
+    public static Asset<Texture2D> Mid2Texture { get; private set; } = null!;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        SkyTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsSky");
+        Mid2Texture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsMid2");
+    }
+
     public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => -1;
 
     public override int ChooseMiddleTexture() => -1;
@@ -75,9 +89,9 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
     }
 
     private void DrawDarkerBackground(SpriteBatch spriteBatch) {
-        Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsSky").Value;
+        Texture2D texture = SkyTexture.Value;
         float scale = 2.2f;
-        int width = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsMid2").Value.Width;
+        int width = Mid2Texture.Value.Width;
         int num4 = (int)(width * (double)scale);
         float num1 = 1200f;
         float num2 = 1550f;
@@ -95,7 +109,7 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
                     num6 = -500;
                 }
                 Vector2 position = new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f));
-                texture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsMid2").Value;
+                texture = Mid2Texture.Value;
                 //spriteBatch.DrawSelf(texture, position, new Rectangle(0, 0, texture.Width * 3, texture.Height * 3), color);
                 spriteBatch.Draw(texture, new Vector2(num5 + num4 * index2, MathHelper.Clamp(num6, -50f, 0f) + 500),
                     new Rectangle?(new Rectangle(0, 0, texture.Width, 1160)), color, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);

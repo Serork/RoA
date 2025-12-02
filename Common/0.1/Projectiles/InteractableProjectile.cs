@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Core.Utility;
 
 using System.Collections.Generic;
@@ -13,9 +15,19 @@ using Terraria.ModLoader;
 namespace RoA.Common.Projectiles;
 
 abstract class InteractableProjectile : ModProjectile {
+    private static Asset<Texture2D> _hoverTexture = null!;
+
     protected virtual Vector2 DrawOffset { get; }
 
     protected virtual SpriteEffects SetSpriteEffects() => Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _hoverTexture = ModContent.Request<Texture2D>(Texture + "_Hover");
+    }
 
     public override void Load() {
         On_Projectile.IsInteractible += On_Projectile_IsInteractable;
@@ -52,7 +64,7 @@ abstract class InteractableProjectile : ModProjectile {
             SpriteBatch spriteBatch = Main.spriteBatch;
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
-            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Hover");
+            Texture2D texture = _hoverTexture.Value;
             int height = texture.Height / Main.projFrames[Projectile.type];
             Vector2 drawOrigin = new(texture.Width / 2f, height * 0.5f);
             Vector2 position = Projectile.position + drawOrigin - Main.screenPosition;

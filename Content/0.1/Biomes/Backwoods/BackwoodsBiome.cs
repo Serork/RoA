@@ -1,5 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
+using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.BackwoodsSystems;
@@ -18,17 +21,25 @@ using Terraria.ModLoader;
 namespace RoA.Content.Biomes.Backwoods;
 
 sealed class LightColorFix : ILoadable {
+    private static Asset<Texture2D> _mapBGAsset = null!,
+                                    _fogMapBGAsset = null!,
+                                    _glowMapBGAsset = null!;
+
     void ILoadable.Load(Mod mod) {
         On_Main.DrawMapFullscreenBackground += On_Main_DrawMapFullscreenBackground;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "DruidBiomeMapBG");
+        _glowMapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "DruidBiomeMapBG_Fog");
+        _mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "DruidBiomeMapBG_Glow");
     }
 
     private void On_Main_DrawMapFullscreenBackground(On_Main.orig_DrawMapFullscreenBackground orig, Vector2 screenPosition, int screenWidth, int screenHeight) {
         if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
-            string key = "DruidBiomeMapBG";
-            if (BackwoodsFogHandler.IsFogActive) {
-                key += "_Fog";
-            }
-            Texture2D mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + key).Value;
+            Texture2D mapBGAsset = BackwoodsFogHandler.IsFogActive ? _fogMapBGAsset.Value : _mapBGAsset.Value;
             Color color = Main.ColorOfTheSkies * 3f;
             if ((double)screenPosition.Y > Main.worldSurface * 16.0) {
                 color = Color.White;
@@ -38,7 +49,7 @@ sealed class LightColorFix : ILoadable {
             //    MapBGAsset = ((!Main.player[Main.myPlayer].ZoneDesert) ? (Texture2D)ModContent.Request<Texture2D>("TheConfectionRebirth/Biomes/ConfectionBiomeMapBackground") : ((Main.player[Main.myPlayer].ZoneSnow) ? (Texture2D)ModContent.Request<Texture2D>("TheConfectionRebirth/Biomes/ConfectionIceBiomeMapBackground") : (Texture2D)ModContent.Request<Texture2D>("TheConfectionRebirth/Biomes/ConfectionDesertBiomeMapBackground")));
             //}
             Main.spriteBatch.Draw(mapBGAsset, new Rectangle(0, 0, screenWidth, screenHeight), color);
-            mapBGAsset = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + $"DruidBiomeMapBG_Glow").Value;
+            mapBGAsset = _glowMapBGAsset.Value;
             Main.spriteBatch.Draw(mapBGAsset, new Rectangle(0, 0, screenWidth, screenHeight), Color.White * 0.5f);
         }
         else {

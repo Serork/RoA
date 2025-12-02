@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 
@@ -16,6 +18,23 @@ namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Face)]
 sealed class CosmicHat : ModItem {
+    private static Asset<Texture2D> _faceGlow = null!,
+                                    _faceMask = null!;
+
+    public override void SetStaticDefaults() {
+        ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
+        ArmorIDs.Head.Sets.DrawHatHair[Item.faceSlot] = true;
+
+        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _faceGlow = ModContent.Request<Texture2D>(Texture + "_Face_Glow");
+        _faceMask = ModContent.Request<Texture2D>(Texture + "_Face_Mask");
+    }
+
     private class CosmicHatFaceGlowing : PlayerDrawLayer {
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
 
@@ -34,13 +53,13 @@ sealed class CosmicHat : ModItem {
         private static void DrawHeadGlowMask(ref PlayerDrawSet drawInfo) {
             Player player = drawInfo.drawPlayer;
             if (player.face == EquipLoader.GetEquipSlot(RoA.Instance, typeof(CosmicHat).Name, EquipType.Face)) {
-                Texture2D glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<CosmicHat>()).Texture + "_Face_Glow").Value;
+                Texture2D glowMaskTexture = _faceGlow.Value;
                 Color glowMaskColor = Color.White * 0.9f;
                 glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                 DrawData drawData;
                 var drawinfo = drawInfo;
 
-                Texture2D maskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<CosmicHat>()).Texture + "_Face_Mask").Value;
+                Texture2D maskTexture = _faceMask.Value;
                 drawData = GetHeadGlowMask(ref drawInfo, maskTexture, glowMaskColor);
                 //DrawColor color = Lighting.GetColor((int)((double)player.position.X + (double)player.width * 0.5) / 16, (int)(((double)player.position.Y + (double)player.height * 0.25) / 16.0));
                 glowMaskColor = GameShaders.Hair.GetColor(12, player, Color.White * 0.9f);
@@ -150,13 +169,6 @@ sealed class CosmicHat : ModItem {
                 IsEffectActive2 = false;
             }
         }
-    }
-
-    public override void SetStaticDefaults() {
-        ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
-        ArmorIDs.Head.Sets.DrawHatHair[Item.faceSlot] = true;
-
-        CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
     }
 
     public override void SetDefaults() {

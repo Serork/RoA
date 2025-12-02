@@ -16,9 +16,16 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories;
 
 sealed class FireflyPinHandler : PlayerDrawLayer {
-    private static Asset<Texture2D> glowTexture;
+    private static Asset<Texture2D> glowTexture = null!;
 
-    public override void Load() => glowTexture = ModContent.Request<Texture2D>(GetType().Namespace.Replace(".", "/") + "/FireflyPin_Face_Glow");
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        glowTexture = ModContent.Request<Texture2D>(GetType().Namespace!.Replace(".", "/") + "/FireflyPin_Face_Glow");
+    }
+
     public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) {

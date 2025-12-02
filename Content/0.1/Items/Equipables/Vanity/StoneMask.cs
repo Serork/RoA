@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Creative;
@@ -27,6 +29,18 @@ sealed class StoneMask : ModItem {
     }
 
     internal sealed class StoneMaskDrawLayer : PlayerDrawLayer {
+        private static Asset<Texture2D> _headTexture = null!,
+                                        _eyesTexture = null!;
+
+        public override void SetStaticDefaults() {
+            if (Main.dedServ) {
+                return;
+            }
+
+            _headTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<StoneMask>()).Texture + "_Head");
+            _eyesTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<StoneMask>()).Texture + "_Head_Eyes");
+        }
+
         public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.FaceAcc);
 
         private static bool IsActive(Player player) {
@@ -53,7 +67,7 @@ sealed class StoneMask : ModItem {
             if (!IsActive(drawInfo.drawPlayer)) {
                 return;
             }
-            Texture2D texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<StoneMask>()).Texture + "_Head").Value;
+            Texture2D texture = _headTexture.Value;
             Color color = drawInfo.colorBodySkin * (1f - drawInfo.shadow);
             color = player.GetImmuneAlphaPure(color, drawInfo.shadow);
             Rectangle bodyFrame = drawInfo.drawPlayer.bodyFrame;
@@ -68,7 +82,7 @@ sealed class StoneMask : ModItem {
                 shader = drawInfo.cHead
             };
             drawInfo.DrawDataCache.Add(item);
-            texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<StoneMask>()).Texture + "_Head_Eyes").Value;
+            texture = _eyesTexture.Value;
             color = drawInfo.colorArmorBody * (1f - drawInfo.shadow);
             color = player.GetImmuneAlphaPure(color, drawInfo.shadow);
             item = new(texture,

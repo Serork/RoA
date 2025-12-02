@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.InterfaceElements;
 using RoA.Common.Items;
 using RoA.Content.Items.Equipables.Wreaths;
@@ -25,6 +27,8 @@ class WreathSlot2 : WreathSlot {
 }
 
 class WreathSlot : ModAccessorySlot {
+    private static Asset<Texture2D> _functionalTexture = null!;
+
     private static bool _equipped, _equipped2;
 
     public static int ActiveSlot => ModContent.GetInstance<WreathSlot>().Type;
@@ -57,6 +61,14 @@ class WreathSlot : ModAccessorySlot {
         }
     }
 
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _functionalTexture = ModContent.Request<Texture2D>(FunctionalTexture);
+    }
+
     public override Vector2? CustomLocation => GetCustomLocation();
 
     protected bool IsHiddenBase() => (!IsItemValidForSlot(Main.mouseItem) && !BeltButton.IsUsed) || Main.EquipPage >= 1;
@@ -75,7 +87,7 @@ class WreathSlot : ModAccessorySlot {
 
         if (context == AccessorySlotType.FunctionalSlot) {
             Item[] items = [FunctionalItem];
-            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 8, 0, position, mainTexture: ModContent.Request<Texture2D>(FunctionalTexture).Value);
+            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 8, 0, position, mainTexture: _functionalTexture.Value;
 
             return false;
         }

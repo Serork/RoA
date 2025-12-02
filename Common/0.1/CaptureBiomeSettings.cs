@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using MonoMod.Cil;
 
+using ReLogic.Content;
+
 using RoA.Content.Backgrounds;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
@@ -20,6 +22,16 @@ namespace RoA.Common;
 
 // kittenbun my goat
 sealed class CaptureBiomeSettings : ModSystem {
+    private static Asset<Texture2D> _backwoodsBGIcon = null!;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _backwoodsBGIcon = ModContent.Request<Texture2D>(ResourceManager.BackwoodsTextures + "BackwoodsBGIcon");
+    }
+
     public override void Load() {
         IL_CaptureInterface.ModeChangeSettings.DrawWaterChoices += DrawModdedCaptureIcons;
         On_CaptureBiome.GetCaptureBiome += makeCaptureBiomeSlot;
@@ -42,7 +54,7 @@ sealed class CaptureBiomeSettings : ModSystem {
     /// <param name="textureXposition"></param>
     internal void CaptureIconSetInfo(int captureIconID, Rectangle iconHitbox, Point mouse, ref Texture2D iconTexture, ref int textureXposition) {
         if (captureIconID == biomeCapturesIndexs[0]) {
-            iconTexture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "BackwoodsBGIcon"); //edit texture to be ours
+            iconTexture = _backwoodsBGIcon.Value; //edit texture to be ours
             textureXposition = captureIconID == biomeCapturesIndexs[0] ? 0 : 18; //frame X for our texture
             if (iconHitbox.Contains(mouse)) {
                 if (captureIconID == biomeCapturesIndexs[0]) {

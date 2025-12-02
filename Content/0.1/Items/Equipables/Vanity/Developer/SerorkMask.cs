@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using System;
 
 using Terraria;
@@ -14,9 +16,36 @@ namespace RoA.Content.Items.Equipables.Vanity.Developer;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class SerorkMask : ModItem {
+    private static Asset<Texture2D> _maskGlowTexture1 = null!,
+                                    _maskGlowTexture2 = null!;
+    private static Asset<Texture2D> _helmetGlowTexture1 = null!,
+                                    _helmetGlowTexture2 = null!;
+
+    private static Asset<Texture2D> _legsGlowTexture = null!,
+                                    _legsGlowTexture2 = null!;
+
+    private static Asset<Texture2D> _bodyGlowTexture = null!,
+                                    _bodyGlowTexture2 = null!;
+
     public override void SetStaticDefaults() {
         ArmorIDs.Head.Sets.DrawFullHair[Item.headSlot] = true;
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _maskGlowTexture1 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkMask>()).Texture + "_Head_Glow");
+        _maskGlowTexture2 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkMask>()).Texture + "_Head_Glow2");
+
+        _helmetGlowTexture1 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkHelmet>()).Texture + "_Head_Glow");
+        _helmetGlowTexture1 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkHelmet>()).Texture + "_Head_Glow2");
+
+        _legsGlowTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkGreaves>()).Texture + "_Legs_Glow");
+        _legsGlowTexture2 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkGreaves>()).Texture + "_Legs_Glow2");
+
+        _bodyGlowTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkBreastplate>()).Texture + "_Body_Glow");
+        _bodyGlowTexture2 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkBreastplate>()).Texture + "_Body_Glow2");
     }
 
     public override void SetDefaults() {
@@ -52,8 +81,10 @@ sealed class SerorkMask : ModItem {
             private static void DrawHeadGlowMask(ref PlayerDrawSet drawInfo) {
                 Player player = drawInfo.drawPlayer;
                 void drawself<T>(ref PlayerDrawSet drawInfo) where T : ModItem {
+                    bool mask = typeof(T).Name == nameof(SerorkMask);
+
                     if (player.head == EquipLoader.GetEquipSlot(RoA.Instance, typeof(T).Name, EquipType.Head)) {
-                        Texture2D glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<T>()).Texture + "_Head_Glow").Value;
+                        Texture2D glowMaskTexture = mask ? _maskGlowTexture1.Value : _helmetGlowTexture1.Value;
                         Color glowMaskColor = Color.White;
                         glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                         DrawData drawData = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
@@ -92,8 +123,8 @@ sealed class SerorkMask : ModItem {
                             drawinfo.DrawDataCache.Add(drawData);
                         }
 
-                        if (typeof(T).Name == nameof(SerorkMask)) {
-                            glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<T>()).Texture + "_Head_Glow2").Value;
+                        if (mask) {
+                            glowMaskTexture = _maskGlowTexture2.Value;
                             drawData = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
                             glowMaskColor = Color.White * 0.9f;
                             glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
@@ -143,7 +174,7 @@ sealed class SerorkMask : ModItem {
             private static void DrawArmorGlowMask(ref PlayerDrawSet drawInfo) {
                 Player player = drawInfo.drawPlayer;
                 if (player.legs == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SerorkGreaves), EquipType.Legs)) {
-                    Texture2D glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkGreaves>()).Texture + "_Legs_Glow").Value;
+                    Texture2D glowMaskTexture = _legsGlowTexture.Value;
                     Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(player.width / 2 - player.legFrame.Width / 2, player.height - player.legFrame.Height + 4f) + player.legPosition;
                     Vector2 legsOffset = drawInfo.legsOffset;
                     DrawData drawData = new(glowMaskTexture, drawPos.Floor() + legsOffset, player.legFrame, default, player.legRotation, legsOffset, 1f, drawInfo.playerEffect, 0);
@@ -182,7 +213,7 @@ sealed class SerorkMask : ModItem {
                         drawinfo.DrawDataCache.Add(drawData);
                     }
 
-                    glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkGreaves>()).Texture + "_Legs_Glow2").Value;
+                    glowMaskTexture = _legsGlowTexture2.Value;
                     drawData = new(glowMaskTexture, drawPos.Floor() + legsOffset, player.legFrame, default, player.legRotation, legsOffset, 1f, drawInfo.playerEffect, 0);
                     glowMaskColor = Color.White * 0.9f;
                     glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
@@ -238,7 +269,7 @@ sealed class SerorkMask : ModItem {
                 case CompositePlayerDrawContext.FrontArm:
                 case CompositePlayerDrawContext.FrontShoulder: {
                     DrawData item2 = data;
-                    item2.texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkBreastplate>()).Texture + "_Body_Glow").Value;
+                    item2.texture = _bodyGlowTexture.Value;
                     Color glowMaskColor = Color.White;
                     glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                     item2.color = glowMaskColor * 0.25f;
@@ -279,7 +310,7 @@ sealed class SerorkMask : ModItem {
 
                 case CompositePlayerDrawContext.Torso: {
                     DrawData item = data;
-                    item.texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkBreastplate>()).Texture + "_Body_Glow2").Value;
+                    item.texture = _bodyGlowTexture2.Value;
                     Color glowMaskColor = Color.White * 0.9f;
                     glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                     item.color = glowMaskColor;

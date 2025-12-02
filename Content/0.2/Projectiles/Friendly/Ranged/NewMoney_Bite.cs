@@ -110,8 +110,8 @@ sealed class NewMoneyBite : ModProjectile {
         }
 
         //Projectile.QuickDrawAnimated(color);
-        //if (_glowTexture?.IsLoaded == true) {
-        //    Projectile.QuickDrawAnimated(color * 0.9f, texture: _glowTexture.Value);
+        //if (GlowTexture?.IsLoaded == true) {
+        //    Projectile.QuickDrawAnimated(color * 0.9f, texture: GlowTexture.Value);
         //}
 
         return false;

@@ -117,11 +117,6 @@ abstract class BaseForm : ModMount {
     public sealed override void Load() {
         Mod.AddContent(MountBuff);
 
-        if (!Main.dedServ) {
-            HeadTexture = ModContent.Request<Texture2D>(Texture + "_Head");
-            SolidTexture = ModContent.Request<Texture2D>(Texture + "_Solid");
-        }
-
         SafeLoad();
     }
 
@@ -241,11 +236,14 @@ abstract class BaseForm : ModMount {
 
         MountData.playerYOffsets = [.. Enumerable.Repeat(0, MountData.totalFrames)];
 
-        MountData.frontTextureGlow = ModContent.Request<Texture2D>(Texture + "_Glow");
-
         if (!Main.dedServ) {
             MountData.textureWidth = MountData.backTexture.Width();
             MountData.textureHeight = MountData.backTexture.Height();
+
+            MountData.frontTextureGlow = ModContent.Request<Texture2D>(Texture + "_Glow");
+
+            HeadTexture = ModContent.Request<Texture2D>(Texture + "_Head");
+            SolidTexture = ModContent.Request<Texture2D>(Texture + "_Solid");
         }
 
         _copyData = new CopyInfo[MAXCOPIES];

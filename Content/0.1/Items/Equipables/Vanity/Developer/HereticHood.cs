@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Core.Utility;
 
 using Terraria;
@@ -13,8 +15,16 @@ namespace RoA.Content.Items.Equipables.Vanity.Developer;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class HereticHood : ModItem {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override void SetStaticDefaults() {
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Head_Glow2");
     }
 
     public override void SetDefaults() {
@@ -64,7 +74,7 @@ sealed class HereticHood : ModItem {
 
                     Color glowMaskColor = Color.White * 0.9f;
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
-                    Texture2D glowMaskTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<HereticHood>()).Texture + "_Head_Glow2").Value;
+                    Texture2D glowMaskTexture = _glowTexture.Value;
                     DrawData drawData = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
                     glowMaskColor = Color.White;
                     glowMaskColor = drawInfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawInfo.shadow);

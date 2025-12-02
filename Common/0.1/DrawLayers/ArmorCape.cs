@@ -14,9 +14,15 @@ using Terraria.ModLoader;
 namespace RoA.Common.DrawLayers;
 
 sealed class ArmorCape : PlayerDrawLayer {
-    private Asset<Texture2D> _acolyteCapeTexture;
+    private static Asset<Texture2D> _acolyteCapeTexture = null!;
 
-    public override void Load() => _acolyteCapeTexture = ModContent.Request<Texture2D>(ResourceManager.MagicArmorTextures + "AcolyteCape_Front");
+    public override void Load() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _acolyteCapeTexture = ModContent.Request<Texture2D>(ResourceManager.MagicArmorTextures + "AcolyteCape_Front");
+    }
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) {
         int copperJacket = ModContent.ItemType<CopperAcolyteJacket>();

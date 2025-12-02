@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Projectiles;
 using RoA.Common.Recipes;
 using RoA.Core;
@@ -76,7 +78,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
         Player player = Main.player[Projectile.owner];
         Item heldItem = player.HeldItem;
         bool flag = _direction != 1;
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 origin = new(texture.Width * 0.5f * (1 - _direction), (player.gravDir == -1f) ? 0 : texture.Height);
         int x = -(int)origin.X;
         ItemLoader.HoldoutOrigin(player, ref origin);
@@ -218,11 +220,21 @@ sealed class ArterialSprayProjectile : ModProjectile {
 }
 
 sealed class ArterialSprayProjectile2 : ModProjectile {
+    private static Asset<Texture2D> _spray3Texture = null,
+                                    _spray4Texture = null!;
+
     public override string Texture => ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray2";
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 18;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _spray4Texture = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray4");
+        _spray3Texture = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray3");
     }
 
     public override void SetDefaults() {
@@ -261,7 +273,7 @@ sealed class ArterialSprayProjectile2 : ModProjectile {
             num149 = (int)(ProjectileID.Sets.TrailCacheLength[Projectile.type] * 0.85f);
             num147 = 0;
             num148 = -2;
-            Texture2D texture2 = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray4").Value;
+            Texture2D texture2 = _spray4Texture.Value;
             for (int num152 = num149; (num148 > 0 && num152 < num147) || (num148 < 0 && num152 > num147); num152 += num148) {
                 if (num152 >= Projectile.oldPos.Length) {
                     continue;
@@ -276,7 +288,7 @@ sealed class ArterialSprayProjectile2 : ModProjectile {
             }
             Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
             Main.EntitySpriteDraw(texture, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile.rotation, origin, Projectile.scale, effects);
-            texture2 = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + "Magic/ArterialSpray3").Value;
+            texture2 = _spray3Texture.Value;
             //Main.EntitySpriteDraw(texture2, drawPosition + Projectile.Size / 2f, null, lightColor, Projectile._rotation, origin, Projectile.scale, effects);
         }
 

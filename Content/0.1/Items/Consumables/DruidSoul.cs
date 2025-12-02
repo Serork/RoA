@@ -8,6 +8,7 @@ using System;
 
 using Terraria;
 using Terraria.Enums;
+using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -57,7 +58,7 @@ sealed class DruidSoul : ModItem {
         for (int index = 0; index < length; index++) {
             float factor = (length - (float)index) / length;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
-                Texture2D text = ModContent.Request<Texture2D>(Texture).Value;
+                Texture2D text = TextureAssets.Item[Type].Value;
                 Rectangle frame = new(0, 0, text.Width, text.Height);
                 Vector2 position = Item.Center - Main.screenPosition - Vector2.UnitY * 2f;
                 spriteBatch.Draw(text, position + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) + Vector2.UnitY * 2f,

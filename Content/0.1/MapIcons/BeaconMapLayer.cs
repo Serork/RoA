@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Tiles.Crafting;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -21,6 +23,16 @@ using Terraria.UI;
 namespace RoA.Content.MapIcons;
 
 sealed class BeaconMapLayer : ModMapLayer {
+    private static Asset<Texture2D> _iconTexture = null!;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _iconTexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Beacon_Icons");
+    }
+
     public override void Draw(ref MapOverlayDrawContext context, ref string text) {
         if (!Main.LocalPlayer.active) {
             return;
@@ -42,7 +54,7 @@ sealed class BeaconMapLayer : ModMapLayer {
                 {
                     scaleIfSelected = num * 2f;
                 }
-                Texture2D value = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Beacon_Icons").Value;
+                Texture2D value = _iconTexture.Value;
                 bool num2 = (Main.DroneCameraTracker == null || !Main.DroneCameraTracker.IsInUse());
                 Color color = Color.White;
                 if (!num2) {

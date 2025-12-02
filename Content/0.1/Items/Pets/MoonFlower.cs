@@ -1,12 +1,15 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -14,9 +17,17 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Pets;
 
 sealed class MoonFlower : ModItem {
+    public static Asset<Texture2D> GlowTexture { get; private set; } = null!;
+
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Moon Flower");
         // Tooltip.SetDefault("Summons a small moon to provide light");
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        GlowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetDefaults() {
@@ -51,7 +62,7 @@ sealed class MoonFlower : ModItem {
     }
 
     public override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
-        Texture2D glowmask = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+        Texture2D glowmask = GlowTexture.Value;
         Player player = Main.player[Main.myPlayer];
         ushort type = (ushort)ModContent.ItemType<MoonFlower>();
         Color color = player.GetModPlayer<SmallMoonPlayer>().smallMoonColor;
@@ -89,8 +100,8 @@ sealed class MoonFlower : ModItem {
         Color color = player.GetModPlayer<SmallMoonPlayer>().smallMoonColor;
         color.A = 80;
         Lighting.AddLight(Item.position, player.GetModPlayer<SmallMoonPlayer>().smallMoonColor.ToVector3());
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        Texture2D glowmask = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+        Texture2D texture = TextureAssets.Item[Type].Value;
+        Texture2D glowmask = GlowTexture.Value;
         spriteBatch.Draw(glowmask, new Vector2(Item.position.X - Main.screenPosition.X + Item.width * 0.5f, Item.position.Y - Main.screenPosition.Y + Item.height - texture.Height * 0.5f),
             new Rectangle(0, 0, texture.Width, texture.Height),
             color,
@@ -132,7 +143,7 @@ sealed class MoonFlowerUseGlow : PlayerDrawLayer {
         }
 
         Player player = drawInfo.drawPlayer;
-        Texture2D texture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<MoonFlower>()).Texture + "_Glow").Value;
+        Texture2D texture = MoonFlower.GlowTexture.Value;
         if (drawInfo.shadow != 0f || !player.IsAliveAndFree() || player.itemAnimation <= 0)
             return;
         Color color = player.GetModPlayer<SmallMoonPlayer>().smallMoonColor;

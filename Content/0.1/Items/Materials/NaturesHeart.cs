@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
 
@@ -14,6 +16,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Materials;
 
 sealed class NaturesHeart : ModItem {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override Color? GetAlpha(Color lightColor) => lightColor;
 
     public override void SetStaticDefaults() {
@@ -23,6 +27,12 @@ sealed class NaturesHeart : ModItem {
         ItemID.Sets.AnimatesAsSoul[Type] = true;
 
         CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 25;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetDefaults() {
@@ -93,7 +103,7 @@ sealed class NaturesHeart : ModItem {
 
     private void DrawGlowMask(SpriteBatch spriteBatch, Color lightColor, float rotation, int whoAmI, float scale = 1f, Vector2? position = null) {
         int frame = Main.itemAnimations[Type].GetFrame(TextureAssets.Item[Type].Value, Main.itemFrameCounter[whoAmI]).Y / Item.height;
-        Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        Texture2D glowMaskTexture = _glowTexture.Value;
         Vector2 origin = new Vector2(22, 32) / 2f;
         Color color = Color.Lerp(lightColor, Color.White, 0.5f);
         position ??= Item.Center - Main.screenPosition;

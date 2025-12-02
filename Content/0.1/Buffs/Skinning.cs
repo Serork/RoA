@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.CustomConditions;
 using RoA.Common.Networking;
@@ -36,11 +38,21 @@ sealed class Skinning : ModBuff {
 }
 
 sealed class SpoilLeatherHandler : GlobalItem {
+    private static Asset<Texture2D> _expiryTexture = null!;
+
     public override bool InstancePerEntity => true;
 
     public ulong StartSpoilingTime;
 
     public ulong NeedToSpoilTime => 18000;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _expiryTexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Expiry");
+    }
 
     public override void SaveData(Item item, TagCompound tag) {
         if (!IsValidToHandle(item)) {
@@ -86,7 +98,7 @@ sealed class SpoilLeatherHandler : GlobalItem {
         }
 
         var handler = item.GetGlobalItem<SpoilLeatherHandler>();
-        Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "Expiry").Value;
+        Texture2D texture = _expiryTexture.Value;
         int height = texture.Height / 5;
         int frames = 5;
         int usedFrame = (int)((TimeSystem.UpdateCount - handler.StartSpoilingTime) / (float)handler.NeedToSpoilTime * frames);

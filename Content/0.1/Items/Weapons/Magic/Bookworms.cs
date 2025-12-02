@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Recipes;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -72,12 +74,24 @@ sealed class BookwormsProjectile : ModProjectile {
     private int _direction;
     private float _length;
 
+    private static Asset<Texture2D> _worm1Texture = null!,
+                                    _worm2Texture = null!,
+                                    _worm3Texture = null!;
+
     public override string Texture => ResourceManager.EmptyTexture;
 
     private static ushort MAXTIMELEFT => 90;
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.NeedsUUID[Type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _worm1Texture = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + $"Magic/Bookworms1");
+        _worm2Texture = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + $"Magic/Bookworms2");
+        _worm3Texture = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + $"Magic/Bookworms3");
     }
 
     public override void SetDefaults() {
@@ -116,7 +130,13 @@ sealed class BookwormsProjectile : ModProjectile {
         }
 
         int variant = Projectile.ai[0] == 0f ? 1 : flag ? 3 : (int)Projectile.ai[0];
-        Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.FriendlyProjectileTextures + $"Magic/Bookworms{variant}").Value;
+        Texture2D texture = _worm1Texture.Value;
+        if (variant == 3) {
+            texture = _worm3Texture.Value;
+        }
+        else {
+            texture = _worm2Texture.Value;
+        }
         Vector2 position = Projectile.position - Main.screenPosition;
         Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
         SpriteEffects effects = Projectile.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;

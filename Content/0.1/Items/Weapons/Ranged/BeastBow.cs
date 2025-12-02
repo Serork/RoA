@@ -85,7 +85,7 @@ sealed class BeastProj : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Player _player = Main.player[Projectile.owner];
-        Texture2D _texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D _texture = Projectile.GetTexture();
         Vector2 _origin = new(_texture.Width * 0.5f, _texture.Height * 0.5f);
         float _rotOffset = 0.785f * _player.direction;
         if (_player.gravDir == -1f)

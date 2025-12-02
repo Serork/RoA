@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Cache;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
@@ -23,6 +25,18 @@ namespace RoA.Content.Items.Special;
 
 // IT STINKS
 sealed class SphereHandler : GlobalItem {
+    private static Asset<Texture2D> _terraUITexture = null!,
+                                    _condorFeatherUITexture = null!;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _terraUITexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TerraLeaf");
+        _condorFeatherUITexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "CondorFeather");
+    }
+
     private const float DISTTOALTAR = 150f;
 
     private static IReadOnlyCollection<int> _spheresToHandle = [ModContent.ItemType<SphereOfPyre>(), ModContent.ItemType<SphereOfCondor>(), ModContent.ItemType<SphereOfQuake>(),
@@ -247,7 +261,7 @@ sealed class SphereHandler : GlobalItem {
                     num5 -= 260;
                     num6 += 26;
                 }
-                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "TerraLeaf").Value;
+                Texture2D texture = _terraUITexture.Value;
                 int height = texture.Height;
                 int width = texture.Width;
                 spriteBatch.Draw(texture, item.Center - Main.screenPosition + new Vector2((float)(26 * (i - 1) + num5) - 48,
@@ -399,7 +413,7 @@ sealed class SphereHandler : GlobalItem {
                     num5 -= 260;
                     num6 += 26;
                 }
-                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "CondorFeather").Value;
+                Texture2D texture = _condorFeatherUITexture.Value;
                 int height = texture.Height;
                 int width = texture.Width;
                 spriteBatch.Draw(texture, item.Center - Main.screenPosition +

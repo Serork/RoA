@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Menus;
 using RoA.Core;
 
 using System;
@@ -35,7 +38,7 @@ sealed class BackwoodsSky : CustomSky {
 
     public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         if (maxDepth >= 3E+38f && minDepth < 3E+38f && !Main.gameMenu) {
-            Texture2D skyTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsSky").Value;
+            Texture2D skyTexture = BackwoodsMenuBG.SkyTexture.Value;
             spriteBatch.Draw(skyTexture,
                 new Rectangle(-(int)(Main.screenWidth * 0.1f), -(int)(Main.screenHeight * 0.1f), (int)(Main.screenWidth * 1.2f), (int)(Main.screenHeight * 1.2f)),
                 Main.ColorOfTheSkies * 0.95f * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _opacity));
