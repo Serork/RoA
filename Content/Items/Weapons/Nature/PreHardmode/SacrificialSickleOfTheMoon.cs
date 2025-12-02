@@ -80,11 +80,9 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
             Item.noMelee = false;
         }
         if (Main.moonPhase == 4 || Main.moonPhase == 5) {
-            Item.noMelee = true;
             Item.noUseGraphic = true;
         }
         else {
-            Item.noMelee = false;
             Item.noUseGraphic = false;
         }
         return true;
