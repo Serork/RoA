@@ -24,7 +24,6 @@ sealed partial class Lothor : ModNPC {
 
     public static Asset<Texture2D> ItsSpriteSheet { get; private set; } = null!;
     public static Asset<Texture2D> GlowMask { get; private set; } = null!;
-    public static Asset<Texture2D> WhiteTint { get; private set; } = null!;
 
     public partial void LoadTextures() {
         if (Main.dedServ) {
@@ -33,7 +32,6 @@ sealed partial class Lothor : ModNPC {
 
         ItsSpriteSheet = ModContent.Request<Texture2D>(Texture + "_Spritesheet");
         GlowMask = ModContent.Request<Texture2D>(Texture + "_Spritesheet_Glow");
-        WhiteTint = ModContent.Request<Texture2D>(Texture + "_Spritesheet_WhiteTint");
     }
 
     public override void FindFrame(int frameHeight) {
