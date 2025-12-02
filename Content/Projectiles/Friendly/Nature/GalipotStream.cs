@@ -119,12 +119,12 @@ sealed class GalipotStream : NatureProjectile {
         if (IsActive) {
             for (int num164 = 0; num164 < 2; num164++) {
                 if (Main.rand.NextBool(4)) {
-                    Dust obj14 = Main.dust[Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, ModContent.DustType<Galipot>(), Projectile.velocity.X, Projectile.velocity.Y, 150)];
+                    Dust obj14 = Main.dust[Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Galipot>(), Projectile.velocity.X, Projectile.velocity.Y, 150)];
                     obj14.noGravity = true;
                     obj14.color = default;
                     obj14.velocity = obj14.velocity / 4f + Projectile.velocity / 2f;
                     obj14.scale = 1.2f;
-                    obj14.position = Projectile.Center + Main.rand.NextFloat() * Projectile.velocity * 2f;
+                    obj14.position = Projectile.Center + Main.rand.NextFloatDirection() * Projectile.velocity * 1f;
                     obj14.velocity *= 0.5f;
                 }
             }
