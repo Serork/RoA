@@ -734,7 +734,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
     }
 
     private class WaveSlash : ModProjectile {
-        public override string Texture => ResourceManager.Textures + "FlederSlayerSlash";
+        public override string Texture => ResourceManager.MeleeProjectileTextures + "FlederSlayer_Slash";
 
         public override bool PreDraw(ref Color lightColor) {
             SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();

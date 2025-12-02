@@ -136,13 +136,15 @@ sealed class PeegeonHood : ModItem {
             public float idleCount;
         }
 
-        private Asset<Texture2D> eyeTrailTexture, eyeTrailGlowTexture;
+        private static Asset<Texture2D> _eyeTrailTexture = null!, _eyeTrailGlowTexture = null!;
 
-        public override void Load()
-            => eyeTrailTexture = eyeTrailGlowTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "PeegeonHood_Glow");
+        public override void Load() {
+            if (Main.dedServ) {
+                return;
+            }
 
-        public override void Unload()
-            => eyeTrailTexture = null;
+            _eyeTrailTexture = _eyeTrailGlowTexture = ModContent.Request<Texture2D>(ResourceManager.DeveloperEquipableTextures + "PeegeonHood_Glow");
+        }
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
             => true;
@@ -173,8 +175,8 @@ sealed class PeegeonHood : ModItem {
             }
 
             Player player = drawInfo.drawPlayer;
-            Texture2D texture = eyeTrailTexture.Value;
-            Texture2D glow_texture = eyeTrailGlowTexture.Value;
+            Texture2D texture = _eyeTrailTexture.Value;
+            Texture2D glow_texture = _eyeTrailGlowTexture.Value;
             Rectangle bodyFrame = player.bodyFrame;
             SpriteEffects effect = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 

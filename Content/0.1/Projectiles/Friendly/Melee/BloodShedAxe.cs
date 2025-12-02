@@ -180,7 +180,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 Vector2 velocity = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(0.5f, 2f) - new Vector2(0f, 0.5f);
                 float rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                 Color color = new(82, 15, 15, 255);
-                VisualEffectSystem.New<BloodShedParticle>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity,
+                VisualEffectSystem.New<BloodShedDust>(VisualEffectLayer.BEHINDPLAYERS)?.Setup(position, velocity,
                     color, rotation: rotation);
 
                 if (Main.netMode == NetmodeID.MultiplayerClient) {

@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Druid;
 using RoA.Common.Networking;
 using RoA.Content.Dusts;
@@ -22,6 +24,8 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 // TODO: rewrite
 sealed class Cacti : NatureProjectile {
+    private static Asset<Texture2D> _trailTexture = null!;
+
     public enum State {
         Normal,
         Enchanted
@@ -34,6 +38,12 @@ sealed class Cacti : NatureProjectile {
     public override void SetStaticDefaults() {
         Projectile.SetTrail(2, 6);
         ProjectileID.Sets.NeedsUUID[Type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _trailTexture = ModContent.Request<Texture2D>(Texture + "_Trail");
     }
 
     protected override void SafeSetDefaults() {
@@ -96,7 +106,7 @@ sealed class Cacti : NatureProjectile {
     public override bool PreDraw(ref Color lightColor) {
         if (_state == State.Enchanted) {
             Texture2D texture = Projectile.GetTexture(),
-                      trailTexture = ModContent.Request<Texture2D>(ResourceManager.NatureProjectileTextures + "CactiTrail").Value;
+                      trailTexture = _trailTexture.Value;
             Vector2 origin = texture.Size() / 2f;
             Color color = lightColor;
             int length = Projectile.oldPos.Length;

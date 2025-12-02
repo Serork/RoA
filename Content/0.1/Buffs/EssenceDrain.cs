@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Core;
 
 using System;
@@ -57,18 +59,28 @@ internal class EssenceDrainPlayer : ModPlayer {
 }
 
 internal class EssenceDrainNPC : GlobalNPC {
+    private static Asset<Texture2D> _baneRuneTexture = null!;
+
     public float fadeMult = 0.1f;
     public Color color;
-    public override bool InstancePerEntity => true;
 
     public bool essenceDrain;
     public int Source;
 
     private float _essenceDrainTimer = 0;
 
+    public override bool InstancePerEntity => true;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _baneRuneTexture = ModContent.Request<Texture2D>(ResourceManager.MagicProjectileTextures + "BaneRune");
+    }
+
     public override void ResetEffects(NPC npc)
         => essenceDrain = false;
-
 
     public override void UpdateLifeRegen(NPC npc, ref int damage) {
         int bonusDamage = 4;
@@ -116,7 +128,7 @@ internal class EssenceDrainNPC : GlobalNPC {
         if (essenceDrain) {
             if (fadeMult < 0.8f) fadeMult += 0.1f;
             Vector2 offset = new Vector2(-MathHelper.Lerp(-3.5f, 5f, (float)Math.Sin(_essenceDrainTimer * 0.05f)));
-            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "BaneRune");
+            Texture2D texture = _baneRuneTexture.Value;
             color = drawColor.MultiplyRGB(Color.DarkViolet) * fadeMult;
             color = new Color(color.R, color.G, color.B * MathHelper.Lerp(1f, 2f, (float)Math.Sin(_essenceDrainTimer * 0.25f)), MathHelper.Lerp(0.75f, 1f, (float)Math.Sin(_essenceDrainTimer * 0.25f)));
             Vector2 origin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);

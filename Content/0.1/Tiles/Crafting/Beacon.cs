@@ -166,7 +166,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
 
             Vector2 zero = Vector2.Zero;
             Vector2 position = new Point(i, j).ToWorldCoordinates();
-            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "Beacon_Light");
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.VisualEffectTextures + "Beacon_Light");
             Vector2 drawPos = position - Main.screenPosition;
             drawPos.X += 1f;
             drawPos.Y -= 4f;

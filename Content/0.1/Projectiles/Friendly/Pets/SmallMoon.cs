@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Buffs;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -15,6 +17,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Pets;
 
 sealed class SmallMoon : ModProjectile {
+    private static Asset<Texture2D> _lightTexture = null!;
+
     private float glowAlpha;
     private bool glowAlphaIncrease;
 
@@ -24,6 +28,12 @@ sealed class SmallMoon : ModProjectile {
         Main.projFrames[Projectile.type] = 4;
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _lightTexture = ModContent.Request<Texture2D>(ResourceManager.VisualEffectTextures + "SmallLight");
     }
 
     public override void SetDefaults() {
@@ -122,7 +132,7 @@ sealed class SmallMoon : ModProjectile {
         }
 
         Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
-        Texture2D glowTexture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.Textures + "SmallMoon_Light");
+        Texture2D glowTexture = _lightTexture.Value;
         int frameHeight = texture.Height / Main.projFrames[Projectile.type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
         Rectangle glowframeRect = new Rectangle(0, 0, glowTexture.Width, glowTexture.Height);

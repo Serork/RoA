@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.VisualEffects;
 using RoA.Common.WorldEvents;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -18,6 +19,8 @@ sealed class Fog2 : VisualEffect<Fog2> {
     public float FadeIn2 { get; private set; }
 
     public int Alpha { get; private set; }
+
+    protected override string TexturePath => ResourceManager.BackwoodsDustTextures + nameof(Fog2);
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
         Color lightColor = Lighting.GetColor((int)(Position.X / 16f), (int)(Position.Y / 16f));

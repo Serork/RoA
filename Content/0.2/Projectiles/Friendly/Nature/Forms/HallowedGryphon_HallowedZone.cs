@@ -27,7 +27,7 @@ sealed class HallowedZone : FormProjectile_NoTextureLoad, IRequestAssets {
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
-        [((byte)HallowedZoneRequstedTextureType.Light, ResourceManager.Textures + "HallowedLight")];
+        [((byte)HallowedZoneRequstedTextureType.Light, ResourceManager.VisualEffectTextures + "HallowedLight")];
 
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(10);

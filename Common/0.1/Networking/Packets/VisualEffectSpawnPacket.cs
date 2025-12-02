@@ -77,7 +77,7 @@ sealed class VisualEffectSpawnPacket : NetPacket {
                 createVisualEffect<ClawsSlashHit>();
                 break;
             case VisualEffectPacketType.BloodShedParticle:
-                createVisualEffect<BloodShedParticle>();
+                createVisualEffect<BloodShedDust>();
                 break;
             case VisualEffectPacketType.MercuriumBulletParticle:
                 createVisualEffect<MercuriumBulletParticle>();

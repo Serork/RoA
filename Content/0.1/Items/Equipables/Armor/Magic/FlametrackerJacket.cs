@@ -39,13 +39,15 @@ sealed class FlametrackerJacket : ModItem {
 }
 
 sealed class FlametrackerJacketFlame : PlayerDrawLayer {
-    private Asset<Texture2D> _jacketFlameTexture;
+    private static Asset<Texture2D> _jacketFlameTexture = null!;
 
-    public override void Load()
-        => _jacketFlameTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "FlametrackerJacket_Flame");
+    public override void Load() {
+        if (Main.dedServ) {
+            return;
+        }
 
-    public override void Unload()
-        => _jacketFlameTexture = null;
+        _jacketFlameTexture = ModContent.Request<Texture2D>(ResourceManager.MagicArmorTextures + "FlametrackerJacket_Flame");
+    }
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         => drawInfo.drawPlayer.CheckArmorSlot(ModContent.ItemType<FlametrackerJacket>(), 1, 11) ||
@@ -82,13 +84,15 @@ sealed class FlametrackerJacketFlame : PlayerDrawLayer {
 }
 
 sealed class FlametrackerJacketMask : PlayerDrawLayer {
-    private Asset<Texture2D> _jacketMaskTexture;
+    private static Asset<Texture2D> _jacketMaskTexture = null!;
 
-    public override void Load()
-        => _jacketMaskTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "FlametrackerMask_Down");
+    public override void Load() {
+        if (Main.dedServ) {
+            return;
+        }
 
-    public override void Unload()
-        => _jacketMaskTexture = null;
+        _jacketMaskTexture = ModContent.Request<Texture2D>(ResourceManager.MagicArmorTextures + "FlametrackerMask_Down");
+    }
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         => drawInfo.drawPlayer.CheckArmorSlot(ModContent.ItemType<FlametrackerJacket>(), 1, 11) ||

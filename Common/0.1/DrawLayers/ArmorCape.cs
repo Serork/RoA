@@ -16,7 +16,7 @@ namespace RoA.Common.DrawLayers;
 sealed class ArmorCape : PlayerDrawLayer {
     private Asset<Texture2D> _acolyteCapeTexture;
 
-    public override void Load() => _acolyteCapeTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "AcolyteCape_Front");
+    public override void Load() => _acolyteCapeTexture = ModContent.Request<Texture2D>(ResourceManager.MagicArmorTextures + "AcolyteCape_Front");
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) {
         int copperJacket = ModContent.ItemType<CopperAcolyteJacket>();

@@ -43,10 +43,10 @@ static class ResourceManager {
     public static Texture2D Circle4 => ModContent.Request<Texture2D>(Textures + "Circle4", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Circle5 => ModContent.Request<Texture2D>(Textures + "Circle5", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Blood => ModContent.Request<Texture2D>(Textures + "Blood", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Flash => ModContent.Request<Texture2D>(Textures + "Flash", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Laser0 => ModContent.Request<Texture2D>(Textures + "Laser0", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Laser1 => ModContent.Request<Texture2D>(Textures + "Laser1", AssetRequestMode.ImmediateLoad).Value;
-    public static Texture2D Star => ModContent.Request<Texture2D>(Textures + "Star", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Flash => ModContent.Request<Texture2D>(VisualEffectTextures + "Flash", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Laser0 => ModContent.Request<Texture2D>(VisualEffectTextures + "Laser0", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Laser1 => ModContent.Request<Texture2D>(VisualEffectTextures + "Laser1", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Star => ModContent.Request<Texture2D>(VisualEffectTextures + "Star", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Ray2 => ModContent.Request<Texture2D>(Textures + "Ray2", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Bloom => ModContent.Request<Texture2D>(Textures + "Bloom0", AssetRequestMode.ImmediateLoad).Value;
 
@@ -62,6 +62,15 @@ static class ResourceManager {
     public static string WeaponTextures => ItemTextures + "Weapons/";
     public static string MeleeWeaponTextures => WeaponTextures + "Melee/";
     public static string MagicWeaponTextures => WeaponTextures + "Magic/";
+
+    public static string MiscellaneousItemTextures => ItemTextures + "Miscellaneous/";
+
+    public static string EquipableTextures => ItemTextures + "Equipables/";
+    public static string VanityEquipableTextures => EquipableTextures + "Vanity/";
+    public static string DeveloperEquipableTextures => VanityEquipableTextures + "Developer/";
+
+    public static string ArmorTextures => EquipableTextures + "Armor/";
+    public static string MagicArmorTextures => ArmorTextures + "Magic/";
 
     public static string ProjectileTextures => Textures + "Projectiles/";
     public static string FriendlyMiscProjectiles => FriendlyProjectileTextures + "Miscellaneous/";
@@ -79,10 +88,12 @@ static class ResourceManager {
     public static string TarEnemyNPCTextures => EnemyNPCTextures + "Tar/";
 
     public static string DustTextures => Textures + "Dusts/";
+    public static string BackwoodsDustTextures => DustTextures + "Backwoods";
 
     public static string BuffTextures => Textures + "Buffs/";
 
     public static string TileTextures => Textures + "Tiles/";
+    public static string AmbientTileTextures => TileTextures + "Ambient/";
     public static string TreeTileTextures => TileTextures + "Trees/";
     public static string MiscTileTextures => TileTextures + "Miscellaneous/";
     public static string WaterTextures => TileTextures + "Waters/";

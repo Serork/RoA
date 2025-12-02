@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -159,6 +161,8 @@ sealed class EldritchRing : ModItem {
     }
 
     private class EldritchRingDrawLayer : ILoadable {
+        private static Asset<Texture2D> _yellowSignRune = null!;
+
         internal class EldritchRingHandler : ModPlayer {
             public Vector2 runePosition;
             public float runeRotation;
@@ -181,6 +185,10 @@ sealed class EldritchRing : ModItem {
 
         void ILoadable.Load(Mod mod) {
             On_PlayerDrawLayers.DrawPlayer_08_Backpacks += On_PlayerDrawLayers_DrawPlayer_08_Backpacks;
+
+            if (!Main.dedServ) {
+                _yellowSignRune = ModContent.Request<Texture2D>(ResourceManager.DeveloperEquipableTextures + "YellowSignRune");
+            }
         }
 
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawInfo) {
@@ -191,7 +199,7 @@ sealed class EldritchRing : ModItem {
                     if (!drawInfo.hideEntirePlayer && !player.dead) {
                         Vector2 position2 = handler.runePosition - Main.screenPosition;
                         Vector2 position = new(drawInfo.Center.X, drawInfo.Center.Y);
-                        var asset = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "YellowSignRune");
+                        var asset = _yellowSignRune;
                         Texture2D texture = asset.Value;
                         Vector2 origin = new(texture.Width * 0.5f, texture.Height * 0.5f);
                         Color color = new(255, 215, 50, 180);

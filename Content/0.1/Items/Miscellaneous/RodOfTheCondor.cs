@@ -113,7 +113,7 @@ sealed class RodOfTheCondor : ModItem {
 
         private static int _wingsSlot = -1;
 
-        private static string WingsTextureName => ResourceManager.ItemTextures + $"{nameof(RodOfTheCondor)}_Wings";
+        private static string WingsTextureName => ResourceManager.MiscellaneousItemTextures + $"{nameof(RodOfTheCondor)}_Wings";
         private static string WingsLayerName => $"{nameof(RodOfTheCondor)}_Wings";
 
         public override void PostUpdate() {

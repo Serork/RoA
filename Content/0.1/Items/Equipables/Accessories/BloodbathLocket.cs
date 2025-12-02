@@ -17,14 +17,24 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories;
 
 sealed class BloodbathLocketGlowGlowing : ModSystem {
-    private Asset<Texture2D> _lothorGlowMaskTexture;
+    public static Asset<Texture2D> NeckGlowTexture { get; private set; } = null!;
+
+    public static Asset<Texture2D> GlowTexture { get; private set; } = null!;
+
+    public static Asset<Texture2D> FlederEyesTexture { get; private set; } = null!;
+    public static Asset<Texture2D> FlederEyesTexture2 { get; private set; } = null!;
 
     public override void SetStaticDefaults() {
         if (Main.dedServ) {
             return;
         }
 
-        _lothorGlowMaskTexture = ModContent.Request<Texture2D>(GetType().Namespace.Replace(".", "/") + "/BloodbathLocket_Neck_Glow");
+        string texturePath = GetType().Namespace!.Replace(".", "/") + "/BloodbathLocket";
+        NeckGlowTexture = ModContent.Request<Texture2D>(texturePath + "_Neck_Glow");
+        GlowTexture = ModContent.Request<Texture2D>(texturePath + "_Glow");
+
+        FlederEyesTexture = ModContent.Request<Texture2D>(texturePath + "_Eyes1");
+        FlederEyesTexture2 = ModContent.Request<Texture2D>(texturePath + "_Eyes2");
     }
 
     public override void Load() {
@@ -63,7 +73,7 @@ sealed class BloodbathLocketGlowGlowing : ModSystem {
                 }
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
                     Main.spriteBatch.Draw(
-                        _lothorGlowMaskTexture.Value,
+                        NeckGlowTexture.Value,
                         (drawInfo.drawPlayer.mount.Active ? drawInfo.drawPlayer.position : drawInfo.Position) + (player.gravDir != 1 ? Vector2.UnitY * 6f : Vector2.Zero) + Vector2.UnitY * (-posOffset.Y + seatYOffset) - Main.screenPosition + new Vector2(0f, drawInfo.drawPlayer.mount.Active ? drawInfo.drawPlayer.gfxOffY : 0f)
                             +
                             Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0 * player.gravDir, new Vector2())
@@ -87,13 +97,10 @@ sealed class BloodbathLocketGlowGlowing : ModSystem {
 
 
 sealed class BloodbathLocketGlowMaskHandler : PlayerDrawLayer {
-    private static Asset<Texture2D> glowTexture;
-
     internal class BloodbathLocketGlowMaskHandler2 : ModPlayer {
         public bool ShouldDraw;
     }
 
-    public override void Load() => glowTexture = ModContent.Request<Texture2D>(GetType().Namespace.Replace(".", "/") + "/BloodbathLocket_Neck_Glow");
     public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.NeckAcc);
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) {
@@ -137,7 +144,7 @@ sealed class BloodbathLocket : ModItem {
         SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
         Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
         for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
-            Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+            Texture2D glowMaskTexture = BloodbathLocketGlowGlowing.GlowTexture.Value;
             Vector2 origin = glowMaskTexture.Size() / 2f;
             Color color = Color.White;
             spriteBatch.Draw(glowMaskTexture, Item.Center - Main.screenPosition +
@@ -171,7 +178,7 @@ sealed class BloodbathLocket : ModItem {
         Main.spriteBatch.End();
         Main.spriteBatch.Begin(snapshot.sortMode, BlendState.Additive, Main.DefaultSamplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
         for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
-            Texture2D glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+            Texture2D glowMaskTexture = BloodbathLocketGlowGlowing.GlowTexture.Value;
             Vector2 origin2 = glowMaskTexture.Size() / 2f;
             Color color = Color.White;
             spriteBatch.Draw(glowMaskTexture, position +
@@ -252,7 +259,7 @@ sealed class BloodbathLocket : ModItem {
                 if (gameActive) {
                     eyes.TimeLeft--;
                 }
-                Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.Textures + $"FlederEyes" + (eyes.Extra ? 2 : string.Empty)).Value;
+                Texture2D texture = eyes.Extra ? BloodbathLocketGlowGlowing.FlederEyesTexture2.Value : BloodbathLocketGlowGlowing.FlederEyesTexture.Value;
                 float edge = 30f;
                 float opacity = Utils.GetLerpValue(0f, edge, eyes.TimeLeft, true) * Utils.GetLerpValue(eyes.MaxTimeLeft, eyes.MaxTimeLeft - edge, eyes.TimeLeft, true);
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {

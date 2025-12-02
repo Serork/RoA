@@ -113,7 +113,7 @@ sealed partial class RoA : Mod {
         };
 
         var customPortrait = (SpriteBatch sb, Rectangle rect, Color color) => {
-            Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.Textures + "Lothor_Checklist").Value;
+            Texture2D texture = ModContent.Request<Texture2D>(ResourceManager.BestiaryTextures + "Lothor_Checklist").Value;
             Vector2 centered = new Vector2(rect.X + (rect.Width / 2) - (texture.Width / 2), rect.Y + (rect.Height / 2) - (texture.Height / 2));
             sb.Draw(texture, centered, color);
         };

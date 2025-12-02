@@ -43,7 +43,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
             return;
         }
 
-        _wreathSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.Textures + "Wreath"), new SpriteFrame(HORIZONTALFRAMECOUNT, 3));
+        _wreathSpriteData = new SpriteData(ModContent.Request<Texture2D>(ResourceManager.UITextures + "Wreath"), new SpriteFrame(HORIZONTALFRAMECOUNT, 3));
     }
 
     public override bool IsHeadLayer => false;

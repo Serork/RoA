@@ -21,7 +21,7 @@ namespace RoA.Content.VisualEffects;
 sealed class Leaf : VisualEffect<Leaf> {
     private static float BASECHANGEVALUE => 10f;
 
-    private static Asset<Texture2D>? _glowTexture;
+    private static Asset<Texture2D>? _glowTexture = null!;
 
     private Vector2 _newVelocity;
 

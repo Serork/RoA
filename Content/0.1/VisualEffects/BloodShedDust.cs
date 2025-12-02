@@ -11,7 +11,7 @@ using Terraria.Graphics.Renderers;
 
 namespace RoA.Content.VisualEffects;
 
-sealed class BloodShedParticle : VisualEffect<BloodShedParticle> {
+sealed class BloodShedDust : VisualEffect<BloodShedDust> {
     private float _opacity;
 
     protected override void SetDefaults() {

@@ -14,6 +14,16 @@ using Terraria.ModLoader;
 namespace RoA.Common.Tiles;
 
 sealed class RootsDrawing : GlobalTile {
+    private static Asset<Texture2D> _rootsTexture = null!;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _rootsTexture = ModContent.Request<Texture2D>(ResourceManager.AmbientTileTextures + "Roots");
+    }
+
     public static bool[] ShouldDraw = TileID.Sets.Factory.CreateBoolSet();
 
     public override void PostDraw(int i, int j, int type, SpriteBatch spriteBatch) {
@@ -33,7 +43,7 @@ sealed class RootsDrawing : GlobalTile {
         }
         Color color = Lighting.GetColor(i, j);
         SpriteFrame frame = new(frameCount, 1);
-        Asset<Texture2D> texture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "Roots");
+        Asset<Texture2D> texture = _rootsTexture;
         Rectangle rectangle = frame.GetSourceRectangle(texture.Value);
         int width = texture.Width() / frameCount;
         ulong seedForRandomness = (ulong)((long)j << 32 | (long)(uint)i);

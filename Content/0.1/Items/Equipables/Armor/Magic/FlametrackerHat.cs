@@ -80,10 +80,15 @@ sealed class FlametrackerHat : ModItem {
 }
 
 sealed class FlametrackerHatFlame : PlayerDrawLayer {
-    private Asset<Texture2D> _hatFlameTexture;
+    private static Asset<Texture2D> _hatFlameTexture = null!;
 
-    public override void Load()
-        => _hatFlameTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "FlametrackerHat_Flame");
+    public override void Load() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _hatFlameTexture = ModContent.Request<Texture2D>(ResourceManager.MagicArmorTextures + "FlametrackerHat_Flame");
+    }
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         => drawInfo.drawPlayer.CheckArmorSlot(ModContent.ItemType<FlametrackerHat>(), 0, 10) ||
@@ -124,13 +129,15 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
 }
 
 sealed class FlametrackerHatMask : PlayerDrawLayer {
-    private Asset<Texture2D> hatMaskTexture;
+    private static Asset<Texture2D> hatMaskTexture = null!;
 
-    public override void Load()
-        => hatMaskTexture = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "FlametrackerMask_Up");
+    public override void Load() {
+        if (Main.dedServ) {
+            return;
+        }
 
-    public override void Unload()
-        => hatMaskTexture = null;
+        hatMaskTexture = ModContent.Request<Texture2D>(ResourceManager.MagicArmorTextures + "FlametrackerMask_Up");
+    }
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         => drawInfo.drawPlayer.CheckArmorSlot(ModContent.ItemType<FlametrackerHat>(), 0, 10) ||

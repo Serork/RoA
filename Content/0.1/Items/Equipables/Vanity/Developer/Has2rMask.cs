@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Core;
@@ -45,6 +47,8 @@ sealed class Has2rMask : ModItem {
           legs == EquipLoader.GetEquipSlot(Mod, nameof(Has2rPants), EquipType.Legs);
 
     private class TentaclesDrawLayer : ILoadable {
+        private static Asset<Texture2D> _tentacleTexture = null!;
+
         private const int MAX = 3;
 
         private Vector2 tentaclePosition;
@@ -59,6 +63,10 @@ sealed class Has2rMask : ModItem {
 
         void ILoadable.Load(Mod mod) {
             On_PlayerDrawLayers.DrawPlayer_08_Backpacks += On_PlayerDrawLayers_DrawPlayer_08_Backpacks;
+
+            if (!Main.dedServ) {
+                _tentacleTexture = ModContent.Request<Texture2D>(ResourceManager.DeveloperEquipableTextures + "Tentacle");
+            }
         }
 
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawInfo) {
@@ -94,7 +102,7 @@ sealed class Has2rMask : ModItem {
                             shader = drawInfo.cLegs;
                         }
 
-                        var asset = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "Tentacle");
+                        var asset = _tentacleTexture;
                         Texture2D _texture = asset.Value;
                         Vector2 _position2 = tentaclePosition - Main.screenPosition;
                         Vector2 _origin = new(_texture.Width * 0.5f, _texture.Height * 0.5f);

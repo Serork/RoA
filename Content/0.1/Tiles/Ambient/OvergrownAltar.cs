@@ -11,6 +11,7 @@ using RoA.Content.Tiles.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
 using RoA.Core;
+using RoA.Core.Data;
 using RoA.Core.Utility;
 
 using System;
@@ -35,7 +36,7 @@ sealed class OvergrownAltar : ModTile {
 
         On_WorldGen.PlaceTile += On_WorldGen_PlaceTile;
         On_TileObject.Place += On_TileObject_Place;
-        On_WorldGen.Convert_int_int_int_int += On_WorldGen_Convert_int_int_int_int;
+        On_WorldGen.Convert_int_int_int_int_bool_bool += On_WorldGen_Convert_int_int_int_int_bool_bool;
     }
 
     private bool On_TileObject_Place(On_TileObject.orig_Place orig, TileObject toBePlaced) {
@@ -102,7 +103,8 @@ sealed class OvergrownAltar : ModTile {
         return orig(i, j, Type, mute, forced, plr, style);
     }
 
-    private void On_WorldGen_Convert_int_int_int_int(On_WorldGen.orig_Convert_int_int_int_int orig, int i, int j, int conversionType, int size) {
+
+    private void On_WorldGen_Convert_int_int_int_int_bool_bool(On_WorldGen.orig_Convert_int_int_int_int_bool_bool orig, int i, int j, int conversionType, int size, bool tiles, bool walls) {
         if (WorldGen.IsGeneratingHardMode) {
             for (int type = TileID.Count; type < TileLoader.TileCount; type++) {
                 if (type == ModContent.TileType<BackwoodsGrass>()) {
@@ -134,7 +136,7 @@ sealed class OvergrownAltar : ModTile {
             }
         }
 
-        orig(i, j, conversionType, size);
+        orig(i, j, conversionType, size, tiles, walls);
 
         if (WorldGen.IsGeneratingHardMode) {
             for (int type = TileID.Count; type < TileLoader.TileCount; type++) {
