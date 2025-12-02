@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Core.Utility;
+
 using System;
 
 using Terraria;
@@ -61,6 +63,8 @@ sealed class SerorkMask : ModItem {
           legs == EquipLoader.GetEquipSlot(Mod, nameof(SerorkGreaves), EquipType.Legs);
 
     private class SerorkVisuals : ILoadable {
+        public static Color EffectGlowColor => Color.Lerp(Color.LightYellow, Color.LightBlue, Helper.Wave(0f, 1f, 5f, 0f));
+
         public sealed class SerorkVisualsHeadGlowing : PlayerDrawLayer {
             public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Head);
 
@@ -90,7 +94,7 @@ sealed class SerorkMask : ModItem {
                         glowMaskColor = Color.White;
                         glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                         drawData.color = glowMaskColor * 0.25f;
-                        drawData.color = Color.Lerp(drawData.color, Color.LightBlue, 0.5f);
+                        drawData.color = Color.Lerp(drawData.color, EffectGlowColor, 0.5f);
                         drawData.color.A = (byte)((float)(int)drawData.color.A * 0.375f);
                         var handler = drawinfo.drawPlayer.GetModPlayer<SerorkVisualsStorage>();
                         float num2 = handler.ghostFade2;
@@ -180,7 +184,7 @@ sealed class SerorkMask : ModItem {
                     Color glowMaskColor = Color.White;
                     glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                     drawData.color = glowMaskColor * 0.25f;
-                    drawData.color = Color.Lerp(drawData.color, Color.LightBlue, 0.5f);
+                    drawData.color = Color.Lerp(drawData.color, EffectGlowColor, 0.5f);
                     drawData.color.A = (byte)((float)(int)drawData.color.A * 0.375f);
                     var handler = drawinfo.drawPlayer.GetModPlayer<SerorkVisualsStorage>();
                     float num2 = handler.ghostFade3;
@@ -234,14 +238,15 @@ sealed class SerorkMask : ModItem {
                     flag = true;
                 }
                 if (!Main.gamePaused && flag) {
+                    float maxOffset = 10f;
                     ghostFade = MathHelper.SmoothStep(ghostFade,
-                        (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
+                        (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(maxOffset),
                         0.25f);
                     ghostFade2 = MathHelper.SmoothStep(ghostFade2,
-                         (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
+                         (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(maxOffset),
                          0.25f);
                     ghostFade3 = MathHelper.SmoothStep(ghostFade3,
-                         (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(20f),
+                         (float)Main.rand.NextFloatDirection() * (float)Math.Floor(Main.rand.NextFloatDirection()) * Main.rand.NextFloat(maxOffset),
                          0.25f);
                 }
             }
@@ -271,7 +276,7 @@ sealed class SerorkMask : ModItem {
                     Color glowMaskColor = Color.White;
                     glowMaskColor = drawinfo.drawPlayer.GetImmuneAlphaPure(glowMaskColor, (float)drawinfo.shadow);
                     item2.color = glowMaskColor * 0.25f;
-                    item2.color = Color.Lerp(item2.color, Color.LightBlue, 0.5f);
+                    item2.color = Color.Lerp(item2.color, EffectGlowColor, 0.5f);
                     item2.color.A = (byte)((float)(int)item2.color.A * 0.375f);
                     var handler = drawPlayer.GetModPlayer<SerorkVisualsStorage>();
                     float num2 = handler.ghostFade;
@@ -329,7 +334,7 @@ sealed class SerorkMask : ModItem {
                 if (flag && drawinfo.shadow == handler.ghostFade) {
                     for (int i = 0; i < drawinfo.DrawDataCache.Count; i++) {
                         DrawData value = drawinfo.DrawDataCache[i];
-                        value.color = Color.Lerp(value.color, Color.LightBlue, 0.5f);
+                        value.color = Color.Lerp(value.color, EffectGlowColor, 0.5f);
                         value.color.A = (byte)((float)(int)value.color.A * 0.375f);
                         drawinfo.DrawDataCache[i] = value;
                     }
