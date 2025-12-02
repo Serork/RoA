@@ -18,8 +18,7 @@ namespace RoA.Content.Items.Equipables.Vanity.Developer;
 sealed class SerorkMask : ModItem {
     private static Asset<Texture2D> _maskGlowTexture1 = null!,
                                     _maskGlowTexture2 = null!;
-    private static Asset<Texture2D> _helmetGlowTexture1 = null!,
-                                    _helmetGlowTexture2 = null!;
+    private static Asset<Texture2D> _helmetGlowTexture1 = null!;
 
     private static Asset<Texture2D> _legsGlowTexture = null!,
                                     _legsGlowTexture2 = null!;
@@ -39,7 +38,6 @@ sealed class SerorkMask : ModItem {
         _maskGlowTexture2 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkMask>()).Texture + "_Head_Glow2");
 
         _helmetGlowTexture1 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkHelmet>()).Texture + "_Head_Glow");
-        _helmetGlowTexture1 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkHelmet>()).Texture + "_Head_Glow2");
 
         _legsGlowTexture = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkGreaves>()).Texture + "_Legs_Glow");
         _legsGlowTexture2 = ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<SerorkGreaves>()).Texture + "_Legs_Glow2");
