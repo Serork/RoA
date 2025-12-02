@@ -119,35 +119,8 @@ sealed class PineCone : NatureProjectile {
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        if (Main.netMode != NetmodeID.Server) {
-            Point point = Projectile.TopLeft.ToTileCoordinates();
-            Point point2 = Projectile.BottomRight.ToTileCoordinates();
-            int num2 = point.X / 2 + point2.X / 2;
-            int num3 = Projectile.width / 2;
-            int num4 = (int)Projectile.ai[0] / 3;
-            for (int i = point.X; i <= point2.X; i++) {
-                for (int j = point.Y; j <= point2.Y; j++) {
-                    if (Vector2.Distance(Projectile.Center, new Vector2(i * 16, j * 16)) > num3)
-                        continue;
-                    Tile tileSafely = Framing.GetTileSafely(i, j);
-                    if (!tileSafely.HasTile || !Main.tileSolid[tileSafely.TileType] || Main.tileSolidTop[tileSafely.TileType] || Main.tileFrameImportant[tileSafely.TileType]) {
-                        continue;
-                    }
-                    Tile tileSafely2 = Framing.GetTileSafely(i, j - 1);
-                    if (tileSafely2.HasTile && Main.tileSolid[tileSafely2.TileType] && !Main.tileSolidTop[tileSafely2.TileType]) {
-                        continue;
-                    }
-                    int num5 = WorldGen.KillTile_GetTileDustAmount(fail: true, tileSafely, i, j);
-                    for (int k = 0; k < num5; k++) {
-                        Dust obj = Main.dust[WorldGen.KillTile_MakeTileDust(i, j, tileSafely)];
-                        obj.velocity.Y -= 1f + num4 * 1.5f;
-                        obj.velocity.Y *= Main.rand.NextFloat();
-                        obj.velocity.Y *= 0.75f;
-                        obj.scale += num4 * 0.03f;
-                    }
-                }
-            }
-        }
+        int size = 6;
+        Collision.HitTiles(Projectile.Center - Vector2.One * size / 2f, Projectile.velocity, size, size);
 
         SoundEngine.PlaySound(SoundID.Dig with { Pitch = Main.rand.NextFloat(0.8f, 1.2f) }, Projectile.Center);
 
@@ -166,11 +139,12 @@ sealed class PineCone : NatureProjectile {
         for (int i = 0; i < Main.rand.Next(4, 8) + 1; i++) {
             if (Main.rand.Next(2) == 0)
                 type = ModContent.DustType<Dusts.PineCone>();
-            Dust dust = Dust.NewDustDirect(Projectile.Center - Vector2.One * 4 - Projectile.velocity * 0.1f, 8, 8, type, Projectile.velocity.X / 10f * 0.25f, Projectile.velocity.Y / 10f * 0.25f, 0, default, Main.rand.NextFloat(0.8f, 1f) * Main.rand.NextFloat(0.75f, 0.9f) * 0.85f);
+            Dust dust = Dust.NewDustDirect(Projectile.Center - Vector2.One * 4 - Projectile.velocity * 0.1f - Vector2.One * 2f, 8, 8, type, Projectile.velocity.X / 10f * 0.25f, Projectile.velocity.Y / 10f * 0.25f, 0, default, Main.rand.NextFloat(0.8f, 1f) * Main.rand.NextFloat(0.75f, 0.9f) * 0.85f);
             dust.fadeIn = (float)(1.3 + (double)Main.rand.NextFloat() * 0.2);
             dust.noGravity = true;
+            dust.position += dust.velocity;
             Dust dust2 = dust;
-            dust2.position += dust.velocity;
+            dust2.velocity *= 0.5f;
         }
     }
 }
