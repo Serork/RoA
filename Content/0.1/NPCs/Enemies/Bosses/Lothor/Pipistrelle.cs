@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.WorldEvents;
@@ -8,6 +10,7 @@ using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -23,8 +26,7 @@ sealed class Pipistrelle : ModNPC {
     private bool _shouldEnrage;
     private float _lightingColorValue = 1f;
 
-    private Texture2D ItsSpriteSheet => (Texture2D)ModContent.Request<Texture2D>(Texture);
-    private Texture2D GlowMask => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+    public static Asset<Texture2D> GlowMask { get; private set; } = null!;
 
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 4;
@@ -39,6 +41,12 @@ sealed class Pipistrelle : ModNPC {
 
         NPCID.Sets.DontDoHardmodeScaling[Type] = true;
         NPCID.Sets.CantTakeLunchMoney[Type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        GlowMask = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
@@ -86,7 +94,7 @@ sealed class Pipistrelle : ModNPC {
                 bestiaryOffset = Vector2.UnitX * 5f;
             }
             float progress = (Math.Abs(rotation) / MathHelper.PiOver2) * NPC.spriteDirection;
-            spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.EnemyProjectileTextures + "Lothor/CursedAcorn").Value,
+            spriteBatch.Draw(ProjectileLoader.GetProjectile(ModContent.ProjectileType<CursedAcorn>()).Projectile.GetTexture(),
                 position + origin + bestiaryOffset +
                 new Vector2(-27f, 4f - (NPC.spriteDirection != 1 ? progress * -20f : 0f)) + Vector2.UnitX * -40f * progress -
                 Vector2.UnitY * 12f,
@@ -100,7 +108,7 @@ sealed class Pipistrelle : ModNPC {
         }
         enrage(ref drawColor);
 
-        spriteBatch.Draw(ItsSpriteSheet, position, NPC.frame, drawColor, rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(NPC.GetTexture(), position, NPC.frame, drawColor, rotation, origin, NPC.scale, effects, 0f);
 
         NPC owner = Main.npc[(int)NPC.ai[0]];
         bool flag = !owner.active || owner.ModNPC is null || owner.ModNPC is not Lothor;
@@ -120,7 +128,7 @@ sealed class Pipistrelle : ModNPC {
         float value = MathHelper.Clamp(flag ? glowMaskOpacity : Math.Max(glowMaskOpacity, lifeProgress), 0f, 1f);
 
         Color glowColor = Color.White * 0.95f * value;
-        spriteBatch.Draw(GlowMask, position, NPC.frame, glowColor, rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(GlowMask.Value, position, NPC.frame, glowColor, rotation, origin, NPC.scale, effects, 0f);
 
         NPC npc = Main.npc[(int)NPC.ai[0]];
         if (!(!npc.active || npc.ModNPC is null || npc.ModNPC is not Lothor)) {
@@ -128,7 +136,7 @@ sealed class Pipistrelle : ModNPC {
             spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             float lifeProgress2 = _shouldEnrage ? 1f : lifeProgress;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
-                spriteBatch.Draw(GlowMask, position +
+                spriteBatch.Draw(GlowMask.Value, position +
                     Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                     * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress2,
                     NPC.frame, glowColor.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress2, rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress2, origin, NPC.scale, effects, 0f);

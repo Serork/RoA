@@ -6,6 +6,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.IO;
@@ -170,7 +171,7 @@ sealed class BabyFleder : ModNPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = NPC.GetTexture();
         spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(0f, IsSitting ? 3f : 0f) + new Vector2(NPC.width, NPC.height) / 2,
             NPC.frame, NPC.GetNPCColorTintedByBuffs(drawColor), NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.spriteDirection != 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 

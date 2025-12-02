@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Cache;
 using RoA.Common.WorldEvents;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -16,6 +19,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 
 sealed partial class DruidSoul : RoANPC {
+    private static Asset<Texture2D> _chainTexture = null!,
+                                    _eyeTexture = null!;
+
     private readonly Color _color = new(241, 53, 84, 200), _color2 = new(114, 216, 102, 200);
 
     public override void SetStaticDefaults() {
@@ -28,6 +34,11 @@ sealed partial class DruidSoul : RoANPC {
             Hide = true
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        if (Main.dedServ) {
+            _chainTexture = ModContent.Request<Texture2D>(Texture + "_Chain");
+            _eyeTexture = ModContent.Request<Texture2D>(Texture + "_Eye");
+        }
     }
 
     public override void FindFrame(int frameHeight) {
@@ -43,7 +54,7 @@ sealed partial class DruidSoul : RoANPC {
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         DrawChain(spriteBatch, drawColor.MultiplyRGB(_color), drawColor.MultiplyRGB(_color2));
         Color color = drawColor.MultiplyRGB(_color);
-        DrawTextureUnderCustomSoulEffect(spriteBatch, (Texture2D)ModContent.Request<Texture2D>(Texture), color);
+        DrawTextureUnderCustomSoulEffect(spriteBatch, NPC.GetTexture(), color);
         return false;
     }
 
@@ -56,7 +67,7 @@ sealed partial class DruidSoul : RoANPC {
         if (Vector2.Distance(NPC.Center, altarCoords) > 500f) {
             return;
         }
-        Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Chain").Value;
+        Texture2D texture = _chainTexture.Value;
         Rectangle? sourceRectangle = null;
         Vector2 origin = (sourceRectangle.HasValue ? (sourceRectangle.Value.Size() / 2f) : (texture.Size() / 2f));
         Vector2 from = NPC.Center + new Vector2(0f, 4f);
@@ -142,9 +153,9 @@ sealed partial class DruidSoul : RoANPC {
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
         spriteBatch.Begin(snapshot with { blendState = BlendState.NonPremultiplied, samplerState = SamplerState.PointClamp }, true);
-        DrawTextureUnderCustomSoulEffect(spriteBatch, (Texture2D)ModContent.Request<Texture2D>(Texture), drawColor);
+        DrawTextureUnderCustomSoulEffect(spriteBatch, NPC.GetTexture(), drawColor);
         spriteBatch.Begin(snapshot, true);
-        DrawTextureUnderCustomSoulEffect(spriteBatch, ModContent.Request<Texture2D>(Texture + "_Eye").Value, drawColor);
+        DrawTextureUnderCustomSoulEffect(spriteBatch, _eyeTexture.Value, drawColor);
     }
 
     private void DrawTextureUnderCustomSoulEffect(SpriteBatch spriteBatch, Texture2D texture, Color drawColor) {

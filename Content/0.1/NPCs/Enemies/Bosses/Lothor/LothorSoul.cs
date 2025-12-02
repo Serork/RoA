@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -12,6 +15,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Bosses.Lothor;
 
 sealed class LothorSoul : RoANPC {
+    private static Asset<Texture2D> _eyeTexture = null!;
+
     private static float FirstFrameTime => 4f;
     private static float AnimationSpeed => 27.5f;
 
@@ -34,6 +39,12 @@ sealed class LothorSoul : RoANPC {
             Hide = true
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _eyeTexture = ModContent.Request<Texture2D>(Texture + "_Eye");
     }
 
     public override void SetDefaults() {
@@ -134,7 +145,7 @@ sealed class LothorSoul : RoANPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = NPC.GetTexture();
         spriteBatch.Draw(texture, NPC.position + NPC.Size / 2 - screenPos - Vector2.UnitY * 6f, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, NPC.Size / 2, 1f, NPC.direction != 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
         Color color = drawColor.MultiplyRGB(_color);
         DrawTextureUnderCustomSoulEffect(spriteBatch, texture, color);
@@ -142,7 +153,7 @@ sealed class LothorSoul : RoANPC {
     }
 
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        DrawTextureUnderCustomSoulEffect(spriteBatch, ModContent.Request<Texture2D>(Texture + "_Eye").Value, drawColor);
+        DrawTextureUnderCustomSoulEffect(spriteBatch, _eyeTexture.Value, drawColor);
     }
 
     private void DrawTextureUnderCustomSoulEffect(SpriteBatch spriteBatch, Texture2D texture, Color drawColor) {

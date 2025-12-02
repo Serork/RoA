@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -15,6 +17,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Enemies.Lothor;
 
 sealed class LothorSpike : ModProjectile {
+    private static Asset<Texture2D> _tipTexture = null!,
+                                    _startTexture = null!;
+
     private const int LENGTH = 20;
 
     private struct PartInfo {
@@ -28,8 +33,15 @@ sealed class LothorSpike : ModProjectile {
     private int Length => Projectile.ai[2] != 0f ? (int)Projectile.ai[2] : LENGTH;
 
     public override string Texture => ResourceManager.EnemyProjectileTextures + "Lothor/LothorSpike";
-    public static string TipTexture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<LothorSpike>()).Texture + "Tip";
-    public static string StartTexture => ProjectileLoader.GetProjectile(ModContent.ProjectileType<LothorSpike>()).Texture + "Start";
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _tipTexture = ModContent.Request<Texture2D>(Texture + "Tip");
+        _startTexture = ModContent.Request<Texture2D>(Texture + "Start");
+    }
 
     public override void SetDefaults() {
         int width = 30; int height = 32;
@@ -147,19 +159,19 @@ sealed class LothorSpike : ModProjectile {
             bool flag3 = index == length - 1;
             bool flag4 = index == length - 2;
             if (flag3) {
-                texture = ModContent.Request<Texture2D>(TipTexture).Value;
+                texture = _tipTexture.Value;
                 width = texture.Width;
                 height = texture.Height;
                 sourceRectangle = new(0, 0, width, 0);
             }
             else if (flag2) {
-                texture = ModContent.Request<Texture2D>(StartTexture).Value;
+                texture = _startTexture.Value;
                 width = texture.Width;
                 height = texture.Height;
                 sourceRectangle = new(0, 0, width, 0);
             }
             else {
-                texture = ModContent.Request<Texture2D>(Texture).Value;
+                texture = Projectile.GetTexture();
                 width = texture.Width;
                 height = 15;
                 effects = SpriteEffects.FlipVertically;

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Cache;
 using RoA.Common.WorldEvents;
 using RoA.Core;
@@ -20,9 +22,19 @@ sealed partial class Lothor : ModNPC {
     private Color? _drawColor = null;
     private float _glowMaskOpacity;
 
-    private Texture2D ItsSpriteSheet => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet");
-    private Texture2D GlowMask => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet_Glow");
-    private Texture2D WhiteTint => (Texture2D)ModContent.Request<Texture2D>(Texture + "_Spritesheet_WhiteTint");
+    public static Asset<Texture2D> ItsSpriteSheet { get; private set; } = null!;
+    public static Asset<Texture2D> GlowMask { get; private set; } = null!;
+    public static Asset<Texture2D> WhiteTint { get; private set; } = null!;
+
+    public partial void LoadTextures() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        ItsSpriteSheet = ModContent.Request<Texture2D>(Texture + "_Spritesheet");
+        GlowMask = ModContent.Request<Texture2D>(Texture + "_Spritesheet_Glow");
+        WhiteTint = ModContent.Request<Texture2D>(Texture + "_Spritesheet_WhiteTint");
+    }
 
     public override void FindFrame(int frameHeight) {
         HandleAnimations();
@@ -38,7 +50,7 @@ sealed partial class Lothor : ModNPC {
         Vector2 positionOffset = Vector2.UnitY * _drawOffset + new Vector2(0f, 2f);
         Vector2 offset = positionOffset - screenPos + origin / 2f;
         if (NPC.IsABestiaryIconDummy) {
-            spriteBatch.Draw(ItsSpriteSheet, NPC.position + offset - Vector2.UnitY * 6f, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
+            spriteBatch.Draw(ItsSpriteSheet.Value, NPC.position + offset - Vector2.UnitY * 6f, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
 
             return false;
         }
@@ -97,16 +109,16 @@ sealed partial class Lothor : ModNPC {
                 color39 *= _trailOpacity;
                 color39 *= 0.8f;
                 Rectangle frame7 = NPC.frame;
-                int num174 = ItsSpriteSheet.Height / Main.npcFrameCount[Type];
+                int num174 = ItsSpriteSheet.Value.Height / Main.npcFrameCount[Type];
                 frame7.Y -= num174 * num173;
                 while (frame7.Y < 0) {
                     frame7.Y += num174 * Main.npcFrameCount[Type];
                 }
                 Vector2 pos = NPC.oldPos[num173];
-                spriteBatch.Draw(ItsSpriteSheet,
+                spriteBatch.Draw(ItsSpriteSheet.Value,
                     pos + offset,
                     frame7, color39 * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
-                spriteBatch.Draw(GlowMask,
+                spriteBatch.Draw(GlowMask.Value,
                     pos + offset,
                     frame7, color39 * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
             }
@@ -129,7 +141,7 @@ sealed partial class Lothor : ModNPC {
                 Vector2 position33 = NPC.position + offset + ((float)num293 / (float)num275 * ((float)Math.PI * 2f) + NPC.rotation + num278).ToRotationVector2() * maxOffset * _pulseStrength;
                 position33 -= new Vector2(NPC.frame.Width, NPC.frame.Height / Main.npcFrameCount[Type]) * NPC.scale / 2f;
                 position33 += origin * NPC.scale + new Vector2(0f, NPC.gfxOffY);
-                spriteBatch.Draw(ItsSpriteSheet, position33, NPC.frame, value80, NPC.rotation, origin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(ItsSpriteSheet.Value, position33, NPC.frame, value80, NPC.rotation, origin, NPC.scale, effects, 0f);
                 value80 = glowMaskColor;
                 value80 = Microsoft.Xna.Framework.Color.Lerp(value80, color46, 0f);
                 value80 = NPC.GetAlpha(value80);
@@ -137,17 +149,17 @@ sealed partial class Lothor : ModNPC {
                 opacity = 1f - _pulseStrength;
                 value80 *= opacity;
                 value80 *= 0.7f;
-                spriteBatch.Draw(GlowMask, position33, NPC.frame, value80 * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
+                spriteBatch.Draw(GlowMask.Value, position33, NPC.frame, value80 * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
             }
         }
 
-        spriteBatch.Draw(ItsSpriteSheet, NPC.position + offset, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
-        spriteBatch.Draw(GlowMask, NPC.position + offset, NPC.frame, glowMaskColor * Utils.GetLerpValue(0f, 0.25f, NPC.Opacity, true), NPC.rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(ItsSpriteSheet.Value, NPC.position + offset, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(GlowMask.Value, NPC.position + offset, NPC.frame, glowMaskColor * Utils.GetLerpValue(0f, 0.25f, NPC.Opacity, true), NPC.rotation, origin, NPC.scale, effects, 0f);
 
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
         spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
         for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
-            spriteBatch.Draw(GlowMask, NPC.position + offset +
+            spriteBatch.Draw(GlowMask.Value, NPC.position + offset +
                 Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                 * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
                 NPC.frame, (Color.White * 0.95f).MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress * NPC.Opacity, NPC.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);

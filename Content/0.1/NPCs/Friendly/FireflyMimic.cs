@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Content.Items.Equipables.Accessories;
 
 using System;
@@ -14,6 +16,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Friendly;
 
 sealed class FireflyMimic : ModNPC {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override void SetStaticDefaults() {
         Main.npcFrameCount[Type] = 4;
 
@@ -27,6 +31,12 @@ sealed class FireflyMimic : ModNPC {
             Position = new Vector2(0f, 2f),
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
@@ -54,7 +64,7 @@ sealed class FireflyMimic : ModNPC {
         SpriteEffects spriteEffects = SpriteEffects.None;
         if (NPC.spriteDirection == 1)
             spriteEffects = SpriteEffects.FlipHorizontally;
-        Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Glow").Value;
+        Texture2D texture = _glowTexture.Value;
         Vector2 halfSize = new Vector2(TextureAssets.Npc[Type].Width() / 2, TextureAssets.Npc[Type].Height() / Main.npcFrameCount[Type] / 2);
         spriteBatch.Draw(texture,
             new Vector2(NPC.position.X - screenPos.X + (float)(NPC.width / 2) -

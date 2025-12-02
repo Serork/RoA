@@ -1,11 +1,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.WorldEvents;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -17,6 +20,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class CrowdRaven : ModNPC {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public override void SetStaticDefaults() {
         //base.SetStaticDefaults();
 
@@ -30,6 +35,12 @@ sealed class CrowdRaven : ModNPC {
             Hide = true
         };
         NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
@@ -306,10 +317,10 @@ sealed class CrowdRaven : ModNPC {
     public override bool? CanFallThroughPlatforms() => true;
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = NPC.GetTexture();
         spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(NPC.width, NPC.height) / 2, NPC.frame,
             drawColor * (1f - NPC.alpha / 255f), NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.velocity.X > 0f ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
-        texture = (Texture2D)ModContent.Request<Texture2D>(Texture + "_Glow");
+        texture = _glowTexture.Value;
         spriteBatch.Draw(texture, NPC.position - screenPos + new Vector2(NPC.width, NPC.height) / 2, NPC.frame, new Color(200, 200, 200, 100) * (1f - NPC.alpha / 255f), NPC.rotation, new Vector2(texture.Width, texture.Height / Main.npcFrameCount[Type]) / 2, NPC.scale, NPC.velocity.X > 0f ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 
         return false;

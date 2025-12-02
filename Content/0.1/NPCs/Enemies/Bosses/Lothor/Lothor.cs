@@ -27,7 +27,11 @@ sealed partial class Lothor : ModNPC {
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Shimmer] = true;
         NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+
+        LoadTextures();
     }
+
+    public partial void LoadTextures();
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange([

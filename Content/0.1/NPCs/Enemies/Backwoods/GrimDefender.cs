@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Networking;
@@ -25,6 +27,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class GrimDefender : ModNPC {
+    private static Asset<Texture2D> _bodyTexture = null!;
+
     private const float ATTACKTIME = 145f;
 
     private Vector2 _tempPosition, _extraVelocity, _extraVelocity2;
@@ -53,6 +57,12 @@ sealed class GrimDefender : ModNPC {
         //NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
 
         NPCID.Sets.ImmuneToRegularBuffs[Type] = true;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _bodyTexture = ModContent.Request<Texture2D>(Texture + "_Body");
     }
 
     public override void SetDefaults() {
@@ -130,7 +140,7 @@ sealed class GrimDefender : ModNPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        Texture2D texture = ModContent.Request<Texture2D>(Texture + "_Body").Value;
+        Texture2D texture = _bodyTexture.Value;
         Vector2 offset = new Vector2(22, 28) / 2f;
         Vector2 position = NPC.position - screenPos + offset;
         Vector2 origin = NPC.frame.Size() / 2f;

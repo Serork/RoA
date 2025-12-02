@@ -286,8 +286,8 @@ sealed class ShockLightning : ModProjectile {
                 SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
                 spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
                 spriteBatch.Draw(_segmentTexture.Value, source - Main.screenPosition, null, color * 0.75f, rotation, middleOrigin, middleScale * 0.95f * 0.95f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.015f * 1.1f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(ModContent.Request<Texture2D>(ResourceManager.Textures + "Light").Value, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.02f * 1.1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(ResourceManager.Light, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.015f * 1.1f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(ResourceManager.Light, source - Main.screenPosition, null, color.MultiplyRGB(new Color(60, 222, 190)) * 1.5f, rotation, middleOrigin, new Vector2(middleScale.X, middleScale.Y * 2f) * 0.02f * 1.1f, SpriteEffects.None, 0f);
                 spriteBatch.Begin(snapshot, true);
             }
             if (thicknessScale < 0.4f) {

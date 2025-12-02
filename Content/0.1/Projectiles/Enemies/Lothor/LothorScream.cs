@@ -40,7 +40,7 @@ sealed class LothorScream : ModProjectile {
         SpriteBatch spriteBatch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
         spriteBatch.Begin(snapshot with { blendState = BlendState.AlphaBlend, samplerState = SamplerState.PointClamp }, true);
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         Vector2 position = Projectile.Center - Main.screenPosition;
         Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
         spriteBatch.Draw(texture,

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -85,7 +87,7 @@ sealed class GoblinsDagger : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+        Texture2D texture = Projectile.GetTexture();
         bool flag = Projectile.spriteDirection != -1;
         Color color = Lighting.GetColor(new Point((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16));
         Main.spriteBatch.Draw(texture, Projectile.position - Main.screenPosition, new Rectangle?(new Rectangle(flag ? 0 : 10, 0, 10, 24)), color * Projectile.Opacity, Projectile.rotation, Vector2.Zero, Projectile.scale, flag ? SpriteEffects.None : SpriteEffects.FlipVertically, 0f);
