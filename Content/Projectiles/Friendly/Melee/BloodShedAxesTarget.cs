@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Melee;
 
-sealed class BloodShedAxesTarget : ModProjectile {
+sealed class BloodshedAxesTarget : ModProjectile {
     private int NPC => (int)Projectile.ai[0];
 
     public override string Texture => ResourceManager.EmptyTexture;
@@ -42,7 +42,7 @@ sealed class BloodShedAxesTarget : ModProjectile {
             Projectile.Kill();
         }
         Projectile.Center = target.Center;
-        target.AddBuff(ModContent.BuffType<BloodShedAxesDebuff>(), 10);
+        target.AddBuff(ModContent.BuffType<BloodshedAxesDebuff>(), 10);
         if (player.whoAmI == Main.myPlayer) {
             if (player.itemAnimation < player.itemAnimationMax / 2 - player.itemAnimationMax / 4 && Projectile.ai[1] == 0f) {
                 Projectile.ai[1] = 1f;

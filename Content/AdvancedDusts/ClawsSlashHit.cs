@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Cache;
 using RoA.Common.VisualEffects;
 using RoA.Content.Dusts;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -14,6 +15,8 @@ namespace RoA.Content.AdvancedDusts;
 
 sealed class ClawsSlashHit : AdvancedDust<ClawsSlashHit> {
     private float _baseScale;
+
+    public override Texture2D Texture => ResourceManager.DefaultSparkle;
 
     protected override void SetDefaults() {
         TimeLeft = 30;

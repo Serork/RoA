@@ -15,8 +15,8 @@ namespace RoA.Common.Networking.Packets;
 sealed class AdvancedDustSpawnPacket : NetPacket {
     public enum VisualEffectPacketType : byte {
         ClawsHit,
-        BloodShedParticle,
-        MercuriumBulletParticle,
+        BloodshedHit,
+        MercuriumBulletHit,
         HardmodeClawsHit
     }
 
@@ -76,10 +76,10 @@ sealed class AdvancedDustSpawnPacket : NetPacket {
             case VisualEffectPacketType.ClawsHit:
                 createVisualEffect<ClawsSlashHit>();
                 break;
-            case VisualEffectPacketType.BloodShedParticle:
-                createVisualEffect<BloodShedDust>();
+            case VisualEffectPacketType.BloodshedHit:
+                createVisualEffect<BloodshedHit>();
                 break;
-            case VisualEffectPacketType.MercuriumBulletParticle:
+            case VisualEffectPacketType.MercuriumBulletHit:
                 createVisualEffect<MercuriumBulletParticle>();
                 break;
             case VisualEffectPacketType.HardmodeClawsHit:

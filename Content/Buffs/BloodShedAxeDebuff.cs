@@ -9,14 +9,14 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
 
-sealed class BloodShedAxesDebuff : ModBuff {
+sealed class BloodshedAxesDebuff : ModBuff {
     public override string Texture => ResourceManager.EmptyTexture;
 
-    public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<BloodShedAxesDebuffHandler1>().IsEffectActive = true;
+    public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<BloodshedAxesDebuffHandler1>().IsEffectActive = true;
 
-    public override void Update(NPC npc, ref int buffIndex) => npc.GetGlobalNPC<BloodShedAxesDebuffHandler2>().IsEffectActive = true;
+    public override void Update(NPC npc, ref int buffIndex) => npc.GetGlobalNPC<BloodshedAxesDebuffHandler2>().IsEffectActive = true;
 
-    private class BloodShedAxesDebuffHandler1 : ModPlayer {
+    private class BloodshedAxesDebuffHandler1 : ModPlayer {
         public bool IsEffectActive;
 
         public override void ResetEffects() => IsEffectActive = false;
@@ -37,7 +37,7 @@ sealed class BloodShedAxesDebuff : ModBuff {
         }
     }
 
-    private class BloodShedAxesDebuffHandler2 : GlobalNPC {
+    private class BloodshedAxesDebuffHandler2 : GlobalNPC {
         public bool IsEffectActive;
 
         public override bool InstancePerEntity => true;

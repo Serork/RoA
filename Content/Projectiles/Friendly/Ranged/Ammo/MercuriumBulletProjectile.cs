@@ -89,7 +89,7 @@ sealed class MercuriumBulletProjectile : ModProjectile {
                   color,
                   scale);
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(AdvancedDustSpawnPacket.VisualEffectPacketType.MercuriumBulletParticle, Main.player[Projectile.owner], layer, position, velocity, color,
+            MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(AdvancedDustSpawnPacket.VisualEffectPacketType.MercuriumBulletHit, Main.player[Projectile.owner], layer, position, velocity, color,
                 scale, 0f));
         }
     }

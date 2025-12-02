@@ -23,7 +23,7 @@ sealed class BloodshedAxeHitDustPacket : NetPacket {
         int identity = reader.ReadInt32();
         int whoAmI = reader.ReadInt32();
 
-        BloodShedAxesTarget.Dusts(identity, whoAmI);
+        BloodshedAxesTarget.Dusts(identity, whoAmI);
 
         if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new BloodshedAxeHitDustPacket(player, identity, whoAmI), ignoreClient: sender);

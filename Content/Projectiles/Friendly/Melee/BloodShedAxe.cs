@@ -180,23 +180,23 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 Vector2 velocity = Projectile.velocity.RotatedBy(Main.rand.NextFloat(-1f, 1f)) * Main.rand.NextFloat(0.5f, 2f) - new Vector2(0f, 0.5f);
                 float rotation = Main.rand.NextFloat(MathHelper.TwoPi);
                 Color color = new(82, 15, 15, 255);
-                AdvancedDustSystem.New<BloodShedDust>(AdvancedDustLayer.BEHINDPLAYERS)?.Setup(position, velocity,
+                AdvancedDustSystem.New<BloodshedHit>(AdvancedDustLayer.BEHINDPLAYERS)?.Setup(position, velocity,
                     color, rotation: rotation);
 
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
-                    MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(AdvancedDustSpawnPacket.VisualEffectPacketType.BloodShedParticle, player, AdvancedDustLayer.BEHINDPLAYERS, position, velocity, color, 1f, rotation));
+                    MultiplayerSystem.SendPacket(new AdvancedDustSpawnPacket(AdvancedDustSpawnPacket.VisualEffectPacketType.BloodshedHit, player, AdvancedDustLayer.BEHINDPLAYERS, position, velocity, color, 1f, rotation));
                 }
             }
 
             if (_powerUp) {
-                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "BloodShed") { Volume = 0.25f, Pitch = -0.25f, MaxInstances = 3 }, Projectile.Center);
-                if (!target.HasBuff<BloodShedAxesDebuff>()) {
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Bloodshed") { Volume = 0.25f, Pitch = -0.25f, MaxInstances = 3 }, Projectile.Center);
+                if (!target.HasBuff<BloodshedAxesDebuff>()) {
                     if (Main.myPlayer == Projectile.owner) {
-                        Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), target.Center, Vector2.Zero, ModContent.ProjectileType<BloodShedAxesTarget>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
+                        Projectile.NewProjectileDirect(Projectile.GetSource_OnHit(target), target.Center, Vector2.Zero, ModContent.ProjectileType<BloodshedAxesTarget>(), Projectile.damage, Projectile.knockBack, Projectile.owner, target.whoAmI);
                     }
                 }
                 else {
-                    if (target.FindBuff(ModContent.BuffType<BloodShedAxesDebuff>(), out int buffIndex)) {
+                    if (target.FindBuff(ModContent.BuffType<BloodshedAxesDebuff>(), out int buffIndex)) {
                         target.DelBuff(buffIndex);
                     }
                 }

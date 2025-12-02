@@ -49,7 +49,6 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
 
         Item.value = Item.sellPrice(0, 1, 50, 0);
 
-
         NatureWeaponHandler.SetPotentialDamage(Item, 60);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
     }

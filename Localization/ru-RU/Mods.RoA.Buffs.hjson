@@ -201,7 +201,7 @@ BoneHarpyMountBuff: {
 	// Description: ""
 }
 
-BloodShedAxesDebuff: {
+BloodshedAxesDebuff: {
 	DisplayName: Топор кровопролития
 	// Description: ""
 }

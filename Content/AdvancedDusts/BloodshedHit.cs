@@ -11,7 +11,7 @@ using Terraria.Graphics.Renderers;
 
 namespace RoA.Content.AdvancedDusts;
 
-sealed class BloodShedDust : AdvancedDust<BloodShedDust> {
+sealed class BloodshedHit : AdvancedDust<BloodshedHit> {
     private float _opacity;
 
     protected override void SetDefaults() {

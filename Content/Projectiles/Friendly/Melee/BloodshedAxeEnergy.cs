@@ -114,7 +114,7 @@ sealed class BloodshedAxeEnergy : ModProjectile {
         }
 
         if (Projectile.timeLeft == 80) {
-            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "BloodShed") { Volume = 0.3f }, npc.Center);
+            SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Bloodshed") { Volume = 0.3f }, npc.Center);
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Heal") { Volume = 0.6f }, npc.Center);
         }
         _rotation += _rotationSpeed;

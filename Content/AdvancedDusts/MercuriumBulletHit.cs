@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.VisualEffects;
+using RoA.Core;
 
 using Terraria;
 using Terraria.GameContent;
@@ -11,6 +12,8 @@ namespace RoA.Content.AdvancedDusts;
 
 sealed class MercuriumBulletParticle : AdvancedDust<MercuriumBulletParticle> {
     private float _scale;
+
+    public override Texture2D Texture => ResourceManager.DefaultSparkle;
 
     protected override void SetDefaults() {
         TimeLeft = MaxTimeLeft = 25;
