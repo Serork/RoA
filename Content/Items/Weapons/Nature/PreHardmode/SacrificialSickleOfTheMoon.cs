@@ -63,6 +63,12 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
     }
 
     public override bool CanUseItem(Player player) {
+        if (Main.moonPhase == 4 || Main.moonPhase == 5) {
+            Item.noUseGraphic = true;
+        }
+        else {
+            Item.noUseGraphic = false;
+        }
         if (Main.moonPhase == 0 || Main.moonPhase == 1) {
             Item.useStyle = ItemUseStyleID.Shoot;
             if (player.ownedProjectileCounts[ModContent.ProjectileType<MoonSigil>()] == 1) Item.UseSound = SoundID.Item1;
@@ -78,12 +84,6 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
             Item.useStyle = ItemUseStyleID.Swing;
             Item.UseSound = SoundID.Item71;
             Item.noMelee = false;
-        }
-        if (Main.moonPhase == 4 || Main.moonPhase == 5) {
-            Item.noUseGraphic = true;
-        }
-        else {
-            Item.noUseGraphic = false;
         }
         return true;
     }
