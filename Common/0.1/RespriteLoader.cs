@@ -12,7 +12,7 @@ namespace RoA.Common;
 sealed class RespriteLoader : ILoadable {
     public void Load(Mod mod) {
         string texturePath = ResourceManager.ItemTextures;
-        int id = 4;
+        int id;
         if (!ModContent.GetInstance<RoAClientConfig>().VanillaResprites) {
             UnloadInner();
 
@@ -40,10 +40,6 @@ sealed class RespriteLoader : ILoadable {
         id = 18;
         TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>(texturePath + $"Tree_Branches_{id}");
 
-        LoadV02Resprites();
-    }
-
-    public void LoadV02Resprites() {
         TextureAssets.Item[ItemID.Skull] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "Skull");
         TextureAssets.ArmorHead[ArmorIDs.Head.Skull] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "Skull_Head");
         TextureAssets.Item[ItemID.TerraBlade] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "TerraBlade");
@@ -69,10 +65,6 @@ sealed class RespriteLoader : ILoadable {
         id = 18;
         TextureAssets.TreeBranch[id] = ModContent.Request<Texture2D>($"Terraria/Images/Tree_Branches_{id}");
 
-        UnloadV02Resprites();
-    }
-
-    public void UnloadV02Resprites() {
         TextureAssets.Item[ItemID.Skull] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Skull}");
         TextureAssets.ArmorHead[ArmorIDs.Head.Skull] = ModContent.Request<Texture2D>($"Terraria/Images/Armor_Head_{ArmorIDs.Head.Skull}");
         TextureAssets.Item[ItemID.TerraBlade] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.TerraBlade}");
