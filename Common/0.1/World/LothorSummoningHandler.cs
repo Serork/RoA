@@ -20,7 +20,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace RoA.Common.WorldEvents;
+namespace RoA.Common.World;
 
 sealed class LothorSummoningHandler : ModSystem {
     private static float _preArrivedLothorBossTimer;

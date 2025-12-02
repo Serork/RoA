@@ -9,7 +9,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Common.Networking;
+namespace RoA.Common.Networking.Packets;
 
 sealed class CactiCasterDustsPacket : NetPacket {
     public CactiCasterDustsPacket(Player player, Vector2 corePosition) {

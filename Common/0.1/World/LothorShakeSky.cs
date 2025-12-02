@@ -9,7 +9,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.Graphics.Effects;
 
-namespace RoA.Common.WorldEvents;
+namespace RoA.Common.World;
 
 sealed class LothorShakeSky : CustomSky {
     private bool _hasTile;

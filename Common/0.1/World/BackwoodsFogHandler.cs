@@ -19,7 +19,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 
-namespace RoA.Common.WorldEvents;
+namespace RoA.Common.World;
 
 sealed class BackwoodsFogHandler : ModSystem {
     // private class ActivateFog : ModCommand {

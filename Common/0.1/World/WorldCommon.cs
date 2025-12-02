@@ -4,12 +4,11 @@ using RoA.Content.Tiles.Miscellaneous;
 using System;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace RoA.Common;
+namespace RoA.Common.World;
 
 sealed class WorldCommon : ModSystem {
     public static class NewGuideHelpTextID {

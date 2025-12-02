@@ -8,7 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Common.Networking;
+namespace RoA.Common.Networking.Packets;
 
 sealed class RegisterTrackedProjectilePacket : NetPacket {
     public RegisterTrackedProjectilePacket(Player player, int whoAmI) {

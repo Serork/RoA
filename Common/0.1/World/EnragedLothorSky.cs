@@ -10,7 +10,7 @@ using Terraria.GameContent;
 using Terraria.Graphics.Effects;
 using Terraria.ID;
 
-namespace RoA.Common.WorldEvents;
+namespace RoA.Common.World;
 
 sealed class EnragedLothorSky : CustomSky {
     private bool _hasTile;

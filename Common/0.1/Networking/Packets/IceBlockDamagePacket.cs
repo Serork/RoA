@@ -6,7 +6,7 @@ using System.IO;
 using Terraria;
 using Terraria.ID;
 
-namespace RoA.Common.Networking;
+namespace RoA.Common.Networking.Packets;
 
 sealed class IceBlockDamagePacket : NetPacket {
     public IceBlockDamagePacket(Player player, int whoAmI, byte index) {

@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common;
 
-sealed partial class RespriteLoader : ILoadable {
+sealed class RespriteLoader : ILoadable {
     public void Load(Mod mod) {
         string texturePath = ResourceManager.ItemTextures;
         int id = 4;
@@ -43,7 +43,11 @@ sealed partial class RespriteLoader : ILoadable {
         LoadV02Resprites();
     }
 
-    public partial void LoadV02Resprites();
+    public void LoadV02Resprites() {
+        TextureAssets.Item[ItemID.Skull] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "Skull");
+        TextureAssets.ArmorHead[ArmorIDs.Head.Skull] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "Skull_Head");
+        TextureAssets.Item[ItemID.TerraBlade] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "TerraBlade");
+    }
 
     private void UnloadInner() {
         TextureAssets.Item[ItemID.Daybloom] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Daybloom}");
@@ -68,7 +72,11 @@ sealed partial class RespriteLoader : ILoadable {
         UnloadV02Resprites();
     }
 
-    public partial void UnloadV02Resprites();
+    public void UnloadV02Resprites() {
+        TextureAssets.Item[ItemID.Skull] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Skull}");
+        TextureAssets.ArmorHead[ArmorIDs.Head.Skull] = ModContent.Request<Texture2D>($"Terraria/Images/Armor_Head_{ArmorIDs.Head.Skull}");
+        TextureAssets.Item[ItemID.TerraBlade] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.TerraBlade}");
+    }
 
     public void Unload() {
         UnloadInner();

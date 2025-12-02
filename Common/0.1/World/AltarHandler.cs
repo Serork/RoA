@@ -17,7 +17,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace RoA.Common.WorldEvents;
+namespace RoA.Common.World;
 
 sealed class AltarHandler : ModSystem {
     private static Point _altarPosition;

@@ -11,7 +11,7 @@ using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Common.WorldEvents;
+namespace RoA.Common.World;
 
 sealed class LothorShake : ModSystem {
     internal static bool shake;

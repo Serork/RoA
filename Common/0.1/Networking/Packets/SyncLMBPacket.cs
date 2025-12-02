@@ -7,7 +7,7 @@ using Terraria;
 
 using Terraria.ID;
 
-namespace RoA.Common.Networking;
+namespace RoA.Common.Networking.Packets;
 
 sealed class SyncLMBPacket : NetPacket {
     public SyncLMBPacket(Player player, bool state) {

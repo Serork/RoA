@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 
-namespace RoA.Common.WorldEvents;
+namespace RoA.Common.World;
 
 sealed class BackwoodsFogShaderData : ModSceneEffect {
     private string ShaderName => ShaderLoader.BackwoodsFog;

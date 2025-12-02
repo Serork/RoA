@@ -126,7 +126,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Common\0.2\Crossmod\" />
-		<Folder Include="Common\0.2\DrawLayers\" />
 	</ItemGroup>
 
 	<!-- References -->
