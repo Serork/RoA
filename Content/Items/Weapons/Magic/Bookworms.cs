@@ -134,7 +134,7 @@ sealed class BookwormsProjectile : ModProjectile {
         if (variant == 3) {
             texture = _worm3Texture.Value;
         }
-        else {
+        else if (variant != 1) {
             texture = _worm2Texture.Value;
         }
         Vector2 position = Projectile.position - Main.screenPosition;
