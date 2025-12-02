@@ -269,7 +269,6 @@ sealed class HellfireFracture : NatureProjectile {
         Color color = Color.Lerp(color1, color2, random.NextFloat()) * mult * 0.9f;
         color = lightColor.MultiplyRGB(color);
         color *= 0.875f * opacity;
-        Texture2D texture = ResourceManager.Blood;
         do {
             bool flag4 = false;
             if (count > 2) {
