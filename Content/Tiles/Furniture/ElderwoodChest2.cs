@@ -89,8 +89,8 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
             return;
         }
 
-        _chainTexture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "Rootbinded_Chain");
-        _lockTexture = ModContent.Request<Texture2D>(ResourceManager.TileTextures + "Rootbinded_Lock");
+        _chainTexture = ModContent.Request<Texture2D>(ResourceManager.MiscTileTextures + "Rootbinded_Chain");
+        _lockTexture = ModContent.Request<Texture2D>(ResourceManager.MiscTileTextures + "Rootbinded_Lock");
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {

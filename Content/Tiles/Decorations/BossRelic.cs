@@ -33,7 +33,7 @@ class BossRelic : ModTile {
     public virtual string RelicTextureName => Texture;
 
     // All relics use the same pedestal texture, this one is copied from vanilla
-    public override string Texture => ResourceManager.TileTextures + "RelicPedestal";
+    public override string Texture => ResourceManager.MiscTileTextures + "RelicPedestal";
 
     public override void SetStaticDefaults() {
         if (!Main.dedServ) {
