@@ -1,10 +1,10 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
 using RoA.Common;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Core.Utility;

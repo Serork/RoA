@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Common.Projectiles;
 using RoA.Core;
 using RoA.Core.Data;

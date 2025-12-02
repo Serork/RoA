@@ -5,7 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common.Cache;
 using RoA.Common.Tiles;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Tiles.Trees;

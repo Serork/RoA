@@ -1,10 +1,9 @@
 ﻿using RoA.Common.CustomConditions;
-using RoA.Common.WorldEvents;
+using RoA.Common.World;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Content.Tiles.Platforms;
-using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 

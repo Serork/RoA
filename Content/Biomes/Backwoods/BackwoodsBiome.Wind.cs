@@ -1,7 +1,7 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Utilities.Extensions;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 
 using System;
 

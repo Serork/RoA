@@ -5,7 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Items.Consumables;
 using RoA.Content.Tiles.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;

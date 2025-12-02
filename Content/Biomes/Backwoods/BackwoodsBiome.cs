@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -7,7 +7,7 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Tiles;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Core;
 
 using System.Runtime.CompilerServices;

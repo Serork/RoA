@@ -1,8 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable;
 using RoA.Content.Items.Placeable.Miscellaneous;

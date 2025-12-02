@@ -3,7 +3,7 @@
 using RoA.Common;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Core;
 using RoA.Core.Utility;

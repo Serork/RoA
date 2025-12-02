@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.VisualEffects;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Core;
 using RoA.Core.Utility;
 

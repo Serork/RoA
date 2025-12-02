@@ -6,7 +6,7 @@ using ReLogic.Content;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Emotes;
 using RoA.Content.Items.Weapons.Magic;

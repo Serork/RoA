@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common.Druid;
 using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 using RoA.Core;

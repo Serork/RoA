@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.BackwoodsSystems;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Placeable.Banners;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.World;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility.Vanilla;
@@ -14,6 +15,7 @@ using Terraria.ModLoader;
 using Terraria.UI.Chat;
 
 namespace RoA.Common.NPCs;
+
 sealed class GuideMapHeadOutlineChanger : IInitializer {
     private static int _guideHead = -1;
 

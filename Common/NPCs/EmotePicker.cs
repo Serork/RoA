@@ -1,4 +1,4 @@
-﻿using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Emotes;
 using RoA.Content.NPCs.Friendly;

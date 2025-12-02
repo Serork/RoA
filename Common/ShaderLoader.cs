@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Cache;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Backgrounds;
 using RoA.Core;
 

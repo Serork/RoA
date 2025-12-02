@@ -5,7 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Cache;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;

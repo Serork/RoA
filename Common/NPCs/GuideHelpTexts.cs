@@ -1,12 +1,11 @@
-﻿using RoA.Content.Tiles.Miscellaneous;
-using RoA.Core.Utility.Vanilla;
+﻿using RoA.Common.World;
 
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-using static RoA.Common.WorldCommon;
+using static RoA.Common.World.WorldCommon;
 
 namespace RoA.Common.NPCs;
 

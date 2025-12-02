@@ -5,7 +5,7 @@ using ReLogic.Utilities;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Configs;
 using RoA.Common.Sets;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Placeable.Miscellaneous;

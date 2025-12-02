@@ -4,7 +4,7 @@ using ReLogic.Utilities;
 
 using RoA.Common;
 using RoA.Common.VisualEffects;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Station;

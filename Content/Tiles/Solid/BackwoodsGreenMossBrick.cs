@@ -1,8 +1,8 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.Dusts;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Solid.Backwoods;

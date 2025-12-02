@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.VisualEffects;
-using RoA.Common.WorldEvents;
+﻿using RoA.Common.World;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Content.Tiles.Ambient;
 using RoA.Core;
