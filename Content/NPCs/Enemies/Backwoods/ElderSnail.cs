@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Content.Buffs;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -252,7 +253,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     private void ApplySnailAI() {
-        Vector2 passedPosition = NPC.Center + new Vector2(0.625f * NPC.ai[3], 1f).RotatedBy(NPC.rotation) * NPC.height / 2f;
+        Vector2 passedPosition = NPC.Center + new Vector2(FacedDirection > 0 ? -0f : 0.625f, 1f).RotatedBy(NPC.rotation) * NPC.height / 2f;
         Point16 passedPositionInTiles = passedPosition.ToTileCoordinates16();
         if (WorldGenHelper.GetTileSafely(passedPositionInTiles).HasTile && !_passedPositions.Any(checkInfo => checkInfo.Position == passedPositionInTiles)) {
             _passedPositions[_passedPositionNextIndex++] = new PassedPositionInfo(passedPositionInTiles);
@@ -262,7 +263,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         }
         for (int i = 0; i < _passedPositions.Length; i++) {
             ref PassedPositionInfo passedPositionInfo = ref _passedPositions[i];
-            passedPositionInfo.Opacity = Helper.Approach(_passedPositions[i].Opacity, 1f, 0.2f);
+            passedPositionInfo.Opacity = Helper.Approach(_passedPositions[i].Opacity, 1f, 0.15f);
         }
 
         TargetOverTime();
@@ -462,8 +463,13 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
             NPC.velocity.X = speedX * NPC.direction;
             NPC.velocity.Y = speedY * NPC.directionY;
         }
-
         applyAdjustedVanillaSnailAI();
+
+        Player target = NPC.GetTargetPlayer();
+        Point16 targetPositionInTiles = target.Bottom.ToTileCoordinates16();
+        if (_passedPositions.Any(checkInfo => checkInfo.Position == targetPositionInTiles)) {
+            target.AddBuff<ElderSnailSlow>(2);
+        }
     }
 
     public override void FindFrame(int frameHeight) {

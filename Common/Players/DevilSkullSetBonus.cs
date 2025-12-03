@@ -16,7 +16,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public partial void DevilSkullLoad() {
     }
 
-    public override void PostUpdateMiscEffects() {
+    public partial void DevilSkullSetBonusPostMiscEffects() {
         Player self = Player;
         if (!self.IsLocal()) {
             return;

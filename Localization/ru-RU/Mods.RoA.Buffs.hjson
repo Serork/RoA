@@ -325,3 +325,8 @@ Unhinged: {
 	DisplayName: Отвёртка
 	Description: Скорость атаки увеличена
 }
+
+ElderSnailSlow: {
+	// DisplayName: Elder Snail Slow
+	// Description: Mods.RoA.Buffs.ElderSnailSlow.Description
+}

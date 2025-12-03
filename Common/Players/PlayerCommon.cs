@@ -50,6 +50,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public int ManaIncrease, LifeIncrease;
     public bool DontShowHealEffect, DontShowManaEffect;
 
+    public bool ElderSnailSlow;
+
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
 
@@ -366,6 +368,15 @@ sealed partial class PlayerCommon : ModPlayer {
         PostUpdateEquipsEvent?.Invoke(Player);
 
         DeerSkullPostUpdateEquips();
+
+        if (ElderSnailSlow) {
+            Player.moveSpeed /= 3f;
+            if (Player.velocity.Y == 0f && Math.Abs(Player.velocity.X) > 1f) {
+                Player.velocity.X /= 2f;
+            }
+
+            Player.slowOgreSpit = Player.dazed = Player.slow = Player.chilled = false;
+        }
     }
 
     public partial void DeerSkullPostUpdateEquips();
@@ -454,6 +465,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        ElderSnailSlow = false;
+
         if (IsAetherInvincibilityActive) {
             Player.shimmerTransparency += 0.03f;
             if (Player.shimmerTransparency > 0.5f)
@@ -509,6 +522,12 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public partial void RodOfTheBifrostItemCheck(Player player);
+
+    public override void PostUpdateMiscEffects() {
+        DevilSkullSetBonusPostMiscEffects();
+    }
+
+    public partial void DevilSkullSetBonusPostMiscEffects();
 
     public override void PostUpdate() {
         if (Player.controlUseItem) {
