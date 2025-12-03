@@ -366,7 +366,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
             //batch.Draw(baseTexture, position, drawInfo with {
             //    Scale = scale * getScaleWave(i)
             //});
-            //batch.Draw(glowTexture, position, drawInfo with {
+            //batch.Draw(_glowTexture, position, drawInfo with {
             //    Color = getColor(true) * 0.5f,
             //    Scale = scale * getScaleWave(i)
             //});

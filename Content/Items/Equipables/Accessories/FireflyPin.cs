@@ -16,14 +16,14 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories;
 
 sealed class FireflyPinHandler : PlayerDrawLayer {
-    private static Asset<Texture2D> glowTexture = null!;
+    private static Asset<Texture2D> _glowTexture = null!;
 
     public override void SetStaticDefaults() {
         if (Main.dedServ) {
             return;
         }
 
-        glowTexture = ModContent.Request<Texture2D>(GetType().Namespace!.Replace(".", "/") + "/FireflyPin_Face_Glow");
+        _glowTexture = ModContent.Request<Texture2D>(GetType().Namespace!.Replace(".", "/") + "/FireflyPin_Face_Glow");
     }
 
     public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FaceAcc);
@@ -40,7 +40,7 @@ sealed class FireflyPinHandler : PlayerDrawLayer {
         if (drawInfo.shadow != 0f)
             return;
 
-        var texture = glowTexture.Value;
+        var texture = _glowTexture.Value;
         Color color = Color.White;
 
         float progress = (1f - MathHelper.Clamp(Helper.Wave(0f, 15f, speed: 5f), 0f, 1f));

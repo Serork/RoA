@@ -129,14 +129,14 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
 }
 
 sealed class FlametrackerHatMask : PlayerDrawLayer {
-    private static Asset<Texture2D> hatMaskTexture = null!;
+    private static Asset<Texture2D> _hatMaskTexture = null!;
 
     public override void Load() {
         if (Main.dedServ) {
             return;
         }
 
-        hatMaskTexture = ModContent.Request<Texture2D>(ResourceManager.MagicArmorTextures + "FlametrackerMask_Up");
+        _hatMaskTexture = ModContent.Request<Texture2D>(ResourceManager.MagicArmorTextures + "FlametrackerMask_Up");
     }
 
     public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
@@ -155,7 +155,7 @@ sealed class FlametrackerHatMask : PlayerDrawLayer {
         if (drawInfo.shadow != 0f || player.dead || !player.ZoneUnderworldHeight)
             return;
 
-        Texture2D texture = hatMaskTexture.Value;
+        Texture2D texture = _hatMaskTexture.Value;
         Rectangle bodyFrame = player.bodyFrame;
         Color color = drawInfo.colorArmorHead;
 
