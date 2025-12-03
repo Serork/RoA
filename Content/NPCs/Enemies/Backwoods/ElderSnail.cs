@@ -26,6 +26,9 @@ using static RoA.Content.Projectiles.Enemies.ElderSnailTrail;
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class ElderSnail : ModNPC, IRequestAssets {
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Collision_MoveSnailOnSlopes")]
+    public extern static void NPC_Collision_MoveSnailOnSlopes(NPC self);
+
     public enum ElderSnailRequstedTextureType : byte {
         Trail1,
         Trail2,
@@ -38,22 +41,14 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
          ((byte)ElderSnailTrailRequstedTextureType.Trail2, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail2"),
          ((byte)ElderSnailTrailRequstedTextureType.Trail3, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail3")];
 
-    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
-        bestiaryEntry.Info.AddRange([
-            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(ElderSnail)}")
-        ]);
-    }
-
     private record struct PassedPositionInfo(Point16 Position, float Opacity = 0f);
-
-    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Collision_MoveSnailOnSlopes")]
-    public extern static void NPC_Collision_MoveSnailOnSlopes(NPC self);
 
     private static byte FRAMECOUNT => 10;
     private static float UPDATEDIRECTIONEVERYNTICKS => 10f;
     private static float UPDATETARGETEVERYNTICKS => 90f;
     private static float HIDETIMEINTICKS => 120f;
     private static float CANTHIDETIME => 30f;
+    private static byte TRAILPOSITIONCOUNT => 200;
 
     private static float MAXTIMETOSPEEDUP => 30f;
     private static float MINTIMETOSPEEDUP => MAXTIMETOSPEEDUP * 0.25f;
@@ -99,6 +94,12 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         }
     }
 
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(ElderSnail)}")
+        ]);
+    }
+
     public override void SetStaticDefaults() {
         NPC.SetFrameCount(FRAMECOUNT);
     }
@@ -122,7 +123,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     public override void AI() {
         if (!_init) {
-            _passedPositions ??= new PassedPositionInfo[200];
+            _passedPositions ??= new PassedPositionInfo[TRAILPOSITIONCOUNT];
             _init = true;
         }
 
