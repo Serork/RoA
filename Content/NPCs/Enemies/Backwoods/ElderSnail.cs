@@ -1,21 +1,35 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
+using RoA.Common;
 using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
-sealed class ElderSnail : ModNPC {
+sealed class ElderSnail : ModNPC, IRequestAssets {
+    public enum ElderSnailRequstedTextureType : byte {
+        Trail
+    }
+
+    (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
+        [((byte)ElderSnailRequstedTextureType.Trail, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail")];
+
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange([
             new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(ElderSnail)}")
@@ -29,7 +43,7 @@ sealed class ElderSnail : ModNPC {
     private static float UPDATEDIRECTIONEVERYNTICKS => 10f;
     private static float UPDATETARGETEVERYNTICKS => 90f;
     private static float HIDETIMEINTICKS => 120f;
-    private static float CANTHIDETIME => 10f;
+    private static float CANTHIDETIME => 30f;
 
     private static float MAXTIMETOSPEEDUP => 30f;
     private static float MINTIMETOSPEEDUP => MAXTIMETOSPEEDUP * 0.25f;
@@ -42,6 +56,10 @@ sealed class ElderSnail : ModNPC {
 
     private bool _shouldHide, _shouldBeHiding;
     private float _hideFactor;
+
+    private bool _init;
+
+    private HashSet<Point16> _passedPositions = null!;
 
     private bool IsFalling => NPC.ai[2] > 0f;
     private int FacedDirection => (int)-NPC.ai[3];
@@ -92,6 +110,11 @@ sealed class ElderSnail : ModNPC {
     }
 
     public override void AI() {
+        if (!_init) {
+            _passedPositions ??= [];
+            _init = true;
+        }
+
         ApplySnailAI();
     }
 
@@ -142,6 +165,10 @@ sealed class ElderSnail : ModNPC {
     }
 
     private void TryToHideOverTime() {
+        if (!NPC.IsGrounded()) {
+            return;
+        }
+
         if (_shouldBeHiding) {
             if (_shouldHide || !CanHide) {
                 return;
@@ -186,7 +213,7 @@ sealed class ElderSnail : ModNPC {
         float progress = Ease.CubeInOut(Utils.GetLerpValue(MINTIMETOSPEEDUP, MAXTIMETOSPEEDUP, _speedXFactor, true));
 
         speedX = 0.1f + 1.5f * progress;
-        speedY = 0.5f + 1f * progress;
+        speedY = 0.5f + 0.5f * progress;
 
         speedX *= hideFactor;
         speedY *= hideFactor;
@@ -213,6 +240,12 @@ sealed class ElderSnail : ModNPC {
     }
 
     private void ApplySnailAI() {
+        Vector2 passedPosition = NPC.Center + new Vector2(0.625f * NPC.ai[3], 1f).RotatedBy(NPC.rotation) * NPC.height / 2f;
+        Point16 passedPositionInTiles = passedPosition.ToTileCoordinates16();
+        if (WorldGenHelper.GetTileSafely(passedPositionInTiles).HasTile) {
+            _passedPositions.Add(passedPositionInTiles);
+        }
+
         TargetOverTime();
         TryToHideOverTime();
         UpdateHideState();
@@ -472,6 +505,24 @@ sealed class ElderSnail : ModNPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        if (AssetInitializer.TryGetRequestedTextureAssets<ElderSnail>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
+            if (_init) {
+                //foreach (Point16 passedPosition in _passedPositions) {
+                //    Vector2 scale = Vector2.One;
+                //    Texture2D texture = indexedTextureAssets[(byte)ElderSnailRequstedTextureType.Trail].Value;
+                //    Rectangle clip = texture.Bounds;
+                //    Vector2 origin = clip.Centered();
+                //    Color color = Color.White;
+                //    spriteBatch.Draw(texture, passedPosition.ToWorldCoordinates(), DrawInfo.Default with {
+                //        Clip = clip,
+                //        Scale = scale,
+                //        Origin = origin,
+                //        Color = color
+                //    });
+                //}
+            }
+        }
+
         SpriteEffects flip = FacedDirection.ToSpriteEffects();
         NPC.QuickDraw(spriteBatch, screenPos, drawColor, effect: flip);
 

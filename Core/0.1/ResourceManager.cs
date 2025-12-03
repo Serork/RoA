@@ -85,6 +85,7 @@ static class ResourceManager {
 
     public static string NPCTextures => Textures + "NPCs/";
     public static string EnemyNPCTextures => NPCTextures + "Enemies/";
+    public static string BackwoodsEnemyNPCTextures => EnemyNPCTextures + "Backwoods/";
     public static string TarEnemyNPCTextures => EnemyNPCTextures + "Tar/";
 
     public static string DustTextures => Textures + "Dusts/";
