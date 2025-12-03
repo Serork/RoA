@@ -9,11 +9,18 @@ using System;
 using System.Runtime.CompilerServices;
 
 using Terraria;
+using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 
-namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
+namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class ElderSnail : ModNPC {
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
+        bestiaryEntry.Info.AddRange([
+            new FlavorTextBestiaryInfoElement($"Mods.RoA.Bestiary.{nameof(ElderSnail)}")
+        ]);
+    }
+
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Collision_MoveSnailOnSlopes")]
     public extern static void NPC_Collision_MoveSnailOnSlopes(NPC self);
 
@@ -225,20 +232,20 @@ sealed class ElderSnail : ModNPC {
                 NPC.ai[0] = 1f;
                 NPC.directionY = 1;
                 if (NPC.velocity.Y > speedX)
-                    NPC.rotation += (float)NPC.direction * 0.1f;
+                    NPC.rotation += NPC.direction * 0.1f;
                 else
                     NPC.rotation = 0f;
 
                 NPC.spriteDirection = NPC.direction;
-                NPC.velocity.X = speedX * (float)NPC.direction;
+                NPC.velocity.X = speedX * NPC.direction;
                 NPC.noGravity = false;
-                int num1042 = (int)(NPC.Center.X + (float)(NPC.width / 2 * -NPC.direction)) / 16;
-                int num1043 = (int)(NPC.position.Y + (float)NPC.height + 8f) / 16;
+                int num1042 = (int)(NPC.Center.X + NPC.width / 2 * -NPC.direction) / 16;
+                int num1043 = (int)(NPC.position.Y + NPC.height + 8f) / 16;
                 if (!Main.tile[num1042, num1043].TopSlope && NPC.collideY)
                     NPC.ai[2] -= 1f;
 
-                num1043 = (int)(NPC.position.Y + (float)NPC.height - 4f) / 16;
-                num1042 = (int)(NPC.Center.X + (float)(NPC.width / 2 * NPC.direction)) / 16;
+                num1043 = (int)(NPC.position.Y + NPC.height - 4f) / 16;
+                num1042 = (int)(NPC.Center.X + NPC.width / 2 * NPC.direction) / 16;
                 if (Main.tile[num1042, num1043].BottomSlope)
                     NPC.direction *= -1;
 
@@ -254,7 +261,7 @@ sealed class ElderSnail : ModNPC {
                         NPC.localAI[2] += 1f;
                         if (NPC.localAI[2] > 10f) {
                             NPC.direction = 1;
-                            NPC.velocity.X = (float)NPC.direction * speedX;
+                            NPC.velocity.X = NPC.direction * speedX;
                             NPC.localAI[2] = 0f;
                         }
                     }
@@ -343,7 +350,7 @@ sealed class ElderSnail : ModNPC {
 
                 float num1045 = NPC.rotation;
                 NPC.rotation = num1044;
-                if ((double)NPC.rotation > 6.28)
+                if (NPC.rotation > 6.28)
                     NPC.rotation -= 6.28f;
 
                 if (NPC.rotation < 0f)
@@ -380,8 +387,8 @@ sealed class ElderSnail : ModNPC {
                 NPC.ai[3] = NPC.spriteDirection;
             }
 
-            NPC.velocity.X = speedX * (float)NPC.direction;
-            NPC.velocity.Y = speedY * (float)NPC.directionY;
+            NPC.velocity.X = speedX * NPC.direction;
+            NPC.velocity.Y = speedY * NPC.directionY;
         }
 
         applyAdjustedVanillaSnailAI();
