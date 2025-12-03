@@ -13,6 +13,7 @@ using RoA.Core.Utility.Vanilla;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -43,6 +44,8 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         ]);
     }
 
+    private record struct PassedPositionInfo(Point16 Position, float Opacity = 0f);
+
     [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "Collision_MoveSnailOnSlopes")]
     public extern static void NPC_Collision_MoveSnailOnSlopes(NPC self);
 
@@ -66,7 +69,8 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     private bool _init;
 
-    private HashSet<Point16> _passedPositions = null!;
+    private PassedPositionInfo[] _passedPositions = null!;
+    private byte _passedPositionNextIndex;
 
     private bool IsFalling => NPC.ai[2] > 0f;
     private int FacedDirection => (int)-NPC.ai[3];
@@ -118,7 +122,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     public override void AI() {
         if (!_init) {
-            _passedPositions ??= [];
+            _passedPositions ??= new PassedPositionInfo[200];
             _init = true;
         }
 
@@ -249,8 +253,15 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private void ApplySnailAI() {
         Vector2 passedPosition = NPC.Center + new Vector2(0.625f * NPC.ai[3], 1f).RotatedBy(NPC.rotation) * NPC.height / 2f;
         Point16 passedPositionInTiles = passedPosition.ToTileCoordinates16();
-        if (WorldGenHelper.GetTileSafely(passedPositionInTiles).HasTile) {
-            _passedPositions.Add(passedPositionInTiles);
+        if (WorldGenHelper.GetTileSafely(passedPositionInTiles).HasTile && !_passedPositions.Any(checkInfo => checkInfo.Position == passedPositionInTiles)) {
+            _passedPositions[_passedPositionNextIndex++] = new PassedPositionInfo(passedPositionInTiles);
+            if (_passedPositionNextIndex > _passedPositions.Length - 1) {
+                _passedPositionNextIndex = 0;
+            }
+        }
+        for (int i = 0; i < _passedPositions.Length; i++) {
+            ref PassedPositionInfo passedPositionInfo = ref _passedPositions[i];
+            passedPositionInfo.Opacity = Helper.Approach(_passedPositions[i].Opacity, 1f, 0.2f);
         }
 
         TargetOverTime();
@@ -514,20 +525,22 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         if (AssetInitializer.TryGetRequestedTextureAssets<ElderSnail>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             if (_init) {
-                foreach (Point16 passedPosition in _passedPositions) {
-                    Vector2 worldPosition = passedPosition.ToWorldCoordinates() - Vector2.One * 6f;
-                    if (WorldGenHelper.GetTileSafely(passedPosition).IsHalfBlock) {
+                foreach (PassedPositionInfo passedPositionInfo in _passedPositions) {
+                    Point16 position = passedPositionInfo.Position;
+                    Vector2 worldPosition = position.ToWorldCoordinates() - Vector2.One * 6f;
+                    if (WorldGenHelper.GetTileSafely(position).IsHalfBlock) {
                         worldPosition.Y += 8f;
                     }
                     ulong seed = (((ulong)worldPosition.X << 32) | (uint)worldPosition.Y);
                     byte a = 150;
                     Color color = new(a, a, a, a);
+                    color *= passedPositionInfo.Opacity;
                     for (int i = 0; i < 4; i++) {
-                        Vector2 scale = new Vector2(1.5f, 1f);
+                        Vector2 scale = new(1.5f, 1f);
                         Texture2D texture = indexedTextureAssets[(byte)Utils.RandomInt(ref seed, 0, 3)].Value;
                         Rectangle clip = texture.Bounds;
                         Vector2 origin = clip.Centered();
-                        spriteBatch.Draw(texture, worldPosition + new Vector2(Utils.RandomInt(ref seed, -1, 2), Utils.RandomInt(ref seed, -1, 2)), DrawInfo.Default with {
+                        spriteBatch.Draw(texture, worldPosition + new Vector2(Utils.RandomInt(ref seed, -2, 3), Utils.RandomInt(ref seed, -1, 2)), DrawInfo.Default with {
                             Clip = clip,
                             Scale = scale,
                             Origin = origin,
