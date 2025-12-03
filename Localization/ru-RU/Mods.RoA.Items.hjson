@@ -2463,3 +2463,13 @@ BackwoodsNightMusicBox: {
 	// DisplayName: Backwoods Night Music Box
 	// Tooltip: ""
 }
+
+AncientHallowedVisor: {
+	// DisplayName: Ancient Hallowed Visor
+	// Tooltip: ""
+}
+
+HallowedVisor: {
+	// DisplayName: Hallowed Visor
+	// Tooltip: ""
+}
