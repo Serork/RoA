@@ -20,15 +20,22 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 
+using static RoA.Content.Projectiles.Enemies.ElderSnailTrail;
+
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class ElderSnail : ModNPC, IRequestAssets {
     public enum ElderSnailRequstedTextureType : byte {
-        Trail
+        Trail1,
+        Trail2,
+        Trail3, 
+        Count
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
-        [((byte)ElderSnailRequstedTextureType.Trail, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail")];
+        [((byte)ElderSnailTrailRequstedTextureType.Trail1, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail1"),
+         ((byte)ElderSnailTrailRequstedTextureType.Trail2, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail2"),
+         ((byte)ElderSnailTrailRequstedTextureType.Trail3, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail3")];
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) {
         bestiaryEntry.Info.AddRange([
@@ -507,19 +514,27 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         if (AssetInitializer.TryGetRequestedTextureAssets<ElderSnail>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             if (_init) {
-                //foreach (Point16 passedPosition in _passedPositions) {
-                //    Vector2 scale = Vector2.One;
-                //    Texture2D texture = indexedTextureAssets[(byte)ElderSnailRequstedTextureType.Trail].Value;
-                //    Rectangle clip = texture.Bounds;
-                //    Vector2 origin = clip.Centered();
-                //    Color color = Color.White;
-                //    spriteBatch.Draw(texture, passedPosition.ToWorldCoordinates(), DrawInfo.Default with {
-                //        Clip = clip,
-                //        Scale = scale,
-                //        Origin = origin,
-                //        Color = color
-                //    });
-                //}
+                foreach (Point16 passedPosition in _passedPositions) {
+                    Vector2 worldPosition = passedPosition.ToWorldCoordinates() - Vector2.One * 6f;
+                    if (WorldGenHelper.GetTileSafely(passedPosition).IsHalfBlock) {
+                        worldPosition.Y += 8f;
+                    }
+                    ulong seed = (((ulong)worldPosition.X << 32) | (uint)worldPosition.Y);
+                    byte a = 150;
+                    Color color = new(a, a, a, a);
+                    for (int i = 0; i < 4; i++) {
+                        Vector2 scale = new Vector2(1.5f, 1f);
+                        Texture2D texture = indexedTextureAssets[(byte)Utils.RandomInt(ref seed, 0, 3)].Value;
+                        Rectangle clip = texture.Bounds;
+                        Vector2 origin = clip.Centered();
+                        spriteBatch.Draw(texture, worldPosition + new Vector2(Utils.RandomInt(ref seed, -1, 2), Utils.RandomInt(ref seed, -1, 2)), DrawInfo.Default with {
+                            Clip = clip,
+                            Scale = scale,
+                            Origin = origin,
+                            Color = color
+                        });
+                    }
+                }
             }
         }
 
