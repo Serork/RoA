@@ -6,6 +6,7 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -39,7 +40,7 @@ sealed class ElderSnail : ModNPC {
     private bool _playMoveAnimation, _playHideAnimation;
     private bool _playAppearAfterHidingAnimation;
 
-    private bool _shouldHide;
+    private bool _shouldHide, _shouldBeHiding;
     private float _hideFactor;
 
     private bool IsFalling => NPC.ai[2] > 0f;
@@ -82,23 +83,22 @@ sealed class ElderSnail : ModNPC {
         NPC.noGravity = true;
     }
 
+    public override void SendExtraAI(BinaryWriter writer) {
+        writer.Write(_shouldBeHiding);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader) {
+        _shouldBeHiding = reader.ReadBoolean();
+    }
+
     public override void AI() {
         ApplySnailAI();
     }
 
     private void Hide() {
-        if (_shouldHide || !CanHide) {
-            return;
-        }
+        _shouldBeHiding = true;
 
-        ResetTargetTimeValues();
-
-        _speedXFactor = 0f;
-        _playMoveAnimation = false;
-        _shouldHide = true;
-        _playHideAnimation = true;
-
-        ResetFrame();
+        NPC.netUpdate = true;
     }
 
     private void AppearAfterHiding() {
@@ -142,8 +142,28 @@ sealed class ElderSnail : ModNPC {
     }
 
     private void TryToHideOverTime() {
-        if (HasTargetLine() && Main.rand.NextBool(200)) {
-            Hide();
+        if (_shouldBeHiding) {
+            if (_shouldHide || !CanHide) {
+                return;
+            }
+
+            ResetTargetTimeValues();
+
+            _speedXFactor = 0f;
+            _playMoveAnimation = false;
+            _shouldHide = true;
+            _playHideAnimation = true;
+
+            ResetFrame();
+
+            _shouldBeHiding = false;
+
+            return;
+        }
+        if (Helper.SinglePlayerOrServer) {
+            if (HasTargetLine() && Main.rand.NextBool(200)) {
+                Hide();
+            }
         }
     }
 
@@ -411,9 +431,12 @@ sealed class ElderSnail : ModNPC {
             else {
                 frame = moveFrameCount;
 
-                TargetClosestPlayer();
-                _playAppearAfterHidingAnimation = false;
-                ResetFrame();
+                FrameCounter++;
+                if (FrameCounter > perFrameCounter * (moveFrameCount + 1)) {
+                    TargetClosestPlayer();
+                    _playAppearAfterHidingAnimation = false;
+                    ResetFrame();
+                }
             }
             frame = (byte)(moveFrameCount + (hideFrameCount - frame - 1));
             NPC.SetFrame(frame, frameHeight2);
