@@ -22,8 +22,6 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.ModLoader;
 
-using static RoA.Content.Projectiles.Enemies.ElderSnailTrail;
-
 namespace RoA.Content.NPCs.Enemies.Backwoods;
 
 sealed class ElderSnail : ModNPC, IRequestAssets {
@@ -38,16 +36,16 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
-        [((byte)ElderSnailTrailRequstedTextureType.Trail1, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail1"),
-         ((byte)ElderSnailTrailRequstedTextureType.Trail2, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail2"),
-         ((byte)ElderSnailTrailRequstedTextureType.Trail3, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail3")];
+        [((byte)ElderSnailRequstedTextureType.Trail1, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail1"),
+         ((byte)ElderSnailRequstedTextureType.Trail2, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail2"),
+         ((byte)ElderSnailRequstedTextureType.Trail3, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail3")];
 
     private record struct PassedPositionInfo(Point16 Position, float Opacity = 0f);
 
     private static byte FRAMECOUNT => 10;
     private static float UPDATEDIRECTIONEVERYNTICKS => 10f;
     private static float UPDATETARGETEVERYNTICKS => 90f;
-    private static float HIDETIMEINTICKS => 120f;
+    private static float HIDETIMEINTICKS => 300f;
     private static float CANTHIDETIME => 30f;
     private static byte TRAILPOSITIONCOUNT => 200;
 
@@ -57,10 +55,10 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private float _targetTimer;
     private float _speedXFactor;
 
-    private bool _playMoveAnimation, _playHideAnimation;
+    private bool _playMoveAnimation, _playHideAnimation, _playAttackAnimation;
     private bool _playAppearAfterHidingAnimation;
 
-    private bool _shouldHide, _shouldBeHiding;
+    private bool _shouldHide, _shouldAttack, _shouldBeHiding, _shouldBeAttacking;
     private float _hideFactor;
 
     private bool _init;
@@ -70,7 +68,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     private bool IsFalling => NPC.ai[2] > 0f;
     private int FacedDirection => (int)-NPC.ai[3];
-    private bool CanHide => _hideFactor >= 0f;
+    private bool CanHide => _hideFactor >= 0f && !_shouldAttack;
 
     public ref double FrameCounter => ref NPC.frameCounter;
 
@@ -116,10 +114,12 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     public override void SendExtraAI(BinaryWriter writer) {
         writer.Write(_shouldBeHiding);
+        writer.Write(_shouldBeAttacking);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
         _shouldBeHiding = reader.ReadBoolean();
+        _shouldBeAttacking = reader.ReadBoolean();
     }
 
     public override void AI() {
@@ -129,6 +129,12 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         }
 
         ApplySnailAI();
+    }
+
+    private void Attack() {
+        _shouldBeAttacking = true;
+
+        NPC.netUpdate = true;
     }
 
     private void Hide() {
@@ -207,6 +213,42 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         }
     }
 
+    private void TryToAttackOverTime() {
+        if (_playAppearAfterHidingAnimation || _shouldHide || _hideFactor < -CANTHIDETIME / 2f) {
+            return;
+        }
+
+        if (!NPC.IsGrounded()) {
+            return;
+        }
+
+        if (_shouldBeAttacking) {
+            if (_shouldAttack) {
+                return;
+            }
+
+            ResetTargetTimeValues();
+
+            _speedXFactor = 0f;
+            _playMoveAnimation = false;
+            _shouldAttack = true;
+            _playAttackAnimation = true;
+
+            _shouldBeAttacking = false;
+
+            _hideFactor = -CANTHIDETIME;
+
+            ResetFrame();
+
+            return;
+        }
+        if (Helper.SinglePlayerOrServer) {
+            if (Main.rand.NextBool(200)) {
+                Attack();
+            }
+        }
+    }
+
     private bool HasTargetLine() => Collision.CanHitLine(NPC.Center, 0, 0, NPC.GetTargetPlayer().Center, 0, 0);
 
     private void GetVelocitySpeeds(out float speedX, out float speedY) {
@@ -268,9 +310,29 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
         TargetOverTime();
         TryToHideOverTime();
+        TryToAttackOverTime();
         UpdateHideState();
 
+        if (_shouldAttack) {
+            NPC.velocity.X *= 0.8f;
+            _speedXFactor++;
+
+            TargetClosestPlayer();
+
+            if (_speedXFactor >= 120f) {
+                _speedXFactor = 0f;
+
+                ResetFrame();
+
+                _shouldAttack = _playAttackAnimation = false;
+            }
+        }
+
         void applyAdjustedVanillaSnailAI() {
+            if (_shouldAttack) {
+                return;
+            }
+
             GetVelocitySpeeds(out float speedX, out float speedY);
 
             if (NPC.ai[0] == 0f) {
@@ -476,9 +538,56 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         ushort frameHeight2 = (ushort)frameHeight;
 
         byte moveFrameCount = 3,
-             hideFrameCount = 3;
+             hideFrameCount = 3,
+             attackFrameCount = 4;
 
-        double perFrameCounter = 8.0;
+        double perFrameCounter = 8.0,
+               perFrameCounter_Attack = 4.0;
+        if (_shouldAttack) {
+            byte startFrame = (byte)(moveFrameCount + hideFrameCount);
+            NPC.SetFrame(startFrame, frameHeight2);
+            byte frame = (byte)(FrameCounter / perFrameCounter_Attack);
+            if (_playAttackAnimation) {
+                if (FrameCounter < perFrameCounter_Attack * attackFrameCount) {
+                    if (FrameCounter == 0.0) {
+                        NPC.SetFrame(startFrame, frameHeight2);
+                    }
+                    FrameCounter++;
+                }
+                else {
+                    frame = (byte)(startFrame + attackFrameCount - 1);
+                    NPC.SetFrame(frame, frameHeight2);
+
+                    FrameCounter = 0.0;
+                    _playAttackAnimation = false;
+
+                    return;
+                }
+                frame = (byte)(startFrame + frame);
+                NPC.SetFrame(frame, frameHeight2);
+            }
+            else {
+                if (FrameCounter < perFrameCounter_Attack * attackFrameCount) {
+                    if (FrameCounter == 0.0) {
+                        NPC.SetFrame(startFrame, frameHeight2);
+                    }
+                    FrameCounter++;
+                }
+                else {
+                    frame = startFrame;
+                    NPC.SetFrame(frame, frameHeight2);
+
+                    FrameCounter = 0.0;
+                    _playAttackAnimation = true;
+
+                    return;
+                }
+                frame = (byte)(startFrame + attackFrameCount - frame - 1);
+                NPC.SetFrame(frame, frameHeight2);
+            }
+
+            return;
+        }
         if (_playAppearAfterHidingAnimation) {
             perFrameCounter *= 0.75;
 
@@ -541,6 +650,9 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
                     ulong seed = (((ulong)worldPosition.X << 32) | (uint)worldPosition.Y);
                     byte a = 150;
                     Color color = new(a, a, a, a);
+                    if (_shouldAttack) {
+                        color = Color.Lerp(color, Color.Lerp(color, Color.Red, 0.5f), 0.5f);
+                    }
                     color *= passedPositionInfo.Opacity;
                     for (int i = 0; i < 4; i++) {
                         Vector2 scale = new(1.5f, 1f);
