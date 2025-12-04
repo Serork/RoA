@@ -52,7 +52,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool DontShowHealEffect, DontShowManaEffect;
 
     public bool ElderSnailSlow;
-    public bool IsElderShellEffectActive;
+    public bool IsElderShellEffectActive, IsElderShieldEffectActive;
     public int DefenseLastTick;
 
     public bool DoingBackflip => _backflipTimer > 0f;
@@ -161,7 +161,22 @@ sealed partial class PlayerCommon : ModPlayer {
     private bool On_Player_AddBuff_ActuallyTryToAddTheBuff(On_Player.orig_AddBuff_ActuallyTryToAddTheBuff orig, Player self, int type, int time) {
         bool result = orig(self, type, time);
         if (result && type == BuffID.PotionSickness) {
-            self.AddBuff<SnailBuff>(ElderShell.BUFFTIME);
+            foreach (Player player in Main.ActivePlayers) {
+                if (player.whoAmI == self.whoAmI) {
+                    continue;
+                }
+                if (player.GetCommon().IsElderShieldEffectActive) {
+                    if (self.team == player.team && player.team != 0) {
+                        float num = player.position.X - self.position.X;
+                        float num2 = player.position.Y - self.position.Y;
+                        if ((float)Math.Sqrt(num * num + num2 * num2) < 800f)
+                            player.AddBuff<SnailBuff>(ElderShell.BUFFTIME);
+                    }
+                }
+            }
+            if (self.GetCommon().IsElderShellEffectActive) {
+                self.AddBuff<SnailBuff>(ElderShell.BUFFTIME);
+            }
         }
         return result;
     }
@@ -480,6 +495,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public override void ResetEffects() {
         IsElderShellEffectActive = false;
         ElderSnailSlow = false;
+        IsElderShieldEffectActive = false;
 
         if (IsAetherInvincibilityActive) {
             Player.shimmerTransparency += 0.03f;

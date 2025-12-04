@@ -2467,3 +2467,8 @@ LifeSpiral: {
 	DisplayName: Life Spiral
 	Tooltip: ""
 }
+
+ElderShield: {
+	DisplayName: Elder Shield
+	Tooltip: ""
+}
