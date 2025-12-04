@@ -49,7 +49,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private static float UPDATETARGETEVERYNTICKS => 90f;
     private static float HIDETIMEINTICKS => 300f;
     private static float CANTHIDETIMEINWHATAEVER => 30f;
-    private static byte TRAILPOSITIONCOUNT => 200;
+    private static byte TRAILPOSITIONCOUNT => 10;
 
     private static float MAXTIMETOSPEEDUP => 30f;
     private static float MINTIMETOSPEEDUP => MAXTIMETOSPEEDUP * 0.25f;
@@ -262,27 +262,29 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
             hideFactor = 0f;
         }
 
+        _playMoveAnimation = true;
+
         float add = 0.75f * hideFactor;
         _speedXFactor += add;
         if (_speedXFactor > MAXTIMETOSPEEDUP) {
             _speedXFactor = 0f;
 
-            _playMoveAnimation = false;
+            //_playMoveAnimation = false;
             FrameCounter = 0.0;
         }
         float progress = Ease.CubeInOut(Utils.GetLerpValue(MINTIMETOSPEEDUP, MAXTIMETOSPEEDUP, _speedXFactor, true));
 
-        speedX = 0.1f + 1.5f * progress;
-        speedY = 0.5f + 0.5f * progress;
+        speedX = 1f/* + 0.5f * progress*/;
+        speedY = 1f/* + 0.5f * progress*/;
 
         speedX *= hideFactor;
         speedY *= hideFactor;
     }
 
     private void UpdateHideState() {
-        if (!_playMoveAnimation && _speedXFactor > MINTIMETOSPEEDUP) {
-            _playMoveAnimation = true;
-        }
+        //if (!_playMoveAnimation && _speedXFactor > MINTIMETOSPEEDUP) {
+        //    _playMoveAnimation = true;
+        //}
 
         if (_shouldHide) {
             NPC.velocity.X *= 0.8f;
@@ -300,7 +302,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     private void ApplySnailAI() {
-        Vector2 passedPosition = NPC.Center + new Vector2(0.5f * -FacedDirection, 1f).RotatedBy(NPC.rotation) * NPC.height / 2f;
+        Vector2 passedPosition = NPC.Center + new Vector2(0.5f * -FacedDirection, 1.25f).RotatedBy(NPC.rotation) * NPC.height / 2f;
         Point16 passedPositionInTiles = passedPosition.ToTileCoordinates16();
         if (WorldGenHelper.GetTileSafely(passedPositionInTiles).HasTile && !_passedPositions.Any(checkInfo => checkInfo.Position == passedPositionInTiles)) {
             _passedPositions[_passedPositionNextIndex++] = new PassedPositionInfo(passedPositionInTiles, NPC.rotation);
@@ -550,6 +552,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
         double perFrameCounter = 8.0,
                perFrameCounter_Attack = 4.0;
+        double moveFrameCounter = 12.0;
         if (_shouldAttack) {
             byte startFrame = (byte)(moveFrameCount + hideFrameCount);
             NPC.SetFrame(startFrame, frameHeight2);
@@ -630,12 +633,13 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
             return;
         }
         if (_playMoveAnimation) {
-            byte frame = (byte)(FrameCounter / perFrameCounter);
-            if (FrameCounter < perFrameCounter * moveFrameCount) {
+            byte frame = (byte)(FrameCounter / moveFrameCounter);
+            if (FrameCounter < moveFrameCounter * moveFrameCount) {
                 FrameCounter++;
             }
             else {
                 frame = 0;
+                FrameCounter = 0.0;
             }
             NPC.SetFrame(frame, frameHeight2);
 
