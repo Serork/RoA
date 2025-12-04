@@ -50,11 +50,12 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private static float HIDETIMEINTICKS => 300f;
     private static float CANTHIDETIMEINWHATAEVER => 30f;
     private static byte TRAILPOSITIONCOUNT => 20;
+    private static float INACTIVETARGETIMEINTICKS => 300f;
 
     private static float MAXTIMETOSPEEDUP => 30f;
     private static float MINTIMETOSPEEDUP => MAXTIMETOSPEEDUP * 0.25f;
 
-    private float _targetTimer;
+    private float _targetTimer, _targetTimer2;
     private float _speedXFactor;
 
     private bool _playMoveAnimation, _playHideAnimation, _playAttackAnimation;
@@ -180,10 +181,14 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
             if (HasTargetLine()) {
                 _targetTimer++;
             }
+            else {
+                _targetTimer2++;
+            }
             if (_speedXFactor < MINTIMETOSPEEDUP && _targetTimer > UPDATETARGETEVERYNTICKS) {
                 _targetTimer = 0f;
                 NPC.ai[0] = 0f;
                 NPC.localAI[0] = UPDATEDIRECTIONEVERYNTICKS;
+                _targetTimer2 = 0f;
             }
         }
     }
@@ -254,7 +259,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         //}
     }
 
-    private bool HasTargetLine() => Collision.CanHitLine(NPC.Center, 0, 0, NPC.GetTargetPlayer().Center, 0, 0);
+    private bool HasTargetLine() => _targetTimer2 >= TARGETTIME || Collision.CanHitLine(NPC.Center, 0, 0, NPC.GetTargetPlayer().Center, 0, 0);
 
     private void GetVelocitySpeeds(out float speedX, out float speedY) {
         float hideFactor = MathUtils.Clamp01(1f - _hideFactor);
