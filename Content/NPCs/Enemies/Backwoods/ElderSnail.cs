@@ -259,7 +259,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         //}
     }
 
-    private bool HasTargetLine() => _targetTimer2 >= TARGETTIME || Collision.CanHitLine(NPC.Center, 0, 0, NPC.GetTargetPlayer().Center, 0, 0);
+    private bool HasTargetLine() => _targetTimer2 >= INACTIVETARGETIMEINTICKS || Collision.CanHitLine(NPC.Center, 0, 0, NPC.GetTargetPlayer().Center, 0, 0);
 
     private void GetVelocitySpeeds(out float speedX, out float speedY) {
         float hideFactor = MathUtils.Clamp01(1f - _hideFactor);
@@ -434,8 +434,8 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
                 NPC.ai[1] = 0f;
                 NPC.ai[0] = 1f;
                 NPC.directionY = 1;
-                if (NPC.velocity.Y > speedX)
-                    NPC.rotation += NPC.direction * 0.1f;
+                if (NPC.velocity.Y > speedY)
+                    NPC.rotation += MathF.Abs(NPC.velocity.Y) * 0.02f * FacedDirection;
                 else
                     NPC.rotation = 0f;
 
@@ -464,7 +464,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
                         NPC.localAI[2] += 1f;
                         if (NPC.localAI[2] > 10f) {
                             NPC.direction = 1;
-                            NPC.velocity.X = NPC.direction * speedX;
+                            NPC.velocity.X = NPC.direction * speedY;
                             NPC.localAI[2] = 0f;
                         }
                     }
