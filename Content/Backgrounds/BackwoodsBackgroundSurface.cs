@@ -1,11 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
+using ReLogic.Content;
+
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Utilities.Extensions;
-﻿using RoA.Common.World;
+using RoA.Common.World;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
@@ -15,15 +20,82 @@ using Terraria.Graphics.Capture;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
 
+using static RoA.Content.Backgrounds.BackwoodsBackgroundSurface;
+
 namespace RoA.Content.Backgrounds;
 
 sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
+    public static byte THEMBGTEXTURECOUNT => 3;
+    private static ushort THEMACTIVETIME => (ushort)MathUtils.SecondsToFrames(30);
+    private static byte MAXTHEMCOUNT => 50;
+
+    public static Asset<Texture2D>[] ThemBGTextures { get; private set; } = null!;
+    public static ThemBGInfo[] ThemBG { get; private set; } = null!;
+
+    public record struct ThemBGInfo(byte TextureIndex, Vector2 Position, ushort ActiveTime, float Opacity = 0f) {
+        public readonly ushort MaxActiveTime = ActiveTime;
+    }
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        ThemBGTextures = new Asset<Texture2D>[THEMBGTEXTURECOUNT];
+        for (int i = 0; i < ThemBGTextures.Length; i++) {
+            ThemBGTextures[i] = ModContent.Request<Texture2D>(ResourceManager.AmbienceTextures + $"them_BG_{i + 1}");
+        }
+
+        ThemBG = new ThemBGInfo[MAXTHEMCOUNT];
+    }
+
     public readonly int CloseOffset = 700;
     public readonly int MidOffset = 1140;
     public readonly int MidOffset2 = 1740;
     public readonly int FarOffset = 1200;
 
+    private bool IsFogActiveForBackground() => BackwoodsFogHandler.Opacity > 0f && Main.cloudAlpha <= 0f && Main.GraveyardVisualIntensity * 0.92f <= 0f;
+
+    private bool SpawnThem() {
+        int availableIndex = -1;
+        for (int i = 0; i < ThemBG.Length; i++) {
+            if (ThemBG[i].ActiveTime <= 0) {
+                availableIndex = i;
+                break;
+            }
+        }
+        if (availableIndex >= 0) {
+            ThemBG[availableIndex] = new ThemBGInfo((byte)Main.rand.Next(THEMBGTEXTURECOUNT), 
+                                                    new Vector2(Main.rand.Next(Main.screenWidth * 4), -Main.screenHeight / 3 * Main.rand.NextFloatDirection()),
+                                                    (ushort)(THEMACTIVETIME * Main.rand.NextFloat(0.5f, 1f)));
+            return true;
+        }
+
+        return false;
+    }
+
+    private void UpdateThem() {
+        for (int i = 0; i < ThemBG.Length; i++) {
+            ref ThemBGInfo themBGInfo = ref ThemBG[i];
+            if (themBGInfo.ActiveTime <= 0) {
+                continue;
+            }
+
+            themBGInfo.Opacity = Utils.GetLerpValue(0f, themBGInfo.MaxActiveTime * 0.15f, themBGInfo.ActiveTime, true) * Utils.GetLerpValue(themBGInfo.MaxActiveTime, themBGInfo.MaxActiveTime * 0.85f, themBGInfo.ActiveTime, true);
+
+            themBGInfo.ActiveTime--;
+        }
+    }
+
     public override void ModifyFarFades(float[] fades, float transitionSpeed) {
+        if (IsFogActiveForBackground()) {
+            if (Main.rand.NextBool(100)) {
+                SpawnThem();
+                Main.NewText(123);
+            }
+        }
+        UpdateThem();
+
         for (int i = 0; i < fades.Length; i++) {
             if (i == Slot) {
                 fades[i] += transitionSpeed;
@@ -213,10 +285,31 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             }
             float value2 = Main.GraveyardVisualIntensity * 0.92f;
             bool flag = false;
-            if (/*Main.cloudAlpha > 0f || value2 > 0f || */BackwoodsFogHandler.Opacity > 0f && Main.cloudAlpha <= 0f && value2 <= 0f) {
-                backgroundColor *= Math.Max(BackwoodsFogHandler.Opacity * 0.3f, Math.Max(Main.cloudAlpha, value2) * 0.1f);
+            float backgroundOpacity = 1f;
+            if (IsFogActiveForBackground()) {
+                backgroundOpacity = Math.Max(BackwoodsFogHandler.Opacity * 0.3f, Math.Max(Main.cloudAlpha, value2) * 0.1f);
+                backgroundColor *= backgroundOpacity;
                 flag = true;
             }
+
+            if (flag) {
+                foreach (ThemBGInfo themBGInfo in ThemBG) {
+                    Texture2D value = ThemBGTextures[themBGInfo.TextureIndex].Value;
+                    bgScale = 1f;
+                    bgScale *= bgGlobalScaleMultiplier;
+                    Rectangle clip = value.Bounds;
+                    Vector2 origin = clip.Centered();
+                    int width = value.Width;
+                    bgWidthScaled = (int)(BackwoodsVars.BackwoodsHalfSizeX * 3f * 16 * bgScale * 1f);
+                    bgParallax = 0.5;
+                    bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled)) + (int)(bgWidthScaled * 0.75f);
+                    bgTopY = (int)(backgroundTopMagicNumber * 2100.0 + 2500.0) + (int)scAdj + pushBGTopHack;
+                    if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
+                        Main.spriteBatch.Draw(value, new Vector2(bgStartX, bgTopY) - themBGInfo.Position, clip, Color.White * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, SpriteEffects.None, 0f);
+                    }
+                }
+            }
+
             if (flag) {
                 Texture2D value = TextureAssets.Background[49].Value;
                 bgScale = 1f;
@@ -237,4 +330,6 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         }
         return false;
     }
+
+    private int testTImer;
 }
