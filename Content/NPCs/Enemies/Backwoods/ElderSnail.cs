@@ -40,7 +40,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
          ((byte)ElderSnailRequstedTextureType.Trail2, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail2"),
          ((byte)ElderSnailRequstedTextureType.Trail3, ResourceManager.BackwoodsEnemyNPCTextures + "ElderSnail_Trail3")];
 
-    private record struct PassedPositionInfo(Point16 Position, float Opacity = 0f);
+    private record struct PassedPositionInfo(Point16 Position, float Rotation, float Opacity = 0f);
 
     private static byte FRAMECOUNT => 10;
     private static float UPDATEDIRECTIONEVERYNTICKS => 10f;
@@ -63,8 +63,8 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     private bool _init;
 
-    private PassedPositionInfo[] _passedPositions = null!;
-    private byte _passedPositionNextIndex;
+    private static PassedPositionInfo[] _passedPositions = null!;
+    private static byte _passedPositionNextIndex;
 
     private bool IsFalling => NPC.ai[2] > 0f;
     private int FacedDirection => (int)-NPC.ai[3];
@@ -214,39 +214,39 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     private void TryToAttackOverTime() {
-        if (_playAppearAfterHidingAnimation || _shouldHide || _hideFactor < -CANTHIDETIME / 2f) {
-            return;
-        }
+        //if (_playAppearAfterHidingAnimation || _shouldHide || _hideFactor < -CANTHIDETIME / 2f) {
+        //    return;
+        //}
 
-        if (!NPC.IsGrounded()) {
-            return;
-        }
+        //if (!NPC.IsGrounded()) {
+        //    return;
+        //}
 
-        if (_shouldBeAttacking) {
-            if (_shouldAttack) {
-                return;
-            }
+        //if (_shouldBeAttacking) {
+        //    if (_shouldAttack) {
+        //        return;
+        //    }
 
-            ResetTargetTimeValues();
+        //    ResetTargetTimeValues();
 
-            _speedXFactor = 0f;
-            _playMoveAnimation = false;
-            _shouldAttack = true;
-            _playAttackAnimation = true;
+        //    _speedXFactor = 0f;
+        //    _playMoveAnimation = false;
+        //    _shouldAttack = true;
+        //    _playAttackAnimation = true;
 
-            _shouldBeAttacking = false;
+        //    _shouldBeAttacking = false;
 
-            _hideFactor = -CANTHIDETIME;
+        //    _hideFactor = -CANTHIDETIME;
 
-            ResetFrame();
+        //    ResetFrame();
 
-            return;
-        }
-        if (Helper.SinglePlayerOrServer) {
-            if (Main.rand.NextBool(200)) {
-                Attack();
-            }
-        }
+        //    return;
+        //}
+        //if (Helper.SinglePlayerOrServer) {
+        //    if (Main.rand.NextBool(200)) {
+        //        Attack();
+        //    }
+        //}
     }
 
     private bool HasTargetLine() => Collision.CanHitLine(NPC.Center, 0, 0, NPC.GetTargetPlayer().Center, 0, 0);
@@ -298,7 +298,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         Vector2 passedPosition = NPC.Center + new Vector2(FacedDirection > 0 ? -0f : 0.625f, 1f).RotatedBy(NPC.rotation) * NPC.height / 2f;
         Point16 passedPositionInTiles = passedPosition.ToTileCoordinates16();
         if (WorldGenHelper.GetTileSafely(passedPositionInTiles).HasTile && !_passedPositions.Any(checkInfo => checkInfo.Position == passedPositionInTiles)) {
-            _passedPositions[_passedPositionNextIndex++] = new PassedPositionInfo(passedPositionInTiles);
+            _passedPositions[_passedPositionNextIndex++] = new PassedPositionInfo(passedPositionInTiles, NPC.rotation);
             if (_passedPositionNextIndex > _passedPositions.Length - 1) {
                 _passedPositionNextIndex = 0;
             }
@@ -643,7 +643,8 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
             if (_init) {
                 foreach (PassedPositionInfo passedPositionInfo in _passedPositions) {
                     Point16 position = passedPositionInfo.Position;
-                    Vector2 worldPosition = position.ToWorldCoordinates() - Vector2.One * 6f;
+                    float rotation = passedPositionInfo.Rotation;
+                    Vector2 worldPosition = position.ToWorldCoordinates() - Vector2.UnitY.RotatedBy(rotation) * 6f;
                     if (WorldGenHelper.GetTileSafely(position).IsHalfBlock) {
                         worldPosition.Y += 8f;
                     }
@@ -663,7 +664,8 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
                             Clip = clip,
                             Scale = scale,
                             Origin = origin,
-                            Color = color
+                            Color = color,
+                            Rotation = rotation
                         });
                     }
                 }
