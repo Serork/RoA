@@ -304,8 +304,64 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private void ApplySnailAI() {
         Vector2 passedPosition = NPC.Center + new Vector2(0.5f * -FacedDirection, 1.25f).RotatedBy(NPC.rotation) * NPC.height / 2f;
         Point16 passedPositionInTiles = passedPosition.ToTileCoordinates16();
-        if (WorldGenHelper.SolidTile(passedPositionInTiles.ToPoint()) && !_passedPositions.Any(checkInfo => checkInfo.Position == passedPositionInTiles)) {
+
+        if (NPC.SpeedX() > 0.1f && NPC.IsGrounded()) {
+            if (Main.rand.NextBool(3)) {
+                if (!Main.rand.NextBool(3)) {
+                    int num242 = Utils.SelectRandom<int>(Main.rand, 4);
+                    Dust dust38 = Main.dust[Dust.NewDust(passedPosition - Vector2.UnitY * 8f + Vector2.UnitX * Main.rand.NextFloat(16f) * -FacedDirection - Vector2.UnitX * Main.rand.NextFloat(36f) * -FacedDirection, 0, 8, num242, 0f, 0f, 150)];
+                    dust38.scale = 0.8f + Main.rand.NextFloat() * 0.6f;
+                    dust38.fadeIn = 1f;
+                    dust38.velocity *= 0.1f;
+                    dust38.noGravity = true;
+                    Dust dust2 = dust38;
+                    dust38.noLight = true;
+                    if (dust38.type == 4)
+                        dust38.color = new Color(71, 107, 95, 150);
+                }
+            }
+        }
+
+        if (WorldGenHelper.SolidTile(passedPositionInTiles.ToPoint()) && WorldGenHelper.GetTileSafely(passedPositionInTiles).HasUnactuatedTile && !_passedPositions.Any(checkInfo => checkInfo.Position == passedPositionInTiles)) {
+            if (_passedPositions[_passedPositionNextIndex].Opacity != 0f) {
+                Point16 position = _passedPositions[_passedPositionNextIndex].Position;
+                float rotation = _passedPositions[_passedPositionNextIndex].Rotation;
+                Vector2 worldPosition = position.ToWorldCoordinates() - Vector2.UnitY.RotatedBy(rotation) * 6f;
+                if (WorldGenHelper.GetTileSafely(position).IsHalfBlock) {
+                    worldPosition.Y += 8f;
+                }
+                for (int i = 0; i < 12; i++) {
+                    int num242 = Utils.SelectRandom<int>(Main.rand, 4, 256);
+                    Dust dust38 = Main.dust[Dust.NewDust(worldPosition - Vector2.UnitY * 8f - Vector2.UnitX * 8f, 24, 16, num242, 0f, 0f, 175)];
+                    dust38.scale = 0.8f + Main.rand.NextFloat() * 0.6f;
+                    dust38.fadeIn = 0.5f;
+                    dust38.velocity *= 0.25f;
+                    dust38.noGravity = true;
+                    Dust dust2 = dust38;
+                    dust38.noLight = true;
+                    if (dust38.type == 4)
+                        dust38.color = new Color(71, 107, 95, 150);
+                }
+            }
+
             _passedPositions[_passedPositionNextIndex++] = new PassedPositionInfo(passedPositionInTiles, NPC.rotation);
+
+            for (int i = 0; i < 4; i++) {
+                if (!Main.rand.NextBool(3)) {
+                    continue;
+                }
+                int num242 = Utils.SelectRandom<int>(Main.rand, 4);
+                Dust dust38 = Main.dust[Dust.NewDust(passedPosition - Vector2.UnitY * 8f + Vector2.UnitX * Main.rand.NextFloat(16f) * -FacedDirection, 0, 16, num242, 0f, 0f, 150)];
+                dust38.scale = 0.8f + Main.rand.NextFloat() * 0.6f;
+                dust38.fadeIn = 1f;
+                dust38.velocity *= 0.1f;
+                dust38.noGravity = true;
+                Dust dust2 = dust38;
+                dust38.noLight = true;
+                if (dust38.type == 4)
+                    dust38.color = new Color(71, 107, 95, 150);
+            }
+
             if (_passedPositionNextIndex > _passedPositions.Length - 1) {
                 _passedPositionNextIndex = 0;
             }
