@@ -28,7 +28,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     public static Asset<Texture2D>[] ThemBGTextures { get; private set; } = null!;
     public static ThemBGInfo[] ThemBG { get; private set; } = null!;
 
-    public record struct ThemBGInfo(byte TextureIndex, Vector2 Position, ushort ActiveTime, float Opacity = 0f) {
+    public record struct ThemBGInfo(byte TextureIndex, Vector2 Position, ushort ActiveTime, float Opacity = 0f, bool FacedRight = true) {
         public readonly ushort MaxActiveTime = ActiveTime;
     }
 
@@ -63,7 +63,8 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         if (availableIndex >= 0) {
             ThemBG[availableIndex] = new ThemBGInfo((byte)Main.rand.Next(THEMBGTEXTURECOUNT), 
                                                     new Vector2(Main.rand.Next(Main.screenWidth * 4), -Main.screenHeight / 3 * Main.rand.NextFloatDirection()),
-                                                    (ushort)(THEMACTIVETIME * Main.rand.NextFloat(0.75f, 1f)));
+                                                    (ushort)(THEMACTIVETIME * Main.rand.NextFloat(0.75f, 1f)),
+                                                    FacedRight: Main.rand.NextBool());
             return true;
         }
 
@@ -301,7 +302,11 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                     bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled)) + (int)(bgWidthScaled * 0.75f);
                     bgTopY = (int)(backgroundTopMagicNumber * 2100.0 + 2500.0) + (int)scAdj + pushBGTopHack;
                     if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
-                        Main.spriteBatch.Draw(value, new Vector2(bgStartX, bgTopY) - themBGInfo.Position, clip, Color.White * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, SpriteEffects.None, 0f);
+                        SpriteEffects effects = themBGInfo.FacedRight.ToInt().ToSpriteEffects();
+                        for (int i = 0; i < 2; i++) {
+                            Main.spriteBatch.Draw(value, new Vector2(bgStartX, bgTopY) - themBGInfo.Position + Main.rand.RandomPointInArea(0.2f), clip, Color.White with { A = 175 } * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, effects, 0f);
+                            Main.spriteBatch.Draw(value, new Vector2(bgStartX, bgTopY) - themBGInfo.Position + Main.rand.RandomPointInArea(20f), clip, Color.White * 0.1f * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, effects, 0f);
+                        }
                     }
                 }
             }
