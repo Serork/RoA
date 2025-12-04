@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Common.NPCs;
+using RoA.Common.World;
 using RoA.Content.Buffs;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
@@ -46,7 +48,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private static float UPDATEDIRECTIONEVERYNTICKS => 10f;
     private static float UPDATETARGETEVERYNTICKS => 90f;
     private static float HIDETIMEINTICKS => 300f;
-    private static float CANTHIDETIME => 30f;
+    private static float CANTHIDETIME => 20f;
     private static byte TRAILPOSITIONCOUNT => 200;
 
     private static float MAXTIMETOSPEEDUP => 30f;
@@ -65,16 +67,23 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     private static PassedPositionInfo[] _passedPositions = null!;
     private static byte _passedPositionNextIndex;
+    private static int _trailWhoAmIDraw;
 
     private bool IsFalling => NPC.ai[2] > 0f;
     private int FacedDirection => (int)-NPC.ai[3];
     private bool CanHide => _hideFactor >= 0f && !_shouldAttack;
+    private bool IsHiding => _hideFactor > 1f;
 
     public ref double FrameCounter => ref NPC.frameCounter;
 
     public override void Load() {
         On_NPC.UpdateCollision += On_NPC_UpdateCollision;
         On_NPC.Collision_MoveSlopesAndStairFall += On_NPC_Collision_MoveSlopesAndStairFall;
+        WorldCommon.PreUpdateNPCsEvent += WorldCommon_PreUpdateNPCsEvent;
+    }
+
+    private void WorldCommon_PreUpdateNPCsEvent() {
+        _trailWhoAmIDraw = -1;
     }
 
     private void On_NPC_Collision_MoveSlopesAndStairFall(On_NPC.orig_Collision_MoveSlopesAndStairFall orig, NPC self, bool fall) {
@@ -123,10 +132,16 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     public override void AI() {
+        if (_trailWhoAmIDraw < 0) {
+            _trailWhoAmIDraw = NPC.whoAmI;
+        }
+
         if (!_init) {
             _passedPositions ??= new PassedPositionInfo[TRAILPOSITIONCOUNT];
             _init = true;
         }
+
+        NPC.dontTakeDamage = IsHiding;
 
         ApplySnailAI();
     }
@@ -527,10 +542,12 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         }
         applyAdjustedVanillaSnailAI();
 
-        Player target = NPC.GetTargetPlayer();
-        Point16 targetPositionInTiles = target.Bottom.ToTileCoordinates16();
-        if (_passedPositions.Any(checkInfo => checkInfo.Position == targetPositionInTiles)) {
-            target.AddBuff<ElderSnailSlow>(2);
+        foreach (Player target in Main.ActivePlayers) {
+            Rectangle targetRect = target.getRect();
+            targetRect.Inflate(10, 10);
+            if (_passedPositions.Any(checkInfo => targetRect.Contains(checkInfo.Position.ToWorldCoordinates().ToPoint()))) {
+                target.AddBuff<ElderSnailSlow>(2);
+            }
         }
     }
 
@@ -640,7 +657,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         if (AssetInitializer.TryGetRequestedTextureAssets<ElderSnail>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
-            if (_init) {
+            if (_init && _trailWhoAmIDraw == NPC.whoAmI) {
                 foreach (PassedPositionInfo passedPositionInfo in _passedPositions) {
                     Point16 position = passedPositionInfo.Position;
                     float rotation = passedPositionInfo.Rotation;

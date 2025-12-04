@@ -11,6 +11,18 @@ using Terraria.ModLoader.IO;
 namespace RoA.Common.World;
 
 sealed class WorldCommon : ModSystem {
+    public delegate void PostUpdateNPCsDelegate();
+    public static event PostUpdateNPCsDelegate PostUpdateNPCsEvent;
+    public override void PostUpdateNPCs() {
+        PostUpdateNPCsEvent?.Invoke();
+    }
+
+    public delegate void PreUpdateNPCsDelegate();
+    public static event PreUpdateNPCsDelegate PreUpdateNPCsEvent;
+    public override void PreUpdateNPCs() {
+        PreUpdateNPCsEvent?.Invoke();
+    }
+
     public static class NewGuideHelpTextID {
         public const byte DryadCocoon1 = 0;
         public const byte DryadCocoon2 = 1;
