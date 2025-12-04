@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using ReLogic.Content;
 
 using RoA.Common.BackwoodsSystems;
@@ -19,8 +17,6 @@ using Terraria.GameContent;
 using Terraria.Graphics.Capture;
 using Terraria.Graphics.Effects;
 using Terraria.ModLoader;
-
-using static RoA.Content.Backgrounds.BackwoodsBackgroundSurface;
 
 namespace RoA.Content.Backgrounds;
 
@@ -67,7 +63,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         if (availableIndex >= 0) {
             ThemBG[availableIndex] = new ThemBGInfo((byte)Main.rand.Next(THEMBGTEXTURECOUNT), 
                                                     new Vector2(Main.rand.Next(Main.screenWidth * 4), -Main.screenHeight / 3 * Main.rand.NextFloatDirection()),
-                                                    (ushort)(THEMACTIVETIME * Main.rand.NextFloat(0.5f, 1f)));
+                                                    (ushort)(THEMACTIVETIME * Main.rand.NextFloat(0.75f, 1f)));
             return true;
         }
 
