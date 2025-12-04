@@ -145,7 +145,7 @@ RoAServerConfig: {
 			RoA: {
 				Configs: {
 					GeneralOptionsHeader2: General Options
-					GenerationOptionHeader: Worldgen Options
+					GenerationOptionHeader: World Generation Options
 				}
 			}
 		}
