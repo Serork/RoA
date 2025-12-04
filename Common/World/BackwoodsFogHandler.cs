@@ -273,7 +273,7 @@ sealed class BackwoodsFogHandler : ModSystem {
 
     private void TestAirCloud(int x, int y) {
         UnifiedRandom random = Main.rand;
-        if (random.Next(150000) != 0)
+        if (random.Next(135000) != 0)
             return;
 
         for (int i = -5; i <= 5; i++) {
