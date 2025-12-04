@@ -20,7 +20,7 @@ sealed class Fog2 : AdvancedDust<Fog2> {
 
     public int Alpha { get; private set; }
 
-    protected override string TexturePath => ResourceManager.BackwoodsDustTextures + nameof(Fog2);
+    protected override string TexturePath => ResourceManager.BackwoodsAdvancedDustTextures + nameof(Fog2);
 
     public override void Draw(ref ParticleRendererSettings settings, SpriteBatch spritebatch) {
         Color lightColor = Lighting.GetColor((int)(Position.X / 16f), (int)(Position.Y / 16f));

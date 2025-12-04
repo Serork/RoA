@@ -90,7 +90,7 @@ static class ResourceManager {
 
     public static string DustTextures => Textures + "Dusts/";
     public static string AdvancedDustTextures => Textures + "AdvancedDusts/";
-    public static string BackwoodsDustTextures => DustTextures + "Backwoods/";
+    public static string BackwoodsAdvancedDustTextures => AdvancedDustTextures + "Backwoods/";
 
     public static string BuffTextures => Textures + "Buffs/";
 
