@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Players;
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Core.Utility;
@@ -6,7 +7,6 @@ using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.GameContent.Creative;
-using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Default;
@@ -22,6 +22,16 @@ sealed partial class Hooks : ModSystem {
         On_ItemSlot.AccCheck_ForLocalPlayer += On_ItemSlot_AccCheck_ForLocalPlayer;
         On_ItemFilters.AAccessories.IsAnAccessoryOfType += AAccessories_IsAnAccessoryOfType;
         On_Player.CanVisuallyHoldItem += On_Player_CanVisuallyHoldItem;
+
+        On_Player.LoadPlayer_LastMinuteFixes_Player_Item += On_Player_LoadPlayer_LastMinuteFixes_Player_Item;
+    }
+
+    private void On_Player_LoadPlayer_LastMinuteFixes_Player_Item(On_Player.orig_LoadPlayer_LastMinuteFixes_Player_Item orig, Player newPlayer, Item item) {
+        orig(newPlayer, item);
+
+        if (item.type == ModContent.ItemType<ImmortalSnail>() || item.type == ModContent.ItemType<LifeSpiral>()) {
+            newPlayer.pStone = true;
+        }
     }
 
     private bool On_Player_CanVisuallyHoldItem(On_Player.orig_CanVisuallyHoldItem orig, Player self, Item item) {
