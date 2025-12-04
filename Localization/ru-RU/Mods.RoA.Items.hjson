@@ -1773,12 +1773,19 @@ SerorkGreaves: {
 
 SerorkHelmet: {
 	DisplayName: Шлем Serork'а
-	// Tooltip: "{$Mods.RoA.RoADev}"
+	Tooltip: 		
+		'''
+		{$Mods.RoA.RoADev}
+		'Всё ведет к лучшему.'
+		'''
 }
 
 SerorkMask: {
 	DisplayName: Маска Serork'а
-	// Tooltip: "{$Mods.RoA.RoADev}"
+		'''
+		{$Mods.RoA.RoADev}
+		'Или худшему.'
+		'''
 }
 
 BRIPEsHeart: {

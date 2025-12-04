@@ -1747,7 +1747,7 @@ PeegeonCape: {
 
 SerorkBreastplate: {
 	DisplayName: Serork's Breastplate
-	Tooltip: "{$Mods.RoA.RoADev}"
+	Tooltip: {$Mods.RoA.RoADev}"
 }
 
 SerorkGreaves: {
@@ -1757,12 +1757,20 @@ SerorkGreaves: {
 
 SerorkHelmet: {
 	DisplayName: Serork's Helmet
-	Tooltip: "{$Mods.RoA.RoADev}"
+	Tooltip: 		
+		'''
+		{$Mods.RoA.RoADev}
+		'Everything leads to the better.'
+		'''
 }
 
 SerorkMask: {
 	DisplayName: Serork's Mask
-	Tooltip: "{$Mods.RoA.RoADev}"
+	Tooltip: 		
+		'''
+		{$Mods.RoA.RoADev}
+		'Or to the worse.'
+		'''
 }
 
 BRIPEsHeart: {
