@@ -2457,3 +2457,13 @@ ElderShell: {
 	DisplayName: Elder Shell
 	Tooltip: ""
 }
+
+ImmortalSnail: {
+	DisplayName: Immortal Snail
+	Tooltip: ""
+}
+
+LifeSpiral: {
+	DisplayName: Life Spiral
+	Tooltip: ""
+}
