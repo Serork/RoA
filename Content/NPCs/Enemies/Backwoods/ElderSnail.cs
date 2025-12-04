@@ -435,7 +435,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
                 NPC.ai[0] = 1f;
                 NPC.directionY = 1;
                 if (NPC.velocity.Y > speedY)
-                    NPC.rotation += MathF.Abs(NPC.velocity.Y) * 0.02f * FacedDirection;
+                    NPC.rotation += MathF.Abs(NPC.velocity.Y) * 0.015f * NPC.spriteDirection;
                 else
                     NPC.rotation = 0f;
 
