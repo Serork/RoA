@@ -1785,7 +1785,7 @@ SerorkMask: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Или худшему.'
+		'Или к худшему.'
 		'''
 }
 
