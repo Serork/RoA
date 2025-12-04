@@ -14,7 +14,7 @@ sealed class Crates : ModTile {
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
         TileObjectData.newTile.CoordinateWidth = 16;
-        TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
+        TileObjectData.newTile.CoordinateHeights = [16, 18];
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(160, 120, 92));

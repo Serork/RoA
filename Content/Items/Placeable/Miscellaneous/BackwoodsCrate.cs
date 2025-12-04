@@ -13,6 +13,7 @@ using RoA.Content.Items.Weapons.Summon;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.GameContent.Creative;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -27,18 +28,9 @@ sealed class BackwoodsCrate : ModItem {
     }
 
     public override void SetDefaults() {
-        Item.width = 32;
-        Item.height = 34;
-        Item.rare = ItemRarityID.Green;
+        Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Decorations.Crates>(), 0);
+        Item.SetShopValues(ItemRarityColor.Green2, Item.sellPrice(0, 1));
         Item.maxStack = Item.CommonMaxStack;
-        Item.createTile = ModContent.TileType<Tiles.Decorations.Crates>();
-        Item.placeStyle = 0;
-        Item.useAnimation = 15;
-        Item.useTime = 15;
-        Item.autoReuse = true;
-        Item.useStyle = 1;
-        Item.consumable = true;
-        Item.value = Item.sellPrice(0, 1, 0, 0);
     }
 
     public override bool CanRightClick() {

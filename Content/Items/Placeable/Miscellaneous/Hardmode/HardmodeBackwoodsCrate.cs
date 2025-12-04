@@ -19,8 +19,6 @@ namespace RoA.Content.Items.Placeable.Miscellaneous.Hardmode;
 
 sealed class HardmodeBackwoodsCrate : ModItem {
     public override void SetDefaults() {
-        Item.SetSizeValues(32, 34);
-
         Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Decorations.Crates>(), 1);
         Item.SetShopValues(ItemRarityColor.Green2, Item.sellPrice(0, 1));
         Item.maxStack = Item.CommonMaxStack;
