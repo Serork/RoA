@@ -50,7 +50,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private static float HIDETIMEINTICKS => 300f;
     private static float CANTHIDETIMEINWHATAEVER => 30f;
     private static byte TRAILPOSITIONCOUNT => 20;
-    private static float INACTIVETARGETIMEINTICKS => 300f;
+    private static float INACTIVETARGETIMEINTICKS => 600f;
 
     private static float MAXTIMETOSPEEDUP => 30f;
     private static float MINTIMETOSPEEDUP => MAXTIMETOSPEEDUP * 0.25f;
