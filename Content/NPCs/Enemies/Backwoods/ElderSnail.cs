@@ -48,7 +48,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private static float UPDATEDIRECTIONEVERYNTICKS => 10f;
     private static float UPDATETARGETEVERYNTICKS => 90f;
     private static float HIDETIMEINTICKS => 300f;
-    private static float CANTHIDETIME => 20f;
+    private static float CANTHIDETIMEINWHATAEVER => 30f;
     private static byte TRAILPOSITIONCOUNT => 200;
 
     private static float MAXTIMETOSPEEDUP => 30f;
@@ -65,9 +65,8 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     private bool _init;
 
-    private static PassedPositionInfo[] _passedPositions = null!;
-    private static byte _passedPositionNextIndex;
-    private static int _trailWhoAmIDraw;
+    private PassedPositionInfo[] _passedPositions = null!;
+    private byte _passedPositionNextIndex;
 
     private bool IsFalling => NPC.ai[2] > 0f;
     private int FacedDirection => (int)-NPC.ai[3];
@@ -79,11 +78,6 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     public override void Load() {
         On_NPC.UpdateCollision += On_NPC_UpdateCollision;
         On_NPC.Collision_MoveSlopesAndStairFall += On_NPC_Collision_MoveSlopesAndStairFall;
-        WorldCommon.PreUpdateNPCsEvent += WorldCommon_PreUpdateNPCsEvent;
-    }
-
-    private void WorldCommon_PreUpdateNPCsEvent() {
-        _trailWhoAmIDraw = -1;
     }
 
     private void On_NPC_Collision_MoveSlopesAndStairFall(On_NPC.orig_Collision_MoveSlopesAndStairFall orig, NPC self, bool fall) {
@@ -113,7 +107,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     public override void SetDefaults() {
-        NPC.SetSizeValues(26, 36);
+        NPC.SetSizeValues(30, 30);
         NPC.DefaultToEnemy(new NPCExtensions.NPCHitInfo(500, 40, 16, 0f));
 
         NPC.aiStyle = -1;
@@ -132,10 +126,6 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     public override void AI() {
-        if (_trailWhoAmIDraw < 0) {
-            _trailWhoAmIDraw = NPC.whoAmI;
-        }
-
         if (!_init) {
             _passedPositions ??= new PassedPositionInfo[TRAILPOSITIONCOUNT];
             _init = true;
@@ -165,7 +155,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private void ResetHideState() {
         _playHideAnimation = false;
         _speedXFactor = 0f;
-        _hideFactor = -CANTHIDETIME;
+        _hideFactor = -CANTHIDETIMEINWHATAEVER;
         _shouldHide = false;
 
         AppearAfterHiding();
@@ -229,7 +219,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     private void TryToAttackOverTime() {
-        //if (_playAppearAfterHidingAnimation || _shouldHide || _hideFactor < -CANTHIDETIME / 2f) {
+        //if (_playAppearAfterHidingAnimation || _shouldHide || _hideFactor < -CANTHIDETIMEINWHATAEVER / 2f) {
         //    return;
         //}
 
@@ -251,7 +241,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
         //    _shouldBeAttacking = false;
 
-        //    _hideFactor = -CANTHIDETIME;
+        //    _hideFactor = -CANTHIDETIMEINWHATAEVER;
 
         //    ResetFrame();
 
@@ -310,7 +300,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     private void ApplySnailAI() {
-        Vector2 passedPosition = NPC.Center + new Vector2(FacedDirection > 0 ? -0f : 0.625f, 1f).RotatedBy(NPC.rotation) * NPC.height / 2f;
+        Vector2 passedPosition = NPC.Center + new Vector2(0.5f * -FacedDirection, 1f).RotatedBy(NPC.rotation) * NPC.height / 2f;
         Point16 passedPositionInTiles = passedPosition.ToTileCoordinates16();
         if (WorldGenHelper.GetTileSafely(passedPositionInTiles).HasTile && !_passedPositions.Any(checkInfo => checkInfo.Position == passedPositionInTiles)) {
             _passedPositions[_passedPositionNextIndex++] = new PassedPositionInfo(passedPositionInTiles, NPC.rotation);
@@ -320,7 +310,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         }
         for (int i = 0; i < _passedPositions.Length; i++) {
             ref PassedPositionInfo passedPositionInfo = ref _passedPositions[i];
-            passedPositionInfo.Opacity = Helper.Approach(_passedPositions[i].Opacity, 1f, 0.15f);
+            passedPositionInfo.Opacity = Helper.Approach(_passedPositions[i].Opacity, 1f, 0.1f);
         }
 
         TargetOverTime();
@@ -657,7 +647,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
         if (AssetInitializer.TryGetRequestedTextureAssets<ElderSnail>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
-            if (_init && _trailWhoAmIDraw == NPC.whoAmI) {
+            if (_init) {
                 foreach (PassedPositionInfo passedPositionInfo in _passedPositions) {
                     Point16 position = passedPositionInfo.Position;
                     float rotation = passedPositionInfo.Rotation;
@@ -689,8 +679,13 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
             }
         }
 
+        Vector2 tempPosition = NPC.position;
+        NPC.position += Vector2.UnitY.RotatedBy(NPC.rotation) * -3f;
+
         SpriteEffects flip = FacedDirection.ToSpriteEffects();
         NPC.QuickDraw(spriteBatch, screenPos, drawColor, effect: flip);
+
+        NPC.position = tempPosition;
 
         return false;
     }
