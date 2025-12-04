@@ -1747,7 +1747,7 @@ PeegeonCape: {
 
 SerorkBreastplate: {
 	DisplayName: Serork's Breastplate
-	Tooltip: {$Mods.RoA.RoADev}"
+	Tooltip: "{$Mods.RoA.RoADev}"
 }
 
 SerorkGreaves: {
