@@ -3,7 +3,7 @@
 using RoA.Common.Players;
 using RoA.Common.VisualEffects;
 using RoA.Content.Achievements;
-using RoA.Content.AdvancedDusts;
+using RoA.Content.AdvancedDusts.Backwoods;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Core.Utility;
 
@@ -411,7 +411,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             float scale = 0.8f + Main.rand.NextFloat() * 0.2f;
 
             if (Main.netMode != NetmodeID.Server) {
-                AdvancedDustSystem.New<Content.AdvancedDusts.Fog>(AdvancedDustLayer.ABOVEPLAYERS)?.
+                AdvancedDustSystem.New<RoA.Content.AdvancedDusts.Backwoods.Fog>(AdvancedDustLayer.ABOVEPLAYERS)?.
                     Setup(position + Main.rand.RandomPointInArea(5f, 5f), new Vector2(num2 * Main.WindForVisuals, 0f), scale: scale);
             }
         }
