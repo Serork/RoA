@@ -6,7 +6,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Decorations;
 
-sealed class BackwoodsCrate : ModTile {
+sealed class Crates : ModTile {
     public override void SetStaticDefaults() {
         Main.tileSolidTop[Type] = true;
         Main.tileFrameImportant[Type] = true;
