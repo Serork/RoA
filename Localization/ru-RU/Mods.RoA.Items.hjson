@@ -2503,3 +2503,8 @@ ThinkingMask: {
 	// DisplayName: Thinking Mask
 	// Tooltip: ""
 }
+
+HardmodeBackwoodsCrate: {
+	// DisplayName: Hardmode Backwoods Crate
+	// Tooltip: ""
+}
