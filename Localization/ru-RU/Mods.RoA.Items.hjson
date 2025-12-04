@@ -1782,6 +1782,7 @@ SerorkHelmet: {
 
 SerorkMask: {
 	DisplayName: Маска Serork'а
+	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
 		'Или худшему.'
