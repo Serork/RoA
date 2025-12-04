@@ -94,6 +94,6 @@ sealed class Fog2 : AdvancedDust<Fog2> {
             }
         }
 
-        Position = Vector2.Lerp(Position, Position + Velocity, 0.5f);
+        Position += Velocity;
     }
 }
