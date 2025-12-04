@@ -2493,3 +2493,13 @@ ElderShield: {
 	// DisplayName: Elder Shield
 	// Tooltip: ""
 }
+
+GoldenApple: {
+	// DisplayName: Golden Apple
+	// Tooltip: ""
+}
+
+ThinkingMask: {
+	// DisplayName: Thinking Mask
+	// Tooltip: ""
+}
