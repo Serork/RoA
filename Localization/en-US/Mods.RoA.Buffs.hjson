@@ -330,3 +330,8 @@ ElderSnailSlow: {
 	DisplayName: Elder Snail Slow
 	Description: Mods.RoA.Buffs.ElderSnailSlow.Description
 }
+
+SnailBuff: {
+	DisplayName: Snail Buff
+	Description: Mods.RoA.Buffs.SnailBuff.Description
+}

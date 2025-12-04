@@ -2473,3 +2473,8 @@ HallowedVisor: {
 	// DisplayName: Hallowed Visor
 	// Tooltip: ""
 }
+
+ElderShell: {
+	// DisplayName: Elder Shell
+	// Tooltip: ""
+}

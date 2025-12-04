@@ -2,6 +2,7 @@
 
 using RoA.Common.NPCs;
 using RoA.Content.Buffs;
+using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
 using RoA.Content.Projectiles.Friendly.Ranged;
@@ -51,6 +52,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool DontShowHealEffect, DontShowManaEffect;
 
     public bool ElderSnailSlow;
+    public bool IsElderShellEffectActive;
+    public int DefenseLastTick;
 
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
@@ -151,6 +154,16 @@ sealed partial class PlayerCommon : ModPlayer {
         CrystallizedSkullLoad();
         WiresLoad();
         CursorEffectsLoad();
+
+        On_Player.AddBuff_ActuallyTryToAddTheBuff += On_Player_AddBuff_ActuallyTryToAddTheBuff;
+    }
+
+    private bool On_Player_AddBuff_ActuallyTryToAddTheBuff(On_Player.orig_AddBuff_ActuallyTryToAddTheBuff orig, Player self, int type, int time) {
+        bool result = orig(self, type, time);
+        if (result && type == BuffID.PotionSickness) {
+            self.AddBuff<SnailBuff>(ElderShell.BUFFTIME);
+        }
+        return result;
     }
 
     private void On_Player_ManaEffect(On_Player.orig_ManaEffect orig, Player self, int manaAmount) {
@@ -465,6 +478,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsElderShellEffectActive = false;
         ElderSnailSlow = false;
 
         if (IsAetherInvincibilityActive) {
@@ -530,6 +544,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public partial void DevilSkullSetBonusPostMiscEffects();
 
     public override void PostUpdate() {
+        DefenseLastTick = Player.statDefense;
+
         if (Player.controlUseItem) {
             ControlUseItem = true;
         }
