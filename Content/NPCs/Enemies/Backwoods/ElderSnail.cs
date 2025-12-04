@@ -49,7 +49,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private static float UPDATETARGETEVERYNTICKS => 90f;
     private static float HIDETIMEINTICKS => 300f;
     private static float CANTHIDETIMEINWHATAEVER => 30f;
-    private static byte TRAILPOSITIONCOUNT => 10;
+    private static byte TRAILPOSITIONCOUNT => 20;
 
     private static float MAXTIMETOSPEEDUP => 30f;
     private static float MINTIMETOSPEEDUP => MAXTIMETOSPEEDUP * 0.25f;
@@ -304,7 +304,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private void ApplySnailAI() {
         Vector2 passedPosition = NPC.Center + new Vector2(0.5f * -FacedDirection, 1.25f).RotatedBy(NPC.rotation) * NPC.height / 2f;
         Point16 passedPositionInTiles = passedPosition.ToTileCoordinates16();
-        if (WorldGenHelper.GetTileSafely(passedPositionInTiles).HasTile && !_passedPositions.Any(checkInfo => checkInfo.Position == passedPositionInTiles)) {
+        if (WorldGenHelper.SolidTile(passedPositionInTiles.ToPoint()) && !_passedPositions.Any(checkInfo => checkInfo.Position == passedPositionInTiles)) {
             _passedPositions[_passedPositionNextIndex++] = new PassedPositionInfo(passedPositionInTiles, NPC.rotation);
             if (_passedPositionNextIndex > _passedPositions.Length - 1) {
                 _passedPositionNextIndex = 0;
@@ -541,6 +541,51 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
                 target.AddBuff<ElderSnailSlow>(2);
             }
         }
+
+        bool flag28 = true;
+        int num585 = 0;
+        if (NPC.velocity.X < 0f)
+            num585 = -1;
+
+        if (NPC.velocity.X > 0f)
+            num585 = 1;
+
+        Vector2 vector72 = NPC.position;
+        vector72.X += NPC.velocity.X;
+        int num586 = (int)((vector72.X + (float)(NPC.width / 2) + (float)((NPC.width / 2 + 1) * num585)) / 16f);
+        int num587 = (int)((vector72.Y + (float)NPC.height - 1f) / 16f);
+        if ((float)(num586 * 16) < vector72.X + (float)NPC.width && (float)(num586 * 16 + 16) > vector72.X) {
+            Tile tileSafely = Framing.GetTileSafely(num586, num587 - 4);
+            Tile tileSafely2 = Framing.GetTileSafely(num586 - num585, num587 - 3);
+            Tile tileSafely3 = Framing.GetTileSafely(num586, num587 - 3);
+            Tile tileSafely4 = Framing.GetTileSafely(num586, num587 - 2);
+            Tile tileSafely5 = Framing.GetTileSafely(num586, num587 - 1);
+            Tile tileSafely6 = Framing.GetTileSafely(num586, num587);
+            if (((tileSafely6.HasUnactuatedTile && !tileSafely6.TopSlope && !tileSafely5.TopSlope && ((Main.tileSolid[tileSafely6.TileType] && !Main.tileSolidTop[tileSafely6.TileType]) || (flag28 && Main.tileSolidTop[tileSafely6.TileType] && (!Main.tileSolid[tileSafely5.TileType] || !tileSafely5.HasUnactuatedTile) && tileSafely6.TileType != 16 && tileSafely6.TileType != 18 && tileSafely6.TileType != 134))) || (tileSafely5.IsHalfBlock && tileSafely5.HasUnactuatedTile)) && (!tileSafely5.HasUnactuatedTile || !Main.tileSolid[tileSafely5.TileType] ||
+                Main.tileSolidTop[tileSafely5.TileType] || (tileSafely5.IsHalfBlock && (!tileSafely.HasUnactuatedTile || !Main.tileSolid[tileSafely.TileType] || Main.tileSolidTop[tileSafely.TileType]))) &&
+                (!tileSafely4.HasUnactuatedTile || !Main.tileSolid[tileSafely4.TileType] || Main.tileSolidTop[tileSafely4.TileType]) && 
+                (!tileSafely3.HasUnactuatedTile || !Main.tileSolid[tileSafely3.TileType] || Main.tileSolidTop[tileSafely3.TileType]) &&
+                (!tileSafely2.HasUnactuatedTile || !Main.tileSolid[tileSafely2.TileType] || Main.tileSolidTop[tileSafely2.TileType])) {
+                float num588 = num587 * 16;
+                if (tileSafely6.IsHalfBlock)
+                    num588 += 8f;
+
+                if (tileSafely5.IsHalfBlock)
+                    num588 -= 8f;
+
+                if (num588 < vector72.Y + (float)NPC.height) {
+                    float num589 = vector72.Y + (float)NPC.height - num588;
+                    if ((double)num589 <= 16.1) {
+                        NPC.gfxOffY += NPC.position.Y + (float)NPC.height - num588;
+                        NPC.position.Y = num588 - (float)NPC.height;
+                        if (num589 < 9f)
+                            NPC.stepSpeed = 0.75f;
+                        else
+                            NPC.stepSpeed = 1.5f;
+                    }
+                }
+            }
+        }
     }
 
     public override void FindFrame(int frameHeight) {
@@ -665,7 +710,6 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
                     if (_shouldAttack) {
                         color = Color.Lerp(color, Color.Lerp(color, Color.Red, 0.5f), 0.5f);
                     }
-                    color *= passedPositionInfo.Opacity;
                     for (int i = 0; i < 4; i++) {
                         Vector2 scale = new(1.5f, 1f);
                         Texture2D texture = indexedTextureAssets[(byte)Utils.RandomInt(ref seed, 0, 3)].Value;
@@ -675,7 +719,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
                             Clip = clip,
                             Scale = scale,
                             Origin = origin,
-                            Color = color,
+                            Color = color.MultiplyRGB(drawColor) with { A = a } * passedPositionInfo.Opacity,
                             Rotation = rotation
                         });
                     }
