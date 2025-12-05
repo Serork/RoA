@@ -25,7 +25,12 @@ abstract class CollectableFlower : ModTile {
         Main.tileCut[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.IgnoredInHouseScore[Type] = true;
+        TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
         TileID.Sets.SwaysInWindBasic[Type] = true;
+
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.AnchorValidTiles = AnchorValidTileTypes;

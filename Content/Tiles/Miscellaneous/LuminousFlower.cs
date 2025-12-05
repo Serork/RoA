@@ -75,6 +75,13 @@ sealed class LuminousFlower : ModTile {
         Main.tileCut[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.IgnoredInHouseScore[Type] = true;
+        TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
+
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+        TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
+
         HitSound = SoundID.Grass;
         DustType = DustID.Grass;
 

@@ -137,6 +137,8 @@ sealed class ExoticTulip : ModTile {
         TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
         TileID.Sets.SwaysInWindBasic[Type] = true;
 
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.AnchorValidTiles = [TileID.Grass, TileID.GolfGrass];
         TileObjectData.newTile.StyleHorizontal = true;
@@ -208,6 +210,8 @@ sealed class SweetTulip : ModTile {
         TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
         TileID.Sets.SwaysInWindBasic[Type] = true;
 
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.AnchorValidTiles = [TileID.JungleGrass];
         TileObjectData.newTile.StyleHorizontal = true;
@@ -278,6 +282,8 @@ sealed class WeepingTulip : ModTile {
         TileID.Sets.IgnoredInHouseScore[Type] = true;
         TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
         TileID.Sets.SwaysInWindBasic[Type] = true;
+
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         TileObjectData.newTile.AnchorValidTiles = [TileID.PinkDungeonBrick, TileID.GreenDungeonBrick, TileID.BlueDungeonBrick];
