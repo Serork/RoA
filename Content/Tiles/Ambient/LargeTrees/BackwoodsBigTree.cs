@@ -256,6 +256,8 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
 
         TileID.Sets.IsATreeTrunk[Type] = true;
 
+        TileID.Sets.GetsCheckedForLeaves[Type] = true;
+
         Main.tileMergeDirt[Type] = false;
         Main.tileSolid[Type] = false;
         Main.tileLighted[Type] = false;
@@ -266,6 +268,7 @@ sealed class BackwoodsBigTree : ModTile, IPostDraw, IRequireMinAxePower, IResist
         Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.PreventsTileReplaceIfOnTopOfIt[Type] = true;
+        TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
 
         TileSets.ShouldKillTileBelow[Type] = false;
         TileSets.PreventsSlopesBelow[Type] = true;
