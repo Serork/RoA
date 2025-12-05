@@ -20,6 +20,9 @@ class TreeDryadDecoration2Rubble_Jungle : TreeDryadDecoration2Rubble {
         Main.tileObsidianKill[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 0;
         TileObjectData.newTile.CoordinateHeights = [18];
@@ -48,6 +51,9 @@ class TreeDryadDecoration2Rubble_Spirit : TreeDryadDecoration2Rubble {
         Main.tileObsidianKill[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 0;
         TileObjectData.newTile.CoordinateHeights = [18];
@@ -73,6 +79,9 @@ class TreeDryadDecoration2Rubble : ModTile {
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
         Main.tileLavaDeath[Type] = true;
+
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 0;

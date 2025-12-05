@@ -15,6 +15,9 @@ class TreeDryadDecoration2_Jungle : TreeDryadDecoration2 {
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
 
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
@@ -40,6 +43,9 @@ class TreeDryadDecoration2_Spirit : TreeDryadDecoration2 {
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
 
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
@@ -62,6 +68,9 @@ class TreeDryadDecoration2 : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
+
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 2;
