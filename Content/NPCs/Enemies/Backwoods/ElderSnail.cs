@@ -90,9 +90,18 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     }
 
     private void On_NPC_UpdateCollision(On_NPC.orig_UpdateCollision orig, NPC self) {
+        bool snail = self.type == ModContent.NPCType<ElderSnail>();
+        if (snail) {
+            self.aiStyle = 67;
+        }
+
         orig(self);
 
-        if (self.type == ModContent.NPCType<ElderSnail>()) {
+        if (snail) {
+            self.aiStyle = -1;
+        }
+
+        if (snail) {
             NPC_Collision_MoveSnailOnSlopes(self);
         }
     }
