@@ -121,6 +121,8 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
 
         TileID.Sets.HasOutlines[Type] = true;
 
+        TileID.Sets.InteractibleByNPCs[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.CoordinateHeights = [16, 16, 18];
         TileObjectData.newTile.CoordinateWidth = 16;
