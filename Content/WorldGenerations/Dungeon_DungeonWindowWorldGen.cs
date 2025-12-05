@@ -21,7 +21,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
 
     private double On_WorldGen_MakeDungeon_Pictures(On_WorldGen.orig_MakeDungeon_Pictures orig, int[] roomWall, double count) {
         count = 420000.0 / (double)Main.maxTilesX;
-        count /= 8;
+        count /= 6;
         UnifiedRandom genRand = WorldGen.genRand;
         for (int i = 0; (double)i < count; i++) {
             int num = genRand.Next(GenVars.dMinX, GenVars.dMaxX);
