@@ -2404,7 +2404,7 @@ AetherWreath: {
 
 TerraClaws: {
 	DisplayName: Terra Claws
-	Tooltip: 
+	Tooltip:
 		'''
 		Consume a full wreath charge to send tremors along the ground
 		'Holding out for a hero'

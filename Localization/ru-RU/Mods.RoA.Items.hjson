@@ -2429,7 +2429,7 @@ AetherWreath: {
 
 TerraClaws: {
 	DisplayName: Терра-когти
-	Tooltip: 
+	Tooltip:
 		'''
 		Тратят полный заряд венка, чтобы разверзнуть землю
 		'Ждёт настоящего героя'
