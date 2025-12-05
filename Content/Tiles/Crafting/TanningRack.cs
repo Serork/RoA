@@ -77,6 +77,8 @@ sealed class TanningRack : ModTile {
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
+        TileID.Sets.InteractibleByNPCs[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
         TileObjectData.newTile.Origin = new Point16(1, 1);
         TileObjectData.newTile.CoordinateHeights = [16, 16];
