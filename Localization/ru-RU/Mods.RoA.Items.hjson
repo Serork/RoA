@@ -2535,3 +2535,8 @@ DungeonWindow: {
 	// DisplayName: Dungeon Window
 	// Tooltip: ""
 }
+
+MenhirDecoration: {
+	// DisplayName: Menhir Decoration
+	// Tooltip: ""
+}
