@@ -56,7 +56,7 @@ sealed class DungeonWindow : ModTile, IPostSetupContent {
                 lock (objData) {
                     int[] anchorAlternates = objData.AnchorAlternateTiles;
                     Array.Resize(ref anchorAlternates, anchorAlternates.Length + 1);
-                    anchorAlternates[^1] = ModContent.TileType<FlamingFabric>();
+                    anchorAlternates[^1] = ModContent.TileType<DungeonWindow>();
                     objData.AnchorAlternateTiles = anchorAlternates;
                 }
             }
@@ -70,7 +70,7 @@ sealed class DungeonWindow : ModTile, IPostSetupContent {
             }
 
             if (modTile.AdjTiles.Any(tileId => tileId == TileID.BorealBeam)) {
-                Main.tileMerge[ModContent.TileType<FlamingFabric>()][i] = true;
+                Main.tileMerge[ModContent.TileType<DungeonWindow>()][i] = true;
             }
         }
     }
