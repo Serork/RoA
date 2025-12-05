@@ -24,6 +24,10 @@ sealed class NexusGateway : ModTile {
             _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
         }
 
+        TileID.Sets.InteractibleByNPCs[Type] = true;
+
+        TileID.Sets.AvoidedByMeteorLanding[Type] = true;
+
         Main.tileLighted[Type] = true;
         Main.tileLavaDeath[Type] = false;
         Main.tileFrameImportant[Type] = true;

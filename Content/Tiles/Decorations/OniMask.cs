@@ -4,6 +4,7 @@ using RoA.Content.Dusts;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -16,6 +17,8 @@ sealed class OniMask : ModTile {
         Main.tileNoAttach[Type] = true;
 
         Main.tileSpelunker[Type] = true;
+
+        TileID.Sets.InteractibleByNPCs[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
         TileObjectData.newTile.CoordinateHeights = [16, 16];

@@ -187,6 +187,8 @@ interface IStalactiteTile { }
 
 abstract class StalactiteBase<T1, T2> : ModTile, IStalactiteTile where T1 : StalactiteTE<T2> where T2 : StalactiteProjectileBase {
     public sealed override void SetStaticDefaults() {
+        TileID.Sets.AvoidedByNPCs[Type] = true;
+
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
 

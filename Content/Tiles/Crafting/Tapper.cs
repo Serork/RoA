@@ -44,6 +44,7 @@ partial class Tapper : ModTile {
         Main.tileNoFail[Type] = true;
         Main.tileAxe[Type] = true;
 
+
         TileID.Sets.HasOutlines[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
         TileID.Sets.IgnoreSmartCursorPriorityAxe[Type] = true;

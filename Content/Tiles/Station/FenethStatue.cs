@@ -166,6 +166,8 @@ sealed class FenethStatue : ModTile {
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
+        TileID.Sets.InteractibleByNPCs[Type] = true;
+
         Main.tileOreFinderPriority[Type] = 750;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);

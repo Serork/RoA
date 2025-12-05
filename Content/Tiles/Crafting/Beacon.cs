@@ -113,6 +113,8 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
 
         TileID.Sets.HasOutlines[Type] = true;
 
+        TileID.Sets.AvoidedByMeteorLanding[Type] = true;
+
         AddMapEntry(new Color(238, 51, 53), Lang.GetItemName(ItemID.Ruby));
         AddMapEntry(new Color(13, 107, 216), Lang.GetItemName(ItemID.Sapphire));
         AddMapEntry(new Color(33, 184, 115), Lang.GetItemName(ItemID.Emerald));

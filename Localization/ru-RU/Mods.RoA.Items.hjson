@@ -2526,3 +2526,8 @@ WoodpeckerFeather: {
 	// DisplayName: Woodpecker Feather
 	// Tooltip: ""
 }
+
+DungeonWindow: {
+	// DisplayName: Dungeon Window
+	// Tooltip: ""
+}

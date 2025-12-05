@@ -40,6 +40,8 @@ sealed class FenethStatueFlowers : ModTile, TileHooks.IGetTileDrawData {
         TileID.Sets.IgnoredByGrowingSaplings[Type] = true;
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
 
+        TileID.Sets.InteractibleByNPCs[Type] = true;
+
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);

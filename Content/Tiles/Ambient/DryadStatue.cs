@@ -25,6 +25,8 @@ sealed class DryadStatue : ModTile {
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
+        TileID.Sets.InteractibleByNPCs[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 2;

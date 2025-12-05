@@ -2,15 +2,23 @@
 using RoA.Content.Tiles.Miscellaneous;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.WorldBuilding;
 
 namespace RoA.Common.World;
 
 sealed class WorldCommon : ModSystem {
+    public delegate void ModifyWorldGenTasksDelegate(List<GenPass> tasks, ref double totalWeight);
+    public static event ModifyWorldGenTasksDelegate ModifyWorldGenTasksEvent;
+    public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
+        ModifyWorldGenTasksEvent?.Invoke(tasks, ref totalWeight);
+    }
+
     public delegate void PostUpdateNPCsDelegate();
     public static event PostUpdateNPCsDelegate PostUpdateNPCsEvent;
     public override void PostUpdateNPCs() {
