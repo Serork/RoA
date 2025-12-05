@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.Enums;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -12,6 +13,8 @@ sealed class Coffin : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = true;
+
+        TileID.Sets.AvoidedByNPCs[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
