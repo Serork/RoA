@@ -17,8 +17,6 @@ sealed class MenhirDecoration : ModTile {
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
-        TileID.Sets.AvoidedByNPCs[Type] = true;
-
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
 
