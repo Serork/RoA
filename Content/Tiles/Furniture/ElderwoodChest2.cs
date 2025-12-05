@@ -130,8 +130,8 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
             Vector2 mouseWorldPosition = player.GetWorldMousePosition();
             Point16 chestPosition = new(i, j);
             Vector2 chestWorldPosition = chestPosition.ToWorldCoordinates();
-            float maxDistance = 200f;
-            float clampedDistanceProgress = MathUtils.ClampedDistanceProgress(mouseWorldPosition, chestWorldPosition, 75f, maxDistance);
+            float maxDistance = 150f;
+            float clampedDistanceProgress = MathUtils.ClampedDistanceProgress(mouseWorldPosition, chestWorldPosition, 50f, maxDistance);
             if (player.Center.Distance(chestPosition.ToWorldCoordinates()) > maxDistance) {
                 clampedDistanceProgress = 0f;
             }
@@ -151,8 +151,8 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
                                       new Vector2(2.5f, 2.5f) +
                                       Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 5f),
                                       null,
-                                      color * 0.25f * _opacity,
-                                      Helper.Wave(-0.1f, 0.025f, 5f, i * j * 2),
+                                      color * 0.25f * _opacity * 0.9f,
+                                      Helper.Wave(-0.15f, 0.025f, 5f, i * j * 2),
                                       origin,
                                       1f + Helper.Wave(0f, 0.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
 
@@ -163,7 +163,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
                                       new Vector2(5f, 2.5f) +
                                       Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 5f),
                                       null,
-                                      color * 0.25f * _opacity,
+                                      color * 0.25f * _opacity * 0.9f,
                                       Helper.Wave(-0.15f, 0.15f, 2.5f, i * j),
                                       origin,
                                       1f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
