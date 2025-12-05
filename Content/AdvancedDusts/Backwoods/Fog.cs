@@ -24,7 +24,7 @@ sealed class Fog : AdvancedDust<Fog> {
         float brightness = (lightColor.R / 255f + lightColor.G / 255f + lightColor.B / 255f) / 3f;
         float brightness2 = MathHelper.Clamp((brightness - 0.6f) * 5f, 0f, 1f);
         _brightness = MathHelper.Lerp(_brightness, 1f - brightness2, 0.15f);
-        spritebatch.Draw(Texture, Position - Main.screenPosition, Frame, lightColor * _brightness * (1f - Alpha / 255f), Rotation, Origin, Scale, SpriteEffects.None, 0f);
+        spritebatch.Draw(Texture, Position - Main.screenPosition, Frame, lightColor * _brightness * (1f - Alpha / 255f) * Utils.GetLerpValue(0f, 0.1f, FadeIn, true), Rotation, Origin, Scale, SpriteEffects.None, 0f);
     }
 
     protected override void SetDefaults() {
@@ -77,8 +77,11 @@ sealed class Fog : AdvancedDust<Fog> {
         else {
             Alpha++;
             if (Alpha >= 255) {
-                RestInPool();
-                return;
+                FadeIn -= TimeSystem.LogicDeltaTime;
+                if (FadeIn <= 0f) {
+                    RestInPool();
+                    return;
+                }
             }
         }
 

@@ -86,7 +86,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
 
     public override void ModifyFarFades(float[] fades, float transitionSpeed) {
         if (IsFogActiveForBackground()) {
-            if (Main.rand.NextBool(100)) {
+            if (Main.rand.NextBool(150)) {
                 SpawnThem();
             }
         }
@@ -304,7 +304,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                         SpriteEffects effects = themBGInfo.FacedRight.ToInt().ToSpriteEffects();
                         for (int i = 0; i < 2; i++) {
                             Main.spriteBatch.Draw(value, new Vector2(bgStartX, bgTopY) - themBGInfo.Position + Main.rand.RandomPointInArea(0.2f), clip, Color.White with { A = 187 } * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, effects, 0f);
-                            Main.spriteBatch.Draw(value, new Vector2(bgStartX, bgTopY) - themBGInfo.Position + Main.rand.RandomPointInArea(20f), clip, Color.White * 0.125f * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, effects, 0f);
+                            Main.spriteBatch.Draw(value, new Vector2(bgStartX, bgTopY) - themBGInfo.Position + Main.rand.RandomPointInArea(20f), clip, Color.White * 0.1f * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, effects, 0f);
                         }
                     }
                 }

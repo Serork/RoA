@@ -413,6 +413,11 @@ sealed class BackwoodsFogHandler : ModSystem {
             if (Main.netMode != NetmodeID.Server) {
                 AdvancedDustSystem.New<Fog>(AdvancedDustLayer.ABOVEPLAYERS)?.
                     Setup(position + Main.rand.RandomPointInArea(5f, 5f), new Vector2(num2 * Main.WindForVisuals, 0f), scale: scale);
+
+                if (Main.rand.NextBool(800)) {
+                    AdvancedDustSystem.New<Them_FG>(AdvancedDustLayer.ABOVEDUSTS)?.
+                        Setup(position - Vector2.UnitY * 10f + Main.rand.RandomPointInArea(5f, 5f), Vector2.Zero);
+                }
             }
         }
     }
