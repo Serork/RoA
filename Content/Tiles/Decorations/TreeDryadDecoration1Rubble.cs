@@ -14,6 +14,8 @@ using Terraria.ObjectData;
 namespace RoA.Content.Tiles.Decorations;
 
 class TreeDryadDecoration1Rubble_Jungle : TreeDryadDecoration1Rubble {
+    public override string Texture => TileLoader.GetTile(ModContent.TileType<TreeDryadDecoration1_Jungle>()).Texture;
+
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
@@ -44,6 +46,8 @@ class TreeDryadDecoration1Rubble_Jungle : TreeDryadDecoration1Rubble {
 }
 
 class TreeDryadDecoration1Rubble_Spirit : TreeDryadDecoration1Rubble {
+    public override string Texture => TileLoader.GetTile(ModContent.TileType<TreeDryadDecoration1_Spirit>()).Texture;
+
     public override bool IsLoadingEnabled(Mod mod) => ModLoader.HasMod("SpiritReforged");
 
     public override void SetStaticDefaults() {
@@ -76,6 +80,8 @@ class TreeDryadDecoration1Rubble_Spirit : TreeDryadDecoration1Rubble {
 }
 
 class TreeDryadDecoration1Rubble : ModTile {
+    public override string Texture => TileLoader.GetTile(ModContent.TileType<TreeDryadDecoration1>()).Texture;
+
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
