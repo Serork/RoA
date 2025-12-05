@@ -2495,3 +2495,13 @@ HardmodeBackwoodsCrate: {
 	DisplayName: Hardmode Backwoods Crate
 	Tooltip: ""
 }
+
+WoodpeckerWings: {
+	DisplayName: Woodpecker Wings
+	Tooltip: ""
+}
+
+WoodpeckerFeather: {
+	DisplayName: Woodpecker Feather
+	Tooltip: ""
+}
