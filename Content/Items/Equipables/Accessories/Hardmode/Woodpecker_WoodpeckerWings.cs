@@ -8,7 +8,7 @@ namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 [AutoloadEquip(EquipType.Wings)]
 sealed class WoodpeckerWings : ModItem {
     public override void SetStaticDefaults() {
-        int flyTime3 = 85;
+        int flyTime3 = 75;
         float flySpeedOverride5 = 6.75f;
         ArmorIDs.Wing.Sets.Stats[Item.wingSlot] = new WingStats(flyTime3, flySpeedOverride5);
     }
