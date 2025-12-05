@@ -78,6 +78,8 @@ abstract class Painting : ModTile {
         TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
 
+        TileID.Sets.Paintings[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
         Point16 size = Size();
         int width = size.X, height = size.Y;

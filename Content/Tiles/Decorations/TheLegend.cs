@@ -24,6 +24,8 @@ sealed class TheLegend : ModTile {
         TileID.Sets.ResetsHalfBrickPlacementAttempt[Type] = true;
         TileID.Sets.DoesntPlaceWithTileReplacement[Type] = true;
 
+        TileID.Sets.Paintings[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3Wall);
         TileObjectData.newTile.Height = 4;
         TileObjectData.newTile.Width = 4;
