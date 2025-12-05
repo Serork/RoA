@@ -26,19 +26,17 @@ namespace RoA.Content.NPCs.Enemies.Backwoods;
 sealed class GrimDruid : DruidNPC {
     protected override Color MagicCastColor => new(234, 15, 35, 0);
 
-    private float _timer, _timer2;
+    private float _timer2;
 
     public override void SendExtraAI(BinaryWriter writer) {
         base.SendExtraAI(writer);
 
-        writer.Write(_timer);
         writer.Write(_timer2);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader) {
         base.ReceiveExtraAI(reader);
 
-        _timer = reader.ReadSingle();
         _timer2 = reader.ReadSingle();
     }
 
@@ -179,7 +177,7 @@ sealed class GrimDruid : DruidNPC {
             if (npc.directionY > 0 && Main.player[npc.target].Center.Y <= npc.Bottom.Y)
                 npc.directionY = -1;
         }
-        else if (!(_timer > 0f) || !Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
+        else if (!Terraria.NPC.DespawnEncouragement_AIStyle3_Fighters_CanBeBusyWithAction(npc.type)) {
             bool flag12 = targetPlayer/*Main.player[npc.target].InModBiome<BackwoodsBiome>()*/;
             if (!flag12 && (double)(npc.position.Y / 16f) < Main.worldSurface/* && npc.type != 624 && npc.type != 631*/) {
                 npc.EncourageDespawn(10);
