@@ -1773,7 +1773,7 @@ SerorkGreaves: {
 
 SerorkHelmet: {
 	DisplayName: Шлем Serork'а
-	Tooltip: 		
+	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
 		'Всё ведет к лучшему.'

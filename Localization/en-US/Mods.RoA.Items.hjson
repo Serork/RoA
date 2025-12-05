@@ -1757,7 +1757,7 @@ SerorkGreaves: {
 
 SerorkHelmet: {
 	DisplayName: Serork's Helmet
-	Tooltip: 		
+	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
 		'Everything leads to the better.'
@@ -1766,7 +1766,7 @@ SerorkHelmet: {
 
 SerorkMask: {
 	DisplayName: Serork's Mask
-	Tooltip: 		
+	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
 		'Or to the worse.'
