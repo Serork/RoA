@@ -5,6 +5,7 @@ using RoA.Content.Dusts.Backwoods;
 
 using Terraria;
 using Terraria.Enums;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -15,6 +16,9 @@ sealed class BackwoodsSpecial2 : BackwoodsRocks0 {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
+
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 2;

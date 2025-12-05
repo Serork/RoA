@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Content.Dusts.Backwoods;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -14,6 +15,9 @@ sealed class BackwoodsRoots2_2 : BackwoodsRocks0 {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
+
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+        TileID.Sets.IgnoredInHouseScore[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
         TileObjectData.newTile.DrawYOffset = 2;

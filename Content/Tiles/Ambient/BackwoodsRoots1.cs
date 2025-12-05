@@ -5,6 +5,7 @@ using RoA.Content.Dusts.Backwoods;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -19,6 +20,9 @@ sealed class BackwoodsRoots1 : ModTile {
         Main.tileNoFail[Type] = true;
 
         Main.tileObsidianKill[Type] = true;
+
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+        TileID.Sets.IgnoredInHouseScore[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
         //TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile, 0, 0);

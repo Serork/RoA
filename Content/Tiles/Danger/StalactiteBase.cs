@@ -194,6 +194,10 @@ abstract class StalactiteBase<T1, T2> : ModTile, IStalactiteTile where T1 : Stal
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
+        TileID.Sets.IgnoredInHouseScore[Type] = true;
+
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
         TileObjectData.newTile.LavaDeath = false;
         TileObjectData.newTile.CoordinatePadding = 0;

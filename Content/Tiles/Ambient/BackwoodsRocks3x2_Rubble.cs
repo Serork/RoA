@@ -11,6 +11,7 @@ using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -30,6 +31,9 @@ sealed class BackwoodsRocks3x2Rubble : ModTile, TileHooks.IGetTileDrawData {
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
         Main.tileLavaDeath[Type] = true;
+
+        TileID.Sets.ReplaceTileBreakUp[Type] = true;
+        TileID.Sets.BreakableWhenPlacing[Type] = true;
 
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 3;
