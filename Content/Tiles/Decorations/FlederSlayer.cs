@@ -16,6 +16,7 @@ namespace RoA.Content.Tiles.Decorations;
 sealed class FlederSlayerDecoration : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
 
         TileID.Sets.AvoidedByNPCs[Type] = true;
 

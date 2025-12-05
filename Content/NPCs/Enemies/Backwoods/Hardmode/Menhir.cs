@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ReLogic.Content;
-
 using RoA.Common;
-using RoA.Content.Emotes;
 using RoA.Core.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
