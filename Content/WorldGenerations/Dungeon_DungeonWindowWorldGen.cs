@@ -117,7 +117,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
                 num9 = -1;
 
             if (num9 == 0) {
-                if (!WorldGen.nearPicture(num, num2)) {
+                if (!WorldGen.nearPicture(num, num2) && !nearDungeonWindow(num, num2)) {
                     PlaceDungeonWindow(num, num2);
                     //PlaceTile(num, num2, paintingEntry2.tileType, mute: true, forced: false, -1, paintingEntry2.style);
                 }
@@ -125,6 +125,17 @@ sealed class DungeonWindowWorldGen : IInitializer {
         }
 
         return orig(roomWall, count);
+    }
+
+    public static bool nearDungeonWindow(int x, int y) {
+        for (int i = x - 4; i <= x + 3; i++) {
+            for (int j = y - 3; j <= y + 2; j++) {
+                if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<DungeonWindow>())
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     //private void WorldCommon_ModifyWorldGenTasksEvent(System.Collections.Generic.List<GenPass> tasks, ref double totalWeight) {
@@ -156,7 +167,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
         Point16 offset = Point16.Zero;
         for (int i = 0; i < 2; i++) {
             makeMainBase(ref offset);
-            Vector2 direction = new(genRand.NextFloat(0.825f, 1.9f), genRand.NextFloat(0.825f, 1.9f));
+            Vector2 direction = new(genRand.NextFloat(0.8f, 1.9f), genRand.NextFloat(0.8f, 1.9f));
             if (genRand.NextBool()) {
                 direction.X *= -1;
             }
