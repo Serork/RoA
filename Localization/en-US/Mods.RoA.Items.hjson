@@ -2524,3 +2524,8 @@ BackwoodsUndergroundMusicBox: {
 	DisplayName: Music Box (Underground Backwoods)
 	Tooltip: ""
 }
+
+MistFire: {
+	DisplayName: Mist Fire
+	Tooltip: ""
+}
