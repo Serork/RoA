@@ -109,12 +109,12 @@ sealed class IgnisFatuus : NatureProjectile {
         Texture2D bloom = ResourceManager.Bloom;
         Rectangle bloomClip = bloom.Bounds;
         Vector2 bloomOrigin = bloomClip.Centered();
-        Color bloomColor = GetLightColor((int)TypeValue) * Projectile.Opacity * 0.1f;
+        Color bloomColor = GetLightColor((int)TypeValue) * Projectile.Opacity * 0.2f;
         batch.Draw(bloom, position, DrawInfo.Default with {
             Clip = bloomClip,
             Origin = bloomOrigin,
             Color = bloomColor,
-            Scale = scale * 0.5f,
+            Scale = scale * 0.325f,
             Rotation = rotation
         });
 

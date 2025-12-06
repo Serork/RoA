@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -24,7 +25,7 @@ sealed class Mist : NatureProjectile {
 
     private struct MistInfo {
         public Vector2 Position, Offset;
-        public float OffsetSpeed;
+        public float OffsetSpeed, CenterProgress;
         public byte Index;
         public Color OriginalColor, Color, GoToColor;
         public float GoToColorFactor;
@@ -161,13 +162,13 @@ sealed class Mist : NatureProjectile {
                 previousSegmentIndex = Math.Max(0, i - 1);
             ref MistInfo currentSegmentData = ref _mists[currentSegmentIndex],
                          previousSegmentData = ref _mists[previousSegmentIndex];
-            float to = 0.3f;
+            float to = 0.5f;
             currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, to, 0.1f);
             float maxRotation = 0.1f;
             currentSegmentData.RotationSpeed = Helper.Wave(-maxRotation, maxRotation, 2.5f, currentSegmentData.Index);
             currentSegmentData.GoToColorFactor = Helper.Approach(currentSegmentData.GoToColorFactor, 0f, 0.2f);
             if (currentSegmentData.GoToColorFactor > 0.5f) {
-                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, Color.Lerp(currentSegmentData.OriginalColor, currentSegmentData.GoToColor, 0.375f), 0.1f);
+                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, Color.Lerp(currentSegmentData.OriginalColor, currentSegmentData.GoToColor, 0.15f * currentSegmentData.CenterProgress), 0.1f);
             }
             else {
                 currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, currentSegmentData.OriginalColor, 0.2f);
@@ -180,16 +181,17 @@ sealed class Mist : NatureProjectile {
             _currentMistIndex = 0;
         }
         float rotationDirection = Main.rand.NextFloatDirection();
-        Color color = Color.Lerp(Color.White, Color.Lerp(Color.Gray, Color.DarkGray, Main.rand.NextFloat(1f)), 0.5f);
+        Color color = Color.Lerp(Color.White, Color.Lerp(Color.Gray, Color.DarkGray, Main.rand.NextFloat(1f)), 0.75f);
         _mists[_currentMistIndex] = new MistInfo() {
             Index = _currentMistIndex,
+            CenterProgress = Vector2.Distance(Projectile.Center, Projectile.Center + Main.rand.RandomPointInArea(MistOffset)) / 36f,
             Position = Projectile.Center + Main.rand.RandomPointInArea(MistOffset),
             Offset = Main.rand.NextVector2() * 2.5f,
             OffsetSpeed = Main.rand.NextFloat(5f),
             Scale = 1f + Main.rand.NextFloatRange(0.2f),
             Opacity = 0f,
             Color = color,
-            OriginalColor = color.ModifyRGB(0.7f),
+            OriginalColor = color.ModifyRGB(0.4f),
             FrameIndex = (byte)Main.rand.Next(3),
             Rotation = Projectile.rotation + MathHelper.Pi/*MathHelper.TwoPi * Main.rand.NextFloat()*/
         };
@@ -219,7 +221,20 @@ sealed class Mist : NatureProjectile {
                 Scale = scale,
                 Rotation = rotation
             };
+
             batch.Draw(texture, position, mistDrawInfo);
+
+            Texture2D bloom = ResourceManager.Bloom;
+            Rectangle bloomClip = bloom.Bounds;
+            Vector2 bloomOrigin = bloomClip.Centered();
+            Color bloomColor = Color.Black * mist.Opacity * 0.35f;
+            batch.Draw(bloom, position, DrawInfo.Default with {
+                Clip = bloomClip,
+                Origin = bloomOrigin,
+                Color = bloomColor,
+                Scale = scale * 0.5f,
+                Rotation = rotation
+            });
         }
 
         return false;
