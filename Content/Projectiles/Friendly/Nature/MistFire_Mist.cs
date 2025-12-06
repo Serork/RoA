@@ -171,7 +171,7 @@ sealed class Mist : NatureProjectile {
                 previousSegmentIndex = Math.Max(0, i - 1);
             ref MistInfo currentSegmentData = ref _mists[currentSegmentIndex],
                          previousSegmentData = ref _mists[previousSegmentIndex];
-            float to = 0.5f * Ease.CubeIn(Utils.GetLerpValue(0, MathF.Max(1.5f, currentSegmentData.OffsetSpeed) * 10, Projectile.timeLeft, true));
+            float to = 0.5f * Ease.CubeIn(Utils.GetLerpValue(0, MathF.Max(1.5f, currentSegmentData.OffsetSpeed) * 20, Projectile.timeLeft, true));
             currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, to, 0.1f);
             float maxRotation = 0.1f;
             currentSegmentData.RotationSpeed = Helper.Wave(-maxRotation, maxRotation, 2.5f, currentSegmentData.Index);
