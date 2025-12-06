@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Players;
 using RoA.Common.ScreenTargets;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Tiles.Decorations;
@@ -100,18 +101,22 @@ class ReflectionTarget : IPostSetupContent {
     }
 
     private void ChangePlayerOutfit() {
+        // TODO: test multiplayer and add MORE
         Player player = Main.LocalPlayer;
         _outfitSnapshot = new OutfitSnapshot(player.head, player.body, player.legs,
             player.handon, player.handoff, player.back, player.front, player.shoe, player.waist, player.shield, player.neck,
             player.face, player.balloon, player.backpack, player.tail, player.faceHead, player.faceFlower, player.balloonFront, player.beard);
         if (isDrawReflectablesThisFrame) {
-            if (player.head == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersShades), EquipType.Head)) {
+            int tylerHead = EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersShades), EquipType.Head),
+                tylerBody = EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersJacket), EquipType.Body),
+                tylerLegs = EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersJeans), EquipType.Legs);
+            if (player.head == tylerHead) {
                 player.head = ArmorIDs.Head.FamiliarWig;
             }
-            if (player.body == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersJacket), EquipType.Body)) {
+            if (player.body == tylerBody) {
                 player.body = ArmorIDs.Body.FamiliarShirt;
             }
-            if (player.legs == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersJeans), EquipType.Legs)) {
+            if (player.legs == tylerLegs) {
                 player.legs = ArmorIDs.Legs.FamiliarPants;
             }
 
