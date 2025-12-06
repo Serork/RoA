@@ -208,13 +208,15 @@ sealed class Mist : NatureProjectile {
             }
         }
 
-        foreach (Player player in Main.ActivePlayers) {
-            Rectangle playerRect = player.getRect();
+        if (Projectile.Opacity >= 0.9f) {
+            foreach (Player player in Main.ActivePlayers) {
+                Rectangle playerRect = player.getRect();
 
-            float point = 0f;
-            if (Collision.CheckAABBvLineCollision(playerRect.TopLeft(), playerRect.Size(), Projectile.Center,
-                _startPosition, 100, ref point)) {
-                player.AddBuff<BuffLantern>(2);
+                float point = 0f;
+                if (Collision.CheckAABBvLineCollision(playerRect.TopLeft(), playerRect.Size(), Projectile.Center,
+                    _startPosition, 100, ref point)) {
+                    player.AddBuff<BuffLantern>(2);
+                }
             }
         }
     }
