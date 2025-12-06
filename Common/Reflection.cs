@@ -119,6 +119,15 @@ class ReflectionTarget : IPostSetupContent {
             if (player.legs == tylerLegs) {
                 player.legs = ArmorIDs.Legs.FamiliarPants;
             }
+            if (player.head == ItemID.FamiliarWig) {
+                player.head = tylerHead;
+            }
+            if (player.body == ItemID.FamiliarShirt) {
+                player.body = tylerBody;
+            }
+            if (player.legs == ItemID.FamiliarPants) {
+                player.legs = tylerLegs;
+            }
 
             //player.ResetVisibleAccessories();
         }
