@@ -77,7 +77,7 @@ sealed class Mist : NatureProjectile {
             }
 
             Projectile.rotation = Projectile.velocity.ToRotation();
-            float maxOffset = 7.5f;
+            float maxOffset = 5f;
             Projectile.position += Vector2.One.RotatedBy(Projectile.rotation) * Helper.Wave(-maxOffset, maxOffset, MistOffsetValue, WaveOffsetValue) * Projectile.direction;
         }
         if (SpawnValue > spawnFor * 0.85f) {
