@@ -192,6 +192,8 @@ sealed class ShaderLoader : ModSystem {
     public static Asset<Effect> GodDescent => _loadedShaders["GodDescent"];
     public static Asset<Effect> TerraDye => _loadedShaders["TerraDye"];
 
+    public static Asset<Effect> SimpleReflection => _loadedShaders["SimpleReflection"];
+
     public override void OnModLoad() {
         if (Main.dedServ) {
             return;
