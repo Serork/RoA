@@ -335,3 +335,8 @@ SnailBuff: {
 	DisplayName: Snail Buff
 	Description: Mods.RoA.Buffs.SnailBuff.Description
 }
+
+BuffLantern: {
+	DisplayName: Buff Lantern
+	Description: Mods.RoA.Buffs.BuffLantern.Description
+}

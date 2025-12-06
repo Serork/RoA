@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Content.Buffs;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -15,7 +16,6 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Light;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
@@ -40,6 +40,7 @@ sealed class Mist : NatureProjectile {
     private MistInfo[] _mists = null!;
     private List<(float, Vector2)> _flamePositions = null!;
     private byte _currentMistIndex, _currentFlameIndex;
+    private Vector2 _startPosition;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float FlameSpawnValue => ref Projectile.localAI[1];
@@ -147,6 +148,8 @@ sealed class Mist : NatureProjectile {
 
             Projectile.rotation = Projectile.velocity.ToRotation();
 
+            _startPosition = Projectile.Center - Projectile.velocity;
+
             MistOffset = 12f;
         }
 
@@ -202,6 +205,16 @@ sealed class Mist : NatureProjectile {
                         dust.fadeIn = 0f;
                     }
                 }
+            }
+        }
+
+        foreach (Player player in Main.ActivePlayers) {
+            Rectangle playerRect = player.getRect();
+
+            float point = 0f;
+            if (Collision.CheckAABBvLineCollision(playerRect.TopLeft(), playerRect.Size(), Projectile.Center,
+                _startPosition, 100, ref point)) {
+                player.AddBuff<BuffLantern>(2);
             }
         }
     }

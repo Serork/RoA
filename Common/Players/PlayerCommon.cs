@@ -2,6 +2,7 @@
 
 using RoA.Common.NPCs;
 using RoA.Content.Buffs;
+using RoA.Content.Forms;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
@@ -54,6 +55,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool ElderSnailSlow;
     public bool IsElderShellEffectActive, IsElderShieldEffectActive;
     public int DefenseLastTick;
+
+    public bool IsFriarLanternBuffEffectActive;
+    public float FriarLanternEffectStrength;
 
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
@@ -156,6 +160,26 @@ sealed partial class PlayerCommon : ModPlayer {
         CursorEffectsLoad();
 
         On_Player.AddBuff_ActuallyTryToAddTheBuff += On_Player_AddBuff_ActuallyTryToAddTheBuff;
+
+        On_Player.GetImmuneAlpha += On_Player_GetImmuneAlpha;
+        On_Player.GetImmuneAlphaPure += On_Player_GetImmuneAlphaPure;
+    }
+
+
+    private Color On_Player_GetImmuneAlphaPure(On_Player.orig_GetImmuneAlphaPure orig, Player self, Color newColor, float alphaReduction) {
+        Color result = orig(self, newColor, alphaReduction);
+        if (self.GetCommon().FriarLanternEffectStrength > 0f) {
+            result = Color.Lerp(result, Color.Gray * 0.25f, self.GetCommon().FriarLanternEffectStrength);
+        }
+        return result;
+    }
+
+    private Color On_Player_GetImmuneAlpha(On_Player.orig_GetImmuneAlpha orig, Player self, Color newColor, float alphaReduction) {
+        Color result = orig(self, newColor, alphaReduction);
+        if (self.GetCommon().FriarLanternEffectStrength > 0f) {
+            result = Color.Lerp(result, Color.Gray * 0.25f, self.GetCommon().FriarLanternEffectStrength);
+        }
+        return result;
     }
 
     private bool On_Player_AddBuff_ActuallyTryToAddTheBuff(On_Player.orig_AddBuff_ActuallyTryToAddTheBuff orig, Player self, int type, int time) {
@@ -428,6 +452,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
         HandleBackflip();
         HandleHornetDash();
+
+        FriarLanternEffectStrength = Helper.Approach(FriarLanternEffectStrength, IsFriarLanternBuffEffectActive.ToInt() * 0.5f, !IsFriarLanternBuffEffectActive ? 0.075f : 0.05f);
     }
 
     public void ResetSocialShadows() {
@@ -493,6 +519,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsFriarLanternBuffEffectActive = false;
+
         IsElderShellEffectActive = false;
         ElderSnailSlow = false;
         IsElderShieldEffectActive = false;
