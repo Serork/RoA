@@ -120,7 +120,7 @@ sealed class IgnisFatuus : NatureProjectile {
             }
         }
 
-        Lighting.AddLight(Projectile.Center, _lightColor.ToVector3() * 0.625f);
+        Lighting.AddLight(Projectile.Center, _lightColor.ToVector3() * 0.625f * Projectile.Opacity);
 
         Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.X * 0.35f, 0.25f);
 
