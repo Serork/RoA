@@ -118,7 +118,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
             if (num9 == 0) {
                 if (!WorldGen.nearPicture(num, num2) && !nearDungeonWindow(num, num2)) {
                     if (!nearDungeonWindow2(num, num2, spaceX / 3, spaceY / 3) && spaceY >= 30 && spaceY < 50) {
-                        PlaceLargeDungeonWindow(num, num2 + 2, spaceX, spaceY);
+                        PlaceLargeDungeonWindow(num, num2 + 1, spaceX, spaceY);
                     }
                     else if (!nearDungeonWindow2(num, num2, spaceX / 4, spaceY / 4)) {
                         PlaceDungeonWindow(num, num2, spaceX, spaceY);
