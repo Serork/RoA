@@ -180,7 +180,7 @@ sealed class Mist : NatureProjectile {
                 currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, Color.Lerp(currentSegmentData.OriginalColor, currentSegmentData.GoToColor, 0.2f * currentSegmentData.CenterProgress), 0.1f);
             }
             else {
-                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, currentSegmentData.OriginalColor, 0.1f);
+                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, currentSegmentData.OriginalColor, 0.025f);
             }
 
             if (currentSegmentData.Opacity >= 0.1f && Projectile.Opacity >= 0.75f) {
