@@ -3,11 +3,8 @@
 using RoA.Content.Tiles.Decorations;
 using RoA.Core;
 
-using System;
-
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.Generation;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
@@ -120,8 +117,12 @@ sealed class DungeonWindowWorldGen : IInitializer {
 
             if (num9 == 0) {
                 if (!WorldGen.nearPicture(num, num2) && !nearDungeonWindow(num, num2)) {
-                    Console.WriteLine(spaceX + " " + spaceY);
-                    PlaceDungeonWindow(num, num2, spaceX, spaceY);
+                    if (!nearDungeonWindow2(num, num2, spaceX / 3, spaceY / 3) && spaceY >= 30 && spaceY < 50) {
+                        PlaceLargeDungeonWindow(num, num2, spaceX, spaceY);
+                    }
+                    else if (!nearDungeonWindow2(num, num2, spaceX / 4, spaceY / 4)) {
+                        PlaceDungeonWindow(num, num2, spaceX, spaceY);
+                    }
                     //PlaceTile(num, num2, paintingEntry2.tileType, mute: true, forced: false, -1, paintingEntry2.style);
                 }
             }
@@ -133,6 +134,17 @@ sealed class DungeonWindowWorldGen : IInitializer {
     public static bool nearDungeonWindow(int x, int y) {
         for (int i = x - 4; i <= x + 3; i++) {
             for (int j = y - 3; j <= y + 2; j++) {
+                if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<DungeonWindow>())
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool nearDungeonWindow2(int x, int y, int sizeX, int sizeY) {
+        for (int i = x - sizeX; i <= x + sizeX - 1; i++) {
+            for (int j = y - sizeY; j <= y + sizeY - 1; j++) {
                 if (Main.tile[i, j].HasTile && Main.tile[i, j].TileType == ModContent.TileType<DungeonWindow>())
                     return true;
             }
@@ -175,6 +187,30 @@ sealed class DungeonWindowWorldGen : IInitializer {
                 direction.X *= -1;
             }
             offset += direction.ToPoint16();
+        }
+    }
+
+    private static void PlaceLargeDungeonWindow(int x, int y, int spaceX, int spaceY) {
+        ushort dungeonWindowTileType = (ushort)ModContent.TileType<DungeonWindow>();
+        UnifiedRandom genRand = WorldGen.genRand;
+        void makeLargeWindow(int x2, int y2, int sizeX, int sizeY) {
+            int halfSizeX = sizeX / 2,
+                halfSizeY = sizeY / 2;
+            for (int i = 0; i < sizeX; i++) {
+                for (int j = 0; j < sizeY; j++) {
+                    int placeX = x2 + i - halfSizeX,
+                        placeY = y2 + j - halfSizeY;
+                    WorldGen.PlaceTile(placeX, placeY, dungeonWindowTileType);
+                }
+            }
+            WorldGen.PlaceTile(x2 - 1, y2 - halfSizeY - 1, dungeonWindowTileType);
+            WorldGen.PlaceTile(x2 + 1 - 1, y2 - halfSizeY - 1, dungeonWindowTileType);
+        }
+        makeLargeWindow(x, y, 4, spaceY / 2);
+        if (spaceX > 20) {
+            int sizeY = spaceY / 2 - 2;
+            makeLargeWindow(x + 7, y + sizeY / 10, 4, sizeY);
+            makeLargeWindow(x - 7, y + sizeY / 10, 4, sizeY);
         }
     }
 }
