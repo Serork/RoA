@@ -20,7 +20,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class Mist : NatureProjectile {
-    private static ushort TIMELEFT => 150;
+    private static ushort TIMELEFT => 290;
     private static byte MISTCOUNT => 200;
 
     private struct MistInfo {
@@ -82,8 +82,8 @@ sealed class Mist : NatureProjectile {
     public override void AI() {
         Projectile.Opacity = Ease.CubeIn(Utils.GetLerpValue(0, 40, Projectile.timeLeft, true));
 
-        float maxFlameSpawn = 5f,
-              minFlameSpawn = 0f;
+        float maxFlameSpawn = 4f,
+              minFlameSpawn = 3f;
         if (FlameSpawnValue++ > FlameSpawnValue2 && Projectile.Opacity >= 1f) {
             FlameSpawnValue = 0f;
 
@@ -97,11 +97,10 @@ sealed class Mist : NatureProjectile {
                     AI0 = ai0
                 });
             }
-            for (int i = _currentFlameIndex; i < _currentFlameIndex * 30; i++) {
-                int i2 = i;
-                if (i2 > _mists.Length - 1) {
-                    i2 = _mists.Length - 1;
-                }
+            int count = _mists.Length;
+            int step = count / _flamePositions.Count;
+            for (int i = _currentFlameIndex * step; i < (_currentFlameIndex + 1) * step; i++) {
+                int i2 = Utils.Clamp(i, 0, count - 1);
                 _mists[i2].GoToColorFactor = 1f;
                 _mists[i2].GoToColor = IgnisFatuus.GetLightColor((int)ai0);
             }
@@ -144,8 +143,8 @@ sealed class Mist : NatureProjectile {
         if (SpawnValue < spawnFor) {
             SpawnValue++;
 
-            if (SpawnValue % 5 == 0) {
-                _flamePositions.Add((MistOffset * 0.5f, Projectile.Center));
+            if (SpawnValue % maxFlameSpawn == 0) {
+                _flamePositions.Add((MistOffset * 0.75f, Projectile.Center));
             }
 
             for (int i = 0; i < 5; i++) {
@@ -168,12 +167,12 @@ sealed class Mist : NatureProjectile {
             currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, to, 0.1f);
             float maxRotation = 0.1f;
             currentSegmentData.RotationSpeed = Helper.Wave(-maxRotation, maxRotation, 2.5f, currentSegmentData.Index);
-            currentSegmentData.GoToColorFactor = Helper.Approach(currentSegmentData.GoToColorFactor, 0f, 0.2f);
+            currentSegmentData.GoToColorFactor = Helper.Approach(currentSegmentData.GoToColorFactor, 0f, TimeSystem.LogicDeltaTime);
             if (currentSegmentData.GoToColorFactor > 0.5f) {
-                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, Color.Lerp(currentSegmentData.OriginalColor, currentSegmentData.GoToColor, 0.15f * currentSegmentData.CenterProgress), 0.1f);
+                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, Color.Lerp(currentSegmentData.OriginalColor, currentSegmentData.GoToColor, 0.2f * currentSegmentData.CenterProgress), 0.1f);
             }
             else {
-                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, currentSegmentData.OriginalColor, 0.2f);
+                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, currentSegmentData.OriginalColor, 0.1f);
             }
         }
     }
