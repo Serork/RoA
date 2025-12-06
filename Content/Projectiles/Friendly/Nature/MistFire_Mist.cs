@@ -80,9 +80,11 @@ sealed class Mist : NatureProjectile {
     }
 
     public override void AI() {
+        Projectile.Opacity = Ease.CubeIn(Utils.GetLerpValue(0, 40, Projectile.timeLeft, true));
+
         float maxFlameSpawn = 5f,
               minFlameSpawn = 0f;
-        if (FlameSpawnValue++ > FlameSpawnValue2) {
+        if (FlameSpawnValue++ > FlameSpawnValue2 && Projectile.Opacity >= 1f) {
             FlameSpawnValue = 0f;
 
             float ai0 = Main.rand.Next(3);
@@ -209,7 +211,7 @@ sealed class Mist : NatureProjectile {
         foreach (MistInfo mist in _mists) {
             Vector2 offset = mist.Offset * Helper.Wave(-1f, 1f, mist.OffsetSpeed, mist.Index);
             Vector2 position = mist.Position + offset;
-            Color color = mist.Color.MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * mist.Opacity;
+            Color color = mist.Color.MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * mist.Opacity * Projectile.Opacity;
             Rectangle clip = spriteFrame.With(0, mist.FrameIndex).GetSourceRectangle(texture);
             Vector2 origin = clip.Centered();
             float rotation = mist.Rotation + mist.RotationSpeed;
@@ -227,7 +229,7 @@ sealed class Mist : NatureProjectile {
             Texture2D bloom = ResourceManager.Bloom;
             Rectangle bloomClip = bloom.Bounds;
             Vector2 bloomOrigin = bloomClip.Centered();
-            Color bloomColor = Color.Black * mist.Opacity * 0.35f;
+            Color bloomColor = Color.Black * mist.Opacity * 0.35f * Projectile.Opacity;
             batch.Draw(bloom, position, DrawInfo.Default with {
                 Clip = bloomClip,
                 Origin = bloomOrigin,
