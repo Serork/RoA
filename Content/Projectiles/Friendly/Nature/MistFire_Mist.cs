@@ -22,7 +22,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class Mist : NatureProjectile {
-    private static ushort TIMELEFT => 330;
+    private static ushort TIMELEFT => 325;
     private static byte MISTCOUNT => 200;
 
     private struct MistInfo {
