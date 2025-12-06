@@ -2521,6 +2521,6 @@ MenhirDecoration: {
 }
 
 BackwoodsUndergroundMusicBox: {
-	DisplayName: Backwoods Underground Music Box
+	DisplayName: Music Box (Underground Backwoods)
 	Tooltip: ""
 }
