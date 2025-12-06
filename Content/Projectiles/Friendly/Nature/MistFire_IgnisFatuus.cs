@@ -12,6 +12,7 @@ using System;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -56,6 +57,10 @@ sealed class IgnisFatuus : NatureProjectile {
         Projectile.manualDirectionChange = true;
 
         Projectile.timeLeft = TIMELEFT;
+
+        Projectile.penetrate = -1;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
     }
 
     public override void AI() {
@@ -73,10 +78,12 @@ sealed class IgnisFatuus : NatureProjectile {
 
         Projectile.Opacity = Utils.GetLerpValue(0f, 0.35f, progress, true) * Utils.GetLerpValue(1f, 0.9f, progress, true);
 
-        if (++Projectile.frameCounter >= 4) {
-            Projectile.frameCounter = 0;
-            if (++Projectile.frame > 7) {
-                Projectile.frame = 4;
+        if (progress <= 0.9f) {
+            if (++Projectile.frameCounter >= 4) {
+                Projectile.frameCounter = 0;
+                if (++Projectile.frame > 7) {
+                    Projectile.frame = 4;
+                }
             }
         }
 
@@ -89,6 +96,12 @@ sealed class IgnisFatuus : NatureProjectile {
         Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.velocity.RotatedBy(MathHelper.PiOver2), 0.05f);
 
         Projectile.velocity *= 0.5f;
+
+        //int num876 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.DungeonSpirit);
+        //Dust dust = Main.dust[num876];
+        //dust.velocity *= 0.1f;
+        //Main.dust[num876].scale = 1.3f;
+        //Main.dust[num876].noGravity = true;
     }
 
     public override void OnKill(int timeLeft) {

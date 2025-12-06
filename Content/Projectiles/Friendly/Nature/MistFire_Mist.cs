@@ -209,6 +209,7 @@ sealed class Mist : NatureProjectile {
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = Projectile.GetTexture();
         SpriteFrame spriteFrame = new(1, 3);
+        SpriteEffects effects = Projectile.FacedRight() ? SpriteEffects.FlipVertically : SpriteEffects.None;
         foreach (MistInfo mist in _mists) {
             Vector2 offset = mist.Offset * Helper.Wave(-1f, 1f, mist.OffsetSpeed, mist.Index);
             Vector2 position = mist.Position + offset;
@@ -222,7 +223,8 @@ sealed class Mist : NatureProjectile {
                 Origin = origin,
                 Color = color,
                 Scale = scale,
-                Rotation = rotation
+                Rotation = rotation,
+                ImageFlip = effects
             };
 
             batch.Draw(texture, position, mistDrawInfo);
