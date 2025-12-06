@@ -88,7 +88,7 @@ sealed class Mist : NatureProjectile {
               minFlameSpawn = 3f;
         if (Init) {
             FlameSpawnValue += 0.5f;
-            if (FlameSpawnValue > FlameSpawnValue2 && Projectile.Opacity >= 1f) {
+            if (Projectile.timeLeft > 110 && FlameSpawnValue > FlameSpawnValue2 && Projectile.Opacity >= 1f) {
                 FlameSpawnValue = 0f;
 
                 float ai0 = Main.rand.Next(3);
@@ -183,16 +183,16 @@ sealed class Mist : NatureProjectile {
                 currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, currentSegmentData.OriginalColor, 0.025f);
             }
 
-            if (currentSegmentData.Opacity >= 0.1f && Projectile.Opacity >= 0.75f) {
+            if (SpawnValue >= spawnFor && currentSegmentData.Opacity >= 0.1f && Projectile.Opacity >= 0.75f) {
                 if (Main.rand.NextBool(30)) {
-                    float dustCount = 4;
+                    float dustCount = 3;
                     for (int k = 0; k < dustCount; k++) {
                         float distanceToCenter = 0.4f + 0.8f * (float)Math.Pow(Main.rand.NextFloat(), 0.4f);
                         float dustRotation = Projectile.rotation - MathHelper.PiOver2;
                         Vector2 dustVelocity = (dustRotation + MathHelper.PiOver2).ToRotationVector2() * (distanceToCenter * 7f + 3f);
                         Dust dust = Dust.NewDustPerfect(currentSegmentData.Position + Main.rand.RandomPointInArea(10f) - Projectile.velocity * Main.rand.NextFloat(3.5f, 10f) + dustRotation.ToRotationVector2() * distanceToCenter, DustID.Sand, Vector2.Zero, 240);
                         dust.color = new(74, 74, 74);
-                        dust.velocity = dustVelocity * 0.5f;
+                        dust.velocity = dustVelocity * 0.375f;
                         dust.noGravity = true;
                         dust.fadeIn = 0f;
                     }
@@ -220,19 +220,21 @@ sealed class Mist : NatureProjectile {
             FrameIndex = (byte)Main.rand.Next(3),
             Rotation = Projectile.rotation + MathHelper.Pi/*MathHelper.TwoPi * Main.rand.NextFloat()*/
         };
-        float dustCount = 4;
-        for (int i = 0; i < dustCount; i++) {
-            if (Main.rand.NextBool()) {
-                continue;
+        if (_currentMistIndex > 25) {
+            float dustCount = 4;
+            for (int i = 0; i < dustCount; i++) {
+                if (Main.rand.NextBool()) {
+                    continue;
+                }
+                float distanceToCenter = 0.4f + 0.8f * (float)Math.Pow(Main.rand.NextFloat(), 0.4f);
+                float dustRotation = Projectile.rotation - MathHelper.PiOver2;
+                Vector2 dustVelocity = (dustRotation + MathHelper.PiOver2).ToRotationVector2() * (distanceToCenter * 7f + 3f);
+                Dust dust = Dust.NewDustPerfect(_mists[_currentMistIndex].Position + Main.rand.RandomPointInArea(10f) - Projectile.velocity * Main.rand.NextFloat(3.5f, 10f) + dustRotation.ToRotationVector2() * distanceToCenter, DustID.Sand, Vector2.Zero, 240);
+                dust.color = new(74, 74, 74);
+                dust.velocity = dustVelocity;
+                dust.noGravity = true;
+                dust.fadeIn = 0f;
             }
-            float distanceToCenter = 0.4f + 0.8f * (float)Math.Pow(Main.rand.NextFloat(), 0.4f);
-            float dustRotation = Projectile.rotation - MathHelper.PiOver2;
-            Vector2 dustVelocity = (dustRotation + MathHelper.PiOver2).ToRotationVector2() * (distanceToCenter * 7f + 3f);
-            Dust dust = Dust.NewDustPerfect(_mists[_currentMistIndex].Position + Main.rand.RandomPointInArea(10f) - Projectile.velocity * Main.rand.NextFloat(3.5f, 10f) + dustRotation.ToRotationVector2() * distanceToCenter, DustID.Sand, Vector2.Zero, 240);
-            dust.color = new(74, 74, 74);
-            dust.velocity = dustVelocity;
-            dust.noGravity = true;
-            dust.fadeIn = 0f;
         }
         _currentMistIndex++;
 
