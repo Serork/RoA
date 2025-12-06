@@ -265,7 +265,7 @@ class ReflectionTarget : IPostSetupContent {
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, default, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
 
             DrawReflection(Main.spriteBatch, screenPos: Vector2.Zero, normalMap: reflectionNormalMapTarget.RenderTarget,
-                flatOffset: new Vector2(0.036f, 0.052f), offsetScale: 0.05f, tintColor: Color.DarkGray, restartSpriteBatch: false);
+                flatOffset: new Vector2(0.036f, 0.06f), offsetScale: 0.05f, tintColor: Color.DarkGray, restartSpriteBatch: false);
             applyWallReflectionsThisFrame = false;
 
             Main.spriteBatch.End();
@@ -275,9 +275,9 @@ class ReflectionTarget : IPostSetupContent {
 
     public void drawGlassWallReflectionNormalMap(SpriteBatch spriteBatch) {
 
-        int TileSearchSize = 10; //limit distance from Player for getting these wall tiles
+        int TileSearchSize = 50; //limit distance from Player for getting these wall tiles
         for (int i = -TileSearchSize; i < TileSearchSize; i++) {
-            for (int j = -1; j < TileSearchSize; j++) {
+            for (int j = -TileSearchSize; j < TileSearchSize; j++) {
                 var p = (Main.LocalPlayer.Center / 16).ToPoint();
                 var pij = new Point(p.X + i, p.Y - j);
 
@@ -292,7 +292,7 @@ class ReflectionTarget : IPostSetupContent {
                         if (tex != null) {
                             for (int k = 0; k < 2; k++) {
                                 spriteBatch.Draw(TextureAssets.Tile[type].Value, pos - Main.screenPosition - Vector2.One * 0, new Rectangle(tile.TileFrameX, tile.TileFrameY, 18, 18),
-                                    new Color(50, 50, 50, 100));
+                                    new Color(10, 10, 10, 125));
                             }
                         }
                         isDrawReflectablesThisFrame = true;
