@@ -69,7 +69,7 @@ sealed class IgnisFatuus : NatureProjectile {
     }
 
     public override void ModifyDamageHitbox(ref Rectangle hitbox) {
-        hitbox.Inflate(14, 14);
+        hitbox.Inflate(15, 15);
     }
 
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
