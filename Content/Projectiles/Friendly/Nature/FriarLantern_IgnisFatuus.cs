@@ -68,6 +68,10 @@ sealed class IgnisFatuus : NatureProjectile {
         Projectile.localNPCHitCooldown = 10;
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox = GeometryUtils.Square(Projectile.Center, 40);
+    }
+
     public override void AI() {
         if (!Init) {
             Init = true;
