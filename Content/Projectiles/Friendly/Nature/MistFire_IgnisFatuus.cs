@@ -80,7 +80,7 @@ sealed class IgnisFatuus : NatureProjectile {
             }
         }
 
-        Lighting.AddLight(Projectile.Center, _lightColor.ToVector3() * 0.5f);
+        Lighting.AddLight(Projectile.Center, _lightColor.ToVector3() * 0.625f);
 
         Projectile.rotation = Projectile.velocity.X * 0.35f;
 
