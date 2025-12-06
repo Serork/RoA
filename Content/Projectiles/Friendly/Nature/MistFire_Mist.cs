@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -11,17 +13,21 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics.Light;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+[Tracked]
 sealed class Mist : NatureProjectile {
+    private static ushort TIMELEFT => 150;
     private static byte MISTCOUNT => 200;
 
     private struct MistInfo {
         public Vector2 Position, Offset;
         public float OffsetSpeed;
         public byte Index;
-        public Color Color;
+        public Color OriginalColor, Color, GoToColor;
+        public float GoToColorFactor;
         public float Scale;
         public float Opacity;
         public byte FrameIndex;
@@ -44,6 +50,15 @@ sealed class Mist : NatureProjectile {
         set => InitValue = value.ToInt();
     }
 
+    public override void Load() {
+        On_TileLightScanner.ApplyWallLight += On_TileLightScanner_ApplyWallLight;
+    }
+
+    private void On_TileLightScanner_ApplyWallLight(On_TileLightScanner.orig_ApplyWallLight orig, TileLightScanner self, Tile tile, int x, int y, ref Terraria.Utilities.FastRandom localRandom, ref Vector3 lightColor) {
+        orig(self, tile, x, y, ref localRandom, ref lightColor);
+
+    }
+
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(10);
 
@@ -55,6 +70,8 @@ sealed class Mist : NatureProjectile {
         Projectile.manualDirectionChange = true;
 
         Projectile.hide = true;
+
+        Projectile.timeLeft = TIMELEFT;
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
@@ -63,21 +80,32 @@ sealed class Mist : NatureProjectile {
 
     public override void AI() {
         float maxFlameSpawn = 5f,
-              minFlameSpawn = 2f;
+              minFlameSpawn = 0f;
         if (FlameSpawnValue++ > FlameSpawnValue2) {
             FlameSpawnValue = 0f;
 
+            float ai0 = Main.rand.Next(3);
             if (Projectile.IsOwnerLocal()) {
-                ProjectileUtils.SpawnPlayerOwnedProjectile<MistFlame>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromAI()) {
+                ProjectileUtils.SpawnPlayerOwnedProjectile<IgnisFatuus>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromAI()) {
                     Position = _flamePositions[_currentFlameIndex].Item2 + Main.rand.RandomPointInArea(_flamePositions[_currentFlameIndex].Item1),
                     Damage = Projectile.damage,
-                    KnockBack = Projectile.knockBack
+                    KnockBack = Projectile.knockBack,
+                    Velocity = Vector2.UnitY.RotatedByRandom(MathHelper.TwoPi),
+                    AI0 = ai0
                 });
             }
+            for (int i = _currentFlameIndex; i < _currentFlameIndex * 30; i++) {
+                int i2 = i;
+                if (i2 > _mists.Length - 1) {
+                    i2 = _mists.Length - 1;
+                }
+                _mists[i2].GoToColorFactor = 1f;
+                _mists[i2].GoToColor = IgnisFatuus.GetLightColor((int)ai0);
+            }
 
-            FlameSpawnValue2 -= 0.1f;
+            FlameSpawnValue2 -= 0.5f;
             if (FlameSpawnValue2 < minFlameSpawn) {
-                FlameSpawnValue2 = maxFlameSpawn;
+                FlameSpawnValue2 = minFlameSpawn;
             }
 
             _currentFlameIndex++;
@@ -103,6 +131,8 @@ sealed class Mist : NatureProjectile {
 
                 Projectile.netUpdate = true;
             }
+
+            Projectile.rotation = Projectile.velocity.ToRotation();
         }
 
         MistOffset = Helper.Approach(MistOffset, 36f, 3f);
@@ -112,14 +142,13 @@ sealed class Mist : NatureProjectile {
             SpawnValue++;
 
             if (SpawnValue % 5 == 0) {
-                _flamePositions.Add((MistOffset * 0.75f, Projectile.Center));
+                _flamePositions.Add((MistOffset * 0.5f, Projectile.Center));
             }
 
             for (int i = 0; i < 5; i++) {
                 SpawnMist();
             }
 
-            Projectile.rotation = Projectile.velocity.ToRotation();
             float maxOffset = 5f;
             Projectile.position += Vector2.One.RotatedBy(Projectile.rotation) * Helper.Wave(-maxOffset, maxOffset, MistOffset, WaveOffset) * Projectile.direction;
         }
@@ -132,10 +161,17 @@ sealed class Mist : NatureProjectile {
                 previousSegmentIndex = Math.Max(0, i - 1);
             ref MistInfo currentSegmentData = ref _mists[currentSegmentIndex],
                          previousSegmentData = ref _mists[previousSegmentIndex];
-            float to = 0.25f;
+            float to = 0.3f;
             currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, to, 0.1f);
             float maxRotation = 0.1f;
-            currentSegmentData.Rotation = Helper.Wave(-maxRotation, maxRotation, 2.5f, currentSegmentData.Index);
+            currentSegmentData.RotationSpeed = Helper.Wave(-maxRotation, maxRotation, 2.5f, currentSegmentData.Index);
+            currentSegmentData.GoToColorFactor = Helper.Approach(currentSegmentData.GoToColorFactor, 0f, 0.2f);
+            if (currentSegmentData.GoToColorFactor > 0.5f) {
+                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, Color.Lerp(currentSegmentData.OriginalColor, currentSegmentData.GoToColor, 0.375f), 0.1f);
+            }
+            else {
+                currentSegmentData.Color = Color.Lerp(currentSegmentData.Color, currentSegmentData.OriginalColor, 0.2f);
+            }
         }
     }
 
@@ -144,17 +180,18 @@ sealed class Mist : NatureProjectile {
             _currentMistIndex = 0;
         }
         float rotationDirection = Main.rand.NextFloatDirection();
+        Color color = Color.Lerp(Color.White, Color.Lerp(Color.Gray, Color.DarkGray, Main.rand.NextFloat(1f)), 0.5f);
         _mists[_currentMistIndex] = new MistInfo() {
-            Index = (byte)_currentMistIndex,
+            Index = _currentMistIndex,
             Position = Projectile.Center + Main.rand.RandomPointInArea(MistOffset),
             Offset = Main.rand.NextVector2() * 2.5f,
             OffsetSpeed = Main.rand.NextFloat(5f),
             Scale = 1f + Main.rand.NextFloatRange(0.2f),
             Opacity = 0f,
-            Color = Color.Lerp(Color.White, Color.Lerp(Color.Gray, Color.DarkGray, Main.rand.NextFloat(1f)), 0.1f),
+            Color = color,
+            OriginalColor = color.ModifyRGB(0.7f),
             FrameIndex = (byte)Main.rand.Next(3),
-            Rotation = Projectile.rotation/*MathHelper.TwoPi * Main.rand.NextFloat()*/,
-            RotationSpeed = MathF.Max(0.005f * rotationDirection.GetDirection(), MathHelper.PiOver4 * 0.01f * rotationDirection)
+            Rotation = Projectile.rotation + MathHelper.Pi/*MathHelper.TwoPi * Main.rand.NextFloat()*/
         };
         _currentMistIndex++;
     }
@@ -173,7 +210,7 @@ sealed class Mist : NatureProjectile {
             Color color = mist.Color.MultiplyRGB(Lighting.GetColor(position.ToTileCoordinates())) * mist.Opacity;
             Rectangle clip = spriteFrame.With(0, mist.FrameIndex).GetSourceRectangle(texture);
             Vector2 origin = clip.Centered();
-            float rotation = mist.Rotation;
+            float rotation = mist.Rotation + mist.RotationSpeed;
             Vector2 scale = Vector2.One * mist.Scale;
             DrawInfo mistDrawInfo = DrawInfo.Default with {
                 Clip = clip,
