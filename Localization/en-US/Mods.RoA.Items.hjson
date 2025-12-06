@@ -2525,7 +2525,7 @@ BackwoodsUndergroundMusicBox: {
 	Tooltip: ""
 }
 
-MistFire: {
-	DisplayName: Mist Fire
+FriarLantern: {
+	DisplayName: Friar's Lantern
 	Tooltip: ""
 }

@@ -3,6 +3,8 @@
 using RoA.Content.Tiles.Decorations;
 using RoA.Core;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Generation;
@@ -35,8 +37,8 @@ sealed class DungeonWindowWorldGen : IInitializer {
             int num4 = num;
             int num5 = num2;
             int num6 = num2;
-            int num7 = 0;
-            int num8 = 0;
+            int spaceX = 0;
+            int spaceY = 0;
             for (int j = 0; j < 2; j++) {
                 num3 = num;
                 num4 = num;
@@ -88,9 +90,9 @@ sealed class DungeonWindowWorldGen : IInitializer {
             num6--;
             num = (num3 + num4) / 2;
             num2 = (num5 + num6) / 2;
-            num7 = num4 - num3;
-            num8 = num6 - num5;
-            if (num7 <= 7 || num8 <= 5)
+            spaceX = num4 - num3;
+            spaceY = num6 - num5;
+            if (spaceX <= 7 || spaceY <= 5)
                 continue;
 
             bool[] array = new bool[3] {
@@ -99,10 +101,10 @@ sealed class DungeonWindowWorldGen : IInitializer {
                 false
             };
 
-            if (num7 > num8 * 3 && num7 > 21)
+            if (spaceX > spaceY * 3 && spaceX > 21)
                 array[1] = true;
 
-            if (num8 > num7 * 3 && num8 > 21)
+            if (spaceY > spaceX * 3 && spaceY > 21)
                 array[2] = true;
 
             int num9 = genRand.Next(3);
@@ -118,7 +120,8 @@ sealed class DungeonWindowWorldGen : IInitializer {
 
             if (num9 == 0) {
                 if (!WorldGen.nearPicture(num, num2) && !nearDungeonWindow(num, num2)) {
-                    PlaceDungeonWindow(num, num2);
+                    Console.WriteLine(spaceX + " " + spaceY);
+                    PlaceDungeonWindow(num, num2, spaceX, spaceY);
                     //PlaceTile(num, num2, paintingEntry2.tileType, mute: true, forced: false, -1, paintingEntry2.style);
                 }
             }
@@ -148,7 +151,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
 
     //}
 
-    private static void PlaceDungeonWindow(int x, int y) {
+    private static void PlaceDungeonWindow(int x, int y, int spaceX, int spaceY) {
         ushort dungeonWindowTileType = (ushort)ModContent.TileType<DungeonWindow>();
         UnifiedRandom genRand = WorldGen.genRand;
         void makeMainBase(ref Point16 offset) {

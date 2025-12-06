@@ -7,14 +7,14 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
-sealed class MistFire : NatureItem {
+sealed class FriarLantern : NatureItem {
     public override void SetStaticDefaults() {
         Item.staff[Type] = true;
         //PrefixLegacy.ItemSets.MagicAndSummon[Type] = true;
     }
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(32, 32);
+        Item.SetSizeValues(46, 48);
 
         //Item.mana = 12;
         Item.damage = 35;
@@ -30,8 +30,6 @@ sealed class MistFire : NatureItem {
         Item.knockBack = 1f;
         Item.value = 200000;
         //Item.magic = true;
-
-        Item.noUseGraphic = true;
 
         NatureWeaponHandler.SetPotentialDamage(Item, 80);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
