@@ -136,7 +136,7 @@ sealed class Mist : NatureProjectile {
 
             Projectile.rotation = Projectile.velocity.ToRotation();
 
-            MistOffset = 6f;
+            MistOffset = 12f;
         }
 
         MistOffset = Helper.Approach(MistOffset, 36f, 3f);
