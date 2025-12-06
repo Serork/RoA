@@ -6,14 +6,14 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Placeable.MusicBoxes;
 
-sealed class BackwoodsDayMusicBox : ModItem {
+sealed class BackwoodsUndergroundMusicBox : ModItem {
     public override void SetStaticDefaults() {
         ItemID.Sets.CanGetPrefixes[Type] = false;
         ItemID.Sets.ShimmerTransformToItem[Type] = ItemID.MusicBox;
 
         Item.ResearchUnlockCount = 1;
 
-        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "BackwoodsDay"), ModContent.ItemType<BackwoodsDayMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>());
+        MusicLoader.AddMusicBox(Mod, MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "BackwoodsUnderground"), ModContent.ItemType<BackwoodsUndergroundMusicBox>(), ModContent.TileType<Tiles.Miscellaneous.BackwoodsUndergroundMusicBox>());
     }
 
     public override void SetDefaults() {
@@ -23,7 +23,7 @@ sealed class BackwoodsDayMusicBox : ModItem {
         Item.useTime = 10;
         Item.autoReuse = true;
         Item.consumable = true;
-        Item.createTile = ModContent.TileType<Tiles.Miscellaneous.BackwoodsDayMusicBox>();
+        Item.createTile = ModContent.TileType<Tiles.Miscellaneous.BackwoodsUndergroundMusicBox>();
         Item.width = 30;
         Item.height = 20;
         Item.rare = 4;
