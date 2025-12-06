@@ -2,6 +2,7 @@
 
 using RoA.Content.Tiles.Decorations;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -117,7 +118,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
 
             if (num9 == 0) {
                 if (!WorldGen.nearPicture(num, num2) && !nearDungeonWindow(num, num2)) {
-                    if (!nearDungeonWindow2(num, num2, spaceX / 3, spaceY / 3) && spaceY >= 30 && spaceY < 50) {
+                    if (!nearDungeonWindow2(num, num2, spaceX / 3, spaceY / 3) && spaceY >= 30 && spaceY < 50 && genRand.NextChance(0.875f)) {
                         PlaceLargeDungeonWindow(num, num2 + 1, spaceX, spaceY);
                     }
                     else if (!nearDungeonWindow2(num, num2, spaceX / 4, spaceY / 4)) {
