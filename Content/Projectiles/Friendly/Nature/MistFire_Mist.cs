@@ -75,7 +75,12 @@ sealed class Mist : NatureProjectile {
         Projectile.hide = true;
 
         Projectile.timeLeft = TIMELEFT;
+
+        Projectile.penetrate = -1;
     }
+
+    public override bool? CanCutTiles() => false;
+    public override bool? CanDamage() => false;
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
         behindProjectiles.Add(index);
