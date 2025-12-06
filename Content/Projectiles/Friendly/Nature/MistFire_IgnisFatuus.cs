@@ -102,7 +102,7 @@ sealed class IgnisFatuus : NatureProjectile {
                     Dust dust = Main.dust[num876];
                     dust.velocity *= 0.1f;
                     dust.velocity.Y -= 1.5f * Main.rand.NextFloat(0.75f, 1f);
-                    dust.velocity += Vector2.UnitY.RotatedBy(SavedRotation) * 0.75f;
+                    dust.velocity += Vector2.UnitY.RotatedBy(SavedRotation) * 0.875f;
                     Main.dust[num876].scale = 1.3f;
                     Main.dust[num876].noGravity = true;
                     Main.dust[num876].customData = (int)TypeValue;
