@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.ScreenTargets;
+using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Tiles.Decorations;
 
 using System.Reflection;
@@ -75,6 +76,73 @@ class ReflectionTarget : IPostSetupContent {
         DrawWallReflectionNormalMapEvent += drawGlassWallReflectionNormalMap;
 
         GameShaders.Misc[simpleReflectionShaderPath] = new MiscShaderData(ShaderLoader.SimpleReflection, "TileReflectionPass");
+
+        On_Main.DrawPlayers_BehindNPCs += On_Main_DrawPlayers_BehindNPCs;
+        On_Main.DrawPlayers_AfterProjectiles += On_Main_DrawPlayers_AfterProjectiles;
+    }
+
+    private record struct OutfitSnapshot(int Head, int Body, int Legs,
+        int handon, int handoff, int back, int front, int shoe, int waist, int shield, int neck,
+        int face, int balloon, int backpack, int tail, int faceHead, int faceFlower, int balloonFront, int beard);
+
+    private static OutfitSnapshot _outfitSnapshot;
+
+    private void On_Main_DrawPlayers_AfterProjectiles(On_Main.orig_DrawPlayers_AfterProjectiles orig, Main self) {
+        ChangePlayerOutfit();
+        orig(self);
+        ResetPlayerOutfit();
+    }
+
+    private void On_Main_DrawPlayers_BehindNPCs(On_Main.orig_DrawPlayers_BehindNPCs orig, Main self) {
+        ChangePlayerOutfit();
+        orig(self);
+        ResetPlayerOutfit();
+    }
+
+    private void ChangePlayerOutfit() {
+        Player player = Main.LocalPlayer;
+        _outfitSnapshot = new OutfitSnapshot(player.head, player.body, player.legs,
+            player.handon, player.handoff, player.back, player.front, player.shoe, player.waist, player.shield, player.neck,
+            player.face, player.balloon, player.backpack, player.tail, player.faceHead, player.faceFlower, player.balloonFront, player.beard);
+        if (isDrawReflectablesThisFrame) {
+            if (player.head == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersShades), EquipType.Head)) {
+                player.head = ArmorIDs.Head.FamiliarWig;
+            }
+            if (player.body == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersJacket), EquipType.Body)) {
+                player.body = ArmorIDs.Body.FamiliarShirt;
+            }
+            if (player.legs == EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersJeans), EquipType.Legs)) {
+                player.legs = ArmorIDs.Legs.FamiliarPants;
+            }
+
+            //player.ResetVisibleAccessories();
+        }
+    }
+
+    private void ResetPlayerOutfit() {
+        // from ResetVisibleAccessories
+
+        Player player = Main.LocalPlayer;
+        player.head = _outfitSnapshot.Head;
+        player.body = _outfitSnapshot.Body;
+        player.legs = _outfitSnapshot.Legs;
+
+        player.handon = _outfitSnapshot.handon;
+        player.handoff = _outfitSnapshot.handoff;
+        player.back = _outfitSnapshot.back;
+        player.front = _outfitSnapshot.front;
+        player.shoe = _outfitSnapshot.shoe;
+        player.waist = _outfitSnapshot.waist;
+        player.shield = _outfitSnapshot.shield;
+        player.neck = _outfitSnapshot.neck;
+        player.face = _outfitSnapshot.face;
+        player.balloon = _outfitSnapshot.balloon;
+        player.backpack = _outfitSnapshot.backpack;
+        player.tail = _outfitSnapshot.tail;
+        player.faceHead = _outfitSnapshot.faceHead;
+        player.faceFlower = _outfitSnapshot.faceFlower;
+        player.balloonFront = _outfitSnapshot.balloonFront;
+        player.beard = _outfitSnapshot.beard;
     }
 
     void ILoadable.Unload() {
@@ -274,34 +342,34 @@ class ReflectionTarget : IPostSetupContent {
     }
 
     public void drawGlassWallReflectionNormalMap(SpriteBatch spriteBatch) {
+        // TODO: test in mp
+        foreach (Player player in Main.ActivePlayers) {
+            int TileSearchSize = 50; //limit distance from Player for getting these wall tiles
+            for (int i = -TileSearchSize; i < TileSearchSize; i++) {
+                for (int j = -TileSearchSize; j < TileSearchSize; j++) {
+                    var p = (player.Center / 16).ToPoint();
+                    var pij = new Point(p.X + i, p.Y - j);
 
-        int TileSearchSize = 50; //limit distance from Player for getting these wall tiles
-        for (int i = -TileSearchSize; i < TileSearchSize; i++) {
-            for (int j = -TileSearchSize; j < TileSearchSize; j++) {
-                var p = (Main.LocalPlayer.Center / 16).ToPoint();
-                var pij = new Point(p.X + i, p.Y - j);
+                    if (WorldGen.InWorld(pij.X, pij.Y)) {
+                        Tile tile = Framing.GetTileSafely(pij);
+                        ushort type = tile.TileType;
 
-                if (WorldGen.InWorld(pij.X, pij.Y)) {
-                    Tile tile = Framing.GetTileSafely(pij);
-                    ushort type = tile.TileType;
-
-                    if (type == ModContent.TileType<DungeonWindow>()) {
-                        Vector2 pos = pij.ToVector2() * 16;
-                        Texture2D tex = TextureAssets.Tile[type].Value;
-                        //not sure if tile.WallFrame* is the correct value
-                        if (tex != null) {
-                            for (int k = 0; k < 2; k++) {
-                                spriteBatch.Draw(TextureAssets.Tile[type].Value, pos - Main.screenPosition - Vector2.One * 0, new Rectangle(tile.TileFrameX, tile.TileFrameY, 18, 18),
-                                    new Color(10, 10, 10, 125));
+                        if (type == ModContent.TileType<DungeonWindow>()) {
+                            Vector2 pos = pij.ToVector2() * 16;
+                            Texture2D tex = TextureAssets.Tile[type].Value;
+                            //not sure if tile.WallFrame* is the correct value
+                            if (tex != null) {
+                                for (int k = 0; k < 2; k++) {
+                                    spriteBatch.Draw(TextureAssets.Tile[type].Value, pos - Main.screenPosition - Vector2.One * 0, new Rectangle(tile.TileFrameX, tile.TileFrameY, 18, 18),
+                                        new Color(10, 10, 10, 125));
+                                }
                             }
+                            isDrawReflectablesThisFrame = true;
+                            applyWallReflectionsThisFrame = true;
                         }
-                        isDrawReflectablesThisFrame = true;
-                        applyWallReflectionsThisFrame = true;
                     }
                 }
             }
         }
-
-
     }
 }
