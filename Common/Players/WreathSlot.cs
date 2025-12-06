@@ -78,32 +78,34 @@ class WreathSlot : ModAccessorySlot {
     public override string FunctionalTexture => ResourceManager.UITextures + "Wreath_SlotBackground";
 
     public override bool PreDraw(AccessorySlotType context, Item item, Vector2 position, bool isHovered) {
-        if (isHovered) {
-            _equipped = !FunctionalItem.IsEmpty() || !VanityItem.IsEmpty() || !DyeItem.IsEmpty();
-            if (_equipped && !_equipped2) {
-                BeltButton.ToggleTo(true);
+        if (_functionalTexture?.IsLoaded == true) {
+            if (isHovered) {
+                _equipped = !FunctionalItem.IsEmpty() || !VanityItem.IsEmpty() || !DyeItem.IsEmpty();
+                if (_equipped && !_equipped2) {
+                    BeltButton.ToggleTo(true);
+                }
             }
-        }
 
-        if (context == AccessorySlotType.FunctionalSlot) {
-            Item[] items = [FunctionalItem];
-            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 8, 0, position, mainTexture: _functionalTexture.Value);
+            if (context == AccessorySlotType.FunctionalSlot) {
+                Item[] items = [FunctionalItem];
+                MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 8, 0, position, mainTexture: _functionalTexture.Value);
 
-            return false;
-        }
+                return false;
+            }
 
-        if (context == AccessorySlotType.VanitySlot) {
-            Item[] items = [VanityItem];
-            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 11, 0, position);
+            if (context == AccessorySlotType.VanitySlot) {
+                Item[] items = [VanityItem];
+                MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 11, 0, position);
 
-            return false;
-        }
+                return false;
+            }
 
-        if (context == AccessorySlotType.DyeSlot) {
-            Item[] items = [DyeItem];
-            MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 12, 0, position);
+            if (context == AccessorySlotType.DyeSlot) {
+                Item[] items = [DyeItem];
+                MannequinWreathSlotSupport.Draw(Main.spriteBatch, items, 12, 0, position);
 
-            return false;
+                return false;
+            }
         }
 
         return true;
