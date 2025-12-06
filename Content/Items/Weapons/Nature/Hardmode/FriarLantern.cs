@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Druid;
+using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 
@@ -7,6 +8,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
+[AutoloadGlowMask]
 sealed class FriarLantern : NatureItem {
     public override void SetStaticDefaults() {
         Item.staff[Type] = true;
