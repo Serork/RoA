@@ -155,7 +155,6 @@ class BackwoodsRocks1 : ModTile {
         TileObjectData.newTile.Width = 1;
         TileObjectData.newTile.Height = 1;
         TileObjectData.newTile.Origin = new Point16(0, 1);
-        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, TileObjectData.newTile.Width, 0);
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.CoordinateHeights = [16];
         TileObjectData.newTile.CoordinateWidth = 16;
