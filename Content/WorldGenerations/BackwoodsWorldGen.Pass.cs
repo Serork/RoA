@@ -267,7 +267,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 else if (WorldGen.getGoodWorldGen)
                     chance = 2;
 
-                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(chance) && _random.NextBool(chance) && flag && !MidInvalidTileTypesToKill.Contains(WorldGenHelper.GetTileSafely(i, j + 1).TileType)) {
+                if (/*(!tile.AnyWall() || (tile.AnyWall() && j < Main.worldSurface)) && */_random.NextBool(chance) && _random.NextBool(chance / 2) && flag && !MidInvalidTileTypesToKill.Contains(WorldGenHelper.GetTileSafely(i, j + 1).TileType)) {
                     int x = i, y = j;
                     bool flag2 = false;
                     if (WorldGen.SolidTile2(x, y + 1) && WorldGen.SolidTile2(x + 1, y + 1) && !Main.tile[x, y - 1].HasTile && !Main.tile[x + 1, y - 1].HasTile &&
@@ -1022,16 +1022,17 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         // problem here
-        //for (int i = Left - 100; i <= Right + 100; i++) {
-        //    for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY * 2; j++) {
-        //        Tile tile = WorldGenHelper.GetTileSafely(i, j);
-        //        if (tile.ActiveTile(_mossTileType) && tile.ActiveTile(_mossGrowthTileType) && WorldGen.SolidTile2(tile) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
-        //            if (Main.tile[i, j + 1].TileType != TileID.RollingCactus && _random.NextBool(4)) {
-        //                WorldGen.PlaceTile(i, j, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
-        //            }
-        //        }
-        //    }
-        //}
+        for (int i = Left - 100; i <= Right + 100; i++) {
+            for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + EdgeY * 2; j++) {
+                Tile tile = WorldGenHelper.GetTileSafely(i, j);
+                Tile belowTile = WorldGenHelper.GetTileSafely(i, j + 1);
+                if (tile.ActiveTile(_mossGrowthTileType) && WorldGen.SolidTile2(belowTile) && !MidInvalidTileTypesToKill.Contains(belowTile.TileType)) {
+                    if (belowTile.TileType != TileID.RollingCactus && _random.NextBool(8)) {
+                        WorldGen.PlaceTile(i, j + 1, _random.NextBool() ? (ushort)ModContent.TileType<BackwoodsRocks1>() : (ushort)ModContent.TileType<BackwoodsRocks2>(), true, style: _random.Next(3));
+                    }
+                }
+            }
+        }
 
         for (int i = Left - 50; i <= Right + 50; i++) {
             for (int j = CenterY - EdgeY; j < Bottom + EdgeY * 2; j++) {
