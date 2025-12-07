@@ -63,6 +63,9 @@ sealed class BackwoodsSpecial3_Rubble : ModTile, TileHooks.IGetTileDrawData {
 
     public override ushort GetMapOption(int i, int j) {
         var tileFrameX = Main.tile[i, j].TileFrameX;
+        if (tileFrameX >= 214) {
+            tileFrameX -= 214;
+        }
         if (tileFrameX < 54)
             return 0;
         else if (tileFrameX < 108) {
@@ -75,6 +78,9 @@ sealed class BackwoodsSpecial3_Rubble : ModTile, TileHooks.IGetTileDrawData {
 
     public override bool CreateDust(int i, int j, ref int type) {
         short tileFrame = Main.tile[i, j].TileFrameX;
+        if (tileFrame >= 214) {
+            tileFrame -= 214;
+        }
         if (tileFrame < 54) {
             type = DustID.Bone;
         }
@@ -90,6 +96,9 @@ sealed class BackwoodsSpecial3_Rubble : ModTile, TileHooks.IGetTileDrawData {
 
     public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) {
         var tileFrameX = Main.tile[i, j].TileFrameX;
+        if (tileFrameX >= 214) {
+            tileFrameX -= 214;
+        }
         if (tileFrameX < 54) {
         }
         else if (tileFrameX < 108) {

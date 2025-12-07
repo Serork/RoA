@@ -45,6 +45,9 @@ sealed class BackwoodsSpecial2 : BackwoodsRocks0 {
 
     public override ushort GetMapOption(int i, int j) {
         var tileFrameX = Main.tile[i, j].TileFrameX;
+        if (tileFrameX >= 108) {
+            tileFrameX -= 108;
+        }
         if (tileFrameX < 36)
             return 0;
         else
@@ -56,6 +59,9 @@ sealed class BackwoodsSpecial2 : BackwoodsRocks0 {
     public override bool CreateDust(int i, int j, ref int type) {
         Tile tile = Main.tile[i, j];
         short tileFrameX = tile.TileFrameX;
+        if (tileFrameX >= 108) {
+            tileFrameX -= 108;
+        }
         if (tileFrameX < 36) {
             type = ModContent.DustType<Stone>();
         }
