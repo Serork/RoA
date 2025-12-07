@@ -436,22 +436,19 @@ public class HouseBuilderCustom {
                             break;
                         }
                     case 1: {
-                            int num5_2 = room.Y + 1;
-                            WorldGenHelper.Place1x2Top(num4, num5_2, (ushort)ModContent.TileType<DecorativeBanners_Gen>(), styleX: (int)DecorativeBanners.StyleID.Equality);
-
-                            //if (_random.NextBool()) {
-                            //    int num5_2 = room.Y + 1;
-                            //    WorldGenHelper.Place1x2Top(num4, num5_2, (ushort)ModContent.TileType<DecorativeBanners>(), styleX: (int)DecorativeBanners.StyleID.Equality);
-                            //}
-                            //else {
-                            //    int num5 = room.Y + 1;
-                            //    WorldGen.PlaceTile(num4, num5, ChandelierTileType, mute: true, forced: false, -1);
-                            //    for (int j = -1; j < 2; j++) {
-                            //        for (int k = 0; k < 3; k++) {
-                            //            _tiles[j + num4, k + num5].TileFrameX += 54;
-                            //        }
-                            //    }
-                            //}
+                            if (_random.NextBool()) {
+                                int num5_2 = room.Y + 1;
+                                WorldGenHelper.Place1x2Top(num4, num5_2, (ushort)ModContent.TileType<DecorativeBanners_Gen>(), styleX: (int)DecorativeBanners.StyleID.Equality);
+                            }
+                            else {
+                                int num5 = room.Y + 1;
+                                WorldGen.PlaceTile(num4, num5, ChandelierTileType, mute: true, forced: false, -1);
+                                for (int j = -1; j < 2; j++) {
+                                    for (int k = 0; k < 3; k++) {
+                                        _tiles[j + num4, k + num5].TileFrameX += 54;
+                                    }
+                                }
+                            }
 
                             break;
                         }
