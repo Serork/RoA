@@ -26,6 +26,9 @@ sealed class ElderwoodWorkbench : ModTile {
         AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.WorkBench"));
 
         AdjTiles = [TileID.WorkBenches];
+
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {

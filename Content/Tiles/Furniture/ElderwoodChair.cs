@@ -27,6 +27,9 @@ sealed class ElderwoodChair : ModTile {
         TileID.Sets.CanBeSatOnForPlayers[Type] = true;
         TileID.Sets.DisableSmartCursor[Type] = true;
 
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2);
         TileObjectData.newTile.CoordinateHeights = new[] { 16, 18 };
         TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;

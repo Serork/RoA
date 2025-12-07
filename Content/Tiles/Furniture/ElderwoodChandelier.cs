@@ -32,6 +32,9 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
         Main.tileFrameImportant[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style1x2Top);
         TileObjectData.newTile.Origin = new Point16(1, 0);
         TileObjectData.newTile.AnchorTop = new AnchorData(AnchorType.SolidTile | AnchorType.SolidSide, 1, 1);

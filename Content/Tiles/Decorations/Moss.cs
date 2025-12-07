@@ -34,6 +34,9 @@ sealed class Moss : ModTile {
 
         // name.SetDefault("MOX");
         AddMapEntry(new Microsoft.Xna.Framework.Color(99, 50, 30), Language.GetText("MapObject.Painting"));
+
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;

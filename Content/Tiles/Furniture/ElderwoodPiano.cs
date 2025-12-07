@@ -24,6 +24,9 @@ sealed class ElderwoodPiano : ModTile {
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
         AddMapEntry(new Color(191, 142, 111), Language.GetText("ItemName.Piano"));
+
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {

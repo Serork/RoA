@@ -2550,3 +2550,18 @@ FriarLantern: {
 	// DisplayName: Friar's Lantern
 	// Tooltip: ""
 }
+
+Equality: {
+	// DisplayName: Equality
+	// Tooltip: ""
+}
+
+Riot: {
+	// DisplayName: Riot
+	// Tooltip: ""
+}
+
+SmolderingTapestry: {
+	// DisplayName: Smoldering Tapestry
+	// Tooltip: ""
+}

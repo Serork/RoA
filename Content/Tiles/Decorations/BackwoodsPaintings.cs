@@ -107,6 +107,9 @@ abstract class Painting : ModTile {
         AddMapEntry(new Color(99, 50, 30), Language.GetText($"MapObject.{key}"));
 
         SafeSetStaticDefaults();
+
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
     }
 
     protected virtual void SafeSetStaticDefaults() { }

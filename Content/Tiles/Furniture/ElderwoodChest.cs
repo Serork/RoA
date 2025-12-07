@@ -35,6 +35,8 @@ sealed class ElderwoodChest : ModTile {
         TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
+
         AdjTiles = [TileID.Containers];
 
         Color mapColor = new(110, 91, 74);

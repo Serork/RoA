@@ -18,6 +18,9 @@ sealed class ElderwoodTable : ModTile {
         Main.tileTable[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
         TileObjectData.newTile.CoordinateHeights = [16, 18];
         TileObjectData.addTile(Type);

@@ -160,6 +160,7 @@ sealed class TreeDryad : ModTile, IRequestAssets, TileHooks.IPreDraw, TileHooks.
         Main.tileHammer[Type] = true;
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
 
         TileID.Sets.AvoidedByMeteorLanding[Type] = true;
         TileID.Sets.InteractibleByNPCs[Type] = true;

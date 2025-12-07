@@ -134,6 +134,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
         Main.tileNoAttach[Type] = true;
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
 
         TileID.Sets.AvoidedByNPCs[Type] = true;
 

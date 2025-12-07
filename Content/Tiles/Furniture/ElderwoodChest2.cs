@@ -55,6 +55,8 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
         TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
         TileID.Sets.GeneralPlacementTiles[Type] = false;
 
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
+
         RegisterItemDrop(ModContent.ItemType<Items.Placeable.Furniture.ElderwoodChest>(), 1);
         RegisterItemDrop(ItemID.Chest);
 

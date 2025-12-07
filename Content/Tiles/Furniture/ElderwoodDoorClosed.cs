@@ -25,6 +25,9 @@ sealed class ElderwoodDoorClosed : ModTile {
         TileID.Sets.DrawsWalls[Type] = true;
         TileID.Sets.HasOutlines[Type] = true;
 
+        TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
+
         TileObjectData.newTile.Width = 1;
         TileObjectData.newTile.Height = 3;
         TileObjectData.newTile.Origin = new Point16(0, 0);
