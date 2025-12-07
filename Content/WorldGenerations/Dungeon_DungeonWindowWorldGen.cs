@@ -210,7 +210,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
         makeLargeWindow(x, y, 4, spaceY / 2);
         if (spaceX > 20) {
             int sizeY = spaceY / 2 - 2;
-            int offsetY = sizeY / 10 + genRand.Next(-1, 3);
+            int offsetY = sizeY / 9 + genRand.Next(-1, 3);
             makeLargeWindow(x + 7, y + offsetY, 4, sizeY);
             makeLargeWindow(x - 7, y + offsetY, 4, sizeY);
         }

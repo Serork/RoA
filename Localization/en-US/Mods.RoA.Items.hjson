@@ -1249,7 +1249,7 @@ Bane: {
 }
 
 BackwoodsDayMusicBox: {
-	DisplayName: Music Box (Backwoods)
+	DisplayName: Music Box (Backwoods Day)
 	Tooltip: ""
 }
 
@@ -2451,7 +2451,7 @@ GraspOfTheWarden: {
 }
 
 BackwoodsNightMusicBox: {
-	DisplayName: Backwoods Night Music Box
+	DisplayName: Music Box (Backwoods Night)
 	Tooltip: ""
 }
 
