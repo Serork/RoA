@@ -25,13 +25,13 @@ sealed class BackwoodsSpecial3_Rubble : ModTile, TileHooks.IGetTileDrawData {
         glowTexture = BackwoodsSpecial3.GlowTexture.Value;
         glowColor = TileDrawingExtra.BackwoodsMossGlowColor;
         glowSourceRect = new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight);
-        addFrY = -2;
     }
 
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileObsidianKill[Type] = true;
+        Main.tileLavaDeath[Type] = true;
 
         TileID.Sets.ReplaceTileBreakUp[Type] = true;
         TileID.Sets.BreakableWhenPlacing[Type] = true;
@@ -39,17 +39,13 @@ sealed class BackwoodsSpecial3_Rubble : ModTile, TileHooks.IGetTileDrawData {
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 3;
         TileObjectData.newTile.Height = 2;
-        TileObjectData.newTile.Origin = new Point16(0, 1);
+        TileObjectData.newTile.Origin = new Point16(1, 1);
         TileObjectData.newTile.UsesCustomCanPlace = true;
         TileObjectData.newTile.CoordinateHeights = [16, 16];
         TileObjectData.newTile.CoordinateWidth = 16;
         TileObjectData.newTile.CoordinatePadding = 2;
-        TileObjectData.newTile.Direction = TileObjectDirection.PlaceLeft;
         TileObjectData.newTile.StyleHorizontal = true;
-        TileObjectData.newTile.LavaDeath = false;
-        TileObjectData.newAlternate.CopyFrom(TileObjectData.newTile);
-        TileObjectData.newAlternate.Direction = TileObjectDirection.PlaceRight;
-        TileObjectData.addAlternate(1);
+        TileObjectData.newTile.LavaDeath = true;
         TileObjectData.addTile(Type);
 
         DustType = ModContent.DustType<Dusts.Backwoods.Stone>();
