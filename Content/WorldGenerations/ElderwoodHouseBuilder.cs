@@ -436,7 +436,7 @@ public class HouseBuilderCustom {
                             break;
                         }
                     case 1: {
-                            if (_random.NextBool()) {
+                            if (_random.NextBool(3)) {
                                 int num5_2 = room.Y + 1;
                                 WorldGenHelper.Place1x3Top(num4, num5_2, (ushort)ModContent.TileType<DecorativeBanners>(), styleX: (int)DecorativeBanners.StyleID.Equality);
                             }

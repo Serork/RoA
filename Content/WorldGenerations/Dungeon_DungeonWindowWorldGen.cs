@@ -21,7 +21,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
 
     private double On_WorldGen_MakeDungeon_Pictures(On_WorldGen.orig_MakeDungeon_Pictures orig, int[] roomWall, double count) {
         count = 420000.0 / (double)Main.maxTilesX;
-        count /= 6;
+        count /= 7;
         UnifiedRandom genRand = WorldGen.genRand;
         for (int i = 0; (double)i < count; i++) {
             int num = genRand.Next(GenVars.dMinX, GenVars.dMaxX);
@@ -210,7 +210,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
         makeLargeWindow(x, y, 4, spaceY / 2);
         if (spaceX > 20) {
             int sizeY = spaceY / 2 - 2;
-            int offsetY = sizeY / 9 + genRand.Next(-3, 3);
+            int offsetY = sizeY / 9 + genRand.Next(-3, 2);
             makeLargeWindow(x + 7, y + offsetY, 4, sizeY);
             makeLargeWindow(x - 7, y + offsetY, 4, sizeY);
         }
