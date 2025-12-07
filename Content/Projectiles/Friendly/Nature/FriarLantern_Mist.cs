@@ -227,6 +227,8 @@ sealed class Mist : NatureProjectile {
         }
         float rotationDirection = Main.rand.NextFloatDirection();
         Color color = Color.Lerp(Color.White, Color.Lerp(Color.Gray, Color.DarkGray, Main.rand.NextFloat(1f)), 0.75f);
+        Color startColor = color.ModifyRGB(0.9f),
+              endColor = color.ModifyRGB(0.4f);
         _mists[_currentMistIndex] = new MistInfo() {
             Index = _currentMistIndex,
             CenterProgress = Vector2.Distance(Projectile.Center, Projectile.Center + Main.rand.RandomPointInArea(MistOffset)) / 36f,
@@ -235,13 +237,14 @@ sealed class Mist : NatureProjectile {
             OffsetSpeed = Main.rand.NextFloat(5f),
             Scale = 1f + Main.rand.NextFloatRange(0.2f),
             Opacity = 0f,
-            Color = color,
-            OriginalColor = color.ModifyRGB(0.4f),
+            Color = startColor,
+            GoToColor = startColor,
+            OriginalColor = endColor,
             FrameIndex = (byte)Main.rand.Next(3),
             Rotation = Projectile.rotation + MathHelper.Pi/*MathHelper.TwoPi * Main.rand.NextFloat()*/
         };
         if (_currentMistIndex > 25) {
-            float dustCount = 4;
+            float dustCount = 6;
             for (int i = 0; i < dustCount; i++) {
                 if (Main.rand.NextBool()) {
                     continue;
