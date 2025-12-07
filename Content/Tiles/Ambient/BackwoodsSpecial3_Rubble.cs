@@ -1,15 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using ReLogic.Content;
-
 using RoA.Common.Tiles;
 using RoA.Content.Items.Placeable.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
@@ -56,8 +53,12 @@ sealed class BackwoodsSpecial3_Rubble : ModTile, TileHooks.IGetTileDrawData {
 
         MineResist = 0.01f;
 
-        FlexibleTileWand.RubblePlacementLarge.AddVariations(ModContent.ItemType<Elderwood>(), Type, 0, 1, 2, 3);
+        FlexibleTileWand.RubblePlacementLarge.AddVariations(ModContent.ItemType<Elderwood>(), Type, 0, 1, 2, 3, 4, 5, 6, 7);
         RegisterItemDrop(ModContent.ItemType<Elderwood>());
+    }
+
+    public override void DropCritterChance(int i, int j, ref int wormChance, ref int grassHopperChance, ref int jungleGrubChance) {
+
     }
 
     public override ushort GetMapOption(int i, int j) {

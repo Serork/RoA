@@ -23,7 +23,6 @@ sealed class BackwoodsSpecial3 : ModTile, TileHooks.IGetTileDrawData {
         glowTexture = GlowTexture.Value;
         glowColor = TileDrawingExtra.BackwoodsMossGlowColor;
         glowSourceRect = new Rectangle(tileFrameX, tileFrameY, tileWidth, tileHeight);
-        addFrY = -2;
     }
 
     public override void SetStaticDefaults() {

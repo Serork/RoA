@@ -1042,7 +1042,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if ((_random.NextBool(4) || (flag2 && _random.NextChance(0.5))) && WorldGen.SolidTile2(tile) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                     if (_random.NextBool(4)) {
                         if (Main.tile[i, j - 1 + 1].TileType != TileID.RollingCactus) {
-                            WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsSpecial3>(), _random.Next(4));
+                            WorldGenHelper.Place3x2(i, j - 1, (ushort)ModContent.TileType<BackwoodsSpecial3>(), _random.Next(8));
                         }
                     }
                 }
@@ -1056,7 +1056,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if ((_random.NextBool(7) || (flag2 && _random.NextChance(0.2))) && WorldGen.SolidTile2(tile) && !MidInvalidTileTypesToKill.Contains(tile.TileType)) {
                     if (_random.NextBool(4)) {
                         if (Main.tile[i, j - 1 + 1].TileType != TileID.RollingCactus) {
-                            WorldGen.Place2x1(i, j - 1, (ushort)ModContent.TileType<BackwoodsSpecial2>(), _random.Next(3));
+                            WorldGen.Place2x1(i, j - 1, (ushort)ModContent.TileType<BackwoodsSpecial2>(), _random.Next(6));
                         }
                     }
                 }

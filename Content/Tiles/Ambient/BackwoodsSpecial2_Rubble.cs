@@ -5,7 +5,6 @@ using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Items.Placeable.Solid;
 
 using Terraria;
-using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -26,7 +25,8 @@ sealed class BackwoodsSpecial2_Rubble : BackwoodsRocks0 {
         TileID.Sets.BreakableWhenPlacing[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x1);
-        TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.DrawYOffset = -2;
+        TileObjectData.newTile.CoordinateHeights = [20];
         TileObjectData.newTile.StyleHorizontal = true;
         TileObjectData.newTile.LavaDeath = true;
         TileObjectData.addTile(Type);
@@ -38,13 +38,16 @@ sealed class BackwoodsSpecial2_Rubble : BackwoodsRocks0 {
 
         MineResist = 0.01f;
 
-        FlexibleTileWand.RubblePlacementMedium.AddVariations(ModContent.ItemType<Elderwood>(), Type, 0, 1, 2);
+        FlexibleTileWand.RubblePlacementMedium.AddVariations(ModContent.ItemType<Elderwood>(), Type, 0, 1, 2, 3, 4, 5);
         RegisterItemDrop(ModContent.ItemType<Elderwood>());
+    }
+
+    public override void DropCritterChance(int i, int j, ref int wormChance, ref int grassHopperChance, ref int jungleGrubChance) {
+
     }
 
     public override void SetDrawPositions(int i, int j, ref int width, ref int offsetY, ref int height, ref short tileFrameX, ref short tileFrameY) {
         height = 20;
-        offsetY -= 4;
     }
 
     public override ushort GetMapOption(int i, int j) {
