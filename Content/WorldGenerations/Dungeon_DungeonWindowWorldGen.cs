@@ -121,7 +121,7 @@ sealed class DungeonWindowWorldGen : IInitializer {
                     if (!nearDungeonWindow2(num, num2, spaceX / 3, spaceY / 3) && spaceY >= 30 && spaceY < 50 && genRand.NextChance(0.875f)) {
                         PlaceLargeDungeonWindow(num, num2 + 1, spaceX, spaceY);
                     }
-                    else if (!nearDungeonWindow2(num, num2, spaceX / 4, spaceY / 4)) {
+                    else if (!nearDungeonWindow2(num, num2, spaceX / 3, spaceY / 3)) {
                         PlaceDungeonWindow(num, num2, spaceX, spaceY);
                     }
                     //PlaceTile(num, num2, paintingEntry2.tileType, mute: true, forced: false, -1, paintingEntry2.style);
