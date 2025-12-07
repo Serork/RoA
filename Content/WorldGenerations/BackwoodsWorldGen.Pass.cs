@@ -3508,7 +3508,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step_AddGrassWalls();
 
         progress.Set(0.4f);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             GrowTrees();
         }
 
