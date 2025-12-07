@@ -165,6 +165,7 @@ sealed class FenethStatue : ModTile {
         Main.tileSpelunker[Type] = true;
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;
+        TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
 
         TileID.Sets.InteractibleByNPCs[Type] = true;
 
