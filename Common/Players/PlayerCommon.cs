@@ -59,6 +59,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsFriarLanternBuffEffectActive;
     public float FriarLanternEffectStrength;
 
+    public bool DrawJokeVisor;
+
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
 
@@ -519,6 +521,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        DrawJokeVisor = false;
+
         IsFriarLanternBuffEffectActive = false;
 
         IsElderShellEffectActive = false;

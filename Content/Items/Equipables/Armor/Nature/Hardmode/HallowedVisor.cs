@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
@@ -21,6 +23,34 @@ namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class HallowedVisor : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask, IDoubleTap {
+    private static Asset<Texture2D> _jokeVisor = null!;
+
+    public override void Load() {
+        ExtraDrawLayerSupport.PostHeadDrawEvent += ExtraDrawLayerSupport_PostHeadDrawEvent;
+    }
+
+    private void ExtraDrawLayerSupport_PostHeadDrawEvent(ref PlayerDrawSet drawinfo) {
+        Player player = drawinfo.drawPlayer;
+        if (player.GetCommon().DrawJokeVisor) {
+            Texture2D texture = _jokeVisor.Value;
+            Rectangle clip = texture.Bounds;
+            Vector2 origin = clip.Centered();
+
+            Vector2 helmetOffset = drawinfo.helmetOffset;
+            Vector2 position = helmetOffset + new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
+            position -= clip.Centered();
+            position.Y += 4.5f;
+            position.X += 12f;
+            position.X += 2f * player.direction;
+            position += player.MovementOffset();
+            position += origin / 2f;
+            DrawData item = new(texture, position, clip, drawinfo.colorArmorHead, drawinfo.drawPlayer.headRotation, origin, 1f, drawinfo.playerEffect) {
+                shader = drawinfo.cHead
+            };
+            drawinfo.DrawDataCache.Add(item);
+        }
+    }
+
     void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) {
         SetDrawSettings_Inner(player, ref texture, ref color, ref drawInfo);
     }
@@ -36,6 +66,10 @@ sealed class HallowedVisor : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMask,
     }
 
     public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            _jokeVisor = ModContent.Request<Texture2D>(Texture + "_Joke");
+        }
+
         Item.ResearchUnlockCount = 1;
 
         ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Head, this);

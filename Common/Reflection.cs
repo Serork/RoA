@@ -3,8 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Players;
 using RoA.Common.ScreenTargets;
+using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Tiles.Decorations;
+using RoA.Core.Utility.Vanilla;
 
 using System.Reflection;
 
@@ -106,6 +108,7 @@ class ReflectionTarget : IPostSetupContent {
         _outfitSnapshot = new OutfitSnapshot(player.head, player.body, player.legs,
             player.handon, player.handoff, player.back, player.front, player.shoe, player.waist, player.shield, player.neck,
             player.face, player.balloon, player.backpack, player.tail, player.faceHead, player.faceFlower, player.balloonFront, player.beard);
+        
         if (isDrawReflectablesThisFrame) {
             int tylerHead = EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersShades), EquipType.Head),
                 tylerBody = EquipLoader.GetEquipSlot(RoA.Instance, nameof(SoapSellersJacket), EquipType.Body),
@@ -129,6 +132,13 @@ class ReflectionTarget : IPostSetupContent {
                 player.legs = tylerLegs;
             }
 
+            int druidHallowedHelmet1 = EquipLoader.GetEquipSlot(RoA.Instance, nameof(HallowedVisor), EquipType.Head),
+                druidHallowedHelmet2 = EquipLoader.GetEquipSlot(RoA.Instance, nameof(AncientHallowedVisor), EquipType.Head);
+            if (player.head == druidHallowedHelmet1 || player.head == druidHallowedHelmet2) {
+                player.head = -1;
+                player.GetCommon().DrawJokeVisor = true;
+            }
+
             //player.ResetVisibleAccessories();
         }
     }
@@ -137,6 +147,11 @@ class ReflectionTarget : IPostSetupContent {
         // from ResetVisibleAccessories
 
         Player player = Main.LocalPlayer;
+
+        if (player.head == -1 && player.GetCommon().DrawJokeVisor) {
+            player.GetCommon().DrawJokeVisor = false;
+        }
+
         player.head = _outfitSnapshot.Head;
         player.body = _outfitSnapshot.Body;
         player.legs = _outfitSnapshot.Legs;
