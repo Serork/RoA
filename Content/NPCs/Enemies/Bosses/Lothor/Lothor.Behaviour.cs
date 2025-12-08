@@ -1216,6 +1216,7 @@ sealed partial class Lothor : ModNPC {
                 Main.dust[dust].velocity = rotationPoint * NPC.scale * -2f;
                 Main.dust[dust].velocity.X *= 0.25f * Main.rand.NextFloat();
                 Main.dust[dust].velocity.Y -= 5f + 5f * Main.rand.NextFloat();
+                Main.dust[dust].velocity.Y *= 0.85f;
                 Main.dust[dust].scale = Main.rand.NextFloat() * Main.rand.NextFloat(1f, 1.25f) * 2f;
                 Main.dust[dust].scale *= NPC.scale;
                 Main.dust[dust].velocity += NPC.velocity * 0.5f;
