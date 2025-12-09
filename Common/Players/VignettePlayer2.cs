@@ -58,12 +58,12 @@ sealed class VignettePlayer2 : ModPlayer {
             return;
         }
 
-        var vignetteShader = ShaderLoader.VignetteShaderData2;
+        var vignetteShader = ShaderLoader.VignetteShaderData;
         vignetteShader.UseColor(_color);
         vignetteShader.UseIntensity(_opacity);
-        var vignetteEffect = ShaderLoader.VignetteEffectData2;
+        var vignetteEffect = ShaderLoader.VignetteEffectData;
         vignetteEffect.Parameters["Radius"].SetValue(_radius);
         vignetteEffect.Parameters["FadeDistance"].SetValue(_fadeDistance);
-        Player.ManageSpecialBiomeVisuals(ShaderLoader.Vignette2, _vignetteActive || _lastTickVignetteActive, _targetPosition);
+        Player.ManageSpecialBiomeVisuals(ShaderLoader.Vignette, _vignetteActive || _lastTickVignetteActive, _targetPosition);
     }
 }

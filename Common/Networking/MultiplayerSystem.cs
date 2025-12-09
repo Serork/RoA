@@ -1,11 +1,9 @@
-﻿using RoA.Core.Utility;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
+using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.ID;
@@ -22,7 +20,7 @@ sealed class MultiplayerSystem : ModSystem {
 
     public override void Load() {
         foreach (var type in Assembly.GetExecutingAssembly().GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(NetPacket)))) {
-            var instance = (NetPacket)FormatterServices.GetUninitializedObject(type);
+            var instance = (NetPacket)RuntimeHelpers.GetUninitializedObject(type);
 
             instance.Id = packets.Count;
             packetsByType[type] = instance;

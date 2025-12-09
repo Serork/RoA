@@ -186,7 +186,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             if (!player.InModBiome<BackwoodsBiome>() && Opacity < 0.01f) {
                 Opacity = 0f;
                 if (Main.netMode != NetmodeID.Server) {
-                    localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero);
+                    localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero, true);
                 }
                 return;
             }
@@ -207,7 +207,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                         Opacity2 = 0f;
                     }
                 }
-                localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero);
+                localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero, true);
             }
 
             Rectangle tileWorkSpace = GetTileWorkSpace();

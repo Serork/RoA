@@ -1,4 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Core;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -16,13 +20,15 @@ sealed class VignettePlayer : ModPlayer {
     private float _radius;
     private float _fadeDistance;
     private Color _color;
+    private float _noiseProgress;
+    private bool _useNoise;
 
     public override void ResetEffects() {
         _lastTickVignetteActive = _vignetteActive;
         _vignetteActive = false;
     }
 
-    public void SetVignette(float radius, float colorFadeDistance, float opacity) => SetVignette(radius, colorFadeDistance, opacity, Color.Black, Main.screenPosition);
+    public void SetVignette(float radius, float colorFadeDistance, float opacity, bool useNoise = false) => SetVignette(radius, colorFadeDistance, opacity, Color.Black, Main.screenPosition, useNoise);
 
     /// <summary>
     /// Sets a vignette effect for the player with the given radius, distance to fade from the default color to the used color, opacity of the effect, color, and center position.
@@ -32,13 +38,14 @@ sealed class VignettePlayer : ModPlayer {
     /// <param name="opacity"></param>
     /// <param name="color"></param>
     /// <param name="targetPosition"></param>
-    public void SetVignette(float radius, float colorFadeDistance, float opacity, Color color, Vector2 targetPosition) {
+    public void SetVignette(float radius, float colorFadeDistance, float opacity, Color color, Vector2 targetPosition, bool useNoise = false) {
         _radius = radius;
         _targetPosition = targetPosition;
         _fadeDistance = colorFadeDistance;
         _color = color;
         _opacity = opacity;
         _vignetteActive = true;
+        _useNoise = useNoise;
     }
 
     public override void UpdateDead() {
@@ -58,14 +65,25 @@ sealed class VignettePlayer : ModPlayer {
             return;
         }
 
-        var vignetteShader = ShaderLoader.VignetteShaderData;
-        vignetteShader.UseOpacity(1f);
-        vignetteShader.Apply();
+        var vignetteShader = ShaderLoader.FogVignetteShaderData;
         vignetteShader.UseColor(_color);
-        vignetteShader.UseIntensity(_opacity);
-        var vignetteEffect = ShaderLoader.VignetteEffectData;
+        vignetteShader.UseOpacity(_opacity);
+
+        if (_useNoise) {
+            vignetteShader.UseImage(ResourceManager.Noise, 0);
+            vignetteShader.UseImage(ResourceManager.Noise, 1);
+            vignetteShader.UseTargetPosition(Main.screenPosition + (Vector2.UnitY * Player.gfxOffY));
+            vignetteShader.UseProgress(_noiseProgress += Main.windSpeedCurrent * Main.windPhysicsStrength * -0.0375f);
+            vignetteShader.UseIntensity(1f - 0.0625f * MathUtils.Clamp01(_opacity * 2f));
+            vignetteShader.UseImageScale(new Vector2(Main.screenWidth, Main.screenHeight), 0);
+            vignetteShader.UseImageScale(new Vector2(1024, 1024), 1);
+        }
+
+        vignetteShader.Apply();
+
+        var vignetteEffect = ShaderLoader.FogVignetteEffectData;
         vignetteEffect.Parameters["Radius"].SetValue(_radius);
         vignetteEffect.Parameters["FadeDistance"].SetValue(_fadeDistance);
-        Player.ManageSpecialBiomeVisuals(ShaderLoader.Vignette, _vignetteActive || _lastTickVignetteActive, _targetPosition);
+        Player.ManageSpecialBiomeVisuals(ShaderLoader.FogVignette, _vignetteActive || _lastTickVignetteActive, _targetPosition);
     }
 }
