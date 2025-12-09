@@ -5,7 +5,7 @@ using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Equipables.Miscellaneous;
+namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Head)]
 sealed class OniMask : ModItem {
