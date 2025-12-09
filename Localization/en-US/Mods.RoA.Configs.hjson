@@ -71,7 +71,7 @@ RoAClientConfig: {
 
 	VanillaResprites: {
 		Label: Vanilla Sprite Changes
-		Tooltip: Replaces some textures i. e. alchemical herbs and Vilethorn
+		Tooltip: Replaces some textures
 	}
 
 	Headers: {

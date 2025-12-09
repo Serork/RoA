@@ -2,7 +2,9 @@
 
 using RoA.Common.Configs;
 using RoA.Core;
+using RoA.Core.Defaults;
 
+using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -10,6 +12,73 @@ using Terraria.ModLoader;
 namespace RoA.Common;
 
 sealed class RespriteLoader : ILoadable {
+    private class RespriteLoader_Resizer : GlobalItem {
+        public override bool InstancePerEntity => true;
+
+        public override void SetDefaults(Item entity) {
+            if (!ModContent.GetInstance<RoAClientConfig>().VanillaResprites) {
+                return;
+            }
+
+            int type = entity.type;
+            switch (type) {
+                case ItemID.Daybloom:
+                    entity.SetSizeValues(20, 22);
+                    break;
+                case ItemID.Blinkroot:
+                    entity.SetSizeValues(22, 24);
+                    break;
+                case ItemID.Deathweed:
+                    entity.SetSizeValues(22, 24);
+                    break;
+                case ItemID.Fireblossom:
+                    entity.SetSizeValues(18, 22);
+                    break;
+                case ItemID.Moonglow:
+                    entity.SetSizeValues(20, 24);
+                    break;
+                case ItemID.Shiverthorn:
+                    entity.SetSizeValues(20, 24);
+                    break;
+                case ItemID.Waterleaf:
+                    entity.SetSizeValues(24, 24);
+                    break;
+
+                case ItemID.TerraBlade:
+                    entity.SetSizeValues(46, 54);
+                    break;
+
+                case ItemID.CursedFlames:
+                    entity.SetSizeValues(28, 30);
+                    break;
+                case ItemID.CrystalStorm:
+                    entity.SetSizeValues(28, 32);
+                    break;
+                case ItemID.GoldenShower:
+                    entity.SetSizeValues(28, 30);
+                    break;
+                case ItemID.BookofSkulls:
+                    entity.SetSizeValues(28, 30);
+                    break;
+                case ItemID.DemonScythe:
+                    entity.SetSizeValues(28, 30);
+                    break;
+                case ItemID.WaterBolt:
+                    entity.SetSizeValues(28, 30);
+                    break;
+                case ItemID.MagnetSphere:
+                    entity.SetSizeValues(28, 30);
+                    break;
+                case ItemID.RazorbladeTyphoon:
+                    entity.SetSizeValues(28, 30);
+                    break;
+                case ItemID.LunarFlareBook:
+                    entity.SetSizeValues(28, 32);
+                    break;
+            }
+        }
+    }
+
     public void Load(Mod mod) {
         string texturePath = ResourceManager.ItemTextures;
         int id;
@@ -43,6 +112,16 @@ sealed class RespriteLoader : ILoadable {
         TextureAssets.Item[ItemID.Skull] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "Skull");
         TextureAssets.ArmorHead[ArmorIDs.Head.Skull] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "Skull_Head");
         TextureAssets.Item[ItemID.TerraBlade] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + "TerraBlade");
+
+        TextureAssets.Item[ItemID.CursedFlames] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.CursedFlames}");
+        TextureAssets.Item[ItemID.CrystalStorm] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.CrystalStorm}");
+        TextureAssets.Item[ItemID.GoldenShower] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.GoldenShower}");
+        TextureAssets.Item[ItemID.BookofSkulls] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.BookofSkulls}");
+        TextureAssets.Item[ItemID.DemonScythe] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.DemonScythe}");
+        TextureAssets.Item[ItemID.WaterBolt] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.WaterBolt}");
+        TextureAssets.Item[ItemID.MagnetSphere] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.WaterBolt}");
+        TextureAssets.Item[ItemID.RazorbladeTyphoon] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.RazorbladeTyphoon}");
+        TextureAssets.Item[ItemID.LunarFlareBook] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.LunarFlareBook}");
     }
 
     private void UnloadInner() {
@@ -68,6 +147,16 @@ sealed class RespriteLoader : ILoadable {
         TextureAssets.Item[ItemID.Skull] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Skull}");
         TextureAssets.ArmorHead[ArmorIDs.Head.Skull] = ModContent.Request<Texture2D>($"Terraria/Images/Armor_Head_{ArmorIDs.Head.Skull}");
         TextureAssets.Item[ItemID.TerraBlade] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.TerraBlade}");
+
+        TextureAssets.Item[ItemID.CursedFlames] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.CursedFlames}");
+        TextureAssets.Item[ItemID.CrystalStorm] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.CrystalStorm}");
+        TextureAssets.Item[ItemID.GoldenShower] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.GoldenShower}");
+        TextureAssets.Item[ItemID.BookofSkulls] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.BookofSkulls}");
+        TextureAssets.Item[ItemID.DemonScythe] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.DemonScythe}");
+        TextureAssets.Item[ItemID.WaterBolt] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.WaterBolt}");
+        TextureAssets.Item[ItemID.MagnetSphere] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.MagnetSphere}");
+        TextureAssets.Item[ItemID.RazorbladeTyphoon] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.RazorbladeTyphoon}");
+        TextureAssets.Item[ItemID.LunarFlareBook] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.LunarFlareBook}");
     }
 
     public void Unload() {

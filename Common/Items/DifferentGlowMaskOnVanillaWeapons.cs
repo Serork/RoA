@@ -5,8 +5,9 @@ using ReLogic.Content;
 
 using RoA.Common.Configs;
 using RoA.Core;
-using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
+
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -22,9 +23,28 @@ namespace RoA.Common.Items;
 // hammush
 // terra blade
 
+// cursed flames
+// golden shower
+// magnet sphere
+// lunar flare
+
 sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
     private static Asset<Texture2D>? _mushroomSpearTexture, _mushroomSpearGlowMaskTexture;
     internal static Asset<Texture2D>? _terraBladeGlowMaskTexture;
+
+    public static Dictionary<int, Asset<Texture2D>?> GlowMaskPerVanillaItemType { get; private set; } = [];
+
+    public static void RegisterVanillaGlowMask(int itemType) {
+        if (Main.dedServ) {
+            return;
+        }
+
+        if (!ModContent.GetInstance<RoAClientConfig>().VanillaResprites) {
+            return;
+        }
+
+        GlowMaskPerVanillaItemType.TryAdd(itemType, ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{itemType}_Glow"));
+    }
 
     public override Color? GetAlpha(Item item, Color lightColor) {
         if (ModContent.GetInstance<RoAClientConfig>().VanillaResprites && item.type == ItemID.TerraBlade) {
@@ -38,6 +58,15 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
         LoadMushroomSpearTextures();
 
         LoadTerraBladeGlowMask();
+
+        LoadSpellTomeGlowMasks();
+    }
+
+    private void LoadSpellTomeGlowMasks() {
+        RegisterVanillaGlowMask(ItemID.CursedFlames);
+        RegisterVanillaGlowMask(ItemID.GoldenShower);
+        RegisterVanillaGlowMask(ItemID.MagnetSphere);
+        RegisterVanillaGlowMask(ItemID.LunarFlareBook);
     }
 
     private void LoadTerraBladeGlowMask() {
@@ -63,8 +92,8 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
             }
 
             if (hammush) {
-                ItemUtils.DrawItem(item, color, 0f, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushTexture!.Value, scale, position);
-                ItemUtils.DrawItem(item, Color.White * 0.9f, 0f, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushGlowMaskTexture!.Value, scale, position);
+                ItemUtils.DrawItem(item, color, 0f, DifferentGlowMaskOnVanillaWeapons_Usage.HammushTexture!.Value, scale, position);
+                ItemUtils.DrawItem(item, Color.White * 0.9f, 0f, DifferentGlowMaskOnVanillaWeapons_Usage.HammushGlowMaskTexture!.Value, scale, position);
             }
             else {
                 ItemUtils.DrawItem(item, color, 0f, _mushroomSpearTexture.Value, scale, position);
@@ -74,13 +103,21 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
             return false;
         }
 
-        if (item.type == ItemID.TerraBlade) {
+        int type = item.type;
+        if (type == ItemID.TerraBlade) {
             if (_terraBladeGlowMaskTexture?.IsLoaded != true) {
                 return base.PreDrawInInventory(item, spriteBatch, position, frame, drawColor, itemColor, origin, scale);
             }
 
             ItemUtils.DrawItem(item, color, 0f, TextureAssets.Item[ItemID.TerraBlade].Value, scale, position);
             ItemUtils.DrawItem(item, Color.White * 0.75f, 0f, _terraBladeGlowMaskTexture.Value, scale, position);
+
+            return false;
+        }
+
+        if (GlowMaskPerVanillaItemType.TryGetValue(type, out Asset<Texture2D>? value) && value!.IsLoaded == true) {
+            ItemUtils.DrawItem(item, color, 0f, TextureAssets.Item[type].Value, scale, position);
+            ItemUtils.DrawItem(item, Color.White * 0.75f, 0f, value.Value, scale, position);
 
             return false;
         }
@@ -96,8 +133,8 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
             }
 
             if (hammush) {
-                ItemUtils.DrawItem(item, lightColor, rotation, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushTexture!.Value);
-                ItemUtils.DrawItem(item, Color.White * 0.9f, rotation, DifferentGlowMaskOnVanillaTruffleWeapons_Hammush.HammushGlowMaskTexture!.Value);
+                ItemUtils.DrawItem(item, lightColor, rotation, DifferentGlowMaskOnVanillaWeapons_Usage.HammushTexture!.Value);
+                ItemUtils.DrawItem(item, Color.White * 0.9f, rotation, DifferentGlowMaskOnVanillaWeapons_Usage.HammushGlowMaskTexture!.Value);
             }
             else {
                 ItemUtils.DrawItem(item, lightColor, rotation, _mushroomSpearTexture.Value);
@@ -107,13 +144,21 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
             return false;
         }
 
-        if (item.type == ItemID.TerraBlade) {
+        int type = item.type;
+        if (type == ItemID.TerraBlade) {
             if (_terraBladeGlowMaskTexture?.IsLoaded != true) {
                 return base.PreDrawInWorld(item, spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
             }
 
             ItemUtils.DrawItem(item, lightColor, rotation, TextureAssets.Item[ItemID.TerraBlade].Value);
             ItemUtils.DrawItem(item, Color.White * 0.75f, rotation, _terraBladeGlowMaskTexture.Value);
+            return false;
+        }
+
+        if (GlowMaskPerVanillaItemType.TryGetValue(type, out Asset<Texture2D>? value) && value!.IsLoaded == true) {
+            ItemUtils.DrawItem(item, lightColor, rotation, TextureAssets.Item[type].Value);
+            ItemUtils.DrawItem(item, Color.White * 0.9f, rotation, value.Value);
+
             return false;
         }
 
@@ -135,7 +180,7 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
     }
 }
 
-sealed class DifferentGlowMaskOnVanillaTruffleWeapons_Hammush : IInitializer {
+sealed class DifferentGlowMaskOnVanillaWeapons_Usage : IInitializer {
     public static Asset<Texture2D>? HammushTexture, HammushGlowMaskTexture;
 
     void ILoadable.Load(Mod mod) {
@@ -181,6 +226,12 @@ sealed class DifferentGlowMaskOnVanillaTruffleWeapons_Hammush : IInitializer {
             }
 
             ItemUtils.DrawHeldItem(heldItem, ref drawinfo, glowMaskTexture: DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld._terraBladeGlowMaskTexture.Value);
+            return;
+        }
+
+        if (DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld.GlowMaskPerVanillaItemType.TryGetValue(num, out Asset<Texture2D>? value) && value!.IsLoaded == true) {
+            ItemUtils.DrawHeldItem(heldItem, ref drawinfo, glowMaskTexture: value.Value);
+
             return;
         }
 

@@ -1,7 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Content.Items.Miscellaneous;
+
+using System;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -20,53 +24,161 @@ static class ItemUtils {
         if (drawinfo.drawPlayer.JustDroppedAnItem)
             return;
 
-        float adjustedItemScale = drawinfo.drawPlayer.GetAdjustedItemScale(heldItem);
-        //Main.instance.LoadItem(num);
         int num = heldItem.type;
-        Texture2D value = texture ?? TextureAssets.Item[heldItem.type].Value;
+        float adjustedItemScale = drawinfo.drawPlayer.GetAdjustedItemScale(heldItem);
+        Texture2D value = TextureAssets.Item[num].Value;
         Vector2 position = new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y));
         Rectangle itemDrawFrame = drawinfo.drawPlayer.GetItemDrawFrame(num);
         drawinfo.itemColor = Lighting.GetColor((int)((double)drawinfo.Position.X + (double)drawinfo.drawPlayer.width * 0.5) / 16, (int)(((double)drawinfo.Position.Y + (double)drawinfo.drawPlayer.height * 0.5) / 16.0));
+
         if (drawinfo.drawPlayer.shroomiteStealth && heldItem.DamageType == DamageClass.Ranged) {
             float num2 = drawinfo.drawPlayer.stealth;
             if ((double)num2 < 0.03)
                 num2 = 0.03f;
+
             float num3 = (1f + num2 * 10f) / 11f;
             drawinfo.itemColor = new Color((byte)((float)(int)drawinfo.itemColor.R * num2), (byte)((float)(int)drawinfo.itemColor.G * num2), (byte)((float)(int)drawinfo.itemColor.B * num3), (byte)((float)(int)drawinfo.itemColor.A * num2));
         }
+
         if (drawinfo.drawPlayer.setVortex && heldItem.DamageType == DamageClass.Ranged) {
             float num4 = drawinfo.drawPlayer.stealth;
             if ((double)num4 < 0.03)
                 num4 = 0.03f;
+
             _ = (1f + num4 * 10f) / 11f;
             drawinfo.itemColor = drawinfo.itemColor.MultiplyRGBA(new Color(Vector4.Lerp(Vector4.One, new Vector4(0f, 0.12f, 0.16f, 0f), 1f - num4)));
         }
+
         bool flag = drawinfo.drawPlayer.itemAnimation > 0 && heldItem.useStyle != 0;
         bool flag2 = heldItem.holdStyle != 0 && !drawinfo.drawPlayer.pulley;
         if (!drawinfo.drawPlayer.CanVisuallyHoldItem(heldItem))
             flag2 = false;
+
         if (drawinfo.shadow != 0f || drawinfo.drawPlayer.frozen || !(flag || flag2) || num <= 0 || drawinfo.drawPlayer.dead || heldItem.noUseGraphic || (drawinfo.drawPlayer.wet && heldItem.noWet && !ItemID.Sets.WaterTorches[num]/*Allow biome torches underwater.*/) || (drawinfo.drawPlayer.happyFunTorchTime && drawinfo.drawPlayer.inventory[drawinfo.drawPlayer.selectedItem].createTile == 4 && drawinfo.drawPlayer.itemAnimation == 0))
             return;
-        _ = drawinfo.drawPlayer.name;
-        Color color = Color.White * (1f - heldItem.alpha / 255f);
-        Vector2 vector = Vector2.Zero;
-        Vector2 origin = new Vector2((float)itemDrawFrame.Width * 0.5f - (float)itemDrawFrame.Width * 0.5f * (float)drawinfo.drawPlayer.direction, itemDrawFrame.Height);
-        if (drawinfo.drawPlayer.gravDir == -1f)
-            origin.Y = (float)itemDrawFrame.Height - origin.Y;
-        origin += vector;
-        float num5 = drawinfo.drawPlayer.itemRotation;
-        ItemSlot.GetItemLight(ref drawinfo.itemColor, heldItem);
-        DrawData item;
+        
+        if (heldItem.useStyle == ItemUseStyleID.Shoot) {
+            ItemSlot.GetItemLight(ref drawinfo.itemColor, heldItem);
+            if (Item.staff[num]) {
+                float num9 = drawinfo.drawPlayer.itemRotation + 0.785f * (float)drawinfo.drawPlayer.direction;
+                float num10 = 0f;
+                float num11 = 0f;
+                Vector2 origin5 = new Vector2(0f, itemDrawFrame.Height);
+                if (num == 3210) {
+                    num10 = 8 * -drawinfo.drawPlayer.direction;
+                    num11 = 2 * (int)drawinfo.drawPlayer.gravDir;
+                }
 
-        //DrawColor itemColor = heldItem.GetAlpha(drawinfo.itemColor);
-        Color itemColor = drawinfo.itemColor;
+                if (num == 3870) {
+                    Vector2 vector6 = (drawinfo.drawPlayer.itemRotation + (float)Math.PI / 4f * (float)drawinfo.drawPlayer.direction).ToRotationVector2() * new Vector2((float)(-drawinfo.drawPlayer.direction) * 1.5f, drawinfo.drawPlayer.gravDir) * 3f;
+                    num10 = (int)vector6.X;
+                    num11 = (int)vector6.Y;
+                }
 
-        if (heldItem.type == ItemID.Hammush) {
-            DelegateMethods.v3_1 = new Vector3(0.1f, 0.4f, 1f);
-            Utils.PlotTileLine(drawinfo.ItemLocation, drawinfo.ItemLocation + Vector2.UnitY.RotatedBy(num5) * value.Width, 4, DelegateMethods.CastLightOpen);
+                if (num == 3787)
+                    num11 = (int)((float)(8 * (int)drawinfo.drawPlayer.gravDir) * (float)Math.Cos(num9));
+
+                if (num == 3209) {
+                    Vector2 vector7 = (new Vector2(-8f, 0f) * drawinfo.drawPlayer.Directions).RotatedBy(drawinfo.drawPlayer.itemRotation);
+                    num10 = vector7.X;
+                    num11 = vector7.Y;
+                }
+
+                if (drawinfo.drawPlayer.gravDir == -1f) {
+                    if (drawinfo.drawPlayer.direction == -1) {
+                        num9 += 1.57f;
+                        origin5 = new Vector2(itemDrawFrame.Width, 0f);
+                        num10 -= (float)itemDrawFrame.Width;
+                    }
+                    else {
+                        num9 -= 1.57f;
+                        origin5 = Vector2.Zero;
+                    }
+                }
+                // Extra patch context.
+                else if (drawinfo.drawPlayer.direction == -1) {
+                    origin5 = new Vector2(itemDrawFrame.Width, itemDrawFrame.Height);
+                    num10 -= (float)itemDrawFrame.Width;
+                }
+
+                ItemLoader.HoldoutOrigin(drawinfo.drawPlayer, ref origin5);
+
+                DrawData item2 = new DrawData(value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + origin5.X + num10), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + num11)), itemDrawFrame, heldItem.GetAlpha(drawinfo.itemColor), num9, origin5, adjustedItemScale, drawinfo.itemEffect);
+
+                drawinfo.DrawDataCache.Add(item2);
+                if (glowMaskTexture != null) {
+                    item2 = new DrawData(glowMaskTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + origin5.X + num10), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + num11)), itemDrawFrame, new Color(255, 255, 255, 127), num9, origin5, adjustedItemScale, drawinfo.itemEffect);
+                    drawinfo.DrawDataCache.Add(item2);
+                }
+
+                return;
+            }
+
+            int num12 = 10;
+            Vector2 vector9 = new Vector2(0, itemDrawFrame.Height / 2); // forward port from 1.4.5
+            Vector2 vector10 = Main.DrawPlayerItemPos(drawinfo.drawPlayer.gravDir, num);
+            num12 = (int)vector10.X;
+            vector9.Y = vector10.Y;
+            Vector2 origin7 = new Vector2(-num12, itemDrawFrame.Height / 2);
+            if (drawinfo.drawPlayer.direction == -1)
+                origin7 = new Vector2(itemDrawFrame.Width + num12, itemDrawFrame.Height / 2);
+            DrawData item = new DrawData(value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, heldItem.GetAlpha(drawinfo.itemColor), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+            drawinfo.DrawDataCache.Add(item);
+            if (heldItem.color != default(Color)) {
+                item = new DrawData(value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, heldItem.GetColor(drawinfo.itemColor), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                drawinfo.DrawDataCache.Add(item);
+            }
+
+            if (heldItem.glowMask != -1) {
+                item = new DrawData(TextureAssets.GlowMask[heldItem.glowMask].Value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, new Color(250, 250, 250, heldItem.alpha), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                drawinfo.DrawDataCache.Add(item);
+            }
+
+            if (glowMaskTexture != null) {
+                item = new DrawData(glowMaskTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, new Color(250, 250, 250, heldItem.alpha), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                drawinfo.DrawDataCache.Add(item);
+            }
         }
+        else if (heldItem.useStyle == ItemUseStyleID.Swing) {
+            //Main.instance.LoadItem(num);
+            _ = drawinfo.drawPlayer.name;
+            Color color = Color.White * (1f - heldItem.alpha / 255f);
+            Vector2 vector = Vector2.Zero;
+            Vector2 origin = new Vector2((float)itemDrawFrame.Width * 0.5f - (float)itemDrawFrame.Width * 0.5f * (float)drawinfo.drawPlayer.direction, itemDrawFrame.Height);
+            if (drawinfo.drawPlayer.gravDir == -1f)
+                origin.Y = (float)itemDrawFrame.Height - origin.Y;
+            origin += vector;
+            float num5 = drawinfo.drawPlayer.itemRotation;
+            ItemSlot.GetItemLight(ref drawinfo.itemColor, heldItem);
+            DrawData item;
 
-        if (drawinfo.drawPlayer.gravDir == -1f) {
+            //DrawColor itemColor = heldItem.GetAlpha(drawinfo.itemColor);
+            Color itemColor = drawinfo.itemColor;
+
+            if (heldItem.type == ItemID.Hammush) {
+                DelegateMethods.v3_1 = new Vector3(0.1f, 0.4f, 1f);
+                Utils.PlotTileLine(drawinfo.ItemLocation, drawinfo.ItemLocation + Vector2.UnitY.RotatedBy(num5) * value.Width, 4, DelegateMethods.CastLightOpen);
+            }
+
+            if (drawinfo.drawPlayer.gravDir == -1f) {
+                item = new DrawData(value, position, itemDrawFrame, itemColor, num5, origin, adjustedItemScale, drawinfo.itemEffect);
+                drawinfo.DrawDataCache.Add(item);
+                if (heldItem.color != default(Color)) {
+                    item = new DrawData(value, position, itemDrawFrame, itemColor, num5, origin, adjustedItemScale, drawinfo.itemEffect);
+                    drawinfo.DrawDataCache.Add(item);
+                }
+                if (heldItem.glowMask != -1) {
+                    item = new DrawData(TextureAssets.GlowMask[heldItem.glowMask].Value, position, itemDrawFrame, new Color(250, 250, 250, heldItem.alpha), num5, origin, adjustedItemScale, drawinfo.itemEffect);
+                    drawinfo.DrawDataCache.Add(item);
+                }
+
+                if (glowMaskTexture != null) {
+                    // glowmask
+                    item = new DrawData(glowMaskTexture, position, itemDrawFrame, new Color(250, 250, 250, heldItem.alpha) * 0.9f, num5, origin, adjustedItemScale, drawinfo.itemEffect);
+                    drawinfo.DrawDataCache.Add(item);
+                }
+                return;
+            }
             item = new DrawData(value, position, itemDrawFrame, itemColor, num5, origin, adjustedItemScale, drawinfo.itemEffect);
             drawinfo.DrawDataCache.Add(item);
             if (heldItem.color != default(Color)) {
@@ -74,38 +186,21 @@ static class ItemUtils {
                 drawinfo.DrawDataCache.Add(item);
             }
             if (heldItem.glowMask != -1) {
-                item = new DrawData(TextureAssets.GlowMask[heldItem.glowMask].Value, position, itemDrawFrame, new Color(250, 250, 250, heldItem.alpha), num5, origin, adjustedItemScale, drawinfo.itemEffect);
+                item = new DrawData(TextureAssets.GlowMask[heldItem.glowMask].Value, position, itemDrawFrame, color, num5, origin, adjustedItemScale, drawinfo.itemEffect);
                 drawinfo.DrawDataCache.Add(item);
             }
 
             if (glowMaskTexture != null) {
                 // glowmask
-                item = new DrawData(glowMaskTexture, position, itemDrawFrame, new Color(250, 250, 250, heldItem.alpha) * 0.9f, num5, origin, adjustedItemScale, drawinfo.itemEffect);
+                if (heldItem.type == ItemID.TerraBlade) {
+                    color = Color.White * 0.75f;
+                }
+                item = new DrawData(glowMaskTexture, position, itemDrawFrame, color, num5, origin, adjustedItemScale, drawinfo.itemEffect);
+                if (heldItem.type == ItemID.TerraBlade) {
+                    item.shader = GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TerraDye>());
+                }
                 drawinfo.DrawDataCache.Add(item);
             }
-            return;
-        }
-        item = new DrawData(value, position, itemDrawFrame, itemColor, num5, origin, adjustedItemScale, drawinfo.itemEffect);
-        drawinfo.DrawDataCache.Add(item);
-        if (heldItem.color != default(Color)) {
-            item = new DrawData(value, position, itemDrawFrame, itemColor, num5, origin, adjustedItemScale, drawinfo.itemEffect);
-            drawinfo.DrawDataCache.Add(item);
-        }
-        if (heldItem.glowMask != -1) {
-            item = new DrawData(TextureAssets.GlowMask[heldItem.glowMask].Value, position, itemDrawFrame, color, num5, origin, adjustedItemScale, drawinfo.itemEffect);
-            drawinfo.DrawDataCache.Add(item);
-        }
-
-        if (glowMaskTexture != null) {
-            // glowmask
-            if (heldItem.type == ItemID.TerraBlade) {
-                color = Color.White * 0.75f;
-            }
-            item = new DrawData(glowMaskTexture, position, itemDrawFrame, color, num5, origin, adjustedItemScale, drawinfo.itemEffect);
-            if (heldItem.type == ItemID.TerraBlade) {
-                item.shader = GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TerraDye>());
-            }
-            drawinfo.DrawDataCache.Add(item);
         }
     }
 
