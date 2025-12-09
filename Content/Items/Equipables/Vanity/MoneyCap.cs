@@ -10,7 +10,7 @@ namespace RoA.Content.Items.Equipables.Vanity;
 [AutoloadEquip(EquipType.Head)]
 sealed class MoneyCap : ModItem {
     public override void SetStaticDefaults() {
-        ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = false;
+        ArmorIDs.Head.Sets.DrawHatHair[Item.headSlot] = true;
     }
 
     public override void SetDefaults() {
