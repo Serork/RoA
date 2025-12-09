@@ -132,8 +132,10 @@ sealed class BookwormsProjectile : ModProjectile {
         int variant = Projectile.ai[0] == 0f ? 1 : flag ? 3 : (int)Projectile.ai[0];
         Texture2D texture = _worm1Texture.Value;
         bool flag3 = false;
+        bool flag4 = false;
         if (variant == 3) {
             texture = _worm3Texture.Value;
+            flag4 = true;
         }
         else if (variant != 1) {
             texture = _worm2Texture.Value;
@@ -150,7 +152,7 @@ sealed class BookwormsProjectile : ModProjectile {
         if (flag3) {
             position += Vector2.UnitX.RotatedBy(Projectile.rotation) * 1f * -Projectile.spriteDirection;
         }
-        Main.EntitySpriteDraw(texture, position + origin, null, color * Projectile.Opacity, Projectile.rotation, origin2, Projectile.scale, effects);
+        Main.EntitySpriteDraw(texture, position + origin, texture.Bounds, color * Projectile.Opacity, Projectile.rotation, origin2, Projectile.scale, effects);
 
         return false;
     }
