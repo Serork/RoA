@@ -2549,3 +2549,8 @@ MoneyCap: {
 	DisplayName: Money Cap
 	Tooltip: ""
 }
+
+MoneyNecklace: {
+	DisplayName: Money Necklace
+	Tooltip: ""
+}
