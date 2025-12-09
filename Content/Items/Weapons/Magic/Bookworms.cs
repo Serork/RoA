@@ -131,18 +131,25 @@ sealed class BookwormsProjectile : ModProjectile {
 
         int variant = Projectile.ai[0] == 0f ? 1 : flag ? 3 : (int)Projectile.ai[0];
         Texture2D texture = _worm1Texture.Value;
+        bool flag3 = false;
         if (variant == 3) {
             texture = _worm3Texture.Value;
         }
         else if (variant != 1) {
             texture = _worm2Texture.Value;
         }
+        else {
+            flag3 = true;
+        }
         Vector2 position = Projectile.position - Main.screenPosition;
         Color color = Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16);
         SpriteEffects effects = Projectile.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         Vector2 origin = Projectile.Size / 2f;
-        Vector2 size = new(20, 26);
+        Vector2 size = texture.Size();
         Vector2 origin2 = size / 2f;
+        if (flag3) {
+            position += Vector2.UnitX.RotatedBy(Projectile.rotation) * 1f * -Projectile.spriteDirection;
+        }
         Main.EntitySpriteDraw(texture, position + origin, null, color * Projectile.Opacity, Projectile.rotation, origin2, Projectile.scale, effects);
 
         return false;
