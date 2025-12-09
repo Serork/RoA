@@ -2565,3 +2565,8 @@ SmolderingTapestry: {
 	// DisplayName: Smoldering Tapestry
 	// Tooltip: ""
 }
+
+MoneyCap: {
+	// DisplayName: Money Cap
+	// Tooltip: ""
+}
