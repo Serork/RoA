@@ -27,7 +27,7 @@ sealed class Them_FG : AdvancedDust<Them_FG> {
         float brightness2 = MathHelper.Clamp((brightness - 0.6f) * 5f, 0f, 1f);
         _brightness = MathHelper.Lerp(_brightness, 1f - brightness2, 0.15f);
         float opacity = _brightness * (1f - Alpha / 255f);
-        opacity *= 6f;
+        opacity *= 5f;
         opacity *= Utils.GetLerpValue(0f, 1f, FadeIn, true);
         spritebatch.Draw(Texture, Position - Main.screenPosition + Main.rand.RandomPointInArea(0.075f), null, Color.White * opacity, Rotation, Texture.Size() / 2f, Scale, ShouldFullBright.ToInt().ToSpriteEffects(), 0f);
         spritebatch.Draw(Texture, Position - Main.screenPosition + Main.rand.RandomPointInArea(7.5f), null, Color.White * 0.1f * opacity, Rotation, Texture.Size() / 2f, Scale, ShouldFullBright.ToInt().ToSpriteEffects(), 0f);
