@@ -181,7 +181,13 @@ sealed class DifferentGlowMaskOnVanillaWeapons_GlowMaskInWorld : GlobalItem {
 }
 
 sealed class DifferentGlowMaskOnVanillaWeapons_Usage : IInitializer {
-    public static Asset<Texture2D>? HammushTexture, HammushGlowMaskTexture;
+    public static Asset<Texture2D>? HammushTexture { get; private set; }
+    public static Asset<Texture2D>? HammushGlowMaskTexture { get; private set; }
+
+    public static Asset<Texture2D>? LunarFlare_Use { get; private set; }
+    public static Asset<Texture2D>? LunarFlare_Use_Glow { get; private set; }
+    public static Asset<Texture2D>? MagnetSphere_Use { get; private set; }
+    public static Asset<Texture2D>? MagnetSphere_Use_Glow { get; private set; }
 
     void ILoadable.Load(Mod mod) {
         LoadHammushTextures();
@@ -201,6 +207,11 @@ sealed class DifferentGlowMaskOnVanillaWeapons_Usage : IInitializer {
         string texturePath = ResourceManager.MeleeWeaponTextures + "Hammush";
         HammushTexture = ModContent.Request<Texture2D>(texturePath);
         HammushGlowMaskTexture = ModContent.Request<Texture2D>(texturePath + "_Glow");
+
+        LunarFlare_Use = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.LunarFlareBook}_Use");
+        LunarFlare_Use_Glow = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.LunarFlareBook}_Use_Glow");
+        MagnetSphere_Use = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.MagnetSphere}_Use");
+        MagnetSphere_Use_Glow = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.MagnetSphere}_Use_Glow");
     }
 
     private void On_PlayerDrawLayers_DrawPlayer_27_HeldItem(On_PlayerDrawLayers.orig_DrawPlayer_27_HeldItem orig, ref PlayerDrawSet drawinfo) {

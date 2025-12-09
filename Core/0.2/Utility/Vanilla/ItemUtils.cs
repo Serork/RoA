@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
 
+using RoA.Common.Items;
 using RoA.Content.Items.Miscellaneous;
 
 using System;
@@ -56,7 +57,8 @@ static class ItemUtils {
 
         if (drawinfo.shadow != 0f || drawinfo.drawPlayer.frozen || !(flag || flag2) || num <= 0 || drawinfo.drawPlayer.dead || heldItem.noUseGraphic || (drawinfo.drawPlayer.wet && heldItem.noWet && !ItemID.Sets.WaterTorches[num]/*Allow biome torches underwater.*/) || (drawinfo.drawPlayer.happyFunTorchTime && drawinfo.drawPlayer.inventory[drawinfo.drawPlayer.selectedItem].createTile == 4 && drawinfo.drawPlayer.itemAnimation == 0))
             return;
-        
+
+        Color glowColor_New = new Color(250, 250, 250, heldItem.alpha) * 0.9f;
         if (heldItem.useStyle == ItemUseStyleID.Shoot) {
             ItemSlot.GetItemLight(ref drawinfo.itemColor, heldItem);
             if (Item.staff[num]) {
@@ -114,29 +116,72 @@ static class ItemUtils {
                 return;
             }
 
-            int num12 = 10;
-            Vector2 vector9 = new Vector2(0, itemDrawFrame.Height / 2); // forward port from 1.4.5
-            Vector2 vector10 = Main.DrawPlayerItemPos(drawinfo.drawPlayer.gravDir, num);
-            num12 = (int)vector10.X;
-            vector9.Y = vector10.Y;
-            Vector2 origin7 = new Vector2(-num12, itemDrawFrame.Height / 2);
-            if (drawinfo.drawPlayer.direction == -1)
-                origin7 = new Vector2(itemDrawFrame.Width + num12, itemDrawFrame.Height / 2);
-            DrawData item = new DrawData(value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, heldItem.GetAlpha(drawinfo.itemColor), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
-            drawinfo.DrawDataCache.Add(item);
-            if (heldItem.color != default(Color)) {
-                item = new DrawData(value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, heldItem.GetColor(drawinfo.itemColor), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
-                drawinfo.DrawDataCache.Add(item);
+            Vector2 getOrigin(PlayerDrawSet drawinfo, Rectangle frame, out Vector2 vector9, int num12_2 = 0) {
+                int num12 = 10;
+                vector9 = new Vector2(0, frame.Height / 2); // forward port from 1.4.5
+                Vector2 vector10 = Main.DrawPlayerItemPos(drawinfo.drawPlayer.gravDir, num);
+                num12 = (int)vector10.X;
+                num12 += num12_2;
+                vector9.Y = vector10.Y;
+                Vector2 origin7 = new Vector2(-num12, frame.Height / 2);
+                if (drawinfo.drawPlayer.direction == -1)
+                    origin7 = new Vector2(frame.Width + num12, frame.Height / 2);
+                return origin7;
             }
 
-            if (heldItem.glowMask != -1) {
-                item = new DrawData(TextureAssets.GlowMask[heldItem.glowMask].Value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, new Color(250, 250, 250, heldItem.alpha), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
-                drawinfo.DrawDataCache.Add(item);
-            }
+            Vector2 origin7 = getOrigin(drawinfo, itemDrawFrame, out Vector2 vector9);
 
-            if (glowMaskTexture != null) {
-                item = new DrawData(glowMaskTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, new Color(250, 250, 250, heldItem.alpha), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+            DrawData item;
+            if (num == ItemID.LunarFlareBook && DifferentGlowMaskOnVanillaWeapons_Usage.LunarFlare_Use?.IsLoaded == true) {
+                Texture2D useTexture = DifferentGlowMaskOnVanillaWeapons_Usage.LunarFlare_Use.Value;
+                Rectangle frame = new SpriteFrame(10, 1, (byte)(Main.GlobalTimeWrappedHourly * 16f % 10), 0).GetSourceRectangle(useTexture);
+                origin7 = getOrigin(drawinfo, frame, out vector9, -10);
+                item = new DrawData(useTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)),
+                    frame,
+                    heldItem.GetAlpha(drawinfo.itemColor), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
                 drawinfo.DrawDataCache.Add(item);
+                if (DifferentGlowMaskOnVanillaWeapons_Usage.LunarFlare_Use_Glow?.IsLoaded == true) {
+                    useTexture = DifferentGlowMaskOnVanillaWeapons_Usage.LunarFlare_Use_Glow.Value;
+                    item = new DrawData(useTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)),
+                                        frame,
+                                        glowColor_New, drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                    drawinfo.DrawDataCache.Add(item);
+                }
+            }
+            else if (num == ItemID.MagnetSphere && DifferentGlowMaskOnVanillaWeapons_Usage.MagnetSphere_Use?.IsLoaded == true) {
+                Texture2D useTexture = DifferentGlowMaskOnVanillaWeapons_Usage.MagnetSphere_Use.Value;
+                Rectangle frame = new SpriteFrame(5, 1, (byte)(Main.GlobalTimeWrappedHourly * 12f % 5), 0).GetSourceRectangle(useTexture);
+                origin7 = getOrigin(drawinfo, frame, out vector9, -10);
+                item = new DrawData(useTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)),
+                    frame,
+                    heldItem.GetAlpha(drawinfo.itemColor), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                drawinfo.DrawDataCache.Add(item);
+                if (DifferentGlowMaskOnVanillaWeapons_Usage.MagnetSphere_Use_Glow?.IsLoaded == true) {
+                    useTexture = DifferentGlowMaskOnVanillaWeapons_Usage.MagnetSphere_Use_Glow.Value;
+                    item = new DrawData(useTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)),
+                                        frame,
+                                        glowColor_New, drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                    drawinfo.DrawDataCache.Add(item);
+                }
+            }
+            else {
+                item = new DrawData(value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, heldItem.GetAlpha(drawinfo.itemColor), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                drawinfo.DrawDataCache.Add(item);
+
+                if (heldItem.color != default(Color)) {
+                    item = new DrawData(value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, heldItem.GetColor(drawinfo.itemColor), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                    drawinfo.DrawDataCache.Add(item);
+                }
+
+                if (heldItem.glowMask != -1) {
+                    item = new DrawData(TextureAssets.GlowMask[heldItem.glowMask].Value, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, new Color(250, 250, 250, heldItem.alpha), drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                    drawinfo.DrawDataCache.Add(item);
+                }
+
+                if (glowMaskTexture != null) {
+                    item = new DrawData(glowMaskTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)), itemDrawFrame, glowColor_New, drawinfo.drawPlayer.itemRotation, origin7, adjustedItemScale, drawinfo.itemEffect);
+                    drawinfo.DrawDataCache.Add(item);
+                }
             }
         }
         else if (heldItem.useStyle == ItemUseStyleID.Swing) {
@@ -174,7 +219,7 @@ static class ItemUtils {
 
                 if (glowMaskTexture != null) {
                     // glowmask
-                    item = new DrawData(glowMaskTexture, position, itemDrawFrame, new Color(250, 250, 250, heldItem.alpha) * 0.9f, num5, origin, adjustedItemScale, drawinfo.itemEffect);
+                    item = new DrawData(glowMaskTexture, position, itemDrawFrame, glowColor_New, num5, origin, adjustedItemScale, drawinfo.itemEffect);
                     drawinfo.DrawDataCache.Add(item);
                 }
                 return;
