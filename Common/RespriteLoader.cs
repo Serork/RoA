@@ -119,7 +119,7 @@ sealed class RespriteLoader : ILoadable {
         TextureAssets.Item[ItemID.BookofSkulls] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.BookofSkulls}");
         TextureAssets.Item[ItemID.DemonScythe] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.DemonScythe}");
         TextureAssets.Item[ItemID.WaterBolt] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.WaterBolt}");
-        TextureAssets.Item[ItemID.MagnetSphere] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.WaterBolt}");
+        TextureAssets.Item[ItemID.MagnetSphere] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.MagnetSphere}");
         TextureAssets.Item[ItemID.RazorbladeTyphoon] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.RazorbladeTyphoon}");
         TextureAssets.Item[ItemID.LunarFlareBook] = ModContent.Request<Texture2D>(ResourceManager.ItemTextures + $"Item_{ItemID.LunarFlareBook}");
     }
