@@ -68,9 +68,9 @@ static class MathUtils {
 
     public static int GetPercentageFromModifier(float value) => (int)(MathF.Round((value - 1f) * 100f));
 
-    public static int SecondsToFrames(float seconds) => (int)MathF.Round(seconds * 60f);
+    public static ushort SecondsToFrames(float seconds) => (ushort)MathF.Round(seconds * 60f);
 
-    public static int MinutesToFrames(float minutes) => (int)MathF.Round(minutes * 3600f);
+    public static ushort MinutesToFrames(float minutes) => (ushort)MathF.Round(minutes * 3600f);
 
     public static float Sin01(float x) => MathF.Sin(x) * 0.5f + 0.5f;
 

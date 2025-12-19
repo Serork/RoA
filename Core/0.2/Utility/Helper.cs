@@ -9,6 +9,10 @@ using Terraria.ID;
 namespace RoA.Core.Utility; 
 
 static partial class Helper {
+    public static void SpawnDebugDusts(Vector2 position) {
+        Dust.NewDustPerfect(position, DustID.Adamantite, Vector2.Zero).noGravity = true;
+    }
+
     public static Vector2 GetBezierPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 d, float t) {
         t = MathHelper.Clamp(t, 0.0f, 1f);
         float num = 1f - t;

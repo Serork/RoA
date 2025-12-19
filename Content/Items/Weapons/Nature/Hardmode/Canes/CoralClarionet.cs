@@ -27,6 +27,8 @@ using static RoA.Content.Projectiles.Friendly.Nature.CoralClarionet;
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 
 sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
+    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<Projectiles.Friendly.Nature.CoralClarionet>();
+
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(34, 40);
         Item.SetWeaponValues(60, 4f);
@@ -39,20 +41,18 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
         Item.autoReuse = true;
     }
 
-    protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<Projectiles.Friendly.Nature.CoralClarionet>();
-
     public sealed class CoralClarionetBase : CaneBaseProjectile {
         protected override bool ShouldWaitUntilProjDespawn() => false;
 
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
-            spawnPosition = GetSpawnPosition();
+            spawnPosition = GetSpawnPosition(player);
         }
 
-        private Vector2 GetSpawnPosition() {
-            Vector2 spawnPosition = Owner.Center;
+        public static Vector2 GetSpawnPosition(Player player) {
+            Vector2 spawnPosition = player.Center;
             int maxChecks = 50;
             while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
-                spawnPosition += spawnPosition.DirectionTo(Owner.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
+                spawnPosition += spawnPosition.DirectionTo(player.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
             }
             return spawnPosition;
         }
@@ -129,7 +129,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
             }
 
             player.SyncMousePosition();
-            Vector2 destination = GetSpawnPosition();
+            Vector2 destination = GetSpawnPosition(player);
             Vector2 destination2 = destination + Vector2.UnitY * 50f * 3f;
             int attempt = 50;
             while (attempt > 0 && Collision.SolidCollision(destination2, 0, 0)) {

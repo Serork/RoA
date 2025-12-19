@@ -48,7 +48,6 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
     }
 
-
     private Vector2 _spawnPosition;
     private int _flySpawnedCount;
 
