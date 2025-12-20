@@ -1,12 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common.NPCs;
 using RoA.Content.Buffs;
-using RoA.Content.Forms;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
-using RoA.Content.Items.Weapons.Ranged.Hardmode;
-using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -22,8 +18,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
-
-using static RoA.Common.Players.PlayerCommon;
 
 namespace RoA.Common.Players;
 

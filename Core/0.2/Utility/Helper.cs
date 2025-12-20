@@ -41,7 +41,10 @@ static partial class Helper {
 
     public static bool SinglePlayerOrServer => Main.netMode != NetmodeID.MultiplayerClient;
 
+    public static SpriteEffects ToSpriteEffects(this bool facedRight) => facedRight ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
     public static SpriteEffects ToSpriteEffects(this int direction) => direction > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+    public static SpriteEffects ToSpriteEffects2(this bool facedRight) => facedRight ? SpriteEffects.None : SpriteEffects.FlipVertically;
+    public static SpriteEffects ToSpriteEffects2(this int direction) => direction > 0 ? SpriteEffects.None : SpriteEffects.FlipVertically;
 
     public static bool OnSurface(Vector2 center, ref Vector2 velocity) => (double)center.Y < Main.worldSurface * 16.0 && Main.tile[(int)center.X / 16, (int)center.Y / 16] != null && Main.tile[(int)center.X / 16, (int)center.Y / 16].WallType == 0 && ((velocity.X > 0f && Main.windSpeedCurrent < 0f) || (velocity.X < 0f && Main.windSpeedCurrent > 0f) || Math.Abs(velocity.X) < Math.Abs(Main.windSpeedCurrent * Main.windPhysicsStrength) * 180f) && Math.Abs(velocity.X) < 16f;
 

@@ -71,7 +71,9 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     private Vector2 _positionOffset;
     private bool _shouldBeActive;
     private bool _shouldDrawGlowMask;
-    protected Projectile LastShotProjectile { get; private set; }
+    private bool _justSetDirection;
+
+    protected Projectile? LastShotProjectile { get; private set; }
 
     protected bool Shot, ShotWhenEndedAttackAnimation;
 
@@ -434,6 +436,8 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             if (Projectile.velocity.X != 0f) {
                 Projectile.spriteDirection = Owner.direction;
                 Owner.ChangeDir(Math.Sign(Projectile.velocity.X));
+
+                _justSetDirection = true;
             }
         }
         float armRotation = Projectile.rotation - MathHelper.PiOver4 * Owner.direction;
@@ -460,6 +464,15 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             float max = MAXROTATION;
             Helper.SmoothClamp(ref mouseRotation, FacedLeft ? min : -max * 0.7f, FacedLeft ? max : -min, rotationLerp);
             _rotation = mouseRotation;
+
+            if (!_justSetDirection) {
+                if (Owner.JustChangedDirection()) {
+                    _rotation = rotation;
+                }
+            }
+            else {
+                _justSetDirection = false;
+            }
         }
     }
 }

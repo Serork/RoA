@@ -17,4 +17,8 @@ readonly struct DrawInfo() {
     public SpriteEffects ImageFlip { get; init; } = SpriteEffects.None;
 
     public Rectangle Clip { get; init; } = Rectangle.Empty;
+
+    public DrawInfo WithScale(float scale) => this with { Scale = Scale * scale };
+    public DrawInfo WithScaleX(float scale) => this with { Scale = new Vector2(Scale.X * scale, Scale.Y) };
+    public DrawInfo WithScaleY(float scale) => this with { Scale = new Vector2(Scale.X, Scale.Y * scale) };
 }

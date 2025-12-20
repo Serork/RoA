@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 
-using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Station;
 
 using Terraria;

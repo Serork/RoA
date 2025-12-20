@@ -4,6 +4,7 @@ using RoA.Common.Druid;
 using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -15,6 +16,20 @@ namespace RoA.Content.Items.Weapons.Nature.PreHardmode;
 
 [AutoloadGlowMask]
 sealed class SacrificialSickleOfTheMoon : NatureItem {
+    public override void Load() {
+        On_PlayerDrawLayers.DrawPlayer_27_HeldItem += On_PlayerDrawLayers_DrawPlayer_27_HeldItem;
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_27_HeldItem(On_PlayerDrawLayers.orig_DrawPlayer_27_HeldItem orig, ref PlayerDrawSet drawinfo) {
+        Item heldItem = drawinfo.heldItem;
+        Player owner = drawinfo.drawPlayer;
+        if (heldItem.IsModded(out ModItem modItem) && modItem is SacrificialSickleOfTheMoon sacrificialSickleOfTheMoon) {
+            sacrificialSickleOfTheMoon.AdaptItsUseStyleToMoonPhase(owner);
+        }
+
+        orig(ref drawinfo);
+    }
+
     public override void SetStaticDefaults() {
         //DisplayName.SetDefault("Sacrificial Sickle Of The Moon");
         //Tooltip.SetDefault("Changes attacks depending on current moon phase");
@@ -61,7 +76,23 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
             }
     }
 
-    public override void UseStyle(Player player, Rectangle heldItemFrame) {
+    public override bool? UseItem(Player player) {
+        AdaptItsUseStyleToMoonPhase(player);
+
+        return base.UseItem(player);
+    }
+
+    public override bool CanUseItem(Player player) {
+        AdaptItsUseStyleToMoonPhase(player);
+
+        if (Main.moonPhase == 4 || Main.moonPhase == 5) {
+            if (player.ownedProjectileCounts[ModContent.ProjectileType<SacrificialSickle>()] == 1) return false;
+        }
+
+        return true;
+    }
+
+    private void AdaptItsUseStyleToMoonPhase(Player player) {
         if (Main.moonPhase == 4 || Main.moonPhase == 5) {
             Item.noUseGraphic = true;
         }
@@ -83,14 +114,6 @@ sealed class SacrificialSickleOfTheMoon : NatureItem {
             Item.UseSound = SoundID.Item71;
             Item.noMelee = false;
         }
-    }
-
-    public override bool CanUseItem(Player player) {
-        if (Main.moonPhase == 4 || Main.moonPhase == 5) {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<SacrificialSickle>()] == 1) return false;
-        }
-
-        return true;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
