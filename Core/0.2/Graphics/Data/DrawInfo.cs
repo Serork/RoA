@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core.Utility.Extensions;
+
+using Terraria;
+
 namespace RoA.Core.Graphics.Data;
 
 readonly struct DrawInfo() {
@@ -21,4 +25,7 @@ readonly struct DrawInfo() {
     public DrawInfo WithScale(float scale) => this with { Scale = Scale * scale };
     public DrawInfo WithScaleX(float scale) => this with { Scale = new Vector2(Scale.X * scale, Scale.Y) };
     public DrawInfo WithScaleY(float scale) => this with { Scale = new Vector2(Scale.X, Scale.Y * scale) };
+
+    public DrawInfo WithColor(Color color) => this with { Color = Color.MultiplyRGB(color) };
+    public DrawInfo WithColorRGBModifier(float colorModifier) => this with { Color = Color.ModifyRGB(colorModifier) };
 }
