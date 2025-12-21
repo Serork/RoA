@@ -29,6 +29,13 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                 bulbProjectile.As<Bulb>().AcceptDamage(finalDamage);
             }
         }
+
+        public override void OnHitPlayer(Projectile projectile, Player target, Player.HurtInfo info) {
+            int finalDamage = info.Damage;
+            foreach (Projectile bulbProjectile in TrackedEntitiesSystem.GetTrackedProjectile<Bulb>(checkProjectile => !checkProjectile.SameOwnerAs(projectile))) {
+                bulbProjectile.As<Bulb>().AcceptDamage(finalDamage);
+            }
+        }
     }
 
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(600);
@@ -39,8 +46,10 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static byte BULB2FRAMECOUNT_ROW => 5;
 
     private static byte LEAFFRAMECOUNT => 2;
-    private static byte STAMENFRAMECOUNT_YELLOW => 4;
-    private static byte STAMENFRAMECOUNT_GREEN => 4;
+    private static byte STAMENFRAMECOUNT_YELLOW => 3;
+    private static byte STAMENFRAMECOUNT_GREEN => 3;
+    private static byte SUMMONMOUTHFRAMECOUNT => 2;
+    private static byte SUMMONTENTACLEFRAMECOUNT => 2;
 
     private static float ROOTLENGTH => 150f;
     private static byte SUMMONMOUTHCOUNT => 6;
@@ -53,14 +62,16 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
         Bulb_Back,
         Bulb2,
         Bulb2_Back,
-        Stem1,
+        Stem,
         Stem2,
-        LeafStem1,
+        Stem3,
+        LeafStem,
         Leaf,
         Stamen_Yellow,
         Stamen_Green,
         SummonMouth,
-        SummonTentacle
+        SummonTentacle,
+        SummonTentacle2
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
@@ -68,14 +79,16 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)Bulb_RequstedTextureType.Bulb_Back, ResourceManager.NatureProjectileTextures + "Bulb_Back"),
          ((byte)Bulb_RequstedTextureType.Bulb2, ResourceManager.NatureProjectileTextures + "Bulb2"),
          ((byte)Bulb_RequstedTextureType.Bulb2_Back, ResourceManager.NatureProjectileTextures + "Bulb2_Back"),
-         ((byte)Bulb_RequstedTextureType.Stem1, ResourceManager.NatureProjectileTextures + "Bulb_Stem1"),
+         ((byte)Bulb_RequstedTextureType.Stem, ResourceManager.NatureProjectileTextures + "Bulb_Stem"),
          ((byte)Bulb_RequstedTextureType.Stem2, ResourceManager.NatureProjectileTextures + "Bulb_Stem2"),
-         ((byte)Bulb_RequstedTextureType.LeafStem1, ResourceManager.NatureProjectileTextures + "Bulb_LeafStem1"),
+         ((byte)Bulb_RequstedTextureType.Stem3, ResourceManager.NatureProjectileTextures + "Bulb_Stem3"),
+         ((byte)Bulb_RequstedTextureType.LeafStem, ResourceManager.NatureProjectileTextures + "Bulb_LeafStem"),
          ((byte)Bulb_RequstedTextureType.Leaf, ResourceManager.NatureProjectileTextures + "Bulb_Leaf"),
          ((byte)Bulb_RequstedTextureType.Stamen_Yellow, ResourceManager.NatureProjectileTextures + "Bulb_Stamen_Yellow"),
          ((byte)Bulb_RequstedTextureType.Stamen_Green, ResourceManager.NatureProjectileTextures + "Bulb_Stamen_Green"),
          ((byte)Bulb_RequstedTextureType.SummonMouth, ResourceManager.NatureProjectileTextures + "Bulb_SummonMouth"),
-         ((byte)Bulb_RequstedTextureType.SummonTentacle, ResourceManager.NatureProjectileTextures + "Bulb_SummonTentacle")];
+         ((byte)Bulb_RequstedTextureType.SummonTentacle, ResourceManager.NatureProjectileTextures + "Bulb_SummonTentacle"),
+         ((byte)Bulb_RequstedTextureType.SummonTentacle2, ResourceManager.NatureProjectileTextures + "Bulb_SummonTentacle2")];
 
     public record struct SummonMouthInfo(Vector2 Position, Vector2 Destination, Vector2 Velocity, float Rotation, float BaseRotation, bool FacedRight);
     public record struct SummonTentacleInfo(Vector2 RootPosition, Vector2 Destination, Vector2[] Position, float[] Rotation, float[] Scale, float WaveFrequency);
@@ -284,7 +297,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
 
                 for (int i2 = 0; i2 < segmentCount; i2++) {
                     float progress = i2 / (float)segmentCount;
-                    float scale = 1f - 0.5f * Utils.GetLerpValue(0.7f, 1f, progress, true);
+                    float scale = 1f/* - 0.5f * Utils.GetLerpValue(0.7f, 1f, progress, true)*/;
                     summonTentacleInfo.Scale[i2] = scale;
                 }
 
@@ -358,6 +371,10 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
     }
 
     protected override void Draw(ref Color lightColor) {
+        if (!Init) {
+            return;
+        }
+
         if (!AssetInitializer.TryGetRequestedTextureAssets<Bulb>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
             return;
         }
@@ -373,14 +390,16 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                   bulbTexture_Back = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Bulb_Back].Value,
                   bulb2Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Bulb2].Value,
                   bulb2Texture_Back = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Bulb2_Back].Value,
-                  stem1Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stem1].Value,
+                  stem1Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stem].Value,
                   stem2Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stem2].Value,
-                  leafStem1Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.LeafStem1].Value,
+                  stem3Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stem3].Value,
+                  leafStem1Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.LeafStem].Value,
                   leafTexture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Leaf].Value,
                   stamenTexture_Yellow = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stamen_Yellow].Value,
                   stamenTexture_Green = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stamen_Green].Value,
                   summonMouthTexture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.SummonMouth].Value,
-                  summonTentacleTexture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.SummonTentacle].Value;
+                  summonTentacleTexture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.SummonTentacle].Value,
+                  summonTentacle2Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.SummonTentacle2].Value;
 
         int texturePadding = 4;
         float plantScaleFactor = Projectile.scale;
@@ -388,9 +407,6 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         int bulbFrame = Projectile.frame,
             bulbFrameColumn = ShouldTransform.ToInt();
-
-        Color yellowPartColor_Active = new(251, 201, 40),
-              yellowPartColor_NonActive = new(77, 74, 81);
 
         // BULB
         Rectangle bulbClip = Utils.Frame(bulbTexture, BULBFRAMECOUNT_COLUMN, BULBFRAMECOUNT_ROW, frameX: bulbFrameColumn, frameY: bulbFrame);
@@ -432,6 +448,16 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             Scale = plantScale
         };
 
+        // STEM 3
+        Rectangle stem3Clip = stem3Texture.Bounds;
+        Vector2 stem3Origin = stem3Clip.BottomCenter();
+        DrawInfo stem3DrawInfo = new() {
+            Clip = stem3Clip,
+            Origin = stem3Origin,
+
+            Scale = plantScale
+        };
+
         // LEAF STEM 1
         Rectangle leafStem1Clip = leafStem1Texture.Bounds;
         Vector2 leafStem1Origin = leafStem1Clip.BottomCenter();
@@ -443,8 +469,9 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
         };
 
         // LEAF
-        Rectangle leafClip = Utils.Frame(leafTexture, 1, LEAFFRAMECOUNT);
-        Vector2 leafOrigin = leafStem1Clip.LeftCenter() + new Vector2(0f, texturePadding);
+        Rectangle getLeafClip(int frameY = 0) => Utils.Frame(leafTexture, 1, LEAFFRAMECOUNT, frameY: frameY);
+        Rectangle leafClip = getLeafClip();
+        Vector2 leafOrigin = leafStem1Clip.BottomLeft();
         DrawInfo leafDrawInfo = new() {
             Clip = leafClip,
             Origin = leafOrigin,
@@ -475,7 +502,8 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
         };
 
         // SUMMON MOUTH
-        Rectangle summonMouthClip = summonMouthTexture.Bounds;
+        Rectangle getSummonMouthClip(int frameY = 0) => Utils.Frame(summonMouthTexture, 1, SUMMONMOUTHFRAMECOUNT, frameY: frameY);
+        Rectangle summonMouthClip = getSummonMouthClip();
         Vector2 summonMouthOrigin = summonMouthClip.Centered();
         DrawInfo summonMouthDrawInfo = new() {
             Clip = summonMouthClip,
@@ -494,30 +522,52 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             Scale = plantScale
         };
 
-        void drawMainStem() {
-            int height = stem1Clip.Height - texturePadding;
-            height = (int)(height * plantScaleFactor);
-            Vector2 startPosition = RootPosition;
-            Vector2 endPosition = center + center.DirectionFrom(startPosition) * height;
-            float scaleFactor = 0f;
-            float getDistanceToBulb() => Vector2.Distance(startPosition, endPosition);
-            while (getDistanceToBulb() > height) {
-                float lerpValue = 0.25f;
-                scaleFactor = Helper.Approach(scaleFactor, height, lerpValue);
+        // SUMMON TENTACLE 2
+        Rectangle summonTentacle2Clip = summonTentacle2Texture.Bounds;
+        Vector2 summonTentacle2Origin = summonTentacle2Clip.BottomCenter();
+        DrawInfo summonTentacle2DrawInfo = new() {
+            Clip = summonTentacle2Clip,
+            Origin = summonTentacle2Origin,
 
-                Vector2 scale = Vector2.One * (0.25f + Utils.GetLerpValue(0f, height, scaleFactor, true));
-                float sizeIncreaseFluff = 3f;
-                if (getDistanceToBulb() < height * sizeIncreaseFluff) {
-                    scale = Helper.Approach(scale, new Vector2(10f), lerpValue);
+            Scale = plantScale
+        };
+
+        void drawMainStem() {
+            int stem1Height = stem1Clip.Height - texturePadding;
+            stem1Height = (int)(stem1Height * plantScaleFactor);
+            int stem3Height = stem3Clip.Height - texturePadding;
+            stem3Height = (int)(stem3Height * plantScaleFactor);
+            Vector2 startPosition = RootPosition;
+            Vector2 endPosition = center + center.DirectionFrom(startPosition) * stem1Height;
+            //float scaleFactor = 1f;
+            float getDistanceToBulb() => Vector2.Distance(startPosition, endPosition);
+            bool isValidToContinue() => getDistanceToBulb() > stem1Height;
+            bool justStarted = true;
+            while (isValidToContinue()) {
+                //float lerpValue = 0.25f;
+                //scaleFactor = Helper.Approach(scaleFactor, stem1Height, lerpValue);
+                float step = stem1Height;
+
+                //Vector2 scale = Vector2.One * (0.25f + Utils.GetLerpValue(0f, stem1Height, scaleFactor, true));
+                //float sizeIncreaseFluff = 3f;
+                //if (getDistanceToBulb() < stem1Height * sizeIncreaseFluff) {
+                //    scale = Helper.Approach(scale, new Vector2(10f), lerpValue);
+                //}
+
+                Vector2 position = startPosition + new Vector2(1f, -3f);
+                if (justStarted) {
+                    step = stem3Height;
+
+                    batch.Draw(stem3Texture, position, stem3DrawInfo);
+                }
+                else {
+                    batch.Draw(stem1Texture, position, stem1DrawInfo);
                 }
 
-                Vector2 position = startPosition;
-                batch.Draw(stem1Texture, position, stem1DrawInfo with {
-                    Scale = plantScale * scale
-                });
-
                 Vector2 velocityToBulbPosition = startPosition.DirectionTo(endPosition);
-                startPosition += velocityToBulbPosition * scaleFactor;
+                startPosition += velocityToBulbPosition * step;
+
+                justStarted = false;
             }
         }
         void getBulbPosition(out Vector2 bulbPosition_Origin, out Vector2 bulbPosition_Result) {
@@ -545,7 +595,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
         void drawBulb() {
             getBulbPosition(out Vector2 bulbPosition_Origin, out Vector2 bulbPosition_Result);
 
-            float stem2OffsetFromBulbValue = 8f * plantScaleFactor;
+            float stem2OffsetFromBulbValue = 32f * plantScaleFactor;
             Vector2 angleFromBulbToRoot = bulbPosition_Origin.DirectionTo(RootPosition);
             Vector2 stem2Position = bulbPosition_Origin + angleFromBulbToRoot * stem2OffsetFromBulbValue;
 
@@ -567,60 +617,79 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
         int generalCurrentStamenIndex = 0,
             generalLeafStemIndex = 0;
         float transformFactorForScale = Utils.GetLerpValue(0f, 0.05f, TransformFactor, true);
+        bool firstStamen = true;
         void drawLeafStem(Vector2 startVelocity, bool stamenStem = false) {
-            int height = leafStem1Clip.Height - texturePadding;
-            height = (int)(height * plantScaleFactor * 0.95f);
+            int leafStem1Height = leafStem1Clip.Height - texturePadding;
+            leafStem1Height = (int)(leafStem1Height * plantScaleFactor * 0.95f);
 
             int currentStamenIndex = 0;
             void drawStamen(Vector2 startPosition, int direction, float startRotation = 0f) {
-                float currentLength = 4f;
+                startRotation += MathHelper.Pi;
+
+                int baseStamenHeight = stamenClip_Green.Height - texturePadding,
+                    currentStamenHeight = baseStamenHeight;
+
+                float currentLength = 3f;
                 Vector2 position = startPosition;
                 float currentRotation = startRotation;
-                float scaleFactor = 0.5f,
+                float scaleFactor = 0.75f,
                       scaleFactorLerpValue = 0.1f;
                 while (currentLength > 0f) {
-                    uint seed = (uint)(randomnessSeed * (generalCurrentStamenIndex + currentStamenIndex) * 15);
-                    ulong seed_ulong = (ulong)seed;
-
-                    float sineOffset = 0f;
-                    switch (currentStamenIndex) {
-                        case 1:
-                            sineOffset = 2f;
+                    switch (currentLength) {
+                        case 3f:
+                            currentStamenHeight = (int)(baseStamenHeight * plantScaleFactor * 0.55f);
                             break;
-                        case 2:
-                            sineOffset = 0f;
+                        case 2f:
+                            currentStamenHeight = (int)(baseStamenHeight * plantScaleFactor * 0.55f);
+                            break;
+                        case 1f:
+                            currentStamenHeight = (int)(baseStamenHeight * plantScaleFactor * 0.7f);
                             break;
                     }
-                    sineOffset += MathUtils.PseudoRandRange(ref seed, -0.5f, 0.5f);
 
-                    float baseStep = height,
+                    //uint seed = (uint)(randomnessSeed * (generalCurrentStamenIndex + currentStamenIndex) * 15);
+                    //ulong seed_ulong = (ulong)seed;
+
+                    //float sineOffset = 0f;
+                    //switch (currentStamenIndex) {
+                    //    case 1:
+                    //        sineOffset = 2f;
+                    //        break;
+                    //    case 2:
+                    //        sineOffset = 0f;
+                    //        break;
+                    //}
+                    //sineOffset += MathUtils.PseudoRandRange(ref seed, -0.5f, 0.5f);
+
+                    float baseStep = currentStamenHeight,
                           step = baseStep * scaleFactor * TransformFactor;
 
                     scaleFactor = Helper.Approach(scaleFactor, 1f, scaleFactorLerpValue);
 
-                    currentRotation += -MathF.Sin(currentLength * 7.5f + sineOffset) * 0.5f * direction;
+                    currentRotation += -MathF.Sin(currentLength * 7.5f) * 0.5f * direction;
 
-                    batch.Draw(leafStem1Texture, position, leafStem1DrawInfo.WithScale(scaleFactor * transformFactorForScale) with {
+                    Vector2 stamenPosition = position;
+                    stamenPosition += -Vector2.UnitY.RotatedBy(currentRotation) * baseStep;
+                    //stamenPosition += Vector2.UnitX.RotatedBy(currentRotation) * 2f * direction;
+                    int stamenFrame = (int)currentLength - 1;
+                    batch.Draw(stamenTexture_Green, stamenPosition, stamenDrawInfo_Green.WithScale(scaleFactor * transformFactorForScale) with {
+                        Clip = getStamenClip_Green(stamenFrame),
+                        Rotation = currentRotation
+                    });
+                    float activationProgress = _stamenActivated[stamenFrame + 3 * generalCurrentStamenIndex].Progress;
+                    batch.Draw(stamenTexture_Yellow, stamenPosition, stamenDrawInfo_Yellow.WithColorModifier(activationProgress).WithScale(scaleFactor * transformFactorForScale) with {
+                        Clip = getStamenClip_Yellow(stamenFrame),
                         Rotation = currentRotation
                     });
 
-                    bool shouldDrawStamen = currentLength <= 1f;
-                    if (shouldDrawStamen) {
-                        Vector2 stamenPosition = position;
-                        stamenPosition += -Vector2.UnitY.RotatedBy(currentRotation) * baseStep;
+                    //bool shouldDrawStamen = currentLength <= 1f;
+                    //if (shouldDrawStamen) {
+                    //    Vector2 stamenPosition = position;
+                    //    stamenPosition += -Vector2.UnitY.RotatedBy(currentRotation) * baseStep;
 
-                        batch.Draw(stamenTexture_Green, stamenPosition, stamenDrawInfo_Green.WithScale(transformFactorForScale) with {
-                            Clip = getStamenClip_Green(Utils.RandomInt(ref seed_ulong, STAMENFRAMECOUNT_GREEN))
-                        });
-                        float yellowPartScaleModifier = 0.625f;
-                        float activationProgress = _stamenActivated[generalCurrentStamenIndex].Progress;
-                        Color yellowPartCurrentColor = Color.Lerp(yellowPartColor_NonActive, yellowPartColor_Active, activationProgress);
-                        batch.Draw(stamenTexture_Yellow, stamenPosition, stamenDrawInfo_Yellow.WithScale(transformFactorForScale)
-                            .WithScale(yellowPartScaleModifier)
-                            .WithColor(yellowPartCurrentColor) with {
-                            Clip = getStamenClip_Yellow(Utils.RandomInt(ref seed_ulong, STAMENFRAMECOUNT_YELLOW))
-                        });
-                    }
+                    //    batch.Draw(stamenTexture_Green, stamenPosition, stamenDrawInfo_Green.WithScale(transformFactorForScale));
+                    //    batch.Draw(stamenTexture_Yellow, stamenPosition, stamenDrawInfo_Yellow.WithScale(transformFactorForScale));
+                    //}
 
                     Vector2 velocity = Vector2.UnitY.RotatedBy(currentRotation);
                     position += -velocity * step;
@@ -644,7 +713,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             SpriteEffects flip = direction.ToSpriteEffects();
             bool facedRight = direction > 0;
 
-            float currentLength = 9f,
+            float currentLength = stamenStem ? 7f : 9f,
                   length = currentLength;
             float xLerpValue = 0.1f,
                   yLerpValue = 0f;
@@ -655,7 +724,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
 
                 leafStemScaleLerpValue = Helper.Approach(leafStemScaleLerpValue, 0.1f, TimeSystem.LogicDeltaTime);
 
-                float baseStep = height,
+                float baseStep = leafStem1Height * 1.1f,
                       step = baseStep * scaleFactor * TransformFactor;
 
                 float lengthProgress = 1f - currentLength / length;
@@ -699,6 +768,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
 
                 float waveFrequency = 0.5f;
                 uint seed = (uint)(randomnessSeed * (generalLeafStemIndex + 1) * 15);
+                ulong seed_ulong = (ulong)seed;
                 float seedForAnimation_LeafStem = seedForAnimation + MathUtils.PseudoRandRange(ref seed, -1f, 1f);
                 xLerpValue *= Helper.Wave(0.75f, 1f, waveFrequency, seedForAnimation_LeafStem);
                 yLerpValue *= Helper.Wave(0.5f, 1f, 2f, seedForAnimation_LeafStem);
@@ -725,26 +795,29 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                     drawStem(position);
 
                     if (shouldDrawStamen_Inner1) {
-                        float stamenStemStartRotation = MathHelper.PiOver2 * 1f * direction;
-                        drawStamen(position, direction, stamenStemStartRotation);
-                        stamenStemStartRotation = MathHelper.PiOver2 * 0.375f * direction;
-                        drawStamen(position, direction, stamenStemStartRotation);
+                        drawStamen(position, direction, rotation);
                     }
-                    if (shouldDrawStamen_Inner2) {
-                        float stamenStemStartRotation = 0f;
-                        drawStamen(position, direction, stamenStemStartRotation);
-                    }
+
+                    //if (shouldDrawStamen_Inner1) {
+                    //    float stamenStemStartRotation = MathHelper.PiOver2 * 1f * direction;
+                    //    drawStamen(position, direction, stamenStemStartRotation);
+                    //    stamenStemStartRotation = MathHelper.PiOver2 * 0.375f * direction;
+                    //    drawStamen(position, direction, stamenStemStartRotation);
+                    //}
+                    //if (shouldDrawStamen_Inner2) {
+                    //    float stamenStemStartRotation = 0f;
+                    //    drawStamen(position, direction, stamenStemStartRotation);
+                    //}
                 }
                 else if (shouldDrawLeaf) {
                     float leafRotation = rotation + MathHelper.PiOver2 * direction;
-                    Vector2 leafOffset = -Vector2.UnitX.RotatedBy(leafRotation) * baseStep;
-                    if (!facedRight) {
-                        leafOffset *= 0.8f;
-                    }
+                    Vector2 leafOffset = -Vector2.UnitX.RotatedBy(leafRotation) * baseStep * 1.9f;
                     position += leafOffset;
                     Vector2 leafOffset2 = -Vector2.UnitY.RotatedBy(leafRotation) * 2f;
                     position += leafOffset2;
-                    batch.Draw(leafTexture, position, leafDrawInfo.WithScale(transformFactorForScale) with {
+                    int leafFrame = Utils.RandomInt(ref seed_ulong, LEAFFRAMECOUNT);
+                    batch.Draw(leafTexture, position, leafDrawInfo.WithScale(transformFactorForScale * 0.9f) with {
+                        Clip = getLeafClip(leafFrame),
                         Rotation = leafRotation,
                         ImageFlip = flip
                     });
@@ -771,10 +844,23 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             drawLeafStem(new Vector2(-startXVelocity, -2.5f), true);
         }
         void drawSummonMise() {
+            if (!IsSecondFormActive) {
+                return;
+            }
+
+            int currentSummonMouthIndex = 0;
             foreach (SummonMouthInfo summonMouthInfo in _summonMouthData) {
+                currentSummonMouthIndex++;
+
                 Vector2 position = summonMouthInfo.Position;
                 float rotation = summonMouthInfo.Rotation;
                 SpriteEffects flip = summonMouthInfo.FacedRight.ToSpriteEffects2();
+                if (!summonMouthInfo.FacedRight) {
+                    flip = SpriteEffects.None;
+                }
+                else {
+                    flip |= SpriteEffects.FlipVertically;
+                }
 
                 int stemHeight = leafStem1Clip.Height - texturePadding;
                 stemHeight = (int)(stemHeight * plantScaleFactor * 0.95f);
@@ -809,7 +895,9 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                     stemStartPosition += velocityToSummonMouthPosition * step;
                 }
 
+                int summonMouthFrame = (int)((Main.GlobalTimeWrappedHourly * 5 + currentSummonMouthIndex) % 2);
                 batch.Draw(summonMouthTexture, position, summonMouthDrawInfo with {
+                    Clip = getSummonMouthClip(summonMouthFrame),
                     Rotation = rotation,
                     ImageFlip = flip
                 });
@@ -819,10 +907,18 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             foreach (SummonTentacleInfo summonTentacleInfo in _summonTentacleData) {
                 int segmentCount = summonTentacleInfo.Position.Length;
                 for (int i = 0; i < segmentCount; i++) {
+                    bool last = i == segmentCount - 1;
                     Vector2 position = summonTentacleInfo.Position[i];
                     position = Vector2.Lerp(position, center, TransformFactor);
                     float rotation = summonTentacleInfo.Rotation[i] + MathHelper.PiOver2;
                     float scale = summonTentacleInfo.Scale[i];
+                    if (last) {
+                        batch.Draw(summonTentacle2Texture, position, summonTentacle2DrawInfo.WithScaleX(scale) with {
+                            Rotation = rotation
+                        });
+
+                        break;
+                    }
                     batch.Draw(summonTentacleTexture, position, summonTentacleDrawInfo.WithScaleX(scale) with {
                         Rotation = rotation
                     });

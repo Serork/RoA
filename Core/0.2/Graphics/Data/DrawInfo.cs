@@ -27,5 +27,6 @@ readonly struct DrawInfo() {
     public DrawInfo WithScaleY(float scale) => this with { Scale = new Vector2(Scale.X, Scale.Y * scale) };
 
     public DrawInfo WithColor(Color color) => this with { Color = Color.MultiplyRGB(color) };
+    public DrawInfo WithColorModifier(float colorModifier) => this with { Color = Color * colorModifier };
     public DrawInfo WithColorRGBModifier(float colorModifier) => this with { Color = Color.ModifyRGB(colorModifier) };
 }

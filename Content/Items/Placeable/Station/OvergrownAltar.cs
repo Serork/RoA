@@ -1,16 +1,14 @@
-using Microsoft.Xna.Framework;
-
-using RoA.Content.Tiles.Station;
+﻿using Microsoft.Xna.Framework;
 
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Items.Miscellaneous;
+namespace RoA.Content.Items.Placeable.Station;
 
-sealed class AltarPlacer : ModItem {
+sealed class OvergrownAltar : ModItem {
     public override void SetDefaults() {
-        int width = 10; int height = width;
+        int width = 40; int height = 30;
         Item.Size = new Vector2(width, height);
 
         Item.maxStack = Item.CommonMaxStack;
@@ -21,6 +19,6 @@ sealed class AltarPlacer : ModItem {
         Item.useStyle = ItemUseStyleID.Swing;
         Item.consumable = false;
 
-        Item.createTile = ModContent.TileType<OvergrownAltar>();
+        Item.createTile = ModContent.TileType<Tiles.Station.OvergrownAltar>();
     }
 }

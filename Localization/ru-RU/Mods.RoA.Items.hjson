@@ -1946,11 +1946,6 @@ JewellersBelt: {
 		'''
 }
 
-AltarPlacer: {
-	DisplayName: Заросший алтарь
-	Tooltip: "#ТЕСТ: РАЗМЕЩАЕТ ЗАРОСШИЙ АЛТАРЬ"
-}
-
 BeachWreathTier3: {
 	// DisplayName: Beach Wreath III
 	/* Tooltip:
@@ -2579,4 +2574,9 @@ MoneyNecklace: {
 BulbCane: {
 	// DisplayName: Bulb Cane
 	// Tooltip: ""
+}
+
+OvergrownAltar: {
+	DisplayName: Заросший алтарь
+	Tooltip: Размещает заросший алтарь
 }
