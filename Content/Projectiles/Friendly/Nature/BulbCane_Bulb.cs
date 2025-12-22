@@ -20,6 +20,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
+using static RoA.Content.Projectiles.Friendly.Nature.Bulb;
+
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
@@ -59,8 +61,8 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
     private static byte STAMENACTIVATIONSLOTCOUNT => 6;
     private static ushort DAMAGENEEDEDPERSTAMEN => 100;
     private static float TENTACLESEGMENTHEIGHT => 9;
-    private static ushort SUMMONMOUTHHITBOXSIZE => 40;
-    private static ushort SUMMONTENTACLEHITBOXSIZE => 10;
+    private static ushort SUMMONMOUTHHITBOXSIZE => 50;
+    private static ushort SUMMONTENTACLEHITBOXSIZE => 14;
 
     public enum Bulb_RequstedTextureType : byte { 
         Bulb,
@@ -423,7 +425,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
                         if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
                                                                          ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcForCollisionCheck.whoAmI),
-                                                                         collided: (targetHitbox) => GeometryUtils.Square(summonMouthPosition, SUMMONMOUTHHITBOXSIZE).Intersects(targetHitbox),
+                                                                         collided: (targetHitbox) => GeometryUtils.CenteredSquare(summonMouthPosition, SUMMONMOUTHHITBOXSIZE).Intersects(targetHitbox),
                                                                          direction: MathF.Sign(summonMouthPosition.X - npcForCollisionCheck.Center.X))) {
                             continue;
                         }
@@ -433,13 +435,13 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
             if (ShouldSummonTentaclesDealDamage) {
                 for (int i = SummonMouthCount; i < SummonMouthCount + SUMMONTENTACLECOUNT; i++) {
                     ref SummonTentacleInfo summonTentacleInfo = ref _summonTentacleData[i - SummonMouthCount];
-                    int summonTentacleSegmentCount = summonTentacleInfo.SegmentCount - 2;
+                    int summonTentacleSegmentCount = summonTentacleInfo.SegmentCount - 1;
                     for (int i2 = 0; i2 < summonTentacleSegmentCount; i2++) {
                         Vector2 summongTentaclePosition = summonTentacleInfo.SegmentPositions[i2];
                         foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
                             if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
                                                                              ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcForCollisionCheck.whoAmI),
-                                                                             collided: (targetHitbox) => GeometryUtils.Square(summongTentaclePosition, SUMMONTENTACLEHITBOXSIZE).Intersects(targetHitbox),
+                                                                             collided: (targetHitbox) => GeometryUtils.CenteredSquare(summongTentaclePosition, SUMMONTENTACLEHITBOXSIZE).Intersects(targetHitbox),
                                                                              direction: MathF.Sign(summongTentaclePosition.X - npcForCollisionCheck.Center.X))) {
                                 continue;
                             }
@@ -1009,6 +1011,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     int nextIndex = Math.Min(segmentCount - 1, i + 1);
                     Vector2 position = summonTentacleInfo.SegmentPositions[i];
                     position = Vector2.Lerp(position, center, TransformFactor);
+
                     Vector2 nextPosition = summonTentacleInfo.SegmentPositions[nextIndex];
                     nextPosition = Vector2.Lerp(nextPosition, center, TransformFactor);
                     float rotation = summonTentacleInfo.SegmentRotations[i] + MathHelper.PiOver2;
