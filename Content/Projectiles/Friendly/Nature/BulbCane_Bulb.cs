@@ -10,18 +10,20 @@ using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
-sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
+sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomImmunityFrames {
     private class Bulb_DamageCounter : GlobalProjectile {
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone) {
             int finalDamage = hit.Damage;
@@ -49,13 +51,16 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
     private static byte STAMENFRAMECOUNT_YELLOW => 3;
     private static byte STAMENFRAMECOUNT_GREEN => 3;
     private static byte SUMMONMOUTHFRAMECOUNT => 2;
-    private static byte SUMMONTENTACLEFRAMECOUNT => 2;
+    private static Point16 TENTACLETARGETZONESIZE => new(100, 125);
 
-    private static float ROOTLENGTH => 150f;
+    private static float ROOTLENGTH => TileHelper.TileSize * 10;
     private static byte SUMMONMOUTHCOUNT => 6;
     private static byte SUMMONTENTACLECOUNT => 3;
     private static byte STAMENACTIVATIONSLOTCOUNT => 6;
     private static ushort DAMAGENEEDEDPERSTAMEN => 100;
+    private static float TENTACLESEGMENTHEIGHT => 9;
+    private static ushort SUMMONMOUTHHITBOXSIZE => 40;
+    private static ushort SUMMONTENTACLEHITBOXSIZE => 10;
 
     public enum Bulb_RequstedTextureType : byte { 
         Bulb,
@@ -91,7 +96,9 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
          ((byte)Bulb_RequstedTextureType.SummonTentacle2, ResourceManager.NatureProjectileTextures + "Bulb_SummonTentacle2")];
 
     public record struct SummonMouthInfo(Vector2 Position, Vector2 Destination, Vector2 Velocity, float Rotation, float BaseRotation, bool FacedRight);
-    public record struct SummonTentacleInfo(Vector2 RootPosition, Vector2 Destination, Vector2[] Position, float[] Rotation, float[] Scale, float WaveFrequency);
+    public record struct SummonTentacleInfo(Vector2 RootPosition, Vector2 BaseDestination, Vector2 CurrentDestination, List<Vector2> SegmentPositions, List<float> SegmentRotations, float WaveFrequency) {
+        public readonly int SegmentCount => SegmentPositions.Count;
+    }
     public record struct StamenDamageInfo(int DamageDone, int DamageNeeded) {
         public readonly float Progress => MathUtils.Clamp01((float)DamageDone / DamageNeeded);
         public readonly bool Activated => Progress >= 1f;
@@ -100,6 +107,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
     private SummonMouthInfo[] _summonMouthData = null!;
     private SummonTentacleInfo[] _summonTentacleData = null!;
     private StamenDamageInfo[] _stamenActivated = null!;
+    private int _seedForRandomness;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float ShouldTransformValue => ref Projectile.localAI[1];
@@ -134,7 +142,15 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
     public float TransformFactor => Ease.SineIn(TransformFactorValue);
     public bool IsTransforming => ShouldTransform || IsSecondFormActive;
 
+    private ushort CustomImmunityFrameCount => (ushort)(SUMMONMOUTHCOUNT + SUMMONTENTACLECOUNT);
+    private bool ShouldSummonMiseDealDamage => IsSecondFormActive;
+    private bool ShouldSummonTentaclesDealDamage => IsSecondFormActive;
+    private int SummonMouthCount => _summonMouthData.Length;
+    private int SummonTentacleCount => _summonTentacleData.Length;
+
     protected override void SafeSetDefaults() {
+        SetNatureValues(Projectile, shouldApplyAttachedItemDamage: false);
+
         Projectile.SetSizeValues(10);
 
         Projectile.penetrate = -1;
@@ -149,7 +165,6 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     public override void AI() {
         Vector2 center = Projectile.Center;
-        float tentacleSegmentHeight = 9;
 
         void init() {
             if (!Init) {
@@ -157,7 +172,12 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                 RootPosition = Projectile.Center + Vector2.UnitY * yOffset;
 
                 TransformFactorValue = 1f;
-                
+
+                if (Projectile.IsOwnerLocal()) {
+                    _seedForRandomness = Main.rand.Next(100); // need sync
+                }
+
+                CustomImmunityFramesHandler.Initialize(Projectile, CustomImmunityFrameCount);
 
                 void initStamens() {
                     _stamenActivated = new StamenDamageInfo[STAMENACTIVATIONSLOTCOUNT];
@@ -167,7 +187,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                 }
                 void initSummonMise() {
                     _summonMouthData = new SummonMouthInfo[SUMMONMOUTHCOUNT];
-                    int summonMouthCount = _summonMouthData.Length,
+                    int summonMouthCount = SummonMouthCount,
                         summonMouthHalfCount = summonMouthCount / 2;
                     for (int i = 0; i < summonMouthCount; i++) {
                         bool first = i < summonMouthHalfCount;
@@ -181,36 +201,43 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                         summonMouthInfo.FacedRight = direction > 0;
                     }
                 }
-                void iniSummonTentacles() {
+                void initSummonTentacles() {
                     _summonTentacleData = new SummonTentacleInfo[SUMMONTENTACLECOUNT];
-                    int summonTentacleCount = _summonTentacleData.Length;
-                    for (int i = 0; i < summonTentacleCount; i++) {
+                    for (int i = 0; i < SummonTentacleCount; i++) {
                         bool first = i == 0;
                         int nextIndex = i + 1;
                         ref SummonTentacleInfo summonTentacleInfo = ref _summonTentacleData[i];
-                        int segmentCount = 10 + 3 * nextIndex;
+                        int segmentCount = 12 + 3 * nextIndex;
                         float rootXOffset = 5f,
                               xOffset = (i % 2 == 0).ToDirectionInt() * (first ? 0f : rootXOffset),
-                              yOffset = -tentacleSegmentHeight * segmentCount;
+                              yOffset = -TENTACLESEGMENTHEIGHT * segmentCount;
                         summonTentacleInfo.RootPosition = center + Vector2.UnitX * xOffset;
                         Vector2 destination = center + new Vector2(xOffset, yOffset);
-                        summonTentacleInfo.Destination = destination;
-                        summonTentacleInfo.Position = new Vector2[segmentCount];
-                        summonTentacleInfo.Rotation = new float[segmentCount];
+                        summonTentacleInfo.BaseDestination = summonTentacleInfo.CurrentDestination = destination;
                         summonTentacleInfo.WaveFrequency = Main.rand.NextFloat(3f, 5f);
-                        summonTentacleInfo.Scale = new float[segmentCount];
+                        summonTentacleInfo.SegmentPositions = new List<Vector2>(segmentCount);
+                        summonTentacleInfo.SegmentRotations = new List<float>(segmentCount);
                         for (int i2 = 0; i2 < segmentCount; i2++) {
-                            summonTentacleInfo.Position[i] = center;
-                            summonTentacleInfo.Scale[i] = 1f;
+                            summonTentacleInfo.SegmentPositions.Add(center);
+                            summonTentacleInfo.SegmentRotations.Add(0f);
                         }
                     }
                 }
                 initStamens();
                 initSummonMise();
-                iniSummonTentacles();
+                initSummonTentacles();
 
                 Init = true;
             }
+        }
+        void levitate() {
+            float maxOffsetY = 0.375f;
+            float sineOffset = _seedForRandomness;
+            float levitateSpeed = 2f;
+            Projectile.position.Y += Helper.Wave(-maxOffsetY, maxOffsetY, levitateSpeed, sineOffset);
+            float maxOffsetX = maxOffsetY / 6f;
+            levitateSpeed /= 2f;
+            Projectile.position.X += Helper.Wave(-maxOffsetX, maxOffsetX * 1.025f, levitateSpeed, sineOffset);
         }
         void scaleUp() {
             Projectile.scale = 1.5f;
@@ -252,12 +279,11 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             }
         }
         void processSummonMise() {
-            if (!IsSecondFormActive) {
+            if (!ShouldSummonMiseDealDamage) {
                 return;
             }
 
-            int summonMouthCount = _summonMouthData.Length;
-            for (int i = 0; i < summonMouthCount; i++) {
+            for (int i = 0; i < SummonMouthCount; i++) {
                 ref SummonMouthInfo summonMouthInfo = ref _summonMouthData[i];
                 float baseRotation = summonMouthInfo.BaseRotation;
                 float offsetValue = 125f;
@@ -286,25 +312,41 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             //    return;
             //}
 
-            int summonTentacleCount = _summonTentacleData.Length;
-            for (int i = 0; i < summonTentacleCount; i++) {
+            for (int i = 0; i < SummonTentacleCount; i++) {
                 ref SummonTentacleInfo summonTentacleInfo = ref _summonTentacleData[i];
-                int segmentCount = summonTentacleInfo.Position.Length;
 
-                Vector2 rootPosition = summonTentacleInfo.RootPosition,
-                        mainDestination = rootPosition,
-                        finalDestination = summonTentacleInfo.Destination;
+                Vector2 rootPosition = center,
+                        mainDestination = summonTentacleInfo.CurrentDestination + (center - summonTentacleInfo.RootPosition);
 
-                for (int i2 = 0; i2 < segmentCount; i2++) {
-                    float progress = i2 / (float)segmentCount;
-                    float scale = 1f/* - 0.5f * Utils.GetLerpValue(0.7f, 1f, progress, true)*/;
-                    summonTentacleInfo.Scale[i2] = scale;
+                NPC? target = NPCUtils.FindClosestNPC(mainDestination, TENTACLETARGETZONESIZE.X);
+                bool hasTarget_Inner = target is not null;
+                Vector2 baseTargetCenter = hasTarget_Inner ? target!.Center : Vector2.Zero,
+                        targetCenter = baseTargetCenter;
+                bool hasTarget = false;
+                if (hasTarget_Inner) {
+                    targetCenter -= Vector2.UnitX.RotatedBy(target.AngleTo(center)) * 100f;
+                    targetCenter.Y = MathF.Min(mainDestination.Y, targetCenter.Y);
                 }
-
-                for (int i2 = 0; i2 < segmentCount; i2++) {
-                    float scale = summonTentacleInfo.Scale[i2];
-                    Vector2 step = rootPosition.DirectionTo(finalDestination) * tentacleSegmentHeight * scale;
-                    mainDestination += step;
+                bool canChase = summonTentacleInfo.CurrentDestination.Y > targetCenter.Y;
+                int targetZoneXSize = TENTACLETARGETZONESIZE.X,
+                    targetZoneYSize = TENTACLETARGETZONESIZE.Y;
+                bool tooFarX = MathF.Abs(summonTentacleInfo.BaseDestination.X - baseTargetCenter.X) > targetZoneXSize,
+                     tooFarY = MathF.Abs(summonTentacleInfo.BaseDestination.Y - baseTargetCenter.Y) > targetZoneYSize;
+                if (!hasTarget_Inner) {
+                    canChase = false;
+                }
+                if (canChase) {
+                    if (tooFarX || tooFarY) {
+                        canChase = false;
+                    }
+                }
+                float tentacleChaseSpeed = TimeSystem.LogicDeltaTime * 2f;
+                if (canChase) {
+                    hasTarget = true;
+                    summonTentacleInfo.CurrentDestination = Vector2.Lerp(summonTentacleInfo.CurrentDestination, targetCenter, tentacleChaseSpeed);
+                }
+                else {
+                    summonTentacleInfo.CurrentDestination = Vector2.Lerp(summonTentacleInfo.CurrentDestination, summonTentacleInfo.BaseDestination, tentacleChaseSpeed);
                 }
 
                 float maxXOffset = 40f;
@@ -312,30 +354,32 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                       waveFrequency = summonTentacleInfo.WaveFrequency;
                 float waveOffset = Helper.Wave(-maxXOffset, maxXOffset, waveFrequency, waveSinOffset);
                 waveOffset *= 1f - TransformFactor;
-                mainDestination.X += waveOffset;
+                if (hasTarget) {
+                    float rotationToTarget = Projectile.Center.AngleTo(targetCenter);
+                    mainDestination += Vector2.UnitY.RotatedBy(rotationToTarget) * waveOffset;
+                }
+                else {
+                    mainDestination.X += waveOffset;
+                }
 
+                int segmentCount = summonTentacleInfo.SegmentCount;
                 for (int i2 = 0; i2 < segmentCount; i2++) {
                     int currentSegmentIndex = i2,
                         previousSegmentIndex = Math.Max(0, currentSegmentIndex - 1),
                         nextSegmentIndex = Math.Min(segmentCount - 1, currentSegmentIndex + 1);
-                    ref Vector2 currentSegmentPosition = ref summonTentacleInfo.Position[currentSegmentIndex],
-                                previousSegmentPosition = ref summonTentacleInfo.Position[previousSegmentIndex],
-                                nextSegmentPosition = ref summonTentacleInfo.Position[nextSegmentIndex];
 
                     bool first = currentSegmentIndex == 0,
                          last = currentSegmentIndex == nextSegmentIndex;
 
-                    ref float currentSegmentRotation = ref summonTentacleInfo.Rotation[currentSegmentIndex],
-                              nextSegmentRotation = ref summonTentacleInfo.Rotation[nextSegmentIndex];
-                    float rotation = currentSegmentPosition.AngleTo(nextSegmentPosition);
+                    float rotation = summonTentacleInfo.SegmentPositions[currentSegmentIndex].AngleTo(summonTentacleInfo.SegmentPositions[nextSegmentIndex]);
                     if (last) {
-                        rotation = previousSegmentPosition.AngleTo(currentSegmentPosition);
-                    }              
-                    currentSegmentRotation = rotation;
+                        rotation = summonTentacleInfo.SegmentPositions[previousSegmentIndex].AngleTo(summonTentacleInfo.SegmentPositions[currentSegmentIndex]);
+                    }
+                    summonTentacleInfo.SegmentRotations[currentSegmentIndex] = rotation;
 
                     Vector2 centerPoint(Vector2 a, Vector2 b) => new((a.X + b.X) / 2f, (a.Y + b.Y) / 2f);
-                    Vector2 startPosition = previousSegmentPosition;
-                    Vector2 destination = nextSegmentPosition;
+                    Vector2 startPosition = summonTentacleInfo.SegmentPositions[previousSegmentIndex];
+                    Vector2 destination = summonTentacleInfo.SegmentPositions[nextSegmentIndex];
                     if (previousSegmentIndex == currentSegmentIndex) {
                         startPosition = rootPosition;
                     }
@@ -343,27 +387,77 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                         destination = mainDestination;
                     }
                     if (first) {
-                        currentSegmentPosition = startPosition;
+                        summonTentacleInfo.SegmentPositions[currentSegmentIndex] = startPosition;
                         continue;
                     }
                     if (startPosition.Distance(destination) < 1f) {
                         continue;
                     }
-                    currentSegmentPosition = centerPoint(startPosition, destination);
+                    summonTentacleInfo.SegmentPositions[currentSegmentIndex] = centerPoint(startPosition, destination);
                     float maxDistance = 100f;
-                    if (currentSegmentPosition.Distance(destination) > maxDistance) {
-                        currentSegmentPosition = destination;
+                    if (summonTentacleInfo.SegmentPositions[currentSegmentIndex].Distance(destination) > maxDistance) {
+                        summonTentacleInfo.SegmentPositions[currentSegmentIndex] = destination;
+                    }
+                }
+            }
+        }
+        void resetDamageInfo() {
+            for (int i = 0; i < CustomImmunityFrameCount; i++) {
+                for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
+                    ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcId);
+                    if (immuneTime > 0) {
+                        immuneTime--;
+                    }
+                }
+            }
+        }
+        void damageNPCs() {
+            if (!Projectile.IsOwnerLocal()) {
+                return;
+            }
+
+            if (ShouldSummonMiseDealDamage) {
+                for (int i = 0; i < SummonMouthCount; i++) {
+                    ref SummonMouthInfo summonMouthInfo = ref _summonMouthData[i];
+                    Vector2 summonMouthPosition = summonMouthInfo.Position;
+                    foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
+                        if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
+                                                                         ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcForCollisionCheck.whoAmI),
+                                                                         collided: (targetHitbox) => GeometryUtils.Square(summonMouthPosition, SUMMONMOUTHHITBOXSIZE).Intersects(targetHitbox),
+                                                                         direction: MathF.Sign(summonMouthPosition.X - npcForCollisionCheck.Center.X))) {
+                            continue;
+                        }
+                    }
+                }
+            }
+            if (ShouldSummonTentaclesDealDamage) {
+                for (int i = SummonMouthCount; i < SummonMouthCount + SUMMONTENTACLECOUNT; i++) {
+                    ref SummonTentacleInfo summonTentacleInfo = ref _summonTentacleData[i - SummonMouthCount];
+                    int summonTentacleSegmentCount = summonTentacleInfo.SegmentCount - 2;
+                    for (int i2 = 0; i2 < summonTentacleSegmentCount; i2++) {
+                        Vector2 summongTentaclePosition = summonTentacleInfo.SegmentPositions[i2];
+                        foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
+                            if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
+                                                                             ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcForCollisionCheck.whoAmI),
+                                                                             collided: (targetHitbox) => GeometryUtils.Square(summongTentaclePosition, SUMMONTENTACLEHITBOXSIZE).Intersects(targetHitbox),
+                                                                             direction: MathF.Sign(summongTentaclePosition.X - npcForCollisionCheck.Center.X))) {
+                                continue;
+                            }
+                        }
                     }
                 }
             }
         }
 
         init();
+        levitate();
         scaleUp();
         enrage();
         animateBulb();
         processSummonMise();
         processSummonTentacles();
+        resetDamageInfo();
+        damageNPCs();
     }
 
     public override void OnKill(int timeLeft) {
@@ -379,10 +473,10 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
-        float randomnessSeed = Projectile.position.Length();
+        float randomnessSeed = _seedForRandomness;
 
         Vector2 center = Projectile.Center;
-        float seedForAnimation = Projectile.whoAmI;
+        float seedForAnimation = _seedForRandomness;
 
         SpriteBatch batch = Main.spriteBatch;
 
@@ -408,6 +502,8 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
         int bulbFrame = Projectile.frame,
             bulbFrameColumn = ShouldTransform.ToInt();
 
+        float bulbScaleModifier = 0.95f;
+
         // BULB
         Rectangle bulbClip = Utils.Frame(bulbTexture, BULBFRAMECOUNT_COLUMN, BULBFRAMECOUNT_ROW, frameX: bulbFrameColumn, frameY: bulbFrame);
         Vector2 bulbOrigin = bulbClip.BottomCenter();
@@ -415,7 +511,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             Clip = bulbClip,
             Origin = bulbOrigin,
 
-            Scale = plantScale
+            Scale = plantScale * bulbScaleModifier
         };
 
         // BULB 2
@@ -425,7 +521,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             Clip = bulb2Clip,
             Origin = bulb2Origin,
 
-            Scale = plantScale
+            Scale = plantScale * bulbScaleModifier
         };
 
         // STEM 1
@@ -541,7 +637,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
             Vector2 endPosition = center + center.DirectionFrom(startPosition) * stem1Height;
             //float scaleFactor = 1f;
             float getDistanceToBulb() => Vector2.Distance(startPosition, endPosition);
-            bool isValidToContinue() => getDistanceToBulb() > stem1Height;
+            bool isValidToContinue() => getDistanceToBulb() > stem1Height * 2;
             bool justStarted = true;
             while (isValidToContinue()) {
                 //float lerpValue = 0.25f;
@@ -617,7 +713,6 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
         int generalCurrentStamenIndex = 0,
             generalLeafStemIndex = 0;
         float transformFactorForScale = Utils.GetLerpValue(0f, 0.05f, TransformFactor, true);
-        bool firstStamen = true;
         void drawLeafStem(Vector2 startVelocity, bool stamenStem = false) {
             int leafStem1Height = leafStem1Clip.Height - texturePadding;
             leafStem1Height = (int)(leafStem1Height * plantScaleFactor * 0.95f);
@@ -676,7 +771,9 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
                         Clip = getStamenClip_Green(stamenFrame),
                         Rotation = currentRotation
                     });
-                    float activationProgress = _stamenActivated[stamenFrame + 3 * generalCurrentStamenIndex].Progress;
+                    int activationSlotIndex = stamenFrame + 3 * generalCurrentStamenIndex;
+                    activationSlotIndex = STAMENACTIVATIONSLOTCOUNT - 1 - activationSlotIndex;
+                    float activationProgress = _stamenActivated[activationSlotIndex].Progress;
                     batch.Draw(stamenTexture_Yellow, stamenPosition, stamenDrawInfo_Yellow.WithColorModifier(activationProgress).WithScale(scaleFactor * transformFactorForScale) with {
                         Clip = getStamenClip_Yellow(stamenFrame),
                         Rotation = currentRotation
@@ -905,21 +1002,30 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
         void drawSummonTentacles() {
             foreach (SummonTentacleInfo summonTentacleInfo in _summonTentacleData) {
-                int segmentCount = summonTentacleInfo.Position.Length;
+                int segmentCount = summonTentacleInfo.SegmentCount;
+                segmentCount -= 2;
                 for (int i = 0; i < segmentCount; i++) {
-                    bool last = i == segmentCount - 1;
-                    Vector2 position = summonTentacleInfo.Position[i];
+                    bool last = i >= segmentCount - 2;
+                    int nextIndex = Math.Min(segmentCount - 1, i + 1);
+                    Vector2 position = summonTentacleInfo.SegmentPositions[i];
                     position = Vector2.Lerp(position, center, TransformFactor);
-                    float rotation = summonTentacleInfo.Rotation[i] + MathHelper.PiOver2;
-                    float scale = summonTentacleInfo.Scale[i];
+                    Vector2 nextPosition = summonTentacleInfo.SegmentPositions[nextIndex];
+                    nextPosition = Vector2.Lerp(nextPosition, center, TransformFactor);
+                    float rotation = summonTentacleInfo.SegmentRotations[i] + MathHelper.PiOver2;
+                    float distanceToNext = position.Distance(nextPosition);
+                    float scaleY = distanceToNext * 0.085f;
+                    scaleY = MathF.Max(scaleY, 1f);
                     if (last) {
-                        batch.Draw(summonTentacle2Texture, position, summonTentacle2DrawInfo.WithScaleX(scale) with {
+                        float step = summonTentacle2DrawInfo.Clip.Height * 0.4f * scaleY;
+                        Vector2 endOffset = Vector2.UnitY.RotatedBy(rotation) * step;
+                        position += endOffset;
+                        batch.Draw(summonTentacle2Texture, position, summonTentacle2DrawInfo.WithScaleY(scaleY) with {
                             Rotation = rotation
                         });
 
                         break;
                     }
-                    batch.Draw(summonTentacleTexture, position, summonTentacleDrawInfo.WithScaleX(scale) with {
+                    batch.Draw(summonTentacleTexture, position, summonTentacleDrawInfo.WithScaleY(scaleY) with {
                         Rotation = rotation
                     });
                 }
