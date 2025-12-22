@@ -20,8 +20,6 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 
-using static RoA.Content.Projectiles.Friendly.Nature.Bulb;
-
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
@@ -55,14 +53,14 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
     private static byte SUMMONMOUTHFRAMECOUNT => 2;
     private static Point16 TENTACLETARGETZONESIZE => new(100, 125);
 
-    private static float ROOTLENGTH => TileHelper.TileSize * 10;
+    private static float ROOTLENGTH => TileHelper.TileSize * 7;
     private static byte SUMMONMOUTHCOUNT => 6;
     private static byte SUMMONTENTACLECOUNT => 3;
     private static byte STAMENACTIVATIONSLOTCOUNT => 6;
     private static ushort DAMAGENEEDEDPERSTAMEN => 100;
     private static float TENTACLESEGMENTHEIGHT => 9;
-    private static ushort SUMMONMOUTHHITBOXSIZE => 50;
-    private static ushort SUMMONTENTACLEHITBOXSIZE => 14;
+    private static ushort SUMMONMOUTHHITBOXSIZE => 30;
+    private static ushort SUMMONTENTACLEHITBOXSIZE => 8;
 
     public enum Bulb_RequstedTextureType : byte { 
         Bulb,
@@ -170,7 +168,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
 
         void init() {
             if (!Init) {
-                float yOffset = ROOTLENGTH;
+                float yOffset = ROOTLENGTH * Projectile.scale;
                 RootPosition = Projectile.Center + Vector2.UnitY * yOffset;
 
                 TransformFactorValue = 1f;
@@ -209,10 +207,10 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                         bool first = i == 0;
                         int nextIndex = i + 1;
                         ref SummonTentacleInfo summonTentacleInfo = ref _summonTentacleData[i];
-                        int segmentCount = 12 + 3 * nextIndex;
+                        int segmentCount = (int)((12 + 2 * nextIndex) * Projectile.scale);
                         float rootXOffset = 5f,
                               xOffset = (i % 2 == 0).ToDirectionInt() * (first ? 0f : rootXOffset),
-                              yOffset = -TENTACLESEGMENTHEIGHT * segmentCount;
+                              yOffset = -TENTACLESEGMENTHEIGHT * Projectile.scale * segmentCount * 0.7f;
                         summonTentacleInfo.RootPosition = center + Vector2.UnitX * xOffset;
                         Vector2 destination = center + new Vector2(xOffset, yOffset);
                         summonTentacleInfo.BaseDestination = summonTentacleInfo.CurrentDestination = destination;
@@ -233,16 +231,16 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
             }
         }
         void levitate() {
-            float maxOffsetY = 0.375f;
+            float maxOffsetY = 0.375f * Projectile.scale * 0.8f;
             float sineOffset = _seedForRandomness;
             float levitateSpeed = 2f;
             Projectile.position.Y += Helper.Wave(-maxOffsetY, maxOffsetY, levitateSpeed, sineOffset);
             float maxOffsetX = maxOffsetY / 6f;
             levitateSpeed /= 2f;
-            Projectile.position.X += Helper.Wave(-maxOffsetX, maxOffsetX * 1.025f, levitateSpeed, sineOffset);
+            Projectile.position.X += Helper.Wave(-maxOffsetX, maxOffsetX * 1.01f, levitateSpeed, sineOffset);
         }
         void scaleUp() {
-            Projectile.scale = 1.5f;
+            Projectile.scale = 1f;
         }
         void enrage() {
             bool shouldActivateEnragedState = AcceptedEnoughDamage();
@@ -288,12 +286,13 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
             for (int i = 0; i < SummonMouthCount; i++) {
                 ref SummonMouthInfo summonMouthInfo = ref _summonMouthData[i];
                 float baseRotation = summonMouthInfo.BaseRotation;
-                float offsetValue = 125f;
-                float centerYOffset = 50f;
+                float scaleModifier = Projectile.scale * 0.7f;
+                float offsetValue = 125f * scaleModifier;
+                float centerYOffset = 50f * scaleModifier;
                 Vector2 destination = center - Vector2.UnitY * centerYOffset + Vector2.UnitY.RotatedBy(baseRotation) * offsetValue + summonMouthInfo.Destination;
                 float minDistance = 60f;
-                if (Vector2.Distance(destination, summonMouthInfo.Position) < minDistance) {
-                    float maxOffsetValue = 50f;
+                if (Vector2.Distance(destination, summonMouthInfo.Position) < minDistance * scaleModifier) {
+                    float maxOffsetValue = 50f * scaleModifier;
                     summonMouthInfo.Destination = Main.rand.RandomPointInArea(maxOffsetValue);
                 }
                 summonMouthInfo.Position += summonMouthInfo.Velocity;
@@ -351,7 +350,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     summonTentacleInfo.CurrentDestination = Vector2.Lerp(summonTentacleInfo.CurrentDestination, summonTentacleInfo.BaseDestination, tentacleChaseSpeed);
                 }
 
-                float maxXOffset = 40f;
+                float maxXOffset = 26f * Projectile.scale;
                 float waveSinOffset = i * maxXOffset,
                       waveFrequency = summonTentacleInfo.WaveFrequency;
                 float waveOffset = Helper.Wave(-maxXOffset, maxXOffset, waveFrequency, waveSinOffset);
@@ -435,7 +434,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
             if (ShouldSummonTentaclesDealDamage) {
                 for (int i = SummonMouthCount; i < SummonMouthCount + SUMMONTENTACLECOUNT; i++) {
                     ref SummonTentacleInfo summonTentacleInfo = ref _summonTentacleData[i - SummonMouthCount];
-                    int summonTentacleSegmentCount = summonTentacleInfo.SegmentCount - 1;
+                    int summonTentacleSegmentCount = summonTentacleInfo.SegmentCount - 2;
                     for (int i2 = 0; i2 < summonTentacleSegmentCount; i2++) {
                         Vector2 summongTentaclePosition = summonTentacleInfo.SegmentPositions[i2];
                         foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
@@ -451,9 +450,9 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
             }
         }
 
+        scaleUp();
         init();
         levitate();
-        scaleUp();
         enrage();
         animateBulb();
         processSummonMise();
@@ -715,6 +714,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         int generalCurrentStamenIndex = 0,
             generalLeafStemIndex = 0;
         float transformFactorForScale = Utils.GetLerpValue(0f, 0.05f, TransformFactor, true);
+        int leafFrame = 0;
         void drawLeafStem(Vector2 startVelocity, bool stamenStem = false) {
             int leafStem1Height = leafStem1Clip.Height - texturePadding;
             leafStem1Height = (int)(leafStem1Height * plantScaleFactor * 0.95f);
@@ -758,6 +758,8 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     //}
                     //sineOffset += MathUtils.PseudoRandRange(ref seed, -0.5f, 0.5f);
 
+                    bool lastRight = direction > 0 && currentLength == 1f;
+
                     float baseStep = currentStamenHeight,
                           step = baseStep * scaleFactor * TransformFactor;
 
@@ -765,20 +767,26 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
 
                     currentRotation += -MathF.Sin(currentLength * 7.5f) * 0.5f * direction;
 
+                    SpriteEffects flip = SpriteEffects.None;
+                    if (lastRight) {
+                        flip = SpriteEffects.FlipHorizontally;
+                    }
                     Vector2 stamenPosition = position;
                     stamenPosition += -Vector2.UnitY.RotatedBy(currentRotation) * baseStep;
                     //stamenPosition += Vector2.UnitX.RotatedBy(currentRotation) * 2f * direction;
                     int stamenFrame = (int)currentLength - 1;
                     batch.Draw(stamenTexture_Green, stamenPosition, stamenDrawInfo_Green.WithScale(scaleFactor * transformFactorForScale) with {
                         Clip = getStamenClip_Green(stamenFrame),
-                        Rotation = currentRotation
+                        Rotation = currentRotation,
+                        ImageFlip = flip
                     });
                     int activationSlotIndex = stamenFrame + 3 * generalCurrentStamenIndex;
                     activationSlotIndex = STAMENACTIVATIONSLOTCOUNT - 1 - activationSlotIndex;
                     float activationProgress = _stamenActivated[activationSlotIndex].Progress;
                     batch.Draw(stamenTexture_Yellow, stamenPosition, stamenDrawInfo_Yellow.WithColorModifier(activationProgress).WithScale(scaleFactor * transformFactorForScale) with {
                         Clip = getStamenClip_Yellow(stamenFrame),
-                        Rotation = currentRotation
+                        Rotation = currentRotation,
+                        ImageFlip = flip
                     });
 
                     //bool shouldDrawStamen = currentLength <= 1f;
@@ -910,16 +918,19 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                 }
                 else if (shouldDrawLeaf) {
                     float leafRotation = rotation + MathHelper.PiOver2 * direction;
+                    if (leafFrame == 0) {
+                        leafRotation += MathHelper.PiOver4 * direction * 0.5f;
+                    }
                     Vector2 leafOffset = -Vector2.UnitX.RotatedBy(leafRotation) * baseStep * 1.9f;
                     position += leafOffset;
                     Vector2 leafOffset2 = -Vector2.UnitY.RotatedBy(leafRotation) * 2f;
                     position += leafOffset2;
-                    int leafFrame = Utils.RandomInt(ref seed_ulong, LEAFFRAMECOUNT);
                     batch.Draw(leafTexture, position, leafDrawInfo.WithScale(transformFactorForScale * 0.9f) with {
                         Clip = getLeafClip(leafFrame),
                         Rotation = leafRotation,
                         ImageFlip = flip
                     });
+                    leafFrame++;
                 }
                 else {
                     drawStem(position);
@@ -1016,7 +1027,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     nextPosition = Vector2.Lerp(nextPosition, center, TransformFactor);
                     float rotation = summonTentacleInfo.SegmentRotations[i] + MathHelper.PiOver2;
                     float distanceToNext = position.Distance(nextPosition);
-                    float scaleY = distanceToNext * 0.085f;
+                    float scaleY = distanceToNext * 0.121f;
                     scaleY = MathF.Max(scaleY, 1f);
                     if (last) {
                         float step = summonTentacle2DrawInfo.Clip.Height * 0.4f * scaleY;
