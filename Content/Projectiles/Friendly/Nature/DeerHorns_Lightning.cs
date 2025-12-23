@@ -88,12 +88,11 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
 
         }
         else if (!_onEnemy) {
-            Projectile.Center = owner.RotatedRelativePoint(owner.MountedCenter);
             if (inDruidicForm) {
-                Projectile.Center = Utils.Floor(Projectile.Center) + _startPosition;
+                Projectile.Center = owner.GetPlayerCorePoint() + _startPosition;
             }
             else {
-                Projectile.Center = Utils.Floor(Projectile.Center) - new Vector2(0f, 26f) + _startPosition;
+                Projectile.Center = owner.GetPlayerCorePoint() - new Vector2(0f, 26f) + _startPosition;
             }
         }
 

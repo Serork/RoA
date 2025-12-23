@@ -124,8 +124,6 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     public override void AI() {
         Player owner = Projectile.GetOwnerAsPlayer();
-        //Projectile.Center = owner.MountedCenter;
-        //Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY;
 
         SandfallProgress += 3f;
         if (SandfallProgress > 138) {

@@ -488,7 +488,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                   stem1Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stem].Value,
                   stem2Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stem2].Value,
                   stem3Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stem3].Value,
-                  leafStem1Texture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.LeafStem].Value,
+                  leafStemTexture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.LeafStem].Value,
                   leafTexture = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Leaf].Value,
                   stamenTexture_Yellow = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stamen_Yellow].Value,
                   stamenTexture_Green = indexedTextureAssets[(byte)Bulb_RequstedTextureType.Stamen_Green].Value,
@@ -503,7 +503,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         int bulbFrame = Projectile.frame,
             bulbFrameColumn = ShouldTransform.ToInt();
 
-        float bulbScaleModifier = 0.95f;
+        float bulbScaleModifier = 1f;
 
         // BULB
         Rectangle bulbClip = Utils.Frame(bulbTexture, BULBFRAMECOUNT_COLUMN, BULBFRAMECOUNT_ROW, frameX: bulbFrameColumn, frameY: bulbFrame);
@@ -555,12 +555,12 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
             Scale = plantScale
         };
 
-        // LEAF STEM 1
-        Rectangle leafStem1Clip = leafStem1Texture.Bounds;
-        Vector2 leafStem1Origin = leafStem1Clip.BottomCenter();
-        DrawInfo leafStem1DrawInfo = new() {
-            Clip = leafStem1Clip,
-            Origin = leafStem1Origin,
+        // LEAF STEM
+        Rectangle leafStemClip = leafStemTexture.Bounds;
+        Vector2 leafStemOrigin = leafStemClip.BottomCenter();
+        DrawInfo leafStemDrawInfo = new() {
+            Clip = leafStemClip,
+            Origin = leafStemOrigin,
 
             Scale = plantScale
         };
@@ -568,7 +568,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         // LEAF
         Rectangle getLeafClip(int frameY = 0) => Utils.Frame(leafTexture, 1, LEAFFRAMECOUNT, frameY: frameY);
         Rectangle leafClip = getLeafClip();
-        Vector2 leafOrigin = leafStem1Clip.BottomLeft();
+        Vector2 leafOrigin = leafStemClip.BottomLeft();
         DrawInfo leafDrawInfo = new() {
             Clip = leafClip,
             Origin = leafOrigin,
@@ -716,7 +716,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         float transformFactorForScale = Utils.GetLerpValue(0f, 0.05f, TransformFactor, true);
         int leafFrame = 0;
         void drawLeafStem(Vector2 startVelocity, bool stamenStem = false) {
-            int leafStem1Height = leafStem1Clip.Height - texturePadding;
+            int leafStem1Height = leafStemClip.Height - texturePadding;
             leafStem1Height = (int)(leafStem1Height * plantScaleFactor * 0.95f);
 
             int currentStamenIndex = 0;
@@ -892,7 +892,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                 Vector2 position = startPosition;
 
                 void drawStem(Vector2 position) {
-                    batch.Draw(leafStem1Texture, position, leafStem1DrawInfo.WithScale(scaleFactor * transformFactorForScale) with {
+                    batch.Draw(leafStemTexture, position, leafStemDrawInfo.WithScale(scaleFactor * transformFactorForScale) with {
                         Rotation = rotation,
                         ImageFlip = flip
                     });
@@ -972,7 +972,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     flip |= SpriteEffects.FlipVertically;
                 }
 
-                int stemHeight = leafStem1Clip.Height - texturePadding;
+                int stemHeight = leafStemClip.Height - texturePadding;
                 stemHeight = (int)(stemHeight * plantScaleFactor * 0.95f);
                 Vector2 stemStartPosition = position,
                         stemEndPosition = center;
@@ -998,7 +998,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                         break;
                     }
 
-                    batch.Draw(leafStem1Texture, stemPosition, leafStem1DrawInfo.WithScale(stemScaleFactor) with {
+                    batch.Draw(leafStemTexture, stemPosition, leafStemDrawInfo.WithScale(stemScaleFactor) with {
                         Rotation = stemRotation
                     });
 

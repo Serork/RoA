@@ -12,6 +12,7 @@ using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -93,8 +94,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
         Projectile.scale = 0.75f * _scale.Value;
 
         if (Projectile.localAI[0] == 0f) {
-            Projectile.Center = owner.Top;
-            Projectile.Center = Utils.Floor(Projectile.Center) - Vector2.UnitY * 40f + Vector2.UnitY * owner.gfxOffY;
+            Projectile.Center = owner.GetPlayerCorePoint() - Vector2.UnitY * owner.height / 2 - Vector2.UnitY * 40f;
             if (Projectile.IsOwnerLocal()) {
                 Projectile.velocity = Projectile.Center.DirectionTo(owner.GetWorldMousePosition());
                 Projectile.netUpdate = true;

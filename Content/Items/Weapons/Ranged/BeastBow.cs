@@ -179,8 +179,7 @@ sealed class BeastProj : ModProjectile {
         Vector2 velocity = new Vector2();
         velocity.X += vector.X * x - vector.Y * y;
         velocity.Y += vector.X * y + vector.Y * x;
-        Projectile.Center = player.MountedCenter;
-        Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * player.gfxOffY + Projectile.velocity * 20f + new Vector2(offset * player.direction, 2f * player.direction * player.gravDir).RotatedBy(Projectile.velocity.ToRotation());
+        Projectile.Center = player.GetPlayerCorePoint() + Projectile.velocity * 20f + new Vector2(offset * player.direction, 2f * player.direction * player.gravDir).RotatedBy(Projectile.velocity.ToRotation());
         Vector2 velocity2 = Projectile.Center + velocity * (float)(31.4 + 31.4 * Projectile.ai[1]);
         Projectile.direction = Projectile.spriteDirection = player.direction;
 

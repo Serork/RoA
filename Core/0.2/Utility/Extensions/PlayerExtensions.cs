@@ -1,4 +1,6 @@
-﻿using RoA.Core.Data;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Core.Data;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -6,6 +8,12 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Extensions;
 
 static partial class PlayerExtensions {
+    public static Vector2 GetPlayerCorePoint(this Player player) {
+        Vector2 vector = player.Bottom;
+        Vector2 pos = player.MountedCenter;
+        return Utils.Floor(vector + (pos - vector) + new Vector2(0f, player.gfxOffY));
+    }
+
     public static bool HasProjectile<T>(this Player player, int count = 1) where T : ModProjectile => player.ownedProjectileCounts[ModContent.ProjectileType<T>()] >= count;
 
     public static bool IsAliveAndFree(this Player player) => player.IsAlive() && !player.CCed;

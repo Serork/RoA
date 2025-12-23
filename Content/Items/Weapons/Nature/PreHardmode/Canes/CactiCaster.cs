@@ -87,7 +87,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
             if (CurrentUseTime > UseTime * MinUseTimeToShootFactor()) {
 
             }
-            else if (CurrentPenaltyTime <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {
+            else if (CurrentReleaseTime <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {
                 _makeDust = false;
                 for (int num559 = 0; num559 < 10; num559++) {
                     int dustType = DustID.OasisCactus;

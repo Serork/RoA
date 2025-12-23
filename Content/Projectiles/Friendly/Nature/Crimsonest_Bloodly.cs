@@ -120,8 +120,7 @@ sealed class Bloodly : NatureProjectile, IRequestAssets {
             if (_index == 2) {
                 _cooconAngle = -(float)1 / 3 * MathHelper.PiOver4 * -owner.direction;
             }
-            Projectile.Center = owner.MountedCenter - Vector2.UnitY * owner.height / 2;
-            Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY + (Vector2.UnitY * -20f + (Vector2.UnitY * (_index == 1 ? 30f : _index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle * owner.gravDir)) * owner.gravDir;
+            Projectile.Center = owner.GetPlayerCorePoint() - Vector2.UnitY * owner.height / 2 + (Vector2.UnitY * -20f + (Vector2.UnitY * (_index == 1 ? 30f : _index == 2 ? 35f : 25f)).RotatedBy(_cooconAngle * owner.gravDir)) * owner.gravDir;
         }
         void init() {
             BloodlyValues bloodlyValues = new(Projectile);

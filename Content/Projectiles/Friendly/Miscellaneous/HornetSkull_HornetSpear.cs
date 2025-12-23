@@ -139,8 +139,7 @@ sealed class HornetSpear : ModProjectile {
         int maxTimeLeft = (int)Projectile.localAI[1];
         Projectile.scale = Utils.GetLerpValue(maxTimeLeft, maxTimeLeft - STARTDISAPPEARINGTIME / 2, Projectile.timeLeft, true);
 
-        Projectile.Center = owner.Center;
-        Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * owner.gfxOffY + -Vector2.UnitY.RotatedBy(Projectile.rotation) * 20f;
+        Projectile.Center = owner.GetPlayerCorePoint() + -Vector2.UnitY.RotatedBy(Projectile.rotation) * 20f;
     }
 
     public override bool ShouldUpdatePosition() => false;

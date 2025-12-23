@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Content.Buffs;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -72,8 +73,7 @@ sealed class SmallMoon : ModProjectile {
             Projectile.ai[2] = (float)dist;
         }
         Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], (float)dist, 0.01f);
-        Projectile.Center = player.MountedCenter;
-        Projectile.Center = Utils.Floor(Projectile.Center);
+        Projectile.Center = player.GetPlayerCorePoint();
         Projectile.Center = new Vector2(Projectile.Center.X - (int)(Math.Cos(rad) * Projectile.ai[2]), Projectile.Center.Y - (int)(Math.Sin(rad) * Projectile.ai[2]) + player.gfxOffY);
 
         if (player.name == "has2r") Projectile.ai[1] -= 3f;

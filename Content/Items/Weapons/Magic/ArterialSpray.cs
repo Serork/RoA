@@ -8,6 +8,7 @@ using RoA.Common.Recipes;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.IO;
@@ -126,8 +127,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        Projectile.Center = player.MountedCenter;
-        Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * player.gfxOffY;
+        Projectile.Center = player.GetPlayerCorePoint();
         if (Projectile.owner == Main.myPlayer) {
             if (Projectile.ai[0] == 0f) {
                 Projectile.ai[0] = 1f;

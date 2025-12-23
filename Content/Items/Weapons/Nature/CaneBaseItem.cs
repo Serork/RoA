@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Utilities;
 
 using RoA.Common.Druid;
-using RoA.Common.Druid.Forms;
 using RoA.Common.GlowMasks;
 using RoA.Common.Projectiles;
 using RoA.Core.Utility;
@@ -63,8 +62,8 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     private const float STARTROTATION = 1.4f;
     private const float MINROTATION = -0.24f, MAXROTATION = 0.24f;
     private const int BASEPENALTY = 30;
+    protected bool Init { get; private set; }
 
-    private bool _init;
     private ushort _penaltyTime, _maxPenaltyTime;
     private float _maxUseTime;
     private float _rotation;
@@ -97,8 +96,9 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     public int CurrentUseTime { get => (int)Projectile.ai[0]; private set => Projectile.ai[0] = value < 0 ? 0 : value; }
     public bool ShouldBeActive { get => _shouldBeActive; private set => _shouldBeActive = value; }
 
-    protected ushort CurrentPenaltyTime => _penaltyTime;
-    protected float PenaltyProgress => (float)_penaltyTime / _maxPenaltyTime;
+    protected ushort CurrentReleaseTime => _penaltyTime;
+    protected float AfterReleaseProgress01 => _maxPenaltyTime <= 0 ? 0f : ((float)_penaltyTime / _maxPenaltyTime);
+
     protected ushort ShootType => (ushort)Projectile.ai[1];
 
     public virtual bool IsInUse => Owner.IsAliveAndFree();
@@ -194,6 +194,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     }
 
     protected virtual void SafePreDraw() { }
+    protected virtual void SafePostDraw() { }
 
     protected sealed override void Draw(ref Color lightColor) {
         if (AttachedNatureWeapon.IsEmpty()) {
@@ -240,6 +241,8 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             Color glowMaskColor = glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - Projectile.alpha / 255f) : glowMaskInfo.Color;
             Main.EntitySpriteDraw(heldItemGlowMaskTexture, drawPosition, sourceRectangle, glowMaskColor, rotation, origin, scale, effects);
         }
+
+        SafePostDraw();
     }
 
     protected sealed override void SafeOnSpawn(IEntitySource source) {
@@ -276,8 +279,8 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
 
         SetPosition();
 
-        if (!_init) {
-            _init = true;
+        if (!Init) {
+            Init = true;
 
             Initialize();
 
@@ -384,7 +387,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             }
         }
         else {
-            _penaltyTime = BASEPENALTY;
+            _penaltyTime = _maxPenaltyTime = BASEPENALTY;
         }
         if (_penaltyTime > 2) {
             if (Owner.itemTime < 2) {
@@ -415,9 +418,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     }
 
     private void SetPosition() {
-        Vector2 center = Owner.MountedCenter;
-        Projectile.Center = center;
-        Projectile.Center = Utils.Floor(Projectile.Center) + Vector2.UnitY * Owner.gfxOffY;
+        Projectile.Center = Owner.GetPlayerCorePoint();
         //bool flag = !ShouldStopUpdatingRotationAndDirection();
         bool flag = true;
         if (Projectile.IsOwnerLocal() && flag) {
