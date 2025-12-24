@@ -157,7 +157,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
             }
         }
 
-        private void DrawSmallSummonMise(bool inPreDraw) {
+        private void DrawSmallSummonMise(bool inPreDraw, Color lightColor) {
             if (!AssetInitializer.TryGetRequestedTextureAssets<BulbCaneBase>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
                 return;
             }
@@ -189,6 +189,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
 
                 Vector2 startPosition = CorePosition,
                         endPosition = position;
+
                 while (true) {
                     Vector2 velocityToSummonMouthPosition = startPosition.DirectionTo(endPosition);
                     float stemRotation = velocityToSummonMouthPosition.ToRotation() + MathHelper.PiOver2;
@@ -200,7 +201,8 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
                     }
 
                     batch.Draw(leafStemTexture, startPosition, leafStemDrawInfo.WithScale(0.75f) with {
-                        Rotation = stemRotation
+                        Rotation = stemRotation,
+                        Color = lightColor
                     });
 
                     startPosition += velocityToSummonMouthPosition * step;
@@ -211,7 +213,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
                 float a = 255f;
                 float progress = Ease.CubeOut(ReleaseProgress);
                 a = MathHelper.Lerp(a, 50, progress);
-                Color baseColor = Color.White;
+                Color baseColor = lightColor;
                 baseColor = Color.Lerp(baseColor, Color.Yellow, progress);
                 Color color = baseColor with { A = (byte)a } * smallSummonMouthInfo.Opacity * 1f;
                 int smallSummonMouthFrame = (int)((Main.GlobalTimeWrappedHourly * 10 + i) % 2);
@@ -234,20 +236,20 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
             }
         }
 
-        protected override void SafePreDraw() {
+        protected override void SafePreDraw(Color lightColor) {
             if (!Init) {
                 return;
             }
 
-            DrawSmallSummonMise(true);
+            DrawSmallSummonMise(true, lightColor);
         }
 
-        protected override void SafePostDraw() {
+        protected override void SafePostDraw(Color lightColor) {
             if (!Init) {
                 return;
             }
 
-            DrawSmallSummonMise(false);
+            DrawSmallSummonMise(false, lightColor);
 
             float attackProgress = AttackProgress01;
             attackProgress = Ease.CubeOut(attackProgress);

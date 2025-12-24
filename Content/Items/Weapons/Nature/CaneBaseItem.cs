@@ -193,15 +193,15 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
         _positionOffset = reader.ReadVector2();
     }
 
-    protected virtual void SafePreDraw() { }
-    protected virtual void SafePostDraw() { }
+    protected virtual void SafePreDraw(Color lightColor) { }
+    protected virtual void SafePostDraw(Color lightColor) { }
 
     protected sealed override void Draw(ref Color lightColor) {
         if (AttachedNatureWeapon.IsEmpty()) {
             return;
         }
 
-        SafePreDraw();
+        SafePreDraw(lightColor);
 
         Texture2D heldItemTexture = TextureAssets.Item[AttachedNatureWeapon.type].Value;
 
@@ -242,7 +242,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
             Main.EntitySpriteDraw(heldItemGlowMaskTexture, drawPosition, sourceRectangle, glowMaskColor, rotation, origin, scale, effects);
         }
 
-        SafePostDraw();
+        SafePostDraw(lightColor);
     }
 
     protected sealed override void SafeOnSpawn(IEntitySource source) {

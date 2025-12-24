@@ -164,7 +164,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.15f, Owner.direction == 1 ? -0.1f : 0f);
 
-        protected override void SafePreDraw() {
+        protected override void SafePreDraw(Color lightColor) {
             if (!AssetInitializer.TryGetRequestedTextureAssets<CarrionCaneBase>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets) ||
                 !AssetInitializer.TryGetRequestedTextureAssets<Rafflesia>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets2)) {
                 return;
