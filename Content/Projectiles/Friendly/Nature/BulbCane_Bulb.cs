@@ -26,18 +26,17 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomImmunityFrames {
+    // separate
     private class Bulb_DamageCounter : GlobalProjectile {
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone) {
-            int finalDamage = hit.Damage;
-            Vector2 damageSourcePosition = target.Center;
-            foreach (Projectile bulbProjectile in TrackedEntitiesSystem.GetTrackedProjectile<Bulb>(checkProjectile => !checkProjectile.SameOwnerAs(projectile))) {
-                bulbProjectile.As<Bulb>().AcceptDamage(damageSourcePosition, finalDamage);
-            }
+            AcceptDamage(hit.Damage, target.Center, projectile);
         }
 
         public override void OnHitPlayer(Projectile projectile, Player target, Player.HurtInfo info) {
-            int finalDamage = info.Damage;
-            Vector2 damageSourcePosition = target.Center;
+            AcceptDamage(info.Damage, target.Center, projectile);
+        }
+
+        private void AcceptDamage(int finalDamage, Vector2 damageSourcePosition, Projectile projectile) {
             foreach (Projectile bulbProjectile in TrackedEntitiesSystem.GetTrackedProjectile<Bulb>(checkProjectile => !checkProjectile.SameOwnerAs(projectile))) {
                 bulbProjectile.As<Bulb>().AcceptDamage(damageSourcePosition, finalDamage);
             }
@@ -207,7 +206,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         energyInfo.Velocity = Vector2.One.RotateRandom(MathHelper.TwoPi) * 2.5f * Main.rand.NextFloat(2.5f, 5f);
         energyInfo.Velocity = new Vector2(energyInfo.Velocity.X, MathF.Abs(energyInfo.Velocity.Y) * 1.5f);
         int direction = (AcceptedEnoughDamageProgress() > 0.5f).ToDirectionInt();
-        energyInfo.Destination = center - Vector2.UnitY * 30f + Vector2.UnitX * 50f * direction;
+        energyInfo.Destination = center - Vector2.UnitY * 34f + Vector2.UnitX * 48f + Main.rand.RandomPointInArea(10f) * direction;
 
         if (_nextEnergyParticleIndex > _energyParticleData.Length - 1) {
             _nextEnergyParticleIndex = 0;
@@ -546,7 +545,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
 
                 Vector2 vector104 = IsSecondFormActive ? center : energyInfo.Destination;
                 Vector2 value12 = vector104 - energyInfo.Position;
-                if (value12.Length() < energyInfo.Velocity.Length()) {
+                if (IsSecondFormActive || value12.Length() < energyInfo.Velocity.Length()) {
                     energyInfo.Active = false;
                     continue;
                 }
@@ -577,7 +576,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     if (!Main.rand.NextBool(2)) {
                         continue;
                     }
-                    Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, ModContent.DustType<BulbCaneGlow>(), 0f, 0f, 0, default, Main.rand.NextFloat(1.25f, 2f) * 2f)];
+                    Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, ModContent.DustType<BulbCaneGlow>(), 0f, 0f, Main.rand.Next(150), default, Main.rand.NextFloat(1.25f, 2f) * 2f)];
                     obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f;
                     obj.position += Main.rand.RandomPointInArea(2f);
                     obj.noGravity = true;
