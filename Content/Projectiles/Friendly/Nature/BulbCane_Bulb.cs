@@ -110,7 +110,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         public readonly float Progress => MathUtils.Clamp01((float)DamageDone / DamageNeeded);
         public readonly bool Activated => Progress >= 1f;
     }
-    public record struct EnergyParticleInfo(Vector2 Position, Vector2 Destination, Vector2 Velocity, ushort TimeLeft);
+    public record struct EnergyParticleInfo(Vector2 Position, Vector2 Destination, Vector2 Velocity, bool Active);
 
     private SummonMouthInfo[] _summonMouthData = null!;
     private SummonTentacleInfo[] _summonTentacleData = null!;
@@ -202,10 +202,11 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
 
         ref EnergyParticleInfo energyInfo = ref _energyParticleData[_nextEnergyParticleIndex++];
         energyInfo.Position = position;
-        energyInfo.TimeLeft = 25;
+        energyInfo.Active = true;
         energyInfo.Velocity = position.DirectionFrom(center).RotatedByRandom(MathHelper.Pi * Main.rand.NextFloatDirection()) * 2.5f * Main.rand.NextFloat(2.5f, 5f);
+        energyInfo.Velocity = new Vector2(energyInfo.Velocity.X, MathF.Abs(energyInfo.Velocity.Y) * 1.5f);
         int direction = (AcceptedEnoughDamageProgress() > 0.5f).ToDirectionInt();
-        energyInfo.Destination = center - Vector2.UnitY * 34f + Vector2.UnitX * 48f + Main.rand.RandomPointInArea(10f) * direction;
+        energyInfo.Destination = center - Vector2.UnitY * 36 + Vector2.UnitX * 48f * direction + Main.rand.RandomPointInArea(10f);
 
         if (_nextEnergyParticleIndex > _energyParticleData.Length - 1) {
             _nextEnergyParticleIndex = 0;
@@ -435,7 +436,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     mainDestination.X += waveOffset;
                 }
 
-                mainDestination = Vector2.Lerp(mainDestination, rootPosition, dissappearanceFactor);
+                //mainDestination = Vector2.Lerp(mainDestination, rootPosition, dissappearanceFactor);
 
                 int segmentCount = summonTentacleInfo.SegmentCount;
                 for (int i2 = 0; i2 < segmentCount; i2++) {
@@ -536,23 +537,21 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         void processEnergyParticles() {
             for (int i = 0; i < _energyParticleData.Length; i++) {
                 ref EnergyParticleInfo energyInfo = ref _energyParticleData[i];
-                if (energyInfo.TimeLeft <= 0) {
+                if (!energyInfo.Active) {
                     continue;
                 }
-
-                energyInfo.TimeLeft--;
 
                 energyInfo.Position += energyInfo.Velocity;
 
                 Vector2 vector104 = IsSecondFormActive ? center : energyInfo.Destination;
                 Vector2 value12 = vector104 - energyInfo.Position;
-                if (IsSecondFormActive || value12.Length() < energyInfo.Velocity.Length()) {
-                    energyInfo.TimeLeft = 0;
+                if (value12.Length() < energyInfo.Velocity.Length()) {
+                    energyInfo.Active = false;
                     continue;
                 }
 
-                if (energyInfo.Position.Distance(vector104) < 20f) {
-                    energyInfo.TimeLeft = 0;
+                if (energyInfo.Position.Distance(vector104) < 2f) {
+                    energyInfo.Active = false;
                     continue;
                 }
 
@@ -577,7 +576,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     if (!Main.rand.NextBool(2)) {
                         continue;
                     }
-                    Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, ModContent.DustType<BulbCaneGlow>(), 0f, 0f, 0, default, Main.rand.NextFloat(1.25f, 2f) * 2f)];
+                    Dust obj = Main.dust[Dust.NewDust(Projectile.position, 0, 0, ModContent.DustType<BulbCaneGlow>(), 0f, 0f, 100, default, Main.rand.NextFloat(1.25f, 2f) * 2f)];
                     obj.position = Vector2.Lerp(vector7, vector6, num6 / (float)num5) + new Vector2(Projectile.width, Projectile.height) / 2f;
                     obj.position += Main.rand.RandomPointInArea(2f);
                     obj.noGravity = true;

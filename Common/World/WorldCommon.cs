@@ -14,19 +14,19 @@ namespace RoA.Common.World;
 
 sealed class WorldCommon : ModSystem {
     public delegate void ModifyWorldGenTasksDelegate(List<GenPass> tasks, ref double totalWeight);
-    public static event ModifyWorldGenTasksDelegate ModifyWorldGenTasksEvent;
+    public static event ModifyWorldGenTasksDelegate ModifyWorldGenTasksEvent = null!;
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
         ModifyWorldGenTasksEvent?.Invoke(tasks, ref totalWeight);
     }
 
     public delegate void PostUpdateNPCsDelegate();
-    public static event PostUpdateNPCsDelegate PostUpdateNPCsEvent;
+    public static event PostUpdateNPCsDelegate PostUpdateNPCsEvent = null!;
     public override void PostUpdateNPCs() {
         PostUpdateNPCsEvent?.Invoke();
     }
 
     public delegate void PreUpdateNPCsDelegate();
-    public static event PreUpdateNPCsDelegate PreUpdateNPCsEvent;
+    public static event PreUpdateNPCsDelegate PreUpdateNPCsEvent = null!;
     public override void PreUpdateNPCs() {
         PreUpdateNPCsEvent?.Invoke();
     }
