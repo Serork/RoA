@@ -58,7 +58,9 @@ sealed class ScholarStructure : IInitializer {
     private void WorldCommon_ModifyWorldGenTasksEvent(System.Collections.Generic.List<Terraria.WorldBuilding.GenPass> tasks, ref double totalWeight) {
         int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Micro Biomes"));
 
-        //genIndex = 20;
+        genIndex = 20;
+
+        genIndex += 1;
 
         tasks.Insert(genIndex, new PassLegacy("Scholar Structure", ScholarStructure_Generator, 0.2074f));
     }
@@ -77,7 +79,7 @@ sealed class ScholarStructure : IInitializer {
         origin.Y -= sizeY * 3 / 2;
         for (int i = -1; i < sizeX + 1; i++) {
             double num4 = (double)(i - sizeX / 2) / (double)sizeX + 0.5;
-            int num5 = (int)((0.5 - Math.Abs(num4 - 0.5)) * 1.0) - 4;
+            int num5 = (int)((0.5 - Math.Abs(num4 - 0.5)) * 1) - 4;
             for (int j = -1; j < sizeY + 1; j++) {
                 bool hasWall = true;
                 bool flag = false;
@@ -95,7 +97,7 @@ sealed class ScholarStructure : IInitializer {
                     flag = j - sizeY / 2 > 0 || flag2;
                 }
 
-                if (Math.Abs(num4 - 0.5) > 0.45 + genRand.NextDouble() * 0.05) {
+                if (Math.Abs(num4 - 0.5) > 0.5 + genRand.NextDouble() * 0.05) {
                     hasWall = false;
                     flag = false;
                 }
@@ -119,19 +121,84 @@ sealed class ScholarStructure : IInitializer {
             num11 = ((m >= sizeX / 2) ? (num11 + Utils.Lerp(num10, value2, (double)m / (double)(sizeX / 2) - 1.0))
                 : (num11 + Utils.Lerp(value, num10, (double)m / (double)(sizeX / 2))));
             for (int n = num8 - num13; n <= num8 + num13; n++) {
-                PlaceSlab(_slabs[m + 1, n + 1], m * 3 + origin.X + WorldGen.genRand.Next(-3, 4), n * 3 + origin.Y + (int)num11 + (int)(Math.Sin(m * genRand.NextFloat(0.75f, 1f)) * 5), 5);
+                bool bottom = n > num8;
+                int x = m * 3 + origin.X + WorldGen.genRand.Next(-3, 4);
+                int y = n * 3 + origin.Y + (int)num11 + (int)(Math.Sin(m * 0.275f * genRand.NextFloat(0.75f, 1f)) * 5);
+                PlaceSlab(_slabs[m + 1, n + 1], x, y, 5);
+                //if (_slabs[m + 1, n + 1].IsSolid && m % 2 == 0) {
+                //    PlaceTight(x, y, bottom, num8);
+                //}
             }
         }
 
         baseOrigin.Y += sizeY;
-        StructureGenerator.GenerateStructureFromMap(ScholarStructureMap, new Point16(baseOrigin.X, baseOrigin.Y), StructureGenerator.StructureOriginType.BottomCenter,
+        StructureGenerator.GenerateStructureFromMap(ScholarStructureMap, new Point16(baseOrigin.X, baseOrigin.Y - 2), StructureGenerator.StructureOriginType.BottomCenter,
             cleanUpFluffY: 4);
 
-        GenVars.structures.AddStructure(new Rectangle(origin.X, origin.Y, sizeX * 3, sizeY * 3), 8);
+        GenVars.structures.AddStructure(new Rectangle(origin.X, origin.Y, sizeX * 3, sizeY * 3), 20);
+    }
+
+    private void PlaceTight(int x, int y, bool bottom, int sizeY) {
+        UnifiedRandom genRand = WorldGen.genRand;
+        int num9 = (int)x;
+        int num10 = (int)((double)x + 16);
+        int m = num9;
+        int num16 = 0;
+        for (; m < num10; m += 1) {
+            int dir = (!bottom).ToDirectionInt();
+            int num17 = y - 3 * dir;
+            while (!Main.tile[m, num17].HasTile) {
+                num17 += -1 * dir;
+            }
+
+            num17 += -4 * dir;
+            int num18 = genRand.Next(5, 15);
+            int num19 = genRand.Next(15, 26);
+            int n = m - num18;
+            while (num18 > 0) {
+                for (n = m - num18; n < m + num18; n++) {
+                    Tile tile2 = Main.tile[n, num17];
+                    tile2.HasTile = true;
+                    Main.tile[n, num17].TileType = 1;
+                }
+
+                num16++;
+                if (WorldGen.genRand.Next(3) < num16) {
+                    num16 = 0;
+                    num18 += -1;
+                    m += WorldGen.genRand.Next(-1, 2);
+                }
+
+                if (num19 <= 0)
+                    num18 += -1;
+
+                num19--;
+                num17 += 1 * dir;
+            }
+
+            n -= genRand.Next(1, 3);
+            Tile tile = Main.tile[n, num17 - 2 * dir];
+            tile.HasTile = true;
+            Main.tile[n, num17 - 2 * dir].TileType = 1;
+            tile = Main.tile[n, num17 - 1];
+            tile.HasTile = true;
+            Main.tile[n, num17 - 1 * dir].TileType = 1;
+            tile = Main.tile[n, num17];
+            tile.HasTile = true;
+            Main.tile[n, num17].TileType = 1;
+            //if (genRand.Next(2) == 0) {
+            //    Main.tile[n, num17 + 1].active(active: true);
+            //    Main.tile[n, num17 + 1].type = 1;
+            //    PlaceTight(n, num17 + 2);
+            //}
+            //else {
+            //    PlaceTight(n, num17 + 1);
+            //}
+        }
     }
 
     private void PlaceSlab(Slab slab, int originX, int originY, int scale) {
-        ushort num = TileID.Stone;
+        ushort num = TileID.MarbleBlock;
         ushort wall = 0;
 
         int num2 = -1;
@@ -139,18 +206,22 @@ sealed class ScholarStructure : IInitializer {
         int num4 = 0;
         int num5 = scale;
         for (int i = num2; i < num3; i++) {
-            if ((i == num2 || i == num3 - 1) && WorldGen.genRand.Next(3) == 0)
+            if ((i == num2 || i == num3 - 1) && WorldGen.genRand.Next(4) == 0)
                 continue;
 
-            if (WorldGen.genRand.Next(3) == 0)
+            if (WorldGen.genRand.Next(4) == 0)
                 num4--;
+
+            if (WorldGen.genRand.Next(3) == 0)
+                num5--;
 
             if (WorldGen.genRand.Next(3) == 0)
                 num5++;
 
             for (int j = num4; j < num5; j++) {
                 Tile tile = Main.tile[originX + i, originY + j];
-                tile.ResetToType(TileID.Sets.Ore[tile.TileType] ? tile.TileType : num);
+                ushort[] skipTileTypes = [TileID.Dirt];
+                tile.ResetToType(/*TileID.Sets.Ore[tile.TileType] ? TileID.Dirt : skipTileTypes.Contains(tile.TileType) ? tile.TileType : */num);
                 bool active = slab.State(i, j, scale);
                 tile.HasTile = active;
                 if (slab.HasWall) {

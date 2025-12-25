@@ -126,7 +126,7 @@ sealed class TarBiome : MicroBiome {
         CleanupTiles(origin, effectedMapArea);
         PlaceStalactites(origin);
         PlaceDecorations(origin, effectedMapArea);
-        structures.AddStructure(GeometryUtils.CenteredSquare(origin.ToVector2() + new Vector2(effectedMapArea.Size().X * 1.05f, effectedMapArea.Size().Y) * 0.625f, effectedMapArea.Size()), 8);
+        structures.AddStructure(GeometryUtils.CenteredSquare(origin.ToVector2() + new Vector2(effectedMapArea.Size().X * 1.05f + 5, effectedMapArea.Size().Y - 5) * 0.625f, effectedMapArea.Size()), 8);
         return true;
     }
 
