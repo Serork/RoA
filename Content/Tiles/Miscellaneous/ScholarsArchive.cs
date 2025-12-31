@@ -75,13 +75,15 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             Rectangle clip = Utils.Frame(glowTexture, 1, 3, frameY: 1);
             Vector2 origin = clip.Centered();
             SpriteBatch batch = Main.spriteBatch;
-            Vector2 position = new Point16(i, j).ToWorldCoordinates() - Vector2.UnitY * 6f;
+            Vector2 position = new Point16(i, j).ToWorldCoordinates() - Vector2.UnitY * 6f;         
             float rotation = (float)(Main.timeForVisualEffects * 0.1 + offset) * 0.05f;
+            Color lightingColor = Lighting.GetColor(position.ToTileCoordinates());
+            lightingColor = Color.Lerp(lightingColor, Color.White, 0.1f);
             Color color = Color.Lerp(Color.SkyBlue, Color.Lerp(Color.SkyBlue, Color.Blue, 0.1f), Helper.Wave(0f, 1f, waveFrequency, offset)).ModifyRGB(Helper.Wave(0.9f, 1.1f, waveFrequency, offset));
             DrawInfo drawInfo = new() {
                 Clip = clip,
                 Origin = origin,
-                Color = color,
+                Color = color.MultiplyRGB(lightingColor),
                 Rotation = rotation
             };
             batch.Draw(glowTexture, position, drawInfo);
@@ -93,7 +95,7 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             drawInfo = new() {
                 Clip = clip,
                 Origin = origin,
-                Color = color,
+                Color = color.MultiplyRGB(lightingColor),
                 Rotation = rotation
             };
             batch.Draw(glowTexture, position, drawInfo);
@@ -105,7 +107,7 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             drawInfo = new() {
                 Clip = clip,
                 Origin = origin,
-                Color = color,
+                Color = color.MultiplyRGB(lightingColor),
                 Rotation = rotation
             };
             batch.Draw(glowTexture, position, drawInfo);

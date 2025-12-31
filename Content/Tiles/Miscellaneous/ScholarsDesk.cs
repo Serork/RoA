@@ -26,7 +26,7 @@ sealed class ScholarsDesk : ModTile {
         TileObjectData.addTile(Type);
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);
-        AddMapEntry(new Color(213, 189, 185), Language.GetText("MapObject.Table"));
+        AddMapEntry(new Color(191, 142, 111), Language.GetText("MapObject.Table"));
 
         AdjTiles = [TileID.Tables];
     }
