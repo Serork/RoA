@@ -100,13 +100,13 @@ sealed class ScholarStructure : IInitializer {
         while (flag56) {
             int num932 = genRand.Next((int)((double)Main.maxTilesX * 0.3), (int)((double)Main.maxTilesX * 0.7));
 
-            int num933 = genRand.Next((int)Main.rockLayer, Main.maxTilesY - 300);
+            int num933 = genRand.Next((int)Main.worldSurface + 50, Main.maxTilesY - 300);
             flag56 = false;
             int num934 = 100;
             for (int num936 = num932 - num934; num936 < num932 + num934; num936 += 3) {
                 for (int num937 = num933 - num934; num937 < num933 + num934; num937 += 3) {
                     if (WorldGen.InWorld(num936, num937)) {
-                        ushort[] skipTileTypes = [TileID.MushroomGrass, 147, 161, 162, 60, 368, 367, (ushort)ModContent.TileType<SolidifiedTar>()];
+                        ushort[] skipTileTypes = [TileID.Crimstone, TileID.Ebonstone, TileID.MushroomGrass, 147, 161, 162, 60, 368, 367, (ushort)ModContent.TileType<SolidifiedTar>()];
                         if (Main.tile[num936, num937].HasTile && skipTileTypes.Contains(Main.tile[num936, num937].TileType)) {
                             flag56 = true;
                             break;
@@ -242,7 +242,7 @@ sealed class ScholarStructure : IInitializer {
             for (int j = origin.Y - 30; j < origin.Y + sizeY * 3 + 30; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 int chance = 25;
-                chance += (int)((float)(j - Main.rockLayer) / (Main.maxTilesY - 300) * 15);
+                chance += (int)((float)(j - Main.rockLayer) / (Main.maxTilesY - 300 - Main.rockLayer) * 15);
                 if (tile.HasTile && (tile.TileType == PLACEHOLDERTILETYPE || tile.TileType == PLACEHOLDERTILETYPE2)) {
                     if (genRand.NextBool(chance)) {
                         WorldGen.TileRunner(i, j, genRand.Next(2, 6), genRand.Next(2, 40), TileID.Dirt, addTile: false, overRide: true);
@@ -462,7 +462,7 @@ sealed class ScholarStructure : IInitializer {
                         genRand.NextBool(4)) {
                         bool flag = false;
                         foreach (var holePoint in holePoints) {
-                            if (MathF.Abs(holePoint.X - i) < 4) {
+                            if (MathF.Abs(holePoint.X - i) < 3) {
                                 flag = true;
                                 break;
                             }
@@ -474,6 +474,7 @@ sealed class ScholarStructure : IInitializer {
                             Tile tile2 = Main.tile[i, j];
                             tile2.HasTile = false;
                             Main.tile[i, j - 1].WallType = WallID.GrayBrick;
+                            holePoints.Add(new Point16(i, j));
                             if (genRand.NextBool()) {
                                 tile2 = Main.tile[i + 1, j - 1];
                                 Main.tile[i + 1, j - 2].WallType = WallID.GrayBrick;
@@ -498,7 +499,6 @@ sealed class ScholarStructure : IInitializer {
                             }
                             //WorldGenHelper.ModifiedTileRunner(i, j, 2, 1, -1, wallType: WallID.GrayBrick, clearOnlySolids: true);
                         }
-                        holePoints.Add(new Point16(i, j));
                     }
                     if ((tile.TileType == TileID.WoodBlock || tile.TileType == TileID.LivingWood) &&
                         genRand.NextBool(4)) {
@@ -592,7 +592,7 @@ sealed class ScholarStructure : IInitializer {
                 Tile tile2 = Main.tile[i, j - 1];
                 if (tile.HasTile && !tile2.HasTile) {
                     if (tile.TileType == TileID.WoodBlock || tile.TileType == TileID.LivingWood) {
-                        if (!genRand.NextBool(3)) {
+                        if (genRand.NextBool()) {
                             if (genRand.NextBool(5)) {
                                 int x3 = genRand.Next(12, 36);
                                 WorldGen.PlaceSmallPile(i, j - 1, x3, 0, 185);

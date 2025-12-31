@@ -117,6 +117,7 @@ static partial class TileHelper {
 
     public static Dictionary<int, HangingTileInfo>? HangingTile { get; private set; }
     public static List<(ModTile, Point16)>? SolidTileDrawPoints { get; private set; }
+    public static List<(ModTile, Point16)>? NonSolidTileDrawPoints { get; private set; }
     public static List<(ModTile, Point16)>? PostPlayerDrawPoints { get; private set; }
 
     [UnsafeAccessor(UnsafeAccessorKind.Field, Name = "_sunflowerWindCounter")]
@@ -149,6 +150,13 @@ static partial class TileHelper {
         SolidTileDrawPoints.Add((modTile, new Point16(i, j)));
     }
 
+    public static void AddPostNonSolidTileDrawPoint(ModTile modTile, int i, int j) {
+        if (NonSolidTileDrawPoints.Contains((modTile, new Point16(i, j)))) {
+            return;
+        }
+        NonSolidTileDrawPoints.Add((modTile, new Point16(i, j)));
+    }
+
     public static void AddPostPlayerDrawPoint(ModTile modTile, int i, int j) {
         if (PostPlayerDrawPoints.Contains((modTile, new Point16(i, j)))) {
             return;
@@ -164,6 +172,7 @@ static partial class TileHelper {
         _fluentTiles = [];
         HangingTile = [];
         SolidTileDrawPoints = [];
+        NonSolidTileDrawPoints = [];
         PostPlayerDrawPoints = [];
 
         On_TileDrawing.PreDrawTiles += (orig, self, solidLayer, forRenderTargets, intoRenderTargets) => {
@@ -186,12 +195,25 @@ static partial class TileHelper {
         On_TileDrawing.DrawMultiTileVinesInWind += On_TileDrawing_DrawMultiTileVinesInWind;
 
         On_Main.DoDraw_Tiles_Solid += On_Main_DoDraw_Tiles_Solid;
+        On_Main.DoDraw_Tiles_NonSolid += On_Main_DoDraw_Tiles_NonSolid;
 
         On_Main.DrawPlayers_AfterProjectiles += On_Main_DrawPlayers_AfterProjectiles;
 
         On_Main.DrawTiles += On_Main_DrawTiles;
 
         LoadImpl();
+    }
+
+    private static void On_Main_DoDraw_Tiles_NonSolid(On_Main.orig_DoDraw_Tiles_NonSolid orig, Main self) {
+        if (!CaptureManager.Instance.IsCapturing) {
+            PreNonSolidTileDraws();
+        }
+
+        orig(self);
+
+        if (!CaptureManager.Instance.IsCapturing) {
+            PostNonSolidTileDraws();
+        }
     }
 
     static partial void LoadImpl();
@@ -262,6 +284,37 @@ static partial class TileHelper {
         }
     }
 
+    private static void PreNonSolidTileDraws() {
+        for (int i = NonSolidTileDrawPoints.Count - 1; i >= 0; i--) {
+            (ModTile, Point16) info = NonSolidTileDrawPoints[i];
+            ModTile modTile = info.Item1;
+            Point16 position = info.Item2;
+            if (!Main.tile[position.X, position.Y].HasTile) {
+                NonSolidTileDrawPoints.RemoveAt(i);
+            }
+            if (modTile is IPreDraw tileHaveExtras && modTile is not null) {
+                //if (!TileDrawing.IsVisible(Main.tile[position.X, position.Y])) {
+                //    continue;
+                //}
+                tileHaveExtras.PreDrawExtra(Main.spriteBatch, position);
+            }
+        }
+    }
+
+    private static void PostNonSolidTileDraws() {
+        for (int i = NonSolidTileDrawPoints.Count - 1; i >= 0; i--) {
+            (ModTile, Point16) info = NonSolidTileDrawPoints[i];
+            ModTile modTile = info.Item1;
+            Point16 tilePosition = info.Item2;
+            if (!Main.tile[tilePosition.X, tilePosition.Y].HasTile) {
+                NonSolidTileDrawPoints.RemoveAt(i);
+            }
+            if (modTile is IPostDraw tileHaveExtras && modTile is not null) {
+                tileHaveExtras.PostDrawExtra(Main.spriteBatch, tilePosition);
+            }
+        }
+    }
+
     private static void PreSolidTileDraws() {
         for (int i = SolidTileDrawPoints.Count - 1; i >= 0; i--) {
             (ModTile, Point16) info = SolidTileDrawPoints[i];
@@ -306,6 +359,9 @@ static partial class TileHelper {
 
         SolidTileDrawPoints?.Clear();
         SolidTileDrawPoints = null!;
+
+        NonSolidTileDrawPoints?.Clear();
+        NonSolidTileDrawPoints = null!;
 
         PostPlayerDrawPoints?.Clear();
         PostPlayerDrawPoints = null!;
