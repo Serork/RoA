@@ -21,6 +21,12 @@ class DullDaikatana_Rubble : DullDaikatana {
         MinPick = 0;
 
         MineResist = 0.01f;
+
+        Main.tileSpelunker[Type] = false;
+        Main.tileShine2[Type] = false;
+        Main.tileShine[Type] = 0;
+        TileID.Sets.FriendlyFairyCanLureTo[Type] = false;
+        Main.tileOreFinderPriority[Type] = 0;
     }
 
     public override bool CanExplode(int i, int j) => true;

@@ -302,7 +302,7 @@ sealed class ScholarStructure : IInitializer {
                 if (genRand.NextChance(0.85f)) {
                     WorldGen.PlaceTile(i, j - 1, TileID.Books, mute: true);
                 }
-                else if (genRand.NextChance(0.2f)) {
+                else if (genRand.NextChance(0.375f)) {
                     if (genRand.NextBool()) {
                         Tile tile2 = Main.tile[i, j - 1];
                         tile2.HasTile = true;
@@ -333,17 +333,17 @@ sealed class ScholarStructure : IInitializer {
             }
             if (tile.TileType == TileID.Tables ||
                 tile.TileType == TileID.Tables2) {
-                if (genRand.NextChance(0.35f)) {
+                if (genRand.NextChance(0.375f)) {
                     Tile tile2 = Main.tile[i, j - 1];
                     tile2.HasTile = true;
                     tile2.TileType = TileID.Bottles;
                     tile2.TileFrameX
-                        = (short)(genRand.NextChance(0.75f) ? genRand.Next(4, 7) * 18 : 0);
+                        = (short)(genRand.NextChance(0.75f) ? (genRand.Next(4, 7) * 18) : 0);
                 }
                 else if (genRand.NextChance(0.85f)) {
                     WorldGen.PlaceTile(i, j - 1, TileID.Books, mute: true);
                 }
-                else if (genRand.NextChance(0.2f)) {
+                else if (genRand.NextChance(0.375f)) {
                     if (genRand.NextBool()) {
                         Tile tile2 = Main.tile[i, j - 1];
                         tile2.HasTile = true;
@@ -384,17 +384,17 @@ sealed class ScholarStructure : IInitializer {
                 }
                 if (tile.TileType == TileID.Tables ||
                     tile.TileType == TileID.Tables2) {
-                    if (genRand.NextChance(0.35f)) {
+                    if (genRand.NextChance(0.375f)) {
                         Tile tile2 = Main.tile[i, j - 1];
                         tile2.HasTile = true;
                         tile2.TileType = TileID.Bottles;
                         tile2.TileFrameX
-                            = (short)(genRand.NextChance(0.75f) ? genRand.Next(4, 7) * 18 : 0);
+                            = (short)(genRand.NextChance(0.75f) ? (genRand.Next(4, 7) * 18) : 0);
                     }
                     else if (genRand.NextChance(0.85f)) {
                         WorldGen.PlaceTile(i, j - 1, TileID.Books, mute: true);
                     }
-                    else if (genRand.NextChance(0.1f)) {
+                    else if (genRand.NextChance(0.375f)) {
                         if (genRand.NextBool()) {
                             Tile tile2 = Main.tile[i, j - 1];
                             tile2.HasTile = true;

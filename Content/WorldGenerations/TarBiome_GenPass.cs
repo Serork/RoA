@@ -34,6 +34,7 @@ sealed class TarBiome_GenPass : ModSystem {
                 //while ((double)point3.X < (double)Main.maxTilesX * 0.05 && (double)point3.X < (double)Main.maxTilesX * 0.95) {
                 //    point3.X = WorldGen.genRand.Next(WorldGen.beachDistance, Main.maxTilesX - WorldGen.beachDistance);
                 //}
+                point3.X -= 100;
 
                 num918++;
                 if (TarBiome.CanPlace(point3, GenVars.structures)) {

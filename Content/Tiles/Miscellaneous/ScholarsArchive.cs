@@ -38,6 +38,12 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
         TileObjectData.addTile(Type);
         AdjTiles = [TileID.Bookcases];
         AddMapEntry(new Color(213, 189, 185), CreateMapEntryName());
+
+        Main.tileSpelunker[Type] = true;
+        Main.tileShine2[Type] = true;
+        Main.tileShine[Type] = 2000;
+        TileID.Sets.FriendlyFairyCanLureTo[Type] = true;
+        Main.tileOreFinderPriority[Type] = 550;
     }
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0;
@@ -72,6 +78,7 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             float waveFrequency = 10f;
             float offset = i * j;
 
+            byte a = 100;
             Rectangle clip = Utils.Frame(glowTexture, 1, 3, frameY: 1);
             Vector2 origin = clip.Centered();
             SpriteBatch batch = Main.spriteBatch;
@@ -83,7 +90,7 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             DrawInfo drawInfo = new() {
                 Clip = clip,
                 Origin = origin,
-                Color = color.MultiplyRGB(lightingColor),
+                Color = color.MultiplyRGB(lightingColor) with { A = a },
                 Rotation = rotation
             };
             batch.Draw(glowTexture, position, drawInfo);
@@ -95,7 +102,7 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             drawInfo = new() {
                 Clip = clip,
                 Origin = origin,
-                Color = color.MultiplyRGB(lightingColor),
+                Color = color.MultiplyRGB(lightingColor) with { A = a },
                 Rotation = rotation
             };
             batch.Draw(glowTexture, position, drawInfo);
@@ -107,7 +114,7 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             drawInfo = new() {
                 Clip = clip,
                 Origin = origin,
-                Color = color.MultiplyRGB(lightingColor),
+                Color = color.MultiplyRGB(lightingColor) with { A = a },
                 Rotation = rotation
             };
             batch.Draw(glowTexture, position, drawInfo);
