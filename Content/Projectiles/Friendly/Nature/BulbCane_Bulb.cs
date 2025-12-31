@@ -657,7 +657,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
 
         float bulbScaleModifier = 1f;
 
-        Color baseColor = lightColor * Utils.GetLerpValue(0f, 0.25f, appearanceFactor, true);
+        Color baseColor = lightColor * Utils.GetLerpValue(0f, 0.625f, appearanceFactor, true);
 
         // BULB
         Rectangle bulbClip = Utils.Frame(bulbTexture, BULBFRAMECOUNT_COLUMN, BULBFRAMECOUNT_ROW, frameX: bulbFrameColumn, frameY: bulbFrame);

@@ -4418,7 +4418,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         bool init = false;
-        int startY = -10, endY = (int)Main.worldSurface - 10;
+        int startY = -10, endY = (int)Main.worldSurface - 20;
         int sizeY = (int)MathF.Abs(endY - startY);
         int[] sandX = new int[sizeY + 1];
         foreach (Point surface in _biomeSurface) {
@@ -4443,11 +4443,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (WorldGenHelper.IsCloud(surface.X + sandX[index], surface.Y + j)) {
                     break;
                 }
-                for (int x = -1; x < 2; x++) {
+                for (int x = -2; x < 3; x++) {
                     int x2 = (int)(x * _random.NextBool().ToInt());
-                    if (surface.Y + j < surface.Y) {
-                        x2 = 0;
-                    }
+                    //if (surface.Y + j < surface.Y) {
+                    //    x2 = 0;
+                    //}
+                    x2 = x;
                     Tile tile = WorldGenHelper.GetTileSafely(surface.X + sandX[index] + x2, surface.Y + j);
                     if (SandTileTypes.Contains(tile.TileType)) {
                         WorldGenHelper.ReplaceTile(surface.X + sandX[index] + x2, surface.Y + j, _dirtTileType);

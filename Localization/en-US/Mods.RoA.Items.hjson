@@ -2559,3 +2559,13 @@ OvergrownAltar: {
 	DisplayName: Overgrown Altar
 	Tooltip: Places an Overgrown Altar
 }
+
+ScholarsArchive: {
+	DisplayName: Scholars Archive
+	Tooltip: ""
+}
+
+ScholarsDesk: {
+	DisplayName: Scholars Desk
+	Tooltip: ""
+}

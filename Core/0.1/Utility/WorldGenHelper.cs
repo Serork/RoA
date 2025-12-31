@@ -25,6 +25,40 @@ using Terraria.WorldBuilding;
 namespace RoA.Core.Utility;
 
 static class WorldGenHelper {
+    public static bool IsTileNearby(int x, int y, int distance) {
+        for (int i = x - distance; i <= x + distance; i++) {
+            for (int j = y - distance; j <= y + distance; j++) {
+                if (WorldGen.InWorld(i, j) && Main.tile[i, j].HasTile)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool IsWallNearby(int x, int y, int distance) {
+        for (int i = x - distance; i <= x + distance; i++) {
+            for (int j = y - distance; j <= y + distance; j++) {
+                if (WorldGen.InWorld(i, j) && Main.tile[i, j].AnyWall())
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static ushort WallCountNearby(int x, int y, int distance) {
+        int result = 0;
+        for (int i = x - distance; i <= x + distance; i++) {
+            for (int j = y - distance; j <= y + distance; j++) {
+                if (WorldGen.InWorld(i, j) && Main.tile[i, j].AnyWall())
+                    result++;
+            }
+        }
+
+        return (ushort)result;
+    }
+
     public static int TILESIZE = 16;
 
     sealed class WorldGenHelperVars : ModSystem {
@@ -2123,7 +2157,7 @@ static class WorldGenHelper {
     public static Func<float> RightSizeFactor = () => 1f;
 
     // adapted vanilla
-    public static void ModifiedTileRunner(int i, int j, double strength, int steps, int type = 0, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int[] ignoreTileTypes = null, bool applySeedSettings = false, Action? onIteration = null, Predicate<Point16>? onTilePlacement = null, ushort? wallType = null, bool resetSlope = false) {
+    public static void ModifiedTileRunner(int i, int j, double strength, int steps, int type = 0, bool addTile = false, double speedX = 0.0, double speedY = 0.0, bool noYChange = false, bool overRide = true, int[]? ignoreTileTypes = null, bool applySeedSettings = false, Action? onIteration = null, Predicate<Point16>? onTilePlacement = null, ushort? wallType = null, bool resetSlope = false, int[]? overrideOnlyTileTypes = null, bool clearWallToo = false, bool clearOnlySolids = false, int[]? mustKillTileTypes = null, bool clearOnlyWalls = false) {
         if (applySeedSettings) {
             if (!GenVars.mudWall) {
                 if (WorldGen.drunkWorldGen) {
@@ -2225,7 +2259,23 @@ static class WorldGenHelper {
                             }
                         }
 
-                        tile.HasTile = false;
+                        if (!clearOnlyWalls) {
+                            if (!clearOnlySolids || WorldGenHelper.SolidTileNoPlatform(k, l)) {
+                                tile.HasTile = false;
+                            }
+                            if (mustKillTileTypes != null && mustKillTileTypes.Contains(tile.TileType)) {
+                                tile.HasTile = false;
+                            }
+                        }
+                        else {
+                            tile.WallType = 0;
+                        }
+                        if (clearWallToo) {
+                            tile.WallType = 0;
+                        }
+                        if (wallType.HasValue) {
+                            tile.WallType = wallType.Value;
+                        }
                         continue;
                     }
 
@@ -2277,10 +2327,12 @@ static class WorldGenHelper {
                         if (!flag3) {
                             if (wallType == null) {
                                 if (onTilePlacement == null || onTilePlacement(new Point16(k, l))) {
-                                    tile.TileType = (ushort)type;
-                                    if (resetSlope) {
-                                        tile.IsHalfBlock = false;
-                                        tile.Slope = 0;
+                                    if (overrideOnlyTileTypes == null || overrideOnlyTileTypes.Contains(tile.TileType)) {
+                                        tile.TileType = (ushort)type;
+                                        if (resetSlope) {
+                                            tile.IsHalfBlock = false;
+                                            tile.Slope = 0;
+                                        }
                                     }
                                 }
                             }
