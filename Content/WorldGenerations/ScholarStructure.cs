@@ -248,8 +248,8 @@ sealed class ScholarStructure : IInitializer {
             }
         }
 
-        for (int i = origin.X - 30; i < origin.X + sizeX * 3 + 30; i++) {
-            for (int j = origin.Y - 30; j < origin.Y + sizeY * 3 + 30; j++) {
+        for (int i = origin.X - 60; i < origin.X + sizeX * 3 + 60; i++) {
+            for (int j = origin.Y - 60; j < origin.Y + sizeY * 3 + 60; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.HasTile && (tile.TileType == PLACEHOLDERTILETYPE || tile.TileType == PLACEHOLDERTILETYPE2)) {
                     tile.TileType = TileID.Stone;
@@ -302,7 +302,7 @@ sealed class ScholarStructure : IInitializer {
                 if (genRand.NextChance(0.85f)) {
                     WorldGen.PlaceTile(i, j - 1, TileID.Books, mute: true);
                 }
-                else if (genRand.NextChance(0.1f)) {
+                else if (genRand.NextChance(0.2f)) {
                     if (genRand.NextBool()) {
                         Tile tile2 = Main.tile[i, j - 1];
                         tile2.HasTile = true;
@@ -333,7 +333,7 @@ sealed class ScholarStructure : IInitializer {
             }
             if (tile.TileType == TileID.Tables ||
                 tile.TileType == TileID.Tables2) {
-                if (genRand.NextChance(0.4f)) {
+                if (genRand.NextChance(0.35f)) {
                     Tile tile2 = Main.tile[i, j - 1];
                     tile2.HasTile = true;
                     tile2.TileType = TileID.Bottles;
@@ -343,7 +343,7 @@ sealed class ScholarStructure : IInitializer {
                 else if (genRand.NextChance(0.85f)) {
                     WorldGen.PlaceTile(i, j - 1, TileID.Books, mute: true);
                 }
-                else if (genRand.NextChance(0.1f)) {
+                else if (genRand.NextChance(0.2f)) {
                     if (genRand.NextBool()) {
                         Tile tile2 = Main.tile[i, j - 1];
                         tile2.HasTile = true;
@@ -509,7 +509,7 @@ sealed class ScholarStructure : IInitializer {
                                 if (tile2.TileType != TileID.Bookcases && !archiveDecorTileTypes.Contains(tile2.TileType)) {
                                     tile2.HasTile = true;
                                     tile2.TileType = tile.TileType;
-                                    if (!Main.tile[i + 1, j - 2].HasTile) {
+                                    if (Main.tile[i + 1, j - 2].TileType != TileID.WoodenBeam) {
                                         tile2.IsHalfBlock = true;
                                     }
                                 }
@@ -519,7 +519,7 @@ sealed class ScholarStructure : IInitializer {
                                 if (tile2.TileType != TileID.Bookcases && !archiveDecorTileTypes.Contains(tile2.TileType)) {
                                     tile2.HasTile = true;
                                     tile2.TileType = tile.TileType;
-                                    if (!Main.tile[i - 1, j - 2].HasTile) {
+                                    if (Main.tile[i - 1, j - 2].TileType != TileID.WoodenBeam) {
                                         tile2.IsHalfBlock = true;
                                     }
                                 }
