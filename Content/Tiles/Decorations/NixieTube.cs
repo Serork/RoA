@@ -177,10 +177,10 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
         int frameX = tile.TileFrameX;
         bool flag = frameY >= 56;
         if (flag && TryGetTE(out NixieTubeTE nixieTubeTE, i, j) && nixieTubeTE.Active && nixieTubeTE.Activated) {
-            if (nixieTubeTE.Dye2?.type == ItemID.ShadowDye) {
-                r = g = b = 0f;
-                return;
-            }
+            //if (nixieTubeTE.Dye2?.type == ItemID.ShadowDye) {
+            //    r = g = b = 0f;
+            //    return;
+            //}
             Color? lightColor = nixieTubeTE.LightColor;
             if (lightColor == null) {
                 r = 224 / 255f;
@@ -223,10 +223,14 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
         int height = WorldGenHelper.GetTileSafely(i, j + 1).TileType != Type ? 18 : 16;
 
         Color color = Lighting.GetColor(i, j);
+        Color color2 = color;
+        if (TryGetTE(out NixieTubeTE? nixieTubeTE2, i, j) && nixieTubeTE2.Dye2?.type == ItemID.ShadowDye) {
+            color2 = Color.Black.MultiplyRGB(color);
+        }
         spriteBatch.Draw(texture,
                          new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                          new Rectangle(frameX % 36, frameY % 56, 16, height),
-                         color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                         color2, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         if (TryGetTE(out NixieTubeTE? nixieTubeTE, i, j)) {
             SpriteBatchSnapshot snapshot;
             DrawData drawData;
