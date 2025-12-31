@@ -24,18 +24,6 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.WorldGenerations;
 
 sealed class ScholarStructure : IInitializer {
-    class ScholarStructure_TightPlacer : ModSystem {
-        public override void PostUpdateInput() {
-            //if (Main.mouseRightRelease && Main.mouseRight) {
-            //    int x = Player.tileTargetX,
-            //        y = Player.tileTargetY;
-            //    float angle = (new Vector2(x, y) * 16f).AngleTo(new Point16(Main.maxTilesX / 2, Main.maxTilesY / 2).ToWorldCoordinates());
-            //    angle -= MathHelper.PiOver2;
-            //    PlaceTight2(x, y, angle);
-            //}
-        }
-    }
-
     private delegate bool SlabState(int x, int y, int scale);
 
     private static class SlabStates {
@@ -184,7 +172,7 @@ sealed class ScholarStructure : IInitializer {
                 bool bottom = n > num8;
                 int x = m * 3 + origin.X + WorldGen.genRand.Next(-3, 4);
                 int y = n * 3 + origin.Y + (int)num11 + (int)(Math.Sin(m * 0.275f * genRand.NextFloat(0.75f, 1f)) * 5);
-                PlaceSlab(_slabs[m + 1, n + 1], x, y, 6);
+                PlaceSlab(_slabs[m + 1, n + 1], x, y, 7);
                 //if (_slabs[m + 1, n + 1].IsSolid && m % 6 == 0 && !bottom) {
                 //    PlaceTight(x, y, bottom);
                 //}
@@ -242,7 +230,7 @@ sealed class ScholarStructure : IInitializer {
             for (int j = origin.Y - 30; j < origin.Y + sizeY * 3 + 30; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 int chance = 25;
-                chance += (int)((float)(j - Main.rockLayer) / (Main.maxTilesY - 300 - Main.rockLayer) * 15);
+                chance += (int)((float)(j - Main.rockLayer) / (Main.maxTilesY - 300 - Main.rockLayer) * 20);
                 if (tile.HasTile && (tile.TileType == PLACEHOLDERTILETYPE || tile.TileType == PLACEHOLDERTILETYPE2)) {
                     if (genRand.NextBool(chance)) {
                         WorldGen.TileRunner(i, j, genRand.Next(2, 6), genRand.Next(2, 40), TileID.Dirt, addTile: false, overRide: true);
@@ -345,7 +333,7 @@ sealed class ScholarStructure : IInitializer {
             }
             if (tile.TileType == TileID.Tables ||
                 tile.TileType == TileID.Tables2) {
-                if (genRand.NextChance(0.5f)) {
+                if (genRand.NextChance(0.4f)) {
                     Tile tile2 = Main.tile[i, j - 1];
                     tile2.HasTile = true;
                     tile2.TileType = TileID.Bottles;
@@ -470,7 +458,11 @@ sealed class ScholarStructure : IInitializer {
                         if (flag) {
                             continue;
                         }
-                        if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
+                        if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile && 
+                            WorldGenHelper.GetTileSafely(i + 1, j).HasTile &&
+                            WorldGenHelper.GetTileSafely(i - 1, j).HasTile &&
+                            WorldGenHelper.GetTileSafely(i + 2, j).HasTile &&
+                            WorldGenHelper.GetTileSafely(i - 2, j).HasTile) {
                             Tile tile2 = Main.tile[i, j];
                             tile2.HasTile = false;
                             Main.tile[i, j - 1].WallType = WallID.GrayBrick;
