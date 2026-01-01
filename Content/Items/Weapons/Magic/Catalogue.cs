@@ -63,7 +63,7 @@ sealed class Catalogue : GlobalItem {
             }
         }
         Active = result;
-        if (!Active)) {
+        if (!Active) {
             CurrentSpellTomeIndex = 0;
         }
     }
@@ -109,7 +109,6 @@ sealed class Catalogue : GlobalItem {
     public override void NetReceive(Item item, BinaryReader reader) {
   
     }
-
 
     private void On_ItemSlot_LeftClick_ItemArray_int_int(On_ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
         orig(inv, context, slot);
