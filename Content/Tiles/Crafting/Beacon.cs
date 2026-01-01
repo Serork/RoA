@@ -22,6 +22,7 @@ using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
+using Terraria.GameContent.Tile_Entities;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -577,6 +578,10 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
     }
 
     public override void MouseOver(int i, int j) {
+        if (!Main.mouseItem.IsEmpty()) {
+            return;
+        }
+
         Player player = Main.LocalPlayer;
         player.cursorItemIconID = GetGemItemID(i, j, true);
         if (player.cursorItemIconID != -1) {

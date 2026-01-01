@@ -94,7 +94,7 @@ sealed class ScholarStructure : IInitializer {
             for (int num936 = num932 - num934; num936 < num932 + num934; num936 += 3) {
                 for (int num937 = num933 - num934; num937 < num933 + num934; num937 += 3) {
                     if (WorldGen.InWorld(num936, num937)) {
-                        ushort[] skipTileTypes = [TileID.Crimstone, TileID.Ebonstone, TileID.MushroomGrass, 147, 161, 162, 60, 368, 367, (ushort)ModContent.TileType<SolidifiedTar>()];
+                        ushort[] skipTileTypes = [TileID.Containers, TileID.Crimstone, TileID.Ebonstone, TileID.MushroomGrass, 147, 161, 162, 60, 368, 367, (ushort)ModContent.TileType<SolidifiedTar>()];
                         if (Main.tile[num936, num937].HasTile && skipTileTypes.Contains(Main.tile[num936, num937].TileType)) {
                             flag56 = true;
                             break;
@@ -272,6 +272,7 @@ sealed class ScholarStructure : IInitializer {
             archiveY++;
         }
         archiveY -= 1;
+        ModContent.GetInstance<ScholarsArchiveTE>().Place(archiveX - 1, archiveY - 3);
         WorldGenHelper.Place3x4(archiveX, archiveY, (ushort)archiveDecorTileTypes[0], 0);
         WorldGenHelper.Place3x2(archiveX + 3, archiveY, (ushort)archiveDecorTileTypes[1], 0);
         WorldGenHelper.Place3x2(archiveX - 3, archiveY, (ushort)archiveDecorTileTypes[1], 1);
@@ -509,7 +510,7 @@ sealed class ScholarStructure : IInitializer {
                                 if (tile2.TileType != TileID.Bookcases && !archiveDecorTileTypes.Contains(tile2.TileType)) {
                                     tile2.HasTile = true;
                                     tile2.TileType = tile.TileType;
-                                    if (Main.tile[i + 1, j - 2].TileType != TileID.WoodenBeam) {
+                                    if (!Main.tile[i + 1, j - 2].HasTile) {
                                         tile2.IsHalfBlock = true;
                                     }
                                 }
@@ -519,7 +520,7 @@ sealed class ScholarStructure : IInitializer {
                                 if (tile2.TileType != TileID.Bookcases && !archiveDecorTileTypes.Contains(tile2.TileType)) {
                                     tile2.HasTile = true;
                                     tile2.TileType = tile.TileType;
-                                    if (Main.tile[i - 1, j - 2].TileType != TileID.WoodenBeam) {
+                                    if (!Main.tile[i - 1, j - 2].HasTile) {
                                         tile2.IsHalfBlock = true;
                                     }
                                 }

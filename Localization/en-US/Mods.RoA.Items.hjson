@@ -2561,11 +2561,11 @@ OvergrownAltar: {
 }
 
 ScholarsArchive: {
-	DisplayName: Scholars Archive
+	DisplayName: Scholar's Archive
 	Tooltip: ""
 }
 
 ScholarsDesk: {
-	DisplayName: Scholars Desk
+	DisplayName: Scholar's Desk
 	Tooltip: ""
 }

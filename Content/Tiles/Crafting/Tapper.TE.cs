@@ -21,7 +21,7 @@ class TapperTE : ModTileEntity {
 
     public double Time { get; private set; }
 
-    public bool IsReadyToCollectGalipot => Time >= TIMETOBECOLLECTABLE;
+    public bool IsReadyToCollectGalipot => true;
 
     public float Progress => (float)(Time / TIMETOBECOLLECTABLE) * 0.9f;
 

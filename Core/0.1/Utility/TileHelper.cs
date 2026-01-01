@@ -510,7 +510,7 @@ static partial class TileHelper {
         }
     }
 
-    public static T GetTE<T>(int i, int j) where T : ModTileEntity {
+    public static T? GetTE<T>(int i, int j) where T : ModTileEntity {
         if (TileEntity.ByPosition.TryGetValue(new Point16(i, j), out TileEntity entity) && entity is T) {
             return entity as T;
         }
