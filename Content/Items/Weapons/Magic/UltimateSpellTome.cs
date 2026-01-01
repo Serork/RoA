@@ -72,8 +72,8 @@ sealed class UltimateSpellTome : GlobalItem {
             colors.Add(ScholarsArchiveTE.GetColorPerSpellTome(handler.SpellTomeItemTypes[i]));
         }
         Texture2D inventory = _inventoryBorder.Value;
-        Color baseColor = BorderColor.GetLerpColor(colors);
-        BorderColor.Update();
+        Color baseColor = handler.BorderColor.GetLerpColor(colors);
+        handler.BorderColor.Update();
         spriteBatch.Draw(inventory, position, null, baseColor.MultiplyRGB(color), 0f, default(Vector2), inventoryScale, SpriteEffects.None, 0f);
     }
 
@@ -87,7 +87,6 @@ sealed class UltimateSpellTome : GlobalItem {
         handler.CurrentSpellTomeIndex = index;
         float damageIncreaseModifier = 1f + 0.1f * handler.SpellTomeCount;
         item.damage = (int)(item.damage * damageIncreaseModifier);
-        Main.NewText(damageIncreaseModifier);
         if (handler.CurrentSpellTomeIndex > handler.SpellTomeCount - 1) {
             handler.CurrentSpellTomeIndex = 0;
         }
