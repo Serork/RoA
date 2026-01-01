@@ -305,7 +305,7 @@ sealed class ScholarStructure : IInitializer {
                 if (genRand.NextChance(0.85f)) {
                     WorldGen.PlaceTile(i, j - 1, TileID.Books, mute: true);
                 }
-                else if (genRand.NextChance(0.375f)) {
+                else if (genRand.NextChance(0.5f)) {
                     if (genRand.NextBool()) {
                         Tile tile2 = Main.tile[i, j - 1];
                         tile2.HasTile = true;
@@ -346,7 +346,7 @@ sealed class ScholarStructure : IInitializer {
                 else if (genRand.NextChance(0.85f)) {
                     WorldGen.PlaceTile(i, j - 1, TileID.Books, mute: true);
                 }
-                else if (genRand.NextChance(0.375f)) {
+                else if (genRand.NextChance(0.5f)) {
                     if (genRand.NextBool()) {
                         Tile tile2 = Main.tile[i, j - 1];
                         tile2.HasTile = true;
@@ -397,7 +397,7 @@ sealed class ScholarStructure : IInitializer {
                     else if (genRand.NextChance(0.85f)) {
                         WorldGen.PlaceTile(i, j - 1, TileID.Books, mute: true);
                     }
-                    else if (genRand.NextChance(0.375f)) {
+                    else if (genRand.NextChance(0.5f)) {
                         if (genRand.NextBool()) {
                             Tile tile2 = Main.tile[i, j - 1];
                             tile2.HasTile = true;

@@ -27,4 +27,8 @@ NixieTubeFlickerButton2: Включить мерцание
 // TarDamage: damage
 // TarMaximumLife: maximum life
 // SwitchSpells: "{$Controls.RightClick} to switch spells"
-// NoSpells: Empty Catalogue
+/* NoSpells:
+	'''
+	Empty Catalogue
+	Used to combine spell books
+	''' */
