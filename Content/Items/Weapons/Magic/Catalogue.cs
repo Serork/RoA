@@ -11,11 +11,13 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
+using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.UI;
 
 namespace RoA.Content.Items.Weapons.Magic;
@@ -61,6 +63,9 @@ sealed class Catalogue : GlobalItem {
             }
         }
         Active = result;
+        if (!Active)) {
+            CurrentSpellTomeIndex = 0;
+        }
     }
 
     public override bool InstancePerEntity => true;
@@ -88,6 +93,23 @@ sealed class Catalogue : GlobalItem {
         On_ItemSlot.LeftClick_ItemArray_int_int += On_ItemSlot_LeftClick_ItemArray_int_int;
         On_Item.GetStoreValue += On_Item_GetStoreValue;
     }
+
+    public override void SaveData(Item item, TagCompound tag) {
+
+    }
+
+    public override void LoadData(Item item, TagCompound tag) {
+
+    }
+
+    public override void NetSend(Item item, BinaryWriter writer) {
+
+    }
+
+    public override void NetReceive(Item item, BinaryReader reader) {
+  
+    }
+
 
     private void On_ItemSlot_LeftClick_ItemArray_int_int(On_ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
         orig(inv, context, slot);
