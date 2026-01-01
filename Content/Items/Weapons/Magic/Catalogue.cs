@@ -92,6 +92,14 @@ sealed class Catalogue : GlobalItem {
         On_ItemSlot.SellOrTrash += On_ItemSlot_SellOrTrash;
         On_ItemSlot.LeftClick_ItemArray_int_int += On_ItemSlot_LeftClick_ItemArray_int_int;
         On_Item.GetStoreValue += On_Item_GetStoreValue;
+        On_Item.AffixName += On_Item_AffixName;
+    }
+
+    private string On_Item_AffixName(On_Item.orig_AffixName orig, Item self) {
+        if (ScholarsArchiveTE.IsSpellTome(self.type) && !self.GetGlobalItem<Catalogue>().Active) {
+            return Language.GetTextValue("Mods.RoA.NoSpells0");
+        }
+        return orig(self);
     }
 
     public override void SaveData(Item item, TagCompound tag) {
@@ -156,7 +164,9 @@ sealed class Catalogue : GlobalItem {
                 tooltipLine.Hide();
             }
 
-            TooltipLine line2 = new(Mod, "nospellsintome", Language.GetTextValue("Mods.RoA.NoSpells"));
+            TooltipLine line2 = new(Mod, "nospellsintome0", Language.GetTextValue("Mods.RoA.NoSpells0"));
+            tooltips.Add(line2);
+            line2 = new(Mod, "nospellsintome1", Language.GetTextValue("Mods.RoA.NoSpells1"));
             tooltips.Add(line2);
 
             return;
