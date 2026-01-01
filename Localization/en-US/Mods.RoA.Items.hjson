@@ -2569,3 +2569,8 @@ ScholarsDesk: {
 	DisplayName: Scholar's Desk
 	Tooltip: ""
 }
+
+UltimateSpellTome: {
+	DisplayName: Ultimate Spell Tome
+	Tooltip: ""
+}

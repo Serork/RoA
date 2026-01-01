@@ -194,12 +194,8 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             return false;
         }
 
+        Player player = Main.LocalPlayer;
         if (HasSpellTomeInHand(out int selectedItemType, out Item selectedItem)) {
-            Player player = Main.LocalPlayer;
-            player.releaseUseItem = false;
-            player.mouseInterface = true;
-            player.PlayDroppedItemAnimation(20);
-
             if (selectedItemType == ModContent.ItemType<Bookworms>()) {
                 ScholarsArchiveTE.ArchiveSpellTomeType toInsert = ScholarsArchiveTE.ArchiveSpellTomeType.Bookworms;
                 if (scholarsArchiveTE.HasSpellTome(toInsert)) {
@@ -278,8 +274,41 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
                 scholarsArchiveTE.InsertSpellTome(toInsert);
             }
 
+            player.releaseUseItem = false;
+            player.mouseInterface = true;
+            player.PlayDroppedItemAnimation(20);
+
             if (--selectedItem.stack <= 0) {
                 selectedItem.TurnToAir();
+            }
+
+            return true;
+        }
+
+        if (scholarsArchiveTE.HasAnySpellTome()) {
+            ScholarsArchiveTE.ArchiveSpellTomeType[] spellTomes = {
+                ScholarsArchiveTE.ArchiveSpellTomeType.Bookworms,
+                ScholarsArchiveTE.ArchiveSpellTomeType.Bane,
+                ScholarsArchiveTE.ArchiveSpellTomeType.BookofSkulls,
+                ScholarsArchiveTE.ArchiveSpellTomeType.WaterBolt,
+                ScholarsArchiveTE.ArchiveSpellTomeType.DemonScythe,
+                ScholarsArchiveTE.ArchiveSpellTomeType.CrystalStorm,
+                ScholarsArchiveTE.ArchiveSpellTomeType.CursedFlames,
+                ScholarsArchiveTE.ArchiveSpellTomeType.GoldenShower,
+                ScholarsArchiveTE.ArchiveSpellTomeType.MagnetSphere,
+                ScholarsArchiveTE.ArchiveSpellTomeType.RazorbladeTyphoon,
+                ScholarsArchiveTE.ArchiveSpellTomeType.LunarFlareBook
+            };
+            ScholarsArchiveTE.ArchiveSpellTomeType? lastActiveFlag = null;
+            foreach (ScholarsArchiveTE.ArchiveSpellTomeType spellTome in spellTomes) {
+                if (scholarsArchiveTE.HasSpellTome(spellTome)) {
+                    lastActiveFlag = spellTome;
+                }
+            }
+            int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, ScholarsArchiveTE.GetSpellTomeItemType(lastActiveFlag!.Value), 1, false, 0, false, false);
+            Main.item[item].GetGlobalItem<UltimateSpellTome>().InitializeWith(scholarsArchiveTE);
+            if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
+                NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
             }
         }
 
