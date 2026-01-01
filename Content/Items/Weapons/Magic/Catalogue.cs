@@ -27,7 +27,7 @@ sealed class Catalogue : GlobalItem {
                                     _catalogueIcon = null!,
                                     _inventoryBorder = null!;
 
-    //private static string ULTIMATESPELLTOMEKEY => RoA.ModName + "ultimatespelltome";
+    private static string ULTIMATESPELLTOMEKEY => RoA.ModName + "ultimatespelltome";
 
     private record struct LastReforgedData(bool Active, int[] SpellTomeItemTypes, int[] PrefixesPerItemType, byte CurrentSpellTomeIndex, Point16 ArchiveCoords, ScholarsArchiveTE.ArchiveSpellTomeType ArchiveSpellTomes);
 
@@ -103,11 +103,22 @@ sealed class Catalogue : GlobalItem {
     }
 
     public override void SaveData(Item item, TagCompound tag) {
-
+        tag[ULTIMATESPELLTOMEKEY + "spellitemtypes"] = SpellTomeItemTypes;
+        tag[ULTIMATESPELLTOMEKEY + "prefixesperitemtype"] = PrefixesPerItemType;
+        tag[ULTIMATESPELLTOMEKEY + "currentspelltomeindex"] = CurrentSpellTomeIndex;
+        tag[ULTIMATESPELLTOMEKEY + "archivecoordsX"] = ArchiveCoords.X;
+        tag[ULTIMATESPELLTOMEKEY + "archivecoordsY"] = ArchiveCoords.Y;
+        tag[ULTIMATESPELLTOMEKEY + "archivespelltomes"] = (short)ArchiveSpellTomes;
+        tag[ULTIMATESPELLTOMEKEY + "active"] = Active;
     }
 
     public override void LoadData(Item item, TagCompound tag) {
-
+        SpellTomeItemTypes = tag.GetIntArray(ULTIMATESPELLTOMEKEY + "spellitemtypes");
+        PrefixesPerItemType = tag.GetIntArray(ULTIMATESPELLTOMEKEY + "prefixesperitemtype");
+        CurrentSpellTomeIndex = tag.GetByte(ULTIMATESPELLTOMEKEY + "currentspelltomeindex");
+        ArchiveCoords = new Point16(tag.GetAsShort(ULTIMATESPELLTOMEKEY + "archivecoordsX"), tag.GetAsShort(ULTIMATESPELLTOMEKEY + "archivecoordsY"));
+        ArchiveSpellTomes = (ScholarsArchiveTE.ArchiveSpellTomeType)tag.GetAsShort(ULTIMATESPELLTOMEKEY + "archivespelltomes");
+        Active = tag.GetBool(ULTIMATESPELLTOMEKEY + "active");
     }
 
     public override void NetSend(Item item, BinaryWriter writer) {
