@@ -1343,6 +1343,28 @@ static class WorldGenHelper {
         }
     }
 
+    public static void Place2x1_2(int x, int y, ushort type, int styleX = 0, int styleY = 0, Action? onPlaced = null) {
+        bool flag = false;
+        if (WorldGen.SolidTile2(x, y + 1) && WorldGen.SolidTile2(x + 1, y + 1) && !Main.tile[x, y].HasTile && !Main.tile[x + 1, y].HasTile)
+            flag = true;
+        else if ((type == 29 || type == 103) && Main.tile[x, y + 1].HasTile && Main.tile[x + 1, y + 1].HasTile && Main.tileTable[Main.tile[x, y + 1].TileType] && Main.tileTable[Main.tile[x + 1, y + 1].TileType] && !Main.tile[x, y].HasTile && !Main.tile[x + 1, y].HasTile)
+            flag = true;
+
+        if (flag) {
+            Tile tile = GetTileSafely(x, y);
+            tile.HasTile = true;
+            tile.TileFrameY = (short)(18 * styleY);
+            tile.TileFrameX = (short)(36 * styleX);
+            tile.TileType = type;
+            tile = GetTileSafely(x + 1, y);
+            tile.HasTile = true;
+            tile.TileFrameY = (short)(18 * styleY);
+            tile.TileFrameX = (short)(36 * styleX + 18);
+            tile.TileType = type;
+            onPlaced?.Invoke();
+        }
+    }
+
     public static void Place1x2Right(int x, int y, ushort type, int width = 18, int style = 0, Action? onPlaced = null) {
         bool flag = false;
         if (WorldGen.SolidTile2(x - 1, y) && WorldGen.SolidTile2(x - 1, y + 1) && !Main.tile[x, y].HasTile && !Main.tile[x, y + 1].HasTile)

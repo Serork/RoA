@@ -173,7 +173,7 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             selectedItem = Main.mouseItem;
         }
         selectedItemType = selectedItem.type;
-        return spellTomesItemTypes.Contains(selectedItemType);
+        return spellTomesItemTypes.Contains(selectedItemType) && !selectedItem.GetGlobalItem<Catalogue>().Initialized;
     }
 
     public override bool RightClick(int i, int j) {
@@ -297,10 +297,13 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             ScholarsArchiveTE.ArchiveSpellTomeType spellTome = lastActiveFlag!.Value;
             Vector2 offset = ScholarsArchiveTE.GetOffsetPerSpellTome(spellTome);
             int item = Item.NewItem(new EntitySource_TileInteraction(player, tePosition.X, tePosition.Y), new Vector2(tePosition.X, tePosition.Y) * 16 + offset, ScholarsArchiveTE.GetSpellTomeItemType(spellTome));
-            Main.item[item].GetGlobalItem<UltimateSpellTome>().InitializeWith(scholarsArchiveTE);
+            Main.item[item].GetGlobalItem<Catalogue>().InitializeWith(scholarsArchiveTE);
+            Main.item[item].value = 0;
             if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
                 NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
             }
+
+            //scholarsArchiveTE.ClearSpellTomes();
         }
 
         return true;

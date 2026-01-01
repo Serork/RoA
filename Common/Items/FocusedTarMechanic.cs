@@ -164,15 +164,15 @@ sealed partial class ItemCommon : GlobalItem {
         Item hoverItem = item;
         if (hoverItem != Main.mouseItem && !hoverItem.IsEmpty() && hoverItem.GetCommon().HasTarEnchantment()) {
             Texture2D inventory = _tarEnchantmentIndicator_Inventory2.Value;
-            position.Y += inventory.Height / 2f;
-            position.X += inventory.Width / 3f;
+            position.Y += inventory.Height / 2f * scale;
+            position.X += inventory.Width / 3f * scale;
             float xOffset = 0f;
             for (int i = 0; i < hoverItem.GetCommon().TarEnchantmentCount(); i++) {
-                xOffset += inventory.Width / 2f; 
+                xOffset += inventory.Width / 2f * scale; 
             }
             for (int i = 0; i < hoverItem.GetCommon().TarEnchantmentCount(); i++) {
-                spriteBatch.Draw(inventory, position - Vector2.UnitX * xOffset / 2f, null, drawColor, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);
-                position.X += inventory.Width / 2f;
+                spriteBatch.Draw(inventory, position - Vector2.UnitX * xOffset / 2f * scale, null, drawColor, 0f, default(Vector2), scale, SpriteEffects.None, 0f);
+                position.X += inventory.Width / 2f * scale;
             }
         }
     }

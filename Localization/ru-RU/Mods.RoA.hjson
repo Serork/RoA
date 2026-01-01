@@ -26,3 +26,5 @@ NixieTubeFlickerButton2: Включить мерцание
 // TarKillCount: Enemy kills to mutate
 // TarDamage: damage
 // TarMaximumLife: maximum life
+// SwitchSpells: "{$Controls.RightClick} to switch spells"
+// NoSpells: Empty Catalogue

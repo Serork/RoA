@@ -26,3 +26,9 @@ NixieTubeFlickerButton2: Turn On Flicker
 TarKillCount: Enemy kills to mutate
 TarDamage: damage
 TarMaximumLife: maximum life
+SwitchSpells: "{$Controls.RightClick} to switch spells"
+NoSpells: 
+	'''
+	Empty Catalogue
+	Used to combine spell books
+	'''

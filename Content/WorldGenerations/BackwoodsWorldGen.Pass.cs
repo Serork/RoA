@@ -971,7 +971,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                             flag = false;
                         }
                         if (flag) {
-                            WorldGenHelper.Place2x1(i, j - 1, (ushort)ModContent.TileType<BackwoodsRoots2>(), _random.Next(3));
+                            WorldGenHelper.Place2x1(i, j - 1, (ushort)ModContent.TileType<BackwoodsRoots2>(), style: _random.Next(3));
                         }
                     }
                 }

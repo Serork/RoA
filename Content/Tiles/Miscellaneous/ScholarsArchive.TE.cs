@@ -213,6 +213,8 @@ sealed class ScholarsArchiveTE : ModTileEntity {
 
     public bool HasSpellTome(ArchiveSpellTomeType spellTome) => SpellTomes.HasFlag(spellTome);
 
+    public void ClearSpellTomes() => SpellTomes = ArchiveSpellTomeType.None;
+
     public bool HasAnySpellTome() => (ushort)SpellTomes > 0;
 
     public override bool IsTileValidForEntity(int x, int y) {
