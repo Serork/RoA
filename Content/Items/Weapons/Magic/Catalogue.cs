@@ -27,7 +27,12 @@ sealed class Catalogue : GlobalItem {
 
     //private static string ULTIMATESPELLTOMEKEY => RoA.ModName + "ultimatespelltome";
 
+    private record struct LastReforgedData(bool Active, int[] SpellTomeItemTypes, int[] PrefixesPerItemType, byte CurrentSpellTomeIndex, Point16 ArchiveCoords, ScholarsArchiveTE.ArchiveSpellTomeType ArchiveSpellTomes);
+
+    private static LastReforgedData _lastReforgedData;
+
     public int[] SpellTomeItemTypes { get; private set; } = null!;
+    public int[] PrefixesPerItemType { get; private set; } = null!;
 
     public byte CurrentSpellTomeIndex { get; private set; }
 
@@ -64,6 +69,7 @@ sealed class Catalogue : GlobalItem {
 
     public void InitializeWith(ScholarsArchiveTE scholarsArchiveTE) {
         SpellTomeItemTypes = ScholarsArchiveTE.GetSpellTomeItemTypes(scholarsArchiveTE);
+        PrefixesPerItemType = new int[SpellTomeItemTypes.Length];
         CurrentSpellTomeIndex = 0;
         ArchiveCoords = scholarsArchiveTE.Position;
         ArchiveSpellTomes = scholarsArchiveTE.SpellTomes;
@@ -78,6 +84,44 @@ sealed class Catalogue : GlobalItem {
         }
 
         On_ItemSlot.Draw_SpriteBatch_ItemArray_int_int_Vector2_Color += On_ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color;
+        On_ItemSlot.SellOrTrash += On_ItemSlot_SellOrTrash;
+        On_ItemSlot.LeftClick_ItemArray_int_int += On_ItemSlot_LeftClick_ItemArray_int_int;
+        On_Item.GetStoreValue += On_Item_GetStoreValue;
+    }
+
+    private void On_ItemSlot_LeftClick_ItemArray_int_int(On_ItemSlot.orig_LeftClick_ItemArray_int_int orig, Item[] inv, int context, int slot) {
+        orig(inv, context, slot);
+    }
+
+    private void On_ItemSlot_SellOrTrash(On_ItemSlot.orig_SellOrTrash orig, Item[] inv, int context, int slot) {
+        orig(inv, context, slot);
+    }
+
+    private int On_Item_GetStoreValue(On_Item.orig_GetStoreValue orig, Item self) {
+        if (ScholarsArchiveTE.IsSpellTome(self.type) && self.GetGlobalItem<Catalogue>().Initialized) {
+            return 0;
+        }
+        return orig(self);
+    }
+
+    public override void PreReforge(Item item) {
+        var handler = item.GetGlobalItem<Catalogue>();
+        if (!handler.Initialized) {
+            return;
+        }
+
+        _lastReforgedData = new(handler.Active, handler.SpellTomeItemTypes, handler.PrefixesPerItemType, handler.CurrentSpellTomeIndex, handler.ArchiveCoords, handler.ArchiveSpellTomes);
+    }
+
+    public override void PostReforge(Item item) {
+        var handler = item.GetGlobalItem<Catalogue>();
+        handler.Active = _lastReforgedData.Active;
+        handler.SpellTomeItemTypes = _lastReforgedData.SpellTomeItemTypes;
+        handler.CurrentSpellTomeIndex = _lastReforgedData.CurrentSpellTomeIndex;
+        handler.PrefixesPerItemType = _lastReforgedData.PrefixesPerItemType;
+        handler.PrefixesPerItemType[handler.CurrentSpellTomeIndex] = item.prefix;
+        handler.ArchiveCoords = _lastReforgedData.ArchiveCoords;
+        handler.ArchiveSpellTomes = _lastReforgedData.ArchiveSpellTomes;
     }
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
@@ -97,8 +141,15 @@ sealed class Catalogue : GlobalItem {
             return;
         }
 
+        foreach (TooltipLine tooltipLine in tooltips) {
+            if (tooltipLine.Name == "Price") {
+                tooltipLine.Hide();
+            }
+        }
+
         TooltipLine line = new(Mod, "switchspells", Language.GetTextValue("Mods.RoA.SwitchSpells"));
-        tooltips.Add(line);
+        int index = tooltips.FindIndex(tooltip => tooltip.Name.Contains("Tooltip0"));
+        tooltips.Insert(index + 1, line);
     }
 
     private void On_ItemSlot_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color(On_ItemSlot.orig_Draw_SpriteBatch_ItemArray_int_int_Vector2_Color orig,
@@ -142,15 +193,23 @@ sealed class Catalogue : GlobalItem {
                 handler.SpellTomeItemTypes = ScholarsArchiveTE.GetSpellTomeItemTypes(scholarsArchiveTE);
 
                 int[] spellTomeItemTypes = handler.SpellTomeItemTypes;
+                int[] prefixesPerItemType = handler.PrefixesPerItemType;
                 byte index = handler.CurrentSpellTomeIndex;
                 if (handler.CurrentSpellTomeIndex > handler.SpellTomeCount - 1) {
                     handler.CurrentSpellTomeIndex = 0;
                 }
                 Point16 archiveCoords = handler.ArchiveCoords;
                 ScholarsArchiveTE.ArchiveSpellTomeType spellTomes = handler.ArchiveSpellTomes;
-                item.ChangeItemType(SpellTomeItemTypes[index++]);
+                item.ChangeItemType(SpellTomeItemTypes[index]);
                 handler = item.GetGlobalItem<Catalogue>();
                 handler.SpellTomeItemTypes = spellTomeItemTypes;
+                handler.PrefixesPerItemType = prefixesPerItemType;
+                int prefixIndex = index + 1;
+                if (prefixIndex > handler.SpellTomeCount - 1) {
+                    prefixIndex = 0;
+                }
+                item.prefix = handler.PrefixesPerItemType[prefixIndex];
+                index++;
                 handler.CurrentSpellTomeIndex = index;
                 handler.ArchiveCoords = archiveCoords;
                 handler.ArchiveSpellTomes = spellTomes;

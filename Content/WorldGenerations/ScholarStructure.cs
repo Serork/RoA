@@ -90,7 +90,7 @@ sealed class ScholarStructure : IInitializer {
         while (flag56) {
             int num932 = genRand.Next((int)((double)Main.maxTilesX * 0.3), (int)((double)Main.maxTilesX * 0.7));
 
-            int num933 = genRand.Next((int)Main.worldSurface + 50, GenVars.lavaLine);
+            int num933 = genRand.Next((int)Main.worldSurface + 50, GenVars.lavaLine - 50);
             flag56 = false;
             int num934 = 100;
             for (int num936 = num932 - num934; num936 < num932 + num934; num936 += 3) {
@@ -232,7 +232,7 @@ sealed class ScholarStructure : IInitializer {
             for (int j = origin.Y - 30; j < origin.Y + sizeY * 3 + 30; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 int chance = 25;
-                chance += (int)((float)(j - Main.rockLayer) / (GenVars.lavaLine - Main.rockLayer) * 20);
+                chance += (int)((float)(j - Main.rockLayer) / (GenVars.lavaLine - 50 - Main.rockLayer) * 20);
                 if (tile.HasTile && (tile.TileType == PLACEHOLDERTILETYPE || tile.TileType == PLACEHOLDERTILETYPE2)) {
                     if (genRand.NextBool(chance)) {
                         WorldGen.TileRunner(i, j, genRand.Next(2, 6), genRand.Next(2, 40), TileID.Dirt, addTile: false, overRide: true);
@@ -449,16 +449,18 @@ sealed class ScholarStructure : IInitializer {
             for (int j = origin.Y - 30; j < origin.Y + sizeY * 3 + 30; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.HasTile) {
-                    if ((tile.TileType == TileID.WoodBlock || tile.TileType == TileID.LivingWood) &&
-                        genRand.NextBool(4)) {
+                    if (tile.TileType == TileID.WoodBlock || tile.TileType == TileID.LivingWood) {
                         bool flag = false;
                         foreach (var holePoint in holePoints) {
-                            if (MathF.Abs(holePoint.X - i) < 3) {
+                            if (MathF.Abs(holePoint.X - i) < 4) {
                                 flag = true;
                                 break;
                             }
                         }
                         if (flag) {
+                            continue;
+                        }
+                        if (!genRand.NextBool(4)) {
                             continue;
                         }
                         if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile && 
@@ -525,9 +527,8 @@ sealed class ScholarStructure : IInitializer {
                             //WorldGenHelper.ModifiedTileRunner(i, j, 2, 1, -1, wallType: WallID.GrayBrick, clearOnlySolids: true);
                         }
                     }
-                    if ((tile.TileType == TileID.WoodBlock || tile.TileType == TileID.LivingWood) &&
-                        genRand.NextBool(4)) {
-                        if (!WorldGenHelper.GetTileSafely(i, j - 1).HasTile) {
+                    if (tile.TileType == TileID.WoodBlock || tile.TileType == TileID.LivingWood) {
+                        if (!WorldGenHelper.GetTileSafely(i, j - 1).HasTile && genRand.NextBool()) {
                             Tile tile2 = Main.tile[i, j - 1];
                             tile2.HasTile = true;
                             tile2.TileType = tile.TileType;
