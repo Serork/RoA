@@ -2577,3 +2577,28 @@ ScholarsDesk: {
 	DisplayName: Scholar's Desk
 	Tooltip: ""
 }
+
+BlotchedFish: {
+	DisplayName: Blotched Fish
+	Tooltip: ""
+}
+
+EmeraldOpaleye: {
+	DisplayName: Emerald Opaleye
+	Tooltip: ""
+}
+
+BoneBroth: {
+	DisplayName: Bone Broth
+	Tooltip: ""
+}
+
+Druidfish: {
+	DisplayName: Druidfish
+	Tooltip: ""
+}
+
+SwimmingStone: {
+	DisplayName: Swimming Stone
+	Tooltip: ""
+}
