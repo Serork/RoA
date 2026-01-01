@@ -2198,11 +2198,6 @@ Crimsonest: {
 	Tooltip: Выращивает прыщи, из которых вырываются плотоядные насекомые
 }
 
-HallowedTopfhelm: {
-	DisplayName: Освящённый  топфхельм
-	// Tooltip: ""
-}
-
 SolScorchers: {
 	DisplayName: Палящее солнце
 	Tooltip:
@@ -2443,7 +2438,12 @@ UnhingedPotion: {
 
 LittleElixir: {
 	DisplayName: Маленький эликсир
-	Tooltip: Маленькие сердечки восстанавливают больше здоровья
+	Tooltip:
+		'''
+		Маленькие сердечки восстанавливают больше здоровья
+		'Только ты нужна —
+		Выпью тебя до дна.'
+		'''
 }
 
 ManaDraught: {
@@ -2457,8 +2457,8 @@ PerfectedConcoction: {
 }
 
 HoneyPunch: {
-	// DisplayName: Honey Punch
-	// Tooltip: ""
+	DisplayName: Медовый ёрш
+	Tooltip: Маленькие сердечки восстанавливают больше здоровья и даруют медовое насыщение
 }
 
 GraspOfTheWarden: {
@@ -2467,112 +2467,125 @@ GraspOfTheWarden: {
 }
 
 BackwoodsNightMusicBox: {
-	// DisplayName: Music Box (Backwoods Night)
+	DisplayName: Музыкальная шкатулка (Ночная чаща)
 	// Tooltip: ""
 }
 
 AncientHallowedVisor: {
-	// DisplayName: Ancient Hallowed Visor
+	DisplayName: Древнее освящённое забрало
 	// Tooltip: ""
 }
 
 HallowedVisor: {
-	// DisplayName: Hallowed Visor
+	DisplayName: Освящённое забрало
 	// Tooltip: ""
 }
 
 ElderShell: {
-	// DisplayName: Elder Shell
-	// Tooltip: ""
+	DisplayName: Древняя ракушка
+	Tooltip: Повышает защиту после выпитого лечащего зелья
 }
 
 ImmortalSnail: {
-	// DisplayName: Immortal Snail
-	// Tooltip: ""
+	DisplayName: Бессмертная улика
+	Tooltip:
+		'''
+		Снижает время ожидания от лечащих зелий на 25%
+		Повышает защиту после выпитого лечащего зелья
+		'''
 }
 
 LifeSpiral: {
-	// DisplayName: Life Spiral
-	// Tooltip: ""
+	DisplayName: Повседневная рутина
+	Tooltip:
+		'''
+		Обеспечивает регенерацию здоровья и снижает время ожидания от лечащих зелий на 25%
+		Повышает защиту после выпитого лечащего зелья
+		'''
 }
 
 ElderShield: {
-	// DisplayName: Elder Shield
-	// Tooltip: ""
+	DisplayName: Эскапизм
+	Tooltip:
+		'''
+		Поглощает 25% урона, нанесённого игрокам вашей команды, если их здоровье выше 25%
+		Повышает защиту, когда вы или ваши союзники пьёте лечащие зелья
+		Даёт иммунитет к отбрасыванию
+		'''
 }
 
 GoldenApple: {
-	// DisplayName: Golden Apple
+	DisplayName: Золотое яблоко
 	// Tooltip: ""
 }
 
 ThinkingMask: {
-	// DisplayName: Thinking Mask
+	DisplayName: Маска в раздумьях
 	// Tooltip: ""
 }
 
 HardmodeBackwoodsCrate: {
-	// DisplayName: Hardmode Backwoods Crate
+	DisplayName: Ящик зарослей
 	// Tooltip: ""
 }
 
 WoodpeckerWings: {
-	// DisplayName: Woodpecker Wings
+	DisplayName: Крылья дятла
 	// Tooltip: ""
 }
 
 WoodpeckerFeather: {
-	// DisplayName: Woodpecker Feather
+	DisplayName: Перо дятла
 	// Tooltip: ""
 }
 
 DungeonWindow: {
-	// DisplayName: Dungeon Window
-	// Tooltip: ""
+	DisplayName: Подземельное окно
+	Tooltip: Впрочем, не особо работает как окно
 }
 
 MenhirDecoration: {
-	// DisplayName: Menhir Decoration
+	DisplayName: Декоративный мейнхир
 	// Tooltip: ""
 }
 
 BackwoodsUndergroundMusicBox: {
-	// DisplayName: Music Box (Underground Backwoods)
+	DisplayName: Музыкальная шкатулка (Подзменая чаща)
 	// Tooltip: ""
 }
 
 FriarLantern: {
-	// DisplayName: Friar's Lantern
+	DisplayName: Монашеский фонарь
 	// Tooltip: ""
 }
 
 Equality: {
-	// DisplayName: Equality
+	DisplayName: Равенство
 	// Tooltip: ""
 }
 
 Riot: {
-	// DisplayName: Riot
+	DisplayName: Бунт
 	// Tooltip: ""
 }
 
 SmolderingTapestry: {
-	// DisplayName: Smoldering Tapestry
+	DisplayName: Тлеющая вышивка
 	// Tooltip: ""
 }
 
 MoneyCap: {
-	// DisplayName: Money Cap
+	DisplayName: Блатной кепарь
 	// Tooltip: ""
 }
 
 MoneyNecklace: {
-	// DisplayName: Money Necklace
+	DisplayName: Блатная цепура
 	// Tooltip: ""
 }
 
 BulbCane: {
-	// DisplayName: Bulb Cane
+	DisplayName: Вечно свободный
 	// Tooltip: ""
 }
 
@@ -2582,11 +2595,11 @@ OvergrownAltar: {
 }
 
 ScholarsArchive: {
-	// DisplayName: Scholar's Archive
+	DisplayName: Архив Учёного
 	// Tooltip: ""
 }
 
 ScholarsDesk: {
-	// DisplayName: Scholar's Desk
+	DisplayName: Стол Учёного
 	// Tooltip: ""
 }

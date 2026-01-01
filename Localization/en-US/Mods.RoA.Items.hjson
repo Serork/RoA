@@ -2173,11 +2173,6 @@ Crimsonest: {
 	Tooltip: Grows pustulas that erupt with flesh-eating insects
 }
 
-HallowedTopfhelm: {
-	DisplayName: Hallowed Topfhelm
-	Tooltip: ""
-}
-
 SolScorchers: {
 	DisplayName: Sol Scorchers
 	Tooltip:
@@ -2421,7 +2416,7 @@ LittleElixir: {
 	Tooltip:
 		'''
 		Picking up tiny hearts restores additional life
-		'Soda-pop'
+		'You're my soda pop, gotta drink every drop'
 		'''
 }
 
@@ -2437,7 +2432,7 @@ PerfectedConcoction: {
 
 HoneyPunch: {
 	DisplayName: Honey Punch
-	Tooltip: ""
+	Tooltip: Picking up tiny hearts restores additional life and provides with honeyed restoration
 }
 
 GraspOfTheWarden: {
@@ -2462,22 +2457,35 @@ HallowedVisor: {
 
 ElderShell: {
 	DisplayName: Elder Shell
-	Tooltip: ""
+	Tooltip: Increases defence upon drinking healing potions
 }
 
 ImmortalSnail: {
 	DisplayName: Immortal Snail
-	Tooltip: ""
+	Tooltip:
+		'''
+		Reduces the cooldown of healing potions by 25%
+		Increases defence upon drinking healing potions
+		'''
 }
 
 LifeSpiral: {
-	DisplayName: Life Spiral
-	Tooltip: ""
+	DisplayName: Mortal Coil
+	Tooltip:
+		'''
+		Provides life regeneration and reduces the cooldown of healing potions by 25%
+		Increases defence upon drinking healing potions
+		'''
 }
 
 ElderShield: {
-	DisplayName: Elder Shield
-	Tooltip: ""
+	DisplayName: Escapism
+	Tooltip:
+		'''
+		Absorbs 25% of damage done to players on your team when above 25% life
+		Increases defence when you or allies drink healing potions
+		Grants immunity to knockback
+		'''
 }
 
 GoldenApple: {
@@ -2491,7 +2499,7 @@ ThinkingMask: {
 }
 
 HardmodeBackwoodsCrate: {
-	DisplayName: Hardmode Backwoods Crate
+	DisplayName: Covert Crate
 	Tooltip: ""
 }
 
@@ -2507,7 +2515,7 @@ WoodpeckerFeather: {
 
 DungeonWindow: {
 	DisplayName: Dungeon Window
-	Tooltip: ""
+	Tooltip: Doesn't really work as a window though
 }
 
 MenhirDecoration: {
@@ -2521,7 +2529,7 @@ BackwoodsUndergroundMusicBox: {
 }
 
 FriarLantern: {
-	DisplayName: Friar's Lantern
+	DisplayName: Fryar's Lantern
 	Tooltip: ""
 }
 
@@ -2551,7 +2559,7 @@ MoneyNecklace: {
 }
 
 BulbCane: {
-	DisplayName: Bulb Cane
+	DisplayName: Forever Free
 	Tooltip: ""
 }
 
