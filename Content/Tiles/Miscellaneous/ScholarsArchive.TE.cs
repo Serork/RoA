@@ -48,6 +48,46 @@ sealed class ScholarsArchiveTE : ModTileEntity {
         LunarFlareBook = 1 << 10
     }
 
+    public static Vector2 GetOffsetPerSpellTome(ArchiveSpellTomeType spellTome) {
+        Vector2 offset = Vector2.Zero;
+        switch (spellTome) {
+            case ArchiveSpellTomeType.Bookworms:
+                offset = new(10, 20);
+                break;
+            case ArchiveSpellTomeType.Bane:
+                offset = new(16, 22);
+                break;
+            case ArchiveSpellTomeType.BookofSkulls:
+                offset = new(22, 24);
+                break;
+            case ArchiveSpellTomeType.WaterBolt:
+                offset = new(26, 24);
+                break;
+            case ArchiveSpellTomeType.DemonScythe:
+                offset = new(32, 22);
+                break;
+            case ArchiveSpellTomeType.CrystalStorm:
+                offset = new(36, 20);
+                break;
+            case ArchiveSpellTomeType.CursedFlames:
+                offset = new(10, 40);
+                break;
+            case ArchiveSpellTomeType.GoldenShower:
+                offset = new(14, 42);
+                break;
+            case ArchiveSpellTomeType.MagnetSphere:
+                offset = new(20, 44);
+                break;
+            case ArchiveSpellTomeType.RazorbladeTyphoon:
+                offset = new(24, 44);
+                break;
+            case ArchiveSpellTomeType.LunarFlareBook:
+                offset = new(30, 42);
+                break;
+        }
+        return offset;
+    }
+
     public static Color GetColorPerSpellTome(int itemType) {
         if (itemType == ModContent.ItemType<Bookworms>()) {
             return new(172, 145, 147);

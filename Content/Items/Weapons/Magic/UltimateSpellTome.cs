@@ -30,7 +30,7 @@ sealed class UltimateSpellTome : GlobalItem {
 
     public bool Initialized => SpellTomeItemTypes != null;
 
-    public static LerpColor BorderColor { get; private set; } = new(0.03f);
+    public LerpColor BorderColor { get; private set; } = new(0.03f);
 
     public override bool InstancePerEntity => true;
 

@@ -58,50 +58,39 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
         if (scholarsArchiveTE is not null) {
             void dropSpellTome(ScholarsArchiveTE.ArchiveSpellTomeType spellTome) {
                 int toDrop = -1;
-                Vector2 offset = Vector2.Zero;
+                Vector2 offset = ScholarsArchiveTE.GetOffsetPerSpellTome(spellTome);
                 switch (spellTome) {
                     case ScholarsArchiveTE.ArchiveSpellTomeType.Bookworms:
-                        offset = new(10, 20);
                         toDrop = ModContent.ItemType<Bookworms>();
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.Bane:
-                        offset = new(16, 22);
                         toDrop = ModContent.ItemType<Bane>();
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.BookofSkulls:
-                        offset = new(22, 24);
                         toDrop = ItemID.BookofSkulls;
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.WaterBolt:
-                        offset = new(26, 24);
                         toDrop = ItemID.WaterBolt;
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.DemonScythe:
-                        offset = new(32, 22);
                         toDrop = ItemID.DemonScythe;
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.CrystalStorm:
-                        offset = new(36, 20);
                         toDrop = ItemID.CrystalStorm;
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.CursedFlames:
-                        offset = new(10, 40);
                         toDrop = ItemID.CursedFlames;
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.GoldenShower:
-                        offset = new(14, 42);
                         toDrop = ItemID.GoldenShower;
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.MagnetSphere:
-                        offset = new(20, 44);
                         toDrop = ItemID.MagnetSphere;
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.RazorbladeTyphoon:
-                        offset = new(24, 44);
                         toDrop = ItemID.RazorbladeTyphoon;
                         break;
                     case ScholarsArchiveTE.ArchiveSpellTomeType.LunarFlareBook:
-                        offset = new(30, 42);
                         toDrop = ItemID.LunarFlareBook;
                         break;
                 }
@@ -300,12 +289,14 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
                 ScholarsArchiveTE.ArchiveSpellTomeType.LunarFlareBook
             };
             ScholarsArchiveTE.ArchiveSpellTomeType? lastActiveFlag = null;
-            foreach (ScholarsArchiveTE.ArchiveSpellTomeType spellTome in spellTomes) {
-                if (scholarsArchiveTE.HasSpellTome(spellTome)) {
-                    lastActiveFlag = spellTome;
+            foreach (ScholarsArchiveTE.ArchiveSpellTomeType spellTome2 in spellTomes) {
+                if (scholarsArchiveTE.HasSpellTome(spellTome2)) {
+                    lastActiveFlag = spellTome2;
                 }
             }
-            int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, ScholarsArchiveTE.GetSpellTomeItemType(lastActiveFlag!.Value), 1, false, 0, false, false);
+            ScholarsArchiveTE.ArchiveSpellTomeType spellTome = lastActiveFlag!.Value;
+            Vector2 offset = ScholarsArchiveTE.GetOffsetPerSpellTome(spellTome);
+            int item = Item.NewItem(new EntitySource_TileInteraction(player, tePosition.X, tePosition.Y), new Vector2(tePosition.X, tePosition.Y) * 16 + offset, ScholarsArchiveTE.GetSpellTomeItemType(spellTome));
             Main.item[item].GetGlobalItem<UltimateSpellTome>().InitializeWith(scholarsArchiveTE);
             if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
                 NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
