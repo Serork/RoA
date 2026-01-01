@@ -46,7 +46,7 @@ sealed class Catalogue : GlobalItem {
     public Point16 ArchiveCoords { get; private set; }
     public ScholarsArchiveTE.ArchiveSpellTomeType ArchiveSpellTomes { get; private set; }
 
-    public LerpColor BorderColor { get; private set; } = new(0.03f);
+    //public LerpColor BorderColor { get; private set; } = new(0.03f);
 
     public bool Active { get; private set; }
 
@@ -96,7 +96,7 @@ sealed class Catalogue : GlobalItem {
     }
 
     private string On_Item_AffixName(On_Item.orig_AffixName orig, Item self) {
-        if (ScholarsArchiveTE.IsSpellTome(self.type) && !self.GetGlobalItem<Catalogue>().Active) {
+        if (ScholarsArchiveTE.IsSpellTome(self.type) && self.GetGlobalItem<Catalogue>().Initialized && !self.GetGlobalItem<Catalogue>().Active) {
             return Language.GetTextValue("Mods.RoA.NoSpells0");
         }
         return orig(self);

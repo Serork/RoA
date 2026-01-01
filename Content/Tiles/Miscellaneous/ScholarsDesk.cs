@@ -22,7 +22,7 @@ sealed class ScholarsDesk : ModTile {
         TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.Style3x2);
-        TileObjectData.newTile.CoordinateHeights = [16, 18];
+        TileObjectData.newTile.CoordinateHeights = [20, 16];
         TileObjectData.addTile(Type);
 
         AddToArray(ref TileID.Sets.RoomNeeds.CountsAsTable);

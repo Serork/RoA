@@ -96,7 +96,7 @@ sealed class ScholarStructure : IInitializer {
             for (int num936 = num932 - num934; num936 < num932 + num934; num936 += 3) {
                 for (int num937 = num933 - num934; num937 < num933 + num934; num937 += 3) {
                     if (WorldGen.InWorld(num936, num937)) {
-                        ushort[] skipTileTypes = [TileID.Containers, TileID.Crimstone, TileID.Ebonstone, TileID.MushroomGrass, 147, 161, 162, 60, 368, 367, (ushort)ModContent.TileType<SolidifiedTar>()];
+                        ushort[] skipTileTypes = [TileID.WoodBlock, TileID.Containers, TileID.Crimstone, TileID.Ebonstone, TileID.MushroomGrass, 147, 161, 162, 60, 368, 367, (ushort)ModContent.TileType<SolidifiedTar>()];
                         if (Main.tile[num936, num937].HasTile && skipTileTypes.Contains(Main.tile[num936, num937].TileType)) {
                             flag56 = true;
                             break;
