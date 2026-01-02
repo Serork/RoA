@@ -325,7 +325,7 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             Tile tile = Main.tile[i, j];
             Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
             texture ??= TextureAssets.Tile[Type].Value;
-            Color color = Color.White;
+            Color color = Lighting.GetColor(i, j);
             Rectangle clip = new(tile.TileFrameX, tile.TileFrameY + 72 * frame, 16, 16);
             spriteBatch.Draw(texture,
                              new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + TileHelper.ScreenOffset,
