@@ -53,6 +53,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsFriarLanternBuffEffectActive;
     public float FriarLanternEffectStrength;
 
+    public ushort ArchiveUseCooldownInTicks;
+
     public bool DrawJokeVisor;
 
     public bool DoingBackflip => _backflipTimer > 0f;
@@ -413,6 +415,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void PostUpdateEquipsDelegate(Player player);
     public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent;
     public override void PostUpdateEquips() {
+        ArchiveUseCooldownInTicks = (ushort)Helper.Approach(ArchiveUseCooldownInTicks, 0, 1);
+
         PostUpdateEquipsEvent?.Invoke(Player);
 
         DeerSkullPostUpdateEquips();

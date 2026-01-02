@@ -10,6 +10,7 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -307,7 +308,7 @@ sealed class Catalogue : GlobalItem {
                 }
                 Point16 archiveCoords = handler.ArchiveCoords;
                 ScholarsArchiveTE.ArchiveSpellTomeType spellTomes = handler.ArchiveSpellTomes;
-                item.ChangeItemType(SpellTomeItemTypes[index]);
+                item.ChangeItemType(handler.SpellTomeItemTypes[index]);
                 handler = item.GetGlobalItem<Catalogue>();
                 handler.SpellTomeItemTypes = spellTomeItemTypes;
                 handler.PrefixesPerItemType = prefixesPerItemType;
@@ -325,10 +326,14 @@ sealed class Catalogue : GlobalItem {
 
                 handler.UpdateActive();
 
-                if (handler.CurrentSpellTomeIndex > handler.SpellTomeCount - 1) {
+                if (handler.CurrentSpellTomeIndex == 1) {
                     SoundEngine.PlaySound(Empty);
                     SoundEngine.PlaySound(PageClose);
                     handler.Active = false;
+                }
+                if (handler.CurrentSpellTomeIndex > handler.SpellTomeCount - 1) {
+                    SoundEngine.PlaySound(Empty);
+                    SoundEngine.PlaySound(PageTurn);
                     handler.CurrentSpellTomeIndex = 0;
                 }
                 //else {
@@ -344,7 +349,7 @@ sealed class Catalogue : GlobalItem {
     public override bool CanUseItem(Item item, Player player) {
         var handler = item.GetGlobalItem<Catalogue>();
         if (handler.Initialized) {
-            if (!handler.Active) {
+            if (!handler.Active || !handler.HasSpells) {
                 return player.altFunctionUse == 2;
             }
         }
@@ -355,16 +360,25 @@ sealed class Catalogue : GlobalItem {
     public override bool? UseItem(Item item, Player player) {
         var handler = item.GetGlobalItem<Catalogue>();
         if (handler.Initialized) {
-            if (!handler.Active) {
+            if (!handler.Active || !handler.HasSpells) {
                 if (player.altFunctionUse == 2) {
+                    player.itemAnimation = 0;
+                    player.itemTime = 0;
+                    player.reuseDelay = 0;
+
+                    if (!handler.Active && !handler.HasSpells) {
+                        SoundEngine.PlaySound(Empty);
+                        SoundEngine.PlaySound(PageTurn);
+                    }
+                    if (!handler.HasSpells) {
+                        handler.SwitchTome(item);
+                        item.GetGlobalItem<Catalogue>().UpdateActive();
+                        return false;
+                    }
                     SoundEngine.PlaySound(Empty);
                     SoundEngine.PlaySound(PageTurn);
 
                     item.GetGlobalItem<Catalogue>().UpdateActive();
-
-                    player.itemAnimation = 0;
-                    player.itemTime = 0;
-                    player.reuseDelay = 0;
                 }
                 return false;
             }

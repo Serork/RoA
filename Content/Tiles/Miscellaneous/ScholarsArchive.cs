@@ -10,6 +10,7 @@ using RoA.Content.Tiles.Crafting;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -274,7 +275,11 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             return true;
         }
 
-        if (scholarsArchiveTE.HasAnySpellTome()) {
+        if (player.GetCommon().ArchiveUseCooldownInTicks > 0) {
+            return false;
+        }
+
+        if (scholarsArchiveTE.HasAnySpellTome() && !player.inventory.Any(x => !x.IsEmpty() && ScholarsArchiveTE.IsSpellTome(x.type) && x.GetGlobalItem<Catalogue>().Initialized && x.GetGlobalItem<Catalogue>().ArchiveCoords == tePosition)) {
             ScholarsArchiveTE.ArchiveSpellTomeType[] spellTomes = {
                 ScholarsArchiveTE.ArchiveSpellTomeType.Bookworms,
                 ScholarsArchiveTE.ArchiveSpellTomeType.Bane,
@@ -301,6 +306,8 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
                 NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
             }
+
+            player.GetCommon().ArchiveUseCooldownInTicks = 60;
 
             //scholarsArchiveTE.ClearSpellTomes();
         }
