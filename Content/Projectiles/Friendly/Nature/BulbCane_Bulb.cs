@@ -22,6 +22,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static RoA.Content.Projectiles.Friendly.Nature.CavernCane_Rocks;
+
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
@@ -163,6 +165,9 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
     private bool ShouldSummonTentaclesDealDamage => IsSecondFormActive;
     private int SummonMouthCount => _summonMouthData.Length;
     private int SummonTentacleCount => _summonTentacleData.Length;
+
+    public override bool? CanDamage() => false;
+    public override bool? CanCutTiles() => false;
 
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldApplyAttachedItemDamage: false);
@@ -593,6 +598,20 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                 }
             }
         }
+        void cutTiles() {
+            if (!ShouldSummonTentaclesDealDamage) {
+                return;
+            }
+
+            for (int i = SummonMouthCount; i < SummonMouthCount + SUMMONTENTACLECOUNT; i++) {
+                ref SummonTentacleInfo summonTentacleInfo = ref _summonTentacleData[i - SummonMouthCount];
+                int summonTentacleSegmentCount = summonTentacleInfo.SegmentCount - 2;
+                for (int i2 = 0; i2 < summonTentacleSegmentCount; i2++) {
+                    Vector2 summongTentaclePosition = summonTentacleInfo.SegmentPositions[i2];
+                    ProjectileUtils.CutTilesAt(Projectile, summongTentaclePosition, SUMMONTENTACLEHITBOXSIZE, SUMMONTENTACLEHITBOXSIZE);
+                }
+            }
+        }
 
         scaleUp();
         init();
@@ -604,6 +623,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         resetDamageInfo();
         damageNPCs();
         processEnergyParticles();
+        cutTiles();
     }
 
     public override void OnKill(int timeLeft) {
