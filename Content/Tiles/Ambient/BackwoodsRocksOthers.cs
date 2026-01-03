@@ -188,4 +188,12 @@ class BackwoodsRocks1 : ModTile {
     public override void DropCritterChance(int i, int j, ref int wormChance, ref int grassHopperChance, ref int jungleGrubChance) {
         wormChance = 8;
     }
+
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
+            WorldGen.KillTile(i, j);
+        }
+
+        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+    }
 }

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Tiles;
 using RoA.Content.Items.Placeable.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -107,5 +108,13 @@ sealed class BackwoodsSpecial3_Rubble : ModTile, TileHooks.IGetTileDrawData {
         else {
 
         }
+    }
+
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
+            WorldGen.KillTile(i, j);
+        }
+
+        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
     }
 }

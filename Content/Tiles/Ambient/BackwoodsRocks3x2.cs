@@ -74,4 +74,12 @@ sealed class BackwoodsRocks3x2 : ModTile, TileHooks.IGetTileDrawData {
     public override void DropCritterChance(int i, int j, ref int wormChance, ref int grassHopperChance, ref int jungleGrubChance) {
         wormChance = 6;
     }
+
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
+            WorldGen.KillTile(i, j);
+        }
+
+        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+    }
 }

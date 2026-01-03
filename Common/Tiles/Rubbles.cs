@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -28,6 +30,14 @@ abstract class Rubble : ModTile {
     protected abstract void AddTile();
 
     protected virtual void SafeSetStaticDefaults() { }
+
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
+            WorldGen.KillTile(i, j);
+        }
+
+        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+    }
 }
 
 abstract class Rubble_1x1 : Rubble {

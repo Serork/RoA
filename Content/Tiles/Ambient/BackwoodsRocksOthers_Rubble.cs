@@ -105,6 +105,14 @@ class BackwoodsRocks0Rubble : BackwoodsRocks1Rubble {
 
         return true;
     }
+
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
+            WorldGen.KillTile(i, j);
+        }
+
+        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
+    }
 }
 
 sealed class BackwoodsRocks2Rubble : BackwoodsRocks1Rubble, TileHooks.IGetTileDrawData {
@@ -162,5 +170,13 @@ class BackwoodsRocks1Rubble : ModTile {
 
     public override void SetSpriteEffects(int i, int j, ref SpriteEffects spriteEffects) {
 
+    }
+
+    public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
+        if (!WorldGenHelper.GetTileSafely(i, j + 1).HasTile) {
+            WorldGen.KillTile(i, j);
+        }
+
+        return base.TileFrame(i, j, ref resetFrame, ref noBreak);
     }
 }

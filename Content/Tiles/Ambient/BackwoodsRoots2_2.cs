@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts.Backwoods;
+using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ID;
@@ -37,7 +38,7 @@ sealed class BackwoodsRoots2_2 : BackwoodsRocks0 {
     }
 
     public override bool TileFrame(int i, int j, ref bool resetFrame, ref bool noBreak) {
-        if (!WorldGen.SolidTile(Main.tile[i, j - 1])) {
+        if (!WorldGenHelper.GetTileSafely(i, j - 1).HasTile) {
             WorldGen.KillTile(i, j);
         }
         else if ((Main.tile[i, j].TileFrameX % 36 == 0 && !(Main.tile[i + 1, j].TileType == Type && Main.tile[i + 1, j].TileFrameX == Main.tile[i, j].TileFrameX + 18)) ||
