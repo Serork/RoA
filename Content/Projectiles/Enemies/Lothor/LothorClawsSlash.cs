@@ -53,7 +53,7 @@ sealed class LothorClawsSlash : ModProjectile {
             float dist = Vector2.Distance(npc.Center, Main.player[npc.target].Center);
             float value = Utils.Remap(dist, 0f, 300f, 1f, 2.5f);
             value *= 1.25f;
-            Projectile.localAI[2] = Math.Max(value, 1f);
+            Projectile.localAI[2] = Math.Max(value, 1.5f);
         }
 
         Projectile.localAI[0] += 1f;
@@ -80,6 +80,7 @@ sealed class LothorClawsSlash : ModProjectile {
         Point pos = Projectile.Center.ToTileCoordinates();
         Color color2 = new Color(150, 20, 20);
         Color color1 = new Color(241, 100, 100);
+        color2 = color1;
         float num12 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num22 = Utils.Remap(num12, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num12, 0.6f, 1f, 1f, 0.0f);
         float num42 = 1f/*Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f)*/ * Projectile.Opacity;
@@ -159,6 +160,7 @@ sealed class LothorClawsSlash : ModProjectile {
         float num4 = 1f /* Utils.Remap((Lighting.GetColor(pos) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f)*/ * Projectile.Opacity;
         Color color2 = new Color(150, 20, 20);
         Color color1 = new Color(241, 100, 100);
+        color2 = Color.Lerp(color2, color1, 0f);
         float num12 = MathHelper.Clamp(Projectile.timeLeft / 2, 0f, 5f);
         if (CanFunction()) {
             SpriteBatch spriteBatch = Main.spriteBatch;
@@ -173,6 +175,7 @@ sealed class LothorClawsSlash : ModProjectile {
             spriteBatch.Begin(snapshot with { blendState = BlendState.Additive, samplerState = SamplerState.LinearClamp }, true);
             //spriteBatch.DrawSelf(texture.Value, position, new Rectangle?(r), color1 * num4 * num2, Projectile._rotation + (float)(Projectile.ai[0] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale, effects, 0.0f);
             Color shineColor = new Color(255, 200, 150);
+            shineColor = Color.Lerp(shineColor, color2, 0f);
             Color color3 = lightColor * num2 * 0.5f;
             color3.A = (byte)(color3.A * (1.0 - (double)num4));
             Color color4 = color3 * num4 * 0.5f;
@@ -183,10 +186,10 @@ sealed class LothorClawsSlash : ModProjectile {
             spriteBatch.Draw(texture, position, new Rectangle?(r), shineColor * num4 * num2 * 0.3f, Projectile.rotation, origin, scale, effects, 0.0f);
             spriteBatch.Draw(texture, position, new Rectangle?(r), color2 * num4 * num2 * 0.5f, Projectile.rotation, origin, scale * num3, effects, 0.0f);
 
-            spriteBatch.Draw(texture, position, new Rectangle?(texture.Frame(verticalFrames: 2, frameY: 1)), shineColor * 0.6f * num2, Projectile.rotation + (float)(Projectile.ai[2] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale * 1f, effects, 0.0f);
+            spriteBatch.Draw(texture, position, new Rectangle?(texture.Frame(verticalFrames: 2, frameY: 1)), shineColor * 0.4f * num2, Projectile.rotation + (float)(Projectile.ai[2] * 0.785398185253143 * -1.0 * (1.0 - (double)num1)), origin, scale * 1.075f, effects, 0.0f);
             spriteBatch.Draw(texture, position, new Rectangle?(texture.Frame(verticalFrames: 2, frameY: 1)), shineColor * 0.4f * num2, Projectile.rotation + Projectile.ai[2] * -0.05f, origin, scale * 0.8f, effects, 0.0f);
             spriteBatch.Draw(texture, position, new Rectangle?(texture.Frame(verticalFrames: 2, frameY: 1)), shineColor * 0.4f * num2, Projectile.rotation + Projectile.ai[2] * -0.1f, origin, scale * 0.6f, effects, 0.0f);
-            
+
             spriteBatch.Begin(snapshot with { blendState = BlendState.Additive, samplerState = Main.DefaultSamplerState }, true);
 
             spriteBatch.Draw(texture, position, new Rectangle?(r), color4 * 0.15f, Projectile.rotation + Projectile.ai[2] * 0.01f, origin, scale, effects, 0.0f);
@@ -203,11 +206,11 @@ sealed class LothorClawsSlash : ModProjectile {
            
             spriteBatch.Begin(snapshot, true);
 
-            Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)texture.Width * 0.555f - Utils.Remap(num1, 0f, 1f, 0f, 20f)) * scale;
-            DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(color1, color2, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 2f);
+            Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)texture.Width * 0.59f - Utils.Remap(num1, 0f, 1f, 0f, 20f)) * scale;
+            DrawPrettyStarSparkle(Projectile.Opacity * 1f, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(color1, color2, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 2f);
 
-            drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)texture.Width * 0.485f - 4f - Utils.Remap(num1, 0f, 1f, 0f, 4f)) * scale;
-            DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(color1, color2, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 2f);
+            drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)texture.Width * 0.515f - 4f - Utils.Remap(num1, 0f, 1f, 0f, 4f)) * scale;
+            DrawPrettyStarSparkle(Projectile.Opacity * 1f, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(color1, color2, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 2f);
         }
     }
 

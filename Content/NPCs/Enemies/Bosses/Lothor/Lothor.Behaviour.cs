@@ -10,6 +10,7 @@ using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Enemies.Lothor;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -148,7 +149,7 @@ sealed partial class Lothor : ModNPC {
     private bool _stompSpawned;
     private float _canChangeDirectionTimer;
     private float _pulseStrength;
-    private List<LothorAIState> _previousAttacks;
+    private List<LothorAIState> _previousAttacks = null!;
     private float _beforeAttackDelay, _beforeAttackTimerVisual, _beforeAttackTimerVisualMax;
     private bool _frameChosen;
     private int _tempDirection;
@@ -170,6 +171,7 @@ sealed partial class Lothor : ModNPC {
     private int _hpLoseInEnrage;
     private double _frameTimer;
     private bool _shouldScreamInFlight, _shouldScreamInFlight2;
+    private int _copySpawn;
 
     private static bool _firstTimeEnrage;
 
@@ -666,6 +668,8 @@ sealed partial class Lothor : ModNPC {
             return;
         }
 
+        _copyData = new CopyInfo[MAXCOPIES];
+
         Glow();
 
         _firstTimeEnrage = false;
@@ -1013,6 +1017,11 @@ sealed partial class Lothor : ModNPC {
     private void WreathAttack() {
         LookAtPlayer();
         if (WreathTimer < WreathAttackTime / 2f) {
+            if (_copySpawn++ > 4) {
+                MakeCopy(NPC.position, CurrentFrameInSpriteSheetLine, NPC.rotation, NPC.FacedRight());
+                _copySpawn = 0;
+            }
+
             float dashStrength = 15f;
             _dashStrength = Helper.Approach(_dashStrength, 1f, 0.05f);
             if (NPC.velocity.Length() < dashStrength) {

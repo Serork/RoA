@@ -22,6 +22,40 @@ sealed partial class Lothor : ModNPC {
     private Color? _drawColor = null;
     private float _glowMaskOpacity;
 
+    private struct CopyInfo {
+        private float _opacity;
+
+        public Vector2 Position;
+        public float Rotation;
+        public float Scale;
+        public byte UsedFrame;
+        public bool FacedRight;
+
+        public float Opacity {
+            readonly get => _opacity;
+            set => _opacity = MathUtils.Clamp01(value);
+        }
+    }
+
+    private static byte MAXCOPIES => 6;
+
+    private CopyInfo[] _copyData = null!;
+    private byte _currentCopyIndex;
+
+    private void MakeCopy(Vector2 position, byte frame, float rotation, bool facedRight, float scale = 1f) {
+        if (_currentCopyIndex >= MAXCOPIES) {
+            _currentCopyIndex = 0;
+        }
+        _copyData![_currentCopyIndex++] = new CopyInfo() {
+            Position = position,
+            UsedFrame = frame,
+            Rotation = rotation,
+            Opacity = 1.25f,
+            Scale = scale,
+            FacedRight = facedRight
+        };
+    }
+
     public static Asset<Texture2D> ItsSpriteSheet { get; private set; } = null!;
     public static Asset<Texture2D> GlowMask { get; private set; } = null!;
 
@@ -38,6 +72,17 @@ sealed partial class Lothor : ModNPC {
         HandleAnimations();
         GetFrameInfo(out ushort x, out ushort y, out ushort width, out ushort height);
         NPC.frame = new Rectangle(x, y, width, height);
+
+        if (_spawned) {
+            for (int i = 0; i < MAXCOPIES; i++) {
+                ref CopyInfo copyData = ref _copyData![i];
+                if (copyData.Opacity > 0f) {
+                    copyData.Scale -= 0.05f;
+                    copyData.Opacity -= 0.05f;
+                    copyData.Opacity = MathF.Max(0f, copyData.Opacity);
+                }
+            }
+        }
     }
 
     partial void HandleAnimations();
@@ -151,8 +196,20 @@ sealed partial class Lothor : ModNPC {
             }
         }
 
-        spriteBatch.Draw(ItsSpriteSheet.Value, NPC.position + offset, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
-        spriteBatch.Draw(GlowMask.Value, NPC.position + offset, NPC.frame, glowMaskColor * Utils.GetLerpValue(0f, 0.25f, NPC.Opacity, true), NPC.rotation, origin, NPC.scale, effects, 0f);
+        Vector2 drawPosition = NPC.position + offset;
+        GetFrameInfo(out ushort x, out ushort y, out ushort width, out ushort height);
+        for (int i = 0; i < MAXCOPIES; i++) {
+            CopyInfo copyInfo = _copyData![i];
+            if (MathUtils.Approximately(copyInfo.Position, drawPosition, 2f)) {
+                continue;
+            }
+
+            spriteBatch.Draw(ItsSpriteSheet.Value, copyInfo.Position + offset, NPC.frame with { Y = height * copyInfo.UsedFrame }, drawColor * NPC.Opacity * MathUtils.Clamp01(copyInfo.Opacity) * 0.5f,
+                copyInfo.Rotation, origin, NPC.scale * MathF.Max(copyInfo.Scale, 1f), copyInfo.FacedRight.ToInt().ToSpriteEffects(), 0f);
+        }
+
+        spriteBatch.Draw(ItsSpriteSheet.Value, drawPosition, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
+        spriteBatch.Draw(GlowMask.Value, drawPosition, NPC.frame, glowMaskColor * Utils.GetLerpValue(0f, 0.25f, NPC.Opacity, true), NPC.rotation, origin, NPC.scale, effects, 0f);
 
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
         spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
