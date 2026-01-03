@@ -62,10 +62,13 @@ sealed partial class PlayerCommon : ModPlayer {
             drawCursor(Vector2.Zero);
         }
         else {
+            float scale = Main.cursorScale;
+            Main.cursorScale *= 1f;
             drawCursor(Vector2.Zero);
+            Main.cursorScale = scale;
             SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
             Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
-            for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
+            for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver4 * 0.5f) {
                 drawCursor(Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
                         * Helper.Wave(0f, 3f, 12f, 0.5f) * 1f,
                         Main.rand.NextFloatRange(0.05f) * 1f,
@@ -98,6 +101,9 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (flag2) {
                     num = 0.3f;
                     color = Microsoft.Xna.Framework.Color.White * Main.GamepadCursorAlpha;
+                    if (alpha != 0) {
+                        color *= 0.95f;
+                    }
                     int num2 = 17;
                     int frameX = 0;
                     Main.spriteBatch.Draw(TextureAssets.Cursors[num2].Value, t2 + bonus + extraPosition, TextureAssets.Cursors[num2].Frame(1, 1, frameX), color.MultiplyAlpha(alpha), rotation + (float)Math.PI / 2f * Main.GlobalTimeWrappedHourly, TextureAssets.Cursors[num2].Frame(1, 1, frameX).Size() / 2f, Main.cursorScale, SpriteEffects.None, 0f);
@@ -105,18 +111,27 @@ sealed partial class PlayerCommon : ModPlayer {
 
                 if (smart && !flag) {
                     color = Microsoft.Xna.Framework.Color.White * Main.GamepadCursorAlpha * num;
+                    if (alpha != 0) {
+                        color *= 0.95f;
+                    }
                     int num3 = 13;
                     int frameX2 = 0;
                     Main.spriteBatch.Draw(TextureAssets.Cursors[num3].Value, t + bonus + extraPosition, TextureAssets.Cursors[num3].Frame(2, 1, frameX2), color.MultiplyAlpha(alpha), rotation, TextureAssets.Cursors[num3].Frame(2, 1, frameX2).Size() / 2f, Main.cursorScale, SpriteEffects.None, 0f);
                 }
                 else {
                     color = Microsoft.Xna.Framework.Color.White;
+                    if (alpha != 0) {
+                        color *= 0.95f;
+                    }
                     int num4 = 15;
                     Main.spriteBatch.Draw(TextureAssets.Cursors[num4].Value, new Vector2(Main.mouseX, Main.mouseY) + bonus + extraPosition, null, color.MultiplyAlpha(alpha), rotation, TextureAssets.Cursors[num4].Value.Size() / 2f, Main.cursorScale, SpriteEffects.None, 0f);
                 }
             }
             else {
                 int num5 = smart.ToInt();
+                if (alpha != 0) {
+                    color *= 0.95f;
+                }
                 Main.spriteBatch.Draw(TextureAssets.Cursors[num5].Value, new Vector2(Main.mouseX, Main.mouseY) + bonus + extraPosition + Vector2.One, null, new Microsoft.Xna.Framework.Color((int)((float)(int)color.R * 0.2f), (int)((float)(int)color.G * 0.2f), (int)((float)(int)color.B * 0.2f), (int)((float)(int)color.A * 0.5f)), rotation, default(Vector2), Main.cursorScale * 1.1f, SpriteEffects.None, 0f);
                 Main.spriteBatch.Draw(TextureAssets.Cursors[num5].Value, new Vector2(Main.mouseX, Main.mouseY) + bonus + extraPosition, null, color.MultiplyAlpha(alpha), rotation, default(Vector2), Main.cursorScale, SpriteEffects.None, 0f);
             }
