@@ -227,7 +227,7 @@ sealed class OvergrownAltar : ModTile {
         TileSets.CanPlayerMineMe[Type] = false;
         TileSets.PreventsSlopesBelow[Type] = true;
 
-        CanBeSlopedTileSystem.Included[Type] = true;
+        CantBeSlopedTileSystem.Included[Type] = true;
 
         AddMapEntry(new Color(197, 254, 143), CreateMapEntryName());
 

@@ -2602,3 +2602,18 @@ SwimmingStone: {
 	DisplayName: Swimming Stone
 	Tooltip: ""
 }
+
+BrokenBookcase: {
+	DisplayName: Broken Bookcase
+	Tooltip: ""
+}
+
+ScholarsGlobe: {
+	DisplayName: Scholar's Globe
+	Tooltip: ""
+}
+
+ScholarsTelescope: {
+	DisplayName: Scholar's Telescope
+	Tooltip: ""
+}

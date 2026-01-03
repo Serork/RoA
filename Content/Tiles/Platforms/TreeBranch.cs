@@ -80,7 +80,7 @@ class TreeBranch : ModTile, TileHooks.IRequireMinAxePower {
 
         TileID.Sets.Platforms[Type] = true;
 
-        CanBeSlopedTileSystem.Included[Type] = true;
+        CantBeSlopedTileSystem.Included[Type] = true;
 
         TileObjectData.newTile.CoordinateHeights = [16];
         TileObjectData.newTile.CoordinateWidth = 32;

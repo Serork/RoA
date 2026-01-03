@@ -179,7 +179,7 @@ sealed class TreeDryad : ModTile, IRequestAssets, TileHooks.IPreDraw, TileHooks.
         TileID.Sets.PreventsSandfall[Type] = true;
         TileSets.ShouldKillTileBelow[Type] = false;
         TileSets.PreventsSlopesBelow[Type] = true;
-        CanBeSlopedTileSystem.Included[Type] = true;
+        CantBeSlopedTileSystem.Included[Type] = true;
 
         var mapText = CreateMapEntryName();
         AddMapEntry(new Color(191, 143, 111), mapText);

@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Common.Tiles;
 
-sealed class CanBeSlopedTileSystem : ILoadable {
+sealed class CantBeSlopedTileSystem : ILoadable {
     public static bool[] Included = TileID.Sets.Factory.CreateBoolSet();
 
     public void Load(Mod mod) {

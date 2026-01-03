@@ -74,7 +74,6 @@ static class WorldGenHelper {
         public override void LoadWorldData(TagCompound tag) => worldSurfaceLow = tag.GetInt(RoA.ModName + "backwoods" + nameof(worldSurfaceLow));
     }
 
-
     public static void Place3x4(int x, int y, ushort type, int style, byte paintID = 0) {
         if (x < 5 || x > Main.maxTilesX - 5 || y < 5 || y > Main.maxTilesY - 5)
             return;
@@ -94,6 +93,48 @@ static class WorldGenHelper {
             int num = style * 54;
             for (int k = -3; k <= 0; k++) {
                 short frameY = (short)((3 + k) * 18);
+                Tile tile = Main.tile[x - 1, y + k];
+                tile.HasTile = true;
+                tile.TileFrameY = frameY;
+                tile.TileFrameX = (short)num;
+                tile.TileType = type;
+                tile.TileColor = paintID;
+                tile = Main.tile[x, y + k];
+                tile.HasTile = true;
+                tile.TileFrameY = frameY;
+                tile.TileFrameX = (short)(num + 18);
+                tile.TileType = type;
+                tile.TileColor = paintID;
+                tile = Main.tile[x + 1, y + k];
+                tile.HasTile = true;
+                tile.TileFrameY = frameY;
+                tile.TileFrameX = (short)(num + 36);
+                tile.TileType = type;
+                tile.TileColor = paintID;
+            }
+        }
+    }
+
+    public static void Place3x4_2(int x, int y, ushort type, int styleX, int styleY, byte paintID = 0) {
+        if (x < 5 || x > Main.maxTilesX - 5 || y < 5 || y > Main.maxTilesY - 5)
+            return;
+
+        bool flag = true;
+        for (int i = x - 1; i < x + 2; i++) {
+            for (int j = y - 3; j < y + 1; j++) {
+                if (Main.tile[i, j].HasTile)
+                    flag = false;
+            }
+
+            if (!WorldGen.SolidTile2(i, y + 1))
+                flag = false;
+        }
+
+        Main.NewText(flag);
+        if (flag) {
+            int num = styleX * 54;
+            for (int k = -3; k <= 0; k++) {
+                short frameY = (short)(((3 + k) * 18) + styleY * 72);
                 Tile tile = Main.tile[x - 1, y + k];
                 tile.HasTile = true;
                 tile.TileFrameY = frameY;
@@ -1129,7 +1170,7 @@ static class WorldGenHelper {
     }
 
     // adapted vanilla
-    public static bool Place3x2(int x, int y, ushort type, int styleX = 0, int styleY = 0, Action? onPlaced = null) {
+    public static bool Place3x2(int x, int y, ushort type, int styleX = 0, int styleY = 0, Action? onPlaced = null, bool frame = false) {
         if (x < 5 || x > Main.maxTilesX - 5 || y < 5 || y > Main.maxTilesY - 5)
             return false;
 
@@ -1214,6 +1255,15 @@ static class WorldGenHelper {
             tile.TileType = type;
 
             onPlaced?.Invoke();
+
+            if (frame) {
+                WorldGen.TileFrame(x - 1, y - 1);
+                WorldGen.TileFrame(x, y - 1);
+                WorldGen.TileFrame(x + 1, y - 1);
+                WorldGen.TileFrame(x - 1, y);
+                WorldGen.TileFrame(x, y);
+                WorldGen.TileFrame(x + 1, y);
+            }
         }
 
         return flag2;

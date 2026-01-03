@@ -193,7 +193,7 @@ sealed class FenethStatue : ModTile {
         TileID.Sets.PreventsSandfall[Type] = true;
         TileSets.ShouldKillTileBelow[Type] = false;
         TileSets.PreventsSlopesBelow[Type] = true;
-        CanBeSlopedTileSystem.Included[Type] = true;
+        CantBeSlopedTileSystem.Included[Type] = true;
 
         AddMapEntry(new Color(191, 107, 87), CreateMapEntryName());
 

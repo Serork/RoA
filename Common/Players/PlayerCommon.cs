@@ -3,6 +3,7 @@
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Content.Tiles.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;

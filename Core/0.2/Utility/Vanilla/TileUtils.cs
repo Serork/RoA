@@ -220,6 +220,46 @@ static partial class TileHelper {
         return new Point16(i + 1, j + 1);
     }
 
+    public static Point16 GetTileTopLeft(int i, int j, ushort type) {
+        int left = i;
+        int top = j;
+        while (Main.tile[i, top].TileFrameX != 0) {
+            if (!WorldGen.InWorld(i, top) || !Main.tile[i, top].ActiveTile(type)) {
+                break;
+            }
+            --i;
+        }
+        while (Main.tile[left, j].TileFrameY != 0) {
+            if (!WorldGen.InWorld(left, j) || !Main.tile[left, j].ActiveTile(type)) {
+                break;
+            }
+            --j;
+        }
+        return new Point16(i + 1, j + 1);
+    }
+
+    public static Point16 GetTileTopLeft2(int i, int j, ushort type) {
+        int left = i;
+        int top = j;
+        TileObjectData tileData = TileObjectData.GetTileData(Main.tile[i, top]);
+        if (tileData == null) {
+            return Point16.Zero;
+        }
+        while ((Main.tile[i, top].TileFrameX % TileObjectData.GetTileData(Main.tile[i, top]).CoordinateFullWidth) != 0) {
+            if (!WorldGen.InWorld(i, top) || !Main.tile[i, top].ActiveTile(type)) {
+                break;
+            }
+            --i;
+        }
+        while ((Main.tile[left, j].TileFrameY % TileObjectData.GetTileData(Main.tile[i, top]).CoordinateFullHeight) != 0) {
+            if (!WorldGen.InWorld(left, j) || !Main.tile[left, j].ActiveTile(type)) {
+                break;
+            }
+            --j;
+        }
+        return new Point16(i, j);
+    }
+
     public static Point16 GetTileTopLeft2<T>(int i, int j) where T : ModTile {
         ushort type = (ushort)ModContent.TileType<T>();
         int left = i;
