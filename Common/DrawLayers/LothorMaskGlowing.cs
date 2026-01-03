@@ -58,6 +58,10 @@ sealed class LothorMaskGlowing : ModSystem {
                         player.sitting.isSitting = true;
                     }
                     player.sitting.GetSittingOffsetInfo(player, out Vector2 posOffset, out float seatYOffset);
+                    if (drawInfo.isSitting && player.mount._active) {
+                        posOffset *= 0f;
+                        seatYOffset *= 0f;
+                    }
                     float lifeProgress = 1f - MathHelper.Clamp((float)player.statLife / player.statLifeMax2 * 0.5f, 0f, 1f);
                     SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
                     Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
