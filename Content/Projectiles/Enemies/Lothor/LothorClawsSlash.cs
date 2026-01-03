@@ -80,7 +80,7 @@ sealed class LothorClawsSlash : ModProjectile {
         Point pos = Projectile.Center.ToTileCoordinates();
         Color color2 = new Color(150, 20, 20);
         Color color1 = new Color(241, 100, 100);
-        color2 = color1;
+        color2 = Color.Lerp(color2, color1, 0f);
         float num12 = (Projectile.localAI[0] + 0.5f) / (Projectile.ai[1] + Projectile.ai[1] * 0.5f);
         float num22 = Utils.Remap(num12, 0.0f, 0.6f, 0.0f, 1f) * Utils.Remap(num12, 0.6f, 1f, 1f, 0.0f);
         float num42 = 1f/*Utils.Remap((Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * 1.5f).ToVector3().Length() / (float)Math.Sqrt(3.0), 0.6f, 1f, 0.4f, 1f)*/ * Projectile.Opacity;
