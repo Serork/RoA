@@ -36,7 +36,7 @@ sealed class FlakCannonBullet : ModProjectile {
     public override void AI() {
         Lighting.AddLight(Projectile.Center, new Color(143, 255, 133).ToVector3() * 0.5f);
 
-        Projectile.Opacity = Utils.GetLerpValue(0, 50, Projectile.timeLeft, true);
+        Projectile.Opacity = Utils.GetLerpValue(0, 20, Projectile.timeLeft, true);
     }
 
     public override bool PreDraw(ref Color lightColor) {

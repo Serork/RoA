@@ -2648,3 +2648,8 @@ FlakCannon: {
 	// DisplayName: Flak Cannon
 	// Tooltip: ""
 }
+
+GraveDanger: {
+	// DisplayName: Grave Danger
+	// Tooltip: ""
+}

@@ -24,25 +24,25 @@ static class ProjectileUtils {
         SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
 
         if (scale != null) {
-            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, sourceRectangle, lightColor, projectile.rotation + exRot,
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, sourceRectangle, lightColor, projectile.rotation + exRot,
             origin ?? mainTex.Size() / 2, projectile.scale * scale.Value, effects, 0);
             return;
         }
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, sourceRectangle, lightColor, projectile.rotation + exRot,
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, sourceRectangle, lightColor, projectile.rotation + exRot,
             origin ?? mainTex.Size() / 2, projectile.scale, effects, 0);
     }
 
     public static void QuickDraw(this Projectile projectile, Color lightColor, float overrideRot, int EmmmItIsAStupidValue) {
         Texture2D mainTex = projectile.GetTexture();
 
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, null, lightColor, overrideRot,
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, null, lightColor, overrideRot,
             mainTex.Size() / 2, projectile.scale, 0, 0);
     }
 
     public static void QuickDraw(this Projectile projectile, Rectangle frameBox, Color lightColor, float exRot) {
         Texture2D mainTex = projectile.GetTexture();
 
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, lightColor, projectile.rotation + exRot,
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, frameBox, lightColor, projectile.rotation + exRot,
             frameBox.Size() / 2, projectile.scale, 0, 0);
     }
 
@@ -57,17 +57,17 @@ static class ProjectileUtils {
             origin *= originScale;
         }
         if (scale != null) {
-            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, lightColor, projectile.rotation + exRot,
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, frameBox, lightColor, projectile.rotation + exRot,
                 origin.Value, scale.Value, effects, 0);
         }
         else {
-            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, lightColor, projectile.rotation + exRot,
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, frameBox, lightColor, projectile.rotation + exRot,
                 origin.Value, projectile.scale, effects, 0);
         }
     }
 
     public static void QuickDrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, int start, float extraRot = 0, float scale = -1, Texture2D? texture = null, byte maxFrames = 0, SpriteEffects? spriteEffects = null, Vector2? origin = null) {
-        int howMany = ProjectileID.Sets.TrailCacheLength[projectile.type];
+        int howMany = projectile.oldPos.Length;
         projectile.DrawShadowTrails(drawColor, maxAlpha, maxAlpha / howMany, start, howMany, 1, extraRot, scale, texture, maxFrames, spriteEffects, origin);
     }
 
@@ -80,9 +80,10 @@ static class ProjectileUtils {
         SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
         origin ??= frameBox.Size() / 2;
 
-        for (int i = start; i < howMany; i += step)
+        for (int i = start; i < howMany; i += step) {
             Main.spriteBatch.Draw(texture ?? mainTex, projectile.oldPos[i] + toCenter - Main.screenPosition, frameBox,
                 drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + extraRot, origin.Value, scale == -1 ? projectile.scale : scale, effects, 0);
+        }
     }
 
     public static void DrawShadowTrails(this Projectile projectile, Color drawColor, float maxAlpha, float alphaStep, int start, int howMany, int step, float scaleStep, float extraRot = 0, float scale = -1, byte maxFrames = 0, SpriteEffects? spriteEffects = null, Vector2? origin = null) {

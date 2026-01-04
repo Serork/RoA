@@ -7,9 +7,11 @@ using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -18,23 +20,31 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
-sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(1);
+sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(6);
 
     float ISpawnCopies.CopyDeathFrequency => 0.1f;
 
-    private float DieProgress => Ease.CircIn(1f - Projectile.timeLeft / (float)TIMELEFT);
+    private bool _collideX, _collideY;
+    private Vector2 _oldVelocity;
+    private float _copyCounter;
+    private float _scale;
+
+    public ref float DirectionXValue => ref Projectile.localAI[1];
+    public ref float DirectionYValue => ref Projectile.localAI[2];
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 
         ProjectileID.Sets.Explosive[Type] = true;
 
+        Projectile.SetFrameCount(2);
+
         Projectile.SetTrail(2, 4);
     }
 
     public override void SetDefaults() {
-        Projectile.SetSizeValues(10);
+        Projectile.SetSizeValues(24);
 
         Projectile.friendly = true;
         Projectile.penetrate = -1;
@@ -43,6 +53,9 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
         Projectile.localNPCHitCooldown = -1;
 
         Projectile.timeLeft = TIMELEFT;
+
+        Projectile.Opacity = 0f;
+        _scale = 0f;
     }
 
     public override void PrepareBombToBlow() {
@@ -50,81 +63,136 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
         Projectile.alpha = 255;
 
         Projectile.Resize(128, 128);
+        Projectile.ai[2] = Projectile.knockBack;
         Projectile.knockBack = 8f;
+
+        Projectile.netUpdate = true;
     }
 
+    public override bool ShouldUpdatePosition() => true;
+
     public override void AI() {
-        Lighting.AddLight(Projectile.Center, new Color(143, 255, 133).ToVector3() * 0.5f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+        _scale = Helper.Approach(_scale, 1f, 0.0875f);
+
+        if (Projectile.localAI[0] == 2f) {
+            _collideX = MathF.Abs(Projectile.velocity.X - Projectile.oldVelocity.X) > 6f;
+            _collideY = MathF.Abs(Projectile.velocity.Y - Projectile.oldVelocity.Y) > 6f;
+
+            if (MathF.Abs(Projectile.velocity.Y) < 0.1f && MathF.Abs(Projectile.velocity.X) < 0.1f) {
+                if (Projectile.owner == Main.myPlayer) {
+                    Projectile.PrepareBombToBlow();
+                }
+                Projectile.Kill();
+            }
+
+            if (Projectile.ai[1] == 0f) {
+                if (_collideY)
+                    Projectile.ai[0] = 2f;
+
+                if (!_collideY && Projectile.ai[0] == 2f) {
+                    DirectionXValue = -DirectionXValue;
+                    Projectile.ai[1] = 1f;
+                    Projectile.ai[0] = 1f;
+                }
+
+                if (_collideX) {
+                    DirectionYValue = -DirectionYValue;
+                    Projectile.ai[1] = 1f;
+                }
+            }
+            else {
+                if (_collideX)
+                    Projectile.ai[0] = 2f;
+
+                if (!_collideX && Projectile.ai[0] == 2f) {
+                    DirectionYValue = -DirectionYValue;
+                    Projectile.ai[1] = 0f;
+                    Projectile.ai[0] = 1f;
+                }
+
+                if (_collideY) {
+                    DirectionXValue = -DirectionXValue;
+                    Projectile.ai[1] = 0f;
+                }
+            }
+            Projectile.velocity.X = 6 * DirectionXValue;
+            Projectile.velocity.Y = 6 * DirectionYValue;
+        }
+
+        Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY);
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
+            DirectionXValue = Projectile.velocity.X.GetDirection();
+            DirectionYValue = Projectile.velocity.Y.GetDirection();
+            Projectile.ai[0] = 1f;
+
+            Projectile.frame = Main.rand.NextBool().ToInt();
+
             CopyHandler.InitializeCopies(Projectile, 10);
         }
-
-        Projectile.SetTrail(0, 4);
 
         if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 3) {
             Projectile.PrepareBombToBlow();
         }
 
-        Projectile.ai[0] += 1f;
-        if (Projectile.ai[0] % 4 == 0) {
+        if (Projectile.timeLeft > 3 && Projectile.alpha == 255) {
+            Projectile.tileCollide = true;
+            Projectile.alpha = 0;
+
+            Projectile.Resize(20, 20);
+            Projectile.knockBack = Projectile.ai[2];
+        }
+
+        if (_copyCounter++ % 4 == 0) {
             CopyHandler.MakeCopy(Projectile);
         }
-        if (Projectile.ai[0] > 15f) {
-            if (Projectile.velocity.Y == 0f) {
-                Projectile.velocity.X *= 0.95f;
-            }
-            Projectile.velocity.Y += 0.2f;
-        }
-        Projectile.rotation += Projectile.velocity.X * 0.1f;
+        Projectile.rotation += Projectile.velocity.X * 0.04375f;
 
-        if (Main.rand.NextChance(DieProgress * 1f)) {
-            if (Main.rand.NextBool()) {
-                return;
-            }
+        Projectile.oldPos[0] = Projectile.position + Projectile.gfxOffY * Vector2.UnitY;
 
-            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(7) ? DustID.Torch : ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 2f);
-            fireDust.position = Projectile.Center + Main.rand.RandomPointInArea(5);
-            fireDust.noGravity = true;
-            fireDust.velocity = -Projectile.oldVelocity * Main.rand.NextFloat(5f, 10f);
-            fireDust.velocity *= 0.1f;
-            fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(7) ? DustID.Torch : ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 1.5f);
-            fireDust.position = Projectile.Center + Main.rand.RandomPointInArea(5);
-            fireDust.velocity = -Projectile.oldVelocity * Main.rand.NextFloat(5f, 10f) * 0.5f;
-            fireDust.velocity *= 0.1f;
-        }
+        _oldVelocity = Projectile.velocity;
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        if (Projectile.velocity.X != oldVelocity.X) {
-            Projectile.velocity.X = oldVelocity.X * -0.4f;
+        //if (Projectile.velocity.X != oldVelocity.X) {
+        //    Projectile.velocity.X = oldVelocity.X * -0.4f;
+        //}
+        //if (Projectile.velocity.Y != oldVelocity.Y && oldVelocity.Y > 0.7f) {
+        //    Projectile.velocity.Y = oldVelocity.Y * -0.4f;
+        //}
+        if (Projectile.velocity == -oldVelocity) {
+            Projectile.PrepareBombToBlow();
         }
-        if (Projectile.velocity.Y != oldVelocity.Y && oldVelocity.Y > 0.7f) {
-            Projectile.velocity.Y = oldVelocity.Y * -0.4f;
-        }
+
+        Projectile.localAI[0] = 2f;
 
         return false;
     }
 
     public override void OnKill(int timeLeft) {
         if (Projectile.IsOwnerLocal()) {
-            int count = 16;
+            int count = 6;
             for (int i = 0; i < count; i++) {
                 float angle = MathHelper.TwoPi * i / count;
                 float bulletSpeed = 4f;
                 bulletSpeed *= Main.rand.NextFloat(0.75f, 1.25f);
                 Vector2 velocity = Vector2.One.RotatedBy(angle + MathHelper.PiOver4 * 0.5f * Main.rand.NextFloatDirection()) * bulletSpeed;
-                ProjectileUtils.SpawnPlayerOwnedProjectile<FlakCannonBullet>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
+                ProjectileUtils.SpawnPlayerOwnedProjectile<GraveDangerSplinter>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
                     Position = Projectile.Center,
                     Velocity = velocity,
                     Damage = Projectile.damage,
-                    KnockBack = Projectile.knockBack
+                    KnockBack = 0f
                 });
             }
         }
 
+        Explode();
+    }
+
+    private void Explode() {
         SoundEngine.PlaySound(SoundID.Item62, Projectile.position);
 
         Projectile.Resize(22, 22);
@@ -134,15 +202,7 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
             smoke.velocity *= 1.4f;
         }
 
-        for (int j = 0; j < 10; j++) {
-            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 3.5f);
-            fireDust.noGravity = true;
-            fireDust.velocity *= 7f;
-            fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 1.5f);
-            fireDust.velocity *= 3f;
-        }
-
-        for (int j = 0; j < 10; j++) {
+        for (int j = 0; j < 20; j++) {
             var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3.5f);
             fireDust.noGravity = true;
             fireDust.velocity *= 7f;
@@ -171,6 +231,8 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
             smokeGore.velocity *= speedMulti;
             smokeGore.velocity -= Vector2.One;
         }
+
+        Projectile.Resize(20, 20);
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -179,7 +241,7 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
         var handler = Projectile.GetGlobalProjectile<CopyHandler>();
         var copyData = handler.CopyData;
         int width = texture.Width,
-            height = texture.Height;
+            height = texture.Height / 2;
         for (int i = 0; i < 10; i++) {
             CopyHandler.CopyInfo copyInfo = copyData![i];
             if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
@@ -188,16 +250,15 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
             batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
                 Color = lightColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f,
                 Rotation = copyInfo.Rotation,
-                Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
+                Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f) * _scale,
                 Origin = new Vector2(width, height) / 2f,
                 Clip = new Rectangle(0, copyInfo.UsedFrame * height, width, height)
             });
         }
 
-        Color shadowColor = lightColor;
-        shadowColor = Color.Lerp(shadowColor, lightColor.MultiplyRGB(Color.Orange) with { A = 0 }, DieProgress);
-        Projectile.QuickDrawShadowTrails(shadowColor * Projectile.Opacity, 0.5f, 1, 0f);
-        Projectile.QuickDraw(shadowColor);
+        Color shadowColor = lightColor * Projectile.Opacity;
+        Projectile.QuickDrawShadowTrails(shadowColor, 0.5f, 1, 0f, scale: _scale);
+        Projectile.QuickDrawAnimated(shadowColor, scale: Vector2.One * _scale);
 
         return false;
     }
