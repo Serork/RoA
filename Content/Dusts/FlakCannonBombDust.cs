@@ -43,5 +43,5 @@ sealed class FlakCannonBombDust : ModDust {
         return false;
     }
 
-    public override bool PreDraw(Dust dust) => false;
+    public override bool PreDraw(Dust dust) => true;
 }
