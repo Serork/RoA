@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Projectiles;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -109,7 +110,7 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
 
     public override void OnKill(int timeLeft) {
         if (Projectile.IsOwnerLocal()) {
-            int count = 8;
+            int count = 16;
             for (int i = 0; i < count; i++) {
                 float angle = MathHelper.TwoPi * i / count;
                 float bulletSpeed = 4f;
@@ -134,10 +135,10 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
         }
 
         for (int j = 0; j < 20; j++) {
-            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3.5f);
+            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 3.5f);
             fireDust.noGravity = true;
             fireDust.velocity *= 7f;
-            fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 1.5f);
+            fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 1.5f);
             fireDust.velocity *= 3f;
         }
 

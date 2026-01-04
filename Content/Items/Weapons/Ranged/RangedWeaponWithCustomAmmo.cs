@@ -14,12 +14,15 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Items.Weapons.Ranged;
 
 abstract class RangedWeaponWithCustomAmmo : ModItem {
     private static string AMMOTEXTUREKEY => "_Ammo";
     private static ushort BASETIMEFORAMMORECOVERYINTICKS => MathUtils.SecondsToFrames(2f);
+    private static string AMMOSAVEKEY => RoA.ModName + "customammo";
+
 
     private static Asset<Texture2D> _ammoTexture = null!;
 
@@ -51,6 +54,12 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
                 return;
             }
         }
+
+        if (player.ammoBox && Main.rand.Next(5) == 0)
+            return;
+
+        if (player.ammoPotion && Main.rand.Next(5) == 0)
+            return;
 
         if (player.huntressAmmoCost90 && Main.rand.Next(10) == 0)
             return;
@@ -104,6 +113,14 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
 
     public sealed override bool CanUseItem(Player player) => HasAmmo;
 
+    public override void SaveData(TagCompound tag) {
+        tag[AMMOSAVEKEY] = CurrentAmmoCount;
+    }
+
+    public override void LoadData(TagCompound tag) {
+        CurrentAmmoCount = tag.GetByte(AMMOSAVEKEY);
+    }
+
     public sealed override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
         if (!IsAmmoTextureLoaded) {
             return;
@@ -125,6 +142,7 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
                         progress = 0f;
                     }
                     float colorProgress = MathHelper.Lerp(0.5f, 1f, progress);
+                    colorProgress = 0.5f;
                     color = color.ModifyRGB(colorProgress);
                 }
                 int width = texture.Width;
