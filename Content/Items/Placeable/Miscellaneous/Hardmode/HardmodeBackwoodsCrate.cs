@@ -159,7 +159,7 @@ sealed class HardmodeBackwoodsCrate : ModItem {
 
             ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DryadStatue>(), 6),
 
-            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<Moss>(), 20),
+            //ItemDropRule.NotScalingWithLuck(ModContent.ItemType<Moss>(), 20),
 
             goldCoin,
             hardmodeBiomeCrateOres,
