@@ -2617,3 +2617,8 @@ ScholarsTelescope: {
 	DisplayName: Scholar's Telescope
 	Tooltip: ""
 }
+
+FlakCannon: {
+	DisplayName: Flak Cannon
+	Tooltip: ""
+}

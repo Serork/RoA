@@ -1,0 +1,195 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Common.Projectiles;
+using RoA.Core;
+using RoA.Core.Defaults;
+using RoA.Core.Graphics.Data;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
+
+using System;
+
+using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace RoA.Content.Projectiles.Friendly.Ranged;
+
+sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
+    private static ushort TIMELEFT => 60;
+
+    float ISpawnCopies.CopyDeathFrequency => 0.1f;
+
+    private float DieProgress => Ease.CircIn(1f - Projectile.timeLeft / (float)TIMELEFT);
+
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
+
+        ProjectileID.Sets.Explosive[Type] = true;
+
+        Projectile.SetTrail(0, 4);
+    }
+
+    public override void SetDefaults() {
+        Projectile.SetSizeValues(10);
+
+        Projectile.friendly = true;
+        Projectile.penetrate = -1;
+        Projectile.DamageType = DamageClass.Ranged;
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = -1;
+
+        Projectile.timeLeft = TIMELEFT;
+    }
+
+    public override void PrepareBombToBlow() {
+        Projectile.tileCollide = false;
+        Projectile.alpha = 255;
+
+        Projectile.Resize(128, 128);
+        Projectile.knockBack = 8f;
+    }
+
+    public override void AI() {
+        Lighting.AddLight(Projectile.Center, new Color(143, 255, 133).ToVector3() * 0.5f);
+
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = 1f;
+
+            CopyHandler.InitializeCopies(Projectile, 10);
+        }
+
+        Projectile.SetTrail(0, 4);
+
+        if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 3) {
+            Projectile.PrepareBombToBlow();
+        }
+
+        Projectile.ai[0] += 1f;
+        if (Projectile.ai[0] % 4 == 0) {
+            CopyHandler.MakeCopy(Projectile);
+        }
+        if (Projectile.ai[0] > 15f) {
+            if (Projectile.velocity.Y == 0f) {
+                Projectile.velocity.X *= 0.95f;
+            }
+            Projectile.velocity.Y += 0.2f;
+        }
+        Projectile.rotation += Projectile.velocity.X * 0.1f;
+
+        if (Main.rand.NextChance(DieProgress * 1f)) {
+            if (Main.rand.NextBool()) {
+                return;
+            }
+
+            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 2f);
+            fireDust.position = Projectile.Center + Main.rand.RandomPointInArea(5);
+            fireDust.noGravity = true;
+            fireDust.velocity = -Projectile.oldVelocity * Main.rand.NextFloat(5f, 10f);
+            fireDust.velocity *= 0.1f;
+            fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 1.5f);
+            fireDust.position = Projectile.Center + Main.rand.RandomPointInArea(5);
+            fireDust.velocity = -Projectile.oldVelocity * Main.rand.NextFloat(5f, 10f) * 0.5f;
+            fireDust.velocity *= 0.1f;
+        }
+    }
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        if (Projectile.velocity.X != oldVelocity.X) {
+            Projectile.velocity.X = oldVelocity.X * -0.4f;
+        }
+        if (Projectile.velocity.Y != oldVelocity.Y && oldVelocity.Y > 0.7f) {
+            Projectile.velocity.Y = oldVelocity.Y * -0.4f;
+        }
+
+        return false;
+    }
+
+    public override void OnKill(int timeLeft) {
+        if (Projectile.IsOwnerLocal()) {
+            int count = 8;
+            for (int i = 0; i < count; i++) {
+                float angle = MathHelper.TwoPi * i / count;
+                float bulletSpeed = 4f;
+                bulletSpeed *= Main.rand.NextFloat(0.75f, 1.25f);
+                Vector2 velocity = Vector2.One.RotatedBy(angle + MathHelper.PiOver4 * 0.5f * Main.rand.NextFloatDirection()) * bulletSpeed;
+                ProjectileUtils.SpawnPlayerOwnedProjectile<FlakCannonBullet>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
+                    Position = Projectile.Center,
+                    Velocity = velocity,
+                    Damage = Projectile.damage,
+                    KnockBack = Projectile.knockBack
+                });
+            }
+        }
+
+        SoundEngine.PlaySound(SoundID.Item62, Projectile.position);
+
+        Projectile.Resize(22, 22);
+
+        for (int i = 0; i < 30; i++) {
+            var smoke = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.5f);
+            smoke.velocity *= 1.4f;
+        }
+
+        for (int j = 0; j < 20; j++) {
+            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3.5f);
+            fireDust.noGravity = true;
+            fireDust.velocity *= 7f;
+            fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 1.5f);
+            fireDust.velocity *= 3f;
+        }
+
+        for (int k = 0; k < 2; k++) {
+            float speedMulti = 0.4f;
+            if (k == 1) {
+                speedMulti = 0.8f;
+            }
+
+            var smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));
+            smokeGore.velocity *= speedMulti;
+            smokeGore.velocity += Vector2.One;
+            smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));
+            smokeGore.velocity *= speedMulti;
+            smokeGore.velocity.X -= 1f;
+            smokeGore.velocity.Y += 1f;
+            smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));
+            smokeGore.velocity *= speedMulti;
+            smokeGore.velocity.X += 1f;
+            smokeGore.velocity.Y -= 1f;
+            smokeGore = Gore.NewGoreDirect(Projectile.GetSource_Death(), Projectile.position, default, Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1));
+            smokeGore.velocity *= speedMulti;
+            smokeGore.velocity -= Vector2.One;
+        }
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        SpriteBatch batch = Main.spriteBatch;
+        Texture2D texture = Projectile.GetTexture();
+        var handler = Projectile.GetGlobalProjectile<CopyHandler>();
+        var copyData = handler.CopyData;
+        int width = texture.Width,
+            height = texture.Height;
+        for (int i = 0; i < 10; i++) {
+            CopyHandler.CopyInfo copyInfo = copyData![i];
+            if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
+                continue;
+            }
+            batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
+                Color = lightColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f,
+                Rotation = copyInfo.Rotation,
+                Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
+                Origin = new Vector2(width, height) / 2f,
+                Clip = new Rectangle(0, copyInfo.UsedFrame * height, width, height)
+            });
+        }
+
+        Color shadowColor = lightColor;
+        shadowColor = Color.Lerp(shadowColor, lightColor.MultiplyRGB(Color.Orange) with { A = 0 }, DieProgress);
+        Projectile.QuickDrawShadowTrails(shadowColor * Projectile.Opacity, 0.5f, 1, 0f);
+        Projectile.QuickDraw(shadowColor);
+
+        return false;
+    }
+}
