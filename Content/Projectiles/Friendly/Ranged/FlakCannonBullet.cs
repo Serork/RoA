@@ -23,7 +23,7 @@ sealed class FlakCannonBullet : ModProjectile {
         Projectile.hostile = false; // Can the projectile deal damage to the player?
         Projectile.DamageType = DamageClass.Ranged; // Is the projectile shoot by a ranged weapon?
         Projectile.penetrate = 1; // How many monsters the projectile can penetrate. (OnTileCollide below also decrements penetrate for bounces as well)
-        Projectile.timeLeft = 60; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
+        Projectile.timeLeft = 90; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
         Projectile.alpha = 255; // The transparency of the projectile, 255 for completely transparent. (aiStyle 1 quickly fades the projectile in) Make sure to delete this if you aren't using an aiStyle that fades in. You'll wonder why your projectile is invisible.
         //Projectile.light = 0.5f; // How much light emit around the projectile
         Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
@@ -35,6 +35,8 @@ sealed class FlakCannonBullet : ModProjectile {
 
     public override void AI() {
         Lighting.AddLight(Projectile.Center, new Color(143, 255, 133).ToVector3() * 0.5f);
+
+        Projectile.Opacity = Utils.GetLerpValue(0, 20, Projectile.timeLeft, true);
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -42,22 +44,23 @@ sealed class FlakCannonBullet : ModProjectile {
 
         Color baseColor = lightColor;
         baseColor = Color.Lerp(baseColor, Color.White, 0.25f);
+        baseColor *= Projectile.Opacity;
 
         // Redraw the projectile with the color not influenced by light
         Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
         for (int k = 0; k < Projectile.oldPos.Length - 2; k++) {
             Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
             Color color = baseColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-            Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(texture, drawPos, null, color * Projectile.Opacity, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
         }
 
         Main.EntitySpriteDraw(texture, Projectile.position - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY), 
-            null, baseColor, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+            null, baseColor * Projectile.Opacity, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
 
         for (int k = 0; k < Projectile.oldPos.Length - 2; k++) {
             Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
             Color color = baseColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-            Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+            Main.EntitySpriteDraw(texture, drawPos, null, color * Projectile.Opacity, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
         }
 
         return false;

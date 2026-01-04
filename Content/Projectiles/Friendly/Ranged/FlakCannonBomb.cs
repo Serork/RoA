@@ -85,12 +85,12 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
                 return;
             }
 
-            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 2f);
+            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(7) ? DustID.Torch : ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 2f);
             fireDust.position = Projectile.Center + Main.rand.RandomPointInArea(5);
             fireDust.noGravity = true;
             fireDust.velocity = -Projectile.oldVelocity * Main.rand.NextFloat(5f, 10f);
             fireDust.velocity *= 0.1f;
-            fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 1.5f);
+            fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, Main.rand.NextBool(7) ? DustID.Torch : ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 1.5f);
             fireDust.position = Projectile.Center + Main.rand.RandomPointInArea(5);
             fireDust.velocity = -Projectile.oldVelocity * Main.rand.NextFloat(5f, 10f) * 0.5f;
             fireDust.velocity *= 0.1f;
@@ -134,7 +134,7 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
             smoke.velocity *= 1.4f;
         }
 
-        for (int j = 0; j < 20; j++) {
+        for (int j = 0; j < 10; j++) {
             var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<FlakCannonBombDust>(), 0f, 0f, 100, default, 3.5f);
             fireDust.noGravity = true;
             fireDust.velocity *= 7f;
@@ -142,7 +142,7 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
             fireDust.velocity *= 3f;
         }
 
-        for (int j = 0; j < 20; j++) {
+        for (int j = 0; j < 10; j++) {
             var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3.5f);
             fireDust.noGravity = true;
             fireDust.velocity *= 7f;
