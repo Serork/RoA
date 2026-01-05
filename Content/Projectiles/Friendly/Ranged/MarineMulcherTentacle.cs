@@ -84,7 +84,7 @@ sealed class MarineMulcherTentacle : ModProjectile {
         else
             Projectile.localAI[0] += 0.025f * 1.625f;
 
-        if (Projectile.localAI[0] >= 2f)
+        if (Projectile.localAI[0] >= 0.95f)
             Projectile.Kill();
 
         Projectile.velocity.X += Projectile.ai[0] * 1f;

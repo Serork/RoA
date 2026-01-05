@@ -23,7 +23,7 @@ sealed class GraveDangerSplinter : ModProjectile {
         Projectile.SetSizeValues(14);
 
         Projectile.friendly = true;
-        Projectile.penetrate = -1;
+        Projectile.penetrate = 3;
         Projectile.DamageType = DamageClass.Ranged;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
