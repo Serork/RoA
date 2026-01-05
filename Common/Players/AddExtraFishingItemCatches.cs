@@ -1,9 +1,16 @@
-﻿using RoA.Content.Biomes.Backwoods;
+﻿using ModLiquidLib.ModLoader;
+
+using RoA.Content.Biomes.Backwoods;
+using RoA.Content.Items.Materials;
+using RoA.Content.Items.Miscellaneous.QuestFish;
 using RoA.Content.Items.Weapons.Nature.Hardmode;
+using RoA.Content.Liquids;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
+
+using static Terraria.ID.ContentSamples.CreativeHelper;
 
 namespace RoA.Common.Players;
 
@@ -68,6 +75,26 @@ sealed class AddExtraFishingItemCatches : ModPlayer {
                     fisher.rolledItemDrop = 2315;
                 }
             }
+
+            return;
+        }
+
+        Tile tile = Main.tile[fisher.X, fisher.Y];
+        if (tile.LiquidType == LiquidLoader.LiquidType<Tar>()) {
+            if (fisher.questFish == ModContent.ItemType<BoneBroth>() && fisher.uncommon) {
+                fisher.rolledItemDrop = ModContent.ItemType<BoneBroth>();
+            }
+            else if (fisher.uncommon) {
+                fisher.rolledItemDrop = ModContent.ItemType<BlotchedFish>();
+            }
+            return;
+        }
+
+        if (fisher.inHoney) {
+            if (fisher.rare || (fisher.uncommon && Main.rand.Next(2) == 0))
+                fisher.rolledItemDrop = 2314;
+            else if (fisher.uncommon && fisher.questFish == 2451)
+                fisher.rolledItemDrop = 2451;
 
             return;
         }
@@ -157,8 +184,18 @@ sealed class AddExtraFishingItemCatches : ModPlayer {
         }
         else {
             if (inBackwoods) {
-                if (fisher.legendary && Main.hardMode && Main.rand.Next(2) == 0)
+                if (fisher.legendary && Main.hardMode && Main.rand.Next(2) == 0) {
                     fisher.rolledItemDrop = ModContent.ItemType<LeafySeahorse>();
+                }
+                else if (fisher.questFish == ModContent.ItemType<Druidfish>() && fisher.heightLevel <= 1 && fisher.uncommon) {
+                    fisher.rolledItemDrop = ModContent.ItemType<Druidfish>();
+                }
+                else if (fisher.questFish == ModContent.ItemType<SwimmingStone>() && fisher.heightLevel > 1 && fisher.uncommon) {
+                    fisher.rolledItemDrop = ModContent.ItemType<SwimmingStone>();
+                }
+                else if (fisher.rare) {
+                    fisher.rolledItemDrop = ModContent.ItemType<EmeraldOpaleye>();
+                }
             }
             else if (flag) {
                 if (fisher.legendary && Main.hardMode && Main.player[owner].ZoneSnow && fisher.heightLevel == 3 && Main.rand.Next(3) != 0)

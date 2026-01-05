@@ -151,7 +151,7 @@ sealed partial class BackwoodsBiome : ModBiome {
         bool result = false;
 
         Player player = Main.LocalPlayer;
-        if (player.position.Y / 16 > BackwoodsVars.FirstTileYAtCenter + 35) {
+        if (player.position.Y / 16 >= Main.worldSurface/*BackwoodsVars.FirstTileYAtCenter + 35*/) {
             result = true;
         }
 
