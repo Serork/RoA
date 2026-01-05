@@ -195,7 +195,7 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
         int width = texture.Width,
             height = texture.Height;
         Color shadowColor = lightColor;
-        shadowColor = Color.Lerp(shadowColor, Color.Orange with { A = 0 }, DieProgress * 1.5f);
+        shadowColor = Color.Lerp(shadowColor, Color.Orange with { A = 0 }, DieProgress * 1.25f);
         for (int i = 0; i < 10; i++) {
             CopyHandler.CopyInfo copyInfo = copyData![i];
             if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
