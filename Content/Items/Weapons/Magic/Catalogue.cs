@@ -36,7 +36,7 @@ sealed class Catalogue : GlobalItem {
     private record struct LastReforgedData(bool Active, int[] SpellTomeItemTypes, int[] PrefixesPerItemType, byte CurrentSpellTomeIndex, Point16 ArchiveCoords, ScholarsArchiveTE.ArchiveSpellTomeType ArchiveSpellTomes);
 
     private static LastReforgedData _lastReforgedData;
-    private static bool _useSoundPlayed;
+    private static bool _useSoundPlayed, _mustPlayTurnSound;
 
     public static SoundStyle Empty { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "PageTurn") with { Volume = 0f };
     public static SoundStyle PageTurn { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "PageTurn");
@@ -75,6 +75,9 @@ sealed class Catalogue : GlobalItem {
         if (HasSpells && !result) {
             SoundEngine.PlaySound(Empty);
             SoundEngine.PlaySound(PageClose);
+            if (!_mustPlayTurnSound) {
+                _mustPlayTurnSound = true;
+            }
         }
         HasSpells = result;
         if (!HasSpells) {
@@ -224,6 +227,8 @@ sealed class Catalogue : GlobalItem {
 
             TooltipLine line2 = new(Mod, "nospellsintome0", Language.GetTextValue("Mods.RoA.Catalogue0"));
             tooltips.Add(line2);
+            line2 = new(Mod, "nospellsintome4", Language.GetTextValue("Mods.RoA.CatalogueNoSpells"));
+            tooltips.Add(line2);
             line2 = new(Mod, "nospellsintome1", Language.GetTextValue("Mods.RoA.SwitchSpells"));
             tooltips.Add(line2);
 
@@ -331,13 +336,22 @@ sealed class Catalogue : GlobalItem {
                 handler.UpdateActive();
 
                 if (handler.CurrentSpellTomeIndex == 1) {
-                    SoundEngine.PlaySound(Empty);
-                    SoundEngine.PlaySound(PageClose);
+                    if (_mustPlayTurnSound) {
+                        _mustPlayTurnSound = false;
+                        SoundEngine.PlaySound(Empty);
+                        SoundEngine.PlaySound(PageTurn);
+                    }
+                    else {
+                        SoundEngine.PlaySound(Empty);
+                        SoundEngine.PlaySound(PageClose);
+                    }
                     handler.Active = false;
                 }
                 if (handler.CurrentSpellTomeIndex > handler.SpellTomeCount - 1) {
-                    SoundEngine.PlaySound(Empty);
-                    SoundEngine.PlaySound(PageTurn);
+                    if (handler.SpellTomeCount > 1) {
+                        SoundEngine.PlaySound(Empty);
+                        SoundEngine.PlaySound(PageTurn);
+                    }
                     handler.CurrentSpellTomeIndex = 0;
                 }
                 //else {
