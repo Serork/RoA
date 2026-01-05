@@ -47,7 +47,7 @@ sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
         Projectile.tileCollide = false;
         Projectile.alpha = 255;
 
-        Projectile.Resize(128, 128);
+        Projectile.Resize(150, 150);
         Projectile.knockBack = 8f;
     }
 
@@ -133,7 +133,7 @@ sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
 
         SoundEngine.PlaySound(SoundID.Item62, Projectile.position);
 
-        Projectile.Resize(22, 22);
+        Projectile.Resize(34, 34);
 
         for (int i = 0; i < 30; i++) {
             var smoke = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 1.5f);

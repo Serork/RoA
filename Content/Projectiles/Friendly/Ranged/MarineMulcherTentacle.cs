@@ -80,9 +80,9 @@ sealed class MarineMulcherTentacle : ModProjectile {
         Projectile.position.X = center15.X - (float)(Projectile.width / 2);
         Projectile.position.Y = center15.Y - (float)(Projectile.height / 2);
         if ((double)Projectile.localAI[0] < 0.1)
-            Projectile.localAI[0] += 0.01f * 1.75f;
+            Projectile.localAI[0] += 0.01f * 1.625f;
         else
-            Projectile.localAI[0] += 0.025f * 1.75f;
+            Projectile.localAI[0] += 0.025f * 1.625f;
 
         if (Projectile.localAI[0] >= 2f)
             Projectile.Kill();
