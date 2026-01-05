@@ -297,6 +297,7 @@ sealed class ScholarsArchive : ModTile, TileHooks.IPreDraw {
             foreach (ScholarsArchiveTE.ArchiveSpellTomeType spellTome2 in spellTomes) {
                 if (scholarsArchiveTE.HasSpellTome(spellTome2)) {
                     lastActiveFlag = spellTome2;
+                    break;
                 }
             }
             ScholarsArchiveTE.ArchiveSpellTomeType spellTome = lastActiveFlag!.Value;

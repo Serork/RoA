@@ -72,6 +72,10 @@ sealed class Catalogue : GlobalItem {
                 }
             }
         }
+        if (HasSpells && !result) {
+            SoundEngine.PlaySound(Empty);
+            SoundEngine.PlaySound(PageClose);
+        }
         HasSpells = result;
         if (!HasSpells) {
             CurrentSpellTomeIndex = 0;
