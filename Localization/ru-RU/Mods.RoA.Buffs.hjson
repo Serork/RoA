@@ -328,12 +328,12 @@ Unhinged: {
 
 ElderSnailSlow: {
 	// DisplayName: Elder Snail Slow
-	// Description: Mods.RoA.Buffs.ElderSnailSlow.Description
+	// Description: Snail goo slows down your movement speed
 }
 
 SnailBuff: {
 	// DisplayName: Snail Buff
-	// Description: Mods.RoA.Buffs.SnailBuff.Description
+	// Description: Defence briefly increased
 }
 
 BuffLantern: {
