@@ -1,14 +1,14 @@
 SwimmingStone: {
-	Description: DESCRIPTION
-	CatchLocation: LOCATION
+	Description: Ever heard of standing stones? Well, I've heard of swimming stones. They're just like a fish, but statue. Now go and get me one, so I can experience all the other senses of that fish!
+	CatchLocation: Ungerground Backwoods
 }
 
 Druidfish: {
-	Description: DESCRIPTION
-	CatchLocation: LOCATION
+	Description: This has to be some kind of a fashion boom, that, just like those leafy morons, even the fish now wear animal skulls on their heads! I haven't fished a skull-headed fish yet, so go and fix that. Now!
+	CatchLocation: Surface Backwoods
 }
 
 BoneBroth: {
-	Description: DESCRIPTION
-	CatchLocation: LOCATION
+	Description: I wanna taste the fish, but I don't wanna taste the bones, ya get me? Now go and fish me a fish that is nothing, but bones. And maybe tar. Yeah, lots of tar.
+	CatchLocation: Tar Pit
 }

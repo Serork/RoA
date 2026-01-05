@@ -23,10 +23,10 @@ NixieTubeDyeSlot2: Casing Dye
 NixieTubeLanguageButton: Change Language
 NixieTubeFlickerButton1: Turn Off Flicker
 NixieTubeFlickerButton2: Turn On Flicker
-TarKillCount: Enemy kills to mutate
+TarKillCount: Enemy kills until mutation
 TarDamage: damage
 TarMaximumLife: maximum life
 SwitchSpells: "{$Controls.RightClick} to switch spells"
-Catalogue0: Catalogue
-Catalogue1: Empty Catalogue
-CatalogueNoSpells: Used to combine spell books
+Catalogue0: Eccentric Tome
+Catalogue1: Eccentric Tome (Empty)
+CatalogueNoSpells: Allows easy access to any spell book stored inside
