@@ -2653,3 +2653,8 @@ GraveDanger: {
 	// DisplayName: Grave Danger
 	// Tooltip: ""
 }
+
+MarineMulcher: {
+	// DisplayName: Marine Mulcher
+	// Tooltip: ""
+}

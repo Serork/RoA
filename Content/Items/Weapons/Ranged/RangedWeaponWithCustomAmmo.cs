@@ -17,7 +17,8 @@ namespace RoA.Content.Items.Weapons.Ranged;
 abstract class RangedWeaponWithCustomAmmo : ModItem {
     protected enum BaseMaxAmmoAmount : byte {
         Two,
-        Three
+        Three,
+        Four
     }
 
     private static ushort BASETIMEFORAMMORECOVERYINTICKS => MathUtils.SecondsToFrames(2f);
@@ -205,7 +206,7 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
                 Color = ammoColor,
                 Scale = Vector2.One * scale
             };
-            drawPosition.X -= ammoOrigin.X / 6f;
+            drawPosition.X -= (ammoOrigin.X - 9f);
             spriteBatch.Draw(ammoTexture, drawPosition, drawInfo, onScreen: false);
         }
         drawSpecialAmmoIcon();

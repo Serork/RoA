@@ -15,7 +15,7 @@ sealed class GraveDanger : RangedWeaponWithCustomAmmo {
     protected override BaseMaxAmmoAmount MaxAmmoAmount => BaseMaxAmmoAmount.Three;
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(40, 20);
+        Item.SetSizeValues(46, 22);
         Item.DefaultToRangedWeapon(ModContent.ProjectileType<GraveDangerGrave>(), AmmoID.None, 30, 7f);
         Item.knockBack = 6.5f;
         Item.UseSound = SoundID.Item36;

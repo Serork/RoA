@@ -11,12 +11,12 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Ranged;
 
-sealed class FlakCannon : RangedWeaponWithCustomAmmo {
-    protected override BaseMaxAmmoAmount MaxAmmoAmount => BaseMaxAmmoAmount.Four;
+sealed class MarineMulcher : RangedWeaponWithCustomAmmo {
+    protected override BaseMaxAmmoAmount MaxAmmoAmount => BaseMaxAmmoAmount.Two;
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(40, 20);
-        Item.DefaultToRangedWeapon(ModContent.ProjectileType<FlakCannonBomb>(), AmmoID.None, 30, 7f);
+        Item.SetSizeValues(48, 24);
+        Item.DefaultToRangedWeapon(ModContent.ProjectileType<MarineMulcherBomb>(), AmmoID.None, 30, 7f);
         Item.knockBack = 6.5f;
         Item.UseSound = SoundID.Item36;
         Item.damage = 14;
@@ -25,8 +25,8 @@ sealed class FlakCannon : RangedWeaponWithCustomAmmo {
     }
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        position -= velocity.TurnLeft().SafeNormalize() * 4f * -player.direction;
+        position -= velocity.TurnLeft().SafeNormalize() * 6f * -player.direction;
     }
 
-    public override Vector2? HoldoutOffset() => new Vector2(6f, 0f);
+    public override Vector2? HoldoutOffset() => new Vector2(-4f, 0f);
 }

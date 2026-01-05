@@ -37,10 +37,10 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
         Projectile.SetSizeValues(10);
 
         Projectile.friendly = true;
-        Projectile.penetrate = -1;
+        Projectile.penetrate = 3;
         Projectile.DamageType = DamageClass.Ranged;
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = -1;
+        Projectile.localNPCHitCooldown = 10;
 
         Projectile.timeLeft = TIMELEFT;
     }
@@ -60,6 +60,20 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
             Projectile.localAI[0] = 1f;
 
             CopyHandler.InitializeCopies(Projectile, 10);
+
+            float num114 = 4f;
+            for (int num115 = 0; (float)num115 < num114; num115++) {
+                Vector2 spinningpoint6 = Vector2.UnitX * 0f;
+                spinningpoint6 += -Vector2.UnitY.RotatedBy((float)num115 * ((float)Math.PI * 2f / num114)) * new Vector2(1f, 4f);
+                spinningpoint6 = spinningpoint6.RotatedBy(Projectile.velocity.ToRotation());
+                int num116 = Dust.NewDust(Projectile.Center, 0, 0, DustID.Torch);
+                Main.dust[num116].scale = 1.7f;
+                Main.dust[num116].noGravity = true;
+                Main.dust[num116].position = Projectile.Center + spinningpoint6 + Projectile.velocity.SafeNormalize(Vector2.Zero) * 30f;
+                Main.dust[num116].velocity = Main.dust[num116].velocity * 2f + spinningpoint6.SafeNormalize(Vector2.UnitY) * 0.3f + Projectile.velocity.SafeNormalize(Vector2.Zero) * 3f;
+                Main.dust[num116].velocity *= 0.7f;
+                Main.dust[num116].position += Main.dust[num116].velocity * 5f;
+            }
         }
 
         Projectile.SetTrail(0, 4);
@@ -180,13 +194,15 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
         var copyData = handler.CopyData;
         int width = texture.Width,
             height = texture.Height;
+        Color shadowColor = lightColor;
+        shadowColor = Color.Lerp(shadowColor, Color.Orange with { A = 0 }, DieProgress * 1.5f);
         for (int i = 0; i < 10; i++) {
             CopyHandler.CopyInfo copyInfo = copyData![i];
             if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
                 continue;
             }
             batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
-                Color = lightColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f,
+                Color = shadowColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f,
                 Rotation = copyInfo.Rotation,
                 Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
                 Origin = new Vector2(width, height) / 2f,
@@ -194,8 +210,6 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
             });
         }
 
-        Color shadowColor = lightColor;
-        shadowColor = Color.Lerp(shadowColor, lightColor.MultiplyRGB(Color.Orange) with { A = 0 }, DieProgress);
         Projectile.QuickDrawShadowTrails(shadowColor * Projectile.Opacity, 0.5f, 1, 0f);
         Projectile.QuickDraw(shadowColor);
 

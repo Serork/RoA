@@ -7,11 +7,9 @@ using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
-using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
-using System.IO;
 
 using Terraria;
 using Terraria.Audio;
@@ -20,30 +18,21 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
-sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(6);
+sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(5);
 
     float ISpawnCopies.CopyDeathFrequency => 0.1f;
-
-    private bool _collideX, _collideY;
-    private float _copyCounter;
-    private float _scale;
-
-    public ref float DirectionXValue => ref Projectile.localAI[1];
-    public ref float DirectionYValue => ref Projectile.localAI[2];
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 
         ProjectileID.Sets.Explosive[Type] = true;
 
-        Projectile.SetFrameCount(2);
-
         Projectile.SetTrail(2, 4);
     }
 
     public override void SetDefaults() {
-        Projectile.SetSizeValues(24);
+        Projectile.SetSizeValues(12);
 
         Projectile.friendly = true;
         Projectile.penetrate = 3;
@@ -52,9 +41,6 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
         Projectile.localNPCHitCooldown = 10;
 
         Projectile.timeLeft = TIMELEFT;
-
-        Projectile.Opacity = 0f;
-        _scale = 0f;
     }
 
     public override void PrepareBombToBlow() {
@@ -62,64 +48,11 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
         Projectile.alpha = 255;
 
         Projectile.Resize(128, 128);
-        Projectile.ai[2] = Projectile.knockBack;
         Projectile.knockBack = 8f;
-
-        Projectile.netUpdate = true;
     }
 
-    public override bool ShouldUpdatePosition() => true;
-
     public override void AI() {
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
-        _scale = Helper.Approach(_scale, 1f, 0.0875f);
-
-        if (Projectile.localAI[0] == 2f) {
-            _collideX = MathF.Abs(Projectile.velocity.X - Projectile.oldVelocity.X) > 6f;
-            _collideY = MathF.Abs(Projectile.velocity.Y - Projectile.oldVelocity.Y) > 6f;
-
-            if (MathF.Abs(Projectile.velocity.Y) < 0.1f && MathF.Abs(Projectile.velocity.X) < 0.1f) {
-                if (Projectile.owner == Main.myPlayer) {
-                    Projectile.PrepareBombToBlow();
-                }
-                Projectile.Kill();
-            }
-
-            if (Projectile.ai[1] == 0f) {
-                if (_collideY)
-                    Projectile.ai[0] = 2f;
-
-                if (!_collideY && Projectile.ai[0] == 2f) {
-                    DirectionXValue = -DirectionXValue;
-                    Projectile.ai[1] = 1f;
-                    Projectile.ai[0] = 1f;
-                }
-
-                if (_collideX) {
-                    DirectionYValue = -DirectionYValue;
-                    Projectile.ai[1] = 1f;
-                }
-            }
-            else {
-                if (_collideX)
-                    Projectile.ai[0] = 2f;
-
-                if (!_collideX && Projectile.ai[0] == 2f) {
-                    DirectionYValue = -DirectionYValue;
-                    Projectile.ai[1] = 0f;
-                    Projectile.ai[0] = 1f;
-                }
-
-                if (_collideY) {
-                    DirectionXValue = -DirectionXValue;
-                    Projectile.ai[1] = 0f;
-                }
-            }
-            Projectile.velocity.X = 6 * DirectionXValue;
-            Projectile.velocity.Y = 6 * DirectionYValue;
-
-            Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY);
-        }
+        Lighting.AddLight(Projectile.Center, new Color(252, 144, 144).ToVector3() * 0.75f);
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
@@ -138,72 +71,58 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
                 Main.dust[num116].position += Main.dust[num116].velocity * 5f;
             }
 
-            DirectionXValue = Projectile.velocity.X.GetDirection();
-            DirectionYValue = Projectile.velocity.Y.GetDirection();
-            Projectile.ai[0] = 1f;
-
-            Projectile.frame = Main.rand.NextBool().ToInt();
-
             CopyHandler.InitializeCopies(Projectile, 10);
         }
+
+        Projectile.SetTrail(0, 4);
 
         if (Projectile.owner == Main.myPlayer && Projectile.timeLeft <= 3) {
             Projectile.PrepareBombToBlow();
         }
 
-        if (Projectile.timeLeft > 3 && Projectile.alpha == 255) {
-            Projectile.tileCollide = true;
-            Projectile.alpha = 0;
-
-            Projectile.Resize(20, 20);
-            Projectile.knockBack = Projectile.ai[2];
-        }
-
-        if (Projectile.localAI[0] != 2f) {
-            Projectile.velocity.Y += 0.05f;
-        }
-
-        if (_copyCounter++ % 4 == 0) {
+        Projectile.ai[0] += 1f;
+        if (Projectile.localAI[2]++ % 2 == 0) {
             CopyHandler.MakeCopy(Projectile);
         }
-        Projectile.rotation += Projectile.velocity.X * 0.04375f;
+        if (Projectile.ai[0] > 15f) {
+            if (Projectile.velocity.Y == 0f) {
+                Projectile.velocity.X *= 0.95f;
+            }
+            Projectile.velocity.Y += 0.2f;
+        }
+        Projectile.rotation += Projectile.velocity.X * 0.1f;
 
-        Projectile.oldPos[0] = Projectile.position + Projectile.gfxOffY * Vector2.UnitY;
+        if (Projectile.localAI[2] > 20f && Main.rand.NextBool(4)) {
+            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MarineMulcherTentacleDust>(), 0f, 0f, 100, default, 1.6f + Main.rand.NextFloatRange(0.4f));
+            fireDust.noGravity = true;
+            fireDust.position = Projectile.Center + Main.rand.RandomPointInArea(5);
+            fireDust.velocity = -Projectile.oldVelocity * Main.rand.NextFloat(5f, 10f);
+            fireDust.velocity *= 0.1f;
+        }
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        //if (Projectile.velocity.X != oldVelocity.X) {
-        //    Projectile.velocity.X = oldVelocity.X * -0.4f;
-        //}
-        //if (Projectile.velocity.Y != oldVelocity.Y && oldVelocity.Y > 0.7f) {
-        //    Projectile.velocity.Y = oldVelocity.Y * -0.4f;
-        //}
-        if (Projectile.velocity == -oldVelocity) {
-            Projectile.PrepareBombToBlow();
-        }
+        if ((double)Projectile.velocity.X != (double)oldVelocity.X)
+            Projectile.velocity.X = (float)(-(double)oldVelocity.X * 0.89999997615814209);
+        if ((double)Projectile.velocity.Y != (double)oldVelocity.Y)
+            Projectile.velocity.Y = (float)(-(double)oldVelocity.Y * 0.89999997615814209);
 
-        if (Projectile.localAI[0] != 2f) {
-            DirectionXValue = Projectile.velocity.X.GetDirection();
-            DirectionYValue = Projectile.velocity.Y.GetDirection();
+        Projectile.ai[0] = 15f * 0.89999997615814209f;
 
-            Projectile.velocity.Y *= 0f;
-            Projectile.oldVelocity.Y *= 0f;
-        }
-
-        Projectile.localAI[0] = 2f;
+        Projectile.timeLeft -= 60;
 
         return false;
     }
 
     public override void OnKill(int timeLeft) {
         if (Projectile.IsOwnerLocal()) {
-            int count = 6;
+            int count = 8;
             for (int i = 0; i < count; i++) {
                 float angle = MathHelper.TwoPi * i / count;
                 float bulletSpeed = 4f;
                 bulletSpeed *= Main.rand.NextFloat(0.75f, 1.25f);
                 Vector2 velocity = Vector2.One.RotatedBy(angle + MathHelper.PiOver4 * 0.5f * Main.rand.NextFloatDirection()) * bulletSpeed;
-                ProjectileUtils.SpawnPlayerOwnedProjectile<GraveDangerSplinter>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
+                ProjectileUtils.SpawnPlayerOwnedProjectile<MarineMulcherTentacle>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
                     Position = Projectile.Center,
                     Velocity = velocity,
                     Damage = Projectile.damage,
@@ -212,10 +131,6 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
             }
         }
 
-        Explode();
-    }
-
-    private void Explode() {
         SoundEngine.PlaySound(SoundID.Item62, Projectile.position);
 
         Projectile.Resize(22, 22);
@@ -225,7 +140,16 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
             smoke.velocity *= 1.4f;
         }
 
-        for (int j = 0; j < 20; j++) {
+
+        for (int j = 0; j < 10; j++) {
+            var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MarineMulcherTentacleDust>(), 0f, 0f, 100, default, 3.5f);
+            fireDust.noGravity = true;
+            fireDust.velocity *= 7f;
+            fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<MarineMulcherTentacleDust>(), 0f, 0f, 100, default, 1.5f);
+            fireDust.velocity *= 3f;
+        }
+
+        for (int j = 0; j < 10; j++) {
             var fireDust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, 0f, 0f, 100, default, 3.5f);
             fireDust.noGravity = true;
             fireDust.velocity *= 7f;
@@ -254,8 +178,6 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
             smokeGore.velocity *= speedMulti;
             smokeGore.velocity -= Vector2.One;
         }
-
-        Projectile.Resize(20, 20);
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -264,24 +186,25 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
         var handler = Projectile.GetGlobalProjectile<CopyHandler>();
         var copyData = handler.CopyData;
         int width = texture.Width,
-            height = texture.Height / 2;
+            height = texture.Height;
+        Color shadowColor = Color.White;
+        shadowColor = Color.Lerp(shadowColor, shadowColor with { A = 50 }, 1f - Projectile.timeLeft / (float)TIMELEFT);
         for (int i = 0; i < 10; i++) {
             CopyHandler.CopyInfo copyInfo = copyData![i];
             if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
                 continue;
             }
             batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
-                Color = lightColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f,
+                Color = shadowColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f,
                 Rotation = copyInfo.Rotation,
-                Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f) * _scale,
+                Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
                 Origin = new Vector2(width, height) / 2f,
                 Clip = new Rectangle(0, copyInfo.UsedFrame * height, width, height)
             });
         }
 
-        Color shadowColor = lightColor * Projectile.Opacity;
-        Projectile.QuickDrawShadowTrails(shadowColor, 0.5f, 1, 0f, scale: _scale);
-        Projectile.QuickDrawAnimated(shadowColor, scale: Vector2.One * _scale);
+        Projectile.QuickDrawShadowTrails(shadowColor * Projectile.Opacity, 0.5f, 1, 0f);
+        Projectile.QuickDraw(shadowColor);
 
         return false;
     }

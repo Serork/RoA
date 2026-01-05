@@ -3,6 +3,7 @@
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -15,7 +16,7 @@ sealed class GraveDangerSplinter : ModProjectile {
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(3);
 
-        Projectile.SetTrail(2, 4);
+        Projectile.SetTrail(0, 2);
     }
 
     public override void SetDefaults() {
@@ -37,6 +38,12 @@ sealed class GraveDangerSplinter : ModProjectile {
     }
 
     public override void AI() {
+        if (Projectile.localAI[0] == 0f) {
+            Projectile.localAI[0] = 1f;
+
+            Projectile.frame = Main.rand.Next(3);
+        }
+
         Projectile.Opacity = Utils.GetLerpValue(0, 50, Projectile.timeLeft, true);
 
         Projectile.ai[0] += 1f;
@@ -47,5 +54,12 @@ sealed class GraveDangerSplinter : ModProjectile {
             Projectile.velocity.Y += 0.2f;
         }
         Projectile.rotation += Projectile.velocity.X * 0.1f;
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Projectile.QuickDrawShadowTrails(lightColor * Projectile.Opacity, 0.5f, 1, Projectile.rotation);
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, 0f);
+
+        return false;
     }
 }
