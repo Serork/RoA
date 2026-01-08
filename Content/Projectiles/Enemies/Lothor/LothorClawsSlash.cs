@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common.Cache;
 using RoA.Content.Dusts;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -206,12 +207,22 @@ sealed class LothorClawsSlash : ModProjectile {
            
             spriteBatch.Begin(snapshot, true);
 
+            Color lightColor2 = true ? Color.Lerp(Color.White, lightColor, 1f - num4) : lightColor;
+            lightColor2 *= MathUtils.Clamp01(num4 * 3f);
+            Color lightColor3 = true ? Color.Lerp(Color.White, lightColor, 1f - num4) : lightColor;
+
             Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)texture.Width * 0.59f - Utils.Remap(num1, 0f, 1f, 0f, 20f)) * scale;
-            DrawPrettyStarSparkle(Projectile.Opacity * 1f, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(color1, color2, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 2f);
+            DrawPrettyStarSparkle(Projectile.Opacity, effects, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(color1, color2, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 2f);
 
             drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)texture.Width * 0.515f - 4f - Utils.Remap(num1, 0f, 1f, 0f, 4f)) * scale;
-            DrawPrettyStarSparkle(Projectile.Opacity * 1f, SpriteEffects.None, drawpos2, (Color.Lerp(Color.White, Color.Lerp(color1, color2, Main.rand.NextFloat()), Main.rand.NextFloat()) with { A = 0 }) * num3 * num4, Color.Lerp(color1, color2, 0.666f), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 2f);
+            DrawPrettyStarSparkle(Projectile.Opacity, effects, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(color1, color2, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 2f);
         }
+    }
+
+    private Color GetSlashColor(float progress = 0f) {
+        Color color2 = new Color(150, 20, 20);
+        Color color1 = new Color(241, 100, 100);
+        return Color.Lerp(color1, color2, progress == 0f ? Main.rand.NextFloat() : MathUtils.Clamp01(progress));
     }
 
     private void DrawPrettyStarSparkle(float opacity, SpriteEffects dir, Vector2 drawpos, Microsoft.Xna.Framework.Color drawColor, Microsoft.Xna.Framework.Color shineColor, float flareCounter, float fadeInStart, float fadeInEnd, float fadeOutStart, float fadeOutEnd, float rotation, Vector2 scale, Vector2 fatness) {
@@ -224,8 +235,13 @@ sealed class LothorClawsSlash : ModProjectile {
         num *= 0.95f;
         Vector2 vector = new Vector2(fatness.X * 0.5f, scale.X) * num * 1f;
         Vector2 vector2 = new Vector2(fatness.Y * 0.5f, scale.Y) * num * 1f;
-        color *= num;
+        Vector2 projCenter = drawpos + Main.screenPosition;
+        float brightness = MathUtils.Clamp01(Lighting.Brightness((int)projCenter.X / 16, (int)projCenter.Y / 16) * 5f);
+        brightness = Ease.SineIn(brightness);
+        num *= brightness;
+        num *= opacity;
         color2.A /= 2;
+        color *= num;
         color2 *= num;
         Main.EntitySpriteDraw(value, drawpos, null, color, (float)Math.PI / 2f + rotation, origin, vector, dir);
         Main.EntitySpriteDraw(value, drawpos, null, color, 0f + rotation, origin, vector2, dir);
