@@ -197,15 +197,17 @@ sealed partial class Lothor : ModNPC {
         }
 
         Vector2 drawPosition = NPC.position + offset;
-        GetFrameInfo(out ushort x, out ushort y, out ushort width, out ushort height);
-        for (int i = 0; i < MAXCOPIES; i++) {
-            CopyInfo copyInfo = _copyData![i];
-            if (MathUtils.Approximately(copyInfo.Position, drawPosition, 2f)) {
-                continue;
-            }
+        if (_spawned) {
+            GetFrameInfo(out ushort x, out ushort y, out ushort width, out ushort height);
+            for (int i = 0; i < MAXCOPIES; i++) {
+                CopyInfo copyInfo = _copyData![i];
+                if (MathUtils.Approximately(copyInfo.Position, drawPosition, 2f)) {
+                    continue;
+                }
 
-            spriteBatch.Draw(ItsSpriteSheet.Value, copyInfo.Position + offset, NPC.frame with { Y = height * copyInfo.UsedFrame }, drawColor * NPC.Opacity * MathUtils.Clamp01(copyInfo.Opacity) * 0.5f,
-                copyInfo.Rotation, origin, NPC.scale * MathF.Max(copyInfo.Scale, 1f), copyInfo.FacedRight.ToInt().ToSpriteEffects(), 0f);
+                spriteBatch.Draw(ItsSpriteSheet.Value, copyInfo.Position + offset, NPC.frame with { Y = height * copyInfo.UsedFrame }, drawColor * NPC.Opacity * MathUtils.Clamp01(copyInfo.Opacity) * 0.5f,
+                    copyInfo.Rotation, origin, NPC.scale * MathF.Max(copyInfo.Scale, 1f), copyInfo.FacedRight.ToInt().ToSpriteEffects(), 0f);
+            }
         }
 
         spriteBatch.Draw(ItsSpriteSheet.Value, drawPosition, NPC.frame, drawColor * NPC.Opacity, NPC.rotation, origin, NPC.scale, effects, 0f);
