@@ -70,7 +70,7 @@ sealed class ChemicalFlask : ModProjectile {
         Vector2 origin = sourceRectangle.Size() / 2f;
         Color color3 = new Color(223, 255, 95).MultiplyRGB(baseColor) * Projectile.Opacity;
         color3.A = 150;
-        Main.EntitySpriteDraw(texture, position, sourceRectangle, color3 * 0.25f, Projectile.rotation, origin, Projectile.scale * 2f * Helper.Wave(0.95f, 1.05f, 5f, Projectile.whoAmI), spriteEffects);
+        Main.EntitySpriteDraw(texture, position, sourceRectangle, color3 * 0.25f * Helper.Wave(0.5f, 1f, 10f, Projectile.whoAmI), Projectile.rotation, origin, Projectile.scale * 2.25f * Helper.Wave(0.95f, 1.1f, 5f, Projectile.whoAmI), spriteEffects);
         Main.EntitySpriteDraw(texture, position, sourceRectangle, color, Projectile.rotation, origin, Projectile.scale, spriteEffects);
         texture = _glowTexture.Value;
         Main.EntitySpriteDraw(texture, position, sourceRectangle, Color.White, Projectile.rotation, origin, Projectile.scale, spriteEffects);
