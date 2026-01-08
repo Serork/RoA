@@ -2658,3 +2658,8 @@ MarineMulcher: {
 	// DisplayName: Marine Mulcher
 	// Tooltip: ""
 }
+
+MinersDelight: {
+	// DisplayName: Miners Delight
+	// Tooltip: ""
+}
