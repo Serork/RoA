@@ -25,7 +25,7 @@ sealed class GraveDanger : RangedWeaponWithCustomAmmo {
     }
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        position -= velocity.TurnLeft().SafeNormalize() * 2f * -player.direction;
+        position -= velocity.TurnLeft().SafeNormalize() * 3f * -player.direction;
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(-2f, 0f);

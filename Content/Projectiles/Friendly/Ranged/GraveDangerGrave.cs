@@ -72,9 +72,9 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
 
     public override void AI() {
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
-        _scale = Helper.Approach(_scale, 1f, 0.1f);
+        _scale = Helper.Approach(_scale, 1f, 0.0875f);
         if (Projectile.Opacity >= 1f) {
-            _trailOpacity = Helper.Approach(_trailOpacity, 1f, 0.05f);
+            _trailOpacity = Helper.Approach(_trailOpacity, 1f, 0.0875f);
         }
 
         if (Projectile.localAI[0] == 2f) {
@@ -158,7 +158,7 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
             Projectile.velocity.Y += 0.05f;
         }
 
-        if (_copyCounter++ % 4 == 0) {
+        if (_trailOpacity >= 1f && _copyCounter++ % 4 == 0) {
             CopyHandler.MakeCopy(Projectile);
         }
         Projectile.rotation += Projectile.velocity.X * 0.04375f;
