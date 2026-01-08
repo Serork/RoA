@@ -15,23 +15,11 @@ using Terraria.ModLoader;
 namespace RoA.Common.Projectiles;
 
 abstract class InteractableProjectile : ModProjectile {
-    private static Asset<Texture2D> _hoverTexture = null!;
-
     protected virtual Vector2 DrawOffset { get; }
 
     protected virtual SpriteEffects SetSpriteEffects() => Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-    public sealed override void SetStaticDefaults() {
-        SafeSetStaticDefaults();
-
-        if (Main.dedServ) {
-            return;
-        }
-
-        _hoverTexture = ModContent.Request<Texture2D>(Texture + "_Hover");
-    }
-
-    protected virtual void SafeSetStaticDefaults() { }
+    protected abstract Asset<Texture2D> HoverTexture { get; }
 
     public override void Load() {
         On_Projectile.IsInteractible += On_Projectile_IsInteractable;
@@ -68,7 +56,7 @@ abstract class InteractableProjectile : ModProjectile {
             SpriteBatch spriteBatch = Main.spriteBatch;
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
-            Texture2D texture = _hoverTexture.Value;
+            Texture2D texture = HoverTexture.Value;
             int height = texture.Height / Main.projFrames[Projectile.type];
             Vector2 drawOrigin = new(texture.Width / 2f, height * 0.5f);
             Vector2 position = Projectile.position + drawOrigin - Main.screenPosition;

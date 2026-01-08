@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Projectiles;
 using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Armor.Summon;
@@ -16,6 +18,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Summon;
 
 sealed class BoneHarpy : InteractableProjectile {
+    private static Asset<Texture2D> _hoverTexture = null!;
+
+    protected override Asset<Texture2D> HoverTexture => _hoverTexture;
+
+
     private const float DIST = 500f;
 
     public static readonly Color TrailColor = new(153, 134, 128);
@@ -40,13 +47,19 @@ sealed class BoneHarpy : InteractableProjectile {
         player.cursorItemIconID = ModContent.ItemType<WingIcon>();
     }
 
-    protected override void SafeSetStaticDefaults() {
+    public override void SetStaticDefaults() {
         Main.projFrames[Type] = 6;
 
         ProjectileID.Sets.TrailCacheLength[Type] = 12;
         ProjectileID.Sets.TrailingMode[Type] = 0;
 
         ProjectileID.Sets.MinionSacrificable[Type] = false;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _hoverTexture = ModContent.Request<Texture2D>(Texture + "_Hover");
     }
 
     public override void SetDefaults() {

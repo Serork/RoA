@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.PopupTexts;
@@ -21,6 +23,10 @@ using Terraria.ModLoader.IO;
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 sealed class PettyBag : InteractableProjectile {
+    private static Asset<Texture2D> _hoverTexture = null!;
+
+    protected override Asset<Texture2D> HoverTexture => _hoverTexture;
+
     private class PettyBagItemExtra : GlobalItem {
         public bool WasCollectedByPettyBag;
 
@@ -210,8 +216,14 @@ sealed class PettyBag : InteractableProjectile {
 
     protected override SpriteEffects SetSpriteEffects() => base.SetSpriteEffects();
 
-    protected override void SafeSetStaticDefaults() {
+    public override void SetStaticDefaults() {
         Main.projFrames[Type] = 6;
+
+        if (Main.dedServ) {
+            return;
+        }
+
+        _hoverTexture = ModContent.Request<Texture2D>(Texture + "_Hover");
     }
 
     public override void SetDefaults() {

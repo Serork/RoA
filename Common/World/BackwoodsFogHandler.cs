@@ -182,9 +182,8 @@ sealed class BackwoodsFogHandler : ModSystem {
 
     public override void PostUpdatePlayers() {
         Opacity2 = 1f;
-        Opacity = MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f) * 0.75f;
 
-        //if (Opacity > 0f) 
+        //if (Opacity > 0f)
         {
             Player player = Main.LocalPlayer;
             VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
@@ -215,25 +214,27 @@ sealed class BackwoodsFogHandler : ModSystem {
                 localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero, true);
             }
 
-            Rectangle tileWorkSpace = GetTileWorkSpace();
-            int num = tileWorkSpace.X + tileWorkSpace.Width;
-            int num2 = tileWorkSpace.Y + tileWorkSpace.Height;
-            for (int i = tileWorkSpace.X; i < num; i++) {
-                for (int j = tileWorkSpace.Y; j < num2; j++) {
-                    if (j < Main.worldSurface) {
-                        TrySpawnFog(i, j);
+            if (Opacity > 0f) {
+                Rectangle tileWorkSpace = GetTileWorkSpace();
+                int num = tileWorkSpace.X + tileWorkSpace.Width;
+                int num2 = tileWorkSpace.Y + tileWorkSpace.Height;
+                for (int i = tileWorkSpace.X; i < num; i++) {
+                    for (int j = tileWorkSpace.Y; j < num2; j++) {
+                        if (j < Main.worldSurface) {
+                            TrySpawnFog(i, j);
+                        }
                     }
                 }
-            }
 
-            _updatesCounter++;
-            for (int i = tileWorkSpace.X; i < num; i++) {
-                for (int j = tileWorkSpace.Y; j < num2; j++) {
-                    //TrySpawningWind(i, j);
+                _updatesCounter++;
+                for (int i = tileWorkSpace.X; i < num; i++) {
+                    for (int j = tileWorkSpace.Y; j < num2; j++) {
+                        //TrySpawningWind(i, j);
+                    }
                 }
+                if (_updatesCounter % 10 == 0)
+                    SpawnAirborneWind();
             }
-            if (_updatesCounter % 10 == 0)
-                SpawnAirborneWind();
 
             //if (player.whoAmI == Main.myPlayer && Vector2.Distance(_oldPosition, player.position) > 600f && !player.InModBiome<BackwoodsBiome>()) {
             //    Opacity = Opacity2 = 0.01f;
@@ -241,7 +242,11 @@ sealed class BackwoodsFogHandler : ModSystem {
             //}
         }
 
+        float lerpValue = TimeSystem.LogicDeltaTime * 0.1f;
+        float tileFactor = MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 200f);
         if (!BackwoodsBiome.IsActiveForFogEffect || !IsFogActive) {
+            Opacity = Helper.Approach(Opacity, 0f, lerpValue * 5f);
+
             //if (Opacity > 0f) {
             //    Opacity -= 0.005f * 0.25f;
             //}
@@ -258,6 +263,8 @@ sealed class BackwoodsFogHandler : ModSystem {
 
             return;
         }
+
+        Opacity = Helper.Approach(Opacity, tileFactor * 0.75f, lerpValue * 2f);
 
         //if (Opacity < 0.75f) {
         //    Opacity += 0.0175f * 0.15f;

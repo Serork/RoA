@@ -3,11 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using RoA.Common.Tiles;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Menus;
 using RoA.Core;
-using RoA.Core.Utility;
 
 using System;
 
@@ -25,13 +23,12 @@ sealed class BackwoodsSky : CustomSky {
         if (!Main.LocalPlayer.InModBiome<BackwoodsBiome>() || Main.gameMenu) {
             _skyActive = false;
         }
-        _opacity = MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 200f);
-        //if (_skyActive && _opacity < 1f) {
-        //    _opacity += 0.02f;
-        //}
-        //else if (!_skyActive && _opacity > 0f) {
-        //    _opacity -= 0.02f;
-        //}
+        if (_skyActive && _opacity < 1f) {
+            _opacity += 0.02f;
+        }
+        else if (!_skyActive && _opacity > 0f) {
+            _opacity -= 0.02f * 5f;
+        }
     }
 
     public override Color OnTileColor(Color inColor) {
