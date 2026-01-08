@@ -71,10 +71,10 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
     public override bool ShouldUpdatePosition() => true;
 
     public override void AI() {
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
         _scale = Helper.Approach(_scale, 1f, 0.0875f);
         if (Projectile.Opacity >= 1f) {
-            _trailOpacity = Helper.Approach(_trailOpacity, 1f, 0.0875f);
+            _trailOpacity = Helper.Approach(_trailOpacity, 1f, 0.075f);
         }
 
         if (Projectile.localAI[0] == 2f) {
