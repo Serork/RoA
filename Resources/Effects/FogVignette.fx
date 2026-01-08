@@ -48,7 +48,7 @@ float4 MainPS(float2 coords : TEXCOORD0) : COLOR0
     noiseCoords = frac(noiseCoords + offset);
     float4 otherTex = tex2D(uImage1, noiseCoords);
     otherTex = lerp(BORDERCOLOR, otherTex * vig, vig);
-    return ((color * uIntensity) + (otherTex * (1 - uIntensity)));
+    return lerp(color, (color * uIntensity) + (otherTex * (1 - uIntensity)), uOpacity);
 }
 
 technique Technique1

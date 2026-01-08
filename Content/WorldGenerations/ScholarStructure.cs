@@ -94,7 +94,7 @@ sealed class ScholarStructure : IInitializer {
         while (flag56) {
             int num932 = genRand.Next((int)((double)Main.maxTilesX * 0.3), (int)((double)Main.maxTilesX * 0.7));
 
-            int num933 = genRand.Next((int)Main.worldSurface + 50, GenVars.lavaLine - 50);
+            int num933 = genRand.Next((int)Main.worldSurface + 50, GenVars.lavaLine - 100);
             flag56 = false;
             int num934 = 100;
             for (int num936 = num932 - num934; num936 < num932 + num934; num936 += 3) {
@@ -236,7 +236,7 @@ sealed class ScholarStructure : IInitializer {
             for (int j = origin.Y - 30; j < origin.Y + sizeY * 3 + 30; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 int chance = 25;
-                chance += (int)((float)(j - Main.rockLayer) / (GenVars.lavaLine - 50 - Main.rockLayer) * 20);
+                chance += (int)((float)(j - Main.rockLayer) / (GenVars.lavaLine - 100 - Main.rockLayer) * 20);
                 if (tile.HasTile && (tile.TileType == PLACEHOLDERTILETYPE || tile.TileType == PLACEHOLDERTILETYPE2)) {
                     if (genRand.NextBool(chance)) {
                         WorldGen.TileRunner(i, j, genRand.Next(2, 6), genRand.Next(2, 40), TileID.Dirt, addTile: false, overRide: true);
@@ -546,6 +546,17 @@ sealed class ScholarStructure : IInitializer {
                                 break;
                             }
                         }
+                        for (int checkX2 = i - 2; checkX2 < i + 2; checkX2++) {
+                            if (flag) {
+                                break;
+                            }
+                            for (int checkY2 = j - 2; checkY2 < j + 2; checkY2++) {
+                                if (Main.tile[checkX2, checkY2].TileType == ModContent.TileType<ScholarsGlobe>()) {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                        }
                         if (flag) {
                             continue;
                         }
@@ -617,7 +628,7 @@ sealed class ScholarStructure : IInitializer {
                         }
                     }
                     if (tile.TileType == TileID.WoodBlock || tile.TileType == TileID.LivingWood) {
-                        if (!WorldGenHelper.GetTileSafely(i, j - 1).HasTile && genRand.NextBool()) {
+                        if (!WorldGenHelper.GetTileSafely(i, j - 1).HasTile) {
                             Tile tile2 = Main.tile[i, j - 1];
                             tile2.HasTile = true;
                             tile2.TileType = tile.TileType;
@@ -629,7 +640,8 @@ sealed class ScholarStructure : IInitializer {
                             //}
                             if (genRand.NextBool()) {
                                 tile2 = Main.tile[i + 1, j - 1];
-                                if (tile2.TileType != TileID.Bookcases && tile2.TileType != (ushort)ModContent.TileType<BrokenBookcase>() && !archiveDecorTileTypes.Contains(tile2.TileType)) {
+                                if (tile2.TileType != TileID.Bookcases && tile2.TileType != ModContent.TileType<ScholarsTelescope>() &&
+                                    tile2.TileType != ModContent.TileType<ScholarsGlobe>() && tile2.TileType != (ushort)ModContent.TileType<BrokenBookcase>() && !archiveDecorTileTypes.Contains(tile2.TileType)) {
                                     tile2.HasTile = true;
                                     tile2.TileType = tile.TileType;
                                     if (!Main.tile[i + 1, j - 2].HasTile) {
@@ -639,7 +651,8 @@ sealed class ScholarStructure : IInitializer {
                             }
                             else {
                                 tile2 = Main.tile[i - 1, j - 1];
-                                if (tile2.TileType != TileID.Bookcases && tile2.TileType != (ushort)ModContent.TileType<BrokenBookcase>() && !archiveDecorTileTypes.Contains(tile2.TileType)) {
+                                if (tile2.TileType != TileID.Bookcases && tile2.TileType != ModContent.TileType<ScholarsTelescope>() &&
+                                    tile2.TileType != ModContent.TileType<ScholarsGlobe>() && tile2.TileType != (ushort)ModContent.TileType<BrokenBookcase>() && !archiveDecorTileTypes.Contains(tile2.TileType)) {
                                     tile2.HasTile = true;
                                     tile2.TileType = tile.TileType;
                                     if (!Main.tile[i - 1, j - 2].HasTile) {

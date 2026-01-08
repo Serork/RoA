@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Players;
+using RoA.Common.Tiles;
 using RoA.Common.VisualEffects;
 using RoA.Content.Achievements;
 using RoA.Content.AdvancedDusts.Backwoods;
@@ -180,7 +181,11 @@ sealed class BackwoodsFogHandler : ModSystem {
     }
 
     public override void PostUpdatePlayers() {
-        if (Opacity > 0f) {
+        Opacity2 = 1f;
+        Opacity = MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f) * 0.75f;
+
+        //if (Opacity > 0f) 
+        {
             Player player = Main.LocalPlayer;
             VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
             if (!player.InModBiome<BackwoodsBiome>() && Opacity < 0.01f) {
@@ -191,22 +196,22 @@ sealed class BackwoodsFogHandler : ModSystem {
                 return;
             }
             if (Main.netMode != NetmodeID.Server) {
-                if (player.position.Y / 16 < Main.worldSurface) {
-                    if (Opacity2 < 0.75f) {
-                        Opacity2 += 0.0175f * 0.15f;
-                    }
-                    else {
-                        Opacity2 = 0.75f;
-                    }
-                }
-                else {
-                    if (Opacity2 > 0f) {
-                        Opacity2 -= 0.005f * 0.25f;
-                    }
-                    else {
-                        Opacity2 = 0f;
-                    }
-                }
+                //if (player.position.Y / 16 < Main.worldSurface) {
+                //    if (Opacity2 < 0.75f) {
+                //        Opacity2 += 0.0175f * 0.15f;
+                //    }
+                //    else {
+                //        Opacity2 = 0.75f;
+                //    }
+                //}
+                //else {
+                //    if (Opacity2 > 0f) {
+                //        Opacity2 -= 0.005f * 0.25f;
+                //    }
+                //    else {
+                //        Opacity2 = 0f;
+                //    }
+                //}
                 localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero, true);
             }
 
@@ -230,35 +235,36 @@ sealed class BackwoodsFogHandler : ModSystem {
             if (_updatesCounter % 10 == 0)
                 SpawnAirborneWind();
 
-            if (player.whoAmI == Main.myPlayer && Vector2.Distance(_oldPosition, player.position) > 600f && !player.InModBiome<BackwoodsBiome>()) {
-                Opacity = Opacity2 = 0.01f;
-            }
+            //if (player.whoAmI == Main.myPlayer && Vector2.Distance(_oldPosition, player.position) > 600f && !player.InModBiome<BackwoodsBiome>()) {
+            //    Opacity = Opacity2 = 0.01f;
+            //    Main.NewText(213);
+            //}
         }
 
         if (!BackwoodsBiome.IsActiveForFogEffect || !IsFogActive) {
-            if (Opacity > 0f) {
-                Opacity -= 0.005f * 0.25f;
-            }
-            else {
-                Opacity = 0f;
-            }
+            //if (Opacity > 0f) {
+            //    Opacity -= 0.005f * 0.25f;
+            //}
+            //else {
+            //    Opacity = 0f;
+            //}
 
-            if (Opacity2 > 0f) {
-                Opacity2 -= 0.005f * 0.25f;
-            }
-            else {
-                Opacity2 = 0f;
-            }
+            //if (Opacity2 > 0f) {
+            //    Opacity2 -= 0.005f * 0.25f;
+            //}
+            //else {
+            //    Opacity2 = 0f;
+            //}
 
             return;
         }
 
-        if (Opacity < 0.75f) {
-            Opacity += 0.0175f * 0.15f;
-        }
-        else {
-            Opacity = 0.75f;
-        }
+        //if (Opacity < 0.75f) {
+        //    Opacity += 0.0175f * 0.15f;
+        //}
+        //else {
+        //    Opacity = 0.75f;
+        //}
 
         _oldPosition = Main.LocalPlayer.position;
     }

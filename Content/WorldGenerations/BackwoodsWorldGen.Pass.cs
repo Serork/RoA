@@ -4650,7 +4650,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 flag50 = false;
             }
 
-            if (num793 > GenVars.snowOriginLeft - num786 * 2f && num793 < GenVars.snowOriginRight + num786 * 2f) {
+            if (num793 > GenVars.snowOriginLeft - num786 * 2.5f && num793 < GenVars.snowOriginRight + num786 * 2.5f) {
                 flag50 = false;
             }
 
@@ -4666,7 +4666,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (num794 < num796 + num797_2 && num795 > num796 - num797_2)
                 flag50 = false;
 
-            if (num794 < GenVars.dungeonLocation + num786 * 3f && num795 > GenVars.dungeonLocation - num786 * 3f)
+            if (num794 < GenVars.dungeonLocation + num786 * 2.5f && num795 > GenVars.dungeonLocation - num786 * 2.5f)
                 flag50 = false;
 
             if (!remixWorldGen) {

@@ -578,7 +578,7 @@ static class WorldGenHelper {
         return (TileID.Sets.Platforms[tile.TileType] && (WorldGen.PlatformProperTopFrame(tile.TileFrameX) || CustomTileCollision.ExtraTileCollisionBlocks_Platforms.Contains(new Point16(tilePosition.X, tilePosition.Y))));
     }
 
-    public static int SafeFloatingIslandY => /*ModLoader.HasMod("Remnants") ? (WorldGenHelperVars.worldSurfaceLow + 66) : */(WorldGenHelperVars.worldSurfaceLow - 22);
+    public static int SafeFloatingIslandY => /*ModLoader.HasMod("Remnants") ? (WorldGenHelperVars.worldSurfaceLow + 66) : */(WorldGenHelperVars.worldSurfaceLow - 25);
 
     public static int WorldSize => SmallWorld ? 1 : MediumWorld ? 2 : 3;
     public static float WorldSize2 => Main.maxTilesX / 4200f - 1f;
