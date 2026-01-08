@@ -21,13 +21,17 @@ abstract class InteractableProjectile : ModProjectile {
 
     protected virtual SpriteEffects SetSpriteEffects() => Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
 
-    public override void SetStaticDefaults() {
+    public sealed override void SetStaticDefaults() {
+        SafeSetStaticDefaults();
+
         if (Main.dedServ) {
             return;
         }
 
         _hoverTexture = ModContent.Request<Texture2D>(Texture + "_Hover");
     }
+
+    protected virtual void SafeSetStaticDefaults() { }
 
     public override void Load() {
         On_Projectile.IsInteractible += On_Projectile_IsInteractable;

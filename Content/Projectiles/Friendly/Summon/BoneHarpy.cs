@@ -40,7 +40,7 @@ sealed class BoneHarpy : InteractableProjectile {
         player.cursorItemIconID = ModContent.ItemType<WingIcon>();
     }
 
-    public override void SetStaticDefaults() {
+    protected override void SafeSetStaticDefaults() {
         Main.projFrames[Type] = 6;
 
         ProjectileID.Sets.TrailCacheLength[Type] = 12;

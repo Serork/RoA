@@ -210,7 +210,7 @@ sealed class PettyBag : InteractableProjectile {
 
     protected override SpriteEffects SetSpriteEffects() => base.SetSpriteEffects();
 
-    public override void SetStaticDefaults() {
+    protected override void SafeSetStaticDefaults() {
         Main.projFrames[Type] = 6;
     }
 
