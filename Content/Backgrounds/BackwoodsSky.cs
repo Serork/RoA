@@ -27,7 +27,7 @@ sealed class BackwoodsSky : CustomSky {
             _opacity += 0.02f;
         }
         else if (!_skyActive && _opacity > 0f) {
-            _opacity -= 0.02f * 5f;
+            _opacity -= 0.02f;
         }
     }
 

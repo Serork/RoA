@@ -22,7 +22,7 @@ sealed class BackwoodsLighting : ModSystem {
 
     public override void ModifyLightingBrightness(ref float scale) {
         if (Brightness2 > 0f) {
-            float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 200f;
+            float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f;
             strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2;
             float value = Utils.Remap(strength, 0f, 0.78f, scale, 0.95f);
             scale = value;
@@ -50,7 +50,7 @@ sealed class BackwoodsLighting : ModSystem {
             if (Brightness2 < 1f) {
                 Brightness2 += BackwoodsBiome.TransitionSpeed;
             }
-            float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 200f;
+            float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f;
             if (flag && (LothorEnrageScene.MonolithNearby || handler._isActive2 || (npc != null && npc.active && npc.As<Lothor>() != null && npc.As<Lothor>().LifeProgress == 1f))) {
                 strength = Math.Max(strength, 1.5f * handler._opacity);
             }

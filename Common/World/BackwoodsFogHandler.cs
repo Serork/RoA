@@ -214,7 +214,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                 localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero, true);
             }
 
-            if (Opacity > 0f) {
+            if (Opacity > 0f && player.InModBiome<BackwoodsBiome>()) {
                 Rectangle tileWorkSpace = GetTileWorkSpace();
                 int num = tileWorkSpace.X + tileWorkSpace.Width;
                 int num2 = tileWorkSpace.Y + tileWorkSpace.Height;
@@ -243,9 +243,9 @@ sealed class BackwoodsFogHandler : ModSystem {
         }
 
         float lerpValue = TimeSystem.LogicDeltaTime * 0.1f;
-        float tileFactor = MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 200f);
+        float tileFactor = MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f);
         if (!BackwoodsBiome.IsActiveForFogEffect || !IsFogActive) {
-            Opacity = Helper.Approach(Opacity, 0f, lerpValue * 5f);
+            Opacity = Helper.Approach(Opacity, 0f, lerpValue * MathHelper.Lerp(1f, 7.5f, 1f - tileFactor));
 
             //if (Opacity > 0f) {
             //    Opacity -= 0.005f * 0.25f;
@@ -264,7 +264,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             return;
         }
 
-        Opacity = Helper.Approach(Opacity, tileFactor * 0.75f, lerpValue * 2f);
+        Opacity = Helper.Approach(Opacity, tileFactor * 0.75f, lerpValue);
 
         //if (Opacity < 0.75f) {
         //    Opacity += 0.0175f * 0.15f;
