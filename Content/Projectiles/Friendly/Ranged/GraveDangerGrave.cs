@@ -27,7 +27,7 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
 
     private bool _collideX, _collideY;
     private float _copyCounter;
-    private float _scale;
+    private float _scale, _trailOpacity;
 
     public ref float DirectionXValue => ref Projectile.localAI[1];
     public ref float DirectionYValue => ref Projectile.localAI[2];
@@ -72,7 +72,10 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
 
     public override void AI() {
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
-        _scale = Helper.Approach(_scale, 1f, 0.0875f);
+        _scale = Helper.Approach(_scale, 1f, 0.1f);
+        if (Projectile.Opacity >= 1f) {
+            _trailOpacity = Helper.Approach(_trailOpacity, 1f, 0.05f);
+        }
 
         if (Projectile.localAI[0] == 2f) {
             _collideX = MathF.Abs(Projectile.velocity.X - Projectile.oldVelocity.X) > 6f;
@@ -261,7 +264,7 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
                 continue;
             }
             batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
-                Color = lightColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f,
+                Color = lightColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f * _trailOpacity,
                 Rotation = copyInfo.Rotation,
                 Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f) * _scale,
                 Origin = new Vector2(width, height) / 2f,
@@ -270,7 +273,7 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
         }
 
         Color shadowColor = lightColor * Projectile.Opacity;
-        Projectile.QuickDrawShadowTrails(shadowColor, 0.5f, 1, 0f, scale: _scale);
+        Projectile.QuickDrawShadowTrails(shadowColor * _trailOpacity, 0.5f, 1, 0f, scale: _scale);
         Projectile.QuickDrawAnimated(shadowColor, scale: Vector2.One * _scale);
 
         return false;
