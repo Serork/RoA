@@ -41,6 +41,8 @@ sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
         Projectile.localNPCHitCooldown = 10;
 
         Projectile.timeLeft = TIMELEFT;
+
+        Projectile.Opacity = 0f;
     }
 
     public override void PrepareBombToBlow() {
@@ -52,6 +54,8 @@ sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
     }
 
     public override void AI() {
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.075f);
+
         Lighting.AddLight(Projectile.Center, new Color(252, 144, 144).ToVector3() * 0.75f);
 
         if (Projectile.localAI[0] == 0f) {
@@ -81,7 +85,7 @@ sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
         }
 
         Projectile.ai[0] += 1f;
-        if (Projectile.localAI[2]++ % 2 == 0) {
+        if (Projectile.Opacity > 0.5f && Projectile.localAI[2]++ % 2 == 0) {
             CopyHandler.MakeCopy(Projectile);
         }
         if (Projectile.ai[0] > 15f) {
@@ -181,6 +185,10 @@ sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
     }
 
     public override bool PreDraw(ref Color lightColor) {
+        if (Projectile.Opacity < 0.5f) {
+            return false;
+        }
+
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = Projectile.GetTexture();
         var handler = Projectile.GetGlobalProjectile<CopyHandler>();
@@ -195,7 +203,7 @@ sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
                 continue;
             }
             batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
-                Color = shadowColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f,
+                Color = shadowColor * MathUtils.Clamp01(copyInfo.Opacity) * 0.5f,
                 Rotation = copyInfo.Rotation,
                 Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
                 Origin = new Vector2(width, height) / 2f,
@@ -203,7 +211,7 @@ sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
             });
         }
 
-        Projectile.QuickDrawShadowTrails(shadowColor * Projectile.Opacity, 0.5f, 1, 0f);
+        Projectile.QuickDrawShadowTrails(shadowColor, 0.5f, 1, 0f);
         Projectile.QuickDraw(shadowColor);
 
         return false;
