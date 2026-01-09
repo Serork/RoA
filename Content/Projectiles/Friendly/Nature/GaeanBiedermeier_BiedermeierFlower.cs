@@ -158,7 +158,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     float rotation = offset.X / 100f;
                     offset.Y -= 30f;
                     if (flowerInABouquetToAdd == FlowerType.Acalypha) {
-                        //offset.Y -= 10f;
+                        offset.Y -= 10f;
                     }
                     offset = new(offset.X * Main.rand.NextFloat(0.975f, 1.025f), offset.Y * Main.rand.NextFloat(0.975f, 1.025f));
                     _flowerData[index] = new FlowerInfo(flowerInABouquetToAdd, offset, rotation, FacedRight: Main.rand.NextBool());
@@ -284,11 +284,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 Color = flowerColor
             };
             //flowerClip.Height = clip.Height;
-            DrawInfo drawInfo2 = new() {
-                Clip = flowerClip,
-                Origin = origin,
-                Rotation = rotation + MathHelper.Pi,
-                ImageFlip = flip,
+            DrawInfo drawInfo2 = drawInfo with {
                 Color = baseColor
             };
             float progress3 = progress2;
