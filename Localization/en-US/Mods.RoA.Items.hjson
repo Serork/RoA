@@ -2637,3 +2637,8 @@ MinersDelight: {
 	DisplayName: Miners Delight
 	Tooltip: ""
 }
+
+GaeanBiedermeier: {
+	DisplayName: Gaean Biedermeier
+	Tooltip: ""
+}
