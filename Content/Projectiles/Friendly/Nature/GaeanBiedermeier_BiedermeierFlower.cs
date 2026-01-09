@@ -20,7 +20,7 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static byte FLOWERCOUNTINABOUQUET => (byte)FlowerType.Count;
+    private static byte FLOWERCOUNTINABOUQUET => (byte)FlowerType.Count + 1 + 2;
 
     public enum BiedermeierFlowerTextureType : byte {
         Flower,
@@ -76,35 +76,73 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 Init = true;
 
                 _flowerData = new FlowerInfo[FLOWERCOUNTINABOUQUET];
-                List<FlowerType> flowersInABouquet = [FlowerType.Sweet, FlowerType.Exotic, FlowerType.Weeping, FlowerType.Perfect1, FlowerType.Perfect2, FlowerType.Perfect3, FlowerType.Custom, FlowerType.Acalypha];
+                List<FlowerType> flowersInABouquet = [];
+                FlowerType flowerTypeToAdd = Main.rand.GetRandomEnumValue<FlowerType>(1);
+                flowersInABouquet.Add(flowerTypeToAdd);
+                for (int i = 0; i < 2; i++) {
+                    flowerTypeToAdd = Main.rand.GetRandomEnumValue<FlowerType>(1);
+                    while (flowersInABouquet.Contains(flowerTypeToAdd)) {
+                        flowerTypeToAdd = Main.rand.GetRandomEnumValue<FlowerType>(1);
+                    }
+                    flowersInABouquet.Add(flowerTypeToAdd);
+                }
                 int index = 0;
                 while (index < FLOWERCOUNTINABOUQUET) {
-                    FlowerType flowerInABouquetToAdd = flowersInABouquet[Main.rand.Next(flowersInABouquet.Count)];
+                    FlowerType firstFlowerTypeInABouquet = flowersInABouquet[0],
+                               secondFlowerTypeInABouquet = flowersInABouquet[1],
+                               thirdFlowerTypeInABouquet = flowersInABouquet[2];
+                    FlowerType flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                     Vector2 offset = Vector2.Zero;
                     switch (index) {
                         case 0:
                             offset = new Vector2(0f, -90f);
+                            flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                             break;
                         case 1:
-                            offset = new Vector2(40f, -90f);
+                            offset = new Vector2(40f, -115f);
+                            flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                             break;
                         case 2:
-                            offset = new Vector2(-40f, -90f);
+                            offset = new Vector2(-40f, -115f);
+                            flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                             break;
                         case 3:
                             offset = new Vector2(30f, -130f);
+                            flowerInABouquetToAdd = secondFlowerTypeInABouquet;
                             break;
                         case 4:
                             offset = new Vector2(-30f, -130f);
+                            flowerInABouquetToAdd = secondFlowerTypeInABouquet;
                             break;
                         case 5:
-                            offset = new Vector2(20f, -110f);
+                            offset = new Vector2(20f, -105f);
+                            flowerInABouquetToAdd = secondFlowerTypeInABouquet;
                             break;
                         case 6:
-                            offset = new Vector2(-20f, -110f);
+                            offset = new Vector2(-20f, -105f);
+                            flowerInABouquetToAdd = secondFlowerTypeInABouquet;
                             break;
                         case 7:
-                            offset = new Vector2(0f, -140f);
+                            offset = new Vector2(15f, -125f);
+                            flowerInABouquetToAdd = thirdFlowerTypeInABouquet;
+                            if (flowerInABouquetToAdd == FlowerType.Acalypha) {
+                                offset.Y -= 10f;
+                            }
+                            break;
+                        case 8:
+                            offset = new Vector2(-15f, -125f);
+                            flowerInABouquetToAdd = thirdFlowerTypeInABouquet;
+                            if (flowerInABouquetToAdd == FlowerType.Acalypha) {
+                                offset.Y -= 10f;
+                            }
+                            break;
+                        case 9:
+                            offset = new Vector2(20f, -80f);
+                            flowerInABouquetToAdd = firstFlowerTypeInABouquet;
+                            break;
+                        case 10:
+                            offset = new Vector2(-20f, -80f);
+                            flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                             break;
                     }
                     float rotation = offset.X / 100f;
@@ -112,8 +150,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     if (flowerInABouquetToAdd == FlowerType.Acalypha) {
                         offset.Y -= 10f;
                     }
+                    //offset = new(offset.X * Main.rand.NextFloat(0.975f, 1.025f), offset.Y * Main.rand.NextFloat(0.975f, 1.025f));
                     _flowerData[index] = new FlowerInfo(flowerInABouquetToAdd, offset, rotation, FacedRight: Main.rand.NextBool());
-                    flowersInABouquet.Remove(flowerInABouquetToAdd);
+                    //flowersInABouquet.Remove(flowerInABouquetToAdd);
                     index++;
                 }
             }
@@ -216,7 +255,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             Color stemGlowColor = baseColor with { A = 100 } * 1f;
             float leafProgressThresholdForGlowing = 0.5f;
             FlowerType flowerType = flowerInfo.FlowerType;
-            Rectangle clip = Utils.Frame(texture, FLOWERCOUNTINABOUQUET, 1, frameX: (byte)flowerType);
+            Rectangle clip = Utils.Frame(texture, (byte)FlowerType.Count, 1, frameX: (byte)flowerType);
             Vector2 origin = clip.TopCenter();
             float flowerRotation = flowerInfo.Rotation,
                   baseRotation = Projectile.rotation;
@@ -278,12 +317,13 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         stemEndPosition = playerCenter;
                 stemStartPosition += stemStartPosition.DirectionTo(stemEndPosition) * 10f;
                 if (flowerType == FlowerType.Acalypha) {
-                    stemStartPosition += Vector2.UnitX.RotatedBy(flowerRotation) * 4f * flowerInfo.FacedRight.ToDirectionInt();
+                    stemStartPosition += Vector2.UnitX.RotatedBy(flowerRotation) * -4f * flowerInfo.FacedRight.ToDirectionInt();
                 }
                 Vector2 stemPosition = stemStartPosition;
                 Vector2 stemOrigin = stemClip.BottomCenter();
                 uint seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
                 int index = (int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f);
+                int baseIndex = index;
                 while (true) {
                     if (Vector2.Distance(stemPosition, stemEndPosition) < height * 0.75f) {
                         break;
@@ -292,17 +332,18 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     Vector2 velocity = stemPosition.DirectionTo(stemEndPosition);
                     velocity = velocity.RotatedBy(Math.Sin(index) * 0.075f);
                     float stemRotation = velocity.ToRotation() - MathHelper.PiOver2;
+                    SpriteEffects leafFlip = flip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                     DrawInfo stemDrawInfo = new() {
                         Clip = stemClip,
                         Origin = stemOrigin,
                         Rotation = stemRotation,
-                        ImageFlip = flip,
+                        ImageFlip = leafFlip,
                         Color = baseColor
                     };
                     batch.Draw(stemTexture, stemPosition, stemDrawInfo);
                     //if (progress2 >= progress) 
                     {
-                        float opacity = Utils.GetLerpValue(progress, progress * 1.5f, progress2, true); 
+                        float opacity = Utils.GetLerpValue(progress, progress * 1.5f, progress2, true);
                         batch.Draw(stemTexture, stemPosition, stemDrawInfo with {
                             Color = stemGlowColor * opacity
                         });
@@ -367,7 +408,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     Vector2 leafPosition = leafStartPosition;
                     Vector2 leafOrigin = leafClip.BottomRight();
                     seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
-                    index = (int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f);
+                    index = baseIndex;
                     int index2 = 0;
                     while (true) {
                         if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.5f) {
@@ -390,11 +431,14 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         };
                         int offsetDirection = flipped.ToDirectionInt();
                         bool shouldDraw = index2 == 1 || index2 == 2;
+                        if (index > 29) {
+                            shouldDraw = false;
+                        }
                         if (shouldDraw) {
-                            float offsetValue = 2f;
+                            float offsetValue = -4f;
                             if (flipped) {
                                 offsetValue = leafClip.Width - 2f;
-                                offsetValue += 4f * flowerInfo.FacedRight.ToDirectionInt();
+                                offsetValue += -4f * flowerInfo.FacedRight.ToDirectionInt();
                             }
                             Vector2 offset = Vector2.UnitX.RotatedBy(leafRotation) * offsetValue * offsetDirection;
                             DrawInfo leafDrawInfo2 = leafDrawInfo;
@@ -424,18 +468,18 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         Rectangle leafClip = Utils.Frame(leafTexture, 4, 1, frameX: (byte)stemFrameX);
                         Vector2 leafOrigin = leafClip.BottomCenter();
                         float leafRotation = stemStartPosition.AngleTo(stemEndPosition) - MathHelper.PiOver2;
-                        SpriteEffects flip = SpriteEffects.None;
+                        SpriteEffects leafFlip = SpriteEffects.None;
                         Vector2 scale = new(1f, 1f * progress);
                         for (int i = 0; i < 2; i++) {
                             DrawInfo leafDrawInfo = new() {
                                 Clip = leafClip,
                                 Origin = leafOrigin,
                                 Rotation = leafRotation,
-                                ImageFlip = flip,
+                                ImageFlip = leafFlip,
                                 Color = baseColor,
                                 Scale = scale
                             };
-                            bool flipped = flip == SpriteEffects.None;
+                            bool flipped = leafFlip == SpriteEffects.None;
                             Vector2 leafPosition = stemEndPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * flipped.ToDirectionInt();
                             float yOffset = 10f + MathUtils.PseudoRandRange(ref seedForRandomness, 40f);
                             leafPosition -= Vector2.UnitY.RotatedBy(leafRotation) * yOffset;
@@ -445,7 +489,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                                     Color = stemGlowColor
                                 });
                             }
-                            flip = SpriteEffects.FlipHorizontally;
+                            leafFlip = SpriteEffects.FlipHorizontally;
                         }
                     }
                     drawLeafs();

@@ -16,7 +16,7 @@ sealed class GaeanBiedermeier : NatureItem {
         Item.SetUsableValues(-1, 40, autoReuse: true, showItemOnUse: false);
         Item.SetShootableValues((ushort)ModContent.ProjectileType<BiedermeierFlower>());
         Item.SetShopValues(ItemRarityColor.Pink5, Item.sellPrice());
-        Item.UseSound = SoundID.NPCDeath19 with { Volume = 3f, Pitch = -0.2f };
+        Item.UseSound = SoundID.Item65 with { Volume = 3f, Pitch = -1f };
 
         NatureWeaponHandler.SetPotentialDamage(Item, 60);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
