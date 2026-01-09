@@ -264,7 +264,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             return;
         }
 
-        Opacity = Helper.Approach(Opacity, tileFactor * 0.75f, lerpValue);
+        Opacity = Helper.Approach(Opacity, tileFactor * 0.75f, lerpValue * 2f);
 
         //if (Opacity < 0.75f) {
         //    Opacity += 0.0175f * 0.15f;
