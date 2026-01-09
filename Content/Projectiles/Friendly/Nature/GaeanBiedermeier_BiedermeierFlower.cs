@@ -20,7 +20,7 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets {
-    private static byte FLOWERCOUNTINABOUQUET => (byte)FlowerType.Count + 1 + 2;
+    private static byte FLOWERCOUNTINABOUQUET => (byte)FlowerType.Count + 1 + 3;
 
     public enum BiedermeierFlowerTextureType : byte {
         Flower,
@@ -95,60 +95,70 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     Vector2 offset = Vector2.Zero;
                     switch (index) {
                         case 0:
-                            offset = new Vector2(0f, -90f);
+                            offset = new Vector2(0f, -75f);
                             flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                             break;
                         case 1:
-                            offset = new Vector2(40f, -115f);
+                            offset = new Vector2(25f, -85f);
                             flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                             break;
                         case 2:
-                            offset = new Vector2(-40f, -115f);
+                            offset = new Vector2(-25f, -85f);
                             flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                             break;
                         case 3:
+                            offset = new Vector2(40f, -115f);
+                            flowerInABouquetToAdd = firstFlowerTypeInABouquet;
+                            break;
+                        case 4:
+                            offset = new Vector2(-40f, -115f);
+                            flowerInABouquetToAdd = firstFlowerTypeInABouquet;
+                            break;
+                        case 5:
                             offset = new Vector2(30f, -130f);
                             flowerInABouquetToAdd = secondFlowerTypeInABouquet;
                             break;
-                        case 4:
+                        case 6:
                             offset = new Vector2(-30f, -130f);
                             flowerInABouquetToAdd = secondFlowerTypeInABouquet;
                             break;
-                        case 5:
+                        case 7:
                             offset = new Vector2(20f, -105f);
                             flowerInABouquetToAdd = secondFlowerTypeInABouquet;
                             break;
-                        case 6:
+                        case 8:
                             offset = new Vector2(-20f, -105f);
                             flowerInABouquetToAdd = secondFlowerTypeInABouquet;
                             break;
-                        case 7:
+                        case 9:
                             offset = new Vector2(15f, -125f);
                             flowerInABouquetToAdd = thirdFlowerTypeInABouquet;
-                            if (flowerInABouquetToAdd == FlowerType.Acalypha) {
-                                offset.Y -= 10f;
+                            if (flowerInABouquetToAdd == FlowerType.Acalypha || 
+                                flowerInABouquetToAdd == FlowerType.Custom) {
+                                //offset.Y -= 10f;
                             }
-                            break;
-                        case 8:
-                            offset = new Vector2(-15f, -125f);
-                            flowerInABouquetToAdd = thirdFlowerTypeInABouquet;
-                            if (flowerInABouquetToAdd == FlowerType.Acalypha) {
-                                offset.Y -= 10f;
-                            }
-                            break;
-                        case 9:
-                            offset = new Vector2(20f, -80f);
-                            flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                             break;
                         case 10:
-                            offset = new Vector2(-20f, -80f);
-                            flowerInABouquetToAdd = firstFlowerTypeInABouquet;
+                            offset = new Vector2(-15f, -125f);
+                            flowerInABouquetToAdd = thirdFlowerTypeInABouquet;
+                            if (flowerInABouquetToAdd == FlowerType.Acalypha ||
+                                flowerInABouquetToAdd == FlowerType.Custom) {
+                                //offset.Y -= 10f;
+                            }
+                            break;
+                        case 11:
+                            offset = new Vector2(0f, -135f);
+                            flowerInABouquetToAdd = thirdFlowerTypeInABouquet;
+                            if (flowerInABouquetToAdd == FlowerType.Acalypha ||
+                                flowerInABouquetToAdd == FlowerType.Custom) {
+                                //offset.Y -= 10f;
+                            }
                             break;
                     }
                     float rotation = offset.X / 100f;
                     offset.Y -= 30f;
                     if (flowerInABouquetToAdd == FlowerType.Acalypha) {
-                        offset.Y -= 10f;
+                        //offset.Y -= 10f;
                     }
                     offset = new(offset.X * Main.rand.NextFloat(0.975f, 1.025f), offset.Y * Main.rand.NextFloat(0.975f, 1.025f));
                     _flowerData[index] = new FlowerInfo(flowerInABouquetToAdd, offset, rotation, FacedRight: Main.rand.NextBool());
