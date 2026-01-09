@@ -677,7 +677,20 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
 
         float bulbScaleModifier = 1f;
 
-        Color baseColor = lightColor * Utils.GetLerpValue(0f, 0.625f, appearanceFactor, true);
+        void getBulbPosition(out Vector2 bulbPosition_Origin, out Vector2 bulbPosition_Result) {
+            Vector2 bulbOffset = new(0f, 24f);
+            Vector2 bulbPosition = center;
+
+            bulbPosition_Origin = bulbPosition;
+
+            bulbPosition += bulbOffset;
+
+            bulbPosition_Result = bulbPosition;
+        }
+
+        getBulbPosition(out _, out Vector2 bulbPosition_Result_ForLighting);
+        bulbPosition_Result_ForLighting.Y -= 30f;
+        Color baseColor = Lighting.GetColor(bulbPosition_Result_ForLighting.ToTileCoordinates()) * Utils.GetLerpValue(0f, 0.625f, appearanceFactor, true);
 
         // BULB
         Rectangle bulbClip = Utils.Frame(bulbTexture, BULBFRAMECOUNT_COLUMN, BULBFRAMECOUNT_ROW, frameX: bulbFrameColumn, frameY: bulbFrame);
@@ -873,16 +886,6 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
 
                 justStarted = false;
             }
-        }
-        void getBulbPosition(out Vector2 bulbPosition_Origin, out Vector2 bulbPosition_Result) {
-            Vector2 bulbOffset = new(0f, 24f);
-            Vector2 bulbPosition = center;
-
-            bulbPosition_Origin = bulbPosition;
-
-            bulbPosition += bulbOffset;
-
-            bulbPosition_Result = bulbPosition;
         }
         void drawBulb_Back() {
             getBulbPosition(out _, out Vector2 bulbPosition_Result);
