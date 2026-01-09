@@ -55,7 +55,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
     }
 
     protected override (Color, Color) SetSlashColors(Player player) 
-        => (new Color(202, 112, 255), new Color(120, 50, 255));
+        => (new Color(160, 100, 255), new Color(120, 50, 255));
 
     public sealed class ShadowflameClawsSlash : ClawsSlash {
         private bool Charged => (!CanFunction && Projectile.GetOwnerAsPlayer().GetWreathHandler().IsActualFull6) || Opacity == 1f;

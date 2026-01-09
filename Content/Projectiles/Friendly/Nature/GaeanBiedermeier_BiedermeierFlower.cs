@@ -273,7 +273,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             SpriteEffects flip = flowerInfo.FacedRight.ToSpriteEffects();
             Rectangle flowerClip = clip;
             float progress5 = MathUtils.Clamp01(progress2 - 1f);
-            flowerColor = Color.Lerp(flowerColor, Color.Black, progress5);
+            //flowerColor = Color.Lerp(flowerColor, Color.Black, progress5);
             stemGlowColor = Color.Lerp(stemGlowColor, baseColor, progress5);
             //flowerClip.Height = (int)(clip.Height * (1f - MathUtils.Clamp01(progress2 - 1f)));
             DrawInfo drawInfo = new() {

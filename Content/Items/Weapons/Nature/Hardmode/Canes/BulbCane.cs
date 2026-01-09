@@ -5,10 +5,10 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Druid;
+using RoA.Common.Players;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
-using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -57,7 +57,16 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
         protected override bool ShouldWaitUntilProjDespawn() => false;
 
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
-            spawnPosition = player.GetViableMousePosition();
+            spawnPosition = GetSpawnPosition(player);
+        }
+
+        public static Vector2 GetSpawnPosition(Player player) {
+            Vector2 spawnPosition = player.Center;
+            int maxChecks = 60;
+            while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
+                spawnPosition += spawnPosition.DirectionTo(player.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
+            }
+            return spawnPosition;
         }
 
         protected override Vector2 CorePositionOffsetFactor() => new(0.35f, -0.175f);
