@@ -156,12 +156,12 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             break;
                     }
                     float rotation = offset.X / 100f;
+                    offset.Y *= 0.7f;
                     offset.Y -= 30f;
                     if (flowerInABouquetToAdd == FlowerType.Acalypha) {
                         offset.Y -= 10f;
                     }
                     offset = new(offset.X * Main.rand.NextFloat(0.975f, 1.025f), offset.Y * Main.rand.NextFloat(0.975f, 1.025f));
-                    offset.Y *= 0.7f;
                     _flowerData[index] = new FlowerInfo(flowerInABouquetToAdd, offset, rotation, FacedRight: Main.rand.NextBool());
                     //flowersInABouquet.Remove(flowerInABouquetToAdd);
                     index++;
