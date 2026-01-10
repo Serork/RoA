@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Buffs;
 using RoA.Core.Utility;
 
 using Terraria;
@@ -10,8 +11,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Food;
 
 sealed class MinersDelight : ModItem {
-    private static readonly ushort[] _buffPool = [BuffID.Regeneration, BuffID.Swiftness/*, BuffID.Calm, BuffID.BiomeSight, BuffID.Dangersense, BuffID.Invisibility, BuffID.Lucky, BuffID.Mining, BuffID.NightOwl, BuffID.Shine, ModContent.BuffType<Buffs.Brightstone>()*/],
-                                     _debuffPool = [BuffID.Poisoned, BuffID.OnFire/*, BuffID.Bleeding, BuffID.Darkness, BuffID.Weak, BuffID.Tipsy, BuffID.Stinky*/];
+    private static readonly ushort[] _buffPool = [BuffID.Regeneration, BuffID.Swiftness, BuffID.Calm, BuffID.BiomeSight, BuffID.Dangersense, BuffID.Invisibility, BuffID.Lucky, BuffID.Mining, BuffID.NightOwl, BuffID.Shine, (ushort)ModContent.BuffType<Brightstone>()],
+                                     _debuffPool = [BuffID.Poisoned, BuffID.OnFire, BuffID.Bleeding, BuffID.Darkness, BuffID.Weak, BuffID.Tipsy, BuffID.Stinky];
 
     public override void SetStaticDefaults() {
         Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
