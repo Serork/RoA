@@ -5,11 +5,13 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Projectiles;
+using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -41,7 +43,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
          ((byte)BiedermeierFlowerTextureType.Leaf3, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Leaf3"),
          ((byte)BiedermeierFlowerTextureType.Leaf3_Base, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Leaf3_Base")];
 
-    private enum FlowerType : byte {
+    public enum FlowerType : byte {
         Sweet,
         Exotic,
         Weeping,
@@ -53,7 +55,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         Count
     }
 
-    private record struct FlowerInfo(FlowerType FlowerType, Vector2 Offset, float Rotation, float Progress = 0f, float Progress2 = 0f, bool FacedRight = false);
+    private record struct FlowerInfo(FlowerType FlowerType, Vector2 Offset, float Rotation, float Progress = 0f, float Progress2 = 0f, bool FacedRight = false, bool Released = false);
 
     private FlowerInfo[] _flowerData = null!;
 
@@ -161,6 +163,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     if (flowerInABouquetToAdd == FlowerType.Acalypha) {
                         offset.Y -= 10f;
                     }
+                    if (flowerInABouquetToAdd == FlowerType.Custom) {
+                        offset.Y -= 5f;
+                    }
                     offset = new(offset.X * Main.rand.NextFloat(0.975f, 1.025f), offset.Y * Main.rand.NextFloat(0.975f, 1.025f));
                     _flowerData[index] = new FlowerInfo(flowerInABouquetToAdd, offset, rotation, FacedRight: Main.rand.NextBool());
                     //flowersInABouquet.Remove(flowerInABouquetToAdd);
@@ -227,6 +232,19 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     }
                     float lerpValue = 0.075f;
                     currentSegmentData.Progress2 = Helper.Approach(currentSegmentData.Progress2, 3f, lerpValue);
+                    if (currentSegmentData.Progress2 >= 1.5f && !currentSegmentData.Released) {
+                        if (Projectile.IsOwnerLocal()) {
+                            ProjectileUtils.SpawnPlayerOwnedProjectile<BiedermeierPetal>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromAI()) {
+                                Position = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * 1.15f,
+                                Velocity = Vector2.UnitY.RotatedBy(Projectile.rotation + MathHelper.Pi),
+                                Damage = Projectile.damage,
+                                KnockBack = Projectile.knockBack,
+                                AI0 = (float)currentSegmentData.FlowerType,
+                                AI1 = currentSegmentData.Rotation + MathHelper.PiOver2
+                            });
+                        }
+                        currentSegmentData.Released = true;
+                    }
                     allProgress2 += currentSegmentData.Progress2;
                 }
             }
@@ -264,6 +282,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             Color baseColor = Color.White * opacity,
                   flowerColor = baseColor;
             Color stemGlowColor = baseColor with { A = 100 } * 1f;
+            Vector2 scale = Vector2.One;
             float leafProgressThresholdForGlowing = 0.5f;
             FlowerType flowerType = flowerInfo.FlowerType;
             Rectangle clip = Utils.Frame(texture, (byte)FlowerType.Count, 1, frameX: (byte)flowerType);
@@ -277,12 +296,14 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             //flowerColor = Color.Lerp(flowerColor, Color.Black, progress5);
             stemGlowColor = Color.Lerp(stemGlowColor, baseColor, progress5);
             //flowerClip.Height = (int)(clip.Height * (1f - MathUtils.Clamp01(progress2 - 1f)));
+            float stemGlowScaleFactor = 1f + (0.25f * opacity * (1f - progress5));
             DrawInfo drawInfo = new() {
                 Clip = flowerClip,
                 Origin = origin,
                 Rotation = rotation + MathHelper.Pi,
                 ImageFlip = flip,
-                Color = flowerColor
+                Color = flowerColor,
+                Scale = scale
             };
             //flowerClip.Height = clip.Height;
             DrawInfo drawInfo2 = drawInfo with {
@@ -346,13 +367,14 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         Origin = stemOrigin,
                         Rotation = stemRotation,
                         ImageFlip = leafFlip,
-                        Color = baseColor
+                        Color = baseColor,
+                        Scale = scale
                     };
                     batch.Draw(stemTexture, stemPosition, stemDrawInfo);
                     //if (progress2 >= progress) 
                     {
                         float opacity = Utils.GetLerpValue(progress, progress * 1.5f, progress2, true);
-                        batch.Draw(stemTexture, stemPosition, stemDrawInfo with {
+                        batch.Draw(stemTexture, stemPosition, stemDrawInfo.WithScaleX(stemGlowScaleFactor) with {
                             Color = stemGlowColor * opacity
                         });
                     }
@@ -383,7 +405,8 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             Origin = leafOrigin,
                             Rotation = leafRotation,
                             ImageFlip = leafFlip,
-                            Color = baseColor
+                            Color = baseColor,
+                            Scale = scale
                         };
                         int offsetDirection = flipped.ToDirectionInt();
                         bool shouldDraw = MathUtils.PseudoRandRange(ref seedForRandomness, 1f) < 0.35f;
@@ -393,10 +416,10 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                                 Clip = leafClip2
                             });
                             if (progress2 >= leafProgressThresholdForGlowing) {
-                                batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * -6f * offsetDirection, leafDrawInfo with {
+                                batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * -6f * offsetDirection, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
                                     Color = stemGlowColor
                                 });
-                                batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * offsetDirection, leafDrawInfo with {
+                                batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * offsetDirection, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
                                     Color = stemGlowColor,
                                     Clip = leafClip2
                                 });
@@ -435,7 +458,8 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             Origin = leafOrigin,
                             Rotation = leafRotation,
                             ImageFlip = leafFlip,
-                            Color = baseColor
+                            Color = baseColor,
+                            Scale = scale
                         };
                         int offsetDirection = flipped.ToDirectionInt();
                         bool shouldDraw = index2 == 1 || index2 == 2;
@@ -457,7 +481,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             }
                             batch.Draw(leafTexture, leafPosition + offset, leafDrawInfo2);
                             if (progress2 >= leafProgressThresholdForGlowing) {
-                                batch.Draw(leafTexture_Base, leafPosition + offset, leafDrawInfo2 with {
+                                batch.Draw(leafTexture_Base, leafPosition + offset, leafDrawInfo2.WithScaleX(stemGlowScaleFactor) with {
                                     Color = stemGlowColor
                                 });
                             }
@@ -477,7 +501,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         Vector2 leafOrigin = leafClip.BottomCenter();
                         float leafRotation = stemStartPosition.AngleTo(stemEndPosition) - MathHelper.PiOver2;
                         SpriteEffects leafFlip = SpriteEffects.None;
-                        Vector2 scale = new(1f, 1f * progress);
+                        Vector2 leafScale = new Vector2(1f, 1f * progress) * scale;
                         for (int i = 0; i < 2; i++) {
                             DrawInfo leafDrawInfo = new() {
                                 Clip = leafClip,
@@ -485,7 +509,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                                 Rotation = leafRotation,
                                 ImageFlip = leafFlip,
                                 Color = baseColor,
-                                Scale = scale
+                                Scale = leafScale
                             };
                             bool flipped = leafFlip == SpriteEffects.None;
                             Vector2 leafPosition = stemEndPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * flipped.ToDirectionInt();
@@ -493,7 +517,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             leafPosition -= Vector2.UnitY.RotatedBy(leafRotation) * yOffset;
                             batch.Draw(leafTexture, leafPosition, leafDrawInfo);
                             if (progress2 >= leafProgressThresholdForGlowing) {
-                                batch.Draw(leafTexture, leafPosition, leafDrawInfo with {
+                                batch.Draw(leafTexture, leafPosition, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
                                     Color = stemGlowColor
                                 });
                             }
@@ -504,11 +528,13 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 }
             }
             drawStem();
-            batch.Draw(texture, position, drawInfo);
+            if (!flowerInfo.Released) {
+                batch.Draw(texture, position, drawInfo);
+            }
             batch.Draw(texture_Base, position, drawInfo2);
             if (progress2 >= 1f) {
-                batch.Draw(texture_Base, position, drawInfo2 with {
-                    Color = stemGlowColor * 0.375f
+                batch.Draw(texture_Base, position, drawInfo2.WithScaleX(stemGlowScaleFactor) with {
+                    Color = stemGlowColor * 0.5f
                 });
             }
         }

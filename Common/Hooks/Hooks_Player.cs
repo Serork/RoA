@@ -30,8 +30,8 @@ sealed partial class Hooks : ModSystem {
     }
 
     private void On_Player_UpdateEquips(On_Player.orig_UpdateEquips orig, Player self, int i) {
-        if (Main.mouseItem.IsModded(out ModItem modItem) && modItem is RangedWeaponWithCustomAmmo rangedWeaponWithCustomAmmo) {
-            rangedWeaponWithCustomAmmo.RecoveryAmmo();
+        if (self.IsLocal() && Main.mouseItem.IsModded(out ModItem modItem) && modItem is RangedWeaponWithCustomAmmo rangedWeaponWithCustomAmmo) {
+            rangedWeaponWithCustomAmmo.RecoverAmmo();
         }
 
         orig(self, i);
