@@ -218,7 +218,7 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
             });
         }
 
-        Projectile.QuickDrawShadowTrails(baseColor * Projectile.Opacity * 0.25f, 0.5f, 1, 0f, texture: texture, clip: clip);
+        //Projectile.QuickDrawShadowTrails(baseColor * Projectile.Opacity * 0.25f, 0.5f, 1, 0f, texture: texture, clip: clip);
 
         Vector2 origin = clip.Centered();
         float rotation = Projectile.rotation;
