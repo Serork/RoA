@@ -33,6 +33,7 @@ sealed class Tulip2 : ModDust {
         dust.position += _velocity *= 0.99f;
 
         dust.scale *= 0.975f;
+        dust.scale *= 0.9825f;
         if (dust.scale <= 1f) {
             dust.scale *= 0.95f;
         }

@@ -102,6 +102,8 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
             return;
         }
 
+        Projectile.Opacity = Utils.GetLerpValue(0, 60, Projectile.timeLeft, true);
+
         if (_copyCounter++ % 4 == 0) {
             CopyHandler.MakeCopy(Projectile);
         }
@@ -182,7 +184,9 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
         Vector2 origin = clip.Centered();
         float rotation = Projectile.rotation;
         SpriteEffects flip = Projectile.spriteDirection.ToSpriteEffects();
+        Color color = lightColor * Projectile.Opacity;
         DrawInfo drawInfo = new() {
+            Color = color,
             Clip = clip,
             Origin = origin,
             Rotation = rotation,
