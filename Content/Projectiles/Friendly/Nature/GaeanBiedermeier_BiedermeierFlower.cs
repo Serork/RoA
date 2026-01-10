@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -70,6 +71,19 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         Projectile.SetSizeValues(10);
 
         Projectile.friendly = true;
+    }
+
+    private void MakeTulipDust(FlowerType flowerType, Vector2 position, Vector2 velocity) {
+        float offset2 = 10f;
+        Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
+                spawnPosition = position - randomOffset / 2f + randomOffset;
+
+        Dust dust = Dust.NewDustPerfect(position,
+                                        ModContent.DustType<Dusts.Tulip2>(),
+                                        (spawnPosition - position).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f) + velocity,
+                                        Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f) * 1.75f,
+                                        Alpha: (byte)flowerType);
+        dust.customData = Main.rand.NextFloatRange(50f);
     }
 
     public override void AI() {
@@ -233,15 +247,21 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     float lerpValue = 0.075f;
                     currentSegmentData.Progress2 = Helper.Approach(currentSegmentData.Progress2, 3f, lerpValue);
                     if (currentSegmentData.Progress2 >= 1.5f && !currentSegmentData.Released) {
+                        Vector2 flowerPosition = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * 1.15f;
+                        Vector2 velocity = Vector2.UnitY.RotatedBy(Projectile.rotation + MathHelper.Pi);
                         if (Projectile.IsOwnerLocal()) {
                             ProjectileUtils.SpawnPlayerOwnedProjectile<BiedermeierPetal>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromAI()) {
-                                Position = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * 1.15f,
-                                Velocity = Vector2.UnitY.RotatedBy(Projectile.rotation + MathHelper.Pi),
+                                Position = flowerPosition,
+                                Velocity = velocity,
                                 Damage = Projectile.damage,
                                 KnockBack = Projectile.knockBack,
                                 AI0 = (float)currentSegmentData.FlowerType,
                                 AI1 = currentSegmentData.Rotation + MathHelper.PiOver2
                             });
+                        }
+                        flowerPosition = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * 1.5f;
+                        for (int k = 0; k < 4; k++) {
+                            MakeTulipDust(currentSegmentData.FlowerType, flowerPosition, velocity * 0.5f);
                         }
                         currentSegmentData.Released = true;
                     }
@@ -275,7 +295,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         foreach (FlowerInfo flowerInfo in sortedFlowerData) {
             float progress = flowerInfo.Progress;
             float progress2 = flowerInfo.Progress2;
-            //progress -= Utils.GetLerpValue(2.5f, 3f, progress2, true);
+            progress -= Utils.GetLerpValue(2.5f, 3f, progress2, true);
             progress = Ease.CubeOut(progress);
             //progress2 = Ease.CubeInOut(progress2);
             float opacity = Utils.GetLerpValue(0f, 0.2f, progress, true);
@@ -392,7 +412,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
                     index = (int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f);
                     while (true) {
-                        if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.5f) {
+                        if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.75f) {
                             break;
                         }
                         Vector2 velocity = leafPosition.DirectionTo(leafEndPosition);

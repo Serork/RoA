@@ -11,7 +11,7 @@ namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
 sealed class GaeanBiedermeier : NatureItem {
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(38);
+        Item.SetSizeValues(42, 46);
         Item.SetWeaponValues(30, 5f);
         Item.SetUsableValues(-1, 40, autoReuse: true, showItemOnUse: false);
         Item.SetShootableValues((ushort)ModContent.ProjectileType<BiedermeierFlower>());

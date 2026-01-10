@@ -12,15 +12,14 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
 
-using static RoA.Content.Projectiles.Friendly.Nature.TulipPetalSoul;
-
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets {
+sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, ISpawnCopies {
     private static byte BASESIZE => 32;
     private static ushort MAXTIMELEFT => 360;
     private static byte LOOPANIMATIONFRAMECOUNT => 8;
@@ -32,12 +31,15 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets {
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)BiedermeierPetalTextureType.Petal, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Petal")];
 
+    float ISpawnCopies.CopyDeathFrequency => 0.1f;
+
     public ref float InitOnSpawnValue => ref Projectile.localAI[0];
     public ref float RotationValue => ref Projectile.localAI[1];
     public ref float RotationValue2 => ref Projectile.localAI[2];
     public ref int Frame => ref Projectile.frame;
 
     private Vector2 _mousePosition;
+    private float _copyCounter;
 
     public byte FlowerType => (byte)Projectile.ai[0];
     public float StartRotation => Projectile.ai[1];
@@ -50,6 +52,10 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets {
     public bool Falling {
         get => Projectile.ai[2] == 1f;
         set => Projectile.ai[2] = value.ToInt();
+    }
+
+    public override void SetStaticDefaults() {
+        Projectile.SetTrail(2, 4);
     }
 
     protected override void SafeSetDefaults() {
@@ -91,7 +97,13 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets {
 
             Projectile.SetDirection(Projectile.velocity.X.GetDirection());
 
+            CopyHandler.InitializeCopies(Projectile, 10);
+
             return;
+        }
+
+        if (_copyCounter++ % 4 == 0) {
+            CopyHandler.MakeCopy(Projectile);
         }
 
         if (Vector2.Distance(Projectile.Center, _mousePosition) < 100f) {
@@ -137,12 +149,36 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
+        if (!Init) {
+            return;
+        }
+
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = indexedTextureAssets[(byte)BiedermeierPetalTextureType.Petal].Value;
         Vector2 position = Projectile.Center;
         byte frameXCount = (byte)BiedermeierFlower.FlowerType.Count;
         int frame = Projectile.frame;
         Rectangle clip = Utils.Frame(texture, frameXCount, LOOPANIMATIONFRAMECOUNT, frameX: FlowerType, frameY: frame);
+
+        var handler = Projectile.GetGlobalProjectile<CopyHandler>();
+        var copyData = handler.CopyData;
+        for (int i = 0; i < 10; i++) {
+            CopyHandler.CopyInfo copyInfo = copyData![i];
+            if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
+                continue;
+            }
+            var clip2 = Utils.Frame(texture, frameXCount, LOOPANIMATIONFRAMECOUNT, frameX: FlowerType, frameY: copyInfo.UsedFrame);
+            batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
+                Color = lightColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f * 0.5f,
+                Rotation = copyInfo.Rotation,
+                Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
+                Origin = clip2.Centered(),
+                Clip = clip2
+            });
+        }
+
+        Projectile.QuickDrawShadowTrails(lightColor * Projectile.Opacity * 0.25f, 0.5f, 1, 0f, texture: texture, clip: clip);
+
         Vector2 origin = clip.Centered();
         float rotation = Projectile.rotation;
         SpriteEffects flip = Projectile.spriteDirection.ToSpriteEffects();

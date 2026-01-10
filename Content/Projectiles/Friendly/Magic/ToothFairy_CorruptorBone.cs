@@ -129,7 +129,7 @@ sealed class CorruptorBone : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDrawShadowTrails(lightColor * Projectile.Opacity, 0.5f, 1, Projectile.rotation);
+        Projectile.QuickDrawShadowTrails(lightColor * Projectile.Opacity, 0.5f, 1, 0f);
         Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, 0f);
 
         return false;
