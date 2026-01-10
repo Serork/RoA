@@ -294,6 +294,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             //progress2 *= Utils.GetLerpValue(3f, 2f, progress3, true);
             Vector2 playerCenter = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint() - Projectile.velocity * 10f;
             Vector2 position = Vector2.Lerp(playerCenter, Projectile.Center + flowerInfo.Offset.RotatedBy(baseRotation), MathF.Max(0.1f, progress));
+            float sineOffset = 0.05f;
             void drawStem() {
                 int stemFrameX = 0;
                 switch (flowerType) {
@@ -337,7 +338,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     }
                     float progress = stemPosition.Distance(stemEndPosition) / stemStartPosition.Distance(stemEndPosition);
                     Vector2 velocity = stemPosition.DirectionTo(stemEndPosition);
-                    velocity = velocity.RotatedBy(Math.Sin(index) * 0.075f);
+                    velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset);
                     float stemRotation = velocity.ToRotation() - MathHelper.PiOver2;
                     SpriteEffects leafFlip = flip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                     DrawInfo stemDrawInfo = new() {
@@ -373,7 +374,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             break;
                         }
                         Vector2 velocity = leafPosition.DirectionTo(leafEndPosition);
-                        velocity = velocity.RotatedBy(Math.Sin(index) * 0.05f);
+                        velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset);
                         float leafRotation = velocity.ToRotation() - MathHelper.PiOver2;
                         bool flipped = index % 2 == 0;
                         SpriteEffects leafFlip = flipped.ToSpriteEffects();
@@ -422,7 +423,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             break;
                         }
                         Vector2 velocity = leafPosition.DirectionTo(leafEndPosition);
-                        velocity = velocity.RotatedBy(Math.Sin(index) * 0.05f);
+                        velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset);
                         float leafRotation = velocity.ToRotation() - MathHelper.PiOver2;
                         bool flipped = index % 4 == 0;
                         if (flowerInfo.FacedRight) {
