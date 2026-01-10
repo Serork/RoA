@@ -260,6 +260,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                       baseRotation = Projectile.rotation;
                 float positionLerpValue = 0.15f;
                 currentSegmentData.Position = Vector2.Lerp(currentSegmentData.Position, Projectile.Center + currentSegmentData.Offset.RotatedBy(baseRotation), positionLerpValue);
+                currentSegmentData.Position += Projectile.GetOwnerAsPlayer().velocity;
                 allProgress += currentSegmentData.Progress;
                 if (currentSegmentIndex > 0 && previousSegmentData.Progress < 0.25f) {
                     continue;
