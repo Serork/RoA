@@ -76,6 +76,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         Projectile.friendly = true;
     }
 
+    public override bool? CanDamage() => false;
+    public override bool? CanCutTiles() => false;
+
     private void MakeTulipDust(FlowerType flowerType, Vector2 position, Vector2 velocity) {
         float offset2 = 10f;
         Vector2 randomOffset = Main.rand.RandomPointInArea(offset2, offset2),
@@ -336,13 +339,6 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             progress = Ease.CubeOut(progress);
             //progress2 = Ease.CubeInOut(progress2);
             float opacity = Utils.GetLerpValue(0f, 0.2f, progress, true);
-            Color lightColor2 = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
-            Color baseColor = lightColor2 * opacity,
-                  flowerColor = baseColor;
-            if (flowerInfo.FlowerType >= FlowerType.Perfect1 && flowerInfo.FlowerType <= FlowerType.Perfect3) {
-                flowerColor = TulipPetalSoul.SoulColor2 * opacity;
-            }
-            Color stemGlowColor = baseColor with { A = 100 } * 1f;
             Vector2 scale = Vector2.One;
             float leafProgressThresholdForGlowing = 0.5f;
             FlowerType flowerType = flowerInfo.FlowerType;
@@ -355,10 +351,23 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             Rectangle flowerClip = clip;
             float progress5 = MathUtils.Clamp01(progress2 - 1f);
             //flowerColor = Color.Lerp(flowerColor, Color.Black, progress5);
-            stemGlowColor = Color.Lerp(stemGlowColor, baseColor, progress5);
             //flowerClip.Height = (int)(clip.Height * (1f - MathUtils.Clamp01(progress2 - 1f)));
             float stemGlowScaleFactor = 1f + (0.25f * opacity * (1f - progress5));
             Vector2 flowerScale = scale * (1f + 0.25f * Ease.CubeIn(Utils.GetLerpValue(0.75f, 1.5f, progress2, true)));
+            float progress3 = progress2;
+            progress2 = MathUtils.Clamp01(progress2);
+            float progress4 = progress2;
+            //progress2 *= Utils.GetLerpValue(3f, 2f, progress3, true);
+            Vector2 playerCenter = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint() - Projectile.velocity * 10f;
+            Vector2 position = Vector2.Lerp(playerCenter, Projectile.Center + flowerInfo.Offset.RotatedBy(baseRotation), MathF.Max(0.1f, progress));
+            Color lightColor2 = Lighting.GetColor(position.ToTileCoordinates());
+            Color baseColor = lightColor2 * opacity,
+                  flowerColor = baseColor;
+            if (flowerInfo.FlowerType >= FlowerType.Perfect1 && flowerInfo.FlowerType <= FlowerType.Perfect3) {
+                flowerColor = TulipPetalSoul.SoulColor2 * opacity;
+            }
+            Color stemGlowColor = baseColor with { A = 100 } * 1f;
+            stemGlowColor = Color.Lerp(stemGlowColor, baseColor, progress5);
             DrawInfo drawInfo = new() {
                 Clip = flowerClip,
                 Origin = origin,
@@ -371,12 +380,6 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             DrawInfo drawInfo2 = drawInfo with {
                 Color = baseColor
             };
-            float progress3 = progress2;
-            progress2 = MathUtils.Clamp01(progress2);
-            float progress4 = progress2;
-            //progress2 *= Utils.GetLerpValue(3f, 2f, progress3, true);
-            Vector2 playerCenter = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint() - Projectile.velocity * 10f;
-            Vector2 position = Vector2.Lerp(playerCenter, Projectile.Center + flowerInfo.Offset.RotatedBy(baseRotation), MathF.Max(0.1f, progress));
             float sineOffset = 0.05f;
             void drawStem() {
                 int stemFrameX = 0;
