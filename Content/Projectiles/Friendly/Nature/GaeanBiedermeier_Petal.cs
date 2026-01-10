@@ -70,13 +70,18 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
         Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
-        Projectile.penetrate = 1 + 3;
+        Projectile.penetrate = -1;
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
 
         Projectile.manualDirectionChange = true;
 
         Projectile.hide = true;
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        Player player = Main.player[Projectile.owner];
+        Projectile.damage = (int)(Projectile.damage * 0.95f);
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
