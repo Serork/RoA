@@ -213,7 +213,7 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
     }
 
     // also see Hooks_Player
-    //public sealed override void UpdateInventory(Player player) {
-    //    RecoveryAmmo();
-    //}
+    public sealed override void UpdateInventory(Player player) {
+        RecoveryAmmo();
+    }
 }
