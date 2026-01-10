@@ -2,6 +2,7 @@
 using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons.Nature;
+using RoA.Content.Items.Weapons.Ranged;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
@@ -24,6 +25,24 @@ sealed partial class Hooks : ModSystem {
         On_Player.CanVisuallyHoldItem += On_Player_CanVisuallyHoldItem;
 
         On_Player.LoadPlayer_LastMinuteFixes_Player_Item += On_Player_LoadPlayer_LastMinuteFixes_Player_Item;
+
+        On_Player.UpdateEquips += On_Player_UpdateEquips;
+    }
+
+    private void On_Player_UpdateEquips(On_Player.orig_UpdateEquips orig, Player self, int i) {
+        for (int j = 0; j < 58; j++) {
+            int type = self.inventory[j].type;
+
+            if (self.inventory[j].IsModded(out ModItem modItem2) && modItem2 is RangedWeaponWithCustomAmmo rangedWeaponWithCustomAmmo2) {
+                rangedWeaponWithCustomAmmo2.RecoveryAmmo();
+            }
+        }
+
+        if (Main.mouseItem.IsModded(out ModItem modItem) && modItem is RangedWeaponWithCustomAmmo rangedWeaponWithCustomAmmo) {
+            rangedWeaponWithCustomAmmo.RecoveryAmmo();
+        }
+
+        orig(self, i);
     }
 
     private void On_Player_LoadPlayer_LastMinuteFixes_Player_Item(On_Player.orig_LoadPlayer_LastMinuteFixes_Player_Item orig, Player newPlayer, Item item) {

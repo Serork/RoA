@@ -77,7 +77,7 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
         CurrentAmmoAmount--;
     }
 
-    private void RecoveryAmmo() {
+    public void RecoveryAmmo() {
         if (HasMaxAmmo) {
             return;
         }
@@ -212,7 +212,8 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
         drawSpecialAmmoIcon();
     }
 
-    public sealed override void UpdateInventory(Player player) {
-        RecoveryAmmo();
-    }
+    // also see Hooks_Player
+    //public sealed override void UpdateInventory(Player player) {
+    //    RecoveryAmmo();
+    //}
 }
