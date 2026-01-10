@@ -81,7 +81,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         Dust dust = Dust.NewDustPerfect(position,
                                         ModContent.DustType<Dusts.Tulip2>(),
                                         (spawnPosition - position).SafeNormalize(Vector2.Zero) * 2.5f * Main.rand.NextFloat(1.25f, 1.5f) + velocity,
-                                        Scale: Main.rand.NextFloat(0.5f, 0.8f) * Main.rand.NextFloat(1.25f, 1.5f) * 1.75f,
+                                        Scale: Main.rand.NextFloat(1.375f, 1.5f) * 1.25f,
                                         Alpha: (byte)flowerType);
         dust.customData = Main.rand.NextFloatRange(50f);
     }

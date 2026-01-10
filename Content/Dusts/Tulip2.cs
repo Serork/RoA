@@ -34,9 +34,9 @@ sealed class Tulip2 : ModDust {
 
         dust.scale *= 0.975f;
         if (dust.scale <= 1f) {
-            dust.scale *= 0.975f;
+            dust.scale *= 0.95f;
         }
-        if (dust.scale <= 0.1f) {
+        if (dust.scale <= 0.15f) {
             dust.active = false;
         }
 
