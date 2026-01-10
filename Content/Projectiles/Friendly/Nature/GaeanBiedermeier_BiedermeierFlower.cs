@@ -59,7 +59,13 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         Count
     }
 
-    private record struct FlowerInfo(FlowerType FlowerType, Vector2 Offset, float Rotation, float Progress = 0f, float Progress2 = 0f, bool FacedRight = false, bool Released = false);
+    public enum FlowerLayer : byte {
+        First,
+        Second,
+        Third
+    }
+
+    private record struct FlowerInfo(FlowerType FlowerType, FlowerLayer FlowerLayer, Vector2 Offset, float Rotation, float Progress = 0f, float Progress2 = 0f, bool FacedRight = false, bool Released = false);
 
     private FlowerInfo[] _flowerData = null!;
 
@@ -124,6 +130,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                                thirdFlowerTypeInABouquet = flowersInABouquet[2];
                     FlowerType flowerInABouquetToAdd = firstFlowerTypeInABouquet;
                     Vector2 offset = Vector2.Zero;
+                    FlowerLayer flowerLayer = FlowerLayer.First;
                     switch (index) {
                         case 0:
                             offset = new Vector2(0f, -75f);
@@ -148,22 +155,27 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         case 5:
                             offset = new Vector2(30f, -130f);
                             flowerInABouquetToAdd = secondFlowerTypeInABouquet;
+                            flowerLayer = FlowerLayer.Second;
                             break;
                         case 6:
                             offset = new Vector2(-30f, -130f);
                             flowerInABouquetToAdd = secondFlowerTypeInABouquet;
+                            flowerLayer = FlowerLayer.Second;
                             break;
                         case 7:
                             offset = new Vector2(20f, -105f);
                             flowerInABouquetToAdd = secondFlowerTypeInABouquet;
+                            flowerLayer = FlowerLayer.Second;
                             break;
                         case 8:
                             offset = new Vector2(-20f, -105f);
                             flowerInABouquetToAdd = secondFlowerTypeInABouquet;
+                            flowerLayer = FlowerLayer.Second;
                             break;
                         case 9:
                             offset = new Vector2(15f, -125f);
                             flowerInABouquetToAdd = thirdFlowerTypeInABouquet;
+                            flowerLayer = FlowerLayer.Third;
                             if (flowerInABouquetToAdd == FlowerType.Acalypha || 
                                 flowerInABouquetToAdd == FlowerType.Custom) {
                                 //offset.Y -= 10f;
@@ -172,6 +184,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         case 10:
                             offset = new Vector2(-15f, -125f);
                             flowerInABouquetToAdd = thirdFlowerTypeInABouquet;
+                            flowerLayer = FlowerLayer.Third;
                             if (flowerInABouquetToAdd == FlowerType.Acalypha ||
                                 flowerInABouquetToAdd == FlowerType.Custom) {
                                 //offset.Y -= 10f;
@@ -180,6 +193,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         case 11:
                             offset = new Vector2(0f, -135f);
                             flowerInABouquetToAdd = thirdFlowerTypeInABouquet;
+                            flowerLayer = FlowerLayer.Third;
                             if (flowerInABouquetToAdd == FlowerType.Acalypha ||
                                 flowerInABouquetToAdd == FlowerType.Custom) {
                                 //offset.Y -= 10f;
@@ -196,7 +210,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         offset.Y -= 5f;
                     }
                     offset = new(offset.X * Main.rand.NextFloat(0.975f, 1.025f), offset.Y * Main.rand.NextFloat(0.975f, 1.025f));
-                    _flowerData[index] = new FlowerInfo(flowerInABouquetToAdd, offset, rotation, FacedRight: Main.rand.NextBool());
+                    _flowerData[index] = new FlowerInfo(flowerInABouquetToAdd, flowerLayer, offset, rotation, FacedRight: Main.rand.NextBool());
                     //flowersInABouquet.Remove(flowerInABouquetToAdd);
                     index++;
                 }
@@ -240,7 +254,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             for (int i = 0; i < flowerCount; i++) {
                 int currentSegmentIndex = i,
                     previousSegmentIndex = Math.Max(0, i - 1);
-                ref FlowerInfo currentSegmentData = ref _flowerData![currentSegmentIndex],
+                ref FlowerInfo currentSegmentData = ref _flowerData[currentSegmentIndex],
                                 previousSegmentData = ref _flowerData[previousSegmentIndex];
                 allProgress += currentSegmentData.Progress;
                 if (currentSegmentIndex > 0 && previousSegmentData.Progress < 0.25f) {
@@ -249,6 +263,22 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 float lerpValue = 0.05f;
                 currentSegmentData.Progress = Helper.Approach(currentSegmentData.Progress, 1f, lerpValue);
             }
+            float firstLayerProgress = 0f,
+                  secondLayerProgress = 0f;
+            int firstLayerCount = 0,
+                secondLayerCount = 0;
+            for (int i = 0; i < flowerCount; i++) {
+                int currentSegmentIndex = i;
+                ref FlowerInfo currentSegmentData = ref _flowerData[currentSegmentIndex];
+                if (currentSegmentData.FlowerLayer == FlowerLayer.First) {
+                    firstLayerProgress += currentSegmentData.Progress2;
+                    firstLayerCount++;
+                }
+                if (currentSegmentData.FlowerLayer == FlowerLayer.Second) {
+                    secondLayerProgress += currentSegmentData.Progress2;
+                    secondLayerCount++;
+                }
+            }
             float allProgress2 = 0f;
             float attackStartThreshhold = 1f;
             if (allProgress >= flowerCount * attackStartThreshhold) {
@@ -256,8 +286,15 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     int currentSegmentIndex = i,
                         previousSegmentIndex = Math.Max(0, i - 1);
                     ref FlowerInfo currentSegmentData = ref _flowerData![currentSegmentIndex],
-                                    previousSegmentData = ref _flowerData[previousSegmentIndex];
-                    if (currentSegmentIndex > 0 && previousSegmentData.Progress2 < 0.5f) {
+                                   previousSegmentData = ref _flowerData[previousSegmentIndex];
+                    float betweenLayerDelay = 2f;
+                    if (currentSegmentData.FlowerLayer == FlowerLayer.Second && firstLayerProgress < firstLayerCount * betweenLayerDelay) {
+                        continue;
+                    }
+                    if (currentSegmentData.FlowerLayer == FlowerLayer.Third && secondLayerProgress < secondLayerCount * betweenLayerDelay) {
+                        continue;
+                    }
+                    if (currentSegmentIndex > 0 && previousSegmentData.Progress2 < 0.25f) {
                         continue;
                     }
                     float lerpValue = 0.075f;
