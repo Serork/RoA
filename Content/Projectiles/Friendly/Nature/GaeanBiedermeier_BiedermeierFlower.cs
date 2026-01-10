@@ -20,6 +20,9 @@ using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
 
+using static RoA.Content.Projectiles.Friendly.Nature.TulipPetalSoul;
+using static tModPorter.ProgressUpdate;
+
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets {
@@ -93,14 +96,23 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
 
                 _flowerData = new FlowerInfo[FLOWERCOUNTINABOUQUET];
                 List<FlowerType> flowersInABouquet = [];
-                FlowerType flowerTypeToAdd = Main.rand.GetRandomEnumValue<FlowerType>(1);
-                flowersInABouquet.Add(flowerTypeToAdd);
-                for (int i = 0; i < 2; i++) {
-                    flowerTypeToAdd = Main.rand.GetRandomEnumValue<FlowerType>(1);
-                    while (flowersInABouquet.Contains(flowerTypeToAdd)) {
-                        flowerTypeToAdd = Main.rand.GetRandomEnumValue<FlowerType>(1);
-                    }
+                void fillBouquet() {
+                    FlowerType flowerTypeToAdd = Main.rand.GetRandomEnumValue<FlowerType>(1);
                     flowersInABouquet.Add(flowerTypeToAdd);
+                    for (int i = 0; i < 2; i++) {
+                        flowerTypeToAdd = Main.rand.GetRandomEnumValue<FlowerType>(1);
+                        while (flowersInABouquet.Contains(flowerTypeToAdd)) {
+                            flowerTypeToAdd = Main.rand.GetRandomEnumValue<FlowerType>(1);
+                        }
+                        flowersInABouquet.Add(flowerTypeToAdd);
+                    }
+                }
+                fillBouquet();
+                while (!flowersInABouquet.Contains(FlowerType.Perfect1) &&
+                       !flowersInABouquet.Contains(FlowerType.Perfect2) &&
+                       !flowersInABouquet.Contains(FlowerType.Perfect3)) {
+                    flowersInABouquet.Clear();
+                    fillBouquet();
                 }
                 int index = 0;
                 while (index < FLOWERCOUNTINABOUQUET) {
@@ -272,10 +284,35 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 Projectile.Kill();
             }
         }
+        void addLight() {
+            foreach (FlowerInfo flowerInfo in _flowerData) {
+                FlowerType currentType = flowerInfo.FlowerType;
+                Vector2 flowerPosition = Projectile.Center + flowerInfo.Offset.RotatedBy(Projectile.rotation) * 1.15f;
+                if (currentType == FlowerType.Perfect3) {
+                    float num6 = (float)Main.rand.Next(90, 111) * 0.015f;
+                    num6 *= Main.essScale;
+                    num6 *= MathUtils.Clamp01(flowerInfo.Progress - Utils.GetLerpValue(2.5f, 3f, flowerInfo.Progress2, true));
+                    Lighting.AddLight((int)flowerPosition.X / 16, (int)flowerPosition.Y / 16, 0.1f * num6, 0.1f * num6, 0.6f * num6);
+                }
+                else if (currentType == FlowerType.Perfect1) {
+                    float num5 = (float)Main.rand.Next(90, 111) * 0.015f;
+                    num5 *= Main.essScale;
+                    num5 *= MathUtils.Clamp01(flowerInfo.Progress - Utils.GetLerpValue(2.5f, 3f, flowerInfo.Progress2, true));
+                    Lighting.AddLight((int)flowerPosition.X / 16, (int)flowerPosition.Y / 16, 0.5f * num5, 0.3f * num5, 0.05f * num5);
+                }
+                else if (currentType == FlowerType.Perfect2) {
+                    float num8 = (float)Main.rand.Next(90, 111) * 0.015f;
+                    num8 *= Main.essScale;
+                    num8 *= MathUtils.Clamp01(flowerInfo.Progress - Utils.GetLerpValue(2.5f, 3f, flowerInfo.Progress2, true));
+                    Lighting.AddLight((int)flowerPosition.X / 16, (int)flowerPosition.Y / 16, 0.1f * num8, 0.5f * num8, 0.2f * num8);
+                }
+            }
+        }
 
         init();
         setPosition();
         processFlowers();
+        addLight();
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -299,8 +336,12 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             progress = Ease.CubeOut(progress);
             //progress2 = Ease.CubeInOut(progress2);
             float opacity = Utils.GetLerpValue(0f, 0.2f, progress, true);
-            Color baseColor = Color.White * opacity,
+            Color lightColor2 = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
+            Color baseColor = lightColor2 * opacity,
                   flowerColor = baseColor;
+            if (flowerInfo.FlowerType >= FlowerType.Perfect1 && flowerInfo.FlowerType <= FlowerType.Perfect3) {
+                flowerColor = TulipPetalSoul.SoulColor2 * opacity;
+            }
             Color stemGlowColor = baseColor with { A = 100 } * 1f;
             Vector2 scale = Vector2.One;
             float leafProgressThresholdForGlowing = 0.5f;
@@ -374,7 +415,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 int index = (int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f);
                 int baseIndex = index;
                 while (true) {
-                    if (Vector2.Distance(stemPosition, stemEndPosition) < height * 0.75f) {
+                    if (Vector2.Distance(stemPosition, stemEndPosition) < height * 0.5f) {
                         break;
                     }
                     float progress = stemPosition.Distance(stemEndPosition) / stemStartPosition.Distance(stemEndPosition);

@@ -17,6 +17,8 @@ using System.Collections.Generic;
 
 using Terraria;
 
+using static RoA.Content.Projectiles.Friendly.Nature.BiedermeierFlower;
+
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, ISpawnCopies {
@@ -64,7 +66,7 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
         Projectile.SetSizeValues(BASESIZE);
 
         Projectile.aiStyle = -1;
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
         Projectile.timeLeft = MAXTIMELEFT;
 
         Projectile.friendly = true;
@@ -144,6 +146,30 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
         }
 
         Projectile.Animate(6, LOOPANIMATIONFRAMECOUNT);
+
+        void addLight() {
+            byte currentType = FlowerType;
+            Vector2 flowerPosition = Projectile.Center;
+            if (currentType == (byte)BiedermeierFlower.FlowerType.Perfect3) {
+                float num6 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num6 *= Main.essScale;
+                num6 *= Projectile.Opacity;
+                Lighting.AddLight((int)flowerPosition.X / 16, (int)flowerPosition.Y / 16, 0.1f * num6, 0.1f * num6, 0.6f * num6);
+            }
+            else if (currentType == (byte)BiedermeierFlower.FlowerType.Perfect1) {
+                float num5 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num5 *= Main.essScale;
+                num5 *= Projectile.Opacity;
+                Lighting.AddLight((int)flowerPosition.X / 16, (int)flowerPosition.Y / 16, 0.5f * num5, 0.3f * num5, 0.05f * num5);
+            }
+            else if (currentType == (byte)BiedermeierFlower.FlowerType.Perfect2) {
+                float num8 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num8 *= Main.essScale;
+                num8 *= Projectile.Opacity;
+                Lighting.AddLight((int)flowerPosition.X / 16, (int)flowerPosition.Y / 16, 0.1f * num8, 0.5f * num8, 0.2f * num8);
+            }
+        }
+        addLight();
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -153,6 +179,10 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
 
         if (!Init) {
             return;
+        }
+
+        if (FlowerType >= (byte)BiedermeierFlower.FlowerType.Perfect1 && FlowerType <= (byte)BiedermeierFlower.FlowerType.Perfect3) {
+            lightColor = TulipPetalSoul.SoulColor2;
         }
 
         SpriteBatch batch = Main.spriteBatch;

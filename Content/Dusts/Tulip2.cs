@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;
+
+using static RoA.Content.Projectiles.Friendly.Nature.BiedermeierFlower;
 
 namespace RoA.Content.Dusts;
 
@@ -13,7 +16,7 @@ sealed class Tulip2 : ModDust {
     public const byte COLUMNCOUNT = 8;
     public const byte ROWCOUNT = 3;
 
-    public override Color? GetAlpha(Dust dust, Color lightColor) => lightColor;
+    public override Color? GetAlpha(Dust dust, Color lightColor) => dust.alpha >= (byte)BiedermeierFlower.FlowerType.Perfect1 && dust.alpha <= (byte)BiedermeierFlower.FlowerType.Perfect3 ? TulipPetalSoul.SoulColor2 : lightColor;
 
     public override void OnSpawn(Dust dust) {
         dust.frame = (Texture2D?.Value?.Frame(COLUMNCOUNT, ROWCOUNT, frameX: dust.alpha, frameY: Main.rand.Next(ROWCOUNT))).GetValueOrDefault();
@@ -25,6 +28,28 @@ sealed class Tulip2 : ModDust {
     public override bool Update(Dust dust) {
         if (dust.customData is null) {
             return false;
+        }
+
+        if (dust.alpha >= (byte)BiedermeierFlower.FlowerType.Perfect1 && dust.alpha <= (byte)BiedermeierFlower.FlowerType.Perfect3) {
+            Vector2 position = dust.position;
+            if (dust.alpha == (byte)BiedermeierFlower.FlowerType.Perfect3) {
+                float num6 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num6 *= Main.essScale;
+                num6 *= MathUtils.Clamp01(dust.scale * 1.5f);
+                Lighting.AddLight((int)position.X / 16, (int)position.Y / 16, 0.1f * num6, 0.1f * num6, 0.6f * num6);
+            }
+            else if (dust.alpha == (byte)BiedermeierFlower.FlowerType.Perfect1) {
+                float num5 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num5 *= Main.essScale;
+                num5 *= MathUtils.Clamp01(dust.scale * 1.5f);
+                Lighting.AddLight((int)position.X / 16, (int)position.Y / 16, 0.5f * num5, 0.3f * num5, 0.05f * num5);
+            }
+            else if (dust.alpha == (byte)BiedermeierFlower.FlowerType.Perfect2) {
+                float num8 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num8 *= Main.essScale;
+                num8 *= MathUtils.Clamp01(dust.scale * 1.5f);
+                Lighting.AddLight((int)position.X / 16, (int)position.Y / 16, 0.1f * num8, 0.5f * num8, 0.2f * num8);
+            }
         }
 
         float randomness = (float)dust.customData;

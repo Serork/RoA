@@ -3,8 +3,6 @@
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
-using System;
-
 using Terraria;
 using Terraria.ModLoader;
 
@@ -37,6 +35,28 @@ sealed class Tulip : ModDust {
 
         _velocity = Vector2.SmoothStep(_velocity, dust.velocity *= 0.9f, 1f);
         dust.position += _velocity *= 0.99f;
+
+        if (dust.alpha >= SOULORANGE) {
+            Vector2 position = dust.position;
+            if (dust.alpha == SOULBLUE) {
+                float num6 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num6 *= Main.essScale;
+                num6 *= MathUtils.Clamp01(dust.scale * 1.5f);
+                Lighting.AddLight((int)position.X / 16, (int)position.Y / 16, 0.1f * num6, 0.1f * num6, 0.6f * num6);
+            }
+            else if (dust.alpha == SOULORANGE) {
+                float num5 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num5 *= Main.essScale;
+                num5 *= MathUtils.Clamp01(dust.scale * 1.5f);
+                Lighting.AddLight((int)position.X / 16, (int)position.Y / 16, 0.5f * num5, 0.3f * num5, 0.05f * num5);
+            }
+            else if (dust.alpha == SOULGREEN) {
+                float num8 = (float)Main.rand.Next(90, 111) * 0.01f;
+                num8 *= Main.essScale;
+                num8 *= MathUtils.Clamp01(dust.scale * 1.5f);
+                Lighting.AddLight((int)position.X / 16, (int)position.Y / 16, 0.1f * num8, 0.5f * num8, 0.2f * num8);
+            }
+        }
 
         if (dust.alpha >= 4) {
             dust.scale *= 0.95f;

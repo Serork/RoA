@@ -36,6 +36,7 @@ sealed class TulipPetalSoul : NatureProjectile, IRequestExtraAIValue {
     private static float PSEUDODESTROYEDOPACITY => 0.5f;
 
     public static Color SoulColor => new Color(Color.White.R, Color.White.G, Color.White.B, 150) * 0.9f;
+    public static Color SoulColor2 => new Color(Color.White.R, Color.White.G, Color.White.B, 200) * 0.9f;
 
     private static Asset<Texture2D>? _sawEffectTexture;
 
