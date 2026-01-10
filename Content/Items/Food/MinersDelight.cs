@@ -54,6 +54,7 @@ sealed class MinersDelight : ModItem {
             }
             addBuffs();
             addDebuffs();
+            return true;
         }
 
         return base.UseItem(player);
