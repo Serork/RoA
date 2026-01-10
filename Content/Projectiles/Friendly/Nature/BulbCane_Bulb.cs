@@ -678,7 +678,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         float bulbScaleModifier = 1f;
 
         void getBulbPosition(out Vector2 bulbPosition_Origin, out Vector2 bulbPosition_Result) {
-            Vector2 bulbOffset = new(0f, 12f);
+            Vector2 bulbOffset = new(0f, 14f);
             Vector2 bulbPosition = center;
 
             bulbPosition_Origin = bulbPosition;
