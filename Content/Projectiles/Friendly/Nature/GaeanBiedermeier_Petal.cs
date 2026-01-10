@@ -111,7 +111,7 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
 
         Projectile.Opacity = Utils.GetLerpValue(0, 60, Projectile.timeLeft, true);
 
-        if (_copyCounter++ % 4 == 0) {
+        if (_copyCounter++ % 6 == 0) {
             CopyHandler.MakeCopy(Projectile);
         }
 
@@ -210,7 +210,7 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
             }
             var clip2 = Utils.Frame(texture, frameXCount, LOOPANIMATIONFRAMECOUNT, frameX: FlowerType, frameY: copyInfo.UsedFrame);
             batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
-                Color = baseColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f * 0.5f,
+                Color = baseColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f * 0.375f,
                 Rotation = copyInfo.Rotation,
                 Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
                 Origin = clip2.Centered(),

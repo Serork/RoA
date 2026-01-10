@@ -65,7 +65,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         Third
     }
 
-    private record struct FlowerInfo(FlowerType FlowerType, FlowerLayer FlowerLayer, Vector2 Offset, float Rotation, float Progress = 0f, float Progress2 = 0f, bool FacedRight = false, bool Released = false);
+    private record struct FlowerInfo(FlowerType FlowerType, FlowerLayer FlowerLayer, Vector2 Position, Vector2 Offset, float Rotation, float Progress = 0f, float Progress2 = 0f, bool FacedRight = false, bool Released = false);
 
     private FlowerInfo[] _flowerData = null!;
 
@@ -210,7 +210,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         offset.Y -= 5f;
                     }
                     offset = new(offset.X * Main.rand.NextFloat(0.975f, 1.025f), offset.Y * Main.rand.NextFloat(0.975f, 1.025f));
-                    _flowerData[index] = new FlowerInfo(flowerInABouquetToAdd, flowerLayer, offset, rotation, FacedRight: Main.rand.NextBool());
+                    _flowerData[index] = new FlowerInfo(flowerInABouquetToAdd, flowerLayer, Projectile.Center, offset, rotation, FacedRight: Main.rand.NextBool());
                     //flowersInABouquet.Remove(flowerInABouquetToAdd);
                     index++;
                 }
@@ -255,7 +255,11 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 int currentSegmentIndex = i,
                     previousSegmentIndex = Math.Max(0, i - 1);
                 ref FlowerInfo currentSegmentData = ref _flowerData[currentSegmentIndex],
-                                previousSegmentData = ref _flowerData[previousSegmentIndex];
+                               previousSegmentData = ref _flowerData[previousSegmentIndex];
+                float flowerRotation = currentSegmentData.Rotation,
+                      baseRotation = Projectile.rotation;
+                float positionLerpValue = 0.15f;
+                currentSegmentData.Position = Vector2.Lerp(currentSegmentData.Position, Projectile.Center + currentSegmentData.Offset.RotatedBy(baseRotation), positionLerpValue);
                 allProgress += currentSegmentData.Progress;
                 if (currentSegmentIndex > 0 && previousSegmentData.Progress < 0.25f) {
                     continue;
@@ -397,7 +401,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             float progress4 = progress2;
             //progress2 *= Utils.GetLerpValue(3f, 2f, progress3, true);
             Vector2 playerCenter = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint() - Projectile.velocity * 10f;
-            Vector2 position = Vector2.Lerp(playerCenter, Projectile.Center + flowerInfo.Offset.RotatedBy(baseRotation), MathF.Max(0.1f, progress));
+            Vector2 position = Vector2.Lerp(playerCenter, flowerInfo.Position, MathF.Max(0.1f, progress));
             Color lightColor2 = Lighting.GetColor(position.ToTileCoordinates());
             Color baseColor = lightColor2 * opacity,
                   flowerColor = baseColor;
@@ -456,7 +460,8 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 uint seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
                 int index = (int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f);
                 int baseIndex = index;
-                while (true) {
+                int attempts = 50;
+                while (attempts-- > 0) {
                     if (Vector2.Distance(stemPosition, stemEndPosition) < height * 0.5f) {
                         break;
                     }
@@ -494,7 +499,8 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     Vector2 leafOrigin = leafClip.BottomCenter();
                     seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
                     index = (int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f);
-                    while (true) {
+                    int attempts2 = 50;
+                    while (attempts2-- > 0) {
                         if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.75f) {
                             break;
                         }
@@ -544,7 +550,8 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
                     index = baseIndex;
                     int index2 = 0;
-                    while (true) {
+                    int attempts2 = 50;
+                    while (attempts2-- > 0) {
                         if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.5f) {
                             break;
                         }
