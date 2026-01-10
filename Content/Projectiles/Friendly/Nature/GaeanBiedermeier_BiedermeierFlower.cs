@@ -281,7 +281,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             }
             float allProgress2 = 0f;
             float attackStartThreshhold = 1f;
-            if (allProgress >= flowerCount * attackStartThreshhold) {
+            if (allProgress >= flowerCount * 0.825f * attackStartThreshhold) {
                 for (int i = 0; i < flowerCount; i++) {
                     int currentSegmentIndex = i,
                         previousSegmentIndex = Math.Max(0, i - 1);
