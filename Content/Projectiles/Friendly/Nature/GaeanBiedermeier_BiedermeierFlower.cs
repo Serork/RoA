@@ -272,7 +272,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             });
                         }
                         flowerPosition = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * 1.5f;
-                        for (int k = 0; k < 4; k++) {
+                        for (int k = 0; k < 6; k++) {
                             MakeTulipDust(currentSegmentData.FlowerType, flowerPosition, velocity * 0.5f);
                         }
                         currentSegmentData.Released = true;
@@ -358,13 +358,14 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             stemGlowColor = Color.Lerp(stemGlowColor, baseColor, progress5);
             //flowerClip.Height = (int)(clip.Height * (1f - MathUtils.Clamp01(progress2 - 1f)));
             float stemGlowScaleFactor = 1f + (0.25f * opacity * (1f - progress5));
+            Vector2 flowerScale = scale * (1f + 0.25f * Ease.CubeIn(Utils.GetLerpValue(0.75f, 1.5f, progress2, true)));
             DrawInfo drawInfo = new() {
                 Clip = flowerClip,
                 Origin = origin,
                 Rotation = rotation + MathHelper.Pi,
                 ImageFlip = flip,
                 Color = flowerColor,
-                Scale = scale
+                Scale = flowerScale
             };
             //flowerClip.Height = clip.Height;
             DrawInfo drawInfo2 = drawInfo with {
