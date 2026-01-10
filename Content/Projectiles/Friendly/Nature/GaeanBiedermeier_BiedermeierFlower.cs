@@ -250,18 +250,19 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 currentSegmentData.Progress = Helper.Approach(currentSegmentData.Progress, 1f, lerpValue);
             }
             float allProgress2 = 0f;
-            if (allProgress >= flowerCount) {
+            float attackStartThreshhold = 1f;
+            if (allProgress >= flowerCount * attackStartThreshhold) {
                 for (int i = 0; i < flowerCount; i++) {
                     int currentSegmentIndex = i,
                         previousSegmentIndex = Math.Max(0, i - 1);
                     ref FlowerInfo currentSegmentData = ref _flowerData![currentSegmentIndex],
                                     previousSegmentData = ref _flowerData[previousSegmentIndex];
-                    if (currentSegmentIndex > 0 && previousSegmentData.Progress2 < 1f) {
+                    if (currentSegmentIndex > 0 && previousSegmentData.Progress2 < 0.5f) {
                         continue;
                     }
                     float lerpValue = 0.075f;
                     currentSegmentData.Progress2 = Helper.Approach(currentSegmentData.Progress2, 3f, lerpValue);
-                    if (currentSegmentData.Progress2 >= 1.5f && !currentSegmentData.Released) {
+                    if (currentSegmentData.Progress2 >= 1.5f * attackStartThreshhold && !currentSegmentData.Released) {
                         Vector2 flowerPosition = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * 1.15f;
                         Vector2 velocity = Vector2.UnitY.RotatedBy(Projectile.rotation + MathHelper.Pi);
                         if (Projectile.IsOwnerLocal()) {

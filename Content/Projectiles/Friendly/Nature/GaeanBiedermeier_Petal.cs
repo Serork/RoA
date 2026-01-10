@@ -115,7 +115,10 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
             CopyHandler.MakeCopy(Projectile);
         }
 
-        if (Vector2.Distance(Projectile.Center, _mousePosition) < 100f) {
+        float minDistance2 = TileHelper.TileSize * 6;
+        bool closeToPlayer = Vector2.Distance(Projectile.GetOwnerAsPlayer().GetPlayerCorePoint(), _mousePosition) < minDistance2;
+        if (Vector2.Distance(Projectile.Center, _mousePosition) < minDistance2 || 
+            closeToPlayer) {
             if (!Falling) {
                 _mousePosition += Main.rand.RandomPointInArea(50f);
             }
@@ -130,7 +133,7 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
             Vector2 destination = _mousePosition;
             float distanceToDestination = Vector2.Distance(Projectile.position, destination);
             float minDistance = 60f;
-            float inertiaValue = 30, extraInertiaValue = inertiaValue * 5;
+            float inertiaValue = closeToPlayer ? 15 : 30, extraInertiaValue = inertiaValue * 5;
             float extraInertiaFactor = 1f - MathUtils.Clamp01(distanceToDestination / minDistance);
             float inertia = inertiaValue + extraInertiaValue * extraInertiaFactor;
             Helper.InertiaMoveTowards(ref Projectile.velocity, Projectile.position, destination, inertia: inertia);
