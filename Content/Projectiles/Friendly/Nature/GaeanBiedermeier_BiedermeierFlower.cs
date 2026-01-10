@@ -5,7 +5,6 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Projectiles;
-using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -19,9 +18,6 @@ using System.Linq;
 
 using Terraria;
 using Terraria.ModLoader;
-
-using static RoA.Content.Projectiles.Friendly.Nature.TulipPetalSoul;
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -65,7 +61,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         Third
     }
 
-    private record struct FlowerInfo(FlowerType FlowerType, FlowerLayer FlowerLayer, Vector2 Position, Vector2 Offset, float Rotation, float Progress = 0f, float Progress2 = 0f, bool FacedRight = false, bool Released = false);
+    private record struct FlowerInfo(FlowerType FlowerType, FlowerLayer FlowerLayer, Vector2 Position, Vector2 Offset, float Rotation, float Progress = 0f, float Progress2 = 0f, bool FacedRight = false, bool Released = false) {
+        public readonly Vector2 GetDestinationPoint(Projectile projectile, float rotation) => projectile.Center + Offset.RotatedBy(rotation);
+    }
 
     private FlowerInfo[] _flowerData = null!;
 
@@ -259,7 +257,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 float flowerRotation = currentSegmentData.Rotation,
                       baseRotation = Projectile.rotation;
                 float positionLerpValue = 0.15f;
-                currentSegmentData.Position = Vector2.Lerp(currentSegmentData.Position, Projectile.Center + currentSegmentData.Offset.RotatedBy(baseRotation), positionLerpValue);
+                currentSegmentData.Position = Vector2.Lerp(currentSegmentData.Position, currentSegmentData.GetDestinationPoint(Projectile, baseRotation), positionLerpValue);
                 currentSegmentData.Position += Projectile.GetOwnerAsPlayer().velocity;
                 allProgress += currentSegmentData.Progress;
                 if (currentSegmentIndex > 0 && previousSegmentData.Progress < 0.25f) {
@@ -403,14 +401,17 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             //progress2 *= Utils.GetLerpValue(3f, 2f, progress3, true);
             Vector2 playerCenter = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint() - Projectile.velocity * 10f;
             Vector2 position = Vector2.Lerp(playerCenter, flowerInfo.Position, MathF.Max(0.1f, progress));
+            Vector2 position2 = Vector2.Lerp(playerCenter, flowerInfo.GetDestinationPoint(Projectile, baseRotation), MathF.Max(0.1f, progress));
             Color lightColor2 = Lighting.GetColor(position.ToTileCoordinates());
             Color baseColor = lightColor2 * opacity,
                   flowerColor = baseColor;
             if (flowerInfo.FlowerType >= FlowerType.Perfect1 && flowerInfo.FlowerType <= FlowerType.Perfect3) {
-                flowerColor = TulipPetalSoul.SoulColor2 * opacity;
+                flowerColor = TulipPetalSoul.SoulColor2;
             }
+            flowerColor *= opacity;
             Color stemGlowColor = baseColor with { A = 100 } * 1f;
             stemGlowColor = Color.Lerp(stemGlowColor, baseColor, progress5);
+            stemGlowColor *= opacity;
             DrawInfo drawInfo = new() {
                 Clip = flowerClip,
                 Origin = origin,
@@ -453,9 +454,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 Vector2 stemStartPosition = position,
                         stemEndPosition = playerCenter;
                 stemStartPosition += stemStartPosition.DirectionTo(stemEndPosition) * 10f;
-                if (flowerType == FlowerType.Acalypha) {
-                    stemStartPosition += Vector2.UnitX.RotatedBy(flowerRotation) * -4f * flowerInfo.FacedRight.ToDirectionInt();
-                }
+                //if (flowerType == FlowerType.Acalypha) {
+                //    stemStartPosition += Vector2.UnitX.RotatedBy(flowerRotation) * -4f * flowerInfo.FacedRight.ToDirectionInt();
+                //}
                 Vector2 stemPosition = stemStartPosition;
                 Vector2 stemOrigin = stemClip.BottomCenter();
                 uint seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
@@ -490,155 +491,158 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     stemPosition += velocity * height;
                     index++;
                 }
-                if (flowerType == FlowerType.Custom) {
-                    Texture2D leafTexture = leaf2Texture;
-                    Rectangle leafClip = Utils.Frame(leafTexture, 2, 1, frameX: 0),
-                              leafClip2 = Utils.Frame(leafTexture, 2, 1, frameX: 1);
-                    Vector2 leafStartPosition = position + stemStartPosition.DirectionTo(stemEndPosition) * 10f,
-                            leafEndPosition = stemEndPosition;
-                    Vector2 leafPosition = leafStartPosition;
-                    Vector2 leafOrigin = leafClip.BottomCenter();
-                    seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
-                    index = (int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f);
-                    int attempts2 = 50;
-                    while (attempts2-- > 0) {
-                        if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.75f) {
-                            break;
-                        }
-                        Vector2 velocity = leafPosition.DirectionTo(leafEndPosition);
-                        velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset);
-                        float leafRotation = velocity.ToRotation() - MathHelper.PiOver2;
-                        bool flipped = index % 2 == 0;
-                        SpriteEffects leafFlip = flipped.ToSpriteEffects();
-                        DrawInfo leafDrawInfo = new() {
-                            Clip = leafClip,
-                            Origin = leafOrigin,
-                            Rotation = leafRotation,
-                            ImageFlip = leafFlip,
-                            Color = baseColor,
-                            Scale = scale
-                        };
-                        int offsetDirection = flipped.ToDirectionInt();
-                        bool shouldDraw = MathUtils.PseudoRandRange(ref seedForRandomness, 1f) < 0.35f;
-                        if (shouldDraw) {
-                            batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * -6f * offsetDirection, leafDrawInfo);
-                            batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * offsetDirection, leafDrawInfo with {
-                                Clip = leafClip2
-                            });
-                            if (progress2 >= leafProgressThresholdForGlowing) {
-                                batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * -6f * offsetDirection, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
-                                    Color = stemGlowColor
-                                });
-                                batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * offsetDirection, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
-                                    Color = stemGlowColor,
-                                    Clip = leafClip2
-                                });
-                            }
-                        }
-                        leafPosition += velocity * height;
-                        index++;
-                    }
-                }
-                if (flowerType == FlowerType.Acalypha) {
-                    Texture2D leafTexture = leaf3Texture,
-                              leafTexture_Base = leaf3Texture_Base;
-                    Rectangle leafClip = Utils.Frame(leafTexture, 1, 2, frameY: 0),
-                              leafClip2 = Utils.Frame(leafTexture, 1, 2, frameY: 1);
-                    Vector2 leafStartPosition = position + stemStartPosition.DirectionTo(stemEndPosition) * 10f,
-                            leafEndPosition = stemEndPosition - stemStartPosition.DirectionTo(stemEndPosition) * 10f;
-                    Vector2 leafPosition = leafStartPosition;
-                    Vector2 leafOrigin = leafClip.BottomRight();
-                    seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
-                    index = baseIndex;
-                    int index2 = 0;
-                    int attempts2 = 50;
-                    while (attempts2-- > 0) {
-                        if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.5f) {
-                            break;
-                        }
-                        Vector2 velocity = leafPosition.DirectionTo(leafEndPosition);
-                        velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset);
-                        float leafRotation = velocity.ToRotation() - MathHelper.PiOver2;
-                        bool flipped = index % 4 == 0;
-                        if (flowerInfo.FacedRight) {
-                            flipped = !flipped;
-                        }
-                        SpriteEffects leafFlip = (!flipped).ToSpriteEffects();
-                        DrawInfo leafDrawInfo = new() {
-                            Clip = leafClip,
-                            Origin = leafOrigin,
-                            Rotation = leafRotation,
-                            ImageFlip = leafFlip,
-                            Color = baseColor,
-                            Scale = scale
-                        };
-                        int offsetDirection = flipped.ToDirectionInt();
-                        bool shouldDraw = index2 == 1 || index2 == 2;
-                        if (index > 29) {
-                            shouldDraw = false;
-                        }
-                        if (shouldDraw) {
-                            float offsetValue = -4f;
-                            if (flipped) {
-                                offsetValue = leafClip.Width - 2f;
-                                offsetValue += -4f * flowerInfo.FacedRight.ToDirectionInt();
-                            }
-                            Vector2 offset = Vector2.UnitX.RotatedBy(leafRotation) * offsetValue * offsetDirection;
-                            DrawInfo leafDrawInfo2 = leafDrawInfo;
-                            if (index2 == 1) {
-                                leafDrawInfo2 = leafDrawInfo with {
-                                    Clip = leafClip2
-                                };
-                            }
-                            batch.Draw(leafTexture, leafPosition + offset, leafDrawInfo2);
-                            if (progress2 >= leafProgressThresholdForGlowing) {
-                                batch.Draw(leafTexture_Base, leafPosition + offset, leafDrawInfo2.WithScaleX(stemGlowScaleFactor) with {
-                                    Color = stemGlowColor
-                                });
-                            }
-                        }
-                        if (index2 > 2) {
-                            index2 = 0;
-                        }
-                        leafPosition += velocity * height;
-                        index++;
-                        index2++;
-                    }
-                }
-                if (flowerType <= FlowerType.Perfect3) {
-                    void drawLeafs() {
-                        Texture2D leafTexture = leaf1Texture;
-                        Rectangle leafClip = Utils.Frame(leafTexture, 4, 1, frameX: (byte)stemFrameX);
+                if (progress >= 0.3f) {
+                    if (flowerType == FlowerType.Custom) {
+                        Texture2D leafTexture = leaf2Texture;
+                        Rectangle leafClip = Utils.Frame(leafTexture, 2, 1, frameX: 0),
+                                  leafClip2 = Utils.Frame(leafTexture, 2, 1, frameX: 1);
+                        Vector2 leafStartPosition = position + stemStartPosition.DirectionTo(stemEndPosition) * 10f,
+                                leafEndPosition = stemEndPosition;
+                        Vector2 leafPosition = leafStartPosition;
                         Vector2 leafOrigin = leafClip.BottomCenter();
-                        float leafRotation = stemStartPosition.AngleTo(stemEndPosition) - MathHelper.PiOver2;
-                        SpriteEffects leafFlip = SpriteEffects.None;
-                        Vector2 leafScale = new Vector2(1f, 1f * progress) * scale;
-                        for (int i = 0; i < 2; i++) {
+                        seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
+                        index = (int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f);
+                        int attempts2 = 50;
+                        while (attempts2-- > 0) {
+                            if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.75f) {
+                                break;
+                            }
+                            Vector2 velocity = leafPosition.DirectionTo(leafEndPosition);
+                            velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset);
+                            float leafRotation = velocity.ToRotation() - MathHelper.PiOver2;
+                            bool flipped = index % 2 == 0;
+                            SpriteEffects leafFlip = flipped.ToSpriteEffects();
                             DrawInfo leafDrawInfo = new() {
                                 Clip = leafClip,
                                 Origin = leafOrigin,
                                 Rotation = leafRotation,
                                 ImageFlip = leafFlip,
                                 Color = baseColor,
-                                Scale = leafScale
+                                Scale = scale
                             };
-                            bool flipped = leafFlip == SpriteEffects.None;
-                            Vector2 leafPosition = stemEndPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * flipped.ToDirectionInt();
-                            float yOffset = 10f + MathUtils.PseudoRandRange(ref seedForRandomness, 40f);
-                            leafPosition -= Vector2.UnitY.RotatedBy(leafRotation) * yOffset;
-                            batch.Draw(leafTexture, leafPosition, leafDrawInfo);
-                            if (progress2 >= leafProgressThresholdForGlowing) {
-                                batch.Draw(leafTexture, leafPosition, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
-                                    Color = stemGlowColor
+                            int offsetDirection = flipped.ToDirectionInt();
+                            bool shouldDraw = MathUtils.PseudoRandRange(ref seedForRandomness, 1f) < 0.35f;
+                            if (shouldDraw) {
+                                batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * -6f * offsetDirection, leafDrawInfo);
+                                batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * offsetDirection, leafDrawInfo with {
+                                    Clip = leafClip2
                                 });
+                                if (progress2 >= leafProgressThresholdForGlowing) {
+                                    batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * -6f * offsetDirection, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
+                                        Color = stemGlowColor
+                                    });
+                                    batch.Draw(leafTexture, leafPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * offsetDirection, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
+                                        Color = stemGlowColor,
+                                        Clip = leafClip2
+                                    });
+                                }
                             }
-                            leafFlip = SpriteEffects.FlipHorizontally;
+                            leafPosition += velocity * height;
+                            index++;
                         }
                     }
-                    drawLeafs();
+                    if (flowerType == FlowerType.Acalypha) {
+                        Texture2D leafTexture = leaf3Texture,
+                                  leafTexture_Base = leaf3Texture_Base;
+                        Rectangle leafClip = Utils.Frame(leafTexture, 1, 2, frameY: 0),
+                                  leafClip2 = Utils.Frame(leafTexture, 1, 2, frameY: 1);
+                        Vector2 leafStartPosition = position + stemStartPosition.DirectionTo(stemEndPosition) * 10f,
+                                leafEndPosition = stemEndPosition - stemStartPosition.DirectionTo(stemEndPosition) * 10f;
+                        Vector2 leafPosition = leafStartPosition;
+                        Vector2 leafOrigin = leafClip.BottomRight();
+                        seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
+                        index = baseIndex;
+                        int index2 = 0;
+                        int attempts2 = 50;
+                        while (attempts2-- > 0) {
+                            if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.5f) {
+                                break;
+                            }
+                            Vector2 velocity = leafPosition.DirectionTo(leafEndPosition);
+                            velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset);
+                            float leafRotation = velocity.ToRotation() - MathHelper.PiOver2;
+                            bool flipped = index % 4 == 0;
+                            if (flowerInfo.FacedRight) {
+                                flipped = !flipped;
+                            }
+                            SpriteEffects leafFlip = (!flipped).ToSpriteEffects();
+                            DrawInfo leafDrawInfo = new() {
+                                Clip = leafClip,
+                                Origin = leafOrigin,
+                                Rotation = leafRotation,
+                                ImageFlip = leafFlip,
+                                Color = baseColor,
+                                Scale = scale
+                            };
+                            int offsetDirection = flipped.ToDirectionInt();
+                            bool shouldDraw = index2 == 1 || index2 == 2;
+                            if (index > 29) {
+                                shouldDraw = false;
+                            }
+                            if (shouldDraw) {
+                                float offsetValue = -4f;
+                                if (flipped) {
+                                    offsetValue = leafClip.Width - 2f;
+                                    offsetValue += -4f * flowerInfo.FacedRight.ToDirectionInt();
+                                }
+                                Vector2 offset = Vector2.UnitX.RotatedBy(leafRotation) * offsetValue * offsetDirection;
+                                DrawInfo leafDrawInfo2 = leafDrawInfo;
+                                if (index2 == 1) {
+                                    leafDrawInfo2 = leafDrawInfo with {
+                                        Clip = leafClip2
+                                    };
+                                }
+                                batch.Draw(leafTexture, leafPosition + offset, leafDrawInfo2);
+                                if (progress2 >= leafProgressThresholdForGlowing) {
+                                    batch.Draw(leafTexture_Base, leafPosition + offset, leafDrawInfo2.WithScaleX(stemGlowScaleFactor) with {
+                                        Color = stemGlowColor
+                                    });
+                                }
+                            }
+                            if (index2 > 2) {
+                                index2 = 0;
+                            }
+                            leafPosition += velocity * height;
+                            index++;
+                            index2++;
+                        }
+                    }
+                    if (flowerType <= FlowerType.Perfect3) {
+                        void drawLeafs() {
+                            Texture2D leafTexture = leaf1Texture;
+                            Rectangle leafClip = Utils.Frame(leafTexture, 4, 1, frameX: (byte)stemFrameX);
+                            Vector2 leafOrigin = leafClip.BottomCenter();
+                            float leafRotation = stemStartPosition.AngleTo(stemEndPosition) - MathHelper.PiOver2;
+                            SpriteEffects leafFlip = SpriteEffects.None;
+                            Vector2 leafScale = new Vector2(1f, 1f * progress) * scale;
+                            for (int i = 0; i < 2; i++) {
+                                DrawInfo leafDrawInfo = new() {
+                                    Clip = leafClip,
+                                    Origin = leafOrigin,
+                                    Rotation = leafRotation,
+                                    ImageFlip = leafFlip,
+                                    Color = baseColor,
+                                    Scale = leafScale
+                                };
+                                bool flipped = leafFlip == SpriteEffects.None;
+                                Vector2 leafPosition = stemEndPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * flipped.ToDirectionInt();
+                                float yOffset = 10f + MathUtils.PseudoRandRange(ref seedForRandomness, 40f);
+                                leafPosition -= Vector2.UnitY.RotatedBy(leafRotation) * yOffset;
+                                batch.Draw(leafTexture, leafPosition, leafDrawInfo);
+                                if (progress2 >= leafProgressThresholdForGlowing) {
+                                    batch.Draw(leafTexture, leafPosition, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
+                                        Color = stemGlowColor
+                                    });
+                                }
+                                leafFlip = SpriteEffects.FlipHorizontally;
+                            }
+                        }
+                        drawLeafs();
+                    }
                 }
             }
             drawStem();
+            //position += Vector2.UnitY.RotatedBy(drawInfo.Rotation) * 30f;
             if (!flowerInfo.Released) {
                 batch.Draw(texture, position, drawInfo);
             }
