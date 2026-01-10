@@ -181,8 +181,9 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
             return;
         }
 
+        Color baseColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
         if (FlowerType >= (byte)BiedermeierFlower.FlowerType.Perfect1 && FlowerType <= (byte)BiedermeierFlower.FlowerType.Perfect3) {
-            lightColor = TulipPetalSoul.SoulColor2;
+            baseColor = TulipPetalSoul.SoulColor2;
         }
 
         SpriteBatch batch = Main.spriteBatch;
@@ -201,7 +202,7 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
             }
             var clip2 = Utils.Frame(texture, frameXCount, LOOPANIMATIONFRAMECOUNT, frameX: FlowerType, frameY: copyInfo.UsedFrame);
             batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
-                Color = lightColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f * 0.5f,
+                Color = baseColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f * 0.5f,
                 Rotation = copyInfo.Rotation,
                 Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f),
                 Origin = clip2.Centered(),
@@ -209,12 +210,12 @@ sealed class BiedermeierPetal : NatureProjectile_NoTextureLoad, IRequestAssets, 
             });
         }
 
-        Projectile.QuickDrawShadowTrails(lightColor * Projectile.Opacity * 0.25f, 0.5f, 1, 0f, texture: texture, clip: clip);
+        Projectile.QuickDrawShadowTrails(baseColor * Projectile.Opacity * 0.25f, 0.5f, 1, 0f, texture: texture, clip: clip);
 
         Vector2 origin = clip.Centered();
         float rotation = Projectile.rotation;
         SpriteEffects flip = Projectile.spriteDirection.ToSpriteEffects();
-        Color color = lightColor * Projectile.Opacity;
+        Color color = baseColor * Projectile.Opacity;
         DrawInfo drawInfo = new() {
             Color = color,
             Clip = clip,
