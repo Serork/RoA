@@ -367,9 +367,16 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                                 AI1 = currentSegmentData.Rotation + MathHelper.PiOver2
                             });
                         }
-                        flowerPosition = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * 1.5f;
+                        float offsetModifier = 1.5f;
+                        if (currentSegmentData.FlowerLayer == FlowerLayer.Third) {
+                            offsetModifier = 1.425f;
+                        }
+                        if (currentSegmentData.FlowerLayer == FlowerLayer.Second) {
+                            offsetModifier = 1.4f;
+                        }
+                        flowerPosition = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * offsetModifier;
                         for (int k = 0; k < 6; k++) {
-                            MakeTulipDust(currentSegmentData.FlowerType, flowerPosition, velocity * 0.375f);
+                            MakeTulipDust(currentSegmentData.FlowerType, flowerPosition, velocity * 0.5f);
                         }
                         currentSegmentData.Released = true;
                     }
