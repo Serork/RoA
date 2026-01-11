@@ -27,7 +27,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
     public enum BiedermeierFlowerTextureType : byte {
         Flower,
         Flower_Base,
+        Flower_Base2,
         Stem,
+        Stem_End,
         Leaf1,
         Leaf2,
         Leaf3,
@@ -37,7 +39,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)BiedermeierFlowerTextureType.Flower, ResourceManager.NatureProjectileTextures + "BiedermeierFlower"),
          ((byte)BiedermeierFlowerTextureType.Flower_Base, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Base"),
+         ((byte)BiedermeierFlowerTextureType.Flower_Base2, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Base2"),
          ((byte)BiedermeierFlowerTextureType.Stem, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Stem"),
+         ((byte)BiedermeierFlowerTextureType.Stem_End, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Stem_End"),
          ((byte)BiedermeierFlowerTextureType.Leaf1, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Leaf1"),
          ((byte)BiedermeierFlowerTextureType.Leaf2, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Leaf2"),
          ((byte)BiedermeierFlowerTextureType.Leaf3, ResourceManager.NatureProjectileTextures + "BiedermeierFlower_Leaf3"),
@@ -425,10 +429,12 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         }
 
         Texture2D texture = indexedTextureAssets[(byte)BiedermeierFlowerTextureType.Flower].Value,
-                  texture_Base = indexedTextureAssets[(byte)BiedermeierFlowerTextureType.Flower_Base].Value;
+                  texture_Base = indexedTextureAssets[(byte)BiedermeierFlowerTextureType.Flower_Base].Value,
+                  texture_Base2 = indexedTextureAssets[(byte)BiedermeierFlowerTextureType.Flower_Base2].Value;
         SpriteBatch batch = Main.spriteBatch;
         IEnumerable<FlowerInfo> sortedFlowerData = _flowerData.OrderBy(x => x.Offset.Y);
         Texture2D stemTexture = indexedTextureAssets[(byte)BiedermeierFlowerTextureType.Stem].Value,
+                  stemTexture_End = indexedTextureAssets[(byte)BiedermeierFlowerTextureType.Stem_End].Value,
                   leaf1Texture = indexedTextureAssets[(byte)BiedermeierFlowerTextureType.Leaf1].Value,
                   leaf2Texture = indexedTextureAssets[(byte)BiedermeierFlowerTextureType.Leaf2].Value,
                   leaf3Texture = indexedTextureAssets[(byte)BiedermeierFlowerTextureType.Leaf3].Value,
@@ -556,12 +562,16 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         Color = baseColor,
                         Scale = scale
                     };
-                    batch.Draw(stemTexture, stemPosition, stemDrawInfo);
+                    Texture2D texture = stemTexture;
+                    if (Vector2.Distance(stemPosition, stemEndPosition) < height * 2f) {
+                        texture = stemTexture_End;
+                    }
+                    batch.Draw(texture, stemPosition, stemDrawInfo);
                     //if (progress2 >= progress) 
                     {
-                        float opacity = Utils.GetLerpValue(progress, progress * 1.5f, progress2, true);
-                        batch.Draw(stemTexture, stemPosition, stemDrawInfo.WithScaleX(stemGlowScaleFactor) with {
-                            Color = stemGlowColor * opacity
+                        float opacity2 = Utils.GetLerpValue(progress * 0.75f, progress, progress2, true);
+                        batch.Draw(texture, stemPosition, stemDrawInfo.WithScaleX(stemGlowScaleFactor) with {
+                            Color = stemGlowColor * opacity2
                         });
                     }
                     if (Vector2.Distance(stemPosition, stemEndPosition) < height * 2f) {
@@ -749,8 +759,15 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             if (!flowerInfo.Released) {
                 batch.Draw(texture, position, drawInfo);
             }
-            batch.Draw(texture_Base, position, drawInfo2);
-            if (progress2 >= 1f) {
+            else { 
+                batch.Draw(texture_Base2, position, drawInfo2);
+                if (!flowerInfo.Released && progress2 >= 1f) {
+                    batch.Draw(texture_Base2, position, drawInfo2.WithScaleX(stemGlowScaleFactor) with {
+                        Color = stemGlowColor * 0.5f
+                    });
+                }
+            }
+            if (!flowerInfo.Released && progress2 >= 1f) {
                 batch.Draw(texture_Base, position, drawInfo2.WithScaleX(stemGlowScaleFactor) with {
                     Color = stemGlowColor * 0.5f
                 });
