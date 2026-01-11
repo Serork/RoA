@@ -269,8 +269,8 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     ref FlowerInfo currentSegmentData = ref _flowerData[currentSegmentIndex];
                     float baseRotation = Projectile.rotation;
                     float moveProgress = currentSegmentData.GetMoveProgress(Projectile, baseRotation, out int direction);
-                    float lerpValue = 0.25f * MathUtils.Clamp01(currentSegmentData.Progress);
-                    currentSegmentData.MoveDirectionY = MathHelper.Lerp(currentSegmentData.MoveDirectionY, (Projectile.Center - currentSegmentData.Position).SafeNormalize().Y, lerpValue);
+                    float lerpValue = 0.25f * Ease.CubeOut(MathUtils.Clamp01(currentSegmentData.Progress));
+                    currentSegmentData.MoveDirectionY = MathHelper.Lerp(currentSegmentData.MoveDirectionY, (Projectile.Center - currentSegmentData.Position).SafeNormalize().Y, lerpValue * 2f);
                     moveProgress *= direction * currentSegmentData.MoveDirectionY;
                     float maxValue = 1.25f;
                     moveProgress = Utils.Clamp(moveProgress, -maxValue, maxValue);
