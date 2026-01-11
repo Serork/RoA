@@ -530,7 +530,6 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 float baseIndex = index;
                 int attempts = 100;
                 Vector2 velocity = stemPosition.DirectionTo(stemEndPosition);
-                float scaleFactor = 1f;
                 while (attempts-- > 0) {
                     if (_active) {
                         if (Vector2.Distance(stemPosition, Projectile.Center) > Vector2.Distance(stemPosition, stemEndPosition)) {
@@ -555,7 +554,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         Rotation = stemRotation,
                         ImageFlip = leafFlip,
                         Color = baseColor,
-                        Scale = scale * new Vector2(scaleFactor, 1f)
+                        Scale = scale
                     };
                     batch.Draw(stemTexture, stemPosition, stemDrawInfo);
                     //if (progress2 >= progress) 
