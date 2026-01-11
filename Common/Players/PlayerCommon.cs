@@ -460,7 +460,7 @@ sealed partial class PlayerCommon : ModPlayer {
         HandleBackflip();
         HandleHornetDash();
 
-        FriarLanternEffectStrength = Helper.Approach(FriarLanternEffectStrength, IsFriarLanternBuffEffectActive.ToInt() * 0.625f, !IsFriarLanternBuffEffectActive ? 0.075f : 0.05f);
+        FriarLanternEffectStrength = Helper.Approach(FriarLanternEffectStrength, IsFriarLanternBuffEffectActive.ToInt() * 0.625f, !IsFriarLanternBuffEffectActive ? 0.1f : 0.05f);
     }
 
     public void ResetSocialShadows() {
