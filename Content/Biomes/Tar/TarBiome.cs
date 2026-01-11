@@ -11,6 +11,8 @@ sealed class TarBiome : ModBiome {
 
     public static bool BiomeShouldBeActive => ModContent.GetInstance<TileCount>().TarpitTiles >= 100;
 
+    public override int Music => -1;
+
     public override bool IsBiomeActive(Player player) {
         bool isInBiome = BiomeShouldBeActive;
         return isInBiome;
