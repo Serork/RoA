@@ -241,7 +241,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
 
             int flowerCount = _flowerData.Length;
             if (!_active) {
-                Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, TimeSystem.LogicDeltaTime * 1.5f);
+                Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, TimeSystem.LogicDeltaTime * 2f);
                 if (Projectile.Opacity <= 0f) {
                     Projectile.Kill();
                 }
@@ -253,14 +253,16 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     currentSegmentData.CorePosition += currentSegmentData.ThrowVelocity;
                     currentSegmentData.Position += currentSegmentData.ThrowVelocity;
 
-                    float rotation = currentSegmentData.ThrowVelocity.ToRotation();
-                    int direction = currentSegmentData.ThrowVelocity.X.GetDirection();
-                    float speed = 2f;
-                    currentSegmentData.CorePosition -= Vector2.UnitY.RotatedBy(0f) * speed;
-                    currentSegmentData.Position -= Vector2.UnitY.RotatedBy(MathHelper.PiOver2 * direction) * speed;
+                    currentSegmentData.Progress2 = Helper.Approach(currentSegmentData.Progress2, 0f, 0.1f);
+
+                    //float rotation = currentSegmentData.ThrowVelocity.ToRotation();
+                    //int direction = currentSegmentData.ThrowVelocity.X.GetDirection();
+                    //float speed = 2f;
+                    //currentSegmentData.CorePosition -= Vector2.UnitY.RotatedBy(0f) * speed;
+                    //currentSegmentData.Position -= Vector2.UnitY.RotatedBy(MathHelper.PiOver2 * direction) * speed;
 
                     currentSegmentData.ThrowVelocity *= 0.99f;
-                    currentSegmentData.ThrowVelocity = new Vector2(currentSegmentData.ThrowVelocity.X, currentSegmentData.ThrowVelocity.Y + 0.1f);
+                    currentSegmentData.ThrowVelocity = new Vector2(currentSegmentData.ThrowVelocity.X, currentSegmentData.ThrowVelocity.Y + 0.2f);
                 }
             }
             else {
@@ -371,19 +373,19 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 }
             }
             if (allProgress2 >= 3f * flowerCount) {
-                //if (_active) {
-                //    Player player = Projectile.GetOwnerAsPlayer();
-
-
-                //    for (int i = 0; i < flowerCount; i++) {
-                //        int currentSegmentIndex = i;
-                //        ref FlowerInfo currentSegmentData = ref _flowerData[currentSegmentIndex];
-                //        currentSegmentData.ThrowVelocity = Projectile.velocity.RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloatDirection() * 0.75f) * Main.rand.NextFloat(4f, 6f) * 1.5f;
-                //    }
-                //    //_throwVelocity = Projectile.velocity * 5f;
-                //}
-                //_active = false;
-                Projectile.Kill();
+                if (_active) {
+                    for (int i = 0; i < flowerCount; i++) {
+                        int currentSegmentIndex = i;
+                        ref FlowerInfo currentSegmentData = ref _flowerData[currentSegmentIndex];
+                        currentSegmentData.ThrowVelocity = Projectile.velocity.RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloatDirection() * 0.75f) 
+                            * Main.rand.NextFloat(4f, 6f) * 1f;
+                        currentSegmentData.ThrowVelocity = new Vector2(currentSegmentData.ThrowVelocity.X, currentSegmentData.ThrowVelocity.Y + 1f);
+                        currentSegmentData.Progress2 = Main.rand.NextFloat(1f, 2f);
+                    }
+                    //_throwVelocity = Projectile.velocity * 5f;
+                }
+                _active = false;
+                //Projectile.Kill();
             }
         }
         void addLight() {
@@ -434,7 +436,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         foreach (FlowerInfo flowerInfo in sortedFlowerData) {
             float progress = flowerInfo.Progress;
             float progress2 = flowerInfo.Progress2;
-            progress -= Utils.GetLerpValue(2.5f, 3f, progress2, true);
+            //progress -= Utils.GetLerpValue(2.5f, 3f, progress2, true);
             progress = Ease.CubeOut(progress);
             //progress2 = Ease.CubeInOut(progress2);
             float opacity = Utils.GetLerpValue(0f, 0.2f, progress, true) * Projectile.Opacity;
@@ -452,13 +454,17 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             //flowerColor = Color.Lerp(flowerColor, Color.Black, progress5);
             //flowerClip.Height = (int)(clip.Height * (1f - MathUtils.Clamp01(progress2 - 1f)));
             float stemGlowScaleFactor = 1f + (0.25f * opacity * (1f - progress5));
-            Vector2 flowerScale = scale * (1f + 0.25f * Ease.CubeIn(Utils.GetLerpValue(0.75f, 1.5f, progress2, true)));
+            Vector2 flowerScale = scale * (1f + 0.25f * Ease.CubeIn(Utils.GetLerpValue(0.75f, 1.5f, progress2, true)) * (Utils.GetLerpValue(2.75f, 2f, progress2, true)));
             float progress3 = progress2;
             progress2 = MathUtils.Clamp01(progress2);
             float progress4 = progress2;
             //progress2 *= Utils.GetLerpValue(3f, 2f, progress3, true);
             Vector2 playerCenter = flowerInfo.CorePosition;
             Vector2 position = Vector2.Lerp(playerCenter, flowerInfo.Position, MathF.Max(0.1f, progress));
+            if (!_active) {
+                position = flowerInfo.Position;
+                opacity *= MathUtils.Clamp01(progress2);
+            }
             Vector2 position2 = Vector2.Lerp(playerCenter, flowerInfo.GetDestinationPoint(Projectile, baseRotation), MathF.Max(0.1f, progress));
             Color lightColor2 = Lighting.GetColor(position.ToTileCoordinates());
             Color baseColor = lightColor2 * opacity,
@@ -470,6 +476,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             Color stemGlowColor = baseColor with { A = 100 } * 1f;
             stemGlowColor = Color.Lerp(stemGlowColor, baseColor, progress5);
             stemGlowColor *= opacity;
+            if (!_active) {
+                stemGlowColor *= 0f;
+            }
             DrawInfo drawInfo = new() {
                 Clip = flowerClip,
                 Origin = origin,
@@ -521,15 +530,22 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 float baseIndex = index;
                 int attempts = 100;
                 Vector2 velocity = stemPosition.DirectionTo(stemEndPosition);
+                float scaleFactor = 1f;
                 while (attempts-- > 0) {
-                    if (Vector2.Distance(stemPosition, Projectile.Center) > Vector2.Distance(stemPosition, stemEndPosition)) {
-                        break;
+                    if (_active) {
+                        if (Vector2.Distance(stemPosition, Projectile.Center) > Vector2.Distance(stemPosition, stemEndPosition)) {
+                            break;
+                        }
                     }
-                    if (Vector2.Distance(stemPosition, stemEndPosition) < height * 0.25f) {
-                        break;
+                    else {
+                        if (Vector2.Distance(stemPosition, stemEndPosition) < height * 0.5f) {
+                            break;
+                        }
                     }
                     float moveOffset = 2f * flowerInfo.MoveProgress;
-                    velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset * moveOffset);
+                    if (_active) {
+                        velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset * moveOffset);
+                    }
                     velocity = velocity.RotatedBy(Math.Sin(index3) * sineOffset);
                     float stemRotation = velocity.ToRotation() - MathHelper.PiOver2;
                     SpriteEffects leafFlip = flip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
@@ -539,7 +555,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         Rotation = stemRotation,
                         ImageFlip = leafFlip,
                         Color = baseColor,
-                        Scale = scale
+                        Scale = scale * new Vector2(scaleFactor, 1f)
                     };
                     batch.Draw(stemTexture, stemPosition, stemDrawInfo);
                     //if (progress2 >= progress) 
@@ -548,6 +564,10 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         batch.Draw(stemTexture, stemPosition, stemDrawInfo.WithScaleX(stemGlowScaleFactor) with {
                             Color = stemGlowColor * opacity
                         });
+                    }
+                    if (Vector2.Distance(stemPosition, stemEndPosition) < height * 2f) {
+                        velocity += stemPosition.DirectionTo(stemEndPosition);
+                        velocity = velocity.SafeNormalize();
                     }
                     stemPosition += velocity * height;
                     index++;
@@ -568,14 +588,18 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         int attempts2 = 100;
                         Vector2 velocity2 = leafPosition.DirectionTo(leafEndPosition);
                         while (attempts2-- > 0) {
-                            if (Vector2.Distance(leafPosition, Projectile.Center) > Vector2.Distance(leafPosition, leafEndPosition)) {
-                                break;
+                            if (_active) {
+                                if (Vector2.Distance(leafPosition, Projectile.Center) > Vector2.Distance(leafPosition, leafEndPosition)) {
+                                    break;
+                                }
                             }
-                            if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.75f) {
+                            if (Vector2.Distance(leafPosition, leafEndPosition) < height * 1f) {
                                 break;
                             }
                             float moveOffset = 2f * flowerInfo.MoveProgress;
-                            velocity2 = velocity2.RotatedBy(Math.Sin(index) * sineOffset * moveOffset);
+                            if (_active) {
+                                velocity2 = velocity2.RotatedBy(Math.Sin(index) * sineOffset * moveOffset);
+                            }
                             velocity2 = velocity2.RotatedBy(Math.Sin(index3) * sineOffset);
                             float leafRotation = velocity2.ToRotation() - MathHelper.PiOver2;
                             bool flipped = (int)index % 2 == 0;
@@ -619,24 +643,22 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                                 leafEndPosition = stemEndPosition - stemStartPosition.DirectionTo(stemEndPosition) * 10f;
                         Vector2 leafPosition = leafStartPosition;
                         Vector2 leafOrigin = leafClip.BottomRight();
-                        seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
                         index = baseIndex;
                         index3 = baseIndex3;
                         int index2 = 0;
                         int attempts2 = 100;
                         Vector2 velocity2 = leafPosition.DirectionTo(leafEndPosition);
                         while (attempts2-- > 0) {
-                            if (Vector2.Distance(leafPosition, Projectile.Center) > Vector2.Distance(leafPosition, leafEndPosition)) {
-                                break;
-                            }
-                            if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.75f) {
+                            if (Vector2.Distance(leafPosition, leafEndPosition) < height * 2f) {
                                 break;
                             }
                             float moveOffset = 2f * flowerInfo.MoveProgress;
-                            velocity2 = velocity2.RotatedBy(Math.Sin(index) * sineOffset * moveOffset);
+                            if (_active) {
+                                velocity2 = velocity2.RotatedBy(Math.Sin(index) * sineOffset * moveOffset);
+                            }
                             velocity2 = velocity2.RotatedBy(Math.Sin(index3) * sineOffset);
                             float leafRotation = velocity2.ToRotation() - MathHelper.PiOver2;
-                            bool flipped = index % 4 == 0;
+                            bool flipped = (int)index % 4 == 0;
                             if (flowerInfo.FacedRight) {
                                 flipped = !flipped;
                             }
@@ -702,8 +724,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                                 };
                                 bool flipped = leafFlip == SpriteEffects.None;
                                 Vector2 leafPosition = stemEndPosition + Vector2.UnitX.RotatedBy(leafRotation) * 8f * flipped.ToDirectionInt();
-                                float yOffset = 10f + MathUtils.PseudoRandRange(ref seedForRandomness, 40f);
+                                float yOffset = 10f + MathUtils.PseudoRandRange(ref seedForRandomness, 30f);
                                 leafPosition -= Vector2.UnitY.RotatedBy(leafRotation) * yOffset;
+                                leafPosition += Vector2.UnitY.RotatedBy(leafRotation) * 5f;
                                 batch.Draw(leafTexture, leafPosition, leafDrawInfo);
                                 if (progress2 >= leafProgressThresholdForGlowing) {
                                     batch.Draw(leafTexture, leafPosition, leafDrawInfo.WithScaleX(stemGlowScaleFactor) with {
@@ -720,8 +743,10 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             drawStem();
             //position += Vector2.UnitY.RotatedBy(drawInfo.Rotation) * 30f;
             float moveOffset = 0.5f * flowerInfo.MoveProgress;
-            drawInfo = drawInfo.WithRotation(moveOffset);
-            drawInfo2 = drawInfo2.WithRotation(moveOffset);
+            if (_active) {
+                drawInfo = drawInfo.WithRotation(moveOffset);
+                drawInfo2 = drawInfo2.WithRotation(moveOffset);
+            }
             if (!flowerInfo.Released) {
                 batch.Draw(texture, position, drawInfo);
             }
