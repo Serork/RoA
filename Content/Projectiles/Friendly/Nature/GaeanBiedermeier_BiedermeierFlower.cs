@@ -372,7 +372,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             offsetModifier = 1.425f;
                         }
                         if (currentSegmentData.FlowerLayer == FlowerLayer.Second) {
-                            offsetModifier = 1.4f;
+                            offsetModifier = 1.375f;
                         }
                         flowerPosition = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * offsetModifier;
                         for (int k = 0; k < 6; k++) {
