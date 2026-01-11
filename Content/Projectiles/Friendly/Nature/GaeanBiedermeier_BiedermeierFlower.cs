@@ -369,7 +369,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         }
                         flowerPosition = Projectile.Center + currentSegmentData.Offset.RotatedBy(Projectile.rotation) * 1.5f;
                         for (int k = 0; k < 6; k++) {
-                            MakeTulipDust(currentSegmentData.FlowerType, flowerPosition, velocity * 0.5f);
+                            MakeTulipDust(currentSegmentData.FlowerType, flowerPosition, velocity * 0.375f);
                         }
                         currentSegmentData.Released = true;
                     }
