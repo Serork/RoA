@@ -9,9 +9,6 @@ using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
-using System;
-using System.Collections.Generic;
-
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;

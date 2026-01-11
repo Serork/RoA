@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Druid;
+using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 
@@ -9,6 +10,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 
+[AutoloadGlowMask]
 sealed class GaeanBiedermeier : NatureItem {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(42, 46);

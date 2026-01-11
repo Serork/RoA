@@ -29,4 +29,6 @@ readonly struct DrawInfo() {
     public DrawInfo WithColor(Color color) => this with { Color = Color.MultiplyRGB(color) };
     public DrawInfo WithColorModifier(float colorModifier) => this with { Color = Color * colorModifier };
     public DrawInfo WithColorRGBModifier(float colorModifier) => this with { Color = Color.ModifyRGB(colorModifier) };
+
+    public DrawInfo WithRotation(float rotation) => this with { Rotation = Rotation + rotation };
 }
