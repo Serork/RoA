@@ -467,7 +467,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             //flowerColor = Color.Lerp(flowerColor, Color.Black, progress5);
             //flowerClip.Height = (int)(clip.Height * (1f - MathUtils.Clamp01(progress2 - 1f)));
             float stemGlowScaleFactor = 1f + (0.25f * opacity * (1f - progress5));
-            Vector2 flowerScale = scale * (1f + 0.25f * Ease.CubeIn(Utils.GetLerpValue(0.75f, 1.5f, progress2, true)) * (Utils.GetLerpValue(2.75f, 2f, progress2, true)));
+            Vector2 flowerScale = scale * (1f + 0.25f * Ease.CubeIn(Utils.GetLerpValue(0.75f, 1.5f, progress2, true)) * (Utils.GetLerpValue(2.5f, 2f, progress2, true)));
             float progress3 = progress2;
             progress2 = MathUtils.Clamp01(progress2);
             float progress4 = progress2;
