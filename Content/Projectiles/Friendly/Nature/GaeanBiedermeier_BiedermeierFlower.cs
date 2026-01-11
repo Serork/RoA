@@ -549,10 +549,8 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             break;
                         }
                     }
-                    else {
-                        if (Vector2.Distance(stemPosition, stemEndPosition) < height * 0.5f) {
-                            break;
-                        }
+                    if (Vector2.Distance(stemPosition, stemEndPosition) < height * 0.5f) {
+                        break;
                     }
                     float moveOffset = 2f * flowerInfo.MoveProgress;
                     if (_active) {
