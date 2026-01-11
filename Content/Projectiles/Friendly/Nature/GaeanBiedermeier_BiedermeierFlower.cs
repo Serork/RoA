@@ -269,7 +269,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     ref FlowerInfo currentSegmentData = ref _flowerData[currentSegmentIndex];
                     float baseRotation = Projectile.rotation;
                     float moveProgress = currentSegmentData.GetMoveProgress(Projectile, baseRotation, out int direction);
-                    float lerpValue = 0.25f * Ease.CubeOut(MathUtils.Clamp01(currentSegmentData.Progress));
+                    float lerpValue = 0.25f * Ease.QuintOut(MathUtils.Clamp01(currentSegmentData.Progress));
                     currentSegmentData.MoveDirectionY = MathHelper.Lerp(currentSegmentData.MoveDirectionY, (Projectile.Center - currentSegmentData.Position).SafeNormalize().Y, lerpValue * 2f);
                     moveProgress *= direction * currentSegmentData.MoveDirectionY;
                     float maxValue = 1.25f;
@@ -512,13 +512,12 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 Vector2 stemStartPosition = position,
                         stemEndPosition = playerCenter;
                 stemStartPosition += stemStartPosition.DirectionTo(stemEndPosition) * 10f;
-                //if (flowerType == FlowerType.Acalypha) {
-                //    stemStartPosition += Vector2.UnitX.RotatedBy(flowerRotation) * -4f * flowerInfo.FacedRight.ToDirectionInt();
-                //}
                 Vector2 stemPosition = stemStartPosition;
                 Vector2 stemOrigin = stemClip.BottomCenter();
                 uint seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
-                float index = 2.5f/*(int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f)*/;
+                float index = 2.5f;
+                int index3 = (int)MathUtils.PseudoRandRange(ref seedForRandomness, 100f);
+                int baseIndex3 = index3;
                 float baseIndex = index;
                 int attempts = 100;
                 Vector2 velocity = stemPosition.DirectionTo(stemEndPosition);
@@ -531,6 +530,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     }
                     float moveOffset = 2f * flowerInfo.MoveProgress;
                     velocity = velocity.RotatedBy(Math.Sin(index) * sineOffset * moveOffset);
+                    velocity = velocity.RotatedBy(Math.Sin(index3) * sineOffset);
                     float stemRotation = velocity.ToRotation() - MathHelper.PiOver2;
                     SpriteEffects leafFlip = flip == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
                     DrawInfo stemDrawInfo = new() {
@@ -551,6 +551,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                     }
                     stemPosition += velocity * height;
                     index++;
+                    index3++;
                 }
                 if (progress >= 0.3f) {
                     if (flowerType == FlowerType.Custom) {
@@ -563,6 +564,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         Vector2 leafOrigin = leafClip.BottomCenter();
                         seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
                         index = baseIndex;
+                        index3 = baseIndex3;
                         int attempts2 = 100;
                         Vector2 velocity2 = leafPosition.DirectionTo(leafEndPosition);
                         while (attempts2-- > 0) {
@@ -574,6 +576,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             }
                             float moveOffset = 2f * flowerInfo.MoveProgress;
                             velocity2 = velocity2.RotatedBy(Math.Sin(index) * sineOffset * moveOffset);
+                            velocity2 = velocity2.RotatedBy(Math.Sin(index3) * sineOffset);
                             float leafRotation = velocity2.ToRotation() - MathHelper.PiOver2;
                             bool flipped = (int)index % 2 == 0;
                             SpriteEffects leafFlip = flipped.ToSpriteEffects();
@@ -604,6 +607,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             }
                             leafPosition += velocity2 * height;
                             index++;
+                            index3++;
                         }
                     }
                     if (flowerType == FlowerType.Acalypha) {
@@ -617,6 +621,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         Vector2 leafOrigin = leafClip.BottomRight();
                         seedForRandomness = (uint)((byte)flowerType + flowerInfo.Offset.Length() * 2f);
                         index = baseIndex;
+                        index3 = baseIndex3;
                         int index2 = 0;
                         int attempts2 = 100;
                         Vector2 velocity2 = leafPosition.DirectionTo(leafEndPosition);
@@ -626,6 +631,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             }
                             float moveOffset = 2f * flowerInfo.MoveProgress;
                             velocity2 = velocity2.RotatedBy(Math.Sin(index) * sineOffset * moveOffset);
+                            velocity2 = velocity2.RotatedBy(Math.Sin(index3) * sineOffset);
                             float leafRotation = velocity2.ToRotation() - MathHelper.PiOver2;
                             bool flipped = index % 4 == 0;
                             if (flowerInfo.FacedRight) {
@@ -671,6 +677,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                             leafPosition += velocity2 * height;
                             index++;
                             index2++;
+                            index3++;
                         }
                     }
                     if (flowerType <= FlowerType.Perfect3) {
