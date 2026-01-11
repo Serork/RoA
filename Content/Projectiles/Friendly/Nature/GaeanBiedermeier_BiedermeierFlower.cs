@@ -625,7 +625,10 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                         int index2 = 0;
                         int attempts2 = 100;
                         Vector2 velocity2 = leafPosition.DirectionTo(leafEndPosition);
-                        while (attempts2-- > 0) {  
+                        while (attempts2-- > 0) {
+                            if (Vector2.Distance(leafPosition, Projectile.Center) > Vector2.Distance(leafPosition, leafEndPosition)) {
+                                break;
+                            }
                             if (Vector2.Distance(leafPosition, leafEndPosition) < height * 0.75f) {
                                 break;
                             }
