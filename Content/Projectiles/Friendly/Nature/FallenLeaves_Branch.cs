@@ -216,13 +216,15 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 origin = clip.Centered();
                 rotation = 0f;
                 color = new Color(120, 120, 120, 60) * progress2 * progress3;
+                float scaleFactor = MathUtils.Clamp01(scale.X * 2f);
                 drawInfo = new() {
                     Clip = clip,
                     Origin = origin,
                     Rotation = rotation,
-                    Color = color
+                    Color = color,
+                    Scale = Vector2.One * scaleFactor
                 };
-                batch.Draw(flameTexture, position + new Vector2(Utils.RandomInt(ref seed, -2, 3), Utils.RandomInt(ref seed, -2, 3)), drawInfo);
+                batch.Draw(flameTexture, position + new Vector2(Utils.RandomInt(ref seed, -2, 3), Utils.RandomInt(ref seed, -2, 3)) * scaleFactor, drawInfo);
             }
         }
     }
