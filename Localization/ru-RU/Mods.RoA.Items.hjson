@@ -2661,7 +2661,12 @@ MarineMulcher: {
 
 MinersDelight: {
 	DisplayName: '''"Радость шахтёра"'''
-	// Tooltip: ""
+	/* Tooltip:
+		'''
+		Medium improvements to all stats
+		Provides several random buffs and debuffs
+		'A palate of ups and downs'
+		''' */
 }
 
 GaeanBiedermeier: {

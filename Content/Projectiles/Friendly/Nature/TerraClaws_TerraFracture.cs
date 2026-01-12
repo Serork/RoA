@@ -67,8 +67,11 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
         int x = (int)Projectile.Center.X;
         int y = (int)Projectile.Center.Y;
-        int width = (int)(500 * Projectile.scale * Projectile.ai[0]);
+        int width = (int)(525 * Projectile.scale);
         int height = (int)(350 * Projectile.scale);
+        if (Projectile.ai[0] < 0) {
+            x = (int)(x - width);
+        }
         y -= height / 2;
         if (new Rectangle(x, y, width, height).Intersects(targetHitbox)) {
             return true;
