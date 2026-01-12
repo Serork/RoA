@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.GameContent;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -117,7 +119,25 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 if (currentSegmentIndex > 0 && previousSegmentData.Progress < lerpValue * 2f) {
                     return false;
                 }
-                currentSegmentData.Progress = Helper.Approach(currentSegmentData.Progress, 1f, lerpValue);
+                currentSegmentData.Progress = Helper.Approach(currentSegmentData.Progress, 20f, lerpValue);
+                if (currentSegmentData.Progress < 20f && Main.rand.NextChance(MathUtils.Clamp01(currentSegmentData.Progress - 10f))) {
+                    if (Main.rand.NextBool(3)) {
+                        int size = 20;
+                        Dust dust = Dust.NewDustDirect(currentSegmentData.Position + new Vector2(-2f, 8f) - Vector2.One * size * 0.5f, size, size, DustID.Torch, 0f, 0f, 100);
+                        if (Main.rand.Next(2) == 0) {
+                            dust.noGravity = true;
+                            dust.fadeIn = 1.15f;
+                        }
+                        else {
+                            dust.scale = 0.6f;
+                        }
+
+                        dust.velocity *= 0.6f;
+                        dust.velocity.Y -= 1.2f;
+                        dust.noLight = true;
+                        dust.position.Y -= 4f;
+                    }
+                }
                 return true;
             }
             if (!Reversed) {
@@ -147,6 +167,10 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = indexedTextureAssets[(byte)FallenLeavesRequstedTextureType.Branch].Value;
         int count = _branchData.Length - 1;
+        int[] flameTypes = [326, 327, 328];
+        Main.instance.LoadProjectile(flameTypes[0]);
+        Main.instance.LoadProjectile(flameTypes[1]);
+        Main.instance.LoadProjectile(flameTypes[2]);
         for (int i = 0; i < count; i++) {
             int nextIndex = i + 1,
                 currentIndex = i;
@@ -164,8 +188,12 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
             Vector2 position = currentBranchInfo.Position,
                     nextPosition = nextBranchInfo.Position;
             float rotation = position.AngleTo(nextPosition) + MathHelper.PiOver2;
-            float progress = currentBranchInfo.Progress;
-            Color color = Color.White * progress;
+            float progress = MathUtils.Clamp01(currentBranchInfo.Progress),
+                  progress2 = Utils.GetLerpValue(8f, 10f, currentBranchInfo.Progress , true),
+                  progress3 = Utils.GetLerpValue(20f, 18.5f, currentBranchInfo.Progress, true),
+                  progress4 = Utils.GetLerpValue(20f, 10f, currentBranchInfo.Progress, true);
+            Color baseColor = Color.White;
+            Color color = Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGB(baseColor) * progress * progress3;
             Vector2 scale = new(1f * MathF.Max(0.5f, progress), 1f);
             int scaleThreshhold = 6;
             if (i > count - scaleThreshhold) {
@@ -179,6 +207,22 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 Scale = scale
             };
             batch.Draw(texture, position, drawInfo);
+            ulong seed = (byte)(Main.TileFrameSeed + 1) ^ (((ulong)position.X << 32) | (uint)position.Y);
+            for (int i2 = 0; i2 < 4; i2++) {
+                int flameType = Utils.RandomInt(ref seed, 3);
+                Texture2D flameTexture = TextureAssets.Projectile[flameTypes[flameType]].Value;
+                clip = flameTexture.Bounds;
+                origin = clip.Centered();
+                rotation = 0f;
+                color = new Color(120, 120, 120, 60) * progress2 * progress3;
+                drawInfo = new() {
+                    Clip = clip,
+                    Origin = origin,
+                    Rotation = rotation,
+                    Color = color
+                };
+                batch.Draw(flameTexture, position + new Vector2(Utils.RandomInt(ref seed, -2, 3), Utils.RandomInt(ref seed, -2, 3)), drawInfo);
+            }
         }
     }
 }
