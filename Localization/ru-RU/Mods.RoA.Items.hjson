@@ -2585,7 +2585,7 @@ MoneyNecklace: {
 }
 
 BulbCane: {
-	DisplayName: Вечно свободный
+	DisplayName: '''"Вечно свободный"'''
 	// Tooltip: ""
 }
 
@@ -2605,52 +2605,52 @@ ScholarsDesk: {
 }
 
 BlotchedFish: {
-	// DisplayName: Blotched Fish
+	DisplayName: Чернильная рыба
 	// Tooltip: ""
 }
 
 EmeraldOpaleye: {
-	// DisplayName: Emerald Opaleye
+	DisplayName: Изумрудная гирелла
 	// Tooltip: ""
 }
 
 BoneBroth: {
-	// DisplayName: Bone Broth
+	DisplayName: '''"Бульон на кости"'''
 	// Tooltip: ""
 }
 
 Druidfish: {
-	// DisplayName: Druidfish
+	DisplayName: Рыба-друид
 	// Tooltip: ""
 }
 
 SwimmingStone: {
-	// DisplayName: Swimming Stone
+	DisplayName: '''"Плавучий камень"'''
 	// Tooltip: ""
 }
 
 BrokenBookcase: {
-	// DisplayName: Broken Bookcase
+	DisplayName: Сломанный книжный шкаф
 	// Tooltip: ""
 }
 
 ScholarsGlobe: {
-	// DisplayName: Scholar's Globe
+	DisplayName: Глобус Учёного
 	// Tooltip: ""
 }
 
 ScholarsTelescope: {
-	// DisplayName: Scholar's Telescope
+	DisplayName: Телескоп Учёного
 	// Tooltip: ""
 }
 
 FlakCannon: {
-	// DisplayName: Flak Cannon
+	DisplayName: Зенитный огонь
 	// Tooltip: ""
 }
 
 GraveDanger: {
-	// DisplayName: Grave Danger
+	DisplayName: '''"Смертельная угроза"'''
 	// Tooltip: ""
 }
 
@@ -2660,16 +2660,16 @@ MarineMulcher: {
 }
 
 MinersDelight: {
-	// DisplayName: Miners Delight
+	DisplayName: '''"Радость шахтёра"'''
 	// Tooltip: ""
 }
 
 GaeanBiedermeier: {
-	// DisplayName: Gaean Biedermeier
+	DisplayName: Гейский бидермейер
 	// Tooltip: ""
 }
 
 FallenLeaves: {
-	// DisplayName: Fallen Leaves
+	DisplayName: Опавшие листья
 	// Tooltip: ""
 }
