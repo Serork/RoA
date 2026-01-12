@@ -22,13 +22,16 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
     public override void UpdateAccessory(Player player, bool hideVisual) {
         if (Main.mouseRight && Main.mouseRightRelease) {
             int countToMake = 2;
+            bool direction = false;
             for (int i = 0; i < countToMake; i++) {
-                Vector2 position = player.GetViableMousePosition();
+                Vector2 position = player.Center;
                 ProjectileUtils.SpawnPlayerOwnedProjectile<FallenLeavesBranch>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_FromThis()) {
                     Position = position,
-                    AI0 = Main.rand.NextBool().ToInt(),
-                    AI2 = i / (float)countToMake * Main.rand.NextFloat(0.5f, 1f)
+                    AI0 = direction.ToInt(),
+                    AI1 = Main.rand.NextFloat(0.5f, 1.5f),
+                    AI2 = 0f
                 });
+                direction = !direction;
             }
         }
     }
