@@ -120,7 +120,8 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                     return false;
                 }
                 currentSegmentData.Progress = Helper.Approach(currentSegmentData.Progress, 20f, lerpValue);
-                if (currentSegmentData.Progress < 20f && Main.rand.NextChance(MathUtils.Clamp01(currentSegmentData.Progress - 10f))) {
+                bool start = currentSegmentIndex == 0;
+                if (!start && currentSegmentData.Progress < 20f && Main.rand.NextChance(MathUtils.Clamp01(currentSegmentData.Progress - 10f))) {
                     if (Main.rand.NextBool(3)) {
                         int size = 20;
                         Dust dust = Dust.NewDustDirect(currentSegmentData.Position + new Vector2(-2f, 8f) - Vector2.One * size * 0.5f, size, size, DustID.Torch, 0f, 0f, 100);
@@ -180,7 +181,8 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
             BranchInfo currentBranchInfo = _branchData[currentIndex],
                        nextBranchInfo = _branchData[nextIndex];
             int frameY = currentBranchInfo.FrameY;
-            if (currentIndex == 0) {
+            bool start = currentIndex == 0;
+            if (start) {
                 frameY = 3;
             }
             Rectangle clip = Utils.Frame(texture, 1, 4, frameY: frameY);
@@ -193,7 +195,9 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                   progress3 = Utils.GetLerpValue(20f, 18.5f, currentBranchInfo.Progress, true),
                   progress4 = Utils.GetLerpValue(20f, 10f, currentBranchInfo.Progress, true);
             Color baseColor = Color.White;
-            baseColor = Color.Lerp(baseColor, Color.Lerp(Color.White, Color.Black, 0.5f), 1f - progress4);
+            if (!start) {
+                baseColor = Color.Lerp(baseColor, Color.Lerp(Color.White, Color.Black, 0.5f), 1f - progress4);
+            }
             Color color = Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGB(baseColor) * progress * progress3;
             Vector2 scale = new(1f * MathF.Max(0.5f, progress), 1f);
             int scaleThreshhold = 6;
@@ -209,22 +213,24 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
             };
             batch.Draw(texture, position, drawInfo);
             ulong seed = (byte)(Main.TileFrameSeed + 1) ^ (((ulong)position.X << 32) | (uint)position.Y);
-            for (int i2 = 0; i2 < 4; i2++) {
-                int flameType = Utils.RandomInt(ref seed, 3);
-                Texture2D flameTexture = TextureAssets.Projectile[flameTypes[flameType]].Value;
-                clip = flameTexture.Bounds;
-                origin = clip.Centered();
-                rotation = 0f;
-                color = new Color(120, 120, 120, 60) * progress2 * progress3;
-                float scaleFactor = MathUtils.Clamp01(scale.X * 2f);
-                drawInfo = new() {
-                    Clip = clip,
-                    Origin = origin,
-                    Rotation = rotation,
-                    Color = color,
-                    Scale = Vector2.One * scaleFactor
-                };
-                batch.Draw(flameTexture, position + new Vector2(Utils.RandomInt(ref seed, -2, 3), Utils.RandomInt(ref seed, -2, 3)) * scaleFactor, drawInfo);
+            if (!start) {
+                for (int i2 = 0; i2 < 4; i2++) {
+                    int flameType = Utils.RandomInt(ref seed, 3);
+                    Texture2D flameTexture = TextureAssets.Projectile[flameTypes[flameType]].Value;
+                    clip = flameTexture.Bounds;
+                    origin = clip.Centered();
+                    rotation = 0f;
+                    color = new Color(120, 120, 120, 60) * progress2 * progress3;
+                    float scaleFactor = MathUtils.Clamp01(scale.X * 2f);
+                    drawInfo = new() {
+                        Clip = clip,
+                        Origin = origin,
+                        Rotation = rotation,
+                        Color = color,
+                        Scale = Vector2.One * scaleFactor
+                    };
+                    batch.Draw(flameTexture, position + new Vector2(Utils.RandomInt(ref seed, -2, 3), Utils.RandomInt(ref seed, -2, 3)) * scaleFactor, drawInfo);
+                }
             }
         }
     }
