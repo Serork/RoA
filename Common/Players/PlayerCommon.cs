@@ -58,6 +58,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool DrawJokeVisor;
 
+    public bool IsFallenLeavesEffectActive;
+
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
 
@@ -526,6 +528,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsFallenLeavesEffectActive = false;
+
         DrawJokeVisor = false;
 
         IsFriarLanternBuffEffectActive = false;

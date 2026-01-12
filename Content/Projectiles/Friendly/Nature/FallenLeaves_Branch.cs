@@ -189,7 +189,7 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                     currentSegmentData.Destroyed = true;
                 }
                 bool shouldBurn = ShouldBurn && currentSegmentIndex < count - 3;
-                if (shouldBurn && currentSegmentData.Progress < 20f && Main.rand.NextChance(MathUtils.Clamp01(currentSegmentData.Progress - 10f))) {
+                if (shouldBurn && currentSegmentData.Progress < 20f && Main.rand.NextChance(MathUtils.Clamp01((currentSegmentData.Progress - 10f) * 3))) {
                     if (Main.rand.NextBool(3)) {
                         Dust dust = Dust.NewDustDirect(position + Vector2.UnitY * 8f - Vector2.One * size * 0.5f, size, size, DustID.Torch, 0f, 0f, 100);
                         if (Main.rand.Next(2) == 0) {
@@ -222,9 +222,22 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 }
             }
         }
+        void killItself() {
+            int count = _branchData.Length;
+            int destroyedCount = 0;
+            for (int i = 0; i < count; i++) {
+                if (_branchData[i].Destroyed) {
+                    destroyedCount++;
+                }
+            }
+            if (destroyedCount >= count) {
+                Projectile.Kill();
+            }
+        }
 
         init();
         handleBodyPoints();
+        killItself();
     }
 
     protected override void Draw(ref Color lightColor) {

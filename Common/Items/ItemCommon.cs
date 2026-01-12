@@ -9,6 +9,14 @@ namespace RoA.Common.Items;
 sealed partial class ItemCommon : GlobalItem {
     public override bool InstancePerEntity => true;
 
+    public delegate void UseItemDelegate(Item item, Player player);
+    public static event UseItemDelegate UseItemEvent = null!;
+    public override bool? UseItem(Item item, Player player) {
+        UseItemEvent?.Invoke(item, player);
+
+        return base.UseItem(item, player);
+    }
+
     public override void SetStaticDefaults() {
         VanillaSkullSetStaticDefaults();
 
