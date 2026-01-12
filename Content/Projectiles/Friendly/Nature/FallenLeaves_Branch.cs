@@ -193,6 +193,7 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                   progress3 = Utils.GetLerpValue(20f, 18.5f, currentBranchInfo.Progress, true),
                   progress4 = Utils.GetLerpValue(20f, 10f, currentBranchInfo.Progress, true);
             Color baseColor = Color.White;
+            baseColor = Color.Lerp(baseColor, Color.Lerp(Color.White, Color.Black, 0.5f), 1f - progress4);
             Color color = Lighting.GetColor(position.ToTileCoordinates()).MultiplyRGB(baseColor) * progress * progress3;
             Vector2 scale = new(1f * MathF.Max(0.5f, progress), 1f);
             int scaleThreshhold = 6;
