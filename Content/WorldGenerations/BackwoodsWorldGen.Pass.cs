@@ -4586,7 +4586,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         //CenterX = GenVars.JungleX;
 
-        int num785 = 500;
+        int num785 = 400;
         var genRand = WorldGen.genRand;
         int num778 = Main.maxTilesX;
         int num779 = 0;

@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Enums;
@@ -14,5 +17,19 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
         Item.SetSizeValues(38, 40);
 
         Item.SetShopValues(ItemRarityColor.Lime7, Item.buyPrice());
+    }
+
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        if (Main.mouseRight && Main.mouseRightRelease) {
+            int countToMake = 2;
+            for (int i = 0; i < countToMake; i++) {
+                Vector2 position = player.GetViableMousePosition();
+                ProjectileUtils.SpawnPlayerOwnedProjectile<FallenLeavesBranch>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_FromThis()) {
+                    Position = position,
+                    AI0 = Main.rand.NextBool().ToInt(),
+                    AI2 = i / (float)countToMake * Main.rand.NextFloat(0.5f, 1f)
+                });
+            }
+        }
     }
 }
