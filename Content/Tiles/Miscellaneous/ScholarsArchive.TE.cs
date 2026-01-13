@@ -242,7 +242,7 @@ sealed class ScholarsArchiveTE : ModTileEntity {
     }
 
     public override void LoadData(TagCompound tag) {
-        SpellTomes = (ArchiveSpellTomeType)tag.GetAsShort(ARCHIVEKEY);
+        SpellTomes = (ArchiveSpellTomeType)tag.GetShort(ARCHIVEKEY);
     }
 
     public override void NetSend(BinaryWriter writer) {
