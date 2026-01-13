@@ -156,41 +156,54 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 Vector2 position = currentSegmentData.Position,
                         nextPosition = previousSegmentData.Position;
                 float rotation = position.AngleTo(nextPosition);
-                position -= Vector2.UnitX.RotatedBy(rotation) * 10f;
+                if (currentSegmentIndex > 0) {
+                    position -= Vector2.UnitX.RotatedBy(rotation) * 10f;
+                }
                 float to = 20f;
                 currentSegmentData.Progress = Helper.Approach(currentSegmentData.Progress, to, lerpValue);
                 int size = 20;
                 Vector2 offset = new(-2f, 0f);
                 position += offset;
+                bool notEnd = currentSegmentIndex < count - 3;
                 if (currentSegmentData.Progress >= to) {
                     // spawn dusts
                     if (!currentSegmentData.Destroyed) {
-                        if (!ShouldBurn) {
-                            if (!Main.dedServ) {
-                                int gore = Gore.NewGore(Projectile.GetSource_FromAI(), position + Main.rand.NextVector2Circular(size, size) * 0.25f,
-                                    Vector2.Zero, $"FallenLeavesBranchGore{(byte)Main.rand.Next(3) + 1}".GetGoreType());
-                                Main.gore[gore].velocity *= 0.5f;
-                                Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
-                                Main.gore[gore].position -= new Vector2(Main.gore[gore].Width, Main.gore[gore].Height) / 2f;
-                                Main.gore[gore].rotation = MathHelper.TwoPi * Main.rand.NextFloat();
+                        if (notEnd) {
+                            if (!ShouldBurn && Main.rand.NextBool(3)) {
+                                if (!Main.dedServ) {
+                                    int gore = Gore.NewGore(Projectile.GetSource_FromAI(), position + Main.rand.NextVector2Circular(size, size) * 0.25f,
+                                        Vector2.Zero, $"FallenLeavesBranchGore{(byte)Main.rand.Next(3) + 1}".GetGoreType());
+                                    Main.gore[gore].velocity *= 0.5f;
+                                    Main.gore[gore].velocity.Y = MathF.Abs(Main.gore[gore].velocity.Y);
+                                    Main.gore[gore].position -= new Vector2(Main.gore[gore].Width, Main.gore[gore].Height) / 2f;
+                                    Main.gore[gore].rotation = MathHelper.TwoPi * Main.rand.NextFloat();
+                                }
                             }
-                        }
-                        for (int k = 0; k < 3; k++) {
-                            float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
-                            Dust dust = Main.dust[Dust.NewDust(position - Vector2.One * size * 0.5f, size, size, ModContent.DustType<FallenLeavesBranchDust>(), 0f, 0f, Main.rand.Next(100),
-                                ShouldBurn ? Color.Lerp(Color.White, Color.Black, 0.25f) : default, dustScale)];
-                            dust.noGravity = true;
-                            dust.fadeIn = 0.5f;
-                            dust.noLight = true;
-                            dust.velocity *= 0.5f;
-                            dust.velocity *= Main.rand.NextFloat(0.5f, 1f);
+                            for (int k = 0; k < (!ShouldBurn ? 5 : 3); k++) {
+                                float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
+                                Dust dust = Main.dust[Dust.NewDust(position - Vector2.One * size * 0.5f, size, size, ModContent.DustType<FallenLeavesBranchDust>(), 0f, 0f, Main.rand.Next(100),
+                                    ShouldBurn ? Color.Lerp(Color.White, Color.Black, 0.25f) : default, dustScale)];
+                                dust.noGravity = true;
+                                dust.fadeIn = 0.5f;
+                                dust.noLight = true;
+                                dust.velocity *= 0.5f;
+                                dust.velocity *= Main.rand.NextFloat(0.5f, 1f);
+                            }
                         }
                     }
                     currentSegmentData.Destroyed = true;
                 }
-                bool shouldBurn = ShouldBurn && currentSegmentIndex < count - 3;
+                bool shouldBurn = ShouldBurn && notEnd;
+                if (shouldBurn) {
+                    float progress = MathUtils.Clamp01(currentSegmentData.Progress),
+                          progress2 = Utils.GetLerpValue(8f, 10f, currentSegmentData.Progress, true),
+                          progress3 = Utils.GetLerpValue(20f, 18.5f, currentSegmentData.Progress, true),
+                          progress4 = Utils.GetLerpValue(20f, 10f, currentSegmentData.Progress, true);
+                    float opacity = progress2 * progress3;
+                    Lighting.AddLight((int)position.X / 16, (int)position.Y / 16, 0.9f * opacity, 0.6f * opacity, 0.2f * opacity);
+                }
                 if (shouldBurn && currentSegmentData.Progress < 20f && Main.rand.NextChance(MathUtils.Clamp01((currentSegmentData.Progress - 10f) * 3))) {
-                    if (Main.rand.NextBool(3)) {
+                    if (Main.rand.NextBool(7)) {
                         Dust dust = Dust.NewDustDirect(position + Vector2.UnitY * 8f - Vector2.One * size * 0.5f, size, size, DustID.Torch, 0f, 0f, 100);
                         if (Main.rand.Next(2) == 0) {
                             dust.noGravity = true;
