@@ -235,8 +235,8 @@ sealed class ScholarStructure : IInitializer {
         for (int i = origin.X - 30; i < origin.X + sizeX * 3 + 30; i++) {
             for (int j = origin.Y - 30; j < origin.Y + sizeY * 3 + 30; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                int chance = 25;
-                chance += (int)((float)(j - Main.rockLayer) / (GenVars.lavaLine - 100 - Main.rockLayer) * 20);
+                int chance = 30;
+                chance += (int)((float)(j - Main.rockLayer) / (GenVars.lavaLine - 100 - Main.rockLayer) * 25);
                 if (tile.HasTile && (tile.TileType == PLACEHOLDERTILETYPE || tile.TileType == PLACEHOLDERTILETYPE2)) {
                     if (genRand.NextBool(chance)) {
                         WorldGen.TileRunner(i, j, genRand.Next(2, 6), genRand.Next(2, 40), TileID.Dirt, addTile: false, overRide: true);
