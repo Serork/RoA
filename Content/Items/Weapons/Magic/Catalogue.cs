@@ -88,7 +88,7 @@ sealed class Catalogue : GlobalItem {
 
     public override bool InstancePerEntity => true;
 
-    public override bool AppliesToEntity(Item entity, bool lateInstantiation) => true/*ScholarsArchiveTE.IsSpellTome(entity.type)*/;
+    public override bool AppliesToEntity(Item entity, bool lateInstantiation) => ScholarsArchiveTE.IsSpellTome(entity.type);
 
     public void InitializeWith(ScholarsArchiveTE scholarsArchiveTE) {
         SpellTomeItemTypes = ScholarsArchiveTE.GetSpellTomeItemTypes(scholarsArchiveTE);
@@ -152,13 +152,8 @@ sealed class Catalogue : GlobalItem {
     }
 
     public override void SaveData(Item item, TagCompound tag) {
-        if (!ScholarsArchiveTE.IsSpellTome(item.type)) {
-            return;
-        }
-        if (Initialized) {
-            tag[ULTIMATESPELLTOMEKEY + "initialized"] = true;
-        }
-        else {
+        tag[ULTIMATESPELLTOMEKEY + "initialized"] = Initialized;
+        if (!Initialized) {
             return;
         }
 
@@ -172,15 +167,13 @@ sealed class Catalogue : GlobalItem {
             tag[ULTIMATESPELLTOMEKEY + "active"] = true;
         }
         if (HasSpells) {
-            tag[ULTIMATESPELLTOMEKEY + "hasnospells"] = HasSpells;
+            tag[ULTIMATESPELLTOMEKEY + "hasnospells"] = true;
         }
     }
 
     public override void LoadData(Item item, TagCompound tag) {
-        if (!ScholarsArchiveTE.IsSpellTome(item.type)) {
-            return;
-        }
-        if (!tag.ContainsKey(ULTIMATESPELLTOMEKEY + "initialized")) {
+        bool initialized = tag.GetBool(ULTIMATESPELLTOMEKEY + "initialized");
+        if (!initialized) {
             return;
         }
 
