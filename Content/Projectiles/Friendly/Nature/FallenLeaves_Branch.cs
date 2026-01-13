@@ -222,7 +222,7 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                             }
                             for (int k = 0; k < (!ShouldBurn ? 5 : 3); k++) {
                                 float dustScale = 0.915f + 0.15f * Main.rand.NextFloat();
-                                Dust dust = Main.dust[Dust.NewDust(position - Vector2.One * size * 0.5f, size, size, ModContent.DustType<FallenLeavesBranchDust>(), 0f, 0f, Main.rand.Next(100),
+                                Dust dust = Main.dust[Dust.NewDust(position - Vector2.UnitY * 2f - Vector2.One * size * 0.5f, size, size, ModContent.DustType<FallenLeavesBranchDust>(), 0f, 0f, Main.rand.Next(100),
                                     ShouldBurn ? Color.Lerp(Color.White, Color.Black, 0.25f) : default, dustScale)];
                                 dust.noGravity = true;
                                 dust.fadeIn = 0.5f;
