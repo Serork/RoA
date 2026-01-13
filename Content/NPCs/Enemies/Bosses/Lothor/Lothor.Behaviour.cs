@@ -850,9 +850,9 @@ sealed partial class Lothor : ModNPC {
         //Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothor = true;
 
         NPC.SetEventFlagCleared(ref DownedBossSystem.DownedLothorBoss, -1);
-        if (Main.netMode == NetmodeID.Server) {
-            NetMessage.SendData(MessageID.WorldData);
-        }
+        //if (Main.netMode == NetmodeID.Server) {
+        //    NetMessage.SendData(MessageID.WorldData);
+        //}
 
         if (CanDropFlederSlayer) {
             ModContent.GetInstance<DefeatEnragedLothor>().KillEnragedLothorCondition.Complete();

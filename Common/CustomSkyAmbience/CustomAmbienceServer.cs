@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.GameContent.Ambience;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -17,8 +18,16 @@ sealed class CustomAmbienceServer : ILoadable {
         WorldGen.Hooks.OnWorldLoad += delegate {
             customAmbienceServer = new CustomAmbienceServer();
         };
-        On_AmbienceServer.Update += On_AmbienceServer_Update;
+        //On_AmbienceServer.Update += On_AmbienceServer_Update;
+        On_BackgroundChangeFlashInfo.UpdateFlashValues += On_BackgroundChangeFlashInfo_UpdateFlashValues;
         On_AmbienceServer.IsSunnyDay += On_AmbienceServer_IsSunnyDay;
+    }
+
+    private void On_BackgroundChangeFlashInfo_UpdateFlashValues(On_BackgroundChangeFlashInfo.orig_UpdateFlashValues orig, BackgroundChangeFlashInfo self) {
+        if ((Main.dedServ || (Main.netMode != 1 && !Main.gameMenu && !Main.gamePaused)) && customAmbienceServer != null)
+            customAmbienceServer.Update();
+
+        orig(self);
     }
 
     private bool On_AmbienceServer_IsSunnyDay(On_AmbienceServer.orig_IsSunnyDay orig) {
@@ -29,13 +38,6 @@ sealed class CustomAmbienceServer : ILoadable {
         //}
 
         return orig();
-    }
-
-    private void On_AmbienceServer_Update(On_AmbienceServer.orig_Update orig, AmbienceServer self) {
-        if ((Main.dedServ || (Main.netMode != NetmodeID.MultiplayerClient && !Main.gameMenu && !Main.gamePaused)) && customAmbienceServer != null)
-            customAmbienceServer.Update();
-
-        orig(self);
     }
 
     public void Unload() {

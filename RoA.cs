@@ -5,6 +5,7 @@ using MonoMod.RuntimeDetour;
 using ReLogic.Content.Sources;
 
 using RoA.Common.Crossmod;
+using RoA.Common.CustomSkyAmbience;
 using RoA.Common.Networking;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons.Druidic;
@@ -15,7 +16,9 @@ using System.IO;
 using System.Reflection;
 
 using Terraria;
+using Terraria.Initializers;
 using Terraria.ModLoader;
+using Terraria.Net;
 
 namespace RoA;
 
@@ -45,6 +48,13 @@ sealed partial class RoA : Mod {
                 _fenethsWreathTextureForRecipeBrowser = Helper.ResizeImage(ModContent.Request<Texture2D>(ItemLoader.GetItem(ModContent.ItemType<FenethsBlazingWreath>()).Texture, ReLogic.Content.AssetRequestMode.ImmediateLoad), 24, 24);
             });
         }
+
+        On_NetworkInitializer.Load += On_NetworkInitializer_Load;
+    }
+
+    private void On_NetworkInitializer_Load(On_NetworkInitializer.orig_Load orig) {
+        orig();
+        //NetManager.Instance.Register<CustomNetAmbienceModule>();
     }
 
     public override void PostSetupContent() {
@@ -57,6 +67,8 @@ sealed partial class RoA : Mod {
         DoBossChecklistIntegration();
         DoMusicDisplayIntegration();
         DoRecipeBrowserIntergration();
+
+        NetManager.Instance.Register<CustomNetAmbienceModule>();
     }
 
     public override object Call(params object[] args) => DruidModCalls.Call(args);
