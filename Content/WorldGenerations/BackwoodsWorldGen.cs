@@ -108,6 +108,42 @@ sealed class BackwoodsWorldGen : ModSystem {
         On_WorldGen.Convert_int_int_int_int_bool_bool += On_WorldGen_Convert_int_int_int_int_bool_bool;
         On_WorldGen.PaintTheLivingTrees += On_WorldGen_PaintTheLivingTrees;
         On_WorldGen.NotTheBees += On_WorldGen_NotTheBees;
+        On_WorldGen.ShimmerMakeBiome += On_WorldGen_ShimmerMakeBiome;
+    }
+
+    private bool On_WorldGen_ShimmerMakeBiome(On_WorldGen.orig_ShimmerMakeBiome orig, int X, int Y) {
+        var genRand = WorldGen.genRand;
+        int num = genRand.Next(2);
+        double num2 = 0.6;
+        double num3 = 1.3;
+        double num4 = 0.3;
+        if (num == 0) {
+            num2 = 0.55;
+            num3 = 2.0;
+        }
+
+        num2 *= 1.05 - genRand.NextDouble() * 0.1;
+        num3 *= 1.05 - genRand.NextDouble() * 0.1;
+        num4 *= 1.0 - genRand.NextDouble() * 0.1;
+        int num5 = genRand.Next(105, 125);
+        int num6 = (int)((double)num5 * num4);
+        int num7 = (int)((double)num5 * num2);
+        int num8 = genRand.Next(9, 13);
+        int num9 = X - num5;
+        int num10 = X + num5;
+        int num11 = Y - num5;
+        int num12 = Y + num5;
+        for (int i = num11; i <= num12; i++) {
+            for (int j = num9; j <= num10; j++) {
+                if (!WorldGen.InWorld(j, i, 50))
+                    return false;
+
+                if (Main.tile[j, i].TileType == ModContent.TileType<BackwoodsStone>())
+                    return false;
+            }
+        }
+
+        return orig(X, Y);
     }
 
     private void On_WorldGen_Convert_int_int_int_int_bool_bool(On_WorldGen.orig_Convert_int_int_int_int_bool_bool orig, int i, int j, int conversionType, int size, bool tiles, bool walls) {

@@ -426,6 +426,18 @@ sealed class ScholarStructure : IInitializer {
             if (tile.TileType == TileID.Tables ||
                 tile.TileType == TileID.Tables2) {
                 if (genRand.NextChance(0.375f)) {
+                    Tile tile2 = Framing.GetTileSafely(i, j - 2);
+                    tile2.HasTile = true;
+                    tile2.TileFrameY = (short)0;
+                    tile2.TileFrameX = (short)0;
+                    tile2.TileType = (ushort)ModContent.TileType<QuillStand>();
+                    tile2 = Framing.GetTileSafely(i, j - 1);
+                    tile2.HasTile = true;
+                    tile2.TileFrameY = (short)(0 + 18);
+                    tile2.TileFrameX = (short)0;
+                    tile2.TileType = (ushort)ModContent.TileType<QuillStand>();
+                }
+                else if (genRand.NextChance(0.375f)) {
                     Tile tile2 = Main.tile[i, j - 1];
                     tile2.HasTile = true;
                     tile2.TileType = TileID.Bottles;

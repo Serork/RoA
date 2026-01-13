@@ -2678,3 +2678,8 @@ FallenLeaves: {
 	DisplayName: Опавшие листья
 	// Tooltip: ""
 }
+
+QuillStand: {
+	// DisplayName: Quill Stand
+	// Tooltip: ""
+}

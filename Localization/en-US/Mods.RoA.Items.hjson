@@ -2652,3 +2652,8 @@ FallenLeaves: {
 	DisplayName: Fallen Leaves
 	Tooltip: ""
 }
+
+QuillStand: {
+	DisplayName: Quill Stand
+	Tooltip: ""
+}
