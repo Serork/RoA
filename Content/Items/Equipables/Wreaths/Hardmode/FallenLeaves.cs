@@ -2,6 +2,7 @@
 
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -20,6 +21,34 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
 
     public override void Load() {
         ItemCommon.UseItemEvent += ItemCommon_UseItemEvent;
+        PlayerCommon.PreItemCheckEvent += PlayerCommon_PreItemCheckEvent;
+    }
+
+    private void PlayerCommon_PreItemCheckEvent(Player player) {
+        if (!player.IsLocal()) {
+            return;
+        }
+
+        if (!player.GetCommon().IsFallenLeavesEffectActive) {
+            return;
+        }
+
+        if (!player.GetCommon().CanSpawnFallenLeavesBranch) {
+            return;
+        }
+
+        if (!player.HasProjectile<FallenLeavesSprout>()) {
+            int direction = -1;
+            for (int i = 0; i < 2; i++) {
+                Vector2 position = player.Center,
+                        velocity = -Vector2.UnitY.RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloat(0.5f, 1f) * direction);
+                ProjectileUtils.SpawnPlayerOwnedProjectile<FallenLeavesSprout>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_FromThis()) {
+                    Position = position,
+                    Velocity = velocity
+                });
+                direction = 1;
+            }
+        }
     }
 
     private void ItemCommon_UseItemEvent(Item item, Player player) {

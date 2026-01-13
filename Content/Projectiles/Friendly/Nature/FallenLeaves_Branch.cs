@@ -206,7 +206,7 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 Vector2 offset = new(-2f, 0f);
                 position += offset;
                 bool notEnd = currentSegmentIndex < count - 3;
-                if (currentSegmentData.Progress >= to * 0.965f) {
+                if (currentSegmentData.Progress >= to * 0.98f) {
                     // spawn dusts
                     if (!currentSegmentData.SpawnedDusts) {
                         if (notEnd) {
