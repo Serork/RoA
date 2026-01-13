@@ -47,7 +47,7 @@ sealed class Catalogue : GlobalItem {
 
     public byte CurrentSpellTomeIndex { get; private set; }
 
-    public int CurrentSpellTomeItemType =>  SpellTomeItemTypes[CurrentSpellTomeIndex];
+    public int CurrentSpellTomeItemType => SpellTomeItemTypes[CurrentSpellTomeIndex];
     public int SpellTomeCount => SpellTomeItemTypes.Length;
 
     public bool Initialized => SpellTomeItemTypes != null;
@@ -155,6 +155,12 @@ sealed class Catalogue : GlobalItem {
         if (!ScholarsArchiveTE.IsSpellTome(item.type)) {
             return;
         }
+        if (Initialized) {
+            tag[ULTIMATESPELLTOMEKEY + "initialized"] = true;
+        }
+        else {
+            return;
+        }
 
         tag[ULTIMATESPELLTOMEKEY + "spellitemtypes"] = SpellTomeItemTypes;
         tag[ULTIMATESPELLTOMEKEY + "prefixesperitemtype"] = PrefixesPerItemType;
@@ -172,6 +178,10 @@ sealed class Catalogue : GlobalItem {
 
     public override void LoadData(Item item, TagCompound tag) {
         if (!ScholarsArchiveTE.IsSpellTome(item.type)) {
+            return;
+        }
+
+        if (!tag.ContainsKey(ULTIMATESPELLTOMEKEY + "initialized")) {
             return;
         }
 
