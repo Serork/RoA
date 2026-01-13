@@ -378,6 +378,7 @@ sealed class ScholarStructure : IInitializer {
                 }
             }
         }
+        float chanceForQuill = 0.375f;
         foreach (var tableTilePosition in tableTilePositions) {
             int i = tableTilePosition.X,
                 j = tableTilePosition.Y;
@@ -425,7 +426,7 @@ sealed class ScholarStructure : IInitializer {
             }
             if (tile.TileType == TileID.Tables ||
                 tile.TileType == TileID.Tables2) {
-                if (genRand.NextChance(0.375f)) {
+                if (genRand.NextChance(chanceForQuill)) {
                     Tile tile2 = Framing.GetTileSafely(i, j - 2);
                     tile2.HasTile = true;
                     tile2.TileFrameY = (short)0;
@@ -436,6 +437,7 @@ sealed class ScholarStructure : IInitializer {
                     tile2.TileFrameY = (short)(0 + 18);
                     tile2.TileFrameX = (short)0;
                     tile2.TileType = (ushort)ModContent.TileType<QuillStand>();
+                    chanceForQuill /= 2;
                 }
                 else if (genRand.NextChance(0.375f)) {
                     Tile tile2 = Main.tile[i, j - 1];
@@ -549,7 +551,7 @@ sealed class ScholarStructure : IInitializer {
         for (int i = origin.X - 30; i < origin.X + sizeX * 3 + 30; i++) {
             for (int j = origin.Y - 30; j < origin.Y + sizeY * 3 + 30; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
-                if (tile.HasTile) {
+                if (tile.HasTile && tile.Slope == SlopeType.Solid) {
                     if (tile.TileType == TileID.WoodBlock || tile.TileType == TileID.LivingWood) {
                         bool flag = false;
                         foreach (var holePoint in holePoints) {
