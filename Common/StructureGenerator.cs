@@ -42,11 +42,11 @@ sealed class StructureGenerator : ModSystem {
     private static bool Capturing => Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.X);
 
     public override void PostUpdateInput() {
-        HandleLogic();
+        //HandleLogic();
     }
 
     public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers) {
-        DrawLayout(layers);
+        //DrawLayout(layers);
     }
 
     private void HandleLogic() {
