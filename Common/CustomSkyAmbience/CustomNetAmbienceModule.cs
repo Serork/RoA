@@ -7,14 +7,7 @@ using Terraria.Net;
 
 namespace RoA.Common.CustomSkyAmbience;
 
-sealed class CustomNetAmbienceModule : NetModule, ILoadable {
-    public void Load(Mod mod) {
-        NetManager.Instance.Register<CustomNetAmbienceModule>();
-    }
-
-    public void Unload() {
-    }
-
+sealed class CustomNetAmbienceModule : NetModule {
     public static NetPacket SerializeSkyEntitySpawn(Player player, CustomSkyEntityType type) {
         int value = Main.rand.Next();
         NetPacket result = CreatePacket<CustomNetAmbienceModule>(6);

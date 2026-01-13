@@ -152,17 +152,29 @@ sealed class Catalogue : GlobalItem {
     }
 
     public override void SaveData(Item item, TagCompound tag) {
+        if (!ScholarsArchiveTE.IsSpellTome(item.type)) {
+            return;
+        }
+
         tag[ULTIMATESPELLTOMEKEY + "spellitemtypes"] = SpellTomeItemTypes;
         tag[ULTIMATESPELLTOMEKEY + "prefixesperitemtype"] = PrefixesPerItemType;
         tag[ULTIMATESPELLTOMEKEY + "currentspelltomeindex"] = CurrentSpellTomeIndex;
         tag[ULTIMATESPELLTOMEKEY + "archivecoordsX"] = ArchiveCoords.X;
         tag[ULTIMATESPELLTOMEKEY + "archivecoordsY"] = ArchiveCoords.Y;
         tag[ULTIMATESPELLTOMEKEY + "archivespelltomes"] = (short)ArchiveSpellTomes;
-        tag[ULTIMATESPELLTOMEKEY + "active"] = Active;
-        tag[ULTIMATESPELLTOMEKEY + "hasnospells"] = HasSpells;
+        if (Active) {
+            tag[ULTIMATESPELLTOMEKEY + "active"] = true;
+        }
+        if (HasSpells) {
+            tag[ULTIMATESPELLTOMEKEY + "hasnospells"] = HasSpells;
+        }
     }
 
     public override void LoadData(Item item, TagCompound tag) {
+        if (!ScholarsArchiveTE.IsSpellTome(item.type)) {
+            return;
+        }
+
         SpellTomeItemTypes = tag.GetIntArray(ULTIMATESPELLTOMEKEY + "spellitemtypes");
         PrefixesPerItemType = tag.GetIntArray(ULTIMATESPELLTOMEKEY + "prefixesperitemtype");
         CurrentSpellTomeIndex = tag.GetByte(ULTIMATESPELLTOMEKEY + "currentspelltomeindex");
@@ -170,8 +182,8 @@ sealed class Catalogue : GlobalItem {
               y = tag.GetShort(ULTIMATESPELLTOMEKEY + "archivecoordsY");
         ArchiveCoords = new Point16(x, y);
         ArchiveSpellTomes = (ScholarsArchiveTE.ArchiveSpellTomeType)tag.GetShort(ULTIMATESPELLTOMEKEY + "archivespelltomes");
-        Active = tag.GetBool(ULTIMATESPELLTOMEKEY + "active");
-        HasSpells = tag.GetBool(ULTIMATESPELLTOMEKEY + "hasnospells");
+        Active = tag.ContainsKey(ULTIMATESPELLTOMEKEY + "active");
+        HasSpells = tag.ContainsKey(ULTIMATESPELLTOMEKEY + "hasnospells");
     }
 
     public override void NetSend(Item item, BinaryWriter writer) {

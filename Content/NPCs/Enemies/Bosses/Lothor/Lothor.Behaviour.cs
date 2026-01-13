@@ -296,6 +296,12 @@ sealed partial class Lothor : ModNPC {
 
         ThatThingMakeHimScream();
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.NPCSounds + "LothorNew/LothorDeath"), NPC.Center);
+        if (Main.netMode != NetmodeID.Server) {
+            ModContent.GetInstance<DefeatLothor>().KillLothorCondition.Complete();
+            if (CanDropFlederSlayer) {
+                ModContent.GetInstance<DefeatEnragedLothor>().KillEnragedLothorCondition.Complete();
+            }
+        }
         ActualDeath();
     }
 
@@ -850,20 +856,7 @@ sealed partial class Lothor : ModNPC {
     }
 
     public override void OnKill() {
-        ModContent.GetInstance<DefeatLothor>().KillLothorCondition.Complete();
-        //RoA.CompleteAchievement("DefeatLothor");
-        //Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothor = true;
-
         NPC.SetEventFlagCleared(ref DownedBossSystem.DownedLothorBoss, -1);
-        //if (Main.netMode == NetmodeID.Server) {
-        //    NetMessage.SendData(MessageID.WorldData);
-        //}
-
-        if (CanDropFlederSlayer) {
-            ModContent.GetInstance<DefeatEnragedLothor>().KillEnragedLothorCondition.Complete();
-            //RoA.CompleteAchievement("DefeatLothorEnraged");
-            //Main.LocalPlayer.GetModPlayer<RoAAchievementInGameNotification.RoAAchievementStorage_Player>().DefeatLothorEnraged = true;
-        }
     }
 
     private void Scream() {
