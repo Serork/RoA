@@ -449,6 +449,9 @@ sealed partial class PlayerCommon : ModPlayer {
                 FallenLeavesCounter = FallenLeaves.ATTACKTIME;
             }
         }
+        else {
+            FallenLeavesCounter = 0f;
+        }
     }
 
     public partial void DeerSkullPostUpdateEquips();
