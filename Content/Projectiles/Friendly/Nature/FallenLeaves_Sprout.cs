@@ -44,7 +44,7 @@ sealed class FallenLeavesSprout : ModProjectile {
     public override bool ShouldUpdatePosition() => false;
 
     public override void AI() {
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.125f);
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
