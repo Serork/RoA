@@ -43,9 +43,9 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
             return;
         }
 
-        if (player.HasProjectile<FallenLeavesBranch>()) {
-            return;
-        }
+        //if (player.HasProjectile<FallenLeavesBranch>()) {
+        //    return;
+        //}
 
         //float chance = 1f * player.GetWreathHandler().ActualProgress4;
         //if (Main.rand.NextChance(chance))
@@ -65,7 +65,7 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
             }
         }
 
-        player.GetCommon().FallenLeavesCounter = 0;
+        player.GetCommon().FallenLeavesCounter = 0f;
     }
 
     protected override void SafeSetDefaults() {
