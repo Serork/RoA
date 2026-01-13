@@ -30,6 +30,8 @@ sealed class FallenLeavesSprout : ModProjectile {
         Projectile.hide = true;
 
         Projectile.Opacity = 0f;
+
+        Projectile.manualDirectionChange = true;
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
@@ -48,6 +50,8 @@ sealed class FallenLeavesSprout : ModProjectile {
             Projectile.localAI[0] = 1f;
 
             Projectile.frame = Main.rand.Next(2);
+
+            Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
         }
 
         Player player = Projectile.GetOwnerAsPlayer();
@@ -90,7 +94,7 @@ sealed class FallenLeavesSprout : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDrawAnimated(lightColor, scale: new Vector2(Ease.CubeOut(Projectile.Opacity), Projectile.Opacity));
+        Projectile.QuickDrawAnimated(lightColor, scale: new Vector2(Ease.CubeOut(Projectile.Opacity), MathUtils.Clamp01(Projectile.Opacity * 3f)));
 
         return false;
     }
