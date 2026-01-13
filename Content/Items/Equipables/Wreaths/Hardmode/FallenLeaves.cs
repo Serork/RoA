@@ -14,6 +14,8 @@ using Terraria.Enums;
 namespace RoA.Content.Items.Equipables.Wreaths.Hardmode;
 
 sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
+    public static ushort ATTACKTIME => MathUtils.SecondsToFrames(10);
+
     Color IWreathGlowMask.GlowColor => Color.White;
 
     public override void Load() {
@@ -29,6 +31,10 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
             return;
         }
 
+        if (!player.GetCommon().CanSpawnFallenLeavesBranch) {
+            return;
+        }
+
         if (!player.ItemAnimationJustStarted) {
             return;
         }
@@ -41,8 +47,9 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
             return;
         }
 
-        float chance = 1f * player.GetWreathHandler().ActualProgress4;
-        if (Main.rand.NextChance(chance)) {
+        //float chance = 1f * player.GetWreathHandler().ActualProgress4;
+        //if (Main.rand.NextChance(chance))
+        {
             int countToMake = 2;
             bool direction = false;
             bool wreathIsFull = WreathHandler.IsWreathCharged(player);
@@ -57,6 +64,8 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
                 direction = !direction;
             }
         }
+
+        player.GetCommon().FallenLeavesCounter = 0;
     }
 
     protected override void SafeSetDefaults() {

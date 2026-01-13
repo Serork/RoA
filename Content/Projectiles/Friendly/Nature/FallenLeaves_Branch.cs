@@ -155,17 +155,23 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 }
                 Vector2 position = currentSegmentData.Position,
                         nextPosition = previousSegmentData.Position;
-                float rotation = position.AngleTo(nextPosition);
-                if (currentSegmentIndex > 0) {
-                    position -= Vector2.UnitX.RotatedBy(rotation) * 10f;
+                bool start = currentSegmentIndex == 0;
+                if (start) {
+                    nextPosition = _branchData[currentSegmentIndex + 1].Position;
                 }
+                float rotation = position.AngleTo(nextPosition);
+                float offsetValue = 10f;
+                if (start) {
+                    offsetValue *= -1;
+                }
+                position -= Vector2.UnitX.RotatedBy(rotation) * offsetValue;
                 float to = 20f;
                 currentSegmentData.Progress = Helper.Approach(currentSegmentData.Progress, to, lerpValue);
                 int size = 20;
                 Vector2 offset = new(-2f, 0f);
                 position += offset;
                 bool notEnd = currentSegmentIndex < count - 3;
-                if (currentSegmentData.Progress >= to) {
+                if (currentSegmentData.Progress >= to * 0.975f) {
                     // spawn dusts
                     if (!currentSegmentData.Destroyed) {
                         if (notEnd) {

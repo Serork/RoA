@@ -3,6 +3,7 @@
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
+using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Tiles.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -59,6 +60,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool DrawJokeVisor;
 
     public bool IsFallenLeavesEffectActive;
+    public float FallenLeavesCounter;
+
+    public bool CanSpawnFallenLeavesBranch => FallenLeavesCounter >= FallenLeaves.ATTACKTIME;
 
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
@@ -437,6 +441,13 @@ sealed partial class PlayerCommon : ModPlayer {
             }
 
             Player.slowOgreSpit = Player.dazed = Player.slow = Player.chilled = false;
+        }
+
+        if (IsFallenLeavesEffectActive) {
+            FallenLeavesCounter += 1f * Player.GetWreathHandler().ActualProgress4;
+            if (FallenLeavesCounter > FallenLeaves.ATTACKTIME) {
+                FallenLeavesCounter = FallenLeaves.ATTACKTIME;
+            }
         }
     }
 
