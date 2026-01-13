@@ -31,9 +31,9 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
             return;
         }
 
-        if (!player.GetCommon().CanSpawnFallenLeavesBranch) {
-            return;
-        }
+        //if (!player.GetCommon().CanSpawnFallenLeavesBranch) {
+        //    return;
+        //}
 
         if (!player.ItemAnimationJustStarted) {
             return;
@@ -49,6 +49,20 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
 
         //float chance = 1f * player.GetWreathHandler().ActualProgress4;
         //if (Main.rand.NextChance(chance))
+
+        int damage = 75;
+        if (Main.masterMode) {
+            damage *= 3;
+        }
+        else if (Main.expertMode) {
+            damage *= 2;
+        }
+        float knockBack = 7f;
+
+        int denom = 1;
+        damage /= denom;
+        knockBack /= denom;
+
         {
             int countToMake = 2;
             bool direction = false;
@@ -59,7 +73,9 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
                     Position = position,
                     AI0 = direction.ToInt(),
                     AI1 = Main.rand.NextFloat(0.5f, 1.5f),
-                    AI2 = wreathIsFull.ToInt()
+                    AI2 = wreathIsFull.ToInt(),
+                    Damage = damage,
+                    KnockBack = knockBack
                 });
                 direction = !direction;
             }

@@ -19,10 +19,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ID;
 using Terraria.ModLoader;
-
-using static RoA.Content.Projectiles.Friendly.Nature.CavernCane_Rocks;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 

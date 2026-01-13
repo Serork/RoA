@@ -11,19 +11,20 @@ using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
 
 using Terraria;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets {
+sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomImmunityFrames {
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
+    private static byte HITBOXSIZE => 20;
 
     public enum FallenLeavesRequstedTextureType : byte {
         Branch,
@@ -36,7 +37,18 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
          ((byte)FallenLeavesRequstedTextureType.Burn, ResourceManager.NatureProjectileTextures + "FallenLeaves_Branch_Burn"),
          ((byte)FallenLeavesRequstedTextureType.Glow, ResourceManager.NatureProjectileTextures + "FallenLeaves_Branch_Glow")];
 
-    private record struct BranchSegmentInfo(Vector2 Position, byte FrameY = 0, float Progress = 0f, bool FacedRight = false, bool Destroyed = false, bool ShouldGlow = false, bool SpawnedDusts = false);
+    private record struct BranchSegmentInfo(Vector2 Position, byte FrameY = 0, float Progress = 0f, bool FacedRight = false, bool Destroyed = false, bool ShouldGlow = false, bool SpawnedDusts = false) {
+        public readonly bool CanDamage() {
+            bool result = true;
+            if (Progress < 0.01f) {
+                result = false;
+            }
+            if (Destroyed) {
+                result = false;
+            }
+            return result;
+        }
+    }
 
     private BranchSegmentInfo[] _branchData = null!;
 
@@ -62,12 +74,33 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
     public float ProgressFactor => Projectile.ai[1];
 
     protected override void SafeSetDefaults() {
+        SetNatureValues(Projectile, shouldChargeWreath: false, shouldApplyAttachedItemDamage: false);
+
         Projectile.SetSizeValues(10);
 
         Projectile.friendly = true;
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.tileCollide = false;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
+
+        Projectile.penetrate = -1;
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        foreach (BranchSegmentInfo branchSegmentInfo in _branchData) {
+            Vector2 position = branchSegmentInfo.Position;
+            if (!branchSegmentInfo.CanDamage()) {
+                continue;
+            }
+            if (GeometryUtils.CenteredSquare(position, HITBOXSIZE).Intersects(targetHitbox)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -76,6 +109,8 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
         void init() {
             if (!Init) {
                 Init = true;
+
+                CustomImmunityFramesHandler.Initialize(Projectile, 1);
 
                 int segmentCount = 90;
 
@@ -256,10 +291,45 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 Projectile.Kill();
             }
         }
+        void resetDamageInfo() {
+            if (ShouldBurn) {
+                for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
+                    ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, 0, npcId);
+                    if (immuneTime > 0) {
+                        immuneTime--;
+                    }
+                }
+            }
+        }
+        void damageNPCs() {
+            if (ShouldBurn) {
+                foreach (BranchSegmentInfo branchSegmentInfo in _branchData) {
+                    if (!branchSegmentInfo.CanDamage()) {
+                        continue;
+                    }
+                    float progress2 = Utils.GetLerpValue(8f, 10f, branchSegmentInfo.Progress, true),
+                          progress3 = Utils.GetLerpValue(20f, 18.5f, branchSegmentInfo.Progress, true);
+                    if (progress2 * progress3 < 0.01f) {
+                        continue;
+                    }
+                    Vector2 position = branchSegmentInfo.Position;
+                    foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
+                        if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
+                                                                         ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, 0, npcForCollisionCheck.whoAmI),
+                                                                         collided: (targetHitbox) => GeometryUtils.CenteredSquare(position, HITBOXSIZE).Intersects(targetHitbox),
+                                                                         direction: (position.X - npcForCollisionCheck.Center.X).GetDirection())) {
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
 
         init();
         handleBodyPoints();
         killItself();
+        resetDamageInfo();
+        damageNPCs();
     }
 
     protected override void Draw(ref Color lightColor) {
