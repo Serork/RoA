@@ -80,7 +80,7 @@ sealed class ScholarStructure : IInitializer {
 
         genIndex += 35;
 
-        tasks.Insert(genIndex, new PassLegacy("Scholar Structure", ScholarStructure_Generator, 0.2074f));
+        tasks.Insert(genIndex, new PassLegacy("Scholar's Structure", ScholarStructure_Generator, 0.2074f));
     }
 
     private void ScholarStructure_Generator(GenerationProgress progress, GameConfiguration configuration) {
