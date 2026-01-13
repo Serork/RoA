@@ -87,11 +87,7 @@ sealed partial class RoA : Mod {
             return;
         }
 
-        if (bossChecklistMod.Version < new Version(1, 6)) {
-            return;
-        }
-
-        string internalName = nameof(Lothor);
+        string internalName = "LothorTheWild";
 
         // Value inferred from boss progression, see the wiki for details
         float weight = 6.5f;

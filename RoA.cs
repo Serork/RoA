@@ -3,6 +3,7 @@ using MonoMod.RuntimeDetour;
 using ReLogic.Content.Sources;
 
 using RoA.Common.Crossmod;
+using RoA.Common.CustomSkyAmbience;
 using RoA.Common.Networking;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -12,6 +13,7 @@ using System.Reflection;
 
 using Terraria;
 using Terraria.ModLoader;
+using Terraria.Net;
 
 namespace RoA;
 
@@ -51,6 +53,8 @@ sealed partial class RoA : Mod {
         DoBossChecklistIntegration();
         DoMusicDisplayIntegration();
         DoRecipeBrowserIntergration();
+
+        NetManager.Instance.Register<CustomNetAmbienceModule>();
     }
 
     public override object Call(params object[] args) => DruidModCalls.Call(args);
