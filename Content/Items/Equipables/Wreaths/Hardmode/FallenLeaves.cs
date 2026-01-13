@@ -31,9 +31,9 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
             return;
         }
 
-        //if (!player.GetCommon().CanSpawnFallenLeavesBranch) {
-        //    return;
-        //}
+        if (!player.GetCommon().CanSpawnFallenLeavesBranch) {
+            return;
+        }
 
         if (!player.ItemAnimationJustStarted) {
             return;
