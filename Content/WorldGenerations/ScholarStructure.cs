@@ -617,23 +617,23 @@ sealed class ScholarStructure : IInitializer {
                                     tile2 = Main.tile[i, j - 1];
                                     Main.tile[i, j - 2].WallType = WallID.GrayBrick;
                                     tile2.HasTile = false;
-                                    tile2 = Main.tile[i, j - 2];
+                                    tile2 = Main.tile[i, j - 1];
                                     Main.tile[i, j - 3].WallType = WallID.GrayBrick;
                                     tile2.Slope = SlopeType.SlopeUpLeft;
-                                    tile2 = Main.tile[i, j];
+                                    //tile2 = Main.tile[i, j];
                                     Main.tile[i, j - 1].WallType = WallID.GrayBrick;
-                                    tile2.Slope = SlopeType.SlopeDownRight;
+                                    //tile2.Slope = SlopeType.SlopeDownRight;
                                 }
                                 else {
                                     tile2 = Main.tile[i, j - 1];
                                     Main.tile[i, j - 2].WallType = WallID.GrayBrick;
                                     tile2.HasTile = false;
-                                    tile2 = Main.tile[i, j - 2];
+                                    tile2 = Main.tile[i, j - 1];
                                     Main.tile[i, j - 3].WallType = WallID.GrayBrick;
                                     tile2.Slope = SlopeType.SlopeUpRight;
-                                    tile2 = Main.tile[i, j];
+                                    //tile2 = Main.tile[i, j];
                                     Main.tile[i, j - 1].WallType = WallID.GrayBrick;
-                                    tile2.Slope = SlopeType.SlopeDownLeft;
+                                    //tile2.Slope = SlopeType.SlopeDownLeft;
                                 }
                             }
                             //WorldGenHelper.ModifiedTileRunner(i, j, 2, 1, -1, wallType: WallID.GrayBrick, clearOnlySolids: true);
