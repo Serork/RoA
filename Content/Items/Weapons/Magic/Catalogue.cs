@@ -88,7 +88,7 @@ sealed class Catalogue : GlobalItem {
 
     public override bool InstancePerEntity => true;
 
-    public override bool AppliesToEntity(Item entity, bool lateInstantiation) => ScholarsArchiveTE.IsSpellTome(entity.type);
+    public override bool AppliesToEntity(Item entity, bool lateInstantiation) => true/*ScholarsArchiveTE.IsSpellTome(entity.type)*/;
 
     public void InitializeWith(ScholarsArchiveTE scholarsArchiveTE) {
         SpellTomeItemTypes = ScholarsArchiveTE.GetSpellTomeItemTypes(scholarsArchiveTE);
@@ -180,7 +180,6 @@ sealed class Catalogue : GlobalItem {
         if (!ScholarsArchiveTE.IsSpellTome(item.type)) {
             return;
         }
-
         if (!tag.ContainsKey(ULTIMATESPELLTOMEKEY + "initialized")) {
             return;
         }

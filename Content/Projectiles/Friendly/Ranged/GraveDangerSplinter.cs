@@ -20,7 +20,7 @@ sealed class GraveDangerSplinter : ModProjectile {
     }
 
     public override void SetDefaults() {
-        Projectile.SetSizeValues(14);
+        Projectile.SetSizeValues(16);
 
         Projectile.friendly = true;
         Projectile.penetrate = 3;
@@ -31,6 +31,14 @@ sealed class GraveDangerSplinter : ModProjectile {
         Projectile.tileCollide = true;
 
         Projectile.timeLeft = TIMELEFT;
+    }
+
+    public override void OnKill(int timeLeft) {
+        for (int i = 0; i < 10; i++) {
+            int ind4 = Dust.NewDust(Projectile.Center - Vector2.One * 5, 10, 10, ModContent.DustType<Dusts.GraveDangerSplinter>(), 0f, 0f, 0, default, 1.2f + Main.rand.NextFloatRange(0.1f));
+            Main.dust[ind4].velocity *= 0.5f;
+            Main.dust[ind4].noGravity = true;
+        }
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
