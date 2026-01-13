@@ -1294,7 +1294,7 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
         int size = 30;
         result = 0;
         result2 = default(Vector2D);
-        int directions = 3;
+        int directions = 5;
         for (int k2 = 0; k2 < 3; k2++) {
             for (int x = -directions; x < directions + 2; x++) {
                 Vector2D vector2D = default(Vector2D);
