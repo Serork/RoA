@@ -36,7 +36,7 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
          ((byte)FallenLeavesRequstedTextureType.Burn, ResourceManager.NatureProjectileTextures + "FallenLeaves_Branch_Burn"),
          ((byte)FallenLeavesRequstedTextureType.Glow, ResourceManager.NatureProjectileTextures + "FallenLeaves_Branch_Glow")];
 
-    private record struct BranchSegmentInfo(Vector2 Position, byte FrameY = 0, float Progress = 0f, bool FacedRight = false, bool Destroyed = false, bool ShouldGlow = false);
+    private record struct BranchSegmentInfo(Vector2 Position, byte FrameY = 0, float Progress = 0f, bool FacedRight = false, bool Destroyed = false, bool ShouldGlow = false, bool SpawnedDusts = false);
 
     private BranchSegmentInfo[] _branchData = null!;
 
@@ -171,9 +171,9 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 Vector2 offset = new(-2f, 0f);
                 position += offset;
                 bool notEnd = currentSegmentIndex < count - 3;
-                if (currentSegmentData.Progress >= to * 1f) {
+                if (currentSegmentData.Progress >= to * 0.965f) {
                     // spawn dusts
-                    if (!currentSegmentData.Destroyed) {
+                    if (!currentSegmentData.SpawnedDusts) {
                         if (notEnd) {
                             if (!ShouldBurn && Main.rand.NextBool(3)) {
                                 if (!Main.dedServ) {
@@ -197,6 +197,9 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                             }
                         }
                     }
+                    currentSegmentData.SpawnedDusts = true;
+                }
+                if (currentSegmentData.Progress >= to * 1f) {
                     currentSegmentData.Destroyed = true;
                 }
                 bool shouldBurn = ShouldBurn && notEnd;
