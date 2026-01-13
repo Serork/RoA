@@ -96,6 +96,7 @@ sealed class Catalogue : GlobalItem {
         CurrentSpellTomeIndex = 0;
         ArchiveCoords = scholarsArchiveTE.Position;
         ArchiveSpellTomes = scholarsArchiveTE.SpellTomes;
+        _mustPlayTurnSound = true;
         //UpdateActive();
     }
 
@@ -165,8 +166,10 @@ sealed class Catalogue : GlobalItem {
         SpellTomeItemTypes = tag.GetIntArray(ULTIMATESPELLTOMEKEY + "spellitemtypes");
         PrefixesPerItemType = tag.GetIntArray(ULTIMATESPELLTOMEKEY + "prefixesperitemtype");
         CurrentSpellTomeIndex = tag.GetByte(ULTIMATESPELLTOMEKEY + "currentspelltomeindex");
-        ArchiveCoords = new Point16(tag.GetAsShort(ULTIMATESPELLTOMEKEY + "archivecoordsX"), tag.GetAsShort(ULTIMATESPELLTOMEKEY + "archivecoordsY"));
-        ArchiveSpellTomes = (ScholarsArchiveTE.ArchiveSpellTomeType)tag.GetAsShort(ULTIMATESPELLTOMEKEY + "archivespelltomes");
+        short x = tag.GetShort(ULTIMATESPELLTOMEKEY + "archivecoordsX"),
+              y = tag.GetShort(ULTIMATESPELLTOMEKEY + "archivecoordsY");
+        ArchiveCoords = new Point16(x, y);
+        ArchiveSpellTomes = (ScholarsArchiveTE.ArchiveSpellTomeType)tag.GetShort(ULTIMATESPELLTOMEKEY + "archivespelltomes");
         Active = tag.GetBool(ULTIMATESPELLTOMEKEY + "active");
         HasSpells = tag.GetBool(ULTIMATESPELLTOMEKEY + "hasnospells");
     }
