@@ -133,6 +133,14 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
         }
 
         protected override void AfterProcessingCane() {
+            float attackProgress = AttackProgress01;
+            float waveFrequency = 30f;
+            float waveStartValue = MathHelper.Lerp(0.5f, 1f, 1f - attackProgress);
+            float circleScale = 0.125f;
+            circleScale *= attackProgress;
+            Vector2 circleFinalScale = new(circleScale * Helper.Wave(waveStartValue, 1f, waveFrequency, 1f), circleScale * Helper.Wave(waveStartValue, 1f, waveFrequency, 2f));
+            Lighting.AddLight(CorePosition, new Color(166, 178, 53).ToVector3() * circleFinalScale.X * 8.75f);
+
             ref float miscCounter = ref Projectile.localAI[0];
             miscCounter = MathHelper.Lerp(miscCounter, 0.1f, 0.05f);
 
@@ -261,6 +269,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
             DrawSmallSummonMise(false, lightColor);
 
             float attackProgress = AttackProgress01;
+            float waveFrequency = 30f;
             attackProgress = Ease.CubeOut(attackProgress);
             SpriteBatch batch = Main.spriteBatch;
             Texture2D circleTexture = ResourceManager.Circle6;
@@ -271,7 +280,6 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
             float alpha = 0.875f * attackProgress;
             float circleScale = 0.125f;
             circleScale *= attackProgress;
-            float waveFrequency = 30f;
             float waveStartValue = MathHelper.Lerp(0.5f, 1f, 1f - attackProgress);
             Vector2 circleFinalScale = new(circleScale * Helper.Wave(waveStartValue, 1f, waveFrequency, 1f), circleScale * Helper.Wave(waveStartValue, 1f, waveFrequency, 2f));
             Color blackPartColor = Color.Lerp(new Color(133, 142, 48), Color.Black, 0.5f);
