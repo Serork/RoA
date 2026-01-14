@@ -2683,3 +2683,8 @@ QuillStand: {
 	// DisplayName: Quill Stand
 	// Tooltip: ""
 }
+
+TarBrick: {
+	// DisplayName: Tar Brick
+	// Tooltip: ""
+}
