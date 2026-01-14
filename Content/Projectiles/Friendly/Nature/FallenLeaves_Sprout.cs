@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Dusts;
 using RoA.Core;
@@ -68,9 +69,9 @@ sealed class FallenLeavesSprout : ModProjectile {
         Projectile.timeLeft = 2;
 
         Vector2 velocity = Projectile.velocity.SafeNormalize();
-        velocity.X *= player.direction;
+        velocity.X *= player.direction * player.gravDir;
         Projectile.rotation = velocity.ToRotation() + MathHelper.PiOver2;
-        Projectile.Center = player.MovementOffset() + player.RotatedRelativePoint(player.GetPlayerCorePoint(), false, false) + velocity.RotatedBy(player.fullRotation) * 25f;
+        Projectile.Center = player.MovementOffset() + player.RotatedRelativePoint(player.GetPlayerCorePoint(), false, false) + velocity.RotatedBy(player.fullRotation) * 25f * player.gravDir;
     }
 
     public override void OnKill(int timeLeft) {
@@ -96,7 +97,12 @@ sealed class FallenLeavesSprout : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDrawAnimated(lightColor, scale: new Vector2(Ease.CubeOut(Projectile.Opacity), MathUtils.Clamp01(Projectile.Opacity * 3f)), spriteEffects: (Projectile.spriteDirection * Projectile.GetOwnerAsPlayer().direction).ToSpriteEffects());
+        Player player = Projectile.GetOwnerAsPlayer();
+        SpriteEffects spriteEffects = (Projectile.spriteDirection * player.direction).ToSpriteEffects();
+        if (player.gravDir < 0f) {
+            spriteEffects |= SpriteEffects.FlipVertically;
+        }
+        Projectile.QuickDrawAnimated(lightColor, scale: new Vector2(Ease.CubeOut(Projectile.Opacity), MathUtils.Clamp01(Projectile.Opacity * 3f)), spriteEffects: spriteEffects);
 
         return false;
     }

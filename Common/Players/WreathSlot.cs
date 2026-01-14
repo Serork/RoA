@@ -56,7 +56,7 @@ class WreathSlot : ModAccessorySlot {
     }
 
     public override void ApplyEquipEffects() {
-        if (!IsHidden()) {
+        if (!IsHidden() || Main.EquipPage >= 1) {
             base.ApplyEquipEffects();
         }
     }
