@@ -46,6 +46,8 @@ sealed class NixieTubePicker_TextureLoader : IInitializer {
     public static Asset<Texture2D> NixieTubeLightButton { get; private set; } = null!;
     public static Asset<Texture2D> NixieTubeLightButtonBorder { get; private set; } = null!;
 
+    public static Asset<Texture2D> NineSlicedTexture { get; private set; } = null!;
+
     void ILoadable.Load(Mod mod) {
         On_Player.Spawn += On_Player_Spawn;
 
@@ -60,6 +62,8 @@ sealed class NixieTubePicker_TextureLoader : IInitializer {
 
         NixieTubeLightButton = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LightButton");
         NixieTubeLightButtonBorder = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_LanguageButton_Border");
+
+        NineSlicedTexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_Panel");
     }
 
     private void On_Player_Spawn(On_Player.orig_Spawn orig, Player self, PlayerSpawnContext context) {

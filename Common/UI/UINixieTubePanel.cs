@@ -14,27 +14,12 @@ namespace RoA.Common.UI;
 sealed class UINixieTubePanel : UIElement {
     private int _cornerSize = 12;
     private int _barSize = 4;
-    private Asset<Texture2D> _nineSlicedTexture;
-
-    // Added by TML.
-    private bool _needsTextureLoading;
-
-    private void LoadTextures() {
-        // These used to be moved to OnActivate in order to avoid texture loading on JIT thread.
-        // Doing so caused issues with missing backgrounds and borders because Activate wasn't always being called.
-        if (_nineSlicedTexture == null)
-            _nineSlicedTexture = ModContent.Request<Texture2D>(ResourceManager.UITextures + "NixieTube_Panel");
-    }
 
     public UINixieTubePanel() {
         SetPadding(_cornerSize);
-        _needsTextureLoading = true;
     }
 
-    public UINixieTubePanel(Asset<Texture2D> customBackground, Asset<Texture2D> customborder, int customCornerSize = 12, int customBarSize = 4) {
-        if (_nineSlicedTexture == null)
-            _nineSlicedTexture = customborder;
-
+    public UINixieTubePanel(int customCornerSize = 12, int customBarSize = 4) {
         _cornerSize = customCornerSize;
         _barSize = customBarSize;
         SetPadding(_cornerSize);
@@ -95,12 +80,6 @@ sealed class UINixieTubePanel : UIElement {
     }
 
     protected override void DrawSelf(SpriteBatch spriteBatch) {
-        if (_needsTextureLoading) {
-            _needsTextureLoading = false;
-            LoadTextures();
-        }
-
-        if (_nineSlicedTexture != null)
-            DrawPanel(spriteBatch, _nineSlicedTexture.Value);
+         DrawPanel(spriteBatch, NixieTubePicker_TextureLoader.NineSlicedTexture.Value);
     }
 }
