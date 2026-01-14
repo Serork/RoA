@@ -350,10 +350,10 @@ sealed class Snatcher : NatureProjectile {
         Vector2 drawPosition = playerCenter + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * DIST;
         Vector2 endLocation = playerCenter + _targetVector2 + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * Math.Max(DIST * (1f - progress), 8f);
         Vector2 result = Vector2.Lerp(drawPosition, endLocation, progress) + _attackVector;
-        if (player.Distance(result) > 200f) {
-            ResetAttackState();
-            _attackVector = Vector2.Zero;
-        }
+        //if (player.Distance(result) > 200f) {
+        //    ResetAttackState();
+        //    _attackVector = Vector2.Zero;
+        //}
         if (Projectile.Opacity > 0f) {
             Vector2 to = Vector2.Lerp(playerCenter, result, MathHelper.Clamp(result.Length() * (1f - Projectile.Opacity), 0f, 1f));
             if (player.Distance(result) > 200f) {
