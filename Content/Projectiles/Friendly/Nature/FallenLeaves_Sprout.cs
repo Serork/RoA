@@ -67,8 +67,10 @@ sealed class FallenLeavesSprout : ModProjectile {
 
         Projectile.timeLeft = 2;
 
-        Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-        Projectile.Center = player.MovementOffset() + player.RotatedRelativePoint(player.GetPlayerCorePoint(), false, false) + Projectile.velocity.SafeNormalize().RotatedBy(player.fullRotation) * 25f;
+        Vector2 velocity = Projectile.velocity.SafeNormalize();
+        velocity.X *= player.direction;
+        Projectile.rotation = velocity.ToRotation() + MathHelper.PiOver2;
+        Projectile.Center = player.MovementOffset() + player.RotatedRelativePoint(player.GetPlayerCorePoint(), false, false) + velocity.RotatedBy(player.fullRotation) * 25f;
     }
 
     public override void OnKill(int timeLeft) {
@@ -94,7 +96,7 @@ sealed class FallenLeavesSprout : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDrawAnimated(lightColor, scale: new Vector2(Ease.CubeOut(Projectile.Opacity), MathUtils.Clamp01(Projectile.Opacity * 3f)));
+        Projectile.QuickDrawAnimated(lightColor, scale: new Vector2(Ease.CubeOut(Projectile.Opacity), MathUtils.Clamp01(Projectile.Opacity * 3f)), spriteEffects: (Projectile.spriteDirection * Projectile.GetOwnerAsPlayer().direction).ToSpriteEffects());
 
         return false;
     }
