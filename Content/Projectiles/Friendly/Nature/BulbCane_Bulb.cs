@@ -36,6 +36,9 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         }
 
         private void AcceptDamage(int finalDamage, Vector2 damageSourcePosition, Projectile projectile) {
+            if (!projectile.IsNature()) {
+                return;
+            }
             foreach (Projectile bulbProjectile in TrackedEntitiesSystem.GetTrackedProjectile<Bulb>(checkProjectile => !checkProjectile.SameOwnerAs(projectile))) {
                 bulbProjectile.As<Bulb>().AcceptDamage(damageSourcePosition, finalDamage);
             }
