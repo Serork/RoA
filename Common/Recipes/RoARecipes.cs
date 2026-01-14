@@ -197,7 +197,7 @@ sealed partial class RoARecipes : ModSystem {
     }
 
     private static void AddTorch() {
-        Recipe item = Recipe.Create(ModContent.ItemType<ElderTorch>());
+        Recipe item = Recipe.Create(ModContent.ItemType<ElderTorch>(), 3);
         item.AddIngredient(ItemID.Torch, 3);
         item.AddIngredient<Grimstone>();
         item.SortAfterFirstRecipesOf(ItemID.JungleTorch);
