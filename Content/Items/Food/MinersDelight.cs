@@ -14,6 +14,19 @@ sealed class MinersDelight : ModItem {
     private static readonly ushort[] _buffPool = [BuffID.Regeneration, BuffID.Swiftness, BuffID.Calm, BuffID.BiomeSight, BuffID.Dangersense, BuffID.Invisibility, BuffID.Lucky, BuffID.Mining, BuffID.NightOwl, BuffID.Shine, (ushort)ModContent.BuffType<Brightstone>()],
                                      _debuffPool = [BuffID.Poisoned, BuffID.OnFire, BuffID.Bleeding, BuffID.Darkness, BuffID.Weak, BuffID.Tipsy, BuffID.Stinky];
 
+    private static bool _addingDebuffs = false;
+
+    public override void Load() {
+        On_Player.AddBuff_DetermineBuffTimeToAdd += On_Player_AddBuff_DetermineBuffTimeToAdd;
+    }
+
+    private int On_Player_AddBuff_DetermineBuffTimeToAdd(On_Player.orig_AddBuff_DetermineBuffTimeToAdd orig, Player self, int type, int time1) {
+        if (_addingDebuffs) {
+            return time1;
+        }
+        return orig(self, type, time1);
+    }
+
     public override void SetStaticDefaults() {
         Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
         ItemID.Sets.FoodParticleColors[Type] = [
@@ -43,6 +56,7 @@ sealed class MinersDelight : ModItem {
                 player.AddBuff(secondBuff, buffTime);
             }
             void addDebuffs() {
+                _addingDebuffs = true;
                 int debuffTime = MathUtils.SecondsToFrames(10);
                 int firstDebuff = Main.rand.NextFromList(_debuffPool),
                     secondDebuff = Main.rand.NextFromList(_debuffPool);
@@ -51,6 +65,7 @@ sealed class MinersDelight : ModItem {
                 }
                 player.AddBuff(firstDebuff, debuffTime);
                 player.AddBuff(secondDebuff, debuffTime);
+                _addingDebuffs = false;
             }
             addBuffs();
             addDebuffs();
