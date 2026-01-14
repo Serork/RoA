@@ -22,6 +22,7 @@ using System.Runtime.CompilerServices;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods;
@@ -92,7 +93,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
     private void On_NPC_UpdateCollision(On_NPC.orig_UpdateCollision orig, NPC self) {
         bool snail = self.type == ModContent.NPCType<ElderSnail>();
         if (snail) {
-            self.aiStyle = 67;
+            self.aiStyle = NPCAIStyleID.Snail;
         }
 
         orig(self);
@@ -623,7 +624,7 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         Vector2 vector72 = NPC.position;
         vector72.X += NPC.velocity.X;
         int num586 = (int)((vector72.X + (float)(NPC.width / 2) + (float)((NPC.width / 2 + 1) * num585)) / 16f);
-        int num587 = (int)((vector72.Y + (float)NPC.height - 1f) / 16f);
+        int num587 = (int)((vector72.Y + (float)32 - 1f) / 16f);
         if ((float)(num586 * 16) < vector72.X + (float)NPC.width && (float)(num586 * 16 + 16) > vector72.X) {
             Tile tileSafely = Framing.GetTileSafely(num586, num587 - 4);
             Tile tileSafely2 = Framing.GetTileSafely(num586 - num585, num587 - 3);
