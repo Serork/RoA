@@ -112,7 +112,7 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
 
                 CustomImmunityFramesHandler.Initialize(Projectile, 1);
 
-                int segmentCount = 90;
+                int segmentCount = 95;
 
                 BranchSegmentInfo[] sampleBranchInfo = new BranchSegmentInfo[segmentCount + 1];
                 int direction = Reversed.ToDirectionInt();
@@ -124,31 +124,34 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 int index = 0;
                 Vector2 center = Projectile.Center;
                 int step = 50;
-                Vector2 startPosition = center + new Vector2(Main.rand.NextFloat(0.25f, 1f) * Main.rand.NextBool().ToDirectionInt(), Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextBool().ToDirectionInt()) * startVelocity.SafeNormalize().Y * step * Main.rand.NextFloat(1f, 2f) * 0.25f,
-                        baseStartPosition = startPosition;
+                Vector2 startPosition = center/* + new Vector2(Main.rand.NextFloat(0.25f, 1f) * Main.rand.NextBool().ToDirectionInt(), Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextBool().ToDirectionInt()) * startVelocity.SafeNormalize().Y * step * Main.rand.NextFloat(1f, 2f) * 0.25f*/;
+                startPosition.X += -10f * player.direction;
+                startPosition.Y += 4f;
+                Vector2 baseStartPosition = startPosition;
                 int segmentHeight = 20;
                 float endFactor = 1f;
                 while (true) {
                     if (index > segmentCount) {
                         break;
                     }
-                    int endThreshhold = 10;
-                    if (index > segmentCount - endThreshhold) {
-                        endFactor = Helper.Approach(endFactor, 0.5f, 0.05f);
-                    }
+                    //int endThreshhold = 10;
+                    //if (index > segmentCount - endThreshhold) {
+                    //    endFactor = Helper.Approach(endFactor, 0.5f, 0.025f);
+                    //}
                     Vector2 bodyPositionToAdd = startPosition + startVelocity.SafeNormalize() * step * new Vector2(direction, 1f);
-                    float sineOffset = step * 0.1f * Helper.Wave(-1f, 1f, 2f, index);
+                    float sineDirection = Helper.Wave(-1f, 1f, 2f, index);
+                    float sineOffset = step * 0.075f * sineDirection;
                     float sineFactor = MathF.Sin(index * 2f);
                     bodyPositionToAdd += Vector2.UnitX.RotatedBy(startVelocity.ToRotation()) * sineFactor * sineOffset;
                     Vector2 offset = new(5f * Main.rand.NextFloatDirection(), 5f * Main.rand.NextFloatDirection());
                     startPosition += offset;
-                    Vector2 offset2 = baseStartVelocity * 10f * Main.rand.NextFloat(0.25f, 1f);
+                    Vector2 offset2 = baseStartVelocity * 10f * Main.rand.NextFloat(0.25f, 0.875f);
                     startPosition += offset2;
                     sampleBranchInfo[index] = new BranchSegmentInfo(bodyPositionToAdd);
 
-                    float velocityStep = MathHelper.TwoPi / segmentHeight * Main.rand.NextFloat(0.75f, 1f) * endFactor;
+                    float velocityStep = MathHelper.TwoPi / segmentHeight * Main.rand.NextFloat(0.875f, 1f) * endFactor;
                     velocityStep = Utils.AngleLerp(velocityStep, mouseRotation, 1f - endFactor);
-                    startVelocity = startVelocity.RotatedBy(velocityStep * endFactor);
+                    startVelocity = startVelocity.RotatedBy(velocityStep * endFactor * -player.direction);
 
                     index++;
                 }
@@ -160,7 +163,7 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                         break;
                     }
                     int nextIndex = Math.Min(index + 1, segmentCount - 1);
-                    Vector2 branchPosition = position + sampleBranchInfo[index].Position.DirectionTo(sampleBranchInfo[nextIndex].Position) * segmentHeight;
+                    Vector2 branchPosition = position + sampleBranchInfo[index].Position.DirectionTo(sampleBranchInfo[nextIndex].Position) * segmentHeight * 0.975f;
                     _branchData[index] = new BranchSegmentInfo(branchPosition, (byte)Main.rand.Next(3), 0f, Main.rand.NextBool(), false, Main.rand.NextBool(5));
                     position = branchPosition;
                     index++;

@@ -15,7 +15,7 @@ using Terraria.Enums;
 namespace RoA.Content.Items.Equipables.Wreaths.Hardmode;
 
 sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
-    public static ushort ATTACKTIME => MathUtils.SecondsToFrames(10);
+    public static ushort ATTACKTIME => MathUtils.SecondsToFrames(20);
 
     Color IWreathGlowMask.GlowColor => Color.White;
 
