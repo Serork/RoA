@@ -2,15 +2,14 @@
 
 using Terraria;
 using Terraria.ModLoader;
-using Terraria.Utilities;
 
 namespace RoA.Content.Items.Consumables;
 
-class FocusedTar : ModItem {
+class DarkNeoplasm : ModItem {
     public override void SetDefaults() {
         Item.consumable = true;
-        Item.width = 28;
-        Item.height = 28;
+        Item.width = 26;
+        Item.height = 30;
         Item.maxStack = Item.CommonMaxStack;
         Item.rare = 2;
     }

@@ -2310,11 +2310,6 @@ PerfectClot: {
 	Tooltip: "'I'm forever alone'"
 }
 
-FocusedTar: {
-	DisplayName: Focused Tar
-	Tooltip: ""
-}
-
 HiTechCattleProd: {
 	DisplayName: Hi-Tech Cattle Prod
 	Tooltip:
@@ -2660,5 +2655,10 @@ QuillStand: {
 
 TarBrick: {
 	DisplayName: Tar Brick
+	Tooltip: ""
+}
+
+DarkNeoplasm: {
+	DisplayName: Dark Neoplasm
 	Tooltip: ""
 }

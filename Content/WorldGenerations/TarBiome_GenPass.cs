@@ -3,7 +3,7 @@
 using ModLiquidLib.ModLoader;
 
 using RoA.Content.Liquids;
-using RoA.Content.Tiles.Miscellaneous;
+using RoA.Content.Tiles.Ambient;
 using RoA.Core.Utility;
 
 using System;
@@ -86,7 +86,7 @@ sealed class TarBiome_GenPass : ModSystem {
                             if (!Main.tile[j, k - 3].HasTile && Main.tile[j, k - 3].LiquidType == tarLiquid && Main.tile[j, k - 3].LiquidAmount == 255 &&
                                 !Main.tile[j, k - 2].HasTile && Main.tile[j, k - 2].LiquidType == tarLiquid && Main.tile[j, k - 2].LiquidAmount == 255 &&
                                 Main.tile[j, k - 1].LiquidType == tarLiquid && Main.tile[j, k - 1].LiquidAmount == 255) {
-                                ushort tarSource = (ushort)ModContent.TileType<TarSource>();
+                                ushort tarSource = (ushort)ModContent.TileType<SwellingTar>();
                                 int check = 4;
                                 bool flag = false;
                                 for (int k2 = -check; k2 < check; k2++) {
@@ -104,7 +104,7 @@ sealed class TarBiome_GenPass : ModSystem {
                                 if (!flag) {
                                     WorldGen.Place2x2(j, k - 1, tarSource, 0);
                                     if (Main.tile[j - 2, k - 2].TileType != tarSource) {
-                                        ModContent.GetInstance<TarSourceTE>().Place(j - 1, k - 2);
+                                        ModContent.GetInstance<SwellingTarTE>().Place(j - 1, k - 2);
                                     }
                                     if (Main.tile[j, k - 1].TileType == tarSource) {
                                         for (int k2 = -10; k2 < 0; k2++) {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Liquids;
 using RoA.Core.Utility;
-using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -15,9 +15,9 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.Utilities;
 
-namespace RoA.Content.Tiles.Miscellaneous;
+namespace RoA.Content.Tiles.Ambient;
 
-sealed class TarSource : ModTile {
+sealed class SwellingTar : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
@@ -26,11 +26,23 @@ sealed class TarSource : ModTile {
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.LavaDeath = false;
-        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<TarSourceTE>().Hook_AfterPlacement, -1, 0, true);
+        TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<SwellingTarTE>().Hook_AfterPlacement, -1, 0, true);
         TileObjectData.addTile(Type);
 
-        //AddMapEntry(Tar.LiquidColor, CreateMapEntryName());
-        AddMapEntry(Color.Lime, CreateMapEntryName());
+        AddMapEntry(Tar.LiquidColor/*, CreateMapEntryName()*/);
+
+        AnimationFrameHeight = 18 * 2;
+    }
+
+    public override void AnimateTile(ref int frame, ref int frameCounter) {
+        if (++frameCounter >= 6) {
+            frameCounter = 0;
+            frame = ++frame % 4;
+        }
+    }
+
+    public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset) {
+        frameYOffset = Main.tileFrame[type] * AnimationFrameHeight;
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
@@ -41,7 +53,7 @@ sealed class TarSource : ModTile {
             j2--;
             j3++;
         }
-        strengthFactor = Helper.Approach(strengthFactor, 1f, j3 / 10f);
+        strengthFactor = Helper.Approach(strengthFactor, 1.5f, j3 / 10f);
         if (Main.netMode != NetmodeID.Server && Main.tile[i - 1, j].TileType != Type && Main.tile[i, j + 1].TileType != Type) {
             var dims = new Vector2(35f, 35f);
             var startPosition = new Point16(i, j).ToWorldCoordinates();
@@ -62,6 +74,6 @@ sealed class TarSource : ModTile {
     }
 
     public override void KillTile(int i, int j, ref bool fail, ref bool effectOnly, ref bool noItem) {
-        ModContent.GetInstance<TarSourceTE>().Kill(i, j);
+        ModContent.GetInstance<SwellingTarTE>().Kill(i, j);
     }
 }

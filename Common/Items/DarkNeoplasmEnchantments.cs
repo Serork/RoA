@@ -242,7 +242,7 @@ sealed partial class ItemCommon : GlobalItem {
     //    }, true);
     //}
 
-    public static bool HoveredWithTar(Item item, Action<FocusedTar>? onHovered = null, bool click = true) {
+    public static bool HoveredWithTar(Item item, Action<DarkNeoplasm>? onHovered = null, bool click = true) {
         if (!CanApplyTarEnchantment(item)) {
             return false;
         }
@@ -253,7 +253,7 @@ sealed partial class ItemCommon : GlobalItem {
         if (item.GetCommon().HasEnoughTarEnchantment()) {
             return false;
         }
-        if (mouseItem.IsModded(out ModItem modItem) && modItem is FocusedTar focusedTar) {
+        if (mouseItem.IsModded(out ModItem modItem) && modItem is DarkNeoplasm focusedTar) {
             //if (!_armorSwap)
             {
                 if (click) {
@@ -271,13 +271,13 @@ sealed partial class ItemCommon : GlobalItem {
         return false;
     }
 
-    public static bool HoveredWithTar2(Item item, out FocusedTar focusedTar) {
+    public static bool HoveredWithTar2(Item item, out DarkNeoplasm focusedTar) {
         focusedTar = null!;
         Item mouseItem = Main.mouseItem;
         if (mouseItem.IsEmpty()) {
             return false;
         }
-        if (mouseItem.IsModded(out ModItem modItem) && modItem is FocusedTar focusedTar2) {
+        if (mouseItem.IsModded(out ModItem modItem) && modItem is DarkNeoplasm focusedTar2) {
             focusedTar = focusedTar2;
             return true;
         }
@@ -638,7 +638,7 @@ sealed partial class ItemCommon : GlobalItem {
     public void RemoveEnchantments(Player player) {
         if (HasTarEnchantment()) {
             for (int i = 0; i < TarEnchantmentCount(); i++) {
-                int number = Item.NewItem(player.GetSource_Misc("focusedtardrop"), (int)player.position.X, (int)player.position.Y, player.width, player.height, ModContent.ItemType<FocusedTar>());
+                int number = Item.NewItem(player.GetSource_Misc("focusedtardrop"), (int)player.position.X, (int)player.position.Y, player.width, player.height, ModContent.ItemType<DarkNeoplasm>());
                 if (Main.netMode == NetmodeID.MultiplayerClient) {
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
                 }

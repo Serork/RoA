@@ -4,12 +4,12 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace RoA.Content.Tiles.Miscellaneous;
+namespace RoA.Content.Tiles.Ambient;
 
-sealed class TarSourceTE : ModTileEntity {
+sealed class SwellingTarTE : ModTileEntity {
     public override bool IsTileValidForEntity(int x, int y) {
         Tile tile = WorldGenHelper.GetTileSafely(x, y);
-        ushort tapperTileType = (ushort)ModContent.TileType<TarSource>();
+        ushort tapperTileType = (ushort)ModContent.TileType<SwellingTar>();
         return tile.HasTile && tile.TileType == tapperTileType;
     }
 

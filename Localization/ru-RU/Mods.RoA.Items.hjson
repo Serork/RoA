@@ -2335,11 +2335,6 @@ PerfectClot: {
 	Tooltip: "'Я всегда одинок'"
 }
 
-FocusedTar: {
-	DisplayName: Сцеженная смола
-	// Tooltip: ""
-}
-
 HiTechCattleProd: {
 	DisplayName: Высокотехнологичное электропогоняло
 	Tooltip:
@@ -2686,5 +2681,10 @@ QuillStand: {
 
 TarBrick: {
 	// DisplayName: Tar Brick
+	// Tooltip: ""
+}
+
+DarkNeoplasm: {
+	// DisplayName: Dark Neoplasm
 	// Tooltip: ""
 }
