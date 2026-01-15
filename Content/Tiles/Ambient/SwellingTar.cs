@@ -35,7 +35,7 @@ sealed class SwellingTar : ModTile {
     }
 
     public override void AnimateTile(ref int frame, ref int frameCounter) {
-        if (++frameCounter >= 6) {
+        if (++frameCounter >= 7) {
             frameCounter = 0;
             frame = ++frame % 4;
         }
