@@ -1,7 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 
+using ModLiquidLib.ModLoader;
+
+using RoA.Content.Liquids;
+using RoA.Content.Tiles.Miscellaneous;
 using RoA.Core.Utility;
 
+using System;
 using System.Collections.Generic;
 
 using Terraria;
@@ -9,6 +14,7 @@ using Terraria.GameContent.Generation;
 using Terraria.IO;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
 namespace RoA.Content.WorldGenerations;
@@ -51,6 +57,105 @@ sealed class TarBiome_GenPass : ModSystem {
             TarBiome tarBiome = GenVars.configuration.CreateBiome<TarBiome>();
             for (int num921 = 0; num921 < list2.Count; num921++) {
                 tarBiome.Place(list2[num921], GenVars.structures);
+            }
+        }));
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Settle Liquids Again") + 2, new PassLegacy("Tar Sources", delegate (GenerationProgress progress, GameConfiguration passConfig) {
+            var tarLiquid = LiquidLoader.LiquidType<Tar>();
+            for (int j = 5; j < Main.maxTilesX - 5; j++) {
+                for (int k = 5; k < Main.maxTilesY - 5; k++) {
+                    Tile tile = Main.tile[j, k];
+                    if (tile.LiquidAmount > 0 && tile.LiquidType == tarLiquid) {
+                        for (int k2 = -10 + WorldGen.genRand.Next(-2, 2); k2 < 0; k2++) {
+                            int x = 3;
+                            for (int j2 = -x; j2 <= x; j2++) {
+                                Tile tile2 = Main.tile[j + j2, k + k2];
+                                if (tile2.WallType != TarBiome.TARWALLTYPE) {
+                                    tile2.WallType = TarBiome.TARWALLTYPE;
+                                }
+                                if (tile2.LiquidAmount > 0 && tile2.LiquidType != tarLiquid) {
+                                    tile2.LiquidAmount = 0;
+                                }
+                            }
+                        }
+                    }
+                    if (tile.HasTile) {
+                        if (tile.TileType == TarBiome.TARTILETYPE) {
+                            if (Main.tile[j, k - 1].LiquidType == tarLiquid && Main.tile[j, k - 1].LiquidAmount == 255 && tile.Slope != Terraria.ID.SlopeType.Solid) {
+                                tile.Slope = Terraria.ID.SlopeType.Solid;
+                            }
+                            if (!Main.tile[j, k - 3].HasTile && Main.tile[j, k - 3].LiquidType == tarLiquid && Main.tile[j, k - 3].LiquidAmount == 255 &&
+                                !Main.tile[j, k - 2].HasTile && Main.tile[j, k - 2].LiquidType == tarLiquid && Main.tile[j, k - 2].LiquidAmount == 255 &&
+                                Main.tile[j, k - 1].LiquidType == tarLiquid && Main.tile[j, k - 1].LiquidAmount == 255) {
+                                ushort tarSource = (ushort)ModContent.TileType<TarSource>();
+                                int check = 4;
+                                bool flag = false;
+                                for (int k2 = -check; k2 < check; k2++) {
+                                    if (flag) {
+                                        break;
+                                    }
+                                    for (int j2 = -check; j2 <= check; j2++) {
+                                        Tile tile2 = Main.tile[j + j2, k - 1 + k2];
+                                        if (tile2.TileType == tarSource) {
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!flag) {
+                                    WorldGen.Place2x2(j, k - 1, tarSource, 0);
+                                    if (Main.tile[j - 2, k - 2].TileType != tarSource) {
+                                        ModContent.GetInstance<TarSourceTE>().Place(j - 1, k - 2);
+                                    }
+                                    if (Main.tile[j, k - 1].TileType == tarSource) {
+                                        for (int k2 = -10; k2 < 0; k2++) {
+                                            for (int j2 = 0; j2 < 2; j2++) {
+                                                Tile tile2 = Main.tile[j - 1 + j2, k + k2 - 1];
+                                                if (tile2.LiquidAmount <= 0 && !tile2.HasTile) {
+                                                    break;
+                                                }
+                                                if (tile2.TileType == tarSource) {
+                                                    continue;
+                                                }
+                                                tile2.HasTile = false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            for (int j = 5; j < Main.maxTilesX - 5; j++) {
+                for (int k = 5; k < Main.maxTilesY - 5; k++) {
+                    Tile tile = Main.tile[j, k];
+                    if (tile.HasTile) {
+                        if (tile.TileType == TarBiome.TARTILETYPE && !tile.IsHalfBlock) {
+                            bool flag = false;
+                            int check = 1;
+                            for (int k2 = -check; k2 < check; k2++) {
+                                if (flag) {
+                                    break;
+                                }
+                                for (int j2 = -check; j2 <= check; j2++) {
+                                    Tile tile2 = Main.tile[j + j2, k + k2];
+                                    if (tile2.LiquidType == tarLiquid) {
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (flag) {
+                                FastRandom fastRandom2 = new FastRandom(Main.ActiveWorldFileData.Seed).WithModifier(65440uL).WithModifier(j, k);
+                                WorldUtils.TileFrame(j, k);
+                                WorldGen.SquareWallFrame(j, k);
+
+                                if (fastRandom2.Next(2) == 0)
+                                    Tile.SmoothSlope(j, k);
+                            }
+                        }
+                    }
+                }
             }
         }));
     }
