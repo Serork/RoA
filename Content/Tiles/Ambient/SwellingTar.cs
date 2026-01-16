@@ -87,7 +87,7 @@ sealed class SwellingTar : ModTile {
             j2--;
             j3++;
         }
-        strengthFactor = Helper.Approach(strengthFactor, 2f, j3 / 10f);
+        strengthFactor = Helper.Approach(strengthFactor, 2f, j3 / 9f);
         if (Main.netMode != NetmodeID.Server && Main.tile[i - 1, j].TileType != Type && Main.tile[i, j + 1].TileType != Type) {
             var dims = new Vector2(35f, 35f);
             var startPosition = new Point16(i, j).ToWorldCoordinates();
