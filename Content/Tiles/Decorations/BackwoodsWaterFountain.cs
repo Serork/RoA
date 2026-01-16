@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using FullSerializer.Internal;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Terraria;
@@ -6,6 +8,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.Localization;
@@ -58,9 +61,10 @@ sealed class BackwoodsWaterFountain : ModTile {
         }
     }
 
-    public override void AnimateTile(ref int frame, ref int frameCounter) {
-        frame = Main.tileFrame[TileID.WaterFountain];
-        frameCounter = Main.tileFrameCounter[TileID.WaterFountain];
+    public override void AnimateTile(ref int frame, ref int frameCounter) => frame = Main.tileFrame[TileID.WaterFountain];
+
+    public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset) {
+
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
@@ -70,7 +74,25 @@ sealed class BackwoodsWaterFountain : ModTile {
             texture = TextureAssets.Tile[Type].Value;
 
         Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
-        int animate = tile.TileFrameY >= 72 ? (Main.tileFrame[Type] * (AnimationFrameHeight)) : 0;
+        int addFrX = 0;
+        int addFrY = 0;
+        if (tile.TileFrameY >= 72) {
+            addFrY = Main.tileFrame[Type];
+            int num5 = i;
+            if (tile.TileFrameX % 36 != 0)
+                num5--;
+
+            int frameCount = 6;
+            addFrY += num5 % frameCount;
+            if (addFrY >= frameCount)
+                addFrY -= frameCount;
+
+            addFrY *= 72;
+        }
+        else {
+            addFrY = 0;
+        }
+        int animate = tile.TileFrameY >= AnimationFrameHeight ? addFrY : 0;
 
         Color color = Lighting.GetColor(i, j);
         spriteBatch.Draw(texture, new Vector2(i * 16, j * 16) - Main.screenPosition + zero + Vector2.UnitY * 2f,

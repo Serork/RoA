@@ -1,4 +1,5 @@
-﻿using RoA.Content.Tiles.Crafting;
+﻿using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Crafting;
 using RoA.Core.Utility;
 
 using System.IO;
@@ -8,8 +9,8 @@ using Terraria.ID;
 
 namespace RoA.Common.Networking.Packets;
 
-sealed class GalipotCollectPacket : NetPacket {
-    public GalipotCollectPacket(Player player, ushort i, ushort j) {
+sealed class SwellingTarCollectPacket : NetPacket {
+    public SwellingTarCollectPacket(Player player, ushort i, ushort j) {
         Writer.TryWriteSenderPlayer(player);
         Writer.Write(i);
         Writer.Write(j);
@@ -22,11 +23,10 @@ sealed class GalipotCollectPacket : NetPacket {
 
         ushort i = reader.ReadUInt16();
         ushort j = reader.ReadUInt16();
-        TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j)!;
-        tapperTE?.Reset();
+        SwellingTarTE swellingTarTE = TileHelper.GetTE<SwellingTarTE>(i, j)!;
+        swellingTarTE?.Reset();
 
-        if (Main.netMode == NetmodeID.Server) {
-            MultiplayerSystem.SendPacket(new GalipotCollectPacket(player, i, j), ignoreClient: sender);
+            MultiplayerSystem.SendPacket(new SwellingTarCollectPacket(player, i, j), ignoreClient: sender);
         }
     }
 }

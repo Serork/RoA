@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Content.Liquids;
+using RoA.Content.Tiles.Crafting;
 using RoA.Core.Utility;
 
 using System;
@@ -35,17 +36,48 @@ sealed class SwellingTar : ModTile {
     }
 
     public override void AnimateTile(ref int frame, ref int frameCounter) {
-        if (++frameCounter >= 7) {
+        if (++frameCounter >= 8) {
             frameCounter = 0;
             frame = ++frame % 4;
         }
     }
 
     public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset) {
-        frameYOffset = Main.tileFrame[type] * AnimationFrameHeight;
+        Point16 topLeft = TileHelper.GetTileTopLeft2(i, j, Type);
+        SwellingTarTE? swellingTar = TileHelper.GetTE<SwellingTarTE>(topLeft.X, topLeft.Y);
+        if (swellingTar is null) {
+            return;
+        }
+        if (!swellingTar.IsReady) {
+            frameYOffset = AnimationFrameHeight * 4;
+
+            return;
+        }
+
+        frameYOffset = Main.tileFrame[Type];
+        int num5 = i;
+        Tile tile = Main.tile[i, j];
+        if (tile.TileFrameX % 36 != 0)
+            num5--;
+
+        int frameCount = 4;
+        frameYOffset += num5 % frameCount;
+        if (frameYOffset >= frameCount)
+            frameYOffset -= frameCount;
+
+        frameYOffset *= AnimationFrameHeight;
     }
 
     public override void PostDraw(int i, int j, SpriteBatch spriteBatch) {
+        Point16 topLeft = TileHelper.GetTileTopLeft2(i, j, Type);
+        SwellingTarTE? swellingTar = TileHelper.GetTE<SwellingTarTE>(topLeft.X, topLeft.Y);
+        if (swellingTar is null) {
+            return;
+        }
+        if (!swellingTar.IsReady) {
+            return;
+        }
+
         float strengthFactor = 0f;
         int j2 = j;
         int j3 = 0;

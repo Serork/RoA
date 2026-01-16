@@ -29,7 +29,7 @@ class TapperTE : ModTileEntity {
         Reset();
         NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
         if (Main.netMode == NetmodeID.MultiplayerClient) {
-            MultiplayerSystem.SendPacket(new GalipotCollectPacket(player, Position.X, Position.Y));
+            MultiplayerSystem.SendPacket(new GalipotCollectPacket(player, (ushort)Position.X, (ushort)Position.Y));
         }
     }
 

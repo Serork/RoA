@@ -109,7 +109,7 @@ sealed class LuminousFlower : ModTile {
         TileObjectData.newTile.LavaDeath = true;
         TileObjectData.newTile.Width = 2;
         TileObjectData.newTile.Height = 3;
-        TileObjectData.newTile.DrawYOffset = 0;
+        TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.addTile(Type);
 
         DustType = DustID.Grass;
@@ -184,8 +184,7 @@ sealed class LuminousFlower : ModTile {
     }
 
     public override void AnimateTile(ref int frame, ref int frameCounter) {
-        frameCounter++;
-        if (frameCounter > 5) {
+        if (++frameCounter >= 4) {
             frameCounter = 0;
 
             frame++;
@@ -193,5 +192,20 @@ sealed class LuminousFlower : ModTile {
                 frame = 0;
             }
         }
+    }
+
+    public override void AnimateIndividualTile(int type, int i, int j, ref int frameXOffset, ref int frameYOffset) {
+        Tile tile = Main.tile[i, j];
+        frameYOffset = Main.tileFrame[Type];
+        int num5 = i;
+        if (tile.TileFrameX % 36 != 0)
+            num5--;
+
+        int frameCount = 15;
+        frameYOffset += num5 % frameCount;
+        if (frameYOffset >= frameCount)
+            frameYOffset -= frameCount;
+
+        frameYOffset *= AnimationFrameHeight;
     }
 }
