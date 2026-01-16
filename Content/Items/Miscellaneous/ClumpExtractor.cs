@@ -122,6 +122,7 @@ sealed class ClumpExtractor : ModItem {
                                     dust.alpha += 25;
                                 dust.noLight = true;
                                 dust.fadeIn = 0.4f;
+                                dust.scale *= 0.95f;
                             }
 
                             swellingTar.Collect(player);
