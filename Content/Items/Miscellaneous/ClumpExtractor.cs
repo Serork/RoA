@@ -108,8 +108,9 @@ sealed class ClumpExtractor : ModItem {
                         SwellingTarTE? swellingTar = TileHelper.GetTE<SwellingTarTE>(topLeft.X, topLeft.Y);
                         if (swellingTar is not null && swellingTar.IsReady) {
                             Vector2 basePosition = topLeft.ToWorldCoordinates() + Vector2.One * 8f;
-                            for (int i2 = 0; i2 < 6; i2++) {
-                                int dustId = Dust.NewDust(basePosition - Vector2.One * 3, 6, 6, ModContent.DustType<Dusts.TarDebuff>());
+                            for (int i2 = 0; i2 < 8; i2++) {
+                                int size = 6;
+                                int dustId = Dust.NewDust(basePosition - Vector2.One * size / 2, size, size, ModContent.DustType<Dusts.TarDebuff>());
                                 Dust dust = Main.dust[dustId];
                                 dust.velocity += basePosition.DirectionTo(checkPosition).RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(1f, 2f);
                                 dust.velocity *= 1.25f;
