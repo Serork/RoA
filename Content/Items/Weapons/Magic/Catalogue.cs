@@ -392,6 +392,15 @@ sealed class Catalogue : GlobalItem {
         return base.CanUseItem(item, player);
     }
 
+    public override void ModifyManaCost(Item item, Player player, ref float reduce, ref float mult) {
+        var handler = item.GetGlobalItem<Catalogue>();
+        if (handler.Initialized) {
+            if (player.altFunctionUse == 2) {
+                mult *= 0f;
+            }
+        }
+    }
+
     public override bool? UseItem(Item item, Player player) {
         var handler = item.GetGlobalItem<Catalogue>();
         if (handler.Initialized) {
