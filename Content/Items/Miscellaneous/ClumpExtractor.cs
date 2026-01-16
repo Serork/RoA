@@ -88,55 +88,64 @@ sealed class ClumpExtractor : ModItem {
 
             if (progress2 >= 0.25f && !player.GetCommon().ItemUsed) {
                 Vector2 checkPosition = player.GetPlayerCorePoint(false);
-                checkPosition += checkPosition.DirectionTo(to) * Item.width * 1.25f;
-                Point16 checkPositionInTiles = checkPosition.ToTileCoordinates16();
-                bool collect() {
-                    int check = 1;
-                    for (int i = -check; i <= check; i++) {
-                        for (int j = -check; j <= check; j++) {
-                            Point16 tilePosition = new(checkPositionInTiles.X + i, checkPositionInTiles.Y + j);
-                            Tile tile = WorldGenHelper.GetTileSafely(tilePosition.X, tilePosition.Y);
-                            if (!tile.HasTile) {
-                                continue;
-                            }
-                            ushort swellingTarTileType = (ushort)ModContent.TileType<SwellingTar>();
-                            if (tile.TileType != swellingTarTileType) {
-                                continue;
-                            }
-
-                            //SoundEngine.PlaySound(SoundID.Item112.WithPitchOffset(-0.1f), tilePosition.ToWorldCoordinates());
-
-                            Point16 topLeft = TileHelper.GetTileTopLeft2(tilePosition.X, tilePosition.Y, swellingTarTileType);
-                            SwellingTarTE? swellingTar = TileHelper.GetTE<SwellingTarTE>(topLeft.X, topLeft.Y);
-                            if (swellingTar is not null && swellingTar.IsReady) {
-                                for (int i2 = 0; i2 < 6; i2++) {
-                                    int dustId = Dust.NewDust(topLeft.ToWorldCoordinates() + Vector2.One * 8f - Vector2.One * 3, 6, 6, ModContent.DustType<Dusts.SolidifiedTar>());
-                                    Dust dust = Main.dust[dustId];
-                                    dust.velocity *= 1.25f;
-                                    dust.velocity *= 0.25f + 0.15f * 1f;
-                                    dust.scale *= 0.85f;
-                                }
-
-                                swellingTar.Collect(player);
-
-                                return true;
-                            }
+                checkPosition += checkPosition.DirectionTo(to) * Item.width * 1f;
+                for (int i = 0; i < 2; i++) {
+                    Point16 checkPositionInTiles = checkPosition.ToTileCoordinates16();
+                    bool collect() {
+                        Point16 tilePosition = new(checkPositionInTiles.X, checkPositionInTiles.Y);
+                        Tile tile = WorldGenHelper.GetTileSafely(tilePosition.X, tilePosition.Y);
+                        if (!tile.HasTile) {
+                            return false;
                         }
+                        ushort swellingTarTileType = (ushort)ModContent.TileType<SwellingTar>();
+                        if (tile.TileType != swellingTarTileType) {
+                            return false;
+                        }
+
+                        //SoundEngine.PlaySound(SoundID.Item112.WithPitchOffset(-0.1f), tilePosition.ToWorldCoordinates());
+
+                        Point16 topLeft = TileHelper.GetTileTopLeft2(tilePosition.X, tilePosition.Y, swellingTarTileType);
+                        SwellingTarTE? swellingTar = TileHelper.GetTE<SwellingTarTE>(topLeft.X, topLeft.Y);
+                        if (swellingTar is not null && swellingTar.IsReady) {
+                            Vector2 basePosition = topLeft.ToWorldCoordinates() + Vector2.One * 8f;
+                            for (int i2 = 0; i2 < 6; i2++) {
+                                int dustId = Dust.NewDust(basePosition - Vector2.One * 3, 6, 6, ModContent.DustType<Dusts.TarDebuff>());
+                                Dust dust = Main.dust[dustId];
+                                dust.velocity += basePosition.DirectionTo(checkPosition).RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(1f, 2f);
+                                dust.velocity *= 1.25f;
+                                dust.velocity *= 0.25f + 0.15f * 1f;
+                                if (Main.rand.Next(2) == 0)
+                                    dust.alpha += 25;
+
+                                if (Main.rand.Next(2) == 0)
+                                    dust.alpha += 25;
+                                dust.noLight = true;
+                                dust.fadeIn = 0.4f;
+                            }
+
+                            swellingTar.Collect(player);
+
+                            return true;
+                        }
+
+                        return false;
                     }
 
-                    return false;
-                }
+                    if (collect()) {
+                        Item item = player.GetSelectedItem();
+                        if (--item.stack <= 0) {
+                            item.TurnToAir();
+                        }
 
-                if (collect()) {
-                    Item item = player.GetSelectedItem();
-                    if (--item.stack <= 0) {
-                        item.TurnToAir();
+                        _collected = true;
+                        _collected2 = true;
+
+                        player.GetCommon().ItemUsed = true;
+
+                        break;
                     }
 
-                    _collected = true;
-                    _collected2 = true;
-
-                    player.GetCommon().ItemUsed = true;
+                    checkPosition += checkPosition.DirectionTo(to) * Item.width * 0.5f;
                 }
             }
         }
