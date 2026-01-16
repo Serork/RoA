@@ -26,6 +26,7 @@ sealed class SwellingTarCollectPacket : NetPacket {
         SwellingTarTE swellingTarTE = TileHelper.GetTE<SwellingTarTE>(i, j)!;
         swellingTarTE?.Reset();
 
+        if (Main.netMode == NetmodeID.Server) {
             MultiplayerSystem.SendPacket(new SwellingTarCollectPacket(player, i, j), ignoreClient: sender);
         }
     }
