@@ -204,9 +204,9 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
                 Clip = ammoClip,
                 Origin = ammoOrigin,
                 Color = ammoColor,
-                Scale = Vector2.One * scale
+                Scale = Vector2.One * 0.75f * Main.inventoryScale
             };
-            drawPosition.X -= (ammoOrigin.X - 9f);
+            drawPosition.X -= (ammoOrigin.X - 10f);
             spriteBatch.Draw(ammoTexture, drawPosition, drawInfo, onScreen: false);
         }
         drawSpecialAmmoIcon();
