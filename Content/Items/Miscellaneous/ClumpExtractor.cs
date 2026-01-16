@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Consumables;
 using RoA.Content.Tiles.Ambient;
@@ -10,7 +9,6 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -18,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Miscellaneous;
 
 sealed class ClumpExtractor : ModItem {
-    private static bool _collected;
+    private static bool _collected, _collected2;
 
     public override void SetStaticDefaults() {
         Item.staff[Type] = true;
@@ -48,7 +46,7 @@ sealed class ClumpExtractor : ModItem {
 
         player.SetCompositeBothArms(player.itemRotation - MathHelper.PiOver2 * player.direction, player.GetCommon().TempStretchAmount);
 
-        if (attackProgress > 0.5f && _collected) {
+        if (attackProgress > 0.5f && _collected2) {
             if (attackProgress >= 0.9f && _collected) {
                 void dropItem(ushort itemType) {
                     int item = Item.NewItem(player.GetSource_Misc("darkneoplasm"), (int)player.position.X, (int)player.position.Y, player.width, player.height, itemType, 1, false, 0, false, false);
@@ -64,6 +62,8 @@ sealed class ClumpExtractor : ModItem {
 
             return;
         }
+
+        _collected2 = false;
 
         Vector2 to = player.GetViableMousePosition();
         Vector2 direction = to.DirectionFrom(player.GetPlayerCorePoint());
@@ -127,6 +127,7 @@ sealed class ClumpExtractor : ModItem {
                     }
 
                     _collected = true;
+                    _collected2 = true;
 
                     player.GetCommon().ItemUsed = true;
                 }

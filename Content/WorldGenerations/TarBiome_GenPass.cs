@@ -102,7 +102,7 @@ sealed class TarBiome_GenPass : ModSystem {
                                     }
                                 }
                                 if (!flag) {
-                                    WorldGen.Place2x2(j, k - 1, tarSource, 0);
+                                    WorldGenHelper.Place2x2(j, k - 1, tarSource, WorldGen.genRand.NextBool().ToInt(), 0);
                                     if (Main.tile[j - 2, k - 2].TileType != tarSource) {
                                         ModContent.GetInstance<SwellingTarTE>().Place(j - 1, k - 2);
                                     }

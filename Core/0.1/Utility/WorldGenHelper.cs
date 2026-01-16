@@ -1319,6 +1319,55 @@ static class WorldGenHelper {
         return true;
     }
 
+    public static bool Place2x2(int x, int y, ushort type, int styleX = 0, int styleY = 0, Action? onPlaced = null, bool countCut = true) {
+        if (x < 5 || x > Main.maxTilesX - 5 || y < 5 || y > Main.maxTilesY - 5)
+            return false;
+
+        for (int i = x - 1; i < x + 1; i++) {
+            for (int j = y - 1; j < y + 1; j++) {
+                Tile tileSafely = Framing.GetTileSafely(i, j);
+                if (((!Main.tileCut[tileSafely.TileType] && !countCut) || countCut) && (tileSafely.HasTile || (type == 98 && tileSafely.LiquidAmount > 0)))
+                    return false;
+            }
+
+            switch (type) {
+                case 95:
+                case 126: {
+                        Tile tileSafely = Framing.GetTileSafely(i, y - 2);
+                        if (!tileSafely.HasUnactuatedTile || !Main.tileSolid[tileSafely.TileType] || Main.tileSolidTop[tileSafely.TileType])
+                            return false;
+
+                        break;
+                    }
+                default: {
+                        Tile tileSafely = Framing.GetTileSafely(i, y + 1);
+                        if (!tileSafely.HasUnactuatedTile || (!WorldGen.SolidTile2(tileSafely) && !Main.tileTable[tileSafely.TileType]))
+                            return false;
+
+                        break;
+                    }
+                case 132:
+                    break;
+            }
+        }
+
+        x--;
+        y--;
+        int num = 36;
+        for (int k = 0; k < 2; k++) {
+            for (int l = 0; l < 2; l++) {
+                Tile tileSafely = Main.tile[x + k, y + l];
+                tileSafely.HasTile = true;
+                tileSafely.TileFrameX = (short)(styleX * num + k * 18);
+                tileSafely.TileFrameY = (short)(styleY * num + l * 18);
+                tileSafely.TileType = type;
+            }
+        }
+        onPlaced?.Invoke();
+
+        return true;
+    }
+
     public static bool Place1x2Top(int x, int y, ushort type, int styleX = 0, int styleY = 0, Action<Point16>? onPlace = null) {
         if (WorldGen.SolidTile2(x, y - 1) && !Main.tile[x, y].HasTile && !Main.tile[x, y + 1].HasTile) {
             short num = (short)(styleY * 36);
