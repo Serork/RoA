@@ -2662,3 +2662,8 @@ DarkNeoplasm: {
 	DisplayName: Dark Neoplasm
 	Tooltip: ""
 }
+
+ClumpExtractor: {
+	DisplayName: Clump Extractor
+	Tooltip: ""
+}

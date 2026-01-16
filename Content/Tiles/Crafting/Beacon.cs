@@ -637,7 +637,7 @@ sealed class Beacon : ModTile, TileHooks.IPostDraw, IPostSetupContent {
                 if (flag3) {
                     if (dropItem) {
                         if (flag2) {
-                            int itemWhoAmI = Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 32, 32,
+                            int itemWhoAmI = Item.NewItem(WorldGen.GetItemSource_FromTileBreak(i, j), i * 16, j * 16, 16, 16,
                                 gemType);
                             if (Main.netMode == NetmodeID.MultiplayerClient && itemWhoAmI >= 0) {
                                 NetMessage.SendData(MessageID.SyncItem, -1, -1, null, itemWhoAmI, 1f, 0f, 0f, 0, 0, 0);

@@ -196,7 +196,7 @@ partial class Tapper : ModTile {
             TapperTE tapperTE = TileHelper.GetTE<TapperTE>(i, j);
             Vector2 position = new Vector2(i, j).ToWorldCoordinates();
             void dropItem(ushort itemType) {
-                int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 26, 24, itemType, 1, false, 0, false, false);
+                int item = Item.NewItem(new EntitySource_TileInteraction(player, i, j), i * 16, j * 16, 16, 16, itemType, 1, false, 0, false, false);
                 if (Main.netMode == NetmodeID.MultiplayerClient && item >= 0) {
                     NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item, 1f, 0f, 0f, 0, 0, 0);
                 }

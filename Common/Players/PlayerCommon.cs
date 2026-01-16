@@ -62,6 +62,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsFallenLeavesEffectActive;
     public float FallenLeavesCounter;
 
+    public Player.CompositeArmStretchAmount TempStretchAmount;
+    public bool ItemUsed;
+
     public bool CanSpawnFallenLeavesBranch => FallenLeavesCounter >= FallenLeaves.ATTACKTIME;
 
     public bool DoingBackflip => _backflipTimer > 0f;
@@ -592,6 +595,10 @@ sealed partial class PlayerCommon : ModPlayer {
         PreItemCheckEvent?.Invoke(Player);
 
         RodOfTheBifrostItemCheck(Player);
+
+        if (Player.ItemAnimationEndingOrEnded && ItemUsed) {
+            ItemUsed = false;
+        }
 
         if (IsAetherInvincibilityActive) {
             Player.noItems = true;

@@ -32,6 +32,8 @@ sealed class SwellingTar : ModTile {
 
         AddMapEntry(Tar.LiquidColor/*, CreateMapEntryName()*/);
 
+        DustType = (ushort)ModContent.DustType<Dusts.SolidifiedTar>();
+
         AnimationFrameHeight = 18 * 2;
     }
 

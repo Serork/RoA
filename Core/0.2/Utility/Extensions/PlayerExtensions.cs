@@ -8,10 +8,10 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Extensions;
 
 static partial class PlayerExtensions {
-    public static Vector2 GetPlayerCorePoint(this Player player) {
+    public static Vector2 GetPlayerCorePoint(this Player player, bool addGfY = true) {
         Vector2 vector = player.Bottom;
         Vector2 pos = player.MountedCenter;
-        return Utils.Floor(vector + (pos - vector) + new Vector2(0f, player.gfxOffY));
+        return Utils.Floor(vector + (pos - vector) + new Vector2(0f, addGfY ? player.gfxOffY : 0f));
     }
 
     public static bool HasProjectile<T>(this Player player, int count = 1) where T : ModProjectile => player.ownedProjectileCounts[ModContent.ProjectileType<T>()] >= count;
