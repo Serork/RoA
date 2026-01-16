@@ -1,6 +1,4 @@
-﻿using RoA.Content.Tiles.Miscellaneous;
-
-using Terraria;
+﻿using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -27,6 +25,6 @@ sealed class Grimstone : ModItem {
         Item.width = 16;
         Item.height = 16;
 
-        Item.createTile = ModContent.TileType<LuminousFlower>();
+        Item.createTile = ModContent.TileType<Tiles.Solid.Backwoods.BackwoodsStone>();
     }
 }
