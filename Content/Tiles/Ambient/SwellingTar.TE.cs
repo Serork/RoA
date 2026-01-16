@@ -20,7 +20,7 @@ sealed class SwellingTarTE : ModTileEntity {
     public double Time { get; private set; }
     public double NeededTime { get; private set; }
 
-    public bool IsReady => false/*Time >= NeededTime*/;
+    public bool IsReady => Time >= NeededTime;
 
     public void Collect(Player player) {
         Reset();
