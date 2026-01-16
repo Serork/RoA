@@ -1,5 +1,8 @@
-﻿using RoA.Common.Networking;
+﻿using ModLiquidLib.ModLoader;
+
+using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
+using RoA.Content.Liquids;
 using RoA.Core.Utility;
 
 using System.IO;
@@ -47,7 +50,12 @@ sealed class SwellingTarTE : ModTileEntity {
 
     public override void Update() {
         if (!IsReady) {
-            Time += Main.dayRate;
+            Tile tile = Main.tile[Position.X, Position.Y];
+            Tile tile2 = Main.tile[Position.X, Position.Y + 1];
+            if ((tile.LiquidAmount > 0 && tile.LiquidType == LiquidLoader.LiquidType<Tar>()) ||
+                (tile2.LiquidAmount > 0 && tile2.LiquidType == LiquidLoader.LiquidType<Tar>())) {
+                Time += Main.dayRate;
+            }
             _sync = false;
         }
         else if (!_sync) {

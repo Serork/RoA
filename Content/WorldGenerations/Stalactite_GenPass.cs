@@ -21,7 +21,7 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.WorldGenerations;
 
 sealed class Stalactite_GenPass : IInitializer {
-    private static HashSet<(ModTileEntity, Point16)>? _TEPositions;
+    private static HashSet<(ModTileEntity, Point16)> _TEPositions = [];
 
     void ILoadable.Load(Mod mod) {
         On_WorldGen.smCallback_End += On_WorldGen_smCallback_End;
@@ -119,8 +119,6 @@ sealed class Stalactite_GenPass : IInitializer {
     }
 
     private void On_WorldGen_smCallback_End(On_WorldGen.orig_smCallback_End orig, System.Collections.Generic.List<Terraria.WorldBuilding.GenPass> hardmodeTasks) {
-        _TEPositions = [];
-
         hardmodeTasks.Add(new PassLegacy("Stalactites", GenerateStalactites));
         hardmodeTasks.Add(new PassLegacy("Stalactites TE", GenerateStalactitesTE));
 
