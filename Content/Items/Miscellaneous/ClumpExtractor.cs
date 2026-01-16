@@ -48,7 +48,7 @@ sealed class ClumpExtractor : ModItem {
 
         player.SetCompositeBothArms(player.itemRotation - MathHelper.PiOver2 * player.direction, player.GetCommon().TempStretchAmount);
 
-        if (attackProgress > 0.5f) {
+        if (attackProgress > 0.5f && _collected) {
             if (attackProgress >= 0.9f && _collected) {
                 void dropItem(ushort itemType) {
                     int item = Item.NewItem(player.GetSource_Misc("darkneoplasm"), (int)player.position.X, (int)player.position.Y, player.width, player.height, itemType, 1, false, 0, false, false);
