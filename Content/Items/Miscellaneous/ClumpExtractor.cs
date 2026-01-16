@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Players;
 using RoA.Content.Items.Consumables;
 using RoA.Content.Tiles.Ambient;
 using RoA.Core;
@@ -64,6 +65,7 @@ sealed class ClumpExtractor : ModItem {
         }
 
         Vector2 to = player.GetViableMousePosition();
+        player.SyncMousePosition();
         Vector2 direction = to.DirectionFrom(player.GetPlayerCorePoint());
         float rotation = to.AngleFrom(player.GetPlayerCorePoint());
         if (!player.FacedRight()) {
