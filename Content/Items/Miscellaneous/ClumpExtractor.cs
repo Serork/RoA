@@ -63,8 +63,6 @@ sealed class ClumpExtractor : ModItem {
             return;
         }
 
-        _collected2 = false;
-
         Vector2 to = player.GetViableMousePosition();
         Vector2 direction = to.DirectionFrom(player.GetPlayerCorePoint());
         float rotation = to.AngleFrom(player.GetPlayerCorePoint());
@@ -82,16 +80,17 @@ sealed class ClumpExtractor : ModItem {
         float progress2 = Utils.GetLerpValue(0.175f, 0.5f, attackProgress, true);
         if (progress2 <= 0f) {
             player.GetCommon().TempStretchAmount = Player.CompositeArmStretchAmount.None;
+
+            _collected2 = false;
         }
         else {
             player.GetCommon().TempStretchAmount = Player.CompositeArmStretchAmount.Full;
 
             if (progress2 >= 0.25f && !player.GetCommon().ItemUsed) {
+                Vector2 checkPosition = player.GetPlayerCorePoint(false);
+                checkPosition += checkPosition.DirectionTo(to) * Item.width * 1.25f;
+                Point16 checkPositionInTiles = checkPosition.ToTileCoordinates16();
                 bool collect() {
-                    Vector2 checkPosition = player.GetPlayerCorePoint(false);
-                    checkPosition += checkPosition.DirectionTo(to) * Item.width * 1.25f;
-
-                    Point16 checkPositionInTiles = checkPosition.ToTileCoordinates16();
                     int check = 1;
                     for (int i = -check; i <= check; i++) {
                         for (int j = -check; j <= check; j++) {
@@ -110,6 +109,14 @@ sealed class ClumpExtractor : ModItem {
                             Point16 topLeft = TileHelper.GetTileTopLeft2(tilePosition.X, tilePosition.Y, swellingTarTileType);
                             SwellingTarTE? swellingTar = TileHelper.GetTE<SwellingTarTE>(topLeft.X, topLeft.Y);
                             if (swellingTar is not null && swellingTar.IsReady) {
+                                for (int i2 = 0; i2 < 6; i2++) {
+                                    int dustId = Dust.NewDust(topLeft.ToWorldCoordinates() + Vector2.One * 8f - Vector2.One * 3, 6, 6, ModContent.DustType<Dusts.SolidifiedTar>());
+                                    Dust dust = Main.dust[dustId];
+                                    dust.velocity *= 1.25f;
+                                    dust.velocity *= 0.25f + 0.15f * 1f;
+                                    dust.scale *= 0.85f;
+                                }
+
                                 swellingTar.Collect(player);
 
                                 return true;
