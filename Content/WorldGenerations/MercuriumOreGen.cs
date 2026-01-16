@@ -61,7 +61,7 @@ sealed class MercuriumOreGen : ModSystem {
                     chance = 1.0;
                     break;
             }
-            if (WorldGen.genRand.NextChance(chance) && !WorldGen.genRand.NextBool(3)) {
+            if (WorldGen.genRand.NextChance(chance) && WorldGen.genRand.NextChance(0.6f)) {
                 Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
                 velocity *= WorldGen.genRand.NextFloat(_tileCount / 2) * 0.15f;
                 if (!WorldGen.genRand.NextBool(4)) {
