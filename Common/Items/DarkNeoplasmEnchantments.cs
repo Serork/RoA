@@ -162,7 +162,7 @@ sealed partial class ItemCommon : GlobalItem {
     public override void PostDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
         Player player = Main.player[Main.myPlayer];
         Item hoverItem = item;
-        if (hoverItem != Main.mouseItem && !hoverItem.IsEmpty() && hoverItem.GetCommon().HasTarEnchantment()) {
+        if (hoverItem.GetCommon().HasTarEnchantment()) {
             Texture2D inventory = _tarEnchantmentIndicator_Inventory2.Value;
             position += new Vector2(6f) * Main.inventoryScale;
             float xOffset = 0f;
