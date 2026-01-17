@@ -437,7 +437,7 @@ sealed class ScholarStructure : IInitializer {
                     tile2.TileFrameY = (short)(0 + 18);
                     tile2.TileFrameX = (short)0;
                     tile2.TileType = (ushort)ModContent.TileType<QuillStand>();
-                    chanceForQuill /= 5;
+                    chanceForQuill /= 6;
                 }
                 else if (genRand.NextChance(0.375f)) {
                     Tile tile2 = Main.tile[i, j - 1];
