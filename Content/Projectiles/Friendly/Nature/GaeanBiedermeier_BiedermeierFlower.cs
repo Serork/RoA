@@ -744,8 +744,8 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
                 drawInfo2 = drawInfo2.WithRotation(moveOffset);
             }
             if (!flowerInfo.Released) {
-                batch.Draw(texture_Base, position, drawInfo);
                 batch.Draw(texture, position, drawInfo);
+                batch.Draw(texture_Base, position, drawInfo2);
             }
             else { 
                 batch.Draw(texture_Base2, position, drawInfo2);
