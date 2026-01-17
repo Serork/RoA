@@ -378,7 +378,7 @@ sealed class ScholarStructure : IInitializer {
                 }
             }
         }
-        float chanceForQuill = 0.375f;
+        float chanceForQuill = 1f;
         foreach (var tableTilePosition in tableTilePositions) {
             int i = tableTilePosition.X,
                 j = tableTilePosition.Y;
@@ -437,7 +437,7 @@ sealed class ScholarStructure : IInitializer {
                     tile2.TileFrameY = (short)(0 + 18);
                     tile2.TileFrameX = (short)0;
                     tile2.TileType = (ushort)ModContent.TileType<QuillStand>();
-                    chanceForQuill /= 2;
+                    chanceForQuill /= 5;
                 }
                 else if (genRand.NextChance(0.375f)) {
                     Tile tile2 = Main.tile[i, j - 1];
