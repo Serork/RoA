@@ -160,7 +160,7 @@ sealed class MeltingStar : ModProjectile {
         //spriteBatch.DrawSelf(backTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), DrawColor.FromNonPremultiplied(byte.MaxValue, 255, 0, 50) * Projectile.Opacity, 0.0f, backTexture.Size() / 2f, (float)(0.8f + 0.2f * Math.Sin(Main.time / 10)) * 0.75f, SpriteEffects.None, 0.0f);
         //spriteBatch.EndBlendState();
         Texture2D projectileTexture = Projectile.GetTexture();
-        spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.9f, 1f, 0.7f, 0.4f) * Projectile.Opacity, Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0)), SpriteEffects.None, 0.0f);
+        spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.9f, 1f, 0.7f, 0.4f) * Projectile.Opacity, Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.timeForVisualEffects / 10.0)), SpriteEffects.None, 0.0f);
         spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), new Color(0.4f, 0.1f, 0f, 0.1f), Main.GlobalTimeWrappedHourly * 8f * Projectile.direction + Projectile.whoAmI, projectileTexture.Size() / 2f, Math.Clamp(2.2f - Projectile.ai[0] / 20f, -2.5f, 2.5f), SpriteEffects.None, 0.0f);
         return false;
     }

@@ -1,12 +1,15 @@
 ﻿using Microsoft.CodeAnalysis.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using Newtonsoft.Json.Linq;
 
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Common.Druid;
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Projectiles;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
@@ -53,6 +56,7 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
     public RootPseudoTileInfo[] RootPseudoTileData { get; private set; } = null!;
 
     public ref float InitValue => ref Projectile.localAI[0];
+    public ref float ScaleFactorValue => ref Projectile.localAI[1];
     public ref float RootChoice => ref Projectile.ai[1];
     public ref float ReversedValue => ref Projectile.ai[2];
 
@@ -68,11 +72,16 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
 
     private static List<Vector2> _rootMapPositions = null!;
 
+    public override bool? CanDamage() => false;
+    public override bool? CanCutTiles() => false;
+
     public override void SetDefaults() {
         Projectile.SetSizeValues(10);
 
         Projectile.friendly = true;
         Projectile.tileCollide = false;
+
+        Projectile.Opacity = 0f;
     }
 
     public override void AI() {
@@ -148,9 +157,6 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                         progress += leftRootTileInfo.Progress;
                     }
                 }
-                else {
-                    progress = 1f;
-                }
                 if (currentSegmentIndex > 0 && progress < 1f) {
                     continue;
                 }
@@ -160,10 +166,20 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
             }
             allProgress /= count;
             Projectile.GetOwnerAsPlayer().statDefense += (int)(MathUtils.Clamp01(allProgress) * 25);
+
+            Projectile.Opacity = Ease.CubeOut(MathUtils.Clamp01(allProgress));
         }
 
         init();
         processRootTiles();
+
+        Projectile.ai[0] = 1f;
+        Projectile.ai[2] = 1f;
+
+        float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
+        float opacity = 1f;
+        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
+        ScaleFactorValue = MathHelper.Lerp(ScaleFactorValue, factor, ScaleFactorValue < factor ? 0.1f : 0.025f);
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -176,6 +192,15 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
         }
 
         Texture2D texture = indexedTextureAssets[(byte)SeedOfWisdomRoot_RequstedTextureType.Root].Value;
+
+        Vector2 drawOffset = -Vector2.UnitY * 8f;
+
+        drawOffset *= 0f;
+
+        float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
+        float opacity = 1f;
+
+        float factor = ScaleFactorValue * Projectile.ai[0];
 
         for (int i = 0; i < RootPseudoTileData.Length; i++) {
             ref RootPseudoTileInfo rootTileInfo = ref RootPseudoTileData[i];
@@ -194,11 +219,26 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                 rootTileInfo.FrameCoords = IceBlock.GetTileFrame(hasLeft, hasRight, hasTop, hasBottom);
             }
             Point position = tilePosition.ToPoint();
-            Color lightColor2 = Lighting.GetColor(position);
-            Color color = new Color(150, 99, 66).MultiplyRGB(lightColor2) * rootTileInfo.Progress;
+            Color color = WreathHandler.GetCurrentColor(Projectile.GetOwnerAsPlayer());
             clip = new(rootTileInfo.FrameCoords.X, rootTileInfo.FrameCoords.Y, 16, (int)(16 * (!hasTop && !hasBottom ? 1f : Ease.SineOut(rootTileInfo.Progress))));
-            DrawUtils.SingleTileDrawInfo info = new(texture, position, clip, color, 0, false);
-            DrawUtils.DrawSingleTile(info);
+            DrawUtils.SingleTileDrawInfo info = new(texture, position, clip, color * rootTileInfo.Progress, 0, false);
+            DrawUtils.DrawSingleTile(info, drawOffset: drawOffset);
+
+            color *= 1f;
+            color.A = 70;
+            color *= opacity;
+            opacity = progress < 1f ? Ease.CubeInOut(progress) : 1f;
+            color *= factor * opacity * 2f;
+            color *= 1.5f;
+            float scale = Projectile.scale + factor * 0.035f;
+            for (int i2 = 0; i2 < 3; i2++) {
+                info = new(texture, position, clip, color.MultiplyAlpha(scale) * 0.75f * rootTileInfo.Progress * Projectile.Opacity, 0, false);
+                DrawUtils.DrawSingleTile(info, scale, drawOffset: drawOffset);
+            }
+
+            float scale2 = 1f + (float)(0.15f * Math.Sin(Main.timeForVisualEffects / 10.0));
+            info = new(texture, position, clip, color.MultiplyAlpha(scale) * 0.75f * rootTileInfo.Progress * Projectile.Opacity, 0, false);
+            DrawUtils.DrawSingleTile(info, scale2, drawOffset: drawOffset);
         }
     }
 

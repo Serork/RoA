@@ -397,9 +397,11 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         Vector2 center = Projectile.Center;
         if (tiled) {
             result = (center.ToTileCoordinates16() + blockInfo.StartOffset + Point16.NegativeOne + new Point16(offsetX, offsetY)).ToWorldCoordinates();
+            result += Vector2.One * 8f;
             return result;
         }
         result = center + (blockInfo.StartOffset + Point16.NegativeOne + new Point16(offsetX, offsetY)).ToWorldCoordinates();
+        result += Vector2.One * 8f;
         return result;
     }
 
@@ -407,9 +409,11 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         Vector2 result;
         if (tiled) {
             result = (position.ToTileCoordinates16() + blockInfo.StartOffset + Point16.NegativeOne + new Point16(offsetX, offsetY)).ToWorldCoordinates();
+            result += Vector2.One * 8f;
             return result;
         }
         result = position + (blockInfo.StartOffset + Point16.NegativeOne + new Point16(offsetX, offsetY)).ToWorldCoordinates();
+        result += Vector2.One * 8f;
         return result;
     }
 

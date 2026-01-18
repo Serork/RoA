@@ -92,7 +92,7 @@ sealed class CosmicMana : ModProjectile {
             float value2 = Projectile.ai[1] * i * 1f;
             spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(),
                 new Color(1f, 1f, 1f, 1f) * Projectile.Opacity * 0.5f,
-                Projectile.rotation, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.time / 10.0 * i)), SpriteEffects.None, 0.0f);
+                Projectile.rotation, projectileTexture.Size() / 2f, Projectile.scale - (float)(0.15f * Math.Sin(Main.timeForVisualEffects / 10.0 * i)), SpriteEffects.None, 0.0f);
         }
         for (int i = 0; i < 2; i++) {
             float value = Main.GlobalTimeWrappedHourly * i * 1f * Projectile.direction;
@@ -100,7 +100,7 @@ sealed class CosmicMana : ModProjectile {
             float value3 = 1f - (Projectile.ai[1] / 300f / (Projectile.ai[0] + 1f));
             spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(),
                 new Color(0.5f, 0.1f + Utils.Remap(Projectile.ai[1], 0, 300, 0, 0.5f), 0.9f, 0.1f) * Projectile.Opacity * 1.25f * value3 * Utils.Remap(Projectile.ai[1], 0, 400, 1f, 0f),
-                value + Projectile.rotation, projectileTexture.Size() / 2f, Projectile.scale + value2 * 0.001f - (float)(0.15f * Math.Sin(Main.time / 10.0 * i)), SpriteEffects.None, 0.0f);
+                value + Projectile.rotation, projectileTexture.Size() / 2f, Projectile.scale + value2 * 0.001f - (float)(0.15f * Math.Sin(Main.timeForVisualEffects / 10.0 * i)), SpriteEffects.None, 0.0f);
         }
         return false;
     }

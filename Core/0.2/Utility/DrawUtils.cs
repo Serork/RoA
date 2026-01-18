@@ -24,21 +24,30 @@ static class DrawUtils {
     }
 
     // adapted vanilla
-    public static void DrawSingleTile(in SingleTileDrawInfo singleTileInfo) {
+    public static void DrawSingleTile(in SingleTileDrawInfo singleTileInfo, float scale = 1f, Vector2 drawOffset = default) {
         int num12 = (int)singleTileInfo.Slope;
         bool halfBlock = singleTileInfo.IsHalfBlock;
-        Vector2 position = singleTileInfo.Position.ToWorldCoordinates() - Vector2.One * 8f;
+        Vector2 position = singleTileInfo.Position.ToWorldCoordinates() - Vector2.One * 8f + drawOffset;
+        Vector2 scale2 = Vector2.One * scale;
         Texture2D texture = singleTileInfo.Texture;
         if (num12 == 0 && !halfBlock) {
-            Main.spriteBatch.Draw(texture, position, DrawInfo.Default with {
+            Rectangle clip2 = singleTileInfo.Clip;
+            Vector2 origin = clip2.Centered();
+            Main.spriteBatch.Draw(texture, position + origin / 1f, DrawInfo.Default with {
                 Color = singleTileInfo.Color,
-                Clip = singleTileInfo.Clip
+                Clip = clip2,
+                Scale = scale2,
+                Origin = origin
             });
         }
         else if (halfBlock) {
-            Main.spriteBatch.Draw(texture, position + Vector2.UnitY * 8f, DrawInfo.Default with {
+            Rectangle clip2 = singleTileInfo.Clip.AdjustHeight(-singleTileInfo.Clip.Height / 2);
+            Vector2 origin = clip2.Centered();
+            Main.spriteBatch.Draw(texture, position + Vector2.UnitY * 8f + origin / 1f, DrawInfo.Default with {
                 Color = singleTileInfo.Color,
-                Clip = singleTileInfo.Clip.AdjustHeight(-singleTileInfo.Clip.Height / 2)
+                Clip = clip2,
+                Scale = scale2,
+                Origin = origin
             });
         }
         else {
@@ -68,15 +77,23 @@ static class DrawUtils {
                         num17 = 16 - i2 * 2 - 2;
                         break;
                 }
-                Main.spriteBatch.Draw(texture, position + new Vector2(num17, i2 * num13 + num14), DrawInfo.Default with {
+                Rectangle clip2 = new Rectangle(singleTileInfo.Clip.X + num17, singleTileInfo.Clip.Y + num16, num13, num15);
+                Vector2 origin = clip2.Centered();
+                Main.spriteBatch.Draw(texture, position + new Vector2(num17, i2 * num13 + num14) + origin / 1f, DrawInfo.Default with {
                     Color = singleTileInfo.Color,
-                    Clip = new Rectangle(singleTileInfo.Clip.X + num17, singleTileInfo.Clip.Y + num16, num13, num15)
+                    Clip = clip2,
+                    Scale = scale2,
+                    Origin = origin
                 });
             }
             int num18 = ((num12 <= 2) ? 14 : 0);
-            Main.spriteBatch.Draw(texture, position + new Vector2(0f, num18), DrawInfo.Default with {
+            Rectangle clip = new Rectangle(singleTileInfo.Clip.X, singleTileInfo.Clip.Y + num18, 16, 2);
+            Vector2 origin2 = clip.Centered();
+            Main.spriteBatch.Draw(texture, position + new Vector2(0f, num18) + origin2 / 1f, DrawInfo.Default with {
                 Color = singleTileInfo.Color,
-                Clip = new Rectangle(singleTileInfo.Clip.X, singleTileInfo.Clip.Y + num18, 16, 2)
+                Clip = clip,
+                Scale = scale2,
+                Origin = origin2
             });
         }
     }

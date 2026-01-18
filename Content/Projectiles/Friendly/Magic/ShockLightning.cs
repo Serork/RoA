@@ -127,7 +127,7 @@ sealed class ShockLightning : ModProjectile {
     }
 
     private void UpdateSegments() {
-        uint seed = (uint)(Projectile.position.GetHashCode() + Main.time);
+        uint seed = (uint)(Projectile.position.GetHashCode() + Main.timeForVisualEffects);
         UnifiedRandom random = new((int)seed);
         Player player = Main.player[Projectile.owner];
         Vector2 source = player.itemLocation + (new Vector2(0f, 3f) * player.direction).RotatedBy(Projectile.velocity.ToRotation()) + Utils.SafeNormalize(Projectile.velocity, Vector2.One) * (player.HeldItem.width + player.HeldItem.width / 4);
