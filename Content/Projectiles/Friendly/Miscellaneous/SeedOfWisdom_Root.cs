@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.CodeAnalysis.Text;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
@@ -46,6 +47,7 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
     public struct RootPseudoTileInfo(Point16 position) {
         public Point16 Position = position;
         public Point16 FrameCoords = Point16.NegativeOne;
+        public float Progress;
     }
 
     public RootPseudoTileInfo[] RootPseudoTileData { get; private set; } = null!;
@@ -88,7 +90,7 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                     Projectile.netUpdate = true;
                 }
 
-                HashSet<Point16> positions = [];
+                List<Point16> positions = [];
                 int rootSize = 29;
                 foreach (Vector2 position in _rootMapPositions) {
                     float x = position.X;
@@ -99,17 +101,69 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                     }
                     Vector2 position2 = Projectile.Center + new Vector2(Reversed ? (rootSize - x % rootSize) : (x % rootSize), position.Y) * TileHelper.TileSize - Vector2.UnitX * rootSize * TileHelper.TileSize * 0.5f;
                     if (Reversed) {
-                        position2.X -= TileHelper.TileSize;
+                        position2.X -= TileHelper.TileSize / 2f;
                     }
                     positions.Add(position2.ToTileCoordinates16());
                 }
+                positions = [.. positions.OrderByDescending(x => MathF.Abs(x.Y - Projectile.Center.Y))];
                 RootPseudoTileData = new RootPseudoTileInfo[positions.Count];
                 for (int i = 0; i < RootPseudoTileData.Length; i++) {
                     RootPseudoTileData[i] = new RootPseudoTileInfo(positions.ToList()[i]);
                 }
             }
         }
+        void processRootTiles() {
+            float allProgress = 0f;
+            int count = RootPseudoTileData.Length;
+            for (int i = 0; i < count; i++) {
+                int currentSegmentIndex = i,
+                    previousSegmentIndex = Math.Max(0, i - 1);
+                ref RootPseudoTileInfo currentRootTileInfo = ref RootPseudoTileData[currentSegmentIndex];
+                Point16 tilePosition = currentRootTileInfo.Position;
+                float progress = 0f;
+                if (i > 0) {
+                    HashSet<Point16> allRootTilePositions = GetRootTilePositions((rootTilePosition) => TileHelper.ArePositionsAdjacent(rootTilePosition, new Point16(tilePosition.X, tilePosition.Y), 1));
+                    Point16 right = tilePosition + new Point16(1, 0);
+                    Point16 left = tilePosition - new Point16(1, 0);
+                    Point16 bottom = tilePosition + new Point16(0, 1);
+                    Point16 top = tilePosition - new Point16(0, 1);
+                    bool hasRight = allRootTilePositions.Contains(right);
+                    bool hasLeft = allRootTilePositions.Contains(left);
+                    bool hasBottom = allRootTilePositions.Contains(bottom);
+                    bool hasTop = allRootTilePositions.Contains(top);
+                    if (hasLeft) {
+                        RootPseudoTileInfo leftRootTileInfo = RootPseudoTileData.FirstOrDefault(x => x.Position == left);
+                        progress += leftRootTileInfo.Progress;
+                    }
+                    if (hasRight) {
+                        RootPseudoTileInfo leftRootTileInfo = RootPseudoTileData.FirstOrDefault(x => x.Position == right);
+                        progress += leftRootTileInfo.Progress;
+                    }
+                    if (hasBottom) {
+                        RootPseudoTileInfo leftRootTileInfo = RootPseudoTileData.FirstOrDefault(x => x.Position == bottom);
+                        progress += leftRootTileInfo.Progress;
+                    }
+                    if (hasTop) {
+                        RootPseudoTileInfo leftRootTileInfo = RootPseudoTileData.FirstOrDefault(x => x.Position == top);
+                        progress += leftRootTileInfo.Progress;
+                    }
+                }
+                else {
+                    progress = 1f;
+                }
+                if (currentSegmentIndex > 0 && progress < 1f) {
+                    continue;
+                }
+                float growthSpeed = 0.2f;
+                currentRootTileInfo.Progress = Helper.Approach(currentRootTileInfo.Progress, 1f, growthSpeed);
+                allProgress += currentRootTileInfo.Progress;
+            }
+            allProgress /= count;
+            Projectile.GetOwnerAsPlayer().statDefense += (int)(MathUtils.Clamp01(allProgress) * 25);
+        }
+
         init();
+        processRootTiles();
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -124,8 +178,8 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
         Texture2D texture = indexedTextureAssets[(byte)SeedOfWisdomRoot_RequstedTextureType.Root].Value;
 
         for (int i = 0; i < RootPseudoTileData.Length; i++) {
-            ref RootPseudoTileInfo rootPseudoTileInfo = ref RootPseudoTileData[i];
-            Point16 tilePosition = rootPseudoTileInfo.Position;
+            ref RootPseudoTileInfo rootTileInfo = ref RootPseudoTileData[i];
+            Point16 tilePosition = rootTileInfo.Position;
             HashSet<Point16> allRootTilePositions = GetRootTilePositions((rootTilePosition) => TileHelper.ArePositionsAdjacent(rootTilePosition, new Point16(tilePosition.X, tilePosition.Y), 1));
             Rectangle clip;
             Point16 right = tilePosition + new Point16(1, 0);
@@ -136,12 +190,13 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
             bool hasLeft = allRootTilePositions.Contains(left);
             bool hasBottom = allRootTilePositions.Contains(bottom);
             bool hasTop = allRootTilePositions.Contains(top);
-            if (rootPseudoTileInfo.FrameCoords == Point16.NegativeOne) {
-                rootPseudoTileInfo.FrameCoords = IceBlock.GetTileFrame(hasLeft, hasRight, hasTop, hasBottom);
+            if (rootTileInfo.FrameCoords == Point16.NegativeOne) {
+                rootTileInfo.FrameCoords = IceBlock.GetTileFrame(hasLeft, hasRight, hasTop, hasBottom);
             }
-            Color color = Color.White;
-            clip = new(rootPseudoTileInfo.FrameCoords.X, rootPseudoTileInfo.FrameCoords.Y, 16, 16);
             Point position = tilePosition.ToPoint();
+            Color lightColor2 = Lighting.GetColor(position);
+            Color color = new Color(150, 99, 66).MultiplyRGB(lightColor2) * rootTileInfo.Progress;
+            clip = new(rootTileInfo.FrameCoords.X, rootTileInfo.FrameCoords.Y, 16, (int)(16 * (!hasTop && !hasBottom ? 1f : Ease.SineOut(rootTileInfo.Progress))));
             DrawUtils.SingleTileDrawInfo info = new(texture, position, clip, color, 0, false);
             DrawUtils.DrawSingleTile(info);
         }
