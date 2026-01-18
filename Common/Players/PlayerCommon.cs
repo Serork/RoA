@@ -62,8 +62,12 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsFallenLeavesEffectActive;
     public float FallenLeavesCounter;
 
+    public float StandingStillTimer;
+
     public Player.CompositeArmStretchAmount TempStretchAmount;
     public bool ItemUsed;
+
+    public bool StandingStill => StandingStillTimer > 0;
 
     public bool CanSpawnFallenLeavesBranch => FallenLeavesCounter >= FallenLeaves.ATTACKTIME;
 
@@ -454,6 +458,13 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         else {
             FallenLeavesCounter = 0f;
+        }
+
+        if (Player.SpeedX() <= 0f && Player.IsGrounded() && WorldGenHelper.CustomSolidCollision(Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms)) {
+            StandingStillTimer++;
+        }
+        else {
+            StandingStillTimer = 0f;
         }
     }
 

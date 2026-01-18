@@ -8,6 +8,8 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility.Extensions;
 
 static partial class PlayerExtensions {
+    public static bool IsGrounded(this Player player) => player.velocity.Y == 0f || player.sliding;
+
     public static Vector2 GetPlayerCorePoint(this Player player, bool addGfY = true) {
         Vector2 vector = player.Bottom;
         Vector2 pos = player.MountedCenter;

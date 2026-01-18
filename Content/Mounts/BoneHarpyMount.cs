@@ -88,7 +88,7 @@ sealed class BoneHarpyMount : ModMount {
         else {
             handler.JumpOffHarpy();
         }
-        //else if (((player.velocity.Y == 0f || player.sliding) && player.releaseJump) || (player.autoJump && player.justJumped)) {
+        //else if (((Player.IsGrounded()) && player.releaseJump) || (player.autoJump && player.justJumped)) {
         //    _flyTime = FLYTIME;
         //}
         if (player.gravity > value) {

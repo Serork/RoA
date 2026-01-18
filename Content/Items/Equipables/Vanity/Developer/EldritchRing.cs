@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -30,7 +31,7 @@ sealed class EldritchRing : ModItem {
             if (IsWingsActive) {
                 Player.wingTimeMax = 150;
 
-                if (((Player.velocity.Y == 0f || Player.sliding) && Player.releaseJump) || (Player.autoJump && Player.justJumped)) {
+                if ((Player.IsGrounded() && Player.releaseJump) || (Player.autoJump && Player.justJumped)) {
                     Player.wingTime = Player.wingTimeMax;
                 }
             }

@@ -77,9 +77,9 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
     }
 
     public readonly List<Point16> IceBlockPositions = [];
-    public IceBlockInfo[] IceBlockData = null;
+    public IceBlockInfo[] IceBlockData = null!;
 
-    private List<Point16>? _extraRandomIceBlocks = null;
+    private List<Point16> _extraRandomIceBlocks = null!;
 
     public bool IsCharged => Projectile.ai[0] < 0f;
 
@@ -588,7 +588,7 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
         }
     }
 
-    public int GetSideMask(bool hasLeft, bool hasRight, bool hasTop, bool hasBottom) {
+    public static int GetSideMask(bool hasLeft, bool hasRight, bool hasTop, bool hasBottom) {
         int mask = 0;
 
         if (hasLeft) mask |= (int)NeighborSides.Left;
@@ -604,9 +604,9 @@ sealed class IceBlock : NatureProjectile, IUseCustomImmunityFrames, IRequestAsse
         return mask;
     }
 
-    public Point16 GetTileFrame(bool hasLeft, bool hasRight, bool hasTop, bool hasBottom) => GetFrameByMask(GetSideMask(hasLeft, hasRight, hasTop, hasBottom));
+    public static Point16 GetTileFrame(bool hasLeft, bool hasRight, bool hasTop, bool hasBottom) => GetFrameByMask(GetSideMask(hasLeft, hasRight, hasTop, hasBottom));
 
-    private Point16 GetFrameByMask(int mask) {
+    public static Point16 GetFrameByMask(int mask) {
         return mask switch {
             (int)(NeighborSides.Top | NeighborSides.Left | NeighborSides.Bottom |
                   NeighborSides.TopLeft | NeighborSides.BottomLeft)

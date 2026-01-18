@@ -1883,7 +1883,7 @@ sealed partial class Lothor : ModNPC {
         float strength = 3.5f;
         int distInTiles = 20;
         foreach (Player target in Main.player) {
-            bool targetStands = target.velocity.Y == 0f || target.sliding;
+            bool targetStands = target.IsGrounded();
             if (Vector2.Distance(target.Center, NPC.Center) < distInTiles * 16f && targetStands) {
                 TossAPlayer(target, strength);
             }

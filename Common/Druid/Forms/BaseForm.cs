@@ -8,6 +8,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -176,7 +177,7 @@ abstract class BaseForm : ModMount {
                 }
             }
             else {
-                if ((player.sliding || player.velocity.Y == 0f || plr.Jumped || (hasDoubleJump && plr.Jumped2)) && player.releaseJump && plr.JumpCD == 0) {
+                if ((player.IsGrounded() || plr.Jumped || (hasDoubleJump && plr.Jumped2)) && player.releaseJump && plr.JumpCD == 0) {
                     bool justJumped = false;
                     bool justJumped2 = false;
                     if (plr.Jumped) {
@@ -187,11 +188,11 @@ abstract class BaseForm : ModMount {
                         justJumped2 = true;
                         plr.Jumped2 = false;
                     }
-                    if (player.velocity.Y == 0f || player.sliding) {
+                    if (player.IsGrounded()) {
                         plr.Jumped = true;
                         plr.Jumped2 = true;
                     }
-                    if (player.velocity.Y == 0f || player.sliding) {
+                    if (player.IsGrounded()) {
                         player.velocity.Y = -jumpSpeed * player.gravDir;
                         plr.Jump = jumpOnSecond;
                         plr.JumpCD = 15;

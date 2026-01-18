@@ -2693,3 +2693,13 @@ ClumpExtractor: {
 	// DisplayName: Clump Extractor
 	// Tooltip: ""
 }
+
+SandalwoodStompers: {
+	// DisplayName: Sandalwood Stompers
+	// Tooltip: ""
+}
+
+SeedOfWisdom: {
+	// DisplayName: Seed Of Wisdom
+	// Tooltip: ""
+}

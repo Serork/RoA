@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -42,7 +43,7 @@ sealed class Heavy : ModBuff {
             }
 
             if (WorldGenHelper.CustomSolidCollision(Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms)) {
-                if ((Player.velocity.Y == 0f || Player.sliding) && _fallLength > 12f && !_onGround) {
+                if (Player.IsGrounded() && _fallLength > 12f && !_onGround) {
                     SoundEngine.PlaySound(SoundID.Item167 with { PitchVariance = 0.1f, Volume = 0.8f }, Player.Bottom);
                     if (_fallLength > 200f && Main.rand.NextBool(5)) SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "VeryHeavy") with { Volume = 0.75f }, Player.Bottom);
                     else SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Heavy") with { PitchVariance = 0.25f, Volume = 0.2f }, Player.Bottom);

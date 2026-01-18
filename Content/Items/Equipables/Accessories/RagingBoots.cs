@@ -6,6 +6,7 @@ using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System.Collections.Generic;
 
@@ -86,7 +87,7 @@ sealed class RagingBoots : NatureItem {
             }
 
             bool enoughSpeed = _fallLength > 2;
-            bool land = ((Player.velocity.Y == 0f || Player.sliding) && enoughSpeed) && !_onGround;
+            bool land = Player.IsGrounded() && enoughSpeed && !_onGround;
             int count = (int)_speedBeforeGround.Length();
             int count2 = (int)MathHelper.Clamp(_fallLength, 0, 20);
             bool onIceBlock = false;
