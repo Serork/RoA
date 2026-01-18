@@ -460,7 +460,7 @@ sealed partial class PlayerCommon : ModPlayer {
             FallenLeavesCounter = 0f;
         }
 
-        if (Player.SpeedX() <= 0f && Player.IsGrounded() && WorldGenHelper.CustomSolidCollision(Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms)) {
+        if (Player.IsStandingStillForSpecialEffects && Player.IsGrounded() && WorldGenHelper.CustomSolidCollision(Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms)) {
             StandingStillTimer++;
         }
         else {
