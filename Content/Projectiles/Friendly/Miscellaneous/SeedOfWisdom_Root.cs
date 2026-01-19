@@ -174,11 +174,14 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                 float growthSpeed = _growSpeed;
                 if (currentRootTileInfo.Progress >= 0.75f && !currentRootTileInfo.SpawnDusts) {
                     if (!Main.rand.NextBool(3)) {
-                        Vector2 position = currentRootTileInfo.Position.ToWorldCoordinates();
-                        int dust = Dust.NewDust(position, 8, 8, TileHelper.GetKillTileDust(currentRootTileInfo.Position.X, currentRootTileInfo.Position.Y, Main.tile[currentRootTileInfo.Position.X, currentRootTileInfo.Position.Y]));
-                        Vector2 pos1 = currentRootTileInfo.Position.ToWorldCoordinates();
-                        Vector2 pos2 = previousRootTileInfo.Position.ToWorldCoordinates();
-                        Main.dust[dust].velocity += -pos1.DirectionTo(pos2) * 1f;
+                        Vector2 position = currentRootTileInfo.Position.ToWorldCoordinates() - Vector2.One * 8f;
+                        Tile tile = WorldGenHelper.GetTileSafely(currentRootTileInfo.Position.X, currentRootTileInfo.Position.Y);
+                        if (tile.HasTile) {
+                            int dust = Dust.NewDust(position, 16, 16, TileHelper.GetKillTileDust(currentRootTileInfo.Position.X, currentRootTileInfo.Position.Y, tile));
+                            Vector2 pos1 = currentRootTileInfo.Position.ToWorldCoordinates();
+                            Vector2 pos2 = previousRootTileInfo.Position.ToWorldCoordinates();
+                            Main.dust[dust].velocity += -pos1.DirectionTo(pos2) * 1f;
+                        }
                     }
                     currentRootTileInfo.SpawnDusts = true;
                 }
