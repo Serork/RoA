@@ -1,14 +1,9 @@
-﻿using Microsoft.CodeAnalysis.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-
-using Newtonsoft.Json.Linq;
 
 using ReLogic.Content;
 
 using RoA.Common;
-using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Projectiles;
 using RoA.Content.Projectiles.Friendly.Nature;
@@ -23,7 +18,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
@@ -51,6 +48,7 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
         public Point16 Position = position;
         public Point16 FrameCoords = Point16.NegativeOne;
         public float Progress;
+        public bool SpawnDusts;
     }
 
     public RootPseudoTileInfo[] RootPseudoTileData { get; private set; } = null!;
@@ -72,6 +70,7 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
 
     private static List<Vector2> _rootMapPositions = null!;
     private bool _shouldBeKilled;
+    private float _growSpeed;
 
     public override void Unload() {
         _rootMapPositions.Clear();
@@ -101,6 +100,8 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
             if (!Init) {
                 Init = true;
 
+                _growSpeed = 0.5f;
+
                 if (Projectile.IsOwnerLocal()) {
                     RootChoice = Main.rand.Next(5);
                     Reversed = Main.rand.NextBool();
@@ -119,6 +120,7 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                     Vector2 position2 = Projectile.Center + new Vector2(Reversed ? (rootSize - x % rootSize) : (x % rootSize), position.Y) * TileHelper.TileSize - Vector2.UnitX * rootSize * TileHelper.TileSize * 0.5f;
                     if (Reversed) {
                         position2.X -= TileHelper.TileSize / 2f;
+                        position2.Y -= TileHelper.TileSize;
                     }
                     positions.Add(position2.ToTileCoordinates16());
                 }
@@ -136,6 +138,7 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                 int currentSegmentIndex = i,
                     previousSegmentIndex = Math.Max(0, i - 1);
                 ref RootPseudoTileInfo currentRootTileInfo = ref RootPseudoTileData[currentSegmentIndex];
+                ref RootPseudoTileInfo previousRootTileInfo = ref RootPseudoTileData[previousSegmentIndex];
                 Point16 tilePosition = currentRootTileInfo.Position;
                 float progress = 0f;
                 if (i > 0) {
@@ -168,7 +171,17 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                 if (currentSegmentIndex > 0 && progress < 1f) {
                     continue;
                 }
-                float growthSpeed = 0.25f;
+                float growthSpeed = _growSpeed;
+                if (currentRootTileInfo.Progress >= 0.75f && !currentRootTileInfo.SpawnDusts) {
+                    if (!Main.rand.NextBool(3)) {
+                        Vector2 position = currentRootTileInfo.Position.ToWorldCoordinates();
+                        int dust = Dust.NewDust(position, 8, 8, TileHelper.GetKillTileDust(currentRootTileInfo.Position.X, currentRootTileInfo.Position.Y, Main.tile[currentRootTileInfo.Position.X, currentRootTileInfo.Position.Y]));
+                        Vector2 pos1 = currentRootTileInfo.Position.ToWorldCoordinates();
+                        Vector2 pos2 = previousRootTileInfo.Position.ToWorldCoordinates();
+                        Main.dust[dust].velocity += -pos1.DirectionTo(pos2) * 1f;
+                    }
+                    currentRootTileInfo.SpawnDusts = true;
+                }
                 currentRootTileInfo.Progress = Helper.Approach(currentRootTileInfo.Progress, 1f, growthSpeed);
                 allProgress += currentRootTileInfo.Progress;
             }
@@ -184,6 +197,8 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                     Projectile.Kill();
                 }
             }
+
+            _growSpeed = Helper.Approach(_growSpeed, 0.25f, 0.0175f);
         }
 
         init();
