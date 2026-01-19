@@ -115,8 +115,8 @@ sealed class RagingBoots : NatureItem {
                     if (!ragingBoots) {
                         colors.Clear();
                         colors.Add(WreathHandler.GetCurrentColor(Player));
-                        colors.Add(WreathHandler.GetCurrentColor(Player).ModifyRGB(1.2f));
-                        colors.Add(WreathHandler.GetCurrentColor(Player).ModifyRGB(0.8f));
+                        colors.Add(WreathHandler.GetCurrentColor(Player).ModifyRGB(1.3f));
+                        colors.Add(WreathHandler.GetCurrentColor(Player).ModifyRGB(0.7f));
                     }
                     for (int i = 0; i < 30; i++) {
                         if (Main.rand.Next(3) != 0) {
