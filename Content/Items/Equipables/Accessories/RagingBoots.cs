@@ -1,12 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
 
@@ -61,7 +63,7 @@ sealed class RagingBoots : NatureItem {
         }
     }
 
-    private class RagingBootsAttackHandler : ModPlayer {
+    public class RagingBootsAttackHandler : ModPlayer {
         private bool _onGround;
         private Vector2 _speedBeforeGround;
         private int _fallLength;
@@ -82,9 +84,11 @@ sealed class RagingBoots : NatureItem {
             }
 
             Item item = Boots;
-            if (item == null || item == default) {
+            if (item.IsEmpty()) {
                 return;
             }
+
+            bool ragingBoots = item.type == ModContent.ItemType<RagingBoots>();
 
             bool enoughSpeed = _fallLength > 2;
             bool land = Player.IsGrounded() && enoughSpeed && !_onGround;
@@ -93,19 +97,27 @@ sealed class RagingBoots : NatureItem {
             bool onIceBlock = false;
             if (TileHelper.CustomSolidCollision_CheckForIceBlocks(Player, Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms, land, 
                 onDestroyingIceBlock: (player) => {
-                    if (player.whoAmI == Main.myPlayer) {
-                        float startAngle = Main.rand.NextFloat(MathHelper.TwoPi);
-                        for (float i = 0; i < MathHelper.TwoPi; i += MathHelper.TwoPi / count2) {
-                            Projectile.NewProjectile(Player.GetSource_Accessory(item), Player.Bottom, _speedBeforeGround.RotatedBy(i + startAngle) * Main.rand.NextFloat(0.25f, 0.75f), ModContent.ProjectileType<IceShard>(), NatureWeaponHandler.GetNatureDamage(item, Player) * 2, Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(item.knockBack) * 0.5f);
+                    if (ragingBoots) {
+                        if (player.whoAmI == Main.myPlayer) {
+                            float startAngle = Main.rand.NextFloat(MathHelper.TwoPi);
+                            for (float i = 0; i < MathHelper.TwoPi; i += MathHelper.TwoPi / count2) {
+                                Projectile.NewProjectile(Player.GetSource_Accessory(item), Player.Bottom, _speedBeforeGround.RotatedBy(i + startAngle) * Main.rand.NextFloat(0.25f, 0.75f), ModContent.ProjectileType<IceShard>(), NatureWeaponHandler.GetNatureDamage(item, Player) * 2, Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(item.knockBack) * 0.5f);
+                            }
                         }
+                        onIceBlock = true;
                     }
-                    onIceBlock = true;
                 })) {
                 if (land) {
                     SoundEngine.PlaySound(SoundID.Item167 with { PitchVariance = 0.1f }, Player.Bottom);
 
                     Vector2 velocity = _speedBeforeGround * 0.35f;
                     List<Color> colors = [new Color(147, 177, 253), new Color(50, 107, 197), new Color(9, 61, 191)];
+                    if (!ragingBoots) {
+                        colors.Clear();
+                        colors.Add(WreathHandler.GetCurrentColor(Player));
+                        colors.Add(WreathHandler.GetCurrentColor(Player).ModifyRGB(1.2f));
+                        colors.Add(WreathHandler.GetCurrentColor(Player).ModifyRGB(0.8f));
+                    }
                     for (int i = 0; i < 30; i++) {
                         if (Main.rand.Next(3) != 0) {
                             int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height - 2f), Player.width + 2, 6, DustID.Snow, 0f, 0f, 50, Main.rand.NextFromList([.. colors]));
@@ -129,20 +141,30 @@ sealed class RagingBoots : NatureItem {
                         }
                     }
 
-                    var center = Player.Bottom;
-                    float radius = Player.Size.Length() / 2f * 0.55f;
-                    if (Main.myPlayer == Player.whoAmI) {
-                        var velo = velocity;
-                        center += velocity;
-                        for (int i = 0; i < count; i++) {
-                            var shootTo = velo.RotatedBy(MathHelper.PiOver2 * (i < count / 2).ToDirectionInt() + MathHelper.PiOver4 * 0.75f * Main.rand.NextFloatDirection());
-                            var shootLocation = center + Vector2.Normalize(shootTo) * 10f;
-                            Projectile.NewProjectile(Player.GetSource_Misc("ragingboots"), shootLocation, shootTo,
-                                ModContent.ProjectileType<RagingBootsWave>(),
-                                NatureWeaponHandler.GetNatureDamage(item, Player),
-                                Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(item.knockBack),
-                                Player.whoAmI,
-                                (int)(18 + count2 * 2f));
+                    if (!ragingBoots && Player.IsLocal()) {
+                        Vector2 position = Player.Bottom;
+                        ProjectileUtils.SpawnPlayerOwnedProjectile<SeedOfWisdomRoot>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Accessory(item)) {
+                            Position = position,
+                            AI0 = 1f,
+                            AI2 = count2 * 20f
+                        });
+                    }
+                    if (ragingBoots) {
+                        var center = Player.Bottom;
+                        float radius = Player.Size.Length() / 2f * 0.55f;
+                        if (Main.myPlayer == Player.whoAmI) {
+                            var velo = velocity;
+                            center += velocity;
+                            for (int i = 0; i < count; i++) {
+                                var shootTo = velo.RotatedBy(MathHelper.PiOver2 * (i < count / 2).ToDirectionInt() + MathHelper.PiOver4 * 0.75f * Main.rand.NextFloatDirection());
+                                var shootLocation = center + Vector2.Normalize(shootTo) * 10f;
+                                Projectile.NewProjectile(Player.GetSource_Misc("ragingboots"), shootLocation, shootTo,
+                                    ModContent.ProjectileType<RagingBootsWave>(),
+                                    NatureWeaponHandler.GetNatureDamage(item, Player),
+                                    Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(item.knockBack),
+                                    Player.whoAmI,
+                                    (int)(18 + count2 * 2f));
+                            }
                         }
                     }
 

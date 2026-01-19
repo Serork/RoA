@@ -18,9 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
@@ -28,18 +26,22 @@ namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPostSetupContent {
     public enum SeedOfWisdomRoot_RequstedTextureType : byte {
         Root,
-        Root_Map
+        Root_Map,
+        Root_Map2
     }
 
     (byte, string)[] IRequestAssets.IndexedPathsToTexture =>
         [((byte)SeedOfWisdomRoot_RequstedTextureType.Root, ResourceManager.MiscellaneousProjectileTextures + "SeedOfWisdomRoot"),
-         ((byte)SeedOfWisdomRoot_RequstedTextureType.Root_Map, ResourceManager.MiscellaneousProjectileTextures + "SeedOfWisdomRoot_Map")];
+         ((byte)SeedOfWisdomRoot_RequstedTextureType.Root_Map, ResourceManager.MiscellaneousProjectileTextures + "SeedOfWisdomRoot_Map"),
+         ((byte)SeedOfWisdomRoot_RequstedTextureType.Root_Map2, ResourceManager.MiscellaneousProjectileTextures + "SeedOfWisdomRoot_Map2")];
 
     void IPostSetupContent.PostSetupContent() {
         Main.QueueMainThreadAction(() => {
             if (!Main.dedServ && AssetInitializer.TryGetRequestedTextureAssets<SeedOfWisdomRoot>(out Dictionary<byte, Asset<Texture2D>> indexedTextureAssets)) {
                 Texture2D rootMap = indexedTextureAssets[(byte)SeedOfWisdomRoot_RequstedTextureType.Root_Map].Value;
                 _rootMapPositions = rootMap.GetColorMap(Vector2.Zero, 0f, 1f, addOffset: false);
+                Texture2D rootMap2 = indexedTextureAssets[(byte)SeedOfWisdomRoot_RequstedTextureType.Root_Map2].Value;
+                _rootMapPositions2 = rootMap2.GetColorMap(Vector2.Zero, 0f, 1f, addOffset: false);
             }
         });
     }
@@ -55,22 +57,28 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float ScaleFactorValue => ref Projectile.localAI[1];
+    public ref float IncreasedValue => ref Projectile.ai[0];
     public ref float RootChoice => ref Projectile.ai[1];
-    public ref float ReversedValue => ref Projectile.ai[2];
+    public ref float SpawnedFromLandingValue => ref Projectile.ai[2];
 
     public bool Init {
         get => InitValue == 1f;
         set => InitValue = value.ToInt();
     }
 
-    public bool Reversed {
-        get => ReversedValue == 1f;
-        set => ReversedValue = value.ToInt();
+    public bool Increased {
+        get => IncreasedValue == 1f;
+        set => IncreasedValue = value.ToInt();
     }
 
-    private static List<Vector2> _rootMapPositions = null!;
+    public bool SpawnedFromLanding => SpawnedFromLandingValue > 0f;
+
+    private static List<Vector2> _rootMapPositions = null!,
+                                 _rootMapPositions2 = null!;
     private bool _shouldBeKilled;
     private float _growSpeed;
+    private bool _reversed; // sync
+    private float _scaleFactor;
 
     public override void Unload() {
         _rootMapPositions.Clear();
@@ -90,10 +98,17 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
     }
 
     public override void AI() {
-        Projectile.timeLeft = 2;
+        if (!SpawnedFromLanding) {
+            Projectile.timeLeft = 2;
+        }
 
-        if (!Projectile.GetOwnerAsPlayer().GetCommon().StandingStill) {
+        if (!SpawnedFromLanding && !Projectile.GetOwnerAsPlayer().GetCommon().StandingStill) {
             _shouldBeKilled = true;
+        }
+
+        if (SpawnedFromLanding && Projectile.timeLeft <= 2) {
+            _shouldBeKilled = true;
+            Projectile.timeLeft = 2;
         }
 
         void init() {
@@ -102,29 +117,54 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
 
                 _growSpeed = 0.5f;
 
+                if (SpawnedFromLanding) {
+                    Projectile.timeLeft = (int)SpawnedFromLandingValue;
+                }
+
                 if (Projectile.IsOwnerLocal()) {
-                    RootChoice = Main.rand.Next(5);
-                    Reversed = Main.rand.NextBool();
+                    RootChoice = Increased ? Main.rand.Next(6) : Main.rand.Next(5);
+                    _reversed = Main.rand.NextBool();
                     Projectile.netUpdate = true;
                 }
 
                 List<Point16> positions = [];
-                int rootSize = 29;
-                foreach (Vector2 position in _rootMapPositions) {
-                    float x = position.X;
-                    int x2 = rootSize * (int)RootChoice,
-                        x3 = rootSize * ((int)RootChoice + 1);
-                    if (!(x >= x2 && x <= x3)) {
-                        continue;
+                if (!Increased) {
+                    int rootSize = 29;
+                    foreach (Vector2 position in _rootMapPositions) {
+                        float x = position.X;
+                        int x2 = rootSize * (int)RootChoice,
+                            x3 = rootSize * ((int)RootChoice + 1);
+                        if (!(x >= x2 && x <= x3)) {
+                            continue;
+                        }
+                        Vector2 position2 = Projectile.Center + new Vector2(_reversed ? (rootSize - x % rootSize) : (x % rootSize), position.Y) * TileHelper.TileSize - Vector2.UnitX * rootSize * TileHelper.TileSize * 0.5f;
+                        if (_reversed) {
+                            position2.X -= TileHelper.TileSize / 2f;
+                            position2.Y -= TileHelper.TileSize;
+                        }
+                        positions.Add(position2.ToTileCoordinates16());
                     }
-                    Vector2 position2 = Projectile.Center + new Vector2(Reversed ? (rootSize - x % rootSize) : (x % rootSize), position.Y) * TileHelper.TileSize - Vector2.UnitX * rootSize * TileHelper.TileSize * 0.5f;
-                    if (Reversed) {
-                        position2.X -= TileHelper.TileSize / 2f;
-                        position2.Y -= TileHelper.TileSize;
-                    }
-                    positions.Add(position2.ToTileCoordinates16());
+                    positions = [.. positions.OrderByDescending(x => MathF.Abs(x.Y - Projectile.Center.Y))];
                 }
-                positions = [.. positions.OrderByDescending(x => MathF.Abs(x.Y - Projectile.Center.Y))];
+                else {
+                    int rootSize = 19;
+                    foreach (Vector2 position in _rootMapPositions2) {
+                        float x = position.X;
+                        int x2 = rootSize * (int)RootChoice,
+                            x3 = rootSize * ((int)RootChoice + 1);
+                        if (!(x >= x2 && x <= x3)) {
+                            continue;
+                        }
+                        Vector2 position2 = Projectile.Center + new Vector2(_reversed ? (rootSize - x % rootSize) : (x % rootSize), position.Y) * TileHelper.TileSize - Vector2.UnitX * rootSize * TileHelper.TileSize * 0.5f;
+                        if (_reversed) {
+                            position2.X -= TileHelper.TileSize / 2f;
+                            position2.Y -= TileHelper.TileSize;
+                        }
+                        position2.Y -= rootSize * TileHelper.TileSize * 0.5f;
+                        positions.Add(position2.ToTileCoordinates16());
+                    }
+                    positions = [.. positions.OrderBy(x => x.ToWorldCoordinates().Distance(Projectile.Center))];
+                }
                 RootPseudoTileData = new RootPseudoTileInfo[positions.Count];
                 for (int i = 0; i < RootPseudoTileData.Length; i++) {
                     RootPseudoTileData[i] = new RootPseudoTileInfo(positions.ToList()[i]);
@@ -189,7 +229,22 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                 allProgress += currentRootTileInfo.Progress;
             }
             allProgress /= count;
-            Projectile.GetOwnerAsPlayer().statDefense += (int)(MathUtils.Clamp01(allProgress) * 25);
+
+            if (!SpawnedFromLanding) {
+                Projectile.GetOwnerAsPlayer().statDefense += (int)(MathUtils.Clamp01(allProgress) * 25);
+            }
+            else {
+                foreach (Player player in Main.ActivePlayers) {
+                    if (!player.IsAlive()) {
+                        continue;
+                    }
+                    if (player.Distance(Projectile.Center) > TileHelper.TileSize * 9) {
+                        continue;
+                    }
+
+                    player.statDefense += (int)(MathUtils.Clamp01(allProgress) * 25);
+                }
+            }
 
             if (!_shouldBeKilled) {
                 Projectile.Opacity = Ease.CubeOut(MathUtils.Clamp01(allProgress));
@@ -207,10 +262,10 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
         init();
         processRootTiles();
 
-        Projectile.ai[0] = 1f;
-        Projectile.ai[2] = 1f;
+        Projectile.localAI[2] = 1f;
+        _scaleFactor = 1f;
 
-        float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
+        float progress = MathHelper.Clamp(_scaleFactor, 0f, 1f);
         float opacity = 1f;
         float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
         ScaleFactorValue = MathHelper.Lerp(ScaleFactorValue, factor, ScaleFactorValue < factor ? 0.1f : 0.025f);
@@ -235,10 +290,10 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
 
         drawOffset *= 0f;
 
-        float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
+        float progress = MathHelper.Clamp(_scaleFactor, 0f, 1f);
         float opacity = 1f;
 
-        float factor = ScaleFactorValue * Projectile.ai[0];
+        float factor = ScaleFactorValue * Projectile.localAI[2];
 
         for (int i = 0; i < RootPseudoTileData.Length; i++) {
             ref RootPseudoTileInfo rootTileInfo = ref RootPseudoTileData[i];
@@ -291,7 +346,11 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
     private static HashSet<Point16> GetRootTilePositions(Predicate<Point16>? filter = null) {
         HashSet<Point16> result = [];
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<SeedOfWisdomRoot>()) {
-            foreach (RootPseudoTileInfo rootPseudoTileInfo in projectile.As<SeedOfWisdomRoot>().RootPseudoTileData) {
+            var seedProj = projectile.As<SeedOfWisdomRoot>();
+            if (!seedProj.Init) {
+                continue;
+            }
+            foreach (RootPseudoTileInfo rootPseudoTileInfo in seedProj.RootPseudoTileData) {
                 Point16 position = rootPseudoTileInfo.Position;
                 if (filter == null || filter(position)) {
                     result.Add(position);
