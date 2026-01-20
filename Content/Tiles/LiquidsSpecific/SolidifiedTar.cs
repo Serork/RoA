@@ -54,9 +54,11 @@ sealed class SolidifiedTar : ModTile {
                         }
                     }
                     if (!flag) {
-                        WorldGenHelper.Place2x2(i, j - 1, swellingTarTileType, WorldGen.genRand.NextBool().ToInt(), 0);
-                        if (Main.tile[i - 2, j - 2].TileType != swellingTarTileType) {
-                            ModContent.GetInstance<SwellingTarTE>().Place(i - 1, j - 2);
+                        if (Main.rand.Next(2500) == 0) {
+                            WorldGenHelper.Place2x2(i, j - 1, swellingTarTileType, WorldGen.genRand.NextBool().ToInt(), 0);
+                            if (Main.tile[i - 2, j - 2].TileType != swellingTarTileType) {
+                                ModContent.GetInstance<SwellingTarTE>().Place(i - 1, j - 2);
+                            }
                         }
                     }
                 }
