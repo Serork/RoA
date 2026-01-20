@@ -25,7 +25,7 @@ using Terraria.DataStructures;
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 [Tracked]
-sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPostSetupContent {
+sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, IPostSetupContent {
     public enum SeedOfWisdomRoot_RequstedTextureType : byte {
         Root,
         Root_Map,
@@ -88,16 +88,38 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
         _rootMapPositions = null!;
     }
 
-    public override bool? CanDamage() => false;
+    public override bool? CanDamage() => base.CanDamage();
     public override bool? CanCutTiles() => false;
 
-    public override void SetDefaults() {
+    protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(10);
 
         Projectile.friendly = true;
         Projectile.tileCollide = false;
 
         Projectile.Opacity = 0f;
+
+        Projectile.penetrate = -1;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
+
+        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        foreach (RootPseudoTileInfo rootPseudoTileInfo in RootPseudoTileData) {
+            if (rootPseudoTileInfo.Progress < 0.01f) {
+                continue;
+            }
+            Point16 tilePosition = rootPseudoTileInfo.Position;
+            Vector2 worldPosition = tilePosition.ToWorldCoordinates() - Vector2.One * TileHelper.TileSize * 0.5f;
+            if (new Rectangle((int)worldPosition.X, (int)worldPosition.Y, (int)TileHelper.TileSize, (int)TileHelper.TileSize).Intersects(targetHitbox)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public override void AI() {
@@ -123,7 +145,6 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
 
                 if (SpawnedFromLanding) {
                     Projectile.timeLeft = (int)SpawnedFromLandingValue;
-                    Main.NewText(Projectile.timeLeft);
                 }
 
                 if (Projectile.IsOwnerLocal()) {

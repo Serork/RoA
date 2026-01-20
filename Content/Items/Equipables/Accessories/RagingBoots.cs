@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Projectiles.Friendly.Nature;
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -14,6 +15,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -141,7 +143,7 @@ sealed class RagingBoots : NatureItem {
                         }
                     }
 
-                    if (!ragingBoots && Player.IsLocal()) {
+                    if (!ragingBoots) {
                         Vector2 position = Player.Bottom;
                         for (int i = 0; i < count2; i++) {
                             if (Main.rand.Next(3) == 0) {
@@ -152,11 +154,22 @@ sealed class RagingBoots : NatureItem {
                             }
                         }
 
-                        ProjectileUtils.SpawnPlayerOwnedProjectile<SeedOfWisdomRoot>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Accessory(item)) {
-                            Position = position,
-                            AI0 = 1f,
-                            AI2 = count2 * 20f
-                        });
+                        if (Main.netMode != NetmodeID.Server && Player.IsLocal()) {
+                            string tag = "Sandalwood Stompers Stomp";
+                            float strength = count2 / 20f * 2.5f;
+                            PunchCameraModifier punchCameraModifier = new PunchCameraModifier(position.ToTileCoordinates().ToWorldCoordinates(), MathHelper.PiOver2.ToRotationVector2(), strength, 6f, (int)(Ease.CircOut(count2 / 20f) * 10), 1000f, tag);
+                            Main.instance.CameraModifiers.Add(punchCameraModifier);
+                        }
+
+                        if (Player.IsLocal()) {
+                            ProjectileUtils.SpawnPlayerOwnedProjectile<SeedOfWisdomRoot>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Accessory(item)) {
+                                Position = position,
+                                AI0 = 1f,
+                                AI2 = count2 * 20f,
+                                Damage = NatureWeaponHandler.GetNatureDamage(item, Player),
+                                KnockBack = Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(item.knockBack)
+                            });
+                        }
                     }
                     if (ragingBoots) {
                         var center = Player.Bottom;

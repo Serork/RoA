@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.Items;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -58,7 +59,9 @@ sealed class SandalwoodStompers : NatureItem {
         Vector2 position = player.Bottom;
         ProjectileUtils.SpawnPlayerOwnedProjectile<SeedOfWisdomRoot>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Accessory(Item)) {
             Position = position,
-            AI0 = 1f
+            AI0 = 1f,
+            Damage = NatureWeaponHandler.GetNatureDamage(Item, player),
+            KnockBack = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(Item.knockBack)
         });
     }
 }
