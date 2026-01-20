@@ -174,8 +174,8 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
                         Vector2 position2 = Projectile.Center + new Vector2(_reversed ? (rootSize - x % rootSize) : (x % rootSize), position.Y) * TileHelper.TileSize - Vector2.UnitX * rootSize * TileHelper.TileSize * 0.5f;
                         if (_reversed) {
                             position2.X -= TileHelper.TileSize / 2f;
-                            position2.Y -= TileHelper.TileSize;
                         }
+                        position2.Y -= TileHelper.TileSize;
                         positions.Add(position2.ToTileCoordinates16());
                     }
                     positions = [.. positions.OrderByDescending(x => MathF.Abs(x.Y - Projectile.Center.Y))];
@@ -270,8 +270,10 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
             float clampedAllProgress = MathUtils.Clamp01(allProgress);
             if (!SpawnedFromLanding) {
                 Player player = Projectile.GetOwnerAsPlayer();
-                player.statDefense += (int)(clampedAllProgress * 25);
-                player.AddBuff<WiseDefense>(2);
+                if (!player.HasBuff<WiseDefense>()) {
+                    player.statDefense += (int)(clampedAllProgress * 25);
+                    player.AddBuff<WiseDefense>(1);
+                }
             }
             else {
                 foreach (Player player in Main.ActivePlayers) {
@@ -282,8 +284,11 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
                         continue;
                     }
 
+                    if (player.HasBuff<WiseDefense>()) {
+                        continue;
+                    }
                     player.statDefense += (int)(clampedAllProgress * 25);
-                    player.AddBuff<WiseDefense>(2);
+                    player.AddBuff<WiseDefense>(1);
                 }
             }
 
