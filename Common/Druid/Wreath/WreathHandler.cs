@@ -220,8 +220,8 @@ sealed class WreathHandler : ModPlayer {
     public DruidStats DruidPlayerStats => Player.GetModPlayer<DruidStats>();
 
     public bool SoulOfTheWoods => DruidPlayerStats.SoulOfTheWoods && Progress > 1f && Progress <= 2f;
-    public bool IsPhoenixWreath => CurrentVisualType == WreathType.Phoenix || CurrentType == WreathType.Phoenix;
-    public bool IsAetherWreath => CurrentVisualType == WreathType.Aether || CurrentType == WreathType.Aether;
+    public bool IsPhoenixWreath => CurrentVisualType == WreathType.Phoenix || (CurrentVisualType == WreathType.Normal && CurrentType == WreathType.Phoenix);
+    public bool IsAetherWreath => CurrentVisualType == WreathType.Aether || (CurrentVisualType == WreathType.Normal && CurrentType == WreathType.Aether);
 
     public ushort AddResourceValue() => (ushort)(AddValue * MaxResource);
 
