@@ -156,7 +156,7 @@ sealed class RagingBoots : NatureItem {
 
                         if (Main.netMode != NetmodeID.Server && Player.IsLocal()) {
                             string tag = "Sandalwood Stompers Stomp";
-                            float strength = count2 / 20f * 2.5f;
+                            float strength = count2 / 20f * 1.5f;
                             PunchCameraModifier punchCameraModifier = new PunchCameraModifier(position.ToTileCoordinates().ToWorldCoordinates(), MathHelper.PiOver2.ToRotationVector2(), strength, 6f, (int)(Ease.CircOut(count2 / 20f) * 10), 1000f, tag);
                             Main.instance.CameraModifiers.Add(punchCameraModifier);
                         }
