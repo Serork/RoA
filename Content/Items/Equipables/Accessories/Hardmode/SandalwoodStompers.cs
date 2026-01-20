@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common;
 using RoA.Common.Druid;
 using RoA.Common.Items;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
@@ -49,14 +48,7 @@ sealed class SandalwoodStompers : NatureItem {
             return;
         }
 
-        bool canSpawn = true;
-        foreach (Projectile seedProjectile in TrackedEntitiesSystem.GetTrackedProjectile<SeedOfWisdomRoot>(checkProjectile => checkProjectile.owner != player.whoAmI)) {
-            if (!seedProjectile.As<SeedOfWisdomRoot>().SpawnedFromLanding) {
-                canSpawn = false;
-                break;
-            }
-        }
-        if (!canSpawn) {
+        if (player.HasProjectile<SeedOfWisdomRoot>()) {
             return;
         }
 
