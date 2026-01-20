@@ -22,6 +22,8 @@ using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 
+using static RoA.Content.Items.Equipables.Accessories.RagingBoots;
+
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
 [Tracked]
@@ -103,8 +105,13 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
+    }
 
-        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
+    protected override bool ShouldAttachNatureWeaponOnSpawn() => false;
+
+    protected override void SafeOnSpawn(IEntitySource source) {
+        Item? bootsItem = Projectile.GetOwnerAsPlayer().GetModPlayer<RagingBootsAttackHandler>().Boots;
+        NatureProjectileSetItem(Projectile, bootsItem);
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
@@ -148,6 +155,7 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
                 }
 
                 if (Projectile.IsOwnerLocal()) {
+
                     RootChoice = Increased ? Main.rand.Next(6) : Main.rand.Next(5);
                     _reversed = Main.rand.NextBool();
                     Projectile.netUpdate = true;

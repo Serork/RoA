@@ -69,6 +69,8 @@ abstract class NatureProjectile : ModProjectile {
 
     protected int AttachedNatureWeaponDamage;
 
+    protected virtual bool ShouldAttachNatureWeaponOnSpawn() => true;
+
     public float WreathFillingFine {
         get => _wreathFillingFine;
         protected set {
@@ -230,7 +232,9 @@ abstract class NatureProjectile : ModProjectile {
     }
 
     public sealed override void OnSpawn(IEntitySource source) {
-        NatureProjectileSetItem(Projectile);
+        if (ShouldAttachNatureWeaponOnSpawn()) {
+            NatureProjectileSetItem(Projectile);
+        }
 
         SafeOnSpawn(source);
     }
