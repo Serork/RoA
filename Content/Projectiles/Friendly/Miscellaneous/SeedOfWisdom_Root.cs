@@ -343,7 +343,8 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
             Rectangle circleClip = circleTexture.Bounds;
             Vector2 circleOrigin = circleClip.Centered();
             Vector2 circleSize = Vector2.One * Ease.CubeOut(_allProgress) * 1.5f;
-            Color circleColor = getColor() * MathHelper.Lerp(0.75f, 0f, Ease.CubeOut(_allProgress));
+            Color lightColor2 = Lighting.GetColor(circlePosition.ToTileCoordinates());
+            Color circleColor = getColor().MultiplyRGB(lightColor2) * MathHelper.Lerp(0.75f, 0f, Ease.CubeOut(_allProgress));
             DrawInfo circleDrawInfo = new() {
                 Clip = circleClip,
                 Origin = circleOrigin,
@@ -356,7 +357,7 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
             Rectangle circle2Clip = circleTexture2.Bounds;
             Vector2 circle2Origin = circle2Clip.Centered();
             Vector2 circle2Size = Vector2.One * Ease.CubeOut(_allProgress) * 2.75f;
-            Color circle2Color = getColor() * MathHelper.Lerp(0.75f, 0f, Ease.CubeOut(_allProgress));
+            Color circle2Color = getColor().MultiplyRGB(lightColor2) * MathHelper.Lerp(0.75f, 0f, Ease.CubeOut(_allProgress));
             DrawInfo circle2DrawInfo = new() {
                 Clip = circle2Clip,
                 Origin = circle2Origin,
