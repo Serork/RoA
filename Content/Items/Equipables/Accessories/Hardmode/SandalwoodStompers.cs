@@ -43,8 +43,8 @@ sealed class SandalwoodStompers : NatureItem {
             player.gravity *= 1.5f;
         }
 
-        ushort attackTime = MathUtils.SecondsToFrames(1.5f);
-        if (player.GetCommon().StandingStillTimer < 1) {
+        ushort attackTime = MathUtils.SecondsToFrames(0.5f);
+        if (player.GetCommon().StandingStillTimer < attackTime) {
             return;
         }
 
