@@ -143,6 +143,15 @@ sealed class RagingBoots : NatureItem {
 
                     if (!ragingBoots && Player.IsLocal()) {
                         Vector2 position = Player.Bottom;
+                        for (int i = 0; i < count2; i++) {
+                            if (Main.rand.Next(3) == 0) {
+                                Dust dust2 = Dust.NewDustDirect(position, 0, 0, DustID.TintableDustLighted, velocity.X, velocity.Y, 254, Main.rand.NextFromList([.. colors]), 0.5f);
+                                Vector2 vector3 = Main.rand.NextVector2Circular(1f, 1f) * 4f;
+                                dust2.position = position + vector3 * 10f;
+                                dust2.velocity = vector3;
+                            }
+                        }
+
                         ProjectileUtils.SpawnPlayerOwnedProjectile<SeedOfWisdomRoot>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Accessory(item)) {
                             Position = position,
                             AI0 = 1f,

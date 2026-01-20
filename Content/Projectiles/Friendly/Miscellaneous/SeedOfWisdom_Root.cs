@@ -6,9 +6,11 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Projectiles;
+using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -79,6 +81,7 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
     private float _growSpeed;
     private bool _reversed; // sync
     private float _scaleFactor;
+    private float _allProgress;
 
     public override void Unload() {
         _rootMapPositions.Clear();
@@ -115,10 +118,12 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
             if (!Init) {
                 Init = true;
 
-                _growSpeed = 0.5f;
+                float extra = 0.075f * SpawnedFromLandingValue / 100f;
+                _growSpeed = 0.5f + extra;
 
                 if (SpawnedFromLanding) {
                     Projectile.timeLeft = (int)SpawnedFromLandingValue;
+                    Main.NewText(Projectile.timeLeft);
                 }
 
                 if (Projectile.IsOwnerLocal()) {
@@ -230,8 +235,14 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
             }
             allProgress /= count;
 
+            //_allProgress = allProgress;
+            _allProgress = Helper.Approach(_allProgress, allProgress, 0.1f);
+
+            float clampedAllProgress = MathUtils.Clamp01(allProgress);
             if (!SpawnedFromLanding) {
-                Projectile.GetOwnerAsPlayer().statDefense += (int)(MathUtils.Clamp01(allProgress) * 25);
+                Player player = Projectile.GetOwnerAsPlayer();
+                player.statDefense += (int)(clampedAllProgress * 25);
+                player.AddBuff<WiseDefense>(2);
             }
             else {
                 foreach (Player player in Main.ActivePlayers) {
@@ -242,12 +253,13 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                         continue;
                     }
 
-                    player.statDefense += (int)(MathUtils.Clamp01(allProgress) * 25);
+                    player.statDefense += (int)(clampedAllProgress * 25);
+                    player.AddBuff<WiseDefense>(2);
                 }
             }
 
             if (!_shouldBeKilled) {
-                Projectile.Opacity = Ease.CubeOut(MathUtils.Clamp01(allProgress));
+                Projectile.Opacity = Ease.CubeOut(clampedAllProgress);
             }
             else {
                 Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.2f);
@@ -286,6 +298,45 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
 
         Texture2D texture = indexedTextureAssets[(byte)SeedOfWisdomRoot_RequstedTextureType.Root].Value;
 
+        Texture2D circleTexture = ResourceManager.Circle,
+                  circleTexture2 = ResourceManager.Circle3;
+
+        Color getColor() {
+            Color color = WreathHandler.GetCurrentColor(Projectile.GetOwnerAsPlayer());
+            if (_shouldBeKilled) {
+                color = Color.Lerp(color, color.ModifyRGB(0.375f), Ease.CubeOut(Projectile.Opacity));
+            }
+            return color;
+        }
+
+        if (SpawnedFromLanding) {
+            Vector2 circlePosition = Projectile.Center - Vector2.One * TileHelper.TileSize * new Vector2(1f, 1f) + Vector2.UnitX * TileHelper.TileSize * 1f;
+            Rectangle circleClip = circleTexture.Bounds;
+            Vector2 circleOrigin = circleClip.Centered();
+            Vector2 circleSize = Vector2.One * Ease.CubeOut(_allProgress) * 1.5f;
+            Color circleColor = getColor() * MathHelper.Lerp(0.75f, 0f, Ease.CubeOut(_allProgress));
+            DrawInfo circleDrawInfo = new() {
+                Clip = circleClip,
+                Origin = circleOrigin,
+                Scale = circleSize,
+                Color = circleColor
+            };
+            SpriteBatch batch = Main.spriteBatch;
+            batch.DrawWithSnapshot(circleTexture, circlePosition, circleDrawInfo, blendState: BlendState.Additive);
+
+            Rectangle circle2Clip = circleTexture2.Bounds;
+            Vector2 circle2Origin = circle2Clip.Centered();
+            Vector2 circle2Size = Vector2.One * Ease.CubeOut(_allProgress) * 2.75f;
+            Color circle2Color = getColor() * MathHelper.Lerp(0.75f, 0f, Ease.CubeOut(_allProgress));
+            DrawInfo circle2DrawInfo = new() {
+                Clip = circle2Clip,
+                Origin = circle2Origin,
+                Scale = circle2Size,
+                Color = circle2Color
+            };
+            batch.DrawWithSnapshot(circleTexture2, circlePosition, circle2DrawInfo, blendState: BlendState.Additive);
+        }
+
         Vector2 drawOffset = -Vector2.UnitY * 8f;
 
         drawOffset *= 0f;
@@ -312,10 +363,7 @@ sealed class SeedOfWisdomRoot : ModProjectile_NoTextureLoad, IRequestAssets, IPo
                 rootTileInfo.FrameCoords = IceBlock.GetTileFrame(hasLeft, hasRight, hasTop, hasBottom);
             }
             Point position = tilePosition.ToPoint();
-            Color color = WreathHandler.GetCurrentColor(Projectile.GetOwnerAsPlayer());
-            if (_shouldBeKilled) {
-                color = Color.Lerp(color, color.ModifyRGB(0.375f), Ease.CubeOut(Projectile.Opacity));
-            }
+            Color color = getColor();
             color = color.MultiplyRGB(Lighting.GetColor(position));
             float opacity2 = rootTileInfo.Progress;
             if (_shouldBeKilled) {

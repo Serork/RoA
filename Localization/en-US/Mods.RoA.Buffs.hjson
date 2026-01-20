@@ -340,3 +340,8 @@ BuffLantern: {
 	DisplayName: Buff Lantern
 	Description: Mods.RoA.Buffs.BuffLantern.Description
 }
+
+WiseDefense: {
+	DisplayName: Wise Defense
+	Description: Mods.RoA.Buffs.WiseDefense.Description
+}
