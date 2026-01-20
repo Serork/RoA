@@ -130,6 +130,27 @@ sealed class TarBiome_GenPass : ModSystem {
                 for (int k = 5; k < Main.maxTilesY - 5; k++) {
                     Tile tile = Main.tile[j, k];
                     if (tile.HasTile) {
+                        if (tile.TileType == TarBiome.TARTILETYPE) {
+                            if (!Main.tile[j, k - 1].HasTile)
+                                WorldGen.Place2x1(j, k - 1, (ushort)ModContent.TileType<TarRocks2>(), WorldGen.genRand.Next(3));
+
+                            if (!Main.tile[j, k - 1].HasTile) {
+                                ushort tarRocks1 = (ushort)ModContent.TileType<TarRocks1>();
+                                WorldGen.Place1x1(j, k - 1, tarRocks1);
+                                Tile tile2 = Main.tile[j, k - 1];
+                                if (tile2.TileType == tarRocks1) {
+                                    tile2.TileFrameX = (short)(18 * WorldGen.genRand.Next(6));
+                                    tile2.TileFrameY = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            for (int j = 5; j < Main.maxTilesX - 5; j++) {
+                for (int k = 5; k < Main.maxTilesY - 5; k++) {
+                    Tile tile = Main.tile[j, k];
+                    if (tile.HasTile) {
                         if (tile.TileType == TarBiome.TARTILETYPE && !tile.IsHalfBlock) {
                             bool flag = false;
                             int check = 1;
