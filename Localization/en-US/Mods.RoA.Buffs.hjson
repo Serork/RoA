@@ -345,3 +345,8 @@ WiseDefense: {
 	DisplayName: Wise Defense
 	Description: Mods.RoA.Buffs.WiseDefense.Description
 }
+
+TempBuffer: {
+	DisplayName: Temp Buffer
+	Description: Mods.RoA.Buffs.TempBuffer.Description
+}

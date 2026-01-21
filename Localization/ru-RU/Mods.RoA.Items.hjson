@@ -2705,6 +2705,11 @@ SeedOfWisdom: {
 }
 
 MaidensBracers: {
-	// DisplayName: Maidens Bracers
+	// DisplayName: Maiden's Bracers
+	// Tooltip: ""
+}
+
+FossilizedSpiral: {
+	// DisplayName: Fossilized Spiral
 	// Tooltip: ""
 }

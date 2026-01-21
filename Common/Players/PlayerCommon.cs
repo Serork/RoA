@@ -71,7 +71,11 @@ sealed partial class PlayerCommon : ModPlayer {
     public Player.CompositeArmStretchAmount TempStretchAmount;
     public bool ItemUsed;
 
+    public bool IsSeedOfWisdomEffectActive;
+
     public bool IsMaidensBracersEffectActive;
+
+    public bool IsFossilizedSpiralEffectActive;
 
     public bool StandingStill => StandingStillTimer > 0;
 
@@ -224,6 +228,9 @@ sealed partial class PlayerCommon : ModPlayer {
             }
             if (self.GetCommon().IsElderShellEffectActive) {
                 self.AddBuff<SnailBuff>(ElderShell.BUFFTIME);
+            }
+            if (self.GetCommon().IsFossilizedSpiralEffectActive) {
+                self.AddBuff<TempBuffer>(ElderShell.BUFFTIME);
             }
         }
         return result;
@@ -577,6 +584,10 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsSeedOfWisdomEffectActive = false;
+
+        IsFossilizedSpiralEffectActive = false;
+
         IsMaidensBracersEffectActive = false;
 
         IsFallenLeavesEffectActive = false;

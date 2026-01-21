@@ -2682,3 +2682,8 @@ MaidensBracers: {
 	DisplayName: Maiden's Bracers
 	Tooltip: ""
 }
+
+FossilizedSpiral: {
+	DisplayName: Fossilized Spiral
+	Tooltip: ""
+}

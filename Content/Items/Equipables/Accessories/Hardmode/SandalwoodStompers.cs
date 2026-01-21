@@ -30,6 +30,8 @@ sealed class SandalwoodStompers : NatureItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
+        player.GetCommon().IsSeedOfWisdomEffectActive = true;
+
         var handler = player.GetModPlayer<RagingBootsAttackHandler>();
         if (!handler.IsEffectActive) {
             handler.Boots = Item;

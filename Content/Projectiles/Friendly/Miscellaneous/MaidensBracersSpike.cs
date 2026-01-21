@@ -23,6 +23,8 @@ sealed class MaidensBracersSpike : ModProjectile {
         Projectile.tileCollide = false;
 
         Projectile.Opacity = 0f;
+
+        Projectile.ignoreWater = true;
     }
 
     public override bool? CanDamage() => false;
@@ -33,10 +35,12 @@ sealed class MaidensBracersSpike : ModProjectile {
 
         Projectile.Center = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint();
 
-        Projectile.localAI[0] += 0.25f;
+        float mult = 1.2f;
+
+        Projectile.localAI[0] += 0.25f * mult;
         if (Projectile.localAI[0] >= 5f) {
             float to = 0.65f;
-            Projectile.localAI[1] = Helper.Approach(Projectile.localAI[1], to, 0.05f);
+            Projectile.localAI[1] = Helper.Approach(Projectile.localAI[1], to, 0.05f * mult);
             if (Projectile.localAI[1] >= to) {
                 Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.2f);
                 if (Projectile.Opacity <= 0f) {
@@ -73,7 +77,7 @@ sealed class MaidensBracersSpike : ModProjectile {
             position += Utils.ToRotationVector2(circleFactor) * (AreaSize + MathF.Sin(circleFactor * 7.5f + visualTimer) * maxOffset) * (1f - Projectile.localAI[1]);
             float rotation1 = rotation;
             Color baseColor = Color.White;
-            color = baseColor * Projectile.Opacity;
+            color = baseColor * Projectile.Opacity * 0.6f;
             Vector2 origin = clip.Centered();
             Main.spriteBatch.Draw(texture, position, DrawInfo.Default with {
                 Clip = clip,

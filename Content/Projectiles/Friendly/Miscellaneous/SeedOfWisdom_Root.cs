@@ -143,6 +143,10 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
             Projectile.timeLeft = 2;
         }
 
+        if (!Projectile.GetOwnerAsPlayer().GetCommon().IsSeedOfWisdomEffectActive) {
+            _shouldBeKilled = true;
+        }
+
         void init() {
             if (!Init) {
                 Init = true;
