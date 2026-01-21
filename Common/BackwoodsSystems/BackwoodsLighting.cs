@@ -23,7 +23,7 @@ sealed class BackwoodsLighting : ModSystem {
     public override void ModifyLightingBrightness(ref float scale) {
         if (Brightness2 > 0f) {
             float strength = ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f;
-            strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2;
+            strength = Math.Min(strength, 1f) * 0.8f * Brightness * Brightness2;
             float value = Utils.Remap(strength, 0f, 0.78f, scale, 0.95f);
             scale = value;
         }
@@ -43,7 +43,7 @@ sealed class BackwoodsLighting : ModSystem {
         var handler = Main.LocalPlayer.GetModPlayer<EnragedVisuals>();
         bool flag = handler._opacity > 0f;
         if (ModContent.GetInstance<TileCount>().BackwoodsTiles > 0 || flag) {
-            NPC npc = null;
+            NPC? npc = null;
             if (flag) {
                 npc = Main.npc.FirstOrDefault(x => x.active && x.type == type);
             }
@@ -54,7 +54,7 @@ sealed class BackwoodsLighting : ModSystem {
             if (flag && (LothorEnrageScene.MonolithNearby || handler._isActive2 || (npc != null && npc.active && npc.As<Lothor>() != null && npc.As<Lothor>().LifeProgress == 1f))) {
                 strength = Math.Max(strength, 1.5f * handler._opacity);
             }
-            strength = Math.Min(strength, 1f) * 0.85f * Brightness * Brightness2 + Helper.EaseInOut3(Math.Min(1f, AltarHandler.GetAltarStrength())) * 0.5f/* + MathUtils.EaseInOut3(Math.Min(1f, OvergrownCoords.Strength + 0.25f))*/;
+            strength = Math.Min(strength, 1f) * 0.8f * Brightness * Brightness2 + Helper.EaseInOut3(Math.Min(1f, AltarHandler.GetAltarStrength())) * 0.5f/* + MathUtils.EaseInOut3(Math.Min(1f, OvergrownCoords.Strength + 0.25f))*/;
             int sunR = backgroundColor.R;
             int sunG = backgroundColor.G;
             int sunB = backgroundColor.B;
