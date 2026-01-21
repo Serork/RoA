@@ -548,24 +548,6 @@ sealed partial class PlayerCommon : ModPlayer {
         else {
             StandingStillTimer = 0f;
         }
-
-        if (IsMaidensBracersEffectActive) {
-            if (Player.ItemAnimationJustStarted && Player.IsLocal() && Main.rand.NextBool(10)) {
-                Item sItem = Player.GetSelectedItem();
-                if (!sItem.IsATool()) {
-                    int num = sItem.damage;
-                    num = Main.DamageVar(num, Player.luck);
-                    int direction = 0;
-                    PlayerDeathReason playerDeathReason = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.MaidensBracers{Main.rand.Next(2)}").ToNetworkText(Player.name));
-                    int result = (int)Player.Hurt(playerDeathReason, num, direction);
-                    if (result > 0) {
-                        ProjectileUtils.SpawnPlayerOwnedProjectile<MaidensBracersSpike>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(playerDeathReason)) with {
-                            Position = Player.Center
-                        });
-                    }
-                }
-            }
-        }
     }
 
     public partial void DeerSkullPostUpdateEquips();
@@ -651,6 +633,26 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event OnHitNPCDelegate OnHitNPCEvent;
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         OnHitNPCEvent?.Invoke(Player, target, hit, damageDone);
+    }
+
+    public override void OnHitAnything(float x, float y, Entity victim) {
+        if (IsMaidensBracersEffectActive) {
+            if (Player.IsLocal() && Main.rand.NextBool(10)) {
+                Item sItem = Player.GetSelectedItem();
+                if (!sItem.IsATool()) {
+                    int num = sItem.damage;
+                    num = Main.DamageVar(num, Player.luck);
+                    int direction = 0;
+                    PlayerDeathReason playerDeathReason = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.MaidensBracers{Main.rand.Next(2)}").ToNetworkText(Player.name));
+                    int result = (int)Player.Hurt(playerDeathReason, num, direction);
+                    if (result > 0) {
+                        ProjectileUtils.SpawnPlayerOwnedProjectile<MaidensBracersSpike>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(playerDeathReason)) with {
+                            Position = Player.Center
+                        });
+                    }
+                }
+            }
+        }
     }
 
     public delegate void ResetEffectsDelegate(Player player);
