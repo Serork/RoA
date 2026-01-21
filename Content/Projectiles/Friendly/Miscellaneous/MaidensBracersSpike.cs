@@ -77,7 +77,7 @@ sealed class MaidensBracersSpike : ModProjectile {
             position += Utils.ToRotationVector2(circleFactor) * (AreaSize + MathF.Sin(circleFactor * 7.5f + visualTimer) * maxOffset) * (1f - Projectile.localAI[1]);
             float rotation1 = rotation;
             Color baseColor = Color.White;
-            color = baseColor * Projectile.Opacity * 0.6f;
+            color = baseColor * Projectile.Opacity * 0.55f;
             Vector2 origin = clip.Centered();
             Main.spriteBatch.Draw(texture, position, DrawInfo.Default with {
                 Clip = clip,
