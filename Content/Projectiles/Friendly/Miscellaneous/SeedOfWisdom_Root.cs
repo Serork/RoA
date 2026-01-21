@@ -115,14 +115,16 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-        foreach (RootPseudoTileInfo rootPseudoTileInfo in RootPseudoTileData) {
-            if (rootPseudoTileInfo.Progress < 0.01f) {
-                continue;
-            }
-            Point16 tilePosition = rootPseudoTileInfo.Position;
-            Vector2 worldPosition = tilePosition.ToWorldCoordinates() - Vector2.One * TileHelper.TileSize * 0.5f;
-            if (new Rectangle((int)worldPosition.X, (int)worldPosition.Y, (int)TileHelper.TileSize, (int)TileHelper.TileSize).Intersects(targetHitbox)) {
-                return true;
+        if (SpawnedFromLanding) {
+            foreach (RootPseudoTileInfo rootPseudoTileInfo in RootPseudoTileData) {
+                if (rootPseudoTileInfo.Progress < 0.01f) {
+                    continue;
+                }
+                Point16 tilePosition = rootPseudoTileInfo.Position;
+                Vector2 worldPosition = tilePosition.ToWorldCoordinates() - Vector2.One * TileHelper.TileSize * 0.5f;
+                if (new Rectangle((int)worldPosition.X, (int)worldPosition.Y, (int)TileHelper.TileSize, (int)TileHelper.TileSize).Intersects(targetHitbox)) {
+                    return true;
+                }
             }
         }
 
@@ -130,6 +132,10 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
     }
 
     public override void AI() {
+        if (!SpawnedFromLanding) {
+            Projectile.damage = 0;
+        }
+
         if (!SpawnedFromLanding) {
             Projectile.timeLeft = 2;
         }
