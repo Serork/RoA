@@ -2703,3 +2703,8 @@ SeedOfWisdom: {
 	// DisplayName: Seed Of Wisdom
 	// Tooltip: ""
 }
+
+MaidensBracers: {
+	// DisplayName: Maidens Bracers
+	// Tooltip: ""
+}

@@ -4,6 +4,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
+using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Tiles.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -17,9 +18,12 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
+
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RoA.Common.Players;
 
@@ -66,6 +70,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public Player.CompositeArmStretchAmount TempStretchAmount;
     public bool ItemUsed;
+
+    public bool IsMaidensBracersEffectActive;
 
     public bool StandingStill => StandingStillTimer > 0;
 
@@ -466,6 +472,21 @@ sealed partial class PlayerCommon : ModPlayer {
         else {
             StandingStillTimer = 0f;
         }
+
+        if (IsMaidensBracersEffectActive) {
+            if (Player.ItemAnimationJustStarted && Player.IsLocal() && Main.rand.NextBool(10)) {
+                Item sItem = Player.GetSelectedItem();
+                int num = sItem.damage;
+                num = Main.DamageVar(num, Player.luck);
+                int direction = 0;
+                PlayerDeathReason playerDeathReason = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.MaidensBracers{Main.rand.Next(2)}").ToNetworkText(Player.name));
+                int result = (int)Player.Hurt(playerDeathReason, num, direction);
+
+                ProjectileUtils.SpawnPlayerOwnedProjectile<MaidensBracersSpike>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(playerDeathReason)) with {
+                    Position = Player.Center
+                });
+            }
+        }
     }
 
     public partial void DeerSkullPostUpdateEquips();
@@ -556,6 +577,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsMaidensBracersEffectActive = false;
+
         IsFallenLeavesEffectActive = false;
 
         DrawJokeVisor = false;

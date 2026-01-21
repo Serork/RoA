@@ -27,3 +27,6 @@ HunterRifle1: " отследили."
 // PerfectMimic0: "{0} is still alive..."
 // PerfectMimic1: "{0} is fine and dandy..."
 // PerfectMimic2: "{0} is right here, look..."
+// Died from Maiden's Bracers
+// MaidensBracers0: "{0} is dead by ..."
+// MaidensBracers1: "{0} is dead by ..."

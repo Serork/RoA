@@ -2677,3 +2677,8 @@ SeedOfWisdom: {
 	DisplayName: Seed Of Wisdom
 	Tooltip: ""
 }
+
+MaidensBracers: {
+	DisplayName: Maiden's Bracers
+	Tooltip: ""
+}

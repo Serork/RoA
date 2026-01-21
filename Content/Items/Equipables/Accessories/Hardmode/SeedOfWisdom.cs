@@ -19,7 +19,7 @@ sealed class SeedOfWisdom : ModItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        ushort attackTime = MathUtils.SecondsToFrames(0.5f);
+        ushort attackTime = MathUtils.SecondsToFrames(0.25f);
         if (player.GetCommon().StandingStillTimer < attackTime) {
             return;
         }
