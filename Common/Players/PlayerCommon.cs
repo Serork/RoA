@@ -5,25 +5,24 @@ using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
-using RoA.Content.Tiles.Miscellaneous;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
-
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RoA.Common.Players;
 
@@ -32,6 +31,10 @@ sealed partial class PlayerCommon : ModPlayer {
     private static float MAXFALLSPEEDMODIFIERFORFALL => 0.75f;
 
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;
+
+    private static bool _drawingTempBufferCopies;
+    private static List<float> _tempBufferCopiesHueShift = null!;
+    private static byte _currentTempBufferCopyIndex;
 
     private bool _fell;
     private float _fellTimer;
@@ -76,6 +79,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsMaidensBracersEffectActive;
 
     public bool IsFossilizedSpiralEffectActive;
+
+    public ushort TempBufferDodgeAnimationCounter;
 
     public bool StandingStill => StandingStillTimer > 0;
 
@@ -156,6 +161,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
             Player.SetImmuneTimeForAllTypes(Player.longInvince ? 120 : 80);
 
+            TempBufferDodgeAnimationCounter = 300;
+
             return true;
         }
 
@@ -209,11 +216,46 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.GetImmuneAlphaPure += On_Player_GetImmuneAlphaPure;
     }
 
+    public override void DrawPlayer(Camera camera) {
+        if (TempBufferDodgeAnimationCounter <= 0) {
+            return;
+        }
+
+        Player drawPlayer = Player;
+
+        _drawingTempBufferCopies = true;
+        _tempBufferCopiesHueShift = [];
+        _currentTempBufferCopyIndex = 0;
+
+        Vector2 vector2 = drawPlayer.position + new Vector2(0f, drawPlayer.gfxOffY);
+        float lerpValue = Utils.GetLerpValue(300f, 270f, TempBufferDodgeAnimationCounter);
+        float y = MathHelper.Lerp(2f, 100f, lerpValue);
+        if (lerpValue >= 0f && lerpValue <= 1f) {
+            for (float num12 = 0f; num12 < (float)Math.PI * 0.5f; num12 += (float)Math.PI / 10f) {
+                _tempBufferCopiesHueShift.Add(num12 * 2f);
+            }
+            for (float num12 = 0f; num12 < (float)Math.PI * 0.5f; num12 += (float)Math.PI / 10f) {
+                Vector2 position = vector2 + Vector2.UnitY * y * 0.5f + new Vector2(0f, y).RotatedBy((float)Math.PI * 0.8f + num12);
+                Main.PlayerRenderer.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, lerpValue);
+
+                _currentTempBufferCopyIndex++;
+            }
+        }
+
+        _drawingTempBufferCopies = false;
+    }
 
     private Color On_Player_GetImmuneAlphaPure(On_Player.orig_GetImmuneAlphaPure orig, Player self, Color newColor, float alphaReduction) {
         Color result = orig(self, newColor, alphaReduction);
         if (self.GetCommon().FriarLanternEffectStrength > 0f) {
             result = Color.Lerp(result, Color.Gray * 0.25f, self.GetCommon().FriarLanternEffectStrength);
+        }
+        if (_drawingTempBufferCopies) {
+            float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
+            Color color = Main.hslToRgb(0.7f + (float)Math.Sin((float)Math.PI * 2f * Main.GlobalTimeWrappedHourly * 0.16f
+                + _tempBufferCopiesHueShift[_currentTempBufferCopyIndex]), 1f, 0.5f);
+            color.A /= 3;
+            result = Color.Lerp(result, color, 0.25f) * opacity;
         }
         return result;
     }
@@ -222,6 +264,13 @@ sealed partial class PlayerCommon : ModPlayer {
         Color result = orig(self, newColor, alphaReduction);
         if (self.GetCommon().FriarLanternEffectStrength > 0f) {
             result = Color.Lerp(result, Color.Gray * 0.25f, self.GetCommon().FriarLanternEffectStrength);
+        }
+        if (_drawingTempBufferCopies) {
+            float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
+            Color color = Main.hslToRgb(0.7f + (float)Math.Sin((float)Math.PI * 2f * Main.GlobalTimeWrappedHourly * 0.16f 
+                + _tempBufferCopiesHueShift[_currentTempBufferCopyIndex]), 1f, 0.5f);
+            color.A /= 3;
+            result = Color.Lerp(result, color, 0.25f) * opacity;
         }
         return result;
     }
@@ -469,6 +518,10 @@ sealed partial class PlayerCommon : ModPlayer {
         PostUpdateEquipsEvent?.Invoke(Player);
 
         DeerSkullPostUpdateEquips();
+
+        if (TempBufferDodgeAnimationCounter > 0) {
+            TempBufferDodgeAnimationCounter--;
+        }
 
         if (ElderSnailSlow) {
             Player.moveSpeed /= 3f;
