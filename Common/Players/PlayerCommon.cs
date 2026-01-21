@@ -254,7 +254,7 @@ sealed partial class PlayerCommon : ModPlayer {
             float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
             Color color = Main.hslToRgb(0.7f + (float)Math.Sin((float)Math.PI * 2f * Main.GlobalTimeWrappedHourly * 0.16f
                 + _tempBufferCopiesHueShift[_currentTempBufferCopyIndex]), 1f, 0.5f);
-            color.A /= 3;
+            color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
         }
         return result;
@@ -269,7 +269,7 @@ sealed partial class PlayerCommon : ModPlayer {
             float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
             Color color = Main.hslToRgb(0.7f + (float)Math.Sin((float)Math.PI * 2f * Main.GlobalTimeWrappedHourly * 0.16f 
                 + _tempBufferCopiesHueShift[_currentTempBufferCopyIndex]), 1f, 0.5f);
-            color.A /= 3;
+            color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
         }
         return result;
