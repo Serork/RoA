@@ -146,6 +146,16 @@ sealed partial class PlayerCommon : ModPlayer {
         OldUseItemRot[0] = rotation;
     }
 
+    public override bool FreeDodge(Player.HurtInfo info) {
+        if (Player.HasBuff<TempBuffer>()) {
+            Player.DelBuff<TempBuffer>();
+
+            return true;
+        }
+
+        return base.FreeDodge(info);
+    }
+
     public delegate void CatchFishDelegate(Player player, FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition);
     public static event CatchFishDelegate CatchFishEvent = null!;
     public override void CatchFish(FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition) {
