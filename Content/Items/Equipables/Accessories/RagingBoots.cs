@@ -255,6 +255,8 @@ sealed class RagingBoots : NatureItem {
                             }
                         }
 
+                        _onGround = true;
+
                         _onGround2 = true;
                     }
 
