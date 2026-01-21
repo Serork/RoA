@@ -267,6 +267,10 @@ sealed class RagingBoots : NatureItem {
             handleRagingBoots();
             handleWoodBoots();
 
+            if (_onGround && !_onGround2) {
+                _onGround2 = true;
+            }
+
             if (!calculateFallLength) {
                 return;
             }
