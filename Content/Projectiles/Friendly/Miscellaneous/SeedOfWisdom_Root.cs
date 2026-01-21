@@ -110,7 +110,7 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
     protected override bool ShouldAttachNatureWeaponOnSpawn() => false;
 
     protected override void SafeOnSpawn(IEntitySource source) {
-        Item? bootsItem = Projectile.GetOwnerAsPlayer().GetModPlayer<RagingBootsAttackHandler>().Boots;
+        Item? bootsItem = Projectile.GetOwnerAsPlayer().GetModPlayer<RagingBootsAttackHandler>().WoodSandals;
         NatureProjectileSetItem(Projectile, bootsItem);
     }
 

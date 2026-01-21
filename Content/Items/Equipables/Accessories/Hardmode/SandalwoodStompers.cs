@@ -33,16 +33,18 @@ sealed class SandalwoodStompers : NatureItem {
         player.GetCommon().IsSeedOfWisdomEffectActive = true;
 
         var handler = player.GetModPlayer<RagingBootsAttackHandler>();
-        if (!handler.IsEffectActive) {
-            handler.Boots = Item;
+        if (!handler.IsWoodSandalsEffectActive) {
+            handler.WoodSandals = Item;
         }
-        handler.IsEffectActive = true;
+        handler.IsWoodSandalsEffectActive = true;
 
-        player.moveSpeed += 0.05f;
-        player.runAcceleration += 0.05f;
+        if (!handler.IsRagingBootsEffectActive) {
+            player.moveSpeed += 0.05f;
+            player.runAcceleration += 0.05f;
 
-        if ((player.gravDir == 1 && player.velocity.Y > 0) || (player.gravDir == -1 && player.velocity.Y < 0)) {
-            player.gravity *= 1.5f;
+            if ((player.gravDir == 1 && player.velocity.Y > 0) || (player.gravDir == -1 && player.velocity.Y < 0)) {
+                player.gravity *= 1.5f;
+            }
         }
 
         ushort attackTime = MathUtils.SecondsToFrames(0.25f);

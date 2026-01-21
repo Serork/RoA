@@ -6,7 +6,10 @@ using RoA.Core.Utility;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
+
+using static RoA.Content.Items.Equipables.Accessories.RagingBoots;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
 
@@ -23,8 +26,13 @@ sealed class RagingBootsWave : NatureProjectile {
         Projectile.tileCollide = false;
         Projectile.penetrate = -1;
         AIType = 14;
+    }
 
-        ShouldApplyAttachedNatureWeaponCurrentDamage = false;
+    protected override bool ShouldAttachNatureWeaponOnSpawn() => false;
+
+    protected override void SafeOnSpawn(IEntitySource source) {
+        Item? bootsItem = Projectile.GetOwnerAsPlayer().GetModPlayer<RagingBootsAttackHandler>().RagingBoots;
+        NatureProjectileSetItem(Projectile, bootsItem);
     }
 
     //public override bool? CanCutTiles() => false;
