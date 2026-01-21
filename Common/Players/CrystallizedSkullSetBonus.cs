@@ -8,6 +8,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -270,7 +271,7 @@ sealed partial class PlayerCommon : ModPlayer {
             return;
         }
         
-        if (player.dead) {
+        if (!player.IsAlive()) {
             return;
         }
 
