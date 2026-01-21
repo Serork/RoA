@@ -147,7 +147,7 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override bool FreeDodge(Player.HurtInfo info) {
-        if (Player.HasBuff<TempBuffer>() && Player.statLife <= info.Damage) {
+        if (Player.HasBuff<TempBuffer>()) {
             Player.DelBuff<TempBuffer>();
 
             return true;
