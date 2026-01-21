@@ -488,10 +488,11 @@ sealed partial class PlayerCommon : ModPlayer {
                 int direction = 0;
                 PlayerDeathReason playerDeathReason = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.MaidensBracers{Main.rand.Next(2)}").ToNetworkText(Player.name));
                 int result = (int)Player.Hurt(playerDeathReason, num, direction);
-
-                ProjectileUtils.SpawnPlayerOwnedProjectile<MaidensBracersSpike>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(playerDeathReason)) with {
-                    Position = Player.Center
-                });
+                if (result > 0) {
+                    ProjectileUtils.SpawnPlayerOwnedProjectile<MaidensBracersSpike>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(playerDeathReason)) with {
+                        Position = Player.Center
+                    });
+                }
             }
         }
     }
