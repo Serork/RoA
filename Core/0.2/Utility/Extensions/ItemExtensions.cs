@@ -4,12 +4,17 @@ using RoA.Core.Defaults;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Core.Utility.Extensions;
 
 static partial class ItemExtensions {
+    public static readonly IItemEntryFilter Tools = new ItemFilters.Tools();
+
+    public static bool IsATool(this Item item) => Tools.FitsFilter(item);
+
     public static ItemCommon GetCommon(this Item item) => item.GetGlobalItem<ItemCommon>();
 
     public static bool IsEquippable(this Item item) => item.accessory || (!item.vanity && (item.headSlot >= 0 || item.bodySlot >= 0 || item.legSlot >= 0));

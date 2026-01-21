@@ -493,15 +493,17 @@ sealed partial class PlayerCommon : ModPlayer {
         if (IsMaidensBracersEffectActive) {
             if (Player.ItemAnimationJustStarted && Player.IsLocal() && Main.rand.NextBool(10)) {
                 Item sItem = Player.GetSelectedItem();
-                int num = sItem.damage;
-                num = Main.DamageVar(num, Player.luck);
-                int direction = 0;
-                PlayerDeathReason playerDeathReason = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.MaidensBracers{Main.rand.Next(2)}").ToNetworkText(Player.name));
-                int result = (int)Player.Hurt(playerDeathReason, num, direction);
-                if (result > 0) {
-                    ProjectileUtils.SpawnPlayerOwnedProjectile<MaidensBracersSpike>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(playerDeathReason)) with {
-                        Position = Player.Center
-                    });
+                if (!sItem.IsATool()) {
+                    int num = sItem.damage;
+                    num = Main.DamageVar(num, Player.luck);
+                    int direction = 0;
+                    PlayerDeathReason playerDeathReason = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.MaidensBracers{Main.rand.Next(2)}").ToNetworkText(Player.name));
+                    int result = (int)Player.Hurt(playerDeathReason, num, direction);
+                    if (result > 0) {
+                        ProjectileUtils.SpawnPlayerOwnedProjectile<MaidensBracersSpike>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(playerDeathReason)) with {
+                            Position = Player.Center
+                        });
+                    }
                 }
             }
         }
