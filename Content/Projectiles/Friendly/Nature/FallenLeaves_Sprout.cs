@@ -98,6 +98,10 @@ sealed class FallenLeavesSprout : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Player player = Projectile.GetOwnerAsPlayer();
+        if (player.GetFormHandler().IsInADruidicForm) {
+            return false;
+        }
+
         SpriteEffects spriteEffects = (Projectile.spriteDirection * player.direction).ToSpriteEffects();
         if (player.gravDir < 0f) {
             spriteEffects |= SpriteEffects.FlipVertically;
