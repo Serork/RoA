@@ -147,13 +147,19 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override bool FreeDodge(Player.HurtInfo info) {
+        return base.FreeDodge(info);
+    }
+
+    public override bool ConsumableDodge(Player.HurtInfo info) {
         if (Player.HasBuff<TempBuffer>()) {
             Player.DelBuff<TempBuffer>();
+
+            Player.SetImmuneTimeForAllTypes(Player.longInvince ? 120 : 80);
 
             return true;
         }
 
-        return base.FreeDodge(info);
+        return base.ConsumableDodge(info);
     }
 
     public delegate void CatchFishDelegate(Player player, FishingAttempt attempt, ref int itemDrop, ref int npcSpawn, ref AdvancedPopupRequest sonar, ref Vector2 sonarPosition);

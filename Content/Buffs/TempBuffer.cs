@@ -1,4 +1,6 @@
-﻿using Terraria;
+﻿using RoA.Core.Utility.Vanilla;
+
+using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
