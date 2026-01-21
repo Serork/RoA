@@ -99,7 +99,7 @@ sealed class LilPhoenixForm : BaseForm {
             player.armorEffectDrawShadowEOCShield = true;
         }
         else {
-            player.fullRotation = 0f/*IsInAir(player) ? 0f : fullRotation*/;
+            player.fullRotation = IsInAir(player) ? 0f : fullRotation;
         }
 
         player.fullRotationOrigin = player.getRect().Size() / 2f;

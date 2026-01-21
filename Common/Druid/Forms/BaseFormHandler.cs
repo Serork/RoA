@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
@@ -19,6 +20,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -332,7 +334,21 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
             typeof(BaseFormHandler).GetMethod(nameof(ExtraJumpLoader_UpdateHorizontalSpeeds), BindingFlags.NonPublic | BindingFlags.Static));
         On_Player.UpdateJumpHeight += On_Player_UpdateJumpHeight;
 
+        On_LegacyPlayerRenderer.DrawPlayer += On_LegacyPlayerRenderer_DrawPlayer;
+
         Load1();
+    }
+
+    private void On_LegacyPlayerRenderer_DrawPlayer(On_LegacyPlayerRenderer.orig_DrawPlayer orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer, Vector2 position, float rotation, Vector2 rotationOrigin, float shadow, float scale) {
+        SpriteBatch batch = camera.SpriteBatch;
+        SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(batch);
+        if (drawPlayer.GetFormHandler().IsInADruidicForm) {
+            batch.Begin(snapshot with { samplerState = camera.Sampler }, true);
+        }
+        orig(self, camera, drawPlayer, position, rotation, rotationOrigin, shadow, scale);
+        if (drawPlayer.GetFormHandler().IsInADruidicForm) {
+            batch.Begin(in snapshot, true);
+        }
     }
 
     public partial void Load1();
@@ -677,7 +693,7 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
 
     private Item On_Player_QuickMount_GetItemToUse(On_Player.orig_QuickMount_GetItemToUse orig, Player self) {
         if (self.GetFormHandler().IsInADruidicForm) {
-            return null;
+            return null!;
         }
 
         return orig(self);

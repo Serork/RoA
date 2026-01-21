@@ -73,7 +73,7 @@ abstract class InsectForm : BaseForm {
         Player.jumpHeight = 50;
         Player.jumpSpeed = 4f;
         player.velocity.Y = Math.Min(5f, player.velocity.Y);
-        player.fullRotationOrigin = new Vector2(player.width / 2f, player.height / 2f);
+        player.fullRotationOrigin = new Vector2(player.width / 2f + 10f * player.direction, player.height / 2f + 0f);
 
         SpecialAttackHandler(player);
     }

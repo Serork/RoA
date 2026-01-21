@@ -71,7 +71,7 @@ sealed class FallenLeavesSprout : ModProjectile {
         Vector2 velocity = Projectile.velocity.SafeNormalize();
         velocity.X *= player.direction * player.gravDir;
         Projectile.rotation = velocity.ToRotation() + MathHelper.PiOver2;
-        Projectile.Center = player.MovementOffset() + player.RotatedRelativePoint(player.GetPlayerCorePoint(), false, false) + velocity.RotatedBy(player.fullRotation) * 25f * player.gravDir;
+        Projectile.Center = player.MovementOffset() + player.RotatedRelativePoint(player.GetPlayerCorePoint(), false, false) + velocity.RotatedBy(player.fullRotation) * new Vector2(15f, 25f) * player.gravDir;
     }
 
     public override void OnKill(int timeLeft) {
