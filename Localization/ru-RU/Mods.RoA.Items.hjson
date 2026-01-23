@@ -2718,3 +2718,8 @@ MysteryCake: {
 	// DisplayName: Mystery Cake
 	// Tooltip: ""
 }
+
+ObsidianStopwatch: {
+	// DisplayName: Obsidian Stopwatch
+	// Tooltip: ""
+}

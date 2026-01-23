@@ -6,6 +6,7 @@ using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -32,9 +33,10 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;
 
-    private static bool _drawingTempBufferCopies;
+    private static bool _drawingTempBufferCopies, _drawingObsidianStopwatchCopies;
     private static List<float> _tempBufferCopiesHueShift = null!;
-    private static byte _currentTempBufferCopyIndex;
+    private static List<ushort> _obsidianStopwatchCopiesHueShift = null!;
+    private static byte _currentTempBufferCopyIndex, _currentObsidianStopwatchCopyIndex;
 
     private bool _fell;
     private float _fellTimer;
@@ -81,6 +83,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsFossilizedSpiralEffectActive;
 
     public ushort TempBufferDodgeAnimationCounter;
+
+    public bool IsObsidianStopwatchEffectActive;
 
     public bool StandingStill => StandingStillTimer > 0;
 
@@ -216,33 +220,88 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.GetImmuneAlphaPure += On_Player_GetImmuneAlphaPure;
     }
 
-    public override void DrawPlayer(Camera camera) {
-        if (TempBufferDodgeAnimationCounter <= 0) {
+    public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
+        if (!_drawingObsidianStopwatchCopies) {
             return;
         }
 
-        Player drawPlayer = Player;
+        int count = drawInfo.DrawDataCache.Count;
+        for (int i = 0; i < count; i++) {
+            float progress = i / (float)count;
+            DrawData value = drawInfo.DrawDataCache[i];
+            float offset = Player.whoAmI + _obsidianStopwatchCopiesHueShift[_currentObsidianStopwatchCopyIndex] * 0.1f * 0.5f;
+            float hue = 0f + Helper.Wave(70f / 255f, 170f / 255f, 5f, offset);
+            Color color = Main.hslToRgb(hue, 1f, 0.5f);
+            color.A = 25;
+            color *= 0.5f;
+            value.color = value.color.MultiplyRGBA(color);
+            value.scale *= Helper.Wave(1.1f, 1.2f, 5f, offset);
+            value.scale *= 1.5f * progress;
+            drawInfo.DrawDataCache[i] = value;
+        }
+    }
 
-        _drawingTempBufferCopies = true;
-        _tempBufferCopiesHueShift = [];
-        _currentTempBufferCopyIndex = 0;
-
-        Vector2 vector2 = drawPlayer.position + new Vector2(0f, drawPlayer.gfxOffY);
-        float lerpValue = Utils.GetLerpValue(300f, 270f, TempBufferDodgeAnimationCounter);
-        float y = MathHelper.Lerp(2f, 100f, lerpValue);
-        if (lerpValue >= 0f && lerpValue <= 1f) {
-            for (float num12 = 0f; num12 < (float)Math.PI * 0.5f; num12 += (float)Math.PI / 10f) {
-                _tempBufferCopiesHueShift.Add(num12 * 2f);
+    public override void DrawPlayer(Camera camera) {
+        void drawObsidianStopwatchEffect() {
+            if (!IsObsidianStopwatchEffectActive) {
+                return;
             }
-            for (float num12 = 0f; num12 < (float)Math.PI * 0.5f; num12 += (float)Math.PI / 10f) {
-                Vector2 position = vector2 + Vector2.UnitY * y * 0.5f + new Vector2(0f, y).RotatedBy((float)Math.PI * 0.8f + num12);
-                Main.PlayerRenderer.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, lerpValue);
 
-                _currentTempBufferCopyIndex++;
+            int totalShadows = Math.Min(Player.availableAdvancedShadowsCount, 60);
+
+            totalShadows = Math.Clamp(totalShadows, 0, 100);
+
+            _obsidianStopwatchCopiesHueShift = [];
+            _currentObsidianStopwatchCopyIndex = 0;
+            _drawingObsidianStopwatchCopies = true;
+
+            int skip = 1;
+            for (int i = 0; i < totalShadows; i += skip) {
+                _obsidianStopwatchCopiesHueShift.Add((ushort)i);
             }
+            for (int i = totalShadows - totalShadows % skip; i > 0; i -= skip) {
+                EntityShadowInfo advancedShadow = Player.GetAdvancedShadow(i);
+                float shadow = Utils.Remap((float)i / totalShadows, 0, 1, 0.15f, 0.5f, clamped: true);
+
+                Main.PlayerRenderer.DrawPlayer(camera, Player, advancedShadow.Position, advancedShadow.Rotation, advancedShadow.Origin, shadow, 1f);
+
+                _currentObsidianStopwatchCopyIndex++;
+            }
+
+            _drawingObsidianStopwatchCopies = false;
         }
 
-        _drawingTempBufferCopies = false;
+        void drawTempBufferEffect() {
+            if (TempBufferDodgeAnimationCounter <= 0) {
+                return;
+            }
+
+            Player drawPlayer = Player;
+
+            _drawingTempBufferCopies = true;
+            _tempBufferCopiesHueShift = [];
+            _currentTempBufferCopyIndex = 0;
+
+            Vector2 vector2 = drawPlayer.position + new Vector2(0f, drawPlayer.gfxOffY);
+            float lerpValue = Utils.GetLerpValue(300f, 270f, TempBufferDodgeAnimationCounter);
+            float y = MathHelper.Lerp(2f, 100f, lerpValue);
+            if (lerpValue >= 0f && lerpValue <= 1f) {
+                for (float num12 = 0f; num12 < (float)Math.PI * 0.5f; num12 += (float)Math.PI / 10f) {
+                    _tempBufferCopiesHueShift.Add(num12 * 2f);
+                }
+                for (float num12 = 0f; num12 < (float)Math.PI * 0.5f; num12 += (float)Math.PI / 10f) {
+                    Vector2 position = vector2 + Vector2.UnitY * y * 0.5f + new Vector2(0f, y).RotatedBy((float)Math.PI * 0.8f + num12);
+                    Main.PlayerRenderer.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, lerpValue);
+
+                    _currentTempBufferCopyIndex++;
+                }
+            }
+
+            _drawingTempBufferCopies = false;
+        }
+
+        drawTempBufferEffect();
+        drawObsidianStopwatchEffect();
     }
 
     private Color On_Player_GetImmuneAlphaPure(On_Player.orig_GetImmuneAlphaPure orig, Player self, Color newColor, float alphaReduction) {
@@ -658,6 +717,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsObsidianStopwatchEffectActive = false;
+
         IsSeedOfWisdomEffectActive = false;
 
         IsFossilizedSpiralEffectActive = false;
