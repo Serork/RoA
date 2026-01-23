@@ -2687,3 +2687,8 @@ FossilizedSpiral: {
 	DisplayName: Fossilized Spiral
 	Tooltip: ""
 }
+
+MysteryCake: {
+	DisplayName: Mystery Cake
+	Tooltip: ""
+}
