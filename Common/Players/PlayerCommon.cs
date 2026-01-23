@@ -1,14 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -27,13 +24,13 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
-using static tModPorter.ProgressUpdate;
-
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
     private static float BACKFLIPTIME => 25f;
     private static float MAXFALLSPEEDMODIFIERFORFALL => 0.75f;
+
+    private static ushort OBSIDIANSTOPWATCHCOOLDOWNINTICKS => MathUtils.SecondsToFrames(5);
 
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;
 
@@ -106,6 +103,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
 
     public bool IsObsidianStopwatchTeleportAvailable => IsObsidianStopwatchEffectActive && _obsidianStopwatchTeleportCooldown <= 0;
+    public bool IsObsidianStopwatchTeleportAvailable2 => IsObsidianStopwatchEffectActive && (_obsidianStopwatchTeleportCooldown <= OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7 || _obsidianStopwatchTeleportCooldown >= OBSIDIANSTOPWATCHCOOLDOWNINTICKS - OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7);
+    public float ObsidianStopwatchEffectOpacity => 1f - Utils.GetLerpValue(0, OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7, _obsidianStopwatchTeleportCooldown, true) * Utils.GetLerpValue(OBSIDIANSTOPWATCHCOOLDOWNINTICKS, OBSIDIANSTOPWATCHCOOLDOWNINTICKS - OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7, _obsidianStopwatchTeleportCooldown, true);
 
     public void DoBackflip(float time = 0f) {
         if (DoingBackflip) {
@@ -253,6 +252,7 @@ sealed partial class PlayerCommon : ModPlayer {
             _lastAddedAvancedShadow = 0;
 
         _advancedShadows[_lastAddedAvancedShadow].CopyPlayer(Player);
+        _advancedShadows[_lastAddedAvancedShadow].Position.Y += Player.gfxOffY;
     }
 
     public void ResetAdvancedShadows() {
@@ -307,7 +307,7 @@ sealed partial class PlayerCommon : ModPlayer {
             }
             else {
                 handler._isTeleportingBackViaObisidianStopwatch = false;
-                handler._obsidianStopwatchTeleportCooldown = 300;
+                handler._obsidianStopwatchTeleportCooldown = OBSIDIANSTOPWATCHCOOLDOWNINTICKS;
                 self.shimmering = false;
                 handler.ResetAdvancedShadows();
             }
@@ -338,7 +338,7 @@ sealed partial class PlayerCommon : ModPlayer {
             Color color = Main.hslToRgb(hue, 1f, 0.5f);
             color.A = 25;
             color *= 0.5f;
-            value.color = value.color.MultiplyRGBA(color);
+            value.color = value.color.MultiplyRGBA(color) * ObsidianStopwatchEffectOpacity;
             value.scale *= Helper.Wave(1.1f, 1.2f, 5f, offset);
             value.scale *= 1.5f * progress;
             drawInfo.DrawDataCache[i] = value;
@@ -351,7 +351,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 return;
             }
 
-            if (!IsObsidianStopwatchTeleportAvailable) {
+            if (!IsObsidianStopwatchTeleportAvailable2) {
                 return;
             }
 
@@ -440,14 +440,14 @@ sealed partial class PlayerCommon : ModPlayer {
             color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
         }
-        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable) {
-            float offset = self.whoAmI + _obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f;
+        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable2) {
+            float offset = self.whoAmI + (!_drawingObsidianStopwatchCopies ? 0f : (_obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f));
             float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
             Color color = Main.hslToRgb(hue, 1f, 0.5f);
             color.A = 25;
             color *= 0.5f;
             Color color2 = result.MultiplyRGBA(color);
-            result = Color.Lerp(result, color2, !self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.75f);
+            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.75f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
     }
@@ -464,14 +464,14 @@ sealed partial class PlayerCommon : ModPlayer {
             color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
         }
-        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable) {
-            float offset = self.whoAmI + _obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f;
+        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable2) {
+            float offset = self.whoAmI + (!_drawingObsidianStopwatchCopies ? 0f : (_obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f));
             float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
             Color color = Main.hslToRgb(hue, 1f, 0.5f);
             color.A = 25;
             color *= 0.5f;
             Color color2 = result.MultiplyRGBA(color);
-            result = Color.Lerp(result, color2, !self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.75f);
+            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.75f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
     }
