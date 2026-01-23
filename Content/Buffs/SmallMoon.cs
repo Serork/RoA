@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Pets;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -32,13 +33,13 @@ sealed class SmallMoon : ModBuff {
 }
 
 sealed class SmallMoonPlayer : ModPlayer {
-    public Color smallMoonColor;
+    public Color smallMoonColor, smallMoonColor2;
     public bool smallMoon;
 
     public bool HasContributor;
 
-    private float _lerpColorProgress;
-    private Color _lerpColor;
+    private float _lerpColorProgress, _lerpColorProgress2;
+    private Color _lerpColor, _lerpColor2;
     private Color? _currentColor = null, _nextColor = null;
 
     public override void ResetEffects() {
@@ -83,8 +84,18 @@ sealed class SmallMoonPlayer : ModPlayer {
         }
         if (Player.name.Equals("has2r", StringComparison.CurrentCultureIgnoreCase)) {
             smallMoonColor = Color.Indigo;
+            HasContributor = true;        
+        }
+        if (Player.name.Equals("HalfbornFan", StringComparison.CurrentCultureIgnoreCase)) {
+            smallMoonColor = Main.DiscoColor;
             HasContributor = true;
         }
+        if (Player.name == string.Empty) {
+            smallMoonColor = Color.Transparent;
+            HasContributor = true;
+        }
+        smallMoonColor2 = smallMoonColor.ModifyRGB(2f);
+
         if (ShouldBeRandom()) {
             if (_currentColor == null) {
                 _currentColor = Color.Yellow;
@@ -93,10 +104,6 @@ sealed class SmallMoonPlayer : ModPlayer {
                 _nextColor = new Color(Main.rand.Next(256), Main.rand.Next(256), Main.rand.Next(256));
             }
             smallMoonColor = GetLerpColor([_currentColor.Value, _nextColor.Value]);
-            HasContributor = true;
-        }
-        if (Player.name.Equals("HalfbornFan", StringComparison.CurrentCultureIgnoreCase)) {
-            smallMoonColor = Main.DiscoColor;
             HasContributor = true;
         }
 
@@ -118,8 +125,6 @@ sealed class SmallMoonPlayer : ModPlayer {
              Helper.FromHexRgb(0xEDF2F4),
              Helper.FromHexRgb(0xEF233C),
              Helper.FromHexRgb(0xD90429)]);
-
-        if (Player.name == string.Empty) smallMoonColor = Color.Transparent;
     }
 
     private void SetContributorColor(string contributor, List<Color> from) {
@@ -131,6 +136,7 @@ sealed class SmallMoonPlayer : ModPlayer {
 
     private Color GetLerpColor(List<Color> from) {
         _lerpColorProgress += 0.005f;
+        _lerpColorProgress2 += 0.005f;
         int colorCount = from.Count;
         for (int i = 0; i < colorCount; i++) {
             float part = 1f / colorCount;
@@ -138,6 +144,10 @@ sealed class SmallMoonPlayer : ModPlayer {
             float max = part * (i + 1);
             if (_lerpColorProgress >= min && _lerpColorProgress <= max) {
                 _lerpColor = Color.Lerp(from[i], from[i == colorCount - 1 ? 0 : (i + 1)], Utils.Remap(_lerpColorProgress, min, max, 0f, 1f, true));
+            }
+            float progress2 = (_lerpColorProgress2 + 0.5f) % 1f;
+            if (progress2 >= min && progress2 <= max) {
+                _lerpColor2 = Color.Lerp(from[i], from[i == colorCount - 1 ? 0 : (i + 1)], Utils.Remap(progress2, min, max, 0f, 1f, true));
             }
         }
         if (ShouldBeRandom() && Math.Round(_lerpColorProgress, 2) == 0.5f) {
@@ -149,6 +159,10 @@ sealed class SmallMoonPlayer : ModPlayer {
                 _nextColor = new Color(Main.rand.Next(256), Main.rand.Next(256), Main.rand.Next(256));
             }
         }
+        if (_lerpColorProgress2 > 1f) {
+            _lerpColorProgress2 = 0f;
+        }
+        smallMoonColor2 = _lerpColor2;
         return _lerpColor;
     }
 }

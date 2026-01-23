@@ -253,6 +253,7 @@ sealed partial class PlayerCommon : ModPlayer {
             _lastAddedAvancedShadow = 0;
 
         _advancedShadows[_lastAddedAvancedShadow].CopyPlayer(Player);
+        _advancedShadows[_lastAddedAvancedShadow].Position.Y += Player.gfxOffY;
     }
 
     public void ResetAdvancedShadows() {
@@ -332,7 +333,10 @@ sealed partial class PlayerCommon : ModPlayer {
             DrawData value = drawInfo.DrawDataCache[i];
             float offset = Player.whoAmI + _obsidianStopwatchCopiesHueShift[_currentObsidianStopwatchCopyIndex] * 0.1f * 0.5f;
             float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
-            Color color = Player.GetModPlayer<SmallMoonPlayer>().HasContributor ? Player.GetModPlayer<SmallMoonPlayer>().smallMoonColor : Main.hslToRgb(hue, 1f, 0.5f);
+            Color color = Main.hslToRgb(hue, 1f, 0.5f);
+            if (Player.GetModPlayer<SmallMoonPlayer>().HasContributor) {
+                color = Color.Lerp(Player.GetModPlayer<SmallMoonPlayer>().smallMoonColor, Player.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
+            }
             color.A = 25;
             color *= 0.5f;
             value.color = value.color.MultiplyRGBA(color) * ObsidianStopwatchEffectOpacity;
@@ -441,6 +445,9 @@ sealed partial class PlayerCommon : ModPlayer {
             float offset = self.whoAmI + (!_drawingObsidianStopwatchCopies ? 0f : (_obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f));
             float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
             Color color = Main.hslToRgb(hue, 1f, 0.5f);
+            if (self.GetModPlayer<SmallMoonPlayer>().HasContributor) {
+                color = Color.Lerp(self.GetModPlayer<SmallMoonPlayer>().smallMoonColor, self.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
+            }
             color.A = 25;
             color *= 0.5f;
             Color color2 = result.MultiplyRGBA(color);
@@ -465,6 +472,9 @@ sealed partial class PlayerCommon : ModPlayer {
             float offset = self.whoAmI + (!_drawingObsidianStopwatchCopies ? 0f : (_obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f));
             float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
             Color color = Main.hslToRgb(hue, 1f, 0.5f);
+            if (self.GetModPlayer<SmallMoonPlayer>().HasContributor) {
+                color = Color.Lerp(self.GetModPlayer<SmallMoonPlayer>().smallMoonColor, self.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
+            }
             color.A = 25;
             color *= 0.5f;
             Color color2 = result.MultiplyRGBA(color);

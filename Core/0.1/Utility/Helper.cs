@@ -29,6 +29,37 @@ static partial class Helper {
 
     public static IDoubleTap.TapDirection CurrentDoubleTapDirectionForSetBonuses => Main.ReversedUpDownArmorSetBonuses ? IDoubleTap.TapDirection.Top : IDoubleTap.TapDirection.Down;
 
+    public static (float Hue, float Saturation, float Lightness) RgbToHsl(Color color) {
+        return RgbToHsl(color.R, color.G, color.B);
+    }
+
+    public static (float Hue, float Saturation, float Lightness) RgbToHsl(int r, int g, int b) {
+        float rNorm = r / 255f;
+        float gNorm = g / 255f;
+        float bNorm = b / 255f;
+
+        float max = Math.Max(rNorm, Math.Max(gNorm, bNorm));
+        float min = Math.Min(rNorm, Math.Min(gNorm, bNorm));
+        float delta = max - min;
+
+        float h = 0f, s = 0f, l = (max + min) / 2f;
+
+        if (delta != 0) {
+            s = l < 0.5f ? delta / (max + min) : delta / (2f - max - min);
+
+            if (max == rNorm)
+                h = (gNorm - bNorm) / delta + (gNorm < bNorm ? 6f : 0f);
+            else if (max == gNorm)
+                h = (bNorm - rNorm) / delta + 2f;
+            else
+                h = (rNorm - gNorm) / delta + 4f;
+
+            h /= 6f;
+        }
+
+        return (h * 360f, s * 100f, l * 100f);
+    }
+
     public static string FirstCharToUpper(string input) {
         return input.First().ToString().ToUpper() + input.Substring(1);
     }
