@@ -253,8 +253,6 @@ sealed partial class PlayerCommon : ModPlayer {
             _lastAddedAvancedShadow = 0;
 
         _advancedShadows[_lastAddedAvancedShadow].CopyPlayer(Player);
-        _advancedShadows[_lastAddedAvancedShadow].Position.Y += Player.gfxOffY;
-        _advancedShadows[_lastAddedAvancedShadow].Position -= Player.velocity;
     }
 
     public void ResetAdvancedShadows() {
@@ -294,15 +292,12 @@ sealed partial class PlayerCommon : ModPlayer {
             int num = (handler._lastAddedAvancedShadow - shadowIndex).ModulusPositive(60);
             Vector2 lastPosition = handler._advancedShadows[num].Position;
             if (lastPosition != Vector2.Zero) {
-                self.position = Vector2.Lerp(self.position, lastPosition, 0.25f);
+                self.position = Vector2.Lerp(self.position, lastPosition, 0.5f);
                 self.velocity = Vector2.One * 0.75f * new Vector2(-self.direction, 1f);
                 self.velocity.Y *= 0f;
                 self.fallStart = (int)(self.position.Y / 16f);
 
                 self.gravity = 0f;
-
-                self.gfxOffY = 0f;
-                self.stepSpeed = 0f;
 
                 self.SetImmuneTimeForAllTypes(self.longInvince ? 40 : 20);
                 self.immuneNoBlink = true;
