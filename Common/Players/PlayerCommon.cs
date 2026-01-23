@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
@@ -25,6 +27,8 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
+using static tModPorter.ProgressUpdate;
+
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
@@ -38,11 +42,18 @@ sealed partial class PlayerCommon : ModPlayer {
     private static List<ushort> _obsidianStopwatchCopiesHueShift = null!;
     private static byte _currentTempBufferCopyIndex, _currentObsidianStopwatchCopyIndex;
 
+    private const int MaxAdvancedShadows = 60;
+    public int availableAdvancedShadowsCount;
+    private EntityShadowInfo[] _advancedShadows = new EntityShadowInfo[60];
+    private int _lastAddedAvancedShadow;
+
     private bool _fell;
     private float _fellTimer;
     private ushort _controlUseItemTimer;
     private float _backflipTimer;
     private bool _isTeleportingBackViaObisidianStopwatch;
+    private ushort _currentTeleportPointIndex;
+    private float _obsidianStopwatchTeleportCooldown;
 
     public ushort ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
     public bool ControlUseItem;
@@ -93,6 +104,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
+
+    public bool IsObsidianStopwatchTeleportAvailable => IsObsidianStopwatchEffectActive && _obsidianStopwatchTeleportCooldown <= 0;
 
     public void DoBackflip(float time = 0f) {
         if (DoingBackflip) {
@@ -223,16 +236,92 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.UpdateAdvancedShadows += On_Player_UpdateAdvancedShadows;
     }
 
-    private void On_Player_UpdateAdvancedShadows(On_Player.orig_UpdateAdvancedShadows orig, Player self) {
-        if (Main.mouseRight && Main.mouseRightRelease) {
-            self.GetCommon()._isTeleportingBackViaObisidianStopwatch = !self.GetCommon()._isTeleportingBackViaObisidianStopwatch;
-        }
+    public EntityShadowInfo GetAdvancedShadow(int shadowIndex) {
+        if (shadowIndex > availableAdvancedShadowsCount)
+            shadowIndex = availableAdvancedShadowsCount;
 
-        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch) {
+        int num = (_lastAddedAvancedShadow - shadowIndex).ModulusPositive(60);
+        return _advancedShadows[num];
+    }
+
+    public void UpdateAdvancedShadows() {
+        availableAdvancedShadowsCount++;
+        if (availableAdvancedShadowsCount > 60)
+            availableAdvancedShadowsCount = 60;
+
+        if (++_lastAddedAvancedShadow >= 60)
+            _lastAddedAvancedShadow = 0;
+
+        _advancedShadows[_lastAddedAvancedShadow].CopyPlayer(Player);
+    }
+
+    public void ResetAdvancedShadows() {
+        for (int i = 0; i < availableAdvancedShadowsCount; i++) {
+            _advancedShadows[i].Position = Vector2.Zero;
+        }
+        availableAdvancedShadowsCount = 0;
+    }
+
+    public override void SetControls() {
+        var handler = Player.GetCommon();
+        if (handler._isTeleportingBackViaObisidianStopwatch) {
+            Player.controlUp = false;
+            Player.controlLeft = false;
+            Player.controlDown = false;
+            Player.controlRight = false;
+            Player.controlJump = false;
+            Player.controlUseItem = false;
+            Player.controlUseTile = false;
+            Player.controlThrow = false;
+            Player.controlHook = false;
+            Player.controlTorch = false;
+            Player.controlSmart = false;
+            Player.controlMount = false;
+        }
+    }
+
+    private void On_Player_UpdateAdvancedShadows(On_Player.orig_UpdateAdvancedShadows orig, Player self) {
+        orig(self);
+
+        var handler = self.GetCommon();
+        if (handler._isTeleportingBackViaObisidianStopwatch) {
+            int shadowIndex = handler._currentTeleportPointIndex;
+            if (shadowIndex > handler.availableAdvancedShadowsCount)
+                shadowIndex = handler.availableAdvancedShadowsCount;
+
+            int num = (handler._lastAddedAvancedShadow - shadowIndex).ModulusPositive(60);
+            Vector2 lastPosition = handler._advancedShadows[num].Position;
+            if (lastPosition != Vector2.Zero) {
+                self.position = lastPosition;
+                self.velocity = Vector2.One * 0.75f * new Vector2(-self.direction, 1f);
+                self.velocity.Y *= 0f;
+                self.fallStart = (int)(self.position.Y / 16f);
+
+                self.gravity = 0f;
+
+                self.shimmering = true;
+                self.shimmerTransparency = 0f;
+
+                self.SetImmuneTimeForAllTypes(self.longInvince ? 40 : 20);
+                self.immuneNoBlink = true;
+            }
+            else {
+                handler._isTeleportingBackViaObisidianStopwatch = false;
+                handler._obsidianStopwatchTeleportCooldown = 300;
+                self.shimmering = false;
+                handler.ResetAdvancedShadows();
+            }
+            if (handler._currentTeleportPointIndex < 60) {
+                handler._currentTeleportPointIndex++;
+                handler._advancedShadows[num].Position = Vector2.Zero;
+            }
+
             return;
         }
 
-        orig(self);
+        if (handler.IsObsidianStopwatchTeleportAvailable) {
+            handler.UpdateAdvancedShadows();
+        }
     }
 
     public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
@@ -262,7 +351,11 @@ sealed partial class PlayerCommon : ModPlayer {
                 return;
             }
 
-            int totalShadows = Math.Min(Player.availableAdvancedShadowsCount, 60);
+            if (!IsObsidianStopwatchTeleportAvailable) {
+                return;
+            }
+
+            int totalShadows = Math.Min(availableAdvancedShadowsCount, 60);
 
             totalShadows = Math.Clamp(totalShadows, 0, 100);
 
@@ -279,16 +372,18 @@ sealed partial class PlayerCommon : ModPlayer {
             Rectangle bodyFrame = Player.bodyFrame;
             float rotation = Player.fullRotation;
             for (int i = totalShadows - totalShadows % skip; i > 0; i -= skip) {
-                EntityShadowInfo advancedShadow = Player.GetAdvancedShadow(i);
+                EntityShadowInfo advancedShadow = GetAdvancedShadow(i);
                 float shadow = Utils.Remap((float)i / totalShadows, 0, 1, 0.15f, 0.5f, clamped: true);
 
-                Player player = Player;
-                player.direction = advancedShadow.Direction;
-                player.gravDir = advancedShadow.GravityDirection;
-                player.UseBodyFrame((Core.Data.PlayerFrame)advancedShadow.BodyFrameIndex);
-                player.fullRotation = advancedShadow.Rotation;
+                if (advancedShadow.Position != Vector2.Zero) {
+                    Player player = Player;
+                    player.direction = advancedShadow.Direction;
+                    player.gravDir = advancedShadow.GravityDirection;
+                    player.UseBodyFrame((Core.Data.PlayerFrame)advancedShadow.BodyFrameIndex);
+                    player.fullRotation = advancedShadow.Rotation;
 
-                Main.PlayerRenderer.DrawPlayer(camera, player, advancedShadow.Position, advancedShadow.Rotation, advancedShadow.Origin, shadow, 1f);
+                    Main.PlayerRenderer.DrawPlayer(camera, player, advancedShadow.Position, advancedShadow.Rotation, advancedShadow.Origin, shadow, 1f);
+                }
 
                 _currentObsidianStopwatchCopyIndex++;
             }
@@ -345,6 +440,15 @@ sealed partial class PlayerCommon : ModPlayer {
             color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
         }
+        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable) {
+            float offset = self.whoAmI + _obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f;
+            float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
+            Color color = Main.hslToRgb(hue, 1f, 0.5f);
+            color.A = 25;
+            color *= 0.5f;
+            Color color2 = result.MultiplyRGBA(color);
+            result = Color.Lerp(result, color2, !self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.75f);
+        }
         return result;
     }
 
@@ -359,6 +463,15 @@ sealed partial class PlayerCommon : ModPlayer {
                 + _tempBufferCopiesHueShift[_currentTempBufferCopyIndex]), 1f, 0.5f);
             color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
+        }
+        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable) {
+            float offset = self.whoAmI + _obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f;
+            float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
+            Color color = Main.hslToRgb(hue, 1f, 0.5f);
+            color.A = 25;
+            color *= 0.5f;
+            Color color2 = result.MultiplyRGBA(color);
+            result = Color.Lerp(result, color2, !self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.75f);
         }
         return result;
     }
@@ -636,6 +749,15 @@ sealed partial class PlayerCommon : ModPlayer {
         else {
             StandingStillTimer = 0f;
         }
+
+        if (IsObsidianStopwatchEffectActive) {
+            if (_obsidianStopwatchTeleportCooldown > 0) {
+                _obsidianStopwatchTeleportCooldown--;
+            }
+        }
+        else {
+            ResetAdvancedShadows();
+        }
     }
 
     public partial void DeerSkullPostUpdateEquips();
@@ -715,6 +837,12 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event OnHurtDelegate OnHurtEvent;
     public override void OnHurt(Player.HurtInfo info) {
         OnHurtEvent?.Invoke(Player, info);
+
+        // need sync
+        if (IsObsidianStopwatchEffectActive && IsObsidianStopwatchTeleportAvailable) {
+            _isTeleportingBackViaObisidianStopwatch = true;
+            _currentTeleportPointIndex = 0;
+        }
     }
 
     public delegate void OnHitNPCDelegate(Player player, NPC target, NPC.HitInfo hit, int damageDone);
