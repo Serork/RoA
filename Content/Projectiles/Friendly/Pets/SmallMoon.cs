@@ -74,7 +74,7 @@ sealed class SmallMoon : ModProjectile {
         }
         Projectile.ai[2] = MathHelper.Lerp(Projectile.ai[2], (float)dist, 0.01f);
         Projectile.Center = player.GetPlayerCorePoint();
-        Projectile.Center = new Vector2(Projectile.Center.X - (int)(Math.Cos(rad) * Projectile.ai[2]), Projectile.Center.Y - (int)(Math.Sin(rad) * Projectile.ai[2]) + player.gfxOffY);
+        Projectile.Center = new Vector2(Projectile.Center.X - (int)(Math.Cos(rad) * Projectile.ai[2]), Projectile.Center.Y - (int)(Math.Sin(rad) * Projectile.ai[2]));
 
         if (player.name == "has2r") Projectile.ai[1] -= 3f;
         else Projectile.ai[1] += 3f;

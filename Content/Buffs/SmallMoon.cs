@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Items.Pets;
+using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
@@ -99,6 +100,27 @@ sealed class SmallMoonPlayer : ModPlayer {
         SetContributorColor("KaffaZ", [new Color(185, 0, 64), new Color(255, 195, 0), new Color(94, 0, 50)]);
         SetContributorColor("KaffaZ_Himself", [new Color(185, 0, 64), new Color(255, 195, 0), new Color(94, 0, 50)]);
         SetContributorColor("gbf", [new Color(206, 68, 178), new Color(208, 33, 33)]);
+
+        SetContributorColor("Croul", 
+            [Helper.FromHexRgb(0x2B2D42),
+             Helper.FromHexRgb(0x8D99AE),
+             Helper.FromHexRgb(0xEDF2F4),
+             Helper.FromHexRgb(0xEF233C),
+             Helper.FromHexRgb(0xD90429),
+
+             Helper.FromHexRgb(0x880D1E),
+             Helper.FromHexRgb(0xDD2D4A),
+             Helper.FromHexRgb(0xF26A8D),
+             Helper.FromHexRgb(0xF49CBB),
+             Helper.FromHexRgb(0xCBEEF3),
+
+             Helper.FromHexRgb(0xFFD700),
+             Helper.FromHexRgb(0xBFA930),
+             Helper.FromHexRgb(0xA68C00),
+             Helper.FromHexRgb(0xFFE140),
+             Helper.FromHexRgb(0xFFE973),
+             Helper.FromHexRgb(0x000000),
+             Helper.FromHexRgb(0xFFFFFF)]);
 
         if (Player.name == string.Empty) smallMoonColor = Color.Transparent;
     }
