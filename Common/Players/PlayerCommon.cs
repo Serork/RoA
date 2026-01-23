@@ -384,7 +384,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
         int count = drawInfo.DrawDataCache.Count;
-        if (_copyIndexIAmDrawing != 255) {
+        if (drawInfo.drawPlayer.active && _copyIndexIAmDrawing != 255) {
             for (int i = 0; i < count; i++) {
                 DrawData value = drawInfo.DrawDataCache[i];
                 value.color *= MathUtils.Clamp01(_copyData[_copyIndexIAmDrawing].Opacity);
