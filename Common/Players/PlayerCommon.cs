@@ -556,7 +556,7 @@ sealed partial class PlayerCommon : ModPlayer {
             color.A = 25;
             color *= 0.5f;
             Color color2 = result.MultiplyRGBA(color);
-            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.75f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
+            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
     }
@@ -583,7 +583,7 @@ sealed partial class PlayerCommon : ModPlayer {
             color.A = 25;
             color *= 0.5f;
             Color color2 = result.MultiplyRGBA(color);
-            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.75f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
+            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
     }
