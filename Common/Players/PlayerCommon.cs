@@ -31,6 +31,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private static float MAXFALLSPEEDMODIFIERFORFALL => 0.75f;
 
     private static ushort OBSIDIANSTOPWATCHCOOLDOWNINTICKS => MathUtils.SecondsToFrames(5);
+    private static ushort OBSIDIANSTOPWATCHBETWEENINTICKS => (ushort)(OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7f);
 
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;
 
@@ -103,8 +104,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
 
     public bool IsObsidianStopwatchTeleportAvailable => IsObsidianStopwatchEffectActive && _obsidianStopwatchTeleportCooldown <= 0;
-    public bool IsObsidianStopwatchTeleportAvailable2 => IsObsidianStopwatchEffectActive && (_obsidianStopwatchTeleportCooldown <= OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7 || _obsidianStopwatchTeleportCooldown >= OBSIDIANSTOPWATCHCOOLDOWNINTICKS - OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7);
-    public float ObsidianStopwatchEffectOpacity => 1f - Utils.GetLerpValue(0, OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7, _obsidianStopwatchTeleportCooldown, true) * Utils.GetLerpValue(OBSIDIANSTOPWATCHCOOLDOWNINTICKS, OBSIDIANSTOPWATCHCOOLDOWNINTICKS - OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7, _obsidianStopwatchTeleportCooldown, true);
+    public bool IsObsidianStopwatchTeleportAvailable2 => IsObsidianStopwatchEffectActive && (_obsidianStopwatchTeleportCooldown <= OBSIDIANSTOPWATCHBETWEENINTICKS || _obsidianStopwatchTeleportCooldown >= OBSIDIANSTOPWATCHCOOLDOWNINTICKS - OBSIDIANSTOPWATCHBETWEENINTICKS);
+    public float ObsidianStopwatchEffectOpacity => 1f - Utils.GetLerpValue(0, OBSIDIANSTOPWATCHBETWEENINTICKS, _obsidianStopwatchTeleportCooldown, true) * Utils.GetLerpValue(OBSIDIANSTOPWATCHCOOLDOWNINTICKS, OBSIDIANSTOPWATCHCOOLDOWNINTICKS - OBSIDIANSTOPWATCHBETWEENINTICKS, _obsidianStopwatchTeleportCooldown, true);
 
     public void DoBackflip(float time = 0f) {
         if (DoingBackflip) {
