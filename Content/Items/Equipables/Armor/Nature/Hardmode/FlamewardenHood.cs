@@ -35,5 +35,6 @@ sealed class FlamewardenHood : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMas
 
     }
 
-    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) => color = Color.White * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
+    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) 
+        => color = Color.White/* * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player)*/;
 }

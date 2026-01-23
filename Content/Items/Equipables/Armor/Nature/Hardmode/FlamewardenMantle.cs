@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
+using RoA.Common.Players;
 using RoA.Core.Defaults;
 
 using Terraria;
@@ -17,6 +18,8 @@ sealed class FlamewardenMantle : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowM
         Item.ResearchUnlockCount = 1;
 
         ItemGlowMaskHandler.RegisterArmorGlowMask(EquipType.Body, this);
+
+        ExtraDrawLayerSupport.RegisterExtraDrawLayer(EquipType.Back, this);
     }
 
     protected override void SafeSetDefaults() {
@@ -28,5 +31,6 @@ sealed class FlamewardenMantle : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowM
 
     }
 
-    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) => color = Color.White * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
+    void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo)
+        => color = Color.White/* * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player)*/;
 }

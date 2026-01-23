@@ -5,11 +5,14 @@ using ReLogic.Content;
 using ReLogic.Utilities;
 
 using RoA.Common.Configs;
+using RoA.Common.Druid.Wreath;
+using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Items.Tools;
 using RoA.Content.Items.Weapons.Nature.Hardmode;
 using RoA.Content.Items.Weapons.Nature.Hardmode.Claws;
 using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -396,6 +399,17 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
                     DrawData item = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
                     drawInfo.DrawDataCache.Add(item);
+                    if (armorGlowMaskModItem.Type == ModContent.ItemType<FlamewardenHood>()) {
+                        for (float num6 = 0f; num6 < 4f; num6 += 1f) {
+                            float num3 = ((float)drawInfo.drawPlayer.miscCounter / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
+                            Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
+                            Vector2 position = item.position + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
+                            DrawData item2 = item;
+                            item2.position = position;
+                            item2.color = color2;
+                            drawInfo.DrawDataCache.Add(item2);
+                        }
+                    }
                 }
                 if (ArmorGlowMasksByType.TryGetValue(player.head, out ArmorGlowMaskByTypeInfo armorGlowMaskByTypeInfo)) {
                     Texture2D glowMaskTexture = armorGlowMaskByTypeInfo.GlowMaskTexture.Value;
@@ -520,6 +534,17 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                         shader = drawInfo.cBody
                     };
                     drawInfo.DrawDataCache.Add(drawData);
+                    if (armorGlowMaskModItem.Type == ModContent.ItemType<FlamewardenMantle>()) {
+                        for (float num6 = 0f; num6 < 4f; num6 += 1f) {
+                            float num3 = ((float)drawInfo.drawPlayer.miscCounter / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
+                            Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
+                            Vector2 position = drawData.position + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
+                            DrawData item2 = drawData;
+                            item2.position = position;
+                            item2.color = color2;
+                            drawInfo.DrawDataCache.Add(item2);
+                        }
+                    }
                 }
                 if (ArmorGlowMasksByType.TryGetValue(player.body, out ArmorGlowMaskByTypeInfo armorGlowMaskByTypeInfo)) {
                     Texture2D glowMaskTexture = armorGlowMaskByTypeInfo.GlowMaskTexture.Value;
