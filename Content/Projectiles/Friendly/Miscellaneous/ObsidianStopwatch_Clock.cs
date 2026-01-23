@@ -62,6 +62,8 @@ sealed class ObsidianStopwatchClock : ModProjectile_NoTextureLoad, IRequestAsset
         float lerpValue = 0.025f;
         if (Projectile.scale == 0f) {
             _spawnPosition = Projectile.Center;
+            Arrow1Rotation = MathHelper.TwoPi * Main.rand.NextFloat();
+            Arrow2Rotation = MathHelper.TwoPi * Main.rand.NextFloat();
         }
         Projectile.scale = Helper.Approach(Projectile.scale, 1f, lerpValue);
         if (Projectile.scale < 1f) {
