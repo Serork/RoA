@@ -69,7 +69,7 @@ sealed class ObsidianStopwatchClock : ModProjectile_NoTextureLoad, IRequestAsset
         if (Projectile.scale < 1f) {
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, lerpValue);
 
-            Projectile.Center = Vector2.Lerp(_spawnPosition, Projectile.GetOwnerAsPlayer().GetPlayerCorePoint(), Ease.CubeOut(Projectile.Opacity) * 0.15f);
+            Projectile.Center = Vector2.Lerp(_spawnPosition, Projectile.GetOwnerAsPlayer().GetPlayerCorePoint(), Ease.CubeOut(Projectile.Opacity) * 0.05f);
         }
         else {
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, lerpValue);
@@ -80,8 +80,8 @@ sealed class ObsidianStopwatchClock : ModProjectile_NoTextureLoad, IRequestAsset
 
         Projectile.velocity *= 0f;
 
-        Arrow1Rotation += 0.05f;
-        Arrow2Rotation += 0.15f;
+        Arrow1Rotation += -0.05f;
+        Arrow2Rotation += -0.15f;
     }
 
     protected override void Draw(ref Color lightColor) {
