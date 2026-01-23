@@ -287,45 +287,47 @@ sealed partial class PlayerCommon : ModPlayer {
 
         var handler = self.GetCommon();
         if (handler._isTeleportingBackViaObisidianStopwatch) {
-            int shadowIndex = handler._currentTeleportPointIndex;
-            if (shadowIndex > handler.availableAdvancedShadowsCount)
-                shadowIndex = handler.availableAdvancedShadowsCount;
+            for (int i = 0; i < 2; i++) {
+                int shadowIndex = handler._currentTeleportPointIndex;
+                if (shadowIndex > handler.availableAdvancedShadowsCount)
+                    shadowIndex = handler.availableAdvancedShadowsCount;
 
-            int num = (handler._lastAddedAvancedShadow - shadowIndex).ModulusPositive(60);
-            Vector2 lastPosition = handler._advancedShadows[num].Position;
-            if (lastPosition != Vector2.Zero) {
-                self.position = Vector2.Lerp(self.position, lastPosition, 0.5f);
-                self.velocity = Vector2.One * 0.75f * new Vector2(-self.direction, 1f);
-                self.velocity.Y *= 0f;
-                self.fallStart = (int)(self.position.Y / 16f);
+                int num = (handler._lastAddedAvancedShadow - shadowIndex).ModulusPositive(60);
+                Vector2 lastPosition = handler._advancedShadows[num].Position;
+                if (lastPosition != Vector2.Zero) {
+                    self.position = Vector2.Lerp(self.position, lastPosition, 0.5f);
+                    self.velocity = Vector2.One * 0.5f * new Vector2(-self.direction, 1f);
+                    self.velocity.Y *= 0f;
+                    self.fallStart = (int)(self.position.Y / 16f);
 
-                self.gravity = 0f;
+                    self.gravity = 0f;
 
-                self.SetImmuneTimeForAllTypes(self.longInvince ? 40 : 20);
-                self.immuneNoBlink = true;
-            }
-            else {
-                handler._isTeleportingBackViaObisidianStopwatch = false;
-                handler._obsidianStopwatchTeleportCooldown = OBSIDIANSTOPWATCHCOOLDOWNINTICKS;
-                handler.ResetAdvancedShadows();
-                handler._obsidianStopwatchTeleportLerpValue2 = 0f;
-            }
-            if (handler._currentTeleportPointIndex < 60) {
-                if (handler._currentTeleportPointIndex >= 56) {
-                    if (handler._obsidianStopwatchTeleportLerpValue2 > 0f) {
-                        handler._obsidianStopwatchTeleportLerpValue2 -= 0.075f;
-                    }
+                    self.SetImmuneTimeForAllTypes(self.longInvince ? 40 : 20);
+                    self.immuneNoBlink = true;
                 }
                 else {
-                    if (handler._obsidianStopwatchTeleportLerpValue2 < 1f) {
-                        handler._obsidianStopwatchTeleportLerpValue2 += 0.075f;
-                    }
+                    handler._isTeleportingBackViaObisidianStopwatch = false;
+                    handler._obsidianStopwatchTeleportCooldown = OBSIDIANSTOPWATCHCOOLDOWNINTICKS;
+                    handler.ResetAdvancedShadows();
+                    handler._obsidianStopwatchTeleportLerpValue2 = 0f;
                 }
-                handler._obsidianStopwatchTeleportLerpValue += handler._obsidianStopwatchTeleportLerpValue2;
-                if (handler._obsidianStopwatchTeleportLerpValue > 1f) {
-                    handler._currentTeleportPointIndex++;
-                    handler._advancedShadows[num].Position = Vector2.Zero;
-                    handler._obsidianStopwatchTeleportLerpValue = 0f;
+                if (handler._currentTeleportPointIndex < 60) {
+                    if (handler._currentTeleportPointIndex >= 53) {
+                        if (handler._obsidianStopwatchTeleportLerpValue2 > 0f) {
+                            handler._obsidianStopwatchTeleportLerpValue2 -= 0.05f;
+                        }
+                    }
+                    else {
+                        if (handler._obsidianStopwatchTeleportLerpValue2 < 1f) {
+                            handler._obsidianStopwatchTeleportLerpValue2 += 0.05f;
+                        }
+                    }
+                    handler._obsidianStopwatchTeleportLerpValue += handler._obsidianStopwatchTeleportLerpValue2;
+                    if (handler._obsidianStopwatchTeleportLerpValue > 1f) {
+                        handler._currentTeleportPointIndex++;
+                        handler._advancedShadows[num].Position = Vector2.Zero;
+                        handler._obsidianStopwatchTeleportLerpValue = 0f;
+                    }
                 }
             }
 
