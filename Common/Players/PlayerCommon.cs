@@ -306,7 +306,6 @@ sealed partial class PlayerCommon : ModPlayer {
             else {
                 handler._isTeleportingBackViaObisidianStopwatch = false;
                 handler._obsidianStopwatchTeleportCooldown = OBSIDIANSTOPWATCHCOOLDOWNINTICKS;
-                self.shimmering = false;
                 handler.ResetAdvancedShadows();
             }
             if (handler._currentTeleportPointIndex < 60) {
