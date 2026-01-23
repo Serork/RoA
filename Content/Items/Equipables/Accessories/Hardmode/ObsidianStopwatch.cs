@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
+[AutoloadEquip(EquipType.Waist)]
 sealed class ObsidianStopwatch : ModItem {
     public override void SetDefaults() {
         Item.DefaultToAccessory(32, 32);
