@@ -371,6 +371,7 @@ sealed partial class PlayerCommon : ModPlayer {
             float gravDir = Player.gravDir;
             Rectangle bodyFrame = Player.bodyFrame;
             float rotation = Player.fullRotation;
+            Rectangle legFrame = Player.legFrame;
             for (int i = totalShadows - totalShadows % skip; i > 0; i -= skip) {
                 EntityShadowInfo advancedShadow = GetAdvancedShadow(i);
                 float shadow = Utils.Remap((float)i / totalShadows, 0, 1, 0.15f, 0.5f, clamped: true);
@@ -381,6 +382,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     player.gravDir = advancedShadow.GravityDirection;
                     player.UseBodyFrame((Core.Data.PlayerFrame)advancedShadow.BodyFrameIndex);
                     player.fullRotation = advancedShadow.Rotation;
+                    player.legFrame.Y *= 0;
 
                     Main.PlayerRenderer.DrawPlayer(camera, player, advancedShadow.Position, advancedShadow.Rotation, advancedShadow.Origin, shadow, 1f);
                 }
@@ -391,6 +393,7 @@ sealed partial class PlayerCommon : ModPlayer {
             Player.gravDir = gravDir;
             Player.bodyFrame = bodyFrame;
             Player.fullRotation = rotation;
+            Player.legFrame = legFrame;
 
             _drawingObsidianStopwatchCopies = false;
         }
