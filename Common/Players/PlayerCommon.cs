@@ -954,6 +954,10 @@ sealed partial class PlayerCommon : ModPlayer {
         if (IsObsidianStopwatchEffectActive && IsObsidianStopwatchTeleportAvailable) {
             _isTeleportingBackViaObisidianStopwatch = true;
             _currentTeleportPointIndex = 0;
+
+            ProjectileUtils.SpawnPlayerOwnedProjectile<ObsidianStopwatchClock>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(info.DamageSource)) with {
+                Position = Player.GetPlayerCorePoint()
+            });
         }
     }
 

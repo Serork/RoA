@@ -93,7 +93,7 @@ sealed class ExtraDrawLayerSupport : ILoadable {
                     vec6 = vec6.Floor();
 
                     var asset = drawInfo.Value.Texture;
-                    DrawData item = new DrawData(asset.Value, vec5,
+                    DrawData item = new DrawData(asset.Value, vec5 + player.MovementOffset(),
                         new Rectangle(0, 0, asset.Width(), asset.Height()), drawinfo.colorArmorBody, drawinfo.drawPlayer.bodyRotation, new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y), 1f, drawinfo.playerEffect);
                     item.shader = shader;
                     drawinfo.DrawDataCache.Add(item);
