@@ -253,7 +253,7 @@ sealed partial class PlayerCommon : ModPlayer {
             _lastAddedAvancedShadow = 0;
 
         _advancedShadows[_lastAddedAvancedShadow].CopyPlayer(Player);
-        _advancedShadows[_lastAddedAvancedShadow].Position.Y += Player.gfxOffY;
+        //_advancedShadows[_lastAddedAvancedShadow].Position.Y += Player.gfxOffY;
     }
 
     public void ResetAdvancedShadows() {
