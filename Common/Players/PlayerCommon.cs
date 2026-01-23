@@ -52,6 +52,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private bool _isTeleportingBackViaObisidianStopwatch;
     private ushort _currentTeleportPointIndex;
     private float _obsidianStopwatchTeleportCooldown;
+    private float _obsidianStopwatchTeleportLerpValue, _obsidianStopwatchTeleportLerpValue2;
 
     public ushort ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
     public bool ControlUseItem;
@@ -307,10 +308,25 @@ sealed partial class PlayerCommon : ModPlayer {
                 handler._isTeleportingBackViaObisidianStopwatch = false;
                 handler._obsidianStopwatchTeleportCooldown = OBSIDIANSTOPWATCHCOOLDOWNINTICKS;
                 handler.ResetAdvancedShadows();
+                handler._obsidianStopwatchTeleportLerpValue2 = 0f;
             }
             if (handler._currentTeleportPointIndex < 60) {
-                handler._currentTeleportPointIndex++;
-                handler._advancedShadows[num].Position = Vector2.Zero;
+                if (handler._currentTeleportPointIndex >= 56) {
+                    if (handler._obsidianStopwatchTeleportLerpValue2 > 0f) {
+                        handler._obsidianStopwatchTeleportLerpValue2 -= 0.075f;
+                    }
+                }
+                else {
+                    if (handler._obsidianStopwatchTeleportLerpValue2 < 1f) {
+                        handler._obsidianStopwatchTeleportLerpValue2 += 0.075f;
+                    }
+                }
+                handler._obsidianStopwatchTeleportLerpValue += handler._obsidianStopwatchTeleportLerpValue2;
+                if (handler._obsidianStopwatchTeleportLerpValue > 1f) {
+                    handler._currentTeleportPointIndex++;
+                    handler._advancedShadows[num].Position = Vector2.Zero;
+                    handler._obsidianStopwatchTeleportLerpValue = 0f;
+                }
             }
 
             return;
@@ -330,15 +346,15 @@ sealed partial class PlayerCommon : ModPlayer {
         for (int i = 0; i < count; i++) {
             float progress = i / (float)count;
             DrawData value = drawInfo.DrawDataCache[i];
-            float offset = Player.whoAmI + _obsidianStopwatchCopiesHueShift[_currentObsidianStopwatchCopyIndex] * 0.1f * 0.5f;
+            float offset = drawInfo.drawPlayer.whoAmI + _obsidianStopwatchCopiesHueShift[_currentObsidianStopwatchCopyIndex] * 0.1f * 0.5f;
             float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
             Color color = Main.hslToRgb(hue, 1f, 0.5f);
-            if (Player.GetModPlayer<SmallMoonPlayer>().HasContributor) {
-                color = Color.Lerp(Player.GetModPlayer<SmallMoonPlayer>().smallMoonColor, Player.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
+            if (drawInfo.drawPlayer.GetModPlayer<SmallMoonPlayer>().HasContributor) {
+                color = Color.Lerp(drawInfo.drawPlayer.GetModPlayer<SmallMoonPlayer>().smallMoonColor, drawInfo.drawPlayer.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
             }
             color.A = 25;
             color *= 0.5f;
-            value.color = value.color.MultiplyRGBA(color) * ObsidianStopwatchEffectOpacity;
+            value.color = value.color.MultiplyRGBA(color)/* * drawInfo.drawPlayer.GetCommon().ObsidianStopwatchEffectOpacity*/;
             value.scale *= Helper.Wave(1.1f, 1.2f, 5f, offset);
             value.scale *= 1.5f * progress;
             drawInfo.DrawDataCache[i] = value;
