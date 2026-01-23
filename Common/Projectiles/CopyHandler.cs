@@ -56,7 +56,7 @@ sealed class CopyHandler : GlobalProjectile {
     public override void PostAI(Projectile projectile) {
         int maxCopies = CopyData.Length;
         for (int i = 0; i < maxCopies; i++) {
-            ref CopyInfo copyData = ref CopyData![i];
+            ref CopyInfo copyData = ref CopyData[i];
             if (copyData.Opacity > 0f) {
                 float deathFrequency = (projectile.ModProjectile as ISpawnCopies)!.CopyDeathFrequency;
                 copyData.Scale -= deathFrequency;

@@ -260,6 +260,9 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
             height = texture.Height / 2;
         for (int i = 0; i < 10; i++) {
             CopyHandler.CopyInfo copyInfo = copyData![i];
+            if (copyInfo.Opacity <= 0f) {
+                continue;
+            }
             if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
                 continue;
             }

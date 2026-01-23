@@ -440,6 +440,9 @@ abstract class BaseForm : ModMount {
 
             for (int i = 0; i < MAXCOPIES; i++) {
                 CopyInfo copyInfo = _copyData![i];
+                if (copyInfo.Opacity <= 0f) {
+                    continue;
+                }
                 if (MathUtils.Approximately(copyInfo.Position, drawPosition, 2f)) {
                     continue;
                 }

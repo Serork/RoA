@@ -270,6 +270,9 @@ sealed class Pixie : ModProjectile {
         void drawTrails() {
             for (int i = 0; i < MAXCOPIES; i++) {
                 CopyInfo copyInfo = _copyData![i];
+                if (copyInfo.Opacity <= 0f) {
+                    continue;
+                }
                 if (MathUtils.Approximately(copyInfo.Position, Projectile.Center, 2f)) {
                     continue;
                 }

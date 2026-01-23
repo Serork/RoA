@@ -201,6 +201,9 @@ sealed partial class Lothor : ModNPC {
             GetFrameInfo(out ushort x, out ushort y, out ushort width, out ushort height);
             for (int i = 0; i < MAXCOPIES; i++) {
                 CopyInfo copyInfo = _copyData![i];
+                if (copyInfo.Opacity <= 0f) {
+                    continue;
+                }
                 if (MathUtils.Approximately(copyInfo.Position, drawPosition, 2f)) {
                     continue;
                 }

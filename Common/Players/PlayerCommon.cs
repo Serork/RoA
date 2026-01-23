@@ -27,6 +27,25 @@ using Terraria.UI;
 namespace RoA.Common.Players;
 
 sealed partial class PlayerCommon : ModPlayer {
+    private static byte MAXCOPIES => 10;
+
+    public struct CopyInfo {
+        private float _opacity;
+
+        public Vector2 Position;
+        public float Rotation;
+        public Vector2 Origin;
+        public int Direction;
+        public int GravityDirection;
+        public float Scale;
+        public int BodyFrameIndex;
+
+        public float Opacity {
+            readonly get => _opacity;
+            set => _opacity = MathUtils.Clamp01(value);
+        }
+    }
+
     private static float BACKFLIPTIME => 25f;
     private static float MAXFALLSPEEDMODIFIERFORFALL => 0.75f;
 
@@ -39,6 +58,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private static List<float> _tempBufferCopiesHueShift = null!;
     private static List<ushort> _obsidianStopwatchCopiesHueShift = null!;
     private static byte _currentTempBufferCopyIndex, _currentObsidianStopwatchCopyIndex;
+    private static byte _copyIndexIAmDrawing;
 
     private const int MaxAdvancedShadows = 60;
     public int availableAdvancedShadowsCount;
@@ -53,6 +73,9 @@ sealed partial class PlayerCommon : ModPlayer {
     private ushort _currentTeleportPointIndex;
     private float _obsidianStopwatchTeleportCooldown;
     private float _obsidianStopwatchTeleportLerpValue, _obsidianStopwatchTeleportLerpValue2;
+
+    private CopyInfo[] _copyData = new CopyInfo[MAXCOPIES];
+    private byte _currentCopyIndex;
 
     public ushort ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
     public bool ControlUseItem;
@@ -237,6 +260,23 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.UpdateAdvancedShadows += On_Player_UpdateAdvancedShadows;
     }
 
+    public void MakeCopy(float opacity = 1.25f, float scale = 1f) {
+        if (_currentCopyIndex >= MAXCOPIES) {
+            _currentCopyIndex = 0;
+        }
+        Player player = Player;
+        _copyData[_currentCopyIndex++] = new CopyInfo() {
+            Position = player.position,
+            Rotation = player.fullRotation,
+            Origin = player.fullRotationOrigin,
+            Direction = player.direction,
+            GravityDirection = (int)player.gravDir,
+            BodyFrameIndex = player.bodyFrame.Y / player.bodyFrame.Height,
+            Opacity = opacity,
+            Scale = scale
+        };
+    }
+
     public EntityShadowInfo GetAdvancedShadow(int shadowIndex) {
         if (shadowIndex > availableAdvancedShadowsCount)
             shadowIndex = availableAdvancedShadowsCount;
@@ -322,6 +362,9 @@ sealed partial class PlayerCommon : ModPlayer {
                             handler._obsidianStopwatchTeleportLerpValue2 += 0.05f;
                         }
                     }
+                    if (handler._currentTeleportPointIndex % 10 == 0) {
+                        self.GetCommon().MakeCopy(0.625f);
+                    }
                     handler._obsidianStopwatchTeleportLerpValue += handler._obsidianStopwatchTeleportLerpValue2;
                     if (handler._obsidianStopwatchTeleportLerpValue > 1f) {
                         handler._currentTeleportPointIndex++;
@@ -340,11 +383,19 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
+        int count = drawInfo.DrawDataCache.Count;
+        if (_copyIndexIAmDrawing != 255) {
+            for (int i = 0; i < count; i++) {
+                DrawData value = drawInfo.DrawDataCache[i];
+                value.color *= MathUtils.Clamp01(_copyData[_copyIndexIAmDrawing].Opacity);
+                drawInfo.DrawDataCache[i] = value;
+            }
+        }
+
         if (!_drawingObsidianStopwatchCopies) {
             return;
         }
 
-        int count = drawInfo.DrawDataCache.Count;
         for (int i = 0; i < count; i++) {
             float progress = i / (float)count;
             DrawData value = drawInfo.DrawDataCache[i];
@@ -364,6 +415,40 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override void DrawPlayer(Camera camera) {
+        for (int i = 0; i < MAXCOPIES; i++) {
+            CopyInfo copyInfo = _copyData[i];
+            Vector2 drawPosition = Player.position;
+            if (copyInfo.Opacity <= 0f) {
+                continue;
+            }
+            if (MathUtils.Approximately(copyInfo.Position, drawPosition, 2f)) {
+                continue;
+            }
+
+            int direction = Player.direction;
+            float gravDir = Player.gravDir;
+            Rectangle bodyFrame = Player.bodyFrame;
+            float rotation = Player.fullRotation;
+
+            Player player = Player;
+
+            player.direction = copyInfo.Direction;
+            player.gravDir = copyInfo.GravityDirection;
+            player.UseBodyFrame((Core.Data.PlayerFrame)copyInfo.BodyFrameIndex);
+            player.fullRotation = copyInfo.Rotation;
+
+            _copyIndexIAmDrawing = (byte)i;
+
+            Main.PlayerRenderer.DrawPlayer(camera, player, copyInfo.Position, copyInfo.Rotation, copyInfo.Origin, 0f, copyInfo.Scale);
+
+            player.direction = direction;
+            player.gravDir = gravDir;
+            player.bodyFrame = bodyFrame;
+            player.fullRotation = rotation;
+        }
+
+        _copyIndexIAmDrawing = 255;
+
         void drawObsidianStopwatchEffect() {
             if (!IsObsidianStopwatchEffectActive) {
                 return;
@@ -1000,6 +1085,15 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         TouchGround();
+
+        for (int i = 0; i < MAXCOPIES; i++) {
+            ref CopyInfo copyData = ref _copyData![i];
+            if (copyData.Opacity > 0f) {
+                //copyData.Scale -= 0.05f;
+                copyData.Opacity -= 0.05f;
+                copyData.Opacity = MathF.Max(0f, copyData.Opacity);
+            }
+        }
 
         if (IsAetherInvincibilityActive) {
             return;
