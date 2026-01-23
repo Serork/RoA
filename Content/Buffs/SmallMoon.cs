@@ -35,6 +35,8 @@ sealed class SmallMoonPlayer : ModPlayer {
     public Color smallMoonColor;
     public bool smallMoon;
 
+    public bool HasContributor;
+
     private float _lerpColorProgress;
     private Color _lerpColor;
     private Color? _currentColor = null, _nextColor = null;
@@ -47,9 +49,9 @@ sealed class SmallMoonPlayer : ModPlayer {
 
     public override void PostUpdate() {
         int type = ModContent.ItemType<MoonFlower>();
-        if (!Player.HasItem(type) && Player.whoAmI == Main.myPlayer && Main.mouseItem.type != type && !Player.miscEquips.Any(x => x.type == type)) {
-            return;
-        }
+        //if (!Player.HasItem(type) && Player.whoAmI == Main.myPlayer && Main.mouseItem.type != type && !Player.miscEquips.Any(x => x.type == type)) {
+        //    return;
+        //}
 
         SetInfo();
     }
@@ -73,9 +75,16 @@ sealed class SmallMoonPlayer : ModPlayer {
         else {
             smallMoonColor = new Color(190, 190, 140);
         }
+        HasContributor = false;
 
-        if (Player.name.Equals("peege.on", StringComparison.CurrentCultureIgnoreCase)) smallMoonColor = Player.underShirtColor;
-        if (Player.name.Equals("has2r", StringComparison.CurrentCultureIgnoreCase)) smallMoonColor = Color.Indigo;
+        if (Player.name.Equals("peege.on", StringComparison.CurrentCultureIgnoreCase)) {
+            smallMoonColor = Player.underShirtColor;
+            HasContributor = true;
+        }
+        if (Player.name.Equals("has2r", StringComparison.CurrentCultureIgnoreCase)) {
+            smallMoonColor = Color.Indigo;
+            HasContributor = true;
+        }
         if (ShouldBeRandom()) {
             if (_currentColor == null) {
                 _currentColor = Color.Yellow;
@@ -84,9 +93,11 @@ sealed class SmallMoonPlayer : ModPlayer {
                 _nextColor = new Color(Main.rand.Next(256), Main.rand.Next(256), Main.rand.Next(256));
             }
             smallMoonColor = GetLerpColor([_currentColor.Value, _nextColor.Value]);
+            HasContributor = true;
         }
         if (Player.name.Equals("HalfbornFan", StringComparison.CurrentCultureIgnoreCase)) {
             smallMoonColor = Main.DiscoColor;
+            HasContributor = true;
         }
 
         SetContributorColor("cleo.", [Color.Black, Color.White]);
@@ -114,6 +125,7 @@ sealed class SmallMoonPlayer : ModPlayer {
     private void SetContributorColor(string contributor, List<Color> from) {
         if (Player.name.Equals(contributor, StringComparison.CurrentCultureIgnoreCase)) {
             smallMoonColor = GetLerpColor(from);
+            HasContributor = true;
         }
     }
 

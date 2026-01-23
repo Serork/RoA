@@ -332,7 +332,7 @@ sealed partial class PlayerCommon : ModPlayer {
             DrawData value = drawInfo.DrawDataCache[i];
             float offset = Player.whoAmI + _obsidianStopwatchCopiesHueShift[_currentObsidianStopwatchCopyIndex] * 0.1f * 0.5f;
             float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
-            Color color = Main.hslToRgb(hue, 1f, 0.5f);
+            Color color = Player.GetModPlayer<SmallMoonPlayer>().HasContributor ? Player.GetModPlayer<SmallMoonPlayer>().smallMoonColor : Main.hslToRgb(hue, 1f, 0.5f);
             color.A = 25;
             color *= 0.5f;
             value.color = value.color.MultiplyRGBA(color) * ObsidianStopwatchEffectOpacity;
