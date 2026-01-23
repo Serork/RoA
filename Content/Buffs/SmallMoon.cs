@@ -106,21 +106,7 @@ sealed class SmallMoonPlayer : ModPlayer {
              Helper.FromHexRgb(0x8D99AE),
              Helper.FromHexRgb(0xEDF2F4),
              Helper.FromHexRgb(0xEF233C),
-             Helper.FromHexRgb(0xD90429),
-
-             Helper.FromHexRgb(0x880D1E),
-             Helper.FromHexRgb(0xDD2D4A),
-             Helper.FromHexRgb(0xF26A8D),
-             Helper.FromHexRgb(0xF49CBB),
-             Helper.FromHexRgb(0xCBEEF3),
-
-             Helper.FromHexRgb(0xFFD700),
-             Helper.FromHexRgb(0xBFA930),
-             Helper.FromHexRgb(0xA68C00),
-             Helper.FromHexRgb(0xFFE140),
-             Helper.FromHexRgb(0xFFE973),
-             Helper.FromHexRgb(0x000000),
-             Helper.FromHexRgb(0xFFFFFF)]);
+             Helper.FromHexRgb(0xD90429)]);
 
         if (Player.name == string.Empty) smallMoonColor = Color.Transparent;
     }

@@ -42,6 +42,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private float _fellTimer;
     private ushort _controlUseItemTimer;
     private float _backflipTimer;
+    private bool _isTeleportingBackViaObisidianStopwatch;
 
     public ushort ControlUseItemTimeCheck = CONTROLUSEITEMTIMECHECKBASE;
     public bool ControlUseItem;
@@ -218,6 +219,20 @@ sealed partial class PlayerCommon : ModPlayer {
 
         On_Player.GetImmuneAlpha += On_Player_GetImmuneAlpha;
         On_Player.GetImmuneAlphaPure += On_Player_GetImmuneAlphaPure;
+
+        On_Player.UpdateAdvancedShadows += On_Player_UpdateAdvancedShadows;
+    }
+
+    private void On_Player_UpdateAdvancedShadows(On_Player.orig_UpdateAdvancedShadows orig, Player self) {
+        if (Main.mouseRight && Main.mouseRightRelease) {
+            self.GetCommon()._isTeleportingBackViaObisidianStopwatch = !self.GetCommon()._isTeleportingBackViaObisidianStopwatch;
+        }
+
+        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch) {
+            return;
+        }
+
+        orig(self);
     }
 
     public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
@@ -259,14 +274,28 @@ sealed partial class PlayerCommon : ModPlayer {
             for (int i = 0; i < totalShadows; i += skip) {
                 _obsidianStopwatchCopiesHueShift.Add((ushort)i);
             }
+            int direction = Player.direction;
+            float gravDir = Player.gravDir;
+            Rectangle bodyFrame = Player.bodyFrame;
+            float rotation = Player.fullRotation;
             for (int i = totalShadows - totalShadows % skip; i > 0; i -= skip) {
                 EntityShadowInfo advancedShadow = Player.GetAdvancedShadow(i);
                 float shadow = Utils.Remap((float)i / totalShadows, 0, 1, 0.15f, 0.5f, clamped: true);
 
-                Main.PlayerRenderer.DrawPlayer(camera, Player, advancedShadow.Position, advancedShadow.Rotation, advancedShadow.Origin, shadow, 1f);
+                Player player = Player;
+                player.direction = advancedShadow.Direction;
+                player.gravDir = advancedShadow.GravityDirection;
+                player.UseBodyFrame((Core.Data.PlayerFrame)advancedShadow.BodyFrameIndex);
+                player.fullRotation = advancedShadow.Rotation;
+
+                Main.PlayerRenderer.DrawPlayer(camera, player, advancedShadow.Position, advancedShadow.Rotation, advancedShadow.Origin, shadow, 1f);
 
                 _currentObsidianStopwatchCopyIndex++;
             }
+            Player.direction = direction;
+            Player.gravDir = gravDir;
+            Player.bodyFrame = bodyFrame;
+            Player.fullRotation = rotation;
 
             _drawingObsidianStopwatchCopies = false;
         }
