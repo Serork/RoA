@@ -350,3 +350,8 @@ TempBuffer: {
 	// DisplayName: Temp Buffer
 	// Description: Mods.RoA.Buffs.TempBuffer.Description
 }
+
+Rewind: {
+	// DisplayName: Rewind
+	// Description: Mods.RoA.Buffs.Rewind.Description
+}
