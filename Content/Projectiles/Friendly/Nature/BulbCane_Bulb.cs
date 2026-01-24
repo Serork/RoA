@@ -849,10 +849,12 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
         };
 
         void drawMainStem() {
+            float scaleFactor2 = plantScaleFactor;
+            scaleFactor2 = MathF.Min(0.99f, scaleFactor2);
             int stem1Height = stem1Clip.Height - texturePadding;
-            stem1Height = (int)(stem1Height * plantScaleFactor);
+            stem1Height = (int)(stem1Height * scaleFactor2);
             int stem3Height = stem3Clip.Height - texturePadding;
-            stem3Height = (int)(stem3Height * plantScaleFactor);
+            stem3Height = (int)(stem3Height * scaleFactor2);
             Vector2 startPosition = RootPosition;
             Vector2 endPosition = center + center.DirectionFrom(startPosition) * stem1Height * appearanceFactor;
             endPosition = Vector2.Lerp(endPosition, RootPosition, 1f - appearanceFactor);
@@ -1234,6 +1236,9 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
             }
         }
         void drawSummonTentacles() {
+            if (!(ShouldTransform || IsSecondFormActive)) {
+                return;
+            }
             if (appearanceFactor < 0.5f) {
                 return;
             }
