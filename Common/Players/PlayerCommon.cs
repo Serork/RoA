@@ -6,7 +6,6 @@ using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -899,13 +898,13 @@ sealed partial class PlayerCommon : ModPlayer {
             ResetAdvancedShadows();
         }
 
+        Vector2 position = Player.Top + Vector2.UnitY * Player.height * 0.2f;
         if (!IsHereticsVeilEffectActive) {
             HereticVeilEffectOpacity = Helper.Approach(HereticVeilEffectOpacity, 1f, 0.15f);
 
             if (HereticVeilEffectOpacity < 1f) {
                 for (int i = 0; i < 20; i++) {
                     Player player = Player;
-                    Vector2 position = Player.Top + Vector2.UnitY * Player.height * 0.2f;
                     Vector2 velocity = -Vector2.UnitY.RotatedBy(player.fullRotation);
                     int num1020 = Math.Sign(velocity.Y);
                     int num1021 = ((num1020 != -1) ? 1 : 0);
@@ -930,6 +929,22 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         else if (Player.statLife <= 100) {
             HereticVeilEffectOpacity = Helper.Approach(HereticVeilEffectOpacity, 0f, 0.1f);
+            Lighting.AddLight(position, Color.Lerp(new Color(255, 247, 147), new Color(255, 165, 53), 0.5f).ToVector3() * 1f);
+            if (Main.rand.NextChance(1f - HereticVeilEffectOpacity) && Main.rand.NextBool(7)) {
+                Dust dust = Dust.NewDustDirect(position, 4, 4, 6, 0f, 0f, 100);
+                dust.position = position + new Vector2(Main.rand.NextFloatDirection() * 14f, Main.rand.NextFloatDirection() * 4f - 8f);
+                if (Main.rand.Next(2) == 0) {
+                    dust.noGravity = true;
+                    dust.fadeIn = 1.15f;
+                }
+                else {
+                    dust.scale = 0.6f;
+                }
+
+                dust.velocity *= 0.6f;
+                dust.velocity.Y -= 1.2f;
+                dust.position.Y -= 4f;
+            }
         }
     }
 
