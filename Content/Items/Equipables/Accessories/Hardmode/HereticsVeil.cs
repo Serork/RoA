@@ -102,7 +102,7 @@ sealed class HereticsVeil : ModItem {
         foreach (NPC nPC in Main.ActiveNPCs) {
             float num = TileHelper.TileSize * 31;
             if (nPC.CanBeChasedBy(this) && !(player.Distance(nPC.Center) > num) && Collision.CanHitLine(player.position, player.width, player.height, nPC.position, nPC.width, nPC.height)) {
-                nPC.AddBuff(BuffID.OnFire, 100);
+                nPC.AddBuff(BuffID.OnFire, 90);
             }
         }
     }
