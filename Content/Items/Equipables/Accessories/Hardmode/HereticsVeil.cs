@@ -79,6 +79,7 @@ sealed class HereticsVeil : ModItem {
             flamePosition.Y -= flameOrigin.Y / 2f;
             Vector2 offset = new(Utils.RandomInt(ref seed, -2, 3) * -player.direction, Utils.RandomInt(ref seed, -2, 3));
             flamePosition += offset;
+            flamePosition.Y += 1f;
             DrawData drawData2 = new DrawData(flameTexture, flamePosition, flameClip,
                 flameColor, flameRotation, flameOrigin, 1f, drawinfo.playerEffect);
             drawinfo.DrawDataCache.Add(drawData2);
