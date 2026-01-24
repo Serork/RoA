@@ -13,7 +13,9 @@ sealed class MysteryCake : ModItem {
         Main.RegisterItemAnimation(Type, new DrawAnimationVertical(int.MaxValue, 3));
         ItemID.Sets.FoodParticleColors[Type] = [
             new Color(230, 218, 211),
-            new Color(200, 189, 182)
+            new Color(200, 189, 182),
+            new Color(189, 53, 0),
+            new Color(135, 26, 16)
         ];
         ItemID.Sets.IsFood[Type] = true;
     }
