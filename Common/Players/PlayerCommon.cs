@@ -118,7 +118,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public ushort TempBufferDodgeAnimationCounter;
 
-    public bool IsObsidianStopwatchEffectActive;
+    public bool IsObsidianStopwatchEffectActive, IsObsidianStopwatchEffectActive_Hidden;
 
     public bool IsHereticsVeilEffectActive;
 
@@ -461,6 +461,10 @@ sealed partial class PlayerCommon : ModPlayer {
                 return;
             }
 
+            if (IsObsidianStopwatchEffectActive_Hidden && !_isTeleportingBackViaObisidianStopwatch) {
+                return;
+            }
+
             int totalShadows = Math.Min(availableAdvancedShadowsCount, 60);
 
             totalShadows = Math.Clamp(totalShadows, 0, 100);
@@ -549,17 +553,20 @@ sealed partial class PlayerCommon : ModPlayer {
             color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
         }
-        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable2) {
-            float offset = self.whoAmI + (!_drawingObsidianStopwatchCopies ? 0f : (_obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f));
-            float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
-            Color color = Main.hslToRgb(hue, 1f, 0.5f);
-            if (self.GetModPlayer<SmallMoonPlayer>().HasContributor) {
-                color = Color.Lerp(self.GetModPlayer<SmallMoonPlayer>().smallMoonColor, self.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
+        //if (!self.GetCommon().IsObsidianStopwatchEffectActive_Hidden || self.GetCommon()._isTeleportingBackViaObisidianStopwatch)
+        {
+            if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable2) {
+                float offset = self.whoAmI + (!_drawingObsidianStopwatchCopies ? 0f : (_obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f));
+                float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
+                Color color = Main.hslToRgb(hue, 1f, 0.5f);
+                if (self.GetModPlayer<SmallMoonPlayer>().HasContributor) {
+                    color = Color.Lerp(self.GetModPlayer<SmallMoonPlayer>().smallMoonColor, self.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
+                }
+                color.A = 25;
+                //color *= 0.5f;
+                Color color2 = result.MultiplyRGB(color);
+                result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.25f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
             }
-            color.A = 25;
-            //color *= 0.5f;
-            Color color2 = result.MultiplyRGB(color);
-            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.25f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
     }
@@ -576,17 +583,20 @@ sealed partial class PlayerCommon : ModPlayer {
             color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
         }
-        if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable2) {
-            float offset = self.whoAmI + (!_drawingObsidianStopwatchCopies ? 0f : (_obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f));
-            float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
-            Color color = Main.hslToRgb(hue, 1f, 0.5f);
-            if (self.GetModPlayer<SmallMoonPlayer>().HasContributor) {
-                color = Color.Lerp(self.GetModPlayer<SmallMoonPlayer>().smallMoonColor, self.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
+        //if (!self.GetCommon().IsObsidianStopwatchEffectActive_Hidden || self.GetCommon()._isTeleportingBackViaObisidianStopwatch)
+        {
+            if (self.GetCommon()._isTeleportingBackViaObisidianStopwatch || self.GetCommon().IsObsidianStopwatchTeleportAvailable2) {
+                float offset = self.whoAmI + (!_drawingObsidianStopwatchCopies ? 0f : (_obsidianStopwatchCopiesHueShift[0] * 0.1f * 0.5f));
+                float hue = 0f + Helper.Wave(60f / 255f, 165f / 255f, 5f, offset);
+                Color color = Main.hslToRgb(hue, 1f, 0.5f);
+                if (self.GetModPlayer<SmallMoonPlayer>().HasContributor) {
+                    color = Color.Lerp(self.GetModPlayer<SmallMoonPlayer>().smallMoonColor, self.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
+                }
+                color.A = 25;
+                //color *= 0.5f;
+                Color color2 = result.MultiplyRGB(color);
+                result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.25f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
             }
-            color.A = 25;
-            //color *= 0.5f;
-            Color color2 = result.MultiplyRGB(color);
-            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.25f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
     }
@@ -998,7 +1008,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public override void ResetEffects() {
         IsHereticsVeilEffectActive = false;
 
-        IsObsidianStopwatchEffectActive = false;
+        IsObsidianStopwatchEffectActive = IsObsidianStopwatchEffectActive_Hidden = false;
 
         IsSeedOfWisdomEffectActive = false;
 

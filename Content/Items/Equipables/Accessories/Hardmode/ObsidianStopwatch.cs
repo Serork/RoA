@@ -16,5 +16,6 @@ sealed class ObsidianStopwatch : ModItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetCommon().IsObsidianStopwatchEffectActive = true;
+        player.GetCommon().IsObsidianStopwatchEffectActive_Hidden = hideVisual;
     }
 }
