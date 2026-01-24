@@ -92,6 +92,10 @@ sealed class ExtraDrawLayerSupport : ILoadable {
                     Vector2 vec6 = drawinfo.Position - Main.screenPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2((-9f + num3) * (float)drawinfo.drawPlayer.direction, (2f + num4) * drawinfo.drawPlayer.gravDir) + vector3;
                     vec6 = vec6.Floor();
 
+                    if (drawinfo.drawPlayer.gravDir < 0) {
+                        vec5.Y -= 8f;
+                    }
+
                     var asset = drawInfo.Value.Texture;
                     DrawData item = new DrawData(asset.Value, vec5 + player.MovementOffset(),
                         new Rectangle(0, 0, asset.Width(), asset.Height()), drawinfo.colorArmorBody, drawinfo.drawPlayer.bodyRotation, new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y), 1f, drawinfo.playerEffect);
