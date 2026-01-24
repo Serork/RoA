@@ -59,6 +59,8 @@ sealed class ObsidianStopwatchClock : ModProjectile_NoTextureLoad, IRequestAsset
     public override bool? CanDamage() => false;
 
     public override void AI() {
+        Projectile.Center = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint();
+
         float lerpValue = 0.025f;
         if (Projectile.scale == 0f) {
             _spawnPosition = Projectile.Center;
@@ -69,7 +71,7 @@ sealed class ObsidianStopwatchClock : ModProjectile_NoTextureLoad, IRequestAsset
         if (Projectile.scale < 1f) {
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, lerpValue);
 
-            Projectile.Center = Vector2.Lerp(_spawnPosition, Projectile.GetOwnerAsPlayer().GetPlayerCorePoint(), Ease.CubeOut(Projectile.Opacity) * 0.05f);
+            //Projectile.Center = Vector2.Lerp(_spawnPosition, Projectile.GetOwnerAsPlayer().GetPlayerCorePoint(), Ease.CubeOut(Projectile.Opacity) * 0.025f);
         }
         else {
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, lerpValue);
