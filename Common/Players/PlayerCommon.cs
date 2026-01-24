@@ -540,7 +540,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private Color On_Player_GetImmuneAlphaPure(On_Player.orig_GetImmuneAlphaPure orig, Player self, Color newColor, float alphaReduction) {
         Color result = orig(self, newColor, alphaReduction);
         if (self.GetCommon().FriarLanternEffectStrength > 0f) {
-            result = Color.Lerp(result, Color.Gray * 0.25f, self.GetCommon().FriarLanternEffectStrength);
+            result = Color.Lerp(result, Color.Gray * 1f, self.GetCommon().FriarLanternEffectStrength);
         }
         if (_drawingTempBufferCopies) {
             float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
@@ -558,7 +558,7 @@ sealed partial class PlayerCommon : ModPlayer {
             }
             color.A = 25;
             //color *= 0.5f;
-            Color color2 = result.MultiplyRGBA(color);
+            Color color2 = result.MultiplyRGB(color);
             result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.25f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
@@ -567,7 +567,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private Color On_Player_GetImmuneAlpha(On_Player.orig_GetImmuneAlpha orig, Player self, Color newColor, float alphaReduction) {
         Color result = orig(self, newColor, alphaReduction);
         if (self.GetCommon().FriarLanternEffectStrength > 0f) {
-            result = Color.Lerp(result, Color.Gray * 0.25f, self.GetCommon().FriarLanternEffectStrength);
+            result = Color.Lerp(result, Color.Gray * 1f, self.GetCommon().FriarLanternEffectStrength);
         }
         if (_drawingTempBufferCopies) {
             float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
@@ -585,7 +585,7 @@ sealed partial class PlayerCommon : ModPlayer {
             }
             color.A = 25;
             //color *= 0.5f;
-            Color color2 = result.MultiplyRGBA(color);
+            Color color2 = result.MultiplyRGB(color);
             result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.25f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
@@ -703,13 +703,16 @@ sealed partial class PlayerCommon : ModPlayer {
         }
     }
 
+
+    public delegate void AlwaysHeadDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event AlwaysHeadDrawDelegate AlwaysHeadDrawEvent;
     private void On_PlayerDrawLayers_DrawPlayer_21_Head(On_PlayerDrawLayers.orig_DrawPlayer_21_Head orig, ref PlayerDrawSet drawinfo) {
-        if (drawinfo.drawPlayer.GetCommon().StopHeadDrawing ||
-            drawinfo.drawPlayer.face == (HornetSkull.HornetSkullAsFace + 1)) {
-            return;
+        if (!(drawinfo.drawPlayer.GetCommon().StopHeadDrawing ||
+            drawinfo.drawPlayer.face == (HornetSkull.HornetSkullAsFace + 1))) {
+            orig(ref drawinfo);
         }
 
-        orig(ref drawinfo);
+        AlwaysHeadDrawEvent?.Invoke(ref drawinfo);
     }
 
     public partial void CursorEffectsLoad();

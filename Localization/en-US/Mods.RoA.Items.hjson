@@ -2697,3 +2697,8 @@ ObsidianStopwatch: {
 	DisplayName: Obsidian Stopwatch
 	Tooltip: ""
 }
+
+HereticsVeil: {
+	DisplayName: Heretics Veil
+	Tooltip: ""
+}

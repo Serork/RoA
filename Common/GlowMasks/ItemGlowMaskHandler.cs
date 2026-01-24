@@ -376,6 +376,9 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
             if (!player.active || player.invis || player.dead) {
                 return;
             }
+            if (player.GetCommon().StopHeadDrawing) {
+                return;
+            }
             DrawHeadGlowMask(ref drawInfo);
         }
 
