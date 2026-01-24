@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Druid.Wreath;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Core;
@@ -13,6 +12,7 @@ using System.Runtime.CompilerServices;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -41,10 +41,12 @@ class MagicHerb1 : ModItem {
         On_Item.DespawnIfMeetingConditions += On_Item_DespawnIfMeetingConditions;
     }
 
+    protected virtual bool DisappearOverTime() => true;
+
     private void On_Item_DespawnIfMeetingConditions(On_Item.orig_DespawnIfMeetingConditions orig, Item self, int i) {
         orig(self, i);
 
-        if (self.ModItem != null && self.ModItem is MagicHerb1 && self.timeSinceItemSpawned > 900) {
+        if (self.ModItem != null && self.ModItem is MagicHerb1 mg1 && mg1.DisappearOverTime() && self.timeSinceItemSpawned > 900) {
             for (int l = 0; l < 10; l++) {
                 Dust.NewDust(self.position, self.width, self.height, 15, self.velocity.X, self.velocity.Y, 200,
                     Color.Lime, 0.9f);
@@ -64,7 +66,7 @@ class MagicHerb1 : ModItem {
         if (!item.active || item.IsAir)
             return;
 
-        List<int> magicHerbIds = [ModContent.ItemType<MagicHerb1>(), ModContent.ItemType<MagicHerb2>(), ModContent.ItemType<MagicHerb3>()];
+        List<int> magicHerbIds = [ModContent.ItemType<AvengingSoul>(), ModContent.ItemType<MagicHerb1>(), ModContent.ItemType<MagicHerb2>(), ModContent.ItemType<MagicHerb3>()];
         if (!magicHerbIds.Contains(item.type)) {
             return;
         }
@@ -135,6 +137,40 @@ class MagicHerb1 : ModItem {
     public override void PostUpdate() {
         _ = Main.rand.Next(90, 111) * 0.01f * (Main.essScale * 0.5f);
         Lighting.AddLight(Item.Center, Color.LightGreen.ToVector3() * 0.5f * Main.essScale);
+    }
+
+    public override void GrabRange(Player player, ref int grabRange) {
+        if (player.lifeMagnet)
+            grabRange += Item.lifeGrabRange;
+    }
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "PullItem_Pickup")]
+    public extern static void Player_PullItem_Pickup(Player self, Item itemToPickUp, float speed, int acc);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "PullItem_Common")]
+    public extern static void Player_PullItem_Common(Player self, Item itemToPickUp, float xPullSpeed);
+
+    [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "PullItem_ToVoidVault")]
+    public extern static void Player_PullItem_ToVoidVault(Player self, Item itemToPickUp);
+
+    public override bool GrabStyle(Player player) {
+        Player.ItemSpaceStatus status = player.ItemSpace(Item);
+
+        bool flag = false;
+        if (player.difficulty == 3 && CreativePowerManager.Instance.GetPower<CreativePowers.FarPlacementRangePower>().IsEnabledForPlayer(player.whoAmI))
+            flag = true;
+        if (flag)
+            Player_PullItem_Pickup(player, Item, 7f, 1);
+        else if (player.lifeMagnet)
+            Player_PullItem_Pickup(player, Item, 15f, 5);
+        else if (status.ItemIsGoingToVoidVault)
+            Player_PullItem_ToVoidVault(player, Item);
+        else if (player.goldRing && Item.IsACoin)
+            Player_PullItem_Pickup(player, Item, 12f, 5);
+        else
+            Player_PullItem_Common(player, Item, 0.75f);
+
+        return true;
     }
 
     public override bool OnPickup(Player player) {

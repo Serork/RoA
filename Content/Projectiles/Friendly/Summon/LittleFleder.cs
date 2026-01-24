@@ -154,6 +154,7 @@ sealed class LittleFleder : ModProjectile {
         validItems.Add(ModContent.ItemType<MagicHerb1>());
         validItems.Add(ModContent.ItemType<MagicHerb2>());
         validItems.Add(ModContent.ItemType<MagicHerb3>());
+        validItems.Add(ModContent.ItemType<AvengingSoul>());
         validItems.Add(ItemID.Star);
         bool validPickUp(Item item) {
             if ((item.type == validItems[0] ||

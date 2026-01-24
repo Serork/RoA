@@ -123,6 +123,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsHereticsVeilEffectActive;
     public float HereticVeilEffectOpacity = 1f;
 
+    public bool IsBansheesGuardEffectActive;
+
     public bool StandingStill => StandingStillTimer > 0;
 
     public bool CanSpawnFallenLeavesBranch => FallenLeavesCounter >= FallenLeaves.ATTACKTIME;
@@ -1066,6 +1068,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsBansheesGuardEffectActive = false;
+
         IsHereticsVeilEffectActive = false;
 
         IsObsidianStopwatchEffectActive = IsObsidianStopwatchEffectActive_Hidden = false;

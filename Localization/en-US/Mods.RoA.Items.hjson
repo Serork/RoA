@@ -2702,3 +2702,13 @@ HereticsVeil: {
 	DisplayName: Heretics Veil
 	Tooltip: ""
 }
+
+BansheesGuard: {
+	DisplayName: Banshees Guard
+	Tooltip: ""
+}
+
+AvengingSoul: {
+	DisplayName: Avenging Soul
+	Tooltip: ""
+}
