@@ -8,6 +8,8 @@ using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
@@ -64,6 +66,11 @@ sealed class HereticsVeil : ModItem {
             Color flameColor = Color.Lerp(new Color(255, 165, 53), new Color(255, 247, 147), Utils.RandomFloat(ref seed));
             flameColor.A = 60;
             flameColor *= 0.75f;
+            if (i != 0) {
+                flameColor = Color.Lerp(new Color(255, 53, 53), new Color(255, 147, 147), Utils.RandomFloat(ref seed));
+                flameColor.A = 60;
+                flameColor *= 0.75f;
+            }
             float flameRotation = drawinfo.drawPlayer.headRotation;
             flamePosition.Y -= flameOrigin.Y / 2f;
             Vector2 offset = new(Utils.RandomInt(ref seed, -2, 3), Utils.RandomInt(ref seed, -2, 3));
@@ -92,9 +99,10 @@ sealed class HereticsVeil : ModItem {
         player.endurance += 0.2f;
         player.lifeRegen += 4;
 
-        foreach (NPC npc in Main.ActiveNPCs) {
-            if (!npc.CanBeChasedBy()) {
-                return;
+        foreach (NPC nPC in Main.ActiveNPCs) {
+            float num = TileHelper.TileSize * 31;
+            if (nPC.CanBeChasedBy(this) && !(player.Distance(nPC.Center) > num) && Collision.CanHitLine(player.position, player.width, player.height, nPC.position, nPC.width, nPC.height)) {
+                nPC.AddBuff(BuffID.OnFire, 100);
             }
         }
     }
