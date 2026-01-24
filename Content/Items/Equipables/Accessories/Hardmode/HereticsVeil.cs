@@ -65,17 +65,16 @@ sealed class HereticsVeil : ModItem {
             Texture2D flameTexture = _flameTexture.Value;
             Vector2 flamePosition = drawPosition;
             int frame = (int)((Main.GlobalTimeWrappedHourly * 15f + Utils.RandomInt(ref seed, -3, 4)) % 8);
-            frame = 0;
             Rectangle flameClip = Utils.Frame(flameTexture, 1, 8, frameY: frame);
             Vector2 flameOrigin = flameClip.Centered();
             Color flameColor = Color.Lerp(new Color(255, 165, 53), new Color(255, 247, 147), Utils.RandomFloat(ref seed));
-            flameColor.A = 255;
-            flameColor *= 1f;
-            //if (i != 0) {
-            //    flameColor = Color.Lerp(new Color(255, 53, 53), new Color(255, 147, 147), Utils.RandomFloat(ref seed));
-            //    flameColor.A = 60;
-            //    flameColor *= 0.75f;
-            //}
+            flameColor.A = 60;
+            flameColor *= 0.75f;
+            if (i != 0) {
+                flameColor = Color.Lerp(new Color(255, 53, 53), new Color(255, 147, 147), Utils.RandomFloat(ref seed));
+                flameColor.A = 60;
+                flameColor *= 0.75f;
+            }
             float flameRotation = drawinfo.drawPlayer.headRotation;
             flamePosition.Y -= flameOrigin.Y / 2f;
             Vector2 offset = new(Utils.RandomInt(ref seed, -2, 3) * -player.direction, Utils.RandomInt(ref seed, -2, 3));
