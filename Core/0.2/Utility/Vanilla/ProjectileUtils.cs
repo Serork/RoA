@@ -24,25 +24,25 @@ static class ProjectileUtils {
         SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
 
         if (scale != null) {
-            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, sourceRectangle, lightColor, projectile.rotation + exRot,
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition/* + Vector2.UnitY * projectile.gfxOffY*/, sourceRectangle, lightColor, projectile.rotation + exRot,
             origin ?? mainTex.Size() / 2, projectile.scale * scale.Value, effects, 0);
             return;
         }
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, sourceRectangle, lightColor, projectile.rotation + exRot,
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition/* + Vector2.UnitY * projectile.gfxOffY*/, sourceRectangle, lightColor, projectile.rotation + exRot,
             origin ?? mainTex.Size() / 2, projectile.scale, effects, 0);
     }
 
     public static void QuickDraw(this Projectile projectile, Color lightColor, float overrideRot, int EmmmItIsAStupidValue) {
         Texture2D mainTex = projectile.GetTexture();
 
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, null, lightColor, overrideRot,
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition/* + Vector2.UnitY * projectile.gfxOffY*/, null, lightColor, overrideRot,
             mainTex.Size() / 2, projectile.scale, 0, 0);
     }
 
     public static void QuickDraw(this Projectile projectile, Rectangle frameBox, Color lightColor, float exRot) {
         Texture2D mainTex = projectile.GetTexture();
 
-        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, frameBox, lightColor, projectile.rotation + exRot,
+        Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition /*+ Vector2.UnitY * projectile.gfxOffY*/, frameBox, lightColor, projectile.rotation + exRot,
             frameBox.Size() / 2, projectile.scale, 0, 0);
     }
 
@@ -57,11 +57,11 @@ static class ProjectileUtils {
             origin *= originScale;
         }
         if (scale != null) {
-            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, frameBox, lightColor, projectile.rotation + exRot,
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition/* + Vector2.UnitY * projectile.gfxOffY*/, frameBox, lightColor, projectile.rotation + exRot,
                 origin.Value, scale.Value, effects, 0);
         }
         else {
-            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition + Vector2.UnitY * projectile.gfxOffY, frameBox, lightColor, projectile.rotation + exRot,
+            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition /*+ Vector2.UnitY * projectile.gfxOffY*/, frameBox, lightColor, projectile.rotation + exRot,
                 origin.Value, projectile.scale, effects, 0);
         }
     }
