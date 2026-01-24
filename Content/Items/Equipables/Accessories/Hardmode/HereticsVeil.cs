@@ -34,10 +34,10 @@ sealed class HereticsVeil : ModItem {
 
     public override void Load() {
         PlayerCommon.AlwaysHeadDrawEvent += PlayerCommon_AlwaysHeadDrawEvent;
-        ExtraDrawLayerSupport.PreHeldItemDrawEvent += ExtraDrawLayerSupport_PreHeldItemDrawEvent;
+        ExtraDrawLayerSupport.PreProjectileOverArmDrawEvent += ExtraDrawLayerSupport_PreProjectileOverArmDrawEvent;
     }
 
-    private void ExtraDrawLayerSupport_PreHeldItemDrawEvent(ref PlayerDrawSet drawinfo) {
+    private void ExtraDrawLayerSupport_PreProjectileOverArmDrawEvent(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         if (!player.GetCommon().IsHereticsVeilEffectActive) {
             return;

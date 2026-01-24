@@ -31,6 +31,16 @@ sealed class ExtraDrawLayerSupport : ILoadable {
         On_PlayerDrawLayers.DrawPlayer_22_FaceAcc += On_PlayerDrawLayers_DrawPlayer_22_FaceAcc;
         On_PlayerDrawLayers.DrawPlayer_12_Skin += On_PlayerDrawLayers_DrawPlayer_12_Skin;
         On_PlayerDrawLayers.DrawPlayer_27_HeldItem += On_PlayerDrawLayers_DrawPlayer_27_HeldItem;
+        On_PlayerDrawLayers.DrawPlayer_31_ProjectileOverArm += On_PlayerDrawLayers_DrawPlayer_31_ProjectileOverArm;
+    }
+
+    public delegate void PreProjectileOverArmDelegate(ref PlayerDrawSet drawinfo);
+    public static event PreProjectileOverArmDelegate PreProjectileOverArmDrawEvent;
+
+    private void On_PlayerDrawLayers_DrawPlayer_31_ProjectileOverArm(On_PlayerDrawLayers.orig_DrawPlayer_31_ProjectileOverArm orig, ref PlayerDrawSet drawinfo) {
+        PreProjectileOverArmDrawEvent?.Invoke(ref drawinfo);
+
+        orig(ref drawinfo);
     }
 
     public delegate void PreHeldItemDelegate(ref PlayerDrawSet drawinfo);
