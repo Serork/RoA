@@ -6,6 +6,7 @@ using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -121,6 +122,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsObsidianStopwatchEffectActive, IsObsidianStopwatchEffectActive_Hidden;
 
     public bool IsHereticsVeilEffectActive;
+    public float HereticVeilEffectOpacity;
 
     public bool StandingStill => StandingStillTimer > 0;
 
@@ -193,6 +195,14 @@ sealed partial class PlayerCommon : ModPlayer {
 
         OldUseItemPos[0] = position;
         OldUseItemRot[0] = rotation;
+    }
+
+    public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) {
+        drawInfo.colorHead *= HereticVeilEffectOpacity;
+        drawInfo.colorHair *= HereticVeilEffectOpacity;
+        drawInfo.colorEyes *= HereticVeilEffectOpacity;
+        drawInfo.colorEyeWhites *= HereticVeilEffectOpacity;
+        drawInfo.colorArmorHead *= HereticVeilEffectOpacity;
     }
 
     public override bool FreeDodge(Player.HurtInfo info) {
@@ -887,6 +897,13 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         else {
             ResetAdvancedShadows();
+        }
+
+        if (!IsHereticsVeilEffectActive) {
+            HereticVeilEffectOpacity = Helper.Approach(HereticVeilEffectOpacity, 1f, 0.2f);
+        }
+        else if (Player.statLife <= 100) {
+            HereticVeilEffectOpacity = Helper.Approach(HereticVeilEffectOpacity, 0f, 0.1f);
         }
     }
 

@@ -41,9 +41,12 @@ sealed class HereticsVeil : ModItem {
         if (!player.GetCommon().IsHereticsVeilEffectActive) {
             return;
         }
+
+        float opacity = 1f - player.GetCommon().HereticVeilEffectOpacity;
         Vector2 drawPosition = new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
+        //drawPosition += player.MovementOffset();
         DrawData drawData = new DrawData(TextureAssets.Players[drawinfo.skinVar, 0].Value, drawPosition, drawinfo.drawPlayer.bodyFrame,
-            drawinfo.colorHead.MultiplyRGB(Color.Black), drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect);
+            Lighting.GetColor(drawPosition.ToTileCoordinates()).MultiplyRGB(Color.Black) * opacity, drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect);
         DrawData item = drawData;
         drawinfo.DrawDataCache.Add(item);
         //item = new DrawData(TextureAssets.Players[drawinfo.skinVar, 1].Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect, drawinfo.drawPlayer.bodyFrame,
@@ -61,6 +64,11 @@ sealed class HereticsVeil : ModItem {
             _seed = Main.rand.NextFloat(100f);
         }
         ulong seed = (ulong)_seed;
+
+        bool isAppearing = player.statLife <= 100;
+
+        float startProgress = isAppearing ? Utils.GetLerpValue(0f, 0.625f, opacity, true) : 1f;
+
         for (int i = 0; i < 2; i++) {
             Texture2D flameTexture = _flameTexture.Value;
             Vector2 flamePosition = drawPosition;
@@ -83,8 +91,10 @@ sealed class HereticsVeil : ModItem {
             if (drawinfo.drawPlayer.gravDir < 0) {
                 flamePosition.Y += 31f;
             }
+            float scale2 = MathHelper.Lerp(1.5f, 1f, startProgress);
+            Vector2 scale = Vector2.One * scale2;
             DrawData drawData2 = new DrawData(flameTexture, flamePosition, flameClip,
-                flameColor, flameRotation, flameOrigin, 1f, drawinfo.playerEffect);
+                flameColor * opacity, flameRotation, flameOrigin, scale, drawinfo.playerEffect);
             drawinfo.DrawDataCache.Add(drawData2);
         }
     }
@@ -102,16 +112,52 @@ sealed class HereticsVeil : ModItem {
             return;
         }
 
+        bool isAppearing = player.statLife <= 100;
+        float opacity = 1f - player.GetCommon().HereticVeilEffectOpacity;
+        float startProgress = isAppearing ? Utils.GetLerpValue(0f, 0.4f, opacity, true) : 1f;
+
+        if (startProgress == 0f) {
+            for (int num130 = 0; num130 < 20; num130++) {
+                Vector2 position = player.Top + Vector2.UnitY * player.height * 0.4f;
+                Vector2 velocity = -Vector2.UnitY.RotatedBy(player.fullRotation);
+                int num1020 = Math.Sign(velocity.Y);
+                int num1021 = ((num1020 != -1) ? 1 : 0);
+                int num1030 = Utils.SelectRandom<int>(Main.rand, 6, 259, 158);
+                float num127 = Main.rand.NextFloat(0.75f, 1.25f);
+                num127 *= Main.rand.NextFloat(1.25f, 1.5f);
+                int width = 20;
+                Color color = Color.Lerp(new Color(255, 165, 53), new Color(255, 247, 147), Main.rand.NextFloat());
+                if (Main.rand.NextBool()) {
+                    color = Color.Lerp(new Color(255, 53, 53), new Color(255, 147, 147), Main.rand.NextFloat());
+                }
+                if (num1030 != 6) {
+                    color = default;
+                    num127 = 1f;
+                }
+                int num131 = Dust.NewDust(new Vector2(position.X, position.Y), 6, 6, num1030, 0f, 0f, 0, color, num127);
+                Main.dust[num131].position = position + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(velocity.ToRotation()) * width / 3f;
+                Main.dust[num131].customData = num1021;
+                if (num1020 == -1 && Main.rand.Next(4) != 0)
+                    Main.dust[num131].velocity.Y -= 0.2f;
+                Main.dust[num131].noGravity = true;
+                Dust dust2 = Main.dust[num131];
+                dust2.velocity *= 0.5f;
+                dust2 = Main.dust[num131];
+                dust2.velocity += position.DirectionTo(Main.dust[num131].position) * Main.rand.NextFloat(2f, 5f) * 0.8f;
+                dust2.velocity.Y += velocity.Y * Main.rand.NextFloat(2f, 5f) * 0.625f * 0.8f;
+            }
+        }
+
         player.GetCommon().IsHereticsVeilEffectActive = true;
 
-        player.GetCommon().StopHeadDrawing = true;
+        //player.GetCommon().StopHeadDrawing = true;
 
         player.endurance += 0.2f;
         player.lifeRegen += 4;
 
         foreach (NPC nPC in Main.ActiveNPCs) {
             float num = TileHelper.TileSize * 31;
-            if (nPC.CanBeChasedBy(this) && !(player.Distance(nPC.Center) > num) && Collision.CanHitLine(player.position, player.width, player.height, nPC.position, nPC.width, nPC.height)) {
+            if (nPC.CanBeChasedBy(player) && !(player.Distance(nPC.Center) > num) && Collision.CanHitLine(player.position, player.width, player.height, nPC.position, nPC.width, nPC.height)) {
                 nPC.AddBuff(BuffID.OnFire, 90);
             }
         }

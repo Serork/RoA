@@ -400,6 +400,9 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                         armorGlowMask.SetDrawSettings(player, ref glowMaskTexture, ref glowMaskColor, ref drawInfo);
                     }
                     glowMaskColor = player.GetImmuneAlphaPure(glowMaskColor, drawInfo.shadow);
+
+                    glowMaskColor *= player.GetCommon().HereticVeilEffectOpacity;
+
                     DrawData item = GetHeadGlowMask(ref drawInfo, glowMaskTexture, glowMaskColor);
                     drawInfo.DrawDataCache.Add(item);
                     if (armorGlowMaskModItem.Type == ModContent.ItemType<FlamewardenHood>()) {
