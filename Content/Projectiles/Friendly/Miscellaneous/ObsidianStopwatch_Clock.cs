@@ -107,7 +107,6 @@ sealed class ObsidianStopwatchClock : ModProjectile_NoTextureLoad, IRequestAsset
             color = Color.Lerp(self.GetModPlayer<SmallMoonPlayer>().smallMoonColor, self.GetModPlayer<SmallMoonPlayer>().smallMoonColor2, Helper.Wave(0f, 1f, 5f, offset));
         }
         color.A = 25;
-        color *= 0.5f;
         Color result = Lighting.GetColor(position.ToTileCoordinates());
         Color color2 = Color.Lerp(result, result.MultiplyRGBA(color), 0.25f);
 
@@ -124,9 +123,27 @@ sealed class ObsidianStopwatchClock : ModProjectile_NoTextureLoad, IRequestAsset
         };
 
         batch.Draw(baseTexture, position, baseDrawInfo);
+
+        clip = arrow1Texture.Bounds;
+        origin = clip.BottomCenter() - Vector2.UnitY * 2f;
+        baseDrawInfo = new() {
+            Clip = clip,
+            Origin = origin,
+            Color = color,
+            Scale = scale
+        };
         batch.Draw(arrow1Texture, position, baseDrawInfo with {
             Rotation = Arrow1Rotation
         });
+
+        clip = arrow2Texture.Bounds;
+        origin = clip.BottomCenter() - Vector2.UnitY * 2f;
+        baseDrawInfo = new() {
+            Clip = clip,
+            Origin = origin,
+            Color = color,
+            Scale = scale
+        };
         batch.Draw(arrow2Texture, position, baseDrawInfo with {
             Rotation = Arrow2Rotation
         });
