@@ -59,7 +59,7 @@ sealed class ObsidianStopwatchClock : ModProjectile_NoTextureLoad, IRequestAsset
     public override bool? CanDamage() => false;
 
     public override void AI() {
-        Projectile.Center = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint();
+        //Projectile.Center = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint();
 
         float lerpValue = 0.025f;
         if (Projectile.scale == 0f) {
