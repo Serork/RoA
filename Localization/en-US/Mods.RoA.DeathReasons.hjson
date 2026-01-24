@@ -30,3 +30,6 @@ PerfectMimic2: "{0} is right here, look..."
 // Died from Maiden's Bracers
 MaidensBracers0: "{0} is dead by ..."
 MaidensBracers1: "{0} is dead by ..."
+// Died from Avenging Soul
+AvengingSoul0: "{0} is dead by ..."
+AvengingSoul1: "{0} is dead by ..."
