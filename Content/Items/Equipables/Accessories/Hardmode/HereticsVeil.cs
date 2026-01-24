@@ -34,9 +34,10 @@ sealed class HereticsVeil : ModItem {
 
     public override void Load() {
         PlayerCommon.AlwaysHeadDrawEvent += PlayerCommon_AlwaysHeadDrawEvent;
+        ExtraDrawLayerSupport.PreHeldItemDrawEvent += ExtraDrawLayerSupport_PreHeldItemDrawEvent;
     }
 
-    private void PlayerCommon_AlwaysHeadDrawEvent(ref PlayerDrawSet drawinfo) {
+    private void ExtraDrawLayerSupport_PreHeldItemDrawEvent(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         if (!player.GetCommon().IsHereticsVeilEffectActive) {
             return;
@@ -45,16 +46,6 @@ sealed class HereticsVeil : ModItem {
         float opacity = 1f - player.GetCommon().HereticVeilEffectOpacity;
         Vector2 drawPosition = new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
         //drawPosition += player.MovementOffset();
-        DrawData drawData = new DrawData(TextureAssets.Players[drawinfo.skinVar, 0].Value, drawPosition, drawinfo.drawPlayer.bodyFrame,
-            Lighting.GetColor(drawPosition.ToTileCoordinates()).MultiplyRGB(Color.Black) * opacity, drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect);
-        DrawData item = drawData;
-        drawinfo.DrawDataCache.Add(item);
-        //item = new DrawData(TextureAssets.Players[drawinfo.skinVar, 1].Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect, drawinfo.drawPlayer.bodyFrame,
-        //    drawinfo.colorEyeWhites, drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect);
-        //drawinfo.DrawDataCache.Add(item);
-        //item = new DrawData(TextureAssets.Players[drawinfo.skinVar, 2].Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect, drawinfo.drawPlayer.bodyFrame,
-        //    drawinfo.colorEyes.MultiplyRGB(Color.Black), drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect);
-        //drawinfo.DrawDataCache.Add(item);
 
         if (_flameTexture.IsLoaded is not true) {
             return;
@@ -97,6 +88,27 @@ sealed class HereticsVeil : ModItem {
                 flameColor * opacity, flameRotation, flameOrigin, scale, drawinfo.playerEffect);
             drawinfo.DrawDataCache.Add(drawData2);
         }
+    }
+
+    private void PlayerCommon_AlwaysHeadDrawEvent(ref PlayerDrawSet drawinfo) {
+        Player player = drawinfo.drawPlayer;
+        if (!player.GetCommon().IsHereticsVeilEffectActive) {
+            return;
+        }
+
+        float opacity = 1f - player.GetCommon().HereticVeilEffectOpacity;
+        Vector2 drawPosition = new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
+        //drawPosition += player.MovementOffset();
+        DrawData drawData = new DrawData(TextureAssets.Players[drawinfo.skinVar, 0].Value, drawPosition, drawinfo.drawPlayer.bodyFrame,
+            Lighting.GetColor(drawPosition.ToTileCoordinates()).MultiplyRGB(Color.Black) * opacity, drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect);
+        DrawData item = drawData;
+        drawinfo.DrawDataCache.Add(item);
+        //item = new DrawData(TextureAssets.Players[drawinfo.skinVar, 1].Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect, drawinfo.drawPlayer.bodyFrame,
+        //    drawinfo.colorEyeWhites, drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect);
+        //drawinfo.DrawDataCache.Add(item);
+        //item = new DrawData(TextureAssets.Players[drawinfo.skinVar, 2].Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect, drawinfo.drawPlayer.bodyFrame,
+        //    drawinfo.colorEyes.MultiplyRGB(Color.Black), drawinfo.drawPlayer.headRotation, drawinfo.headVect, 1f, drawinfo.playerEffect);
+        //drawinfo.DrawDataCache.Add(item);
     }
 
     public override void SetDefaults() {

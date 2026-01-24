@@ -121,7 +121,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsObsidianStopwatchEffectActive, IsObsidianStopwatchEffectActive_Hidden;
 
     public bool IsHereticsVeilEffectActive;
-    public float HereticVeilEffectOpacity;
+    public float HereticVeilEffectOpacity = 1f;
 
     public bool StandingStill => StandingStillTimer > 0;
 

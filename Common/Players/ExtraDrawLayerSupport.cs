@@ -29,6 +29,28 @@ sealed class ExtraDrawLayerSupport : ILoadable {
         On_PlayerDrawLayers.DrawPlayer_01_3_BackHead += On_PlayerDrawLayers_DrawPlayer_01_3_BackHead;
         On_PlayerDrawLayers.DrawPlayer_21_Head += On_PlayerDrawLayers_DrawPlayer_21_Head;
         On_PlayerDrawLayers.DrawPlayer_22_FaceAcc += On_PlayerDrawLayers_DrawPlayer_22_FaceAcc;
+        On_PlayerDrawLayers.DrawPlayer_12_Skin += On_PlayerDrawLayers_DrawPlayer_12_Skin;
+        On_PlayerDrawLayers.DrawPlayer_27_HeldItem += On_PlayerDrawLayers_DrawPlayer_27_HeldItem;
+    }
+
+    public delegate void PreHeldItemDelegate(ref PlayerDrawSet drawinfo);
+    public static event PreHeldItemDelegate PreHeldItemDrawEvent;
+    public delegate void PostHeldItemDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostHeldItemDelegate PostHeldItemDrawEvent;
+    private void On_PlayerDrawLayers_DrawPlayer_27_HeldItem(On_PlayerDrawLayers.orig_DrawPlayer_27_HeldItem orig, ref PlayerDrawSet drawinfo) {
+        PreHeldItemDrawEvent?.Invoke(ref drawinfo);
+
+        orig(ref drawinfo);
+
+        PostHeldItemDrawEvent?.Invoke(ref drawinfo);
+    }
+
+    public delegate void PostSkinDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostSkinDrawDelegate PostSkinDrawEvent;
+    private void On_PlayerDrawLayers_DrawPlayer_12_Skin(On_PlayerDrawLayers.orig_DrawPlayer_12_Skin orig, ref PlayerDrawSet drawinfo) {
+        orig(ref drawinfo);
+
+        PostSkinDrawEvent?.Invoke(ref drawinfo);
     }
 
     public delegate void PostFaceAccDrawDelegate(ref PlayerDrawSet drawinfo);
