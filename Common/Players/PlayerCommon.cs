@@ -914,7 +914,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     float num127 = Main.rand.NextFloat(0.75f, 1.25f);
                     num127 *= Main.rand.NextFloat(1.25f, 1.5f);
                     int width = 20;
-                    int num131 = Dust.NewDust(new Vector2(position.X, position.Y), 6, 6, num1030, 0f, 0f, 235, default, Main.rand.NextFloat(3f, 6f));
+                    int num131 = Dust.NewDust(new Vector2(position.X, position.Y), 6, 6, num1030, 0f, 0f, 235, default, Main.rand.NextFloat(3f, 6f) * 1.375f * (1f - HereticVeilEffectOpacity));
                     Main.dust[num131].position = position + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(velocity.ToRotation()) * width / 3f;
                     Main.dust[num131].customData = num1021;
                     if (num1020 == -1 && Main.rand.Next(4) != 0)
