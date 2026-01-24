@@ -94,6 +94,8 @@ sealed class HereticsVeil : ModItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         if (player.statLife > 100) {
+            _seed = 0f;
+
             return;
         }
 
