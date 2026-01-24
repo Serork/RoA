@@ -22,6 +22,7 @@ namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 [AutoloadEquip(EquipType.Back, EquipType.Front)]
 sealed class HereticsVeil : ModItem {
     private static Asset<Texture2D> _flameTexture = null!;
+    private static float _seed = 0f;
 
     public override void SetStaticDefaults() {
         if (Main.dedServ) {
@@ -56,7 +57,10 @@ sealed class HereticsVeil : ModItem {
             return;
         }
 
-        ulong seed = 0;
+        if (_seed == 0f) {
+            _seed = Main.rand.NextFloat(100f);
+        }
+        ulong seed = (ulong)_seed;
         for (int i = 0; i < 2; i++) {
             Texture2D flameTexture = _flameTexture.Value;
             Vector2 flamePosition = drawPosition;
@@ -73,7 +77,7 @@ sealed class HereticsVeil : ModItem {
             }
             float flameRotation = drawinfo.drawPlayer.headRotation;
             flamePosition.Y -= flameOrigin.Y / 2f;
-            Vector2 offset = new(Utils.RandomInt(ref seed, -2, 3), Utils.RandomInt(ref seed, -2, 3));
+            Vector2 offset = new(Utils.RandomInt(ref seed, -2, 3) * -player.direction, Utils.RandomInt(ref seed, -2, 3));
             flamePosition += offset;
             DrawData drawData2 = new DrawData(flameTexture, flamePosition, flameClip,
                 flameColor, flameRotation, flameOrigin, 1f, drawinfo.playerEffect);
