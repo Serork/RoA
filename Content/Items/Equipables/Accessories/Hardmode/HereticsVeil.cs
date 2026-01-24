@@ -116,9 +116,9 @@ sealed class HereticsVeil : ModItem {
         float opacity = 1f - player.GetCommon().HereticVeilEffectOpacity;
         float startProgress = isAppearing ? Utils.GetLerpValue(0f, 0.4f, opacity, true) : 1f;
 
+        Vector2 position = player.Top + Vector2.UnitY * player.height * 0.4f;
         if (startProgress == 0f) {
             for (int num130 = 0; num130 < 20; num130++) {
-                Vector2 position = player.Top + Vector2.UnitY * player.height * 0.4f;
                 Vector2 velocity = -Vector2.UnitY.RotatedBy(player.fullRotation);
                 int num1020 = Math.Sign(velocity.Y);
                 int num1021 = ((num1020 != -1) ? 1 : 0);

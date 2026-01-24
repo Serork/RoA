@@ -900,7 +900,33 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         if (!IsHereticsVeilEffectActive) {
-            HereticVeilEffectOpacity = Helper.Approach(HereticVeilEffectOpacity, 1f, 0.2f);
+            HereticVeilEffectOpacity = Helper.Approach(HereticVeilEffectOpacity, 1f, 0.15f);
+
+            if (HereticVeilEffectOpacity < 1f) {
+                for (int i = 0; i < 20; i++) {
+                    Player player = Player;
+                    Vector2 position = Player.Top + Vector2.UnitY * Player.height * 0.2f;
+                    Vector2 velocity = -Vector2.UnitY.RotatedBy(player.fullRotation);
+                    int num1020 = Math.Sign(velocity.Y);
+                    int num1021 = ((num1020 != -1) ? 1 : 0);
+                    int num1030 = DustID.Smoke;
+                    float num127 = Main.rand.NextFloat(0.75f, 1.25f);
+                    num127 *= Main.rand.NextFloat(1.25f, 1.5f);
+                    int width = 20;
+                    int num131 = Dust.NewDust(new Vector2(position.X, position.Y), 6, 6, num1030, 0f, 0f, 235, default, Main.rand.NextFloat(3f, 6f));
+                    Main.dust[num131].position = position + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(velocity.ToRotation()) * width / 3f;
+                    Main.dust[num131].customData = num1021;
+                    if (num1020 == -1 && Main.rand.Next(4) != 0)
+                        Main.dust[num131].velocity.Y -= 0.2f;
+                    Main.dust[num131].noGravity = true;
+                    Dust dust2 = Main.dust[num131];
+                    dust2.velocity *= 0.5f;
+                    dust2 = Main.dust[num131];
+                    dust2.velocity += position.DirectionTo(Main.dust[num131].position) * Main.rand.NextFloat(2f, 5f) * 0.8f;
+                    dust2.velocity.Y += velocity.Y * Main.rand.NextFloat(2f, 5f) * 0.625f * 0.8f;
+                    dust2.velocity *= 0.1f;
+                }
+            }
         }
         else if (Player.statLife <= 100) {
             HereticVeilEffectOpacity = Helper.Approach(HereticVeilEffectOpacity, 0f, 0.1f);
