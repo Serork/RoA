@@ -120,6 +120,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsObsidianStopwatchEffectActive;
 
+    public bool IsHereticsVeilEffectActive;
+
     public bool StandingStill => StandingStillTimer > 0;
 
     public bool CanSpawnFallenLeavesBranch => FallenLeavesCounter >= FallenLeaves.ATTACKTIME;
@@ -557,7 +559,7 @@ sealed partial class PlayerCommon : ModPlayer {
             color.A = 25;
             //color *= 0.5f;
             Color color2 = result.MultiplyRGBA(color);
-            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
+            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.25f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
     }
@@ -584,7 +586,7 @@ sealed partial class PlayerCommon : ModPlayer {
             color.A = 25;
             //color *= 0.5f;
             Color color2 = result.MultiplyRGBA(color);
-            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.375f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
+            result = Color.Lerp(result, color2, (!self.GetCommon()._isTeleportingBackViaObisidianStopwatch ? 0.25f : 0.5f) * self.GetCommon().ObsidianStopwatchEffectOpacity);
         }
         return result;
     }
@@ -991,6 +993,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsHereticsVeilEffectActive = false;
+
         IsObsidianStopwatchEffectActive = false;
 
         IsSeedOfWisdomEffectActive = false;
