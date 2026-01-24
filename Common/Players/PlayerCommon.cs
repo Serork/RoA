@@ -73,6 +73,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private ushort _currentTeleportPointIndex;
     private float _obsidianStopwatchTeleportCooldown;
     private float _obsidianStopwatchTeleportLerpValue, _obsidianStopwatchTeleportLerpValue2;
+    private float _obsidianStopwatchTrailOpacity;
 
     private CopyInfo[] _copyData = new CopyInfo[MAXCOPIES];
     private byte _currentCopyIndex;
@@ -413,6 +414,7 @@ sealed partial class PlayerCommon : ModPlayer {
             value.scale *= Helper.Wave(1.1f, 1.2f, 5f, offset);
             value.scale *= 1.5f * progress;
             value.color *= 0.5f;
+            value.color *= drawInfo.drawPlayer.GetCommon()._obsidianStopwatchTrailOpacity;
             drawInfo.DrawDataCache[i] = value;
         }
     }
@@ -461,9 +463,9 @@ sealed partial class PlayerCommon : ModPlayer {
                 return;
             }
 
-            if (IsObsidianStopwatchEffectActive_Hidden && !_isTeleportingBackViaObisidianStopwatch) {
-                return;
-            }
+            //if (IsObsidianStopwatchEffectActive_Hidden && !_isTeleportingBackViaObisidianStopwatch) {
+            //    return;
+            //}
 
             int totalShadows = Math.Min(availableAdvancedShadowsCount, 60);
 
@@ -881,6 +883,13 @@ sealed partial class PlayerCommon : ModPlayer {
         if (IsObsidianStopwatchEffectActive) {
             if (_obsidianStopwatchTeleportCooldown > 0) {
                 _obsidianStopwatchTeleportCooldown--;
+            }
+            float lerpValue = 0.2f;
+            if (IsObsidianStopwatchEffectActive_Hidden) {
+                _obsidianStopwatchTrailOpacity = Helper.Approach(_obsidianStopwatchTrailOpacity, 0f, lerpValue);
+            }
+            else {
+                _obsidianStopwatchTrailOpacity = Helper.Approach(_obsidianStopwatchTrailOpacity, 1f, lerpValue);
             }
         }
         else {
