@@ -2712,3 +2712,13 @@ AvengingSoul: {
 	DisplayName: Avenging Soul
 	Tooltip: ""
 }
+
+BoneSerpentTail: {
+	DisplayName: Bone Serpent Tail
+	Tooltip: ""
+}
+
+SnakeIdol: {
+	DisplayName: Snake Idol
+	Tooltip: ""
+}

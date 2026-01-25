@@ -125,6 +125,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsBansheesGuardEffectActive;
 
+    public bool IsSnakeIdolEffectActive;
+
     public bool StandingStill => StandingStillTimer > 0;
 
     public bool CanSpawnFallenLeavesBranch => FallenLeavesCounter >= FallenLeaves.ATTACKTIME;
@@ -1068,6 +1070,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsSnakeIdolEffectActive = false;
+
         IsBansheesGuardEffectActive = false;
 
         IsHereticsVeilEffectActive = false;
@@ -1146,6 +1150,23 @@ sealed partial class PlayerCommon : ModPlayer {
         if (IsAetherInvincibilityActive) {
             modifiers.Cancel();
         }
+    }
+
+    public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+        if (!IsSnakeIdolEffectActive) {
+            return;
+        }
+
+        int debuffCount = 0;
+        for (int i = 0; i < NPC.maxBuffs; i++) {
+            if (target.buffTime[i] >= 1 && target.buffType[i] > 0) {
+                if (Main.debuff[target.buffType[i]] || Main.pvpBuff[target.buffType[i]]) {
+                    debuffCount++;
+                }
+            }
+        }
+        int armorPenetration = 5 * debuffCount;
+        modifiers.ArmorPenetration += armorPenetration;
     }
 
     public partial void RodOfTheBifrostItemCheck(Player player);
