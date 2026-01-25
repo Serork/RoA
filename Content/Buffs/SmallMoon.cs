@@ -162,7 +162,7 @@ sealed class SmallMoonPlayer : ModPlayer {
         if (_lerpColorProgress2 > 1f) {
             _lerpColorProgress2 = 0f;
         }
-        smallMoonColor2 = Color.Lerp(smallMoonColor2, _lerpColor2, 0.25f);
+        smallMoonColor2 = Color.Lerp(smallMoonColor2, _lerpColor2, 0.2f);
         return _lerpColor;
     }
 }
