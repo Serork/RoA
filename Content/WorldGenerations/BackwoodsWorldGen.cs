@@ -114,7 +114,7 @@ sealed class BackwoodsWorldGen : ModSystem {
     }
 
     private bool On_WorldGen_BiomeTileCheck(On_WorldGen.orig_BiomeTileCheck orig, int x, int y) {
-        int num = 10;
+        int num = 5;
         for (int i = x - num; i <= x + num; i++) {
             for (int j = y - num; j <= y + num; j++) {
                 if (!WorldGen.InWorld(i, j))
