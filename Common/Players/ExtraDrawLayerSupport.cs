@@ -7,6 +7,7 @@ using RoA.Common.Items;
 using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
 
@@ -59,7 +60,7 @@ sealed class ExtraDrawLayerSupport : ILoadable {
                 Texture2D currentNeckTexture = getScarfTexture(drawinfo, modItem.CurrentDebuff),
                           nextNeckTexture = getScarfTexture(drawinfo, modItem.NextDebuff);
                 float opacity1 = 1f,
-                      opacity2 = Utils.GetLerpValue(ChromaticScarfDebuffPicker.CHANGETIMEINTICKS * 0.8f, ChromaticScarfDebuffPicker.CHANGETIMEINTICKS, modItem.CurrentDebuffCounter, true);
+                      opacity2 = Utils.GetLerpValue(ChromaticScarfDebuffPicker.CHANGETIMEINTICKS * 0.9f, ChromaticScarfDebuffPicker.CHANGETIMEINTICKS, modItem.CurrentDebuffCounter, true);
                 DrawData item = new DrawData(currentNeckTexture, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.bodyFrame.Width / 2, drawinfo.drawPlayer.bodyFrame.Height / 2), drawinfo.drawPlayer.bodyFrame,
                     drawinfo.colorArmorBody * opacity1,
                     drawinfo.drawPlayer.bodyRotation, drawinfo.bodyVect, 1f, drawinfo.playerEffect);
