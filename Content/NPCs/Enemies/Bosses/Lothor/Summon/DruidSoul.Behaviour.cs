@@ -602,7 +602,7 @@ sealed partial class DruidSoul : RoANPC {
                 float dist2 = NPC.Distance(towards) / 100f;
                 NPC.Opacity = Math.Min(NPC.Opacity, MathHelper.Clamp(dist2 * 0.75f, 0f, 1f));
             }
-            if (NPC.scale > 0f && NPC.Opacity < 0.625f) {
+            if (NPC.scale > 0f && NPC.Opacity < 0.5f) {
                 NPC.scale -= OPACITYACC * 1.555f;
             }
             //NPC.scale = MathUtils.Clamp01(Vector2.Distance(NPC.Center, towards) / 85f);
