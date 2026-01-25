@@ -17,6 +17,7 @@ sealed class GobletOfPain : ModTile {
 
         TileObjectData.newTile.CopyFrom(TileObjectData.StyleOnTable1x1);
         TileObjectData.newTile.DrawYOffset = 2;
+        TileObjectData.newTile.LavaDeath = false;
         TileObjectData.addTile(Type);
 
         AddMapEntry(new Color(121, 96, 156), CreateMapEntryName());
