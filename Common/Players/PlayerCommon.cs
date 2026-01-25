@@ -553,7 +553,9 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         drawTempBufferEffect();
-        drawObsidianStopwatchEffect();
+        if (!Common.ReflectionTarget.isDrawReflectablesThisFrame) {
+            drawObsidianStopwatchEffect();
+        }
     }
 
     private Color On_Player_GetImmuneAlphaPure(On_Player.orig_GetImmuneAlphaPure orig, Player self, Color newColor, float alphaReduction) {
