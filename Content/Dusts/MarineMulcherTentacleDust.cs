@@ -23,7 +23,7 @@ sealed class MarineMulcherTentacleDust : ModDust {
             num8 = 255;
 
         if (dust.customData is bool) {
-            return Color.White with { A = 0 } * 0.25f;
+            return Color.White with { A = 0 } * 0.2f;
         }
 
         return new Color(num6, num5, num4, num8);
