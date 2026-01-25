@@ -65,8 +65,8 @@ sealed class TarBiome_GenPass : ModSystem {
                 for (int k = 5; k < Main.maxTilesY - 5; k++) {
                     Tile tile = Main.tile[j, k];
                     if (tile.LiquidAmount > 0 && tile.LiquidType == tarLiquid) {
-                        for (int k2 = -10 + WorldGen.genRand.Next(-2, 2); k2 < 0; k2++) {
-                            int x = 3;
+                        for (int k2 = -10 + WorldGen.genRand.Next(-2, 2); k2 < WorldGen.genRand.Next(-2, 3); k2++) {
+                            int x = 3 + WorldGen.genRand.Next(-2, 3);
                             for (int j2 = -x; j2 <= x; j2++) {
                                 Tile tile2 = Main.tile[j + j2, k + k2];
                                 if (tile2.WallType != TarBiome.TARWALLTYPE) {
