@@ -8,6 +8,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.GameContent.Generation;
@@ -109,6 +110,25 @@ sealed class BackwoodsWorldGen : ModSystem {
         On_WorldGen.PaintTheLivingTrees += On_WorldGen_PaintTheLivingTrees;
         On_WorldGen.NotTheBees += On_WorldGen_NotTheBees;
         On_WorldGen.ShimmerMakeBiome += On_WorldGen_ShimmerMakeBiome;
+        On_WorldGen.BiomeTileCheck += On_WorldGen_BiomeTileCheck;
+    }
+
+    private bool On_WorldGen_BiomeTileCheck(On_WorldGen.orig_BiomeTileCheck orig, int x, int y) {
+        int num = 25;
+        for (int i = x - num; i <= x + num; i++) {
+            for (int j = y - num; j <= y + num; j++) {
+                if (!WorldGen.InWorld(i, j))
+                    continue;
+
+                if (Main.tile[i, j].HasTile) {
+                    int type = Main.tile[i, j].TileType;
+                    if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)type))
+                        return true;
+                }
+            }
+        }
+
+        return orig(x, y);
     }
 
     private bool On_WorldGen_ShimmerMakeBiome(On_WorldGen.orig_ShimmerMakeBiome orig, int X, int Y) {
