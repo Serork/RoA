@@ -424,7 +424,7 @@ sealed partial class PlayerCommon : ModPlayer {
             }
             color.A = 25;
             color *= 0.5f;
-            value.color = value.color.MultiplyRGBA(color)/* * drawInfo.drawPlayer.GetCommon().ObsidianStopwatchEffectOpacity*/;
+            value.color = value.color.MultiplyRGBA(color) * drawInfo.drawPlayer.GetCommon().ObsidianStopwatchEffectOpacity;
             value.scale *= Helper.Wave(1.1f, 1.2f, 5f, offset);
             value.scale *= 1.5f * progress;
             value.color *= 0.5f;
