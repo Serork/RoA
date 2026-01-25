@@ -1050,7 +1050,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         OnHitNPCEvent?.Invoke(Player, target, hit, damageDone);
 
-        if (IsGobletOfPainEffectActive && hit.Crit) {
+        if (IsGobletOfPainEffectActive && hit.Crit && Main.rand.NextBool(4)) {
             Player.AddBuff(BuffID.Poisoned, MathUtils.SecondsToFrames(3));
 
             ProjectileUtils.SpawnPlayerOwnedProjectile<GobletOfPainSplash>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc("gobletofpain")) {
