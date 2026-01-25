@@ -39,7 +39,6 @@ sealed class GobletOfPain_WorldGen : ModSystem {
                                 }
                                 if (flag4) {
                                     WorldGen.PlaceTile(num438, num439 - 1, ModContent.TileType<GobletOfPain>());
-                                    Console.WriteLine($"{num438},{num439}");
                                 }
                                 else {
                                     flag24 = true;
