@@ -42,8 +42,9 @@ sealed class ExtraDrawLayerSupport : ILoadable {
     private void On_PlayerDrawLayers_DrawPlayer_20_NeckAcc(On_PlayerDrawLayers.orig_DrawPlayer_20_NeckAcc orig, ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         Item heldItem = player.GetSelectedItem();
-        if (drawinfo.drawPlayer.neck == EquipLoader.GetEquipSlot(RoA.Instance, nameof(ChromaticScarf), EquipType.Neck) && !heldItem.IsEmpty() && heldItem.IsAWeapon()) {
-            if (heldItem.TryGetGlobalItem(out ChromaticScarfDebuffPicker modItem)) {
+        if (drawinfo.drawPlayer.neck == EquipLoader.GetEquipSlot(RoA.Instance, nameof(ChromaticScarf), EquipType.Neck)) {
+            Color glowColor = player.GetImmuneAlphaPure(Color.White * 0.9f * 0.5f, drawinfo.shadow);
+            if (!heldItem.IsEmpty() && heldItem.IsAWeapon() && heldItem.TryGetGlobalItem(out ChromaticScarfDebuffPicker modItem)) {
                 Texture2D getScarfTexture(PlayerDrawSet drawinfo, int debuff) {
                     Texture2D result = TextureAssets.AccNeck[drawinfo.drawPlayer.neck].Value;
                     if (debuff == ChromaticScarfDebuffPicker.DebuffList[0]) {
@@ -62,13 +63,13 @@ sealed class ExtraDrawLayerSupport : ILoadable {
                 float opacity1 = 1f,
                       opacity2 = Utils.GetLerpValue(ChromaticScarfDebuffPicker.CHANGETIMEINTICKS * 0.9f, ChromaticScarfDebuffPicker.CHANGETIMEINTICKS, modItem.CurrentDebuffCounter, true);
                 DrawData item = new DrawData(currentNeckTexture, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.bodyFrame.Width / 2, drawinfo.drawPlayer.bodyFrame.Height / 2), drawinfo.drawPlayer.bodyFrame,
-                    drawinfo.colorArmorBody * opacity1,
+                    glowColor * opacity1,
                     drawinfo.drawPlayer.bodyRotation, drawinfo.bodyVect, 1f, drawinfo.playerEffect);
                 item.shader = drawinfo.cNeck;
                 drawinfo.DrawDataCache.Add(item);
 
                 item = new DrawData(nextNeckTexture, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.bodyFrame.Width / 2, drawinfo.drawPlayer.bodyFrame.Height / 2), drawinfo.drawPlayer.bodyFrame,
-                    drawinfo.colorArmorBody * opacity2,
+                    glowColor * opacity2,
                     drawinfo.drawPlayer.bodyRotation, drawinfo.bodyVect, 1f, drawinfo.playerEffect);
                 item.shader = drawinfo.cNeck;
                 drawinfo.DrawDataCache.Add(item);
@@ -77,7 +78,7 @@ sealed class ExtraDrawLayerSupport : ILoadable {
             }
 
             DrawData item2 = new DrawData(TextureAssets.AccNeck[drawinfo.drawPlayer.neck].Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.bodyFrame.Width / 2, drawinfo.drawPlayer.bodyFrame.Height / 2), drawinfo.drawPlayer.bodyFrame,
-                    drawinfo.colorArmorBody,
+                    glowColor,
                     drawinfo.drawPlayer.bodyRotation, drawinfo.bodyVect, 1f, drawinfo.playerEffect);
             item2.shader = drawinfo.cNeck;
             drawinfo.DrawDataCache.Add(item2);

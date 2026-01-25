@@ -17,5 +17,8 @@ sealed class BoneSerpentTail : ModItem {
         if (player.lifeRegen < 0) {
             player.GetCritChance(DamageClass.Generic) += 12;
         }
+        else {
+            player.GetCritChance(DamageClass.Generic) += 6;
+        }
     }
 }

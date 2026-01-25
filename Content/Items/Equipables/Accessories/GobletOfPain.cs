@@ -12,6 +12,8 @@ sealed class GobletOfPain : ModItem {
         Item.DefaultToAccessory(26, 30);
 
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));
+
+        Item.maxStack = 1;
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
