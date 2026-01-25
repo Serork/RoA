@@ -2730,7 +2730,7 @@ HereticsVeil: {
 }
 
 BansheesGuard: {
-	// DisplayName: Banshees Guard
+	// DisplayName: Banshee's Guard
 	// Tooltip: ""
 }
 
@@ -2756,5 +2756,10 @@ GobletOfPain: {
 
 ChromaticScarf: {
 	// DisplayName: Chromatic Scarf
+	// Tooltip: ""
+}
+
+ConjurersEye: {
+	// DisplayName: Conjurers Eye
 	// Tooltip: ""
 }

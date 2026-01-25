@@ -3,6 +3,7 @@
 using RoA.Common.Items;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
@@ -131,6 +132,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsGobletOfPainEffectActive;
 
     public bool IsChromaticScarfEffectActive;
+
+    public bool IsConjurersEyeEffectActive;
 
     public bool StandingStill => StandingStillTimer > 0;
 
@@ -958,6 +961,14 @@ sealed partial class PlayerCommon : ModPlayer {
                 dust.position.Y -= 4f;
             }
         }
+
+        if (IsConjurersEyeEffectActive && Player.manaRegenDelay <= 0) {
+            if (Player.IsLocal()) {
+                //ProjectileUtils.SpawnPlayerOwnedProjectile<ConjurersEyeLaser>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc("conjurerseye")) {
+
+                //});
+            }
+        }
     }
 
     public partial void DeerSkullPostUpdateEquips();
@@ -1095,6 +1106,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsConjurersEyeEffectActive = false;
+
         IsChromaticScarfEffectActive = false;
 
         IsGobletOfPainEffectActive = false;

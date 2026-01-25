@@ -2732,3 +2732,8 @@ ChromaticScarf: {
 	DisplayName: Chromatic Scarf
 	Tooltip: ""
 }
+
+ConjurersEye: {
+	DisplayName: Conjurers Eye
+	Tooltip: ""
+}
