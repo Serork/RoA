@@ -547,6 +547,24 @@ sealed partial class DruidSoul : RoANPC {
                 }
             }
         }
+        else {
+            if (flag4) {
+                if (Main.rand.NextChance(Utils.GetLerpValue(0.725f, 0.65f, Helper.EaseInOut3(altarStrength), true)) && Main.rand.NextBool(3)) {
+                    Vector2 center = NPC.position + new Vector2(3f + Main.rand.Next(NPC.width - 3), NPC.height / 2f + 8f);
+                    center.X += Main.rand.Next(-100, 100) * 0.05f;
+                    center.Y += Main.rand.Next(-100, 100) * 0.05f;
+                    Vector2 npcVelocity = NPC.velocity + _velocity + _velocity2 + _velocity3 + _velocity4;
+                    Vector2 position = center;
+                    AdvancedDustSystem.New<SoulPart>(AdvancedDustLayer.BEHINDTILESBEHINDNPCS)?.
+                            SetupPart(1,
+                                    Vector2.Zero,
+                                    position,
+                                    towards + Vector2.UnitX * 6f + Main.rand.Random2(15f) + Vector2.UnitY * (10f + 20f * altarStrength),
+                                    Main.rand.Next(70, 85) * Main.rand.NextFloat(0.01f, 0.015f),
+                                    0.8f);
+                }
+            }
+        }
         if (!NPC.downedBoss2) {
             return;
         }
@@ -584,7 +602,7 @@ sealed partial class DruidSoul : RoANPC {
                 float dist2 = NPC.Distance(towards) / 100f;
                 NPC.Opacity = Math.Min(NPC.Opacity, MathHelper.Clamp(dist2 * 0.75f, 0f, 1f));
             }
-            if (NPC.scale > 0f) {
+            if (NPC.scale > 0f && NPC.Opacity < 0.625f) {
                 NPC.scale -= OPACITYACC * 1.555f;
             }
             //NPC.scale = MathUtils.Clamp01(Vector2.Distance(NPC.Center, towards) / 85f);

@@ -22,6 +22,10 @@ sealed class MarineMulcherTentacleDust : ModDust {
         if (num8 > 255)
             num8 = 255;
 
+        if (dust.customData is bool) {
+            return Color.White with { A = 0 } * 0.25f;
+        }
+
         return new Color(num6, num5, num4, num8);
     }
 
@@ -39,6 +43,11 @@ sealed class MarineMulcherTentacleDust : ModDust {
 
             if ((double)dust.scale <= 0.25)
                 dust.scale -= 0.05f;
+        }
+
+        if (dust.customData is bool) {
+            dust.velocity.Y -= 0.1f;
+            dust.scale *= 0.9f;
         }
 
         dust.velocity *= 0.94f;

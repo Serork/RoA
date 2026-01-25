@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common.Sets;
 using RoA.Common.Tiles;
 ﻿using RoA.Common.World;
+using RoA.Content.Dusts;
 using RoA.Content.Items.Consumables;
 using RoA.Content.Tiles.Solid;
 using RoA.Content.Tiles.Solid.Backwoods;
@@ -13,6 +14,7 @@ using RoA.Content.Tiles.Walls;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -262,9 +264,12 @@ sealed class OvergrownAltar : ModTile, TileHooks.IPostDraw {
         bool flag = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
         float altarStrength = AltarHandler.GetAltarStrength();
         float mult = flag ? 1f : Helper.EaseInOut3(MathHelper.Clamp(altarStrength * 2f, 0f, 1f));
-        float r2 = MathHelper.Lerp(0.45f, 0.9f, mult);
-        float g2 = MathHelper.Lerp(0.85f, 0.3f, mult);
-        float b2 = MathHelper.Lerp(0.4f, 0.4f, mult);
+        float r1 = MathHelper.Lerp(0.9f, 0.9f, altarStrength);
+        float g1 = MathHelper.Lerp(0.2f, 0.4f, altarStrength);
+        float b1 = MathHelper.Lerp(0.3f, 0.5f, altarStrength);
+        float r2 = MathHelper.Lerp(0.45f, r1, mult);
+        float g2 = MathHelper.Lerp(0.85f, g1, mult);
+        float b2 = MathHelper.Lerp(0.4f, b1, mult);
         float altarStrength2 = altarStrength * 1.5f;
         value *= Math.Max(0.75f, 1f - (altarStrength2 > 0.5f ? 1f - altarStrength2 : altarStrength2));
         r = r2 * value;
@@ -319,6 +324,7 @@ sealed class OvergrownAltar : ModTile, TileHooks.IPostDraw {
 
         texture = _glowTexture.Value;
         float mult = flag ? 1f : Helper.EaseInOut3(strength);
+        //mult = Ease.QuintOut(mult);
         float factor3 = flag ? 1f : AltarHandler.GetAltarFactor();
         float factor4 = factor3 * 1.5f;
         factor3 *= Math.Max(0.75f, 1f - (factor4 > 0.5f ? 1f - factor4 : factor4));
@@ -352,6 +358,14 @@ sealed class OvergrownAltar : ModTile, TileHooks.IPostDraw {
             for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
                 spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * opacity4, Main.rand.NextFloatRange(0.1f * factor3), origin, scale, SpriteEffects.None, 0f);
             }
+        }
+
+        if (factor2 > 0.25f && Main.rand.NextChance(factor2 * 0.75f) && WorldGenHelper.GetTileSafely(i, j - 1).TileType != ModContent.TileType<OvergrownAltar>() && Main.rand.NextBool(40)) {
+            Vector2 position2 = new Point(i, j).ToWorldCoordinates();
+            var fireDust = Dust.NewDustDirect(position2, 6, 6, ModContent.DustType<MarineMulcherTentacleDust>(), 0f, 0f, 100, Color.Red.ModifyRGB(1.5f), 1.6f + Main.rand.NextFloatRange(0.4f));
+            fireDust.noGravity = true;
+            fireDust.position = position2;
+            fireDust.customData = true;
         }
     }
 
@@ -394,6 +408,7 @@ sealed class OvergrownAltar : ModTile, TileHooks.IPostDraw {
 
         texture = _glowTexture.Value;
         float mult = flag ? 1f : Helper.EaseInOut3(strength);
+        mult = Ease.QuintOut(mult);
         float factor3 = flag ? 1f : AltarHandler.GetAltarFactor();
         float factor4 = factor3 * 1.5f;
         factor3 *= Math.Max(0.75f, 1f - (factor4 > 0.5f ? 1f - factor4 : factor4));
