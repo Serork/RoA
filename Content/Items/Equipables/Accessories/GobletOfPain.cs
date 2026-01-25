@@ -15,6 +15,8 @@ sealed class GobletOfPain : ModItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
+        player.GetDamage(DamageClass.Generic) += 0.15f;
+
         player.GetCommon().IsGobletOfPainEffectActive = true;
     }
 }
