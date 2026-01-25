@@ -501,13 +501,18 @@ sealed class TarBiome : MicroBiome {
                                 Tile checkTile = _tiles[num + checkX, num2 + 1];
                                 if (checkTile.HasTile) {
                                     if (!_tiles[num + checkX - 1, num2 + 1].HasTile || !_tiles[num + checkX + 1, num2 + 1].HasTile) {
-                                        WorldGen.PoundTile(num + checkX, num2 + 1);
+                                        WorldGen.PoundTile(num + checkX, num2 + 2);
                                     }
+                                }
+                            }
+                            for (int checkX = -1; checkX <= 2; checkX++) {
+                                Tile checkTile = _tiles[num + checkX, num2 + 1];
+                                if (checkTile.HasTile) {
                                     num5 = (checkX <= 0).ToDirectionInt();
                                     break;
                                 }
                             }
-                            CreateDentForHoneyFall(num, num2, -num5);
+                            CreateDentForHoneyFall(num - 2, num2, -num5);
                         }
                     }
                 }
