@@ -70,28 +70,29 @@ sealed class GrimrockMimic : ModNPC {
 
     public override void HitEffect(NPC.HitInfo hit) {
         int dustId = (ushort)ModContent.DustType<Dusts.Backwoods.Stone>();
+        int num695 = dustId;
+
         if (NPC.life > 0) {
-            for (int i = 0; i < hit.Damage / (double)NPC.lifeMax * 50.0; i++) {
-                var d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, dustId, 0f, 0f, 50, default(Color), 1.5f);
-                d.velocity *= 2f;
-                d.noGravity = true;
+            for (int num696 = 0; (double)num696 < hit.Damage / (double)NPC.lifeMax * 50.0; num696++) {
+                Dust.NewDust(NPC.position, NPC.width, NPC.height, num695);
             }
+
             return;
         }
 
-        for (int i = 0; i < 20; i++) {
-            var d = Dust.NewDustDirect(NPC.position, NPC.width, NPC.height, dustId, 0f, 0f, 50, default(Color), 1.5f);
-            d.velocity *= 2f;
-            d.noGravity = true;
+        for (int num697 = 0; num697 < 20; num697++) {
+            Dust.NewDust(NPC.position, NPC.width, NPC.height, num695);
         }
 
-        var source = NPC.GetSource_Death();
-        var gore = Gore.NewGoreDirect(source, new Vector2(NPC.position.X, NPC.position.Y - 10f), new Vector2(hit.HitDirection, 0f), Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1), NPC.scale);
-        gore.velocity *= 0.3f;
-        gore = Gore.NewGoreDirect(source, new Vector2(NPC.position.X, NPC.position.Y + NPC.height / 2 - 15f), new Vector2(hit.HitDirection, 0f), Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1), NPC.scale);
-        gore.velocity *= 0.3f;
-        gore = Gore.NewGoreDirect(source, new Vector2(NPC.position.X, NPC.position.Y + NPC.height - 20f), new Vector2(hit.HitDirection, 0f), Main.rand.Next(GoreID.Smoke1, GoreID.Smoke3 + 1), NPC.scale);
-        gore.velocity *= 0.3f;
+        int num698 = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y - 10f), new Vector2(hit.HitDirection, 0f), 61, NPC.scale);
+        Gore gore2 = Main.gore[num698];
+        gore2.velocity *= 0.3f;
+        num698 = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + (float)(NPC.height / 2) - 10f), new Vector2(hit.HitDirection, 0f), 62, NPC.scale);
+        gore2 = Main.gore[num698];
+        gore2.velocity *= 0.3f;
+        num698 = Gore.NewGore(NPC.GetSource_Death(), new Vector2(NPC.position.X, NPC.position.Y + (float)NPC.height - 10f), new Vector2(hit.HitDirection, 0f), 63, NPC.scale);
+        gore2 = Main.gore[num698];
+        gore2.velocity *= 0.3f;
     }
 
     public override void FindFrame(int frameHeight) {
