@@ -74,6 +74,14 @@ sealed class ExtraDrawLayerSupport : ILoadable {
 
                 return;
             }
+
+            DrawData item2 = new DrawData(TextureAssets.AccNeck[drawinfo.drawPlayer.neck].Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.bodyFrame.Width / 2, drawinfo.drawPlayer.bodyFrame.Height / 2), drawinfo.drawPlayer.bodyFrame,
+                    drawinfo.colorArmorBody,
+                    drawinfo.drawPlayer.bodyRotation, drawinfo.bodyVect, 1f, drawinfo.playerEffect);
+            item2.shader = drawinfo.cNeck;
+            drawinfo.DrawDataCache.Add(item2);
+
+            return;
         }
 
         orig(ref drawinfo);
