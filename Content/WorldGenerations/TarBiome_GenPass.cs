@@ -113,7 +113,7 @@ sealed class TarBiome_GenPass : ModSystem {
                                                 if (tile2.LiquidAmount <= 0 && !tile2.HasTile) {
                                                     break;
                                                 }
-                                                if (tile2.TileType == tarSource) {
+                                                if (tile2.TileType == tarSource || Main.tile[j - 1 + j2, k + k2 - 2].TileType == tarSource) {
                                                     continue;
                                                 }
                                                 tile2.HasTile = false;
