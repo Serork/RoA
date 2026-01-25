@@ -28,7 +28,7 @@ using Terraria.ObjectData;
 
 namespace RoA.Content.Tiles.Station;
 
-sealed class OvergrownAltar : ModTile {
+sealed class OvergrownAltar : ModTile, TileHooks.IPostDraw {
     private static Asset<Texture2D> _glowTexture = null;
 
     public override void Load() {
@@ -263,8 +263,8 @@ sealed class OvergrownAltar : ModTile {
         float altarStrength = AltarHandler.GetAltarStrength();
         float mult = flag ? 1f : Helper.EaseInOut3(MathHelper.Clamp(altarStrength * 2f, 0f, 1f));
         float r2 = MathHelper.Lerp(0.45f, 0.9f, mult);
-        float g2 = MathHelper.Lerp(0.85f, 0.2f, mult);
-        float b2 = MathHelper.Lerp(0.4f, 0.3f, mult);
+        float g2 = MathHelper.Lerp(0.85f, 0.3f, mult);
+        float b2 = MathHelper.Lerp(0.4f, 0.4f, mult);
         float altarStrength2 = altarStrength * 1.5f;
         value *= Math.Max(0.75f, 1f - (altarStrength2 > 0.5f ? 1f - altarStrength2 : altarStrength2));
         r = r2 * value;
@@ -279,6 +279,80 @@ sealed class OvergrownAltar : ModTile {
         }
 
         return flag;
+    }
+
+    void TileHooks.IPostDraw.PostDrawExtra(SpriteBatch spriteBatch, Point16 tilePosition) {
+        int i = tilePosition.X, j = tilePosition.Y;
+
+        float counting = MathHelper.Clamp(AltarHandler.Counting, 0f, 0.98f);
+        float factor = counting;
+        float strength = AltarHandler.GetAltarStrength();
+        Color color = Lighting.GetColor(i, j);
+        Color color2 = new Color(255, 255, 200, 200) * 0.95f;
+        Color color3 = Color.Lerp(color, new Color(235, 155, 130, 200) * 0.95f, 0.75f);
+        if (NPC.AnyNPCs(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Summon.DruidSoul>())) {
+            color = Color.Lerp(color, color.MultiplyRGB(color3), MathUtils.YoYo(Ease.QuartOut(strength)));
+        }
+        Tile tile = Main.tile[i, j];
+        bool flag = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
+        int frame = (int)(factor * 6)/* + (flag || strength > 0.3f ? 6 : 0)*/;
+        Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
+        if (Main.drawToScreen) {
+            zero = Vector2.Zero;
+        }
+        zero *= 0f;
+        Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
+        texture ??= TextureAssets.Tile[Type].Value;
+        Rectangle rectangle = new(tile.TileFrameX, !NPC.downedBoss2 ? tile.TileFrameY + 36 * 2 : tile.TileFrameY + 36 * frame, 16, 16);
+        Vector2 position = new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2f) + zero;
+        //spriteBatch.Draw(texture, position, rectangle, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+        if (!NPC.downedBoss2) {
+            return;
+        }
+
+        if (!IsValid(i, j)) {
+            return;
+        }
+
+        TileHelper.AddPostNonSolidTileDrawPoint(this, i, j);
+
+        texture = _glowTexture.Value;
+        float mult = flag ? 1f : Helper.EaseInOut3(strength);
+        float factor3 = flag ? 1f : AltarHandler.GetAltarFactor();
+        float factor4 = factor3 * 1.5f;
+        factor3 *= Math.Max(0.75f, 1f - (factor4 > 0.5f ? 1f - factor4 : factor4));
+
+        float opacity = 1f - mult;
+
+        //spriteBatch.Draw(texture, position, rectangle, color2 * MathHelper.Lerp(0f, 1f, factor3) * opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        //for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
+        //    spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3 * opacity, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        //}
+
+        frame = (int)(factor * 6) + (flag || strength > 0.3f ? 6 : 0);
+        rectangle = new(tile.TileFrameX, !NPC.downedBoss2 ? tile.TileFrameY + 36 * 2 : tile.TileFrameY + 36 * frame, 16, 16);
+        opacity = mult;
+        //spriteBatch.Draw(texture, position, rectangle, color2 * MathHelper.Lerp(0f, 1f, factor3) * opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        //for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
+        //    spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3 * opacity, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        //}
+        float factor2 = mult;
+
+        if (factor2 > 0f && NPC.AnyNPCs(ModContent.NPCType<NPCs.Enemies.Bosses.Lothor.Summon.DruidSoul>())) {
+            factor3 = 1f;
+            float opacity2 = Helper.Wave(1f, 1.5f, 10f, 0f);
+            float opacity3 = Ease.CubeInOut(Utils.GetLerpValue(1.35f, 1.5f, opacity2, true));
+            float scale = 0.75f + opacity3 * 0.5f;
+            float opacity4 = (1f - Utils.GetLerpValue(1.5f, 1.35f, opacity2, true)) * (0.5f + Ease.CubeOut(factor2) * 0.5f);
+            Vector2 origin = rectangle.Centered() + Vector2.UnitY * 4f;
+            position += origin / 2f;
+            position += new Vector2(4f, 4f);
+            spriteBatch.Draw(texture, position, rectangle, color2 * opacity4, 0f, origin, scale, SpriteEffects.None, 0f);
+            for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.Pi) {
+                spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * opacity4, Main.rand.NextFloatRange(0.1f * factor3), origin, scale, SpriteEffects.None, 0f);
+            }
+        }
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
@@ -297,7 +371,7 @@ sealed class OvergrownAltar : ModTile {
         }
         Tile tile = Main.tile[i, j];
         bool flag = LothorSummoningHandler.PreArrivedLothorBoss.Item1 || LothorSummoningHandler.PreArrivedLothorBoss.Item2;
-        int frame = (int)(factor * 6) + (flag || strength > 0.3f ? 6 : 0);
+        int frame = (int)(factor * 6)/* + (flag || strength > 0.3f ? 6 : 0)*/;
         Vector2 zero = new(Main.offScreenRange, Main.offScreenRange);
         if (Main.drawToScreen) {
             zero = Vector2.Zero;
@@ -316,16 +390,30 @@ sealed class OvergrownAltar : ModTile {
             return false;
         }
 
+        TileHelper.AddPostNonSolidTileDrawPoint(this, i, j);
+
         texture = _glowTexture.Value;
         float mult = flag ? 1f : Helper.EaseInOut3(strength);
         float factor3 = flag ? 1f : AltarHandler.GetAltarFactor();
         float factor4 = factor3 * 1.5f;
         factor3 *= Math.Max(0.75f, 1f - (factor4 > 0.5f ? 1f - factor4 : factor4));
-        spriteBatch.Draw(texture, position, rectangle, color2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+        float opacity = 1f - mult;
+
+        spriteBatch.Draw(texture, position, rectangle, color2 * MathHelper.Lerp(0f, 1f, factor3) * opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
-            spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3 * opacity, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        }
+
+        frame = (int)(factor * 6) + (flag || strength > 0.3f ? 6 : 0);
+        rectangle = new(tile.TileFrameX, !NPC.downedBoss2 ? tile.TileFrameY + 36 * 2 : tile.TileFrameY + 36 * frame, 16, 16);
+        opacity = mult;
+        spriteBatch.Draw(texture, position, rectangle, color2 * MathHelper.Lerp(0f, 1f, factor3) * opacity, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+        for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
+            spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: factor3), rectangle, (color2 * factor3).MultiplyAlpha(MathHelper.Lerp(0f, 1f, factor3)).MultiplyAlpha(0.35f).MultiplyAlpha(Helper.Wave(0.25f, 0.75f, speed: factor3)) * factor3 * opacity, Main.rand.NextFloatRange(0.1f * factor3), Vector2.Zero, 1f, SpriteEffects.None, 0f);
         }
         float factor2 = mult;
+
         if (factor2 > 0f) {
             factor3 = 1f;
             spriteBatch.Draw(texture, position, rectangle, color2 * factor2 * MathHelper.Lerp(0f, 1f, factor3), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
