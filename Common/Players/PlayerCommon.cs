@@ -136,7 +136,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsObsidianStopwatchTeleportAvailable => IsObsidianStopwatchEffectActive && _obsidianStopwatchTeleportCooldown <= 0;
     public bool IsObsidianStopwatchTeleportAvailable2 => IsObsidianStopwatchEffectActive && (_obsidianStopwatchTeleportCooldown <= OBSIDIANSTOPWATCHBETWEENINTICKS || _obsidianStopwatchTeleportCooldown >= OBSIDIANSTOPWATCHCOOLDOWNINTICKS - OBSIDIANSTOPWATCHBETWEENINTICKS * 2);
-    public float ObsidianStopwatchEffectOpacity => 1f - Utils.GetLerpValue(0, OBSIDIANSTOPWATCHBETWEENINTICKS, _obsidianStopwatchTeleportCooldown, true) * Utils.GetLerpValue(OBSIDIANSTOPWATCHCOOLDOWNINTICKS, OBSIDIANSTOPWATCHCOOLDOWNINTICKS - OBSIDIANSTOPWATCHBETWEENINTICKS * 2, _obsidianStopwatchTeleportCooldown, true);
+    public float ObsidianStopwatchEffectOpacity => 1f - Utils.GetLerpValue(0, OBSIDIANSTOPWATCHBETWEENINTICKS, _obsidianStopwatchTeleportCooldown, true) * Utils.GetLerpValue(OBSIDIANSTOPWATCHCOOLDOWNINTICKS, OBSIDIANSTOPWATCHCOOLDOWNINTICKS - OBSIDIANSTOPWATCHBETWEENINTICKS * 1f, _obsidianStopwatchTeleportCooldown, true);
 
     public void DoBackflip(float time = 0f) {
         if (DoingBackflip) {
