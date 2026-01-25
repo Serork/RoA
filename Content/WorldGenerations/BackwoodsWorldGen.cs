@@ -122,7 +122,7 @@ sealed class BackwoodsWorldGen : ModSystem {
 
                 if (Main.tile[i, j].HasTile) {
                     int type = Main.tile[i, j].TileType;
-                    if (BackwoodsVars.BackwoodsTileTypes.Contains((ushort)type))
+                    if (BackwoodsVars.BackwoodsTileTypes_NoDirt.Contains((ushort)type))
                         return true;
                 }
             }
