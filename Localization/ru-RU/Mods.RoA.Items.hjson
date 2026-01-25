@@ -2753,3 +2753,8 @@ GobletOfPain: {
 	// DisplayName: Goblet Of Pain
 	// Tooltip: ""
 }
+
+ChromaticScarf: {
+	// DisplayName: Chromatic Scarf
+	// Tooltip: ""
+}

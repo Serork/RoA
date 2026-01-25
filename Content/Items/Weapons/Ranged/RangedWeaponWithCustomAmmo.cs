@@ -14,6 +14,7 @@ using Terraria.ModLoader.IO;
 
 namespace RoA.Content.Items.Weapons.Ranged;
 
+// also see Hooks_Player.cs
 abstract class RangedWeaponWithCustomAmmo : ModItem {
     protected enum BaseMaxAmmoAmount : byte {
         Two,

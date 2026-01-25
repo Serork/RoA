@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Items;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
@@ -128,6 +129,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsSnakeIdolEffectActive;
 
     public bool IsGobletOfPainEffectActive;
+
+    public bool IsChromaticScarfEffectActive;
 
     public bool StandingStill => StandingStillTimer > 0;
 
@@ -738,7 +741,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event AlwaysHeadDrawDelegate AlwaysHeadDrawEvent;
     private void On_PlayerDrawLayers_DrawPlayer_21_Head(On_PlayerDrawLayers.orig_DrawPlayer_21_Head orig, ref PlayerDrawSet drawinfo) {
         if (!(drawinfo.drawPlayer.GetCommon().StopHeadDrawing ||
-            drawinfo.drawPlayer.face == (HornetSkull.HornetSkullAsFace + 1))) {
+            drawinfo.drawPlayer.face == EquipLoader.GetEquipSlot(RoA.Instance, nameof(HornetSkull), EquipType.Face))) {
             orig(ref drawinfo);
         }
 
@@ -1058,6 +1061,15 @@ sealed partial class PlayerCommon : ModPlayer {
                 Position = Player.GetPlayerCorePoint()
             });
         }
+
+        if (IsChromaticScarfEffectActive && hit.Crit) {
+            Item heldItem = Player.GetSelectedItem();
+            if (!heldItem.IsEmpty() && heldItem.IsAWeapon()) {
+                if (heldItem.TryGetGlobalItem(out ChromaticScarfDebuffPicker modItem)) {
+                    target.AddBuff(modItem.CurrentDebuff, Main.rand.Next(MathUtils.SecondsToFrames(3), MathUtils.SecondsToFrames(5) + 1));
+                }
+            }
+        }
     }
 
     public override void OnHitAnything(float x, float y, Entity victim) {
@@ -1083,6 +1095,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsChromaticScarfEffectActive = false;
+
         IsGobletOfPainEffectActive = false;
 
         IsSnakeIdolEffectActive = false;

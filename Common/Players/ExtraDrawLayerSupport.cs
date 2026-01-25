@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.Items;
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 
@@ -10,6 +12,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace RoA.Common.Players;
@@ -32,6 +35,48 @@ sealed class ExtraDrawLayerSupport : ILoadable {
         On_PlayerDrawLayers.DrawPlayer_12_Skin += On_PlayerDrawLayers_DrawPlayer_12_Skin;
         On_PlayerDrawLayers.DrawPlayer_27_HeldItem += On_PlayerDrawLayers_DrawPlayer_27_HeldItem;
         On_PlayerDrawLayers.DrawPlayer_31_ProjectileOverArm += On_PlayerDrawLayers_DrawPlayer_31_ProjectileOverArm;
+        On_PlayerDrawLayers.DrawPlayer_20_NeckAcc += On_PlayerDrawLayers_DrawPlayer_20_NeckAcc;
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_20_NeckAcc(On_PlayerDrawLayers.orig_DrawPlayer_20_NeckAcc orig, ref PlayerDrawSet drawinfo) {
+        Player player = drawinfo.drawPlayer;
+        Item heldItem = player.GetSelectedItem();
+        if (drawinfo.drawPlayer.neck == EquipLoader.GetEquipSlot(RoA.Instance, nameof(ChromaticScarf), EquipType.Neck) && !heldItem.IsEmpty() && heldItem.IsAWeapon()) {
+            if (heldItem.TryGetGlobalItem(out ChromaticScarfDebuffPicker modItem)) {
+                Texture2D getScarfTexture(PlayerDrawSet drawinfo, int debuff) {
+                    Texture2D result = TextureAssets.AccNeck[drawinfo.drawPlayer.neck].Value;
+                    if (debuff == ChromaticScarfDebuffPicker.DebuffList[0]) {
+                        result = ChromaticScarf.Neck1.Value;
+                    }
+                    else if (debuff == ChromaticScarfDebuffPicker.DebuffList[1]) {
+                        result = ChromaticScarf.Neck2.Value;
+                    }
+                    else {
+                        result = ChromaticScarf.Neck3.Value;
+                    }
+                    return result;
+                }
+                Texture2D currentNeckTexture = getScarfTexture(drawinfo, modItem.CurrentDebuff),
+                          nextNeckTexture = getScarfTexture(drawinfo, modItem.NextDebuff);
+                float opacity1 = 1f,
+                      opacity2 = Utils.GetLerpValue(ChromaticScarfDebuffPicker.CHANGETIMEINTICKS * 0.8f, ChromaticScarfDebuffPicker.CHANGETIMEINTICKS, modItem.CurrentDebuffCounter, true);
+                DrawData item = new DrawData(currentNeckTexture, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.bodyFrame.Width / 2, drawinfo.drawPlayer.bodyFrame.Height / 2), drawinfo.drawPlayer.bodyFrame,
+                    drawinfo.colorArmorBody * opacity1,
+                    drawinfo.drawPlayer.bodyRotation, drawinfo.bodyVect, 1f, drawinfo.playerEffect);
+                item.shader = drawinfo.cNeck;
+                drawinfo.DrawDataCache.Add(item);
+
+                item = new DrawData(nextNeckTexture, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.bodyFrame.Width / 2, drawinfo.drawPlayer.bodyFrame.Height / 2), drawinfo.drawPlayer.bodyFrame,
+                    drawinfo.colorArmorBody * opacity2,
+                    drawinfo.drawPlayer.bodyRotation, drawinfo.bodyVect, 1f, drawinfo.playerEffect);
+                item.shader = drawinfo.cNeck;
+                drawinfo.DrawDataCache.Add(item);
+
+                return;
+            }
+        }
+
+        orig(ref drawinfo);
     }
 
     public delegate void PreProjectileOverArmDelegate(ref PlayerDrawSet drawinfo);

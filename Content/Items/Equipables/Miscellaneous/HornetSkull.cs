@@ -11,18 +11,11 @@ namespace RoA.Content.Items.Equipables.Miscellaneous;
 
 [AutoloadEquip(EquipType.Head, EquipType.Face)]
 sealed class HornetSkull : ModItem, IDoubleTap {
-    // also see PlayerCommon
-    public static int HornetSkullAsFace { get; private set; } = -1;
-
     public override void SetStaticDefaults() {
         ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = false;
 
         ArmorIDs.Face.Sets.PreventHairDraw[Item.faceSlot] = true;
         ArmorIDs.Face.Sets.OverrideHelmet[Item.faceSlot] = true;
-    }
-
-    public override void Load() {
-        HornetSkullAsFace = EquipLoader.AddEquipTexture(RoA.Instance, $"{Texture}_Face", EquipType.Face, this, Name + "_Face");
     }
 
     public override void SetDefaults() {

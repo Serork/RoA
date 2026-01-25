@@ -1,10 +1,12 @@
-﻿using RoA.Common.Players;
+﻿using RoA.Common.Items;
+using RoA.Common.Players;
 using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Content.Items.Weapons.Nature;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.GameContent.Creative;
@@ -32,6 +34,9 @@ sealed partial class Hooks : ModSystem {
     private void On_Player_UpdateEquips(On_Player.orig_UpdateEquips orig, Player self, int i) {
         if (self.IsLocal() && Main.mouseItem.IsModded(out ModItem modItem) && modItem is RangedWeaponWithCustomAmmo rangedWeaponWithCustomAmmo) {
             rangedWeaponWithCustomAmmo.RecoverAmmo();
+        }
+        if (self.IsLocal() && self.GetCommon().IsChromaticScarfEffectActive && Main.mouseItem.IsAWeapon() && Main.mouseItem.TryGetGlobalItem(out ChromaticScarfDebuffPicker modItem2)) {
+            modItem2.UpdateCurrentDebuff();
         }
 
         orig(self, i);
