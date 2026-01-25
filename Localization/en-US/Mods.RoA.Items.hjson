@@ -2722,3 +2722,8 @@ SnakeIdol: {
 	DisplayName: Snake Idol
 	Tooltip: ""
 }
+
+GobletOfPain: {
+	DisplayName: Goblet Of Pain
+	Tooltip: ""
+}

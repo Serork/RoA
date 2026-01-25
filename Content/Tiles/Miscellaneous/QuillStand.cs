@@ -13,7 +13,6 @@ sealed class QuillStand : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
-        Main.tileWaterDeath[Type] = true;
         Main.tileLavaDeath[Type] = true;
 
         TileObjectData.newTile.Width = 1;

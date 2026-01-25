@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using RoA.Common.Druid.Wreath;
-using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;

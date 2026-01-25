@@ -127,6 +127,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsSnakeIdolEffectActive;
 
+    public bool IsGobletOfPainEffectActive;
+
     public bool StandingStill => StandingStillTimer > 0;
 
     public bool CanSpawnFallenLeavesBranch => FallenLeavesCounter >= FallenLeaves.ATTACKTIME;
@@ -1047,6 +1049,14 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event OnHitNPCDelegate OnHitNPCEvent;
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
         OnHitNPCEvent?.Invoke(Player, target, hit, damageDone);
+
+        if (IsGobletOfPainEffectActive && hit.Crit) {
+            Player.AddBuff(BuffID.Poisoned, MathUtils.SecondsToFrames(3));
+
+            ProjectileUtils.SpawnPlayerOwnedProjectile<GobletOfPainSplash>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc("gobletofpain")) {
+                Position = Player.GetPlayerCorePoint()
+            });
+        }
     }
 
     public override void OnHitAnything(float x, float y, Entity victim) {
@@ -1072,6 +1082,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsGobletOfPainEffectActive = false;
+
         IsSnakeIdolEffectActive = false;
 
         IsBansheesGuardEffectActive = false;
