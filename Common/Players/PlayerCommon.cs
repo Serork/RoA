@@ -315,6 +315,7 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public void ResetAdvancedShadows() {
+        _lastAddedAvancedShadow = 0;
         for (int i = 0; i < availableAdvancedShadowsCount; i++) {
             _advancedShadows[i].Position = Vector2.Zero;
         }
