@@ -80,7 +80,7 @@ sealed class DullDaikatanaWorldGen : ModSystem {
                         if (flag) {
                             bool flag4 = true;
                             if (!hasRemnants) {
-                                if (!((num436 == 1 ? genRand.NextBool(2) : num436 != 2 || genRand.NextBool(4)))) {
+                                if (!(num436 == 1 ? genRand.NextBool(2) : num436 != 2 || genRand.NextBool(4))) {
                                     flag4 = false;
                                 }
                             }
