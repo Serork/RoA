@@ -21,7 +21,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
     }
 
     public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns) {
-        if (player.InModBiome<BackwoodsBiome>() && !player.ZoneJungle) {
+        if (player.InModBiome<BackwoodsBiome>()) {
             spawnRate = (int)(spawnRate * 0.2f);
             maxSpawns = (int)(maxSpawns * 1.5f);
         }
@@ -73,7 +73,7 @@ sealed class BackwoodsNPCs : GlobalNPC {
             }
             bool notBranch = tile.TileType != ModContent.TileType<TreeBranch>();
             //bool notLeaves = tile.TileType != ModContent.TileType<LivingElderwoodlLeaves>();
-            if (BackwoodsVars.BackwoodsTileTypes_NoDirt.Contains((ushort)spawnInfo.SpawnTileType) && !flag) {
+            if (/*BackwoodsVars.BackwoodsTileTypes_NoDirt.Contains((ushort)spawnInfo.SpawnTileType) &&*/ !flag) {
                 if (notBranch) {
                     ushort crowdRavenType = (ushort)ModContent.NPCType<CrowdRaven>();
                     if (!tile.AnyLiquid() && trulySurface && !NPC.AnyNPCs(crowdRavenType)) {
