@@ -32,7 +32,7 @@ sealed class GobletOfPain_WorldGen : ModSystem {
                         Tile tile = WorldGenHelper.GetTileSafely(num438, num439);
                         if (tile.HasTile && ((tile.TileType == TileID.Tables && tile.TileFrameX >= 702 && tile.TileFrameX <= 356)
                         || (tile.TileType == TileID.WorkBenches && tile.TileFrameX >= 504 && tile.TileFrameX <= 540))) {
-                            if (!WorldGenHelper.GetTileSafely(num438, num439 - 1).HasTile && (tile.TileType != TileID.Tables || WorldGenHelper.GetTileSafely(num438, num439 + 1).TileType == TileID.Tables)) {
+                            if (!WorldGenHelper.GetTileSafely(num438, num439 - 1).HasTile) {
                                 bool flag4 = true;
                                 if (!(num436 == 1 ? genRand.NextBool(2) : num436 != 2 || genRand.NextBool(4))) {
                                     flag4 = false;
