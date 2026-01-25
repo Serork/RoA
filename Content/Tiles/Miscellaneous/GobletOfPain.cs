@@ -12,7 +12,8 @@ sealed class GobletOfPain : ModTile {
     public override void SetStaticDefaults() {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
-        Main.tileLavaDeath[Type] = true;
+        Main.tileLavaDeath[Type] = false;
+        Main.tileObsidianKill[Type] = true;
 
         TileObjectData.newTile.CopyFrom(TileObjectData.StyleOnTable1x1);
         TileObjectData.newTile.DrawYOffset = 2;
