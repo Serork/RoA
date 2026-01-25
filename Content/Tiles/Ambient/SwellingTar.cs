@@ -91,7 +91,7 @@ sealed class SwellingTar : ModTile {
         if (Main.netMode != NetmodeID.Server && Main.tile[i - 1, j].TileType != Type && Main.tile[i, j + 1].TileType != Type) {
             var dims = new Vector2(35f, 35f);
             var startPosition = new Point16(i, j).ToWorldCoordinates();
-            ProduceWaterRipples(startPosition + new Vector2(8f), dims, strengthFactor);
+            ProduceWaterRipples(startPosition + new Vector2(10f, 0f), dims, strengthFactor);
         }
     }
 
