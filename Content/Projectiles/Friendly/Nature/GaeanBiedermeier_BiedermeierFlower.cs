@@ -393,6 +393,9 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         }
         void addLight() {
             foreach (FlowerInfo flowerInfo in _flowerData) {
+                if (flowerInfo.Released) {
+                    continue;
+                }
                 FlowerType currentType = flowerInfo.FlowerType;
                 Vector2 flowerPosition = Projectile.Center + flowerInfo.Offset.RotatedBy(Projectile.rotation) * 1.15f;
                 if (currentType == FlowerType.Perfect3) {
