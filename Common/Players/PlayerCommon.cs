@@ -135,7 +135,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsChromaticScarfEffectActive;
 
-    public bool IsConjurersEyeEffectActive, IsConjurersEyeEffectActive_Hidden;
+    public bool IsConjurersEyeEffectActive, IsConjurersEyeEffectActive_Hidden, ConjurersEyeVanity;
     public ushort ConjurersEyeAttackCounter;
 
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
@@ -1125,6 +1125,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        ConjurersEyeVanity = false;
         IsConjurersEyeEffectActive = IsConjurersEyeEffectActive_Hidden = false;
 
         IsChromaticScarfEffectActive = false;

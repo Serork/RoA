@@ -45,7 +45,7 @@ sealed class ExtraDrawLayerSupport : ILoadable {
     private void On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace(On_PlayerDrawLayers.orig_DrawPlayer_21_Head_TheFace orig, ref PlayerDrawSet drawinfo) {
         orig(ref drawinfo);
 
-        if (drawinfo.drawPlayer.GetCommon().IsConjurersEyeEffectActive && !drawinfo.drawPlayer.GetCommon().IsConjurersEyeEffectActive_Hidden) {
+        if ((drawinfo.drawPlayer.GetCommon().IsConjurersEyeEffectActive && !drawinfo.drawPlayer.GetCommon().IsConjurersEyeEffectActive_Hidden) || drawinfo.drawPlayer.GetCommon().ConjurersEyeVanity) {
             bool flag = drawinfo.drawPlayer.head > 0 && !ArmorIDs.Head.Sets.DrawHead[drawinfo.drawPlayer.head];
 
             if (!flag && drawinfo.drawPlayer.faceHead > 0) {

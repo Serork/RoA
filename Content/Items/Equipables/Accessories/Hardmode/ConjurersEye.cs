@@ -33,4 +33,8 @@ sealed class ConjurersEye : ModItem {
 
         player.GetCommon().IsConjurersEyeEffectActive_Hidden = hideVisual;
     }
+
+    public override void UpdateVanity(Player player) {
+        player.GetCommon().ConjurersEyeVanity = true;
+    }
 }
