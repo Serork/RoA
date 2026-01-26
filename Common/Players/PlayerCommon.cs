@@ -963,7 +963,9 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         if (IsConjurersEyeEffectActive && Player.manaRegenDelay <= 0) {
-            if (Player.IsLocal()) {
+            if (Player.IsLocal() && Player.MouthPosition.HasValue) {
+                Vector2 eyePosition = Player.MouthPosition.Value;
+                eyePosition -= Vector2.One * 4f * new Vector2(Player.direction * 1.25f, 1f);
                 //ProjectileUtils.SpawnPlayerOwnedProjectile<ConjurersEyeLaser>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc("conjurerseye")) {
 
                 //});

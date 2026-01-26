@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.Players;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -63,7 +64,7 @@ sealed class HereticsVeil : ModItem {
         for (int i = 0; i < 2; i++) {
             Texture2D flameTexture = _flameTexture.Value;
             Vector2 flamePosition = drawPosition;
-            int frame = (int)((Main.GlobalTimeWrappedHourly * 15f + Utils.RandomInt(ref seed, -3, 4)) % 8);
+            int frame = (int)((TimeSystem.TimeForVisualEffects * 15f + Utils.RandomInt(ref seed, -3, 4)) % 8);
             Rectangle flameClip = Utils.Frame(flameTexture, 1, 8, frameY: frame);
             Vector2 flameOrigin = flameClip.Centered();
             Color flameColor = Color.Lerp(new Color(255, 165, 53), new Color(255, 247, 147), Utils.RandomFloat(ref seed));
@@ -76,7 +77,7 @@ sealed class HereticsVeil : ModItem {
             }
             float flameRotation = drawinfo.drawPlayer.headRotation;
             flamePosition.Y -= flameOrigin.Y / 2f;
-            Vector2 offset = new(Utils.RandomInt(ref seed, -2, 3) * -player.direction, Utils.RandomInt(ref seed, -2, 3));
+            Vector2 offset = new(i != 0 ? (Utils.RandomInt(ref seed, -2, 3) * -player.direction) : 0f, Utils.RandomInt(ref seed, -2, 3));
             flamePosition += offset;
             flamePosition.Y += 1f;
             if (drawinfo.drawPlayer.gravDir < 0) {
