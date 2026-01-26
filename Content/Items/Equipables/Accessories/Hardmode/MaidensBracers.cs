@@ -14,7 +14,7 @@ sealed class MaidensBracers : ModItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        player.GetDamage(DamageClass.Generic) += 0.15f;
+        player.GetDamage(DamageClass.Generic) += 0.25f;
 
         player.GetCommon().IsMaidensBracersEffectActive = true;
     }
