@@ -45,7 +45,7 @@ sealed class HornetFlowers : ModTile {
         TileObjectData.addAlternate(1);
         TileObjectData.addTile(Type);
 
-        AddMapEntry(new Color(200, 196, 192), CreateMapEntryName());
+        AddMapEntry(new Color(169, 163, 129), CreateMapEntryName());
     }
 
     public override IEnumerable<Item> GetItemDrops(int i, int j) {
@@ -53,7 +53,7 @@ sealed class HornetFlowers : ModTile {
     }
 
     public override bool CreateDust(int i, int j, ref int type) {
-        type = Main.rand.NextBool(3) ? DustID.JunglePlants : DustID.JungleGrass;
+        type = DustID.JungleGrass;
 
         return base.CreateDust(i, j, ref type);
     }
