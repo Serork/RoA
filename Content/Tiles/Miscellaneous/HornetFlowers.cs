@@ -18,6 +18,7 @@ sealed class HornetFlowers : ModTile {
         Main.tileFrameImportant[Type] = true;
         Main.tileNoAttach[Type] = true;
         Main.tileLavaDeath[Type] = true;
+        Main.tileObsidianKill[Type] = true;
 
         Main.tileSpelunker[Type] = true;
         Main.tileShine2[Type] = true;
