@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common.Items;
 using RoA.Content.Items.Equipables.Accessories.Hardmode;
+using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -44,19 +45,29 @@ sealed class ExtraDrawLayerSupport : ILoadable {
     private void On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace(On_PlayerDrawLayers.orig_DrawPlayer_21_Head_TheFace orig, ref PlayerDrawSet drawinfo) {
         orig(ref drawinfo);
 
-        bool flag = drawinfo.drawPlayer.head > 0 && !ArmorIDs.Head.Sets.DrawHead[drawinfo.drawPlayer.head];
+        if (drawinfo.drawPlayer.GetCommon().IsConjurersEyeEffectActive && !drawinfo.drawPlayer.GetCommon().IsConjurersEyeEffectActive_Hidden) {
+            bool flag = drawinfo.drawPlayer.head > 0 && !ArmorIDs.Head.Sets.DrawHead[drawinfo.drawPlayer.head];
 
-        if (!flag && drawinfo.drawPlayer.faceHead > 0) {
+            if (!flag && drawinfo.drawPlayer.faceHead > 0) {
 
-        }
-        else if (!drawinfo.drawPlayer.invis && !flag) {
-            if (drawinfo.drawPlayer.GetCommon().IsConjurersEyeEffectActive) {
-                DrawData drawData = new DrawData(ConjurersEye.EyeTexture.Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect, drawinfo.drawPlayer.bodyFrame, 
-                    drawinfo.colorHead.MultiplyRGB(Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 10f, drawinfo.drawPlayer.whoAmI))), 
+            }
+            else if (!drawinfo.drawPlayer.invis && !flag) {
+                DrawData drawData = new DrawData(ConjurersEye.EyeTexture.Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect, drawinfo.drawPlayer.bodyFrame,
+                    drawinfo.colorHead.MultiplyRGB(Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 10f, drawinfo.drawPlayer.whoAmI))),
                     drawinfo.drawPlayer.headRotation, drawinfo.headVect, 0.75f, drawinfo.playerEffect);
                 drawData.shader = drawinfo.skinDyePacked;
                 DrawData item = drawData;
                 drawinfo.DrawDataCache.Add(item);
+
+                if (drawinfo.drawPlayer.GetCommon().ConjurersEyeCanShoot) {
+                    drawData = new DrawData(ConjurersEye.EyeTexture.Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect, drawinfo.drawPlayer.bodyFrame,
+                        drawinfo.drawPlayer.GetImmuneAlphaPure(Color.White * 0.9f, drawinfo.shadow).MultiplyRGB(Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 10f, drawinfo.drawPlayer.whoAmI)))
+                        with { A = 50 } * 0.75f * drawinfo.drawPlayer.GetCommon().ConjurersEyeShootOpacity,
+                        drawinfo.drawPlayer.headRotation, drawinfo.headVect, 0.75f, drawinfo.playerEffect);
+                    //drawData.shader = drawinfo.skinDyePacked;
+                    item = drawData;
+                    drawinfo.DrawDataCache.Add(item);
+                }
             }
         }
     }

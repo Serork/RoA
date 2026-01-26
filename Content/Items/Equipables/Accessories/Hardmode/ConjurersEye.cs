@@ -30,5 +30,7 @@ sealed class ConjurersEye : ModItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetCommon().IsConjurersEyeEffectActive = true;
+
+        player.GetCommon().IsConjurersEyeEffectActive_Hidden = hideVisual;
     }
 }

@@ -54,6 +54,8 @@ sealed partial class PlayerCommon : ModPlayer {
     private static ushort OBSIDIANSTOPWATCHCOOLDOWNINTICKS => MathUtils.SecondsToFrames(5);
     private static ushort OBSIDIANSTOPWATCHBETWEENINTICKS => (ushort)(OBSIDIANSTOPWATCHCOOLDOWNINTICKS / 7f);
 
+    private static ushort CONJURERSEYEATTACKTIME => MathUtils.SecondsToFrames(0.5f);
+
     public static ushort CONTROLUSEITEMTIMECHECKBASE => 10;
 
     private static bool _drawingTempBufferCopies, _drawingObsidianStopwatchCopies;
@@ -133,7 +135,11 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsChromaticScarfEffectActive;
 
-    public bool IsConjurersEyeEffectActive;
+    public bool IsConjurersEyeEffectActive, IsConjurersEyeEffectActive_Hidden;
+    public ushort ConjurersEyeAttackCounter;
+
+    public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
+    public float ConjurersEyeShootOpacity => Utils.GetLerpValue(CONJURERSEYEATTACKTIME * 0.75f, CONJURERSEYEATTACKTIME, ConjurersEyeAttackCounter, true);
 
     public bool StandingStill => StandingStillTimer > 0;
 
@@ -962,13 +968,24 @@ sealed partial class PlayerCommon : ModPlayer {
             }
         }
 
-        if (IsConjurersEyeEffectActive && Player.manaRegenDelay <= 0) {
-            if (Player.IsLocal() && Player.MouthPosition.HasValue) {
-                Vector2 eyePosition = Player.MouthPosition.Value;
-                eyePosition -= Vector2.One * 4f * new Vector2(Player.direction * 1.25f, 1f);
-                //ProjectileUtils.SpawnPlayerOwnedProjectile<ConjurersEyeLaser>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc("conjurerseye")) {
-
-                //});
+        if (IsConjurersEyeEffectActive && ConjurersEyeCanShoot) {
+            if (ConjurersEyeAttackCounter++ > CONJURERSEYEATTACKTIME) {
+                ConjurersEyeAttackCounter = 0;
+                if (Player.IsLocal() && Player.MouthPosition.HasValue) {
+                    Vector2 eyePosition = Player.MouthPosition.Value;
+                    eyePosition -= Vector2.One * 4f * new Vector2(Player.direction * 1.25f, 1f);
+                    Vector2 velocity = eyePosition.DirectionTo(Player.GetViableMousePosition()) * 25f;
+                    int damage = 70;
+                    float knockBack = 1.5f;
+                    ProjectileUtils.SpawnPlayerOwnedProjectile<ConjurersEyeLaser>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc("conjurerseye")) {
+                        Position = eyePosition,
+                        Velocity = velocity,
+                        AI0 = eyePosition.X - Player.GetPlayerCorePoint().X,
+                        AI1 = eyePosition.Y - Player.GetPlayerCorePoint().Y,
+                        Damage = damage,
+                        KnockBack = knockBack
+                    });
+                }
             }
         }
     }
@@ -1108,7 +1125,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
-        IsConjurersEyeEffectActive = false;
+        IsConjurersEyeEffectActive = IsConjurersEyeEffectActive_Hidden = false;
 
         IsChromaticScarfEffectActive = false;
 
