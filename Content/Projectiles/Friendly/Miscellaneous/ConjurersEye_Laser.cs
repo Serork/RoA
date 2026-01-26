@@ -116,7 +116,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
             //if (IsOutsideAngle(new Vector2(Projectile.ai[0], Projectile.ai[1]), Projectile.velocity, position + Projectile.velocity.SafeNormalize() * -60f, 100f)) {
             //    color *= 0f;
             //}
-            scale = new Vector2(Helper.Wave(0.25f, 0.625f, 20f, i * 10) * lerp * 0.5f, 3f) * projectile.scale;
+            scale = new Vector2(Helper.Wave(0.25f, 0.675f, 20f, i * 10) * lerp * 0.5f, 3f) * projectile.scale;
 
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, null, color, projectile.rotation, texture.Size() / 2, scale, SpriteEffects.None);
         }

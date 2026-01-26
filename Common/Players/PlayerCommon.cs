@@ -974,7 +974,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (Player.IsLocal() && Player.MouthPosition.HasValue) {
                     Vector2 eyePosition = Player.MouthPosition.Value;
                     eyePosition -= Vector2.One * 4f * new Vector2(Player.direction * 1.25f, 1f);
-                    Vector2 velocity = eyePosition.DirectionTo(Player.GetViableMousePosition()) * 25f;
+                    Vector2 velocity = eyePosition.DirectionTo(Player.GetViableMousePosition()) * 27.5f;
                     int damage = 70;
                     float knockBack = 1.5f;
                     ProjectileUtils.SpawnPlayerOwnedProjectile<ConjurersEyeLaser>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc("conjurerseye")) {
