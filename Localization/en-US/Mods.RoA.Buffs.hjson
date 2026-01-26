@@ -318,17 +318,17 @@ NewMoneyDebuff: {
 
 GodDescent: {
 	DisplayName: Divine Punishment
-	Description: Unable to inflict harm onto others
+	Description: Unable to harm others
 }
 
 Unhinged: {
 	DisplayName: Unhinged
-	Description: Attack speed is increased
+	Description: Increased attack speed
 }
 
 ElderSnailSlow: {
 	DisplayName: Snail Goo
-	Description: Snail goo slows down your movement speed
+	Description: Movement speed greatly reduced
 }
 
 SnailBuff: {
@@ -348,7 +348,7 @@ WiseDefense: {
 
 TempBuffer: {
 	DisplayName: Temp Buffer
-	Description: Mods.RoA.Buffs.TempBuffer.Description
+	Description: Negates any damage once
 }
 
 Rewind: {

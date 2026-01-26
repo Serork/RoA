@@ -1,35 +1,35 @@
 //Died from Quicksilver
-ToxicFumesDeathMessage0: " заигрался с градусником."
-ToxicFumesDeathMessage1: " утек из жизни, как ртуть."
-ToxicFumesDeathMessage2: " не надел респиратор."
-ToxicFumesDeathMessage3: " не справился с токсичностью."
+ToxicFumesDeathMessage0: "{0} заигрался с градусником."
+ToxicFumesDeathMessage1: "{0} утек из жизни как ртуть."
+ToxicFumesDeathMessage2: "{0} не надел респиратор."
+ToxicFumesDeathMessage3: "{0} не справился с токсичностью."
 //Killed by a Beartrap
-Root0: " умер до рассвета."
-Root1: " зашёл слишком далеко."
+Root0: "{0} умер до рассвета."
+Root1: "{0} зашёл слишком далеко."
 //Killed by Hunter
-HunterRifle0: " стал жертвой."
-HunterRifle1: " отследили."
+HunterRifle0: "{0} стал жертвой."
+HunterRifle1: "{0} отследили."
 //Killed by Stalactites
-// Stalactite0: "{0}'s head is concave."
-// Stalactite1: "{0} had his head pop off."
-// Stalactite2: "{0} died from acute migrane."
+Stalactite0: "Голова {0} теперь вогнутая."
+Stalactite1: "У {0} отвалилась башка."
+Stalactite2: "У {0} сильно разболелась голова."
 //Suffocated in Tar
-// TarSuffocated0: "{0} was assimilated."
-// TarSuffocated1: "{0} wasn't ready for symbiosis."
+TarSuffocated0: "{0} был переварен."
+TarSuffocated1: "{0} не был готов к симбиозу."
 //Killed by Tar Explosion
-// TarExplosion0: "{0} was spread thin."
-// TarExplosion1: "{0} is now here and there."
+TarExplosion0: "{0}'а тонко намазали."
+TarExplosion1: "{0} теперь и здесь, и там."
 //Burned down when on Tar
-// TarDebuff0: "{0} became glazed barbeque."
-// TarDebuff1: "{0} reached 4000 degrees Kelvin."
-// TarDebuff2: "{0} was baked and then there was cake."
+TarDebuff0: "{0} покрылся хрустящей корочкой."
+TarDebuff1: "{0} достиг 4000 градусов по кельвину."
+TarDebuff2: "{0} был испечён, а потом был торт."
 //Died from Perfect Mimic
-// PerfectMimic0: "{0} is still alive..."
-// PerfectMimic1: "{0} is fine and dandy..."
-// PerfectMimic2: "{0} is right here, look..."
-// Died from Maiden's Bracers
-// MaidensBracers0: "{0} is dead by ..."
-// MaidensBracers1: "{0} is dead by ..."
-// Died from Avenging Soul
-// AvengingSoul0: "{0} is dead by ..."
-// AvengingSoul1: "{0} is dead by ..."
+PerfectMimic0: "{0} всё ещё жив..."
+PerfectMimic1: "{0} хорош как никогда..."
+PerfectMimic2: "Да, вот же {0}, смотри..."
+//Died from Maiden's Bracers
+MaidensBracers0: "{0} теперь дышит всем телом."
+MaidensBracers1: "{0} превратился в сыр."
+//Died from Avenging Soul
+AvengingSoul0: "{0} был досмерти напуган."
+AvengingSoul1: "{0} был унесён духами."

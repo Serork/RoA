@@ -2650,7 +2650,7 @@ GraveDanger: {
 }
 
 MarineMulcher: {
-	// DisplayName: Marine Mulcher
+	DisplayName: '''"Глубоководный поедала"'''
 	// Tooltip: ""
 }
 
@@ -2675,12 +2675,12 @@ FallenLeaves: {
 }
 
 QuillStand: {
-	// DisplayName: Quill Stand
+	DisplayName: Подставка для пера
 	// Tooltip: ""
 }
 
 TarBrick: {
-	// DisplayName: Tar Brick
+	DisplayName: Смоляной кирпич
 	// Tooltip: ""
 }
 
@@ -2695,62 +2695,76 @@ ClumpExtractor: {
 }
 
 SandalwoodStompers: {
-	// DisplayName: Sandalwood Stompers
+	DisplayName: '''"Сандаловы топтуны"'''
 	// Tooltip: ""
 }
 
 SeedOfWisdom: {
-	// DisplayName: Seed Of Wisdom
+	DisplayName: Семя мудрости
 	// Tooltip: ""
 }
 
 MaidensBracers: {
-	// DisplayName: Maiden's Bracers
-	// Tooltip: ""
+	DisplayName: Наручи девы
+	/* Tooltip:
+		'''
+		Increased damage by 25%
+		Damage dealt is reflected back
+		'You will always be punished.'
+		''' */
 }
 
 FossilizedSpiral: {
-	// DisplayName: Fossilized Spiral
-	// Tooltip: ""
+	DisplayName: Окаменевшая спираль
+	/* Tooltip:
+		'''
+		Provides buffer upon drinking a healing potion
+		Buffer prevents one instance of damage
+		'Seemingly indestructible, you wonder what kind of creature this belonged to.'
+		''' */
 }
 
 MysteryCake: {
-	// DisplayName: Mystery Cake
-	// Tooltip: ""
+	DisplayName: Загадочный торт
+	/* Tooltip:
+		'''
+		Major improvements to all stats
+		'I'm making a note here; "Huge success"'
+		''' */
 }
 
 ObsidianStopwatch: {
-	// DisplayName: Obsidian Stopwatch
+	DisplayName: Обсидиановый секундомер
 	// Tooltip: ""
 }
 
 HereticsVeil: {
-	// DisplayName: Heretics Veil
+	DisplayName: Вуаль еретика
 	// Tooltip: ""
 }
 
 BansheesGuard: {
-	// DisplayName: Banshee's Guard
+	DisplayName: Оберег банши
 	// Tooltip: ""
 }
 
 AvengingSoul: {
-	// DisplayName: Avenging Soul
+	DisplayName: Отомщающая душа
 	// Tooltip: ""
 }
 
 BoneSerpentTail: {
-	// DisplayName: Bone Serpent Tail
+	DisplayName: Хвост костяного змея
 	// Tooltip: ""
 }
 
 SnakeIdol: {
-	// DisplayName: Snake Idol
+	DisplayName: Змеиный идол
 	// Tooltip: ""
 }
 
 GobletOfPain: {
-	// DisplayName: Goblet Of Pain
+	DisplayName: Кубок боли
 	// Tooltip: ""
 }
 

@@ -1925,8 +1925,8 @@ JewellersBelt: {
 	DisplayName: Jeweller's Pouch
 	Tooltip:
 		'''
-		Large Gems do not drop when you die
-		Hide this to conceal the held Large Gems
+		Large Gems are not dropped upon death
+		Hide this to conceal held Large Gems
 		'''
 }
 
@@ -2680,7 +2680,7 @@ SeedOfWisdom: {
 
 MaidensBracers: {
 	DisplayName: Maiden's Bracers
-	Tooltip: 
+	Tooltip:
 		'''
 		Increased damage by 25%
 		Damage dealt is reflected back
@@ -2690,7 +2690,7 @@ MaidensBracers: {
 
 FossilizedSpiral: {
 	DisplayName: Fossilized Spiral
-	Tooltip: 
+	Tooltip:
 		'''
 		Provides buffer upon drinking a healing potion
 		Buffer prevents one instance of damage
@@ -2700,7 +2700,7 @@ FossilizedSpiral: {
 
 MysteryCake: {
 	DisplayName: Mystery Cake
-	Tooltip: 
+	Tooltip:
 		'''
 		Major improvements to all stats
 		'I'm making a note here; "Huge success"'
