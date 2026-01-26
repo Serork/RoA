@@ -46,10 +46,16 @@ TanningRack.MapEntry: Дубильный станок
 DullDaikatana.MapEntry: Затупившаяся дай-катана
 FlederSlayerDecoration.MapEntry: Погибель нетопырей
 Acalypha.MapEntry: Акалифа
-FourPixels.MapEntry: Четыре пикселя
 DrippingTar.MapEntry: Капаюшая смола
 TarLiquidSensor.MapEntry: Датчик жидкости (Смола)
 NixieTube.MapEntry: Лампа тлеющего свечения
+MenhirDecoration.MapEntry: Декоративнй мейнхир
+ScholarsArchive.MapEntry: Архив Учёного
+ScholarsGlobe.MapEntry: Глобус Учёного
+ScholarsTelescope.MapEntry: Телескоп Учёного
+QuillStand.MapEntry: Подставка для пера
+GobletOfPain.MapEntry: Кубок боли
+HornetFlowers.MapEntry: Осиные цветы
 //Paintings
 MillionDollarPainting.MapEntry: Картина на миллион долларов
 Moss.MapEntry: '''"Мох"'''
@@ -57,10 +63,5 @@ TheLegend.MapEntry: '''"Легенда"'''
 Absolute.MapEntry: '''"Абсолютный"'''
 Nihility.MapEntry: '''"Небытие"'''
 Them.MapEntry: '''"Они"'''
-// MenhirDecoration.MapEntry: Menhir Decoration
-// ScholarsArchive.MapEntry: Scholar's Archive
-// ScholarsGlobe.MapEntry: Scholar's Globe
-// ScholarsTelescope.MapEntry: Scholar's Telescope
-// QuillStand.MapEntry: Quill Stand
-// GobletOfPain.MapEntry: Goblet Of Pain
-// HornetFlowers.MapEntry: Hornet Flowers
+Her.MapEntry: '''"Она"'''
+FourPixels.MapEntry: '''"Четыре пикселя"'''

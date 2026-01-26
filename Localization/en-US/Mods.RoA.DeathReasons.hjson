@@ -12,7 +12,7 @@ HunterRifle1: "{0} got hunted."
 //Killed by Stalactites
 Stalactite0: "{0}'s head is concave."
 Stalactite1: "{0} had his head pop off."
-Stalactite2: "{0} died from acute migrane."
+Stalactite2: "{0} died from an acute migraine."
 //Suffocated in Tar
 TarSuffocated0: "{0} was assimilated."
 TarSuffocated1: "{0} wasn't ready for symbiosis."
@@ -27,9 +27,9 @@ TarDebuff2: "{0} was baked and then there was cake."
 PerfectMimic0: "{0} is still alive..."
 PerfectMimic1: "{0} is fine and dandy..."
 PerfectMimic2: "{0} is right here, look..."
-// Died from Maiden's Bracers
+//Died from Maiden's Bracers
 MaidensBracers0: "{0}'s body breaths so easily now."
 MaidensBracers1: "{0} became swiss cheese."
-// Died from Avenging Soul
+//Died from Avenging Soul
 AvengingSoul0: "{0} got haunted."
 AvengingSoul1: "{0} was spirited away."

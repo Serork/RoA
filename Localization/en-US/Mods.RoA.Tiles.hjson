@@ -46,7 +46,6 @@ TanningRack.MapEntry: Tanning Rack
 DullDaikatana.MapEntry: Dull Daikatana
 FlederSlayerDecoration.MapEntry: Fleder Slayer
 Acalypha.MapEntry: Acalypha
-
 DrippingTar.MapEntry: Dripping Tar
 TarLiquidSensor.MapEntry: Liquid Sensor (Tar)
 NixieTube.MapEntry: Nixie Tube
@@ -57,7 +56,6 @@ ScholarsTelescope.MapEntry: Scholar's Telescope
 QuillStand.MapEntry: Quill Stand
 GobletOfPain.MapEntry: Goblet Of Pain
 HornetFlowers.MapEntry: Hornet Flowers
-
 //Paintings
 MillionDollarPainting.MapEntry: Million Dollar Painting
 Moss.MapEntry: '''"Moss"'''

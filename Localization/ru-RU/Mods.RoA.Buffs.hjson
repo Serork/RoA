@@ -327,13 +327,13 @@ Unhinged: {
 }
 
 ElderSnailSlow: {
-	// DisplayName: Elder Snail Slow
-	// Description: Snail goo slows down your movement speed
+	DisplayName: Улиточная слизь
+	Description: Скорость передвижения сильно снижена
 }
 
 SnailBuff: {
-	// DisplayName: Snail Buff
-	// Description: Defence briefly increased
+	DisplayName: Древняя ракушка
+	Description: Защита кратковременно повышена
 }
 
 BuffLantern: {
@@ -347,11 +347,11 @@ WiseDefense: {
 }
 
 TempBuffer: {
-	// DisplayName: Temp Buffer
-	// Description: Mods.RoA.Buffs.TempBuffer.Description
+	DisplayName: Временный буффер
+	Description: Единоразово обнуляет получаемый урон
 }
 
 Rewind: {
-	// DisplayName: Rewind
+	DisplayName: Отсчёт
 	// Description: Mods.RoA.Buffs.Rewind.Description
 }
