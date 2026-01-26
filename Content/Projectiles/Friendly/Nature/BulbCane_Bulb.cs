@@ -857,7 +857,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
             stem3Height = (int)(stem3Height * scaleFactor2);
             Vector2 startPosition = RootPosition;
             Vector2 endPosition = center + center.DirectionFrom(startPosition) * stem1Height * appearanceFactor;
-            endPosition = Vector2.Lerp(endPosition, RootPosition, 1f - appearanceFactor);
+            endPosition = Vector2.Lerp(endPosition, RootPosition, Ease.SineIn(1f - appearanceFactor));
             //float scaleFactor = 1f;
             float getDistanceToBulb() => Vector2.Distance(startPosition, endPosition);
             bool isValidToContinue() => getDistanceToBulb() > stem1Height * 2;
@@ -907,7 +907,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
             float stem2OffsetFromBulbValue = 32f * plantScaleFactor;
             Vector2 angleFromBulbToRoot = bulbPosition_Origin.DirectionTo(RootPosition);
             Vector2 stem2Position = bulbPosition_Origin + angleFromBulbToRoot * stem2OffsetFromBulbValue;
-            stem2Position = Vector2.Lerp(stem2Position, RootPosition, 1f - appearanceFactor);
+            stem2Position = Vector2.Lerp(stem2Position, RootPosition, Ease.SineIn(1f - appearanceFactor));
 
             float stem3OffsetFromBulbValue = 4f * plantScaleFactor;
             Vector2 stem3Position = bulbPosition_Origin + angleFromBulbToRoot * stem3OffsetFromBulbValue;
