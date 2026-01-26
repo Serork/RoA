@@ -2524,7 +2524,7 @@ BackwoodsUndergroundMusicBox: {
 }
 
 FriarLantern: {
-	DisplayName: Fryar's Lantern
+	DisplayName: Friar's Lantern
 	Tooltip: ""
 }
 
@@ -2709,11 +2709,15 @@ MysteryCake: {
 
 ObsidianStopwatch: {
 	DisplayName: Obsidian Stopwatch
-	Tooltip: ""
+	Tooltip:
+		'''
+		Rewinds the user's position and grants temporary improvements to all stats when damaged 
+		'Welcome... to the True Man's World.'
+		'''
 }
 
 HereticsVeil: {
-	DisplayName: Heretics Veil
+	DisplayName: Heretic's Veil
 	Tooltip: ""
 }
 
@@ -2739,7 +2743,12 @@ SnakeIdol: {
 
 GobletOfPain: {
 	DisplayName: Goblet Of Pain
-	Tooltip: ""
+	Tooltip:
+		'''
+		15% increased damage
+		May poison the user upon dealing a critical hit
+		'It eats away at my flesh!'
+		'''
 }
 
 ChromaticScarf: {

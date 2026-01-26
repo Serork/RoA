@@ -2685,12 +2685,12 @@ TarBrick: {
 }
 
 DarkNeoplasm: {
-	// DisplayName: Dark Neoplasm
+	DisplayName: Темная неоплазма
 	// Tooltip: ""
 }
 
 ClumpExtractor: {
-	// DisplayName: Clump Extractor
+	DisplayName: Извлекатель сгустков
 	// Tooltip: ""
 }
 
@@ -2749,7 +2749,7 @@ BansheesGuard: {
 }
 
 AvengingSoul: {
-	DisplayName: Отомщающая душа
+	DisplayName: Мстительная душа
 	// Tooltip: ""
 }
 
@@ -2769,11 +2769,11 @@ GobletOfPain: {
 }
 
 ChromaticScarf: {
-	// DisplayName: Chromatic Scarf
+	DisplayName: Хроматический шарф
 	// Tooltip: ""
 }
 
 ConjurersEye: {
-	// DisplayName: Conjurer's Eye
+	DisplayName: Колдовское око
 	// Tooltip: ""
 }
