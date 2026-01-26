@@ -53,7 +53,7 @@ sealed class ExtraDrawLayerSupport : ILoadable {
             }
             else if (!drawinfo.drawPlayer.invis && !flag) {
                 DrawData drawData = new DrawData(ConjurersEye.EyeTexture.Value, new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect, drawinfo.drawPlayer.bodyFrame,
-                    drawinfo.colorHead.MultiplyRGB(Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 10f, drawinfo.drawPlayer.whoAmI))),
+                    drawinfo.drawPlayer.GetImmuneAlphaPure(drawinfo.colorHead.MultiplyRGB(Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 10f, drawinfo.drawPlayer.whoAmI))), drawinfo.shadow),
                     drawinfo.drawPlayer.headRotation, drawinfo.headVect, 0.75f, drawinfo.playerEffect);
                 drawData.shader = drawinfo.skinDyePacked;
                 DrawData item = drawData;
