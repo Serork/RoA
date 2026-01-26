@@ -56,7 +56,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
         Projectile.SetTrail(-1, 6);
 
         if (Projectile.localAI[0] == 0f) {
-            Projectile.Center -= Projectile.velocity.SafeNormalize() * -10f;
+            Projectile.Center -= Projectile.velocity.SafeNormalize() * -0f;
             Vector2 spawnPosition = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint() + new Vector2(Projectile.ai[0], Projectile.ai[1]) - Projectile.velocity.SafeNormalize() * 5f;
             var unit = Vector2.Normalize(Projectile.velocity);
             for (int i = 0; i < 4; i++)
@@ -76,7 +76,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
         }
 
         DelegateMethods.v3_1 = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 20f, Projectile.whoAmI)).ToVector3();
-        Utils.PlotTileLine(Projectile.Center + Projectile.velocity.SafeNormalize() * 20f, Projectile.Center - Projectile.velocity.SafeNormalize() * 140f, 16f, DelegateMethods.CastLight);
+        Utils.PlotTileLine(Projectile.Center + Projectile.velocity.SafeNormalize() * 20f, Projectile.Center - Projectile.velocity.SafeNormalize() * 100f, 16f * Projectile.Opacity, DelegateMethods.CastLight);
 
         Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
 
