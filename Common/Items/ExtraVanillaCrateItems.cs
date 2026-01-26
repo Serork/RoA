@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Crafting;
@@ -364,6 +365,7 @@ sealed class ExtraVanillaCrateItems : ModSystem {
         {
             ItemDropRule.NotScalingWithLuck(ItemID.FlowerBoots, 20),
             ItemDropRule.OneFromOptionsNotScalingWithLuck(1, ItemID.AnkletoftheWind, ItemID.Boomstick, ItemID.FeralClaws, ItemID.StaffofRegrowth, ItemID.FiberglassFishingPole),
+            ItemDropRule.NotScalingWithLuck(ModContent.ItemType<HornetSkull>(), 20),
         };
         IItemDropRule bc_bamboo = ItemDropRule.NotScalingWithLuck(ItemID.BambooBlock, 3, 20, 50);
         IItemDropRule bc_seaweed = ItemDropRule.NotScalingWithLuck(ItemID.Seaweed, 20);
