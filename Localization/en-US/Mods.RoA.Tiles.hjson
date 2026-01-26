@@ -46,17 +46,10 @@ TanningRack.MapEntry: Tanning Rack
 DullDaikatana.MapEntry: Dull Daikatana
 FlederSlayerDecoration.MapEntry: Fleder Slayer
 Acalypha.MapEntry: Acalypha
-FourPixels.MapEntry: Four Pixels
+
 DrippingTar.MapEntry: Dripping Tar
 TarLiquidSensor.MapEntry: Liquid Sensor (Tar)
 NixieTube.MapEntry: Nixie Tube
-//Paintings
-MillionDollarPainting.MapEntry: Million Dollar Painting
-Moss.MapEntry: '''"Moss"'''
-TheLegend.MapEntry: '''"The Legend"'''
-Absolute.MapEntry: '''"Absolute"'''
-Nihility.MapEntry: '''"Nihility"'''
-Them.MapEntry: '''"Them"'''
 MenhirDecoration.MapEntry: Menhir Decoration
 ScholarsArchive.MapEntry: Scholar's Archive
 ScholarsGlobe.MapEntry: Scholar's Globe
@@ -64,3 +57,13 @@ ScholarsTelescope.MapEntry: Scholar's Telescope
 QuillStand.MapEntry: Quill Stand
 GobletOfPain.MapEntry: Goblet Of Pain
 HornetFlowers.MapEntry: Hornet Flowers
+
+//Paintings
+MillionDollarPainting.MapEntry: Million Dollar Painting
+Moss.MapEntry: '''"Moss"'''
+TheLegend.MapEntry: '''"The Legend"'''
+Absolute.MapEntry: '''"Absolute"'''
+Nihility.MapEntry: '''"Nihility"'''
+Them.MapEntry: '''"Them"'''
+Her.MapEntry: '''"Her"'''
+FourPixels.MapEntry: '''"Four Pixels"'''

@@ -2680,17 +2680,31 @@ SeedOfWisdom: {
 
 MaidensBracers: {
 	DisplayName: Maiden's Bracers
-	Tooltip: ""
+	Tooltip: 
+		'''
+		Increased damage by 25%
+		Damage dealt is reflected back
+		'You will always be punished.'
+		'''
 }
 
 FossilizedSpiral: {
 	DisplayName: Fossilized Spiral
-	Tooltip: ""
+	Tooltip: 
+		'''
+		Provides buffer upon drinking a healing potion
+		Buffer prevents one instance of damage
+		'Seemingly indestructible, you wonder what kind of creature this belonged to.'
+		'''
 }
 
 MysteryCake: {
 	DisplayName: Mystery Cake
-	Tooltip: ""
+	Tooltip: 
+		'''
+		Major improvements to all stats
+		'I'm making a note here; "Huge success"'
+		'''
 }
 
 ObsidianStopwatch: {

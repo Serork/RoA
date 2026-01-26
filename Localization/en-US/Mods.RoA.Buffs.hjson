@@ -327,12 +327,12 @@ Unhinged: {
 }
 
 ElderSnailSlow: {
-	DisplayName: Elder Snail Slow
+	DisplayName: Snail Goo
 	Description: Snail goo slows down your movement speed
 }
 
 SnailBuff: {
-	DisplayName: Snail Buff
+	DisplayName: Elder Shell
 	Description: Defence briefly increased
 }
 
