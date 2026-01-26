@@ -424,8 +424,10 @@ sealed class ExtraVanillaCrateItems : ModSystem {
         IItemDropRule bc_pot = ItemDropRule.NotScalingWithLuck(ItemID.PotSuspended, 4, 2, 2);
         IItemDropRule bc_coolshirt = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<StrangerCoat>(), 30);
         IItemDropRule bc_daikatana = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DullDaikatana>(), 30);
+        IItemDropRule bc_gobletOnPain = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<GobletOfPain>(), 30);
         IItemDropRule bc_coolshirt2 = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<StrangerCoat>(), 15);
         IItemDropRule bc_daikatana2 = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<DullDaikatana>(), 15);
+        IItemDropRule bc_gobletOnPain2 = ItemDropRule.NotScalingWithLuck(ModContent.ItemType<GobletOfPain>(), 15);
         IItemDropRule bc_obsi = ItemDropRule.Common(ItemID.ObsidianLockbox);
         IItemDropRule bc_wet = ItemDropRule.NotScalingWithLuck(ItemID.WetBomb, 3, 7, 10);
         IItemDropRule bc_plant = ItemDropRule.OneFromOptionsNotScalingWithLuck(2, ItemID.PottedLavaPlantPalm, ItemID.PottedLavaPlantBush, ItemID.PottedLavaPlantBramble, ItemID.PottedLavaPlantBulb, ItemID.PottedLavaPlantTendrils);
@@ -680,6 +682,7 @@ sealed class ExtraVanillaCrateItems : ModSystem {
             ItemDropRule.SequentialRulesNotScalingWithLuck(1, bc_lava),
             bc_coolshirt,
             bc_daikatana,
+            bc_gobletOnPain,
 
             bc_pot,
             bc_obsi,
@@ -699,6 +702,7 @@ sealed class ExtraVanillaCrateItems : ModSystem {
             ItemDropRule.SequentialRulesNotScalingWithLuck(1, bc_lava),
             bc_coolshirt2,
             bc_daikatana2,
+            bc_gobletOnPain2,
 
             bc_pot,
             bc_obsi,
