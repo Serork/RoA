@@ -30,7 +30,7 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
     public override void SetDefaults() {
         Projectile.width = 20; // The width of projectile hitbox
         Projectile.height = 20; // The height of projectile hitbox
-        Projectile.aiStyle = 1; // The ai style of the projectile, please reference the source code of Terraria
+        Projectile.aiStyle = -1; // The ai style of the projectile, please reference the source code of Terraria
         Projectile.friendly = true; // Can the projectile deal damage to enemies?
         Projectile.hostile = false; // Can the projectile deal damage to the player?
         Projectile.DamageType = DamageClass.Ranged; // Is the projectile shoot by a ranged weapon?
@@ -57,6 +57,20 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
         return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
     }
 
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        if (Projectile.ai[2] == 0f) {
+            // This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
+
+            SoundEngine.PlaySound(SoundID.Item10 with { Pitch = -0.5f }, Projectile.Center);
+        }
+
+        Projectile.ai[2] = 1f;
+
+        return false;
+    }
+
+    public override bool ShouldUpdatePosition() => Projectile.ai[2] == 0f;
+
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
 
     }
@@ -73,7 +87,17 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
     }
 
     public override void AI() {
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
+        if (Projectile.ai[2] == 1f) {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.2f);
+            _scale = Helper.Approach(_scale, 1.5f, 0.1f);
+            if (Projectile.Opacity <= 0f) {
+                Projectile.Kill();
+            }
+        }
+        else {
+            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
+        }
         _scale = Helper.Approach(_scale, 1f, 0.0575f);
         if (Projectile.Opacity >= 1f) {
             _trailOpacity = Helper.Approach(_trailOpacity, 1f, 0.075f);
@@ -122,6 +146,11 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
             height = texture.Height;
         Color shadowColor = lightColor;
         shadowColor = shadowColor.MultiplyAlpha(Helper.Wave(0.75f, 1f, 20f, Projectile.whoAmI));
+        float opacity = Projectile.Opacity;
+        if (Projectile.ai[2] == 1f) {
+            shadowColor = shadowColor.MultiplyAlpha(Projectile.Opacity);
+            opacity = Utils.GetLerpValue(0f, 0.35f, Projectile.Opacity, true);
+        }
         for (int i = 0; i < 10; i++) {
             CopyHandler.CopyInfo copyInfo = copyData![i];
             if (copyInfo.Opacity <= 0f) {
@@ -131,7 +160,7 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
                 continue;
             }
             batch.Draw(texture, copyInfo.Position, DrawInfo.Default with {
-                Color = shadowColor * MathUtils.Clamp01(copyInfo.Opacity) * Projectile.Opacity * 0.5f * _trailOpacity,
+                Color = shadowColor * MathUtils.Clamp01(copyInfo.Opacity) * opacity * 0.5f * _trailOpacity,
                 Rotation = copyInfo.Rotation,
                 Scale = Vector2.One * MathF.Max(copyInfo.Scale, 1f) * _scale,
                 Origin = new Vector2(width, height) / 2f,
@@ -140,13 +169,10 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
         }
 
         //Projectile.QuickDrawShadowTrails(shadowColor * _trailOpacity, 0.5f, 1, 0f, scale: _scale);
-        Projectile.QuickDrawAnimated(shadowColor * Projectile.Opacity, scale: Vector2.One * _scale);
+        Projectile.QuickDrawAnimated(shadowColor * opacity, scale: Vector2.One * _scale);
         return false;
     }
 
     public override void OnKill(int timeLeft) {
-        // This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
-        Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
-        SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
     }
 }
