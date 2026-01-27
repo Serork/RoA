@@ -2735,7 +2735,11 @@ MysteryCake: {
 
 ObsidianStopwatch: {
 	DisplayName: Обсидиановый секундомер
-	// Tooltip: ""
+	/* Tooltip:
+		'''
+		Rewinds the user's position and grants temporary improvements to all stats when damaged 
+		'Welcome... to the True Man's World.'
+		''' */
 }
 
 HereticsVeil: {
@@ -2765,7 +2769,12 @@ SnakeIdol: {
 
 GobletOfPain: {
 	DisplayName: Кубок боли
-	// Tooltip: ""
+	/* Tooltip:
+		'''
+		15% increased damage
+		May poison the user upon dealing a critical hit
+		'It eats away at my flesh!'
+		''' */
 }
 
 ChromaticScarf: {
@@ -2775,5 +2784,10 @@ ChromaticScarf: {
 
 ConjurersEye: {
 	DisplayName: Колдовское око
+	// Tooltip: ""
+}
+
+DoubleGoggles: {
+	// DisplayName: Double Goggles
 	// Tooltip: ""
 }

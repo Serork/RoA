@@ -190,6 +190,7 @@ sealed class ShaderLoader : ModSystem {
     public static Asset<Effect> Sandfall => _loadedShaders["Sandfall"];
     public static Asset<Effect> GodDescent => _loadedShaders["GodDescent"];
     public static Asset<Effect> TerraDye => _loadedShaders["TerraDye"];
+    public static Asset<Effect> ChromaticAberrationShader => _loadedShaders["ChromaticAberrationShader"];
 
     public static Asset<Effect> SimpleReflection => _loadedShaders["SimpleReflection"];
 

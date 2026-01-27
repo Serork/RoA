@@ -86,7 +86,7 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
     private float _allProgress;
 
     public override void Unload() {
-        _rootMapPositions.Clear();
+        _rootMapPositions?.Clear();
         _rootMapPositions = null!;
     }
 

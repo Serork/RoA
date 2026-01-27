@@ -10,9 +10,9 @@ Root1: "{0} зашёл слишком далеко."
 HunterRifle0: "{0} стал жертвой."
 HunterRifle1: "{0} отследили."
 //Killed by Stalactites
-Stalactite0: "Голова {0} теперь вогнутая."
-Stalactite1: "У {0} отвалилась башка."
-Stalactite2: "У {0} сильно разболелась голова."
+Stalactite0: Голова {0} теперь вогнутая.
+Stalactite1: У {0} отвалилась башка.
+Stalactite2: У {0} сильно разболелась голова.
 //Suffocated in Tar
 TarSuffocated0: "{0} был переварен."
 TarSuffocated1: "{0} не был готов к симбиозу."
@@ -26,7 +26,7 @@ TarDebuff2: "{0} был испечён, а потом был торт."
 //Died from Perfect Mimic
 PerfectMimic0: "{0} всё ещё жив..."
 PerfectMimic1: "{0} хорош как никогда..."
-PerfectMimic2: "Да, вот же {0}, смотри..."
+PerfectMimic2: Да, вот же {0}, смотри...
 //Died from Maiden's Bracers
 MaidensBracers0: "{0} теперь дышит всем телом."
 MaidensBracers1: "{0} превратился в сыр."

@@ -2760,3 +2760,8 @@ ConjurersEye: {
 	DisplayName: Conjurer's Eye
 	Tooltip: ""
 }
+
+DoubleGoggles: {
+	DisplayName: Double Goggles
+	Tooltip: ""
+}

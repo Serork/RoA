@@ -1,3 +1,5 @@
+// wrath of gods
+
 sampler metaballContents : register(s0);
 sampler overlayTexture : register(s1);
 

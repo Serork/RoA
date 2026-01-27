@@ -138,6 +138,10 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsConjurersEyeEffectActive, IsConjurersEyeEffectActive_Hidden, ConjurersEyeVanity;
     public ushort ConjurersEyeAttackCounter;
 
+    public bool IsDoubleGogglesEffectActive;
+    public bool DoubleGogglesActivated;
+    public float DoubleGogglesEffectOpacity;
+
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
     public float ConjurersEyeShootOpacity => Utils.GetLerpValue(CONJURERSEYEATTACKTIME * 0.75f, CONJURERSEYEATTACKTIME, ConjurersEyeAttackCounter, true);
 
@@ -287,6 +291,28 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.GetImmuneAlphaPure += On_Player_GetImmuneAlphaPure;
 
         On_Player.UpdateAdvancedShadows += On_Player_UpdateAdvancedShadows;
+
+        On_Player.CheckMana_int_bool_bool += On_Player_CheckMana_int_bool_bool1;
+        On_Player.ItemCheck_PayMana += On_Player_ItemCheck_PayMana;
+    }
+
+    private bool On_Player_ItemCheck_PayMana(On_Player.orig_ItemCheck_PayMana orig, Player self, Item sItem, bool canUse) {
+        if (self.GetCommon().DoubleGogglesActivated) {
+            self.GetCommon().DoubleGogglesActivated = false;
+            return true;
+        }
+
+        return orig(self, sItem, canUse);
+    }
+
+    // TODO: net sync
+    private bool On_Player_CheckMana_int_bool_bool1(On_Player.orig_CheckMana_int_bool_bool orig, Player self, int amount, bool pay, bool blockQuickMana) {
+        if (self.GetCommon().IsDoubleGogglesEffectActive && Main.rand.NextBool(2)) {
+            pay = false;
+            self.GetCommon().DoubleGogglesActivated = true;
+        }
+
+        return orig(self, amount, pay, blockQuickMana);
     }
 
     public void MakeCopy(float opacity = 1.25f, float scale = 1f) {
@@ -988,6 +1014,13 @@ sealed partial class PlayerCommon : ModPlayer {
                 }
             }
         }
+
+        if (IsDoubleGogglesEffectActive) {
+            DoubleGogglesEffectOpacity = Helper.Approach(DoubleGogglesEffectOpacity, 1f, 0.1f);
+        }
+        else {
+            DoubleGogglesEffectOpacity = Helper.Approach(DoubleGogglesEffectOpacity, 0f, 0.1f);
+        }
     }
 
     public partial void DeerSkullPostUpdateEquips();
@@ -1125,6 +1158,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsDoubleGogglesEffectActive = false;
+
         ConjurersEyeVanity = false;
         IsConjurersEyeEffectActive = IsConjurersEyeEffectActive_Hidden = false;
 
