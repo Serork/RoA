@@ -2773,5 +2773,9 @@ HazelnutMask: {
 
 BrawlerMask: {
 	DisplayName: Brawler Mask
-	Tooltip: ""
+	Tooltip:
+		'''
+		desc
+		'I've been hiding my pain, you see?'
+		'''
 }
