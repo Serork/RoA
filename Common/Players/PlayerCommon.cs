@@ -117,6 +117,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsSeedOfWisdomEffectActive;
 
     public bool IsMaidensBracersEffectActive;
+    public bool MaidensBracersActivated;
 
     public bool IsFossilizedSpiralEffectActive;
 
@@ -1135,7 +1136,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         // TODO: net sync
-        if (IsBrawlerMaskEffectActive && Main.rand.NextBool(2)) {
+        if (!MaidensBracersActivated && IsBrawlerMaskEffectActive && Main.rand.NextBool(2)) {
             foreach (NPC nPC in Main.ActiveNPCs) {
                 float num = TileHelper.TileSize * 31;
                 if (nPC.CanBeChasedBy(Player) && !(Player.Distance(nPC.Center) > num)/* && Collision.CanHitLine(Player.position, Player.width, Player.height, nPC.position, nPC.width, nPC.height)*/) {
@@ -1149,6 +1150,8 @@ sealed partial class PlayerCommon : ModPlayer {
             }
         }
         BeforeHitActiveDebuffs.Clear();
+
+        MaidensBracersActivated = false;
     }
 
     public delegate void OnHitNPCDelegate(Player player, NPC target, NPC.HitInfo hit, int damageDone);
@@ -1176,6 +1179,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public override void OnHitAnything(float x, float y, Entity victim) {
         if (IsMaidensBracersEffectActive) {
+            MaidensBracersActivated = true;
             if (Player.IsLocal() && Main.rand.NextBool(10)) {
                 Item sItem = Player.GetSelectedItem();
                 if (!sItem.IsATool()) {
