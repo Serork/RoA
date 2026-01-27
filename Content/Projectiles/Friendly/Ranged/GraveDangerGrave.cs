@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Projectiles;
-using RoA.Content.Dusts;
-using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -11,7 +9,6 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
-using System.IO;
 
 using Terraria;
 using Terraria.Audio;

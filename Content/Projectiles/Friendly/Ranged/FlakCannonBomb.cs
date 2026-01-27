@@ -69,7 +69,7 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
                 int num116 = Dust.NewDust(Projectile.Center, 0, 0, DustID.Torch);
                 Main.dust[num116].scale = 1.7f;
                 Main.dust[num116].noGravity = true;
-                Main.dust[num116].position = Projectile.Center + spinningpoint6 + Projectile.velocity.SafeNormalize(Vector2.Zero) * 30f;
+                Main.dust[num116].position = Projectile.Center + spinningpoint6 + Projectile.velocity.SafeNormalize(Vector2.Zero) * 32f;
                 Main.dust[num116].velocity = Main.dust[num116].velocity * 2f + spinningpoint6.SafeNormalize(Vector2.UnitY) * 0.3f + Projectile.velocity.SafeNormalize(Vector2.Zero) * 3f;
                 Main.dust[num116].velocity *= 0.7f;
                 Main.dust[num116].position += Main.dust[num116].velocity * 5f;

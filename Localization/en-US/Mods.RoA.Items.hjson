@@ -2779,3 +2779,8 @@ BrawlerMask: {
 		'I've been hiding my pain, you see?'
 		'''
 }
+
+BlueRose: {
+	DisplayName: Blue Rose
+	Tooltip: ""
+}
