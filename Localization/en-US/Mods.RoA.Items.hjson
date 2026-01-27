@@ -2770,3 +2770,8 @@ HazelnutMask: {
 	DisplayName: Hazelnut Mask
 	Tooltip: ""
 }
+
+BrawlerMask: {
+	DisplayName: Brawler Mask
+	Tooltip: ""
+}

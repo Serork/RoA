@@ -16,7 +16,7 @@ sealed class FlametrackerDebuff : ModBuff {
         Main.buffNoSave[Type] = true;
         Main.debuff[Type] = true;
 
-        BuffSets.Debuffs[Type] = true;
+        BuffID.Sets.LongerExpertDebuff[Type] = true;
 
         BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
     }

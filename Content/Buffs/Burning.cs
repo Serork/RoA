@@ -4,6 +4,7 @@ using RoA.Common.Sets;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
@@ -16,7 +17,7 @@ sealed class Burning : ModBuff {
         Main.debuff[Type] = true;
         Main.pvpBuff[Type] = true;
 
-        BuffSets.Debuffs[Type] = true;
+        BuffID.Sets.LongerExpertDebuff[Type] = true;
     }
 
     public override void Update(Player player, ref int buffIndex) => player.GetModPlayer<BurningPlayer>().burningEffect = true;

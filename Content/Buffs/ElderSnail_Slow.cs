@@ -2,6 +2,7 @@
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
@@ -13,7 +14,7 @@ sealed class ElderSnailSlow : ModBuff {
         Main.buffNoSave[Type] = true;
         Main.buffNoTimeDisplay[Type] = true;
 
-        BuffSets.Debuffs[Type] = true;
+        BuffID.Sets.LongerExpertDebuff[Type] = true;
     }
 
     public override void Update(Player player, ref int buffIndex) {

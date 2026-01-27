@@ -13,6 +13,8 @@ sealed class OnFire : ModBuff {
         Main.buffNoSave[Type] = true;
         Main.debuff[Type] = true;
         Main.pvpBuff[Type] = true;
+
+        BuffID.Sets.LongerExpertDebuff[Type] = true;
     }
 
     public override void Update(NPC npc, ref int buffIndex) {

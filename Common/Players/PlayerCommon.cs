@@ -142,6 +142,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool DoubleGogglesActivated;
     public float DoubleGogglesEffectOpacity;
 
+    public bool IsBrawlerMaskEffectActive;
+    public HashSet<(int, int)> BeforeHitActiveDebuffs = [];
+
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
     public float ConjurersEyeShootOpacity => Utils.GetLerpValue(CONJURERSEYEATTACKTIME * 0.75f, CONJURERSEYEATTACKTIME, ConjurersEyeAttackCounter, true);
 
@@ -286,6 +289,7 @@ sealed partial class PlayerCommon : ModPlayer {
         CursorEffectsLoad();
 
         On_Player.AddBuff_ActuallyTryToAddTheBuff += On_Player_AddBuff_ActuallyTryToAddTheBuff;
+        On_Player.AddBuff_TryUpdatingExistingBuffTime += On_Player_AddBuff_TryUpdatingExistingBuffTime;
 
         On_Player.GetImmuneAlpha += On_Player_GetImmuneAlpha;
         On_Player.GetImmuneAlphaPure += On_Player_GetImmuneAlphaPure;
@@ -659,6 +663,16 @@ sealed partial class PlayerCommon : ModPlayer {
         return result;
     }
 
+    private bool On_Player_AddBuff_TryUpdatingExistingBuffTime(On_Player.orig_AddBuff_TryUpdatingExistingBuffTime orig, Player self, int type, int time) {
+        bool result = orig(self, type, time);
+        if (result) {
+            if (self.GetCommon().IsBrawlerMaskEffectActive) {
+                self.GetCommon().BeforeHitActiveDebuffs.Add((type, time));
+            }
+        }
+        return result;
+    }
+
     private bool On_Player_AddBuff_ActuallyTryToAddTheBuff(On_Player.orig_AddBuff_ActuallyTryToAddTheBuff orig, Player self, int type, int time) {
         bool result = orig(self, type, time);
         if (result && type == BuffID.PotionSickness) {
@@ -681,6 +695,9 @@ sealed partial class PlayerCommon : ModPlayer {
             if (self.GetCommon().IsFossilizedSpiralEffectActive) {
                 self.AddBuff<TempBuffer>(ElderShell.BUFFTIME);
             }
+        }
+        if (self.GetCommon().IsBrawlerMaskEffectActive) {
+            self.GetCommon().BeforeHitActiveDebuffs.Add((type, time));
         }
         return result;
     }
@@ -1096,6 +1113,12 @@ sealed partial class PlayerCommon : ModPlayer {
         PreUpdateEvent?.Invoke(Player);
     }
 
+    public override void ModifyHurt(ref Player.HurtModifiers modifiers) {
+        if (IsAetherInvincibilityActive) {
+            modifiers.Cancel();
+        }
+    }
+
     public delegate void OnHurtDelegate(Player player, Player.HurtInfo info);
     public static event OnHurtDelegate OnHurtEvent;
     public override void OnHurt(Player.HurtInfo info) {
@@ -1110,6 +1133,21 @@ sealed partial class PlayerCommon : ModPlayer {
                 Position = Player.GetPlayerCorePoint()
             });
         }
+
+        if (IsBrawlerMaskEffectActive) {
+            foreach (NPC nPC in Main.ActiveNPCs) {
+                float num = TileHelper.TileSize * 31;
+                if (nPC.CanBeChasedBy(Player) && !(Player.Distance(nPC.Center) > num)/* && Collision.CanHitLine(Player.position, Player.width, Player.height, nPC.position, nPC.width, nPC.height)*/) {
+                    int num2 = (nPC.Center.X - Player.Center.X).GetDirection();
+                    if (Player.whoAmI == Main.myPlayer)
+                        Player.ApplyDamageToNPC(nPC, (int)info.Damage, info.Knockback, num2, crit: false);
+                    foreach ((int, int) buffInfo in BeforeHitActiveDebuffs) {
+                        nPC.AddBuff(buffInfo.Item1, buffInfo.Item2);
+                    }
+                }
+            }
+        }
+        BeforeHitActiveDebuffs.Clear();
     }
 
     public delegate void OnHitNPCDelegate(Player player, NPC target, NPC.HitInfo hit, int damageDone);
@@ -1158,6 +1196,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsBrawlerMaskEffectActive = false;
+
         IsDoubleGogglesEffectActive = false;
 
         ConjurersEyeVanity = false;
@@ -1241,12 +1281,6 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         return base.PreItemCheck();
-    }
-
-    public override void ModifyHurt(ref Player.HurtModifiers modifiers) {
-        if (IsAetherInvincibilityActive) {
-            modifiers.Cancel();
-        }
     }
 
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
