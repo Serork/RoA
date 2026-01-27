@@ -41,7 +41,7 @@ sealed class DoubleGoggles : ModItem {
             chromaticAberrationShader.Parameters["uSourceRect"].SetValue(sourceRectangle);
             chromaticAberrationShader.Parameters["uLegacyArmorSourceRect"].SetValue(sourceRectangle);
             chromaticAberrationShader.Parameters["uImageSize0"].SetValue(size);
-            chromaticAberrationShader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
+            chromaticAberrationShader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects);
             chromaticAberrationShader.Parameters["uSaturation"].SetValue(Helper.Wave(0.25f, 0.75f, waveFrequency, 1f + player.whoAmI) * player.GetCommon().DoubleGogglesEffectOpacity);
             chromaticAberrationShader.CurrentTechnique.Passes[0].Apply();
 

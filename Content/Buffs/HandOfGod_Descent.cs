@@ -48,7 +48,7 @@ sealed class GodDescent : ModBuff {
                 godDescentShader.Parameters["uSourceRect"].SetValue(sourceRectangle);
                 godDescentShader.Parameters["uLegacyArmorSourceRect"].SetValue(sourceRectangle);
                 godDescentShader.Parameters["uImageSize0"].SetValue(size);
-                godDescentShader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
+                godDescentShader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects);
                 godDescentShader.CurrentTechnique.Passes[0].Apply();
 
                 return;
@@ -69,7 +69,7 @@ sealed class GodDescent : ModBuff {
                     godDescentShader.Parameters["uSourceRect"].SetValue(sourceRectangle);
                     godDescentShader.Parameters["uLegacyArmorSourceRect"].SetValue(sourceRectangle);
                     godDescentShader.Parameters["uImageSize0"].SetValue(size);
-                    godDescentShader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
+                    godDescentShader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects);
                     godDescentShader.CurrentTechnique.Passes[0].Apply();
 
                     orig(self, proj);
@@ -91,7 +91,7 @@ sealed class GodDescent : ModBuff {
                     godDescentShader.Parameters["uSourceRect"].SetValue(sourceRectangle);
                     godDescentShader.Parameters["uLegacyArmorSourceRect"].SetValue(sourceRectangle);
                     godDescentShader.Parameters["uImageSize0"].SetValue(size);
-                    godDescentShader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
+                    godDescentShader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects);
                     godDescentShader.CurrentTechnique.Passes[0].Apply();
 
                     orig(self, mySpriteBatch, rCurrentNPC, behindTiles, screenPos);

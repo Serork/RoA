@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -76,7 +77,7 @@ sealed class BloodbathLocketGlowGlowing : ModSystem {
                         NeckGlowTexture.Value,
                         (drawInfo.drawPlayer.mount.Active ? drawInfo.drawPlayer.position : drawInfo.Position) + (player.gravDir != 1 ? Vector2.UnitY * 6f : Vector2.Zero) + Vector2.UnitY * (-posOffset.Y + seatYOffset) - Main.screenPosition + new Vector2(0f, drawInfo.drawPlayer.mount.Active ? drawInfo.drawPlayer.gfxOffY : 0f)
                             +
-                            Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0 * player.gravDir, new Vector2())
+                            Utils.RotatedBy(Utils.ToRotationVector2(i2), TimeSystem.TimeForVisualEffects * 10.0 * player.gravDir, new Vector2())
                             * Helper.Wave(0f, 3f, 12f, 0.5f),
                         drawInfo.drawPlayer.bodyFrame,
                         color * 0.5f,
@@ -148,7 +149,7 @@ sealed class BloodbathLocket : ModItem {
             Vector2 origin = glowMaskTexture.Size() / 2f;
             Color color = Color.White;
             spriteBatch.Draw(glowMaskTexture, Item.Center - Main.screenPosition +
-                    Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                    Utils.RotatedBy(Utils.ToRotationVector2(i2), TimeSystem.TimeForVisualEffects * 10.0, new Vector2())
                     * Helper.Wave(0f, 3f, 12f, 0.5f + whoAmI), null, color * 0.5f, rotation + Main.rand.NextFloatRange(0.05f), origin, 1f, SpriteEffects.None, 0f);
         }
         Lighting.AddLight(Item.Center, new Vector3(1f, 0.2f, 0.2f) * 0.35f * Helper.Wave(1f, 1.25f, 12f, 0.5f + whoAmI));
@@ -182,7 +183,7 @@ sealed class BloodbathLocket : ModItem {
             Vector2 origin2 = glowMaskTexture.Size() / 2f;
             Color color = Color.White;
             spriteBatch.Draw(glowMaskTexture, position +
-                    Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                    Utils.RotatedBy(Utils.ToRotationVector2(i2), TimeSystem.TimeForVisualEffects * 10.0, new Vector2())
                     * Helper.Wave(0f, 3f, 12f, 0.5f + Item.whoAmI), null, color * 0.5f, 0f + Main.rand.NextFloatRange(0.05f), origin2, scale, SpriteEffects.None, 0f);
         }
         Main.spriteBatch.End();
@@ -264,7 +265,7 @@ sealed class BloodbathLocket : ModItem {
                 float opacity = Utils.GetLerpValue(0f, edge, eyes.TimeLeft, true) * Utils.GetLerpValue(eyes.MaxTimeLeft, eyes.MaxTimeLeft - edge, eyes.TimeLeft, true);
                 for (float i2 = -MathHelper.Pi; i2 <= MathHelper.Pi; i2 += MathHelper.PiOver2) {
                     Main.spriteBatch.Draw(texture, eyes.Position - Main.screenPosition +
-                            Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                            Utils.RotatedBy(Utils.ToRotationVector2(i2), TimeSystem.TimeForVisualEffects * 10.0, new Vector2())
                             * Helper.Wave(0f, 3f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f), null,
                             Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f + eyes.MaxTimeLeft * 0.25f)) * opacity * 0.75f,
                             eyes.Rotation + Main.rand.NextFloatRange(0.05f),

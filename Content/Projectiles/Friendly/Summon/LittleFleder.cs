@@ -110,7 +110,7 @@ sealed class LittleFleder : ModProjectile {
             float lifeProgress = 1f;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                 spriteBatch.Draw(texture, position +
-                    Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                    Utils.RotatedBy(Utils.ToRotationVector2(i), TimeSystem.TimeForVisualEffects * 10.0, new Vector2())
                     * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
                    sourceRectangle, Color.White.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress, Projectile.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, Projectile.scale, spriteEffects, 0f);
             }

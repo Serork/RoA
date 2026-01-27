@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Content.Buffs;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -67,7 +68,7 @@ sealed class MoonFlower : ModItem {
         ushort type = (ushort)ModContent.ItemType<MoonFlower>();
         Color color = player.GetModPlayer<SmallMoonPlayer>().smallMoonColor;
 
-        float globalTimeWrappedHourly2 = Main.GlobalTimeWrappedHourly;
+        float globalTimeWrappedHourly2 = TimeSystem.TimeForVisualEffects;
         globalTimeWrappedHourly2 %= 5f;
         globalTimeWrappedHourly2 /= 2.5f;
         if (globalTimeWrappedHourly2 >= 1f)

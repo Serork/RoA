@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
@@ -161,9 +162,9 @@ sealed class LothorSoul : RoANPC {
         for (int index = 0; index < NPC.oldPos.Length; index++) {
             float factor = (NPC.oldPos.Length - (float)index) / NPC.oldPos.Length;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
-                Vector2 position = NPC.oldPos[index] - Vector2.UnitY * 6f + NPC.Size / 2 + Utils.RotatedBy(Utils.ToRotationVector2((float)i), Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
+                Vector2 position = NPC.oldPos[index] - Vector2.UnitY * 6f + NPC.Size / 2 + Utils.RotatedBy(Utils.ToRotationVector2((float)i), TimeSystem.TimeForVisualEffects * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
                 Color color2 = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i / NPC.oldPos.Length) * factor;
-                spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2((float)i), Main.GlobalTimeWrappedHourly * 5.0, new Vector2()) * Helper.Wave(0f, 2f, speed: 20f), NPC.frame, color2 * (NPC.Opacity + 0.25f) * 0.75f, NPC.rotation + Main.rand.NextFloat(0.075f), NPC.Size / 2, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f * factor, NPC.direction != 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, position + Utils.RotatedBy(Utils.ToRotationVector2((float)i), TimeSystem.TimeForVisualEffects * 5.0, new Vector2()) * Helper.Wave(0f, 2f, speed: 20f), NPC.frame, color2 * (NPC.Opacity + 0.25f) * 0.75f, NPC.rotation + Main.rand.NextFloat(0.075f), NPC.Size / 2, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f * factor, NPC.direction != 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
             }
         }
     }

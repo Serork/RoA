@@ -610,7 +610,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         if (_drawingTempBufferCopies) {
             float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
-            Color color = Main.hslToRgb(0.7f + (float)Math.Sin((float)Math.PI * 2f * Main.GlobalTimeWrappedHourly * 0.16f
+            Color color = Main.hslToRgb(0.7f + (float)Math.Sin((float)Math.PI * 2f * TimeSystem.TimeForVisualEffects * 0.16f
                 + _tempBufferCopiesHueShift[_currentTempBufferCopyIndex]), 1f, 0.5f);
             color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
@@ -640,7 +640,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         if (_drawingTempBufferCopies) {
             float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
-            Color color = Main.hslToRgb(0.7f + (float)Math.Sin((float)Math.PI * 2f * Main.GlobalTimeWrappedHourly * 0.16f 
+            Color color = Main.hslToRgb(0.7f + (float)Math.Sin((float)Math.PI * 2f * TimeSystem.TimeForVisualEffects * 0.16f 
                 + _tempBufferCopiesHueShift[_currentTempBufferCopyIndex]), 1f, 0.5f);
             color.A /= 4;
             result = Color.Lerp(result, color, 0.25f) * opacity;
@@ -902,7 +902,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     break;
             }
 
-            float num165 = (1.2f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 2.5f * ((float)Math.PI * 2f) * 3f)) * 0.8f;
+            float num165 = (1.2f + 0.2f * (float)Math.Cos(TimeSystem.TimeForVisualEffects % 30f / 2.5f * ((float)Math.PI * 2f) * 3f)) * 0.8f;
             Vector2 position = new Vector2(drawPlayer.position.X + num3 * num165, drawPlayer.position.Y + drawPlayer.gfxOffY + num4);
             self.DrawPlayer(camera, drawPlayer, position, drawPlayer.fullRotation, drawPlayer.fullRotationOrigin, drawPlayer.ghostFade, MathF.Max(1.1f, (num165 + 0.2f) * 0.9f));
         }
@@ -1134,7 +1134,8 @@ sealed partial class PlayerCommon : ModPlayer {
             });
         }
 
-        if (IsBrawlerMaskEffectActive) {
+        // TODO: net sync
+        if (IsBrawlerMaskEffectActive && Main.rand.NextBool(2)) {
             foreach (NPC nPC in Main.ActiveNPCs) {
                 float num = TileHelper.TileSize * 31;
                 if (nPC.CanBeChasedBy(Player) && !(Player.Distance(nPC.Center) > num)/* && Collision.CanHitLine(Player.position, Player.width, Player.height, nPC.position, nPC.width, nPC.height)*/) {

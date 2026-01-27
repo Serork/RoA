@@ -1227,7 +1227,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                     stemStartPosition += velocityToSummonMouthPosition * step;
                 }
 
-                int summonMouthFrame = (int)((Main.GlobalTimeWrappedHourly * 5 + currentSummonMouthIndex) % 2);
+                int summonMouthFrame = (int)((TimeSystem.TimeForVisualEffects * 5 + currentSummonMouthIndex) % 2);
                 batch.Draw(summonMouthTexture, position, summonMouthDrawInfo with {
                     Clip = getSummonMouthClip(summonMouthFrame),
                     Rotation = rotation,

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
 
+using RoA.Common;
 using RoA.Common.Items;
 using RoA.Content.Items.Miscellaneous;
 
@@ -134,7 +135,7 @@ static class ItemUtils {
             DrawData item;
             if (num == ItemID.LunarFlareBook && DifferentGlowMaskOnVanillaWeapons_Usage.LunarFlare_Use?.IsLoaded == true) {
                 Texture2D useTexture = DifferentGlowMaskOnVanillaWeapons_Usage.LunarFlare_Use.Value;
-                Rectangle frame = new SpriteFrame(10, 1, (byte)(Main.GlobalTimeWrappedHourly * 16f % 10), 0).GetSourceRectangle(useTexture);
+                Rectangle frame = new SpriteFrame(10, 1, (byte)(TimeSystem.TimeForVisualEffects * 16f % 10), 0).GetSourceRectangle(useTexture);
                 origin7 = getOrigin(drawinfo, frame, out vector9, -10);
                 item = new DrawData(useTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)),
                     frame,
@@ -150,7 +151,7 @@ static class ItemUtils {
             }
             else if (num == ItemID.MagnetSphere && DifferentGlowMaskOnVanillaWeapons_Usage.MagnetSphere_Use?.IsLoaded == true) {
                 Texture2D useTexture = DifferentGlowMaskOnVanillaWeapons_Usage.MagnetSphere_Use.Value;
-                Rectangle frame = new SpriteFrame(5, 1, (byte)(Main.GlobalTimeWrappedHourly * 12f % 5), 0).GetSourceRectangle(useTexture);
+                Rectangle frame = new SpriteFrame(5, 1, (byte)(TimeSystem.TimeForVisualEffects * 12f % 5), 0).GetSourceRectangle(useTexture);
                 origin7 = getOrigin(drawinfo, frame, out vector9, -10);
                 item = new DrawData(useTexture, new Vector2((int)(drawinfo.ItemLocation.X - Main.screenPosition.X + vector9.X), (int)(drawinfo.ItemLocation.Y - Main.screenPosition.Y + vector9.Y)),
                     frame,

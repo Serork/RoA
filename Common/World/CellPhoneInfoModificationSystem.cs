@@ -64,7 +64,7 @@ sealed class CellPhoneInfoModificationSystem : IInitializer {
 
     private static string ChooseWeatherText(string originalText) {
         if (BackwoodsFogHandler.IsFogActive) {
-            if (Main.GlobalTimeWrappedHourly % 15f >= 10f)
+            if (TimeSystem.TimeForVisualEffects % 15f >= 10f)
                 return Language.GetTextValue("Mods.RoA.Biomes.BackwoodsBiomeFog.DisplayName");
         }
 

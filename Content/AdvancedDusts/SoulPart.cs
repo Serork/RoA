@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Common.VisualEffects;
 ﻿using RoA.Common.World;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
@@ -121,7 +122,7 @@ sealed class SoulPart : AdvancedDust<SoulPart> {
         for (int index = 0; index < Positions.Length; index++) {
             float factor = (Positions.Length - (float)index) / Positions.Length;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
-                Vector2 extraPosition = ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
+                Vector2 extraPosition = ((float)i).ToRotationVector2().RotatedBy(TimeSystem.TimeForVisualEffects * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
                 Vector2 position = Positions[index] + extraPosition + Size / 2;
                 Color baseColor = color.MultiplyAlpha(Opacity).MultiplyAlpha((float)i / Positions.Length) * factor;
                 Color color2 = baseColor;

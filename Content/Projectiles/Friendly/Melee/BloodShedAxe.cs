@@ -1,14 +1,15 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Common.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
-using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -365,14 +366,14 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
 
         if (_powerUp && Projectile.ai[1] != 100f) {
             for (int i = 0; i < 3; i++) {
-                float circleCompletion = (float)Math.Sin((double)(Main.GlobalTimeWrappedHourly * 5f + i * MathHelper.PiOver2)) * -Projectile.spriteDirection;
+                float circleCompletion = (float)Math.Sin((double)(TimeSystem.TimeForVisualEffects * 5f + i * MathHelper.PiOver2)) * -Projectile.spriteDirection;
                 float drawRotation = 0.78f - 0.2f * i * Projectile.spriteDirection + circleCompletion * MathHelper.Pi / 10f - circleCompletion * 0.44f;
-                Vector2 drawOffsetStraight = Projectile.Center - Main.screenPosition + -Projectile.spriteDirection * Vector2.One * (float)Math.Sin((double)(Main.GlobalTimeWrappedHourly * 20f)) * 0.01f;
+                Vector2 drawOffsetStraight = Projectile.Center - Main.screenPosition + -Projectile.spriteDirection * Vector2.One * (float)Math.Sin((double)(TimeSystem.TimeForVisualEffects * 20f)) * 0.01f;
                 Vector2 drawDisplacementAngle = -Projectile.spriteDirection * Vector2.One.RotatedBy(MathHelper.PiOver2, default) * circleCompletion.ToRotationVector2().Y;
                 int itemAnimationMax = player.itemAnimationMax;
                 int itemAnimation = player.itemAnimation;
                 float value = 1f - itemAnimation / (float)itemAnimationMax;
-                Main.spriteBatch.Draw(texture2D, drawOffsetStraight + drawDisplacementAngle + Projectile.spriteDirection * Utils.ToRotationVector2(i).RotatedBy(Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(0f, 1.5f, speed: 1f - value) + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+                Main.spriteBatch.Draw(texture2D, drawOffsetStraight + drawDisplacementAngle + Projectile.spriteDirection * Utils.ToRotationVector2(i).RotatedBy(TimeSystem.TimeForVisualEffects, new Vector2()) * Helper.Wave(0f, 1.5f, speed: 1f - value) + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
                                       rectangle,
                                       new Color(255 - Projectile.alpha, 255 - Projectile.alpha, 255 - Projectile.alpha, 0) * Projectile.Opacity * ((4f - i) / 4f) * Projectile.localAI[1],
                                       Projectile.rotation + drawRotation,
@@ -381,7 +382,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             }
         }
         /*for (int i = 0; i < 5; i++) {
-			Main.spriteBatch.DrawSelf(texture2D, Projectile.Center + Utils.ToRotationVector2((float)(Main.GlobalTimeWrappedHourly + i * MathHelper.Pi * 2f / 5.0)) - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
+			Main.spriteBatch.DrawSelf(texture2D, Projectile.Center + Utils.ToRotationVector2((float)(TimeSystem.TimeForVisualEffects + i * MathHelper.Pi * 2f / 5.0)) - Main.screenPosition + new Vector2(0f, Main.player[Projectile.owner].gfxOffY),
 								  rectangle,
 								  Projectile.GetAlpha(lightColor) * 0.025f * MathUtils.Osc(0f, 1.5f, 0.5f, 0.5f) * Projectile.Opacity,
 								  Projectile._rotation + extraRotation + 0.78f,

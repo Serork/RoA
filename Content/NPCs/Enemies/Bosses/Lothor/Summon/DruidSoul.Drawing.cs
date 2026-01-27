@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.Cache;
 ﻿using RoA.Common.World;
 using RoA.Core;
@@ -137,13 +138,13 @@ sealed partial class DruidSoul : RoANPC {
             color *= 1.5f;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
                 color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
-                spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(TimeSystem.TimeForVisualEffects * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
             }
             SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
             spriteBatch.Begin(snapshot with { blendState = BlendState.NonPremultiplied, samplerState = SamplerState.PointClamp }, true);
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
                 color = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i);
-                spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
+                spriteBatch.Draw(texture, start + ((float)i).ToRotationVector2().RotatedBy(TimeSystem.TimeForVisualEffects * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition, sourceRectangle, color, rotation, origin, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f, SpriteEffects.None, 0f);
             }
             spriteBatch.Begin(snapshot, true);
             start += v * texture.Width;
@@ -163,7 +164,7 @@ sealed partial class DruidSoul : RoANPC {
         for (int index = 0; index < NPC.oldPos.Length; index++) {
             float factor = (NPC.oldPos.Length - (float)index) / NPC.oldPos.Length;
             for (double i = -Math.PI; i <= Math.PI; i += Math.PI / 2.0) {
-                Vector2 position = NPC.oldPos[index] + NPC.Size / 2 + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
+                Vector2 position = NPC.oldPos[index] + NPC.Size / 2 + ((float)i).ToRotationVector2().RotatedBy(TimeSystem.TimeForVisualEffects * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) - Main.screenPosition;
                 Color color2 = color.MultiplyAlpha(NPC.Opacity).MultiplyAlpha((float)i / NPC.oldPos.Length) * factor;
                 SpriteEffects effect = NPC.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                 spriteBatch.Draw(texture, position, NPC.frame, color2 * (NPC.Opacity + 0.5f), NPC.rotation, NPC.Size / 2, Helper.Wave(NPC.scale + 0.05f, NPC.scale + 0.15f, 1f, 0f) * 0.9f * factor, effect, 0f);

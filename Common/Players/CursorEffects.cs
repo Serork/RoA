@@ -40,7 +40,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
         Microsoft.Xna.Framework.Color color = Main.cursorColor;
         if (!Main.gameMenu && Main.LocalPlayer.hasRainbowCursor)
-            color = Main.hslToRgb(Main.GlobalTimeWrappedHourly * 0.25f % 1f, 1f, 0.5f);
+            color = Main.hslToRgb(TimeSystem.TimeForVisualEffects * 0.25f % 1f, 1f, 0.5f);
 
         bool bloodCursor = false;
         bool shouldDrawRootBoundEffect = false;
@@ -69,7 +69,7 @@ sealed partial class PlayerCommon : ModPlayer {
             SpriteBatchSnapshot snapshot = Main.spriteBatch.CaptureSnapshot();
             Main.spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver4 * 0.5f) {
-                drawCursor(Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                drawCursor(Utils.RotatedBy(Utils.ToRotationVector2(i), TimeSystem.TimeForVisualEffects * 10.0, new Vector2())
                         * Helper.Wave(0f, 3f, 12f, 0.5f) * 1f,
                         Main.rand.NextFloatRange(0.05f) * 1f,
                         Helper.Wave(0.5f, 0.75f, 12f, 0.5f) * 1f);
@@ -106,7 +106,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     }
                     int num2 = 17;
                     int frameX = 0;
-                    Main.spriteBatch.Draw(TextureAssets.Cursors[num2].Value, t2 + bonus + extraPosition, TextureAssets.Cursors[num2].Frame(1, 1, frameX), color.MultiplyAlpha(alpha), rotation + (float)Math.PI / 2f * Main.GlobalTimeWrappedHourly, TextureAssets.Cursors[num2].Frame(1, 1, frameX).Size() / 2f, Main.cursorScale, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(TextureAssets.Cursors[num2].Value, t2 + bonus + extraPosition, TextureAssets.Cursors[num2].Frame(1, 1, frameX), color.MultiplyAlpha(alpha), rotation + (float)Math.PI / 2f * TimeSystem.TimeForVisualEffects, TextureAssets.Cursors[num2].Frame(1, 1, frameX).Size() / 2f, Main.cursorScale, SpriteEffects.None, 0f);
                 }
 
                 if (smart && !flag) {

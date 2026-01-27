@@ -520,7 +520,7 @@ sealed partial class ItemCommon : GlobalItem {
                 //                break;
                 //        }
 
-                //        float sin = Main.GlobalTimeWrappedHourly % 1f;
+                //        float sin = TimeSystem.TimeForVisualEffects % 1f;
                 //        Main.spriteBatch.Draw(enchantmentTexture, new Vector2(num21, num22)
                 //            + baseOffsetValue.RotatedBy(sin * MathHelper.TwoPi * (i2 % 2 == 0).ToDirectionInt()) * 0.025f
                 //            + offset / 2f - offset2 / (count + 1), null, color2 with { A = 150 }, 0f, default(Vector2), 1f, SpriteEffects.None, 0f);

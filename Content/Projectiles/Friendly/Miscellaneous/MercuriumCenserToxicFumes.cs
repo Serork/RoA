@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core.Utility;
@@ -100,7 +101,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
         Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
         Color color = Projectile.GetAlpha(lightColor) * 0.5f;
         for (int i = 0; i < 2; i++)
-            spriteBatch.Draw(texture, drawPos + new Vector2(0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(Main.GlobalTimeWrappedHourly * 4f), frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, drawPos + new Vector2(0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(TimeSystem.TimeForVisualEffects * 4f), frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 
         return false;
     }

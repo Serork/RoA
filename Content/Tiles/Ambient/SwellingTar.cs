@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Content.Liquids;
 using RoA.Content.Tiles.Crafting;
 using RoA.Core.Utility;
@@ -101,7 +102,7 @@ sealed class SwellingTar : ModTile {
         FastRandom fastRandom = new FastRandom(Main.ActiveWorldFileData.Seed).WithModifier(65440uL);
         FastRandom fastRandom2 = fastRandom.WithModifier((int)startPosition.X / 16, (int)startPosition.Y / 16);
         // A universal time-based sinusoid which updates extremely rapidly. GlobalTime is 0 to 3600, measured in seconds.
-        float waveSine = 0.1f * (float)Math.Sin((Main.GlobalTimeWrappedHourly * 0.2f + startPosition.Length() * fastRandom2.NextFloat()) * (5f + 15f * fastRandom2.NextFloat()));
+        float waveSine = 0.1f * (float)Math.Sin((TimeSystem.TimeForVisualEffects * 0.2f + startPosition.Length() * fastRandom2.NextFloat()) * (5f + 15f * fastRandom2.NextFloat()));
         Vector2 ripplePos = startPosition;
 
         shaderData.QueueRipple(ripplePos, 350f * waveSine * strengthFactor, RippleShape.Circle);

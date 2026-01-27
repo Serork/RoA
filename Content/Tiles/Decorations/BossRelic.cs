@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Core;
 
 using System;
@@ -118,14 +119,14 @@ class BossRelic : ModTile {
 
         // Some math magic to make it smoothly move up and down over time
         const float TwoPi = (float)Math.PI * 2f;
-        float offset = (float)Math.Sin(Main.GlobalTimeWrappedHourly * TwoPi / 5f);
+        float offset = (float)Math.Sin(TimeSystem.TimeForVisualEffects * TwoPi / 5f);
         Vector2 drawPos = worldPos + offScreen - Main.screenPosition + new Vector2(0f, -40f) + new Vector2(0f, offset * 4f);
 
         // DrawSelf the main texture
         spriteBatch.Draw(texture, drawPos, frame, color, 0f, origin, 1f, effects, 0f);
 
         // DrawSelf the periodic glow effect
-        float scale = (float)Math.Sin(Main.GlobalTimeWrappedHourly * TwoPi / 2f) * 0.3f + 0.7f;
+        float scale = (float)Math.Sin(TimeSystem.TimeForVisualEffects * TwoPi / 2f) * 0.3f + 0.7f;
         Color effectColor = color;
         effectColor.A = 0;
         effectColor = effectColor * 0.1f * scale;

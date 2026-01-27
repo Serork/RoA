@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Content.Items.Equipables.Miscellaneous;
 
 using System;
@@ -81,11 +82,11 @@ sealed class LothorBag : ModItem {
         Vector2 offset = new Vector2(Item.width / 2 - frameOrigin.X, Item.height - frame.Height);
         Vector2 drawPos = Item.position - Main.screenPosition + frameOrigin + offset;
 
-        float time = Main.GlobalTimeWrappedHourly;
+        float time = TimeSystem.TimeForVisualEffects;
         float timer = Item.timeSinceItemSpawned / 240f + time * 0.04f;
 
-        float num4 = (float)Item.timeSinceItemSpawned / 240f + Main.GlobalTimeWrappedHourly * 0.04f;
-        float globalTimeWrappedHourly = Main.GlobalTimeWrappedHourly;
+        float num4 = (float)Item.timeSinceItemSpawned / 240f + TimeSystem.TimeForVisualEffects * 0.04f;
+        float globalTimeWrappedHourly = TimeSystem.TimeForVisualEffects;
         globalTimeWrappedHourly %= 4f;
         globalTimeWrappedHourly /= 2f;
         if (globalTimeWrappedHourly >= 1f)

@@ -233,7 +233,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
                 Color baseColor = lightColor;
                 baseColor = Color.Lerp(baseColor, Color.Yellow, progress);
                 Color color = baseColor with { A = (byte)a } * smallSummonMouthInfo.Opacity * 1f;
-                int smallSummonMouthFrame = (int)((Main.GlobalTimeWrappedHourly * 10 + i) % 2);
+                int smallSummonMouthFrame = (int)((TimeSystem.TimeForVisualEffects * 10 + i) % 2);
                 Rectangle clip = Utils.Frame(texture, 1, 2, frameY: smallSummonMouthFrame);
                 Vector2 origin = clip.Centered();
                 float waveFrequency = 30f;

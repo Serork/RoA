@@ -2,6 +2,7 @@
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Content.Items.Miscellaneous;
 
 using Terraria;
@@ -15,7 +16,7 @@ sealed class TerraDyeArmorShaderData(Asset<Effect> shader, string passName) : Ar
 
     public override void Apply(Entity entity, DrawData? drawData) {
         Shader.Parameters["uOpacity"].SetValue(Opacity);
-        Shader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 10f);
+        Shader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects * 10f);
         Main.instance.GraphicsDevice.Textures[1] = TerraDye.TerraShaderMap.Value;
 
         base.Apply(entity, drawData);

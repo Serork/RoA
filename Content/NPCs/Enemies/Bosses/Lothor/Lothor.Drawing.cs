@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.Cache;
 ﻿using RoA.Common.World;
 using RoA.Core;
@@ -220,7 +221,7 @@ sealed partial class Lothor : ModNPC {
         spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
         for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
             spriteBatch.Draw(GlowMask.Value, NPC.position + offset +
-                Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                Utils.RotatedBy(Utils.ToRotationVector2(i), TimeSystem.TimeForVisualEffects * 10.0, new Vector2())
                 * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress,
                 NPC.frame, (Color.White * 0.95f).MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress * NPC.Opacity, NPC.rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress, origin, NPC.scale, effects, 0f);
         }

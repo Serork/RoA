@@ -1,7 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-﻿using RoA.Common.World;
+using RoA.Common;
+using RoA.Common.World;
 using RoA.Core.Utility;
 
 using System;
@@ -61,7 +62,7 @@ sealed class DruidSoul : ModItem {
                 Texture2D text = TextureAssets.Item[Type].Value;
                 Rectangle frame = new(0, 0, text.Width, text.Height);
                 Vector2 position = Item.Center - Main.screenPosition - Vector2.UnitY * 2f;
-                spriteBatch.Draw(text, position + ((float)i).ToRotationVector2().RotatedBy(Main.GlobalTimeWrappedHourly * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) + Vector2.UnitY * 2f,
+                spriteBatch.Draw(text, position + ((float)i).ToRotationVector2().RotatedBy(TimeSystem.TimeForVisualEffects * 2.0, new Vector2()) * Helper.Wave(0f, 3f, speed: 12f) + Vector2.UnitY * 2f,
                     frame, lightColor.MultiplyAlpha((float)i / length), rotation, Item.Size / 2f, Helper.Wave(scale + 0.05f, scale + 0.15f, 1f, 0f) * factor, SpriteEffects.None, 0f);
             }
         }

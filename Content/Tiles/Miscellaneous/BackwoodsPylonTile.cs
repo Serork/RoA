@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.CustomConditions;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Items.Placeable.Miscellaneous;
@@ -153,7 +154,7 @@ sealed class BackwoodsPylonTile : ModPylon {
         Vector2 crystalPosition = point.ToWorldCoordinates(tileOrigin.X - 2f, tileOrigin.Y) + crystalOffset;
 
         // Calculate additional drawing positions with a sine wave movement
-        float sinusoidalOffset = (float)Math.Sin(Main.GlobalTimeWrappedHourly * (Math.PI * 2) / 5);
+        float sinusoidalOffset = (float)Math.Sin(TimeSystem.TimeForVisualEffects * (Math.PI * 2) / 5);
         Vector2 drawingPosition = crystalPosition + offscreenVector + new Vector2(0f, sinusoidalOffset * 4f);
 
         // Do dust drawing
@@ -171,7 +172,7 @@ sealed class BackwoodsPylonTile : ModPylon {
         spriteBatch.Draw(crystalTexture.Value, drawingPosition - Main.screenPosition, crystalFrame, color * 0.7f, 0f, origin, 1f, SpriteEffects.None, 0f);
 
         // DrawSelf the shadow effect for the crystal
-        float scale = (float)Math.Sin(Main.GlobalTimeWrappedHourly * ((float)Math.PI * 2f) / 1f) * 0.2f + 0.8f;
+        float scale = (float)Math.Sin(TimeSystem.TimeForVisualEffects * ((float)Math.PI * 2f) / 1f) * 0.2f + 0.8f;
         Color shadowColor = pylonShadowColor * scale;
         for (float shadowPos = 0f; shadowPos < 1f; shadowPos += 1f / 6f) {
             spriteBatch.Draw(crystalTexture.Value, drawingPosition - Main.screenPosition + ((float)Math.PI * 2f * shadowPos).ToRotationVector2() * (6f + sinusoidalOffset * 2f), crystalFrame, shadowColor, 0f, origin, 1f, SpriteEffects.None, 0f);

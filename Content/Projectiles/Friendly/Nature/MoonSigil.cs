@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Content.Items.Weapons.Nature.PreHardmode;
 using RoA.Core.Utility;
 
@@ -66,7 +67,7 @@ sealed class MoonSigil : NatureProjectile {
             cloneDrawAlpha += 0.02f;
         }
         else {
-            cloneDrawOffset = MathHelper.Lerp(cloneDrawOffset, Utils.Remap((float)Math.Sin(Main.GlobalTimeWrappedHourly * 5f), -1f, 1f, 0.5f, 5f), 1f - cloneDrawOffset / 5f);
+            cloneDrawOffset = MathHelper.Lerp(cloneDrawOffset, Utils.Remap((float)Math.Sin(TimeSystem.TimeForVisualEffects * 5f), -1f, 1f, 0.5f, 5f), 1f - cloneDrawOffset / 5f);
 
             if (Main.rand.NextBool(5)) {
                 int dust = Dust.NewDust(new Vector2(Projectile.position.X - 5f, Projectile.position.Y) - Vector2.One * 3f, 48, 48, DustID.AncientLight, 0f, 0f, 0, new Color(180, 165, 5), Main.rand.NextFloat(0.8f, 1.6f));
@@ -76,7 +77,7 @@ sealed class MoonSigil : NatureProjectile {
                 Main.dust[dust].velocity.X *= 0.1f;
             }
         }
-        Projectile.frame = (int)Utils.Remap((float)Math.Sin(Main.GlobalTimeWrappedHourly * 5f), -1f, 1f, 0f, 4f);
+        Projectile.frame = (int)Utils.Remap((float)Math.Sin(TimeSystem.TimeForVisualEffects * 5f), -1f, 1f, 0f, 4f);
 
         if (Projectile.timeLeft == 595) SoundEngine.PlaySound(SoundID.Item82, Projectile.position);
         if (Projectile.timeLeft == 580) {

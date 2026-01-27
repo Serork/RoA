@@ -137,7 +137,7 @@ sealed class Pipistrelle : ModNPC {
             float lifeProgress2 = _shouldEnrage ? 1f : lifeProgress;
             for (float i = -MathHelper.Pi; i <= MathHelper.Pi; i += MathHelper.PiOver2) {
                 spriteBatch.Draw(GlowMask.Value, position +
-                    Utils.RotatedBy(Utils.ToRotationVector2(i), Main.GlobalTimeWrappedHourly * 10.0, new Vector2())
+                    Utils.RotatedBy(Utils.ToRotationVector2(i), TimeSystem.TimeForVisualEffects * 10.0, new Vector2())
                     * Helper.Wave(0f, 3f, 12f, 0.5f) * lifeProgress2,
                     NPC.frame, glowColor.MultiplyAlpha(Helper.Wave(0.5f, 0.75f, 12f, 0.5f)) * lifeProgress2, rotation + Main.rand.NextFloatRange(0.05f) * lifeProgress2, origin, NPC.scale, effects, 0f);
             }

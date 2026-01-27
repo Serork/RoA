@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using ReLogic.Utilities;
 
+using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.Players;
 using RoA.Content.Dusts;
@@ -601,7 +602,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         Vector2 velocityTo = Vector2.Normalize(Projectile.velocity);
         SpriteBatch spriteBatch = Main.spriteBatch;
         float charge = Math.Clamp(_charge - 0.5f + _charge * 1.5f, 0f, 1f);
-        float osc = (float)Math.Sin(Main.GlobalTimeWrappedHourly * 10f);
+        float osc = (float)Math.Sin(TimeSystem.TimeForVisualEffects * 10f);
         Vector2 offset = -new Vector2((_released ? 20f : 18f) * (Projectile.localAI[2] - 0.5f), 0f).RotatedBy(Projectile.rotation);
         offset += Projectile.rotation.ToRotationVector2() * (-30f * (MathHelper.Clamp(Projectile.scale - 1.25f, 0f, 1f)));
         Player player = Main.player[Projectile.owner];
@@ -622,7 +623,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                                 0f);
             spriteBatch.Begin(snapshot, true);
             spriteBatch.Draw(bladeTexture2D,
-                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 5f % 1f * player.direction)) * 3f * charge + shiftFix,
+                            position - velocityTo.RotatedBy(MathHelper.TwoPi * (TimeSystem.TimeForVisualEffects * 5f % 1f * player.direction)) * 3f * charge + shiftFix,
                             glowRectangle,
                             color * Projectile.Opacity * 0.3f * charge,
                             Projectile.rotation + 0.78f,
@@ -697,7 +698,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition,
                              null,
                              color * Projectile.Opacity * 1f * charge,
-                             MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction,
+                             MathHelper.TwoPi * (TimeSystem.TimeForVisualEffects * 0.8f % 1f) * -Projectile.direction,
                              new Vector2(sparkTexture2D.Width / 2, sparkTexture2D.Height / 2),
                              Projectile.scale * 0.8f,
                              SpriteEffects.None,
@@ -706,7 +707,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition,
                              null,
                              color * Projectile.Opacity * 1f * charge,
-                             MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction + MathHelper.PiOver2,
+                             MathHelper.TwoPi * (TimeSystem.TimeForVisualEffects * 0.8f % 1f) * -Projectile.direction + MathHelper.PiOver2,
                              new Vector2(sparkTexture2D.Width / 2, sparkTexture2D.Height / 2),
                              Projectile.scale * 0.8f,
                              SpriteEffects.None,
@@ -727,7 +728,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                             center + offset + position2 * Projectile.scale - Main.screenPosition,
                             null,
                             color * Projectile.Opacity * 1f * opacity,
-                            MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction,
+                            MathHelper.TwoPi * (TimeSystem.TimeForVisualEffects * 0.8f % 1f) * -Projectile.direction,
                             new Vector2(sparkTexture2D.Width / 2, sparkTexture2D.Height / 2),
                             Projectile.scale * 0.8f,
                             SpriteEffects.None,
@@ -736,7 +737,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                             center + offset + position2 * Projectile.scale - Main.screenPosition,
                             null,
                             color * Projectile.Opacity * 1f * opacity,
-                            MathHelper.TwoPi * (Main.GlobalTimeWrappedHourly * 0.8f % 1f) * -Projectile.direction + MathHelper.PiOver2,
+                            MathHelper.TwoPi * (TimeSystem.TimeForVisualEffects * 0.8f % 1f) * -Projectile.direction + MathHelper.PiOver2,
                             new Vector2(sparkTexture2D.Width / 2, sparkTexture2D.Height / 2),
                             Projectile.scale * 0.8f,
                             SpriteEffects.None,

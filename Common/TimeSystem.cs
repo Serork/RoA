@@ -16,7 +16,7 @@ sealed class TimeSystem : ModSystem {
     public static double GlobalTime { get; private set; }
 
     public static float RealTime => (float)(Main.time + (Main.dayTime ? 0.0 : Main.dayLength));
-    public static double TimeForVisualEffects => Main.timeForVisualEffects / TARGETFPS;
+    public static float TimeForVisualEffects => (float)(Main.timeForVisualEffects / TARGETFPS);
 
     public override void PostUpdatePlayers() {
         UpdateCount++;

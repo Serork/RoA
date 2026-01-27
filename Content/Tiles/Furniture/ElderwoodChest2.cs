@@ -116,7 +116,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
         float posX = Utils.RandomInt(ref speed, -12, 13) * 0.1f;
         float directionMax = posX;
         Tile tile = Main.tile[i, j];
-        float colorValue = MathHelper.Lerp(0.2f, 0.8f, (float)((Math.Sin(Main.GlobalTimeWrappedHourly * 1.3f) + 1f) * 0.5f));
+        float colorValue = MathHelper.Lerp(0.2f, 0.8f, (float)((Math.Sin(TimeSystem.TimeForVisualEffects * 1.3f) + 1f) * 0.5f));
         ModTile? modTile = TileLoader.GetTile(tile.TileType);
         if (modTile is null) {
             return;
@@ -151,7 +151,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
                 Main.spriteBatch.Draw(texture,
                                       new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
                                       new Vector2(2.5f, 2.5f) +
-                                      Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 5f),
+                                      Utils.RotatedBy(Utils.ToRotationVector2(i2), TimeSystem.TimeForVisualEffects, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 5f),
                                       null,
                                       color * 0.25f * _opacity * 0.9f,
                                       Helper.Wave(-0.15f, 0.025f, 5f, i * j * 2),
@@ -163,7 +163,7 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
                 Main.spriteBatch.Draw(texture,
                                       new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin +
                                       new Vector2(5f, 2.5f) +
-                                      Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 5f),
+                                      Utils.RotatedBy(Utils.ToRotationVector2(i2), TimeSystem.TimeForVisualEffects, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 5f),
                                       null,
                                       color * 0.25f * _opacity * 0.9f,
                                       Helper.Wave(-0.15f, 0.15f, 2.5f, i * j),
@@ -178,9 +178,9 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
             //    Main.spriteBatch.Draw(texture,
             //                      new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y + 2) + zero + origin / 2f +
             //                      new Vector2(-3.5f, 0.5f) +
-            //                      Utils.RotatedBy(Utils.ToRotationVector2(i2), Main.GlobalTimeWrappedHourly, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
+            //                      Utils.RotatedBy(Utils.ToRotationVector2(i2), TimeSystem.TimeForVisualEffects, new Vector2()) * Helper.Wave(-1.5f, 1.5f, speed: 1f),
             //                      null,
-            //                      Color.White * 0.1f * _opacity, (Main.GlobalTimeWrappedHourly * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
+            //                      Color.White * 0.1f * _opacity, (TimeSystem.TimeForVisualEffects * 0.35f + _rotationOffset) * directionMax, origin, 1.4f + Helper.Wave(0f, 1.5f, speed: 1f) * 0.1f + _scaleOffset, SpriteEffects.None, 0f);
             //}
         }
         //if (_opacity > 0f) _opacity -= 0.0002f;

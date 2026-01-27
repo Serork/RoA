@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Summon;
@@ -113,7 +114,7 @@ sealed class MercuriumZipper_MercuriumCenserToxicFumes : ModProjectile {
         Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
         Color color = Projectile.GetAlpha(lightColor) * 0.5f;
         for (int i = 0; i < 2; i++)
-            spriteBatch.Draw(texture, drawPos + new Vector2(0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(Main.GlobalTimeWrappedHourly * 4f), frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, drawPos + new Vector2(0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(TimeSystem.TimeForVisualEffects * 4f), frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
 
         return false;
     }

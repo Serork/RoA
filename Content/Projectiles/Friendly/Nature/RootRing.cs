@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
@@ -130,7 +131,7 @@ sealed class RootRing : NatureProjectile {
 
         float progress = MathHelper.Clamp(Projectile.ai[2], 0f, 1f);
         float opacity = 1f;
-        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
+        float factor = Ease.CircOut((float)(TimeSystem.TimeForVisualEffects % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
         _factor = MathHelper.Lerp(_factor, factor, _factor < factor ? 0.1f : 0.025f);
         factor = _factor * Projectile.ai[0];
         color *= 1.4f;

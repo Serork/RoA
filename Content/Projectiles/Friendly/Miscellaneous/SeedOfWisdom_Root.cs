@@ -323,7 +323,7 @@ sealed class SeedOfWisdomRoot : NatureProjectile_NoTextureLoad, IRequestAssets, 
 
         float progress = MathHelper.Clamp(_scaleFactor, 0f, 1f);
         float opacity = 1f;
-        float factor = Ease.CircOut((float)(Main.GlobalTimeWrappedHourly % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
+        float factor = Ease.CircOut((float)(TimeSystem.TimeForVisualEffects % 1.0) / 12f) * Math.Min(opacity > 0.75f ? 0.75f - opacity * (1f - opacity) : 0.925f, 0.925f);
         ScaleFactorValue = MathHelper.Lerp(ScaleFactorValue, factor, ScaleFactorValue < factor ? 0.1f : 0.025f);
     }
 

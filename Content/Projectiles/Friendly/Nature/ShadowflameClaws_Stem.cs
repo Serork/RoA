@@ -390,7 +390,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
             Projectile proj = Projectile;
             Microsoft.Xna.Framework.Color color35 = new Color(123, 89, 234);
 
-            float num165 = (1f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 0.5f * ((float)Math.PI * 2f) * 3f)) * 0.8f;
+            float num165 = (1f + 0.2f * (float)Math.Cos(TimeSystem.TimeForVisualEffects % 30f / 0.5f * ((float)Math.PI * 2f) * 3f)) * 0.8f;
             float scaleFactor = 1f - Utils.GetLerpValue(StemDrawTimeLeftStart + STEAMAPPEARANCETIME, StemDrawTimeLeftStart - STEAMAPPEARANCETIME, timeLeft, true);
             //scaleFactor = Utils.Remap(scaleFactor, 0f, 1f, 0.5f, 1f, true);
             Vector2 scale = Vector2.One * scaleFactor * (0.25f + num165);
@@ -446,7 +446,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
             Microsoft.Xna.Framework.Color color36 = color35;
             Vector2 origin7 = value16.Size() / 2f;
             Microsoft.Xna.Framework.Color color37 = color35 * 1f;
-            float num165 = (1f + 0.2f * (float)Math.Cos(Main.GlobalTimeWrappedHourly % 30f / 0.5f * ((float)Math.PI * 2f) * 3f)) * 0.8f;
+            float num165 = (1f + 0.2f * (float)Math.Cos(TimeSystem.TimeForVisualEffects % 30f / 0.5f * ((float)Math.PI * 2f) * 3f)) * 0.8f;
             Vector2 vector31 = new Vector2(0.5f, 2f);
             Vector2 vector32 = new Vector2(0.5f, 1f);
             color36 *= num165 * 1.5f;
