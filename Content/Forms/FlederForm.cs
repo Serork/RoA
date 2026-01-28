@@ -65,7 +65,7 @@ sealed class FlederForm : BaseForm {
 
         player.npcTypeNoAggro[ModContent.NPCType<Fleder>()] = true;
         player.npcTypeNoAggro[ModContent.NPCType<BabyFleder>()] = true;
-        player.statDefense -= 6;
+        //player.statDefense -= 6;
 
         float velocityX = player.velocity.X;
         float maxVelocityX = flag ? 2.5f : 1.75f;
