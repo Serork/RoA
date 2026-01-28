@@ -186,11 +186,20 @@ sealed class BackwoodsFogHandler : ModSystem {
         //if (Opacity > 0f)
         {
             Player player = Main.LocalPlayer;
+
+            float baseLerpValue = Math.Min(255, Main.ColorOfTheSkies.R * 2) / 255f;
+            float lerpValue2 = 1f - baseLerpValue ;
+            //lerpValue2 = Helper.Wave(lerpValue2 * 0.3f, lerpValue2 * 0.4f, 1f, 0f);
+            lerpValue2 *= 0.375f;
+            lerpValue2 += Helper.Wave(0f, baseLerpValue * 0.25f, 1f, 0f);
+            Color color = Color.Lerp(Color.Gray, Color.Gray.MultiplyRGB(Main.ColorOfTheSkies),
+                lerpValue2);
+
             VignettePlayer localVignettePlayer = player.GetModPlayer<VignettePlayer>();
             if (!player.InModBiome<BackwoodsBiome>() && Opacity < 0.01f) {
                 Opacity = 0f;
                 if (Main.netMode != NetmodeID.Server) {
-                    localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero, true);
+                    localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, color * Opacity * Opacity2, Vector2.Zero, true);
                 }
                 return;
             }
@@ -211,7 +220,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                 //        Opacity2 = 0f;
                 //    }
                 //}
-                localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, Color.Gray * Opacity * Opacity2, Vector2.Zero, true);
+                localVignettePlayer.SetVignette(0, 0, Opacity * Opacity2, color * Opacity * Opacity2, Vector2.Zero, true);
             }
 
             if (Opacity > 0f && player.InModBiome<BackwoodsBiome>()) {
@@ -426,7 +435,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             if (Main.netMode != NetmodeID.Server) {
                 bool spawnFog = Main.rand.NextBool();
 
-                if (spawnFog && Main.rand.NextBool(800)) {
+                if (spawnFog && Main.rand.NextBool(1000)) {
                     AdvancedDustSystem.New<Them_FG>(AdvancedDustLayer.ABOVEPLAYERS)?.
                         Setup(position - Vector2.UnitY * 10f + Main.rand.RandomPointInArea(5f, 5f), Vector2.Zero);
                 }
@@ -434,7 +443,7 @@ sealed class BackwoodsFogHandler : ModSystem {
                 AdvancedDustSystem.New<Fog>(AdvancedDustLayer.ABOVEPLAYERS)?.
                     Setup(position + Main.rand.RandomPointInArea(5f, 5f), new Vector2(num2 * Main.WindForVisuals, 0f), scale: scale);
 
-                if (!spawnFog && Main.rand.NextBool(800)) {
+                if (!spawnFog && Main.rand.NextBool(1000)) {
                     AdvancedDustSystem.New<Them_FG>(AdvancedDustLayer.ABOVEDUSTS)?.
                         Setup(position - Vector2.UnitY * 10f + Main.rand.RandomPointInArea(5f, 5f), Vector2.Zero);
                 }

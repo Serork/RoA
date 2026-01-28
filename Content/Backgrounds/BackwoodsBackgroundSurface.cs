@@ -86,7 +86,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
 
     public override void ModifyFarFades(float[] fades, float transitionSpeed) {
         if (IsFogActiveForBackground()) {
-            if (Main.rand.NextBool(150)) {
+            if (Main.rand.NextBool(300)) {
                 SpawnThem();
             }
         }
@@ -297,14 +297,26 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                     Vector2 origin = clip.Centered();
                     int width = value.Width;
                     bgWidthScaled = (int)(BackwoodsVars.BackwoodsHalfSizeX * 3f * 16 * bgScale * 1f);
-                    bgParallax = 0.5;
-                    bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled)) + (int)(bgWidthScaled * 0.75f);
+                    bgParallax = 1.5f;
+                    bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled));
+                    Vector2 vector = Main.screenPosition + new Vector2(Main.screenWidth >> 1, Main.screenHeight >> 1);
+                    Vector2 vector2 = new Vector2(1f / (float)bgParallax, 1f / (float)bgParallax);
+                    Vector2 position = themBGInfo.Position;
+                    position = (position - vector) * vector2 + vector - Main.screenPosition;
+                    position.X = (position.X + 500f) % 4000f;
+                    position.Y += 3000f;
+                    if (position.X < 0f)
+                        position.X += 4000f;
+
+                    position.X -= 500f;
+                    //if (bgStartX < 0f)
+                    //    bgStartX += bgWidthScaled;
                     bgTopY = (int)(backgroundTopMagicNumber * 2100.0 + 2500.0) + (int)scAdj + pushBGTopHack;
                     if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                         SpriteEffects effects = themBGInfo.FacedRight.ToInt().ToSpriteEffects();
                         for (int i = 0; i < 2; i++) {
-                            Main.spriteBatch.Draw(value, new Vector2(bgStartX, bgTopY) - themBGInfo.Position + Main.rand.RandomPointInArea(0.2f), clip, Color.White with { A = 187 } * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, effects, 0f);
-                            Main.spriteBatch.Draw(value, new Vector2(bgStartX, bgTopY) - themBGInfo.Position + Main.rand.RandomPointInArea(20f), clip, Color.White * 0.1f * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, effects, 0f);
+                            Main.spriteBatch.Draw(value, position + Main.rand.RandomPointInArea(0.2f), clip, Color.White with { A = 187 } * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, effects, 0f);
+                            Main.spriteBatch.Draw(value, position + Main.rand.RandomPointInArea(20f), clip, Color.White * 0.1f * backgroundOpacity * 5f * themBGInfo.Opacity, 0f, origin, bgScale, effects, 0f);
                         }
                     }
                 }
