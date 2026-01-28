@@ -21,10 +21,10 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
     private float _scale, _trailOpacity, _copyCounter;
     private Dictionary<NPC, byte> _hitNPCs = null!;
 
-    float ISpawnCopies.CopyDeathFrequency => 0.05f;
+    float ISpawnCopies.CopyDeathFrequency => 0.1f;
 
     public override void SetStaticDefaults() {
-        Projectile.SetTrail(2, 4);
+        Projectile.SetTrail(2, 7);
     }
 
     public override void SetDefaults() {
@@ -104,9 +104,9 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
             _trailOpacity = Helper.Approach(_trailOpacity, 1f, 0.075f);
         }
 
-        if (_trailOpacity >= 1f && _copyCounter++ % 8 == 0) {
-            CopyHandler.MakeCopy(Projectile);
-        }
+        //if (_trailOpacity >= 1f && _copyCounter++ % 8 == 0) {
+        //    CopyHandler.MakeCopy(Projectile);
+        //}
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
@@ -169,7 +169,7 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
             });
         }
 
-        //Projectile.QuickDrawShadowTrails(shadowColor * _trailOpacity, 0.5f, 1, 0f, scale: _scale);
+        Projectile.QuickDrawShadowTrails(shadowColor * _trailOpacity * 0.375f, 0.5f, 1, 0f, scale: _scale);
         Projectile.QuickDrawAnimated(shadowColor * opacity, scale: Vector2.One * _scale);
         return false;
     }
