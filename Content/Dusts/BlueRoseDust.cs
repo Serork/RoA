@@ -10,6 +10,7 @@ namespace RoA.Content.Dusts;
 sealed class BlueRoseDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
         Color shadowColor = lightColor;
+        shadowColor = shadowColor.MultiplyAlpha(0.925f);
         shadowColor = shadowColor.MultiplyAlpha(Helper.Wave(0.75f, 1f, 20f, (float)dust.customData));
 
         return shadowColor;
