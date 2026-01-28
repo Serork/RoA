@@ -56,7 +56,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
         Projectile.SetTrail(-1, 6);
 
         if (Projectile.localAI[0] == 0f) {
-            Projectile.Center -= Projectile.velocity.SafeNormalize() * -0f;
+            Projectile.Center -= Projectile.velocity.SafeNormalize() * -200f;
             Vector2 spawnPosition = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint() + new Vector2(Projectile.ai[0], Projectile.ai[1]) - Projectile.velocity.SafeNormalize() * 5f;
             var unit = Vector2.Normalize(Projectile.velocity);
             for (int i = 0; i < 4; i++)
