@@ -278,7 +278,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
                     circleOrigin = circleClip.Centered();
             circlePosition -= Main.screenPosition;
             float alpha = 0.875f * attackProgress;
-            float circleScale = 0.125f;
+            float circleScale = 0.1125f;
             circleScale *= attackProgress;
             float waveStartValue = MathHelper.Lerp(0.5f, 1f, 1f - attackProgress);
             Vector2 circleFinalScale = new(circleScale * Helper.Wave(waveStartValue, 1f, waveFrequency, 1f), circleScale * Helper.Wave(waveStartValue, 1f, waveFrequency, 2f));
