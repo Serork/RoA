@@ -191,7 +191,7 @@ sealed class BackwoodsFogHandler : ModSystem {
             float lerpValue2 = 1f - baseLerpValue ;
             //lerpValue2 = Helper.Wave(lerpValue2 * 0.3f, lerpValue2 * 0.4f, 1f, 0f);
             lerpValue2 *= 0.375f;
-            lerpValue2 += Helper.Wave(0f, baseLerpValue * 0.25f, 1f, 0f);
+            lerpValue2 += Helper.Wave(0f, baseLerpValue * 0.2f, 1f, 0f);
             Color color = Color.Lerp(Color.Gray, Color.Gray.MultiplyRGB(Main.ColorOfTheSkies),
                 lerpValue2);
 
