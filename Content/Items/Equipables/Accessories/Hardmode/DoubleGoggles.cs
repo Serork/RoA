@@ -33,7 +33,7 @@ sealed class DoubleGoggles : ModItem {
             float height = MathF.Max(100, player.height * 2f);
             Vector4 sourceRectangle = new(-width / 2f, -height / 2f, width, height);
             Vector2 size = new(width, height);
-            float aberrationPower = 0.0825f;
+            float aberrationPower = 0.08f;
             float waveFrequency = 2f;
             Vector2 point = (Vector2.One * 1f).RotatedBy(Helper.Wave(0f, MathHelper.TwoPi, waveFrequency, player.whoAmI));
             chromaticAberrationShader.Parameters["splitIntensity"].SetValue(aberrationPower);
