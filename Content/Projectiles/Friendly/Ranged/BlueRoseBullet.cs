@@ -90,7 +90,7 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
 
     public override void AI() {
         if (Main.rand.NextBool(4)) {
-            int num4 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<BlueRoseDust>(), Projectile.velocity.X * 0.4f, Projectile.velocity.Y * 0.4f, 0, default, 1.2f);
+            int num4 = Dust.NewDust(Projectile.position - Projectile.velocity.SafeNormalize() * Projectile.width * 0.75f, Projectile.width, Projectile.height, ModContent.DustType<BlueRoseDust>(), Projectile.velocity.X * 0.4f, Projectile.velocity.Y * 0.4f, 0, default, 1.2f);
             Main.dust[num4].noGravity = true;
             Main.dust[num4].velocity = -Projectile.velocity * Main.rand.NextFloat(0.25f, 0.5f);
             Main.dust[num4].customData = Main.rand.NextFloat(10f);
