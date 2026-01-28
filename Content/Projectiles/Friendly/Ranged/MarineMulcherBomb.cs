@@ -113,11 +113,11 @@ sealed class MarineMulcherBomb : ModProjectile, ISpawnCopies {
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
         if ((double)Projectile.velocity.X != (double)oldVelocity.X)
-            Projectile.velocity.X = (float)(-(double)oldVelocity.X * 0.89999997615814209);
+            Projectile.velocity.X = (float)(-(double)oldVelocity.X * 1);
         if ((double)Projectile.velocity.Y != (double)oldVelocity.Y)
-            Projectile.velocity.Y = (float)(-(double)oldVelocity.Y * 0.89999997615814209);
+            Projectile.velocity.Y = (float)(-(double)oldVelocity.Y * 1);
 
-        Projectile.ai[0] = 15f * 0.89999997615814209f;
+        Projectile.ai[0] = 15f * 1;
 
         Projectile.timeLeft -= 60;
 

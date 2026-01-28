@@ -72,7 +72,10 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
             Projectile.ai[2] = 1f;
         }
         else {
-            Projectile.velocity = -oldVelocity;
+            if ((double)Projectile.velocity.X != (double)oldVelocity.X)
+                Projectile.velocity.X = (float)(-(double)oldVelocity.X * 1);
+            if ((double)Projectile.velocity.Y != (double)oldVelocity.Y)
+                Projectile.velocity.Y = (float)(-(double)oldVelocity.Y * 1);
         }
 
         return false;
