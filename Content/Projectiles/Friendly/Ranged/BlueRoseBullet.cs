@@ -59,6 +59,8 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
+        Projectile.localAI[2]++;
+
         if (Projectile.ai[2] == 0f) {
             // This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
@@ -66,7 +68,12 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
             SoundEngine.PlaySound(SoundID.Item10 with { Pitch = -0.5f }, Projectile.Center);
         }
 
-        Projectile.ai[2] = 1f;
+        if (Projectile.localAI[2] >= 3f) {
+            Projectile.ai[2] = 1f;
+        }
+        else {
+            Projectile.velocity = -oldVelocity;
+        }
 
         return false;
     }
