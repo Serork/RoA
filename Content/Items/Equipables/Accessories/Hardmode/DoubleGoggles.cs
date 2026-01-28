@@ -29,8 +29,8 @@ sealed class DoubleGoggles : ModItem {
             orig(player, cHead, ref cdd);
 
             Effect chromaticAberrationShader = ShaderLoader.ChromaticAberrationShader.Value;
-            float width = MathF.Max(100, player.width * 2f);
-            float height = MathF.Max(100, player.height * 2f);
+            float width = MathF.Max(100, player.width * 2.25f);
+            float height = MathF.Max(100, player.height * 2.25f);
             Vector4 sourceRectangle = new(-width / 2f, -height / 2f, width, height);
             Vector2 size = new(width, height);
             float aberrationPower = 0.08f;
