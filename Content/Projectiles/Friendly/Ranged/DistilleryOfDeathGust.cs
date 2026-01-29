@@ -41,7 +41,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
 
     public static Color GetColorPerType(GustType gustType) {
         Color result = gustType switch {
-            GustType.Up => new Color(120, 200, 120),
+            GustType.Up => new Color(100, 180, 100),
             GustType.Down => new Color(255, 150, 100),
             GustType.Magnet => new Color(100, 150, 255),
             _ => new Color(240, 125, 200),
