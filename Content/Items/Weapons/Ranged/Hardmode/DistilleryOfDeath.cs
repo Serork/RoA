@@ -149,6 +149,10 @@ sealed class DistilleryOfDeath : ModItem {
                 NextGustType = player.GetCommon().DistilleryOfDeathLastShootType_Next;
                 NextNextGustType = player.GetCommon().DistilleryOfDeathLastShootType_Next_Next;
 
+                if (CurrentGustType == NextGustType) {
+                    ChangeType();
+                }
+
                 Direct();
             }
 
