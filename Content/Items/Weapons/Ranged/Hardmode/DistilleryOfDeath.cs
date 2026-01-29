@@ -168,7 +168,7 @@ sealed class DistilleryOfDeath : ModItem {
                 shootProgress = Ease.QuartOut(shootProgress);
                 float maxRotation = 0.025f * shootProgress;
                 float extraRotation = Helper.Wave(-maxRotation, maxRotation, 10f, Projectile.whoAmI);
-                _extraRotation = extraRotation;
+                _extraRotation = Utils.AngleLerp(_extraRotation, extraRotation, 0.5f);
             }
 
             if (CanShoot_Override && ShootValue++ >= useTime) {
