@@ -197,7 +197,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
         Color baseColor = GetColorPerType(CurrentGustType).MultiplyRGB(lightColor);
         float rotation = Projectile.rotation;
         float scale = 1.5f * _scale;
-        float opacity = 0.5f * Projectile.Opacity * Utils.GetLerpValue(0, 60, Projectile.timeLeft, true) * 0.6f;
+        float opacity = 0.5f * Projectile.Opacity * Utils.GetLerpValue(0, 60, Projectile.timeLeft, true) * 0.5f;
         for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
             float num12 = (TimeSystem.TimeForVisualEffects + VisualOffsetValue) % 2f / 1f * Projectile.direction;
             Color color = Main.hslToRgb((num12 + num11) % 1f, 1f, 0.5f).MultiplyRGB(baseColor);
