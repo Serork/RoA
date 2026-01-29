@@ -269,6 +269,9 @@ sealed class DistilleryOfDeath : ModItem {
 
             var pos = Projectile.Center - Main.screenPosition;
             var effects = (Projectile.spriteDirection == -1) ? Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically : Microsoft.Xna.Framework.Graphics.SpriteEffects.None;
+            if (player.gravDir < 0) {
+                effects = (Projectile.spriteDirection == -1) ? Microsoft.Xna.Framework.Graphics.SpriteEffects.None : Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically;
+            }
 
             float rotation = Projectile.rotation + _extraRotation;
             Main.EntitySpriteDraw(texture, pos, null, Projectile.GetAlpha(lightColor), rotation, texture.Frame().Left(), Projectile.scale, effects);
@@ -281,10 +284,10 @@ sealed class DistilleryOfDeath : ModItem {
                     texture = current ? _fillTexture1.Value : _fillTexture2.Value;
                     Vector2 position = Projectile.Center - Main.screenPosition;
                     if (current) {
-                        position += new Vector2(30, 10 * -player.direction).RotatedBy(rotation);
+                        position += new Vector2(30, 10 * -player.direction * player.gravDir).RotatedBy(rotation);
                     }
                     else {
-                        position += new Vector2(20, 6 * -player.direction).RotatedBy(rotation);
+                        position += new Vector2(20, 6 * -player.direction * player.gravDir).RotatedBy(rotation);
                     }
                     Rectangle clip = texture.Bounds;
                     Vector2 origin = texture.Frame().Left();
