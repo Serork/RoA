@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Content.Dusts;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -9,6 +10,7 @@ using RoA.Core.Utility.Extensions;
 using System;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
@@ -78,12 +80,43 @@ sealed class DistilleryOfDeathGust : ModProjectile {
     }
 
     public override void AI() {
-        if (Spawnvalue++ > 6f) {
+        if (CollidingValue == 0f) {
+            Projectile.position += _initialSpeed.SafeNormalize();
+        }
+
+        float num = 7f;
+        if (Spawnvalue++ > num) {
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
             _scale = Helper.Approach(_scale, 1f, 0.1f);
             if (Projectile.Opacity >= 1f) {
                 _trailOpacity = Helper.Approach(_trailOpacity, 1f, 0.075f);
             }
+        }
+        else {
+            if (Main.rand.NextFloat() < 0.25f) {
+                short num6 = (short)ModContent.DustType<DistilleryOfDeathGustDust>();
+                Color color = GetColorPerType(CurrentGustType);
+                Vector2 position = Projectile.Center + Projectile.velocity.SafeNormalize() * 48f;
+                Dust dust = Dust.NewDustDirect(position - Vector2.One * 0f + Main.rand.NextVector2Circular(60f, 60f) * 0.1f * Utils.Remap(Spawnvalue, 0f, 72f, 0.75f, 1f), 4, 4, num6, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, newColor: color);
+                if (Main.rand.Next(4) == 0) {
+                    dust.noGravity = true;
+                    dust.scale *= 3f;
+                    dust.velocity.X *= 2f;
+                    dust.velocity.Y *= 2f;
+                }
+                else {
+                    dust.scale *= 1.5f;
+                }
+
+                dust.scale *= 1.5f;
+                dust.velocity *= 2f;
+                dust.velocity += Projectile.velocity * 1f * Utils.Remap(Spawnvalue, 0f, (float)num * 0.75f, 1f, 0.1f) * Utils.Remap(Spawnvalue, 0f, (float)num * 0.1f, 0.1f, 1f);
+                dust.customData = GustTypeValue;
+
+                dust.scale *= 0.625f;
+                dust.velocity *= 1.5f;
+            }
+            return;
         }
 
         if (VisualOffsetValue == 0f) {
@@ -135,10 +168,6 @@ sealed class DistilleryOfDeathGust : ModProjectile {
         }
 
         Projectile.OffsetTheSameProjectile(0.1f);
-
-        if (CollidingValue == 0f) {
-            Projectile.position += _initialSpeed.SafeNormalize();
-        }
 
         Projectile.rotation += (Math.Abs(Projectile.velocity.X) + Math.Abs(Projectile.velocity.Y)) * 0.005f * (float)Projectile.direction;
     }

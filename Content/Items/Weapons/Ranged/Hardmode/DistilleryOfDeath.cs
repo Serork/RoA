@@ -93,7 +93,7 @@ sealed class DistilleryOfDeath : ModItem {
         public float ShootProgress => !CanShoot_Override ? 1f : ShootValue / SHOOTCOUNTPERTYPE;
         public float ShootProgress2 => !CanShoot_Override ? 1f : (float)Projectile.GetOwnerAsPlayer().GetCommon().DistilleryOfDeathShootCount / SHOOTCOUNTPERTYPE;
         public float ShootProgress3 => (float)Projectile.GetOwnerAsPlayer().GetCommon().DistilleryOfDeathShootCount / SHOOTCOUNTPERTYPE;
-        public float DelayProgress => DelayValue / _delay;
+        public float DelayProgress => 1f - Utils.GetLerpValue(0.5f, 0f, DelayValue / _delay, true);
 
         public override void SetStaticDefaults() {
             if (Main.dedServ) {
@@ -113,11 +113,6 @@ sealed class DistilleryOfDeath : ModItem {
         }
 
         public override void AI() {
-            float shootProgress = 1f - ShootProgress2;
-            float maxRotation = 0.025f * shootProgress;
-            float extraRotation = Helper.Wave(-maxRotation, maxRotation, 10f, Projectile.whoAmI);
-            _extraRotation = 0f;
-
             int owner = Projectile.owner;
             Player player = Main.player[owner];
 
@@ -167,6 +162,15 @@ sealed class DistilleryOfDeath : ModItem {
                 Main.player[owner].ChangeDir(-1);
 
             int useTime = player.itemAnimationMax;
+
+            if (ShootCount > 0 && CanShoot_Override) {
+                float shootProgress = 1f - ShootProgress2;
+                shootProgress = Ease.QuartOut(shootProgress);
+                float maxRotation = 0.025f * shootProgress;
+                float extraRotation = Helper.Wave(-maxRotation, maxRotation, 10f, Projectile.whoAmI);
+                _extraRotation = extraRotation;
+            }
+
             if (CanShoot_Override && ShootValue++ >= useTime) {
                 ShootValue = 0;
 
@@ -178,6 +182,7 @@ sealed class DistilleryOfDeath : ModItem {
                     Vector2 velocity2 = Projectile.velocity;
                     Vector2 position2 = Projectile.Center + Vector2.UnitX.RotatedBy(Projectile.rotation + _extraRotation) * 5f;
                     position2 -= velocity.TurnLeft().SafeNormalize() * 2f * -player.direction * player.gravDir;
+                    velocity2 = velocity2.RotatedBy(MathHelper.PiOver4 * 0.075f * Main.rand.NextFloatDirection());
                     ProjectileUtils.SpawnPlayerOwnedProjectile<DistilleryOfDeathGust>(new ProjectileUtils.SpawnProjectileArgs(player, Projectile.GetSource_ReleaseEntity()) {
                         Position = position2,
                         Velocity = velocity2,
@@ -194,7 +199,7 @@ sealed class DistilleryOfDeath : ModItem {
 
                     player.GetCommon().DistilleryOfDeathShootCount = 0;
 
-                    DelayValue = _delay = useTime * 3;
+                    DelayValue = _delay = useTime * 5;
 
                     ChangeType();
                 }
@@ -211,6 +216,17 @@ sealed class DistilleryOfDeath : ModItem {
             Projectile.Center = Utils.Floor(Projectile.Center);
             Projectile.position -= velocity.SafeNormalize() * 12f;
             Projectile.position -= velocity.TurnLeft().SafeNormalize() * 4f * -player.direction * player.gravDir;
+
+            Vector2 position = Projectile.Center + Projectile.velocity.SafeNormalize() * 60f - velocity.TurnLeft().SafeNormalize() * 2f * -player.direction * player.gravDir;
+            if (Main.rand.NextChance(DelayProgress)) {
+                if (Main.rand.NextBool(5)) {
+                    Dust.NewDustPerfect(position + Main.rand.RandomPointInArea(4f), ModContent.DustType<Dusts.Smoke2>(),
+                        Vector2.UnitY * -2f + Projectile.rotation.ToRotationVector2() * Main.rand.NextFloat(1f, 2f),
+                        0,
+                        Color.Lerp(Color.Black, Color.Brown, 0.25f) * 0.15f,
+                        Main.rand.NextFloat(0.4f, 0.6f));
+                }
+            }
         }
 
         private void ChangeType() {
