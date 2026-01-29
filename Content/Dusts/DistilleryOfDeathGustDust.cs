@@ -17,6 +17,7 @@ sealed class DistilleryOfDeathGustDust : ModDust {
         dust.velocity.Y = (float)Main.rand.Next(-10, 6) * 0.1f;
         dust.velocity.X *= 0.3f;
         dust.scale *= 0.7f;
+        dust.position -= Vector2.One;
     }
 
     public override bool Update(Dust dust) {
@@ -60,8 +61,8 @@ sealed class DistilleryOfDeathGustDust : ModDust {
         Color lightColor = Lighting.GetColor(dust.position.ToTileCoordinates());
         Color baseColor = DistilleryOfDeathGust.GetColorPerType((DistilleryOfDeathGust.GustType)(float)dust.customData).MultiplyRGB(lightColor);
         float rotation = dust.rotation;
-        float scale = 1f * MathF.Max(0.5f, dust.scale);
-        float opacity = 0.5f * 1f * Utils.GetLerpValue(0.25f, 1f, dust.scale, true);
+        float scale = 1f * MathF.Max(0.75f, dust.scale);
+        float opacity = 0.5f * Utils.GetLerpValue(0.25f, 1f, dust.scale, true);
         for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
             float num12 = (TimeSystem.TimeForVisualEffects) % 2f / 1f;
             Color color = Main.hslToRgb((num12 + num11) % 1f, 1f, 0.5f).MultiplyRGB(baseColor);
