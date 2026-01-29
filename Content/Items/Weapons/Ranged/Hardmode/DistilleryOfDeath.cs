@@ -177,7 +177,7 @@ sealed class DistilleryOfDeath : ModItem {
                 if (player.IsLocal()) {
                     Vector2 velocity2 = Projectile.velocity;
                     Vector2 position2 = Projectile.Center + Vector2.UnitX.RotatedBy(Projectile.rotation + _extraRotation) * 5f;
-                    position2 -= velocity.TurnLeft().SafeNormalize() * 2f * -player.direction;
+                    position2 -= velocity.TurnLeft().SafeNormalize() * 2f * -player.direction * player.gravDir;
                     ProjectileUtils.SpawnPlayerOwnedProjectile<DistilleryOfDeathGust>(new ProjectileUtils.SpawnProjectileArgs(player, Projectile.GetSource_ReleaseEntity()) {
                         Position = position2,
                         Velocity = velocity2,
@@ -208,7 +208,7 @@ sealed class DistilleryOfDeath : ModItem {
             Projectile.position.Y = vector21.Y - (float)(Projectile.height / 2);
             Projectile.Center = Utils.Floor(Projectile.Center);
             Projectile.position -= velocity.SafeNormalize() * 12f;
-            Projectile.position -= velocity.TurnLeft().SafeNormalize() * 4f * -player.direction;
+            Projectile.position -= velocity.TurnLeft().SafeNormalize() * 4f * -player.direction * player.gravDir;
         }
 
         private void ChangeType() {

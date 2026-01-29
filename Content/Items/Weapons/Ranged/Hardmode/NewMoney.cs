@@ -57,7 +57,7 @@ sealed class NewMoney : ModItem {
         if (type == ProjectileID.Bullet) {
             type = ModContent.ProjectileType<NewMoneyBullet>();
         }
-        position -= velocity.TurnLeft().SafeNormalize() * 6.5f * -player.direction;
+        position -= velocity.TurnLeft().SafeNormalize() * 6.5f * -player.direction * player.gravDir;
         Projectile.NewProjectile(source, position.X, position.Y, num50, num51, type, damage, knockback, player.whoAmI);
 
         return false;
