@@ -123,6 +123,7 @@ sealed class ShaderLoader : ModSystem {
         private static float _min = 0f;
         private static float _max = 1f;
         private static Color _drawColor;
+        private static bool _fromDown = true;
 
         public static float Progress {
             get => _progress;
@@ -154,7 +155,21 @@ sealed class ShaderLoader : ModSystem {
             set => Effect?.Parameters["drawColor"].SetValue((_drawColor = value).ToVector4());
         }
 
+        public static bool FromDown {
+            get => _fromDown;
+            set => Effect?.Parameters["fromDown"].SetValue(_fromDown = value);
+        }
+
         public static Effect? Effect => _loadedShaders["VerticalAppearance"].Value;
+
+        public static void Reset() {
+            FromDown = true;
+            DrawColor = Color.White;
+            Min = 0f;
+            Max = 1f;
+            Size = Size2 = 0f;
+            Progress = 0f;
+        }
     }
 
     public static void Apply(SpriteBatch batch, Effect? effect, Action draw) {

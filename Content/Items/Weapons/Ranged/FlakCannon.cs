@@ -26,6 +26,7 @@ sealed class FlakCannon : RangedWeaponWithCustomAmmo {
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         position -= velocity.TurnLeft().SafeNormalize() * 4f * -player.direction;
+        velocity = position.DirectionTo(player.GetViableMousePosition()) * velocity.Length();
     }
 
     public override Vector2? HoldoutOffset() => new Vector2(6f, 0f);

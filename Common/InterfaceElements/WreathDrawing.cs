@@ -172,6 +172,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
         SpriteData wreathSpriteData2 = wreathSpriteData.Framed(x, y);
         int frameOffsetY = 0;
         int frameHeight = wreathSpriteData2.FrameHeight + frameOffsetY;
+        VerticalAppearanceShader.Reset();
         VerticalAppearanceShader.Min = 0.5f;
         bool soulOfTheWoods = stats.SoulOfTheWoods;
         VerticalAppearanceShader.Size2 = 0.025f * (1f - Utils.GetLerpValue(0.8f, 1f, progress, true));
