@@ -50,7 +50,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
     }
 
     public override void SetDefaults() {
-        Projectile.SetSizeValues(20);
+        Projectile.SetSizeValues(30);
 
         Projectile.aiStyle = -1;
         Projectile.tileCollide = false;
@@ -112,7 +112,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
                 break;
         }
 
-        Projectile.OffsetTheSameProjectile(0.1f);
+        Projectile.OffsetTheSameProjectile(0.05f);
 
         Projectile.position += _initialSpeed.SafeNormalize();
 
