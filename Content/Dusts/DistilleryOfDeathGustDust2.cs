@@ -34,7 +34,8 @@ sealed class DistilleryOfDeathGustDust2 : ModDust, IDrawDustPreProjectiles {
         dust.alpha += 10;
         if (dust.alpha >= 250) dust.active = false;
 
-        dust.rotation += dust.velocity.X * 0.1f;
+        int direction = (dust.velocity.X + dust.velocity.Y).GetDirection();
+        dust.rotation += dust.velocity.Length() * 0.05f * direction;
 
         return false;
     }

@@ -37,7 +37,8 @@ sealed class ToxicFumes : ModDust {
         dust.alpha += 3;
         if (dust.alpha >= 250) dust.active = false;
 
-        dust.rotation += dust.velocity.X * 0.005f;
+        int direction = (dust.velocity.X + dust.velocity.Y).GetDirection();
+        dust.rotation += dust.velocity.Length() * 0.0025f * direction;
 
         return false;
     }
