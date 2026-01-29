@@ -2810,3 +2810,8 @@ BlueRose: {
 	// DisplayName: Blue Rose
 	// Tooltip: ""
 }
+
+DistilleryOfDeath: {
+	// DisplayName: Distillery Of Death
+	// Tooltip: ""
+}
