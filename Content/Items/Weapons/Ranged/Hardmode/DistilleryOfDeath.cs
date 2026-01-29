@@ -137,7 +137,7 @@ sealed class DistilleryOfDeath : ModItem {
                 if (Main.player[owner].channel) {
 
                 }
-                else {
+                else if (CanShoot_Override) {
                     _killNextFrame = true;
 
                     if (player.GetCommon().DistilleryOfDeathShootCount >= shootCount) {
@@ -199,6 +199,8 @@ sealed class DistilleryOfDeath : ModItem {
                     ChangeType();
                 }
             }
+
+            player.SetDummyItemTime(2);
 
             Projectile.spriteDirection = Projectile.direction;
             Main.player[owner].ChangeDir(Projectile.direction);
