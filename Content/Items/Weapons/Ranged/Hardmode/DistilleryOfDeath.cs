@@ -148,9 +148,12 @@ sealed class DistilleryOfDeath : ModItem {
 
                     DelayValue = useTime * 3;
 
-                    CurrentGustType++;
-                    if (CurrentGustType >= GustType.Count) {
-                        CurrentGustType = 0;
+                    if (player.IsLocal()) {
+                        var previous = CurrentGustType;
+                        while (CurrentGustType == previous) {
+                            CurrentGustType = Main.rand.GetRandomEnumValue<GustType>(1);
+                        }
+                        Projectile.netUpdate = true;
                     }
                 }
             }
