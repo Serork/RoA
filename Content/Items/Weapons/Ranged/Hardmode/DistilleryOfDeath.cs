@@ -223,8 +223,8 @@ sealed class DistilleryOfDeath : ModItem {
                     Dust.NewDustPerfect(position + Main.rand.RandomPointInArea(4f), ModContent.DustType<Dusts.Smoke2>(),
                         Vector2.UnitY * -2f + Projectile.rotation.ToRotationVector2() * Main.rand.NextFloat(1f, 2f),
                         0,
-                        Color.Lerp(Color.Black, Color.Brown, 0.25f) * 0.15f,
-                        Main.rand.NextFloat(0.4f, 0.6f));
+                        Color.Lerp(Color.Black, Color.Brown, 0.25f) * 0.125f,
+                        Main.rand.NextFloat(0.4f, 0.6f) * 1.25f);
                 }
             }
         }
