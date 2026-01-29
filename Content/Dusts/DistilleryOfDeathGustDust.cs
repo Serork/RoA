@@ -17,7 +17,6 @@ sealed class DistilleryOfDeathGustDust : ModDust {
         dust.velocity.Y = (float)Main.rand.Next(-10, 6) * 0.1f;
         dust.velocity.X *= 0.3f;
         dust.scale *= 0.7f;
-        dust.position -= Vector2.One;
     }
 
     public override bool Update(Dust dust) {
