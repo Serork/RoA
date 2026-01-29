@@ -146,7 +146,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsBrawlerMaskEffectActive;
     public HashSet<(int, int)> BeforeHitActiveDebuffs = [];
 
-    public DistilleryOfDeathGust.GustType DistilleryOfDeathLastShootType_Current, DistilleryOfDeathLastShootType_Next;
+    public DistilleryOfDeathGust.GustType DistilleryOfDeathLastShootType_Current, DistilleryOfDeathLastShootType_Next, DistilleryOfDeathLastShootType_Next_Next;
     public byte DistilleryOfDeathShootCount;
 
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;

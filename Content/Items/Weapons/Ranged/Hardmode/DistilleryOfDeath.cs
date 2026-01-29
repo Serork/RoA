@@ -121,6 +121,7 @@ sealed class DistilleryOfDeath : ModItem {
 
                 player.GetCommon().DistilleryOfDeathLastShootType_Current = CurrentGustType;
                 player.GetCommon().DistilleryOfDeathLastShootType_Next = NextGustType;
+                player.GetCommon().DistilleryOfDeathLastShootType_Next_Next = NextNextGustType;
             }
 
             int shootCount = SHOOTCOUNTPERTYPE;
@@ -146,6 +147,7 @@ sealed class DistilleryOfDeath : ModItem {
 
                 CurrentGustType = player.GetCommon().DistilleryOfDeathLastShootType_Current;
                 NextGustType = player.GetCommon().DistilleryOfDeathLastShootType_Next;
+                NextNextGustType = player.GetCommon().DistilleryOfDeathLastShootType_Next_Next;
 
                 Direct();
             }
@@ -236,7 +238,8 @@ sealed class DistilleryOfDeath : ModItem {
                 CurrentGustType = NextGustType;
                 NextGustType = NextNextGustType;
                 NextNextGustType = Main.rand.GetRandomEnumValue<GustType>(1);
-                while (NextGustType == NextNextGustType) {
+                while (NextNextGustType == NextGustType ||
+                       NextNextGustType == CurrentGustType) {
                     NextNextGustType = Main.rand.GetRandomEnumValue<GustType>(1);
                 }
                 Projectile.netUpdate = true;
