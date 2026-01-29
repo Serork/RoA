@@ -23,6 +23,7 @@ using Terraria.ModLoader;
 
 using static RoA.Common.ShaderLoader;
 using static RoA.Content.Projectiles.Friendly.Ranged.DistilleryOfDeathGust;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RoA.Content.Items.Weapons.Ranged.Hardmode;
 
@@ -41,6 +42,8 @@ sealed class DistilleryOfDeath : ModItem {
         Item.noMelee = true;
         Item.channel = true;
     }
+
+    public override bool CanConsumeAmmo(Item ammo, Player player) => player.ownedProjectileCounts[Item.shoot] >= 1;
 
     //public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
     //    position -= velocity.TurnLeft().SafeNormalize() * 9f * -player.direction;
@@ -236,6 +239,10 @@ sealed class DistilleryOfDeath : ModItem {
         private void ChangeType() {
             int owner = Projectile.owner;
             Player player = Main.player[owner];
+
+            Item sItem = player.GetSelectedItem();
+            player.PickAmmo(sItem, out int projToShoot, out float speed, out int damage, out float knockBack, out int usedAmmoItemID);
+
             if (player.IsLocal()) {
                 CurrentGustType = NextGustType;
                 NextGustType = NextNextGustType;
