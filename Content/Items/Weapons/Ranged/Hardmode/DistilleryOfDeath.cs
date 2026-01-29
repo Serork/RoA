@@ -263,6 +263,10 @@ sealed class DistilleryOfDeath : ModItem {
         }
 
         public override bool PreDraw(ref Color lightColor) {
+            if (SpawnValue == 0f) {
+                return false;
+            }
+
             var texture = TextureAssets.Projectile[Type].Value;
 
             Player player = Projectile.GetOwnerAsPlayer();
