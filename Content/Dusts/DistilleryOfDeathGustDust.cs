@@ -6,12 +6,12 @@ using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core.Utility;
 
 using System;
-using System.ComponentModel;
 
 using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
+
 sealed class DistilleryOfDeathGustDust : ModDust {
     public override void OnSpawn(Dust dust) {
         dust.velocity.Y = (float)Main.rand.Next(-10, 6) * 0.1f;
