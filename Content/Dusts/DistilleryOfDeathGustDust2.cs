@@ -37,7 +37,7 @@ sealed class DistilleryOfDeathGustDust2_2 : ModDust {
         if (dust.alpha >= 250) dust.active = false;
 
         int direction = (dust.velocity.X + dust.velocity.Y).GetDirection();
-        dust.rotation += dust.velocity.Length() * 0.05f * direction;
+        dust.rotation += dust.velocity.Length() * 0.0375f * direction;
 
         Projectile projectile = ((DistilleryOfDeathGust)dust.customData).Projectile;
         dust.position += dust.position.DirectionTo(projectile.position);
@@ -55,7 +55,7 @@ sealed class DistilleryOfDeathGustDust2_2 : ModDust {
         Color lightColor = Lighting.GetColor(dust.position.ToTileCoordinates());
         Color baseColor = DistilleryOfDeathGust.GetColorPerType((DistilleryOfDeathGust.GustType)((DistilleryOfDeathGust)dust.customData).CurrentGustType).MultiplyRGB(lightColor);
         float rotation = dust.rotation;
-        float scale = 1f * MathF.Max(0.75f, dust.scale);
+        float scale = 1.25f * MathF.Max(0.75f, dust.scale);
         float opacity = 0.5f * (1f - dust.alpha / 255f) * 1f * dust.fadeIn * 0.625f;
         for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
             float num12 = (TimeSystem.TimeForVisualEffects) % 2f / 1f;
@@ -99,7 +99,7 @@ sealed class DistilleryOfDeathGustDust2 : ModDust, IDrawDustPreProjectiles {
         if (dust.alpha >= 250) dust.active = false;
 
         int direction = (dust.velocity.X + dust.velocity.Y).GetDirection();
-        dust.rotation += dust.velocity.Length() * 0.05f * direction;
+        dust.rotation += dust.velocity.Length() * 0.0375f * direction;
 
         Projectile projectile = ((DistilleryOfDeathGust)dust.customData).Projectile;
         dust.position += dust.position.DirectionTo(projectile.position);
@@ -117,7 +117,7 @@ sealed class DistilleryOfDeathGustDust2 : ModDust, IDrawDustPreProjectiles {
         Color lightColor = Lighting.GetColor(dust.position.ToTileCoordinates());
         Color baseColor = DistilleryOfDeathGust.GetColorPerType((DistilleryOfDeathGust.GustType)((DistilleryOfDeathGust)dust.customData).CurrentGustType).MultiplyRGB(lightColor);
         float rotation = dust.rotation;
-        float scale = 1f * MathF.Max(0.75f, dust.scale);
+        float scale = 1.25f * MathF.Max(0.75f, dust.scale);
         float opacity = 0.5f * (1f - dust.alpha / 255f) * 1f * dust.fadeIn * 0.625f;
         for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
             float num12 = (TimeSystem.TimeForVisualEffects) % 2f / 1f;

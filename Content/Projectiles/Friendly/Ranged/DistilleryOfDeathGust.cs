@@ -196,7 +196,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
         SpriteEffects flip = SpriteEffects.None;
         Color baseColor = GetColorPerType(CurrentGustType).MultiplyRGB(lightColor);
         float rotation = Projectile.rotation;
-        float scale = 1f * _scale;
+        float scale = 1.25f * _scale;
         float opacity = 0.5f * Projectile.Opacity * Utils.GetLerpValue(0, 60, Projectile.timeLeft, true);
         for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
             float num12 = (TimeSystem.TimeForVisualEffects + VisualOffsetValue) % 2f / 1f * Projectile.direction;
