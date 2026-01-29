@@ -42,6 +42,8 @@ sealed class DistilleryOfDeath : ModItem {
     private class DistilleryOfDeath_UseProjectile : ModProjectile {
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<DistilleryOfDeath>()).Texture;
 
+        private bool _killNextFrame;
+
         public ref float ShootValue => ref Projectile.localAI[0];
         public ref float SpawnValue => ref Projectile.localAI[1];
 
@@ -66,6 +68,14 @@ sealed class DistilleryOfDeath : ModItem {
 
         public override void AI() {
             int owner = Projectile.owner;
+            Player player = Main.player[owner];
+
+            if (_killNextFrame) {
+                Projectile.Kill();
+
+                player.GetCommon().DistilleryOfDeathLastShootType = CurrentGustType;
+            }
+
             float scale = Projectile.scale;
             ref Vector2 velocity = ref Projectile.velocity;
             Vector2 vector21 = Main.player[owner].GetPlayerCorePoint();
@@ -90,11 +100,17 @@ sealed class DistilleryOfDeath : ModItem {
                     velocity.Y = num180;
                 }
                 else {
-                    Projectile.Kill();
+                    _killNextFrame = true;
+
+                    if (player.IsLocal()) {
+                        var previous = CurrentGustType;
+                        while (CurrentGustType == previous) {
+                            CurrentGustType = Main.rand.GetRandomEnumValue<GustType>(1);
+                        }
+                        Projectile.netUpdate = true;
+                    }
                 }
             }
-
-            Player player = Main.player[owner];
 
             if (SpawnValue == 0f) {
                 SpawnValue = 1f;

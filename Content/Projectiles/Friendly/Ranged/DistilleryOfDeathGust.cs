@@ -22,6 +22,8 @@ sealed class DistilleryOfDeathGust : ModProjectile {
         Count
     }
 
+    private Vector2 _initialSpeed;
+
     public ref float GustTypeValue => ref Projectile.ai[0];
     public ref float VisualOffsetValue => ref Projectile.localAI[0];
 
@@ -29,8 +31,6 @@ sealed class DistilleryOfDeathGust : ModProjectile {
         get => (GustType)GustTypeValue;
         set => GustTypeValue = (float)value;
     }
-
-    private Vector2 _initialSpeed;
 
     public Color GetColorPerType() {
         Color result = CurrentGustType switch {
