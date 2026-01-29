@@ -61,7 +61,7 @@ sealed class DistilleryOfDeathGustDust : ModDust {
         Color baseColor = DistilleryOfDeathGust.GetColorPerType((DistilleryOfDeathGust.GustType)(float)dust.customData).MultiplyRGB(lightColor);
         float rotation = dust.rotation;
         float scale = 1f * MathF.Max(0.75f, dust.scale);
-        float opacity = 0.5f * Utils.GetLerpValue(0.25f, 1f, dust.scale, true);
+        float opacity = 0.5f * Utils.GetLerpValue(0.25f, 1f, dust.scale, true) * 0.75f;
         for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
             float num12 = (TimeSystem.TimeForVisualEffects) % 2f / 1f;
             Color color = Main.hslToRgb((num12 + num11) % 1f, 1f, 0.5f).MultiplyRGB(baseColor);

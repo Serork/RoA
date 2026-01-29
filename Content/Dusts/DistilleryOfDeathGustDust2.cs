@@ -55,8 +55,8 @@ sealed class DistilleryOfDeathGustDust2_2 : ModDust {
         Color lightColor = Lighting.GetColor(dust.position.ToTileCoordinates());
         Color baseColor = DistilleryOfDeathGust.GetColorPerType((DistilleryOfDeathGust.GustType)((DistilleryOfDeathGust)dust.customData).CurrentGustType).MultiplyRGB(lightColor);
         float rotation = dust.rotation;
-        float scale = 1.25f * MathF.Max(0.75f, dust.scale);
-        float opacity = 0.5f * (1f - dust.alpha / 255f) * 1f * dust.fadeIn * 0.625f;
+        float scale = 1.5f * MathF.Max(0.75f, dust.scale);
+        float opacity = 0.5f * (1f - dust.alpha / 255f) * 1f * dust.fadeIn * 0.625f * 0.75f;
         for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
             float num12 = (TimeSystem.TimeForVisualEffects) % 2f / 1f;
             Color color = Main.hslToRgb((num12 + num11) % 1f, 1f, 0.5f).MultiplyRGB(baseColor);
@@ -117,8 +117,8 @@ sealed class DistilleryOfDeathGustDust2 : ModDust, IDrawDustPreProjectiles {
         Color lightColor = Lighting.GetColor(dust.position.ToTileCoordinates());
         Color baseColor = DistilleryOfDeathGust.GetColorPerType((DistilleryOfDeathGust.GustType)((DistilleryOfDeathGust)dust.customData).CurrentGustType).MultiplyRGB(lightColor);
         float rotation = dust.rotation;
-        float scale = 1.25f * MathF.Max(0.75f, dust.scale);
-        float opacity = 0.5f * (1f - dust.alpha / 255f) * 1f * dust.fadeIn * 0.625f;
+        float scale = 1.5f * MathF.Max(0.75f, dust.scale);
+        float opacity = 0.5f * (1f - dust.alpha / 255f) * 1f * dust.fadeIn * 0.625f * 0.8f;
         for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
             float num12 = (TimeSystem.TimeForVisualEffects) % 2f / 1f;
             Color color = Main.hslToRgb((num12 + num11) % 1f, 1f, 0.5f).MultiplyRGB(baseColor);
