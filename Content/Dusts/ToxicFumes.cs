@@ -36,6 +36,9 @@ sealed class ToxicFumes : ModDust {
         dust.velocity *= 0.97f;
         dust.alpha += 3;
         if (dust.alpha >= 250) dust.active = false;
+
+        dust.rotation += dust.velocity.X * 0.005f;
+
         return false;
     }
 }

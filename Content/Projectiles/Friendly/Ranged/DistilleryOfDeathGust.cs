@@ -10,7 +10,6 @@ using RoA.Core.Utility.Extensions;
 using System;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
@@ -84,6 +83,17 @@ sealed class DistilleryOfDeathGust : ModProjectile {
             Projectile.position += _initialSpeed.SafeNormalize();
         }
 
+        if (Projectile.timeLeft % 5 == 0) {
+            int num67 = Dust.NewDust(Projectile.Center, 0, 0, ModContent.DustType<Dusts.DistilleryOfDeathGustDust2>(), 0f, 0f);
+            Main.dust[num67].position = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width) * 0.25f;
+            Main.dust[num67].noGravity = true;
+            Main.dust[num67].fadeIn = _scale * Projectile.Opacity;
+            Main.dust[num67].velocity *= 0.25f;
+            Main.dust[num67].velocity += Projectile.velocity * 0.25f;
+            Main.dust[num67].customData = GustTypeValue;
+            Main.dust[num67].scale *= _scale;
+        }
+
         float num = 7f;
         if (Spawnvalue++ > num) {
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
@@ -93,7 +103,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
             }
         }
         else {
-            if (Main.rand.NextFloat() < 0.25f) {
+            if (Main.rand.NextFloat() < 0.375f) {
                 short num6 = (short)ModContent.DustType<DistilleryOfDeathGustDust>();
                 Color color = GetColorPerType(CurrentGustType);
                 Vector2 position = Projectile.Center + Projectile.velocity.SafeNormalize() * 48f;
@@ -123,6 +133,8 @@ sealed class DistilleryOfDeathGust : ModProjectile {
 
         if (VisualOffsetValue == 0f) {
             VisualOffsetValue = Main.rand.NextFloat(0.1f, 10f);
+
+            Projectile.frame = Main.rand.Next(3);
 
             _initialSpeed = Projectile.velocity;
         }
@@ -193,6 +205,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
             for (int j = 0; j < 2; j++) {
                 for (int k = 0; k < 2; k++) {
                     Vector2 drawPosition = position + ((num12 + num11) * ((float)Math.PI * 2f)).ToRotationVector2() * 4f;
+                    clip = Utils.Frame(texture, 1, Projectile.GetFrameCount(), frameY: (int)((Projectile.frame + VisualOffsetValue) % 3));
                     batch.Draw(texture, drawPosition, clip, Color.Lerp(baseColor, color, 0.5f) * opacity, rotation, origin, scale, flip, 0f);
                 }
             }
