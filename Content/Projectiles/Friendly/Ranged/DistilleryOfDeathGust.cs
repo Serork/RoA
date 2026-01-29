@@ -95,6 +95,8 @@ sealed class DistilleryOfDeathGust : ModProjectile {
         float ySpeed = 0.05f;
         Projectile projectile = Projectile;
         int width = 100;
+        float minDistance = 50f;
+        float inertiaValue = 200f, extraInertiaValue = inertiaValue * 5;
         switch (CurrentGustType) {
             case GustType.Up:
                 Projectile.velocity.Y -= ySpeed;
@@ -109,11 +111,9 @@ sealed class DistilleryOfDeathGust : ModProjectile {
             case GustType.Magnet:
                 for (int i = 0; i < Main.projectile.Length; i++) {
                     Projectile projectile2 = Main.projectile[i];
-                    if (i != projectile.whoAmI && projectile2.active && projectile2.type == projectile.type && Math.Abs(projectile.position.X - projectile2.position.X) + Math.Abs(projectile.position.Y - projectile2.position.Y) < width) {
+                    if (i != projectile.whoAmI && projectile2.active && projectile.ai[0] == projectile2.ai[0] && projectile2.type == projectile.type && Math.Abs(projectile.position.X - projectile2.position.X) + Math.Abs(projectile.position.Y - projectile2.position.Y) < width) {
                         Vector2 destination = projectile2.Center;
                         float distanceToDestination = Vector2.Distance(Projectile.position, destination);
-                        float minDistance = 100f;
-                        float inertiaValue = 200f, extraInertiaValue = inertiaValue * 5;
                         float extraInertiaFactor = 1f - MathUtils.Clamp01(distanceToDestination / minDistance);
                         float inertia = inertiaValue + extraInertiaValue * extraInertiaFactor;
                         Helper.InertiaMoveTowards(ref Projectile.velocity, Projectile.position, destination, inertia: inertia);
@@ -123,11 +123,9 @@ sealed class DistilleryOfDeathGust : ModProjectile {
             case GustType.Push:
                 for (int i = 0; i < Main.projectile.Length; i++) {
                     Projectile projectile2 = Main.projectile[i];
-                    if (i != projectile.whoAmI && projectile2.active && projectile2.type == projectile.type && Math.Abs(projectile.position.X - projectile2.position.X) + Math.Abs(projectile.position.Y - projectile2.position.Y) < width * 2) {
+                    if (i != projectile.whoAmI && projectile2.active && projectile.ai[0] == projectile2.ai[0] && projectile2.type == projectile.type && Math.Abs(projectile.position.X - projectile2.position.X) + Math.Abs(projectile.position.Y - projectile2.position.Y) < width * 2) {
                         Vector2 destination = projectile2.Center;
                         float distanceToDestination = Vector2.Distance(Projectile.position, destination);
-                        float minDistance = 100f;
-                        float inertiaValue = 200f, extraInertiaValue = inertiaValue * 5;
                         float extraInertiaFactor = 1f - MathUtils.Clamp01(distanceToDestination / minDistance);
                         float inertia = inertiaValue + extraInertiaValue * extraInertiaFactor;
                         Helper.InertiaMoveAway(ref Projectile.velocity, Projectile.position, destination, inertia: inertia);
@@ -136,7 +134,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
                 break;
         }
 
-        Projectile.OffsetTheSameProjectile(0.05f);
+        Projectile.OffsetTheSameProjectile(0.1f);
 
         if (CollidingValue == 0f) {
             Projectile.position += _initialSpeed.SafeNormalize();
