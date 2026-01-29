@@ -170,7 +170,7 @@ sealed class DistilleryOfDeath : ModItem {
                 shootProgress = Ease.QuartOut(shootProgress);
                 float maxRotation = 0.025f * shootProgress;
                 float extraRotation = Helper.Wave(-maxRotation, maxRotation, 10f, Projectile.whoAmI);
-                _extraRotation = Utils.AngleLerp(_extraRotation, extraRotation, 0.5f);
+                _extraRotation = Utils.AngleLerp(_extraRotation, extraRotation, 0.25f);
             }
 
             if (CanShoot_Override && ShootValue++ >= useTime) {
@@ -225,8 +225,8 @@ sealed class DistilleryOfDeath : ModItem {
                     Dust.NewDustPerfect(position + Main.rand.RandomPointInArea(4f), ModContent.DustType<Dusts.Smoke2>(),
                         Vector2.UnitY * -2f + Projectile.rotation.ToRotationVector2() * Main.rand.NextFloat(1f, 2f),
                         0,
-                        Color.Lerp(Color.Black, Color.Brown, 0.25f) * 0.1f,
-                        Main.rand.NextFloat(0.4f, 0.6f) * 1.1f);
+                        Color.Lerp(Color.Black, Color.Brown, 0.5f * Main.rand.NextFloat()) * 0.125f,
+                        Main.rand.NextFloat(0.4f, 0.6f) * 1f);
                 }
             }
         }
