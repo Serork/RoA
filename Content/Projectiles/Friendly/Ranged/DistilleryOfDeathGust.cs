@@ -83,14 +83,15 @@ sealed class DistilleryOfDeathGust : ModProjectile {
             Projectile.position += _initialSpeed.SafeNormalize();
         }
 
-        if (Projectile.timeLeft % 5 == 0) {
-            int num67 = Dust.NewDust(Projectile.Center, 0, 0, ModContent.DustType<Dusts.DistilleryOfDeathGustDust2>(), 0f, 0f);
-            Main.dust[num67].position = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width) * 0.25f;
+        if (Projectile.timeLeft > 20 && Projectile.timeLeft % 4 == 0) {
+            int num67 = Dust.NewDust(Projectile.Center, 0, 0, !Main.rand.NextBool(2) ? ModContent.DustType<Dusts.DistilleryOfDeathGustDust2_2>() : ModContent.DustType<Dusts.DistilleryOfDeathGustDust2>(), 0f, 0f);
+            Main.dust[num67].position = Projectile.Center + Main.rand.RandomPointInArea(Projectile.width) * 0.25f + Projectile.velocity * 0.5f;
             Main.dust[num67].noGravity = true;
             Main.dust[num67].fadeIn = _scale * Projectile.Opacity;
             Main.dust[num67].velocity *= 0.25f;
-            Main.dust[num67].velocity += Projectile.velocity * 0.25f;
-            Main.dust[num67].customData = GustTypeValue;
+            Main.dust[num67].velocity += Projectile.velocity * Main.rand.NextFloat(0.5f, 1.5f);
+            Main.dust[num67].customData = Projectile.As<DistilleryOfDeathGust>();
+            Main.dust[num67].scale *= Main.rand.NextFloat(0.875f, 1.375f);
             Main.dust[num67].scale *= _scale;
         }
 
@@ -204,7 +205,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
             color *= 0.5f;
             for (int j = 0; j < 2; j++) {
                 for (int k = 0; k < 2; k++) {
-                    Vector2 drawPosition = position + ((num12 + num11) * ((float)Math.PI * 2f)).ToRotationVector2() * 4f;
+                    Vector2 drawPosition = position + ((num12 + num11) * ((float)Math.PI * 2f)).ToRotationVector2() * Helper.Wave(4f, 6f, 10f, Projectile.whoAmI + j * k);
                     clip = Utils.Frame(texture, 1, Projectile.GetFrameCount(), frameY: (int)((Projectile.frame + VisualOffsetValue) % 3));
                     batch.Draw(texture, drawPosition, clip, Color.Lerp(baseColor, color, 0.5f) * opacity, rotation, origin, scale, flip, 0f);
                 }
