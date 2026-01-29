@@ -29,7 +29,7 @@ namespace RoA.Content.Items.Weapons.Ranged.Hardmode;
 sealed class DistilleryOfDeath : ModItem {
     public override void SetDefaults() {
         Item.SetSizeValues(58, 38);
-        Item.DefaultToRangedWeapon(ModContent.ProjectileType<DistilleryOfDeath_UseProjectile>(), AmmoID.None, 10, 5f);
+        Item.DefaultToRangedWeapon(ModContent.ProjectileType<DistilleryOfDeath_Use>(), AmmoID.Gel, 10, 5f);
         Item.knockBack = 6.5f;
         Item.UseSound = null;
         Item.damage = 14;
@@ -53,10 +53,8 @@ sealed class DistilleryOfDeath : ModItem {
         return base.Shoot(player, source, position, velocity, type, damage, knockback);
     }
 
-    private class DistilleryOfDeath_UseProjectile : ModProjectile {
+    private class DistilleryOfDeath_Use : ModProjectile {
         private static byte SHOOTCOUNTPERTYPE => 15;
-
-        public override string Texture => ItemLoader.GetItem(ModContent.ItemType<DistilleryOfDeath>()).Texture;
 
         private static Asset<Texture2D> _fillTexture1 = null!,
                                         _fillTexture2 = null!;
