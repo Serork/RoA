@@ -97,7 +97,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
                 short num6 = (short)ModContent.DustType<DistilleryOfDeathGustDust>();
                 Color color = GetColorPerType(CurrentGustType);
                 Vector2 position = Projectile.Center + Projectile.velocity.SafeNormalize() * 48f;
-                Dust dust = Dust.NewDustDirect(position - Vector2.One * 0f + Main.rand.NextVector2Circular(60f, 60f) * 0.1f * Utils.Remap(Spawnvalue, 0f, 72f, 0.75f, 1f), 4, 4, num6, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, newColor: color);
+                Dust dust = Dust.NewDustDirect(position, 4, 4, num6, Projectile.velocity.X * 0.2f, Projectile.velocity.Y * 0.2f, 100, newColor: color);
                 if (Main.rand.Next(4) == 0) {
                     dust.noGravity = true;
                     dust.scale *= 3f;
@@ -107,6 +107,8 @@ sealed class DistilleryOfDeathGust : ModProjectile {
                 else {
                     dust.scale *= 1.5f;
                 }
+
+                dust.position = position - Vector2.One * 0f + Main.rand.NextVector2Circular(60f, 60f) * 0.1f * Utils.Remap(Spawnvalue, 0f, 72f, 0.75f, 1f);
 
                 dust.scale *= 1.5f;
                 dust.velocity *= 2f;
