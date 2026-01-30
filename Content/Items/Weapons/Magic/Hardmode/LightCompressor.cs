@@ -351,6 +351,15 @@ sealed class LightCompressor : ModItem {
                 _targets = [];
             }
 
+            Player player4 = Projectile.GetOwnerAsPlayer();
+            if (!player4.CheckMana(player4.GetSelectedItem(), pay: false)) {
+                Projectile.Kill();
+            }
+
+            if (player4.noItems || !player4.IsAliveAndFree()) {
+                Projectile.Kill();
+            }
+
             Vector2 startPosition = Projectile.Center;
             Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize();
             Vector2 endPosition = startPosition + normalizedVelocity * 600f;
@@ -391,6 +400,15 @@ sealed class LightCompressor : ModItem {
                 }
 
                 startPosition += velocity2 * step;
+            }
+
+            if (!hasTarget) {
+                Projectile.localAI[2]++;
+                if (Projectile.localAI[2] >= 20f) {
+                    Player player3 = Projectile.GetOwnerAsPlayer();
+                    player3.CheckMana(player3.GetSelectedItem(), pay: true);
+                    Projectile.localAI[2] = 0f;
+                }
             }
 
             if (!hasTarget) {

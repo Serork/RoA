@@ -219,6 +219,10 @@ sealed class DistilleryOfDeath : ModItem {
                 player.GetCommon().DistilleryOfDeathLastShootType_Next_Next = NextNextGustType;
             }
 
+            if (player.noItems || !player.IsAliveAndFree()) {
+                Projectile.Kill();
+            }
+
             int shootCount = SHOOTCOUNTPERTYPE;
 
             float scale = Projectile.scale;
