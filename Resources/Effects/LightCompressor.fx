@@ -40,7 +40,7 @@ float4 Recolor(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
     float2 textureCoords = FrameFix(coords);
     float aLERP = normalsin(origColor.a * 10 + time);
     origColor.a = lerp(origColor.a, aLERP, 0.5 * origColor.a * uSaturation);
-    origColor.b = lerp(origColor.b, aLERP, 0.75 * origColor.a * uSaturation);
+    origColor.b = lerp(origColor.b, aLERP, 0.625 * origColor.a * uSaturation);
     origColor.g = lerp(origColor.g, aLERP, 0.5 * origColor.a * uSaturation);
     origColor.r = lerp(origColor.r, aLERP, 0.15 * origColor.a * uSaturation);
     return origColor * sampleColor;

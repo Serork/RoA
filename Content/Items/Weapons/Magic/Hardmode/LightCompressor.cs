@@ -4,7 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
-using RoA.Content.Items.Weapons.Ranged.Hardmode;
+using RoA.Common.GlowMasks;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -14,16 +15,14 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Magic.Hardmode;
 
+[AutoloadGlowMask]
 sealed class LightCompressor : ModItem {
     public override void SetDefaults() {
         Item.SetSizeValues(64, 26);
@@ -151,7 +150,19 @@ sealed class LightCompressor : ModItem {
 
             float rotation = Projectile.rotation;
             Main.EntitySpriteDraw(texture, pos, null, Projectile.GetAlpha(lightColor), rotation, texture.Frame().Left(), Projectile.scale, effects);
-      
+
+            Texture2D glowTexture = ItemGlowMaskHandler.GlowMasks[ModContent.ItemType<LightCompressor>()].Texture.Value;
+            Color glowColor = Color.White * 0.9f;
+            int a = 255;
+            foreach (var target in _targets) {
+                glowColor *= 1.25f;
+                a -= 50;
+                a = Math.Max(0, a);
+            }
+            glowColor.A = (byte)a;
+            glowColor = glowColor.MultiplyAlpha(0.75f);
+            Main.EntitySpriteDraw(glowTexture, pos, null, glowColor, rotation, texture.Frame().Left(), Projectile.scale, effects);
+
             return false;
         }
 
@@ -211,7 +222,15 @@ sealed class LightCompressor : ModItem {
                     float waveValue2 = Helper.Wave(0.5f, 1.25f, 20f, i * 15f + Projectile.whoAmI);
                     clip.Height = (int)(clip.Height * waveValue2);
                     Vector2 origin = clip.Centered();
-                    Color color = Color.White.MultiplyAlpha(0.75f);
+                    Color color = Color.White * 0.85f;
+                    int a = 255;
+                    foreach (var target in _targets) {
+                        color *= 1.25f;
+                        a -= 50;
+                        a = Math.Max(0, a);
+                    }
+                    color.A = (byte)a;
+                    color = color.MultiplyAlpha(0.75f);
                     Vector2 scale = new(1f, 0.5f);
                     DrawInfo drawInfo = new() {
                         Clip = clip,
@@ -282,6 +301,13 @@ sealed class LightCompressor : ModItem {
                         Scale = Vector2.One * scale.X * 0.15f
                     };
                     batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
+
+                    if (Main.rand.NextBool(50)) {
+                        Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
+                            Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                    }
+
+                    Lighting.AddLight(position, (Color.Lerp(Color.SkyBlue, Color.Blue, 0.05f) with { A = 0 }).ToVector3() * 0.75f);
 
                     batch.Draw(texture, position, drawInfo);
                     velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
@@ -396,6 +422,12 @@ sealed class LightCompressor : ModItem {
                     TargetInfo targetInfo = _targets[whoAmI];
                     targetInfo.LaserOpacity = Helper.Approach(targetInfo.LaserOpacity, 1f, lerpValue);
                     targetInfo.Position = npc.Center + Vector2.UnitY * npc.gfxOffY;
+
+                    if (Main.rand.NextBool()) {
+                        Dust.NewDustPerfect(targetInfo.Position + Main.rand.RandomPointInArea(npc.Size * 0.25f), ModContent.DustType<LightCompressorDust>(), 
+                            Main.rand.NextVector2Circular(1f, 1f), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                    }
+
                     _targets[whoAmI] = targetInfo;
                     npc.GetCommon().IsLightCompressorEffectActive = true;
                     npc.GetCommon().LightCompressorEffectOpacity = Helper.Approach(npc.GetCommon().LightCompressorEffectOpacity, 1f, 0.025f);
