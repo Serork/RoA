@@ -231,14 +231,19 @@ sealed class LightCompressor : ModItem {
                     Color color = Color.White * 0.85f;
                     int a = 255;
                     float alpha = 0.875f;
+                    bool hasTarget2 = false;
                     foreach (var target in _targets) {
                         alpha = 0.75f;
                         color *= 1.25f;
                         a -= 50;
                         a = Math.Max(100, a);
+                        hasTarget2 = true;
                     }
                     color.A = (byte)a;
                     color = color.MultiplyAlpha(alpha);
+                    if (hasTarget2) {
+                        color *= 0.75f;
+                    }
                     Vector2 scale = new(1f, 0.5f);
                     DrawInfo drawInfo = new() {
                         Clip = clip,
@@ -280,7 +285,7 @@ sealed class LightCompressor : ModItem {
                     float maxLength = MAXDISTANCETOTARGETINPIXELS;
                     float rotation = velocity.ToRotation() - MathHelper.PiOver2;
                     Rectangle clip = texture.Bounds;
-                    Vector2 origin = clip.Centered();
+                    Vector2 origin = clip.BottomCenter();
                     Color color = Color.White.MultiplyAlpha(0.75f);
                     //color *= Utils.GetLerpValue(maxLength, maxLength * 0.8f, Projectile.Distance(endPosition), true);
                     color *= target.LaserOpacity;
@@ -298,7 +303,7 @@ sealed class LightCompressor : ModItem {
                     };
                     Vector2 position = startPosition;
                     startPosition += velocity.SafeNormalize() * step;
-                    float offsetValue2 = 2f * scaleFactor;
+                    float offsetValue2 = 2f * scaleFactor * Ease.CubeIn(Utils.GetLerpValue(0f, 3f, i, true));
                     startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, Projectile.whoAmI * 3 + i2 * 0.05f) * offsetValue2;
 
                     DrawInfo bloomDrawInfo = new() {
