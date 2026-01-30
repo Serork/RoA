@@ -2815,3 +2815,8 @@ DistilleryOfDeath: {
 	// DisplayName: Distillery Of Death
 	// Tooltip: ""
 }
+
+LightCompressor: {
+	// DisplayName: Light Compressor
+	// Tooltip: ""
+}

@@ -149,6 +149,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public DistilleryOfDeathGust.GustType DistilleryOfDeathLastShootType_Current, DistilleryOfDeathLastShootType_Next, DistilleryOfDeathLastShootType_Next_Next;
     public byte DistilleryOfDeathShootCount;
 
+    public bool ShouldDrawVanillaBackpacks = true;
+
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
     public float ConjurersEyeShootOpacity => Utils.GetLerpValue(CONJURERSEYEATTACKTIME * 0.75f, CONJURERSEYEATTACKTIME, ConjurersEyeAttackCounter, true);
 
@@ -1201,6 +1203,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        ShouldDrawVanillaBackpacks = true;
+
         IsBrawlerMaskEffectActive = false;
 
         IsDoubleGogglesEffectActive = false;

@@ -114,16 +114,16 @@ sealed class Has2rMask : ModItem {
                         drawInfo.DrawDataCache.Add(_drawData);
                     }
 
-                    flag2 = true;
+                    //flag2 = true;
 
                     //return;
                 }
             }
 
-            ExtraDrawLayerSupport.DrawBackpacks(ref drawInfo);
-            if (flag2) {
-                return;
-            }
+            //ExtraDrawLayerSupport.DrawBackpacks(ref drawInfo);
+            //if (flag2) {
+            //    return;
+            //}
 
 
             orig(ref drawInfo);

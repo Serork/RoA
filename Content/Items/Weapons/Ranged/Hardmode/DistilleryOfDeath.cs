@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Cache;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core;
 using RoA.Core.Defaults;
@@ -23,11 +24,31 @@ using Terraria.ModLoader;
 
 using static RoA.Common.ShaderLoader;
 using static RoA.Content.Projectiles.Friendly.Ranged.DistilleryOfDeathGust;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace RoA.Content.Items.Weapons.Ranged.Hardmode;
 
 sealed class DistilleryOfDeath : ModItem {
+    private static Asset<Texture2D> _backTexture = null!;
+
+    public override void SetStaticDefaults() {
+        if (Main.dedServ) {
+            return;
+        }
+
+        _backTexture = ModContent.Request<Texture2D>(Texture + "_Back");
+    }
+
+    public override void Load() {
+        ExtraDrawLayerSupport.PreBackpackDrawEvent += ExtraDrawLayerSupport_PreBackpackDrawEvent;
+    }
+
+    private void ExtraDrawLayerSupport_PreBackpackDrawEvent(ref PlayerDrawSet drawinfo) {
+        Player player = drawinfo.drawPlayer;
+        if (player.GetSelectedItem().type == ModContent.ItemType<DistilleryOfDeath>()) {
+            ExtraDrawLayerSupport.DrawBackpack(_backTexture, ref drawinfo);
+        }
+    }
+
     public override void SetDefaults() {
         Item.SetSizeValues(58, 38);
         Item.DefaultToRangedWeapon(ModContent.ProjectileType<DistilleryOfDeath_Use>(), AmmoID.Gel, 10, 5f);
@@ -51,6 +72,10 @@ sealed class DistilleryOfDeath : ModItem {
     //}
 
     //public override Vector2? HoldoutOffset() => new Vector2(2f, -4f);
+
+    public override void HoldItem(Player player) {
+        player.GetCommon().ShouldDrawVanillaBackpacks = false;
+    }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         return base.Shoot(player, source, position, velocity, type, damage, knockback);
@@ -211,8 +236,6 @@ sealed class DistilleryOfDeath : ModItem {
                     ChangeType();
                 }
             }
-
-            player.SetDummyItemTime(2);
 
             Projectile.spriteDirection = Projectile.direction;
             Main.player[owner].ChangeDir(Projectile.direction);

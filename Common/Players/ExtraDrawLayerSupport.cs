@@ -201,7 +201,9 @@ sealed class ExtraDrawLayerSupport : ILoadable {
     private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawinfo) {
         PreBackpackDrawEvent?.Invoke(ref drawinfo);
 
-        orig(ref drawinfo);
+        if (drawinfo.drawPlayer.GetCommon().ShouldDrawVanillaBackpacks) {
+            orig(ref drawinfo);
+        }
 
         DrawBackpacks(ref drawinfo);
     }
@@ -213,34 +215,40 @@ sealed class ExtraDrawLayerSupport : ILoadable {
                 continue;
             }
             int itemType = drawInfo.Value.ModItem.Type;
-            if (!drawinfo.hideEntirePlayer && !player.dead) {
-                if (player.CheckArmorSlot(itemType, 1, 11) || player.CheckVanitySlot(itemType, 11)) {
-                    int type = drawinfo.heldItem.type;
-                    int num2 = 1;
-                    float num3 = -4f;
-                    float num4 = -8f;
-                    int shader = 0;
-                    shader = drawinfo.cBody;
-
-                    Vector2 vector3 = new Vector2(-4f * player.direction, 12f);
-                    Vector2 vec5 = drawinfo.Position - Main.screenPosition + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f) + vector3;
-                    vec5 = vec5.Floor();
-                    Vector2 vec6 = drawinfo.Position - Main.screenPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2((-9f + num3) * (float)drawinfo.drawPlayer.direction, (2f + num4) * drawinfo.drawPlayer.gravDir) + vector3;
-                    vec6 = vec6.Floor();
-
-                    if (drawinfo.drawPlayer.gravDir < 0) {
-                        vec5.Y -= 8f;
-                    }
-
-                    var asset = drawInfo.Value.Texture;
-                    DrawData item = new DrawData(asset.Value, vec5 + player.MovementOffset(),
-                        new Rectangle(0, 0, asset.Width(), asset.Height()), drawinfo.colorArmorBody, drawinfo.drawPlayer.bodyRotation, new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y), 1f, drawinfo.playerEffect);
-                    item.shader = shader;
-                    drawinfo.DrawDataCache.Add(item);
-
-                    //return;
-                }
+            if (player.CheckArmorSlot(itemType, 1, 11) || player.CheckVanitySlot(itemType, 11)) {
+                DrawBackpack(drawInfo.Value.Texture, ref drawinfo);
             }
         }
+    }
+
+    public static bool DrawBackpack(Asset<Texture2D> backbackAsset, ref PlayerDrawSet drawinfo) {
+        Player player = drawinfo.drawPlayer;
+        if (!drawinfo.hideEntirePlayer && !player.dead) {
+            int num2 = 1;
+            float num3 = -4f;
+            float num4 = -8f;
+            int shader = 0;
+            shader = drawinfo.cBody;
+
+            Vector2 vector3 = new Vector2(-4f * player.direction, 12f);
+            Vector2 vec5 = drawinfo.Position - Main.screenPosition + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f) + vector3;
+            vec5 = vec5.Floor();
+            Vector2 vec6 = drawinfo.Position - Main.screenPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2((-9f + num3) * (float)drawinfo.drawPlayer.direction, (2f + num4) * drawinfo.drawPlayer.gravDir) + vector3;
+            vec6 = vec6.Floor();
+
+            if (drawinfo.drawPlayer.gravDir < 0) {
+                vec5.Y -= 8f;
+            }
+
+            var asset = backbackAsset;
+            DrawData item = new DrawData(asset.Value, vec5 + player.MovementOffset(),
+                new Rectangle(0, 0, asset.Width(), asset.Height()), drawinfo.colorArmorBody, drawinfo.drawPlayer.bodyRotation, new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y), 1f, drawinfo.playerEffect);
+            item.shader = shader;
+            drawinfo.DrawDataCache.Add(item);
+
+            return true;
+        }
+
+        return false;
     }
 }
