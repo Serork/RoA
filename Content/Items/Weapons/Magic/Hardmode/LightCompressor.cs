@@ -13,6 +13,7 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -188,6 +189,9 @@ sealed class LightCompressor : ModItem {
                             continue;
                         }
                         if (npc.Distance(position) > npc.Size.Length() * 0.375f) {
+                            continue;
+                        }
+                        if (_targets.Contains((ushort)npc.whoAmI)) {
                             continue;
                         }
                         hasTarget = true;
