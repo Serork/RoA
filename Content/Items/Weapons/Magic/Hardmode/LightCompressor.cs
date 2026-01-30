@@ -172,7 +172,7 @@ sealed class LightCompressor : ModItem {
                 startPosition += normalizedVelocity * offsetValue;
                 startPosition2 += normalizedVelocity * offsetValue * 1.25f;
                 Vector2 endPosition = targetPosition;
-                Vector2 velocity = startPosition.DirectionTo(startPosition2) * 10f;
+                Vector2 velocity = startPosition.DirectionTo(startPosition2) * 2f;
                 float lerpValue = 0.1f;
                 while (true) {
                     Texture2D texture = _lightTexture.Value;
@@ -214,12 +214,12 @@ sealed class LightCompressor : ModItem {
                 }
             }
 
-            drawMainLightLine();
             foreach (ushort targetWhoAmI in _targets) {
                 NPC npc = Main.npc[targetWhoAmI];
                 Vector2 targetPosition = npc.Center + Vector2.UnitY * npc.gfxOffY;
                 drawLightLine(targetPosition);
             }
+            drawMainLightLine();
         }
 
         public override bool? CanDamage() => false;
@@ -262,26 +262,16 @@ sealed class LightCompressor : ModItem {
                 startPosition += velocity2 * step;
             }
 
-            //foreach (NPC npc in Main.ActiveNPCs) {
-            //    ushort whoAmI = (ushort)npc.whoAmI;
-            //    if (Projectile.Distance(npc.Center) > MAXDISTANCETOTARGETINPIXELS) {
-            //        continue;
-            //    }
-            //    if (_targets.Contains(whoAmI)) {
-            //        continue;
-            //    }
-            //    _targets.Add(whoAmI);
-            //}
-            //for (int i = 0; i < _targets.Count; i++) {
-            //    ushort whoAmI = _targets[i];
-            //    NPC npc = Main.npc[whoAmI];
-            //    if (Projectile.Distance(npc.Center) > MAXDISTANCETOTARGETINPIXELS) {
-            //        _targets.Remove(whoAmI);
-            //    }
-            //    if (!npc.active) {
-            //        _targets.Remove(whoAmI);
-            //    }
-            //}
+            for (int i = 0; i < _targets.Count; i++) {
+                ushort whoAmI = _targets[i];
+                NPC npc = Main.npc[whoAmI];
+                if (Projectile.Distance(npc.Center) > MAXDISTANCETOTARGETINPIXELS) {
+                    _targets.Remove(whoAmI);
+                }
+                if (!npc.active) {
+                    _targets.Remove(whoAmI);
+                }
+            }
 
             Player player = Main.player[Projectile.owner];
 
