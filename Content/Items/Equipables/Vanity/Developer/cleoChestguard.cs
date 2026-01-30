@@ -44,6 +44,8 @@ sealed class cleoChestguard : ModItem {
         }
 
         private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawinfo) {
+            drawinfo.Position += drawinfo.drawPlayer.MovementOffset();
+
             Player player = drawinfo.drawPlayer;
             int itemType = ModContent.ItemType<cleoChestguard>();
             bool flag = false;
@@ -54,6 +56,9 @@ sealed class cleoChestguard : ModItem {
             }
 
             ExtraDrawLayerSupport.DrawBackpacks(ref drawinfo);
+
+            drawinfo.Position -= drawinfo.drawPlayer.MovementOffset();
+
             if (flag) {
                 return;
             }

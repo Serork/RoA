@@ -199,6 +199,8 @@ sealed class ExtraDrawLayerSupport : ILoadable {
     public delegate void PreBackpackDrawDelegate(ref PlayerDrawSet drawinfo);
     public static event PreBackpackDrawDelegate PreBackpackDrawEvent;
     private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawinfo) {
+        drawinfo.Position += drawinfo.drawPlayer.MovementOffset();
+
         PreBackpackDrawEvent?.Invoke(ref drawinfo);
 
         if (drawinfo.drawPlayer.GetCommon().ShouldDrawVanillaBackpacks) {
@@ -206,6 +208,8 @@ sealed class ExtraDrawLayerSupport : ILoadable {
         }
 
         DrawBackpacks(ref drawinfo);
+
+        drawinfo.Position -= drawinfo.drawPlayer.MovementOffset();
     }
 
     public static void DrawBackpacks(ref PlayerDrawSet drawinfo) {
@@ -241,7 +245,7 @@ sealed class ExtraDrawLayerSupport : ILoadable {
             }
 
             var asset = backbackAsset;
-            DrawData item = new DrawData(asset.Value, vec5 + player.MovementOffset(),
+            DrawData item = new DrawData(asset.Value, vec5,
                 new Rectangle(0, 0, asset.Width(), asset.Height()), drawinfo.colorArmorBody, drawinfo.drawPlayer.bodyRotation, new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y), 1f, drawinfo.playerEffect);
             item.shader = shader;
             drawinfo.DrawDataCache.Add(item);

@@ -68,7 +68,7 @@ sealed class DistilleryOfDeath : ModItem {
                 }
 
                 var asset = _backTexture;
-                DrawData item = new DrawData(asset.Value, vec5 + player.MovementOffset(),
+                DrawData item = new DrawData(asset.Value, vec5,
                     new Rectangle(0, 0, asset.Width(), asset.Height()), drawinfo.colorArmorBody, drawinfo.drawPlayer.bodyRotation, new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y), 1f, drawinfo.playerEffect);
                 item.shader = shader;
                 drawinfo.DrawDataCache.Add(item);
@@ -76,7 +76,7 @@ sealed class DistilleryOfDeath : ModItem {
                 void drawPart(PlayerDrawSet drawinfo, GustType gustType, float opacityFactor, bool next = false) {
                     asset = next ? _backTexture_Fill2 : _backTexture_Fill1;
                     Color baseColor = drawinfo.colorArmorBody.MultiplyRGB(GetColorPerType(gustType));
-                    Vector2 position = vec5 + player.MovementOffset();
+                    Vector2 position = vec5;
                     float rotation = drawinfo.drawPlayer.bodyRotation;
                     Rectangle clip = new Rectangle(0, 0, asset.Width(), asset.Height());
                     Vector2 origin = new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y);

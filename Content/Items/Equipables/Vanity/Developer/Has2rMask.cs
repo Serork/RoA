@@ -7,6 +7,8 @@ using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -80,7 +82,7 @@ sealed class Has2rMask : ModItem {
                     for (int i = 0; i < MAX; i++) {
                         if (!Main.gamePaused)
                             randomMovement[i] = Main.rand.NextFloat(-0.1f, 0.1f);
-                        Vector2 _position = new(drawInfo.Center.X - (float)((i == 0 ? -1 : (i - 1f)) * 6) - 13f * _player.direction, drawInfo.Center.Y - 10f);
+                        Vector2 _position = new(player.GetPlayerCorePoint().X - (float)((i == 0 ? -1 : (i - 1f)) * 6) - 13f * _player.direction, player.GetPlayerCorePoint().Y - 10f);
                         if (_player.gravDir == -1.0) _position.Y += 50f;
                         tentaclePosition = new((float)(int)_position.X, (float)(int)_position.Y);
 
@@ -109,7 +111,7 @@ sealed class Has2rMask : ModItem {
                         Color _color = new(255, 215, 0, 140);
                         bool _flag = (i == 0 ? -1f : (float)(i - 1f)) != 0 ? _player.direction * (int)_player.gravDir < 0 : _player.direction * (int)_player.gravDir > 0;
                         SpriteEffects _effect = _flag ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-                        DrawData _drawData = new(_texture, _position2, null, _color, rotation[i], _origin, scale[i], _effect, 0);
+                        DrawData _drawData = new(_texture, _position2 + player.MovementOffset(), null, _color, rotation[i], _origin, scale[i], _effect, 0);
                         _drawData.shader = shader;
                         drawInfo.DrawDataCache.Add(_drawData);
                     }
