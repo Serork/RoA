@@ -158,7 +158,7 @@ static partial class PlayerExtensions {
     }
 
     public static Vector2 GetViableMousePosition(this Player player) {
-        Vector2 result = Main.MouseWorld;
+        Vector2 result = Main.ReverseGravitySupport(Main.MouseScreen) + Main.screenPosition;
         player.LimitPointToPlayerReachableArea(ref result);
         return result;
     }
@@ -169,7 +169,6 @@ static partial class PlayerExtensions {
         //if (player.gravDir == -1f)
         //    num15 = Main.screenPosition.Y + (float)Main.screenHeight - (float)Main.mouseY;
         Vector2 result = Main.ReverseGravitySupport(Main.MouseScreen) + Main.screenPosition;
-
         player.LimitPointToPlayerReachableArea(ref result, maxX, maxY);
         return result;
     }
