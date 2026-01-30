@@ -6,6 +6,7 @@ using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
+using RoA.Content.Items.Weapons.Ranged.Hardmode;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core;
@@ -26,6 +27,8 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
+
+using static RoA.Content.Projectiles.Friendly.Ranged.DistilleryOfDeathGust;
 
 namespace RoA.Common.Players;
 
@@ -146,10 +149,13 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsBrawlerMaskEffectActive;
     public HashSet<(int, int)> BeforeHitActiveDebuffs = [];
 
-    public DistilleryOfDeathGust.GustType DistilleryOfDeathLastShootType_Current, DistilleryOfDeathLastShootType_Next, DistilleryOfDeathLastShootType_Next_Next;
+    public GustType DistilleryOfDeathLastShootType_Current, DistilleryOfDeathLastShootType_Next, DistilleryOfDeathLastShootType_Next_Next;
     public byte DistilleryOfDeathShootCount;
+    public GustType DistilleryOfDeathLastShootType_Back1, DistilleryOfDeathLastShootType_Back1_2, DistilleryOfDeathLastShootType_Back2, DistilleryOfDeathLastShootType_Back2_2;
 
     public bool ShouldDrawVanillaBackpacks = true;
+
+    public float DistilleryOfDeathShootProgress => (float)DistilleryOfDeathShootCount / DistilleryOfDeath.DistilleryOfDeath_Use.SHOOTCOUNTPERTYPE;
 
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
     public float ConjurersEyeShootOpacity => Utils.GetLerpValue(CONJURERSEYEATTACKTIME * 0.75f, CONJURERSEYEATTACKTIME, ConjurersEyeAttackCounter, true);

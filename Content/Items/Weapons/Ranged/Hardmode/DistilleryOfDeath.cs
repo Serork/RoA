@@ -28,7 +28,9 @@ using static RoA.Content.Projectiles.Friendly.Ranged.DistilleryOfDeathGust;
 namespace RoA.Content.Items.Weapons.Ranged.Hardmode;
 
 sealed class DistilleryOfDeath : ModItem {
-    private static Asset<Texture2D> _backTexture = null!;
+    private static Asset<Texture2D> _backTexture = null!,
+                                    _backTexture_Fill1 = null!,
+                                    _backTexture_Fill2 = null!;
 
     public override void SetStaticDefaults() {
         if (Main.dedServ) {
@@ -36,6 +38,8 @@ sealed class DistilleryOfDeath : ModItem {
         }
 
         _backTexture = ModContent.Request<Texture2D>(Texture + "_Back");
+        _backTexture_Fill1 = ModContent.Request<Texture2D>(Texture + "_Back_Fill1");
+        _backTexture_Fill2 = ModContent.Request<Texture2D>(Texture + "_Back_Fill2");
     }
 
     public override void Load() {
@@ -45,7 +49,72 @@ sealed class DistilleryOfDeath : ModItem {
     private void ExtraDrawLayerSupport_PreBackpackDrawEvent(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         if (player.GetSelectedItem().type == ModContent.ItemType<DistilleryOfDeath>()) {
-            ExtraDrawLayerSupport.DrawBackpack(_backTexture, ref drawinfo);
+            //ExtraDrawLayerSupport.DrawBackpack(_backTexture, ref drawinfo);
+            if (!drawinfo.hideEntirePlayer && !player.dead) {
+                int num2 = 1;
+                float num3 = -4f;
+                float num4 = -8f;
+                int shader = 0;
+                shader = drawinfo.cBody;
+
+                Vector2 vector3 = new Vector2(-4f * player.direction, 12f);
+                Vector2 vec5 = drawinfo.Position - Main.screenPosition + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f) + vector3;
+                vec5 = vec5.Floor();
+                Vector2 vec6 = drawinfo.Position - Main.screenPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2((-9f + num3) * (float)drawinfo.drawPlayer.direction, (2f + num4) * drawinfo.drawPlayer.gravDir) + vector3;
+                vec6 = vec6.Floor();
+
+                if (drawinfo.drawPlayer.gravDir < 0) {
+                    vec5.Y -= 8f;
+                }
+
+                var asset = _backTexture;
+                DrawData item = new DrawData(asset.Value, vec5 + player.MovementOffset(),
+                    new Rectangle(0, 0, asset.Width(), asset.Height()), drawinfo.colorArmorBody, drawinfo.drawPlayer.bodyRotation, new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y), 1f, drawinfo.playerEffect);
+                item.shader = shader;
+                drawinfo.DrawDataCache.Add(item);
+
+                void drawPart(PlayerDrawSet drawinfo, GustType gustType, float opacityFactor, bool next = false) {
+                    asset = next ? _backTexture_Fill2 : _backTexture_Fill1;
+                    Color baseColor = drawinfo.colorArmorBody.MultiplyRGB(GetColorPerType(gustType));
+                    Vector2 position = vec5 + player.MovementOffset();
+                    float rotation = drawinfo.drawPlayer.bodyRotation;
+                    Rectangle clip = new Rectangle(0, 0, asset.Width(), asset.Height());
+                    Vector2 origin = new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y);
+                    float scale = 1f;
+                    float opacity = 0.5f * opacityFactor;
+                    SpriteEffects flip = drawinfo.playerEffect;
+                    for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
+                        float num12 = (TimeSystem.TimeForVisualEffects + player.whoAmI) % 2f / 1f * player.direction;
+                        Color color = Main.hslToRgb((num12 + num11) % 1f, 1f, 0.5f).MultiplyRGB(baseColor);
+                        color.A = 0;
+                        color *= 0.5f;
+                        for (int j = 0; j < 2; j++) {
+                            for (int k = 0; k < 2; k++) {
+                                Vector2 drawPosition = position + ((num12 + num11) * ((float)Math.PI * 2f)).ToRotationVector2() * 1f;
+
+                                Color drawColor = Color.Lerp(baseColor, color, 0.5f) * opacity;
+
+                                item = new DrawData(asset.Value, drawPosition, clip, drawColor, rotation, origin, scale, flip);
+                                item.shader = shader;
+                                drawinfo.DrawDataCache.Add(item);
+                            }
+                        }
+                    }
+                    baseColor.A = 100;
+                    baseColor *= 0.75f;
+                    Color drawColor2 = baseColor * opacity;
+                    item = new DrawData(asset.Value, position, clip, drawColor2, rotation, origin, scale, flip);
+                    item.shader = shader;
+                    drawinfo.DrawDataCache.Add(item);
+                }
+
+                float progress1 = player.GetCommon().DistilleryOfDeathShootProgress;
+                float progress2 = 1f - player.GetCommon().DistilleryOfDeathShootProgress;
+                drawPart(drawinfo, player.GetCommon().DistilleryOfDeathLastShootType_Back1, progress1, false);
+                drawPart(drawinfo, player.GetCommon().DistilleryOfDeathLastShootType_Back1_2, progress2, false);
+                drawPart(drawinfo, player.GetCommon().DistilleryOfDeathLastShootType_Back2, progress1, true);
+                drawPart(drawinfo, player.GetCommon().DistilleryOfDeathLastShootType_Back2_2, progress2, true);
+            }
         }
     }
 
@@ -81,8 +150,8 @@ sealed class DistilleryOfDeath : ModItem {
         return base.Shoot(player, source, position, velocity, type, damage, knockback);
     }
 
-    private class DistilleryOfDeath_Use : ModProjectile {
-        private static byte SHOOTCOUNTPERTYPE => 15;
+    public class DistilleryOfDeath_Use : ModProjectile {
+        public static byte SHOOTCOUNTPERTYPE => 15;
 
         private static Asset<Texture2D> _fillTexture1 = null!,
                                         _fillTexture2 = null!;
@@ -118,7 +187,7 @@ sealed class DistilleryOfDeath : ModItem {
         public bool CanShoot_Override => DelayValue <= 0f;
         public float ShootProgress => !CanShoot_Override ? 1f : ShootValue / SHOOTCOUNTPERTYPE;
         public float ShootProgress2 => !CanShoot_Override ? 1f : (float)Projectile.GetOwnerAsPlayer().GetCommon().DistilleryOfDeathShootCount / SHOOTCOUNTPERTYPE;
-        public float ShootProgress3 => (float)Projectile.GetOwnerAsPlayer().GetCommon().DistilleryOfDeathShootCount / SHOOTCOUNTPERTYPE;
+        public float ShootProgress3 => Projectile.GetOwnerAsPlayer().GetCommon().DistilleryOfDeathShootProgress;
         public float DelayProgress => 1f - Utils.GetLerpValue(0.5f, 0f, DelayValue / _delay, true);
 
         public override void SetStaticDefaults() {
@@ -275,6 +344,15 @@ sealed class DistilleryOfDeath : ModItem {
                     NextNextGustType = Main.rand.GetRandomEnumValue<GustType>(1);
                 }
                 Projectile.netUpdate = true;
+            }
+            var handler = player.GetCommon();
+            handler.DistilleryOfDeathLastShootType_Back1_2 = handler.DistilleryOfDeathLastShootType_Back1;
+            while (handler.DistilleryOfDeathLastShootType_Back1 == handler.DistilleryOfDeathLastShootType_Back1_2) {
+                handler.DistilleryOfDeathLastShootType_Back1 = Main.rand.GetRandomEnumValue<GustType>(1);
+            }
+            handler.DistilleryOfDeathLastShootType_Back2_2 = handler.DistilleryOfDeathLastShootType_Back2;
+            while (handler.DistilleryOfDeathLastShootType_Back2 == handler.DistilleryOfDeathLastShootType_Back2_2) {
+                handler.DistilleryOfDeathLastShootType_Back2 = Main.rand.GetRandomEnumValue<GustType>(1);
             }
         }
 
