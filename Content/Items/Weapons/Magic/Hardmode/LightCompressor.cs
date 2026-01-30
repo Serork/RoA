@@ -123,13 +123,13 @@ sealed class LightCompressor : ModItem {
         //}
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-            //for (int i = 0; i < _targets.Count; i++) {
-            //    ushort whoAmI = _targets[i];
-            //    NPC npc = Main.npc[whoAmI];
-            //    if (targetHitbox.Contains(npc.Center.ToPoint())) {
-            //        return true;
-            //    }
-            //}
+            foreach (var target in _targets) {
+                ushort whoAmI = target.Key;
+                NPC npc = Main.npc[whoAmI];
+                if (targetHitbox.Contains(npc.Center.ToPoint())) {
+                    return true;
+                }
+            }
 
             return false;
         }
@@ -259,7 +259,7 @@ sealed class LightCompressor : ModItem {
                     color *= target.LaserOpacity;
                     float i2 = i * 10f;
                     float scaleFactor = Utils.GetLerpValue(0f, 10f, i, true);
-                    //scaleFactor *= Ease.CubeOut(MathUtils.Clamp01(distance / 60f));
+                    scaleFactor *= Ease.CubeIn(MathUtils.Clamp01(distance / (step * 3f)));
                     scaleFactor = MathF.Max(0.625f, scaleFactor);
                     Vector2 scale = new(Helper.Wave(0.5f, 1.5f, 20f, Projectile.whoAmI * 3) * 2f * scaleFactor, 1f);
                     DrawInfo drawInfo = new() {
@@ -376,9 +376,9 @@ sealed class LightCompressor : ModItem {
             foreach (var target in _targets) {
                 ushort whoAmI = target.Key;
                 NPC npc = Main.npc[whoAmI];
-                void removeSlowly() {
+                void removeSlowly(float lerpValueFactor = 1f) {
                     TargetInfo targetInfo = _targets[whoAmI];
-                    targetInfo.LaserOpacity = Helper.Approach(targetInfo.LaserOpacity, 0f, lerpValue);
+                    targetInfo.LaserOpacity = Helper.Approach(targetInfo.LaserOpacity, 0f, lerpValue * lerpValueFactor);
                     _targets[whoAmI] = targetInfo;
                     if (_targets[whoAmI].LaserOpacity <= 0f) {
                         _targets.Remove(whoAmI);
@@ -390,7 +390,7 @@ sealed class LightCompressor : ModItem {
                     continue;
                 }
                 if (!npc.active) {
-                    removeSlowly();
+                    removeSlowly(1.25f);
                 }
                 else {
                     TargetInfo targetInfo = _targets[whoAmI];
