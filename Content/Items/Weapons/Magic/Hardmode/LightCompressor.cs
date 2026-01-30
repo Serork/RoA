@@ -157,7 +157,7 @@ sealed class LightCompressor : ModItem {
             foreach (var target in _targets) {
                 glowColor *= 1.25f;
                 a -= 50;
-                a = Math.Max(0, a);
+                a = Math.Max(100, a);
             }
             glowColor.A = (byte)a;
             glowColor = glowColor.MultiplyAlpha(0.75f);
@@ -227,7 +227,7 @@ sealed class LightCompressor : ModItem {
                     foreach (var target in _targets) {
                         color *= 1.25f;
                         a -= 50;
-                        a = Math.Max(0, a);
+                        a = Math.Max(100, a);
                     }
                     color.A = (byte)a;
                     color = color.MultiplyAlpha(0.75f);
