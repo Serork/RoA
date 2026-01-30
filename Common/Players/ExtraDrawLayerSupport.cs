@@ -23,11 +23,11 @@ namespace RoA.Common.Players;
 sealed class ExtraDrawLayerSupport : ILoadable {
     public readonly record struct ExtraDrawLayerInfo(ModItem ModItem, Asset<Texture2D> Texture);
 
-    private static Dictionary<EquipType, ExtraDrawLayerInfo> _extraDrawLayerByItemType = [];
+    private static Dictionary<ExtraDrawLayerInfo, EquipType> _extraDrawLayerByItemType = [];
 
     public static void RegisterExtraDrawLayer(EquipType equipType, ModItem modItem) {
         string textureTypePath = modItem.Texture + $"_{EquipType.Back}";
-        _extraDrawLayerByItemType.TryAdd(equipType, new ExtraDrawLayerInfo(modItem, ModContent.Request<Texture2D>(textureTypePath)));
+        _extraDrawLayerByItemType.TryAdd(new ExtraDrawLayerInfo(modItem, ModContent.Request<Texture2D>(textureTypePath)), equipType);
     }
 
     void ILoadable.Load(Mod mod) {
@@ -215,12 +215,12 @@ sealed class ExtraDrawLayerSupport : ILoadable {
     public static void DrawBackpacks(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         foreach (var drawInfo in _extraDrawLayerByItemType) {
-            if (drawInfo.Key != EquipType.Back) {
+            if (drawInfo.Value != EquipType.Back) {
                 continue;
             }
-            int itemType = drawInfo.Value.ModItem.Type;
+            int itemType = drawInfo.Key.ModItem.Type;
             if (player.CheckArmorSlot(itemType, 1, 11) || player.CheckVanitySlot(itemType, 11)) {
-                DrawBackpack(drawInfo.Value.Texture, ref drawinfo);
+                DrawBackpack(drawInfo.Key.Texture, ref drawinfo);
             }
         }
     }
