@@ -117,7 +117,13 @@ sealed class TrackedEntitiesSystem : ModSystem {
     }
 
     public static NPC GetSingleTrackedNPC<T>(Predicate<NPC>? filter = null, bool checkForType = true) where T : ModNPC => GetTrackedNPC<T>(filter, checkForType).ToList()[0];
-    public static Projectile GetSingleTrackedProjectile<T>(Predicate<Projectile>? filter = null, bool checkForType = true) where T : ModProjectile => GetTrackedProjectile<T>(filter, checkForType).ToList()[0];
+    public static Projectile? GetSingleTrackedProjectile<T>(Predicate<Projectile>? filter = null, bool checkForType = true) where T : ModProjectile {
+        IEnumerable<Projectile> trackedProjectiles = GetTrackedProjectile<T>(filter, checkForType);
+        if (!trackedProjectiles.Any()) {
+            return null;
+        }
+        return trackedProjectiles.ToList()[0];
+    }
 
     public override void PostUpdateEverything() {
         UpdateTrackedEntityLists();

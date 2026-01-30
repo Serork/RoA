@@ -251,7 +251,7 @@ sealed class DistilleryOfDeath : ModItem {
                 Direct();
             }
 
-            velocity.X *= 1f + (float)Main.rand.Next(-3, 4) * 0.01f;
+            //velocity.X *= 1f + (float)Main.rand.Next(-3, 4) * 0.01f;
 
             DelayValue = Helper.Approach(DelayValue, 0f, 1f);
 
@@ -398,7 +398,7 @@ sealed class DistilleryOfDeath : ModItem {
                 return false;
             }
 
-            var texture = TextureAssets.Projectile[Type].Value;
+            var texture = Projectile.GetTexture();
 
             Player player = Projectile.GetOwnerAsPlayer();
 
