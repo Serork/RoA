@@ -230,13 +230,15 @@ sealed class LightCompressor : ModItem {
                     Vector2 origin = clip.Centered();
                     Color color = Color.White * 0.85f;
                     int a = 255;
+                    float alpha = 0.875f;
                     foreach (var target in _targets) {
+                        alpha = 0.75f;
                         color *= 1.25f;
                         a -= 50;
                         a = Math.Max(100, a);
                     }
                     color.A = (byte)a;
-                    color = color.MultiplyAlpha(0.75f);
+                    color = color.MultiplyAlpha(alpha);
                     Vector2 scale = new(1f, 0.5f);
                     DrawInfo drawInfo = new() {
                         Clip = clip,
