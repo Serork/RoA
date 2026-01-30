@@ -122,7 +122,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                         Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
                         float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
                         dustAngle += MathHelper.Pi * k;
-                        dustAngle *= player.direction;
+                        dustAngle *= player.direction * player.gravDir;
                         Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
                         Func<float, float> func = k % 2 == 0 ? MathF.Sin : MathF.Cos;
                         dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi) * 0.5f;
