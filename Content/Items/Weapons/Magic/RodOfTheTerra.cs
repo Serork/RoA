@@ -55,7 +55,7 @@ sealed class RodOfTheTerra : Rod {
     }
 
     public override void ModifyManaCost(Player player, ref float reduce, ref float mult) {
-        mult *= 0f;
+
     }
 
     public override Vector2? HoldoutOrigin() => null;

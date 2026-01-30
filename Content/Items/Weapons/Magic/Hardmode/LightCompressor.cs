@@ -44,7 +44,7 @@ sealed class LightCompressor : ModItem {
     }
 
     public override void ModifyManaCost(Player player, ref float reduce, ref float mult) {
-        mult *= 0f;
+ 
     }
 
     [Tracked]
@@ -405,6 +405,7 @@ sealed class LightCompressor : ModItem {
             }
 
             float lerpValue = 0.05f;
+            bool checkMana = false;
             foreach (var target in _targets) {
                 ushort whoAmI = target.Key;
                 NPC npc = Main.npc[whoAmI];
@@ -434,7 +435,14 @@ sealed class LightCompressor : ModItem {
                     targetInfo.Position = npc.Center + Vector2.UnitY * npc.gfxOffY;
 
                     Player player3 = Projectile.GetOwnerAsPlayer();
-                    player3.CheckMana(player3.GetSelectedItem(), pay: true);
+                    if (!checkMana) {
+                        Projectile.localAI[2]++;
+                        if (Projectile.localAI[2] >= 10f) {
+                            player3.CheckMana(player3.GetSelectedItem(), pay: true);
+                            Projectile.localAI[2] = 0f;
+                        }
+                    }
+                    checkMana = true;
 
                     if (Main.rand.NextBool()) {
                         Dust.NewDustPerfect(targetInfo.Position + Main.rand.RandomPointInArea(npc.Size * 0.25f), ModContent.DustType<LightCompressorDust>(),
