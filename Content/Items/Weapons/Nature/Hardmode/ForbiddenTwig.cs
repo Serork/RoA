@@ -3,6 +3,7 @@
 using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -31,7 +32,7 @@ sealed class ForbiddenTwig : NatureItem {
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
-        Vector2 pointPoisition = player.RotatedRelativePoint(player.MountedCenter);
+        Vector2 pointPoisition = player.GetPlayerCorePoint();
         float num2 = (float)Main.mouseX + Main.screenPosition.X - pointPoisition.X;
         float num3 = (float)Main.mouseY + Main.screenPosition.Y - pointPoisition.Y;
         Vector2 vector6 = new Vector2(num2, num3);

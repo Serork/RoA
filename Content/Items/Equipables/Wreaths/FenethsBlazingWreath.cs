@@ -4,6 +4,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -56,7 +57,7 @@ sealed class FenethsBlazingWreath : WreathItem, WreathItem.IWreathGlowMask {
                 IsEffectActive && Main.rand.NextChance(0.25 * Player.GetWreathHandler().ActualProgress4) && target.FindBuffIndex(ModContent.BuffType<Buffs.Fireblossom>()) == -1 &&
                 Player.ownedProjectileCounts[type] < 10) {
                 Vector2 center = proj.Center;
-                if (center.Distance(Player.Center) < 100f || center.Distance(Player.RotatedRelativePoint(Player.MountedCenter, true)) < 100f) {
+                if (center.Distance(Player.Center) < 100f || center.Distance(Player.GetPlayerCorePoint()) < 100f) {
                     center = target.Center + (Player.Center - target.Center).SafeNormalize(Vector2.Zero) * target.width / 2f;
                 }
                 int projectile = Projectile.NewProjectile(target.GetSource_OnHit(target), target.Center, Vector2.Zero, type, (int)Player.GetTotalDamage(DruidClass.Nature).ApplyTo(10) + proj.damage / 2, proj.knockBack,

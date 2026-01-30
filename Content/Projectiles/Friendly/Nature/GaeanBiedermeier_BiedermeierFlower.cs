@@ -220,7 +220,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         void setPosition() {
             Player player = Projectile.GetOwnerAsPlayer();
             float num = (float)Math.PI / 2f;
-            Vector2 vector = player.RotatedRelativePoint(player.MountedCenter);
+            Vector2 vector = player.GetPlayerCorePoint();
             int num2 = 2;
             float num3 = 0f;
             float num8 = 1f * Projectile.scale;
@@ -241,7 +241,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
             if (_active) {
                 Projectile.velocity = vector4;
             }
-            Projectile.Center = player.GetPlayerCorePoint();
+            Projectile.Center = vector;
 
             int flowerCount = _flowerData.Length;
             if (!_active) {

@@ -43,7 +43,7 @@ sealed class LightCompressor : ModItem {
     public class LightCompressor_Use : ModProjectile {
         private static Asset<Texture2D> _lightTexture = null!;
 
-        private List<int> _targets = null!;
+        private List<ushort> _targets = null!;
 
         public ref float SpawnValue => ref Projectile.localAI[1];
 
@@ -99,49 +99,45 @@ sealed class LightCompressor : ModItem {
 
             float rotation = Projectile.rotation;
             Main.EntitySpriteDraw(texture, pos, null, Projectile.GetAlpha(lightColor), rotation, texture.Frame().Left(), Projectile.scale, effects);
-
-           
+      
             return false;
         }
 
         public void DrawLightLines() {
+            Player player = Projectile.GetOwnerAsPlayer();
             void drawLightLine(Vector2 targetPosition) {
                 SpriteBatch batch = Main.spriteBatch;
-
-                Vector2 startPosition = Projectile.Center,
-                        startPosition2 = startPosition;
+                Vector2 startPosition = Projectile.Center;
                 Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize();
+                startPosition += normalizedVelocity.TurnLeft() * 3f * player.direction * player.gravDir;
+                Vector2 startPosition2 = startPosition;
                 float offsetValue = 60f;
                 startPosition += normalizedVelocity * offsetValue;
                 startPosition2 += normalizedVelocity * offsetValue * 1.25f;
                 Vector2 endPosition = targetPosition;
-
                 Vector2 velocity = startPosition.DirectionTo(startPosition2) * 10f;
-
                 float lerpValue = 0.1f;
-
                 while (true) {
                     Texture2D texture = _lightTexture.Value;
                     float step = texture.Height;
-                    if (Vector2.Distance(startPosition, endPosition) < step) {
+                    float distance = Vector2.Distance(startPosition, endPosition);
+                    if (distance < step * 1f) {
                         break;
                     }
-
                     float rotation = velocity.ToRotation() - MathHelper.PiOver2;
                     Rectangle clip = texture.Bounds;
                     Vector2 origin = clip.Centered();
+                    Color color = Color.White.MultiplyAlpha(0.75f);
                     DrawInfo drawInfo = new() {
                         Clip = clip,
                         Origin = origin,
-                        Rotation = rotation
+                        Rotation = rotation,
+                        Color = color
                     };
                     Vector2 position = startPosition;
                     batch.Draw(texture, position, drawInfo);
-
                     startPosition += velocity.SafeNormalize() * step;
-
                     velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
-
                     float length = (startPosition2 - endPosition).Length();
                     float maxLength = 600f;
                     if (length > maxLength) {
@@ -150,13 +146,19 @@ sealed class LightCompressor : ModItem {
                     float factor = 1f;
                     factor -= length / maxLength;
                     factor = MathF.Max(0.01f, factor);
-                    float maxLerpValue = factor * 10f;
+                    float minDistance = maxLength / 2f;
+                    if (distance < minDistance) {
+                        float distanceFactor = 1f - distance / minDistance;
+                        distanceFactor *= 1f;
+                        factor += distanceFactor;
+                    }
+                    float maxLerpValue = factor * 0.25f;
                     lerpValue = Helper.Approach(lerpValue, maxLerpValue, TimeSystem.LogicDeltaTime * factor);
                 }
             }
-
-            foreach (byte targetWhoAmI in _targets) {
-                Vector2 targetPosition = Main.npc[targetWhoAmI].Center;
+            foreach (ushort targetWhoAmI in _targets) {
+                NPC npc = Main.npc[targetWhoAmI];
+                Vector2 targetPosition = npc.Center + Vector2.UnitY * npc.gfxOffY;
                 drawLightLine(targetPosition);
             }
         }
@@ -170,9 +172,21 @@ sealed class LightCompressor : ModItem {
                 SpawnValue = 1f;
 
                 _targets = [];
+            }
 
-                foreach (NPC npc in Main.ActiveNPCs) {
-                    _targets.Add(npc.whoAmI);
+            foreach (NPC npc in Main.ActiveNPCs) {
+                ushort whoAmI = (ushort)npc.whoAmI;
+                if (_targets.Contains(whoAmI)) {
+                    continue;
+                }
+                _targets.Add(whoAmI);
+            }
+
+            for (int i = 0; i < _targets.Count; i++) {
+                ushort whoAmI = _targets[i];
+                NPC npc = Main.npc[whoAmI];
+                if (!npc.active) {
+                    _targets.Remove(whoAmI);
                 }
             }
 
@@ -184,23 +198,26 @@ sealed class LightCompressor : ModItem {
             Vector2 vector21 = Main.player[owner].GetPlayerCorePoint();
             if (Main.myPlayer == owner) {
                 if (Main.player[owner].channel) {
-                    float num178 = Main.player[owner].inventory[Main.player[owner].selectedItem].shootSpeed * scale;
-                    Vector2 vector22 = vector21;
-                    float num179 = (float)Main.mouseX + Main.screenPosition.X - vector22.X;
-                    float num180 = (float)Main.mouseY + Main.screenPosition.Y - vector22.Y;
-                    if (Main.player[owner].gravDir == -1f)
-                        num180 = (float)(Main.screenHeight - Main.mouseY) + Main.screenPosition.Y - vector22.Y;
+                    float num = (float)Math.PI / 2f;
+                    Vector2 vector = vector21;
+                    int num2 = 2;
+                    float num3 = 0f;
+                    float num8 = 1f * Projectile.scale;
+                    Vector2 vector3 = vector;
+                    Vector2 value = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY) - vector3;
+                    if (player.gravDir == -1f)
+                        value.Y = (float)(Main.screenHeight - Main.mouseY) + Main.screenPosition.Y - vector3.Y;
 
-                    float num181 = (float)Math.Sqrt(num179 * num179 + num180 * num180);
-                    num181 = (float)Math.Sqrt(num179 * num179 + num180 * num180);
-                    num181 = num178 / num181;
-                    num179 *= num181;
-                    num180 *= num181;
-                    if (num179 != velocity.X || num180 != velocity.Y)
+                    Vector2 vector4 = Vector2.Normalize(value);
+                    if (float.IsNaN(vector4.X) || float.IsNaN(vector4.Y))
+                        vector4 = -Vector2.UnitY;
+
+                    vector4 = Vector2.Normalize(Vector2.Lerp(vector4, Vector2.Normalize(Projectile.velocity), 0.9f));
+                    vector4 *= num8;
+                    if (vector4.X != Projectile.velocity.X || vector4.Y != Projectile.velocity.Y)
                         Projectile.netUpdate = true;
 
-                    velocity.X = num179;
-                    velocity.Y = num180;
+                    Projectile.velocity = vector4;
                 }
                 else {
                     Projectile.Kill();
