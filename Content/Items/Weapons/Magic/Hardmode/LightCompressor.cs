@@ -9,6 +9,7 @@ using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,7 @@ sealed class LightCompressor : ModItem {
     [Tracked]
     public class LightCompressor_Use : ModProjectile {
         private static float MAXDISTANCETOTARGETINPIXELS => 600f;
+        private static float TARGETTIME => MathUtils.SecondsToFrames(0.5f);
 
         private static Asset<Texture2D> _lightTexture = null!;
 
@@ -49,10 +51,36 @@ sealed class LightCompressor : ModItem {
 
         public ref float SpawnValue => ref Projectile.localAI[1];
 
+        public ref float TargetTimeValue => ref Projectile.ai[0];
+
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<LightCompressor>()).Texture;
 
         public override void Load() {
             On_Main.DrawNPCs += On_Main_DrawNPCs;
+            On_Main.DrawNPCDirect += On_Main_DrawNPCDirect;
+        }
+
+        private void On_Main_DrawNPCDirect(On_Main.orig_DrawNPCDirect orig, Main self, SpriteBatch mySpriteBatch, NPC rCurrentNPC, bool behindTiles, Vector2 screenPos) {
+            if (rCurrentNPC.GetCommon().LightCompressorEffectOpacity > 0f) {
+                mySpriteBatch.DrawWithSnapshot(() => {
+                    Effect lightCompressorShader = ShaderLoader.LightCompressor.Value;
+                    float width = MathF.Max(100, rCurrentNPC.width * 2f);
+                    float height = MathF.Max(100, rCurrentNPC.height * 2f);
+                    Vector4 sourceRectangle = new(-width / 2f, -height / 2f, width, height);
+                    Vector2 size = new(width, height);
+                    lightCompressorShader.Parameters["uSourceRect"].SetValue(sourceRectangle);
+                    lightCompressorShader.Parameters["uLegacyArmorSourceRect"].SetValue(sourceRectangle);
+                    lightCompressorShader.Parameters["uImageSize0"].SetValue(size);
+                    lightCompressorShader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects);
+                    lightCompressorShader.Parameters["uSaturation"].SetValue(rCurrentNPC.GetCommon().LightCompressorEffectOpacity);
+                    lightCompressorShader.CurrentTechnique.Passes[0].Apply();
+
+                    orig(self, mySpriteBatch, rCurrentNPC, behindTiles, screenPos);
+                }, sortMode: SpriteSortMode.Immediate);
+                return;
+            }
+
+            orig(self, mySpriteBatch, rCurrentNPC, behindTiles, screenPos);
         }
 
         private void On_Main_DrawNPCs(On_Main.orig_DrawNPCs orig, Main self, bool behindTiles) {
@@ -77,12 +105,29 @@ sealed class LightCompressor : ModItem {
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
 
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 10;
+
+            Projectile.penetrate = -1;
+
             //Projectile.hide = true;
         }
 
         //public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
         //    behindNPCs.Add(index);
         //}
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+            for (int i = 0; i < _targets.Count; i++) {
+                ushort whoAmI = _targets[i];
+                NPC npc = Main.npc[whoAmI];
+                if (targetHitbox.Contains(npc.Center.ToPoint())) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public override bool PreDraw(ref Color lightColor) {
             if (SpawnValue == 0f) {
@@ -106,8 +151,7 @@ sealed class LightCompressor : ModItem {
         }
 
         public void DrawLightLines() {
-            Player player = Projectile.GetOwnerAsPlayer();
-            
+            Player player = Projectile.GetOwnerAsPlayer();        
 
             void drawMainLightLine() {
                 SpriteBatch batch = Main.spriteBatch;
@@ -136,6 +180,21 @@ sealed class LightCompressor : ModItem {
                     }
                     Vector2 position = startPosition2;
                     if (WorldGenHelper.SolidTileNoPlatform(position.ToTileCoordinates())) {
+                        break;
+                    }
+                    bool hasTarget = false;
+                    foreach (NPC npc in Main.ActiveNPCs) {
+                        if (!npc.CanBeChasedBy()) {
+                            continue;
+                        }
+                        if (npc.Distance(position) > npc.Size.Length() * 0.375f) {
+                            continue;
+                        }
+                        hasTarget = true;
+                        break;
+                    }
+
+                    if (hasTarget) {
                         break;
                     }
                     Vector2 velocity = startPosition2.DirectionTo(endPosition);
@@ -222,11 +281,13 @@ sealed class LightCompressor : ModItem {
             drawMainLightLine();
         }
 
-        public override bool? CanDamage() => false;
+        public override bool? CanDamage() => true;
         public override bool? CanCutTiles() => false;
         public override bool ShouldUpdatePosition() => false;
 
         public override void AI() {
+            Projectile.knockBack *= 0f;
+
             if (SpawnValue == 0f) {
                 SpawnValue = 1f;
 
@@ -236,6 +297,8 @@ sealed class LightCompressor : ModItem {
             Vector2 startPosition = Projectile.Center;
             Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize();
             Vector2 endPosition = startPosition + normalizedVelocity * 600f;
+
+            bool hasTarget = false;
             while (true) {
                 float distance = Vector2.Distance(startPosition, endPosition);
                 float step = 12f;
@@ -250,16 +313,38 @@ sealed class LightCompressor : ModItem {
                         continue;
                     }
                     ushort whoAmI = (ushort)npc.whoAmI;
-                    if (npc.Distance(startPosition) > step) {
+                    if (npc.Distance(startPosition) > npc.Size.Length() * 0.375f) {
+                        continue;
+                    }
+                    if (!hasTarget) {
+                        npc.GetCommon().IsLightCompressorEffectActive = true;
+                        npc.GetCommon().LightCompressorEffectOpacity = Helper.Approach(npc.GetCommon().LightCompressorEffectOpacity, 1f, 0.025f);
+                    }
+                    hasTarget = true;
+                    if (TargetTimeValue < TARGETTIME) {
                         continue;
                     }
                     if (_targets.Contains(whoAmI)) {
+                        hasTarget = false;
                         continue;
                     }
                     _targets.Add(whoAmI);
+                    TargetTimeValue = 0f;
+                    break;
                 }
 
                 startPosition += velocity2 * step;
+            }
+
+            if (!hasTarget) {
+                if (TargetTimeValue > 0) {
+                    TargetTimeValue -= 2;
+                }
+            }
+            else {
+                if (TargetTimeValue < TARGETTIME) {
+                    TargetTimeValue++;
+                }
             }
 
             for (int i = 0; i < _targets.Count; i++) {
@@ -270,6 +355,10 @@ sealed class LightCompressor : ModItem {
                 }
                 if (!npc.active) {
                     _targets.Remove(whoAmI);
+                }
+                else {
+                    npc.GetCommon().IsLightCompressorEffectActive = true;
+                    npc.GetCommon().LightCompressorEffectOpacity = Helper.Approach(npc.GetCommon().LightCompressorEffectOpacity, 1f, 0.025f);
                 }
             }
 

@@ -23,7 +23,6 @@ float2 uZoom;
 float Radius;
 float FadeDistance;
 
-
 float4 MainPS(float2 coords : TEXCOORD0) : COLOR0
 {
     float4 origColor = tex2D(uImage0, coords);

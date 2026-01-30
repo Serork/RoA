@@ -28,7 +28,7 @@ sealed class DoubleGoggles : ModItem {
         if (player.GetCommon().IsDoubleGogglesEffectActive) {
             orig(player, cHead, ref cdd);
 
-            Effect chromaticAberrationShader = ShaderLoader.ChromaticAberrationShader.Value;
+            Effect chromaticAberrationShader = ShaderLoader.ChromaticAberration.Value;
             float width = MathF.Max(100, player.width * 2.25f);
             float height = MathF.Max(100, player.height * 2.25f);
             Vector4 sourceRectangle = new(-width / 2f, -height / 2f, width, height);

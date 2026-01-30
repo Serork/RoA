@@ -1,22 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using ReLogic.Content;
-
-using RoA.Common.Cache;
-using RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
-using RoA.Core;
-using RoA.Core.Data;
-using RoA.Core.Graphics.Data;
-using RoA.Core.Utility;
+﻿using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
 using System;
-using System.Collections.Generic;
-using System.CommandLine.Parsing;
 
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Common.NPCs;
@@ -26,6 +13,9 @@ sealed partial class NPCCommon : GlobalNPC {
 
     private bool _fell;
     private float _fellTimer;
+
+    public float LightCompressorEffectOpacity;
+    public bool IsLightCompressorEffectActive;
 
     public bool Fell { get; private set; }
 
@@ -39,10 +29,20 @@ sealed partial class NPCCommon : GlobalNPC {
         ModifyHitByProjectileEvent?.Invoke(npc, projectile, ref modifiers);
     }
 
+    public override void ResetEffects(NPC npc) {
+
+    }
+
     public override void PostAI(NPC npc) {
         TouchGround(npc);
 
         NewMoneyPostAI(npc);
+
+        if (!IsLightCompressorEffectActive && LightCompressorEffectOpacity > 0f) {
+            LightCompressorEffectOpacity = Helper.Approach(LightCompressorEffectOpacity, 0f, 0.05f);
+        }
+
+        IsLightCompressorEffectActive = false;
     }
 
     public partial void NewMoneyPostAI(NPC npc);
