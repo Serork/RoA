@@ -278,7 +278,7 @@ sealed class LightCompressor : ModItem {
                         Clip = ResourceManager.Bloom.Bounds,
                         Origin = ResourceManager.Bloom.Bounds.Centered(),
                         Rotation = rotation,
-                        Color = color.MultiplyRGB(new Color(136, 219, 227)).MultiplyAlpha(0.5f) * 0.75f * scaleFactor,
+                        Color = color.MultiplyRGB(new Color(136, 219, 227)).MultiplyAlpha(0.5f) * 0.75f * Ease.QuadOut(scaleFactor),
                         Scale = Vector2.One * scale.X * 0.15f
                     };
                     batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
