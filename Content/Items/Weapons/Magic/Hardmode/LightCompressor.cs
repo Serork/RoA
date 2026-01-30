@@ -41,6 +41,8 @@ sealed class LightCompressor : ModItem {
 
     [Tracked]
     public class LightCompressor_Use : ModProjectile {
+        private static float MAXDISTANCETOTARGETINPIXELS => 600f;
+
         private static Asset<Texture2D> _lightTexture = null!;
 
         private List<ushort> _targets = null!;
@@ -105,11 +107,66 @@ sealed class LightCompressor : ModItem {
 
         public void DrawLightLines() {
             Player player = Projectile.GetOwnerAsPlayer();
+            
+
+            void drawMainLightLine() {
+                SpriteBatch batch = Main.spriteBatch;
+                Vector2 baseStartPosition = Projectile.Center;
+                Vector2 startPosition = baseStartPosition;
+                Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize();
+
+                float waveValue = TimeSystem.TimeForVisualEffects * 4f % 3f;
+                startPosition += normalizedVelocity * 20f * waveValue;
+
+                startPosition += normalizedVelocity.TurnLeft() * 3f * player.direction * player.gravDir;
+
+                float offsetValue = 60f;
+                startPosition += normalizedVelocity * offsetValue;
+                Vector2 startPosition2 = startPosition - normalizedVelocity * 46f;
+                Vector2 endPosition = startPosition2 + normalizedVelocity * 1200f;
+                int i = 0;
+                while (true) {
+                    i++;
+                    Texture2D texture = _lightTexture.Value;
+                    float step = texture.Height;
+                    float distance = Vector2.Distance(startPosition2, endPosition),
+                          distance2 = Vector2.Distance(startPosition2, baseStartPosition);
+                    if (distance < step * 1f) {
+                        break;
+                    }
+                    Vector2 position = startPosition2;
+                    if (WorldGenHelper.SolidTileNoPlatform(position.ToTileCoordinates())) {
+                        break;
+                    }
+                    Vector2 velocity = startPosition2.DirectionTo(endPosition);
+                    float rotation = velocity.ToRotation() - MathHelper.PiOver2;
+                    Rectangle clip = texture.Bounds;
+                    float waveValue2 = Helper.Wave(0.5f, 1.25f, 20f, i * 15f + Projectile.whoAmI);
+                    clip.Height = (int)(clip.Height * waveValue2);
+                    Vector2 origin = clip.Centered();
+                    Color color = Color.White.MultiplyAlpha(0.75f);
+                    Vector2 scale = new(1f, 0.5f);
+                    DrawInfo drawInfo = new() {
+                        Clip = clip,
+                        Origin = origin,
+                        Rotation = rotation,
+                        Color = color,
+                        Scale = scale
+                    };
+                    if (distance2 > step * 1f) {
+                        batch.Draw(texture, position, drawInfo);
+                    }
+                    startPosition2 += velocity.SafeNormalize() * step;
+                }
+            }
+
             void drawLightLine(Vector2 targetPosition) {
                 SpriteBatch batch = Main.spriteBatch;
                 Vector2 startPosition = Projectile.Center;
                 Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize();
+
                 startPosition += normalizedVelocity.TurnLeft() * 3f * player.direction * player.gravDir;
+
                 Vector2 startPosition2 = startPosition;
                 float offsetValue = 60f;
                 startPosition += normalizedVelocity * offsetValue;
@@ -139,7 +196,7 @@ sealed class LightCompressor : ModItem {
                     startPosition += velocity.SafeNormalize() * step;
                     velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
                     float length = (startPosition2 - endPosition).Length();
-                    float maxLength = 600f;
+                    float maxLength = MAXDISTANCETOTARGETINPIXELS;
                     if (length > maxLength) {
                         break;
                     }
@@ -156,6 +213,8 @@ sealed class LightCompressor : ModItem {
                     lerpValue = Helper.Approach(lerpValue, maxLerpValue, TimeSystem.LogicDeltaTime * factor);
                 }
             }
+
+            drawMainLightLine();
             foreach (ushort targetWhoAmI in _targets) {
                 NPC npc = Main.npc[targetWhoAmI];
                 Vector2 targetPosition = npc.Center + Vector2.UnitY * npc.gfxOffY;
@@ -174,21 +233,55 @@ sealed class LightCompressor : ModItem {
                 _targets = [];
             }
 
-            foreach (NPC npc in Main.ActiveNPCs) {
-                ushort whoAmI = (ushort)npc.whoAmI;
-                if (_targets.Contains(whoAmI)) {
-                    continue;
+            Vector2 startPosition = Projectile.Center;
+            Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize();
+            Vector2 endPosition = startPosition + normalizedVelocity * 600f;
+            while (true) {
+                float distance = Vector2.Distance(startPosition, endPosition);
+                float step = 12f;
+                if (distance < step * 1f) {
+                    break;
                 }
-                _targets.Add(whoAmI);
+
+                Vector2 velocity2 = startPosition.DirectionTo(endPosition);
+
+                foreach (NPC npc in Main.ActiveNPCs) {
+                    if (!npc.CanBeChasedBy()) {
+                        continue;
+                    }
+                    ushort whoAmI = (ushort)npc.whoAmI;
+                    if (npc.Distance(startPosition) > step) {
+                        continue;
+                    }
+                    if (_targets.Contains(whoAmI)) {
+                        continue;
+                    }
+                    _targets.Add(whoAmI);
+                }
+
+                startPosition += velocity2 * step;
             }
 
-            for (int i = 0; i < _targets.Count; i++) {
-                ushort whoAmI = _targets[i];
-                NPC npc = Main.npc[whoAmI];
-                if (!npc.active) {
-                    _targets.Remove(whoAmI);
-                }
-            }
+            //foreach (NPC npc in Main.ActiveNPCs) {
+            //    ushort whoAmI = (ushort)npc.whoAmI;
+            //    if (Projectile.Distance(npc.Center) > MAXDISTANCETOTARGETINPIXELS) {
+            //        continue;
+            //    }
+            //    if (_targets.Contains(whoAmI)) {
+            //        continue;
+            //    }
+            //    _targets.Add(whoAmI);
+            //}
+            //for (int i = 0; i < _targets.Count; i++) {
+            //    ushort whoAmI = _targets[i];
+            //    NPC npc = Main.npc[whoAmI];
+            //    if (Projectile.Distance(npc.Center) > MAXDISTANCETOTARGETINPIXELS) {
+            //        _targets.Remove(whoAmI);
+            //    }
+            //    if (!npc.active) {
+            //        _targets.Remove(whoAmI);
+            //    }
+            //}
 
             Player player = Main.player[Projectile.owner];
 
@@ -212,7 +305,7 @@ sealed class LightCompressor : ModItem {
                     if (float.IsNaN(vector4.X) || float.IsNaN(vector4.Y))
                         vector4 = -Vector2.UnitY;
 
-                    vector4 = Vector2.Normalize(Vector2.Lerp(vector4, Vector2.Normalize(Projectile.velocity), 0.9f));
+                    vector4 = Vector2.Normalize(Vector2.Lerp(vector4, Vector2.Normalize(Projectile.velocity), MathF.Min(0.95f, 0.75f + _targets.Count * 0.1f)));
                     vector4 *= num8;
                     if (vector4.X != Projectile.velocity.X || vector4.Y != Projectile.velocity.Y)
                         Projectile.netUpdate = true;
