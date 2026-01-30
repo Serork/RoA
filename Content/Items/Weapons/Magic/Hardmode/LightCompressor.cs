@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -48,7 +49,9 @@ sealed class LightCompressor : ModItem {
 
         private static Asset<Texture2D> _lightTexture = null!;
 
-        private List<ushort> _targets = null!;
+        private record struct TargetInfo(Vector2 Position, float LaserOpacity);
+
+        private Dictionary<ushort, TargetInfo> _targets = null!;
 
         public ref float SpawnValue => ref Projectile.localAI[1];
 
@@ -69,11 +72,12 @@ sealed class LightCompressor : ModItem {
                     float height = MathF.Max(100, rCurrentNPC.height * 2f);
                     Vector4 sourceRectangle = new(-width / 2f, -height / 2f, width, height);
                     Vector2 size = new(width, height);
+                    float factor = rCurrentNPC.GetCommon().LightCompressorEffectOpacity * 0.75f;
                     lightCompressorShader.Parameters["uSourceRect"].SetValue(sourceRectangle);
                     lightCompressorShader.Parameters["uLegacyArmorSourceRect"].SetValue(sourceRectangle);
                     lightCompressorShader.Parameters["uImageSize0"].SetValue(size);
                     lightCompressorShader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects);
-                    lightCompressorShader.Parameters["uSaturation"].SetValue(rCurrentNPC.GetCommon().LightCompressorEffectOpacity);
+                    lightCompressorShader.Parameters["uSaturation"].SetValue(factor);
                     lightCompressorShader.CurrentTechnique.Passes[0].Apply();
 
                     orig(self, mySpriteBatch, rCurrentNPC, behindTiles, screenPos);
@@ -119,13 +123,13 @@ sealed class LightCompressor : ModItem {
         //}
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-            for (int i = 0; i < _targets.Count; i++) {
-                ushort whoAmI = _targets[i];
-                NPC npc = Main.npc[whoAmI];
-                if (targetHitbox.Contains(npc.Center.ToPoint())) {
-                    return true;
-                }
-            }
+            //for (int i = 0; i < _targets.Count; i++) {
+            //    ushort whoAmI = _targets[i];
+            //    NPC npc = Main.npc[whoAmI];
+            //    if (targetHitbox.Contains(npc.Center.ToPoint())) {
+            //        return true;
+            //    }
+            //}
 
             return false;
         }
@@ -191,7 +195,7 @@ sealed class LightCompressor : ModItem {
                         if (npc.Distance(position) > npc.Size.Length() * 0.375f) {
                             continue;
                         }
-                        if (_targets.Contains((ushort)npc.whoAmI)) {
+                        if (_targets.ContainsKey((ushort)npc.whoAmI)) {
                             continue;
                         }
                         hasTarget = true;
@@ -223,7 +227,7 @@ sealed class LightCompressor : ModItem {
                 }
             }
 
-            void drawLightLine(Vector2 targetPosition) {
+            void drawLightLine(TargetInfo target) {
                 SpriteBatch batch = Main.spriteBatch;
                 Vector2 startPosition = Projectile.Center;
                 Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize();
@@ -234,35 +238,54 @@ sealed class LightCompressor : ModItem {
                 float offsetValue = 60f;
                 startPosition += normalizedVelocity * offsetValue;
                 startPosition2 += normalizedVelocity * offsetValue * 1.25f;
-                Vector2 endPosition = targetPosition;
+                Vector2 endPosition = target.Position;
                 Vector2 velocity = startPosition.DirectionTo(startPosition2) * 2f;
                 float lerpValue = 0.1f;
+                int i = 0;
                 while (true) {
+                    i++;
                     Texture2D texture = _lightTexture.Value;
                     float step = texture.Height;
                     float distance = Vector2.Distance(startPosition, endPosition);
                     if (distance < step * 1f) {
                         break;
                     }
+                    float maxLength = MAXDISTANCETOTARGETINPIXELS;
                     float rotation = velocity.ToRotation() - MathHelper.PiOver2;
                     Rectangle clip = texture.Bounds;
                     Vector2 origin = clip.Centered();
                     Color color = Color.White.MultiplyAlpha(0.75f);
+                    //color *= Utils.GetLerpValue(maxLength, maxLength * 0.8f, Projectile.Distance(endPosition), true);
+                    color *= target.LaserOpacity;
+                    float i2 = i * 10f;
+                    float scaleFactor = Utils.GetLerpValue(0f, 10f, i, true);
+                    //scaleFactor *= Ease.CubeOut(MathUtils.Clamp01(distance / 60f));
+                    scaleFactor = MathF.Max(0.625f, scaleFactor);
+                    Vector2 scale = new(Helper.Wave(0.5f, 1.5f, 20f, Projectile.whoAmI * 3) * 2f * scaleFactor, 1f);
                     DrawInfo drawInfo = new() {
                         Clip = clip,
                         Origin = origin,
                         Rotation = rotation,
-                        Color = color
+                        Color = color,
+                        Scale = scale
                     };
                     Vector2 position = startPosition;
-                    batch.Draw(texture, position, drawInfo);
                     startPosition += velocity.SafeNormalize() * step;
+                    float offsetValue2 = 2f * scaleFactor;
+                    startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, Projectile.whoAmI * 3 + i2 * 0.05f) * offsetValue2;
+
+                    DrawInfo bloomDrawInfo = new() {
+                        Clip = ResourceManager.Bloom.Bounds,
+                        Origin = ResourceManager.Bloom.Bounds.Centered(),
+                        Rotation = rotation,
+                        Color = color.MultiplyRGB(new Color(136, 219, 227)).MultiplyAlpha(0.25f) * 1f,
+                        Scale = Vector2.One * scale.X * 0.15f
+                    };
+                    batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
+
+                    batch.Draw(texture, position, drawInfo);
                     velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
                     float length = (startPosition2 - endPosition).Length();
-                    float maxLength = MAXDISTANCETOTARGETINPIXELS;
-                    if (length > maxLength) {
-                        break;
-                    }
                     float factor = 1f;
                     factor -= length / maxLength;
                     factor = MathF.Max(0.01f, factor);
@@ -277,10 +300,8 @@ sealed class LightCompressor : ModItem {
                 }
             }
 
-            foreach (ushort targetWhoAmI in _targets) {
-                NPC npc = Main.npc[targetWhoAmI];
-                Vector2 targetPosition = npc.Center + Vector2.UnitY * npc.gfxOffY;
-                drawLightLine(targetPosition);
+            foreach (var targetWhoAmI in _targets) {
+                drawLightLine(targetWhoAmI.Value);
             }
             drawMainLightLine();
         }
@@ -328,11 +349,11 @@ sealed class LightCompressor : ModItem {
                     if (TargetTimeValue < TARGETTIME) {
                         continue;
                     }
-                    if (_targets.Contains(whoAmI)) {
+                    if (_targets.ContainsKey(whoAmI)) {
                         hasTarget = false;
                         continue;
                     }
-                    _targets.Add(whoAmI);
+                    _targets.Add(whoAmI, new TargetInfo(npc.Center + Vector2.UnitY * npc.gfxOffY, 0f));
                     TargetTimeValue = 0f;
                     break;
                 }
@@ -351,16 +372,31 @@ sealed class LightCompressor : ModItem {
                 }
             }
 
-            for (int i = 0; i < _targets.Count; i++) {
-                ushort whoAmI = _targets[i];
+            float lerpValue = 0.05f;
+            foreach (var target in _targets) {
+                ushort whoAmI = target.Key;
                 NPC npc = Main.npc[whoAmI];
+                void removeSlowly() {
+                    TargetInfo targetInfo = _targets[whoAmI];
+                    targetInfo.LaserOpacity = Helper.Approach(targetInfo.LaserOpacity, 0f, lerpValue);
+                    _targets[whoAmI] = targetInfo;
+                    if (_targets[whoAmI].LaserOpacity <= 0f) {
+                        _targets.Remove(whoAmI);
+                    }
+
+                }
                 if (Projectile.Distance(npc.Center) > MAXDISTANCETOTARGETINPIXELS) {
-                    _targets.Remove(whoAmI);
+                    removeSlowly();
+                    continue;
                 }
                 if (!npc.active) {
-                    _targets.Remove(whoAmI);
+                    removeSlowly();
                 }
                 else {
+                    TargetInfo targetInfo = _targets[whoAmI];
+                    targetInfo.LaserOpacity = Helper.Approach(targetInfo.LaserOpacity, 1f, lerpValue);
+                    targetInfo.Position = npc.Center + Vector2.UnitY * npc.gfxOffY;
+                    _targets[whoAmI] = targetInfo;
                     npc.GetCommon().IsLightCompressorEffectActive = true;
                     npc.GetCommon().LightCompressorEffectOpacity = Helper.Approach(npc.GetCommon().LightCompressorEffectOpacity, 1f, 0.025f);
                 }
