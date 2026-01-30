@@ -39,6 +39,12 @@ sealed class LightCompressor : ModItem {
         Item.autoReuse = true;
         Item.noMelee = true;
         Item.channel = true;
+
+        Item.mana = 4;
+    }
+
+    public override void ModifyManaCost(Player player, ref float reduce, ref float mult) {
+        mult *= 0f;
     }
 
     [Tracked]
@@ -409,7 +415,11 @@ sealed class LightCompressor : ModItem {
                     if (_targets[whoAmI].LaserOpacity <= 0f) {
                         _targets.Remove(whoAmI);
                     }
-
+                }
+                Player player2 = Projectile.GetOwnerAsPlayer();
+                if (!player2.CheckMana(player2.GetSelectedItem(), pay: false)) {
+                    removeSlowly();
+                    continue;
                 }
                 if (Projectile.Distance(npc.Center) > MAXDISTANCETOTARGETINPIXELS) {
                     removeSlowly();
@@ -423,8 +433,11 @@ sealed class LightCompressor : ModItem {
                     targetInfo.LaserOpacity = Helper.Approach(targetInfo.LaserOpacity, 1f, lerpValue);
                     targetInfo.Position = npc.Center + Vector2.UnitY * npc.gfxOffY;
 
+                    Player player3 = Projectile.GetOwnerAsPlayer();
+                    player3.CheckMana(player3.GetSelectedItem(), pay: true);
+
                     if (Main.rand.NextBool()) {
-                        Dust.NewDustPerfect(targetInfo.Position + Main.rand.RandomPointInArea(npc.Size * 0.25f), ModContent.DustType<LightCompressorDust>(), 
+                        Dust.NewDustPerfect(targetInfo.Position + Main.rand.RandomPointInArea(npc.Size * 0.25f), ModContent.DustType<LightCompressorDust>(),
                             Main.rand.NextVector2Circular(1f, 1f), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
                     }
 

@@ -54,6 +54,10 @@ sealed class RodOfTheTerra : Rod {
         Item.shootSpeed = 10f;
     }
 
+    public override void ModifyManaCost(Player player, ref float reduce, ref float mult) {
+        mult *= 0f;
+    }
+
     public override Vector2? HoldoutOrigin() => null;
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
