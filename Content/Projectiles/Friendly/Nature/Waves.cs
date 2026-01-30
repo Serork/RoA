@@ -130,12 +130,12 @@ abstract class Wave : NatureProjectile {
             }
         }
         player.heldProj = Projectile.whoAmI;
-        if (Main.myPlayer == Projectile.owner) {
-            if (player.noItems) {
-                Projectile.Kill();
-                return;
-            }
-        }
+        //if (Main.myPlayer == Projectile.owner) {
+        //    if (player.noItems) {
+        //        Projectile.Kill();
+        //        return;
+        //    }
+        //}
         if (Projectile.Opacity > 0.05f) {
             Projectile.Opacity -= 0.05f;
             Projectile.Opacity *= 0.975f;
