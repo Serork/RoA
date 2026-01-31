@@ -150,7 +150,7 @@ sealed class Ent : RoANPC {
         NPC.lifeMax = npc.lifeMax;
 
         NPC.defense = npc.defense;
-        NPC.Center = npc.Center - Vector2.UnitY * 32f;
+        NPC.Center = npc.Center + npc.gfxOffY * Vector2.UnitY - Vector2.UnitY * 32f;
         NPC.velocity = npc.velocity;
 
         NPC.netUpdate = true;
