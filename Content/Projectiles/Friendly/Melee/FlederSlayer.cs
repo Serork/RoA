@@ -233,10 +233,10 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 Projectile.scale *= scale;
             }
         }
-        if (Projectile.ai[1] < 3f) {
-            Lighting.AddLight(Projectile.Center + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale,
-            Color.White.ToVector3() * MathHelper.Clamp(_charge * 2f, 0f, 1f) * 0.5f);
-        }
+        //if (Projectile.ai[1] < 3f) {
+        //    Lighting.AddLight(Projectile.Center + new Vector2(90, 90).RotatedBy(Projectile.rotation - 0.78f) * Projectile.scale,
+        //    Color.White.ToVector3() * MathHelper.Clamp(_charge * 2f, 0f, 1f) * 0.5f);
+        //}
         int itemAnimationMax = 40;
         int min = itemAnimationMax / 2 - itemAnimationMax / 4;
         Projectile.Opacity = Utils.GetLerpValue(itemAnimationMax, itemAnimationMax - 7, Projectile.timeLeft, clamped: true) * Utils.GetLerpValue(0f, 7f, Projectile.timeLeft, clamped: true);
@@ -515,6 +515,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             dust.scale *= Projectile.scale * 1f;
             dust.fadeIn = dust.scale + 0.1f;
             dust.noGravity = true;
+            dust.noLight = true;
         }
     }
 
@@ -686,12 +687,12 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              color * Projectile.Opacity * 0.65f * charge,
                              Projectile.rotation + 0.78f,
                              bloom.Size() / 2f,
-                             Projectile.scale * 1.05f,
+                             Projectile.scale * 1.05f * Helper.Wave(0.9375f, 1.0625f, 10f, Projectile.whoAmI),
                              SpriteEffects.None,
                              0f);
             spriteBatch.Begin(snapshot, true);
         }
-        color = Color.White;
+        //color = Color.White;
         if (!flag) {
             float opacity2 = MathUtils.Clamp01(Projectile.ai[1] / 10f);
             opacity2 *= 1f - Utils.GetLerpValue(0.75f, 1f, MathUtils.Clamp01(Projectile.ai[1] / 40f), true);
