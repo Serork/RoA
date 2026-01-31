@@ -687,7 +687,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              color * Projectile.Opacity * 0.65f * charge,
                              Projectile.rotation + 0.78f,
                              bloom.Size() / 2f,
-                             Projectile.scale * 1.05f * Helper.Wave(0.9375f, 1.0625f, 10f, Projectile.whoAmI),
+                             Projectile.scale * 1f * Helper.Wave(0.9375f, 1.0625f, 10f, Projectile.whoAmI),
                              SpriteEffects.None,
                              0f);
             spriteBatch.Begin(snapshot, true);
@@ -726,6 +726,9 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         Vector2 position2 = new Vector2(90 + (Projectile.direction == 1 ? -0 : 0), 90 + (Projectile.direction == 1 ? -4 : 0)).RotatedBy(Projectile.rotation - 0.78f);
         if (Projectile.direction == 1) {
             position2 += Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 3f;
+        }
+        if (Projectile.ai[1] == 2f) {
+            opacity *= Utils.GetLerpValue(0f, 20f, Projectile.ai[0], true);
         }
         spriteBatch.Draw(sparkTexture2D,
                             center + offset + position2 * Projectile.scale - Main.screenPosition,
