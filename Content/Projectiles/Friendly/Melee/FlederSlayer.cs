@@ -694,6 +694,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         color = Color.White;
         if (!flag) {
             float opacity2 = MathUtils.Clamp01(Projectile.ai[1] / 10f);
+            opacity2 *= 1f - Utils.GetLerpValue(0.75f, 1f, MathUtils.Clamp01(Projectile.ai[1] / 40f), true);
             spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             spriteBatch.Draw(sparkTexture2D,
                              center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition,
