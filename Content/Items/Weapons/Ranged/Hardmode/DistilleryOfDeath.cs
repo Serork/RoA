@@ -81,7 +81,7 @@ sealed class DistilleryOfDeath : ModItem {
                     Rectangle clip = new Rectangle(0, 0, asset.Width(), asset.Height());
                     Vector2 origin = new Vector2((float)asset.Width() * 0.5f, drawinfo.bodyVect.Y);
                     float scale = 1f;
-                    float opacity = 0.5f * opacityFactor;
+                    float opacity = 0.5f * opacityFactor * 0.875f;
                     SpriteEffects flip = drawinfo.playerEffect;
                     for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
                         float num12 = (TimeSystem.TimeForVisualEffects + player.whoAmI) % 2f / 1f * player.direction;
@@ -437,7 +437,7 @@ sealed class DistilleryOfDeath : ModItem {
                     if (!current) {
                         shootOpacity = 1f;
                     }
-                    float opacity = 0.5f * Projectile.Opacity;
+                    float opacity = 0.5f * Projectile.Opacity * 0.875f;
 
                     if (current) {
                         VerticalAppearanceShader.Reset();
