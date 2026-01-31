@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
@@ -68,6 +69,8 @@ sealed class ConjurersEyeLaser : ModProjectile {
 
         Projectile.localAI[0] = Helper.Approach(Projectile.localAI[0], 1f, 1f);
 
+        Projectile.localAI[2] += TimeSystem.LogicDeltaTime * 0.75f;
+
         if (Projectile.timeLeft < 20) {
             Projectile.Opacity = Utils.GetLerpValue(0, 20, Projectile.timeLeft, true);
         }
@@ -107,7 +110,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
 
             texture = TextureAssets.Projectile[ProjectileID.HallowBossRainbowStreak].Value;
             lerp = 1f - i / (float)(trailLength - 1);
-            brightest = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 20f, i * 10));
+            brightest = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, i * 10));
             color = (Color.Lerp(brightest.MultiplyRGBA(Color.Black * .5f), brightest, lerp) with { A = 50 }) * lerp * Projectile.Opacity;
             color *= 1.5f;
             color *= 0.9f;
@@ -116,7 +119,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
             //if (IsOutsideAngle(new Vector2(Projectile.ai[0], Projectile.ai[1]), Projectile.velocity, position + Projectile.velocity.SafeNormalize() * -60f, 100f)) {
             //    color *= 0f;
             //}
-            scale = new Vector2(Helper.Wave(0.25f, 0.675f, 20f, i * 10) * lerp * 0.5f, 3f) * projectile.scale;
+            scale = new Vector2(Helper.Wave(Projectile.localAI[2], 0.25f, 0.675f, 20f, i * 10) * lerp * 0.5f, 3f) * projectile.scale;
 
             Main.EntitySpriteDraw(texture, position - Main.screenPosition, null, color, projectile.rotation, texture.Size() / 2, scale, SpriteEffects.None);
         }
@@ -125,7 +128,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
         Vector2 eyePosition = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint() + new Vector2(MathF.Abs(Projectile.ai[0]) * Projectile.GetOwnerAsPlayer().direction, Projectile.ai[1]);
         Rectangle flareClip = flare.Bounds;
         Vector2 flareOrigin = flareClip.Centered();
-        Color flareColor = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 20f, Projectile.whoAmI));
+        Color flareColor = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, Projectile.whoAmI));
         flareColor *= 1.5f;
         float baseProgress = Utils.GetLerpValue(TIMELEFT - 20, TIMELEFT, Projectile.timeLeft, true);
         float progress = Ease.CubeOut(baseProgress);
@@ -133,15 +136,16 @@ sealed class ConjurersEyeLaser : ModProjectile {
         flareColor *= 0.9f;
         Vector2 flareScale = new Vector2(MathHelper.Lerp(0.5f, 2f, Ease.QuadOut(baseProgress)), 0.75f);
         flareScale *= 0.425f;
+        float rotation = Projectile.velocity.ToRotation() + Projectile.ai[2];
         DrawInfo flareDrawInfo = new() {
             Clip = flareClip,
             Origin = flareOrigin,
             Color = flareColor,
             Scale = flareScale,
-            Rotation = Projectile.ai[2]
+            Rotation = rotation
         };
         Main.spriteBatch.DrawWithSnapshot(flare, eyePosition, flareDrawInfo, blendState: BlendState.Additive);
-        flareColor = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 20f, Projectile.whoAmI));
+        flareColor = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, Projectile.whoAmI));
         flareColor = flareColor with { A = 0 };
         flareColor *= 1.5f;
         flareColor *= progress;
@@ -151,17 +155,17 @@ sealed class ConjurersEyeLaser : ModProjectile {
             Origin = flareOrigin,
             Color = flareColor,
             Scale = flareScale,
-            Rotation = Projectile.ai[2]
+            Rotation = rotation
         };
         Main.spriteBatch.DrawWithSnapshot(flare, eyePosition, flareDrawInfo);
 
-        Texture2D bloom = ResourceManager.Bloom;
+        Texture2D bloom = ResourceManager.Bloom2;
         flareDrawInfo = new() {
             Clip = bloom.Bounds,
             Origin = bloom.Bounds.Centered(),
-            Color = flareColor * 1f,
-            Scale = Vector2.One * flareScale.X * 0.5f * new Vector2(1.25f, 1f),
-            Rotation = Projectile.ai[2]
+            Color = flareColor * 0.875f,
+            Scale = Vector2.One * flareScale.X * 0.375f * new Vector2(1.25f, 1f),
+            Rotation = rotation
         };
         Main.spriteBatch.DrawWithSnapshot(bloom, eyePosition, flareDrawInfo);
 

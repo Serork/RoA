@@ -49,6 +49,7 @@ static class ResourceManager {
     public static Texture2D Star => ModContent.Request<Texture2D>(VisualEffectTextures + "Star", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Ray2 => ModContent.Request<Texture2D>(VisualEffectTextures + "Ray2", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Bloom => ModContent.Request<Texture2D>(VisualEffectTextures + "Bloom", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Bloom2 => ModContent.Request<Texture2D>(VisualEffectTextures + "Bloom2", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Light => ModContent.Request<Texture2D>(VisualEffectTextures + "Light", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Noise => ModContent.Request<Texture2D>(VisualEffectTextures + "Noise", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Flare => ModContent.Request<Texture2D>(VisualEffectTextures + "Flare", AssetRequestMode.ImmediateLoad).Value;
