@@ -294,6 +294,8 @@ sealed class LightCompressor : ModItem {
                     scaleFactor *= Ease.CubeIn(MathUtils.Clamp01(distance / (step * 3f)));
                     scaleFactor = MathF.Max(0.625f, scaleFactor);
                     Vector2 scale = new(Helper.Wave(0.5f, 1.5f, 20f, Projectile.whoAmI * 3) * 2f * scaleFactor, 1f);
+                    velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
+
                     DrawInfo drawInfo = new() {
                         Clip = clip,
                         Origin = origin,
@@ -301,6 +303,7 @@ sealed class LightCompressor : ModItem {
                         Color = color,
                         Scale = scale
                     };
+
                     Vector2 position = startPosition;
                     startPosition += velocity.SafeNormalize() * step;
                     float offsetValue2 = 2f * scaleFactor * Ease.CubeIn(Utils.GetLerpValue(0f, 3f, i, true));
@@ -323,7 +326,6 @@ sealed class LightCompressor : ModItem {
                     Lighting.AddLight(position, (Color.Lerp(Color.SkyBlue, Color.Blue, 0.05f) with { A = 0 }).ToVector3() * 0.75f);
 
                     batch.Draw(texture, position, drawInfo);
-                    velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
                     float length = (startPosition2 - endPosition).Length();
                     float factor = 1f;
                     factor -= length / maxLength;
