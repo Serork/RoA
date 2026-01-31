@@ -290,10 +290,11 @@ sealed class LightCompressor : ModItem {
                     //color *= Utils.GetLerpValue(maxLength, maxLength * 0.8f, Projectile.Distance(endPosition), true);
                     color *= target.LaserOpacity;
                     float i2 = i * 10f;
+                    float waveFactor = Ease.CubeIn(Utils.GetLerpValue(0f, 2.5f, i, true));
                     float scaleFactor = Utils.GetLerpValue(0f, 10f, i, true);
                     scaleFactor *= Ease.CubeIn(MathUtils.Clamp01(distance / (step * 3f)));
                     scaleFactor = MathF.Max(0.625f, scaleFactor);
-                    Vector2 scale = new(Helper.Wave(0.5f, 1.5f, 20f, Projectile.whoAmI * 3) * 2f * scaleFactor, 1f);
+                    Vector2 scale = new(Helper.Wave(1f - 0.5f * waveFactor, 1f + 0.5f * waveFactor, 20f, Projectile.whoAmI * 3) * 2f * scaleFactor, 1f);
                     velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
 
                     DrawInfo drawInfo = new() {
@@ -306,7 +307,7 @@ sealed class LightCompressor : ModItem {
 
                     Vector2 position = startPosition;
                     startPosition += velocity.SafeNormalize() * step;
-                    float offsetValue2 = 2f * scaleFactor * Ease.CubeIn(Utils.GetLerpValue(0f, 3f, i, true));
+                    float offsetValue2 = 2f * scaleFactor * waveFactor;
                     startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, Projectile.whoAmI * 3 + i2 * 0.05f) * offsetValue2;
 
                     DrawInfo bloomDrawInfo = new() {
