@@ -73,7 +73,7 @@ sealed class SlipperyBomb : ModProjectile {
             Projectile.damage = 100;
             Projectile.knockBack = 8f;
         }
-        Projectile.ai[0] += 1f;
+        //Projectile.ai[0] += 1f;
         return;
     }
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {

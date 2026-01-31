@@ -33,6 +33,8 @@ sealed class SlipperyDynamite : ModProjectile {
         Projectile.friendly = true;
         Projectile.tileCollide = true;
 
+        AIType = ProjectileID.Dynamite;
+
         Projectile.timeLeft = 180;
 
         DrawOriginOffsetY = -10;
@@ -75,20 +77,20 @@ sealed class SlipperyDynamite : ModProjectile {
             Projectile.knockBack = 10f;
         }
         else {
-            if (Main.rand.NextBool()) {
-                int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 31, 0f, 0f, 100, default(Color), 1f);
-                Main.dust[dustIndex].scale = 0.1f + (float)Main.rand.Next(5) * 0.1f;
-                Main.dust[dustIndex].fadeIn = 1.5f + (float)Main.rand.Next(5) * 0.1f;
-                Main.dust[dustIndex].noGravity = true;
-                Main.dust[dustIndex].position = Projectile.Center + new Vector2(0f, (float)(-(float)Projectile.height / 2)).RotatedBy((double)Projectile.rotation, default(Vector2)) * 1.1f;
-                dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 6, 0f, 0f, 100, default(Color), 1f);
-                Main.dust[dustIndex].scale = 1f + (float)Main.rand.Next(5) * 0.1f;
-                Main.dust[dustIndex].noGravity = true;
-                Main.dust[dustIndex].position = Projectile.Center + new Vector2(0f, (float)(-(float)Projectile.height / 2 - 6)).RotatedBy((double)Projectile.rotation, default(Vector2)) * 1.1f;
-            }
+            //if (Main.rand.NextBool()) {
+            //    int dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 31, 0f, 0f, 100, default(Color), 1f);
+            //    Main.dust[dustIndex].scale = 0.1f + (float)Main.rand.Next(5) * 0.1f;
+            //    Main.dust[dustIndex].fadeIn = 1.5f + (float)Main.rand.Next(5) * 0.1f;
+            //    Main.dust[dustIndex].noGravity = true;
+            //    Main.dust[dustIndex].position = Projectile.Center + new Vector2(0f, (float)(-(float)Projectile.height / 2)).RotatedBy((double)Projectile.rotation, default(Vector2)) * 1.1f;
+            //    dustIndex = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 6, 0f, 0f, 100, default(Color), 1f);
+            //    Main.dust[dustIndex].scale = 1f + (float)Main.rand.Next(5) * 0.1f;
+            //    Main.dust[dustIndex].noGravity = true;
+            //    Main.dust[dustIndex].position = Projectile.Center + new Vector2(0f, (float)(-(float)Projectile.height / 2 - 6)).RotatedBy((double)Projectile.rotation, default(Vector2)) * 1.1f;
+            //}
         }
-        Projectile.ai[0] += 1f;
-        Projectile.rotation += Projectile.velocity.X * 0.05f;
+        //Projectile.ai[0] += 1f;
+        //Projectile.rotation += Projectile.velocity.X * 0.05f;
         return;
     }
 

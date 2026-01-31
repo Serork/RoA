@@ -46,8 +46,8 @@ public class SlipperyGlowstick : ModItem {
 
     public override void HoldItem(Player player) {
         player.itemLocation.X -= 2 * player.direction;
-        if (Main.rand.Next(player.itemAnimation > 0 ? 40 : 80) == 0)
-            Dust.NewDust(new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir), 4, 4, 102);
+        //if (Main.rand.Next(player.itemAnimation > 0 ? 40 : 80) == 0)
+        //    Dust.NewDust(new Vector2(player.itemLocation.X + 16f * player.direction, player.itemLocation.Y - 14f * player.gravDir), 4, 4, 102);
 
         Vector2 position = player.RotatedRelativePoint(new Vector2(player.itemLocation.X + 8f * player.direction + player.velocity.X, player.itemLocation.Y - 14f + player.velocity.Y), true);
         Lighting.AddLight(position, 0.95f, 0.75f, 0.4f);

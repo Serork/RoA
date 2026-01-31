@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Audio;
@@ -34,6 +35,14 @@ sealed class SlipperyGrenade : ModProjectile {
         Projectile.timeLeft = 180;
 
         Projectile.DamageType = DamageClass.Ranged;
+
+        DrawOriginOffsetY = 0;
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Projectile.QuickDraw(lightColor * Projectile.Opacity);
+
+        return false;
     }
 
     public override void PrepareBombToBlow() {
@@ -83,8 +92,8 @@ sealed class SlipperyGrenade : ModProjectile {
         }
 
         Projectile.ai[0] += 1f;
-        if (Projectile.ai[0] >= 20f && Projectile.tileCollide)
-            Projectile.velocity.Y = Projectile.velocity.Y + 0.4f; // 0.1f for arrow gravity, 0.4f for knife gravity
+        if (Projectile.ai[0] >= 10f && Projectile.tileCollide)
+            Projectile.velocity.Y = Projectile.velocity.Y + 0.2f; // 0.1f for arrow gravity, 0.4f for knife gravity
         if (Projectile.velocity.Y > 16f)
             Projectile.velocity.Y = 16f;
 
