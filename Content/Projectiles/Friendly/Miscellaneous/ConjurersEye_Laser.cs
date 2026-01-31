@@ -78,8 +78,8 @@ sealed class ConjurersEyeLaser : ModProjectile {
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
         }
 
-        DelegateMethods.v3_1 = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(0f, 1f, 20f, Projectile.whoAmI)).ToVector3();
-        Utils.PlotTileLine(Projectile.Center + Projectile.velocity.SafeNormalize() * 20f, Projectile.Center - Projectile.velocity.SafeNormalize() * 100f, 16f * Projectile.Opacity, DelegateMethods.CastLight);
+        DelegateMethods.v3_1 = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, Projectile.whoAmI)).ToVector3() * 0.65f;
+        Utils.PlotTileLine(Projectile.Center + Projectile.velocity.SafeNormalize() * 200f, Projectile.Center - Projectile.velocity.SafeNormalize() * 100f, 8f * Projectile.Opacity, DelegateMethods.CastLight);
 
         Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
 
