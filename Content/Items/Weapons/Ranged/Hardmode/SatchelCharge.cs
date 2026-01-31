@@ -16,5 +16,7 @@ sealed class SatchelCharge : ModItem {
         Item.damage = 14;
         Item.value = Item.buyPrice(0, 35);
         Item.rare = 3;
+
+        Item.noUseGraphic = true;
     }
 }
