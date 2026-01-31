@@ -457,7 +457,7 @@ sealed class LightCompressor : ModItem {
                     removeSlowly();
                     continue;
                 }
-                if (!npc.active) {
+                if (!npc.active || !npc.CanBeChasedBy()) {
                     removeSlowly(1.25f);
                 }
                 else {
