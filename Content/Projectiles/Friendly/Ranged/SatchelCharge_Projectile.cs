@@ -43,6 +43,8 @@ sealed class SatchelChargeProjectile : ModProjectile {
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
+            Projectile.velocity = Projectile.velocity.SafeNormalize() * 7.5f;
+
             Projectile.Center = player.GetPlayerCorePoint();
             int index = 0;
             int max = 15;
@@ -57,14 +59,14 @@ sealed class SatchelChargeProjectile : ModProjectile {
             Projectile.Center -= Projectile.velocity;
         }
 
-        Projectile.velocity.X *= 0.9f;
+        Projectile.velocity.X *= 0.95f;
         if ((double)Math.Abs(Projectile.velocity.X) < 0.1)
             Projectile.velocity.X = 0f;
         else {
-            Projectile.SetDirection(-Projectile.velocity.X.GetDirection());
+            Projectile.SetDirection(Projectile.velocity.X.GetDirection());
         }
 
-        Projectile.velocity.Y = Projectile.velocity.Y + 0.4f;
+        Projectile.velocity.Y = Projectile.velocity.Y + 0.3f;
         if (Projectile.velocity.Y > 16f) {
             Projectile.velocity.Y = 16f;
         }
