@@ -693,11 +693,12 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         }
         color = Color.White;
         if (!flag) {
+            float opacity2 = MathUtils.Clamp01(Projectile.ai[1] / 10f);
             spriteBatch.Begin(snapshot with { blendState = BlendState.Additive }, true);
             spriteBatch.Draw(sparkTexture2D,
                              center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition,
                              null,
-                             color * Projectile.Opacity * 1f * charge,
+                             color * Projectile.Opacity * opacity2 * charge,
                              MathHelper.TwoPi * (TimeSystem.TimeForVisualEffects * 0.8f % 1f) * -Projectile.direction,
                              new Vector2(sparkTexture2D.Width / 2, sparkTexture2D.Height / 2),
                              Projectile.scale * 0.8f,
@@ -706,7 +707,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             spriteBatch.Draw(sparkTexture2D,
                              center + offset + Vector2.Normalize(Projectile.rotation.ToRotationVector2()) * 127.5f * Projectile.scale - Main.screenPosition,
                              null,
-                             color * Projectile.Opacity * 1f * charge,
+                             color * Projectile.Opacity * opacity2 * charge,
                              MathHelper.TwoPi * (TimeSystem.TimeForVisualEffects * 0.8f % 1f) * -Projectile.direction + MathHelper.PiOver2,
                              new Vector2(sparkTexture2D.Width / 2, sparkTexture2D.Height / 2),
                              Projectile.scale * 0.8f,
