@@ -259,7 +259,10 @@ sealed class LightCompressor : ModItem {
                 }
             }
 
+            int index = 0;
             void drawLightLine(TargetInfo target) {
+                index++;
+
                 SpriteBatch batch = Main.spriteBatch;
                 Vector2 startPosition = Projectile.Center;
                 Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize();
@@ -308,7 +311,7 @@ sealed class LightCompressor : ModItem {
                     Vector2 position = startPosition;
                     startPosition += velocity.SafeNormalize() * step;
                     float offsetValue2 = 2f * scaleFactor * waveFactor;
-                    startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, Projectile.whoAmI * 3 + i2 * 0.05f) * offsetValue2;
+                    startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, Projectile.whoAmI * 3 + i2 * 0.05f + index * 3) * offsetValue2;
 
                     DrawInfo bloomDrawInfo = new() {
                         Clip = ResourceManager.Bloom.Bounds,
