@@ -283,7 +283,7 @@ sealed class SatchelChargeProjectile : ModProjectile {
             circleDrawInfo = circleDrawInfo.WithScale(scale).WithColorModifier(opacity * 1.375f);
             circleColor = Color.Lerp(new Color(255, 255, 86), new Color(230, 70, 70), i / 2f);
             circleDrawInfo = circleDrawInfo.WithColor(circleColor.MultiplyAlpha(alphaModifier) * globalOpacity);
-            batch.DrawWithSnapshot(circleTexture, circlePosition, circleDrawInfo.WithScale(1.65f).WithScale(globalScale), blendState: BlendState.Additive);
+            batch.DrawWithSnapshot(circleTexture, circlePosition, circleDrawInfo.WithScale(1.625f).WithScale(globalScale), blendState: BlendState.Additive);
         }
         circleTexture = ResourceManager.Circle7;
         circlePosition = Projectile.Center;
