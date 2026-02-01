@@ -177,6 +177,10 @@ sealed class WardenHand : NatureProjectile_NoTextureLoad, IUseCustomImmunityFram
                     return;
                 }
 
+                if (IsMoving) {
+                    return;
+                }
+
                 RocksValues rocksValues = new(Projectile);
                 for (int k = 0; k < _rootData.Length; k++) {
                     RootInfo rootInfo = _rootData[k];
