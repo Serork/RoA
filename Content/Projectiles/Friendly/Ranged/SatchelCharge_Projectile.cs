@@ -143,7 +143,7 @@ sealed class SatchelChargeProjectile : ModProjectile {
             }
             for (int i = 0; i < 3; i++) {
                 Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Smoke2>(), 0f, 0f, 0,
-                    Color.Lerp(Color.Black, Color.Lerp(Color.Black, Color.Brown, 0.5f), 0.75f * Main.rand.NextFloat()) * 0.5625f, Main.rand.NextFloat(0.4f, 0.6f) * 1f);
+                    Color.Lerp(Color.Black, Color.Lerp(Color.Black, Color.Brown, 0.5f), 0.75f * Main.rand.NextFloat()) * 0.5f, Main.rand.NextFloat(0.4f, 0.6f) * 1f);
                 position = Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width, Projectile.height) * modifier * 0.375f;
                 dust.position = position;
                 dust.velocity = Vector2.UnitY * -2f;
