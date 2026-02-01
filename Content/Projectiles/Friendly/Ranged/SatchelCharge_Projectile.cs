@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.VisualEffects;
+using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
 using RoA.Core;
 using RoA.Core.Defaults;
@@ -17,6 +18,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -125,6 +127,11 @@ sealed class SatchelChargeProjectile : ModProjectile {
             gore.velocity.Y -= 1.5f;
         }
 
+        if (Helper.SinglePlayerOrServer) {
+            PunchCameraModifier modifier4 = new(Projectile.Center, Vector2.One.RotatedByRandom(MathHelper.TwoPi), 1f, 6f, 15, -1f, "Satchel Charge");
+            Main.instance.CameraModifiers.Add(modifier4);
+        }
+
         float modifier = 0.1f;
         int count = 20;
         for (int g = 0; g < count; g++) {
@@ -133,6 +140,13 @@ sealed class SatchelChargeProjectile : ModProjectile {
                 AdvancedDustSystem.New<AdvancedDusts.SatchelChargeExplosion>(Main.rand.NextBool() ? AdvancedDustLayer.ABOVEDUSTS : AdvancedDustLayer.BEHINDPLAYERS)?.Setup(position,
                     Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 5f,
                     scale: Main.rand.NextFloat(1f, 1.5f));
+            }
+            for (int i = 0; i < 3; i++) {
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Smoke2>(), 0f, 0f, 0,
+                    Color.Lerp(Color.Black, Color.Lerp(Color.Black, Color.Brown, 0.5f), 0.75f * Main.rand.NextFloat()) * 0.5f, Main.rand.NextFloat(0.4f, 0.6f) * 1f);
+                position = Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width, Projectile.height) * modifier * 0.375f;
+                dust.position = position;
+                dust.velocity = Vector2.UnitY * -2f;
             }
             modifier += 0.05f;
         }

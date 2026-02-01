@@ -1889,9 +1889,12 @@ sealed partial class Lothor : ModNPC {
             }
         }
 
-        string tag = "Lothor Stomp";
-        PunchCameraModifier punchCameraModifier = new(NPC.Center, MathHelper.PiOver2.ToRotationVector2(), strength, 10f, 20, 1000f, tag);
-        Main.instance.CameraModifiers.Add(punchCameraModifier);
+        // TODO: test in mp
+        if (Main.netMode != NetmodeID.MultiplayerClient) {
+            string tag = "Lothor Stomp";
+            PunchCameraModifier punchCameraModifier = new(NPC.Center, MathHelper.PiOver2.ToRotationVector2(), strength, 10f, 20, 1000f, tag);
+            Main.instance.CameraModifiers.Add(punchCameraModifier);
+        }
 
         if (Main.netMode == NetmodeID.MultiplayerClient) {
             return;
