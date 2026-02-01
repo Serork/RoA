@@ -31,7 +31,7 @@ sealed class SatchelChargeProjectile : ModProjectile {
 
     public override string Texture => ResourceManager.RangedProjectileTextures + "SatchelCharge";
 
-    public static SoundStyle ExplosionSound { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "SatchelChargExplosion");
+    public static SoundStyle ExplosionSound { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "SatchelChargeExplosion");
 
     public override void SetStaticDefaults() {
         ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;

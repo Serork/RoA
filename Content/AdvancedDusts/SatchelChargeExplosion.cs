@@ -40,7 +40,8 @@ sealed class SatchelChargeExplosion : AdvancedDust<SatchelChargeExplosion> {
 
         Velocity *= 0.8f;
 
-        DrawColor = _baseColor.MultiplyAlpha(0.375f) * 0.625f;
+        float opacity = Utils.GetLerpValue(0, 20, TimeLeft, true) * Utils.GetLerpValue(MaxTimeLeft, MaxTimeLeft - 20, TimeLeft, true);
+        DrawColor = _baseColor.MultiplyAlpha(0.375f) * 0.625f * opacity; 
 
         Frame = Texture.Frame(verticalFrames: 6, frameY: frame);
     }
