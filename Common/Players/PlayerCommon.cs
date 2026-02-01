@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
@@ -27,6 +28,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
+using Terraria.WorldBuilding;
 
 using static RoA.Content.Projectiles.Friendly.Ranged.DistilleryOfDeathGust;
 
@@ -67,6 +69,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private static List<ushort> _obsidianStopwatchCopiesHueShift = null!;
     private static byte _currentTempBufferCopyIndex, _currentObsidianStopwatchCopyIndex;
     private static byte _copyIndexIAmDrawing;
+    private static bool _gardeningGlovesDrawing;
 
     private const int MaxAdvancedShadows = 60;
     public int availableAdvancedShadowsCount;
@@ -481,6 +484,14 @@ sealed partial class PlayerCommon : ModPlayer {
             }
         }
 
+        if (_gardeningGlovesDrawing) {
+            for (int i = 0; i < drawInfo.DrawDataCache.Count; i++) {
+                DrawData value = drawInfo.DrawDataCache[i];
+                value.color = value.color.MultiplyRGBA(WreathHandler.GetCurrentColor(drawInfo.drawPlayer).MultiplyAlpha(0f));
+                drawInfo.DrawDataCache[i] = value;
+            }
+        }
+
         if (!_drawingObsidianStopwatchCopies) {
             return;
         }
@@ -505,6 +516,16 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override void DrawPlayer(Camera camera) {
+        if (GardeningGlovesImmunityFrames > 0) {
+            _gardeningGlovesDrawing = true;
+
+            Vector2 vector2 = Player.position;
+            float factor = 1f - GardeningGlovesImmunityFrames / 20f;
+            Main.PlayerRenderer.DrawPlayer(camera, Player, vector2, Player.fullRotation, Player.fullRotationOrigin, factor, 1f + factor * 0.5f);
+        }
+
+        _gardeningGlovesDrawing = false;
+
         for (int i = 0; i < MAXCOPIES; i++) {
             CopyInfo copyInfo = _copyData[i];
             Vector2 drawPosition = Player.position;
