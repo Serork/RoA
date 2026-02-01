@@ -1043,6 +1043,10 @@ sealed class WreathHandler : ModPlayer {
             ResetVisualParametersForNotNormal();
         }
 
+        if (Player.GetCommon().IsGardeningGlovesEffectActive && _tempResource != CurrentResource) {
+            Player.GetCommon().ActivateGardeningGloveEffect();
+        }
+
         _tempResource = CurrentResource;
         ChangingTimeValue = TimeSystem.LogicDeltaTime * 60f;
         _currentChangingTime = ChangingTimeValue;

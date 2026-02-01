@@ -2804,3 +2804,8 @@ TfugiosHeadGuard: {
 	DisplayName: Tfugios Head Guard
 	Tooltip: ""
 }
+
+GardeningGloves: {
+	DisplayName: Gardening Gloves
+	Tooltip: ""
+}

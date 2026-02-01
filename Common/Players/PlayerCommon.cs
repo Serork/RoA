@@ -155,6 +155,9 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool ShouldDrawVanillaBackpacks = true;
 
+    public bool IsGardeningGlovesEffectActive;
+    public ushort GardeningGlovesImmunityFrames;
+
     public float DistilleryOfDeathShootProgress => (float)DistilleryOfDeathShootCount / DistilleryOfDeath.DistilleryOfDeath_Use.SHOOTCOUNTPERTYPE;
 
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
@@ -310,6 +313,18 @@ sealed partial class PlayerCommon : ModPlayer {
 
         On_Player.CheckMana_int_bool_bool += On_Player_CheckMana_int_bool_bool1;
         On_Player.ItemCheck_PayMana += On_Player_ItemCheck_PayMana;
+
+        On_Player.ApplyVanillaHurtEffectModifiers += On_Player_ApplyVanillaHurtEffectModifiers;
+    }
+
+    private void On_Player_ApplyVanillaHurtEffectModifiers(On_Player.orig_ApplyVanillaHurtEffectModifiers orig, Player self, ref Player.HurtModifiers modifiers) {
+        orig(self, ref modifiers);
+
+        if (self.GetCommon().GardeningGlovesImmunityFrames > 0) {
+            float decrease = MathUtils.Clamp01(1f - Ease.QuintOut(self.GetCommon().GardeningGlovesImmunityFrames / 20f));
+            decrease = MathF.Max(0.01f, decrease);
+            modifiers.FinalDamage *= decrease;
+        }
     }
 
     private bool On_Player_ItemCheck_PayMana(On_Player.orig_ItemCheck_PayMana orig, Player self, Item sItem, bool canUse) {
@@ -1050,6 +1065,10 @@ sealed partial class PlayerCommon : ModPlayer {
         else {
             DoubleGogglesEffectOpacity = Helper.Approach(DoubleGogglesEffectOpacity, 0f, 0.1f);
         }
+
+        if (GardeningGlovesImmunityFrames > 0) {
+            GardeningGlovesImmunityFrames--;
+        }
     }
 
     public partial void DeerSkullPostUpdateEquips();
@@ -1123,6 +1142,13 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event PreUpdateDelegate PreUpdateEvent;
     public override void PreUpdate() {
         PreUpdateEvent?.Invoke(Player);
+    }
+
+    public void ActivateGardeningGloveEffect() {
+        if (GardeningGlovesImmunityFrames > 0) {
+            return;
+        }
+        GardeningGlovesImmunityFrames = 20;
     }
 
     public override void ModifyHurt(ref Player.HurtModifiers modifiers) {
@@ -1209,6 +1235,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsGardeningGlovesEffectActive = false;
+
         ShouldDrawVanillaBackpacks = true;
 
         IsBrawlerMaskEffectActive = false;
