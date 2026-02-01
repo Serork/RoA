@@ -1,7 +1,11 @@
-﻿using RoA.Content.Projectiles.Friendly.Ranged;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core.Defaults;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -18,5 +22,9 @@ sealed class SatchelCharge : ModItem {
         Item.rare = 3;
 
         Item.noUseGraphic = true;
+    }
+
+    public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
+        return !player.HasProjectile<SatchelChargeProjectile>();
     }
 }

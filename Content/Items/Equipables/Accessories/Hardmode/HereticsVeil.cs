@@ -48,10 +48,6 @@ sealed class HereticsVeil : ModItem {
         Vector2 drawPosition = new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
         //drawPosition += player.MovementOffset();
 
-        if (_flameTexture.IsLoaded is not true) {
-            return;
-        }
-
         if (_seed == 0f) {
             _seed = Main.rand.NextFloat(100f);
         }

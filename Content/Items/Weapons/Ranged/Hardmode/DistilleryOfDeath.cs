@@ -415,81 +415,79 @@ sealed class DistilleryOfDeath : ModItem {
             float rotation = Projectile.rotation + _extraRotation;
             Main.EntitySpriteDraw(texture, pos, null, Projectile.GetAlpha(lightColor), rotation, texture.Frame().Left(), Projectile.scale, effects);
 
-            if (_fillTexture1.IsLoaded && _fillTexture2.IsLoaded) {
-                SpriteBatch batch = Main.spriteBatch;
-                void drawPart(Color baseColorBASE, bool current = true) {
-                    SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
+            SpriteBatch batch = Main.spriteBatch;
+            void drawPart(Color baseColorBASE, bool current = true) {
+                SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
 
-                    texture = current ? _fillTexture1.Value : _fillTexture2.Value;
-                    Vector2 position = Projectile.Center - Main.screenPosition;
-                    if (current) {
-                        position += new Vector2(30, 10 * -player.direction * player.gravDir).RotatedBy(rotation);
-                    }
-                    else {
-                        position += new Vector2(20, 6 * -player.direction * player.gravDir).RotatedBy(rotation);
-                    }
-                    Rectangle clip = texture.Bounds;
-                    Vector2 origin = texture.Frame().Left();
-                    SpriteEffects flip = effects;
-                    Color baseColor = baseColorBASE;
-                    float scale = Projectile.scale;
-                    float shootOpacity = 1f - ShootProgress2;
-                    if (!current) {
-                        shootOpacity = 1f;
-                    }
-                    float opacity = 0.5f * Projectile.Opacity * 0.875f;
+                texture = current ? _fillTexture1.Value : _fillTexture2.Value;
+                Vector2 position = Projectile.Center - Main.screenPosition;
+                if (current) {
+                    position += new Vector2(30, 10 * -player.direction * player.gravDir).RotatedBy(rotation);
+                }
+                else {
+                    position += new Vector2(20, 6 * -player.direction * player.gravDir).RotatedBy(rotation);
+                }
+                Rectangle clip = texture.Bounds;
+                Vector2 origin = texture.Frame().Left();
+                SpriteEffects flip = effects;
+                Color baseColor = baseColorBASE;
+                float scale = Projectile.scale;
+                float shootOpacity = 1f - ShootProgress2;
+                if (!current) {
+                    shootOpacity = 1f;
+                }
+                float opacity = 0.5f * Projectile.Opacity * 0.875f;
 
-                    if (current) {
-                        VerticalAppearanceShader.Reset();
-                        VerticalAppearanceShader.Progress = Ease.QuadInOut(ShootProgress2);
-                        if (DelayProgress > 0f) {
-                            VerticalAppearanceShader.Progress = DelayProgress;
-                        }
-                        VerticalAppearanceShader.FromDown = false;
+                if (current) {
+                    VerticalAppearanceShader.Reset();
+                    VerticalAppearanceShader.Progress = Ease.QuadInOut(ShootProgress2);
+                    if (DelayProgress > 0f) {
+                        VerticalAppearanceShader.Progress = DelayProgress;
                     }
+                    VerticalAppearanceShader.FromDown = false;
+                }
 
-                    for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
-                        float num12 = (TimeSystem.TimeForVisualEffects + Projectile.whoAmI) % 2f / 1f * Projectile.direction;
-                        Color color = Main.hslToRgb((num12 + num11) % 1f, 1f, 0.5f).MultiplyRGB(baseColor);
-                        color.A = 0;
-                        color *= 0.5f;
-                        for (int j = 0; j < 2; j++) {
-                            for (int k = 0; k < 2; k++) {
-                                Vector2 drawPosition = position + ((num12 + num11) * ((float)Math.PI * 2f)).ToRotationVector2() * 1f;
+                for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
+                    float num12 = (TimeSystem.TimeForVisualEffects + Projectile.whoAmI) % 2f / 1f * Projectile.direction;
+                    Color color = Main.hslToRgb((num12 + num11) % 1f, 1f, 0.5f).MultiplyRGB(baseColor);
+                    color.A = 0;
+                    color *= 0.5f;
+                    for (int j = 0; j < 2; j++) {
+                        for (int k = 0; k < 2; k++) {
+                            Vector2 drawPosition = position + ((num12 + num11) * ((float)Math.PI * 2f)).ToRotationVector2() * 1f;
 
-                                Color drawColor = Color.Lerp(baseColor, color, 0.5f) * opacity;
-                                if (current) {
-                                    batch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate }, true);
-                                    VerticalAppearanceShader.DrawColor = drawColor;
-                                    VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
-                                }
-                                batch.Draw(texture, drawPosition, clip, drawColor, rotation, origin, scale, flip, 0f);
-                                if (current) {
-                                    batch.Begin(snapshot, true);
-                                }
+                            Color drawColor = Color.Lerp(baseColor, color, 0.5f) * opacity;
+                            if (current) {
+                                batch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate }, true);
+                                VerticalAppearanceShader.DrawColor = drawColor;
+                                VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
+                            }
+                            batch.Draw(texture, drawPosition, clip, drawColor, rotation, origin, scale, flip, 0f);
+                            if (current) {
+                                batch.Begin(snapshot, true);
                             }
                         }
                     }
-                    baseColor.A = 100;
-                    baseColor *= 0.75f;
-
-                    Color drawColor2 = baseColor * opacity;
-                    if (current) {
-                        batch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate }, true);
-                        VerticalAppearanceShader.DrawColor = drawColor2;
-                        VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
-                    }
-                    batch.Draw(texture, position, clip, drawColor2, rotation, origin, scale, flip, 0f);
-                    if (current) {
-                        batch.Begin(snapshot, true);
-                    }
                 }
+                baseColor.A = 100;
+                baseColor *= 0.75f;
 
-                Color lightColor2 = Projectile.GetAlpha(lightColor);
-                drawPart(lightColor2.MultiplyRGB(GetColorPerType(CurrentGustType)), true);
-                Color color2 = Color.Lerp(lightColor2.MultiplyRGB(GetColorPerType(NextGustType)), lightColor2.MultiplyRGB(GetColorPerType(NextNextGustType)), Ease.QuadIn(ShootProgress3));
-                drawPart(color2, false);
+                Color drawColor2 = baseColor * opacity;
+                if (current) {
+                    batch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate }, true);
+                    VerticalAppearanceShader.DrawColor = drawColor2;
+                    VerticalAppearanceShader.Effect?.CurrentTechnique.Passes[0].Apply();
+                }
+                batch.Draw(texture, position, clip, drawColor2, rotation, origin, scale, flip, 0f);
+                if (current) {
+                    batch.Begin(snapshot, true);
+                }
             }
+
+            Color lightColor2 = Projectile.GetAlpha(lightColor);
+            drawPart(lightColor2.MultiplyRGB(GetColorPerType(CurrentGustType)), true);
+            Color color2 = Color.Lerp(lightColor2.MultiplyRGB(GetColorPerType(NextGustType)), lightColor2.MultiplyRGB(GetColorPerType(NextNextGustType)), Ease.QuadIn(ShootProgress3));
+            drawPart(color2, false);
 
             return false;
         }

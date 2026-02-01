@@ -128,12 +128,6 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
     }
 
     public sealed override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
-        if (_specialAmmoTexture2?.IsLoaded != true ||
-            _specialAmmoTexture3?.IsLoaded != true ||
-            _specialAmmoTexture4?.IsLoaded != true) {
-            return;
-        }
-
         //void drawAmmo() {
         //    Vector2 drawPosition = position;
         //    drawPosition += Item.Size / 3f * scale;

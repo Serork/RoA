@@ -99,10 +99,6 @@ sealed class DeerSkull : NatureItem {
             return false;
         }
 
-        if (_extraTexture?.IsLoaded != true) {
-            return false;
-        }
-
         if (player.GetFormHandler().IsInADruidicForm) {
             return false;
         }
