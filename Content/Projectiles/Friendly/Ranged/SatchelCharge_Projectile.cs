@@ -31,6 +31,8 @@ sealed class SatchelChargeProjectile : ModProjectile {
 
     public override string Texture => ResourceManager.RangedProjectileTextures + "SatchelCharge";
 
+    public static SoundStyle ExplosionSound { get; private set; } = new SoundStyle(ResourceManager.ItemSounds + "SatchelChargExplosion");
+
     public override void SetStaticDefaults() {
         ProjectileID.Sets.PlayerHurtDamageIgnoresDifficultyScaling[Type] = true;
 
@@ -67,8 +69,6 @@ sealed class SatchelChargeProjectile : ModProjectile {
         return false;
     }
 
-    private const int ExplosionWidthHeight = 250;
-
     public override void PrepareBombToBlow() {
         Projectile.tileCollide = false; // This is important or the explosion will be in the wrong place if the bomb explodes on slopes.
         Projectile.alpha = 255; // Set to transparent. This projectile technically lives as transparent for about 3 frames
@@ -83,7 +83,8 @@ sealed class SatchelChargeProjectile : ModProjectile {
 
     public override void OnKill(int timeLeft) {
         // Play explosion sound
-        SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
+        SoundEngine.PlaySound(ExplosionSound, Projectile.Center);
+
         // Smoke Dust spawn
         for (int i = 0; i < 50; i++) {
             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
