@@ -224,6 +224,9 @@ sealed class SatchelChargeProjectile : ModProjectile {
                 Projectile.frame = 1;
             }
         }
+        else {
+            Projectile.timeLeft = 5;
+        }
 
         Projectile.velocity.Y = Projectile.velocity.Y + 0.3f;
         if (Projectile.velocity.Y > 16f) {
