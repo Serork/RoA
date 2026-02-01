@@ -207,7 +207,7 @@ sealed class AltarHandler : ModSystem {
         bool flag7 = druidSoul.As<DruidSoul>().ShouldConsumeItsEnergy && !flag6 && _altarFactor >= 0.85f;
         _altarStrength += (float)Math.Round(TimeSystem.LogicDeltaTime / 5f * (flag7 ? 0.5f : (flag6 ? -1.65f : -2f)), 3);
         _altarStrength = MathHelper.Clamp(_altarStrength, 0f, 1f);
-        if (_altarStrength >= 0.05f && _altarStrength <= 0.95f) {
+        if (_altarStrength >= 0.05f && _altarStrength <= 0.95f && Main.netMode != NetmodeID.Server) {
             PunchCameraModifier punchCameraModifier = new(altarCoords, (Main.rand.NextFloat() * MathHelper.TwoPi).ToRotationVector2(), _altarStrength * 1.25f * Main.rand.NextFloat(5f, 10f), _altarStrength * 1.25f * Main.rand.NextFloat(3f, 4.5f), 20, 2000f, "Lothor");
             Main.instance.CameraModifiers.Add(punchCameraModifier);
         }
