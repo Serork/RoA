@@ -14,7 +14,6 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
-using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
@@ -216,12 +215,12 @@ sealed class SatchelChargeProjectile : ModProjectile {
         }
 
         if (Projectile.ai[1] == 1f) {
+            Projectile.localAI[2]++;
             if (player.ItemAnimationEndingOrEnded && Projectile.timeLeft > 3) {
                 Projectile.timeLeft = 3;
                 Projectile.PrepareBombToBlow();
             }
-            Main.NewText(player.itemAnimationMax);
-            if (player.itemAnimation < player.itemAnimationMax - player.itemAnimationMax / 3) {
+            if (Projectile.localAI[2] > 20 / 3) {
                 Projectile.frame = 1;
             }
         }
