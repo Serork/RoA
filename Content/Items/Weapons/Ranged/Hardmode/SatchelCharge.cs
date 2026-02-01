@@ -26,6 +26,19 @@ sealed class SatchelCharge : ModItem {
         Item.noUseGraphic = true;
     }
 
+    public override bool? UseItem(Player player) {
+        if (player.ItemAnimationJustStarted) {
+            if (player.HasProjectile<SatchelChargeProjectile>()) {
+                Item.useStyle = ItemUseStyleID.Shoot;
+            }
+            else {
+                Item.useStyle = ItemUseStyleID.Swing;
+            }
+        }
+
+        return base.UseItem(player);
+    }
+
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
         return !player.HasProjectile<SatchelChargeProjectile>();
     }
