@@ -220,6 +220,7 @@ sealed class SatchelChargeProjectile : ModProjectile {
                 Projectile.timeLeft = 3;
                 Projectile.PrepareBombToBlow();
             }
+            Main.NewText(player.itemAnimationMax);
             if (player.itemAnimation < player.itemAnimationMax - player.itemAnimationMax / 3) {
                 Projectile.frame = 1;
             }
