@@ -189,7 +189,7 @@ sealed class LightCompressor : ModItem {
                 float offsetValue = 60f;
                 startPosition += normalizedVelocity * offsetValue;
                 Vector2 startPosition2 = startPosition - normalizedVelocity * 46f;
-                Vector2 endPosition = startPosition2 + normalizedVelocity * 1200f;
+                Vector2 endPosition = startPosition2 + normalizedVelocity * TileHelper.TileSize * 100f;
                 int i = 0;
                 while (true) {
                     i++;
