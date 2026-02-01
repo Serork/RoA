@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.VisualEffects;
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
 using RoA.Core;
 using RoA.Core.Defaults;
@@ -12,6 +13,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
@@ -21,6 +23,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
 sealed class SatchelChargeProjectile : ModProjectile {
+    private static float EXPLOSIONSCALE => 1.25f;
+
     private static Asset<Texture2D> _glowTexture = null!;
 
     public override string Texture => ResourceManager.RangedProjectileTextures + "SatchelCharge";
@@ -68,7 +72,8 @@ sealed class SatchelChargeProjectile : ModProjectile {
         Projectile.alpha = 255; // Set to transparent. This projectile technically lives as transparent for about 3 frames
 
         // Change the hitbox size, centered about the original projectile center. This makes the projectile damage enemies during the explosion.
-        Projectile.Resize(250, 250);
+        int size = (int)(250 * EXPLOSIONSCALE);
+        Projectile.Resize(size, size);
 
         //Projectile.damage = 250; // Bomb: 100, Dynamite: 250
         //Projectile.knockBack = 10f; // Bomb: 8f, Dynamite: 10f
@@ -119,6 +124,19 @@ sealed class SatchelChargeProjectile : ModProjectile {
             gore.velocity.X -= 1.5f;
             gore.velocity.Y -= 1.5f;
         }
+
+        float modifier = 0.1f;
+        int count = 20;
+        for (int g = 0; g < count; g++) {
+            Vector2 position = Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width, Projectile.height) * modifier * 0.375f;
+            if (!Main.rand.NextBool(3)) {
+                AdvancedDustSystem.New<AdvancedDusts.SatchelChargeExplosion>(Main.rand.NextBool() ? AdvancedDustLayer.ABOVEDUSTS : AdvancedDustLayer.BEHINDPLAYERS)?.Setup(position,
+                    Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 5f,
+                    scale: Main.rand.NextFloat(1f, 1.5f));
+            }
+            modifier += 0.05f;
+        }
+
         // reset size to normal width and height.
         Projectile.Resize(22, 28);
 
@@ -214,7 +232,7 @@ sealed class SatchelChargeProjectile : ModProjectile {
 
         float globalOpacity = 0.875f;
         float baseGlobalScale = Projectile.localAI[1];
-        float globalScale = Ease.CubeOut(/*Ease.CubeIn*/(MathUtils.Clamp01(baseGlobalScale))) * 1.25f;
+        float globalScale = Ease.CubeOut(/*Ease.CubeIn*/(MathUtils.Clamp01(baseGlobalScale))) * 1.25f * EXPLOSIONSCALE;
         float alphaModifier = 0.5f;
         float scaleOpacityFactor = Utils.GetLerpValue(1.5f, 1.1f, baseGlobalScale, true);
         globalScale -= Utils.GetLerpValue(0.75f, 1f, scaleOpacityFactor, true) * 0.05f;

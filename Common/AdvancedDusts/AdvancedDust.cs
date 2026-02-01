@@ -22,6 +22,7 @@ abstract class AdvancedDust<T> : IPooledParticle, ILoadable where T : AdvancedDu
     public int MaxTimeLeft;
     public float AI0 = 0f;
     public object? CustomData;
+    public SpriteEffects Direction = SpriteEffects.None;
 
     public bool ShouldFullBright;
     public float BrightnessModifier;
@@ -100,7 +101,7 @@ abstract class AdvancedDust<T> : IPooledParticle, ILoadable where T : AdvancedDu
     }
 
     protected virtual void Draw_Inner(SpriteBatch batch, Texture2D? texture = null, Color? color = null, float scaleModifier = 1f, float colorModifier = 1f) {
-        batch.Draw(texture ?? Texture, Position - Main.screenPosition, Frame, (color ?? GetParticleColor()) * colorModifier, Rotation, Origin, Scale * scaleModifier, SpriteEffects.None, 0f);
+        batch.Draw(texture ?? Texture, Position - Main.screenPosition, Frame, (color ?? GetParticleColor()) * colorModifier, Rotation, Origin, Scale * scaleModifier, Direction, 0f);
     }
 
     public virtual void RestInPool() {
