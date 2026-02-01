@@ -17,8 +17,6 @@ sealed class SatchelChargeExplosion : AdvancedDust<SatchelChargeExplosion> {
 
         SetFramedTexture(6, 7);
 
-        DontEmitLight = true;
-
         AI0 = Main.rand.NextFloat(10f);
 
         _baseColor = Color.Lerp(new Color(255, 255, 86), new Color(230, 70, 70), Main.rand.NextFloat() * 0.5f);
@@ -41,7 +39,9 @@ sealed class SatchelChargeExplosion : AdvancedDust<SatchelChargeExplosion> {
         Velocity *= 0.8f;
 
         float opacity = Utils.GetLerpValue(0, 4, TimeLeft, true) * Utils.GetLerpValue(MaxTimeLeft, MaxTimeLeft - 4, TimeLeft, true);
-        DrawColor = _baseColor.MultiplyAlpha(0.375f) * 0.625f * opacity; 
+        DrawColor = _baseColor.MultiplyAlpha(0.375f) * 0.625f * opacity;
+
+        Lighting.AddLight(Position, DrawColor.ToVector3() * 0.5f * Scale);
 
         Frame = Texture.Frame(verticalFrames: 6, frameY: frame);
     }
