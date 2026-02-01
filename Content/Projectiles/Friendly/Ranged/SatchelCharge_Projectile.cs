@@ -128,7 +128,7 @@ sealed class SatchelChargeProjectile : ModProjectile {
             gore.velocity.Y -= 1.5f;
         }
 
-        if (Main.netMode != NetmodeID.Server) {
+        if (Projectile.IsOwnerLocal() && Main.netMode != NetmodeID.Server) {
             PunchCameraModifier modifier4 = new(Projectile.Center, Vector2.One.RotatedByRandom(MathHelper.TwoPi), 1f, 6f, 15, -1f, "Satchel Charge");
             Main.instance.CameraModifiers.Add(modifier4);
         }

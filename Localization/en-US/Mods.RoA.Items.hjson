@@ -2799,3 +2799,8 @@ SatchelCharge: {
 	DisplayName: Satchel Charge
 	Tooltip: ""
 }
+
+TfugiosHeadGuard: {
+	DisplayName: Tfugios Head Guard
+	Tooltip: ""
+}
