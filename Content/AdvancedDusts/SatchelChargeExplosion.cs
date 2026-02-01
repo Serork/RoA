@@ -19,7 +19,7 @@ sealed class SatchelChargeExplosion : AdvancedDust<SatchelChargeExplosion> {
 
         DontEmitLight = true;
 
-        AI0 = Main.rand.NextFloat(7f);
+        AI0 = Main.rand.NextFloat(10f);
 
         _baseColor = Color.Lerp(new Color(255, 255, 86), new Color(230, 70, 70), Main.rand.NextFloat() * 0.5f);
 
@@ -28,6 +28,7 @@ sealed class SatchelChargeExplosion : AdvancedDust<SatchelChargeExplosion> {
 
     public override void Update(ref ParticleRendererSettings settings) {
         int frame = (int)(6 * (1f - (float)TimeLeft / MaxTimeLeft));
+        frame += 1;
         if (AI0-- > 0) {
             frame = 7;
         }
