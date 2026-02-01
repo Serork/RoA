@@ -1256,7 +1256,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
-        IsGardeningGlovesEffectActive = false;
+        //IsGardeningGlovesEffectActive = false;
 
         ShouldDrawVanillaBackpacks = true;
 

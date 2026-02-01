@@ -1042,13 +1042,6 @@ sealed class WreathHandler : ModPlayer {
         if (_shouldDecrease || !(value > 90 || value < 5)) {
             ResetVisualParametersForNotNormal();
         }
-
-        if (!_shouldDecrease) {
-            if (Player.GetCommon().IsGardeningGlovesEffectActive && _tempResource != CurrentResource) {
-                Player.GetCommon().ActivateGardeningGloveEffect();
-            }
-        }
-
         _tempResource = CurrentResource;
         ChangingTimeValue = TimeSystem.LogicDeltaTime * 60f;
         _currentChangingTime = ChangingTimeValue;
