@@ -41,7 +41,10 @@ sealed class NewMoneyBat : ModProjectile {
         Projectile.aiStyle = -1;
 
         Projectile.tileCollide = false;
+
+        Projectile.manualDirectionChange = true;
     }
+
     public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac) {
         width = height = 8;
 
@@ -54,6 +57,8 @@ sealed class NewMoneyBat : ModProjectile {
             Projectile.localAI[2] = 1f;
         }
         Lighting.AddLight(Projectile.Center, NewMoneyBullet.BulletColor.ToVector3() * 0.5f);
+
+        Projectile.SetDirection(Projectile.velocity.X.GetDirection());
 
         Projectile.Animate(NewMoney.BAT_ANIMATIONTIME);
 
@@ -101,7 +106,7 @@ sealed class NewMoneyBat : ModProjectile {
         Color color = Color.White;
         int frameSize = mainTex.Height / Main.projFrames[projectile.type];
         Rectangle frameBox = new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
-        SpriteEffects effects = projectile.spriteDirection.ToSpriteEffects();
+        SpriteEffects effects = projectile.spriteDirection.ToSpriteEffects2();
         Vector2 origin = frameBox.Size() / 2;
         float trailOpacity = Ease.CubeOut(MathUtils.Clamp01(Projectile.localAI[1] / 50f));
         trailOpacity = MathUtils.Clamp01(trailOpacity);
@@ -138,7 +143,7 @@ sealed class NewMoneyBat : ModProjectile {
         }
 
         Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition, frameBox, color * trailOpacity, projectile.rotation,
-                              origin, scale, effects, 0);
+                              origin, scale, projectile.spriteDirection.ToSpriteEffects(), 0);
 
         float trailOpacity2 = trailOpacity;
         trailOpacity = 1f - trailOpacity;
