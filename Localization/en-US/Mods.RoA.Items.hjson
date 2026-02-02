@@ -2307,7 +2307,7 @@ RodOfTheLustrous: {
 
 PerfectClot: {
 	DisplayName: Perfect Clot
-	Tooltip: "'I'm forever alone'"
+	Tooltip: Allows carcass skulls to be used as accessories, granting their set bonus
 }
 
 HiTechCattleProd: {
@@ -2367,14 +2367,14 @@ NewMoney: {
 	DisplayName: New Money
 	Tooltip:
 		'''
-		Shoots armour-piercing bullets that eventually inflict a burst of damage onto foes
-		'Bleed for me.'
+		Shoots armor-piercing bullets that build up a burst of addditional damage
+		'Bleed for me'
 		'''
 }
 
 ForbiddenTwig: {
 	DisplayName: Forbidden Twig
-	Tooltip: Trail a withered branch that shatters into ash and dust
+	Tooltip: Draws a withered branch that collapses into falling dust
 }
 
 CoralClarionet: {
@@ -2410,24 +2410,24 @@ LittleElixir: {
 	DisplayName: Little Elixir
 	Tooltip:
 		'''
-		Picking up tiny hearts restores additional life
+		Increases the effectiveness of life hearts
 		'You're my soda pop, gotta drink every drop'
 		'''
 }
 
 ManaDraught: {
 	DisplayName: Mana Draught
-	Tooltip: Picking up tiny stars restores additional mana
+	Tooltip: Increases the effectiveness of mana stars
 }
 
 PerfectedConcoction: {
 	DisplayName: Perfected Concoction
-	Tooltip: Picking up tiny hearts or stars restores additional life or mana respectively
+	Tooltip:Increases the effectiveness of life hearts and mana stars
 }
 
 HoneyPunch: {
 	DisplayName: Honey Punch
-	Tooltip: Picking up tiny hearts restores additional life and provides with honeyed restoration
+	Tooltip: Increases the effectiveness of life hearts and grants honey restoration when they are picked up
 }
 
 GraspOfTheWarden: {
@@ -2452,7 +2452,7 @@ HallowedVisor: {
 
 ElderShell: {
 	DisplayName: Elder Shell
-	Tooltip: Increases defence upon drinking healing potions
+	Tooltip: Increases defense upon drinking healing potions
 }
 
 ImmortalSnail: {
@@ -2460,7 +2460,7 @@ ImmortalSnail: {
 	Tooltip:
 		'''
 		Reduces the cooldown of healing potions by 25%
-		Increases defence upon drinking healing potions
+		Increases defense upon drinking healing potions
 		'''
 }
 
@@ -2469,7 +2469,7 @@ LifeSpiral: {
 	Tooltip:
 		'''
 		Provides life regeneration and reduces the cooldown of healing potions by 25%
-		Increases defence upon drinking healing potions
+		Increases defense upon drinking healing potions
 		'''
 }
 
@@ -2478,7 +2478,7 @@ ElderShield: {
 	Tooltip:
 		'''
 		Absorbs 25% of damage done to players on your team when above 25% life
-		Increases defence when you or allies drink healing potions
+		Increases defense when you or allies drink healing potions
 		Grants immunity to knockback
 		'''
 }
@@ -2660,22 +2660,35 @@ TarBrick: {
 
 DarkNeoplasm: {
 	DisplayName: Dark Neoplasm
-	Tooltip: ""
+	Tooltip:
+		'''
+		Can be applied to an armor piece
+		Consumes defense to grow uncontrollably
+		Does not mix well with lava
+		'''
 }
 
 ClumpExtractor: {
 	DisplayName: Clump Extractor
-	Tooltip: ""
+	Tooltip: Collects neoplasm from formations deep within tar lakes
 }
 
 SandalwoodStompers: {
 	DisplayName: Sandalwood Stompers
-	Tooltip: ""
+	Tooltip:
+		'''
+		Increases falling acceleration
+		Landing or standing still covers an area in canopy that harms enemies and increases defense by up to 25
+		'''
 }
 
 SeedOfWisdom: {
 	DisplayName: Seed Of Wisdom
-	Tooltip: ""
+	Tooltip: 
+		'''
+		Standing still increases defense by up to 25
+		'Defense is the best offense'
+		'''
 }
 
 MaidensBracers: {
@@ -2684,7 +2697,7 @@ MaidensBracers: {
 		'''
 		Increased damage by 25%
 		Damage dealt is reflected back
-		'You will always be punished.'
+		'I've been hiding my pain, you see?'
 		'''
 }
 
@@ -2694,7 +2707,7 @@ FossilizedSpiral: {
 		'''
 		Provides buffer upon drinking a healing potion
 		Buffer prevents one instance of damage
-		'Seemingly indestructible, you wonder what kind of creature this belonged to.'
+		'Seemingly indestructible - what kind of creature did this belong to?'
 		'''
 }
 
@@ -2712,18 +2725,22 @@ ObsidianStopwatch: {
 	Tooltip:
 		'''
 		Rewinds the user's position and grants temporary improvements to all stats when damaged 
-		'Welcome... to the True Man's World.'
+		'Welcome... to the True Man's World'
 		'''
 }
 
 HereticsVeil: {
 	DisplayName: Heretic's Veil
-	Tooltip: ""
+	Tooltip:
+		'''
+		Holder's soul ignites when under 100 life
+		Increases life regeneration and reduces damage taken
+		'''
 }
 
 BansheesGuard: {
 	DisplayName: Banshee's Guard
-	Tooltip: ""
+	Tooltip: Replaces some life hearts with harmful souls
 }
 
 AvengingSoul: {
@@ -2733,12 +2750,20 @@ AvengingSoul: {
 
 BoneSerpentTail: {
 	DisplayName: Bone Serpent Tail
-	Tooltip: ""
+	Tooltip:
+		'''
+		+6% critical strike chance
+		This effect is doubled while affected by a damaging debuff
+		'''
 }
 
 SnakeIdol: {
 	DisplayName: Snake Idol
-	Tooltip: ""
+	Tooltip: 
+		'''
+		Enemies take additional damage for every debuff inflicted
+		Reduces holder's defense by 5 if affected by a debuff
+		'''
 }
 
 GobletOfPain: {
@@ -2753,30 +2778,40 @@ GobletOfPain: {
 
 ChromaticScarf: {
 	DisplayName: Chromatic Scarf
-	Tooltip: ""
+	Tooltip:
+		'''
+		Critical strikes set enemies on fire
+		Fire type changes every 10 seconds
+		'''
 }
 
 ConjurersEye: {
 	DisplayName: Conjurer's Eye
-	Tooltip: ""
+	Tooltip:
+		'''
+		Shoots energy beams while mana is regenerating
+		'''
 }
 
 DoubleGoggles: {
 	DisplayName: Double Goggles
-	Tooltip: ""
+	Tooltip:
+		'''
+		50% chance not to consume mana while above 50% health
+		'''
 }
 
 HazelnutMask: {
 	DisplayName: Hazelnut Mask
-	Tooltip: ""
+	Tooltip: "'Fair'"
 }
 
 BrawlerMask: {
 	DisplayName: Brawler Mask
 	Tooltip:
 		'''
-		desc
-		'I've been hiding my pain, you see?'
+		50% chance to apply incoming damage and negative effects to nearby enemies
+		'There can be no bravery without madness'
 		'''
 }
 
@@ -2787,25 +2822,30 @@ BlueRose: {
 
 DistilleryOfDeath: {
 	DisplayName: Distillery Of Death
-	Tooltip: ""
+	Tooltip:
+		'''
+		Uses gel for ammo
+		Ignores 15 points of enemy Defense
+		Sprays toxic chemicals with different properties
+		'''
 }
 
 LightCompressor: {
 	DisplayName: Light Compressor
-	Tooltip: ""
+	Tooltip: Attaches a light beam to targeted enemies
 }
 
 SatchelCharge: {
 	DisplayName: Satchel Charge
-	Tooltip: ""
+	Tooltip: A massive, remotely activated explosion that will not destroy tiles
 }
 
 TfugiosHeadGuard: {
-	DisplayName: Tfugios Head Guard
+	DisplayName: Tfugio's Head
 	Tooltip: ""
 }
 
 GardeningGloves: {
 	DisplayName: Gardening Gloves
-	Tooltip: ""
+	Tooltip: Upon reaching full wreath charge, briefly absorbs incoming damage
 }
