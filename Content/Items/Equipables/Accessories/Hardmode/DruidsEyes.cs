@@ -35,7 +35,7 @@ sealed class DruidsEyes : NatureItem {
 
         if (player.GetWreathHandler().IsFull1) {
             //player.statDefense += 6;
-            player.lifeRegen += 7;
+            player.lifeRegen += 3;
         }
     }
 }
