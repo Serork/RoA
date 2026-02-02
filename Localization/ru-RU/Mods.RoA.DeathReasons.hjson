@@ -33,3 +33,6 @@ MaidensBracers1: "{0} превратился в сыр."
 //Died from Avenging Soul
 AvengingSoul0: "{0} был досмерти напуган."
 AvengingSoul1: "{0} был унесён духами."
+//Died from Satchel Charge
+// SatchelCharge0: "{0} is dead by..."
+// SatchelCharge1: "{0} is dead by..."

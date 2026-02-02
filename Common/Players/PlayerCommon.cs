@@ -8,6 +8,7 @@ using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
+using RoA.Content.Projectiles;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core;
@@ -1176,6 +1177,15 @@ sealed partial class PlayerCommon : ModPlayer {
         if (IsAetherInvincibilityActive) {
             modifiers.Cancel();
         }
+    }
+
+    public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource) {
+        int? sourceProjectileType = damageSource.SourceProjectileType;
+        if (sourceProjectileType.HasValue && sourceProjectileType == ModContent.ProjectileType<SatchelChargeProjectile>()) {
+            damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.SatchelCharge{Main.rand.Next(2)}").ToNetworkText(Player.name));
+        }
+
+        return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);
     }
 
     public delegate void OnHurtDelegate(Player player, Player.HurtInfo info);

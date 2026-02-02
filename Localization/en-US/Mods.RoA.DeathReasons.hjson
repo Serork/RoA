@@ -33,3 +33,6 @@ MaidensBracers1: "{0} became swiss cheese."
 //Died from Avenging Soul
 AvengingSoul0: "{0} got haunted."
 AvengingSoul1: "{0} was spirited away."
+//Died from Satchel Charge
+SatchelCharge0: "{0} is dead by..."
+SatchelCharge1: "{0} is dead by..."

@@ -17,9 +17,12 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
