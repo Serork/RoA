@@ -32,7 +32,7 @@ sealed class BandOfPurity : NatureItem {
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetModPlayer<DruidStats>().WreathChargeRateMultiplier += 0.15f;
         if (player.GetWreathHandler().IsFull1) {
-            player.lifeRegen += 3;
+            player.lifeRegen += 6;
         }
     }
 }

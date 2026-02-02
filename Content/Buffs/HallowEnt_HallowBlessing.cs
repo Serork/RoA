@@ -12,7 +12,7 @@ sealed class HallowBlessing : ModBuff {
     }
 
     public override void Update(Player player, ref int buffIndex) {
-        player.lifeRegen += 5;
+        player.lifeRegen += 6;
         player.endurance += 0.2f;
     }
 }

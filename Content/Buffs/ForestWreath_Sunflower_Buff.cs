@@ -13,6 +13,6 @@ sealed class SunflowerBuff : ModBuff {
 
     public override void Update(Player player, ref int buffIndex) {
         player.moveSpeed += 0.2f;
-        player.lifeRegen += 1;
+        player.lifeRegen += 2;
     }
 }

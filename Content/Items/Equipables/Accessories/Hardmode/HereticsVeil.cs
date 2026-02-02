@@ -162,7 +162,7 @@ sealed class HereticsVeil : ModItem {
         //player.GetCommon().StopHeadDrawing = true;
 
         player.endurance += 0.2f;
-        player.lifeRegen += 4;
+        player.lifeRegen += 10;
 
         foreach (NPC nPC in Main.ActiveNPCs) {
             float num = TileHelper.TileSize * 31;

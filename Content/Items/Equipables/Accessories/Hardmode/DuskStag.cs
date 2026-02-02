@@ -80,9 +80,6 @@ sealed class DuskStag : ModItem {
         player.GetCommon().IsDuskStagEffectActive_Vanity = !hideVisual;
 
         player.GetModPlayer<DruidStats>().WreathChargeRateMultiplier += 0.2f;
-        if (player.GetWreathHandler().IsFull1) {
-            player.lifeRegen += 3;
-        }
         player.GetModPlayer<DruidStats>().KeepBonusesForTime += 120f;
     }
 
