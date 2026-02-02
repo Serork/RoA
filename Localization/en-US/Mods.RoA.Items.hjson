@@ -184,7 +184,7 @@ BandOfPurity: {
 	DisplayName: Band of Purity
 	Tooltip:
 		'''
-		Increases wreath charge rate by 20%
+		Increases wreath charge rate by 15%
 		While wreath is charged, increases life regeneration
 		'''
 }
