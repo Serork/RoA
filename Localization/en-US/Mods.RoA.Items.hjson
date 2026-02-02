@@ -2307,7 +2307,11 @@ RodOfTheLustrous: {
 
 PerfectClot: {
 	DisplayName: Perfect Clot
-	Tooltip: Allows carcass skulls to be used as accessories, granting their set bonus
+	Tooltip:
+		'''
+		Allows carcass skulls to be used as accessories, granting their set bonus
+		'I'm forever alone'
+		'''
 }
 
 HiTechCattleProd: {
@@ -2422,7 +2426,7 @@ ManaDraught: {
 
 PerfectedConcoction: {
 	DisplayName: Perfected Concoction
-	Tooltip:Increases the effectiveness of life hearts and mana stars
+	Tooltip: Increases the effectiveness of life hearts and mana stars
 }
 
 HoneyPunch: {
@@ -2684,7 +2688,7 @@ SandalwoodStompers: {
 
 SeedOfWisdom: {
 	DisplayName: Seed Of Wisdom
-	Tooltip: 
+	Tooltip:
 		'''
 		Standing still increases defense by up to 25
 		'Defense is the best offense'
@@ -2759,7 +2763,7 @@ BoneSerpentTail: {
 
 SnakeIdol: {
 	DisplayName: Snake Idol
-	Tooltip: 
+	Tooltip:
 		'''
 		Enemies take additional damage for every debuff inflicted
 		Reduces holder's defense by 5 if affected by a debuff
@@ -2787,18 +2791,12 @@ ChromaticScarf: {
 
 ConjurersEye: {
 	DisplayName: Conjurer's Eye
-	Tooltip:
-		'''
-		Shoots energy beams while mana is regenerating
-		'''
+	Tooltip: Shoots energy beams while mana is regenerating
 }
 
 DoubleGoggles: {
 	DisplayName: Double Goggles
-	Tooltip:
-		'''
-		50% chance not to consume mana while above 50% health
-		'''
+	Tooltip: 50% chance not to consume mana while above 50% health
 }
 
 HazelnutMask: {
