@@ -35,6 +35,10 @@ sealed class PerfectClot : ModItem {
         Item.velocity.Y = MathF.Abs(Item.velocity.Y) * -1f;
         Item.velocity.X *= 0.925f;
 
+        if (!Item.lavaWet) {
+            return;
+        }
+
         if (Item.playerIndexTheItemIsReservedFor == Main.myPlayer) {
             // TODO: net test
             if (Helper.SinglePlayerOrServer) {
@@ -45,7 +49,7 @@ sealed class PerfectClot : ModItem {
                 Tile tile4 = Main.tile[x, y + 1];
                 Tile tile5 = Main.tile[x, y];
                 tile.LiquidAmount = tile2.LiquidAmount = tile3.LiquidAmount = 0;
-                Projectile.NewProjectile(null, new Point16(x, y).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<TarExplosion>(), 500, 0f, Main.myPlayer, ai2: 2f);
+                Projectile.NewProjectile(null, new Point16(x, y).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<TarExplosion>(), 500, 0f, Main.myPlayer);
                 WorldGen.SquareTileFrame(x, y);
             }
 

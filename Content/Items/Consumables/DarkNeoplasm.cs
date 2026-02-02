@@ -14,6 +14,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Consumables;
 
 class DarkNeoplasm : ModItem {
+    public override void SetStaticDefaults() {
+        ItemID.Sets.ItemIconPulse[Type] = true;
+    }
+
     public override void SetDefaults() {
         Item.consumable = true;
         Item.width = 26;
@@ -23,6 +27,10 @@ class DarkNeoplasm : ModItem {
     }
 
     public override void PostUpdate() {
+        if (!Item.lavaWet) {
+            return;
+        }
+
         if (Item.playerIndexTheItemIsReservedFor == Main.myPlayer) {
             // TODO: net test
             if (Helper.SinglePlayerOrServer) {
@@ -33,7 +41,7 @@ class DarkNeoplasm : ModItem {
                 Tile tile4 = Main.tile[x, y + 1];
                 Tile tile5 = Main.tile[x, y];
                 tile.LiquidAmount = tile2.LiquidAmount = tile3.LiquidAmount = 0;
-                Projectile.NewProjectile(null, new Point16(x, y).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<TarExplosion>(), 250, 0f, Main.myPlayer, ai2: 1f);
+                Projectile.NewProjectile(null, new Point16(x, y).ToWorldCoordinates(), Vector2.Zero, ModContent.ProjectileType<TarExplosion>(), 250, 0f, Main.myPlayer);
                 WorldGen.SquareTileFrame(x, y);
             }
 

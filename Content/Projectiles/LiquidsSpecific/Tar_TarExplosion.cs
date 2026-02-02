@@ -32,19 +32,6 @@ sealed class TarExplosion : ModProjectile_NoTextureLoad {
     }
 
     public override void AI() {
-        if (Projectile.ai[2] == 1f) {
-            Projectile.width = 225;
-            Projectile.height = 225;
-
-            Projectile.Center = Projectile.position + Projectile.Size;
-        }
-        else if (Projectile.ai[2] == 2f) {
-            Projectile.width = 750;
-            Projectile.height = 750;
-
-            Projectile.Center = Projectile.position + Projectile.Size;
-        }
-
         Projectile.timeLeft = 0;
         Projectile.PrepareBombToBlow();
     }
