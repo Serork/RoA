@@ -28,6 +28,10 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
     // separate
     private class Bulb_DamageCounter : GlobalProjectile {
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone) {
+            if (!target.CanBeChasedBy()) {
+                return;
+            }
+
             AcceptDamage(hit.Damage, target.Center, projectile);
         }
 
