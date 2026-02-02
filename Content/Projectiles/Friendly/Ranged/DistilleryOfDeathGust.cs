@@ -70,6 +70,8 @@ sealed class DistilleryOfDeathGust : ModProjectile {
 
         Projectile.Opacity = 0f;
         _scale = 0f;
+
+        Projectile.ArmorPenetration = 15;
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
