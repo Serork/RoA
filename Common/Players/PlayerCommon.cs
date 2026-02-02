@@ -164,6 +164,11 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsFermentedSpiderEyeEffectActive;
 
+    public bool IsDuskStagEffectActive, IsDuskStagEffectActive_Vanity;
+    public Vector2 DuskStagPosition, DuskStagVelocity;
+    public float DuskStagVelocityFactor;
+    public int DustStagDirection;
+
     public float DistilleryOfDeathShootProgress => (float)DistilleryOfDeathShootCount / DistilleryOfDeath.DistilleryOfDeath_Use.SHOOTCOUNTPERTYPE;
 
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
@@ -1093,6 +1098,50 @@ sealed partial class PlayerCommon : ModPlayer {
         if (GardeningGlovesImmunityFrames > 0) {
             GardeningGlovesImmunityFrames--;
         }
+
+        if (IsDuskStagEffectActive_Vanity) {
+            DuskStagPosition += DuskStagVelocity;
+            DuskStagVelocityFactor++;
+            if (DuskStagVelocityFactor > 1) {
+                DuskStagVelocity.X += (float)Main.rand.Next(-100, 101) * 0.0025f;
+                DuskStagVelocity.Y += (float)Main.rand.Next(-100, 101) * 0.0025f;
+                DuskStagVelocityFactor = 0;
+            }
+            float x = DuskStagPosition.X;
+            float y = DuskStagPosition.Y;
+            float num6 = (float)Math.Sqrt(x * x + y * y);
+            if (num6 > 100f) {
+                num6 = 10f / num6;
+                x *= 0f - num6;
+                y *= 0f - num6;
+                int num7 = 5;
+                DuskStagVelocity.X = MathHelper.Lerp(DuskStagVelocity.X, (DuskStagVelocity.X * (float)(num7 - 1) + x) / (float)num7, 0.25f);
+                DuskStagVelocity.Y = MathHelper.Lerp(DuskStagVelocity.Y, (DuskStagVelocity.Y * (float)(num7 - 1) + y) / (float)num7, 0.25f);
+            }
+            else if (num6 > 30f) {
+                num6 = 5f / num6;
+                x *= 0f - num6;
+                y *= 0f - num6;
+                int num8 = 10;
+                DuskStagVelocity.X = MathHelper.Lerp(DuskStagVelocity.X, (DuskStagVelocity.X * (float)(num8 - 1) + x) / (float)num8, 0.25f);
+                DuskStagVelocity.Y = MathHelper.Lerp(DuskStagVelocity.Y, (DuskStagVelocity.Y * (float)(num8 - 1) + y) / (float)num8, 0.25f);
+            }
+
+            x = DuskStagVelocity.X;
+            y = DuskStagVelocity.Y;
+            num6 = (float)Math.Sqrt(x * x + y * y);
+            if (num6 > 2f)
+                DuskStagVelocity *= 0.95f;
+
+            DuskStagPosition -= Player.velocity * 0.25f;
+
+            if (MathF.Abs(DuskStagVelocity.X) > 0.1f) {
+                DustStagDirection = DuskStagVelocity.X.GetDirection();
+            }
+        }
+        else {
+            DuskStagPosition = DuskStagVelocity = Vector2.Zero;
+        }
     }
 
     public partial void DeerSkullPostUpdateEquips();
@@ -1268,6 +1317,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsDuskStagEffectActive = false;
+        IsDuskStagEffectActive_Vanity = false;
+
         IsFermentedSpiderEyeEffectActive = false;
 
         //IsGardeningGlovesEffectActive = false;
