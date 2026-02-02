@@ -162,6 +162,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsGardeningGlovesEffectActive;
     public ushort GardeningGlovesImmunityFrames;
 
+    public bool IsFermentedSpiderEyeEffectActive;
+
     public float DistilleryOfDeathShootProgress => (float)DistilleryOfDeathShootCount / DistilleryOfDeath.DistilleryOfDeath_Use.SHOOTCOUNTPERTYPE;
 
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
@@ -1266,6 +1268,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsFermentedSpiderEyeEffectActive = false;
+
         //IsGardeningGlovesEffectActive = false;
 
         ShouldDrawVanillaBackpacks = true;

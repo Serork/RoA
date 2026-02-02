@@ -2847,3 +2847,13 @@ GardeningGloves: {
 	DisplayName: Gardening Gloves
 	Tooltip: Upon reaching full wreath charge, briefly absorbs incoming damage
 }
+
+DuskStag: {
+	DisplayName: Dusk Stag
+	Tooltip: ""
+}
+
+FermentedSpiderEye: {
+	DisplayName: Fermented Spider Eye
+	Tooltip: ""
+}

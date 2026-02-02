@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.ModLoader;
 
@@ -13,6 +15,7 @@ sealed partial class DruidStats : ModPlayer {
     private float _druidPotentialUseTimeMultiplier = 1f;
     private int _druidBaseDamage = 0, _druidPotentialDamage = 0;
     private float _clawsAttacKSpeedModifier;
+    private float _clawsResetDecreaseModifier;
 
     public bool IsDruidsEyesEffectActive;
 
@@ -72,6 +75,13 @@ sealed partial class DruidStats : ModPlayer {
         }
     }
 
+    public float ClawsResetDecreaseModifier {
+        get => _clawsResetDecreaseModifier;
+        set {
+            _clawsResetDecreaseModifier = MathUtils.Clamp01(value);
+        }
+    }
+
     public bool SoulOfTheWoods { get; set; }
 
     public override void ResetEffects() {
@@ -80,6 +90,8 @@ sealed partial class DruidStats : ModPlayer {
         DischargeTimeDecreaseMultiplier = 1f;
         DruidPotentialUseTimeMultiplier = 1f;
         ClawsAttackSpeedModifier = 1f;
+
+        ClawsResetDecreaseModifier = 1f;
 
         KeepBonusesForTime = 0f;
 

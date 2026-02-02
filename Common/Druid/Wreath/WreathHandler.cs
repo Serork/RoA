@@ -79,9 +79,9 @@ sealed class WreathHandler : ModPlayer {
     private float _addExtraValue;
     private float _keepBonusesForTime, _keepProgress;
     private byte _boost;
-    private ushort _increaseValue;
+    private ushort _increaseValue, _decreaseValue;
     private float _currentChangingTime, _currentChangingMult, _stayTime, _extraChangingValueMultiplier;
-    private bool _shouldDecrease, _shouldDecrease2;
+    private bool _shouldDecrease, _shouldSlowDecrease;
     private FormInfo _formInfo;
     private ushort _hitEffectTimer;
     private bool _onFullCreated;
@@ -165,7 +165,7 @@ sealed class WreathHandler : ModPlayer {
     public float ChangingProgress {
         get {
             float value = MathHelper.Clamp(ChangingTimeValue - _currentChangingTime, 0f, 1f);
-            return _shouldDecrease2 ? value : (StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2) ? value : Ease.CircOut(value);
+            return _shouldSlowDecrease ? value : (StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2) ? value : Ease.CircOut(value);
         }
     }
     public bool IsEmpty => ActualProgress2 <= 0.01f;
@@ -237,7 +237,7 @@ sealed class WreathHandler : ModPlayer {
         //ChangingTimeValue = changingTimeValue;
         //_currentChangingTime = currentChangingTime;
         //_shouldDecrease = shouldDecrease1;
-        //_shouldDecrease2 = shouldDecrease2;
+        //_shouldSlowDecrease = shouldDecrease2;
         //_currentChangingMult = currentChangingMult;
         //_increaseValue = increaseValue;
         //_stayTime = stayTime;
@@ -255,7 +255,7 @@ sealed class WreathHandler : ModPlayer {
 
     private void SendPacket(Player player, int toClient) {
         WreathHandler source = player.GetWreathHandler();
-        MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)player.whoAmI, source.CurrentResource/*, source._tempResource, source.ChangingTimeValue, source._currentChangingTime, source._shouldDecrease, source._shouldDecrease2, source._currentChangingMult, source._increaseValue, source._stayTime, source.StartSlowlyIncreasingUntilFull, source.StartSlowlyIncreasingUntilFull2*/),
+        MultiplayerSystem.SendPacket(new WreathPointsSyncPacket((byte)player.whoAmI, source.CurrentResource/*, source._tempResource, source.ChangingTimeValue, source._currentChangingTime, source._shouldDecrease, source._shouldSlowDecrease, source._currentChangingMult, source._increaseValue, source._stayTime, source.StartSlowlyIncreasingUntilFull, source.StartSlowlyIncreasingUntilFull2*/),
             toClient: toClient);
     }
 
@@ -356,11 +356,11 @@ sealed class WreathHandler : ModPlayer {
         ShouldKeepSlowFill2 = false;
     }
 
-    internal void ForcedHardReset() {
+    internal void ForcedHardReset(bool clawsReset = false) {
         StartSlowlyIncreasingUntilFull = false;
         StartSlowlyIncreasingUntilFull2 = false;
         ChargedBySlowFill = ShouldKeepSlowFill2 = false;
-        Reset();
+        Reset(clawsReset: clawsReset);
         OnResetEffects();
         OnWreathReset?.Invoke();
         _addExtraValue = _boost = 0;
@@ -389,7 +389,7 @@ sealed class WreathHandler : ModPlayer {
         Item selectedItem = item;
         bool playerUsingClaws = selectedItem.IsNatureClaws();
         if (playerUsingClaws && Player.ItemAnimationActive) {
-            if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {
+            if (!_shouldDecrease && !_shouldSlowDecrease && IsActualFull6) {
                 if (SpecialAttackData.Owner == selectedItem && (ShouldClawsReset() || nonDataReset)) {
                     ClawsReset(selectedItem, nonDataReset);
                 }
@@ -399,7 +399,7 @@ sealed class WreathHandler : ModPlayer {
 
     internal void ClawsReset(Item selectedItem, bool nonDataReset = false) {
         if (!SpecialAttackData.OnlySpawn || nonDataReset) {
-            ForcedHardReset();
+            ForcedHardReset(true);
         }
 
         if (!nonDataReset) {
@@ -426,7 +426,7 @@ sealed class WreathHandler : ModPlayer {
         bool playerUsingClaws = selectedItem.IsNatureClaws();
         if (playerUsingClaws && Player.ItemAnimationActive && attachedItem == selectedItem && selectedItem.As<ClawsBaseItem>().ResetOnHit) {
             selectedItem.As<ClawsBaseItem>().OnHit(Player, Progress);
-            if (!_shouldDecrease && !_shouldDecrease2 && IsActualFull6) {
+            if (!_shouldDecrease && !_shouldSlowDecrease && IsActualFull6) {
                 if (SpecialAttackData.Owner == selectedItem && (SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn || nonDataReset)) {
                     ClawsReset(selectedItem, nonDataReset);
                 }
@@ -438,8 +438,8 @@ sealed class WreathHandler : ModPlayer {
         CurrentResource -= (ushort)((total ? TotalResource : MaxResource) * 0.25f);
         _stayTime = STAYTIMEMAX;
 
-        _shouldDecrease = _shouldDecrease2 = false;
-        _increaseValue = 0;
+        _shouldDecrease = _shouldSlowDecrease = false;
+        _increaseValue = _decreaseValue = 0;
         ResetChangingValue();
 
         StartSlowlyIncreasingUntilFull = false;
@@ -762,7 +762,7 @@ sealed class WreathHandler : ModPlayer {
                 }
             }
         }
-        else if (_stayTime <= 0f && !_shouldDecrease && !_shouldDecrease2) {
+        else if (_stayTime <= 0f && !_shouldDecrease && !_shouldSlowDecrease) {
             Reset(true, noEffects: _dontPlayStaySound);
         }
         else if (!Player.GetFormHandler().IsInADruidicForm && !ChargedBySlowFill) {
@@ -906,8 +906,8 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
 
-        if (_shouldDecrease2) {
-            _shouldDecrease = _shouldDecrease2 = false;
+        if (_shouldSlowDecrease) {
+            _shouldDecrease = _shouldSlowDecrease = false;
         }
 
         if (_shouldDecrease) {
@@ -934,6 +934,9 @@ sealed class WreathHandler : ModPlayer {
         float extra = Player.GetModPlayer<DruidStats>().WreathChargeRateMultiplier * extra2;
         _increaseValue = StartSlowlyIncreasingUntilFull || StartSlowlyIncreasingUntilFull2 ? (ushort)((MaxResource - CurrentResource) * extra) :
             (ushort)(GetIncreaseValue(fine) * extra);
+        if (!_shouldDecrease) {
+            _decreaseValue = 0;
+        }
     }
 
     internal ushort GetIncreaseValue(float fine) => (ushort)Math.Max(2, AddResourceValue() - AddResourceValue() * fine);
@@ -951,7 +954,7 @@ sealed class WreathHandler : ModPlayer {
 
         float num = 1.75f, num2 = 0.5f;
         float mult = num;
-        if (!_shouldDecrease2) {
+        if (!_shouldSlowDecrease) {
             _currentChangingMult = mult;
         }
         else {
@@ -976,15 +979,16 @@ sealed class WreathHandler : ModPlayer {
             value2 *= 0.15f;
         }
         CaneBaseProjectile? caneProjectile = GetHeldCane();
-        if ((_shouldDecrease || _shouldDecrease2) && caneProjectile != null && caneProjectile.PreparingAttack) {
+        if ((_shouldDecrease || _shouldSlowDecrease) && caneProjectile != null && caneProjectile.PreparingAttack) {
             value2 *= 0.15f;
         }
         _currentChangingTime -= value2;
         if (_shouldDecrease) {
-            CurrentResource = (ushort)(_tempResource - _tempResource * ChangingProgress);
-            if (IsEmpty) {
+            int decreaseValue = _decreaseValue;
+            CurrentResource = (ushort)(_tempResource - decreaseValue * ChangingProgress);
+            if (IsEmpty || ChangingProgress >= 1f) {
                 _shouldDecrease = false;
-                _increaseValue = _tempResource = 0;
+                _increaseValue = _decreaseValue = _tempResource = 0;
             }
 
             return;
@@ -1001,8 +1005,8 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    internal void Reset(bool slowReset = false, float extraChangingValue = 1f, bool noEffects = false) {
-        if (!_shouldDecrease2) {
+    internal void Reset(bool slowReset = false, float extraChangingValue = 1f, bool noEffects = false, bool clawsReset = false) {
+        if (!_shouldSlowDecrease) {
             if (!_shouldDecrease && !noEffects) {
                 OnResetEffects();
             }
@@ -1020,16 +1024,16 @@ sealed class WreathHandler : ModPlayer {
         }
 
         if (slowReset) {
-            if (!_shouldDecrease2 && !noEffects) {
+            if (!_shouldSlowDecrease && !noEffects) {
                 OnResetEffects();
             }
 
-            _shouldDecrease2 = true;
+            _shouldSlowDecrease = true;
             _currentChangingMult = TimeSystem.LogicDeltaTime;
             _extraChangingValueMultiplier = extraChangingValue;
         }
         else {
-            _shouldDecrease2 = false;
+            _shouldSlowDecrease = false;
         }
 
         if (_dontPlayStaySound) {
@@ -1043,12 +1047,20 @@ sealed class WreathHandler : ModPlayer {
             ResetVisualParametersForNotNormal();
         }
         _tempResource = CurrentResource;
+        if (_shouldDecrease) {
+            _decreaseValue = _tempResource;
+            _decreaseValue = (ushort)(_decreaseValue * Player.GetDruidStats().ClawsResetDecreaseModifier);
+        }
         ChangingTimeValue = TimeSystem.LogicDeltaTime * 60f;
         _currentChangingTime = ChangingTimeValue;
     }
 
     private void ResetChangingValue() {
         _tempResource = CurrentResource;
+        if (_shouldDecrease) {
+            _decreaseValue = _tempResource;
+            _decreaseValue = (ushort)(_decreaseValue * Player.GetDruidStats().ClawsResetDecreaseModifier);
+        }
         _currentChangingTime = ChangingTimeValue = 0f;
     }
 
