@@ -1760,7 +1760,7 @@ SerorkHelmet: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Everything leads to the better.'
+		'Everything leads to the better'
 		'''
 }
 
@@ -1769,7 +1769,7 @@ SerorkMask: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Or to the worse.'
+		'Or to the worse'
 		'''
 }
 

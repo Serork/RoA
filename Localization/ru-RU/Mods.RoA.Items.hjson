@@ -1776,7 +1776,7 @@ SerorkHelmet: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Всё ведет к лучшему.'
+		'Всё ведет к лучшему'
 		'''
 }
 
@@ -1785,7 +1785,7 @@ SerorkMask: {
 	Tooltip:
 		'''
 		{$Mods.RoA.RoADev}
-		'Или к худшему.'
+		'Или к худшему'
 		'''
 }
 
