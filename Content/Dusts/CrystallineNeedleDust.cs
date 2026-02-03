@@ -41,7 +41,7 @@ sealed class CrystallineNeedleDust : ModDust, IDrawDustPrePlayer {
     }
 
     public override bool PreDraw(Dust dust) {
-        Color color = Color.White.MultiplyRGB(dust.color) with { A = dust.color.A } * (1f - dust.alpha / 255f);
+        Color color = Color.White.MultiplyRGB(dust.color) with { A = (byte)(dust.color.A / 2) } * (1f - dust.alpha / 255f);
         Texture2D texture = Texture2D.Value;
         Rectangle sourceRectangle = dust.frame;
         Vector2 origin = dust.frame.Size() / 2f;
