@@ -138,7 +138,7 @@ sealed class CrystallineNeedle : NatureItem {
     }
 
     protected override void SafeSetDefaults() {
-        Item.DefaultToAccessory(34, 34);
+        Item.DefaultToAccessory(38, 38);
 
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));
     }
