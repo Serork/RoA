@@ -94,7 +94,7 @@ sealed class CrystallineNeedle : NatureItem {
 
             Rectangle sourceRectangle2 = sourceRectangle;
             sourceRectangle2.Height += 2;
-            DrawData item2 = new(texture, position + Vector2.UnitY.RotatedBy(rotation) * -2f + player.MovementOffset(), 
+            DrawData item2 = new(texture, position + Vector2.UnitX.RotatedBy(rotation) * -1f * player.direction * player.gravDir + player.MovementOffset(), 
                 sourceRectangle2,
                 color * appearanceProgress2, rotation, origin, scale, effect);
             drawinfo.DrawDataCache.Add(item2);

@@ -1194,7 +1194,7 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    private ushort GetDustType() {
+    public ushort GetDustType() {
         ushort basicDustType = (ushort)(IsAetherWreath ? ModContent.DustType<Content.Dusts.WreathDust4>() :
                                         IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3>() :
                                         ModContent.DustType<Content.Dusts.WreathDust>());
@@ -1202,7 +1202,7 @@ sealed class WreathHandler : ModPlayer {
         return dustType;
     }
 
-    private ushort GetDustType2() {
+    public ushort GetDustType2() {
         ushort basicDustType = (ushort)(IsAetherWreath ? ModContent.DustType<Content.Dusts.WreathDust4_2>() : 
                                         IsPhoenixWreath ? ModContent.DustType<Content.Dusts.WreathDust3_2>() : 
                                         ModContent.DustType<Content.Dusts.WreathDust_2>());
