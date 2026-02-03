@@ -175,18 +175,21 @@ sealed partial class PlayerCommon : ModPlayer {
     public Vector2[] CrystallineNeedleExtraPosition { get; private set; } = new Vector2[5];
 
     public void AddCrystallineNeedle(ushort time, float rotation, Vector2 extraPosition) {
-        while (MathF.Abs(rotation) < 0.5f) {
+        while (MathF.Abs(rotation) < 1.5f) {
             rotation += 0.25f;
         }
         for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
             if (CrystallineNeedleTime[i].Item1 <= 0) {
                 continue;
             }
-            while (MathF.Abs(rotation - CrystallineNeedleRotation[i]) < 0.25f) {
+            while (MathF.Abs(rotation - CrystallineNeedleRotation[i]) < 1f) {
                 rotation += 0.25f;
             }
         }
-        
+        while (MathF.Abs(rotation) < 1f) {
+            rotation += 0.25f;
+        }
+
         bool searchForFreeSlot() {
             for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
                 if (CrystallineNeedleTime[i].Item1 <= 0) {
@@ -214,6 +217,23 @@ sealed partial class PlayerCommon : ModPlayer {
         for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
             if (CrystallineNeedleTime[i].Item1 > 0) {
                 CrystallineNeedleTime[i].Item1--;
+            }
+        }
+    }
+
+    public override void UpdateLifeRegen() {
+        for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
+            if (CrystallineNeedleTime[i].Item1 > 0) {
+                Player.lifeRegen += 6;
+            }
+        }
+    }
+
+    public override void NaturalLifeRegen(ref float regen) {
+        for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
+            if (CrystallineNeedleTime[i].Item1 > 0) {
+                regen *= 1.25f;
+                return;
             }
         }
     }

@@ -48,12 +48,12 @@ sealed class CrystallineNeedle : NatureItem {
             Color color = WreathHandler.GetCurrentColor(player);
             Texture2D texture = _needleTexture.Value;
             Rectangle sourceRectangle = texture.Bounds;
-            int opacityTime = 30;
-            int inTime = 15;
+            int opacityTime = 20;
+            int inTime = 10;
             float appearanceProgress = Utils.GetLerpValue(handler.CrystallineNeedleTime[i].Item2 - opacityTime, handler.CrystallineNeedleTime[i].Item2 - inTime - opacityTime, handler.CrystallineNeedleTime[i].Item1, true);
             float appearanceProgress2 = Utils.GetLerpValue(handler.CrystallineNeedleTime[i].Item2, handler.CrystallineNeedleTime[i].Item2 - opacityTime, handler.CrystallineNeedleTime[i].Item1, true);
             appearanceProgress = Ease.CubeInOut(appearanceProgress);
-            appearanceProgress2 = Ease.CubeInOut(appearanceProgress2);
+            appearanceProgress2 = Ease.CubeOut(appearanceProgress2);
             sourceRectangle.Y = (int)(sourceRectangle.Height * 0.175f * appearanceProgress);
             sourceRectangle.Height /= 2;
             float rotation = handler.CrystallineNeedleRotation[i];
@@ -76,8 +76,9 @@ sealed class CrystallineNeedle : NatureItem {
 
             position = position.Floor();
             Vector2 extraPosition = player.GetCommon().CrystallineNeedleExtraPosition[i];
-            position += extraPosition * new Vector2(1f * drawinfo.drawPlayer.direction * drawinfo.drawPlayer.gravDir, 1f);
-            position += -(Vector2.UnitY * origin.Y * MathHelper.Lerp(0.25f, 0.125f, appearanceProgress2)).RotatedBy(rotation);
+            position += extraPosition * new Vector2(drawinfo.drawPlayer.direction * drawinfo.drawPlayer.gravDir, 1f).RotatedBy(rotation);
+            position += -(Vector2.UnitY * origin.Y * MathHelper.Lerp(0.125f, 0.25f, appearanceProgress2)).RotatedBy(rotation);
+            position += (Vector2.UnitY * origin.Y * 0.125f).RotatedBy(rotation);
             Vector2 scale = Vector2.One * 1f;
             SpriteEffects effect = facedLeft ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             if (reversedGravity) {
@@ -91,10 +92,17 @@ sealed class CrystallineNeedle : NatureItem {
             }
             effect |= SpriteEffects.FlipVertically;
 
+            Rectangle sourceRectangle2 = sourceRectangle;
+            sourceRectangle2.Height += 2;
+            DrawData item2 = new(texture, position + Vector2.UnitY.RotatedBy(rotation) * -2f + player.MovementOffset(), 
+                sourceRectangle2,
+                color * appearanceProgress2, rotation, origin, scale, effect);
+            drawinfo.DrawDataCache.Add(item2);
+
             float waveOffset = player.whoAmI + extraPosition.Length() * 1f;
             for (float num10 = -0.02f; num10 <= 0.02f; num10 += 0.01f) {
                 float num11 = (float)Math.PI * 2f * num10 * 0.5f;
-                Vector2 vector2 = position + num11.ToRotationVector2() * 2f;
+                Vector2 vector2 = position + num11.ToRotationVector2() * 2f * player.direction * player.gravDir;
                 float alpha = Helper.Wave(0.5f, 0.75f, 10f, waveOffset + num10 * 200f);
                 DrawData item = new(texture, vector2 + player.MovementOffset(), sourceRectangle,
                     color.MultiplyAlpha(alpha) * MathHelper.Lerp(0.5f, 0.625f, 0.5f) * 0.5f * appearanceProgress2, rotation + num11, origin, scale, effect);
@@ -102,10 +110,10 @@ sealed class CrystallineNeedle : NatureItem {
             }
             for (float num10 = -0.01f; num10 <= 0.01f; num10 += 0.005f) {
                 float num11 = (float)Math.PI * 2f * num10 * 0.5f;
-                Vector2 vector2 = position + num11.ToRotationVector2() * 2f;
+                Vector2 vector2 = position + num11.ToRotationVector2() * 2f * player.direction * player.gravDir;
                 float alpha = Helper.Wave(0.25f, 0.5f, 10f, waveOffset + num10 * 200f);
                 DrawData item = new(texture, vector2 + player.MovementOffset(), sourceRectangle, 
-                    color.MultiplyAlpha(alpha) * MathHelper.Lerp(0.5f, 0.625f, 0.5f) * 1f * appearanceProgress2, rotation + num11, origin, scale, effect);
+                    color.MultiplyAlpha(alpha) * MathHelper.Lerp(0.5f, 0.625f, 0.5f) * 0.75f * appearanceProgress2, rotation + num11, origin, scale, effect);
                 drawinfo.DrawDataCache.Add(item);
             }
         }
