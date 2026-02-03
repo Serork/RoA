@@ -2873,7 +2873,11 @@ PricklenutCharm: {
 
 CrystallineNeedle: {
 	DisplayName: Crystalline Needle
-	Tooltip: Consumes a full wreath charge to boost life regeneration when damaged
+	Tooltip:
+		'''
+		Consumes a full wreath charge to boost life regeneration when damaged
+		'No voice to cry suffering'
+		'''
 }
 
 PinCushion: {
