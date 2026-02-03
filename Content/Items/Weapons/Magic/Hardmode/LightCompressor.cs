@@ -322,9 +322,11 @@ sealed class LightCompressor : ModItem {
                     };
                     batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
 
-                    if (Main.rand.NextBool(50)) {
-                        Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
-                            Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                    if (!Main.gamePaused && Main.instance.IsActive) {
+                        if (Main.rand.NextBool(50)) {
+                            Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
+                                Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                        }
                     }
 
                     Lighting.AddLight(position, (Color.Lerp(Color.SkyBlue, Color.Blue, 0.05f) with { A = 0 }).ToVector3() * 0.75f);
