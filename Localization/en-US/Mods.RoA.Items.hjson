@@ -2857,3 +2857,18 @@ FermentedSpiderEye: {
 	DisplayName: Fermented Spider Eye
 	Tooltip: ""
 }
+
+PricklenutCharm: {
+	DisplayName: Pricklenut Charm
+	Tooltip: ""
+}
+
+CrystallineNeedle: {
+	DisplayName: Crystalline Needle
+	Tooltip: ""
+}
+
+PinCushion: {
+	DisplayName: Pin Cushion
+	Tooltip: ""
+}

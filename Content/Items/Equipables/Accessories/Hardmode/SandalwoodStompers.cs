@@ -9,7 +9,6 @@ using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Enums;
-using Terraria.ModLoader;
 
 using static RoA.Content.Items.Equipables.Accessories.RagingBoots;
 

@@ -17,7 +17,15 @@ sealed partial class DruidStats : ModPlayer {
     private float _clawsAttacKSpeedModifier;
     private float _clawsResetDecreaseModifier;
 
-    public bool IsDruidsEyesEffectActive;
+    public enum DruidEyesType : byte {
+        PricklenutCharm,
+        PinCushion,
+        DruidsEyes
+    }
+
+    public (bool, DruidEyesType) IsDruidsEyesEffectActive;
+
+    public bool IsCrystallineNeedleEffectActive;
 
     public float DruidPotentialDamageMultiplier {
         get => _druidPotentialDamageMultiplier;
@@ -101,7 +109,7 @@ sealed partial class DruidStats : ModPlayer {
 
         ResetEquippableWreathStats();
 
-        IsDruidsEyesEffectActive = false;
+        IsDruidsEyesEffectActive = (false, DruidEyesType.DruidsEyes);
     }
 
     public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo) {

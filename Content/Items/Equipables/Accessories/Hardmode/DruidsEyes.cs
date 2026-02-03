@@ -1,5 +1,6 @@
 ﻿using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Players;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -11,14 +12,25 @@ namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 sealed class DruidsEyes : NatureItem {
     public override void Load() {
         WreathHandler.OnHitByAnythingEvent += WreathHandler_OnHitByAnythingEvent1;
+        WreathHandler.PostUpdateEquipsEvent += PlayerCommon_PostUpdateEquipsEvent;
     }
 
-    private void WreathHandler_OnHitByAnythingEvent1(Player player, Player.HurtInfo hurtInfo) {
-        if (!player.GetDruidStats().IsDruidsEyesEffectActive) {
+    private void PlayerCommon_PostUpdateEquipsEvent(Player player) {
+        if (!player.GetDruidStats().IsDruidsEyesEffectActive.Item1) {
             return;
         }
 
-        player.GetWreathHandler().IncreaseResourceValue(-MathUtils.Clamp01((hurtInfo.Damage / (float)player.statLifeMax2) * 3.5f), extra2: 1.5f);
+        if (player.GetWreathHandler().ShouldIncreaseChargeWhenEmpty) {
+            player.GetWreathHandler().IncreaseResourceValue(-MathUtils.Clamp01(player.GetWreathHandler().HurtDamage / (float)player.statLifeMax2 * 3.5f), extra2: 1.5f);
+        }
+    }
+
+    private void WreathHandler_OnHitByAnythingEvent1(Player player, Player.HurtInfo hurtInfo) {
+        if (!player.GetDruidStats().IsDruidsEyesEffectActive.Item1 || player.GetDruidStats().IsCrystallineNeedleEffectActive) {
+            return;
+        }
+
+        player.GetWreathHandler().IncreaseResourceValue(-MathUtils.Clamp01(hurtInfo.Damage / (float)player.statLifeMax2 * 3.5f), extra2: 1.5f);
     }
 
     protected override void SafeSetDefaults() {
@@ -29,12 +41,10 @@ sealed class DruidsEyes : NatureItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        player.GetDruidStats().IsDruidsEyesEffectActive = true;
+        player.GetDruidStats().IsDruidsEyesEffectActive = (true, DruidStats.DruidEyesType.DruidsEyes);
 
         player.GetModPlayer<DruidStats>().WreathChargeRateMultiplier += 0.2f;
-
         if (player.GetWreathHandler().IsFull1) {
-            //player.statDefense += 6;
             player.lifeRegen += 6;
         }
     }

@@ -11,12 +11,11 @@ using RoA.Core.Utility.Vanilla;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
-using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
-sealed class DuskStag : ModItem {
+sealed class DuskStag : NatureItem {
     private static Asset<Texture2D> _bettleTexture = null!;
 
     public override void SetStaticDefaults() {
@@ -69,7 +68,7 @@ sealed class DuskStag : ModItem {
         drawinfo.DrawDataCache.Add(item);
     }
 
-    public override void SetDefaults() {
+    protected override void SafeSetDefaults() {
         Item.DefaultToAccessory(30, 36);
 
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));

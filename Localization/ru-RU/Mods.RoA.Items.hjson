@@ -2689,7 +2689,7 @@ DarkNeoplasm: {
 	/* Tooltip:
 		'''
 		Can be applied to an armor piece
-		Consumes life to grow uncontrollably
+		Consumes life to mutate uncontrollably
 		Does not mix well with lava
 		''' */
 }
@@ -2877,5 +2877,20 @@ DuskStag: {
 
 FermentedSpiderEye: {
 	// DisplayName: Fermented Spider Eye
+	// Tooltip: ""
+}
+
+PricklenutCharm: {
+	// DisplayName: Pricklenut Charm
+	// Tooltip: ""
+}
+
+CrystallineNeedle: {
+	// DisplayName: Crystalline Needle
+	// Tooltip: ""
+}
+
+PinCushion: {
+	// DisplayName: Pin Cushion
 	// Tooltip: ""
 }

@@ -37,6 +37,8 @@ sealed class WreathHandler : ModPlayer {
     public static ushort GETHITEFFECTTIME => 30;
 
     public override void UpdateDead() {
+        ShouldIncreaseChargeWhenEmpty = false;
+
         CommonUpdate();
         if (_dontPlayStaySound) {
             return;
@@ -88,7 +90,10 @@ sealed class WreathHandler : ModPlayer {
     private bool _useAltSounds = true;
     private ushort _showForTime;
     private bool _dontPlayStaySound;
+    private bool _hardReset;
 
+    public bool ShouldIncreaseChargeWhenEmpty { get; private set; }
+    public int HurtDamage { get; private set; }
     public ushort GetHitTimer { get; private set; }
 
     //public static LerpColor AetherLerpColor { get; private set; } = new(0.03f);
@@ -268,11 +273,16 @@ sealed class WreathHandler : ModPlayer {
 
     public delegate void OnHitByAnythingDelegate(Player player, Player.HurtInfo hurtInfo);
     public static event OnHitByAnythingDelegate OnHitByAnythingEvent = null!;
-
     public override void OnHurt(Player.HurtInfo info) {
+        if (!Player.IsAlive()) {
+            return;
+        }
+
         if (GetHitTimer <= 0) {
             GetHitTimer = GETHITEFFECTTIME;
         }
+
+        HurtDamage = info.Damage;
 
         OnHitByAnythingEvent?.Invoke(Player, info);
     }
@@ -356,7 +366,13 @@ sealed class WreathHandler : ModPlayer {
         ShouldKeepSlowFill2 = false;
     }
 
-    internal void ForcedHardReset(bool clawsReset = false) {
+    internal void ForcedHardReset(bool clawsReset = false, bool makeDusts = false) {
+        _hardReset = true;
+
+        if (makeDusts) {
+            Dusts_ResetStayTime();
+        }
+        GetHitTimer = 0;
         StartSlowlyIncreasingUntilFull = false;
         StartSlowlyIncreasingUntilFull2 = false;
         ChargedBySlowFill = ShouldKeepSlowFill2 = false;
@@ -368,6 +384,8 @@ sealed class WreathHandler : ModPlayer {
 
 
     internal void ForcedHardReset2() {
+        _hardReset = true;
+
         StartSlowlyIncreasingUntilFull = false;
         StartSlowlyIncreasingUntilFull2 = false;
         ChargedBySlowFill = ShouldKeepSlowFill2 = false;
@@ -379,8 +397,8 @@ sealed class WreathHandler : ModPlayer {
         if (_stayTime != 0f) {
             Dusts_ResetStayTime();
             _stayTime = 0f;
-            GetHitTimer = 0;
         }
+        GetHitTimer = 0;
     }
 
     public bool ShouldClawsReset(bool skipCondition = false) => IsActualFull6 && (skipCondition || SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn);
@@ -646,7 +664,13 @@ sealed class WreathHandler : ModPlayer {
         return false;
     }
 
+    public delegate void PostUpdateEquipsDelegate(Player player);
+    public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent = null!;
     public override void PostUpdateEquips() {
+        PostUpdateEquipsEvent?.Invoke(Player);
+
+        ShouldIncreaseChargeWhenEmpty = false;
+
         bool alt = ModContent.GetInstance<RoAClientConfig>().WreathSoundMode == RoAClientConfig.WreathSoundModes.Alt;
         if (_useAltSounds != alt) {
             _useAltSounds = alt;
@@ -902,6 +926,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     public void IncreaseResourceValue(float fine = 0f, bool increaseUntilFull = false, float extra2 = 1f) {
+        if (!Player.IsAlive()) {
+            return;
+        }
+
         if (CannotToggleOrGetWreathCharge) {
             return;
         }
@@ -936,6 +964,7 @@ sealed class WreathHandler : ModPlayer {
             (ushort)(GetIncreaseValue(fine) * extra);
         if (!_shouldDecrease) {
             _decreaseValue = 0;
+            ShouldIncreaseChargeWhenEmpty = false;
         }
     }
 
@@ -983,12 +1012,19 @@ sealed class WreathHandler : ModPlayer {
             value2 *= 0.15f;
         }
         _currentChangingTime -= value2;
+
         if (_shouldDecrease) {
             int decreaseValue = _decreaseValue;
             CurrentResource = (ushort)(_tempResource - decreaseValue * ChangingProgress);
             if (IsEmpty || ChangingProgress >= 1f) {
                 _shouldDecrease = false;
                 _increaseValue = _decreaseValue = _tempResource = 0;
+
+                if (_hardReset) {
+                    ShouldIncreaseChargeWhenEmpty = true;
+                    GetHitTimer = GETHITEFFECTTIME;
+                    _hardReset = false;
+                }
             }
 
             return;

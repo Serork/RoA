@@ -265,7 +265,17 @@ sealed class WreathDrawing : PlayerDrawLayer {
         }
 
         // on hit special visuals 
-        if (player.GetDruidStats().IsDruidsEyesEffectActive) {
+        if (player.GetDruidStats().IsDruidsEyesEffectActive.Item1) {
+            Color effectColor = new(57, 197, 71);
+            switch (player.GetDruidStats().IsDruidsEyesEffectActive.Item2) {
+                case Druid.DruidStats.DruidEyesType.PricklenutCharm:
+                    effectColor = new(171, 79, 121);
+                    break;
+                case Druid.DruidStats.DruidEyesType.PinCushion:
+                    effectColor = new(210, 64, 64);
+                    break;
+            }
+
             batch.DrawWithSnapshot(() => {
                 wreathSpriteData = wreathSpriteData.Framed(1, 0);
                 int fluff = WreathHandler.GETHITEFFECTTIME / 4;
@@ -275,7 +285,7 @@ sealed class WreathDrawing : PlayerDrawLayer {
                 wreathSpriteData.Rotation = rotation;
                 wreathSpriteData.Scale = 1f + 0.1f * opacity;
                 ShaderLoader.WreathShaderData.UseSaturation(opacity * 2f);
-                ShaderLoader.WreathShaderData.UseColor(new Color(57, 197, 71));
+                ShaderLoader.WreathShaderData.UseColor(effectColor);
                 ShaderLoader.WreathShaderData.Apply(player, wreathSpriteData.AsDrawData());
                 wreathSpriteData.DrawSelf();
             }, sortMode: SpriteSortMode.Immediate);
