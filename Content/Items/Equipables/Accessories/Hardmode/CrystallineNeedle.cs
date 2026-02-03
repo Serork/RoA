@@ -117,7 +117,6 @@ sealed class CrystallineNeedle : NatureItem {
                 drawinfo.DrawDataCache.Add(item);
             }
 
-            position -= Vector2.One;
             if (!Main.gamePaused && Main.instance.IsActive) {
                 for (int i2 = 0; i2 < 1; i2++) {
                     if (Main.rand.NextBool(3)) {
