@@ -117,12 +117,13 @@ sealed class CrystallineNeedle : NatureItem {
                 drawinfo.DrawDataCache.Add(item);
             }
 
+            position += Vector2.UnitX.RotatedBy(rotation) * 2f;
             if (!Main.gamePaused && Main.instance.IsActive) {
                 for (int i2 = 0; i2 < 1; i2++) {
                     if (Main.rand.NextBool(3)) {
                         continue;
                     }
-                    Dust dust = Dust.NewDustPerfect(position + Main.rand.RandomPointInArea(6f) - Vector2.UnitY.RotatedBy(rotation) * 34f + Main.screenPosition, ModContent.DustType<Dusts.CrystallineNeedleDust>(), Vector2.Zero);
+                    Dust dust = Dust.NewDustPerfect(position + Main.rand.NextVector2Circular(6f, 6f) - Vector2.UnitY.RotatedBy(rotation) * 34f + Main.screenPosition, ModContent.DustType<Dusts.CrystallineNeedleDust>(), Vector2.Zero);
                     dust.color = color;
                     dust.alpha = (byte)(255 - appearanceProgress2 * 255);
                     dust.noGravity = true;
