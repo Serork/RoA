@@ -175,7 +175,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public Vector2[] CrystallineNeedleExtraPosition { get; private set; } = new Vector2[5];
 
     public void AddCrystallineNeedle(ushort time, float rotation, Vector2 extraPosition) {
-        while (MathF.Abs(rotation) < 1.5f) {
+        while (MathF.Abs(rotation) < 2f) {
             rotation += 0.25f;
         }
         for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
