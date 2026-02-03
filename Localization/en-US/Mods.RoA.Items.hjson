@@ -353,7 +353,7 @@ SoulOfTheWoods: {
 	DisplayName: Soul of the Woods
 	Tooltip:
 		'''
-		Allows charging the wreath twice
+		Allows charging wreath twice
 		While second wreath is charged, creates a pulsating aura
 		'''
 }
@@ -758,7 +758,7 @@ Herbarium: {
 	Tooltip:
 		'''
 		Enemies occasionally drop healing herbs
-		If wreath is charged, consumes it together with the herb to restore additional life
+		When picked up, consumes a full wreath charge to restore additional life
 		'''
 }
 
@@ -2294,8 +2294,8 @@ DruidsEyes: {
 	DisplayName: Druid's Eyes
 	Tooltip:
 		'''
-		Taking damage charges up wreath
-		Increases wreath charge rate by 20%
+		Charges up wreath when damaged
+		Increases wreath charge rate by 15%
 		While wreath is charged, increases life regeneration
 		'''
 }
@@ -2835,7 +2835,11 @@ LightCompressor: {
 
 SatchelCharge: {
 	DisplayName: Satchel Charge
-	Tooltip: A massive, remotely activated explosion that will not destroy tiles
+	Tooltip: 
+		'''
+		A massive, remotely activated explosion that will not destroy tiles
+		'Things about to go boom!'
+		'''
 }
 
 TfugiosHeadGuard: {
@@ -2850,25 +2854,29 @@ GardeningGloves: {
 
 DuskStag: {
 	DisplayName: Dusk Stag
-	Tooltip: ""
+	Tooltip:
+		'''
+		Increases wreath charge rate by 20%
+		When full wreath charge effects end, they linger for 2 extra seconds
+		'''
 }
 
 FermentedSpiderEye: {
 	DisplayName: Fermented Spider Eye
-	Tooltip: ""
+	Tooltip: Claws consume 30% less wreath charge upon activating a special attack
 }
 
 PricklenutCharm: {
 	DisplayName: Pricklenut Charm
-	Tooltip: ""
+	Tooltip: Charges up wreath when damaged
 }
 
 CrystallineNeedle: {
 	DisplayName: Crystalline Needle
-	Tooltip: ""
+	Tooltip: Consumes a full wreath charge to boost life regeneration when damaged
 }
 
 PinCushion: {
 	DisplayName: Pin Cushion
-	Tooltip: ""
+	Tooltip: Charges up wreath and consumes a full wreath charge to boost life regeneration when damaged
 }

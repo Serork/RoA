@@ -1,7 +1,7 @@
 //Died from Quicksilver
-ToxicFumesDeathMessage0: "{0} forgot not to play with a thermometer."
+ToxicFumesDeathMessage0: "{0} shouldn't have played with a thermometer."
 ToxicFumesDeathMessage1: "{0}'s end was quick... silver."
-ToxicFumesDeathMessage2: "{0} forgot a respirator."
+ToxicFumesDeathMessage2: "{0} forgot the respirator."
 ToxicFumesDeathMessage3: "{0} couldn't handle the toxicity."
 //Killed by a Beartrap
 Root0: "{0} is dead by daylight."
@@ -28,11 +28,11 @@ PerfectMimic0: "{0} is still alive..."
 PerfectMimic1: "{0} is fine and dandy..."
 PerfectMimic2: "{0} is right here, look..."
 //Died from Maiden's Bracers
-MaidensBracers0: "{0}'s body breaths so easily now."
+MaidensBracers0: "{0}'s body breathes so easily now."
 MaidensBracers1: "{0} became swiss cheese."
 //Died from Avenging Soul
 AvengingSoul0: "{0} got haunted."
 AvengingSoul1: "{0} was spirited away."
 //Died from Satchel Charge
-SatchelCharge0: "{0} is dead by..."
-SatchelCharge1: "{0} is dead by..."
+SatchelCharge0: "{0} was not ready to blow."
+SatchelCharge1: "{0} got rocked like a stone."
