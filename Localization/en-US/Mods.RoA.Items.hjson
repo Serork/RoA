@@ -2667,7 +2667,7 @@ DarkNeoplasm: {
 	Tooltip:
 		'''
 		Can be applied to an armor piece
-		Consumes life to grow uncontrollably
+		Consumes life to mutate uncontrollably
 		Does not mix well with lava
 		'''
 }

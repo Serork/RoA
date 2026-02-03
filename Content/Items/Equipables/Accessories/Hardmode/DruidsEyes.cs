@@ -22,7 +22,7 @@ sealed class DruidsEyes : NatureItem {
     }
 
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(26, 24);
+        Item.SetSizeValues(26, 26);
         Item.SetShopValues(Terraria.Enums.ItemRarityColor.LightRed4, Item.sellPrice());
 
         Item.accessory = true;
