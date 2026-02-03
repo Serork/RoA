@@ -146,7 +146,7 @@ sealed class CrystallineNeedle : NatureItem {
                             dust.noGravity = true;
                             dust.rotation = MathHelper.TwoPi * Main.rand.NextFloat();
                             dust.velocity -= Vector2.UnitY.RotatedBy(rotation + 0.75f * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(2f, 3f);
-                            dust.scale *= Main.rand.NextFloat(0.8f, 1.2f) * 1.2f;
+                            dust.scale *= Main.rand.NextFloat(0.8f, 1.2f) * 1.375f;
                             dust.velocity *= Main.rand.NextFloat(0.8f, 1f);
                             dust.customData = Main.rand.NextFloat(1f, 10f);
                         }
