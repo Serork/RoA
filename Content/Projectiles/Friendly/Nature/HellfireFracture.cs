@@ -378,24 +378,28 @@ sealed class HellfireFracture : NatureProjectile {
                     width += width2 * (0.04f + random.NextFloatRange(0.02f));
                     f = Helper.VelocityToPoint(start - offset + offset2, vector2_4 + vec2 - offset + offset2, 1f).SafeNormalize(Vector2.Zero).ToRotation();
                     vector = f.ToRotationVector2();
-                    if (size2 > 0f && Main.rand.NextBool(80 + (int)(20 * (Projectile.ai[0] / 5f)))) {
-                        Dust dust = Dust.NewDustPerfect(Vector2.Lerp(start - offset + offset2 - vector * num, start - offset + offset2 + vector * num, Main.rand.NextFloat()), 6,
-                            vector.RotatedBy((float)Math.PI * 2f * Main.rand.NextFloatDirection() * 0.02f + Main.rand.NextFloatRange(MathHelper.PiOver4)) * Main.rand.NextFromList(2f, 4f) * Main.rand.NextFloat(0.35f, 0.6f) * Main.rand.NextFloat(), 0, default, (Math.Max(0.75f, size2) * 0.6f + Main.rand.NextFloatRange(0.25f)) * Main.rand.NextFloat(0.75f, 1.1f));
-                        dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
-                        dust.noGravity = !Main.rand.NextBool(40);
-                        dust.customData = 0;
+                    if (!Main.gamePaused && Main.instance.IsActive) {
+                        if (size2 > 0f && Main.rand.NextBool(80 + (int)(20 * (Projectile.ai[0] / 5f)))) {
+                            Dust dust = Dust.NewDustPerfect(Vector2.Lerp(start - offset + offset2 - vector * num, start - offset + offset2 + vector * num, Main.rand.NextFloat()), 6,
+                                vector.RotatedBy((float)Math.PI * 2f * Main.rand.NextFloatDirection() * 0.02f + Main.rand.NextFloatRange(MathHelper.PiOver4)) * Main.rand.NextFromList(2f, 4f) * Main.rand.NextFloat(0.35f, 0.6f) * Main.rand.NextFloat(), 0, default, (Math.Max(0.75f, size2) * 0.6f + Main.rand.NextFloatRange(0.25f)) * Main.rand.NextFloat(0.75f, 1.1f));
+                            dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
+                            dust.noGravity = !Main.rand.NextBool(40);
+                            dust.customData = 0;
+                        }
                     }
                 }
                 while (width < width2);
             }
             f = Helper.VelocityToPoint(first, second, 1f).SafeNormalize(Vector2.Zero).ToRotation();
             vector = f.ToRotationVector2();
-            if (size > minSize && Main.rand.NextBool(80 + (int)(20 * (Projectile.ai[0] / 5f)))) {
-                Dust dust = Dust.NewDustPerfect(Vector2.Lerp(start - offset - vector * num, start - offset + vector * num, Main.rand.NextFloat()), 6,
-                    vector.RotatedBy((float)Math.PI * 2f * Main.rand.NextFloatDirection() * 0.02f + Main.rand.NextFloatRange(MathHelper.PiOver4)) * Main.rand.NextFromList(2f, 4f) * Main.rand.NextFloat(0.35f, 0.6f) * Main.rand.NextFloat(), 0, default, (Math.Max(2f, size) * 0.6f + Main.rand.NextFloatRange(0.25f)) * Main.rand.NextFloat(0.75f, 1.1f));
-                dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
-                dust.noGravity = !Main.rand.NextBool(40);
-                dust.customData = 0;
+            if (!Main.gamePaused && Main.instance.IsActive) {
+                if (size > minSize && Main.rand.NextBool(80 + (int)(20 * (Projectile.ai[0] / 5f)))) {
+                    Dust dust = Dust.NewDustPerfect(Vector2.Lerp(start - offset - vector * num, start - offset + vector * num, Main.rand.NextFloat()), 6,
+                        vector.RotatedBy((float)Math.PI * 2f * Main.rand.NextFloatDirection() * 0.02f + Main.rand.NextFloatRange(MathHelper.PiOver4)) * Main.rand.NextFromList(2f, 4f) * Main.rand.NextFloat(0.35f, 0.6f) * Main.rand.NextFloat(), 0, default, (Math.Max(2f, size) * 0.6f + Main.rand.NextFloatRange(0.25f)) * Main.rand.NextFloat(0.75f, 1.1f));
+                    dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
+                    dust.noGravity = !Main.rand.NextBool(40);
+                    dust.customData = 0;
+                }
             }
             start = vector2_3;
         }

@@ -1024,6 +1024,8 @@ sealed class WreathHandler : ModPlayer {
                     ShouldIncreaseChargeWhenEmpty = true;
                     GetHitTimer = GETHITEFFECTTIME;
                     _hardReset = false;
+
+                    GetHitTimer = 0;
                 }
             }
 

@@ -169,6 +169,55 @@ sealed partial class PlayerCommon : ModPlayer {
     public float DuskStagVelocityFactor;
     public int DustStagDirection;
 
+    public byte CrystallineNeedleIndexToBeAdded { get; private set; }
+    public (ushort, ushort)[] CrystallineNeedleTime { get; private set; } = new (ushort, ushort)[5];
+    public float[] CrystallineNeedleRotation { get; private set; } = new float[5];
+    public Vector2[] CrystallineNeedleExtraPosition { get; private set; } = new Vector2[5];
+
+    public void AddCrystallineNeedle(ushort time, float rotation, Vector2 extraPosition) {
+        while (MathF.Abs(rotation) < 0.5f) {
+            rotation += 0.25f;
+        }
+        for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
+            if (CrystallineNeedleTime[i].Item1 <= 0) {
+                continue;
+            }
+            while (MathF.Abs(rotation - CrystallineNeedleRotation[i]) < 0.25f) {
+                rotation += 0.25f;
+            }
+        }
+        
+        bool searchForFreeSlot() {
+            for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
+                if (CrystallineNeedleTime[i].Item1 <= 0) {
+                    CrystallineNeedleIndexToBeAdded = (byte)i;
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (CrystallineNeedleIndexToBeAdded >= 5) {
+            if (!searchForFreeSlot()) {
+                return;
+            }
+        }
+        CrystallineNeedleTime[CrystallineNeedleIndexToBeAdded] = (time, time);
+        CrystallineNeedleRotation[CrystallineNeedleIndexToBeAdded] = rotation;
+        CrystallineNeedleExtraPosition[CrystallineNeedleIndexToBeAdded] = extraPosition;
+        if (searchForFreeSlot()) {
+            return;
+        }
+        CrystallineNeedleIndexToBeAdded = 5;
+    }
+
+    public void UpdateCrystallineNeedles() {
+        for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
+            if (CrystallineNeedleTime[i].Item1 > 0) {
+                CrystallineNeedleTime[i].Item1--;
+            }
+        }
+    }
+
     public float DistilleryOfDeathShootProgress => (float)DistilleryOfDeathShootCount / DistilleryOfDeath.DistilleryOfDeath_Use.SHOOTCOUNTPERTYPE;
 
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
@@ -973,6 +1022,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void PostUpdateEquipsDelegate(Player player);
     public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent;
     public override void PostUpdateEquips() {
+        UpdateCrystallineNeedles();
+
         ArchiveUseCooldownInTicks = (ushort)Helper.Approach(ArchiveUseCooldownInTicks, 0, 1);
 
         PostUpdateEquipsEvent?.Invoke(Player);

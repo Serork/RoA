@@ -16,17 +16,17 @@ sealed class DruidsEyes : NatureItem {
     }
 
     private void PlayerCommon_PostUpdateEquipsEvent(Player player) {
-        if (!player.GetDruidStats().IsDruidsEyesEffectActive.Item1) {
-            return;
-        }
+        //if (!player.GetDruidStats().IsDruidsEyesEffectActive.Item1) {
+        //    return;
+        //}
 
-        if (player.GetWreathHandler().ShouldIncreaseChargeWhenEmpty) {
-            player.GetWreathHandler().IncreaseResourceValue(-MathUtils.Clamp01(player.GetWreathHandler().HurtDamage / (float)player.statLifeMax2 * 3.5f), extra2: 1.5f);
-        }
+        //if (player.GetWreathHandler().ShouldIncreaseChargeWhenEmpty) {
+        //    player.GetWreathHandler().IncreaseResourceValue(-MathUtils.Clamp01(player.GetWreathHandler().HurtDamage / (float)player.statLifeMax2 * 3.5f), extra2: 1.5f);
+        //}
     }
 
     private void WreathHandler_OnHitByAnythingEvent1(Player player, Player.HurtInfo hurtInfo) {
-        if (!player.GetDruidStats().IsDruidsEyesEffectActive.Item1 || player.GetDruidStats().IsCrystallineNeedleEffectActive) {
+        if (!player.GetDruidStats().IsDruidsEyesEffectActive.Item1) {
             return;
         }
 

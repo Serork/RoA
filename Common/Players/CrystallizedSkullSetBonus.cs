@@ -266,10 +266,6 @@ sealed partial class PlayerCommon : ModPlayer {
         if (!handler.ApplyCrystallizedSkullSetBonus || !handler.ShouldDrawCrystals()) {
             return;
         }
-
-        if (_crystalOnPlayerTexture?.IsLoaded != true) {
-            return;
-        }
         
         if (!player.IsAlive()) {
             return;

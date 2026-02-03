@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -40,6 +41,15 @@ sealed class ExtraDrawLayerSupport : ILoadable {
         On_PlayerDrawLayers.DrawPlayer_31_ProjectileOverArm += On_PlayerDrawLayers_DrawPlayer_31_ProjectileOverArm;
         On_PlayerDrawLayers.DrawPlayer_20_NeckAcc += On_PlayerDrawLayers_DrawPlayer_20_NeckAcc;
         On_PlayerDrawLayers.DrawPlayer_21_Head_TheFace += On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace;
+        On_PlayerDrawLayers.DrawPlayer_38_EyebrellaCloud += On_PlayerDrawLayers_DrawPlayer_38_EyebrellaCloud;
+    }
+
+    public delegate void PostEyebrellaCloudDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostEyebrellaCloudDelegate PostEyebrellaCloudDrawEvent;
+    private void On_PlayerDrawLayers_DrawPlayer_38_EyebrellaCloud(On_PlayerDrawLayers.orig_DrawPlayer_38_EyebrellaCloud orig, ref PlayerDrawSet drawinfo) {
+        orig(ref drawinfo);
+
+        PostEyebrellaCloudDrawEvent?.Invoke(ref drawinfo);
     }
 
     private void On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace(On_PlayerDrawLayers.orig_DrawPlayer_21_Head_TheFace orig, ref PlayerDrawSet drawinfo) {
@@ -198,6 +208,9 @@ sealed class ExtraDrawLayerSupport : ILoadable {
 
     public delegate void PreBackpackDrawDelegate(ref PlayerDrawSet drawinfo);
     public static event PreBackpackDrawDelegate PreBackpackDrawEvent;
+
+    public delegate void PostBackpackDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostBackpackDrawDelegate PostBackpackDrawEvent;
     private void On_PlayerDrawLayers_DrawPlayer_08_Backpacks(On_PlayerDrawLayers.orig_DrawPlayer_08_Backpacks orig, ref PlayerDrawSet drawinfo) {
         drawinfo.Position += drawinfo.drawPlayer.MovementOffset();
 
@@ -210,6 +223,8 @@ sealed class ExtraDrawLayerSupport : ILoadable {
         DrawBackpacks(ref drawinfo);
 
         drawinfo.Position -= drawinfo.drawPlayer.MovementOffset();
+
+        PostBackpackDrawEvent?.Invoke(ref drawinfo);
     }
 
     public static void DrawBackpacks(ref PlayerDrawSet drawinfo) {

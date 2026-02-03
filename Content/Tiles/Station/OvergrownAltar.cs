@@ -28,6 +28,7 @@ using Terraria.GameContent.ObjectInteractions;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Terraria.Utilities;
 
 namespace RoA.Content.Tiles.Station;
 
@@ -361,12 +362,14 @@ sealed class OvergrownAltar : ModTile, TileHooks.IPostDraw {
             }
         }
 
-        if (factor2 > 0.25f && Main.rand.NextChance(factor2 * 0.75f) && WorldGenHelper.GetTileSafely(i, j - 1).TileType != ModContent.TileType<OvergrownAltar>() && Main.rand.NextBool(40)) {
-            Vector2 position2 = new Point(i, j).ToWorldCoordinates();
-            var fireDust = Dust.NewDustDirect(position2, 6, 6, ModContent.DustType<MarineMulcherTentacleDust>(), 0f, 0f, 100, Color.Red.ModifyRGB(1.5f), 1.6f + Main.rand.NextFloatRange(0.4f));
-            fireDust.noGravity = true;
-            fireDust.position = position2;
-            fireDust.customData = true;
+        if (!(Main.gamePaused || !Main.instance.IsActive) && !Lighting.UpdateEveryFrame || new FastRandom(Main.TileFrameSeed).WithModifier(i, j).Next(4) == 0) {
+            if (factor2 > 0.25f && Main.rand.NextChance(factor2 * 0.75f) && WorldGenHelper.GetTileSafely(i, j - 1).TileType != ModContent.TileType<OvergrownAltar>() && Main.rand.NextBool(40)) {
+                Vector2 position2 = new Point(i, j).ToWorldCoordinates();
+                var fireDust = Dust.NewDustDirect(position2, 6, 6, ModContent.DustType<MarineMulcherTentacleDust>(), 0f, 0f, 100, Color.Red.ModifyRGB(1.5f), 1.6f + Main.rand.NextFloatRange(0.4f));
+                fireDust.noGravity = true;
+                fireDust.position = position2;
+                fireDust.customData = true;
+            }
         }
     }
 

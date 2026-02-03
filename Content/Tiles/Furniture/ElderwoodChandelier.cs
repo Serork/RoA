@@ -17,6 +17,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
+using Terraria.Utilities;
 
 namespace RoA.Content.Tiles.Furniture;
 
@@ -111,13 +112,15 @@ sealed class ElderwoodChandelier : ModTile, TileHooks.ITileFluentlyDrawn, TileHo
             if (tile.TileFrameY < 36 && tile.TileFrameX != 18 && num26 != 1) {
                 int num27 = 6;
                 if (num27 != -1) {
-                    int value = tile.TileFrameX != 0 ? 4 : 0;
-                    int num28 = Dust.NewDust(new Vector2(i * 16 + value, j * 16), 6, 6, num27, 0f, 0f, 100);
-                    if (Main.rand.Next(3) != 0)
-                        Main.dust[num28].noGravity = true;
+                    if (!(Main.gamePaused || !Main.instance.IsActive) && !Lighting.UpdateEveryFrame || new FastRandom(Main.TileFrameSeed).WithModifier(i, j).Next(4) == 0) {
+                        int value = tile.TileFrameX != 0 ? 4 : 0;
+                        int num28 = Dust.NewDust(new Vector2(i * 16 + value, j * 16), 6, 6, num27, 0f, 0f, 100);
+                        if (Main.rand.Next(3) != 0)
+                            Main.dust[num28].noGravity = true;
 
-                    Main.dust[num28].velocity *= 0.3f;
-                    Main.dust[num28].velocity.Y -= 1.5f;
+                        Main.dust[num28].velocity *= 0.3f;
+                        Main.dust[num28].velocity.Y -= 1.5f;
+                    }
                 }
             }
         }
