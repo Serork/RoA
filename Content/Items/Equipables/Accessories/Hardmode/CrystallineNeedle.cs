@@ -94,7 +94,7 @@ sealed class CrystallineNeedle : NatureItem {
 
             Rectangle sourceRectangle2 = sourceRectangle;
             sourceRectangle2.Height += 2;
-            DrawData item2 = new(texture, position + Vector2.UnitX.RotatedBy(rotation) * -1f * player.direction * player.gravDir + player.MovementOffset(), 
+            DrawData item2 = new(texture, position + Vector2.UnitY.RotatedBy(rotation) * 1f + Vector2.UnitX.RotatedBy(rotation) * 2f + player.MovementOffset(), 
                 sourceRectangle2,
                 color * appearanceProgress2, rotation, origin, scale, effect);
             drawinfo.DrawDataCache.Add(item2);
@@ -102,7 +102,7 @@ sealed class CrystallineNeedle : NatureItem {
             float waveOffset = player.whoAmI + extraPosition.Length() * 1f;
             for (float num10 = -0.02f; num10 <= 0.02f; num10 += 0.01f) {
                 float num11 = (float)Math.PI * 2f * num10 * 0.5f;
-                Vector2 vector2 = position + num11.ToRotationVector2() * 2f * player.direction * player.gravDir;
+                Vector2 vector2 = position + num11.ToRotationVector2().RotatedBy(rotation) * 2f;
                 float alpha = Helper.Wave(0.5f, 0.75f, 10f, waveOffset + num10 * 200f);
                 DrawData item = new(texture, vector2 + player.MovementOffset(), sourceRectangle,
                     color.MultiplyAlpha(alpha) * MathHelper.Lerp(0.5f, 0.625f, 0.5f) * 0.5f * appearanceProgress2, rotation + num11, origin, scale, effect);
@@ -110,11 +110,48 @@ sealed class CrystallineNeedle : NatureItem {
             }
             for (float num10 = -0.01f; num10 <= 0.01f; num10 += 0.005f) {
                 float num11 = (float)Math.PI * 2f * num10 * 0.5f;
-                Vector2 vector2 = position + num11.ToRotationVector2() * 2f * player.direction * player.gravDir;
+                Vector2 vector2 = position + num11.ToRotationVector2().RotatedBy(rotation) * 2f;
                 float alpha = Helper.Wave(0.25f, 0.5f, 10f, waveOffset + num10 * 200f);
                 DrawData item = new(texture, vector2 + player.MovementOffset(), sourceRectangle, 
                     color.MultiplyAlpha(alpha) * MathHelper.Lerp(0.5f, 0.625f, 0.5f) * 0.75f * appearanceProgress2, rotation + num11, origin, scale, effect);
                 drawinfo.DrawDataCache.Add(item);
+            }
+
+            position -= Vector2.One;
+            if (!Main.gamePaused && Main.instance.IsActive) {
+                for (int i2 = 0; i2 < 1; i2++) {
+                    if (Main.rand.NextBool(3)) {
+                        continue;
+                    }
+                    Dust dust = Dust.NewDustPerfect(position + Main.rand.RandomPointInArea(6f) - Vector2.UnitY.RotatedBy(rotation) * 34f + Main.screenPosition, ModContent.DustType<Dusts.CrystallineNeedleDust>(), Vector2.Zero);
+                    dust.color = color;
+                    dust.alpha = (byte)(255 - appearanceProgress2 * 255);
+                    dust.noGravity = true;
+                    dust.rotation = MathHelper.TwoPi * Main.rand.NextFloat();
+                    dust.velocity -= Vector2.UnitY.RotatedBy(rotation + 0.25f * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(2f, 3f);
+                    dust.scale *= Main.rand.NextFloat(0.8f, 1.2f);
+                    dust.velocity *= Main.rand.NextFloat(0.8f, 1f) * 0.5f;
+                    dust.customData = Main.rand.NextFloat(1f, 10f);
+                }
+                if (handler.CrystallineNeedleTime[i].Item1 == 1) {
+                    int count = 12;
+                    for (int i2 = 0; i2 < count; i2++) {
+                        for (int k = 0; k < 2; k++) {
+                            if (Main.rand.NextBool()) {
+                                continue;
+                            }
+                            Dust dust = Dust.NewDustPerfect(position - Vector2.UnitY.RotatedBy(rotation) * 34f * (i2 / (float)count) + Main.screenPosition, ModContent.DustType<Dusts.CrystallineNeedleDust>(), Vector2.Zero);
+                            dust.color = color;
+                            dust.alpha = (byte)(255 - appearanceProgress2 * 255);
+                            dust.noGravity = true;
+                            dust.rotation = MathHelper.TwoPi * Main.rand.NextFloat();
+                            dust.velocity -= Vector2.UnitY.RotatedBy(rotation + 0.75f * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(2f, 3f);
+                            dust.scale *= Main.rand.NextFloat(0.8f, 1.2f) * 1.2f;
+                            dust.velocity *= Main.rand.NextFloat(0.8f, 1f);
+                            dust.customData = Main.rand.NextFloat(1f, 10f);
+                        }
+                    }
+                }
             }
         }
     }

@@ -2857,7 +2857,11 @@ LightCompressor: {
 
 SatchelCharge: {
 	// DisplayName: Satchel Charge
-	// Tooltip: A massive, remotely activated explosion that will not destroy tiles
+	/* Tooltip:
+		'''
+		A massive, remotely activated explosion that will not destroy tiles
+		'Things about to go boom!'
+		''' */
 }
 
 TfugiosHeadGuard: {
@@ -2872,25 +2876,29 @@ GardeningGloves: {
 
 DuskStag: {
 	// DisplayName: Dusk Stag
-	// Tooltip: ""
+	/* Tooltip:
+		'''
+		Increases wreath charge rate by 20%
+		When full wreath charge effects end, they linger for 2 extra seconds
+		''' */
 }
 
 FermentedSpiderEye: {
 	// DisplayName: Fermented Spider Eye
-	// Tooltip: ""
+	// Tooltip: Claws consume 30% less wreath charge upon activating a special attack
 }
 
 PricklenutCharm: {
 	// DisplayName: Pricklenut Charm
-	// Tooltip: ""
+	// Tooltip: Charges up wreath when damaged
 }
 
 CrystallineNeedle: {
 	// DisplayName: Crystalline Needle
-	// Tooltip: ""
+	// Tooltip: Consumes a full wreath charge to boost life regeneration when damaged
 }
 
 PinCushion: {
 	// DisplayName: Pin Cushion
-	// Tooltip: ""
+	// Tooltip: Charges up wreath and consumes a full wreath charge to boost life regeneration when damaged
 }

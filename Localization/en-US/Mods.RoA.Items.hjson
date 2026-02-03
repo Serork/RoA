@@ -2835,7 +2835,7 @@ LightCompressor: {
 
 SatchelCharge: {
 	DisplayName: Satchel Charge
-	Tooltip: 
+	Tooltip:
 		'''
 		A massive, remotely activated explosion that will not destroy tiles
 		'Things about to go boom!'
