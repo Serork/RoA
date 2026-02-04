@@ -67,7 +67,9 @@ sealed class PhoenixFireball : FormProjectile {
     }
 
     public override void AI() {
-        Projectile.timeLeft = 2;
+        if (!_phoenixDashed) {
+            Projectile.timeLeft = 120;
+        }
 
         Player player = Projectile.GetOwnerAsPlayer();
 
