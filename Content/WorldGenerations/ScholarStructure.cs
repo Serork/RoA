@@ -642,7 +642,7 @@ sealed class ScholarStructure : IInitializer {
                         }
                     }
                     if (tile.TileType == TileID.WoodBlock || tile.TileType == TileID.LivingWood) {
-                        if (!WorldGenHelper.GetTileSafely(i, j - 1).HasTile) {
+                        if (!WorldGenHelper.GetTileSafely(i, j - 1).HasTile && WorldGenHelper.GetTileSafely(i + 1, j).HasTile && WorldGenHelper.GetTileSafely(i - 1, j).HasTile) {
                             Tile tile2 = Main.tile[i, j - 1];
                             tile2.HasTile = true;
                             tile2.TileType = tile.TileType;
