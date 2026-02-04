@@ -56,7 +56,7 @@ sealed class CellPhoneInfoModificationSystem : IInitializer {
 
         cursor.Emit(OpCodes.Pop);
         cursor.EmitDelegate(() => {
-            return (double)Main.rand.NextFloat(86400f);
+
         });
 
         ApplyReplacementTweak(cursor, InfoType.Weather, "GameUI.PartlyCloudy", displayTextIndex, ChooseWeatherText);
