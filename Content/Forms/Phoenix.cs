@@ -15,9 +15,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
 
 namespace RoA.Content.Forms;
 
@@ -212,6 +214,23 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
+        void playFlapSound(bool reset = false) {
+            if (reset) {
+                player.flapSound = false;
+                return;
+            }
+            if (!player.flapSound) {
+                SoundEngine.PlaySound(SoundID.Item32, player.Center);
+            }
+            player.flapSound = true;
+        }
+        if (frame == 4) {
+            playFlapSound();
+        }
+        else {
+            playFlapSound(true);
+        }
+
         ref float attackFactor2 = ref player.GetFormHandler().AttackFactor2;
         if (++frameCounter > 6) {
             frameCounter = 0;
