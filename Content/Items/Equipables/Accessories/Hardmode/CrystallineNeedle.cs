@@ -165,6 +165,10 @@ sealed class CrystallineNeedle : NatureItem {
             return;
         }
 
+        if (player.GetFormHandler().IsInADruidicForm) {
+            return;
+        }
+
         player.GetWreathHandler().ForcedHardReset(makeDusts: true);
 
         player.GetCommon()

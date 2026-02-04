@@ -7,6 +7,7 @@ using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.Players;
 using RoA.Common.Utilities.Extensions;
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
@@ -290,7 +291,9 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
 
     public override void HideDrawLayers(PlayerDrawSet drawInfo) {
         if (IsInADruidicForm && Player.GetFormHandler().CurrentForm.BaseForm.IsDrawing) {
-            foreach (var layer in PlayerDrawLayerLoader.Layers.Except(PlayerDrawLayerLoader.Layers.Where(checkLayer => checkLayer.FullName.Contains("mount", StringComparison.CurrentCultureIgnoreCase) || checkLayer.FullName.Contains("wreath", StringComparison.CurrentCultureIgnoreCase)).Where(checkLayer => checkLayer.Visible))) {
+            foreach (var layer in PlayerDrawLayerLoader.Layers
+                .Except(PlayerDrawLayerLoader.Layers.Where(checkLayer => checkLayer.FullName.Contains("mount", StringComparison.CurrentCultureIgnoreCase) || checkLayer.FullName.Contains("wreath", StringComparison.CurrentCultureIgnoreCase))
+                .Where(checkLayer => checkLayer.Visible))) {
                 layer.Hide();
             }
         }

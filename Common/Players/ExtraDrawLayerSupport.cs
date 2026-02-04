@@ -42,6 +42,17 @@ sealed class ExtraDrawLayerSupport : ILoadable {
         On_PlayerDrawLayers.DrawPlayer_20_NeckAcc += On_PlayerDrawLayers_DrawPlayer_20_NeckAcc;
         On_PlayerDrawLayers.DrawPlayer_21_Head_TheFace += On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace;
         On_PlayerDrawLayers.DrawPlayer_38_EyebrellaCloud += On_PlayerDrawLayers_DrawPlayer_38_EyebrellaCloud;
+        On_PlayerDrawLayers.DrawPlayer_02_MountBehindPlayer += On_PlayerDrawLayers_DrawPlayer_02_MountBehindPlayer;
+    }
+
+    public delegate void PostMountBehindPlayerDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostMountBehindPlayerDelegate PostMountBehindPlayedDrawEvent_ONLYFORDRUIDICFORM;
+    private void On_PlayerDrawLayers_DrawPlayer_02_MountBehindPlayer(On_PlayerDrawLayers.orig_DrawPlayer_02_MountBehindPlayer orig, ref PlayerDrawSet drawinfo) {
+        orig(ref drawinfo);
+
+        if (drawinfo.drawPlayer.GetFormHandler().IsInADruidicForm) {
+            PostMountBehindPlayedDrawEvent_ONLYFORDRUIDICFORM?.Invoke(ref drawinfo);
+        }
     }
 
     public delegate void PostEyebrellaCloudDelegate(ref PlayerDrawSet drawinfo);

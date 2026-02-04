@@ -30,6 +30,10 @@ sealed class DruidsEyes : NatureItem {
             return;
         }
 
+        if (player.GetFormHandler().IsInADruidicForm) {
+            return;
+        }
+
         player.GetWreathHandler().IncreaseResourceValue(-MathUtils.Clamp01(hurtInfo.Damage / (float)player.statLifeMax2 * 3.5f), extra2: 1.5f);
     }
 
