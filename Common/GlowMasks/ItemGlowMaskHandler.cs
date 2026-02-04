@@ -407,12 +407,13 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     drawInfo.DrawDataCache.Add(item);
                     if (armorGlowMaskModItem.Type == ModContent.ItemType<FlamewardenHood>()) {
                         for (float num6 = 0f; num6 < 4f; num6 += 1f) {
-                            float num3 = ((float)drawInfo.drawPlayer.miscCounter / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
+                            float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + player.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
                             Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
                             Vector2 position = item.position + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
                             DrawData item2 = item;
                             item2.position = position;
                             item2.color = color2;
+                            item2.shader = player.cHead;
                             drawInfo.DrawDataCache.Add(item2);
                         }
                     }
@@ -542,12 +543,13 @@ sealed class ItemGlowMaskHandler : PlayerDrawLayer {
                     drawInfo.DrawDataCache.Add(drawData);
                     if (armorGlowMaskModItem.Type == ModContent.ItemType<FlamewardenMantle>()) {
                         for (float num6 = 0f; num6 < 4f; num6 += 1f) {
-                            float num3 = ((float)drawInfo.drawPlayer.miscCounter / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
+                            float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + player.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
                             Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player);
                             Vector2 position = drawData.position + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
                             DrawData item2 = drawData;
                             item2.position = position;
                             item2.color = color2;
+                            item2.shader = player.cBody;
                             drawInfo.DrawDataCache.Add(item2);
                         }
                     }

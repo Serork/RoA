@@ -222,7 +222,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
 
             Texture2D waterTexture = indexedTextureAssets[(byte)CoralClarionetRequstedTextureType.Water2].Value;
             float attackProgress = AttackProgress01;
-            float waveValue = Owner.miscCounter * MathHelper.Lerp(0.1f, 0.2f, attackProgress);
+            float waveValue = (TimeSystem.TimeForVisualEffects * 60f + Projectile.whoAmI * 3) * MathHelper.Lerp(0.1f, 0.2f, attackProgress);
             bool facedRight = Projectile.FacedRight();
             SpriteFrame waterFrame = new(1, 3, 0, (byte)(facedRight ? (3 - waveValue % 3) : (waveValue % 3)));
             Rectangle waterClip = waterFrame.GetSourceRectangle(waterTexture);
