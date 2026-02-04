@@ -4650,6 +4650,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 flag50 = false;
             }
 
+            if (num793 - _biomeWidth < GenVars.beachBordersWidth || num793 + _biomeWidth > Main.maxTilesX - GenVars.beachBordersWidth) {
+                flag50 = false;
+            }
+
             if (num793 > GenVars.snowOriginLeft - num786 * 2.5f && num793 < GenVars.snowOriginRight + num786 * 2.5f) {
                 flag50 = false;
             }
