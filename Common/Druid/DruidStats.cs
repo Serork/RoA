@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -86,6 +87,9 @@ sealed partial class DruidStats : ModPlayer {
     public float ClawsResetDecreaseModifier {
         get => _clawsResetDecreaseModifier;
         set {
+            if (Player.GetFormHandler().IsInADruidicForm) {
+                value = 1f;
+            }
             _clawsResetDecreaseModifier = MathUtils.Clamp01(value);
         }
     }
