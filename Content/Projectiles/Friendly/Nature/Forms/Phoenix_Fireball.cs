@@ -71,11 +71,30 @@ sealed class PhoenixFireball : FormProjectile {
         if (!_phoenixDashed && player.GetFormHandler().AttackFactor2 >= 4f && player.GetFormHandler().AttackFactor2 < 10f) {
             _phoenixDashed = true;
 
-            Projectile.velocity += player.velocity.SafeNormalize() * 10f;
+            Projectile.velocity += player.velocity.SafeNormalize() * 20f;
         }
 
         if (!_phoenixDashed && !player.GetFormHandler().IsInADruidicForm) {
             Projectile.Kill();
+        }
+
+        if (Main.rand.NextBool(_phoenixDashed ? 1 : 7)) {
+            int num495 = 8;
+            int num496 = Dust.NewDust(new Vector2(Projectile.position.X + (float)num495, Projectile.position.Y + (float)num495), Projectile.width - num495 * 2, Projectile.height - num495 * 2, 6);
+            Main.dust[num496].position = Projectile.Center + Main.rand.RandomPointInArea(!_phoenixDashed ? 8f : 4f);
+            if (!_phoenixDashed) {
+                Main.dust[num496].position.Y -= 10f * Main.rand.NextFloat(0.75f, 1f);
+            }
+            Dust dust2 = Main.dust[num496];
+            dust2.velocity *= 0.5f;
+            dust2 = Main.dust[num496];
+            dust2.velocity += Projectile.velocity * 0.5f;
+            Main.dust[num496].noGravity = true;
+            Main.dust[num496].noLight = true;
+            Main.dust[num496].scale = 1.4f;
+            if (!_phoenixDashed) {
+                Main.dust[num496].velocity.Y -= 2f * Main.rand.NextFloat(0.75f, 1f);
+            }
         }
 
         Vector2 center = player.GetPlayerCorePoint();
@@ -167,7 +186,9 @@ sealed class PhoenixFireball : FormProjectile {
         float lerpValue = Utils.GetLerpValue(0f - 0.1f * _transitToDark, 0.7f - 0.2f * _transitToDark, progressOnStrip, clamped: true);
         Color result = Color.Lerp(Color.Lerp(Color.White, Color.Orange, _transitToDark * 0.5f), Color.Red, lerpValue) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip));
         result.A = (byte)(result.A * 0.875f);
-        result *= 0.5f;
+        if (!_phoenixDashed) {
+            result *= 0.5f;
+        }
         return result;
     }
 
@@ -176,28 +197,32 @@ sealed class PhoenixFireball : FormProjectile {
         float lerpValue = Utils.GetLerpValue(0f, 0.06f + _transitToDark * 0.01f, progressOnStrip, clamped: true);
         lerpValue = 1f - (1f - lerpValue) * (1f - lerpValue);
         float result = MathHelper.Lerp(24f + _transitToDark * 16f, 8f, Utils.GetLerpValue(0f, 1f, progressOnStrip, clamped: true)) * lerpValue;
-        result *= 0.5f;
+        result *= _phoenixDashed ? 0.625f : 0.5f;
         return result;
     }
 
     public override bool PreDraw(ref Color lightColor) {
         Color baseColor = Color.White;
+        if (_phoenixDashed) {
+            baseColor.A /= 2;
+        }
 
         float value = BaseFormDataStorage.GetAttackCharge(Projectile.GetOwnerAsPlayer());
 
         float offset = 5f;
-        Vector2 position = Projectile.Center + MathF.Sin(TimeSystem.TimeForVisualEffects * 5f + Projectile.whoAmI * 10f).ToRotationVector2() * offset - new Vector2(offset, -offset) / 2f;
+        Vector2 position = Projectile.Center +
+            (MathF.Sin(TimeSystem.TimeForVisualEffects * 5f + Projectile.whoAmI * 10f).ToRotationVector2() * offset - new Vector2(offset, -offset) / 2f) * (!_phoenixDashed).ToInt();
         Vector2 temp = Projectile.Center;
         Projectile.Center = position;
 
         MiscShaderData miscShaderData = GameShaders.Misc["FlameLash"];
-        miscShaderData.UseSaturation(-0.5f);
+        miscShaderData.UseSaturation(_phoenixDashed ? -2f : -0.5f);
         miscShaderData.UseOpacity(10f);
         miscShaderData.UseOpacity(3f);
         miscShaderData.Apply();
         _vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot, 
             StripColors, StripWidth,
-            -Main.screenPosition + Projectile.Size / 2f, includeBacksides: true);
+            -Main.screenPosition + Projectile.Size / 2f + (position - Projectile.Center), includeBacksides: true);
         _vertexStrip.DrawTrail();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 

@@ -497,19 +497,23 @@ sealed partial class PlayerCommon : ModPlayer {
     public override void SetControls() {
         var handler = Player.GetCommon();
         if (handler._isTeleportingBackViaObisidianStopwatch) {
-            Player.controlUp = false;
-            Player.controlLeft = false;
-            Player.controlDown = false;
-            Player.controlRight = false;
-            Player.controlJump = false;
-            Player.controlUseItem = false;
-            Player.controlUseTile = false;
-            Player.controlThrow = false;
-            Player.controlHook = false;
-            Player.controlTorch = false;
-            Player.controlSmart = false;
-            Player.controlMount = false;
+            ResetControls();
         }
+    }
+
+    public void ResetControls() {
+        Player.controlUp = false;
+        Player.controlLeft = false;
+        Player.controlDown = false;
+        Player.controlRight = false;
+        Player.controlJump = false;
+        Player.controlUseItem = false;
+        Player.controlUseTile = false;
+        Player.controlThrow = false;
+        Player.controlHook = false;
+        Player.controlTorch = false;
+        Player.controlSmart = false;
+        Player.controlMount = false;
     }
 
     private void On_Player_UpdateAdvancedShadows(On_Player.orig_UpdateAdvancedShadows orig, Player self) {

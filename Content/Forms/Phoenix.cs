@@ -138,7 +138,9 @@ sealed class Phoenix : BaseForm {
         ref int shootCounter = ref player.GetFormHandler().ShootCounter;
         ref byte attackCount = ref player.GetFormHandler().AttackCount;
         ref Vector2 savedVelocity = ref player.GetFormHandler().SavedVelocity;
-        if (attackFactor2++ > PREPARATIONTIME) {
+
+        attackFactor2 += attackFactor2 <= 0f ? 1 : 2;
+        if (attackFactor2 > PREPARATIONTIME) {
             attackFactor2 = PREPARATIONTIME;
         }
         if (attackFactor2 < 0f) {
@@ -146,6 +148,19 @@ sealed class Phoenix : BaseForm {
             player.SyncMousePosition();
             player.velocity = savedVelocity;
             player.Center += player.velocity * blinkDistance;
+
+            BaseFormDataStorage.ChangeAttackCharge1(player, 1f, false);
+
+            player.GetCommon().ResetControls();
+
+            if (player.whoAmI == Main.myPlayer) {
+                Main.SetCameraLerp(0.075f, 1);
+                //if (Main.mapTime < 5)
+                //    Main.mapTime = 5;
+
+                //Main.maxQ = true;
+                //Main.renderNow = true;
+            }
         }
         if (attackFactor2 >= PREPARATIONTIME) {
             if (attackCount < FIREBALLCOUNT) {
@@ -183,16 +198,7 @@ sealed class Phoenix : BaseForm {
                     }
                 }
 
-
-
-                if (player.whoAmI == Main.myPlayer) {
-                    Main.SetCameraLerp(0.075f, 5);
-                    //if (Main.mapTime < 5)
-                    //    Main.mapTime = 5;
-
-                    //Main.maxQ = true;
-                    //Main.renderNow = true;
-                }
+                player.GetCommon().ResetControls();
             }
         }
     }
