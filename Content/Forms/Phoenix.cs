@@ -6,6 +6,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -36,58 +37,68 @@ sealed class Phoenix : BaseForm {
         float num = 2f;
         float num2 = 0.1f;
         float num3 = 0.8f;
-        if (player.controlUp || player.controlJump) {
-            if (player.velocity.Y > 0f)
-                player.velocity.Y *= num3;
 
-            player.velocity.Y -= num2;
-            if (player.velocity.Y < 0f - num)
-                player.velocity.Y = 0f - num;
+        Vector2 direction = Vector2.Zero;
+
+        if (player.controlUp || player.controlJump) {
+            direction.Y = -1f;
+            //if (player.velocity.Y > 0f)
+            //    player.velocity.Y *= num3;
+
+            //player.velocity.Y -= num2;
+            //if (player.velocity.Y < 0f - num)
+            //    player.velocity.Y = 0f - num;
         }
         if (player.controlDown) {
-            if (player.velocity.Y < 0f)
-                player.velocity.Y *= num3;
+            direction.Y = 1f;
+            //if (player.velocity.Y < 0f)
+            //    player.velocity.Y *= num3;
 
-            player.velocity.Y += num2;
-            if (player.velocity.Y > num)
-                player.velocity.Y = num;
+            //player.velocity.Y += num2;
+            //if (player.velocity.Y > num)
+            //    player.velocity.Y = num;
         }
-        if (player.controlUp || player.controlJump || player.controlDown) {
-        }
-        else if ((double)player.velocity.Y < -0.1 || (double)player.velocity.Y > 0.1) {
-            player.velocity.Y *= num3;
-        }
-        else {
-            player.velocity.Y = 0f;
-        }
+        //if (player.controlUp || player.controlJump || player.controlDown) {
+        //}
+        //else if ((double)player.velocity.Y < -0.1 || (double)player.velocity.Y > 0.1) {
+        //    player.velocity.Y *= num3;
+        //}
+        //else {
+        //    player.velocity.Y = 0f;
+        //}
 
         if (player.controlLeft) {
-            if (player.velocity.X > 0f)
-                player.velocity.X *= num3;
+            direction.X = -1f;
+            //if (player.velocity.X > 0f)
+            //    player.velocity.X *= num3;
 
-            player.velocity.X -= num2;
-            if (player.velocity.X < 0f - num)
-                player.velocity.X = 0f - num;
+            //player.velocity.X -= num2;
+            //if (player.velocity.X < 0f - num)
+            //    player.velocity.X = 0f - num;
         }
         if (player.controlRight) {
-            if (player.velocity.X < 0f)
-                player.velocity.X *= num3;
+            direction.X = 1f;
+            //if (player.velocity.X < 0f)
+            //    player.velocity.X *= num3;
 
-            player.velocity.X += num2;
-            if (player.velocity.X > num)
-                player.velocity.X = num;
+            //player.velocity.X += num2;
+            //if (player.velocity.X > num)
+            //    player.velocity.X = num;
         }
-        if (player.controlLeft || player.controlRight) {
+        //if (player.controlLeft || player.controlRight) {
 
-        }
-        else if ((double)player.velocity.X < -0.1 || (double)player.velocity.X > 0.1) {
-            player.velocity.X *= num3;
-        }
-        else {
-            player.velocity.X = 0f;
-        }
+        //}
+        //else if ((double)player.velocity.X < -0.1 || (double)player.velocity.X > 0.1) {
+        //    player.velocity.X *= num3;
+        //}
+        //else {
+        //    player.velocity.X = 0f;
+        //}
 
-        player.velocity = player.velocity.NormalizeWithMaxLength(num);
+        player.velocity = Vector2.Lerp(player.velocity, direction.SafeNormalize() * 2f, direction == Vector2.Zero ? 0.2f : 0.1f);
+        if (player.velocity.Length() < 0.1f) {
+            player.velocity *= 0f;
+        }
 
         if (player.velocity.X < 0f)
             player.direction = -1;
