@@ -49,16 +49,6 @@ sealed class CellPhoneInfoModificationSystem : IInitializer {
             return;
         }
 
-        // Change text for the watch.
-        if (!cursor.TryGotoNext(MoveType.After, c => c.MatchLdsfld<Main>("time"))) {
-            return;
-        }
-
-        cursor.Emit(OpCodes.Pop);
-        cursor.EmitDelegate(() => {
-
-        });
-
         ApplyReplacementTweak(cursor, InfoType.Weather, "GameUI.PartlyCloudy", displayTextIndex, ChooseWeatherText);
     }
 
