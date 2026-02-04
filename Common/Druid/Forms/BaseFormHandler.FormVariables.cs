@@ -60,6 +60,8 @@ sealed partial class BaseFormHandler : ModPlayer {
     public void ResetPhoenixStats() {
         AttackFactor = 0f;
         AttackFactor2 = 0f;
+        ShootCounter = 0;
+        AttackCount = 0;
     }
     #endregion
 

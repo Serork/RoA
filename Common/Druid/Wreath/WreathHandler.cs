@@ -1058,7 +1058,7 @@ sealed class WreathHandler : ModPlayer {
 
             _boost = 0;
 
-            ChangeItsValue();
+            ChangeItsValue(slowReset);
         }
 
         if (slowReset) {
@@ -1079,7 +1079,7 @@ sealed class WreathHandler : ModPlayer {
         }
     }
 
-    private void ChangeItsValue() {
+    private void ChangeItsValue(bool slowReset = false) {
         int value = CurrentResource % 100;
         if (_shouldDecrease || !(value > 90 || value < 5)) {
             ResetVisualParametersForNotNormal();
@@ -1087,7 +1087,9 @@ sealed class WreathHandler : ModPlayer {
         _tempResource = CurrentResource;
         if (_shouldDecrease) {
             _decreaseValue = _tempResource;
-            _decreaseValue = (ushort)(_decreaseValue * Player.GetDruidStats().ClawsResetDecreaseModifier);
+            if (!slowReset) {
+                _decreaseValue = (ushort)(_decreaseValue * Player.GetDruidStats().ClawsResetDecreaseModifier);
+            }
         }
         ChangingTimeValue = TimeSystem.LogicDeltaTime * 60f;
         _currentChangingTime = ChangingTimeValue;

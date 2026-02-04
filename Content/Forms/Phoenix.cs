@@ -11,6 +11,7 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -20,8 +21,9 @@ namespace RoA.Content.Forms;
 sealed class Phoenix : BaseForm {
     private static byte FRAMECOUNT => 14;
 
-    private static ushort PREPARATIONTIME => MathUtils.SecondsToFrames(2);
-    private static ushort ATTACKTIME => MathUtils.SecondsToFrames(1);
+    public static ushort PREPARATIONTIME => MathUtils.SecondsToFrames(2);
+    public static ushort ATTACKTIME => MathUtils.SecondsToFrames(1);
+    public static byte FIREBALLCOUNT => 5;
 
     public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2f);
     public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * 1.2f);
@@ -127,22 +129,15 @@ sealed class Phoenix : BaseForm {
 
         ref float attackFactor = ref player.GetFormHandler().AttackFactor;
         ref float attackFactor2 = ref player.GetFormHandler().AttackFactor2;
+        ref int shootCounter = ref player.GetFormHandler().ShootCounter;
+        ref byte attackCount = ref player.GetFormHandler().AttackCount;
         if (attackFactor2++ > PREPARATIONTIME) {
             attackFactor2 = PREPARATIONTIME;
         }
         if (attackFactor2 >= PREPARATIONTIME) {
-            if (attackFactor++ > ATTACKTIME) {
-                attackFactor = 0;
-
-                if (player.IsLocal()) {
-                    float offsetValue = TileHelper.TileSize * 5;
-                    Vector2 center = player.GetPlayerCorePoint();
-                    Vector2 offset = Main.rand.NextVector2CircularEdge(offsetValue, offsetValue);
-                    ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixFireball>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
-                        Position = center,
-                        AI1 = offset.X,
-                        AI2 = offset.Y
-                    });
+            if (attackFactor < ATTACKTIME * FIREBALLCOUNT) {
+                if (attackFactor++ % ATTACKTIME == 0) {
+                    shootCounter = -1;
                 }
             }
         }
@@ -152,7 +147,31 @@ sealed class Phoenix : BaseForm {
         if (++frameCounter > 6) {
             frameCounter = 0;
             frame++;
+            ref float attackFactor = ref player.GetFormHandler().AttackFactor;
+            ref int shootCounter = ref player.GetFormHandler().ShootCounter;
+            ref byte attackCount = ref player.GetFormHandler().AttackCount;
+            if (frame == 3) {
+                if (shootCounter == -1) {
+                    shootCounter = ATTACKTIME;
+
+                    if (player.IsLocal()) {
+                        float offsetValue = TileHelper.TileSize * 5;
+                        Vector2 center = player.GetPlayerCorePoint();
+                        int meInQueueValue = TrackedEntitiesSystem.GetTrackedProjectile<PhoenixFireball>(checkProjectile => checkProjectile.owner != player.whoAmI).Count() + 1;
+                        Vector2 offset = Vector2.One.RotatedBy(MathHelper.TwoPi / 5 * meInQueueValue + MathHelper.PiOver2) * offsetValue;
+                        ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixFireball>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
+                            Position = center,
+                            AI1 = offset.X,
+                            AI2 = offset.Y
+                        });
+                    }
+                }
+
+                attackCount++;
+            }
             if (frame >= 7) {
+                BaseFormDataStorage.ChangeAttackCharge1(player, 1f, false);
+
                 frame = 0;
             }
         }
@@ -172,12 +191,19 @@ sealed class Phoenix : BaseForm {
         player.GetFormHandler().ResetPhoenixStats();
     }
 
+    protected override void AdjustFrameBox(Player player, ref Rectangle frame) {
+
+    }
+
     protected override void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         drawPosition = Utils.Floor(drawPosition);
 
         float value = BaseFormDataStorage.GetAttackCharge(drawPlayer);
 
         if (glowTexture != null) {
+            float opacity = drawPlayer.GetFormHandler().AttackFactor2 / (float)PREPARATIONTIME;
+            opacity = Ease.CubeOut(Utils.GetLerpValue(0.8f, 1f, opacity, true));
+
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
@@ -193,9 +219,7 @@ sealed class Phoenix : BaseForm {
             }
 
             frame.Y += (frame.Height + 2) * 7;
-
-            float opacity = drawPlayer.GetFormHandler().AttackFactor2 / (float)PREPARATIONTIME;
-            opacity = Ease.QuadIn(opacity);
+            value = 1f;
 
             item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f) * opacity, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
