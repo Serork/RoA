@@ -23,6 +23,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
 sealed class PhoenixFireball : FormProjectile {
     private float _transitToDark;
     private bool _phoenixDashed;
+    private int _targetWhoAmI;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float MainOffsetValue => ref Projectile.localAI[2];
@@ -60,18 +61,22 @@ sealed class PhoenixFireball : FormProjectile {
 
         Projectile.tileCollide = false;
 
+        Projectile.ignoreWater = true;
+
         Projectile.Opacity = 0f;
     }
 
     public override void AI() {
         Projectile.timeLeft = 2;
 
+        float dashSpeed = 20f;
+
         Player player = Projectile.GetOwnerAsPlayer();
 
         if (!_phoenixDashed && player.GetFormHandler().AttackFactor2 >= 4f && player.GetFormHandler().AttackFactor2 < 10f) {
             _phoenixDashed = true;
 
-            Projectile.velocity += player.velocity.SafeNormalize() * 20f;
+            Projectile.velocity += player.velocity.SafeNormalize() * dashSpeed;
         }
 
         if (!_phoenixDashed && !player.GetFormHandler().IsInADruidicForm) {
@@ -79,21 +84,23 @@ sealed class PhoenixFireball : FormProjectile {
         }
 
         if (Main.rand.NextBool(_phoenixDashed ? 1 : 7)) {
-            int num495 = 8;
-            int num496 = Dust.NewDust(new Vector2(Projectile.position.X + (float)num495, Projectile.position.Y + (float)num495), Projectile.width - num495 * 2, Projectile.height - num495 * 2, 6);
-            Main.dust[num496].position = Projectile.Center + Main.rand.RandomPointInArea(!_phoenixDashed ? 8f : 4f);
-            if (!_phoenixDashed) {
-                Main.dust[num496].position.Y -= 10f * Main.rand.NextFloat(0.75f, 1f);
-            }
-            Dust dust2 = Main.dust[num496];
-            dust2.velocity *= 0.5f;
-            dust2 = Main.dust[num496];
-            dust2.velocity += Projectile.velocity * 0.5f;
-            Main.dust[num496].noGravity = true;
-            Main.dust[num496].noLight = true;
-            Main.dust[num496].scale = 1.4f;
-            if (!_phoenixDashed) {
-                Main.dust[num496].velocity.Y -= 2f * Main.rand.NextFloat(0.75f, 1f);
+            if (Main.rand.NextBool()) {
+                int num495 = 8;
+                int num496 = Dust.NewDust(new Vector2(Projectile.position.X + (float)num495, Projectile.position.Y + (float)num495), Projectile.width - num495 * 2, Projectile.height - num495 * 2, 6);
+                Main.dust[num496].position = Projectile.Center + Main.rand.RandomPointInArea(!_phoenixDashed ? 8f : 4f);
+                if (!_phoenixDashed) {
+                    Main.dust[num496].position.Y -= 10f * Main.rand.NextFloat(0.75f, 1f);
+                }
+                Dust dust2 = Main.dust[num496];
+                dust2.velocity *= 0.5f;
+                dust2 = Main.dust[num496];
+                dust2.velocity += Projectile.velocity * 0.5f;
+                Main.dust[num496].noGravity = true;
+                Main.dust[num496].noLight = true;
+                Main.dust[num496].scale = 1.4f;
+                if (!_phoenixDashed) {
+                    Main.dust[num496].velocity.Y -= 2f * Main.rand.NextFloat(0.75f, 1f);
+                }
             }
         }
 
@@ -134,6 +141,38 @@ sealed class PhoenixFireball : FormProjectile {
 
         if (!_phoenixDashed) {
             return;
+        }
+
+        Projectile.velocity = Projectile.velocity.NormalizeWithMaxLength(dashSpeed);
+
+        NPC nPC2 = Main.npc[_targetWhoAmI];
+        if (nPC2.CanBeChasedBy(this)) {
+            float num487 = dashSpeed;
+            Vector2 center2 = Projectile.Center;
+            float num488 = nPC2.Center.X - center2.X;
+            float num489 = nPC2.Center.Y - center2.Y;
+            float num490 = (float)Math.Sqrt(num488 * num488 + num489 * num489);
+            float num491 = num490;
+            num490 = num487 / num490;
+            num488 *= num490;
+            num489 *= num490;
+            Projectile.velocity.X = (Projectile.velocity.X * 14f + num488) / 15f;
+            Projectile.velocity.Y = (Projectile.velocity.Y * 14f + num489) / 15f;
+        }
+        else {
+            float num492 = 1000f;
+            for (int num493 = 0; num493 < 200; num493++) {
+                NPC nPC3 = Main.npc[num493];
+                if (nPC3.CanBeChasedBy(this)) {
+                    float x4 = nPC3.Center.X;
+                    float y4 = nPC3.Center.Y;
+                    float num494 = Math.Abs(Projectile.Center.X - x4) + Math.Abs(Projectile.Center.Y - y4);
+                    if (num494 < num492 && Collision.CanHit(Projectile.position, Projectile.width, Projectile.height, nPC3.position, nPC3.width, nPC3.height)) {
+                        num492 = num494;
+                        _targetWhoAmI = num493;
+                    }
+                }
+            }
         }
 
         //Projectile.velocity *= 0.95f;

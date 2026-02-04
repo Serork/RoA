@@ -130,7 +130,6 @@ sealed class Phoenix : BaseForm {
 
         player.gravity = 0f;
 
-        player.fullRotation = 0f;
         player.fullRotationOrigin = player.getRect().Centered();
 
         ref float attackFactor = ref player.GetFormHandler().AttackFactor;
@@ -151,6 +150,8 @@ sealed class Phoenix : BaseForm {
 
             BaseFormDataStorage.ChangeAttackCharge1(player, 1f, false);
 
+            player.fullRotation = player.velocity.X * 0.5f;
+
             player.GetCommon().ResetControls();
 
             if (player.whoAmI == Main.myPlayer) {
@@ -161,6 +162,10 @@ sealed class Phoenix : BaseForm {
                 //Main.maxQ = true;
                 //Main.renderNow = true;
             }
+        }
+        else {
+            player.fullRotation = Utils.AngleLerp(player.fullRotation, 0f, 0.1f);
+            savedVelocity = Vector2.Lerp(savedVelocity, Vector2.Zero, 0.1f);
         }
         if (attackFactor2 >= PREPARATIONTIME) {
             if (attackCount < FIREBALLCOUNT) {
@@ -190,7 +195,7 @@ sealed class Phoenix : BaseForm {
                         Vector2 offset = new Vector2(player.width * Main.rand.NextFloat(), player.height * yProgress);
                         ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixSlash>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
                             Position = center,
-                            Velocity = velocity, 
+                            Velocity = velocity,
                             AI0 = offset.X,
                             AI1 = offset.Y,
                             AI2 = MathUtils.YoYo(yProgress)
@@ -245,7 +250,7 @@ sealed class Phoenix : BaseForm {
             frameCounter = 0;
             frame = 13;
 
-            MakeCopy(player.Center, (byte)frame, 0f, player.direction > 0);
+            MakeCopy(player.Center, (byte)frame, player.fullRotation, player.direction > 0);
         }
 
         BaseFormHandler.TransitToDark = Helper.Wave(0f, 1f, 5f, player.whoAmI);
@@ -288,6 +293,8 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override void PreDraw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
+        drawPosition += drawPlayer.GetFormHandler().SavedVelocity.SafeNormalize() * 50f * MathUtils.Clamp01(drawPlayer.GetFormHandler().SavedVelocity.Length());
+
         MiscShaderData miscShaderData = GameShaders.Misc["FlameLash"];
         miscShaderData.UseSaturation(-0.5f);
         miscShaderData.UseOpacity(10f);

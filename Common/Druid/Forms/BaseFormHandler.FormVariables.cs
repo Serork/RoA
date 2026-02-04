@@ -65,6 +65,7 @@ sealed partial class BaseFormHandler : ModPlayer {
         ShootCounter = 0;
         AttackCount = 0;
         TransitToDark = 0;
+        SavedVelocity = Vector2.Zero;
     }
     #endregion
 
