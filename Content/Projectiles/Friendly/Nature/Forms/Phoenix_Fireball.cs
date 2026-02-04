@@ -144,7 +144,7 @@ sealed class PhoenixFireball : FormProjectile {
                 dust2.velocity *= 0.5f;
                 dust2 = Main.dust[num131];
                 dust2.velocity += position.DirectionTo(Main.dust[num131].position) * Main.rand.NextFloat(2f, 5f) * 0.8f;
-                dust2.velocity += Projectile.velocity * Main.rand.NextFloat(2f, 5f) * 0.5f * 0.8f;
+                dust2.velocity += Projectile.velocity * Main.rand.NextFloat(2f, 5f) * 0.25f * 0.8f;
             }
         }
         ref int frame = ref Projectile.frame;
