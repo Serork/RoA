@@ -503,7 +503,7 @@ sealed class WreathHandler : ModPlayer {
             return;
         }
         if (CannotToggleOrGetWreathCharge) {
-            if (_currentChangingMult < 0.1f) {
+            if (_currentChangingMult < 0.1f * DruidPlayerStats.DischargeTimeDecreaseMultiplier) {
                 Dusts_ResetStayTime();
                 ChargedBySlowFill = false;
                 Reset(true);
