@@ -281,7 +281,8 @@ sealed class Phoenix : BaseForm {
                         float offsetValue = TileHelper.TileSize * 5;
                         Vector2 center = player.GetPlayerCorePoint();
                         int meInQueueValue = attackCount + 2;
-                        Vector2 offset = Vector2.One.RotatedBy(MathHelper.TwoPi / 5 * meInQueueValue + MathHelper.PiOver2) * offsetValue;
+                        Main.NewText(meInQueueValue);
+                        Vector2 offset = Vector2.One.RotatedBy(MathHelper.TwoPi / 5 * meInQueueValue + MathHelper.PiOver2 * (meInQueueValue != 2 && meInQueueValue != 3).ToDirectionInt()) * offsetValue;
                         Vector2 velocity = Vector2.UnitY * 5f;
                         ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixFireball>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
                             Position = center,
