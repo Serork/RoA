@@ -72,6 +72,39 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
                     dust2.velocity += Projectile.velocity * Main.rand.NextFloat(2f, 5f) * 0.625f * 0.8f;
                 }
             }
+            else {
+                for (int i = 0; i < 1; i++) {
+                    int num1021 = 1;
+                    int num1030 = Utils.SelectRandom<int>(Main.rand, 6, 259, 158);
+                    float num127 = Main.rand.NextFloat(0.75f, 1.25f);
+                    num127 *= Main.rand.NextFloat(1.25f, 1.5f);
+                    int width = 20;
+                    Color color = Color.Lerp(new Color(255, 165, 53), new Color(255, 247, 147), Main.rand.NextFloat());
+                    if (Main.rand.NextBool()) {
+                        color = Color.Lerp(new Color(255, 53, 53), new Color(255, 147, 147), Main.rand.NextFloat());
+                    }
+                    if (num1030 != 6) {
+                        color = default;
+                        num127 = 1f;
+                    }
+                    num127 *= 2f;
+                    Vector2 position = Projectile.Center;
+                    int num131 = Dust.NewDust(new Vector2(position.X, position.Y), 6, 6, num1030, 0f, 0f, 0, color, num127);
+                    Main.dust[num131].position = position + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(Projectile.velocity.ToRotation()) * width / 3f;
+                    Main.dust[num131].position += Projectile.velocity * Main.rand.NextFloat(0f, 100f);
+                    Main.dust[num131].customData = num1021;
+                    Main.dust[num131].noGravity = true;
+                    if (Main.rand.Next(4) != 0)
+                        Main.dust[num131].velocity.Y -= 0.2f;
+                    Main.dust[num131].noGravity = true;
+                    Dust dust2 = Main.dust[num131];
+                    dust2.velocity *= 0.5f;
+                    dust2 = Main.dust[num131];
+                    dust2.velocity += position.DirectionTo(Main.dust[num131].position) * Main.rand.NextFloat(2f, 5f) * 0.8f;
+                    dust2.velocity += Projectile.velocity * Main.rand.NextFloat(2f, 5f) * 0.625f * 0.8f * Main.rand.NextFloat(5, 10) * 2.5f;
+                    dust2.noGravity = true;
+                }
+            }
         }
         else {
             Projectile.velocity = Vector2.Zero;

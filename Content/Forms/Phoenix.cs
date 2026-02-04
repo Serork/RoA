@@ -27,6 +27,7 @@ sealed class Phoenix : BaseForm {
     public static ushort PREPARATIONTIME => MathUtils.SecondsToFrames(2);
     public static ushort ATTACKTIME => MathUtils.SecondsToFrames(1);
     public static byte FIREBALLCOUNT => 5;
+    private static float AFTERDASHOFFSETVALUE => 50f;
 
     private static VertexStrip _vertexStrip = new VertexStrip();
 
@@ -47,6 +48,8 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override void SafePostUpdate(Player player) {
+        Lighting.AddLight(player.Center, 0.5f * new Color(254, 158, 135).ToVector3() * MathHelper.Lerp(1f, 1.5f, BaseFormDataStorage.GetAttackCharge(player)));
+
         player.GetCommon().ShouldUpdateAdvancedShadows = true;
         player.GetFormHandler().UsePlayerSpeed = false;
         player.GetFormHandler().UsePlayerHorizontals = false;
@@ -293,7 +296,7 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override void PreDraw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
-        drawPosition += drawPlayer.GetFormHandler().SavedVelocity.SafeNormalize() * 50f * MathUtils.Clamp01(drawPlayer.GetFormHandler().SavedVelocity.Length());
+        drawPosition += drawPlayer.GetFormHandler().SavedVelocity.SafeNormalize() * AFTERDASHOFFSETVALUE * MathUtils.Clamp01(drawPlayer.GetFormHandler().SavedVelocity.Length());
 
         MiscShaderData miscShaderData = GameShaders.Misc["FlameLash"];
         miscShaderData.UseSaturation(-0.5f);

@@ -69,9 +69,11 @@ sealed class PhoenixFireball : FormProjectile {
     public override void AI() {
         Projectile.timeLeft = 2;
 
-        float dashSpeed = 20f;
-
         Player player = Projectile.GetOwnerAsPlayer();
+
+        Lighting.AddLight(player.Center, 0.5f * new Color(254, 158, 135).ToVector3() * MathHelper.Lerp(1f, 1.5f, BaseFormDataStorage.GetAttackCharge(player)));
+
+        float dashSpeed = 20f;
 
         if (!_phoenixDashed && player.GetFormHandler().AttackFactor2 >= 4f && player.GetFormHandler().AttackFactor2 < 10f) {
             _phoenixDashed = true;
@@ -96,7 +98,7 @@ sealed class PhoenixFireball : FormProjectile {
                 dust2 = Main.dust[num496];
                 dust2.velocity += Projectile.velocity * 0.5f;
                 Main.dust[num496].noGravity = true;
-                Main.dust[num496].noLight = true;
+                Main.dust[num496].noLight = false;
                 Main.dust[num496].scale = 1.4f;
                 if (!_phoenixDashed) {
                     Main.dust[num496].velocity.Y -= 2f * Main.rand.NextFloat(0.75f, 1f);
