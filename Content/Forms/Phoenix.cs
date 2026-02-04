@@ -58,6 +58,9 @@ sealed class Phoenix : BaseForm {
             //if (player.velocity.Y > num)
             //    player.velocity.Y = num;
         }
+        if ((player.controlUp || player.controlJump) && player.controlDown) {
+            direction.Y = 0f;
+        }
         //if (player.controlUp || player.controlJump || player.controlDown) {
         //}
         //else if ((double)player.velocity.Y < -0.1 || (double)player.velocity.Y > 0.1) {
@@ -84,6 +87,9 @@ sealed class Phoenix : BaseForm {
             //player.velocity.X += num2;
             //if (player.velocity.X > num)
             //    player.velocity.X = num;
+        }
+        if (player.controlLeft && player.controlRight) {
+            direction.X = 0f;
         }
         //if (player.controlLeft || player.controlRight) {
 
