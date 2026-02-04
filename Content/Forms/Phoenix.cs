@@ -120,14 +120,17 @@ sealed class Phoenix : BaseForm {
 
     protected override void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         drawPosition = Utils.Floor(drawPosition);
+
+        float value = BaseFormDataStorage.GetAttackCharge(drawPlayer);
+
         if (glowTexture != null) {
-            DrawData item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, WreathHandler.GetWreathChargeProgress_ForArmorGlow(drawPlayer)) * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
+            DrawData item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
 
             for (float num6 = 0f; num6 < 4f; num6 += 1f) {
                 float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + drawPlayer.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
-                Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * WreathHandler.GetWreathChargeProgress_ForArmorGlow(drawPlayer);
+                Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * value;
                 Vector2 position = item.position + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
                 DrawData item2 = item;
                 item2.position = position;
