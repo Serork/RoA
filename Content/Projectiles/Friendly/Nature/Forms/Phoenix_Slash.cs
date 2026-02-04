@@ -60,7 +60,7 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
                     Vector2 position = Projectile.Center;
                     int num131 = Dust.NewDust(new Vector2(position.X, position.Y), 6, 6, num1030, 0f, 0f, 0, color, num127);
                     Main.dust[num131].position = position + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(Projectile.velocity.ToRotation()) * width / 3f;
-                    Main.dust[num131].position += Projectile.velocity * Main.rand.NextFloat(-50f, 100f);
+                    Main.dust[num131].position += Projectile.velocity * Main.rand.NextFloat(-50f, 120f);
                     Main.dust[num131].customData = num1021;
                     if (Main.rand.Next(4) != 0)
                         Main.dust[num131].velocity.Y -= 0.2f;
