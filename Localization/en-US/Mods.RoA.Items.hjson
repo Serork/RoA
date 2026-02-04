@@ -2884,3 +2884,8 @@ PinCushion: {
 	DisplayName: Pin Cushion
 	Tooltip: Charges up wreath and consumes a full wreath charge to boost life regeneration when damaged
 }
+
+NaturePriestCape: {
+	DisplayName: Nature Priest Cape
+	Tooltip: ""
+}

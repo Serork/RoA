@@ -2703,7 +2703,7 @@ SandalwoodStompers: {
 	DisplayName: '''"Сандаловы топтуны"'''
 	/* Tooltip:
 		'''
-		Increases falling acceleration
+		Increases movement speed and falling acceleration
 		Landing or standing still covers an area in canopy that harms enemies and increases defense by up to 25
 		''' */
 }
@@ -2905,4 +2905,9 @@ CrystallineNeedle: {
 PinCushion: {
 	// DisplayName: Pin Cushion
 	// Tooltip: Charges up wreath and consumes a full wreath charge to boost life regeneration when damaged
+}
+
+NaturePriestCape: {
+	// DisplayName: Nature Priest Cape
+	// Tooltip: ""
 }
