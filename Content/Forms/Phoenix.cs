@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Druid.Forms;
-using RoA.Common.Druid.Wreath;
-using RoA.Core.Graphics.Data;
+using RoA.Content.Projectiles.Friendly.Nature.Forms;
+using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -19,6 +19,15 @@ namespace RoA.Content.Forms;
 
 sealed class Phoenix : BaseForm {
     private static byte FRAMECOUNT => 14;
+
+    private static ushort PREPARATIONTIME => MathUtils.SecondsToFrames(2);
+    private static ushort ATTACKTIME => MathUtils.SecondsToFrames(1);
+
+    public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2f);
+    public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * 1.2f);
+
+    public override Vector2 SetWreathOffset(Player player) => new(0f, -8f);
+    public override Vector2 SetWreathOffset2(Player player) => new(0f, 0f);
 
     protected override void SafeSetDefaults() {
         MountData.totalFrames = FRAMECOUNT;
@@ -115,6 +124,28 @@ sealed class Phoenix : BaseForm {
 
         player.fullRotation = 0f;
         player.fullRotationOrigin = player.getRect().Centered();
+
+        ref float attackFactor = ref player.GetFormHandler().AttackFactor;
+        ref float attackFactor2 = ref player.GetFormHandler().AttackFactor2;
+        if (attackFactor2++ > PREPARATIONTIME) {
+            attackFactor2 = PREPARATIONTIME;
+        }
+        if (attackFactor2 >= PREPARATIONTIME) {
+            if (attackFactor++ > ATTACKTIME) {
+                attackFactor = 0;
+
+                if (player.IsLocal()) {
+                    float offsetValue = TileHelper.TileSize * 5;
+                    Vector2 center = player.GetPlayerCorePoint();
+                    Vector2 offset = Main.rand.NextVector2CircularEdge(offsetValue, offsetValue);
+                    ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixFireball>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
+                        Position = center,
+                        AI1 = offset.X,
+                        AI2 = offset.Y
+                    });
+                }
+            }
+        }
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
@@ -130,11 +161,15 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
-        
+        skipDust = true;
+
+        player.GetFormHandler().ResetPhoenixStats();
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
-        
+        skipDust = true;
+
+        player.GetFormHandler().ResetPhoenixStats();
     }
 
     protected override void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
@@ -146,10 +181,28 @@ sealed class Phoenix : BaseForm {
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cBody;
             playerDrawData.Add(item);
-
             for (float num6 = 0f; num6 < 4f; num6 += 1f) {
                 float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + drawPlayer.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
                 Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * value;
+                Vector2 position = item.position + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
+                DrawData item2 = item;
+                item2.position = position;
+                item2.color = color2;
+                item2.shader = drawPlayer.cBody;
+                playerDrawData.Add(item2);
+            }
+
+            frame.Y += (frame.Height + 2) * 7;
+
+            float opacity = drawPlayer.GetFormHandler().AttackFactor2 / (float)PREPARATIONTIME;
+            opacity = Ease.QuadIn(opacity);
+
+            item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f) * opacity, rotation, drawOrigin, drawScale, spriteEffects);
+            item.shader = drawPlayer.cBody;
+            playerDrawData.Add(item);
+            for (float num6 = 0f; num6 < 4f; num6 += 1f) {
+                float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + drawPlayer.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
+                Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * value * opacity;
                 Vector2 position = item.position + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
                 DrawData item2 = item;
                 item2.position = position;

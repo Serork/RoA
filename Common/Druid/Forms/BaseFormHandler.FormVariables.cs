@@ -56,6 +56,13 @@ sealed partial class BaseFormHandler : ModPlayer {
     }
     #endregion
 
+    #region PHOENIX
+    public void ResetPhoenixStats() {
+        AttackFactor = 0f;
+        AttackFactor2 = 0f;
+    }
+    #endregion
+
     #region GRYPHON
     public static float MOVESPEEDBUFFTIMEINTICKS => 90f;
     public static float MOVESPEEDBUFFCOOLDOWN => 180f;
@@ -167,15 +174,6 @@ sealed partial class BaseFormHandler : ModPlayer {
         AttackFactor2 = 0f;
     }
 
-    public void ResetFlederStats() {
-        DashDelay = 0;
-        DashTimer = 0;
-        JustJumped = false;
-        JustJumpedForAnimation = false;
-        DashDirection = IDoubleTap.TapDirection.None;
-        AttackFactor = 0;
-    }
-
     public partial void OnDoubleTap2(Player player, IDoubleTap.TapDirection direction) {
         bool flag = direction == IDoubleTap.TapDirection.Right || direction == IDoubleTap.TapDirection.Left;
         if (!flag) {
@@ -197,7 +195,7 @@ sealed partial class BaseFormHandler : ModPlayer {
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "GryphonRoar") with { Pitch = 0.5f, Volume = 2f }, Player.Center);
     }
     #endregion
-    #region PHOENIX
+    #region LIL PHOENIX
     public const float MAXPHOENIXCHARGE = 3.5f;
 
     internal float _charge, _charge2, _charge3;
@@ -236,6 +234,15 @@ sealed partial class BaseFormHandler : ModPlayer {
     #region FLEDER
     public const int CD = 50, DURATION = 35;
     public const float SPEED = 10f;
+
+    public void ResetFlederStats() {
+        DashDelay = 0;
+        DashTimer = 0;
+        JustJumped = false;
+        JustJumpedForAnimation = false;
+        DashDirection = IDoubleTap.TapDirection.None;
+        AttackFactor = 0;
+    }
 
     public partial void ResetEffects2() {
         if (!Player.GetFormHandler().IsInADruidicForm) {
