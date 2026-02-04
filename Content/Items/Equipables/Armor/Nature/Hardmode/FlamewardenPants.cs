@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
 using RoA.Core.Defaults;
 
@@ -28,5 +29,5 @@ sealed class FlamewardenPants : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMa
     }
 
     void ItemGlowMaskHandler.IDrawArmorGlowMask.SetDrawSettings(Player player, ref Texture2D texture, ref Color color, ref PlayerDrawSet drawInfo) 
-        => color = Color.White * 0.9f/* * WreathHandler.GetWreathChargeProgress_ForArmorGlow(player)*/;
+        => color = Color.White * MathHelper.Lerp(0.9f, 1f, WreathHandler.GetWreathChargeProgress_ForArmorGlow(player));
 }
