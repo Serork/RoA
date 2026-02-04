@@ -2911,3 +2911,8 @@ NaturePriestCape: {
 	// DisplayName: Nature Priest Cape
 	// Tooltip: ""
 }
+
+NaturePriestHood: {
+	// DisplayName: Nature Priest Hood
+	// Tooltip: ""
+}

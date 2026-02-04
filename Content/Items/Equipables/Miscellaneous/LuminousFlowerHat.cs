@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.GlowMasks;
+using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Miscellaneous;
 
 using System;
@@ -22,7 +23,7 @@ sealed class LuminousFlowerHat : ModItem {
 
         public override void PostUpdateEquips() {
             int type = ModContent.ItemType<LuminousFlowerHat>();
-            if (Player.armor[0].type == type || Player.armor[10].type == type) {
+            if (Player.head == EquipLoader.GetEquipSlot(RoA.Instance, nameof(LuminousFlowerHat), EquipType.Head)) {
                 float length = Player.velocity.Length();
                 LightValue = MathHelper.Lerp(LightValue,
                     MathHelper.Clamp(Utils.GetLerpValue(0f, Math.Abs(Player.maxRunSpeed), length, true),

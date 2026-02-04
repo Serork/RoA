@@ -45,7 +45,7 @@ sealed class StoneMask : ModItem {
 
         private static bool IsActive(Player player) {
             int itemType = ModContent.ItemType<StoneMask>();
-            bool flag = player.armor[10].type == itemType || player.armor[0].type == itemType;
+            bool flag = player.head == EquipLoader.GetEquipSlot(RoA.Instance, nameof(StoneMask), EquipType.Head);
             return flag;
         }
 
