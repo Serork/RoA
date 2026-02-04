@@ -57,11 +57,14 @@ sealed partial class BaseFormHandler : ModPlayer {
     #endregion
 
     #region PHOENIX
+    public static float TransitToDark;
+
     public void ResetPhoenixStats() {
         AttackFactor = 0f;
         AttackFactor2 = 0f;
         ShootCounter = 0;
         AttackCount = 0;
+        TransitToDark = 0;
     }
     #endregion
 

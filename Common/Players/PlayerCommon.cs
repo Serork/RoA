@@ -238,6 +238,8 @@ sealed partial class PlayerCommon : ModPlayer {
         }
     }
 
+    public bool ShouldUpdateAdvancedShadows;
+
     public float DistilleryOfDeathShootProgress => (float)DistilleryOfDeathShootCount / DistilleryOfDeath.DistilleryOfDeath_Use.SHOOTCOUNTPERTYPE;
 
     public bool ConjurersEyeCanShoot => Player.manaRegenDelay <= 0 && Player.statMana < Player.statManaMax2;
@@ -443,6 +445,27 @@ sealed partial class PlayerCommon : ModPlayer {
         };
     }
 
+    public Vector2[] GetAdvancedShadowPositions(int length = 0) {
+        int pickedLength = length == 0 ? availableAdvancedShadowsCount : length;
+        Vector2[] positions = new Vector2[pickedLength];
+        for (int i = 0; i < pickedLength; i++) {
+            positions[i] = GetAdvancedShadow(i).Position;
+        }
+        return positions;
+    }
+
+    public float[] GetAdvancedShadowRotations(int length = 0) {
+        int pickedLength = length == 0 ? availableAdvancedShadowsCount : length;
+        float[] rotations = new float[pickedLength];
+        int num30 = 1;
+        for (int num31 = 0; num31 < num30; num31++) {
+            for (int num32 = pickedLength - 1; num32 > 0; num32--) {
+                rotations[num32] = (GetAdvancedShadow(num32 - 1).Position - GetAdvancedShadow(num32).Position).SafeNormalize(Vector2.Zero).ToRotation();
+            }
+        }
+        return rotations;
+    }
+
     public EntityShadowInfo GetAdvancedShadow(int shadowIndex) {
         if (shadowIndex > availableAdvancedShadowsCount)
             shadowIndex = availableAdvancedShadowsCount;
@@ -546,7 +569,7 @@ sealed partial class PlayerCommon : ModPlayer {
             return;
         }
 
-        if (handler.IsObsidianStopwatchTeleportAvailable) {
+        if (handler.IsObsidianStopwatchTeleportAvailable || handler.ShouldUpdateAdvancedShadows) {
             handler.UpdateAdvancedShadows();
         }
     }
@@ -1085,7 +1108,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 _obsidianStopwatchTeleportCooldown--;
             }
         }
-        else {
+        else if (!ShouldUpdateAdvancedShadows) {
             ResetAdvancedShadows();
         }
 
@@ -1388,6 +1411,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        ShouldUpdateAdvancedShadows = false;
+
         IsDuskStagEffectActive = false;
         IsDuskStagEffectActive_Vanity = false;
 

@@ -15,6 +15,8 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 
 namespace RoA.Content.Forms;
 
@@ -24,6 +26,8 @@ sealed class Phoenix : BaseForm {
     public static ushort PREPARATIONTIME => MathUtils.SecondsToFrames(2);
     public static ushort ATTACKTIME => MathUtils.SecondsToFrames(1);
     public static byte FIREBALLCOUNT => 5;
+
+    private static VertexStrip _vertexStrip = new VertexStrip();
 
     public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2f);
     public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * 1.2f);
@@ -42,6 +46,7 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override void SafePostUpdate(Player player) {
+        player.GetCommon().ShouldUpdateAdvancedShadows = true;
         player.GetFormHandler().UsePlayerSpeed = false;
         player.GetFormHandler().UsePlayerHorizontals = false;
 
@@ -159,8 +164,10 @@ sealed class Phoenix : BaseForm {
                         Vector2 center = player.GetPlayerCorePoint();
                         int meInQueueValue = TrackedEntitiesSystem.GetTrackedProjectile<PhoenixFireball>(checkProjectile => checkProjectile.owner != player.whoAmI).Count() + 1;
                         Vector2 offset = Vector2.One.RotatedBy(MathHelper.TwoPi / 5 * meInQueueValue + MathHelper.PiOver2) * offsetValue;
+                        Vector2 velocity = Vector2.UnitY * 5f;
                         ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixFireball>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
                             Position = center,
+                            Velocity = velocity,
                             AI1 = offset.X,
                             AI2 = offset.Y
                         });
@@ -175,6 +182,8 @@ sealed class Phoenix : BaseForm {
                 frame = 0;
             }
         }
+
+        BaseFormHandler.TransitToDark = Helper.Wave(0f, 1f, 5f, player.whoAmI);
 
         return false;
     }
@@ -193,6 +202,37 @@ sealed class Phoenix : BaseForm {
 
     protected override void AdjustFrameBox(Player player, ref Rectangle frame) {
 
+    }
+
+    private Color StripColors(float progressOnStrip) {
+        progressOnStrip = 0.25f;
+        float lerpValue = Utils.GetLerpValue(0f - 0.1f * BaseFormHandler.TransitToDark, 0.7f - 0.2f * BaseFormHandler.TransitToDark, progressOnStrip, clamped: true);
+        Color result = Color.Lerp(Color.Lerp(Color.White, Color.Orange, BaseFormHandler.TransitToDark * 0.5f), Color.Red, lerpValue) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip));
+        result.A = (byte)(result.A * 0.875f);
+        result *= 0.25f;
+        return result;
+    }
+
+    private float StripWidth(float progressOnStrip) {
+        progressOnStrip = 0.25f;
+        float lerpValue = Utils.GetLerpValue(0f, 0.06f + BaseFormHandler.TransitToDark * 0.01f, progressOnStrip, clamped: true);
+        lerpValue = 1f - (1f - lerpValue) * (1f - lerpValue);
+        float result = MathHelper.Lerp(24f + BaseFormHandler.TransitToDark * 16f, 8f, Utils.GetLerpValue(0f, 1f, progressOnStrip, clamped: true)) * lerpValue;
+        result *= 0.5f;
+        return result;
+    }
+
+    protected override void PreDraw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
+        MiscShaderData miscShaderData = GameShaders.Misc["FlameLash"];
+        miscShaderData.UseSaturation(-0.5f);
+        miscShaderData.UseOpacity(10f);
+        miscShaderData.UseOpacity(3f);
+        miscShaderData.Apply();
+        _vertexStrip.PrepareStripWithProceduralPadding(drawPlayer.GetCommon().GetAdvancedShadowPositions(30), drawPlayer.GetCommon().GetAdvancedShadowRotations(30),
+            StripColors, StripWidth,
+            -Main.screenPosition + drawPlayer.Size / 2f + new Vector2(drawPlayer.width * -drawPlayer.direction, drawPlayer.height * 0.75f) * 0.5f, includeBacksides: true);
+        _vertexStrip.DrawTrail();
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
     }
 
     protected override void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {

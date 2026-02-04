@@ -11,6 +11,8 @@ using System;
 using System.Linq;
 
 using Terraria;
+using Terraria.Graphics;
+using Terraria.Graphics.Shaders;
 
 using static RoA.Common.Druid.Forms.BaseForm;
 
@@ -25,6 +27,7 @@ sealed class PhoenixFireball : FormProjectile {
     }
 
     private float _posRotation;
+    private float _transitToDark;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float MeInQueueValue => ref Projectile.localAI[1];
@@ -52,8 +55,12 @@ sealed class PhoenixFireball : FormProjectile {
         }
     }
 
+    private static VertexStrip _vertexStrip = new VertexStrip();
+
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(10);
+
+        Projectile.SetTrail(3, 30);
     }
 
     protected override void SafeSetDefaults() {
@@ -93,11 +100,15 @@ sealed class PhoenixFireball : FormProjectile {
         }
         switch (State) {
             case StateType.Idle:
-                Projectile.Center = Vector2.Lerp(Projectile.Center, center + PositionOffset, 0.3f);
+                Projectile.Center = Vector2.Lerp(Projectile.Center, center + PositionOffset, 0.3f * (1f - MathUtils.Clamp01(Projectile.velocity.Length() / 5f)));
                 break;
             case StateType.Shoot:
                 break;
         }
+
+        Projectile.Center += Projectile.velocity;
+
+        Projectile.velocity *= 0.9375f;
 
         PositionOffset = Vector2.Lerp(PositionOffset, Vector2.One.RotatedBy(MathHelper.TwoPi / 5 * MeInQueueValue) * MainOffsetValue, 0.1f);
 
@@ -116,6 +127,26 @@ sealed class PhoenixFireball : FormProjectile {
         if (frame > 8) {
             frame = 5;
         }
+
+        _transitToDark = Helper.Wave(0f, 1f, 5f, Projectile.whoAmI);
+    }
+
+    private Color StripColors(float progressOnStrip) {
+        progressOnStrip = 0.25f;
+        float lerpValue = Utils.GetLerpValue(0f - 0.1f * _transitToDark, 0.7f - 0.2f * _transitToDark, progressOnStrip, clamped: true);
+        Color result = Color.Lerp(Color.Lerp(Color.White, Color.Orange, _transitToDark * 0.5f), Color.Red, lerpValue) * (1f - Utils.GetLerpValue(0f, 0.98f, progressOnStrip));
+        result.A = (byte)(result.A * 0.875f);
+        result *= 0.5f;
+        return result;
+    }
+
+    private float StripWidth(float progressOnStrip) {
+        progressOnStrip = 0.25f;
+        float lerpValue = Utils.GetLerpValue(0f, 0.06f + _transitToDark * 0.01f, progressOnStrip, clamped: true);
+        lerpValue = 1f - (1f - lerpValue) * (1f - lerpValue);
+        float result = MathHelper.Lerp(24f + _transitToDark * 16f, 8f, Utils.GetLerpValue(0f, 1f, progressOnStrip, clamped: true)) * lerpValue;
+        result *= 0.5f;
+        return result;
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -127,6 +158,17 @@ sealed class PhoenixFireball : FormProjectile {
         Vector2 position = Projectile.Center + MathF.Sin(TimeSystem.TimeForVisualEffects * 5f + Projectile.whoAmI * 10f).ToRotationVector2() * offset - new Vector2(offset, -offset) / 2f;
         Vector2 temp = Projectile.Center;
         Projectile.Center = position;
+
+        MiscShaderData miscShaderData = GameShaders.Misc["FlameLash"];
+        miscShaderData.UseSaturation(-0.5f);
+        miscShaderData.UseOpacity(10f);
+        miscShaderData.UseOpacity(3f);
+        miscShaderData.Apply();
+        _vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot, 
+            StripColors, StripWidth,
+            -Main.screenPosition + Projectile.Size / 2f, includeBacksides: true);
+        _vertexStrip.DrawTrail();
+        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 
         Projectile.QuickDrawAnimated(baseColor * MathHelper.Lerp(0.9f, 1f, value) * Projectile.Opacity);
         for (float num6 = 0f; num6 < 4f; num6 += 1f) {
