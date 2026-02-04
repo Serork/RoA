@@ -87,6 +87,8 @@ sealed class Phoenix : BaseForm {
             player.velocity.X = 0f;
         }
 
+        player.velocity = player.velocity.NormalizeWithMaxLength(num);
+
         if (player.velocity.X < 0f)
             player.direction = -1;
         else if (player.velocity.X > 0f)
