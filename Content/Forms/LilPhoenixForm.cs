@@ -79,6 +79,7 @@ sealed class LilPhoenixForm : BaseForm {
         float maxRotation = 0.075f;
         fullRotation = MathHelper.Clamp(fullRotation, -maxRotation, maxRotation);
         var plr = player.GetFormHandler();
+        MountData.xOffset = 0;
         if (plr.Dashed) {
             float rotation2 = 0f;
             if (!player.FacedRight()) {
@@ -100,6 +101,7 @@ sealed class LilPhoenixForm : BaseForm {
         }
         else {
             player.fullRotation = IsInAir(player) ? 0f : fullRotation;
+            MountData.xOffset = -4;
         }
 
         player.fullRotationOrigin = player.getRect().Size() / 2f;

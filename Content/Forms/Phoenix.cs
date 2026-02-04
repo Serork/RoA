@@ -20,6 +20,11 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override void SafePostUpdate(Player player) {
+        MountData.xOffset = -10;
+        MountData.yOffset = -6;
+
+        MountData.playerHeadOffset = -10;
+
         player.GetFormHandler().UsePlayerSpeed = false;
         player.GetFormHandler().UsePlayerHorizontals = false;
 
@@ -89,8 +94,13 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
-        frameCounter = 0;
-        frame = 0;
+        if (++frameCounter > 6) {
+            frameCounter = 0;
+            frame++;
+            if (frame >= 7) {
+                frame = 0;
+            }
+        }
 
         return false;
     }

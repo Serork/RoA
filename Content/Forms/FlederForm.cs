@@ -54,9 +54,11 @@ sealed class FlederForm : BaseForm {
         bool flag = IsInAir(player);
 
         float yOffset = flag ? -3 : 1;
-        player.GetFormHandler().AttackFactor = Helper.Approach(player.GetFormHandler().AttackFactor, yOffset, 5f);
+        player.GetFormHandler().AttackFactor = Helper.Approach(player.GetFormHandler().AttackFactor, yOffset, !flag ? 5 : 1);
 
         MountData.yOffset = (int)player.GetFormHandler().AttackFactor;
+
+        MountData.xOffset = 2;
 
         if (!flag) {
             player.GetFormHandler().JustJumped = false;
@@ -286,7 +288,7 @@ sealed class FlederForm : BaseForm {
                     player.GetFormHandler().JustJumpedForAnimation = true;
                 }
                 else {
-                    frameCounter += flightAnimationCounterSpeed * 1.5f;
+                    frameCounter += flightAnimationCounterSpeed * 2f;
                     float frequency = flightFrameFrequency;
                     while (frameCounter > frequency) {
                         frameCounter -= frequency;

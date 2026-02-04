@@ -42,13 +42,15 @@ abstract class InsectForm : BaseForm {
         MountData.flightTimeMax = 100;
         MountData.acceleration = 0.2f;
         MountData.totalFrames = 6;
-        MountData.yOffset = 2;
 
-        MountData.yOffset = 6;
+        MountData.xOffset = -6;
+        MountData.yOffset = -6;
         MountData.playerHeadOffset = -12;
 
         SafeSetDefaults2();
     }
+
+    protected override Vector2 DrawOffset => new(0f, 10f);
 
     protected virtual void SafeSetDefaults2() { }
 
@@ -57,23 +59,23 @@ abstract class InsectForm : BaseForm {
         rotation *= 0.5f;
         float fullRotation = (float)Math.PI / 4f * rotation / 2f;
         float maxRotation = 0.2f;
-        bool? variable = player.GetFormHandler().FacedRight;
-        if (variable.HasValue) {
-            maxRotation = 0.1f;
-            _maxRotation = MathHelper.Lerp(_maxRotation, maxRotation, 0.1f);
-        }
-        else {
-            _maxRotation = maxRotation;
-        }
+        //bool? variable = player.GetFormHandler().FacedRight;
+        //if (variable.HasValue) {
+        //    maxRotation = 0.1f;
+        //    _maxRotation = MathHelper.Lerp(_maxRotation, maxRotation, 0.1f);
+        //}
+        //else {
+        //    _maxRotation = maxRotation;
+        //}
         //fullRotation = MathHelper.Clamp(fullRotation, -_maxRotation, _maxRotation);
-        player.fullRotation = fullRotation;
+        player.fullRotation = Utils.AngleLerp(player.fullRotation, fullRotation, 1f);
         if (!IsInAir(player)) {
             player.velocity.X *= 0.925f;
         }
         Player.jumpHeight = 50;
         Player.jumpSpeed = 4f;
         player.velocity.Y = Math.Min(5f, player.velocity.Y);
-        player.fullRotationOrigin = new Vector2(player.width / 2f + 10f * player.direction, player.height / 2f + 0f);
+        player.fullRotationOrigin = player.getRect().Centered() + Vector2.UnitY * 10f;
 
         SpecialAttackHandler(player);
     }
