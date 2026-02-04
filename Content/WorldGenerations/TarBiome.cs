@@ -145,7 +145,7 @@ sealed class TarBiome : MicroBiome {
                     continue;
                 }
 
-                if (WorldGen.genRand.NextChance(0.05f)) {
+                if (WorldGen.genRand.NextChance(0.025f)) {
                     int checkWidth = 5, checkHeight = 5;
                     bool canPlace = true;
                     for (int checkX = i - checkWidth; checkX < i + checkWidth; checkX++) {
