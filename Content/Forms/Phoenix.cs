@@ -167,7 +167,7 @@ sealed class Phoenix : BaseForm {
             }
         }
         else {
-            player.fullRotation = Utils.AngleLerp(player.fullRotation, player.velocity.X * 0.1f, 0.1f);
+            player.fullRotation = Utils.AngleLerp(player.fullRotation, player.velocity.X * 0.025f, 0.1f);
             savedVelocity = Vector2.Lerp(savedVelocity, Vector2.Zero, 0.1f);
         }
         if (attackFactor2 >= PREPARATIONTIME) {
