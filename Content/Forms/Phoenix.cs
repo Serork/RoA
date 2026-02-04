@@ -13,18 +13,13 @@ sealed class Phoenix : BaseForm {
         MountData.totalFrames = FRAMECOUNT;
         MountData.fallDamage = 0f;
 
-        MountData.xOffset = -12;
+        MountData.xOffset = -8;
+        MountData.yOffset = -6;
 
-        MountData.yOffset = -7;
-        MountData.playerHeadOffset = -10;
+        MountData.playerHeadOffset = -14;
     }
 
     protected override void SafePostUpdate(Player player) {
-        MountData.xOffset = -10;
-        MountData.yOffset = -6;
-
-        MountData.playerHeadOffset = -10;
-
         player.GetFormHandler().UsePlayerSpeed = false;
         player.GetFormHandler().UsePlayerHorizontals = false;
 
