@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Druid.Forms;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -136,19 +137,68 @@ sealed class Phoenix : BaseForm {
         ref float attackFactor2 = ref player.GetFormHandler().AttackFactor2;
         ref int shootCounter = ref player.GetFormHandler().ShootCounter;
         ref byte attackCount = ref player.GetFormHandler().AttackCount;
+        ref Vector2 savedVelocity = ref player.GetFormHandler().SavedVelocity;
         if (attackFactor2++ > PREPARATIONTIME) {
             attackFactor2 = PREPARATIONTIME;
         }
+        if (attackFactor2 < 0f) {
+            float blinkDistance = 100f;
+            player.SyncMousePosition();
+            player.velocity = savedVelocity;
+            player.Center += player.velocity * blinkDistance;
+        }
         if (attackFactor2 >= PREPARATIONTIME) {
-            if (attackFactor < ATTACKTIME * FIREBALLCOUNT) {
-                if (attackFactor++ % ATTACKTIME == 0) {
-                    shootCounter = -1;
+            if (attackCount < FIREBALLCOUNT) {
+                shootCounter = -1;
+            }
+
+            bool isAttacking = player.HoldingLMB(true);
+            if (isAttacking) {
+                attackFactor2 = -5f;
+                attackFactor = 0f;
+
+                attackCount = 0;
+
+                shootCounter = 0;
+
+                player.SyncMousePosition();
+                savedVelocity = player.DirectionTo(player.GetViableMousePosition());
+
+                player.GetCommon().ResetAdvancedShadows();
+
+                if (player.IsLocal()) {
+                    int count = 5;
+                    for (int i = 0; i < count; i++) {
+                        Vector2 center = player.position;
+                        float yProgress = (float)i / count;
+                        Vector2 velocity = savedVelocity;
+                        Vector2 offset = new Vector2(player.width * Main.rand.NextFloat(), player.height * yProgress);
+                        ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixSlash>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
+                            Position = center,
+                            Velocity = velocity, 
+                            AI0 = offset.X,
+                            AI1 = offset.Y,
+                            AI2 = MathUtils.YoYo(yProgress)
+                        });
+                    }
+                }
+
+
+
+                if (player.whoAmI == Main.myPlayer) {
+                    Main.SetCameraLerp(0.075f, 5);
+                    //if (Main.mapTime < 5)
+                    //    Main.mapTime = 5;
+
+                    //Main.maxQ = true;
+                    //Main.renderNow = true;
                 }
             }
         }
     }
 
     protected override bool SafeUpdateFrame(Player player, ref float frameCounter, ref int frame) {
+        ref float attackFactor2 = ref player.GetFormHandler().AttackFactor2;
         if (++frameCounter > 6) {
             frameCounter = 0;
             frame++;
@@ -157,30 +207,39 @@ sealed class Phoenix : BaseForm {
             ref byte attackCount = ref player.GetFormHandler().AttackCount;
             if (frame == 3) {
                 if (shootCounter == -1) {
+                    attackFactor = 0;
                     shootCounter = ATTACKTIME;
 
                     if (player.IsLocal()) {
                         float offsetValue = TileHelper.TileSize * 5;
                         Vector2 center = player.GetPlayerCorePoint();
-                        int meInQueueValue = TrackedEntitiesSystem.GetTrackedProjectile<PhoenixFireball>(checkProjectile => checkProjectile.owner != player.whoAmI).Count() + 1;
+                        int meInQueueValue = attackCount + 2;
                         Vector2 offset = Vector2.One.RotatedBy(MathHelper.TwoPi / 5 * meInQueueValue + MathHelper.PiOver2) * offsetValue;
                         Vector2 velocity = Vector2.UnitY * 5f;
                         ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixFireball>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
                             Position = center,
                             Velocity = velocity,
+                            AI0 = meInQueueValue,
                             AI1 = offset.X,
                             AI2 = offset.Y
                         });
                     }
-                }
 
-                attackCount++;
+                    attackCount++;
+                }
             }
             if (frame >= 7) {
                 BaseFormDataStorage.ChangeAttackCharge1(player, 1f, false);
 
                 frame = 0;
             }
+        }
+
+        if (attackFactor2 < 0f) {
+            frameCounter = 0;
+            frame = 13;
+
+            MakeCopy(player.Center, (byte)frame, 0f, player.direction > 0);
         }
 
         BaseFormHandler.TransitToDark = Helper.Wave(0f, 1f, 5f, player.whoAmI);

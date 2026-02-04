@@ -1,0 +1,86 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using RoA.Common;
+using RoA.Common.Projectiles;
+using RoA.Core;
+using RoA.Core.Defaults;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
+
+using System;
+
+using Terraria;
+using Terraria.GameContent;
+
+namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
+
+sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
+    public override void SetStaticDefaults() {
+        Projectile.SetTrail(3, 10);
+    }
+
+    protected override void SafeSetDefaults() {
+        Projectile.SetSizeValues(10);
+
+        Projectile.friendly = true;
+        Projectile.penetrate = -1;
+
+        Projectile.tileCollide = false;
+    }
+
+    public override void AI() {
+        if (Projectile.velocity != Vector2.Zero) {
+            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
+        }
+
+        if (Projectile.localAI[0]++ < 5f) {
+            Player player = Projectile.GetOwnerAsPlayer();
+            Projectile.Center = player.position + new Vector2(Projectile.ai[0], Projectile.ai[1]);
+
+            Projectile.SetTrail(1, 40);
+        }
+        else {
+            Projectile.velocity = Vector2.Zero;
+
+            Projectile.SetTrail(-1, 40);
+
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.1f);
+            if (Projectile.Opacity <= 0f) {
+                Projectile.Kill();
+            }
+        }
+    }
+
+    protected override void Draw(ref Color lightColor) {
+        Texture2D texture = ResourceManager.DefaultSparkle;
+        Color color = Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), Projectile.ai[2]).MultiplyAlpha(0.5f) * Projectile.Opacity;
+
+        Projectile projectile = Projectile;
+        Texture2D mainTex = texture;
+
+        Rectangle frameBox = mainTex.Bounds;
+        SpriteEffects effects = projectile.spriteDirection.ToSpriteEffects();
+        Vector2 origin = frameBox.Centered();
+
+        int howMany = projectile.oldPos.Length;
+        int step = 1;
+        Color drawColor = color;
+        float maxAlpha = 1f;
+        float alphaStep = maxAlpha / howMany;
+        for (int i = 1; i < howMany; i += step) {
+            Main.spriteBatch.Draw(mainTex, projectile.oldPos[i] + projectile.Size / 2f - Main.screenPosition, frameBox,
+                drawColor * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + Projectile.rotation, origin, new Vector2(1f, 5f), effects, 0);
+
+            for (float num6 = 0f; num6 < 4f; num6 += 1f) {
+                float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + Projectile.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
+                Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * Projectile.Opacity;
+                Vector2 position2 = projectile.oldPos[i] + projectile.Size / 2f + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
+
+                Main.spriteBatch.Draw(mainTex, position2 - Main.screenPosition, frameBox,
+                    color2 * (maxAlpha - (i * alphaStep)), projectile.oldRot[i] + Projectile.rotation, origin, new Vector2(1f, 5f), effects, 0);
+            }
+        }
+    }
+}

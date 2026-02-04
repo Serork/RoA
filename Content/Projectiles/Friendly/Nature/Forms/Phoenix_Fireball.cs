@@ -13,6 +13,7 @@ using System.Linq;
 using Terraria;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
+using Terraria.ID;
 
 using static RoA.Common.Druid.Forms.BaseForm;
 
@@ -20,27 +21,15 @@ namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
 
 [Tracked]
 sealed class PhoenixFireball : FormProjectile {
-    public enum StateType : byte {
-        Idle,
-        Shoot,
-        Count
-    }
-
-    private float _posRotation;
     private float _transitToDark;
+    private bool _phoenixDashed;
 
     public ref float InitValue => ref Projectile.localAI[0];
-    public ref float MeInQueueValue => ref Projectile.localAI[1];
     public ref float MainOffsetValue => ref Projectile.localAI[2];
 
-    public ref float StateValue => ref Projectile.ai[0];
+    public ref float MeInQueueValue => ref Projectile.ai[0];
     public ref float OffsetXValue => ref Projectile.ai[1];
     public ref float OffsetYValue => ref Projectile.ai[2];
-
-    public StateType State {
-        get => (StateType)StateValue;
-        set => StateValue = Utils.Clamp((byte)value, (byte)StateType.Idle, (byte)StateType.Count);
-    }
 
     public bool Init {
         get => InitValue != 0f;
@@ -78,13 +67,14 @@ sealed class PhoenixFireball : FormProjectile {
         Projectile.timeLeft = 2;
 
         Player player = Projectile.GetOwnerAsPlayer();
-        int count = TrackedEntitiesSystem.GetTrackedProjectile<PhoenixFireball>(checkProjectile => checkProjectile.owner != player.whoAmI).Count();
 
-        _posRotation = Utils.AngleLerp(_posRotation,
-                    player.GetFormHandler().AttackFactor * TimeSystem.LogicDeltaTime * 0.5f + player.GetFormHandler().AttackCount * (count / (float)Phoenix.FIREBALLCOUNT),
-                    1f);
+        if (!_phoenixDashed && player.GetFormHandler().AttackFactor2 >= 4f && player.GetFormHandler().AttackFactor2 < 10f) {
+            _phoenixDashed = true;
 
-        if (!player.GetFormHandler().IsInADruidicForm) {
+            Projectile.velocity += player.velocity.SafeNormalize() * 10f;
+        }
+
+        if (!_phoenixDashed && !player.GetFormHandler().IsInADruidicForm) {
             Projectile.Kill();
         }
 
@@ -95,40 +85,81 @@ sealed class PhoenixFireball : FormProjectile {
             Projectile.Center = center;
 
             MainOffsetValue = PositionOffset.Length() * 0.5f;
-
-            MeInQueueValue = count + 1;
         }
-        switch (State) {
-            case StateType.Idle:
-                Projectile.Center = Vector2.Lerp(Projectile.Center, center + PositionOffset, 0.3f * (1f - MathUtils.Clamp01(Projectile.velocity.Length() / 5f)));
-                break;
-            case StateType.Shoot:
-                break;
-        }
-
-        Projectile.Center += Projectile.velocity;
-
-        Projectile.velocity *= 0.9375f;
-
-        PositionOffset = Vector2.Lerp(PositionOffset, Vector2.One.RotatedBy(MathHelper.TwoPi / 5 * MeInQueueValue) * MainOffsetValue, 0.1f);
-
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
-
-        if (Projectile.Opacity < 1f) {
-            return;
-        }
-
         ref int frame = ref Projectile.frame;
-        ref int frameCounter = ref Projectile.frameCounter;
-        if (frameCounter++ > 4) {
-            frameCounter = 0;
-            frame++;
-        }
-        if (frame > 8) {
-            frame = 5;
+        if (!_phoenixDashed) {
+            Projectile.Center = Vector2.Lerp(Projectile.Center, center + PositionOffset, 0.3f * (1f - MathUtils.Clamp01(Projectile.velocity.Length() / 5f)));
+            Projectile.Center += Projectile.velocity;
+
+            Projectile.velocity *= 0.9375f;
+
+            PositionOffset = Vector2.Lerp(PositionOffset, Vector2.One.RotatedBy(MathHelper.TwoPi / 5 * MeInQueueValue) * MainOffsetValue, 0.1f);
+
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
+
+            if (Projectile.Opacity < 1f) {
+                return;
+            }
+
+            ref int frameCounter = ref Projectile.frameCounter;
+            if (frameCounter++ > 4) {
+                frameCounter = 0;
+                frame++;
+            }
+            if (frame > 8) {
+                frame = 5;
+            }
         }
 
         _transitToDark = Helper.Wave(0f, 1f, 5f, Projectile.whoAmI);
+
+        if (!_phoenixDashed) {
+            return;
+        }
+
+        //Projectile.velocity *= 0.95f;
+        frame = 9;
+
+        //int num486 = (int)this.ai[0];
+        //NPC nPC2 = Main.npc[num486];
+        //if (nPC2.CanBeChasedBy(this) && !NPCID.Sets.CountsAsCritter[nPC2.type]) {
+        //    float num487 = 8f;
+        //    Vector2 center2 = base.Center;
+        //    float num488 = nPC2.Center.X - center2.X;
+        //    float num489 = nPC2.Center.Y - center2.Y;
+        //    float num490 = (float)Math.Sqrt(num488 * num488 + num489 * num489);
+        //    float num491 = num490;
+        //    num490 = num487 / num490;
+        //    num488 *= num490;
+        //    num489 *= num490;
+        //    velocity.X = (velocity.X * 14f + num488) / 15f;
+        //    velocity.Y = (velocity.Y * 14f + num489) / 15f;
+        //}
+        //else {
+        //    float num492 = 1000f;
+        //    for (int num493 = 0; num493 < 200; num493++) {
+        //        NPC nPC3 = Main.npc[num493];
+        //        if (nPC3.CanBeChasedBy(this) && !NPCID.Sets.CountsAsCritter[nPC3.type]) {
+        //            float x4 = nPC3.Center.X;
+        //            float y4 = nPC3.Center.Y;
+        //            float num494 = Math.Abs(base.Center.X - x4) + Math.Abs(base.Center.Y - y4);
+        //            if (num494 < num492 && Collision.CanHit(base.position, width, height, nPC3.position, nPC3.width, nPC3.height)) {
+        //                num492 = num494;
+        //                this.ai[0] = num493;
+        //            }
+        //        }
+        //    }
+        //}
+
+        //int num495 = 8;
+        //int num496 = Dust.NewDust(new Vector2(base.position.X + (float)num495, base.position.Y + (float)num495), width - num495 * 2, height - num495 * 2, 6);
+        //Dust dust2 = Main.dust[num496];
+        //dust2.velocity *= 0.5f;
+        //dust2 = Main.dust[num496];
+        //dust2.velocity += velocity * 0.5f;
+        //Main.dust[num496].noGravity = true;
+        //Main.dust[num496].noLight = true;
+        //Main.dust[num496].scale = 1.4f;
     }
 
     private Color StripColors(float progressOnStrip) {
