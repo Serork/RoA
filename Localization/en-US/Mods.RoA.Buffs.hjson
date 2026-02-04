@@ -355,3 +355,8 @@ Rewind: {
 	DisplayName: Rewind
 	Description: Mods.RoA.Buffs.Rewind.Description
 }
+
+Phoenix: {
+	DisplayName: Phoenix
+	Description: Mods.RoA.Buffs.Phoenix.Description
+}

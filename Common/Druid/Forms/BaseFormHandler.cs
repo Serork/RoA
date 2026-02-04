@@ -63,6 +63,7 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
     public bool HasDruidArmorSet => _shouldBeActive == true;
 
     public bool UsePlayerSpeed { get; internal set; }
+    public bool UsePlayerHorizontals { get; internal set; } = true;
 
     public string Serialize() => CurrentForm.BaseForm.GetType().FullName;
     public FormInfo Deserialize(string typeName) => _formsByType[Type.GetType(typeName)];
@@ -222,6 +223,7 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
 
     public override void PostUpdate() {
         UsePlayerSpeed = false;
+        UsePlayerHorizontals = true;
 
         PostUpdate1();
         PostUpdate2();
@@ -378,7 +380,9 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
             self.accRunSpeed = _playerMovementSpeedInfo.AccRunSpeed * mountData.GetAccRunSpeedMultiplier(self);
             self.runAcceleration = _playerMovementSpeedInfo.RunAcceleration * mountData.GetRunAccelerationMultiplier(self);
         }
-        orig(self);
+        if (self.GetFormHandler().UsePlayerHorizontals) {
+            orig(self);
+        }
     }
 
     private void On_Player_ResizeHitbox(On_Player.orig_ResizeHitbox orig, Player self) {
