@@ -1160,7 +1160,7 @@ RagingBoots: {
 	DisplayName: Raging Boots
 	Tooltip:
 		'''
-		Increases falling acceleration
+		Increases movement speed and falling acceleration
 		Sends a mighty ripple upon landing
 		'''
 }
@@ -2681,7 +2681,7 @@ SandalwoodStompers: {
 	DisplayName: Sandalwood Stompers
 	Tooltip:
 		'''
-		Increases falling acceleration
+		Increases movement speed and falling acceleration
 		Landing or standing still covers an area in canopy that harms enemies and increases defense by up to 25
 		'''
 }
