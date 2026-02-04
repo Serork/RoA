@@ -43,12 +43,54 @@ sealed class ExtraDrawLayerSupport : ILoadable {
         On_PlayerDrawLayers.DrawPlayer_21_Head_TheFace += On_PlayerDrawLayers_DrawPlayer_21_Head_TheFace;
         On_PlayerDrawLayers.DrawPlayer_38_EyebrellaCloud += On_PlayerDrawLayers_DrawPlayer_38_EyebrellaCloud;
         On_PlayerDrawLayers.DrawPlayer_02_MountBehindPlayer += On_PlayerDrawLayers_DrawPlayer_02_MountBehindPlayer;
+        On_PlayerDrawLayers.DrawPlayer_23_MountFront += On_PlayerDrawLayers_DrawPlayer_23_MountFront;
+        On_PlayerDrawLayers.DrawPlayer_RenderAllLayers += On_PlayerDrawLayers_DrawPlayer_RenderAllLayers;
+    }
+
+    public delegate void PostMountFrontDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostMountFrontDrawDelegate PostMountFrontDrawEvent;
+    public delegate void PreMountFrontDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event PreMountFrontDrawDelegate PreMountFrontDrawEvent;
+    private void On_PlayerDrawLayers_DrawPlayer_23_MountFront(On_PlayerDrawLayers.orig_DrawPlayer_23_MountFront orig, ref PlayerDrawSet drawinfo) {
+        PreMountFrontDrawEvent?.Invoke(ref drawinfo);
+
+        orig(ref drawinfo);
+
+        PostMountFrontDrawEvent?.Invoke(ref drawinfo);
+    }
+
+    public delegate void PreRenderAllLayersDelegate(ref PlayerDrawSet drawinfo);
+    public static event PreRenderAllLayersDelegate PreRenderAllLayersEvent_ONLYFORDRUIDICFORM;
+    public delegate void PostRenderAllLayersDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostRenderAllLayersDelegate PostRenderAllLayersEvent_ONLYFORDRUIDICFORM;
+    public static event PreRenderAllLayersDelegate PreRenderAllLayersEvent;
+    public static event PostRenderAllLayersDelegate PostRenderAllLayersEvent;
+    private void On_PlayerDrawLayers_DrawPlayer_RenderAllLayers(On_PlayerDrawLayers.orig_DrawPlayer_RenderAllLayers orig, ref PlayerDrawSet drawinfo) {
+        PreRenderAllLayersEvent?.Invoke(ref drawinfo);
+        if (drawinfo.drawPlayer.GetFormHandler().IsInADruidicForm) {
+            PreRenderAllLayersEvent_ONLYFORDRUIDICFORM?.Invoke(ref drawinfo);
+        }
+
+        orig(ref drawinfo);
+
+        if (drawinfo.drawPlayer.GetFormHandler().IsInADruidicForm) {
+            PostRenderAllLayersEvent_ONLYFORDRUIDICFORM?.Invoke(ref drawinfo);
+        }
+        PostRenderAllLayersEvent?.Invoke(ref drawinfo);
     }
 
     public delegate void PostMountBehindPlayerDelegate(ref PlayerDrawSet drawinfo);
     public static event PostMountBehindPlayerDelegate PostMountBehindPlayedDrawEvent_ONLYFORDRUIDICFORM;
+    public delegate void PostMountBehindDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event PostMountBehindDrawDelegate PostMountBehindDrawEvent;
+    public delegate void PreMountBehindDrawDelegate(ref PlayerDrawSet drawinfo);
+    public static event PreMountBehindDrawDelegate PreMountBehindDrawEvent;
     private void On_PlayerDrawLayers_DrawPlayer_02_MountBehindPlayer(On_PlayerDrawLayers.orig_DrawPlayer_02_MountBehindPlayer orig, ref PlayerDrawSet drawinfo) {
+        PreMountBehindDrawEvent?.Invoke(ref drawinfo);
+
         orig(ref drawinfo);
+
+        PostMountBehindDrawEvent?.Invoke(ref drawinfo);
 
         if (drawinfo.drawPlayer.GetFormHandler().IsInADruidicForm) {
             PostMountBehindPlayedDrawEvent_ONLYFORDRUIDICFORM?.Invoke(ref drawinfo);

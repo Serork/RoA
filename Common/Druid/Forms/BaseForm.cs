@@ -45,6 +45,9 @@ sealed class BaseFormBuff(BaseForm parent) : ModBuff {
 }
 
 abstract class BaseForm : ModMount {
+    public static Asset<Texture2D> GetTexture<T>() where T : BaseForm => GetData<T>().backTexture;
+    public static Mount.MountData GetData<T>() where T : BaseForm => MountLoader.GetMount(ModContent.MountType<T>()).MountData;
+
     private static byte MAXCOPIES => 6;
 
     private struct CopyInfo {

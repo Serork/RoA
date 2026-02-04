@@ -3,7 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Druid.Forms;
+using RoA.Common.Druid.Wreath;
 using RoA.Common.Players;
+using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -12,11 +14,11 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
@@ -38,6 +40,38 @@ sealed class Phoenix : BaseForm {
 
     public override Vector2 SetWreathOffset(Player player) => new(0f, -8f);
     public override Vector2 SetWreathOffset2(Player player) => new(0f, 0f);
+
+    protected override void SafeLoad() {
+        ExtraDrawLayerSupport.PreMountBehindDrawEvent += ExtraDrawLayerSupport_PreMountBehindDrawEvent;
+    }
+
+    private void ExtraDrawLayerSupport_PreMountBehindDrawEvent(ref PlayerDrawSet drawinfo) {
+        Player player = drawinfo.drawPlayer;
+        if (!player.HasSetBonusFrom<FlamewardenHood>()) {
+            return;
+        }
+        if (player.GetFormHandler().IsInADruidicForm) {
+            return;
+        }
+        if (!player.GetWreathHandler().StartSlowlyIncreasingUntilFull) {
+            return;
+        }
+
+        Texture2D texture = GetTexture<Phoenix>().Value;
+        Rectangle clip = Utils.Frame(texture, 1, FRAMECOUNT);
+        Vector2 origin = clip.Centered();
+        Vector2 drawPosition = new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
+        drawPosition += new Vector2(GetData<Phoenix>().xOffset * player.direction, GetData<Phoenix>().yOffset);
+        float opacity = player.GetWreathHandler().ActualProgress4;
+        float opacity2 = opacity;
+        opacity = Utils.GetLerpValue(0.85f, 0.95f, opacity2, true);
+        opacity *= Utils.GetLerpValue(1f, 0.95f, opacity2, true);
+        Color color = Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), Helper.Wave(0f, 1f, 15f, player.whoAmI * 3)).MultiplyAlpha(0.5f) * opacity * 0.5f;
+
+        DrawData drawData = new(texture, drawPosition, clip,
+            color, 0f, origin, 1f, drawinfo.playerEffect);
+        drawinfo.DrawDataCache.Add(drawData);
+    }
 
     protected override void SafeSetDefaults() {
         MountData.totalFrames = FRAMECOUNT;
