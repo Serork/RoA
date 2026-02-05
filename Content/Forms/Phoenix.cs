@@ -293,8 +293,6 @@ sealed class Phoenix : BaseForm {
                 }
             }
 
-            player.GetCommon().ResetControls();
-
             if (player.whoAmI == Main.myPlayer) {
                 Main.SetCameraLerp(0.075f, 1);
                 //if (Main.mapTime < 5)
@@ -332,8 +330,6 @@ sealed class Phoenix : BaseForm {
                 player.GetCommon().ResetAdvancedShadows();
 
                 MakeSlash(player, savedVelocity);
-
-                player.GetCommon().ResetControls();
             }
         }
     }
