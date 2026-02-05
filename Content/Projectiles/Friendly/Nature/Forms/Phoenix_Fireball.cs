@@ -57,13 +57,16 @@ sealed class PhoenixFireball : FormProjectile {
         Projectile.SetSizeValues(20);
 
         Projectile.friendly = true;
-        Projectile.penetrate = -1;
+        Projectile.penetrate = 3;
 
         Projectile.tileCollide = false;
 
         Projectile.ignoreWater = true;
 
         Projectile.Opacity = 0f;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
     }
 
     public override void AI() {

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
+using RoA.Common.Items;
 using RoA.Common.Players;
 using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
@@ -52,7 +53,8 @@ sealed class Phoenix : BaseForm {
 
             return;
         }
-        if (player.GetFormHandler().IsInADruidicForm) {
+        float opacity = player.GetFormHandler().FlameTintOpacity;
+        if (player.GetFormHandler().IsInADruidicForm && opacity > 0f) {
             orig(player, cHead, ref cdd);
 
             Effect flameTintShader = ShaderLoader.FlameTint.Value;
@@ -68,7 +70,7 @@ sealed class Phoenix : BaseForm {
             flameTintShader.Parameters["uColor"].SetValue(color.ToVector3());
             flameTintShader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects);
             flameTintShader.Parameters["uSaturation"].SetValue(Helper.Wave(0.25f, 0.75f, waveFrequency, 1f + player.whoAmI) * 1.5f);
-            flameTintShader.Parameters["uOpacity"].SetValue(player.GetFormHandler().FlameTintOpacity);
+            flameTintShader.Parameters["uOpacity"].SetValue(opacity);
             flameTintShader.CurrentTechnique.Passes[0].Apply();
 
             return;
@@ -221,6 +223,10 @@ sealed class Phoenix : BaseForm {
             player.velocity = savedVelocity;
             player.Center += player.velocity * blinkDistance;
 
+            if (Collision.SolidCollision(player.position, player.width, player.height)) {
+                attackFactor2 = 0f;
+            }
+
             BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f, false);
 
             player.fullRotation = player.velocity.X * 0.5f;
@@ -237,7 +243,7 @@ sealed class Phoenix : BaseForm {
             }
         }
         else {
-            player.fullRotation = Utils.AngleLerp(player.fullRotation, player.velocity.X * 0.025f, 0.1f);
+            player.fullRotation = Utils.AngleLerp(player.fullRotation, player.velocity.X * 0.03f, 0.1f);
             savedVelocity = Vector2.Lerp(savedVelocity, Vector2.Zero, 0.1f);
         }
         if (attackFactor2 >= PREPARATIONTIME) {
@@ -261,6 +267,8 @@ sealed class Phoenix : BaseForm {
 
                 if (player.IsLocal()) {
                     int count = 5;
+                    int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(100);
+                    float baseKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(5f);
                     for (int i = 0; i < count; i++) {
                         Vector2 center = player.position;
                         float yProgress = (float)i / count;
@@ -271,7 +279,9 @@ sealed class Phoenix : BaseForm {
                             Velocity = velocity,
                             AI0 = offset.X,
                             AI1 = offset.Y,
-                            AI2 = MathUtils.YoYo(yProgress)
+                            AI2 = MathUtils.YoYo(yProgress),
+                            Damage = baseDamage,
+                            KnockBack = baseKnockback
                         });
                     }
                 }
@@ -312,6 +322,9 @@ sealed class Phoenix : BaseForm {
                     shootCounter = ATTACKTIME;
 
                     if (player.IsLocal()) {
+                        int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(100);
+                        float baseKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(5f);
+
                         float offsetValue = TileHelper.TileSize * 5;
                         Vector2 center = player.GetPlayerCorePoint();
                         int meInQueueValue = attackCount + 2;
@@ -322,7 +335,9 @@ sealed class Phoenix : BaseForm {
                             Velocity = velocity,
                             AI0 = meInQueueValue,
                             AI1 = offset.X,
-                            AI2 = offset.Y
+                            AI2 = offset.Y,
+                            Damage = baseDamage,
+                            KnockBack = baseKnockback
                         });
                     }
 

@@ -6,13 +6,10 @@ using RoA.Common.Projectiles;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
-using RoA.Core.Utility.Extensions;
-using RoA.Core.Utility.Vanilla;
 
 using System;
 
 using Terraria;
-using Terraria.GameContent;
 
 namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
 
