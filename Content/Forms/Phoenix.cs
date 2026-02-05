@@ -25,6 +25,7 @@ using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
@@ -472,6 +473,10 @@ sealed class Phoenix : BaseForm {
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
         skipDust = true;
+
+        if (player.statLife <= 0 && player.whoAmI == Main.myPlayer) {
+            player.KillMe(PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.Phoenix0").ToNetworkText(player.name)), 1.0, 0);
+        }
 
         player.GetFormHandler().ResetPhoenixStats();
     }

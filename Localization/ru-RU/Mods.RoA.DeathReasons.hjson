@@ -36,3 +36,5 @@ AvengingSoul1: "{0} был унесён духами."
 //Died from Satchel Charge
 // SatchelCharge0: "{0} was not ready to blow."
 // SatchelCharge1: "{0} got rocked like a stone."
+//Phoenix form death
+// Phoenix0: "{0} is dead by..."
