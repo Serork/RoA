@@ -515,7 +515,6 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override void DrawGlowMask(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
-        drawPosition = Utils.Floor(drawPosition);
         if (glowTexture != null) {
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * 0.85f * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cMinion;
