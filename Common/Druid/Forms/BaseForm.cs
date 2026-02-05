@@ -420,6 +420,15 @@ abstract class BaseForm : ModMount {
 
     protected virtual void PreDraw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) { }
 
+    protected virtual int DrawCount { get; } = 1;
+
+    protected virtual void DrawSelf(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
+        DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
+        item.shader = drawPlayer.cMinion;
+        playerDrawData.Add(item);
+        DrawGlowMask(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor, ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
+    }
+
     public sealed override bool Draw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         if (IsDrawing) {
             PreDraw(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor,
@@ -465,18 +474,18 @@ abstract class BaseForm : ModMount {
                     continue;
                 }
 
-                DrawData item3 = new(texture, copyInfo.Position - Main.screenPosition, frame with { Y = texture.Height / MountData.totalFrames * copyInfo.UsedFrame }, drawColor * MathUtils.Clamp01(copyInfo.Opacity) * 0.5f, 
-                    copyInfo.Rotation, 
+                DrawData item3 = new(texture, copyInfo.Position - Main.screenPosition, frame with { Y = texture.Height / MountData.totalFrames * copyInfo.UsedFrame }, drawColor * MathUtils.Clamp01(copyInfo.Opacity) * 0.5f,
+                    copyInfo.Rotation,
                     drawOrigin, drawScale * MathF.Max(copyInfo.Scale, 1f), copyInfo.FacedRight.ToInt().ToSpriteEffects());
                 item3.shader = drawPlayer.cMinion;
                 item3.ignorePlayerRotation = true;
                 playerDrawData.Add(item3);
             }
 
-            DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
-            item.shader = drawPlayer.cMinion;
-            playerDrawData.Add(item);
-            DrawGlowMask(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor, ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
+            for (int i = 0; i < DrawCount; i++) {
+                DrawSelf(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor,
+                    ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
+            }
         }
 
         return false;
