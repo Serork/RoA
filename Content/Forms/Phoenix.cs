@@ -505,8 +505,9 @@ sealed class Phoenix : BaseForm {
         DrawGlowMask(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor, ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
 
         float mainFactor = drawPlayer.GetFormHandler().FlameTintOpacity;
-        drawColor *= mainFactor;
-        item = new(_burnoutTexture.Value, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
+        Color color = drawColor;
+        color *= mainFactor;
+        item = new(_burnoutTexture.Value, drawPosition, frame, color, rotation, drawOrigin, drawScale, spriteEffects);
         item.shader = drawPlayer.cMinion;
         playerDrawData.Add(item);
     }
