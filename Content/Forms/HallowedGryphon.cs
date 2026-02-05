@@ -320,9 +320,9 @@ sealed class HallowedGryphon : BaseForm {
         if (handler.IncreasedMoveSpeed || handler.IsInLoopAttack) {
             activateShadows = true;
         }
-        if (BaseFormDataStorage.GetAttackCharge(player) > 0f) {
-            activateShadows = true;
-        }
+        //if (BaseFormDataStorage.GetAttackCharge(player) > 0f) {
+        //    activateShadows = true;
+        //}
 
         if (!activateShadows) {
             player.armorEffectDrawOutlines = false;
