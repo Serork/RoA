@@ -35,6 +35,10 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
     public override bool? CanDamage() => Projectile.localAI[0] < 5f;
     public override bool? CanCutTiles() => Projectile.localAI[0] < 5f;
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox.Inflate(10, 10);
+    }
+
     public override void AI() {
         if (Projectile.velocity != Vector2.Zero) {
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
