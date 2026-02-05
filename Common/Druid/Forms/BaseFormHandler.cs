@@ -635,6 +635,9 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
 
             if (self.GetFormHandler().IsInADruidicForm) {
                 num3 = self.mount._data.spawnDust;
+                if (!self.GetFormHandler().CurrentForm.BaseForm.ShouldSpawnFloorDust(self)) {
+                    continue;
+                }
             }
 
             int num6 = Dust.NewDust(new Vector2(self.position.X, self.position.Y + (float)self.height - 2f), self.width, 6, num3, 0f, 0f, 50, newColor);

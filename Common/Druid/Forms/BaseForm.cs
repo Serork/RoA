@@ -118,6 +118,8 @@ abstract class BaseForm : ModMount {
     public virtual ushort SetHitboxWidth(Player player) => Player.defaultWidth;
     public virtual ushort SetHitboxHeight(Player player) => Player.defaultHeight;
 
+    public virtual bool ShouldSpawnFloorDust(Player player) => true;
+
     public sealed override void Load() {
         Mod.AddContent(MountBuff);
 
