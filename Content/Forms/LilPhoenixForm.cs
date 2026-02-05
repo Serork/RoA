@@ -257,7 +257,7 @@ sealed class LilPhoenixForm : BaseForm {
                     int y = (int)((double)player.Center.Y - 0.5);
                     Vector2 vector = (new Vector2((float)player.width / 2f, player.height) * 0.5f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
                     Vector2 vector2 = vector - new Vector2((float)x, (float)y);
-                    int dust = Dust.NewDust(vector + vector2 - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), 3.15f);
+                    int dust = Dust.NewDust(vector + vector2 - new Vector2(1f, 2f), 0, 0, 6, vector2.X * 2f, vector2.Y * 2f, 0, default(Color), Main.rand.NextFloat(2.5f, 3.25f));
                     Main.dust[dust].noGravity = true;
                     Main.dust[dust].velocity = -Vector2.Normalize(vector2) * 2f;
                 }
@@ -303,6 +303,9 @@ sealed class LilPhoenixForm : BaseForm {
                         player.ApplyDamageToNPC(Main.npc[i], (int)damage, knockBack, direction, crit, DruidClass.Nature, true);
                 }
                 if (plr._charge3 >= BaseFormHandler.MAXPHOENIXCHARGE) {
+                    player.eocDash = 0;
+                    player.armorEffectDrawShadowEOCShield = false;
+
                     player.immune = true;
                     player.immuneTime = 30;
                     player.immuneNoBlink = true;
@@ -407,7 +410,7 @@ sealed class LilPhoenixForm : BaseForm {
             player.flapSound = true;
         }
 
-        if (plr.DashDelay > 0 && plr.DashDelay < SWINGTIME) {
+        if (!plr.IsPreparing && !plr.Dashed && plr.DashDelay > 0 && plr.DashDelay < SWINGTIME) {
             if (!plr.JustJumped) {
                 if (!plr.JustJumpedForAnimation && plr.DashDelay <= 1) {
                     frame = firstJumpStartFrame;
