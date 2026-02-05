@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
@@ -23,6 +25,7 @@ using Terraria.GameContent;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Forms;
 
@@ -35,6 +38,7 @@ sealed class Phoenix : BaseForm {
     private static float AFTERDASHOFFSETVALUE => 50f;
 
     private static VertexStrip _vertexStrip = new VertexStrip();
+    private static Asset<Texture2D> _burnoutTexture = null!;
 
     public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2f);
     public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * 1.2f);
@@ -74,9 +78,9 @@ sealed class Phoenix : BaseForm {
             flameTintShader.Parameters["uOpacity"].SetValue(mainFactor);
             float globalOpacity = MathHelper.Lerp(MathUtils.Clamp01(Helper.Wave(0.625f, 0.75f, 10f, waveOffset) * 1.375f), 1f, 1f - mainFactor);
             flameTintShader.Parameters["uGlobalOpacity"]
-                .SetValue(1f);
+                .SetValue(0.375f);
             flameTintShader.Parameters["alphaModifier"]
-    .SetValue(MathHelper.Lerp(globalOpacity * 0.75f, 1f, 1f - mainFactor));
+    .SetValue(MathHelper.Lerp(globalOpacity * 0.375f, 1f, 1f - mainFactor));
             flameTintShader.CurrentTechnique.Passes[0].Apply();
 
             return;
@@ -121,6 +125,10 @@ sealed class Phoenix : BaseForm {
         MountData.yOffset = -6;
 
         MountData.playerHeadOffset = -14;
+
+        if (!Main.dedServ) {
+            _burnoutTexture = ModContent.Request<Texture2D>(Texture + "_Burnout");
+        }
     }
 
     public override bool ShouldSpawnFloorDust(Player player) => false;
@@ -491,7 +499,16 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override void DrawSelf(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
-        base.DrawSelf(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor, ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
+        DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
+        item.shader = drawPlayer.cMinion;
+        playerDrawData.Add(item);
+        DrawGlowMask(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor, ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
+
+        float mainFactor = drawPlayer.GetFormHandler().FlameTintOpacity;
+        drawColor *= mainFactor;
+        item = new(_burnoutTexture.Value, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
+        item.shader = drawPlayer.cMinion;
+        playerDrawData.Add(item);
     }
 
     protected override void PreDraw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
