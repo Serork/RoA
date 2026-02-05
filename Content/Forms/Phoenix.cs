@@ -253,6 +253,14 @@ sealed class Phoenix : BaseForm {
                         player.Center += player.velocity;
                         blinkDistance--;
                         if (solid()) {
+                            if (shootCounter != -1) {
+                                int count = (int)MathF.Abs(attackFactor2);
+                                for (int i = 0; i < count; i++) {
+                                    float maxAngle = MathHelper.PiOver4 * Main.rand.NextFloat(0.25f, 1f);
+                                    MakeFireball(player, 0, true, MathHelper.Pi / 2f + maxAngle * MathHelper.Lerp(-1f, 1f, (float)i / count) + maxAngle / count);
+                                }
+                                shootCounter = -1;
+                            }
                             break;
                         }
                     }
@@ -325,7 +333,7 @@ sealed class Phoenix : BaseForm {
         }
     }
 
-    private void MakeFireball(Player player, int attackCount, bool noExtraPosition = false) {
+    private void MakeFireball(Player player, int attackCount, bool noExtraPosition = false, float velocityRotation = 1f) {
         if (player.IsLocal()) {
             int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(100);
             float baseKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(5f);
@@ -333,12 +341,12 @@ sealed class Phoenix : BaseForm {
             float offsetValue = TileHelper.TileSize * 5;
             Vector2 center = player.GetPlayerCorePoint();
             if (noExtraPosition) {
-                center += Main.rand.NextVector2Circular(player.width, player.height);
+                center += Main.rand.NextVector2Circular(player.width, player.height) / 2f;
             }
-            int meInQueueValue = attackCount + 2;
+            float meInQueueValue = attackCount + 2;
             Vector2 offset = Vector2.One.RotatedBy(MathHelper.TwoPi / FIREBALLCOUNT) * offsetValue;
             if (noExtraPosition) {
-                offset = new(-1f);
+                meInQueueValue = -MathF.Abs(velocityRotation);
             }
             Vector2 velocity = Vector2.UnitY * 5f;
             ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixFireball>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
@@ -378,16 +386,18 @@ sealed class Phoenix : BaseForm {
             ref float attackFactor = ref player.GetFormHandler().AttackFactor;
             ref int shootCounter = ref player.GetFormHandler().ShootCounter;
             ref byte attackCount = ref player.GetFormHandler().AttackCount;
-            if (frame == 3) {
-                if (shootCounter == -1) {
-                    attackFactor = 0;
-                    shootCounter = ATTACKTIME;
+            if (attackFactor2 >= PREPARATIONTIME) {
+                if (frame == 3) {
+                    if (shootCounter == -1) {
+                        attackFactor = 0;
+                        shootCounter = ATTACKTIME;
 
-                    MakeFireball(player, attackCount);
+                        MakeFireball(player, attackCount);
 
-                    BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f, false);
+                        BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f, false);
 
-                    attackCount++;
+                        attackCount++;
+                    }
                 }
             }
             if (frame >= 7) {

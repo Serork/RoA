@@ -45,7 +45,7 @@ sealed class PhoenixFireball : FormProjectile {
         }
     }
 
-    public bool ShotFromSpawn => OffsetXValue == -1f;
+    public bool ShotFromSpawn => MeInQueueValue < 0f;
 
     private static VertexStrip _vertexStrip = new VertexStrip();
 
@@ -79,7 +79,7 @@ sealed class PhoenixFireball : FormProjectile {
 
             Projectile.Opacity = 1f;
 
-            Projectile.velocity += player.GetFormHandler().SavedVelocity.SafeNormalize() * dashSpeed;
+            Projectile.velocity -= player.GetFormHandler().SavedVelocity.SafeNormalize().RotatedBy(MeInQueueValue + MathHelper.PiOver2) * dashSpeed;
         }
 
         if (!_phoenixDashed) {

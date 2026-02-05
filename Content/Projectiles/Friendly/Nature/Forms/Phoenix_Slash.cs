@@ -50,8 +50,10 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
 
             Projectile.SetTrail(1, 40);
 
+            int count = 1;
             if (player.GetFormHandler().AttackFactor2 > -1) {
                 Projectile.localAI[0] = 5f;
+                //count = 3;
             }
 
             if (Projectile.localAI[0] < 4) {
@@ -86,7 +88,7 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
                 }
             }
             else {
-                for (int i = 0; i < 1; i++) {
+                for (int i = 0; i < count; i++) {
                     int num1021 = 1;
                     int num1030 = Utils.SelectRandom<int>(Main.rand, 6, 259, 158);
                     float num127 = Main.rand.NextFloat(0.75f, 1.25f);
