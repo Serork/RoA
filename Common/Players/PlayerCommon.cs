@@ -239,6 +239,12 @@ sealed partial class PlayerCommon : ModPlayer {
         }
     }
 
+    public override void UpdateDead() {
+        DeerSkullReset();
+
+        IsHereticsVeilEffectActive = false;
+    }
+
     public bool ShouldUpdateAdvancedShadows;
 
     public float DistilleryOfDeathShootProgress => (float)DistilleryOfDeathShootCount / DistilleryOfDeath.DistilleryOfDeath_Use.SHOOTCOUNTPERTYPE;

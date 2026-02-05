@@ -138,7 +138,7 @@ sealed class Phoenix : BaseForm {
         MountData.spawnDust = Utils.SelectRandom<int>(Main.rand, 6, 259, 158);
         MountData.spawnDustNoGravity = true;
 
-        player.GetFormHandler().FlameTintOpacity = Helper.Approach(player.GetFormHandler().FlameTintOpacity, 1f * (1f - Utils.GetLerpValue(0f, 0.2f, player.statLife / (float)player.statLifeMax2, true)), 0.2f);
+        player.GetFormHandler().FlameTintOpacity = Helper.Approach(player.GetFormHandler().FlameTintOpacity, 1f * (1f - Utils.GetLerpValue(0f, 0.2f, player.statLife / (float)player.statLifeMax2, true)), 0.1f);
 
         Lighting.AddLight(player.Center, 0.5f * new Color(254, 158, 135).ToVector3() * MathHelper.Lerp(1f, 1.5f, BaseFormDataStorage.GetAttackCharge(player)));
 

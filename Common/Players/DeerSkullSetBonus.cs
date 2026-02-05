@@ -33,11 +33,7 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
         }
     }
 
-    public override void UpdateDead() {
-        Reset();
-    }
-
-    private bool Reset() {
+    private bool DeerSkullReset() {
         if (DeerSkullAppearanceProgress != 0f) {
             DeerSkullAppearanceProgress = 0f;
 
@@ -119,7 +115,7 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
 
         float targetValue = 1f;
         if (!deerSkullEquippedAndActivated) {
-            if (Reset()) {
+            if (DeerSkullReset()) {
                 return;
             }
             //targetValue = 0f;
