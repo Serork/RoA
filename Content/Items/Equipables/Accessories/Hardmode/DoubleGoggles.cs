@@ -25,7 +25,7 @@ sealed class DoubleGoggles : ModItem {
     }
 
     private void On_PlayerDrawHelper_SetShaderForData(On_PlayerDrawHelper.orig_SetShaderForData orig, Player player, int cHead, ref DrawData cdd) {
-        if (player.GetCommon().IsDoubleGogglesEffectActive) {
+        if (player.GetCommon().IsDoubleGogglesEffectActive && !player.GetCommon().IsDoubleGogglesEffectActive_Hidden) {
             orig(player, cHead, ref cdd);
 
             Effect chromaticAberrationShader = ShaderLoader.ChromaticAberration.Value;
@@ -61,5 +61,6 @@ sealed class DoubleGoggles : ModItem {
         if (player.statLife >= player.statLifeMax2 * 0.5) {
             player.GetCommon().IsDoubleGogglesEffectActive = true;
         }
+        player.GetCommon().IsDoubleGogglesEffectActive_Hidden = hideVisual;
     }
 }

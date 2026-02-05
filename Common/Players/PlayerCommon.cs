@@ -147,6 +147,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public ushort ConjurersEyeAttackCounter;
 
     public bool IsDoubleGogglesEffectActive;
+    public bool IsDoubleGogglesEffectActive_Hidden;
     public bool DoubleGogglesActivated;
     public float DoubleGogglesEffectOpacity;
 
@@ -1429,6 +1430,7 @@ sealed partial class PlayerCommon : ModPlayer {
         IsBrawlerMaskEffectActive = false;
 
         IsDoubleGogglesEffectActive = false;
+        IsDoubleGogglesEffectActive_Hidden = false;
 
         ConjurersEyeVanity = false;
         IsConjurersEyeEffectActive = IsConjurersEyeEffectActive_Hidden = false;
