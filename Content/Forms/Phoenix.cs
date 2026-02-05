@@ -306,8 +306,8 @@ sealed class Phoenix : BaseForm {
 
     private void MakeSlash(Player player, Vector2 velocity, int count = 5) {
         if (player.IsLocal()) {
-            int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(100);
-            float baseKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(5f);
+            int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(100) / count;
+            float baseKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(5f) / count;
             for (int i = 0; i < count; i++) {
                 Vector2 center = player.position;
                 float yProgress = (float)i / count;
