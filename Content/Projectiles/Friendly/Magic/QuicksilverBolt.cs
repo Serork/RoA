@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Content.Dusts;
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
@@ -52,26 +53,36 @@ sealed class QuicksilverBolt : ModProjectile {
         Main.dust[dust].velocity *= 0.1f;
         Main.dust[dust].scale *= 0.75f;
 
-        if (Projectile.ai[0] == 0f)
-            Projectile.ai[0] = Main.rand.Next(-2, 3);
-        if (Main.rand.Next(40) == 0 && Projectile.timeLeft < 130) {
-            Projectile.damage += (int)(Projectile.damage / 3);
-            Projectile.velocity.Y += Projectile.ai[0];
-            Projectile.velocity.X += Projectile.ai[0] / 2;
-            Projectile.ai[0] += Main.rand.Next(-2, 3);
-            int k = Main.rand.Next(26, 31);
+        if (Projectile.IsOwnerLocal()) {
+            if (Projectile.ai[0] == 0f) {
+                Projectile.ai[0] = Main.rand.Next(-2, 3);
+                Projectile.netUpdate = true;
+            }
+            if (Main.rand.Next(40) == 0 && Projectile.timeLeft < 130) {
+                Projectile.ai[0] += Main.rand.Next(-2, 3);
+                Projectile.ai[1] = 1f;
+                Projectile.netUpdate = true;
+            }
+        }
+        if (Projectile.ai[1] != 0f) {
+            int k = (int)(Main.rand.Next(26, 31) * 0.75f);
             for (int i = 0; i < k; i++) {
                 int x = (int)((double)Projectile.position.X - 3.0 + (double)Projectile.width / 2.0);
                 int y = (int)((double)Projectile.position.Y - 8.0 + (double)Projectile.height / 2.0);
                 Vector2 vector3 = (new Vector2((float)Projectile.width / 2f, Projectile.height) * 0.8f).RotatedBy((float)(i - (k / 2 - 1)) * ((float)Math.PI * 2f) / (float)k) + new Vector2((float)x, (float)y);
                 Vector2 vector2 = -(vector3 - new Vector2((float)x, (float)y));
                 int dust2 = Dust.NewDust(vector3 + vector2 * 2f * Main.rand.NextFloat() - new Vector2(1f, 2f), 0, 0, ModContent.DustType<MercuriumDust>(), vector2.X * 2f, vector2.Y * 2f, 0, default(Color), Main.rand.NextFloat(2.5f, 3.3f));
+                Main.dust[dust2].position += Main.dust[dust2].position.DirectionTo(Projectile.Center) * 10f;
                 Main.dust[dust2].noGravity = true;
                 Main.dust[dust2].noLight = true;
                 Main.dust[dust2].scale *= 0.3f;
                 Main.dust[dust2].velocity = -Vector2.Normalize(vector2) * Main.rand.NextFloat(1.5f, 3f) * Main.rand.NextFloat();
             }
             SoundEngine.PlaySound(SoundID.Item118, new Vector2(Projectile.position.X, Projectile.position.Y));
+            Projectile.damage += (int)(Projectile.damage / 3);
+            Projectile.velocity.Y += Projectile.ai[0];
+            Projectile.velocity.X += Projectile.ai[0] / 2;
+            Projectile.ai[1] = 0f;
         }
     }
     public override void OnKill(int timeLeft) {
