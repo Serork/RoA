@@ -254,7 +254,7 @@ sealed class Phoenix : BaseForm {
                         blinkDistance--;
                         if (solid()) {
                             if (shootCounter != -1) {
-                                int count = (int)MathF.Abs(attackFactor2);
+                                int count = 7 - (int)MathF.Abs(attackFactor2);
                                 for (int i = 0; i < count; i++) {
                                     float maxAngle = MathHelper.PiOver4 * Main.rand.NextFloat(0.25f, 1f);
                                     MakeFireball(player, 0, true, MathHelper.Pi / 2f + maxAngle * MathHelper.Lerp(-1f, 1f, (float)i / count) + maxAngle / count);
@@ -412,6 +412,10 @@ sealed class Phoenix : BaseForm {
             frame = 13;
 
             MakeCopy(player.Center, (byte)frame, player.fullRotation, player.direction > 0);
+        }
+
+        if (frame > 13) {
+            frame = 13;
         }
 
         BaseFormHandler.TransitToDark = Helper.Wave(0f, 1f, 5f, player.whoAmI);
