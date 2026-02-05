@@ -76,7 +76,7 @@ sealed class Phoenix : BaseForm {
             flameTintShader.Parameters["uGlobalOpacity"]
                 .SetValue(1f);
             flameTintShader.Parameters["alphaModifier"]
-    .SetValue(MathHelper.Lerp(globalOpacity * 0.5f, 1f, 1f - mainFactor));
+    .SetValue(MathHelper.Lerp(globalOpacity * 0.75f, 1f, 1f - mainFactor));
             flameTintShader.CurrentTechnique.Passes[0].Apply();
 
             return;
@@ -224,18 +224,26 @@ sealed class Phoenix : BaseForm {
             attackFactor2 = PREPARATIONTIME;
         }
         if (attackFactor2 < 0f) {
-            float blinkDistance = 100f;
-            player.SyncMousePosition();
-            player.velocity = savedVelocity;
-            player.Center += player.velocity * blinkDistance;
-
-            if (Collision.SolidCollision(player.position, player.width, player.height)) {
+            if (Collision.SolidCollision(player.position - player.velocity * player.width, player.width, player.height) ||
+                Collision.SolidCollision(player.position, player.width, player.height) ||
+                Collision.SolidCollision(player.position + player.velocity * player.width, player.width, player.height)) {
                 attackFactor2 = 0f;
             }
-
-            BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f, false);
-
-            player.fullRotation = player.velocity.X * 0.5f;
+            else {
+                float blinkDistance = 0f;
+                bool solid() => (Collision.SolidCollision(player.position, player.width, player.height) ||
+                                 Collision.SolidCollision(player.position + player.velocity * player.width, player.width, player.height));
+                while (!solid()) {
+                    blinkDistance++;
+                    if (blinkDistance >= 100f) {
+                        break;
+                    }
+                }
+                if (!solid()) {
+                    player.velocity = savedVelocity;
+                    player.Center += player.velocity * blinkDistance;
+                }
+            }
 
             player.GetCommon().ResetControls();
 
@@ -247,6 +255,10 @@ sealed class Phoenix : BaseForm {
                 //Main.maxQ = true;
                 //Main.renderNow = true;
             }
+
+            BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f, false);
+
+            player.fullRotation = player.velocity.X * 0.5f;
         }
         else {
             player.fullRotation = Utils.AngleLerp(player.fullRotation, player.velocity.X * 0.03f, 0.1f);
@@ -408,6 +420,9 @@ sealed class Phoenix : BaseForm {
     protected override void PreDraw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
         drawPosition += drawPlayer.GetFormHandler().SavedVelocity.SafeNormalize() * AFTERDASHOFFSETVALUE * MathUtils.Clamp01(drawPlayer.GetFormHandler().SavedVelocity.Length());
 
+        float mainFactor = drawPlayer.GetFormHandler().FlameTintOpacity;
+        drawColor = Color.Lerp(drawColor, drawColor.MultiplyRGB(Color.Lerp(new Color(254, 158, 35), new Color(255, 231, 66), 0.5f)), mainFactor);
+
         MiscShaderData miscShaderData = GameShaders.Misc["FlameLash"];
         miscShaderData.UseSaturation(-0.5f);
         miscShaderData.UseOpacity(10f);
@@ -427,6 +442,9 @@ sealed class Phoenix : BaseForm {
 
         if (glowTexture != null) {
             float opacity = drawPlayer.GetFormHandler().AttackFactor2 / (float)PREPARATIONTIME;
+            if (drawPlayer.GetFormHandler().AttackFactor2 < 5f) {
+                opacity = 1f;
+            }
             opacity = Ease.CubeOut(Utils.GetLerpValue(0.8f, 1f, opacity, true));
 
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);

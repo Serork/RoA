@@ -107,6 +107,7 @@ sealed class PhoenixFireball : FormProjectile {
                 Main.dust[num496].scale = 1.4f;
                 if (!_phoenixDashed) {
                     Main.dust[num496].velocity.Y -= 2f * Main.rand.NextFloat(0.75f, 1f);
+                    Main.dust[num496].velocity = Main.dust[num496].velocity.RotatedBy(0.075f * Main.rand.NextFloatDirection());
                 }
             }
         }
