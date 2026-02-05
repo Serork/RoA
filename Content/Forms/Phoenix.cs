@@ -53,8 +53,8 @@ sealed class Phoenix : BaseForm {
 
             return;
         }
-        float opacity = player.GetFormHandler().FlameTintOpacity;
-        if (player.GetFormHandler().IsInADruidicForm && opacity > 0f) {
+        float mainFactor = player.GetFormHandler().FlameTintOpacity;
+        if (player.GetFormHandler().IsInADruidicForm && mainFactor > 0f) {
             orig(player, cHead, ref cdd);
 
             Effect flameTintShader = ShaderLoader.FlameTint.Value;
@@ -63,14 +63,20 @@ sealed class Phoenix : BaseForm {
             Vector4 sourceRectangle = new(-width / 2f, -height / 2f, width, height);
             Vector2 size = new(width, height);
             float waveFrequency = 2f;
+            float waveOffset = 1f + player.whoAmI;
             Color color = Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), Helper.Wave(0f, 1f, 15f, player.whoAmI * 3)).MultiplyAlpha(0.5f) * 1f;
             flameTintShader.Parameters["uSourceRect"].SetValue(sourceRectangle);
             flameTintShader.Parameters["uLegacyArmorSourceRect"].SetValue(sourceRectangle);
             flameTintShader.Parameters["uImageSize0"].SetValue(size);
             flameTintShader.Parameters["uColor"].SetValue(color.ToVector3());
             flameTintShader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects);
-            flameTintShader.Parameters["uSaturation"].SetValue(Helper.Wave(0.25f, 0.75f, waveFrequency, 1f + player.whoAmI) * 1.5f);
-            flameTintShader.Parameters["uOpacity"].SetValue(opacity);
+            flameTintShader.Parameters["uSaturation"].SetValue(Helper.Wave(0.25f, 0.75f, waveFrequency, waveOffset) * 2f);
+            flameTintShader.Parameters["uOpacity"].SetValue(mainFactor);
+            float globalOpacity = MathHelper.Lerp(MathUtils.Clamp01(Helper.Wave(0.625f, 0.75f, 10f, waveOffset) * 1.375f), 1f, 1f - mainFactor);
+            flameTintShader.Parameters["uGlobalOpacity"]
+                .SetValue(1f);
+            flameTintShader.Parameters["alphaModifier"]
+    .SetValue(MathHelper.Lerp(globalOpacity * 0.5f, 1f, 1f - mainFactor));
             flameTintShader.CurrentTechnique.Passes[0].Apply();
 
             return;

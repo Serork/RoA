@@ -16,7 +16,10 @@ float2 uTargetPosition;
 float4 uLegacyArmorSourceRect;
 float2 uLegacyArmorSheetSize;
 
-float uSine = 0.5f;
+float uSine = 0.5;
+float uGlobalOpacity = 1;
+
+float alphaModifier = 1;
 
 float NormalSin(float time)
 {
@@ -43,6 +46,7 @@ float4 Recolor(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
     float time = uTime * 10;
     float2 textureCoords = FrameFix(coords);   
     float opacity = 1; 
+    float globalOpacity = uGlobalOpacity;
     float screenSine = 0.8 + 0.2 * sin(uTime * 0.6 + uSaturation * 0.6 + 0.6);
     float3 screenedColor = Screen(origColor.rgb, uColor) * sampleColor.a * origColor.a;
     origColor.rgb = lerp(origColor.rgb, screenedColor, (0.5 - 0.5 * textureCoords.y) * screenSine * uOpacity);
@@ -50,7 +54,9 @@ float4 Recolor(float4 sampleColor : COLOR0, float2 coords : TEXCOORD0) : COLOR0
     origColor = lerp(origColor, tex2D(uImage0, float2((coords.x + sin(uTime * 15 + textureCoords.y * 50) * (2 / uImageSize0.x)) % 1, coords.y)), uSine * uOpacity);
     opacity = max(0.25, opacity);
     
-    return origColor * sampleColor * opacity;
+    float4 returnColor = origColor * sampleColor;
+    returnColor.a = (float)(returnColor.a * alphaModifier);
+    return returnColor * opacity * globalOpacity;
 }
 
 technique Technique1
