@@ -187,7 +187,7 @@ sealed class Phoenix : BaseForm {
             player.velocity = savedVelocity;
             player.Center += player.velocity * blinkDistance;
 
-            BaseFormDataStorage.ChangeAttackCharge1(player, 1f, false);
+            BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f, false);
 
             player.fullRotation = player.velocity.X * 0.5f;
 
@@ -291,6 +291,8 @@ sealed class Phoenix : BaseForm {
                             AI2 = offset.Y
                         });
                     }
+
+                    BaseFormDataStorage.ChangeAttackCharge1(player, 1.5f, false);
 
                     attackCount++;
                 }
