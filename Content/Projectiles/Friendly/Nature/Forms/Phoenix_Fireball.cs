@@ -79,6 +79,10 @@ sealed class PhoenixFireball : FormProjectile {
 
             Projectile.Opacity = 1f;
 
+            if (ShotFromSpawn) {
+                dashSpeed *= 0.5f;
+            }
+
             Projectile.velocity -= player.GetFormHandler().SavedVelocity.SafeNormalize().RotatedBy(MeInQueueValue + MathHelper.PiOver2) * dashSpeed;
         }
 
