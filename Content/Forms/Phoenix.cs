@@ -255,6 +255,9 @@ sealed class Phoenix : BaseForm {
                         if (solid()) {
                             if (shootCounter != -1) {
                                 int count = 7 - (int)MathF.Abs(attackFactor2);
+
+                                MakeExplosion(player, count);
+
                                 for (int i = 0; i < count; i++) {
                                     float maxAngle = MathHelper.PiOver4 * Main.rand.NextFloat(0.25f, 1f);
                                     MakeFireball(player, 0, true, MathHelper.Pi / 2f + maxAngle * MathHelper.Lerp(-1f, 1f, (float)i / count) + maxAngle / count);
@@ -330,6 +333,22 @@ sealed class Phoenix : BaseForm {
                     KnockBack = baseKnockback
                 });
             }
+        }
+    }
+
+    private void MakeExplosion(Player player, float strength = 1f) {
+        if (player.IsLocal()) {
+            int baseDamage = (int)player.GetTotalDamage(DruidClass.Nature).ApplyTo(100);
+            float baseKnockback = player.GetTotalKnockback(DruidClass.Nature).ApplyTo(5f);
+            Vector2 center = player.GetPlayerCorePoint();
+            Vector2 velocity = -player.GetFormHandler().SavedVelocity * 2.5f;
+            ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixExplosion>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
+                Position = center,
+                Velocity = velocity,
+                Damage = baseDamage,
+                KnockBack = baseKnockback,
+                AI1 = strength
+            });
         }
     }
 

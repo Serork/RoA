@@ -53,7 +53,7 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
             int count = 1;
             if (player.GetFormHandler().AttackFactor2 > -1) {
                 Projectile.localAI[0] = 5f;
-                //count = 3;
+                count = 2;
             }
 
             if (Projectile.localAI[0] < 4) {
@@ -116,7 +116,7 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
                     dust2.velocity *= 0.5f;
                     dust2 = Main.dust[num131];
                     dust2.velocity += position.DirectionTo(Main.dust[num131].position) * Main.rand.NextFloat(2f, 5f) * 0.8f;
-                    dust2.velocity += Projectile.velocity * Main.rand.NextFloat(2f, 5f) * 0.625f * 0.8f * Main.rand.NextFloat(5, 10) * 2.5f;
+                    dust2.velocity += Projectile.velocity * Main.rand.NextFloat(2f, 5f) * 0.625f * 0.8f * Main.rand.NextFloat(5, 10) * (count != 1 ? 5 : 2.5f);
                     dust2.noGravity = true;
                 }
             }

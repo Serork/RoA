@@ -169,6 +169,9 @@ sealed class LilPhoenixForm : BaseForm {
             }
         }
         void dash() {
+            plr.JustJumpedForAnimation = false;
+            plr.JustJumpedForAnimation2 = false;
+
             SoundEngine.PlaySound(SoundID.Item74, player.Center);
             if (Main.netMode == NetmodeID.MultiplayerClient) {
                 MultiplayerSystem.SendPacket(new PlayOtherItemSoundPacket(player, 10, player.Center));
@@ -551,6 +554,9 @@ sealed class LilPhoenixForm : BaseForm {
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
+        player.eocDash = 0;
+        player.armorEffectDrawShadowEOCShield = false;
+
         BaseFormHandler formHandler = player.GetFormHandler();
         formHandler.JustJumped = false;
         formHandler.JustJumpedForAnimation = false;
