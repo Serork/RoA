@@ -2875,14 +2875,14 @@ CrystallineNeedle: {
 	DisplayName: Crystalline Needle
 	Tooltip:
 		'''
-		Consumes a full wreath charge to boost life regeneration when damaged
+		Consumes a full wreath charge to boost critical strike chance when damaged
 		'No voice to cry suffering'
 		'''
 }
 
 PinCushion: {
 	DisplayName: Pin Cushion
-	Tooltip: Charges up wreath and consumes a full wreath charge to boost life regeneration when damaged
+	Tooltip: Charges up wreath and consumes a full wreath charge to boost critical strike chance when damaged
 }
 
 NaturePriestCape: {

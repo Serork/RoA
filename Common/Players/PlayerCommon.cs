@@ -224,7 +224,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public override void UpdateLifeRegen() {
         for (int i = 0; i < CrystallineNeedleTime.Length; i++) {
             if (CrystallineNeedleTime[i].Item1 > 0) {
-                Player.lifeRegen += 6;
+                Player.GetCritChance(DruidClass.Nature) += 15;
             }
         }
     }

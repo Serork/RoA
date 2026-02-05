@@ -173,7 +173,7 @@ sealed class CrystallineNeedle : NatureItem {
 
         player.GetCommon()
             .AddCrystallineNeedle(
-            (ushort)(MathUtils.SecondsToFrames(5) * player.GetWreathHandler().ActualProgress2),
+            (ushort)(MathUtils.SecondsToFrames(10) * player.GetWreathHandler().ActualProgress2),
             MathHelper.TwoPi * Main.rand.NextFloatDirection(),
             Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f);
     }
