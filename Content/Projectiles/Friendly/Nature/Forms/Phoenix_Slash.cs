@@ -27,7 +27,13 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
         Projectile.penetrate = -1;
 
         Projectile.tileCollide = false;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 10;
     }
+
+    public override bool? CanDamage() => Projectile.localAI[0] < 5f;
+    public override bool? CanCutTiles() => Projectile.localAI[0] < 5f;
 
     public override void AI() {
         if (Projectile.velocity != Vector2.Zero) {
