@@ -78,7 +78,7 @@ sealed class Phoenix : BaseForm {
             flameTintShader.Parameters["uOpacity"].SetValue(mainFactor);
             float globalOpacity = MathHelper.Lerp(MathUtils.Clamp01(Helper.Wave(0.625f, 0.75f, 10f, waveOffset) * 1.375f), 1f, 1f - mainFactor);
             flameTintShader.Parameters["uGlobalOpacity"]
-                .SetValue(0.375f);
+                .SetValue(1f);
             flameTintShader.Parameters["alphaModifier"]
     .SetValue(MathHelper.Lerp(globalOpacity * 0.375f, 1f, 1f - mainFactor));
             flameTintShader.CurrentTechnique.Passes[0].Apply();
