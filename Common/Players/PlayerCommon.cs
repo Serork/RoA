@@ -614,13 +614,9 @@ sealed partial class PlayerCommon : ModPlayer {
             return;
         }
 
+        drawInfo.drawPlayer.armorEffectDrawOutlines = false;
         drawInfo.drawPlayer.armorEffectDrawShadow = false;
         drawInfo.drawPlayer.armorEffectDrawShadowSubtle = false;
-        drawInfo.drawPlayer.armorEffectDrawOutlines = false;
-        drawInfo.drawPlayer.armorEffectDrawShadowLokis = false;
-        drawInfo.drawPlayer.armorEffectDrawShadowBasilisk = false;
-        drawInfo.drawPlayer.armorEffectDrawOutlinesForbidden = false;
-        drawInfo.drawPlayer.armorEffectDrawShadowEOCShield = false;
 
         for (int i = 0; i < count; i++) {
             float progress = i / (float)count;
