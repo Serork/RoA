@@ -15,6 +15,7 @@ using System;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -58,6 +59,7 @@ sealed partial class BaseFormHandler : ModPlayer {
 
     #region PHOENIX
     public static float TransitToDark;
+    public float FlameTintOpacity;
 
     public void ResetPhoenixStats() {
         AttackFactor = 0f;
@@ -66,6 +68,15 @@ sealed partial class BaseFormHandler : ModPlayer {
         AttackCount = 0;
         TransitToDark = 0;
         SavedVelocity = Vector2.Zero;
+        FlameTintOpacity = 0f;
+    }
+
+    public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource) {
+        if (Player.GetFormHandler().IsConsideredAs<Phoenix>()) {
+            return false;
+        }
+
+        return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);
     }
     #endregion
 

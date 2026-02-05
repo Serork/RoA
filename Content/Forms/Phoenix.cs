@@ -43,6 +43,38 @@ sealed class Phoenix : BaseForm {
 
     protected override void SafeLoad() {
         ExtraDrawLayerSupport.PreMountBehindDrawEvent += ExtraDrawLayerSupport_PreMountBehindDrawEvent;
+        On_PlayerDrawHelper.SetShaderForData += On_PlayerDrawHelper_SetShaderForData;
+    }
+
+    private void On_PlayerDrawHelper_SetShaderForData(On_PlayerDrawHelper.orig_SetShaderForData orig, Player player, int cHead, ref DrawData cdd) {
+        if (!player.HasSetBonusFrom<FlamewardenHood>()) {
+            orig(player, cHead, ref cdd);
+
+            return;
+        }
+        if (player.GetFormHandler().IsInADruidicForm) {
+            orig(player, cHead, ref cdd);
+
+            Effect flameTintShader = ShaderLoader.FlameTint.Value;
+            float width = MathF.Max(100, player.width * 2.25f);
+            float height = MathF.Max(100, player.height * 2.25f);
+            Vector4 sourceRectangle = new(-width / 2f, -height / 2f, width, height);
+            Vector2 size = new(width, height);
+            float waveFrequency = 2f;
+            Color color = Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), Helper.Wave(0f, 1f, 15f, player.whoAmI * 3)).MultiplyAlpha(0.5f) * 1f;
+            flameTintShader.Parameters["uSourceRect"].SetValue(sourceRectangle);
+            flameTintShader.Parameters["uLegacyArmorSourceRect"].SetValue(sourceRectangle);
+            flameTintShader.Parameters["uImageSize0"].SetValue(size);
+            flameTintShader.Parameters["uColor"].SetValue(color.ToVector3());
+            flameTintShader.Parameters["uTime"].SetValue(TimeSystem.TimeForVisualEffects);
+            flameTintShader.Parameters["uSaturation"].SetValue(Helper.Wave(0.25f, 0.75f, waveFrequency, 1f + player.whoAmI) * 1.5f);
+            flameTintShader.Parameters["uOpacity"].SetValue(player.GetFormHandler().FlameTintOpacity);
+            flameTintShader.CurrentTechnique.Passes[0].Apply();
+
+            return;
+        }
+
+        orig(player, cHead, ref cdd);
     }
 
     private void ExtraDrawLayerSupport_PreMountBehindDrawEvent(ref PlayerDrawSet drawinfo) {
@@ -84,6 +116,8 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override void SafePostUpdate(Player player) {
+        player.GetFormHandler().FlameTintOpacity = Helper.Approach(player.GetFormHandler().FlameTintOpacity, 1f * (1f - Utils.GetLerpValue(0f, 0.2f, player.statLife / (float)player.statLifeMax2, true)), 0.2f);
+
         Lighting.AddLight(player.Center, 0.5f * new Color(254, 158, 135).ToVector3() * MathHelper.Lerp(1f, 1.5f, BaseFormDataStorage.GetAttackCharge(player)));
 
         player.GetCommon().ShouldUpdateAdvancedShadows = true;
@@ -281,7 +315,7 @@ sealed class Phoenix : BaseForm {
                         float offsetValue = TileHelper.TileSize * 5;
                         Vector2 center = player.GetPlayerCorePoint();
                         int meInQueueValue = attackCount + 2;
-                        Vector2 offset = Vector2.One.RotatedBy(MathHelper.TwoPi / 5 * meInQueueValue + MathHelper.PiOver2 * (meInQueueValue != 2 && meInQueueValue != 3).ToDirectionInt()) * offsetValue;
+                        Vector2 offset = Vector2.One.RotatedBy(MathHelper.TwoPi / FIREBALLCOUNT) * offsetValue;
                         Vector2 velocity = Vector2.UnitY * 5f;
                         ProjectileUtils.SpawnPlayerOwnedProjectile<PhoenixFireball>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("phoenixattack")) {
                             Position = center,

@@ -207,6 +207,7 @@ sealed class ShaderLoader : ModSystem {
     public static Asset<Effect> TerraDye => _loadedShaders["TerraDye"];
     public static Asset<Effect> ChromaticAberration => _loadedShaders["ChromaticAberration"];
     public static Asset<Effect> LightCompressor => _loadedShaders["LightCompressor"];
+    public static Asset<Effect> FlameTint => _loadedShaders["FlameTint"];
 
     public static Asset<Effect> SimpleReflection => _loadedShaders["SimpleReflection"];
 
