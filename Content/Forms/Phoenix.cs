@@ -253,7 +253,6 @@ sealed class Phoenix : BaseForm {
                         player.Center += player.velocity;
                         blinkDistance--;
                         if (solid()) {
-                            MakeFireball(player, 0, true);
                             break;
                         }
                     }
@@ -448,7 +447,7 @@ sealed class Phoenix : BaseForm {
         drawPosition += drawPlayer.GetFormHandler().SavedVelocity.SafeNormalize() * AFTERDASHOFFSETVALUE * MathUtils.Clamp01(drawPlayer.GetFormHandler().SavedVelocity.Length());
 
         float mainFactor = drawPlayer.GetFormHandler().FlameTintOpacity;
-        drawColor = Color.Lerp(drawColor, drawColor.MultiplyRGB(Color.Lerp(new Color(254, 158, 35), new Color(255, 231, 66), 0.5f)), mainFactor);
+        drawColor = Color.Lerp(drawColor, drawColor.MultiplyRGB(Color.Lerp(new Color(254, 158, 35), new Color(255, 231, 66), 0.5f)).MultiplyAlpha(1f), mainFactor);
 
         MiscShaderData miscShaderData = GameShaders.Misc["FlameLash"];
         miscShaderData.UseSaturation(-0.5f);
