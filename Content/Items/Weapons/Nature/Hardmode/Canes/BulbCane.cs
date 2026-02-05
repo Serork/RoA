@@ -156,7 +156,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
 
                 //float sizeFactor = MathHelper.Lerp(1f, 0f, Ease.CubeInOut(Utils.GetLerpValue(0.9f, 1f, ReleaseProgress, true)));
                 //miscCounter *= sizeFactor;
-                float miscCounter2 = miscCounter + (TimeSystem.TimeForVisualEffects * 60f + Projectile.whoAmI * 3) * 6f + i * 2;
+                float miscCounter2 = miscCounter + (Owner.miscCounter + Projectile.whoAmI * 3) * 6f + i * 2;
                 //miscCounter2 *= sizeFactor;
                 float f = (i / (float)totalIndexesInGroup + miscCounter2 * 1f) * ((float)Math.PI * 2f);
                 Vector2 vector2 = f.ToRotationVector2();

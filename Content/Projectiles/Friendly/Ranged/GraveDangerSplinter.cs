@@ -52,7 +52,7 @@ sealed class GraveDangerSplinter : ModProjectile {
             Projectile.frame = Main.rand.Next(3);
         }
 
-        Projectile.Opacity = Utils.GetLerpValue(0, 50, Projectile.timeLeft, true);
+        //Projectile.Opacity = Utils.GetLerpValue(0, 50, Projectile.timeLeft, true);
 
         Projectile.ai[0] += 1f;
         if (Projectile.ai[0] > 15f) {
