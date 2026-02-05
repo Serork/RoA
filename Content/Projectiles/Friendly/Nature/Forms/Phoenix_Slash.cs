@@ -6,6 +6,8 @@ using RoA.Common.Projectiles;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -32,11 +34,15 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
         }
 
+        Player player = Projectile.GetOwnerAsPlayer();
         if (Projectile.localAI[0]++ < 5f) {
-            Player player = Projectile.GetOwnerAsPlayer();
             Projectile.Center = player.position + new Vector2(Projectile.ai[0], Projectile.ai[1]);
 
             Projectile.SetTrail(1, 40);
+
+            if (player.GetFormHandler().AttackFactor2 > -1) {
+                Projectile.localAI[0] = 5f;
+            }
 
             if (Projectile.localAI[0] < 4) {
                 for (int i = 0; i < 5; i++) {

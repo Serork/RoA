@@ -45,6 +45,8 @@ sealed class PhoenixFireball : FormProjectile {
         }
     }
 
+    public bool ShotFromSpawn => OffsetXValue == -1f;
+
     private static VertexStrip _vertexStrip = new VertexStrip();
 
     public override void SetStaticDefaults() {
@@ -70,20 +72,26 @@ sealed class PhoenixFireball : FormProjectile {
     }
 
     public override void AI() {
+        Player player = Projectile.GetOwnerAsPlayer();
+        float dashSpeed = 20f;
+        if (!_phoenixDashed && ShotFromSpawn) {
+            _phoenixDashed = true;
+
+            Projectile.Opacity = 1f;
+
+            Projectile.velocity += player.GetFormHandler().SavedVelocity.SafeNormalize() * dashSpeed;
+        }
+
         if (!_phoenixDashed) {
             Projectile.timeLeft = 120;
         }
 
-        Player player = Projectile.GetOwnerAsPlayer();
-
         Lighting.AddLight(player.Center, 0.5f * new Color(254, 158, 135).ToVector3() * MathHelper.Lerp(1f, 1.5f, BaseFormDataStorage.GetAttackCharge(player)));
-
-        float dashSpeed = 20f;
 
         if (!_phoenixDashed && player.GetFormHandler().AttackFactor2 >= 4f && player.GetFormHandler().AttackFactor2 < 10f) {
             _phoenixDashed = true;
 
-            Projectile.velocity += player.velocity.SafeNormalize() * dashSpeed;
+            Projectile.velocity += player.GetFormHandler().SavedVelocity.SafeNormalize() * dashSpeed;
         }
 
         if (!_phoenixDashed && !player.GetFormHandler().IsInADruidicForm) {
@@ -116,7 +124,9 @@ sealed class PhoenixFireball : FormProjectile {
         if (!Init) {
             Init = true;
 
-            Projectile.Center = center;
+            if (!ShotFromSpawn) {
+                Projectile.Center = center;
+            }
 
             MainOffsetValue = PositionOffset.Length() * 0.5f;
 
