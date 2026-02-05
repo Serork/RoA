@@ -424,7 +424,7 @@ sealed class Phoenix : BaseForm {
             opacity = Ease.CubeOut(Utils.GetLerpValue(0.8f, 1f, opacity, true));
 
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
-            item.shader = drawPlayer.cBody;
+            item.shader = drawPlayer.cMinion;
             playerDrawData.Add(item);
             for (float num6 = 0f; num6 < 4f; num6 += 1f) {
                 float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + drawPlayer.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
@@ -433,7 +433,7 @@ sealed class Phoenix : BaseForm {
                 DrawData item2 = item;
                 item2.position = position;
                 item2.color = color2;
-                item2.shader = drawPlayer.cBody;
+                item2.shader = drawPlayer.cMinion;
                 playerDrawData.Add(item2);
             }
 
@@ -441,7 +441,7 @@ sealed class Phoenix : BaseForm {
             value = 1f;
 
             item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f) * opacity, rotation, drawOrigin, drawScale, spriteEffects);
-            item.shader = drawPlayer.cBody;
+            item.shader = drawPlayer.cMinion;
             playerDrawData.Add(item);
             for (float num6 = 0f; num6 < 4f; num6 += 1f) {
                 float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + drawPlayer.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
@@ -450,7 +450,7 @@ sealed class Phoenix : BaseForm {
                 DrawData item2 = item;
                 item2.position = position;
                 item2.color = color2;
-                item2.shader = drawPlayer.cBody;
+                item2.shader = drawPlayer.cMinion;
                 playerDrawData.Add(item2);
             }
         }

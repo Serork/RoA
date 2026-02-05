@@ -305,17 +305,15 @@ sealed class Moth : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        SpriteBatch spriteBatch = Main.spriteBatch;
         Texture2D projectileTexture = Projectile.GetTexture();
         int frameHeight = projectileTexture.Height / Main.projFrames[Projectile.type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, projectileTexture.Width, frameHeight);
         Vector2 drawOrigin = new Vector2(projectileTexture.Width * 0.5f, frameHeight * 0.5f);
         Vector2 drawPos = Projectile.Center - Main.screenPosition;
-        spriteBatch.Draw(projectileTexture, drawPos, frameRect, lightColor, Projectile.rotation, drawOrigin, Projectile.scale * 1.1f, Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+        Main.EntitySpriteDraw(projectileTexture, drawPos, frameRect, lightColor, Projectile.rotation, drawOrigin, Projectile.scale * 1.1f, Projectile.direction > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
 
         return false;
-    }
-      
+    }    
 
     public override void PostDraw(Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;

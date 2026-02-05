@@ -443,12 +443,12 @@ abstract class BaseForm : ModMount {
                         Color color = hornsBorderOpacity2 >= 0.925f ? Color.White : new(35, 193, 179);
                         color *= 0.75f;
                         DrawData item2 = new(SolidTexture.Value, drawPosition + vector2, frame, color * hornsBorderOpacity, rotation, drawOrigin, drawScale, spriteEffects);
-                        item2.shader = drawPlayer.cHead;
+                        item2.shader = drawPlayer.cMinion;
                         playerDrawData.Add(item2);
 
                         color.A /= 2;
                         item2 = new(SolidTexture.Value, drawPosition + vector2 + Main.rand.RandomPointInArea(2f) * hornsBorderOpacity2, frame, color * 0.5f * hornsBorderOpacity, rotation, drawOrigin, drawScale, spriteEffects);
-                        item2.shader = drawPlayer.cBody;
+                        item2.shader = drawPlayer.cMinion;
                         playerDrawData.Add(item2);
                     }
                 }
@@ -466,13 +466,13 @@ abstract class BaseForm : ModMount {
                 DrawData item3 = new(texture, copyInfo.Position - Main.screenPosition, frame with { Y = texture.Height / MountData.totalFrames * copyInfo.UsedFrame }, drawColor * MathUtils.Clamp01(copyInfo.Opacity) * 0.5f, 
                     copyInfo.Rotation, 
                     drawOrigin, drawScale * MathF.Max(copyInfo.Scale, 1f), copyInfo.FacedRight.ToInt().ToSpriteEffects());
-                item3.shader = drawPlayer.cBody;
+                item3.shader = drawPlayer.cMinion;
                 item3.ignorePlayerRotation = true;
                 playerDrawData.Add(item3);
             }
 
             DrawData item = new(texture, drawPosition, frame, drawColor, rotation, drawOrigin, drawScale, spriteEffects);
-            item.shader = drawPlayer.cBody;
+            item.shader = drawPlayer.cMinion;
             playerDrawData.Add(item);
             DrawGlowMask(playerDrawData, drawType, drawPlayer, ref texture, ref glowTexture, ref drawPosition, ref frame, ref drawColor, ref glowColor, ref rotation, ref spriteEffects, ref drawOrigin, ref drawScale, shadow);
         }
@@ -500,7 +500,7 @@ abstract class BaseForm : ModMount {
         if (glowTexture != null) {
             float value = BaseFormDataStorage.GetAttackCharge(drawPlayer);
             DrawData item = new(glowTexture, drawPosition, frame, GlowColor(drawPlayer, drawColor, ((float)(int)drawColor.A / 255f) * value), rotation, drawOrigin, drawScale, spriteEffects);
-            item.shader = drawPlayer.cBody;
+            item.shader = drawPlayer.cMinion;
             playerDrawData.Add(item);
         }
     }

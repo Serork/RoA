@@ -292,7 +292,7 @@ sealed class HallowedGryphon : BaseForm {
         drawPosition = Utils.Floor(drawPosition);
         if (glowTexture != null) {
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * 0.9f * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
-            item.shader = drawPlayer.cBody;
+            item.shader = drawPlayer.cMinion;
             playerDrawData.Add(item);
         }
         if (_glowMask2?.IsLoaded == true) {
@@ -301,12 +301,12 @@ sealed class HallowedGryphon : BaseForm {
             Texture2D glowMaskTexture = _glowMask2.Value;
             if (shadow != 0) {
                 DrawData item = new(glowMaskTexture, drawPosition, frame, Color.White * 0.2f * colorFactor, rotation, drawOrigin, drawScale, spriteEffects);
-                item.shader = drawPlayer.cBody;
+                item.shader = drawPlayer.cMinion;
                 playerDrawData.Add(item);
             }
             else {
                 DrawData item = new(glowMaskTexture, drawPosition, frame, Color.White * 0.15f * colorFactor, rotation, drawOrigin, drawScale, spriteEffects);
-                item.shader = drawPlayer.cBody;
+                item.shader = drawPlayer.cMinion;
                 playerDrawData.Add(item);
             }
         }

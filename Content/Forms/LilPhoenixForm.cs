@@ -512,13 +512,13 @@ sealed class LilPhoenixForm : BaseForm {
         drawPosition = Utils.Floor(drawPosition);
         if (glowTexture != null) {
             DrawData item = new(glowTexture, drawPosition, frame, Color.White * 0.85f * ((float)(int)drawColor.A / 255f), rotation, drawOrigin, drawScale, spriteEffects);
-            item.shader = drawPlayer.cBody;
+            item.shader = drawPlayer.cMinion;
             playerDrawData.Add(item);
         }
         if (_glowMask2?.IsLoaded == true) {
             float value = BaseFormDataStorage.GetAttackCharge(drawPlayer);
             DrawData item = new(_glowMask2.Value, drawPosition, frame, Color.White * 0.5f * ((float)(int)drawColor.A / 255f) * value, rotation, drawOrigin, drawScale, spriteEffects);
-            item.shader = drawPlayer.cBody;
+            item.shader = drawPlayer.cMinion;
             playerDrawData.Add(item);
         }
     }
