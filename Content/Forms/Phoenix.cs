@@ -556,10 +556,11 @@ sealed class Phoenix : BaseForm {
                 playerDrawData.Add(item2);
             }
 
-            frame.Y += (frame.Height + 2) * 7;
+            Rectangle frame2 = frame;
+            frame2.Y += (frame2.Height + 2) * 7;
             value = 1f;
 
-            item = new(glowTexture, drawPosition, frame, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f) * opacity, rotation, drawOrigin, drawScale, spriteEffects);
+            item = new(glowTexture, drawPosition, frame2, Color.White * MathHelper.Lerp(0.9f, 1f, value) * ((float)(int)drawColor.A / 255f) * opacity, rotation, drawOrigin, drawScale, spriteEffects);
             item.shader = drawPlayer.cMinion;
             playerDrawData.Add(item);
             for (float num6 = 0f; num6 < 4f; num6 += 1f) {
