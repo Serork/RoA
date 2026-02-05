@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
@@ -404,6 +405,12 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.ItemCheck_PayMana += On_Player_ItemCheck_PayMana;
 
         On_Player.ApplyVanillaHurtEffectModifiers += On_Player_ApplyVanillaHurtEffectModifiers;
+
+        On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull1;
+    }
+
+    private void On_LegacyPlayerRenderer_DrawPlayerFull1(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig, LegacyPlayerRenderer self, Camera camera, Player drawPlayer) {
+        orig(self, camera, drawPlayer);
     }
 
     private void On_Player_ApplyVanillaHurtEffectModifiers(On_Player.orig_ApplyVanillaHurtEffectModifiers orig, Player self, ref Player.HurtModifiers modifiers) {
@@ -607,6 +614,14 @@ sealed partial class PlayerCommon : ModPlayer {
             return;
         }
 
+        drawInfo.drawPlayer.armorEffectDrawShadow = false;
+        drawInfo.drawPlayer.armorEffectDrawShadowSubtle = false;
+        drawInfo.drawPlayer.armorEffectDrawOutlines = false;
+        drawInfo.drawPlayer.armorEffectDrawShadowLokis = false;
+        drawInfo.drawPlayer.armorEffectDrawShadowBasilisk = false;
+        drawInfo.drawPlayer.armorEffectDrawOutlinesForbidden = false;
+        drawInfo.drawPlayer.armorEffectDrawShadowEOCShield = false;
+
         for (int i = 0; i < count; i++) {
             float progress = i / (float)count;
             DrawData value = drawInfo.DrawDataCache[i];
@@ -697,6 +712,7 @@ sealed partial class PlayerCommon : ModPlayer {
             for (int i = 0; i < totalShadows; i += skip) {
                 _obsidianStopwatchCopiesHueShift.Add((ushort)i);
             }
+
             int direction = Player.direction;
             float gravDir = Player.gravDir;
             Rectangle bodyFrame = Player.bodyFrame;
@@ -704,7 +720,7 @@ sealed partial class PlayerCommon : ModPlayer {
             Rectangle legFrame = Player.legFrame;
             for (int i = totalShadows - totalShadows % skip; i > 0; i -= skip) {
                 EntityShadowInfo advancedShadow = GetAdvancedShadow(i);
-                float shadow = Utils.Remap((float)i / totalShadows, 0, 1, 0.15f, 0.5f, clamped: true);
+                float shadow = Utils.Remap((float)i / totalShadows, 0f, 1f, 0.15f, 0.5f, clamped: true);
 
                 if (advancedShadow.Position != Vector2.Zero) {
                     Player player = Player;
