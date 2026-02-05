@@ -29,7 +29,7 @@ sealed class PhoenixSlash : FormProjectile_NoTextureLoad {
         Projectile.tileCollide = false;
 
         Projectile.usesLocalNPCImmunity = true;
-        Projectile.localNPCHitCooldown = 10;
+        Projectile.localNPCHitCooldown = -1;
     }
 
     public override bool? CanDamage() => Projectile.localAI[0] < 5f;
