@@ -8,6 +8,7 @@ using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
@@ -282,6 +283,9 @@ sealed class ExtraDrawLayerSupport : ILoadable {
 
     public static void DrawBackpacks(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
+        if (!player.IsAlive()) {
+            return;
+        }
         foreach (var drawInfo in _extraDrawLayerByItemType) {
             if (drawInfo.Value != EquipType.Back) {
                 continue;
