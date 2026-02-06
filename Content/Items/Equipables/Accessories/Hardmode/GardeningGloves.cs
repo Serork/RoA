@@ -20,6 +20,10 @@ sealed class GardeningGloves : ModItem {
         player.GetDamage(DruidClass.Nature) += 0.1f;
         player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.1f;
 
+        if (player.GetFormHandler().IsInADruidicForm) {
+            return;
+        }
+
         if (player.GetWreathHandler().IsFull1) {
             if (!player.GetCommon().IsGardeningGlovesEffectActive) {
                 player.GetCommon().ActivateGardeningGloveEffect();

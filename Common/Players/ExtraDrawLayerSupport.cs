@@ -283,7 +283,7 @@ sealed class ExtraDrawLayerSupport : ILoadable {
 
     public static void DrawBackpacks(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
-        if (!player.IsAlive()) {
+        if (player.dead) {
             return;
         }
         foreach (var drawInfo in _extraDrawLayerByItemType) {
