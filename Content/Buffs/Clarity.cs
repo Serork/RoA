@@ -11,7 +11,7 @@ namespace RoA.Content.Buffs;
 sealed class Clarity : ModBuff {
     private static bool _isDrawingLiquid;
 
-    public static float APPLIEDLIQUIDOPACITY => 0.5f;
+    public static float APPLIEDLIQUIDOPACITY => 0.375f;
 
     public override void Update(Player player, ref int buffIndex) => player.GetCommon().IsClarityEffectActive = true;
 
