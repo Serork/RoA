@@ -2,9 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Content.Buffs;
 using RoA.Content.Liquids;
 using RoA.Content.Tiles.Crafting;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -89,6 +91,9 @@ sealed class SwellingTar : ModTile {
             j3++;
         }
         strengthFactor = Helper.Approach(strengthFactor, 2f, j3 / 9.25f);
+        if (Main.LocalPlayer.GetCommon().IsClarityEffectActive) {
+            return;
+        }
         if (Main.netMode != NetmodeID.Server && Main.tile[i - 1, j].TileType != Type && Main.tile[i, j + 1].TileType != Type) {
             var dims = new Vector2(35f, 35f);
             var startPosition = new Point16(i, j).ToWorldCoordinates();
