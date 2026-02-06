@@ -506,10 +506,11 @@ sealed class Phoenix : BaseForm {
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
         skipDust = true;
+        player.GetFormHandler().ResetPhoenixStats();
         if (player.statLife <= 0 && player.whoAmI == Main.myPlayer) {
             player.KillMe(PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.Phoenix0").ToNetworkText(player.name)), 1.0, 0);
+            return;
         }
-        player.GetFormHandler().ResetPhoenixStats();
 
         Vector2 position = player.GetPlayerCorePoint() + player.velocity + Vector2.UnitY * 2f;
         Vector2 positionInWorld = position;
