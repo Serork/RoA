@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Buffs;
 
 sealed class Clarity : ModBuff {
-    private static bool _isDrawingLiquid;
+    private static bool _isDrawingLiquid, _isDrawingWaterfalls;
 
     public static float APPLIEDLIQUIDOPACITY => 0.375f;
 
@@ -18,6 +18,24 @@ sealed class Clarity : ModBuff {
     public override void Load() {
         On_Main.DrawLiquid += On_Main_DrawLiquid;
         On_Lighting.GetCornerColors += On_Lighting_GetCornerColors;
+        On_WaterfallManager.GetAlpha += On_WaterfallManager_GetAlpha;
+        On_WaterfallManager.Draw += On_WaterfallManager_Draw;
+    }
+
+    private void On_WaterfallManager_Draw(On_WaterfallManager.orig_Draw orig, WaterfallManager self, Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch) {
+        _isDrawingWaterfalls = true;
+
+        orig(self, spriteBatch);
+
+        _isDrawingWaterfalls = false;
+    }
+
+    private float On_WaterfallManager_GetAlpha(On_WaterfallManager.orig_GetAlpha orig, float Alpha, int maxSteps, int waterfallType, int y, int s, Tile tileCache) {
+        float result = orig(Alpha, maxSteps, waterfallType, y, s, tileCache);
+        if (_isDrawingWaterfalls && Main.LocalPlayer.GetCommon().IsClarityEffectActive) {
+            result *= APPLIEDLIQUIDOPACITY;
+        }
+        return result;
     }
 
     private void On_Lighting_GetCornerColors(On_Lighting.orig_GetCornerColors orig, int centerX, int centerY, out Terraria.Graphics.VertexColors vertices, float scale) {
