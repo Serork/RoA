@@ -40,7 +40,8 @@ sealed class Phoenix : BaseForm {
     private static float AFTERDASHOFFSETVALUE => 50f;
 
     private static VertexStrip _vertexStrip = new VertexStrip();
-    private static Asset<Texture2D> _burnoutTexture = null!;
+    private static Asset<Texture2D> _burnoutTexture = null!,
+                                    _wingsTexture = null!;
 
     public override ushort SetHitboxWidth(Player player) => (ushort)(Player.defaultWidth * 2f);
     public override ushort SetHitboxHeight(Player player) => (ushort)(Player.defaultHeight * 1.2f);
@@ -105,11 +106,12 @@ sealed class Phoenix : BaseForm {
         if (!player.GetWreathHandler().StartSlowlyIncreasingUntilFull) {
             return;
         }
-        Texture2D texture = GetTexture<Phoenix>().Value;
-        Rectangle clip = Utils.Frame(texture, 1, FRAMECOUNT);
+        Texture2D texture = _wingsTexture.Value;
+        Rectangle clip = Utils.Frame(texture, 1, 1);
         Vector2 origin = clip.Centered();
         Vector2 drawPosition = new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
         drawPosition += new Vector2(GetData<Phoenix>().xOffset * player.direction, GetData<Phoenix>().yOffset);
+        drawPosition.Y += 2f;
         float opacity = player.GetWreathHandler().ActualProgress4;
         float opacity2 = opacity;
         opacity = Utils.GetLerpValue(0.85f, 0.95f, opacity2, true);
@@ -134,6 +136,7 @@ sealed class Phoenix : BaseForm {
 
         if (!Main.dedServ) {
             _burnoutTexture = ModContent.Request<Texture2D>(Texture + "_Burnout");
+            _wingsTexture = ModContent.Request<Texture2D>(Texture + "_Wings");
         }
     }
 
@@ -467,7 +470,7 @@ sealed class Phoenix : BaseForm {
             frame = 13;
         }
 
-        BaseFormHandler.TransitToDark = Helper.Wave(0f, 1f, 5f, player.whoAmI);
+        BaseFormHandler.TransitToDark = Helper.Wave(0f, 1f, 5f, 1 + player.whoAmI * 3);
 
         return false;
     }
@@ -593,7 +596,11 @@ sealed class Phoenix : BaseForm {
     }
 
     protected override void PreDraw(List<DrawData> playerDrawData, int drawType, Player drawPlayer, ref Texture2D texture, ref Texture2D glowTexture, ref Vector2 drawPosition, ref Rectangle frame, ref Color drawColor, ref Color glowColor, ref float rotation, ref SpriteEffects spriteEffects, ref Vector2 drawOrigin, ref float drawScale, float shadow) {
-        drawPosition += drawPlayer.GetFormHandler().SavedVelocity.SafeNormalize() * AFTERDASHOFFSETVALUE * MathUtils.Clamp01(drawPlayer.GetFormHandler().SavedVelocity.Length());
+        Vector2 dashVelocity = drawPlayer.GetFormHandler().SavedVelocity.SafeNormalize() * AFTERDASHOFFSETVALUE * MathUtils.Clamp01(drawPlayer.GetFormHandler().SavedVelocity.Length());
+        if (dashVelocity.HasNaNs()) {
+            dashVelocity = Vector2.Zero;
+        }
+        drawPosition += dashVelocity;
 
         float mainFactor = drawPlayer.GetFormHandler().FlameTintOpacity;
         drawColor = Color.Lerp(drawColor, drawColor.MultiplyRGB(Color.Lerp(new Color(254, 158, 35), new Color(255, 231, 66), 0.5f)).MultiplyAlpha(1f), mainFactor);
