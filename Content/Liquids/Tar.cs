@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using ModLiquidLib.ModLoader;
+using ModLiquidLib.Utils;
 using ModLiquidLib.Utils.Structs;
 
 using RoA.Content.Buffs;
@@ -129,6 +130,16 @@ sealed partial class Tar : ModLiquid {
 
     public override void Load() {
         CollisionLoad();
+
+        On_Player.SpawnFastRunParticles += On_Player_SpawnFastRunParticles;
+    }
+
+    private void On_Player_SpawnFastRunParticles(On_Player.orig_SpawnFastRunParticles orig, Player self) {
+        if (self.GetModdedWetArray()[LiquidLoader.LiquidType<Liquids.Tar>() - LiquidID.Count]) {
+            return;
+        }
+
+        orig(self);
     }
 
     public partial void CollisionLoad();
