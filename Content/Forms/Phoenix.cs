@@ -86,7 +86,7 @@ sealed class Phoenix : BaseForm {
             flameTintShader.Parameters["uGlobalOpacity"]
                 .SetValue(MathHelper.Lerp(0.375f, 1f, 1f - mainFactor));
             flameTintShader.Parameters["alphaModifier"]
-    .SetValue(MathHelper.Lerp(globalOpacity * 0.375f, 1f, 1f - mainFactor));
+                .SetValue(MathHelper.Lerp(globalOpacity * 0.375f, 1f, 1f - mainFactor));
             flameTintShader.CurrentTechnique.Passes[0].Apply();
 
             return;
@@ -100,10 +100,13 @@ sealed class Phoenix : BaseForm {
         if (!player.HasSetBonusFrom<FlamewardenHood>()) {
             return;
         }
-        if (player.GetFormHandler().IsInADruidicForm) {
-            return;
-        }
-        if (!player.GetWreathHandler().StartSlowlyIncreasingUntilFull) {
+        //if (player.GetFormHandler().IsInADruidicForm) {
+        //    return;
+        //}
+        //if (!player.GetWreathHandler().StartSlowlyIncreasingUntilFull) {
+        //    return;
+        //}
+        if (player.GetFormHandler().IsInADruidicForm && player.GetFormHandler().CurrentForm.BaseForm.IsDrawing) {
             return;
         }
         Texture2D texture = _wingsTexture.Value;
