@@ -209,7 +209,7 @@ sealed class PhoenixFireball : FormProjectile {
             }
         }
 
-        _transitToDark = Helper.Wave(0f, 1f, 5f, Projectile.whoAmI * 3);
+        _transitToDark = Helper.Wave(0f, 1f, 5f, Projectile.whoAmI * 10);
 
         if (!_phoenixDashed) {
             return;
