@@ -6,6 +6,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.GlowMasks;
 using RoA.Common.Players;
 using RoA.Content.Forms;
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -41,6 +42,12 @@ sealed class FlamewardenHood : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMas
     public override void UpdateArmorSet(Player player) {
         BaseFormHandler.KeepFormActive(player);
 
+        if (player.GetFormHandler().IsInADruidicForm) {
+            return;
+        }
+        if (!player.GetWreathHandler().StartSlowlyIncreasingUntilFull) {
+            return;
+        }
         float opacity = player.GetWreathHandler().ActualProgress4;
         float opacity2 = opacity;
         opacity = Utils.GetLerpValue(0.85f, 0.95f, opacity2, true);
