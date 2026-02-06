@@ -2916,3 +2916,8 @@ NaturePriestHood: {
 	// DisplayName: Nature Priest Hood
 	// Tooltip: ""
 }
+
+ClarityPotion: {
+	// DisplayName: Clarity Potion
+	// Tooltip: ""
+}

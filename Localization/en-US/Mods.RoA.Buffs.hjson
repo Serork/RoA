@@ -360,3 +360,8 @@ Phoenix: {
 	DisplayName: Phoenix
 	Description: Mods.RoA.Buffs.Phoenix.Description
 }
+
+Clarity: {
+	DisplayName: Clarity
+	Description: Mods.RoA.Buffs.Clarity.Description
+}

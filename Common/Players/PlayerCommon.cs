@@ -23,6 +23,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Liquid;
 using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
@@ -247,6 +248,8 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public bool ShouldUpdateAdvancedShadows;
+
+    public bool IsClarityEffectActive;
 
     public float DistilleryOfDeathShootProgress => (float)DistilleryOfDeathShootCount / DistilleryOfDeath.DistilleryOfDeath_Use.SHOOTCOUNTPERTYPE;
 
@@ -1435,6 +1438,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsClarityEffectActive = false;
+
         ShouldUpdateAdvancedShadows = false;
 
         IsDuskStagEffectActive = false;

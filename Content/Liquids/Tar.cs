@@ -4,9 +4,11 @@ using Microsoft.Xna.Framework.Graphics;
 using ModLiquidLib.ModLoader;
 using ModLiquidLib.Utils.Structs;
 
+using RoA.Content.Buffs;
 using RoA.Content.Projectiles.LiquidsSpecific;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -355,6 +357,14 @@ sealed partial class Tar : ModLiquid {
         vertices.BottomRightColor *= liquidOpacity;
         vertices.TopLeftColor *= liquidOpacity;
         vertices.TopRightColor *= liquidOpacity;
+
+        if (Main.LocalPlayer.GetCommon().IsClarityEffectActive) {
+            float num = Clarity.APPLIEDLIQUIDOPACITY;
+            vertices.BottomLeftColor *= num;
+            vertices.BottomRightColor *= num;
+            vertices.TopLeftColor *= num;
+            vertices.TopRightColor *= num;
+        }
 
         Main.DrawTileInWater(drawOffset, i, j);
         Main.tileBatch.Draw(texture, new Vector2(i << 4, j << 4) + drawOffset, sourceRectangle, vertices, Vector2.Zero, 1f, SpriteEffects.None);
