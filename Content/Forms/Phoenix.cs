@@ -59,6 +59,9 @@ sealed class Phoenix : BaseForm {
 
             return;
         }
+        if (!player.IsAlive()) {
+            return;
+        }
         float mainFactor = player.GetFormHandler().FlameTintOpacity;
         if (player.GetFormHandler().IsInADruidicForm && mainFactor > 0f) {
             orig(player, cHead, ref cdd);
@@ -509,6 +512,15 @@ sealed class Phoenix : BaseForm {
         player.GetFormHandler().ResetPhoenixStats();
         if (player.statLife <= 0 && player.whoAmI == Main.myPlayer) {
             player.KillMe(PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.Phoenix0").ToNetworkText(player.name)), 1.0, 0);
+
+            int count = 56;
+            for (int i = 0; i < count; i++) {
+                Vector2 pos = player.GetPlayerCorePoint();
+                int dust = Dust.NewDust(pos, 6, 6, Utils.SelectRandom<int>(Main.rand, 6, 259, 158), 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
+                Main.dust[dust].position = pos + Main.rand.RandomPointInArea(20f);
+                Main.dust[dust].velocity += Vector2.One.RotatedBy((float)i / count * MathHelper.TwoPi) * Main.rand.NextFloat(1f, 2f);
+                Main.dust[dust].noGravity = true;
+            }
             return;
         }
 

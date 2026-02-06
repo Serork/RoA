@@ -7,6 +7,7 @@ using RoA.Common;
 using RoA.Common.Players;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -41,6 +42,9 @@ sealed class HereticsVeil : ModItem {
     private void ExtraDrawLayerSupport_PreProjectileOverArmDrawEvent(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         if (!player.GetCommon().IsHereticsVeilEffectActive) {
+            return;
+        }
+        if (!player.IsAlive()) {
             return;
         }
 
@@ -90,6 +94,9 @@ sealed class HereticsVeil : ModItem {
     private void PlayerCommon_AlwaysHeadDrawEvent(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
         if (!player.GetCommon().IsHereticsVeilEffectActive) {
+            return;
+        }
+        if (!player.IsAlive()) {
             return;
         }
 
