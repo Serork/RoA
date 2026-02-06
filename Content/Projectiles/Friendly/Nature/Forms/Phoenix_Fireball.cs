@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.Graphics;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
@@ -69,6 +70,20 @@ sealed class PhoenixFireball : FormProjectile {
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 10;
+    }
+
+    public override void OnKill(int timeLeft) {
+        SoundEngine.PlaySound(SoundID.NPCDeath3, Projectile.Center);
+        for (int num700 = 0; num700 < 15; num700++) {
+            int num701 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 6, (0f - Projectile.velocity.X) * 0.2f, (0f - Projectile.velocity.Y) * 0.2f, 0, default(Color), Main.rand.NextFloat(1.5f, 2f));
+            Main.dust[num701].position += Main.dust[num701].position.DirectionTo(Projectile.Center) * 2f;
+            Main.dust[num701].noGravity = true;
+            Dust dust2 = Main.dust[num701];
+            dust2.velocity *= Main.rand.NextFloat(1.5f, 2f);
+            num701 = Dust.NewDust(new Vector2(Projectile.position.X, Projectile.position.Y), Projectile.width, Projectile.height, 6, (0f - Projectile.velocity.X) * 0.2f, (0f - Projectile.velocity.Y) * 0.2f, 0, default(Color), Main.rand.NextFloat(1f, 1.5f));
+            dust2 = Main.dust[num701];
+            dust2.velocity *= Main.rand.NextFloat(1.5f, 2f);
+        }
     }
 
     public override void AI() {

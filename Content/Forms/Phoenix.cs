@@ -8,6 +8,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
 using RoA.Common.Players;
+using RoA.Common.VisualEffects;
 using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 using RoA.Content.Projectiles.Friendly.Nature.Forms;
 using RoA.Core;
@@ -101,7 +102,6 @@ sealed class Phoenix : BaseForm {
         if (!player.GetWreathHandler().StartSlowlyIncreasingUntilFull) {
             return;
         }
-
         Texture2D texture = GetTexture<Phoenix>().Value;
         Rectangle clip = Utils.Frame(texture, 1, FRAMECOUNT);
         Vector2 origin = clip.Centered();
@@ -111,10 +111,12 @@ sealed class Phoenix : BaseForm {
         float opacity2 = opacity;
         opacity = Utils.GetLerpValue(0.85f, 0.95f, opacity2, true);
         opacity *= Utils.GetLerpValue(1f, 0.95f, opacity2, true);
-        Color color = Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), Helper.Wave(0f, 1f, 15f, player.whoAmI * 3)).MultiplyAlpha(0.5f) * opacity * 0.5f;
-
+        Color lightColor = Lighting.GetColor(drawinfo.Position.ToTileCoordinates());
+        Color baseColor = Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), Helper.Wave(0f, 1f, 15f, player.whoAmI * 3));
+        Color color = Color.Lerp(baseColor, baseColor.MultiplyRGB(lightColor), 0.5f).MultiplyAlpha(0.5f) * opacity * 0.75f;
         DrawData drawData = new(texture, drawPosition, clip,
             color, 0f, origin, 1f, drawinfo.playerEffect);
+        drawData.shader = player.cMinion;
         drawinfo.DrawDataCache.Add(drawData);
     }
 
@@ -469,18 +471,76 @@ sealed class Phoenix : BaseForm {
 
     protected override void SafeSetMount(Player player, ref bool skipDust) {
         skipDust = true;
-
         player.GetFormHandler().ResetPhoenixStats();
+
+        Vector2 position = player.GetPlayerCorePoint() + player.velocity - Vector2.UnitY * 6f;
+        for (int i = 0; i < 1; i++) {
+            AdvancedDustSystem.New<AdvancedDusts.PhoenixExplosion>(AdvancedDustLayer.ABOVEDUSTS)?.Setup(position, Vector2.Zero);
+        }
+        Vector2 center = position;
+        for (int i = 0; i < 32; i++) {
+            Point size = new(44, 55);
+            Vector2 offset = new Vector2(-3f, 10f);
+            if (player.FacedRight()) {
+                offset.X += 2f;
+            }
+            int dust = Dust.NewDust(center - size.ToVector2() / 2f + offset, size.X, size.Y, Utils.SelectRandom<int>(Main.rand, 6, 259, 158), 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].fadeIn = 1f;
+            Main.dust[dust].velocity.X *= 0.1f;
+            Main.dust[dust].velocity.Y -= 0.5f;
+            Main.dust[dust].velocity.Y *= 2.5f;
+        }
+        Vector2 positionInWorld = position;
+        bool flag = false;
+        for (int i = 0; i < 15; i++) {
+            Vector2 value = Main.rand.NextVector2Circular(3f, 3f);
+            float num = Main.rand.NextFloat() * 0.25f;
+            float alphaModifier = 0.75f;
+            Dust dust = Dust.CloneDust(Dust.NewDustPerfect(positionInWorld + Main.rand.NextVector2Circular(player.width, player.height), DustID.SparkForLightDisc, value, 0,
+                Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), num) * alphaModifier, 2.3f + 0.4f * Main.rand.NextFloat()));
+            dust.scale -= 0.6f;
+            dust.color = Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), num + 0.75f) * alphaModifier;
+        }
     }
 
     protected override void SafeDismountMount(Player player, ref bool skipDust) {
         skipDust = true;
-
         if (player.statLife <= 0 && player.whoAmI == Main.myPlayer) {
             player.KillMe(PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.Phoenix0").ToNetworkText(player.name)), 1.0, 0);
         }
-
         player.GetFormHandler().ResetPhoenixStats();
+
+        Vector2 position = player.GetPlayerCorePoint() + player.velocity + Vector2.UnitY * 2f;
+        Vector2 positionInWorld = position;
+        bool flag = false;
+        for (int i = 0; i < 15; i++) {
+            Vector2 value = Main.rand.NextVector2Circular(3f, 3f);
+            if (value.Y > 0f) {
+                value.Y *= -1f;
+            }
+            if (flag) {
+                value *= 1.5f;
+            }
+            float num = Main.rand.NextFloat() * 0.25f;
+            float alphaModifier = 0.75f;
+            Dust dust = Dust.CloneDust(Dust.NewDustPerfect(positionInWorld + Main.rand.NextVector2Circular(player.width, player.height), DustID.SparkForLightDisc, value, 0,
+                Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), num) * alphaModifier, 2.3f + 0.4f * Main.rand.NextFloat()));
+            dust.scale -= 0.6f;
+            dust.color = Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), num + 0.75f) * alphaModifier;
+        }
+        Vector2 center = position;
+        for (int i = 0; i < 56; i++) {
+            Point size = new(40, 55);
+            Vector2 offset = new Vector2(-2f, -2f);
+            int dust = Dust.NewDust(center - size.ToVector2() / 2f + offset, size.X, size.Y, Utils.SelectRandom<int>(Main.rand, 6, 259, 158), 0, Main.rand.NextFloat(-3f, -0.5f), 0, default(Color), Main.rand.NextFloat(0.6f, 2.4f));
+            Main.dust[dust].noGravity = true;
+            Main.dust[dust].fadeIn = 1f;
+            Main.dust[dust].velocity.X *= 0.1f;
+            Main.dust[dust].velocity.Y += 0.5f;
+            Main.dust[dust].velocity.Y *= 1.5f;
+            Main.dust[dust].velocity.Y *= 0.5f;
+        }
     }
 
     protected override void AdjustFrameBox(Player player, ref Rectangle frame) {

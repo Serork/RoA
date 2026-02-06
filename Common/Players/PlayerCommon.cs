@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
+using RoA.Common.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Accessories.Hardmode;
