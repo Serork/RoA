@@ -5,14 +5,32 @@ using ModLiquidLib.Utils;
 
 using RoA.Content.Liquids;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Map;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
 
 sealed class TarDebuff : ModBuff {
+    public override void Load() {
+        On_Main.TryGetBuffTime += On_Main_TryGetBuffTime;
+    }
+
+    private bool On_Main_TryGetBuffTime(On_Main.orig_TryGetBuffTime orig, int buffSlotOnPlayer, out int buffTimeValue) {
+        int num = Main.LocalPlayer.buffType[buffSlotOnPlayer];
+        Player self = Main.LocalPlayer;
+        if (self.GetModdedWetArray()[LiquidLoader.LiquidType<Tar>() - LiquidID.Count] && num == ModContent.BuffType<TarDebuff>()) {
+            buffTimeValue = 0;
+            return false;
+        }
+        bool result = orig(buffSlotOnPlayer, out buffTimeValue);
+        return result;
+    }
+
     public override void SetStaticDefaults() {
         Main.debuff[Type] = true;
         Main.pvpBuff[Type] = true;
