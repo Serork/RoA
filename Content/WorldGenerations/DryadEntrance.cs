@@ -252,8 +252,8 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
                     Main.tile[x2, y2].WallType = woodWallType;
                 }
                 if (Main.tile[x2, y2].TileType == leafBlockTileType) {
-                    for (int grassX = x2 - 2; grassX < x2 + 3; grassX++) {
-                        for (int grassY = y2 - 2; grassY < y2 + 3; grassY++) {
+                    for (int grassX = x2 - 1; grassX < x2 + 2; grassX++) {
+                        for (int grassY = y2 - 1; grassY < y2 + 2; grassY++) {
                             if (Main.tile[grassX, grassY].TileType == TileID.Grass || (WorldGen.notTheBees && Main.tile[grassX, grassY].TileType == TileID.JungleGrass) || (HasSpiritModAndSavannahSeed && Main.tile[grassX, grassY].TileType == GetSavannaGrassTileType())) {
                                 Main.tile[grassX, grassY].TileType = dirtTileType;
                                 WorldGen.SquareTileFrame(grassX, grassY);

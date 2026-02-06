@@ -36,14 +36,14 @@ sealed class HornetSkull_WorldGen : ModSystem {
                                 }
                                 if (flag4) {
                                     WorldGenHelper.Place3x2(num438, num439 - 1, (ushort)ModContent.TileType<HornetFlowers>(), Main.rand.NextBool().ToInt());
-                                    Console.WriteLine($"{num438}, {num439}");
+                                    //Console.WriteLine($"{num438}, {num439}");
                                 }
                                 else {
                                     flag24 = true;
                                 }
                                 if (WorldGenHelper.GetTileSafely(num438, num439 - 1).TileType == ModContent.TileType<HornetFlowers>()) {
                                     flag24 = true;
-                                    Console.WriteLine($"{num438}, {num439}");
+                                    //Console.WriteLine($"{num438}, {num439}");
                                 }
                                 else {
                                     num437++;
