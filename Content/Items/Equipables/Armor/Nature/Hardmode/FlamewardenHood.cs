@@ -8,6 +8,8 @@ using RoA.Common.Players;
 using RoA.Content.Forms;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -38,6 +40,13 @@ sealed class FlamewardenHood : NatureItem, ItemGlowMaskHandler.IDrawArmorGlowMas
 
     public override void UpdateArmorSet(Player player) {
         BaseFormHandler.KeepFormActive(player);
+
+        float opacity = player.GetWreathHandler().ActualProgress4;
+        float opacity2 = opacity;
+        opacity = Utils.GetLerpValue(0.85f, 0.95f, opacity2, true);
+        opacity *= Utils.GetLerpValue(1f, 0.95f, opacity2, true);
+        Color baseColor = new(249, 75, 7);
+        Lighting.AddLight(player.GetPlayerCorePoint(), baseColor.ToVector3() * 0.5f * opacity);
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
