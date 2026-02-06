@@ -304,7 +304,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                     Vector2 position = themBGInfo.Position;
                     position = (position - vector) * vector2 + vector - Main.screenPosition;
                     position.X = (position.X + 500f) % 4000f;
-                    position.Y += 3000f;
+                    position.Y += BackwoodsVars.BackwoodsCenterY * 6.25f;
                     if (position.X < 0f)
                         position.X += 4000f;
 
