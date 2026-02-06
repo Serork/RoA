@@ -2897,5 +2897,5 @@ NaturePriestHood: {
 
 ClarityPotion: {
 	DisplayName: Clarity Potion
-	Tooltip: ""
+	Tooltip: Makes it easier to see through liquids
 }
