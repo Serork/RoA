@@ -130,7 +130,7 @@ sealed class Phoenix : BaseForm {
         MountData.xOffset = -8;
         MountData.yOffset = -6;
 
-        MountData.playerHeadOffset = -14;
+        MountData.playerHeadOffset = -20;
 
         if (!Main.dedServ) {
             _burnoutTexture = ModContent.Request<Texture2D>(Texture + "_Burnout");
