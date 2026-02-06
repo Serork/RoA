@@ -48,6 +48,9 @@ sealed class DistilleryOfDeath : ModItem {
 
     private void ExtraDrawLayerSupport_PreBackpackDrawEvent(ref PlayerDrawSet drawinfo) {
         Player player = drawinfo.drawPlayer;
+        if (!player.IsAlive()) {
+            return;
+        }
         if (player.GetSelectedItem().type == ModContent.ItemType<DistilleryOfDeath>()) {
             //ExtraDrawLayerSupport.DrawBackpack(_backTexture, ref drawinfo);
             if (!drawinfo.hideEntirePlayer && !player.dead) {
