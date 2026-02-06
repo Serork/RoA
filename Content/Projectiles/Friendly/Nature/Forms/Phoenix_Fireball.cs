@@ -330,7 +330,7 @@ sealed class PhoenixFireball : FormProjectile {
         miscShaderData.UseSaturation(_phoenixDashed ? -2f : -0.5f);
         miscShaderData.UseOpacity(10f);
         miscShaderData.UseOpacity(3f);
-        miscShaderData.Shader.Parameters["uTime"]?.SetValue(TimeSystem.TimeForVisualEffects + (1f + Projectile.whoAmI) * 2);
+        miscShaderData.Shader.Parameters["uTime"]?.SetValue(TimeSystem.TimeForVisualEffects + (1f + Projectile.whoAmI) * 10);
         miscShaderData.Apply();
         _vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot, 
             StripColors, StripWidth,
