@@ -40,6 +40,8 @@ sealed class HandOfGod : ClawsBaseItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 80);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
+
+        Item.autoReuse = true;
     }
 
     protected override void SetSpecialAttackData(Player player, ref ClawsHandler.AttackSpawnInfoArgs args) {

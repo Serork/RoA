@@ -29,6 +29,8 @@ sealed class GutwrenchingHooks : ClawsBaseItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 27);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.8f);
+
+        Item.autoReuse = false;
     }
 
     protected override (Color, Color) SetSlashColors(Player player) => (new Color(216, 73, 73), new Color(255, 114, 114));

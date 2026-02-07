@@ -33,6 +33,8 @@ sealed class HellfireClaws : ClawsBaseItem<HellfireClaws.HellfireClawsSlash> {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 34);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
+
+        Item.autoReuse = false;
     }
 
     public override bool ResetOnHit => true;

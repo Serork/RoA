@@ -31,6 +31,8 @@ sealed class ElderwoodClaws : ClawsBaseItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 16);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
+
+        Item.autoReuse = false;
     }
 
     protected override (Color, Color) SetSlashColors(Player player) => (new(62, 86, 80), new(94, 110, 102));

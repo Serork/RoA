@@ -55,6 +55,8 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 60);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
+
+        Item.autoReuse = true;
     }
 
     public override bool ResetOnHit => false;

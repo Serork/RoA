@@ -40,6 +40,8 @@ sealed class SolScorchers : ClawsBaseItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 70);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
+
+        Item.autoReuse = true;
     }
 
     public override bool ResetOnHit => false;

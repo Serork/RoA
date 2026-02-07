@@ -29,6 +29,8 @@ sealed class ThornyClaws : ClawsBaseItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 28);
         NatureWeaponHandler.SetFillingRateModifier(Item, 1f);
+
+        Item.autoReuse = false;
     }
 
     protected override (Color, Color) SetSlashColors(Player player) => (new Color(75, 167, 85), new Color(100, 200, 110));

@@ -29,6 +29,8 @@ sealed class HorrorPincers : ClawsBaseItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 27);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.8f);
+
+        Item.autoReuse = false;
     }
 
     protected override (Color, Color) SetSlashColors(Player player) => (new Color(112, 75, 140), new Color(130, 100, 210));
