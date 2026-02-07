@@ -25,6 +25,8 @@ using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
+using static Terraria.GameContent.PlayerEyeHelper;
+
 namespace RoA.Common.Druid.Forms;
 sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
@@ -321,6 +323,8 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
     private static MovementSpeedInfo _playerMovementSpeedInfo;
 
     public override void Load() {
+        On_PlayerEyeHelper.SetStateByPlayerInfo += On_PlayerEyeHelper_SetStateByPlayerInfo;
+
         On_TileObject.DrawPreview += On_TileObject_DrawPreview;
         On_Main.DrawInterface_40_InteractItemIcon += On_Main_DrawInterface_40_InteractItemIcon;
         On_Player.QuickMount += On_Player_QuickMount;
@@ -342,6 +346,15 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
         On_LegacyPlayerRenderer.DrawPlayer += On_LegacyPlayerRenderer_DrawPlayer;
 
         Load1();
+    }
+
+    private void On_PlayerEyeHelper_SetStateByPlayerInfo(On_PlayerEyeHelper.orig_SetStateByPlayerInfo orig, ref PlayerEyeHelper self, Player player) {
+        if (!player.GetFormHandler().IsInADruidicForm && player.GetWreathHandler().StartSlowlyIncreasingUntilFull && player.GetWreathHandler().ActualProgress4 >= 0.5f) {
+            self.SwitchToState(EyeState.IsBlind);
+            return;
+        }
+
+        orig(ref self, player);
     }
 
     private void On_LegacyPlayerRenderer_DrawPlayer(On_LegacyPlayerRenderer.orig_DrawPlayer orig, LegacyPlayerRenderer self, Terraria.Graphics.Camera camera, Player drawPlayer, Vector2 position, float rotation, Vector2 rotationOrigin, float shadow, float scale) {
