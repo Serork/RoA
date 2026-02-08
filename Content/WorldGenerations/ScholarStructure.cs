@@ -211,7 +211,7 @@ sealed class ScholarStructure : IInitializer {
         }
         for (int i = -sizeX2 + 2; i <= sizeX2 + 5 - 3;) {
             int x = center.X + i;
-            if (Math.Abs(x - center.X) < 38) {
+            if (Math.Abs(x - center.X) < 40) {
                 i++;
                 continue;
             }
