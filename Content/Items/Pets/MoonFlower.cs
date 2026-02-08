@@ -54,7 +54,7 @@ sealed class MoonFlower : ModItem {
     }
 
     public override bool? UseItem(Player player) {
-        if (player.whoAmI == Main.myPlayer && player.itemTime == 0) player.AddBuff(Item.buffType, 3600, true);
+        if (player.whoAmI == Main.myPlayer && player.itemAnimation == 0) player.AddBuff(Item.buffType, 3600, true);
         return null;
     }
 

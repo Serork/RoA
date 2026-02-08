@@ -174,6 +174,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public float DuskStagVelocityFactor;
     public int DustStagDirection;
 
+    public bool IsAriesActive;
+
     public byte CrystallineNeedleIndexToBeAdded { get; private set; }
     public (ushort, ushort)[] CrystallineNeedleTime { get; private set; } = new (ushort, ushort)[5];
     public float[] CrystallineNeedleRotation { get; private set; } = new float[5];
@@ -1440,6 +1442,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsAriesActive = false;
+
         IsClarityEffectActive = false;
 
         ShouldUpdateAdvancedShadows = false;
