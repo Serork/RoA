@@ -66,7 +66,7 @@ sealed class Aries : ModProjectile {
     }
 
     public override void AI() {
-        int walkFrameCounter = 20;
+        int walkFrameCounter = 16;
         int flyFrameCoutner = 8;
 
         Projectile.frameCounter = 0;
