@@ -606,6 +606,9 @@ sealed class ElderSnail : ModNPC, IRequestAssets {
         applyAdjustedVanillaSnailAI();
 
         foreach (Player target in Main.ActivePlayers) {
+            if (target.buffImmune[BuffID.Slow]) {
+                continue;
+            }
             Rectangle targetRect = target.getRect();
             targetRect.Inflate(10, 10);
             if (_passedPositions.Any(checkInfo => targetRect.Contains(checkInfo.Position.ToWorldCoordinates().ToPoint()))) {

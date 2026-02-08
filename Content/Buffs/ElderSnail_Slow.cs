@@ -19,5 +19,7 @@ sealed class ElderSnailSlow : ModBuff {
 
     public override void Update(Player player, ref int buffIndex) {
         player.GetCommon().ElderSnailSlow = true;
+
+
     }
 }
