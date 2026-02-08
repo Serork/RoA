@@ -2,8 +2,12 @@
 
 using ModLiquidLib.ModLoader;
 
+using ReLogic.Utilities;
+
+using RoA.Common.BackwoodsSystems;
 using RoA.Content.Liquids;
 using RoA.Content.Tiles.Ambient;
+using RoA.Content.Tiles.Walls;
 using RoA.Core.Utility;
 
 using System;
@@ -21,7 +25,78 @@ namespace RoA.Content.WorldGenerations;
 
 // TODO: seeds support
 sealed class TarBiome_GenPass : ModSystem {
+    private void WallVariety(GenerationProgress progress, GameConfiguration configuration) {
+        progress.Message = Lang.gen[79].Value;
+        double num568 = (double)(Main.maxTilesX * Main.maxTilesY) / 5040000.0;
+        int num569 = (int)(300.0 * num568);
+        int num570 = num569;
+        ShapeData shapeData = new ShapeData();
+        while (num569 > 0) {
+            progress.Set(1.0 - (double)num569 / (double)num570);
+            Point point2 = WorldGen.RandomWorldPoint((int)GenVars.worldSurface, 2, 190, 2);
+            while (Vector2D.Distance(new Vector2D(point2.X, point2.Y), GenVars.shimmerPosition) < (double)WorldGen.shimmerSafetyDistance) {
+                point2 = WorldGen.RandomWorldPoint((int)GenVars.worldSurface, 2, 190, 2);
+            }
+            bool flag = true;
+            int num = 5;
+            while (flag) {
+                bool flag2 = false;
+                int x = point2.X;
+                int y = point2.Y;
+                for (int i = x - num; i <= x + num; i++) {
+                    if (flag2) {
+                        break;
+                    }
+                    for (int j = y - num; j <= y + num; j++) {
+                        if (!WorldGen.InWorld(i, j))
+                            continue;
+
+                        if (Main.tile[i, j].WallType == TarBiome.TARWALLTYPE) {
+                            point2 = WorldGen.RandomWorldPoint((int)GenVars.worldSurface, 2, 190, 2);
+                            flag2 = true;
+                            break;
+                        }
+                    }
+                }
+                if (!flag2) {
+                    flag = false;
+                }
+            }
+
+            Tile tile6 = Main.tile[point2.X, point2.Y];
+            Tile tile7 = Main.tile[point2.X, point2.Y - 1];
+            ushort num571 = 0;
+            if (tile6.TileType == 60)
+                num571 = (ushort)(204 + WorldGen.genRand.Next(4));
+            else if (tile6.TileType == 1 && tile7.WallType == 0)
+                num571 = (WorldGen.remixWorldGen ? (((double)point2.Y > GenVars.rockLayer) ? ((ushort)(196 + WorldGen.genRand.Next(4))) : ((point2.Y <= GenVars.lavaLine || WorldGen.genRand.Next(2) != 0) ? ((ushort)(212 + WorldGen.genRand.Next(4))) : ((ushort)(208 + WorldGen.genRand.Next(4))))) : (((double)point2.Y < GenVars.rockLayer) ? ((ushort)(196 + WorldGen.genRand.Next(4))) : ((point2.Y >= GenVars.lavaLine) ? ((ushort)(208 + WorldGen.genRand.Next(4))) : ((ushort)(212 + WorldGen.genRand.Next(4))))));
+
+            if (tile6.HasTile && num571 != 0 && !tile7.HasTile) {
+                bool foundInvalidTile = false;
+                bool flag34 = ((tile6.TileType != 60) ? WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData), new Actions.ContinueWrapper(Actions.Chain(new Modifiers.IsTouching(true, 60, 147, 161, 396, 397, 70, 191), new Modifiers.IsTouching(true, 147, 161, 396, 397, 70, 191), new Actions.Custom(delegate {
+                    foundInvalidTile = true;
+                    return true;
+                }))))) : WorldUtils.Gen(new Point(point2.X, point2.Y - 1), new ShapeFloodFill(1000), Actions.Chain(new Modifiers.IsNotSolid(), new Actions.Blank().Output(shapeData), new Actions.ContinueWrapper(Actions.Chain(new Modifiers.IsTouching(true, 147, 161, 396, 397, 70, 191), new Actions.Custom(delegate {
+                    foundInvalidTile = true;
+                    return true;
+                }))))));
+
+                if (shapeData.Count > 50 && flag34 && !foundInvalidTile) {
+                    WorldUtils.Gen(new Point(point2.X, point2.Y), new ModShapes.OuterOutline(shapeData, useDiagonals: true, useInterior: true), Actions.Chain(new Modifiers.SkipWalls(87), new Actions.PlaceWall(num571)));
+                    num569--;
+                }
+
+                shapeData.Clear();
+            }
+        }
+    }
+    
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
+        int genIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Wall Variety"));
+        tasks.RemoveAt(genIndex);
+        string pass = "Wall Variety";
+        tasks.Insert(genIndex, new PassLegacy(pass, WallVariety, 5988.0283f));
+
         tasks.Insert(tasks.FindIndex(task => task.Name == "Settle Liquids") + 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             int num916 = 5 * WorldGenHelper.WorldSize;
             double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
@@ -64,20 +139,20 @@ sealed class TarBiome_GenPass : ModSystem {
             for (int j = 5; j < Main.maxTilesX - 5; j++) {
                 for (int k = 5; k < Main.maxTilesY - 5; k++) {
                     Tile tile = Main.tile[j, k];
-                    if (tile.LiquidAmount > 0 && tile.LiquidType == tarLiquid) {
-                        for (int k2 = -10 + WorldGen.genRand.Next(-2, 2); k2 < WorldGen.genRand.Next(-2, 3); k2++) {
-                            int x = 3 + WorldGen.genRand.Next(-2, 3);
-                            for (int j2 = -x; j2 <= x; j2++) {
-                                Tile tile2 = Main.tile[j + j2, k + k2];
-                                if (tile2.WallType != TarBiome.TARWALLTYPE) {
-                                    tile2.WallType = TarBiome.TARWALLTYPE;
-                                }
-                                if (tile2.LiquidAmount > 0 && tile2.LiquidType != tarLiquid) {
-                                    tile2.LiquidAmount = 0;
-                                }
-                            }
-                        }
-                    }
+                    //if (tile.LiquidAmount > 0 && tile.LiquidType == tarLiquid) {
+                    //    for (int k2 = -10 + WorldGen.genRand.Next(-2, 2); k2 < WorldGen.genRand.Next(-2, 3); k2++) {
+                    //        int x = 3 + WorldGen.genRand.Next(-2, 3);
+                    //        for (int j2 = -x; j2 <= x; j2++) {
+                    //            Tile tile2 = Main.tile[j + j2, k + k2];
+                    //            if (tile2.WallType != TarBiome.TARWALLTYPE) {
+                    //                tile2.WallType = TarBiome.TARWALLTYPE;
+                    //            }
+                    //            if (tile2.LiquidAmount > 0 && tile2.LiquidType != tarLiquid) {
+                    //                tile2.LiquidAmount = 0;
+                    //            }
+                    //        }
+                    //    }
+                    //}
                     if (tile.HasTile) {
                         if (tile.TileType == TarBiome.TARTILETYPE) {
                             if (Main.tile[j, k - 1].LiquidType == tarLiquid && Main.tile[j, k - 1].LiquidAmount == 255 && tile.Slope != Terraria.ID.SlopeType.Solid) {
