@@ -750,7 +750,7 @@ AlchemicalSkull: {
 
 Coffin: {
 	DisplayName: Coffin
-	Tooltip: Taking damage releases bones which return back to the coffin
+	Tooltip: Releases bones which return back to the coffin when damaged
 }
 
 Herbarium: {
@@ -1079,7 +1079,7 @@ WorshipperMantle: {
 
 SentinelShield: {
 	DisplayName: Sentinel Shield
-	Tooltip: Has a chance to unleash vengeful spirits instead of taking damage
+	Tooltip: Has a chance to unleash vengeful spirits instead when damaged
 }
 
 DynastyWoodBreastplate: {
@@ -2682,7 +2682,7 @@ SandalwoodStompers: {
 	Tooltip:
 		'''
 		Increases movement speed and falling acceleration
-		Landing or standing still covers an area in canopy that harms enemies and increases defense by up to 25
+		Landing or standing still enroots the area, harming enemies and increasing defense by up to 25
 		'''
 }
 
@@ -2699,7 +2699,7 @@ MaidensBracers: {
 	DisplayName: Maiden's Bracers
 	Tooltip:
 		'''
-		Increased damage by 25%
+		25% increased damage
 		Damage dealt is reflected back
 		'I've been hiding my pain, you see?'
 		'''
@@ -2728,18 +2728,14 @@ ObsidianStopwatch: {
 	DisplayName: Obsidian Stopwatch
 	Tooltip:
 		'''
-		Rewinds the user's position and grants temporary improvements to all stats when damaged 
+		Rewinds position and grants temporary improvements to all stats when damaged 
 		'Welcome... to the True Man's World'
 		'''
 }
 
 HereticsVeil: {
 	DisplayName: Heretic's Veil
-	Tooltip:
-		'''
-		Holder's soul ignites when under 100 life
-		Increases life regeneration and reduces damage taken
-		'''
+	Tooltip: Wearer's soul burns when under 100 life, increasing life regeneration and reducing damage taken
 }
 
 BansheesGuard: {
@@ -2756,8 +2752,8 @@ BoneSerpentTail: {
 	DisplayName: Bone Serpent Tail
 	Tooltip:
 		'''
-		+6% critical strike chance
-		This effect is doubled while affected by a damaging debuff
+		6% increased critical strike chance
+		The effect is doubled if the wearer affected by a damaging debuff
 		'''
 }
 
@@ -2774,7 +2770,7 @@ GobletOfPain: {
 	DisplayName: Goblet Of Pain
 	Tooltip:
 		'''
-		15% increased damage
+		10% increased damage
 		May poison the user upon dealing a critical hit
 		'It eats away at my flesh!'
 		'''
@@ -2808,7 +2804,7 @@ BrawlerMask: {
 	DisplayName: Brawler Mask
 	Tooltip:
 		'''
-		50% chance to apply incoming damage and negative effects to nearby enemies
+		50% chance to reflect damage and negative effects to nearby enemies when damaged
 		'There can be no bravery without madness'
 		'''
 }
@@ -2819,11 +2815,11 @@ BlueRose: {
 }
 
 DistilleryOfDeath: {
-	DisplayName: Distillery Of Death
+	DisplayName: Morbid Distillery
 	Tooltip:
 		'''
 		Uses gel for ammo
-		Ignores 15 points of enemy Defense
+		Ignores 15 points of enemy defense
 		Sprays toxic chemicals with different properties
 		'''
 }
@@ -2875,14 +2871,18 @@ CrystallineNeedle: {
 	DisplayName: Crystalline Needle
 	Tooltip:
 		'''
-		Consumes a full wreath charge to boost critical strike chance when damaged
+		Consumes a full wreath charge when damaged to boost critical strike chance
 		'No voice to cry suffering'
 		'''
 }
 
 PinCushion: {
 	DisplayName: Pin Cushion
-	Tooltip: Charges up wreath and consumes a full wreath charge to boost critical strike chance when damaged
+	Tooltip:
+		'''
+		Charges up wreath when damaged
+		Consumes a full wreath charge when damaged to boost critical strike chance
+		'''
 }
 
 NaturePriestCape: {
@@ -2902,5 +2902,9 @@ ClarityPotion: {
 
 AriesCard: {
 	DisplayName: Aries Card
-	Tooltip: ""
+	Tooltip:
+		'''
+		Summons a sovereign seraphic incarnation
+		'The stars of this sky have no name.'
+		'''
 }

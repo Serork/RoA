@@ -327,13 +327,13 @@ Unhinged: {
 }
 
 ElderSnailSlow: {
-	DisplayName: Snail Goo
-	Description: Movement speed greatly reduced
+	DisplayName: Slow
+	Description: "{$BuffDescription.Slow}"
 }
 
 SnailBuff: {
 	DisplayName: Elder Shell
-	Description: Defence briefly increased
+	Description: Defense briefly increased
 }
 
 BuffLantern: {
@@ -343,21 +343,21 @@ BuffLantern: {
 
 WiseDefense: {
 	DisplayName: Wise Defense
-	Description: Mods.RoA.Buffs.WiseDefense.Description
+	Description: Standing still improves defense
 }
 
 TempBuffer: {
-	DisplayName: Temp Buffer
-	Description: Negates any damage once
+	DisplayName: Buffer
+	Description: Negates one instance of damage
 }
 
 Rewind: {
 	DisplayName: Rewind
-	Description: Mods.RoA.Buffs.Rewind.Description
+	Description: Taking damage rewinds back time
 }
 
 Phoenix: {
-	DisplayName: Phoenix
+	DisplayName: Phoenix Form
 	Description: Mods.RoA.Buffs.Phoenix.Description
 }
 
@@ -368,5 +368,5 @@ Clarity: {
 
 Aries: {
 	DisplayName: Aries
-	Description: Mods.RoA.Buffs.Aries.Description
+	Description: Cob is watching {0} with great interest
 }

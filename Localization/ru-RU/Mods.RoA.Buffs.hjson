@@ -327,8 +327,8 @@ Unhinged: {
 }
 
 ElderSnailSlow: {
-	DisplayName: Улиточная слизь
-	Description: Скорость передвижения сильно снижена
+	DisplayName: Медлительность
+	Description: "{$BuffDescription.Slow}"
 }
 
 SnailBuff: {
@@ -342,31 +342,31 @@ BuffLantern: {
 }
 
 WiseDefense: {
-	// DisplayName: Wise Defense
-	// Description: Mods.RoA.Buffs.WiseDefense.Description
+	DisplayName: Защита мудреца
+	Description: Повышена защита, если стоять на месте
 }
 
 TempBuffer: {
-	DisplayName: Временный буффер
+	DisplayName: Демпфер
 	Description: Единоразово обнуляет получаемый урон
 }
 
 Rewind: {
 	DisplayName: Отсчёт
-	// Description: Mods.RoA.Buffs.Rewind.Description
+	Description: Отматывает время при получении урона
 }
 
 Phoenix: {
-	// DisplayName: Phoenix
+	DisplayName: Форма феникса
 	// Description: Mods.RoA.Buffs.Phoenix.Description
 }
 
 Clarity: {
-	// DisplayName: Clarity
-	// Description: Improved vision in liquids
+	DisplayName: Ясность
+	Description: Повышена видимость при плавании
 }
 
 Aries: {
-	// DisplayName: Aries
-	// Description: Mods.RoA.Buffs.Aries.Description
+	DisplayName: Козерог
+	Description: Коб с интересом наблюдает за {0}
 }

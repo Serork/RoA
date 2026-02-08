@@ -133,7 +133,7 @@ DiabolicDaikatana: {
 
 RodOfTheDragonfire: {
 	DisplayName: Жезл костра
-	Tooltip: Выпускает огненных летучих мышей, что преследуют ваших врагов
+	Tooltip: Выпускает огненных летучих мышей, что преследуют ваших противников
 }
 
 RodOfTheStream: {
@@ -146,7 +146,7 @@ RodOfTheShock: {
 	Tooltip:
 		'''
 		Выпускает разряд молнии
-		Урон молнии игнорирует вражескую защиту
+		Игнорирует защиту противников
 		'''
 }
 
@@ -194,7 +194,7 @@ GiantTreeSapling: {
 	Tooltip:
 		'''
 		Снижает скорость опустошения венка на 15%
-		Когда венок заполнен, увеличивает защиту на 5
+		Когда венок заполнен, увеличивает защиту на 5 ед.
 		'''
 }
 
@@ -205,7 +205,7 @@ FireflyPin: {
 
 RavencallersCloak: {
 	DisplayName: Плащ воронаря
-	Tooltip: Отбрасывает тень, привлекающую внимание врагов
+	Tooltip: Отбрасывает тень, привлекающую внимание противников
 }
 
 Tapper: {
@@ -237,7 +237,7 @@ TanningRack: {
 	DisplayName: Дубильный станок
 	Tooltip:
 		'''
-		Позволяет добывать сыромятную кожу с врагов
+		Позволяет добывать сыромятную кожу с противников
 		Ее необходимо обработать, пока она не испортилась
 		Не может быть установлен, когда эффект активен
 		'''
@@ -355,8 +355,8 @@ FenethsBlazingWreath: {
 	DisplayName: Искрящийся венок
 	Tooltip:
 		'''
-		Венок заполняется нанесением природного урона и даёт шанс вплоть до 25% на то, что атаки вырастят на вас и врагах бутоны огнецветов
-		Когда венок заполнен, увеличивает отбрасывание природного оружия и огнецветы взрываются во временем, распространяясь на врагов поблизости
+		Венок заполняется нанесением природного урона и даёт шанс вплоть до 25% на то, что атаки вырастят на вас и противниках бутоны огнецветов
+		Когда венок заполнен, увеличивает отбрасывание природного оружия и огнецветы взрываются во временем, распространяясь на противников поблизости
 		'''
 }
 
@@ -766,14 +766,14 @@ AlchemicalSkull: {
 
 Coffin: {
 	DisplayName: Гроб
-	Tooltip: Разбрасывает кости при получении урона, которые прилетают затем обратно
+	Tooltip: Разбрасывает кости при получении урона, которые затем прилетают обратно
 }
 
 Herbarium: {
 	DisplayName: Гербарий
 	Tooltip:
 		'''
-		Враги иногда оставляют лечебные травы при смерти
+		Противники иногда оставляют лечебные травы при смерти
 		Если венок заполнен, поглощает его вместе с травкой, чтобы восстановить больше здоровья
 		'''
 }
@@ -1095,7 +1095,7 @@ WorshipperMantle: {
 
 SentinelShield: {
 	DisplayName: Щит дозорного
-	Tooltip: Дает шанс выпустить мстительных духов вместо получения урона
+	Tooltip: Дает шанс выпустить мстительных духов при получении урона
 }
 
 DynastyWoodBreastplate: {
@@ -1208,8 +1208,8 @@ BloodshedAxe: {
 	DisplayName: Топор кровопролития
 	Tooltip:
 		'''
-		Тратит здоровье, чтобы пометить врагов
-		Забирает здоровье помеченых врагов
+		Тратит здоровье, чтобы пометить противников
+		Забирает здоровье помеченых противников
 		'Да будет кровь'
 		'''
 }
@@ -1236,7 +1236,7 @@ LothorTrophy: {
 
 BloodbathLocket: {
 	DisplayName: Подвеска резни
-	Tooltip: Увеличивает урон на 1% за каждого врага и на 5% за каждого босса поблизости, вплоть до 25%
+	Tooltip: Увеличивает урон на 1% за каждого противника и на 5% за каждого босса поблизости, вплоть до 25%
 }
 
 ChemicalPrisoner: {
@@ -1253,7 +1253,7 @@ FlederSlayer: {
 	DisplayName: Погибель нетопырей
 	Tooltip:
 		'''
-		Отправляет слабых врагов в полет сильным ударом
+		Отправляет лёгких противников в полет сильным ударом
 		Атакуйте в нужный момент, чтобы выпустить еще более мощную волнуы
 		'Слишком большой, чтобы называться мечем'
 		'''
@@ -1907,7 +1907,7 @@ RoyalQualityHoney: {
 	DisplayName: Мед королевского качества
 	Tooltip:
 		'''
-		Повышение регенерации здоровья даёт медовый бонус
+		Накладывает бафф "мёд", если регенерация увеличена
 		'Финики, сыр и полить мёдом'
 		'''
 }
@@ -2127,12 +2127,12 @@ TarDye: {
 
 ClingerStaff: {
 	DisplayName: Посох цеплятеля
-	Tooltip: Призывает хватателя, чтобы обжечь врагов проклятым пламенем
+	Tooltip: Призывает хватателя, чтобы обжечь противников проклятым пламенем
 }
 
 Pixiellation: {
 	DisplayName: '''"Офеевание"'''
-	Tooltip: Раздражает врагов натиском феечек
+	Tooltip: Раздражает противников натиском феечек
 }
 
 CrystalVileShard: {
@@ -2202,7 +2202,7 @@ SolScorchers: {
 	DisplayName: Палящее солнце
 	Tooltip:
 		'''
-		Тратит полный заряд венка, чтобы испеплить врагов малым солнцем
+		Тратит полный заряд венка, чтобы испеплить противников малым солнцем
 		'Золотые лучи прекрасного солнца'
 		'''
 }
@@ -2221,7 +2221,7 @@ ShadowflameClaws: {
 	DisplayName: Когти пламени тьмы
 	Tooltip:
 		'''
-		Тратят полный заряд венка, чтобы благославить врагов бутонами пламени тьмы
+		Тратят полный заряд венка, чтобы благославить противников бутонами пламени тьмы
 		'На твою могилу я принесу цветы'
 		'''
 }
@@ -2319,7 +2319,7 @@ DruidsEyes: {
 	DisplayName: Глаза друида
 	Tooltip:
 		'''
-		Получение урона заполняет венок
+		Заряжает венок при получении урона
 		Увеличивает скорость заполнения венка на 20%
 		Когда венок заполнен, увеличивает регенерацию здоровья
 		'''
@@ -2339,7 +2339,7 @@ HiTechCattleProd: {
 	DisplayName: Высокотехнологичное электропогоняло
 	Tooltip:
 		'''
-		Тратит полный заряд венка, чтобы измельчить врагов в удобрение
+		Тратит полный заряд венка, чтобы измельчить противников в удобрение
 		'С Земли с любовью!'
 		'''
 }
@@ -2385,14 +2385,14 @@ RodOfTheBifrost: {
 
 GlacierCane: {
 	DisplayName: Ледниковая трость
-	Tooltip: Сотворяет большую сосульку, которая разбивает врагов, словно стекло.
+	Tooltip: Сотворяет большую сосульку, которая разбивает противников, словно стекло
 }
 
 NewMoney: {
 	DisplayName: '''"Новые бабки"'''
 	Tooltip:
 		'''
-		Стреляет бронебойными пулями, которые со временем наносят большой всплеск урона врагам.
+		Стреляет бронебойными пулями, которые со временем наносят большой всплеск урона противникам
 		'Истекай кровью.'
 		'''
 }
@@ -2436,8 +2436,7 @@ LittleElixir: {
 	Tooltip:
 		'''
 		Маленькие сердечки восстанавливают больше здоровья
-		'Только ты нужна —
-		Выпью тебя до дна.'
+		'Только ты нужна — Выпью тебя до дна.'
 		'''
 }
 
@@ -2478,7 +2477,7 @@ HallowedVisor: {
 
 ElderShell: {
 	DisplayName: Древняя ракушка
-	Tooltip: Повышает защиту после выпитого лечащего зелья
+	Tooltip: Увеличивает защиту после выпитого лечащего зелья
 }
 
 ImmortalSnail: {
@@ -2486,16 +2485,16 @@ ImmortalSnail: {
 	Tooltip:
 		'''
 		Снижает время ожидания от лечащих зелий на 25%
-		Повышает защиту после выпитого лечащего зелья
+		Увеличивает защиту после выпитого лечащего зелья
 		'''
 }
 
 LifeSpiral: {
-	DisplayName: Повседневная рутина
+	DisplayName: '''"Повседневная рутина"'''
 	Tooltip:
 		'''
 		Обеспечивает регенерацию здоровья и снижает время ожидания от лечащих зелий на 25%
-		Повышает защиту после выпитого лечащего зелья
+		Увеличивает защиту после выпитого лечащего зелья
 		'''
 }
 
@@ -2504,7 +2503,7 @@ ElderShield: {
 	Tooltip:
 		'''
 		Поглощает 25% урона, нанесённого игрокам вашей команды, если их здоровье выше 25%
-		Повышает защиту, когда вы или ваши союзники пьёте лечащие зелья
+		Увеличивает защиту, когда вы или ваши союзники пьёте лечащие зелья
 		Даёт иммунитет к отбрасыванию
 		'''
 }
@@ -2580,7 +2579,7 @@ MoneyNecklace: {
 }
 
 BulbCane: {
-	DisplayName: '''"Вечно свободный"'''
+	DisplayName: '''"Навечно свободный"'''
 	// Tooltip: ""
 }
 
@@ -2656,12 +2655,12 @@ MarineMulcher: {
 
 MinersDelight: {
 	DisplayName: '''"Радость шахтёра"'''
-	/* Tooltip:
+	Tooltip:
 		'''
-		Medium improvements to all stats
-		Provides several random buffs and debuffs
-		'A palate of ups and downs'
-		''' */
+		Умеренно повышает все характеристики
+		Накладывает несколько случайных баффов и дебаффов
+		'Палитра взлётов и падений'
+		'''
 }
 
 GaeanBiedermeier: {
@@ -2686,87 +2685,83 @@ TarBrick: {
 
 DarkNeoplasm: {
 	DisplayName: Темная неоплазма
-	/* Tooltip:
+	Tooltip:
 		'''
-		Can be applied to an armor piece
-		Consumes life to mutate uncontrollably
-		Does not mix well with lava
-		''' */
+		Можно нанести на элемент брони
+		Потребляет здоровье, чтобы бесконтрольно мутировать
+		Не совместим с лавой
+		'''
 }
 
 ClumpExtractor: {
 	DisplayName: Извлекатель сгустков
-	// Tooltip: Collects neoplasm from formations deep within tar lakes
+	Tooltip: Собирает неоплазму из образований вблизи смоляных озёр
 }
 
 SandalwoodStompers: {
 	DisplayName: '''"Сандаловы топтуны"'''
-	/* Tooltip:
+	Tooltip:
 		'''
-		Increases movement speed and falling acceleration
-		Landing or standing still covers an area in canopy that harms enemies and increases defense by up to 25
-		''' */
+		Увеличивают скорость передвижения и ускорение свободного падения
+		Приземление или стояние на месте покрывает почву корнями, которые наносят урон противникам и увеличивают защиту на 25 ед.
+		'''
 }
 
 SeedOfWisdom: {
 	DisplayName: Семя мудрости
-	/* Tooltip:
+	Tooltip:
 		'''
-		Standing still increases defense by up to 25
-		'Defense is the best offense'
-		''' */
+		Увеличивает защиту на 25 ед., если стоять на месте
+		'Лучшее нападание есть защита
+		'''
 }
 
 MaidensBracers: {
 	DisplayName: Наручи девы
-	/* Tooltip:
+	Tooltip:
 		'''
-		Increased damage by 25%
-		Damage dealt is reflected back
-		'I've been hiding my pain, you see?'
-		''' */
+		25%-ное увеличение урона
+		Урон отражается обратно носителю
+		'Я прятал свою боль, не видно?"
+		'''
 }
 
 FossilizedSpiral: {
 	DisplayName: Окаменевшая спираль
-	/* Tooltip:
+	Tooltip:
 		'''
-		Provides buffer upon drinking a healing potion
-		Buffer prevents one instance of damage
-		'Seemingly indestructible - what kind of creature did this belong to?'
-		''' */
+		Даёт демпфер после выпитого лечащего зелья
+		Демпфер защищает от одного удара
+		'Как-будто бы неразрушима - какому же существу она принадлежала?'
+		'''
 }
 
 MysteryCake: {
 	DisplayName: Загадочный торт
-	/* Tooltip:
+	Tooltip:
 		'''
-		Major improvements to all stats
-		'I'm making a note here; "Huge success"'
-		''' */
+		Намного повышает все характеристики
+		'Я записала здесь: "БОЛЬШОЙ УСПЕХ"'
+		'''
 }
 
 ObsidianStopwatch: {
 	DisplayName: Обсидиановый секундомер
-	/* Tooltip:
+	Tooltip:
 		'''
-		Rewinds the user's position and grants temporary improvements to all stats when damaged 
-		'Welcome... to the True Man's World'
-		''' */
+		Отматывает местонахождение и кратковременно повышает все характеристики при получении урона
+		'Добро пожаловать... в мир настоящих мужчин!'
+		'''
 }
 
 HereticsVeil: {
 	DisplayName: Вуаль еретика
-	/* Tooltip:
-		'''
-		Holder's soul ignites when under 100 life
-		Increases life regeneration and reduces damage taken
-		''' */
+	Tooltip: Душа носителя воспламеняется, когда здоровье опускается ниже 100, увеличивая восстановление здоровья и снижая получаемый урон
 }
 
 BansheesGuard: {
 	DisplayName: Оберег банши
-	// Tooltip: Replaces some life hearts with harmful souls
+	Tooltip: Заменяет некоторый сердечки на мстительные души
 }
 
 AvengingSoul: {
@@ -2776,92 +2771,92 @@ AvengingSoul: {
 
 BoneSerpentTail: {
 	DisplayName: Хвост костяного змея
-	/* Tooltip:
+	Tooltip:
 		'''
-		+6% critical strike chance
-		This effect is doubled while affected by a damaging debuff
-		''' */
+		6%-ное увеличение шанса нанести критический удар
+		Эффект удваивается, если носитель подвержен дебаффу, наносящему урон
+		'''
 }
 
 SnakeIdol: {
 	DisplayName: Змеиный идол
-	/* Tooltip:
+	Tooltip:
 		'''
-		Enemies take additional damage for every debuff inflicted
-		Reduces holder's defense by 5 if affected by a debuff
-		''' */
+		Противники получают увеличенный урон за каждый наложенный на них дебафф
+		Снижает защиту носителя за каждый наложенный на него дебафф
+		'''
 }
 
 GobletOfPain: {
 	DisplayName: Кубок боли
-	/* Tooltip:
+	Tooltip:
 		'''
-		15% increased damage
-		May poison the user upon dealing a critical hit
-		'It eats away at my flesh!'
-		''' */
+		10%-ное увеличение урона
+		Критические удары отравляет носителя 
+		'Оно разъедает мою плоть!'
+		'''
 }
 
 ChromaticScarf: {
-	DisplayName: Хроматический шарф
-	/* Tooltip:
+	DisplayName: Многоцветный шарф
+	Tooltip:
 		'''
-		Critical strikes set enemies on fire
-		Fire type changes every 10 seconds
-		''' */
+		Критические удары воспламеняют противников
+		Тип огня меняется каждые 10 секунд
+		'''
 }
 
 ConjurersEye: {
 	DisplayName: Колдовское око
-	// Tooltip: Shoots energy beams while mana is regenerating
+	Tooltip: Стреляет лучами, пока мана восполняется
 }
 
 DoubleGoggles: {
-	// DisplayName: Double Goggles
-	// Tooltip: 50% chance not to consume mana while above 50% health
+	DisplayName: Двойные очки
+	Tooltip: 50% не потратить ману, пока здоровье выше 50%
 }
 
 HazelnutMask: {
-	// DisplayName: Hazelnut Mask
-	// Tooltip: "'Fair'"
+	DisplayName: Фундук-маска
+	Tooltip: "'Справедливо'"
 }
 
 BrawlerMask: {
-	// DisplayName: Brawler Mask
-	/* Tooltip:
+	DisplayName: Маска бойца
+	Tooltip:
 		'''
-		50% chance to apply incoming damage and negative effects to nearby enemies
-		'There can be no bravery without madness'
-		''' */
+		50% шанс отразить урон и отрицательные эффекты обратно противникам при получении урона 
+		'Без безумия не может быть храбрости'
+		'''
 }
 
 BlueRose: {
-	// DisplayName: Blue Rose
+	DisplayName: '''"Синяя роза"'''
 	// Tooltip: ""
 }
 
 DistilleryOfDeath: {
-	// DisplayName: Distillery Of Death
-	/* Tooltip:
+	DisplayName: Смертельный перегонный куб
+	Tooltip:
 		'''
-		Uses gel for ammo
-		Ignores 15 points of enemy Defense
-		Sprays toxic chemicals with different properties
-		''' */
+		Использует гель в качестве боеприпасов
+		Игнорирует 15 ед. защиты противников
+		Разбрызгивает токсичные химикаты с разными свойствами
+		'''
 }
 
 LightCompressor: {
-	// DisplayName: Light Compressor
-	// Tooltip: Attaches a light beam to targeted enemies
+	DisplayName: '''"Сцеженый свет"'''
+	Tooltip: Прикрепляет луч света к противникам
 }
 
 SatchelCharge: {
-	// DisplayName: Satchel Charge
-	/* Tooltip:
+	DisplayName: Satchel Charge
+	Tooltip:
 		'''
-		A massive, remotely activated explosion that will not destroy tiles
-		'Things about to go boom!'
-		''' */
+		Огромный, дистанционно управляемый взрыв, не разрушающий блоки
+		'Быстрый способ попасть навылет!'
+		'''
 }
 
 TfugiosHeadGuard: {
@@ -2870,59 +2865,67 @@ TfugiosHeadGuard: {
 }
 
 GardeningGloves: {
-	// DisplayName: Gardening Gloves
-	// Tooltip: Upon reaching full wreath charge, briefly absorbs incoming damage
+	DisplayName: Перчатки садовода
+	Tooltip: При полном заполнении венка, позволяют кратковременно игнорировать урон
 }
 
 DuskStag: {
-	// DisplayName: Dusk Stag
-	/* Tooltip:
+	DisplayName: Сумеречный жук-олень
+	Tooltip:
 		'''
-		Increases wreath charge rate by 20%
-		When full wreath charge effects end, they linger for 2 extra seconds
-		''' */
+		Увеличивает скорость заполнения венка на 20%
+		Когда эффекты полного заряда венка кончаются, они задерживаются на ещё 2 секунды
+		'''
 }
 
 FermentedSpiderEye: {
-	// DisplayName: Fermented Spider Eye
-	// Tooltip: Claws consume 30% less wreath charge upon activating a special attack
+	DisplayName: Маринованый паучий глаз
+	Tooltip: Когти тратят на 30% меньше заряда венка, чтобы активировать свою способность
 }
 
 PricklenutCharm: {
-	// DisplayName: Pricklenut Charm
-	// Tooltip: Charges up wreath when damaged
+	DisplayName: Подвеска с колким каштаном
+	Tooltip: Заряжает венок при получении урона
 }
 
 CrystallineNeedle: {
-	// DisplayName: Crystalline Needle
-	/* Tooltip:
+	DisplayName: Игла из кристала
+	Tooltip:
 		'''
-		Consumes a full wreath charge to boost critical strike chance when damaged
-		'No voice to cry suffering'
-		''' */
+		Тратит полный заряд венка при получении урона, чтобы повысить шанс критического удара
+		'И голоса нет, чтобы кричать от боли'
+		'''
 }
 
 PinCushion: {
-	// DisplayName: Pin Cushion
-	// Tooltip: Charges up wreath and consumes a full wreath charge to boost critical strike chance when damaged
+	DisplayName: Подушка с булавками
+	Tooltip:
+		'''
+		Заряжает венок при получении урона
+		Тратит полный заряд венка при получении урона, чтобы повысить шанс критического удара
+		'''
 }
 
 NaturePriestCape: {
-	// DisplayName: Nature Priest Cape
+	DisplayName: Накидка священника природы
 	// Tooltip: ""
 }
 
 NaturePriestHood: {
-	// DisplayName: Nature Priest Hood
+	DisplayName: Капюшон священника природы
 	// Tooltip: ""
 }
 
 ClarityPotion: {
-	// DisplayName: Clarity Potion
-	// Tooltip: Makes it easier to see through liquids
+	DisplayName: Зелье ясности
+	Tooltip: Позволяет лучше видеть при плавании
 }
 
 AriesCard: {
-	// DisplayName: Aries Card
-	// Tooltip: ""
+	DisplayName: Карта "Козерог"
+	Tooltip:
+		'''
+		Призывает властительное неземное воплощение
+		'У звёзд этого неба нет имён.'
+		'''
 }
