@@ -2921,3 +2921,8 @@ ClarityPotion: {
 	// DisplayName: Clarity Potion
 	// Tooltip: Makes it easier to see through liquids
 }
+
+AriesCard: {
+	// DisplayName: Aries Card
+	// Tooltip: ""
+}

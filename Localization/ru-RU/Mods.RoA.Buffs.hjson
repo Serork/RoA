@@ -365,3 +365,8 @@ Clarity: {
 	// DisplayName: Clarity
 	// Description: Improved vision in liquids
 }
+
+Aries: {
+	// DisplayName: Aries
+	// Description: Mods.RoA.Buffs.Aries.Description
+}
