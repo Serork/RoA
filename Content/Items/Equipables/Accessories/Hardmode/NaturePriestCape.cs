@@ -1,4 +1,8 @@
-﻿using Terraria;
+﻿using RoA.Common.Druid;
+using RoA.Common.Items;
+using RoA.Core.Utility.Vanilla;
+
+using Terraria;
 using Terraria.Enums;
 using Terraria.ModLoader;
 
@@ -15,6 +19,21 @@ sealed class NaturePriestCape : ModItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
+        player.GetDamage(DruidClass.Nature) += 0.1f;
+        player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.1f;
 
+        if (player.GetFormHandler().IsInADruidicForm) {
+            return;
+        }
+
+        if (player.GetWreathHandler().IsFull1) {
+            if (!player.GetCommon().IsNaturePriestCapeEffectActive) {
+                player.GetCommon().ActivateNaturePriestCapeEffect();
+                player.GetCommon().IsNaturePriestCapeEffectActive = true;
+            }
+        }
+        else {
+            player.GetCommon().IsNaturePriestCapeEffectActive = false;
+        }
     }
 }

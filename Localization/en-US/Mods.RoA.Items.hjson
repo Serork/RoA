@@ -2845,7 +2845,7 @@ TfugiosHeadGuard: {
 
 GardeningGloves: {
 	DisplayName: Gardening Gloves
-	Tooltip: Upon reaching full wreath charge, briefly absorbs incoming damage
+	Tooltip: ""
 }
 
 DuskStag: {
@@ -2887,7 +2887,11 @@ PinCushion: {
 
 NaturePriestCape: {
 	DisplayName: Nature Priest Cape
-	Tooltip: ""
+	Tooltip: 
+		'''
+		10% increased nature damage
+		Upon reaching full wreath charge, briefly absorbs incoming damage
+		'''
 }
 
 NaturePriestHood: {

@@ -74,7 +74,7 @@ sealed partial class PlayerCommon : ModPlayer {
     private static List<ushort> _obsidianStopwatchCopiesHueShift = null!;
     private static byte _currentTempBufferCopyIndex, _currentObsidianStopwatchCopyIndex;
     private static byte _copyIndexIAmDrawing;
-    private static bool _gardeningGlovesDrawing;
+    private static bool _naturePriestCapeDrawing;
 
     private const int MaxAdvancedShadows = 60;
     public int availableAdvancedShadowsCount;
@@ -164,8 +164,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool ShouldDrawVanillaBackpacks = true;
 
-    public bool IsGardeningGlovesEffectActive;
-    public ushort GardeningGlovesImmunityFrames;
+    public bool IsNaturePriestCapeEffectActive;
+    public ushort NaturePriestCapeImmunityFrames;
 
     public bool IsFermentedSpiderEyeEffectActive;
 
@@ -423,8 +423,8 @@ sealed partial class PlayerCommon : ModPlayer {
     private void On_Player_ApplyVanillaHurtEffectModifiers(On_Player.orig_ApplyVanillaHurtEffectModifiers orig, Player self, ref Player.HurtModifiers modifiers) {
         orig(self, ref modifiers);
 
-        if (self.GetCommon().GardeningGlovesImmunityFrames > 0) {
-            float decrease = MathUtils.Clamp01(1f - Ease.QuintOut(self.GetCommon().GardeningGlovesImmunityFrames / 20f));
+        if (self.GetCommon().NaturePriestCapeImmunityFrames > 0) {
+            float decrease = MathUtils.Clamp01(1f - Ease.QuintOut(self.GetCommon().NaturePriestCapeImmunityFrames / 20f));
             decrease = MathF.Max(0.01f, decrease);
             modifiers.FinalDamage *= decrease;
         }
@@ -609,7 +609,7 @@ sealed partial class PlayerCommon : ModPlayer {
             }
         }
 
-        if (_gardeningGlovesDrawing) {
+        if (_naturePriestCapeDrawing) {
             for (int i = 0; i < drawInfo.DrawDataCache.Count; i++) {
                 DrawData value = drawInfo.DrawDataCache[i];
                 value.color = value.color.MultiplyRGBA(WreathHandler.GetCurrentColor(drawInfo.drawPlayer).MultiplyAlpha(0f));
@@ -646,15 +646,15 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override void DrawPlayer(Camera camera) {
-        if (GardeningGlovesImmunityFrames > 0) {
-            _gardeningGlovesDrawing = true;
+        if (NaturePriestCapeImmunityFrames > 0) {
+            _naturePriestCapeDrawing = true;
 
             Vector2 vector2 = Player.position;
-            float factor = 1f - GardeningGlovesImmunityFrames / 20f;
+            float factor = 1f - NaturePriestCapeImmunityFrames / 20f;
             Main.PlayerRenderer.DrawPlayer(camera, Player, vector2, Player.fullRotation, Player.fullRotationOrigin, factor, 1f + factor * 0.5f);
         }
 
-        _gardeningGlovesDrawing = false;
+        _naturePriestCapeDrawing = false;
 
         for (int i = 0; i < MAXCOPIES; i++) {
             CopyInfo copyInfo = _copyData[i];
@@ -1220,8 +1220,8 @@ sealed partial class PlayerCommon : ModPlayer {
             DoubleGogglesEffectOpacity = Helper.Approach(DoubleGogglesEffectOpacity, 0f, 0.1f);
         }
 
-        if (GardeningGlovesImmunityFrames > 0) {
-            GardeningGlovesImmunityFrames--;
+        if (NaturePriestCapeImmunityFrames > 0) {
+            NaturePriestCapeImmunityFrames--;
         }
 
         if (IsDuskStagEffectActive_Vanity) {
@@ -1342,11 +1342,11 @@ sealed partial class PlayerCommon : ModPlayer {
         PreUpdateEvent?.Invoke(Player);
     }
 
-    public void ActivateGardeningGloveEffect() {
-        if (GardeningGlovesImmunityFrames > 0) {
+    public void ActivateNaturePriestCapeEffect() {
+        if (NaturePriestCapeImmunityFrames > 0) {
             return;
         }
-        GardeningGlovesImmunityFrames = 20;
+        NaturePriestCapeImmunityFrames = 20;
     }
 
     public override void ModifyHurt(ref Player.HurtModifiers modifiers) {
@@ -1453,7 +1453,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
         IsFermentedSpiderEyeEffectActive = false;
 
-        //IsGardeningGlovesEffectActive = false;
+        //IsNaturePriestCapeEffectActive = false;
 
         ShouldDrawVanillaBackpacks = true;
 
