@@ -421,8 +421,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (y > BackwoodsVars.FirstTileYAtCenter) {
             y = BackwoodsVars.FirstTileYAtCenter;
         }
-        y += 3;
-        WorldUtils.Gen(new Point(posX, y), new Shapes.Mound(20, 12), Actions.Chain(new Modifiers.Blotches(2, 1, 2, 4, 0.8), new Actions.SetTile(_dirtTileType), new Actions.PlaceWall(_dirtWallType), new Actions.SetFrames(frameNeighbors: true)));
+        y += 2;
+        WorldUtils.Gen(new Point(posX, y), new Shapes.Mound(20, 8), Actions.Chain(new Modifiers.Blotches(2, 1, 2, 4, 0.8), new Actions.SetTile(_dirtTileType), new Actions.PlaceWall(_dirtWallType), new Actions.SetFrames(frameNeighbors: true)));
+        WorldUtils.Gen(new Point(posX, y + 6), new Shapes.Mound(20, 8), Actions.Chain(new Modifiers.Blotches(2, 1, 2, 4, 0.8), new Actions.SetTile(_dirtTileType), new Actions.PlaceWall(_dirtWallType), new Actions.SetFrames(frameNeighbors: true)));
     }
 
     private void Step_AddWebs() {
