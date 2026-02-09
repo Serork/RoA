@@ -46,16 +46,24 @@ sealed class GobletOfPainSplash : ModProjectile {
             Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
         }
 
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
+        if (Projectile.frame <= 3) {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
+        }
+        else {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.15f);
+            if (Projectile.Opacity <= 0f) {
+                Projectile.Kill();
+            }
+        }
 
         Projectile.Center = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint();
 
         if (Projectile.Opacity >= 1f && Projectile.frameCounter++ > 4) {
             Projectile.frameCounter = 0;
             Projectile.frame++;
-            if (Projectile.frame > 3) {
-                Projectile.Kill();
-            }
+        }
+        if (Projectile.frame >= 2) {
+            Projectile.frame = 2;
         }
     }
 
