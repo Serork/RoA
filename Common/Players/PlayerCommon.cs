@@ -1402,7 +1402,7 @@ sealed partial class PlayerCommon : ModPlayer {
         OnHitNPCEvent?.Invoke(Player, target, hit, damageDone);
 
         if (IsGobletOfPainEffectActive && hit.Crit && Main.rand.NextBool(4)) {
-            Player.AddBuff(BuffID.Poisoned, MathUtils.SecondsToFrames(3));
+            Player.AddBuff(BuffID.Poisoned, MathUtils.SecondsToFrames(3), quiet: false);
 
             ProjectileUtils.SpawnPlayerOwnedProjectile<GobletOfPainSplash>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc("gobletofpain")) {
                 Position = Player.GetPlayerCorePoint()
