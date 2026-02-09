@@ -2907,7 +2907,7 @@ PinCushion: {
 }
 
 NaturePriestCape: {
-	DisplayName: Накидка священника природы
+	DisplayName: Одеяние смотрителя рощи
 	Tooltip:
 		'''
 		10%-ное увеличения природного урона
@@ -2916,7 +2916,7 @@ NaturePriestCape: {
 }
 
 NaturePriestHood: {
-	DisplayName: Капюшон священника природы
+	DisplayName: Капюшон смотрителя рощи
 	// Tooltip: ""
 }
 

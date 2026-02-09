@@ -1,5 +1,4 @@
 ﻿using RoA.Common.Druid;
-using RoA.Common.Items;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -17,6 +16,7 @@ sealed class GardeningGloves : ModItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-
+        player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += 0.1f;
+        player.GetCommon().IsGardeningGlovesEffectActive = true;
     }
 }

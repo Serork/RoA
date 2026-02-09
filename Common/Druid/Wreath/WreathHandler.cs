@@ -401,7 +401,16 @@ sealed class WreathHandler : ModPlayer {
         GetHitTimer = 0;
     }
 
-    public bool ShouldClawsReset(bool skipCondition = false) => IsActualFull6 && (skipCondition || SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn);
+    public bool ShouldClawsReset(bool skipCondition = false) {
+        bool result = IsActualFull6 && (skipCondition || SpecialAttackData.ShouldReset || SpecialAttackData.OnlySpawn);
+        if (!result) {
+            Player.GetCommon().ShouldResetClawsOnNextAttack = false;
+        }
+        if (Player.GetCommon().IsGardeningGlovesEffectActive && Player.controlUseItem && !Player.GetCommon().ShouldResetClawsOnNextAttack) {
+            result = false;
+        }
+        return result;
+    }
 
     internal void TryToClawsReset(Item item, bool nonDataReset) {
         Item selectedItem = item;
@@ -416,6 +425,10 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void ClawsReset(Item selectedItem, bool nonDataReset = false) {
+        if (!Player.GetCommon().ShouldResetClawsOnNextAttack) {
+            return;
+        }
+
         if (!SpecialAttackData.OnlySpawn || nonDataReset) {
             ForcedHardReset(true);
         }
@@ -667,6 +680,18 @@ sealed class WreathHandler : ModPlayer {
     public delegate void PostUpdateEquipsDelegate(Player player);
     public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent = null!;
     public override void PostUpdateEquips() {
+        if (Player.GetCommon().IsGardeningGlovesEffectActive) {
+            if (!Player.GetCommon().ShouldResetClawsOnNextAttack && Player.ItemAnimationActive && Player.controlUseItem) {
+                Player.GetCommon().ShouldResetClawsOnNextAttack = false;
+            }
+            if (Player.ItemAnimationEndingOrEnded && !Player.controlUseItem) {
+                Player.GetCommon().ShouldResetClawsOnNextAttack = true;
+            }
+        }
+        else {
+            Player.GetCommon().ShouldResetClawsOnNextAttack = false;
+        }
+
         PostUpdateEquipsEvent?.Invoke(Player);
 
         ShouldIncreaseChargeWhenEmpty = false;

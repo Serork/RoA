@@ -60,7 +60,7 @@ sealed class ShadowflameClaws : ClawsBaseItem<ShadowflameClaws.ShadowflameClawsS
         => (new Color(160, 100, 255), new Color(120, 50, 255));
 
     public sealed class ShadowflameClawsSlash : ClawsSlash {
-        private bool Charged => (!CanFunction && Projectile.GetOwnerAsPlayer().GetWreathHandler().IsActualFull6) || Opacity == 1f;
+        private bool Charged => (!CanFunction && Projectile.GetOwnerAsPlayer().GetWreathHandler().ShouldClawsReset(true)) || Opacity == 1f;
 
         public ref float Opacity => ref Projectile.localAI[1];
 

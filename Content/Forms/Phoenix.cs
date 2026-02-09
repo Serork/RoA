@@ -118,7 +118,7 @@ sealed class Phoenix : BaseForm {
         float opacity = player.GetWreathHandler().ActualProgress4;
         float opacity2 = opacity;
         opacity = Utils.GetLerpValue(0.85f, 0.95f, opacity2, true);
-        opacity *= Utils.GetLerpValue(1f, 0.95f, opacity2, true);
+        //opacity *= Utils.GetLerpValue(1f, 0.95f, opacity2, true);
         Color lightColor = Lighting.GetColor(drawinfo.Position.ToTileCoordinates());
         Color baseColor = Color.Lerp(new Color(249, 75, 7), new Color(255, 231, 66), Helper.Wave(0f, 1f, 15f, player.whoAmI * 3));
         Color color = Color.Lerp(baseColor, baseColor.MultiplyRGB(lightColor), 0.5f).MultiplyAlpha(0.5f) * opacity * 0.75f;

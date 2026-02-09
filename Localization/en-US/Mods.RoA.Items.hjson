@@ -2845,7 +2845,11 @@ TfugiosHeadGuard: {
 
 GardeningGloves: {
 	DisplayName: Gardening Gloves
-	Tooltip: ""
+	Tooltip: 
+		'''
+		10% increased nature potential damage
+		Allows  
+		'''
 }
 
 DuskStag: {
@@ -2886,7 +2890,7 @@ PinCushion: {
 }
 
 NaturePriestCape: {
-	DisplayName: Nature Priest Cape
+	DisplayName: Grove Keeper's Gown
 	Tooltip:
 		'''
 		10% increased nature damage
@@ -2895,7 +2899,7 @@ NaturePriestCape: {
 }
 
 NaturePriestHood: {
-	DisplayName: Nature Priest Hood
+	DisplayName: Grove Keeper's Hood
 	Tooltip: ""
 }
 

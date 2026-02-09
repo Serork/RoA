@@ -108,7 +108,9 @@ abstract class ClawsBaseItem : NatureItem {
 
     protected abstract (Color, Color) SetSlashColors(Player player);
 
-    public sealed override bool CanUseItem(Player player) => player.ownedProjectileCounts[SpawnClawsProjectileType(player) ?? Item.shoot] < 1;
+    public sealed override bool CanUseItem(Player player) {
+        return player.ownedProjectileCounts[SpawnClawsProjectileType(player) ?? Item.shoot] < 1;
+    }
 
     public virtual void SafeOnUse(Player player, ClawsHandler clawsStats) { }
 

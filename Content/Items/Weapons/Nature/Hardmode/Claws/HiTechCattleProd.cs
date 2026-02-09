@@ -63,7 +63,7 @@ sealed class HiTechCattleProd : ClawsBaseItem<HiTechCattleProd.HiTechCattleProdS
         => (new Color(97, 200, 225), new Color(98, 154, 179));
 
     public sealed class HiTechCattleProdSlash : ClawsSlash {
-        private bool Charged => (!CanFunction && Projectile.GetOwnerAsPlayer().GetWreathHandler().IsActualFull6) || Opacity == 1f;
+        private bool Charged => (!CanFunction && Projectile.GetOwnerAsPlayer().GetWreathHandler().ShouldClawsReset(true)) || Opacity == 1f;
 
         public ref float Opacity => ref Projectile.localAI[1];
 
