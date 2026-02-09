@@ -2935,11 +2935,11 @@ AriesCard: {
 }
 
 Knightslayer: {
-	// DisplayName: Knightslayer
-	// Tooltip: ""
+	DisplayName: Рыцареубийца
+	Tooltip: Наносит тем больше урона, чем больше защиты у противника
 }
 
 Taproot: {
-	// DisplayName: Taproot
-	// Tooltip: ""
+	DisplayName: Корневище
+	Tooltip: Наносит больше урона врагам природы
 }

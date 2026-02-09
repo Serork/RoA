@@ -2915,10 +2915,10 @@ AriesCard: {
 
 Knightslayer: {
 	DisplayName: Knightslayer
-	Tooltip: ""
+	Tooltip: Deals more damage, the more defense enemies have
 }
 
 Taproot: {
 	DisplayName: Taproot
-	Tooltip: ""
+	Tooltip: Deals more damage to enemies of nature
 }
