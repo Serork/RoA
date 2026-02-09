@@ -65,15 +65,40 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
         Projectile.tileCollide = false;
 
         Projectile.manualDirectionChange = true;
+
+        Projectile.Opacity = 0f;
     }
 
     public override void AI() {
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+
         if (!Init) {
             Init = true;
 
             Second = Main.rand.NextBool();
 
             Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
+
+            Projectile projectile = Projectile;
+            int num22 = projectile.height;
+
+            for (int num23 = 0; num23 < 10; num23++) {
+                int num24 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<ChainedCloudDust>(), (0f - projectile.velocity.X) * 0.5f, projectile.velocity.Y * 0.5f, 100, default(Color), 1.5f);
+                Main.dust[num24].velocity.X = Main.dust[num24].velocity.X * 0.5f - projectile.velocity.X * 0.1f;
+                Main.dust[num24].velocity.Y = Main.dust[num24].velocity.Y * 0.5f - projectile.velocity.Y * 0.3f;
+            }
+        }
+
+        if (Projectile.ai[1]++ > 60f) {
+            Projectile projectile = Projectile;
+            int num22 = projectile.height;
+
+            for (int num23 = 0; num23 < 1; num23++) {
+                int num24 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<ChainedCloudDust>(), (0f - projectile.velocity.X) * 0.5f, projectile.velocity.Y * 0.5f, 100, default(Color), 1.5f);
+                Main.dust[num24].velocity.X = Main.dust[num24].velocity.X * 0.5f - projectile.velocity.X * 0.1f;
+                Main.dust[num24].velocity.Y = Main.dust[num24].velocity.Y * 0.5f - projectile.velocity.Y * 0.3f;
+            }
+            Projectile.ai[1] = 0f;
         }
 
         if (Projectile.ai[0] < 1f) {
@@ -93,7 +118,7 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
         Projectile.Animate(10);
 
         Player player = Projectile.GetOwnerAsPlayer();
-        bool collided = Projectile.getRect().Intersects(player.getRect());
+        bool collided = player.position.Y < Projectile.position.Y && Projectile.getRect().Intersects(player.getRect());
         if (player.velocity.Y > 0f && collided) {
             Impact(player.velocity.SafeNormalize() * 20f);
         }
