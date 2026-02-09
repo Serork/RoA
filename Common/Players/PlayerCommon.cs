@@ -178,6 +178,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsGardeningGlovesEffectActive;
     public bool ShouldResetClawsOnNextAttack;
 
+    public bool IsChainedCloudEffectActive;
+
     public byte CrystallineNeedleIndexToBeAdded { get; private set; }
     public (ushort, ushort)[] CrystallineNeedleTime { get; private set; } = new (ushort, ushort)[5];
     public float[] CrystallineNeedleRotation { get; private set; } = new float[5];
@@ -603,6 +605,17 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
         int count = drawInfo.DrawDataCache.Count;
+
+        if (IsChainedCloudEffectActive) {
+            foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => !checkProjectile.SameOwnerAs(Player))) {
+                for (int i = 0; i < count; i++) {
+                    DrawData value = drawInfo.DrawDataCache[i];
+                    value.position += projectile.velocity;
+                    drawInfo.DrawDataCache[i] = value;
+                }
+            }
+        }
+
         if (drawInfo.drawPlayer.active && _copyIndexIAmDrawing != 255) {
             for (int i = 0; i < count; i++) {
                 DrawData value = drawInfo.DrawDataCache[i];
@@ -1089,6 +1102,14 @@ sealed partial class PlayerCommon : ModPlayer {
         }
     }
 
+    public void SpawnCloudPlatform() {
+        if (!IsChainedCloudEffectActive) {
+            return;
+        }
+
+
+    }
+
     public delegate void PreUpdateMovementDelegate(Player player);
     public static event PreUpdateMovementDelegate PreUpdateMovementEvent;
     public override void PreUpdateMovement() {
@@ -1098,6 +1119,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void PostUpdateEquipsDelegate(Player player);
     public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent;
     public override void PostUpdateEquips() {
+        SpawnCloudPlatform();
+
         UpdateCrystallineNeedles();
 
         ArchiveUseCooldownInTicks = (ushort)Helper.Approach(ArchiveUseCooldownInTicks, 0, 1);
@@ -1444,6 +1467,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsChainedCloudEffectActive = false;
+
         IsGardeningGlovesEffectActive = false;
 
         IsAriesActive = false;

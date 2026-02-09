@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
+using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Content.Tiles.Platforms;
 using RoA.Core;
@@ -59,6 +61,14 @@ sealed class CustomTileCollision : IInitializer {
             foreach (Vector2 position in positions) {
                 ExtraTileCollisionBlocks_Vectors.TryAdd(position.ToTileCoordinates(), (projectile, position));
             }
+        }
+    }
+
+    private static void GenerateCloudPlatformPositions() {
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>()) {
+            Point16 tilePosition = projectile.position.ToTileCoordinates16();
+            ExtraTileCollisionBlocks_Platforms.Add(tilePosition - new Point16(-1, -1));
+            ExtraTileCollisionBlocks_Platforms.Add(tilePosition - new Point16(0, -1));
         }
     }
 
@@ -128,6 +138,7 @@ sealed class CustomTileCollision : IInitializer {
         }
         ExtraTileCollisionBlocks_Solid.Clear();
         ExtraTileCollisionBlocks_Platforms.Clear();
+        GenerateCloudPlatformPositions();
         GenerateIceBlockPositions(num5, value2, value3, value4);
         GenerateTreeBranchPositions(num5, value2, value3, value4);
         for (int i = num5; i < value2; i++) {

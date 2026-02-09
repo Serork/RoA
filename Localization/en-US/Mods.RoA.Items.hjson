@@ -2845,7 +2845,7 @@ TfugiosHeadGuard: {
 
 GardeningGloves: {
 	DisplayName: Gardening Gloves
-	Tooltip: 
+	Tooltip:
 		'''
 		10% increased nature potential damage
 		Allows  
@@ -2925,4 +2925,9 @@ Knightslayer: {
 Taproot: {
 	DisplayName: Taproot
 	Tooltip: Deals more damage to enemies of nature
+}
+
+ChainedCloud: {
+	DisplayName: Chained Cloud
+	Tooltip: ""
 }

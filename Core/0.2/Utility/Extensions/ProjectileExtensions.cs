@@ -8,6 +8,7 @@ static partial class ProjectileExtensions {
     public static void ResetFrame(this Projectile projectile) => projectile.frame = 0;
     public static void ResetFrameCounter(this Projectile projectile) => projectile.frameCounter = 0;
 
+    public static bool SameOwnerAs(this Projectile projectile, Player checkPlayer) => projectile.owner == checkPlayer.whoAmI;
     public static bool SameOwnerAs(this Projectile projectile, Projectile checkProjectile) => projectile.owner == checkProjectile.owner;
     public static bool SameAs(this Projectile projectile, Projectile checkProjectile) => projectile.whoAmI == checkProjectile.whoAmI;
 

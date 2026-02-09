@@ -2943,3 +2943,8 @@ Taproot: {
 	DisplayName: Корневище
 	Tooltip: Наносит больше урона врагам природы
 }
+
+ChainedCloud: {
+	// DisplayName: Chained Cloud
+	// Tooltip: ""
+}

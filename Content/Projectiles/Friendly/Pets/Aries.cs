@@ -37,6 +37,9 @@ sealed class Aries : ModProjectile {
         }
     }
 
+    public override bool? CanDamage() => false;
+    public override bool? CanCutTiles() => false;
+
     public override void SetDefaults() {
         Projectile.CloneDefaults(ProjectileID.JunimoPet); // Copy the stats of the Zephyr Fish
 
