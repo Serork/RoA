@@ -1,8 +1,6 @@
 ﻿using RoA.Common.GlowMasks;
 using RoA.Core.Defaults;
 
-using System.Collections.Generic;
-
 using Terraria;
 using Terraria.Enums;
 using Terraria.ID;
@@ -12,11 +10,7 @@ namespace RoA.Content.Items.Weapons.Melee.Hardmode;
 
 [AutoloadGlowMask(shouldApplyItemAlpha: true)]
 sealed class Knightslayer : ModItem {
-    private record struct KnightSlayerNPCHitInfo(short NPCTypeToApplyIncreasedDamage, float FinalDamageModifier, int FlatBonusDamage = 0);
-
-    private static readonly HashSet<KnightSlayerNPCHitInfo> NPCsThatTakeIncreasedDamage =
-        [new KnightSlayerNPCHitInfo(NPCID.ArmoredSkeleton, 1.5f, 0),
-         new KnightSlayerNPCHitInfo(NPCID.SkeletonArcher, 1.5f, 0)];
+    private static ushort EXTRADAMAGEPERDEFENSE => 3;
 
     public override void SetDefaults() {
         Item.SetSizeValues(68);
@@ -37,12 +31,6 @@ sealed class Knightslayer : ModItem {
     }
 
     public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers) {
-        foreach (KnightSlayerNPCHitInfo knightSlayerNPCHitInfo in NPCsThatTakeIncreasedDamage) {
-            if (knightSlayerNPCHitInfo.NPCTypeToApplyIncreasedDamage != target.type) {
-                continue;
-            }
-            modifiers.FlatBonusDamage += knightSlayerNPCHitInfo.FlatBonusDamage;
-            modifiers.FinalDamage *= knightSlayerNPCHitInfo.FinalDamageModifier;
-        }
+        modifiers.FlatBonusDamage += target.defDefense * EXTRADAMAGEPERDEFENSE;
     }
 }

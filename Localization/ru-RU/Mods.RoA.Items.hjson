@@ -2934,3 +2934,8 @@ Knightslayer: {
 	// DisplayName: Knightslayer
 	// Tooltip: ""
 }
+
+Taproot: {
+	// DisplayName: Taproot
+	// Tooltip: ""
+}
