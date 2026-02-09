@@ -1,11 +1,14 @@
 ﻿using RoA.Core.Utility.Vanilla;
 
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Buffs;
 
 sealed class Aries : ModBuff {
+    public override LocalizedText Description => base.Description.WithFormatArgs(Main.LocalPlayer.name);
+
     public override void SetStaticDefaults() {
         Main.buffNoTimeDisplay[Type] = true;
         Main.vanityPet[Type] = true;
