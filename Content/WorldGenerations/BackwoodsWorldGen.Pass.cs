@@ -421,7 +421,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         if (y > BackwoodsVars.FirstTileYAtCenter) {
             y = BackwoodsVars.FirstTileYAtCenter;
         }
-        y += 4;
+        y += 3;
         WorldUtils.Gen(new Point(posX, y), new Shapes.Mound(20, 12), Actions.Chain(new Modifiers.Blotches(2, 1, 2, 4, 0.8), new Actions.SetTile(_dirtTileType), new Actions.PlaceWall(_dirtWallType), new Actions.SetFrames(frameNeighbors: true)));
     }
 
@@ -4671,7 +4671,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (num794 < num796 + num797_2 && num795 > num796 - num797_2)
                 flag50 = false;
 
-            if (num794 < GenVars.dungeonLocation + num786 * 2.5f && num795 > GenVars.dungeonLocation - num786 * 2.5f)
+            if (num794 < GenVars.dungeonX + num786 * 2 && num795 > GenVars.dungeonX - num786 * 2)
                 flag50 = false;
 
             if (!remixWorldGen) {
