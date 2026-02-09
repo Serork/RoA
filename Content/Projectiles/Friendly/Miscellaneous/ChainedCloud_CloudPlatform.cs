@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Projectiles;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -62,6 +63,8 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
 
         Projectile.friendly = true;
         Projectile.tileCollide = false;
+
+        Projectile.manualDirectionChange = true;
     }
 
     public override void AI() {
@@ -69,6 +72,8 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
             Init = true;
 
             Second = Main.rand.NextBool();
+
+            Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
         }
 
         if (Projectile.ai[0] < 1f) {
@@ -102,6 +107,19 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
         Impacted = true;
 
         _impactVelocity = velocity;
+
+        Projectile.velocity = _impactVelocity * 0.5f;
+
+        Projectile projectile = Projectile;
+        int num22 = projectile.height;
+
+        for (int num23 = 0; num23 < 10; num23++) {
+            int num24 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<ChainedCloudDust2>(), (0f - projectile.velocity.X) * 0.5f, projectile.velocity.Y * 0.5f, 100, default(Color), 1.5f);
+            Main.dust[num24].velocity.X = Main.dust[num24].velocity.X * 0.5f - projectile.velocity.X * 0.1f;
+            Main.dust[num24].velocity.Y = Main.dust[num24].velocity.Y * 0.5f - projectile.velocity.Y * 0.3f;
+        }
+
+        Projectile.velocity *= 0f;
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -109,7 +127,7 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
         Projectile.position.Y += 2f;
         Projectile.position += Projectile.velocity;
 
-        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, texture: Second ? _texture2.Value : _texture1.Value);
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity * 0.9f, texture: Second ? _texture2.Value : _texture1.Value);
 
         Projectile.position = position;
     }

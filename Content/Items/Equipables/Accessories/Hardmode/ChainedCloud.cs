@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common;
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -11,6 +12,7 @@ using System.Linq;
 
 using Terraria;
 using Terraria.Enums;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
@@ -48,7 +50,7 @@ sealed class ChainedCloud : ModItem {
             if (player.gravDir == -1f)
                 num = -6;
 
-            int num2 = Dust.NewDust(new Vector2(player.position.X - 4f, player.position.Y + (float)num), player.width + 8, 4, 16, (0f - player.velocity.X) * 0.5f, player.velocity.Y * 0.5f, 100, default(Color), 1.5f);
+            int num2 = Dust.NewDust(new Vector2(player.position.X - 4f, player.position.Y + (float)num), player.width + 8, 4, ModContent.DustType<ChainedCloudDust>(), (0f - player.velocity.X) * 0.5f, player.velocity.Y * 0.5f, 0, default(Color), 1.5f);
             Main.dust[num2].velocity.X = Main.dust[num2].velocity.X * 0.5f - player.velocity.X * 0.1f;
             Main.dust[num2].velocity.Y = Main.dust[num2].velocity.Y * 0.5f - player.velocity.Y * 0.3f;
         }
@@ -87,7 +89,7 @@ sealed class ChainedCloud : ModItem {
             //    num22 = 0;
 
             //for (int num23 = 0; num23 < 10; num23++) {
-            //    int num24 = Dust.NewDust(new Vector2(player.position.X - 34f, player.position.Y + (float)num22 - 16f), 102, 32, 16, (0f - player.velocity.X) * 0.5f, player.velocity.Y * 0.5f, 100, default(Color), 1.5f);
+            //    int num24 = Dust.NewDust(new Vector2(player.position.X - 34f, player.position.Y + (float)num22 - 16f), 102, 32, ModContent.DustType<ChainedCloudDust>(), (0f - player.velocity.X) * 0.5f, player.velocity.Y * 0.5f, 100, default(Color), 1.5f);
             //    Main.dust[num24].velocity.X = Main.dust[num24].velocity.X * 0.5f - player.velocity.X * 0.1f;
             //    Main.dust[num24].velocity.Y = Main.dust[num24].velocity.Y * 0.5f - player.velocity.Y * 0.3f;
             //}
