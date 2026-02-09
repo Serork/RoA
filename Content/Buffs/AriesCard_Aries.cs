@@ -7,7 +7,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Buffs;
 
 sealed class Aries : ModBuff {
-    public override LocalizedText Description => base.Description.WithFormatArgs(Main.LocalPlayer.name);
+    public override void ModifyBuffText(ref string buffName, ref string tip, ref int rare) {
+        tip = Description.Format(Main.LocalPlayer.name);
+    }
 
     public override void SetStaticDefaults() {
         Main.buffNoTimeDisplay[Type] = true;
