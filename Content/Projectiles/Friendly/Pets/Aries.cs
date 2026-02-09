@@ -30,18 +30,11 @@ sealed class Aries : ModProjectile {
             .SimpleLoop(2, 2, 8)
             .WithOffset(0, 0)
             .WithSpriteDirection(-1)
-            .WithCode(Float);
+            .WithCode(DelegateMethods.CharacterPreview.Float);
 
         if (!Main.dedServ) {
             _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
         }
-    }
-
-    public static void Float(Projectile proj, bool walking) {
-        float num = 0.5f;
-        float num2 = (float)Main.timeForVisualEffects % 60f / 60f;
-        float modifier = 0.5f;
-        proj.position.Y += (0f - num + (float)(Math.Cos(num2 * ((float)Math.PI * 2f) * 2f) * (double)(num * 2f))) * modifier;
     }
 
     public override void SetDefaults() {
