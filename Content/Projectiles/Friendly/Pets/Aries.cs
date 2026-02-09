@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+using ReLogic.Content;
 
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -13,6 +16,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Projectiles.Friendly.Pets;
 
 sealed class Aries : ModProjectile {
+    private static Asset<Texture2D> _glowTexture = null!;
+
     public int Frame;
     public int FrameCounter;
 
@@ -21,10 +26,22 @@ sealed class Aries : ModProjectile {
 
         Projectile.SetFrameCount(4);
 
-        ProjectileID.Sets.CharacterPreviewAnimations[Projectile.type] = ProjectileID.Sets.SimpleLoop(2, Main.projFrames[Projectile.type], 6)
+        ProjectileID.Sets.CharacterPreviewAnimations[Type] = ProjectileID.Sets
+            .SimpleLoop(2, 2, 8)
             .WithOffset(0, 0)
             .WithSpriteDirection(-1)
-            .WithCode(DelegateMethods.CharacterPreview.Float);
+            .WithCode(Float);
+
+        if (!Main.dedServ) {
+            _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        }
+    }
+
+    public static void Float(Projectile proj, bool walking) {
+        float num = 0.5f;
+        float num2 = (float)Main.timeForVisualEffects % 60f / 60f;
+        float modifier = 0.5f;
+        proj.position.Y += (0f - num + (float)(Math.Cos(num2 * ((float)Math.PI * 2f) * 2f) * (double)(num * 2f))) * modifier;
     }
 
     public override void SetDefaults() {
@@ -58,6 +75,7 @@ sealed class Aries : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, spriteEffects: (-Projectile.spriteDirection).ToSpriteEffects());
+        Projectile.QuickDrawAnimated(Color.White * 0.9f * Projectile.Opacity, spriteEffects: (-Projectile.spriteDirection).ToSpriteEffects(), texture: _glowTexture.Value);
 
         return false;
     }
