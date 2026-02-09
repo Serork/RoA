@@ -12,12 +12,12 @@ namespace RoA.Content.Projectiles.Friendly.Ranged;
 
 sealed class TaprootArrow : ModProjectile {
     public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
-        foreach (Taproot.TaprootNPCHitInfo knightSlayerNPCHitInfo in Taproot.NPCsThatTakeIncreasedDamage) {
-            if (knightSlayerNPCHitInfo.NPCTypeToApplyIncreasedDamage != target.type) {
+        foreach (Taproot.TaprootNPCHitInfo taprootNPCHitInfo in Taproot.NPCsThatTakeIncreasedDamage) {
+            if (taprootNPCHitInfo.NPCTypeToApplyIncreasedDamage != target.type) {
                 continue;
             }
-            modifiers.FlatBonusDamage += knightSlayerNPCHitInfo.FlatBonusDamage;
-            modifiers.FinalDamage *= knightSlayerNPCHitInfo.FinalDamageModifier;
+            modifiers.FlatBonusDamage += taprootNPCHitInfo.FlatBonusDamage;
+            modifiers.FinalDamage *= taprootNPCHitInfo.FinalDamageModifier;
         }
     }
 
