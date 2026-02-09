@@ -2804,7 +2804,7 @@ BrawlerMask: {
 	DisplayName: Brawler Mask
 	Tooltip:
 		'''
-		50% chance to reflect damage and negative effects to nearby enemies when damaged
+		50% chance to reflect incoming damage and negative effects to nearby enemies
 		'There can be no bravery without madness'
 		'''
 }
@@ -2871,7 +2871,7 @@ CrystallineNeedle: {
 	DisplayName: Crystalline Needle
 	Tooltip:
 		'''
-		Consumes a full wreath charge when damaged to boost critical strike chance
+		Consumes a full wreath charge to boost critical strike chance when damaged
 		'No voice to cry suffering'
 		'''
 }
@@ -2881,7 +2881,7 @@ PinCushion: {
 	Tooltip:
 		'''
 		Charges up wreath when damaged
-		Consumes a full wreath charge when damaged to boost critical strike chance
+		Consumes a full wreath charge to boost critical strike chance when damaged
 		'''
 }
 

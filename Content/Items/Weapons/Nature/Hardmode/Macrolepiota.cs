@@ -18,7 +18,7 @@ namespace RoA.Content.Items.Weapons.Nature.Hardmode;
 [AutoloadGlowMask]
 sealed class Macrolepiota : NatureItem {
     protected override void SafeSetDefaults() {
-        Item.SetSizeValues(28, 40);
+        Item.SetSizeValues(34, 42);
         Item.SetWeaponValues(60, 4f);
         Item.SetUsableValues(ItemUseStyleID.None, 30, useSound: SoundID.Item7);
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice());
