@@ -2848,7 +2848,7 @@ GardeningGloves: {
 	Tooltip:
 		'''
 		10% increased nature potential damage
-		Allows  
+		Claws will only activate a special attack upon releasing the attack button
 		'''
 }
 
@@ -2913,7 +2913,7 @@ AriesCard: {
 	Tooltip:
 		'''
 		Summons a sovereign seraphic incarnation
-		'The stars of this sky have no name.'
+		'The stars of this sky have no name'
 		'''
 }
 
