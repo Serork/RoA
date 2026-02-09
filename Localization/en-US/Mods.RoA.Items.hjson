@@ -2908,3 +2908,8 @@ AriesCard: {
 		'The stars of this sky have no name.'
 		'''
 }
+
+Knightslayer: {
+	DisplayName: Knightslayer
+	Tooltip: ""
+}

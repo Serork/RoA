@@ -2929,3 +2929,8 @@ AriesCard: {
 		'У звёзд этого неба нет имён.'
 		'''
 }
+
+Knightslayer: {
+	// DisplayName: Knightslayer
+	// Tooltip: ""
+}
