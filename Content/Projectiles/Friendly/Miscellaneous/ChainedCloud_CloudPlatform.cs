@@ -67,6 +67,8 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
         Projectile.manualDirectionChange = true;
 
         Projectile.Opacity = 0f;
+
+        Projectile.timeLeft = 900;
     }
 
     public override void AI() {
@@ -94,7 +96,7 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
             int num22 = projectile.height;
 
             for (int num23 = 0; num23 < 1; num23++) {
-                int num24 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<ChainedCloudDust>(), (0f - projectile.velocity.X) * 0.5f, projectile.velocity.Y * 0.5f, 100, default(Color), 1.5f);
+                int num24 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<ChainedCloudDust>(), (0f - projectile.velocity.X) * 0.5f, projectile.velocity.Y * 0.5f, 0, default(Color), 1.5f);
                 Main.dust[num24].velocity.X = Main.dust[num24].velocity.X * 0.5f - projectile.velocity.X * 0.1f;
                 Main.dust[num24].velocity.Y = Main.dust[num24].velocity.Y * 0.5f - projectile.velocity.Y * 0.3f;
             }
@@ -121,6 +123,16 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
         bool collided = player.position.Y < Projectile.position.Y && Projectile.getRect().Intersects(player.getRect());
         if (player.velocity.Y > 0f && collided) {
             Impact(player.velocity.SafeNormalize() * 20f);
+        }
+    }
+
+    public override void OnKill(int timeLeft) {
+        Projectile projectile = Projectile;
+        int num22 = projectile.height;
+
+        for (int num23 = 0; num23 < 10; num23++) {
+            int num24 = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<ChainedCloudDust>(), 0f, 0f, 0, default(Color), 1.5f);
+            Main.dust[num24].velocity *= 1f;
         }
     }
 
