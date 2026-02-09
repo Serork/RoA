@@ -2887,7 +2887,7 @@ PinCushion: {
 
 NaturePriestCape: {
 	DisplayName: Nature Priest Cape
-	Tooltip: 
+	Tooltip:
 		'''
 		10% increased nature damage
 		Upon reaching full wreath charge, briefly absorbs incoming damage

@@ -14,8 +14,6 @@ sealed class NaturePriestCape : ModItem {
         Item.DefaultToAccessory(30, 30);
 
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));
-
-        Item.vanity = true;
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
