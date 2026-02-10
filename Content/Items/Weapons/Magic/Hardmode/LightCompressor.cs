@@ -277,28 +277,37 @@ sealed class LightCompressor : ModItem {
                 Vector2 velocity = startPosition.DirectionTo(startPosition2) * 2f;
                 float lerpValue = 0.1f;
                 int i = 0;
+                int height = 2;
+                int y = 0;
+                float i3 = 1f;
                 while (true) {
                     i++;
+                    float stepFactor = 1f;
                     Texture2D texture = _lightTexture.Value;
-                    float step = texture.Height;
+                    float stepFactor2 = (height / (float)texture.Bounds.Height);
+                    i3 += stepFactor2;
+                    float step = height * stepFactor;
                     float distance = Vector2.Distance(startPosition, endPosition);
                     if (distance < step * 1f) {
                         break;
                     }
                     float maxLength = MAXDISTANCETOTARGETINPIXELS;
                     float rotation = velocity.ToRotation() - MathHelper.PiOver2;
-                    Rectangle clip = texture.Bounds;
+                    Rectangle clip = texture.Bounds with { Y = y, Height = height };
                     Vector2 origin = clip.BottomCenter();
                     Color color = Color.White.MultiplyAlpha(0.75f);
                     //color *= Utils.GetLerpValue(maxLength, maxLength * 0.8f, Projectile.Distance(endPosition), true);
                     color *= target.LaserOpacity;
-                    float i2 = i * 10f;
-                    float waveFactor = Ease.CubeIn(Utils.GetLerpValue(0f, 2.5f, i, true));
-                    float scaleFactor = Utils.GetLerpValue(0f, 10f, i, true);
+                    float i_check = i * stepFactor2;
+                    float i2 = i_check * 10f * stepFactor;
+                    float waveFactor = Ease.CubeIn(Utils.GetLerpValue(0f, 2.5f, i_check, true));
+                    float scaleFactor = Utils.GetLerpValue(0f, 10f, i_check, true);
                     scaleFactor *= Ease.CubeIn(MathUtils.Clamp01(distance / (step * 3f)));
                     scaleFactor = MathF.Max(0.625f, scaleFactor);
                     Vector2 scale = new(Helper.Wave(1f - 0.5f * waveFactor, 1f + 0.5f * waveFactor, 20f, Projectile.whoAmI * 3) * 2f * scaleFactor, 1f);
                     velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
+
+                    scale *= 1.25f;
 
                     DrawInfo drawInfo = new() {
                         Clip = clip,
@@ -320,16 +329,20 @@ sealed class LightCompressor : ModItem {
                         Color = color.MultiplyRGB(new Color(136, 219, 227)).MultiplyAlpha(0.5f) * 0.75f * Ease.QuadOut(scaleFactor),
                         Scale = Vector2.One * scale.X * 0.15f
                     };
-                    batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
+                    if (i3 >= 1f) {
+                        i3 = 0f;
 
-                    if (!Main.gamePaused && Main.instance.IsActive) {
-                        if (Main.rand.NextBool(50)) {
-                            Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
-                                Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                        batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
+
+                        if (!Main.gamePaused && Main.instance.IsActive) {
+                            if (Main.rand.NextBool(50)) {
+                                Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
+                                    Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                            }
                         }
-                    }
 
-                    Lighting.AddLight(position, (Color.Lerp(Color.SkyBlue, Color.Blue, 0.05f) with { A = 0 }).ToVector3() * 0.75f);
+                        Lighting.AddLight(position, (Color.Lerp(Color.SkyBlue, Color.Blue, 0.05f) with { A = 0 }).ToVector3() * 0.75f);
+                    }
 
                     batch.Draw(texture, position, drawInfo);
                     float length = (startPosition2 - endPosition).Length();
@@ -344,6 +357,11 @@ sealed class LightCompressor : ModItem {
                     }
                     float maxLerpValue = factor * 0.25f;
                     lerpValue = Helper.Approach(lerpValue, maxLerpValue, TimeSystem.LogicDeltaTime * factor);
+
+                    y += height;
+                    if (y > texture.Bounds.Height) {
+                        y = 0;
+                    }
                 }
             }
 
