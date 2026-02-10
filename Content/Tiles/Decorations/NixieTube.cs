@@ -313,10 +313,11 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                 snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, snapshot.transformationMatrix);
+                byte a = (byte)Helper.Wave(0, 50, 5f, i + j);
                 drawData = new(TextureAssets.Tile[Type].Value,
                                new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                                new Rectangle(frameX, frameY, 16, height),
-                               Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                               Color.White with { A = a }, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 if (!nixieTubeTE.Dye1.IsEmpty()) {
                     GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye1.type).Apply(null, drawData);
                 }
