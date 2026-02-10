@@ -260,7 +260,7 @@ sealed class LightCompressor : ModItem {
             }
 
             int index = 0;
-            void drawLightLine(TargetInfo target) {
+            void drawLightLine(TargetInfo target, bool onlyBloom = false) {
                 index++;
 
                 SpriteBatch batch = Main.spriteBatch;
@@ -289,7 +289,7 @@ sealed class LightCompressor : ModItem {
                     Texture2D texture = _lightTexture.Value;
                     float stepFactor2 = (height / (float)texture.Bounds.Height);
                     i3 += stepFactor2;
-                    float step = height * stepFactor * extraScale;
+                    float step = height * stepFactor /** extraScale*/;
                     float distance = Vector2.Distance(startPosition, endPosition);
                     if (distance < step * 1f) {
                         break;
@@ -335,19 +335,23 @@ sealed class LightCompressor : ModItem {
                     if (i3 >= 0.75f) {
                         i3 = 0f;
 
-                        batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
+                        if (onlyBloom) {
+                            batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
 
-                        if (!Main.gamePaused && Main.instance.IsActive) {
-                            if (Main.rand.NextBool(35)) {
-                                Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
-                                    Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                            if (!Main.gamePaused && Main.instance.IsActive) {
+                                if (Main.rand.NextBool(35)) {
+                                    Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
+                                        Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                                }
                             }
-                        }
 
-                        Lighting.AddLight(position, (Color.Lerp(Color.SkyBlue, Color.Blue, 0.05f) with { A = 0 }).ToVector3() * 0.75f);
+                            Lighting.AddLight(position, (Color.Lerp(Color.SkyBlue, Color.Blue, 0.05f) with { A = 0 }).ToVector3() * 0.75f);
+                        }
                     }
 
-                    batch.Draw(texture, position, drawInfo);
+                    if (!onlyBloom) {
+                        batch.Draw(texture, position, drawInfo);
+                    }
                     float length = (startPosition2 - endPosition).Length();
                     float factor = 1f;
                     factor -= length / maxLength;
@@ -369,6 +373,8 @@ sealed class LightCompressor : ModItem {
             }
 
             foreach (var targetWhoAmI in _targets) {
+                drawLightLine(targetWhoAmI.Value, true);
+                index = 0;
                 drawLightLine(targetWhoAmI.Value);
             }
             drawMainLightLine();
