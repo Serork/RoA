@@ -1134,6 +1134,8 @@ sealed partial class PlayerCommon : ModPlayer {
         PreUpdateMovementEvent?.Invoke(Player);
 
         if (IsScrapRingEffectActive) {
+            Player.wetCount = 10;
+
             Player.shimmerWet = false;
             Player.honeyWet = false;
             Player.wet = false;
