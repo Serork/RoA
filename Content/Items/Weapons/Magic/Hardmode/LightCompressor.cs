@@ -282,11 +282,14 @@ sealed class LightCompressor : ModItem {
                 float i3 = 1f;
                 while (true) {
                     i++;
+
+                    float extraScale = 1.25f;
+
                     float stepFactor = 1f;
                     Texture2D texture = _lightTexture.Value;
                     float stepFactor2 = (height / (float)texture.Bounds.Height);
                     i3 += stepFactor2;
-                    float step = height * stepFactor;
+                    float step = height * stepFactor * extraScale;
                     float distance = Vector2.Distance(startPosition, endPosition);
                     if (distance < step * 1f) {
                         break;
@@ -307,7 +310,7 @@ sealed class LightCompressor : ModItem {
                     Vector2 scale = new(Helper.Wave(1f - 0.5f * waveFactor, 1f + 0.5f * waveFactor, 20f, Projectile.whoAmI * 3) * 2f * scaleFactor, 1f);
                     velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
 
-                    scale *= 1.25f;
+                    scale *= extraScale;
 
                     DrawInfo drawInfo = new() {
                         Clip = clip,

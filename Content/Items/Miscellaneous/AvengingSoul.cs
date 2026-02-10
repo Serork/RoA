@@ -57,6 +57,7 @@ sealed class AvengingSoul : MagicHerb1 {
             Dust dust = Dust.NewDustPerfect(dustPosition, 43, dustVelocity, 254, Color.White, 0.5f);
             dust.noGravity = true;
             dust.fadeIn = Main.rand.NextFloat() * 1.2f;
+            dust.velocity *= Main.rand.NextFloat(0.25f, 0.75f);
         }
 
         return false;
