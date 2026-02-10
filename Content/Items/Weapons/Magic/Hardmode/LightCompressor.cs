@@ -360,7 +360,7 @@ sealed class LightCompressor : ModItem {
                         batch.Draw(texture, position, drawInfo);
                     }
                     float length = (startPosition2 - endPosition).Length();
-                    float factor = 1f * stepFactor2;
+                    float factor = 1f;
                     factor -= length / maxLength;
                     factor = MathF.Max(0.01f, factor);
                     float minDistance = maxLength / 2f;
@@ -370,7 +370,7 @@ sealed class LightCompressor : ModItem {
                         factor += distanceFactor;
                     }
                     float maxLerpValue = factor * 0.25f;
-                    lerpValue = Helper.Approach(lerpValue, maxLerpValue, TimeSystem.LogicDeltaTime * factor);
+                    lerpValue = Helper.Approach(lerpValue, maxLerpValue, TimeSystem.LogicDeltaTime * factor * stepFactor2);
 
                     y += height;
                     if (y >= texture.Bounds.Height) {
@@ -387,7 +387,7 @@ sealed class LightCompressor : ModItem {
             drawMainLightLine();
         }
 
-        public override bool? CanDamage() => true;
+        public override bool? CanDamage() => false;
         public override bool? CanCutTiles() => false;
         public override bool ShouldUpdatePosition() => false;
 
