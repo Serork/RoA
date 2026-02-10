@@ -42,12 +42,12 @@ sealed class AvengingSoul : MagicHerb1 {
         int result = (int)player.Hurt(playerDeathReason, num, direction, armorPenetration: 9999);
 
         for (float num17 = 0f; num17 < 1f; num17 += 0.05f) {
-            if (Main.rand.NextBool()) {
+            if (Main.rand.NextBool(3)) {
                 continue;
             }
 
             Vector2 vector10 = Vector2.UnitX.RotatedBy((float)Math.PI * 2f * num17);
-            Vector2 center = player.GetPlayerCorePoint();
+            Vector2 center = player.GetPlayerCorePoint() - Vector2.UnitY * player.height / 4;
             float num18 = Main.rand.NextFloat(0.5f, 3.5f) * Main.rand.NextFloat(1f, 2f);
             int size = 4;
             Vector2 dustPosition = center + Main.rand.NextVector2CircularEdge(size, size);
@@ -58,6 +58,7 @@ sealed class AvengingSoul : MagicHerb1 {
             dust.noGravity = true;
             dust.fadeIn = Main.rand.NextFloat() * 1.2f;
             dust.velocity *= Main.rand.NextFloat(0.25f, 0.75f);
+            dust.velocity.Y += 1f;
         }
 
         return false;
