@@ -281,7 +281,7 @@ sealed class LightCompressor : ModItem {
                 float i3 = 1f;
                 float i4 = 1f;
                 Texture2D texture = _lightTexture.Value;
-                float stepFactor2 = (height / (float)texture.Bounds.Height);
+                float stepFactor2 = height / (float)texture.Bounds.Height;
                 float lerpValue = 0.1f * stepFactor2;
                 while (true) {
                     i++;
@@ -387,7 +387,7 @@ sealed class LightCompressor : ModItem {
             drawMainLightLine();
         }
 
-        public override bool? CanDamage() => false;
+        public override bool? CanDamage() => true;
         public override bool? CanCutTiles() => false;
         public override bool ShouldUpdatePosition() => false;
 
