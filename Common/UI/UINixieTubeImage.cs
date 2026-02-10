@@ -25,7 +25,15 @@ class UINixieTubeImage : UIFramedImage {
         }
 
         if (IsMouseHovering) {
-            Main.hoverItemName = NixieTubePicker_RemadePicker.GetHoverText(_nixieTubeInfo.Index) + $" ({_nixieTubeInfo.Index})";
+            int indexToShow = _nixieTubeInfo.Index;
+            int engRusCount = NixieTubePicker_RemadePicker.GetEngRusCount() + NixieTubePicker_RemadePicker.NUMCOUNT;
+            if (indexToShow >= NixieTubePicker_RemadePicker.NUMCOUNT && indexToShow < engRusCount) {
+                indexToShow -= NixieTubePicker_RemadePicker.NUMCOUNT - 1;
+            }
+            if (indexToShow >= engRusCount && indexToShow < engRusCount + NixieTubePicker_RemadePicker.MISCCOUNT) {
+                indexToShow -= engRusCount - 1;
+            }
+            Main.hoverItemName = NixieTubePicker_RemadePicker.GetHoverText(_nixieTubeInfo.Index) + $" ({indexToShow})";
         }
 
         base.DrawSelf(spriteBatch);
