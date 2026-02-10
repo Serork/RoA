@@ -284,10 +284,10 @@ sealed partial class ItemCommon : GlobalItem {
     }
 
     private void PlayerCommon_PreItemCheckEvent(Player player) {
-        Item heldItem = player.GetSelectedItem();
-        if (!heldItem.IsEquippable() && heldItem.TryGetGlobalItem(out ItemCommon handler) && handler.HasTarEnchantment()) {
-            handler.ActivateTarEnchantments(player, heldItem);
-        }
+        //Item heldItem = player.GetSelectedItem();
+        //if (!heldItem.IsEquippable() && heldItem.TryGetGlobalItem(out ItemCommon handler) && handler.HasTarEnchantment()) {
+        //    handler.ActivateTarEnchantments(player, heldItem);
+        //}
     }
 
     public override void UpdateInventory(Item item, Player player) {
@@ -328,7 +328,9 @@ sealed partial class ItemCommon : GlobalItem {
 
     public override void SaveData(Item item, TagCompound tag) {
         var handler2 = item.GetCommon();
-        if (!handler2.HasTarEnchantment()) {
+        bool flag = handler2.HasTarEnchantment();
+        tag[SaveKey + "hasenchantment"] = flag;
+        if (!flag) {
             return;
         }
 
@@ -337,11 +339,11 @@ sealed partial class ItemCommon : GlobalItem {
     }
 
     public override void LoadData(Item item, TagCompound tag) {
-        var handler2 = item.GetCommon();
-        if (!handler2.HasTarEnchantment()) {
+        if (!tag.ContainsKey(SaveKey + "hasenchantment")) {
             return;
         }
 
+        var handler2 = item.GetCommon();
         handler2.ActiveTarEnchantments = [.. tag.GetList<TarEnchantmentStat>(SaveKey)];
         handler2.TarKillCount = tag.Get<ulong>(SaveKey + nameof(handler2.TarKillCount));
     }
@@ -550,23 +552,11 @@ sealed partial class ItemCommon : GlobalItem {
     }
 
     public void ActivateTarEnchantments(Player player, Item item) {
-        foreach (TarEnchantmentStat tarEnchantmentStat in ActiveTarEnchantments) {
-            //ref int statLife = ref player.statLifeMax2;
-            //statLife += tarEnchantmentStat.HP;
-            //statLife = (int)(statLife * tarEnchantmentStat.HPModifier);
-            //DamageClass damageType = item.DamageType;
-            //StatModifier damage = player.GetDamage(damageType);
-            //damage.Flat += tarEnchantmentStat.Damage;
-            //player.GetDamage(damageType) += tarEnchantmentStat.DamageModifier - 1f;
-            //player.GetModPlayer<DruidStats>().DruidPotentialDamageMultiplier += tarEnchantmentStat.DamageModifier - 1f;
-            //ref Player.DefenseStat statDefense = ref player.statDefense;
-            //statDefense += tarEnchantmentStat.Defense;
-            //statDefense *= tarEnchantmentStat.DefenseModifier;
-            GetTarEnchantmentStats(out ushort hpToCut, out float damageToAdd);
-            ref int statLife = ref player.statLifeMax2;
-            statLife -= hpToCut;
-            player.GetDamage(DamageClass.Generic) += damageToAdd;
-        }
+        GetTarEnchantmentStats(out ushort hpToCut, out float damageToAdd);
+        ref int statLife = ref player.statLifeMax2;
+        statLife -= hpToCut;
+        statLife = Math.Max(20, statLife);
+        player.GetDamage(DamageClass.Generic) += damageToAdd;
     }
 
     public void GetTarEnchantmentStats(out ushort hpToCut, out float damageToAdd) {
