@@ -2936,3 +2936,8 @@ ThunderKingsGrace: {
 	DisplayName: Thunder Kings Grace
 	Tooltip: ""
 }
+
+ScrapRing: {
+	DisplayName: Scrap Ring
+	Tooltip: ""
+}

@@ -185,6 +185,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsFeathersInABottleEffectActive;
     public bool IsFeathersInABalloonEffectActive;
 
+    public bool IsScrapRingEffectActive;
+
     public byte CrystallineNeedleIndexToBeAdded { get; private set; }
     public (ushort, ushort)[] CrystallineNeedleTime { get; private set; } = new (ushort, ushort)[5];
     public float[] CrystallineNeedleRotation { get; private set; } = new float[5];
@@ -1130,6 +1132,12 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event PreUpdateMovementDelegate PreUpdateMovementEvent;
     public override void PreUpdateMovement() {
         PreUpdateMovementEvent?.Invoke(Player);
+
+        if (IsScrapRingEffectActive) {
+            Player.shimmerWet = false;
+            Player.honeyWet = false;
+            Player.wet = false;
+        }
     }
 
     public delegate void PostUpdateEquipsDelegate(Player player);
@@ -1481,6 +1489,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsScrapRingEffectActive = false;
+
         IsFeathersInABalloonEffectActive = false;
         IsFeathersInABottleEffectActive = false;
 
