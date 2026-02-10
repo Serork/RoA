@@ -1,14 +1,14 @@
-﻿using Microsoft.Build.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
+using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.UI;
 using RoA.Content.Tiles.Mechanisms;
 using RoA.Core.Utility;
-
-using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -202,6 +202,77 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
         if (TryGetTE(out NixieTubeTE nixieTubeTE, i, j)) {
             nixieTubeTE.UpdateLightColor(true);
         }
+
+        Point16 topLeft = TileHelper.GetTileTopLeft2<NixieTube>(i, j);
+        if (!(i == topLeft.X && j == topLeft.Y)) {
+            return;
+        }
+        if (TryGetTE(out nixieTubeTE, i, j)) {
+            SpriteBatchSnapshot snapshot;
+            DrawData drawData;
+
+            Tile tile = Main.tile[topLeft.X, topLeft.Y];
+
+            _multiplyBlendState ??= new() {
+                ColorBlendFunction = BlendFunction.ReverseSubtract,
+                ColorDestinationBlend = Blend.One,
+                ColorSourceBlend = Blend.SourceAlpha,
+                AlphaBlendFunction = BlendFunction.ReverseSubtract,
+                AlphaDestinationBlend = Blend.One,
+                AlphaSourceBlend = Blend.SourceAlpha
+            };
+
+            //Texture2D texture = Main.instance.TilesRenderer.GetTileDrawTexture(tile, i, j);
+            //texture ??= TextureAssets.Tile[Type].Value;
+            Texture2D texture = PaintsRenderer.TryGetPaintedTexture(i, j, Texture + "_Casing");
+            TileObjectData tileObjectData = TileObjectData.GetTileData(Type, 0);
+
+            Color color = Lighting.GetColor(i, j);
+
+            Vector2 zero = Vector2.Zero;
+            zero += Vector2.One * 4f;
+            int frameY = tile.TileFrameY;
+            int frameX = tile.TileFrameX;
+            bool flag = frameY >= 56;
+            bool hasCasingDye = !nixieTubeTE.Dye2.IsEmpty();
+            if (flag || hasCasingDye) {
+                snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+                spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate, blendState = _multiplyBlendState }, true);
+
+                drawData = new(texture,
+                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                               texture.Bounds,
+                               color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                if (hasCasingDye) {
+                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
+                }
+                drawData.Draw(spriteBatch);
+
+                spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate, blendState = BlendState.Additive }, true);
+
+                drawData = new(texture,
+                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                               texture.Bounds,
+                               color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                if (hasCasingDye) {
+                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
+                }
+                drawData.Draw(spriteBatch);
+
+                spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate }, true);
+
+                drawData = new(texture,
+                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+                               texture.Bounds,
+                               color * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                if (hasCasingDye) {
+                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
+                }
+                drawData.Draw(spriteBatch);
+
+                spriteBatch.Begin(snapshot, true);
+            }
+        }
     }
 
     public override bool PreDraw(int i, int j, SpriteBatch spriteBatch) {
@@ -262,41 +333,41 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                 AlphaSourceBlend = Blend.SourceAlpha
             };
 
-            bool hasCasingDye = !nixieTubeTE.Dye2.IsEmpty();
-            if (flag || hasCasingDye) {
-                snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
-                spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate, blendState = _multiplyBlendState }, true);
-                drawData = new(texture,
-                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                               new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
-                               color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                if (hasCasingDye) {
-                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
-                }
-                drawData.Draw(spriteBatch);
+            //bool hasCasingDye = !nixieTubeTE.Dye2.IsEmpty();
+            //if (flag || hasCasingDye) {
+            //    snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
+            //    spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate, blendState = _multiplyBlendState }, true);
+            //    drawData = new(texture,
+            //                   new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+            //                   new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
+            //                   color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            //    if (hasCasingDye) {
+            //        GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
+            //    }
+            //    drawData.Draw(spriteBatch);
 
-                spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate, blendState = BlendState.Additive }, true);
-                drawData = new(texture,
-                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                               new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
-                               color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                if (hasCasingDye) {
-                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
-                }
-                drawData.Draw(spriteBatch);
+            //    spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate, blendState = BlendState.Additive }, true);
+            //    drawData = new(texture,
+            //                   new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+            //                   new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
+            //                   color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            //    if (hasCasingDye) {
+            //        GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
+            //    }
+            //    drawData.Draw(spriteBatch);
 
-                spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate }, true);
-                drawData = new(texture,
-                               new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
-                               new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
-                               color * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                if (hasCasingDye) {
-                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
-                }
-                drawData.Draw(spriteBatch);
+            //    spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate }, true);
+            //    drawData = new(texture,
+            //                   new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+            //                   new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
+            //                   color * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            //    if (hasCasingDye) {
+            //        GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
+            //    }
+            //    drawData.Draw(spriteBatch);
 
-                spriteBatch.Begin(snapshot, true);
-            }
+            //    spriteBatch.Begin(snapshot, true);
+            //}
         }
 
         if (Main.InSmartCursorHighlightArea(i, j, out var actuallySelected)) {
