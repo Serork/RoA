@@ -2952,3 +2952,8 @@ ChainedCloud: {
 	// DisplayName: Chained Cloud
 	// Tooltip: ""
 }
+
+ThunderKingsGrace: {
+	// DisplayName: Thunder Kings Grace
+	// Tooltip: ""
+}

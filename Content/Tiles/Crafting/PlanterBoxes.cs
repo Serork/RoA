@@ -703,6 +703,9 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
         if (CloudPlatform.On_Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(self)) {
             canPlace = true;
         }
+        if (CloudPlatformAngry.On_Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(self)) {
+            canPlace = true;
+        }
 
         return canPlace;
     }

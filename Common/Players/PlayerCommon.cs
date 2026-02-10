@@ -180,6 +180,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool ShouldResetClawsOnNextAttack;
 
     public bool IsChainedCloudEffectActive;
+    public bool IsThunderKingsGraceEffectActive;
 
     public byte CrystallineNeedleIndexToBeAdded { get; private set; }
     public (ushort, ushort)[] CrystallineNeedleTime { get; private set; } = new (ushort, ushort)[5];
@@ -429,6 +430,9 @@ sealed partial class PlayerCommon : ModPlayer {
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => !checkProjectile.SameOwnerAs(self))) {
             result += projectile.velocity;
         }
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatformAngry>(checkProjectile => !checkProjectile.SameOwnerAs(self))) {
+            result += projectile.velocity;
+        }
         return result;
     }
 
@@ -619,6 +623,13 @@ sealed partial class PlayerCommon : ModPlayer {
         int count = drawInfo.DrawDataCache.Count;
 
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => !checkProjectile.SameOwnerAs(Player))) {
+            for (int i = 0; i < count; i++) {
+                DrawData value = drawInfo.DrawDataCache[i];
+                value.position += projectile.velocity;
+                drawInfo.DrawDataCache[i] = value;
+            }
+        }
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatformAngry>(checkProjectile => !checkProjectile.SameOwnerAs(Player))) {
             for (int i = 0; i < count; i++) {
                 DrawData value = drawInfo.DrawDataCache[i];
                 value.position += projectile.velocity;
@@ -1467,6 +1478,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsThunderKingsGraceEffectActive = false;
         IsChainedCloudEffectActive = false;
 
         IsGardeningGlovesEffectActive = false;

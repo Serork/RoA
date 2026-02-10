@@ -70,6 +70,11 @@ sealed class CustomTileCollision : IInitializer {
             ExtraTileCollisionBlocks_Platforms.Add(tilePosition - new Point16(-1, -1));
             ExtraTileCollisionBlocks_Platforms.Add(tilePosition - new Point16(0, -1));
         }
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatformAngry>()) {
+            Point16 tilePosition = projectile.position.ToTileCoordinates16();
+            ExtraTileCollisionBlocks_Platforms.Add(tilePosition - new Point16(-1, -1));
+            ExtraTileCollisionBlocks_Platforms.Add(tilePosition - new Point16(0, -1));
+        }
     }
 
     public static void GenerateIceBlockPositions(int num5, int value2, int value3, int value4) {

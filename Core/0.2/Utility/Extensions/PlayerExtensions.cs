@@ -19,6 +19,9 @@ static partial class PlayerExtensions {
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => !checkProjectile.SameOwnerAs(player))) {
             result += projectile.velocity;
         }
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatformAngry>(checkProjectile => !checkProjectile.SameOwnerAs(player))) {
+            result += projectile.velocity;
+        }
         return result;
     }
 

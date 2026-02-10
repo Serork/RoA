@@ -4,19 +4,19 @@ using RoA.Common;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
-using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
-sealed class ChainedCloud : ModItem {
+sealed class ThunderKingsGrace : ModItem {
     public override void SetDefaults() {
         Item.DefaultToAccessory(32, 28);
 
@@ -24,24 +24,24 @@ sealed class ChainedCloud : ModItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
-        player.GetCommon().IsChainedCloudEffectActive = true;
+        player.GetCommon().IsThunderKingsGraceEffectActive = true;
 
-        player.GetJumpState<ChainedCloudExtraJump>().Enable();
-        player.GetJumpState<ChainedCloudExtraJump2>().Enable();
+        player.GetJumpState<ThunderKingsGraceExtraJump>().Enable();
     }
 
-    class ChainedCloudExtraJump2 : ChainedCloudExtraJump {
-
-    }
-    class ChainedCloudExtraJump : ExtraJump {
+    public class ThunderKingsGraceExtraJump : ExtraJump {
         public override Position GetDefaultPosition() => AfterBottleJumps;
 
-        public override bool CanStart(Player player) => !ThunderKingsGrace.ThunderKingsGraceExtraJump.CanBeActive(player) && player.GetCommon().IsChainedCloudEffectActive;
+        public static bool CanBeActive(Player player) => !player.GetFormHandler().IsInADruidicForm && !player.GetWreathHandler().StartSlowlyIncreasingUntilFull && player.GetWreathHandler().HasEnough(0.25f) &&
+            player.GetCommon().IsThunderKingsGraceEffectActive;
 
-        public override float GetDurationMultiplier(Player player) => 0.75f;
+        public override bool CanStart(Player player) => CanBeActive(player);
+
+        public override float GetDurationMultiplier(Player player) => 1f;
 
         public override void UpdateHorizontalSpeeds(Player player) {
-
+            player.runAcceleration *= 2.25f;
+            player.maxRunSpeed *= 2f;
         }
 
         public override void ShowVisuals(Player player) {
@@ -54,31 +54,21 @@ sealed class ChainedCloud : ModItem {
             Main.dust[num2].velocity.Y = Main.dust[num2].velocity.Y * 0.5f - player.velocity.Y * 0.3f;
         }
 
-        private void UpdateMaxCloudPlatforms(Player player) {
-            IEnumerable<Projectile> list2 = TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => checkProjectile.owner != player.whoAmI);
-            List<Projectile> list = [];
-            foreach (Projectile projectile in list2) {
-                list.Add(projectile);
-            }
-            int num = 0;
-            int count = list2.Count();
-            while (list.Count >= 2 && ++num < count) {
-                Projectile projectile = list[0];
-                for (int j = 1; j < list.Count; j++) {
-                    if (list[j].timeLeft < projectile.timeLeft) {
-                        projectile = list[j];
-                    }
-                }
-                projectile.Kill();
-                list.Remove(projectile);
-            }
-            TrackedEntitiesSystem.UpdateTrackedEntityLists();
+        public override void OnEnded(Player player) {
+            ref ExtraJumpState state = ref player.GetJumpState(this);
+            state.Available = true;
         }
 
         public override void OnStarted(Player player, ref bool playSound) {
-            UpdateMaxCloudPlatforms(player);
+            var handler = player.GetWreathHandler();
+            handler.Consume(0.25f);
+
+            //playSound = false;
+
+            OnJumpEffects(player);
+
             if (player.IsLocal()) {
-                ProjectileUtils.SpawnPlayerOwnedProjectile<CloudPlatform>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("chainedcloudjump")) {
+                ProjectileUtils.SpawnPlayerOwnedProjectile<CloudPlatformAngry>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_Misc("chainedcloudjump")) {
                     Position = player.Bottom.ToTileCoordinates().ToWorldCoordinates()
                 });
             }
@@ -105,10 +95,6 @@ sealed class ChainedCloud : ModItem {
         }
 
         public static void OnJumpEffects(Player player) {
-
-        }
-
-        public override void OnEnded(Player player) {
 
         }
     }

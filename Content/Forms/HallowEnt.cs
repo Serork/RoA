@@ -74,7 +74,7 @@ sealed class HallowEnt : BaseForm {
     protected override void OnJump(Player player) {
         BaseFormDataStorage.ChangeAttackCharge1(player, 1f);
         //for (int i = 0; i < 2; i++) {
-        //    FeathersInABottle.ChainedCloudExtraJump.OnJumpEffects(player);
+        //    FeathersInABottle.ThunderKingsGraceExtraJump.OnJumpEffects(player);
         //}
 
         int num22 = player.height;
@@ -103,7 +103,7 @@ sealed class HallowEnt : BaseForm {
             return;
         }
 
-        //FeathersInABottle.ChainedCloudExtraJump.OnJumpingEffects(player);
+        //FeathersInABottle.ThunderKingsGraceExtraJump.OnJumpingEffects(player);
         int num = player.height;
         if (player.gravDir == -1f)
             num = -6;
