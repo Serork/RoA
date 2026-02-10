@@ -329,13 +329,13 @@ sealed class LightCompressor : ModItem {
                         Color = color.MultiplyRGB(new Color(136, 219, 227)).MultiplyAlpha(0.5f) * 0.75f * Ease.QuadOut(scaleFactor),
                         Scale = Vector2.One * scale.X * 0.15f
                     };
-                    if (i3 >= 1f) {
+                    if (i3 >= 0.75f) {
                         i3 = 0f;
 
                         batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
 
                         if (!Main.gamePaused && Main.instance.IsActive) {
-                            if (Main.rand.NextBool(50)) {
+                            if (Main.rand.NextBool(35)) {
                                 Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
                                     Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
                             }
