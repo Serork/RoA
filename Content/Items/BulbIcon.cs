@@ -5,6 +5,6 @@ namespace RoA.Content.Items;
 
 sealed class BulbIcon : ItemIcon {
     public override void SetDefaults() {
-        Item.SetSizeValues(20, 32);
+        Item.SetSizeValues(20, 28);
     }
 }
