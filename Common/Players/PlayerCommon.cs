@@ -15,6 +15,7 @@ using RoA.Content.Projectiles;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core;
+using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -418,6 +419,17 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.ApplyVanillaHurtEffectModifiers += On_Player_ApplyVanillaHurtEffectModifiers;
 
         On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull1;
+
+
+        On_Player.RotatedRelativePoint += On_Player_RotatedRelativePoint;
+    }
+
+    private Vector2 On_Player_RotatedRelativePoint(On_Player.orig_RotatedRelativePoint orig, Player self, Vector2 pos, bool reverseRotation, bool addGfxOffY) {
+        Vector2 result = orig(self, pos, reverseRotation, addGfxOffY);
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => !checkProjectile.SameOwnerAs(self))) {
+            result += projectile.velocity;
+        }
+        return result;
     }
 
     private void On_LegacyPlayerRenderer_DrawPlayerFull1(On_LegacyPlayerRenderer.orig_DrawPlayerFull orig, LegacyPlayerRenderer self, Camera camera, Player drawPlayer) {
@@ -606,13 +618,11 @@ sealed partial class PlayerCommon : ModPlayer {
     public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
         int count = drawInfo.DrawDataCache.Count;
 
-        if (IsChainedCloudEffectActive) {
-            foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => !checkProjectile.SameOwnerAs(Player))) {
-                for (int i = 0; i < count; i++) {
-                    DrawData value = drawInfo.DrawDataCache[i];
-                    value.position += projectile.velocity;
-                    drawInfo.DrawDataCache[i] = value;
-                }
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => !checkProjectile.SameOwnerAs(Player))) {
+            for (int i = 0; i < count; i++) {
+                DrawData value = drawInfo.DrawDataCache[i];
+                value.position += projectile.velocity;
+                drawInfo.DrawDataCache[i] = value;
             }
         }
 
@@ -1102,14 +1112,6 @@ sealed partial class PlayerCommon : ModPlayer {
         }
     }
 
-    public void SpawnCloudPlatform() {
-        if (!IsChainedCloudEffectActive) {
-            return;
-        }
-
-
-    }
-
     public delegate void PreUpdateMovementDelegate(Player player);
     public static event PreUpdateMovementDelegate PreUpdateMovementEvent;
     public override void PreUpdateMovement() {
@@ -1119,8 +1121,6 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void PostUpdateEquipsDelegate(Player player);
     public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent;
     public override void PostUpdateEquips() {
-        SpawnCloudPlatform();
-
         UpdateCrystallineNeedles();
 
         ArchiveUseCooldownInTicks = (ushort)Helper.Approach(ArchiveUseCooldownInTicks, 0, 1);

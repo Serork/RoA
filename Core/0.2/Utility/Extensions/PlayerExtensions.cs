@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common;
+using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Data;
 
 using Terraria;
@@ -13,7 +15,11 @@ static partial class PlayerExtensions {
     public static Vector2 GetPlayerCorePoint(this Player player, bool addGfY = true) {
         Vector2 vector = player.Bottom;
         Vector2 pos = player.MountedCenter;
-        return Utils.Floor(vector + (pos - vector) + new Vector2(0f, addGfY ? player.gfxOffY : 0f));
+        Vector2 result = Utils.Floor(vector + (pos - vector) + new Vector2(0f, addGfY ? player.gfxOffY : 0f));
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => !checkProjectile.SameOwnerAs(player))) {
+            result += projectile.velocity;
+        }
+        return result;
     }
 
     public static bool HasProjectile<T>(this Player player, int count = 1) where T : ModProjectile => player.ownedProjectileCounts[ModContent.ProjectileType<T>()] >= count;
