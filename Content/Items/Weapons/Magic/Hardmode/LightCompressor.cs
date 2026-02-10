@@ -387,7 +387,7 @@ sealed class LightCompressor : ModItem {
             drawMainLightLine();
         }
 
-        public override bool? CanDamage() => false;
+        public override bool? CanDamage() => true;
         public override bool? CanCutTiles() => false;
         public override bool ShouldUpdatePosition() => false;
 
