@@ -1,5 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
+using RoA.Core.Utility.Vanilla;
+
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -24,7 +27,14 @@ sealed class FeathersInABalloon : NatureItem {
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
+        player.GetCommon().IsFeathersInABalloonEffectActive = true;
+
         player.GetJumpState<FeathersInABottle.FeathersInABottleExtraJump>().Enable();
         player.jumpBoost = true;
+    }
+
+    public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player) {
+        return !(equippedItem.type == ModContent.ItemType<ThunderKingsGrace>() && player.GetCommon().IsThunderKingsGraceEffectActive) &&
+            !(equippedItem.type == ModContent.ItemType<FeathersInABottle>() && player.GetCommon().IsFeathersInABottleEffectActive);
     }
 }

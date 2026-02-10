@@ -3,6 +3,7 @@
 using RoA.Common.Druid.Forms;
 using RoA.Common.Druid.Wreath;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -32,7 +33,16 @@ sealed class FeathersInABottle : NatureItem {
         Item.value = Item.sellPrice(0, 1, 0, 0);
     }
 
-    public override void UpdateAccessory(Player player, bool hideVisual) => player.GetJumpState<FeathersInABottleExtraJump>().Enable();
+    public override void UpdateAccessory(Player player, bool hideVisual) {
+        player.GetCommon().IsFeathersInABottleEffectActive = true;
+
+        player.GetJumpState<FeathersInABottleExtraJump>().Enable();
+    }
+
+    public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player) {
+        return !(equippedItem.type == ModContent.ItemType<ThunderKingsGrace>() && player.GetCommon().IsThunderKingsGraceEffectActive) &&
+            !(equippedItem.type == ModContent.ItemType<FeathersInABalloon>() && player.GetCommon().IsFeathersInABalloonEffectActive);
+    }
 
     internal sealed class FeathersInABottleExtraJump : ExtraJump {
         public override Position GetDefaultPosition() => AfterBottleJumps;

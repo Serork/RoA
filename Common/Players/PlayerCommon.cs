@@ -182,6 +182,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsChainedCloudEffectActive;
     public bool IsThunderKingsGraceEffectActive;
 
+    public bool IsFeathersInABottleEffectActive;
+    public bool IsFeathersInABalloonEffectActive;
+
     public byte CrystallineNeedleIndexToBeAdded { get; private set; }
     public (ushort, ushort)[] CrystallineNeedleTime { get; private set; } = new (ushort, ushort)[5];
     public float[] CrystallineNeedleRotation { get; private set; } = new float[5];
@@ -1478,6 +1481,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsFeathersInABalloonEffectActive = false;
+        IsFeathersInABottleEffectActive = false;
+
         IsThunderKingsGraceEffectActive = false;
         IsChainedCloudEffectActive = false;
 

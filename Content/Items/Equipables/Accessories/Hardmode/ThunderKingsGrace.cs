@@ -25,6 +25,11 @@ sealed class ThunderKingsGrace : ModItem {
         player.GetJumpState<ThunderKingsGraceExtraJump>().Enable();
     }
 
+    public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player) {
+        return !(equippedItem.type == ModContent.ItemType<FeathersInABottle>() && player.GetCommon().IsFeathersInABottleEffectActive) &&
+            !(equippedItem.type == ModContent.ItemType<FeathersInABalloon>() && player.GetCommon().IsFeathersInABalloonEffectActive);
+    }
+
     public class ThunderKingsGraceExtraJump : ExtraJump {
         public override Position GetDefaultPosition() => AfterBottleJumps;
 
