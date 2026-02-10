@@ -21,7 +21,6 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.PreHardmode.Canes;
 
-[AutoloadGlowMask(requirement: "")]
 sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
     protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<TectonicCaneProjectile>();
 
