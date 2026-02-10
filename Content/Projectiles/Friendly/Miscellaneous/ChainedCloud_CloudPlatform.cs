@@ -113,6 +113,19 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
                 Main.dust[num24].velocity.X = Main.dust[num24].velocity.X * 0.5f - projectile.velocity.X * 0.1f;
                 Main.dust[num24].velocity.Y = Main.dust[num24].velocity.Y * 0.5f - projectile.velocity.Y * 0.3f;
             }
+
+            while (true) {
+                bool shouldBreak = true;
+                foreach (Projectile checkProjectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatformAngry>()) {
+                    if (checkProjectile.position.ToTileCoordinates() == Projectile.position.ToTileCoordinates()) {
+                        Projectile.position.Y -= 16;
+                        shouldBreak = false;
+                    }
+                }
+                if (shouldBreak) {
+                    break;
+                }
+            }
         }
 
         if (Projectile.ai[1]++ > 60f) {
