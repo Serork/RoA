@@ -13,6 +13,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Miscellaneous;
@@ -46,6 +47,29 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
     public override bool? CanDamage() => false;
     public override bool? CanCutTiles() => false;
     public override bool ShouldUpdatePosition() => false;
+
+    // also see PlanterBoxes.cs
+    public static bool On_Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(Player self) {
+        bool result = false;
+        if (!result && self.inventory[self.selectedItem].createTile >= 0 && TileID.Sets.Platforms[self.inventory[self.selectedItem].createTile]) {
+            foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>()) {
+                for (int k = Player.tileTargetX - 1; k <= Player.tileTargetX + 1; k++) {
+                    for (int l = Player.tileTargetY - 1; l <= Player.tileTargetY + 1; l++) {
+                        for (int i = 0; i < 3; i++) {
+                            for (int j = 0; j < 3; j++) {
+                                if (projectile.position.ToTileCoordinates() + new Point(i, j) == new Point(k, l)) {
+                                    result = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        result = true;
+        return result;
+    }
 
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(3);

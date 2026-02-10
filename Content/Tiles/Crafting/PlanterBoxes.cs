@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Tiles;
+using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core.Utility;
 
@@ -697,6 +698,10 @@ sealed class PlanterBoxes : ModTile, IPostSetupContent {
                 if (Main.netMode == 1 && !Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile)
                     NetMessage.SendData(17, -1, -1, null, 0, Player.tileTargetX, Player.tileTargetY);
             }
+        }
+
+        if (CloudPlatform.On_Player_PlaceThing_Tiles_BlockPlacementForAssortedThings(self)) {
+            canPlace = true;
         }
 
         return canPlace;
