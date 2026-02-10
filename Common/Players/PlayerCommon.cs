@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ModLiquidLib.ModLoader;
+using ModLiquidLib.Utils;
+
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
 using RoA.Common.VisualEffects;
@@ -186,6 +189,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsFeathersInABalloonEffectActive;
 
     public bool IsScrapRingEffectActive;
+    public bool ScrapRingWet;
+    public float ScrapRingStrength;
+    public Color ScrapRingLiquidColor;
 
     public byte CrystallineNeedleIndexToBeAdded { get; private set; }
     public (ushort, ushort)[] CrystallineNeedleTime { get; private set; } = new (ushort, ushort)[5];
@@ -826,7 +832,10 @@ sealed partial class PlayerCommon : ModPlayer {
     private Color On_Player_GetImmuneAlphaPure(On_Player.orig_GetImmuneAlphaPure orig, Player self, Color newColor, float alphaReduction) {
         Color result = orig(self, newColor, alphaReduction);
         if (self.GetCommon().FriarLanternEffectStrength > 0f) {
-            result = Color.Lerp(result, Color.Gray * 1f, self.GetCommon().FriarLanternEffectStrength);
+            result = Color.Lerp(result, result.MultiplyRGB(Color.Gray * 1f), self.GetCommon().FriarLanternEffectStrength);
+        }
+        if (self.GetCommon().ScrapRingStrength > 0f) {
+            result = Color.Lerp(result, result.MultiplyRGB(self.GetCommon().ScrapRingLiquidColor * 1f), self.GetCommon().ScrapRingStrength * 0.5f);
         }
         if (_drawingTempBufferCopies) {
             float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
@@ -856,7 +865,10 @@ sealed partial class PlayerCommon : ModPlayer {
     private Color On_Player_GetImmuneAlpha(On_Player.orig_GetImmuneAlpha orig, Player self, Color newColor, float alphaReduction) {
         Color result = orig(self, newColor, alphaReduction);
         if (self.GetCommon().FriarLanternEffectStrength > 0f) {
-            result = Color.Lerp(result, Color.Gray * 1f, self.GetCommon().FriarLanternEffectStrength);
+            result = Color.Lerp(result, result.MultiplyRGB(Color.Gray * 1f), self.GetCommon().FriarLanternEffectStrength);
+        }
+        if (self.GetCommon().ScrapRingStrength > 0f) {
+            result = Color.Lerp(result, result.MultiplyRGB(self.GetCommon().ScrapRingLiquidColor * 1f), self.GetCommon().ScrapRingStrength * 0.25f);
         }
         if (_drawingTempBufferCopies) {
             float opacity = Utils.GetLerpValue(270f, 300f, self.GetCommon().TempBufferDodgeAnimationCounter, true);
@@ -1133,9 +1145,30 @@ sealed partial class PlayerCommon : ModPlayer {
     public override void PreUpdateMovement() {
         PreUpdateMovementEvent?.Invoke(Player);
 
+        ScrapRingWet = false;
         if (IsScrapRingEffectActive) {
+            if (Player.wet) {
+                if (Player.GetModdedWetArray()[LiquidLoader.LiquidType<Content.Liquids.Tar>() - LiquidID.Count]) {
+                    ScrapRingLiquidColor = new Color(48, 37, 49);
+                }
+                else if (Player.honeyWet) {
+                    ScrapRingLiquidColor = new Color(250, 155, 16);
+                }
+                else if (Player.shimmerWet) {
+                    ScrapRingLiquidColor = WreathHandler.AetherColor;
+                }
+                else if (Player.lavaWet) {
+                    ScrapRingLiquidColor = new Color(245, 33, 7);
+                }
+                else {
+                    ScrapRingLiquidColor = new Color(13, 80, 195);
+                }
+                ScrapRingWet = true;
+            }
+
             Player.wetCount = 10;
 
+            Player.lavaWet = false;
             Player.shimmerWet = false;
             Player.honeyWet = false;
             Player.wet = false;
@@ -1145,6 +1178,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void PostUpdateEquipsDelegate(Player player);
     public static event PostUpdateEquipsDelegate PostUpdateEquipsEvent;
     public override void PostUpdateEquips() {
+        ScrapRingStrength = Helper.Approach(ScrapRingStrength, ScrapRingWet.ToInt(), 0.2f);
+
         UpdateCrystallineNeedles();
 
         ArchiveUseCooldownInTicks = (ushort)Helper.Approach(ArchiveUseCooldownInTicks, 0, 1);
