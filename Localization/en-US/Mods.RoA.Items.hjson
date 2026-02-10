@@ -2938,6 +2938,6 @@ ThunderKingsGrace: {
 }
 
 ScrapRing: {
-	DisplayName: Scrap Ring
-	Tooltip: ""
+	DisplayName: Oxidized Copper Ring
+	Tooltip: Removes movement speed penalty in liquids
 }
