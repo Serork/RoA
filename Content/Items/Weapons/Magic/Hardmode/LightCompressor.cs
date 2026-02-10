@@ -280,6 +280,7 @@ sealed class LightCompressor : ModItem {
                 int height = 2;
                 int y = 0;
                 float i3 = 1f;
+                float i4 = 1f;
                 while (true) {
                     i++;
 
@@ -338,11 +339,17 @@ sealed class LightCompressor : ModItem {
                         if (onlyBloom) {
                             batch.DrawWithSnapshot(ResourceManager.Bloom, position, bloomDrawInfo, blendState: BlendState.Additive);
 
-                            if (!Main.gamePaused && Main.instance.IsActive) {
-                                if (Main.rand.NextBool(35)) {
-                                    Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
-                                        Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                            void createDusts() {
+                                if (!Main.gamePaused && Main.instance.IsActive) {
+                                    if (Main.rand.NextBool(35)) {
+                                        Dust.NewDustPerfect(position + Main.rand.NextVector2CircularEdge(10f, 10f), ModContent.DustType<LightCompressorDust>(),
+                                            Main.rand.NextVector2Circular(1f, 1f) + position.DirectionTo(position + velocity), 0, Color.White, Main.rand.NextFloat(0.8f, 1.2f));
+                                    }
                                 }
+                            }
+                            createDusts();
+                            for (; i4 > 0f; i4 -= 0.5f) {
+                                createDusts();
                             }
 
                             Lighting.AddLight(position, (Color.Lerp(Color.SkyBlue, Color.Blue, 0.05f) with { A = 0 }).ToVector3() * 0.75f);
