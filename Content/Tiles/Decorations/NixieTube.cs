@@ -313,7 +313,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                 snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
                 spriteBatch.End();
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.instance.GraphicsDevice.RasterizerState, null, snapshot.transformationMatrix);
-                byte a = (byte)Helper.Wave(0, 100, 5f, i + j);
+                byte a = (byte)Helper.Wave(0, 60, 5f, i + j);
                 drawData = new(TextureAssets.Tile[Type].Value,
                                new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                                new Rectangle(frameX, frameY, 16, height),

@@ -10,7 +10,8 @@ namespace RoA.Content.Dusts;
 
 sealed class NixieTube : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) {
-        Color result = (Color.White * 0.9f).MultiplyRGB(dust.color) * (dust.alpha / 255f);
+        byte a = (byte)Helper.Wave(0, 60, 5f, 0);
+        Color result = (Color.White with { A = a } * 0.9f).MultiplyRGB(dust.color) * (dust.alpha / 255f);
         result.A = 50;
         return result;
     }
