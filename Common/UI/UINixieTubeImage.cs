@@ -33,7 +33,7 @@ class UINixieTubeImage : UIFramedImage {
             if (indexToShow >= engRusCount && indexToShow < engRusCount + NixieTubePicker_RemadePicker.MISCCOUNT) {
                 indexToShow -= engRusCount - 1;
             }
-            Main.hoverItemName = NixieTubePicker_RemadePicker.GetHoverText(_nixieTubeInfo.Index) + $" ({indexToShow})";
+            Main.hoverItemName = NixieTubePicker_RemadePicker.GetHoverText(_nixieTubeInfo.Index) + $" ({indexToShow - 1})";
         }
 
         base.DrawSelf(spriteBatch);
