@@ -106,6 +106,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                 nixieTubeTE.Activate();
             }
             else {
+                nixieTubeTE.Activate(true);
                 int currentIndex = NixieTubePicker_RemadePicker.GetIndex(topLeft);
                 var category2 = category % 3;
                 NixieTubePicker_RemadePicker.ChangeNixieTubeSymbol(currentIndex, topLeft, increaseBy, false, category2);
