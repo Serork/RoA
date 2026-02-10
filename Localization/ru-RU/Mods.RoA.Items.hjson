@@ -2945,20 +2945,20 @@ Knightslayer: {
 
 Taproot: {
 	DisplayName: Корневище
-	Tooltip: Наносит больше урона врагам природы
+	Tooltip: Наносит больше урона противникам природы
 }
 
 ChainedCloud: {
-	// DisplayName: Chained Cloud
+	DisplayName: Облако на цепи
 	// Tooltip: ""
 }
 
 ThunderKingsGrace: {
-	// DisplayName: Thunder Kings Grace
+	DisplayName: Благо владыки молний
 	// Tooltip: ""
 }
 
 ScrapRing: {
-	// DisplayName: Scrap Ring
-	// Tooltip: ""
+	DisplayName: Окисленное медное кольцо
+	Tooltip: Убирает снижение скорости передвижения в жидкостях
 }
