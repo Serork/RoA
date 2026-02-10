@@ -275,20 +275,20 @@ sealed class LightCompressor : ModItem {
                 startPosition2 += normalizedVelocity * offsetValue * 1.25f;
                 Vector2 endPosition = target.Position;
                 Vector2 velocity = startPosition.DirectionTo(startPosition2) * 2f;
-                float lerpValue = 0.1f;
                 int i = 0;
                 int height = 2;
                 int y = 0;
                 float i3 = 1f;
                 float i4 = 1f;
+                Texture2D texture = _lightTexture.Value;
+                float stepFactor2 = (height / (float)texture.Bounds.Height);
+                float lerpValue = 0.1f * stepFactor2;
                 while (true) {
                     i++;
 
                     float extraScale = 1.25f;
 
                     float stepFactor = 1f;
-                    Texture2D texture = _lightTexture.Value;
-                    float stepFactor2 = (height / (float)texture.Bounds.Height);
                     i3 += stepFactor2;
                     float step = height * stepFactor /** extraScale*/;
                     float distance = Vector2.Distance(startPosition, endPosition);
@@ -323,7 +323,7 @@ sealed class LightCompressor : ModItem {
 
                     Vector2 position = startPosition;
                     startPosition += velocity.SafeNormalize() * step;
-                    float offsetValue2 = 2f * scaleFactor * waveFactor;
+                    float offsetValue2 = 2f * scaleFactor * waveFactor * stepFactor2 * 2f;
                     startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, Projectile.whoAmI * 3 + i2 * 0.05f + index * 3) * offsetValue2;
 
                     DrawInfo bloomDrawInfo = new() {
@@ -360,7 +360,7 @@ sealed class LightCompressor : ModItem {
                         batch.Draw(texture, position, drawInfo);
                     }
                     float length = (startPosition2 - endPosition).Length();
-                    float factor = 1f;
+                    float factor = 1f * stepFactor2;
                     factor -= length / maxLength;
                     factor = MathF.Max(0.01f, factor);
                     float minDistance = maxLength / 2f;
@@ -373,7 +373,7 @@ sealed class LightCompressor : ModItem {
                     lerpValue = Helper.Approach(lerpValue, maxLerpValue, TimeSystem.LogicDeltaTime * factor);
 
                     y += height;
-                    if (y > texture.Bounds.Height) {
+                    if (y >= texture.Bounds.Height) {
                         y = 0;
                     }
                 }
@@ -387,7 +387,7 @@ sealed class LightCompressor : ModItem {
             drawMainLightLine();
         }
 
-        public override bool? CanDamage() => true;
+        public override bool? CanDamage() => false;
         public override bool? CanCutTiles() => false;
         public override bool ShouldUpdatePosition() => false;
 
