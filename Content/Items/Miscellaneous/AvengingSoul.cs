@@ -1,10 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Dusts;
+using RoA.Core.Utility.Extensions;
+
+using System;
+
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Miscellaneous;
 
@@ -34,6 +40,24 @@ sealed class AvengingSoul : MagicHerb1 {
         int direction = 0;
         PlayerDeathReason playerDeathReason = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.AvengingSoul{Main.rand.Next(2)}").ToNetworkText(player.name));
         int result = (int)player.Hurt(playerDeathReason, num, direction, armorPenetration: 9999);
+
+        for (float num17 = 0f; num17 < 1f; num17 += 0.05f) {
+            if (Main.rand.NextBool()) {
+                continue;
+            }
+
+            Vector2 vector10 = Vector2.UnitX.RotatedBy((float)Math.PI * 2f * num17);
+            Vector2 center = player.GetPlayerCorePoint();
+            float num18 = Main.rand.NextFloat(0.5f, 3.5f) * Main.rand.NextFloat(1f, 2f);
+            int size = 4;
+            Vector2 dustPosition = center + Main.rand.NextVector2CircularEdge(size, size);
+            Vector2 dustVelocity = vector10 * num18 * 10f;
+            dustPosition += dustVelocity;
+            dustVelocity = dustPosition.DirectionTo(center) * 4f;
+            Dust dust = Dust.NewDustPerfect(dustPosition, 43, dustVelocity, 254, Color.White, 0.5f);
+            dust.noGravity = true;
+            dust.fadeIn = Main.rand.NextFloat() * 1.2f;
+        }
 
         return false;
     }
