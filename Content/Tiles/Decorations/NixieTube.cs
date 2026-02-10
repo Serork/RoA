@@ -289,7 +289,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                 drawData = new(texture,
                                new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
                                new Rectangle(36 + frameX % 36, frameY % 56, 16, height),
-                               color * 0.25f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                               color * 0.5f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 if (hasCasingDye) {
                     GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
                 }

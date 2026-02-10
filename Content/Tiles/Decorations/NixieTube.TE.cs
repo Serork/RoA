@@ -145,6 +145,8 @@ sealed class NixieTubeTE : ModTileEntity {
         tag[RoA.ModName + name + nameof(IsFlickerOff)] = IsFlickerOff;
         tag[RoA.ModName + name + nameof(Activated)] = Activated;
         tag[RoA.ModName + name + nameof(Eng)] = Eng;
+        tag[RoA.ModName + name + nameof(_deactivatedTimer)] = _deactivatedTimer;
+        tag[RoA.ModName + name + nameof(_deactivatedTimer2)] = _deactivatedTimer2;
         if (LightColor is null) {
             tag[RoA.ModName + name + nameof(LightColor) + "null"] = true;
             return;
@@ -166,6 +168,8 @@ sealed class NixieTubeTE : ModTileEntity {
         IsFlickerOff = tag.GetBool(RoA.ModName + name + nameof(IsFlickerOff));
         Activated = tag.GetBool(RoA.ModName + name + nameof(Activated));
         Eng = tag.GetBool(RoA.ModName + name + nameof(Eng));
+        _deactivatedTimer = tag.GetInt(RoA.ModName + name + nameof(_deactivatedTimer));
+        _deactivatedTimer2 = tag.GetInt(RoA.ModName + name + nameof(_deactivatedTimer2));
         bool isLightColorNull = !tag.GetBool(RoA.ModName + name + nameof(LightColor) + "null");
         if (isLightColorNull) {
             return;
