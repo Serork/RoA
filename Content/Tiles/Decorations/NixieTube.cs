@@ -102,7 +102,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
             Wiring.SkipWire(topX + 1, topY + 1);
             Wiring.SkipWire(topX + 1, topY + 2);
 
-            if (increaseBy == 0) {
+            if (increaseBy == 0 && category == 0) {
                 nixieTubeTE.Activate();
             }
             else {
