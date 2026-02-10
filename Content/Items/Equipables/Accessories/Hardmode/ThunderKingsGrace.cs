@@ -1,13 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common;
 using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
-
-using System.Collections.Generic;
-using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
