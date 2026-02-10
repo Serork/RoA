@@ -2962,3 +2962,8 @@ ScrapRing: {
 	DisplayName: Окисленное медное кольцо
 	Tooltip: Убирает снижение скорости передвижения в жидкостях
 }
+
+BulbIcon: {
+	// DisplayName: ""
+	// Tooltip: ""
+}

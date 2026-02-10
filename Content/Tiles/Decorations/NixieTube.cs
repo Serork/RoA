@@ -7,6 +7,7 @@ using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.UI;
+using RoA.Content.Items;
 using RoA.Content.Tiles.Mechanisms;
 using RoA.Core.Utility;
 
@@ -155,7 +156,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
     public override void MouseOver(int i, int j) {
         Player player = Main.LocalPlayer;
         if (player.IsWithinSnappngRangeToTile(i, j, 80)) {
-            player.cursorItemIconID = ItemID.Cog;
+            player.cursorItemIconID = ModContent.ItemType<BulbIcon>();
             if (player.cursorItemIconID != -1) {
                 player.noThrow = 2;
                 player.cursorItemIconEnabled = true;

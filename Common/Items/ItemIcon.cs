@@ -5,7 +5,7 @@ namespace RoA.Common.Items;
 
 abstract class ItemIcon : ModItem {
     public override void SetStaticDefaults() {
-        ItemID.Sets.ItemsThatShouldNotBeInInventory[Type] = true;
-        ItemID.Sets.Deprecated[Type] = true;
+        ItemID.Sets.ItemsThatShouldNotBeInInventory[Item.type] = true;
+        //ItemID.Sets.Deprecated[Item.type] = true;
     }
 }

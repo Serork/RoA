@@ -113,7 +113,7 @@ sealed class BoneHarpy : InteractableProjectile {
 
     private void RemoveTrails() {
         if (TrailOpacity > 0f) {
-            TrailOpacity -= 0.15f;
+            TrailOpacity -= 0.2f;
         }
         else {
             TrailOpacity = 0f;
@@ -129,7 +129,7 @@ sealed class BoneHarpy : InteractableProjectile {
             return;
         }
         if (TrailOpacity < 1f) {
-            TrailOpacity += 0.15f;
+            TrailOpacity += 0.1f;
         }
         else {
             TrailOpacity = 1f;

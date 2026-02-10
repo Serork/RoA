@@ -3,8 +3,8 @@ using RoA.Core.Defaults;
 
 namespace RoA.Content.Items;
 
-sealed class WingIcon : ItemIcon {
+sealed class BulbIcon : ItemIcon {
     public override void SetDefaults() {
-        Item.SetSizeValues(22, 24);
+        Item.SetSizeValues(20, 32);
     }
 }

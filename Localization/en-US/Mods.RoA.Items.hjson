@@ -2941,3 +2941,8 @@ ScrapRing: {
 	DisplayName: Oxidized Copper Ring
 	Tooltip: Removes movement speed penalty in liquids
 }
+
+BulbIcon: {
+	DisplayName: ""
+	Tooltip: ""
+}
