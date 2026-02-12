@@ -101,7 +101,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
                 Vector2 dustVelocity = vector10 * num18 * 10f;
                 dustPosition += dustVelocity;
                 dustVelocity = dustPosition.DirectionTo(center) * 4f;
-                Dust dust = Dust.NewDustPerfect(dustPosition, ModContent.DustType<TintableDustGlow>(), dustVelocity, Main.rand.Next(50, 150), new Color(166, 178, 53) with { A = 50 }, Main.rand.NextFloat(1.25f, 2f) * 2f);
+                Dust dust = Dust.NewDustPerfect(dustPosition, ModContent.DustType<TintableDustGlow_Trail>(), dustVelocity, Main.rand.Next(50, 150), new Color(166, 178, 53) with { A = 50 }, Main.rand.NextFloat(1.25f, 2f) * 2f);
                 dust.noGravity = true;
                 dust.fadeIn = Main.rand.NextFloat() * 1.2f;
                 dust.noLightEmittence = true;
@@ -117,7 +117,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
                 int size = 4;
                 Vector2 dustPosition = center + Main.rand.NextVector2CircularEdge(size, size);
                 Vector2 dustVelocity = vector10 * num18;
-                Dust dust = Dust.NewDustPerfect(dustPosition, ModContent.DustType<TintableDustGlow>(), dustVelocity, Main.rand.Next(50, 150), new Color(166, 178, 53) with { A = 50 }, Main.rand.NextFloat(1.25f, 2f) * 2f);
+                Dust dust = Dust.NewDustPerfect(dustPosition, ModContent.DustType<TintableDustGlow>(), dustVelocity, Main.rand.Next(50, 150), new Color(166, 178, 53) with { A = 50 }, Main.rand.NextFloat(1.25f, 2f) * 3f);
                 dust.noGravity = true;
                 dust.fadeIn = Main.rand.NextFloat() * 1.2f;
                 dust.noLightEmittence = true;
