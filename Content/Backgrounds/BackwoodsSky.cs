@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Tiles;
-using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Menus;
 using RoA.Core.Utility;
 
@@ -15,14 +14,10 @@ using Terraria.ModLoader;
 namespace RoA.Content.Backgrounds;
 
 sealed class BackwoodsSky : CustomSky {
-    private bool _skyActive;
     private float _opacity;
 
     public override void Update(GameTime gameTime) {
-        if (!Main.LocalPlayer.InModBiome<BackwoodsBiome>() || Main.gameMenu) {
-            _skyActive = false;
-        }
-        _opacity = MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f);
+        _opacity = Helper.Approach(_opacity, MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f), 0.02f);
         //if (_skyActive && _opacity < 1f) {
         //    _opacity += 0.02f;
         //}
@@ -50,11 +45,11 @@ sealed class BackwoodsSky : CustomSky {
 
     public override float GetCloudAlpha() => 1f - _opacity;
 
-    public override void Activate(Vector2 position, params object[] args) => _skyActive = true;
+    public override void Activate(Vector2 position, params object[] args) { }
 
-    public override void Deactivate(params object[] args) => _skyActive = Main.LocalPlayer.InModBiome<BackwoodsBiome>();
+    public override void Deactivate(params object[] args) { }
 
-    public override void Reset() => _skyActive = false;
+    public override void Reset() { }
 
-    public override bool IsActive() => _skyActive || _opacity > 0f;
+    public override bool IsActive() => _opacity > 0f;
 }
