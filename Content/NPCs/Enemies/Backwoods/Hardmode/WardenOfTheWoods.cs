@@ -5,10 +5,10 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Placeable.Banners;
 using RoA.Content.Projectiles.Enemies;
-using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -24,6 +24,7 @@ using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.WorldBuilding;
 
 namespace RoA.Content.NPCs.Enemies.Backwoods.Hardmode;
 
@@ -370,6 +371,27 @@ class WardenOfTheWoods : ModNPC, IRequestAssets {
         setRotation();
         setDirection();
         handleMoveset();
+
+        Point origin = NPC.Bottom.ToTileCoordinates();
+        int maxDistance = 10;
+        int num1471 = 20;
+        int num1472 = 30;
+        if (WorldGen.InWorld(origin.X, origin.Y, 20) && Main.tile[origin.X, origin.Y] != null) {
+            if (WorldUtils.Find(origin, Searches.Chain(new Searches.Down(maxDistance), new Terraria.WorldBuilding.Conditions.IsSolid()), out var result)) {
+                float num1473 = 1f - (float)Math.Abs(origin.Y - result.Y) / 10f;
+                _initialPosition.Y -= 1.5f * num1473;
+            }
+            else if (!WorldUtils.Find(origin, Searches.Chain(new Searches.Down(num1471), new Terraria.WorldBuilding.Conditions.IsSolid()), out result)) {
+                float num1474 = 1f;
+                if (WorldUtils.Find(origin, Searches.Chain(new Searches.Down(num1472), new Terraria.WorldBuilding.Conditions.IsSolid()), out result))
+                    num1474 = Utils.GetLerpValue(num1471, num1472, Math.Abs(origin.Y - result.Y), clamped: true);
+
+                _initialPosition.Y += 1.5f * num1474;
+            }
+        }
+
+        if (!Main.remixWorld && !Main.getGoodWorld && (double)NPC.Bottom.Y > Main.worldSurface * 16.0 - 100.0)
+            _initialPosition.Y = (float)Main.worldSurface * 16f - (float)NPC.height - 100f;
     }
 
     public override void HitEffect(NPC.HitInfo hit) {
