@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
+using RoA.Common;
 using RoA.Content.Dusts;
+using RoA.Core;
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +12,9 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.WorldBuilding;
@@ -19,11 +26,57 @@ sealed class GreatFilter : ModNPC {
     public static int ShieldStrengthTowerGreatFilter = 0;
     public static bool TowerActiveGreatFilter;
 
+    // temp
+    public static bool ZoneGreatFilter;
+
     public override void Load() {
         On_NPC.getTenthAnniversaryAdjustments += On_NPC_getTenthAnniversaryAdjustments;
         On_NPC.DoesntDespawnToInactivity += On_NPC_DoesntDespawnToInactivity;
 
         On_WorldGen.TriggerLunarApocalypse += On_WorldGen_TriggerLunarApocalypse;
+
+        On_Main.CheckMonoliths += On_Main_CheckMonoliths;
+
+        On_Main.ClearVisualPostProcessEffects += On_Main_ClearVisualPostProcessEffects;
+        On_Player.UpdateBiomes += On_Player_UpdateBiomes;
+    }
+
+    private void On_Player_UpdateBiomes(On_Player.orig_UpdateBiomes orig, Player self) {
+        ZoneGreatFilter = false;
+
+        Vector2 vector = Vector2.Zero;
+        for (int i = 0; i < 200; i++) {
+            if (!Main.npc[i].active)
+                continue;
+
+            if (Main.npc[i].type == ModContent.NPCType<GreatFilter>()) {
+                if (self.Distance(Main.npc[i].Center) <= 4000f) {
+                    ZoneGreatFilter = true;
+                    vector = Main.npc[i].Center;
+                }
+            }
+        }
+        self.ManageSpecialBiomeVisuals(ShaderLoader.GreatFilter, ZoneGreatFilter, vector - new Vector2(0f, 10f));
+
+        orig(self);
+    }
+
+    private void On_Main_ClearVisualPostProcessEffects(On_Main.orig_ClearVisualPostProcessEffects orig) {
+        orig();
+
+        string key = ShaderLoader.GreatFilter;
+        if (SkyManager.Instance[key] != null && SkyManager.Instance[key].IsActive())
+            SkyManager.Instance[key].Deactivate();
+
+        if (Overlays.Scene[key] != null && Overlays.Scene[key].IsVisible())
+            Overlays.Scene[key].Deactivate();
+
+        if (Terraria.Graphics.Effects.Filters.Scene[key] != null && Terraria.Graphics.Effects.Filters.Scene[key].IsActive())
+            Terraria.Graphics.Effects.Filters.Scene[key].Deactivate();
+    }
+
+    private void On_Main_CheckMonoliths(On_Main.orig_CheckMonoliths orig) {
+        orig();
     }
 
     private void On_WorldGen_TriggerLunarApocalypse(On_WorldGen.orig_TriggerLunarApocalypse orig) {
@@ -162,7 +215,7 @@ sealed class GreatFilter : ModNPC {
         TowerActiveGreatFilter = NPC.TowerActiveVortex = (NPC.TowerActiveNebula = (NPC.TowerActiveSolar = (NPC.TowerActiveStardust = true)));
         NPC.LunarApocalypseIsUp = true;
         ShieldStrengthTowerGreatFilter = NPC.ShieldStrengthTowerSolar = (NPC.ShieldStrengthTowerVortex = (NPC.ShieldStrengthTowerNebula = (NPC.ShieldStrengthTowerStardust = NPC.ShieldStrengthTowerMax)));
-        
+
         // TODO: add support
         NetMessage.SendData(101);
         WorldGen.MessageLunarApocalypse();
@@ -227,6 +280,9 @@ sealed class GreatFilter : ModNPC {
     }
 
     public override void AI() {
+        NPC.LunarApocalypseIsUp = true;
+        NPC.MoonLordCountdown = 0;
+
         if (NPC.ai[2] == 1f) {
             NPC.velocity = Vector2.UnitY * NPC.velocity.Length();
             if (NPC.velocity.Y < 0.25f)
@@ -596,5 +652,69 @@ sealed class GreatFilter : ModNPC {
         //    Main.npc[num1487].netUpdate = true;
         //    this.ai[1] = 60f;
         //}
+    }
+
+    public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        SpriteBatch mySpriteBatch = spriteBatch;
+        NPC rCurrentNPC = NPC;
+
+        int num230 = ShieldStrengthTowerGreatFilter;
+        string key = ShaderLoader.GreatFilter;
+
+        SpriteEffects spriteEffects = SpriteEffects.None;
+
+        int type = NPC.type;
+
+        Color npcColor = drawColor;
+
+        float num35 = 0f;
+        float num36 = Main.NPCAddHeight(rCurrentNPC);
+
+        Vector2 halfSize = new Vector2(TextureAssets.Npc[type].Width() / 2, TextureAssets.Npc[type].Height() / Main.npcFrameCount[type] / 2);
+
+        Texture2D value60 = TextureAssets.Npc[type].Value;
+        Vector2 vector65 = rCurrentNPC.Center - screenPos;
+        Vector2 vector66 = vector65 - new Vector2(300f, 310f);
+        vector65 -= new Vector2(value60.Width, value60.Height / Main.npcFrameCount[type]) * rCurrentNPC.scale / 2f;
+        vector65 += halfSize * rCurrentNPC.scale + new Vector2(0f, num35 + num36 + rCurrentNPC.gfxOffY);
+        mySpriteBatch.Draw(value60, vector65, rCurrentNPC.frame, rCurrentNPC.GetAlpha(npcColor), rCurrentNPC.rotation, halfSize, rCurrentNPC.scale, spriteEffects, 0f);
+
+        float num231 = (float)num230 / (float)NPC.ShieldStrengthTowerMax;
+        if (rCurrentNPC.IsABestiaryIconDummy)
+            return false;
+
+        if (num230 > 0) {
+            mySpriteBatch.End();
+            mySpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.Transform);
+            float num232 = 0f;
+            if (rCurrentNPC.ai[3] > 0f && rCurrentNPC.ai[3] <= 30f)
+                num232 = 1f - rCurrentNPC.ai[3] / 30f;
+
+            Terraria.Graphics.Effects.Filters.Scene[key].GetShader().UseIntensity(1f + num232).UseProgress(0f);
+            DrawData value61 = new DrawData(ResourceManager.Perlin, vector66 + new Vector2(300f, 300f), new Microsoft.Xna.Framework.Rectangle(0, 0, 600, 600), Microsoft.Xna.Framework.Color.White * (num231 * 0.8f + 0.2f), rCurrentNPC.rotation, new Vector2(300f, 300f), rCurrentNPC.scale * (1f + num232 * 0.05f), spriteEffects);
+            GameShaders.Misc["ForceField"].UseColor(new Vector3(1f + num232 * 0.5f));
+            GameShaders.Misc["ForceField"].Apply(value61);
+            value61.Draw(mySpriteBatch);
+            mySpriteBatch.End();
+            mySpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        }
+        else if (rCurrentNPC.ai[3] > 0f) {
+            mySpriteBatch.End();
+            mySpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, null, Main.Transform);
+            float num233 = rCurrentNPC.ai[3] / 120f;
+            float num234 = Math.Min(rCurrentNPC.ai[3] / 30f, 1f);
+            Terraria.Graphics.Effects.Filters.Scene[key].GetShader().UseIntensity(Math.Min(5f, 15f * num233) + 1f).UseProgress(num233);
+            DrawData value62 = new DrawData(ResourceManager.Perlin, vector66 + new Vector2(300f, 300f), new Microsoft.Xna.Framework.Rectangle(0, 0, 600, 600), new Microsoft.Xna.Framework.Color(new Vector4(1f - (float)Math.Sqrt(num234))), rCurrentNPC.rotation, new Vector2(300f, 300f), rCurrentNPC.scale * (1f + num234), spriteEffects);
+            GameShaders.Misc["ForceField"].UseColor(new Vector3(2f));
+            GameShaders.Misc["ForceField"].Apply(value62);
+            value62.Draw(mySpriteBatch);
+            mySpriteBatch.End();
+            mySpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        }
+        else {
+            Terraria.Graphics.Effects.Filters.Scene[key].GetShader().UseIntensity(0f).UseProgress(0f);
+        }
+
+        return false;
     }
 }

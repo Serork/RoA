@@ -56,6 +56,7 @@ static class ResourceManager {
     public static Texture2D Light => ModContent.Request<Texture2D>(VisualEffectTextures + "Light", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Noise => ModContent.Request<Texture2D>(VisualEffectTextures + "Noise", AssetRequestMode.ImmediateLoad).Value;
     public static Texture2D Flare => ModContent.Request<Texture2D>(VisualEffectTextures + "Flare", AssetRequestMode.ImmediateLoad).Value;
+    public static Texture2D Perlin => ModContent.Request<Texture2D>(VisualEffectTextures + "Perlin", AssetRequestMode.ImmediateLoad).Value;
 
     public static string VisualEffectTextures => Textures + "VisualEffects/";
 

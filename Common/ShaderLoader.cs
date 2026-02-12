@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common.Cache;
 ﻿using RoA.Common.World;
 using RoA.Content.Backgrounds;
+using RoA.Content.NPCs.Enemies.Bosses.GreatFilter;
 using RoA.Core;
 
 using System;
@@ -15,6 +16,7 @@ using System.Reflection;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.Skies;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
@@ -190,6 +192,7 @@ sealed class ShaderLoader : ModSystem {
     public static readonly string EnragedLothorSky = RoA.ModName + "Enraged Lothor Sky";
     public static readonly string FogVignette = RoA.ModName + "FogVignette";
     public static readonly string Vignette = RoA.ModName + "Vignette";
+    public static readonly string GreatFilter = RoA.ModName + "GreatFilter";
 
     public static VignetteScreenShaderData FogVignetteShaderData { get; private set; } = null!;
     public static Effect FogVignetteEffectData { get; private set; } = null!;
@@ -217,6 +220,10 @@ sealed class ShaderLoader : ModSystem {
         }
 
         void load01Shaders() {
+            Filters.Scene[GreatFilter] = new Filter(new ScreenShaderData("FilterTower").UseColor(0.8f, 0.8f, 0.8f).UseOpacity(0.3f), EffectPriority.High);
+            SkyManager.Instance[GreatFilter] = new GreatFilterSky();
+            Filters.Scene[GreatFilter].Load();
+
             Asset<Effect> vignetteShader = ModContent.Request<Effect>(ResourceManager.Effects + "FogVignette", AssetRequestMode.ImmediateLoad);
             FogVignetteEffectData = vignetteShader.Value;
             FogVignetteShaderData = new VignetteScreenShaderData(vignetteShader.Value, "MainPS");
