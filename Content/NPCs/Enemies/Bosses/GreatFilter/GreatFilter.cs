@@ -53,8 +53,8 @@ sealed class GreatFilter : ModNPC {
 
             x += step / 2;
 
-            if (currentSection == 2 && Main.rand.NextBool()) {
-                x += step;
+            if (currentSection == 2 && Main.rand.NextBool(1)) {
+                x += step + step / 6;
             }
 
             //if (currentSection == 4 || currentSection == 5) {
