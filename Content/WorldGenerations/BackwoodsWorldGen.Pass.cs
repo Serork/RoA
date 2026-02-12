@@ -4619,7 +4619,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (attemtps <= 100) {
                 attemtps++;
             }
-            int num797_2 = Main.maxTilesX / (5 + attemtps / 20);
+            int num797_2 = Main.maxTilesX / (5 + attemtps / 15);
             //if (drunkWorldGen) {
             //    num797 = 100;
             //    num793 = ((!GenVars.crimsonLeft) ? genRand.Next((int)((double)Main.maxTilesX * 0.5), Main.maxTilesX - num785) : genRand.Next(num785, (int)((double)Main.maxTilesX * 0.5)));
