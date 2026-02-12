@@ -2876,6 +2876,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         for (int x = maxLeft - 50; x < maxRight + 50; x++) {
             for (int y = WorldGenHelper.SafeFloatingIslandY; y < Bottom + EdgeY; y++) {
+                if (WorldGenHelper.ActiveTile(i, j, TileID.FallenLog) && WorldGenHelper.ActiveTile(i, j + 1, TileID.Grass)) {
+                    WorldGenHelper.GetTileSafely(i, j + 1).TileType = _grassTileType;
+                }
                 if (WorldGenHelper.ActiveTile(i, j, TileID.Pots)) {
                     if (MustSkipWallTypes.Contains(Main.tile[i, j].WallType)) {
                         continue;
