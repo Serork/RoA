@@ -1310,8 +1310,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
             if (_random.NextChance(0.014) && tile.ActiveTile(_dirtTileType)) {
                 int sizeX = _random.Next(4, 9);
-                int sizeY = _random.Next(20, 30);
-                WorldGen.TileRunner(surface.X, surface.Y, sizeX, sizeY, _stoneTileType);
+                int sizeY = _random.Next(20, 30) * 2;
+                WorldGen.TileRunner(surface.X, surface.Y, sizeX, sizeY, _stoneTileType, speedY: 1f, speedX: 1f * _random.NextFloat(0f, 0.75f) * _random.NextBool().ToDirectionInt());
             }
         }
     }
