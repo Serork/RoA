@@ -8,8 +8,6 @@ using RoA.Common.Cache;
 using RoA.Common.Tiles;
 using RoA.Common.UI;
 using RoA.Content.Items;
-using RoA.Content.Items.LiquidsSpecific;
-using RoA.Content.Items.Miscellaneous;
 using RoA.Content.Tiles.Mechanisms;
 using RoA.Core.Utility;
 
@@ -23,7 +21,6 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
-using Terraria.WorldBuilding;
 
 namespace RoA.Content.Tiles.Decorations;
 
@@ -236,21 +233,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                                new Rectangle(frameX / 36 * 34, frameY / 56 * 52 + 2, 34, 52),
                                Color.White with { A = a }, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 if (!nixieTubeTE.Dye1.IsEmpty()) {
-                    var shaderData = GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye1.type);
-                    bool hasCustomData = false;
-                    if (nixieTubeTE.Dye1.type == ModContent.ItemType<TarDye>()) {
-                        (shaderData as TarDyeArmorShaderData)!.Apply(null, drawData);
-
-                        hasCustomData = true;
-                    }
-                    if (nixieTubeTE.Dye1.type == ModContent.ItemType<TerraDye>()) {
-                        (shaderData as TerraDyeArmorShaderData)!.Apply(null, drawData);
-
-                        hasCustomData = true;
-                    }
-                    if (!hasCustomData) {
-                        shaderData.Apply(null, drawData);
-                    }
+                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye1.type).Apply(null, drawData);
                 }
                 if (nixieTubeTE!.Active) {
                     drawData.Draw(spriteBatch);
@@ -278,24 +261,6 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
             zero += new Vector2(2f, 6f);
             bool hasCasingDye = !nixieTubeTE.Dye2.IsEmpty();
             if (flag || hasCasingDye) {
-                void applyDyeShader() {
-                    var shaderData = GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type);
-                    bool hasCustomData = false;
-                    if (nixieTubeTE.Dye2.type == ModContent.ItemType<TarDye>()) {
-                        (shaderData as TarDyeArmorShaderData)!.Apply(null, drawData);
-
-                        hasCustomData = true;
-                    }
-                    else if (nixieTubeTE.Dye2.type == ModContent.ItemType<TerraDye>()) {
-                        (shaderData as TerraDyeArmorShaderData)!.Apply(null, drawData);
-
-                        hasCustomData = true;
-                    }
-                    if (!hasCustomData) {
-                        shaderData.Apply(null, drawData);
-                    }
-                }
-
                 snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
                 spriteBatch.Begin(snapshot with { sortMode = SpriteSortMode.Immediate, blendState = _multiplyBlendState }, true);
 
@@ -304,7 +269,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                                texture.Bounds,
                                color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 if (hasCasingDye) {
-                    applyDyeShader();
+                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
                 }
                 drawData.Draw(spriteBatch);
 
@@ -315,7 +280,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                                texture.Bounds,
                                color * 1f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 if (hasCasingDye) {
-                    applyDyeShader();
+                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
                 }
                 drawData.Draw(spriteBatch);
 
@@ -326,7 +291,7 @@ sealed class NixieTube : ModTile, TileHooks.IPostDraw {
                                texture.Bounds,
                                color * 0.375f, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 if (hasCasingDye) {
-                    applyDyeShader();
+                    GameShaders.Armor.GetShaderFromItemId(nixieTubeTE.Dye2.type).Apply(null, drawData);
                 }
                 drawData.Draw(spriteBatch);
 
