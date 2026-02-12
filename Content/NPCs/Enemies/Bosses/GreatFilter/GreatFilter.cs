@@ -280,9 +280,6 @@ sealed class GreatFilter : ModNPC {
     }
 
     public override void AI() {
-        NPC.LunarApocalypseIsUp = true;
-        NPC.MoonLordCountdown = 0;
-
         if (NPC.ai[2] == 1f) {
             NPC.velocity = Vector2.UnitY * NPC.velocity.Length();
             if (NPC.velocity.Y < 0.25f)
