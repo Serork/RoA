@@ -27,6 +27,7 @@ sealed class GreatFilter : ModNPC {
     }
 
     private void On_WorldGen_TriggerLunarApocalypse(On_WorldGen.orig_TriggerLunarApocalypse orig) {
+        int currentAddedPillarIndex = 0;
         List<int> list = new List<int> {
             517,
             422,
@@ -44,6 +45,9 @@ sealed class GreatFilter : ModNPC {
         int sectionCount = 7;
         int step = Main.maxTilesX / sectionCount;
         HashSet<Point16> possibleTowerPositions = [];
+
+        bool onRightSide = Main.rand.NextBool();
+
         for (int currentSection = 0; currentSection < sectionCount; currentSection++) {
             if (currentSection == 3 || currentSection == 6) {
                 continue;
@@ -52,6 +56,13 @@ sealed class GreatFilter : ModNPC {
             int x = step * (1 + currentSection) - step / 2;
 
             x += step / 2;
+
+            if (currentSection == 2 && onRightSide) {
+                x += step + step / 6;
+            }
+            if (currentSection > 2 && onRightSide) {
+                x += step / 6;
+            }
 
             //if (currentSection == 4 || currentSection == 5) {
             //    x += step;
@@ -64,7 +75,7 @@ sealed class GreatFilter : ModNPC {
             int num2 = pillarPosition.Y;
             bool flag = false;
 
-            int pillarNPCType = ModContent.NPCType<GreatFilter>();
+            int pillarNPCType = array[currentAddedPillarIndex];
 
             for (int k = 0; k < 30; k++) {
                 int num4 = Main.rand.Next(-100, 101);
@@ -76,6 +87,8 @@ sealed class GreatFilter : ModNPC {
                             NetMessage.SendData(23, -1, -1, null, num6);
 
                         flag = true;
+
+                        currentAddedPillarIndex++;
                         break;
                     }
 
@@ -89,6 +102,8 @@ sealed class GreatFilter : ModNPC {
                             NetMessage.SendData(23, -1, -1, null, num8);
 
                         flag = true;
+
+                        currentAddedPillarIndex++;
                         break;
                     }
                 }
@@ -97,8 +112,10 @@ sealed class GreatFilter : ModNPC {
                     break;
             }
 
-            if (!flag)
+            if (!flag) {
                 NPC.NewNPC(new EntitySource_WorldEvent(), num3 * 16, (num2 - 40) * 16, pillarNPCType);
+                currentAddedPillarIndex++;
+            }
         }
 
         //int num = Main.maxTilesX / 5;
