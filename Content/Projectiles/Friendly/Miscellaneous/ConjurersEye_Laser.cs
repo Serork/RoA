@@ -62,7 +62,8 @@ sealed class ConjurersEyeLaser : ModProjectile {
             var unit = Vector2.Normalize(Projectile.velocity);
             for (int i = 0; i < 4; i++)
                 Dust.NewDustPerfect(spawnPosition + Main.rand.NextVector2Unit() * Main.rand.NextFloat(6f),
-                    ModContent.DustType<TintableDustGlow>(), unit.RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(0.25f, 1.25f), Main.rand.Next(100), Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Main.rand.NextFloat()), Main.rand.NextFloat(2f)).noGravity = true;
+                    ModContent.DustType<TintableDustGlow>(), unit.RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(0.25f, 1.25f), Main.rand.Next(100), Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Main.rand.NextFloat()), 
+                    MathF.Min(1f, Main.rand.NextFloat(2f))).noGravity = true;
 
             Projectile.ai[2] = 0.4f * Main.rand.NextFloatDirection();
         }

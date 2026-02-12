@@ -32,7 +32,7 @@ sealed class TintableDustGlow : ModDust {
             if (dust.alpha < 255) {
                 dust.scale += 0.09f;
                 if (dust.scale >= 1f) {
-                    dust.scale = 1f;
+                    //dust.scale = 1f;
                     dust.alpha = 255;
                 }
             }
