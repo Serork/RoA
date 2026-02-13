@@ -63,11 +63,13 @@ sealed class ConjurersEyeLaser : ModProjectile {
         Player player = Projectile.GetOwnerAsPlayer();
         if (player.GetCommon().IsEyePatchEffectActive || player.GetCommon().IsBlindFoldEffectActive) {
             bool flag = false;
-            if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.LeftEye && player.FacedRight()) {
-                flag = true;
-            }
-            if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.RightEye && !player.FacedRight()) {
-                flag = true;
+            if (!player.GetCommon().IsBlindFoldEffectActive) {
+                if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.LeftEye && player.FacedRight()) {
+                    flag = true;
+                }
+                if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.RightEye && !player.FacedRight()) {
+                    flag = true;
+                }
             }
             if (!flag) {
                 Projectile.friendly = false;

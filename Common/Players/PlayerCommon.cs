@@ -1470,8 +1470,33 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource) {
         int? sourceProjectileType = damageSource.SourceProjectileType;
-        if (sourceProjectileType.HasValue && sourceProjectileType == ModContent.ProjectileType<SatchelChargeProjectile>()) {
-            damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.SatchelCharge{Main.rand.Next(2)}").ToNetworkText(Player.name));
+        if (sourceProjectileType.HasValue) {
+            if (sourceProjectileType == ModContent.ProjectileType<SatchelChargeProjectile>()) {
+                damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.SatchelCharge{Main.rand.Next(2)}").ToNetworkText(Player.name));
+            }
+            if (sourceProjectileType == ModContent.ProjectileType<ConjurersEyeLaser>()) {
+                bool blindfoldDeath = IsBlindFoldEffectActive;
+                bool eyePatchDeath = IsEyePatchEffectActive;
+                bool flag = false;
+                List<int> ids = [];
+                if (!IsBlindFoldEffectActive) {
+                    if (CurrentEyePatchMode == EyePatchMode.LeftEye && Player.FacedRight()) {
+                        flag = true;
+                    }
+                    if (CurrentEyePatchMode == EyePatchMode.RightEye && !Player.FacedRight()) {
+                        flag = true;
+                    }
+                    if (!flag) {
+                        ids.Add(0);
+                    }
+                }
+                else {
+                    ids.Add(1);
+                }
+                if (!flag) {
+                    damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.ConjurersEyeLaser{ids[Main.rand.Next(ids.Count)]}").ToNetworkText(Player.name));
+                }
+            }
         }
 
         return base.PreKill(damage, hitDirection, pvp, ref playSound, ref genDust, ref damageSource);
