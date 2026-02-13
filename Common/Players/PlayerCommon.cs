@@ -196,6 +196,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsEyePatchEffectActive, IsEyePatchEffectActive_Hidden;
 
+    public bool IsBlindFoldEffectActive;
+
     public enum EyePatchMode : byte {
         LeftEye = 0,
         RightEye = 1,
