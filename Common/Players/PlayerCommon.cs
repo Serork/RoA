@@ -1478,7 +1478,6 @@ sealed partial class PlayerCommon : ModPlayer {
                 bool blindfoldDeath = IsBlindFoldEffectActive;
                 bool eyePatchDeath = IsEyePatchEffectActive;
                 bool flag = false;
-                List<int> ids = [];
                 if (!IsBlindFoldEffectActive) {
                     if (CurrentEyePatchMode == EyePatchMode.LeftEye && Player.FacedRight()) {
                         flag = true;
@@ -1486,15 +1485,9 @@ sealed partial class PlayerCommon : ModPlayer {
                     if (CurrentEyePatchMode == EyePatchMode.RightEye && !Player.FacedRight()) {
                         flag = true;
                     }
-                    if (!flag) {
-                        ids.Add(0);
-                    }
-                }
-                else {
-                    ids.Add(1);
                 }
                 if (!flag) {
-                    damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.ConjurersEyeLaser{ids[Main.rand.Next(ids.Count)]}").ToNetworkText(Player.name));
+                    damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.ConjurersEyeLaser{Main.rand.Next(4)}").ToNetworkText(Player.name));
                 }
             }
         }
