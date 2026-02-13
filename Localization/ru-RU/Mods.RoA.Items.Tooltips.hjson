@@ -58,3 +58,6 @@ WorshipperSetBonus:
 	'''
 DynastySetBonus: Нанесение урона вблизи кратковременно увеличивает скорость передвижения
 ElderwoodSetBonus: Дает шанс, что полученный урон будет снижен, взамен на кратковременное снижение скорости передвижения
+// EyePatchLeftEye: LeftEye
+// EyePatchRightEye: RightEye
+// EyePatchBothEyes: BothEyes

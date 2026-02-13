@@ -403,11 +403,20 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         tag[RoA.ModName + nameof(CurrentEyePatchMode)] = (byte)CurrentEyePatchMode;
+        if (IsEyePatchEffectActive) {
+            tag[RoA.ModName + nameof(IsEyePatchEffectActive)] = true;
+        }
+        if (IsEyePatchEffectActive_Hidden) {
+            tag[RoA.ModName + nameof(IsEyePatchEffectActive_Hidden)] = true;
+        }
     }
 
     public override void LoadData(TagCompound tag) {
         PerfectClotActivated = tag.ContainsKey(RoA.ModName + nameof(PerfectClotActivated));
+
         CurrentEyePatchMode = (EyePatchMode)tag.GetByte(RoA.ModName + nameof(CurrentEyePatchMode));
+        IsEyePatchEffectActive = tag.ContainsKey(RoA.ModName + nameof(IsEyePatchEffectActive));
+        IsEyePatchEffectActive_Hidden = tag.ContainsKey(RoA.ModName + nameof(IsEyePatchEffectActive_Hidden));
     }
 
     public override void Load() {
@@ -1544,8 +1553,10 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
-        IsEyePatchEffectActive_Hidden = false;
-        IsEyePatchEffectActive = false;
+        if (!Main.gameMenu) {
+            IsEyePatchEffectActive_Hidden = false;
+            IsEyePatchEffectActive = false;
+        }
 
         IsScrapRingEffectActive = false;
 

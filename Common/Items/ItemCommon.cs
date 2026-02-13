@@ -1,4 +1,6 @@
-﻿using RoA.Core.Utility.Vanilla;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.ID;
@@ -15,6 +17,12 @@ sealed partial class ItemCommon : GlobalItem {
         UseItemEvent?.Invoke(item, player);
 
         return base.UseItem(item, player);
+    }
+
+    public delegate void ModifyShootStatsDelegate(Item item, Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback);
+    public static event ModifyShootStatsDelegate ModifyShootStatsEvent = null!;
+    public override void ModifyShootStats(Item item, Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
+        ModifyShootStatsEvent?.Invoke(item, player, ref position, ref velocity, ref type, ref damage, ref knockback);
     }
 
     public override void SetStaticDefaults() {

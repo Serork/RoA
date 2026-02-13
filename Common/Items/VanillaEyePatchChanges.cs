@@ -9,12 +9,14 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
+using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
@@ -38,6 +40,43 @@ sealed class VanillaEyePatchChanges : GlobalItem {
         On_ItemSlot.OverrideHover_ItemArray_int_int += On_ItemSlot_OverrideHover_ItemArray_int_int;
 
         ExtraDrawLayerSupport.PostHeadDrawEvent += ExtraDrawLayerSupport_PostHeadDrawEvent;
+
+        ItemCommon.ModifyShootStatsEvent += ItemCommon_ModifyShootStatsEvent;
+    }
+
+    public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
+        TooltipLine line = new(Mod, "eyepatchtooltip", Language.GetTextValue($"Mods.RoA.Items.Tooltips.EyePatch{Main.LocalPlayer.GetCommon().CurrentEyePatchMode}"));
+        tooltips.Add(line);
+    }
+
+    private void ItemCommon_ModifyShootStatsEvent(Item item, Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
+        if (!player.GetCommon().IsEyePatchEffectActive) {
+            return;
+        }
+        if (item.DamageType != DamageClass.Ranged) {
+            return;
+        }
+
+        var handler = player.GetCommon();
+        PlayerCommon.EyePatchMode currentEyePatchMode = handler.CurrentEyePatchMode;
+        bool onChosenSide = player.GetViableMousePosition().X > player.GetPlayerCorePoint().X;
+        if (currentEyePatchMode == PlayerCommon.EyePatchMode.RightEye) {
+            onChosenSide = player.GetViableMousePosition().X < player.GetPlayerCorePoint().X;
+        }
+        else if (handler.CurrentEyePatchMode == PlayerCommon.EyePatchMode.BothEyes) {
+            onChosenSide = true;
+        }
+        if (onChosenSide) {
+            switch (currentEyePatchMode) {
+                case PlayerCommon.EyePatchMode.LeftEye:
+                case PlayerCommon.EyePatchMode.RightEye:
+                    damage = (int)(damage * 1.2f);
+                    break;
+                case PlayerCommon.EyePatchMode.BothEyes:
+                    damage = (int)(damage * 1.1f);
+                    break;
+            }
+        }
     }
 
     private void ExtraDrawLayerSupport_PostHeadDrawEvent(ref Terraria.DataStructures.PlayerDrawSet drawinfo) {
@@ -47,6 +86,10 @@ sealed class VanillaEyePatchChanges : GlobalItem {
         }
 
         if (player.GetCommon().IsEyePatchEffectActive_Hidden) {
+            return;
+        }
+
+        if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.LeftEye) {
             return;
         }
 
@@ -67,6 +110,7 @@ sealed class VanillaEyePatchChanges : GlobalItem {
         }
     }
 
+    // TODO: sync
     private void On_ItemSlot_OverrideHover_ItemArray_int_int(On_ItemSlot.orig_OverrideHover_ItemArray_int_int orig, Item[] inv, int context, int slot) {
         orig(inv, context, slot);
 
@@ -111,25 +155,6 @@ sealed class VanillaEyePatchChanges : GlobalItem {
     }
 
     public override void ModifyShootStats(Item item, Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
-        var handler = player.GetCommon();
-        PlayerCommon.EyePatchMode currentEyePatchMode = handler.CurrentEyePatchMode;
-        bool onChosenSide = player.GetViableMousePosition().X < player.GetPlayerCorePoint().X;
-        if (currentEyePatchMode == PlayerCommon.EyePatchMode.RightEye) {
-            onChosenSide = player.GetViableMousePosition().X > player.GetPlayerCorePoint().X;
-        }
-        else if (handler.CurrentEyePatchMode == PlayerCommon.EyePatchMode.BothEyes) {
-            onChosenSide = true;
-        }
-        if (item.DamageType == DamageClass.Ranged && onChosenSide) {
-            switch (currentEyePatchMode) {
-                case PlayerCommon.EyePatchMode.LeftEye:
-                case PlayerCommon.EyePatchMode.RightEye:
-                    damage = (int)(damage * 1.2f);
-                    break;
-                case PlayerCommon.EyePatchMode.BothEyes:
-                    damage = (int)(damage * 1.1f);
-                    break;
-            }
-        }
+
     }
 }
