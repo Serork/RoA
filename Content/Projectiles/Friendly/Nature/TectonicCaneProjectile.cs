@@ -187,7 +187,8 @@ sealed class TectonicCaneProjectile : NatureProjectile {
             new Vector2(60f, sizeY));
     }
 
-    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) => behindNPCsAndTiles.Add(index);
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) 
+        => behindNPCsAndTiles.Add(index);
 
     public override bool PreDraw(ref Color lightColor) {
         Vector2 size = new(60f, 90f);

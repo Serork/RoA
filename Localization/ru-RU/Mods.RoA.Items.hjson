@@ -2977,3 +2977,8 @@ CommandosBelt: {
 	// DisplayName: Commandos Belt
 	// Tooltip: ""
 }
+
+FungalCane: {
+	// DisplayName: Fungal Cane
+	// Tooltip: ""
+}
