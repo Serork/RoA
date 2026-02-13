@@ -57,7 +57,16 @@ sealed class VanillaEyePatchChanges : GlobalItem {
     public override bool PreDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
         Player player = Main.LocalPlayer;
 
-        ItemUtils.DrawItem(item, drawColor, 0f, TextureAssets.Item[item.type].Value, scale, position, spriteEffects: (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.RightEye || player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.BothEyes).ToSpriteEffects());
+        bool flag = false;
+        if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.BothEyes) {
+            flag = true;
+        }
+
+        ItemUtils.DrawItem(item, drawColor, flag ? -MathHelper.PiOver4 * 0.5f : 0f, TextureAssets.Item[item.type].Value, scale, position + (flag.ToInt() * Vector2.One * 4f), spriteEffects: (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.RightEye || player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.BothEyes).ToSpriteEffects());
+
+        if (flag) {
+            ItemUtils.DrawItem(item, drawColor, MathHelper.PiOver4 * 0.5f, TextureAssets.Item[item.type].Value, scale, position - Vector2.One * 4f, spriteEffects: SpriteEffects.None);
+        }
 
         return false;
     }
