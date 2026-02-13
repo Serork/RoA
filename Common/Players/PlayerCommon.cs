@@ -1553,6 +1553,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsBlindFoldEffectActive = false;
+
         if (!Main.gameMenu) {
             IsEyePatchEffectActive_Hidden = false;
             IsEyePatchEffectActive = false;

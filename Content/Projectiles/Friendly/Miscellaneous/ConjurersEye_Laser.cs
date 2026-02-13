@@ -61,7 +61,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
 
     public override void AI() {
         Player player = Projectile.GetOwnerAsPlayer();
-        if (player.GetCommon().IsEyePatchEffectActive) {
+        if (player.GetCommon().IsEyePatchEffectActive || player.GetCommon().IsBlindFoldEffectActive) {
             bool flag = false;
             if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.LeftEye && player.FacedRight()) {
                 flag = true;

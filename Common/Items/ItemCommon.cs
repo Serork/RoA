@@ -47,6 +47,10 @@ sealed partial class ItemCommon : GlobalItem {
         VanillaSkullUpdateEquip(item, player);
 
         TarEnchantmentUpdateEquip(item, player);
+
+        if (item.type == ItemID.Blindfold) {
+            player.GetCommon().IsBlindFoldEffectActive = true;
+        }
     }
 
     public override void UpdateAccessory(Item item, Player player, bool hideVisual) {
