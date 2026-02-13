@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -144,6 +145,8 @@ sealed class VanillaEyePatchChanges : GlobalItem {
                 return;
 
             if (Main.mouseRightRelease) {
+                SoundEngine.PlaySound(SoundID.MenuTick);
+
                 Item item = inv[slot];
                 var handler = Main.LocalPlayer.GetCommon();
                 handler.CurrentEyePatchMode++;
