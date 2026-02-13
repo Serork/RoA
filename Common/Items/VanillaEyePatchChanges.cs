@@ -45,8 +45,21 @@ sealed class VanillaEyePatchChanges : GlobalItem {
     }
 
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips) {
-        TooltipLine line = new(Mod, "eyepatchtooltip", Language.GetTextValue($"Mods.RoA.Items.Tooltips.EyePatch{Main.LocalPlayer.GetCommon().CurrentEyePatchMode}"));
+        string sideText_Name = Language.GetTextValue($"Mods.RoA.Items.Tooltips.EyePatch{Main.LocalPlayer.GetCommon().CurrentEyePatchMode}");
+        int index = tooltips.FindIndex(x => x.Name == "ItemName");
+        tooltips[index].Text += $" ({sideText_Name})";
+
+        string sideText = Language.GetTextValue($"Mods.RoA.Items.Tooltips.EyePatch{Main.LocalPlayer.GetCommon().CurrentEyePatchMode}_Desc");
+        TooltipLine line = new(Mod, "eyepatchtooltip", sideText);
         tooltips.Add(line);
+    }
+
+    public override bool PreDrawInInventory(Item item, SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
+        Player player = Main.LocalPlayer;
+
+        ItemUtils.DrawItem(item, drawColor, 0f, TextureAssets.Item[item.type].Value, scale, position, spriteEffects: (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.RightEye || player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.BothEyes).ToSpriteEffects());
+
+        return false;
     }
 
     private void ItemCommon_ModifyShootStatsEvent(Item item, Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {

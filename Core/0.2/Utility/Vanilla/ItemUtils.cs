@@ -250,8 +250,10 @@ static class ItemUtils {
         }
     }
 
-    public static void DrawItem(Item item, Color color, float rotation = 0f, Texture2D? texture = null, float scale = 1f, Vector2? position = null) {
+    public static void DrawItem(Item item, Color color, float rotation = 0f, Texture2D? texture = null, float scale = 1f, Vector2? position = null, SpriteEffects? spriteEffects = null) {
         texture ??= TextureAssets.Item[item.type].Value;
+
+        spriteEffects ??= SpriteEffects.None;
 
         Vector2 origin = texture.Size() / 2f;
         if (item.shimmered) {
@@ -276,7 +278,7 @@ static class ItemUtils {
             Main.spriteBatch.DrawWithSnapshot(() => {
                 DrawData data = new(texture, position.Value, null,
                                     color,
-                                    rotation, origin, scale, SpriteEffects.None, 0f);
+                                    rotation, origin, scale, spriteEffects.Value, 0f);
                 GameShaders.Armor.Apply(GameShaders.Armor.GetShaderIdFromItemId(ModContent.ItemType<TerraDye>()), item, data);
                 data.Draw(Main.spriteBatch);
             }, sortMode: SpriteSortMode.Immediate);
@@ -284,7 +286,7 @@ static class ItemUtils {
         else {
             Main.spriteBatch.Draw(texture, position.Value, null,
                                   color,
-                                  rotation, origin, scale, SpriteEffects.None, 0f);
+                                  rotation, origin, scale, spriteEffects.Value, 0f);
         }
 
         if ((item.type == ItemID.MushroomSpear || item.type == ItemID.Hammush) && !TileHelper.DrawingTiles) {
@@ -292,7 +294,7 @@ static class ItemUtils {
         }
 
         if (item.shimmered) {
-            Main.spriteBatch.Draw(texture, position.Value, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, position.Value, null, new Microsoft.Xna.Framework.Color(color.R, color.G, color.B, 0), rotation, origin, scale, spriteEffects.Value, 0f);
         }
     }
 }
