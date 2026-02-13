@@ -29,7 +29,7 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
         Mid2Texture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "BackwoodsMid2");
     }
 
-    public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => -1;
+    public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => base.ChooseCloseTexture(ref scale, ref parallax, ref a, ref b);
 
     public override int ChooseMiddleTexture() => -1;
 

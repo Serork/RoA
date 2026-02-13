@@ -34,7 +34,7 @@ sealed class BackwoodsMenu : ModMenu {
 
     public override void Update(bool isOnTitleScreen) {
         if (Main.netMode == NetmodeID.SinglePlayer) {
-            Main.time = 5000;
+            Main.time = 7500;
             Main.dayTime = true;
         }
     }
