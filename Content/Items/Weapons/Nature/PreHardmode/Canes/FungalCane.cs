@@ -4,6 +4,7 @@ using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.ID;
@@ -28,6 +29,12 @@ sealed class FungalCane : CaneBaseItem<FungalCane.FungalCaneBase> {
     }
 
     public sealed class FungalCaneBase : CaneBaseProjectile {
+        private bool[] _smallShroomSpawned = null!;
+
+        protected override void Initialize() {
+            _smallShroomSpawned = new bool[5];
+        }
+
         protected override bool ShouldWaitUntilProjDespawn() => false;
 
         protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
@@ -36,6 +43,24 @@ sealed class FungalCane : CaneBaseItem<FungalCane.FungalCaneBase> {
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
 
+        }
+
+        protected override void AfterProcessingCane() {
+            int index = 0;
+            for (float i = 0f; i < 1f;) {
+                if (AttackProgress01 > i && !_smallShroomSpawned[index]) {
+                    _smallShroomSpawned[index] = true;
+                    if (Owner.IsLocal()) {
+                        ProjectileUtils.SpawnPlayerOwnedProjectile<FungalCaneSmallShroom>(new ProjectileUtils.SpawnProjectileArgs(Owner, Projectile.GetSource_FromThis()) {
+                            Position = CorePosition,
+                            Damage = Projectile.damage,
+                            KnockBack = Projectile.knockBack
+                        });
+                    }
+                }
+                index++;
+                i += 0.2f;
+            }
         }
     }
 }
