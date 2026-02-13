@@ -33,7 +33,7 @@ sealed partial class Hooks : ModSystem {
 
     private void On_Player_UpdateEquips(On_Player.orig_UpdateEquips orig, Player self, int i) {
         if (self.IsLocal() && Main.mouseItem.IsModded(out ModItem modItem) && modItem is RangedWeaponWithCustomAmmo rangedWeaponWithCustomAmmo) {
-            rangedWeaponWithCustomAmmo.RecoverAmmo();
+            rangedWeaponWithCustomAmmo.RecoverAmmo(self);
         }
         if (self.IsLocal() && self.GetCommon().IsChromaticScarfEffectActive && Main.mouseItem.IsAWeapon() && Main.mouseItem.TryGetGlobalItem(out ChromaticScarfDebuffPicker modItem2)) {
             modItem2.UpdateCurrentDebuff();

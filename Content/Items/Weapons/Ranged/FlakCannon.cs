@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Ranged;
 
 sealed class FlakCannon : RangedWeaponWithCustomAmmo {
-    protected override BaseMaxAmmoAmount MaxAmmoAmount => BaseMaxAmmoAmount.Four;
+    protected override BaseMaxAmmoAmount MaxAmmoAmount => BaseMaxAmmoAmount.Two;
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(40, 20);

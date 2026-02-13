@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Weapons.Ranged;
 
 sealed class BlueRose : RangedWeaponWithCustomAmmo {
-    protected override BaseMaxAmmoAmount MaxAmmoAmount => BaseMaxAmmoAmount.Three;
+    protected override BaseMaxAmmoAmount MaxAmmoAmount => BaseMaxAmmoAmount.Two;
 
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(52, 32);

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using ReLogic.Content;
 
 using RoA.Common.Players;
@@ -33,26 +35,27 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
     private byte _currentAmmoAmount = 0;
     private ushort _timeForAmmorRecoveryInTicks = 0;
 
-    private byte CurrentAmmoAmount {
-        get => _currentAmmoAmount;
-        set {
-            _currentAmmoAmount = (byte)Utils.Clamp(value, 0, CurrentMaxAmmoAmount);
-        }
-    }
+    private byte GetCurrentAmmoAmount(Player player) => (byte)Utils.Clamp(_currentAmmoAmount, 0, GetCurrentMaxAmmoAmount(player));
 
-    private bool HasAmmo => CurrentAmmoAmount > 0;
-    private bool HasMaxAmmo => CurrentAmmoAmount == CurrentMaxAmmoAmount;
+    private bool HasAmmo(Player player) => GetCurrentAmmoAmount(player) > 0;
+    private bool HasMaxAmmo(Player player) => GetCurrentAmmoAmount(player) == GetCurrentMaxAmmoAmount(player);
 
-    private byte CurrentMaxAmmoAmount => (byte)(MaxAmmoAmount + 2);
+    private byte GetCurrentMaxAmmoAmount(Player player) => (byte)(MaxAmmoAmount + player.GetModPlayer<RangedArmorSetPlayer>().ExtraCustomAmmoAmount + 2);
 
     private void UseAmmo(Player player) {
-        if (!HasAmmo) {
+        if (!HasAmmo(player)) {
             return;
         }
 
         var handler = player.GetModPlayer<RangedArmorSetPlayer>();
         if (handler.AllAmmoConsumptionReduce > 0f) {
             if (Main.rand.NextFloat() <= handler.AllAmmoConsumptionReduce) {
+                return;
+            }
+        }
+
+        if (handler.ExtraCustomAmmoConsumptionReduce > 0f) {
+            if (Main.rand.NextFloat() <= handler.ExtraCustomAmmoConsumptionReduce) {
                 return;
             }
         }
@@ -75,18 +78,18 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
         if (player.ammoCost75 && Main.rand.Next(4) == 0)
             return;
 
-        CurrentAmmoAmount--;
+        _currentAmmoAmount--;
     }
 
-    public void RecoverAmmo() {
-        if (HasMaxAmmo) {
+    public void RecoverAmmo(Player player) {
+        if (HasMaxAmmo(player)) {
             return;
         }
 
         if (_timeForAmmorRecoveryInTicks++ > BASETIMEFORAMMORECOVERYINTICKS) {
             _timeForAmmorRecoveryInTicks = 0;
 
-            CurrentAmmoAmount++;
+            _currentAmmoAmount++;
         }
     }
 
@@ -117,14 +120,14 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
         return base.UseItem(player);
     }
 
-    public sealed override bool CanUseItem(Player player) => HasAmmo;
+    public sealed override bool CanUseItem(Player player) => HasAmmo(player);
 
     public override void SaveData(TagCompound tag) {
-        tag[AMMOSAVEKEY] = CurrentAmmoAmount;
+        tag[AMMOSAVEKEY] = _currentAmmoAmount;
     }
 
     public override void LoadData(TagCompound tag) {
-        CurrentAmmoAmount = tag.GetByte(AMMOSAVEKEY);
+        _currentAmmoAmount = tag.GetByte(AMMOSAVEKEY);
     }
 
     public sealed override void PostDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale) {
@@ -165,10 +168,12 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
         //}
         //drawAmmo();
 
+        Player player = Main.LocalPlayer;
+
         bool draw2 = true,
              draw3 = false,
              draw4 = false;
-        switch (CurrentMaxAmmoAmount) {
+        switch (GetCurrentMaxAmmoAmount(player)) {
             case 3:
                 draw3 = true;
                 draw2 = false;
@@ -192,7 +197,7 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
                 ammoTexture = _specialAmmoTexture4.Value;
                 frameCount = 5;
             }
-            Rectangle ammoClip = Utils.Frame(ammoTexture, 1, frameCount, frameY: frameCount - 1 - CurrentAmmoAmount);
+            Rectangle ammoClip = Utils.Frame(ammoTexture, 1, frameCount, frameY: frameCount - 1 - GetCurrentAmmoAmount(player));
             Vector2 ammoOrigin = ammoClip.Centered();
             Color ammoColor = drawColor;
             DrawInfo drawInfo = new() {
@@ -208,13 +213,13 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
     }
 
     public sealed override void HoldItem(Player player) {
-        RecoverAmmo();
+        RecoverAmmo(player);
     }
 
     public sealed override void UpdateInventory(Player player) {
         if (player.GetSelectedItem() == Item) {
             return;
         }
-        RecoverAmmo();
+        RecoverAmmo(player);
     }
 }

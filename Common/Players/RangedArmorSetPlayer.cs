@@ -11,10 +11,16 @@ public class RangedArmorSetPlayer : ModPlayer {
     public float AllAmmoConsumptionReduce { get; internal set; }
     public bool TaurusArmorSet { get; internal set; }
 
+    public byte ExtraCustomAmmoAmount;
+    public float ExtraCustomAmmoConsumptionReduce;
+
     public override void ResetEffects() {
         ArrowConsumptionReduce = 0;
         AllAmmoConsumptionReduce = 0;
         TaurusArmorSet = false;
+
+        ExtraCustomAmmoAmount = 0;
+        ExtraCustomAmmoConsumptionReduce = 0f;
     }
 
     private class ExtraArrowLogicHandler : GlobalItem {

@@ -2946,3 +2946,8 @@ BulbIcon: {
 	DisplayName: ""
 	Tooltip: ""
 }
+
+AmmoBelt: {
+	DisplayName: Ammo Belt
+	Tooltip: ""
+}
