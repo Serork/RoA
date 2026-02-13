@@ -99,7 +99,8 @@ sealed class TarBiome_GenPass : ModSystem {
 
         tasks.Insert(tasks.FindIndex(task => task.Name == "Settle Liquids") + 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             int num916 = 5 * WorldGenHelper.WorldSize;
-            double num917 = (double)(Main.maxTilesX - 200) / (double)num916;
+            int beachWidth = GenVars.beachBordersWidth / 2;
+            double num917 = (double)(Main.maxTilesX - beachWidth) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
             int num918 = 0;
             int num919 = 0;
@@ -107,7 +108,7 @@ sealed class TarBiome_GenPass : ModSystem {
                 double num920 = (double)num919 / (double)num916;
                 progress.Set(num920);
                 progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Tar").Value;
-                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 400, (int)GenVars.worldSurface + 200, (int)num917, (int)GenVars.lavaLine - 300 - (int)GenVars.worldSurface);
+                Point point3 = WorldGen.RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - beachWidth)) + beachWidth, (int)GenVars.worldSurface + 200, (int)num917, (int)GenVars.lavaLine - 300 - (int)GenVars.worldSurface);
                 //if (remixWorldGen)
                 //    point3 = RandomRectanglePoint((int)(num920 * (double)(Main.maxTilesX - 200)) + 100, (int)GenVars.worldSurface + 100, (int)num917, (int)GenVars.rockLayer - (int)GenVars.worldSurface - 100);
 
