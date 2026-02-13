@@ -32,8 +32,8 @@ sealed class GreatFilterSky : CustomSky {
     private float _fadeOpacity;
 
     public override void OnLoad() {
-        _planetTexture = ModContent.Request<Texture2D>(ResourceManager.AmbienceTextures + "GreatFilterPlanet");
-        _bgTexture = ModContent.Request<Texture2D>(ResourceManager.AmbienceTextures + "GreatFilterBackground");
+        _planetTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "GreatFilterPlanet");
+        _bgTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "GreatFilterBackground");
     }
 
     public override void Update(GameTime gameTime) {

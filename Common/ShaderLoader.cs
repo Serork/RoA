@@ -220,7 +220,7 @@ sealed class ShaderLoader : ModSystem {
         }
 
         void load01Shaders() {
-            Filters.Scene[GreatFilter] = new Filter(new ScreenShaderData("FilterTower").UseColor(0.8f, 0.8f, 0.8f).UseOpacity(0.5f), EffectPriority.High);
+            Filters.Scene[GreatFilter] = new Filter(new ScreenShaderData("FilterTower").UseColor(1f, 1f, 1f).UseOpacity(0.5f), EffectPriority.High);
             SkyManager.Instance[GreatFilter] = new GreatFilterSky();
             Filters.Scene[GreatFilter].Load();
 
