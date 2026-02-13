@@ -145,7 +145,7 @@ sealed class VanillaEyePatchChanges : GlobalItem {
                 return;
 
             if (Main.mouseRightRelease) {
-                SoundEngine.PlaySound(SoundID.MenuTick);
+                SoundEngine.PlaySound(SoundID.Grab);
 
                 Item item = inv[slot];
                 var handler = Main.LocalPlayer.GetCommon();
