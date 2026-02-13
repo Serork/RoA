@@ -1475,20 +1475,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.SatchelCharge{Main.rand.Next(2)}").ToNetworkText(Player.name));
             }
             if (sourceProjectileType == ModContent.ProjectileType<ConjurersEyeLaser>()) {
-                bool blindfoldDeath = IsBlindFoldEffectActive;
-                bool eyePatchDeath = IsEyePatchEffectActive;
-                bool flag = false;
-                if (!IsBlindFoldEffectActive) {
-                    if (CurrentEyePatchMode == EyePatchMode.LeftEye && Player.FacedRight()) {
-                        flag = true;
-                    }
-                    if (CurrentEyePatchMode == EyePatchMode.RightEye && !Player.FacedRight()) {
-                        flag = true;
-                    }
-                }
-                if (!flag) {
-                    damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.ConjurersEyeLaser{Main.rand.Next(4)}").ToNetworkText(Player.name));
-                }
+                damageSource = PlayerDeathReason.ByCustomReason(Language.GetOrRegister($"Mods.RoA.DeathReasons.ConjurersEyeLaser{Main.rand.Next(4)}").ToNetworkText(Player.name));
             }
         }
 
