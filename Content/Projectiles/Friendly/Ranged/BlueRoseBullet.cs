@@ -164,7 +164,7 @@ sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
         int width = texture.Width,
             height = texture.Height;
         Color shadowColor = lightColor;
-        shadowColor = shadowColor.MultiplyAlpha(Helper.Wave(0.75f, 1f, 20f, Projectile.whoAmI));
+        shadowColor = shadowColor.MultiplyAlpha(Helper.Wave(0.75f, 1f, 20f, Projectile.identity));
         float opacity = Projectile.Opacity;
         if (Projectile.ai[2] == 1f) {
             shadowColor = shadowColor.MultiplyAlpha(Projectile.Opacity);

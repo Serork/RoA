@@ -212,7 +212,7 @@ sealed class TerraFracture : NatureProjectile_NoTextureLoad, IRequestAssets {
         SpriteEffects effects = SpriteEffects.None;
 
         float colorWaveSpeed = 15f;
-        float getColorWave(float offset = 0f) => Helper.Wave(0f, 1f, colorWaveSpeed, Projectile.whoAmI + offset);
+        float getColorWave(float offset = 0f) => Helper.Wave(0f, 1f, colorWaveSpeed, Projectile.identity + offset);
 
         float num5 = Lighting.GetColor(Projectile.Center.ToTileCoordinates()).ToVector3().Length() / (float)Math.Sqrt(3.0);
         num5 = 0.75f + num5 * 0.25f;

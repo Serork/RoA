@@ -247,7 +247,7 @@ sealed class SatchelChargeProjectile : ModProjectile {
         Projectile.QuickDrawAnimated(color);
         Texture2D glowTexture = _glowTexture.Value;
         if (Projectile.frame == 0) {
-            color = color.ModifyRGB(Helper.Wave(0.25f, 1f, 25f, Projectile.whoAmI));
+            color = color.ModifyRGB(Helper.Wave(0.25f, 1f, 25f, Projectile.identity));
         }
         Projectile.QuickDrawAnimated(color, texture: glowTexture);
 

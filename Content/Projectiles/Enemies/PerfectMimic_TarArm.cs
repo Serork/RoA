@@ -58,7 +58,7 @@ sealed class TarArm : ModProjectile {
     private float GetDeathScale() {
         float result = 1f;
         if (MimicIsDead) {
-            result += Helper.Wave(0.5f, 1f, 10f, Projectile.whoAmI) * DeathProgress * Utils.GetLerpValue(1.5f, 1f, DeathProgress, true);
+            result += Helper.Wave(0.5f, 1f, 10f, Projectile.identity) * DeathProgress * Utils.GetLerpValue(1.5f, 1f, DeathProgress, true);
         }
         return result;
     }
@@ -203,7 +203,7 @@ sealed class TarArm : ModProjectile {
             Texture2D texture = indexedTextureAssets[(byte)PerfectMimicRequstedTextureType.Part1].Value;
             bool flag = false;
             bool flag2 = false;
-            if (Projectile.whoAmI % 2 == 0) {
+            if (Projectile.identity % 2 == 0) {
                 flag = true;
             }
             //if (Projectile.whoAmI % 3 == 0) {

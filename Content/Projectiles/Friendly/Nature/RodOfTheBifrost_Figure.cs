@@ -356,7 +356,7 @@ sealed class MagicalBifrostBlock : NatureProjectile {
         }, blendState: BlendState.Additive);
     }
 
-    private float GetLightWaveValue() => Helper.Wave(0.5f, 0.75f, 2.5f, Projectile.whoAmI);
+    private float GetLightWaveValue() => Helper.Wave(0.5f, 0.75f, 2.5f, Projectile.identity);
     private float GetRayOpacity() => (1f - _trailOpacity) * GetRayStrength();
     private float GetRayStrength() => _rayStrength;
     private bool HasRay() => _directlyConnectedWith.Count <= 1;

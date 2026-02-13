@@ -41,6 +41,8 @@ sealed class FungalCaneMushroom : NatureProjectile {
         Projectile.netImportant = true;
 
         Projectile.manualDirectionChange = true;
+
+        Projectile.Opacity = 0f;
     }
 
     public override bool? CanDamage() => false;
@@ -66,7 +68,7 @@ sealed class FungalCaneMushroom : NatureProjectile {
     }
 
     public override void AI() {
-        Projectile.timeLeft = 2;
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
 
         if (!Init) {
             Init = true;
@@ -76,7 +78,10 @@ sealed class FungalCaneMushroom : NatureProjectile {
             Projectile.frame = Main.rand.Next(2);
         }
 
-        Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.075f);
+        Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
+
+        float maxRotation = 0.1f;
+        Projectile.rotation = Helper.Wave(-maxRotation, maxRotation, 1f, Projectile.identity) * Projectile.ai[1];
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -84,14 +89,17 @@ sealed class FungalCaneMushroom : NatureProjectile {
         Rectangle sourceRectangle = Utils.Frame(texture, 1, 2, frameY: Projectile.frame);
         float progress = Projectile.ai[1];
         progress = Ease.QuadOut(progress);
-        int height = (int)(sourceRectangle.Height * progress);
+        int baseHeight = sourceRectangle.Height;
+        int height = (int)(baseHeight * progress);
         Vector2 position = Projectile.position;
-        Projectile.position.Y += (int)(sourceRectangle.Height * (1f - progress));
-        sourceRectangle.Height = Math.Clamp(height, 2, sourceRectangle.Height);
+        Projectile.position.Y += (int)(baseHeight * (1f - progress));
+        sourceRectangle.Height = Math.Clamp(height, 2, baseHeight);
+
+        Projectile.position.Y += baseHeight / 2 * (progress);
 
         Vector2 scale = Vector2.One * progress;
 
-        Projectile.QuickDrawAnimated(lightColor, scale: scale, frameBox: sourceRectangle);
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, scale: scale, frameBox: sourceRectangle, origin: sourceRectangle.BottomCenter());
 
         Projectile.position = position;
 

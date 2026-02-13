@@ -112,7 +112,7 @@ sealed class HiTechSlash : NatureProjectile {
         Vector2 scale = Vector2.One * Projectile.scale;
         SpriteEffects effects = Projectile.direction.ToSpriteEffects();
         for (int i = 0; i < 2; i++) {
-            float wave = Helper.Wave(0.25f, 1f, 10f, i);
+            float wave = Helper.Wave(0.25f, 1f, 10f, Projectile.identity + i);
             int trailLength = Projectile.GetTrailCount();
             for (int i2 = 1; i2 < trailLength; i2++) {
                 Vector2 position2 = Projectile.oldPos[i2] + Projectile.Size / 2f;

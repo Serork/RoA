@@ -687,7 +687,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                              color * Projectile.Opacity * 0.65f * charge,
                              Projectile.rotation + 0.78f,
                              bloom.Size() / 2f,
-                             Projectile.scale * 1f * Helper.Wave(0.9375f, 1.0625f, 10f, Projectile.whoAmI),
+                             Projectile.scale * 1f * Helper.Wave(0.9375f, 1.0625f, 10f, Projectile.identity),
                              SpriteEffects.None,
                              0f);
             spriteBatch.Begin(snapshot, true);

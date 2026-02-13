@@ -372,7 +372,7 @@ sealed class LittleFleder : ModProjectile {
 
         _hasTarget = hasTarget;
 
-        Projectile.position.Y += Helper.Wave(Projectile.localAI[2], -1f, 1f, 2.5f, Projectile.whoAmI) * 0.25f;
+        Projectile.position.Y += Helper.Wave(Projectile.localAI[2], -1f, 1f, 2.5f, Projectile.identity) * 0.25f;
 
         int num21 = 500;
         if (hasTarget)

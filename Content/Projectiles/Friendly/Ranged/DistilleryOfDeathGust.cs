@@ -207,7 +207,7 @@ sealed class DistilleryOfDeathGust : ModProjectile {
             color *= 0.5f;
             for (int j = 0; j < 2; j++) {
                 for (int k = 0; k < 2; k++) {
-                    Vector2 drawPosition = position + ((num12 + num11) * ((float)Math.PI * 2f)).ToRotationVector2() * Helper.Wave(4f, 6f, 10f, Projectile.whoAmI + j * k);
+                    Vector2 drawPosition = position + ((num12 + num11) * ((float)Math.PI * 2f)).ToRotationVector2() * Helper.Wave(4f, 6f, 10f, Projectile.identity + j * k);
                     clip = Utils.Frame(texture, 1, Projectile.GetFrameCount(), frameY: (int)((Projectile.frame + VisualOffsetValue) % 3));
                     batch.Draw(texture, drawPosition, clip, Color.Lerp(baseColor, color, 0.5f) * opacity, rotation, origin, scale, flip, 0f);
                 }

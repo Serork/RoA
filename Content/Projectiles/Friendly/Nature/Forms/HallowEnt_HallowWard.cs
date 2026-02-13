@@ -71,7 +71,7 @@ sealed class HallowWard : FormProjectile_NoTextureLoad {
         Projectile.Center = owner.GetPlayerCorePoint() + Vector2.UnitY * owner.height / 2 - Vector2.UnitY * 40f + Vector2.UnitY * 10f;
 
         Projectile.localAI[0]++;
-        AreaSize = AREASIZE + AREASIZE * 0.115f * Helper.Wave(-1f, 1f, 2f, Projectile.whoAmI);
+        AreaSize = AREASIZE + AREASIZE * 0.115f * Helper.Wave(-1f, 1f, 2f, Projectile.identity);
         AreaSize *= Ease.SineInOut(Utils.Remap(Projectile.Opacity, 0f, 1f, 0.75f, 1f));
 
         if (State == 1f) {

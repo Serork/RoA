@@ -186,13 +186,13 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
         starColor.A = 255;
         float waveSpeed = 20f;
         Vector2 baseScale = Vector2.One * Projectile.Opacity * Projectile.scale;
-        Vector2 starScale = baseScale * Helper.Wave(0.75f, 1.1f, waveSpeed, Projectile.whoAmI);
+        Vector2 starScale = baseScale * Helper.Wave(0.75f, 1.1f, waveSpeed, Projectile.identity);
 
         Texture2D circle = ResourceManager.Circle3;
         Rectangle circleClip = circle.Bounds;
         Vector2 circleOrigin = circleClip.Centered();
         Color circleColor = starColor.MultiplyRGB(new Color(97, 200, 225)) * 0.95f;
-        float mainWave = Helper.Wave(0.975f, 1.025f, waveSpeed, Projectile.whoAmI);
+        float mainWave = Helper.Wave(0.975f, 1.025f, waveSpeed, Projectile.identity);
         Vector2 circleScale = baseScale * 2f * mainWave;
 
         Texture2D circle2 = ResourceManager.Circle2;
@@ -243,8 +243,8 @@ sealed class HiTechStar : NatureProjectile, IRequestAssets {
             Color starPartColor = Color.White;
             starColor.A = 255;
             Vector2 starPartPosition = position - starOrigin / 4f + new Vector2(-3f, -3f) + starPartOrigin * 0.625f;
-            ulong partSeed = (ulong)(i * i * Projectile.GetHashCode() / 2f + Projectile.position.GetHashCode() + Projectile.whoAmI);
-            Vector2 starPartScale = Vector2.One * Projectile.scale * Helper.Wave(0.75f, 0.9f, waveSpeed, i * MathF.Pow(Utils.RandomInt(ref partSeed, 100), 2));
+            ulong partSeed = (ulong)(i * i * Projectile.GetHashCode() / 2f + Projectile.position.GetHashCode() + Projectile.identity);
+            Vector2 starPartScale = Vector2.One * Projectile.scale * Helper.Wave(0.75f, 0.9f, waveSpeed,  i * MathF.Pow(Utils.RandomInt(ref partSeed, 100), 2));
             batch.Draw(starPartTexture, starPartPosition, DrawInfo.Default with {
                 Clip = starPartClip,
                 Origin = starPartOrigin,

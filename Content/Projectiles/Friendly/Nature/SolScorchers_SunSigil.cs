@@ -42,7 +42,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
     private Vector2 _laserDirection;
     private float? _scale;
 
-    private Color SelectedColor => Color.Lerp(_firstSlashColor, _secondSlashColor, Helper.Wave(0f, 1f, 5f, Projectile.whoAmI));
+    private Color SelectedColor => Color.Lerp(_firstSlashColor, _secondSlashColor, Helper.Wave(0f, 1f, 5f, Projectile.identity));
     private float Opacity => Utils.GetLerpValue(TIMELEFT, TIMELEFT - 15, Projectile.timeLeft, true) * Utils.GetLerpValue(0, 15, Projectile.timeLeft, true);
 
     protected override void SafeSetDefaults() {
@@ -252,7 +252,7 @@ sealed class SunSigil : NatureProjectile_NoTextureLoad, IRequestAssets {
                 float circleFactor = MathHelper.TwoPi / count * i - MathHelper.Pi;
                 Vector2 circleOffset = Utils.ToRotationVector2(circleFactor);
                 ulong seed = (ulong)(Projectile.position.Length() * i);
-                float seeded = Utils.RandomFloat(ref seed) + Projectile.whoAmI;
+                float seeded = Utils.RandomFloat(ref seed) + Projectile.identity;
                 Vector2 circleOffset2 = circleOffset * Vector2.One * Helper.Wave(-0.5f, 0.75f, 5f, seeded) * 15f * Projectile.scale;
                 Vector2 position2 = position + circleOffset2;
                 Color rayColor = color * Helper.Wave(0.475f, 0.525f, 10f, seeded) * 1.25f * Opacity;

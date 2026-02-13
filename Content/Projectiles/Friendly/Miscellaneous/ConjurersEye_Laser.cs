@@ -79,7 +79,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
         }
 
-        DelegateMethods.v3_1 = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, Projectile.whoAmI)).ToVector3() * 0.65f;
+        DelegateMethods.v3_1 = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, Projectile.identity)).ToVector3() * 0.65f;
         Utils.PlotTileLine(Projectile.Center + Projectile.velocity.SafeNormalize() * 200f, Projectile.Center - Projectile.velocity.SafeNormalize() * 100f, 8f * Projectile.Opacity, DelegateMethods.CastLight);
 
         Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
@@ -129,7 +129,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
         Vector2 eyePosition = Projectile.GetOwnerAsPlayer().GetPlayerCorePoint() + new Vector2(MathF.Abs(Projectile.ai[0]) * Projectile.GetOwnerAsPlayer().direction, Projectile.ai[1]);
         Rectangle flareClip = flare.Bounds;
         Vector2 flareOrigin = flareClip.Centered();
-        Color flareColor = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, Projectile.whoAmI));
+        Color flareColor = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, Projectile.identity));
         flareColor *= 1.5f;
         float baseProgress = Utils.GetLerpValue(TIMELEFT - 20, TIMELEFT, Projectile.timeLeft, true);
         float progress = Ease.CubeOut(baseProgress);
@@ -146,7 +146,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
             Rotation = rotation
         };
         Main.spriteBatch.DrawWithSnapshot(flare, eyePosition, flareDrawInfo, blendState: BlendState.Additive);
-        flareColor = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, Projectile.whoAmI));
+        flareColor = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, Projectile.identity));
         flareColor = flareColor with { A = 0 };
         flareColor *= 1.5f;
         flareColor *= progress;

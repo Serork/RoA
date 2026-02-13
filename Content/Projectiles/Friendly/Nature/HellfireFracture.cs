@@ -149,7 +149,7 @@ sealed class HellfireFracture : NatureProjectile {
                         extraPosition.Y -= offset;
                         break;
                 }
-                extraPosition *= Helper.Wave(-1f * Main.rand.NextFloat(), 1f * Main.rand.NextFloat(), 10f * Main.rand.NextFloat(), Projectile.whoAmI + i * 10);
+                extraPosition *= Helper.Wave(-1f * Main.rand.NextFloat(), 1f * Main.rand.NextFloat(), 10f * Main.rand.NextFloat(), Projectile.identity + i * 10);
                 DrawSlash((num13 / 2f * 0.3f + 0.85f), Color.Lerp(color, Color.DarkOrange, 0.75f), extraPosition);
             }
             //for (float num14 = -4f; num14 < 4f; num14 += 1f) {

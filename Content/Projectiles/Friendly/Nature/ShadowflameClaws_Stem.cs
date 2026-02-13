@@ -379,7 +379,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
             return;
         }
 
-        float idleOffset = Helper.Wave(-1f, 1f, 2.5f, Projectile.whoAmI) * 0.35f;
+        float idleOffset = Helper.Wave(-1f, 1f, 2.5f, Projectile.identity) * 0.35f;
 
         SpriteBatch batch = Main.spriteBatch;
         Color color = lightColor;
@@ -425,7 +425,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
             var dir = SpriteEffects.None;
             vector31 *= scaleFactor;
             vector32 *= scaleFactor;
-            float rotation = Helper.Wave(-MathHelper.PiOver4 * 0.05f, MathHelper.PiOver4 * 0.05f, 20f, Projectile.whoAmI);
+            float rotation = Helper.Wave(-MathHelper.PiOver4 * 0.05f, MathHelper.PiOver4 * 0.05f, 20f, Projectile.identity);
             Main.EntitySpriteDraw(value16, position4, null, color36, (float)Math.PI / 2f + rotation, origin7, vector31, dir);
             Main.EntitySpriteDraw(value16, position4, null, color36, 0f + rotation, origin7, vector32, dir);
             Main.EntitySpriteDraw(value16, position4, null, color37, (float)Math.PI / 2f + rotation, origin7, vector31 * 0.6f, dir);

@@ -252,7 +252,7 @@ sealed class GodFeather : NatureProjectile_NoTextureLoad, IRequestAssets {
 
         SpriteBatch batch = Main.spriteBatch;
         int count = 8;
-        float waveOffset = Projectile.whoAmI;
+        float waveOffset = Projectile.identity;
         List<(float, Vector2)> positions = [];
         List<Vector2> positions2 = [];
         float distance = 16f;
