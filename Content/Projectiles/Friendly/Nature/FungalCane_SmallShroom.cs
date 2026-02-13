@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -16,6 +17,8 @@ using Terraria.DataStructures;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class FungalCaneSmallShroom : NatureProjectile {
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(5);
+
     public ref float InitValue => ref Projectile.localAI[0];
 
     public bool Init {
@@ -37,6 +40,8 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
         Projectile.tileCollide = false;
 
         Projectile.netImportant = true;
+
+        Projectile.timeLeft = TIMELEFT;
 
         //Projectile.hide = true;
 
@@ -62,7 +67,7 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
         Projectile.Center = point2.ToWorldCoordinates();
-        Projectile.position.X += Main.rand.NextFloatDirection() * TileHelper.TileSize * 3f;
+        Projectile.position.X += Main.rand.NextFloatDirection() * TileHelper.TileSize * 2f;
         while (!WorldGen.SolidTile(Projectile.position.ToTileCoordinates())) {
             Projectile.position.Y++;
         }
@@ -92,12 +97,15 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
             Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
 
             Projectile.frame = Main.rand.Next(3);
+
+            Projectile.localAI[2] = Main.rand.NextFloat(10f);
         }
 
         Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
 
-        float maxRotation = 0.1f;
-        Projectile.rotation = Helper.Wave(-maxRotation, maxRotation, 1f, Projectile.identity) * Projectile.ai[1];
+        float maxRotation = 0.05f;
+        Projectile.localAI[2] += TimeSystem.LogicDeltaTime;
+        Projectile.rotation = Helper.Wave(Projectile.localAI[2] * Projectile.ai[1], -maxRotation, maxRotation, 1f, 0f) * Projectile.ai[1];
     }
 
     public override bool PreDraw(ref Color lightColor) {

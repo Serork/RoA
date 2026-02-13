@@ -17,6 +17,8 @@ using Terraria.DataStructures;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class FungalCaneMushroom : NatureProjectile {
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(5);
+
     public ref float InitValue => ref Projectile.localAI[0];
 
     public bool Init {
@@ -76,12 +78,15 @@ sealed class FungalCaneMushroom : NatureProjectile {
             Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
 
             Projectile.frame = Main.rand.Next(2);
+
+            Projectile.localAI[2] = Main.rand.NextFloat(10f);
         }
 
         Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
 
-        float maxRotation = 0.1f;
-        Projectile.rotation = Helper.Wave(-maxRotation, maxRotation, 1f, Projectile.identity) * Projectile.ai[1];
+        float maxRotation = 0.05f;
+        Projectile.localAI[2] += TimeSystem.LogicDeltaTime;
+        Projectile.rotation = Helper.Wave(Projectile.localAI[2] * Projectile.ai[1], -maxRotation, maxRotation, 1f, 0f) * Projectile.ai[1];
     }
 
     public override bool PreDraw(ref Color lightColor) {
