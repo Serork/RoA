@@ -2951,3 +2951,8 @@ AmmoBelt: {
 	DisplayName: Ammo Belt
 	Tooltip: ""
 }
+
+CommandosBelt: {
+	DisplayName: Commandos Belt
+	Tooltip: ""
+}
