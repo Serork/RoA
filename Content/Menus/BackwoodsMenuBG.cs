@@ -120,17 +120,6 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
     }
 
     public override void ModifyFarFades(float[] fades, float transitionSpeed) {
-        for (int index = 0; index < fades.Length; ++index) {
-            if (index == Slot) {
-                fades[index] += transitionSpeed;
-                if (fades[index] > 1.0)
-                    fades[index] = 1f;
-            }
-            else {
-                fades[index] -= transitionSpeed;
-                if (fades[index] < 0.0)
-                    fades[index] = 0.0f;
-            }
-        }
+
     }
 }
