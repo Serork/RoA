@@ -122,7 +122,7 @@ sealed class Purification : ModProjectile_NoTextureLoad {
         float fadeOutProgress = 1f;
         Color color2 = _areaColor;
         float waveMin = MathHelper.Lerp(0.75f, 1f, 1f - fadeOutProgress), waveMax = MathHelper.Lerp(1.25f, 1f, 1f - fadeOutProgress);
-        float wave = Helper.Wave(VisualEffectTimer, waveMin, waveMax, 3f, Projectile.whoAmI) * fadeOutProgress;
+        float wave = Helper.Wave(VisualEffectTimer, waveMin, waveMax, 3f, Projectile.identity) * fadeOutProgress;
         float opacity = wave * fadeOutProgress;
         color2 *= opacity;
         float disappearValue = 1f - Utils.GetLerpValue(0.5f, 1f, CircleProgress, true);

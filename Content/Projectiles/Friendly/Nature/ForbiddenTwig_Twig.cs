@@ -304,10 +304,10 @@ sealed class ForbiddenTwig : NatureProjectile_NoTextureLoad, IRequestAssets {
                 Scale = scale,
                 Color = color * (1f - currentVineBodyInfo.Progress2)
             });
-            uint seed = (uint)(position.GetHashCode() * 100 + Projectile.whoAmI);
+            uint seed = (uint)(position.GetHashCode() * 100 + Projectile.identity);
             float randomValue = MathUtils.PseudoRandRange(ref seed, 0.625f, 1f),
                   randomValue2 = MathUtils.PseudoRandRange(ref seed, 0f, 1f);
-            Rectangle sandfallClip = new(0, (int)(SandfallProgress + i * 138 + Projectile.whoAmI) % 138, sandfallTexture.Width, 138);
+            Rectangle sandfallClip = new(0, (int)(SandfallProgress + i * 138 + Projectile.identity) % 138, sandfallTexture.Width, 138);
             float num = MathF.Abs(Projectile.Center.Y - (Projectile.Center + position).Y) * randomValue * 2.5f;
             Vector2 sandfallScale = new(Projectile.scale, (float)((double)num / sandfallTexture.Height));
             float sandfallRotation = 0f;

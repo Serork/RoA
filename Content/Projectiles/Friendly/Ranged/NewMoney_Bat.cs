@@ -133,7 +133,7 @@ sealed class NewMoneyBat : ModProjectile {
                 if (num14 < 0.9f) {
                     continue;
                 }
-                Vector2 spinningpoint = new Vector2((float)Math.Sin((double)((float)Projectile.whoAmI / 1f) + Main.timeForVisualEffects / (double)num10 + (double)(num14 * 2f * ((float)Math.PI * 2f))) * num8, 0f - num7) * num15;
+                Vector2 spinningpoint = new Vector2((float)Math.Sin((double)((float)Projectile.identity / 1f) + Main.timeForVisualEffects / (double)num10 + (double)(num14 * 2f * ((float)Math.PI * 2f))) * num8, 0f - num7) * num15;
                 vector2 += spinningpoint.RotatedBy(num12);
                 Color color3 = NewMoneyBullet.BulletColor;
                 color3.A = (byte)(color3.A * 0.625f);
@@ -152,7 +152,7 @@ sealed class NewMoneyBat : ModProjectile {
             Vector2 vector2 = Projectile.oldPos[num13] - Projectile.position;
             float num14 = Utils.Remap(num13, 0f, num3, 1f, 0f);
             float num15 = 1f - num14;
-            Vector2 spinningpoint = new Vector2((float)Math.Sin((double)((float)Projectile.whoAmI / 1f) + Main.timeForVisualEffects / (double)num10 + (double)(num14 * 2f * ((float)Math.PI * 2f))) * num8, 0f - num7) * num15;
+            Vector2 spinningpoint = new Vector2((float)Math.Sin((double)((float)Projectile.identity / 1f) + Main.timeForVisualEffects / (double)num10 + (double)(num14 * 2f * ((float)Math.PI * 2f))) * num8, 0f - num7) * num15;
             vector2 += spinningpoint.RotatedBy(num12);
             Color color3 = NewMoneyBullet.BulletColor;
             color3.A = (byte)(color3.A * 0.625f);

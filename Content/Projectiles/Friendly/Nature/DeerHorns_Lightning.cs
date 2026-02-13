@@ -274,7 +274,7 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
             float scaleOpacity = Utils.GetLerpValue(0.375f, 1f, Scale, true);
             Texture2D text = ResourceManager.Bloom;
             Vector2 start = _nodes[index];
-            ulong seed = (ulong)(index + Projectile.whoAmI);
+            ulong seed = (ulong)(index + Projectile.identity);
             Color borderColor = new Color(49, 183, 184);
             while (start.Distance(_nodes[index + 1]) > 10f) {
                 float size = 0.5f + Utils.RandomInt(ref seed, 100) / 100f * 0.5f;

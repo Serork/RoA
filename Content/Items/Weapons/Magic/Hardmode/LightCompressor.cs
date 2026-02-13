@@ -225,7 +225,7 @@ sealed class LightCompressor : ModItem {
                     Vector2 velocity = startPosition2.DirectionTo(endPosition);
                     float rotation = velocity.ToRotation() - MathHelper.PiOver2;
                     Rectangle clip = texture.Bounds;
-                    float waveValue2 = Helper.Wave(0.5f, 1.25f, 20f, i * 15f + Projectile.whoAmI);
+                    float waveValue2 = Helper.Wave(0.5f, 1.25f, 20f, i * 15f + Projectile.identity);
                     clip.Height = (int)(clip.Height * waveValue2);
                     Vector2 origin = clip.Centered();
                     Color color = Color.White * 0.85f;
@@ -308,7 +308,7 @@ sealed class LightCompressor : ModItem {
                     float scaleFactor = Utils.GetLerpValue(0f, 10f, i_check, true);
                     scaleFactor *= Ease.CubeIn(MathUtils.Clamp01(distance / (step * 3f)));
                     scaleFactor = MathF.Max(0.625f, scaleFactor);
-                    Vector2 scale = new(Helper.Wave(1f - 0.5f * waveFactor, 1f + 0.5f * waveFactor, 20f, Projectile.whoAmI * 3) * 2f * scaleFactor, 1f);
+                    Vector2 scale = new(Helper.Wave(1f - 0.5f * waveFactor, 1f + 0.5f * waveFactor, 20f, Projectile.identity * 3) * 2f * scaleFactor, 1f);
                     velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
 
                     scale *= extraScale;
@@ -324,7 +324,7 @@ sealed class LightCompressor : ModItem {
                     Vector2 position = startPosition;
                     startPosition += velocity.SafeNormalize() * step;
                     float offsetValue2 = 2f * scaleFactor * waveFactor * stepFactor2 * 2f;
-                    startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, Projectile.whoAmI * 3 + i2 * 0.05f + index * 3) * offsetValue2;
+                    startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, Projectile.identity * 3 + i2 * 0.05f + index * 3) * offsetValue2;
 
                     DrawInfo bloomDrawInfo = new() {
                         Clip = ResourceManager.Bloom.Bounds,

@@ -209,7 +209,7 @@ sealed class PhoenixFireball : FormProjectile {
             }
         }
 
-        _transitToDark = Helper.Wave(0f, 1f, 5f, Projectile.whoAmI * 10);
+        _transitToDark = Helper.Wave(0f, 1f, 5f, Projectile.identity * 10);
 
         if (!_phoenixDashed) {
             return;
@@ -322,7 +322,7 @@ sealed class PhoenixFireball : FormProjectile {
 
         float offset = 5f;
         Vector2 position = Projectile.Center +
-            (MathF.Sin(TimeSystem.TimeForVisualEffects * 5f + Projectile.whoAmI * 10f).ToRotationVector2() * offset - new Vector2(offset, -offset) / 2f) * (!_phoenixDashed).ToInt();
+            (MathF.Sin(TimeSystem.TimeForVisualEffects * 5f + Projectile.identity * 10f).ToRotationVector2() * offset - new Vector2(offset, -offset) / 2f) * (!_phoenixDashed).ToInt();
         Vector2 temp = Projectile.Center;
         Projectile.Center = position;
 
@@ -339,7 +339,7 @@ sealed class PhoenixFireball : FormProjectile {
 
         Projectile.QuickDrawAnimated(baseColor * MathHelper.Lerp(0.9f, 1f, value) * Projectile.Opacity);
         for (float num6 = 0f; num6 < 4f; num6 += 1f) {
-            float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + Projectile.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
+            float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + Projectile.identity * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
             Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f * value;
             Vector2 position2 = Projectile.Center + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
 
@@ -351,7 +351,7 @@ sealed class PhoenixFireball : FormProjectile {
 
         Projectile.QuickDrawAnimated(baseColor * 1f * Projectile.Opacity);
         for (float num6 = 0f; num6 < 4f; num6 += 1f) {
-            float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + Projectile.whoAmI * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
+            float num3 = ((float)(TimeSystem.TimeForVisualEffects * 60f + Projectile.identity * 10) / 40f * ((float)Math.PI * 2f)).ToRotationVector2().X * 3f;
             Color color2 = new Color(80, 70, 40, 0) * (num3 / 8f + 0.5f) * 0.8f;
             Vector2 position2 = Projectile.Center + (num6 * ((float)Math.PI / 2f)).ToRotationVector2() * num3;
 

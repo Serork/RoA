@@ -222,7 +222,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
 
             Texture2D waterTexture = indexedTextureAssets[(byte)CoralClarionetRequstedTextureType.Water2].Value;
             float attackProgress = AttackProgress01;
-            float waveValue = (TimeSystem.TimeForVisualEffects * 60f + Projectile.whoAmI * 3) * MathHelper.Lerp(0.1f, 0.2f, attackProgress);
+            float waveValue = (TimeSystem.TimeForVisualEffects * 60f + Projectile.identity * 3) * MathHelper.Lerp(0.1f, 0.2f, attackProgress);
             bool facedRight = Projectile.FacedRight();
             SpriteFrame waterFrame = new(1, 3, 0, (byte)(facedRight ? (3 - waveValue % 3) : (waveValue % 3)));
             Rectangle waterClip = waterFrame.GetSourceRectangle(waterTexture);
@@ -232,7 +232,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
             waterColor *= 0.25f;
             waterColor *= attackProgress;
             Vector2 waterScale = new Vector2(0.75f, 0.625f) * 2f * MathHelper.Lerp(0.5f, 0.75f, attackProgress);
-            float waterRotation = Projectile.rotation + Helper.Wave(waveValue, -0.25f, 0.25f, 10f, Projectile.whoAmI);
+            float waterRotation = Projectile.rotation + Helper.Wave(waveValue, -0.25f, 0.25f, 10f, Projectile.identity);
             DrawInfo waterDrawInfo = DrawInfo.Default with {
                 Clip = waterClip,
                 Origin = waterOrigin,
@@ -246,10 +246,10 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
             batch.Draw(waterTexture, position, waterDrawInfo);
             for (float num5 = 0f; num5 < 1f; num5 += 0.25f) {
                 Color waterColor2 = waterColor * 0.75f;
-                waterColor2 = waterColor.MultiplyAlpha(Helper.Wave(waveValue, 0.625f, 1f, 10f, Projectile.whoAmI + num5 * 5f));
+                waterColor2 = waterColor.MultiplyAlpha(Helper.Wave(waveValue, 0.625f, 1f, 10f, Projectile.identity + num5 * 5f));
                 waterColor2 *= 0.5f;
                 Vector2 vector2 = (num5 * ((float)Math.PI * 2f)).ToRotationVector2() * 6f * MathF.Sin(waveValue * 10f + num5);
-                float waterRotation2 = waterRotation + Helper.Wave(waveValue, -0.25f, 0.25f, 10f, Projectile.whoAmI + num5 * 5f);
+                float waterRotation2 = waterRotation + Helper.Wave(waveValue, -0.25f, 0.25f, 10f, Projectile.identity + num5 * 5f);
                 batch.Draw(waterTexture, position + vector2, waterDrawInfo with { Color = waterColor2, Rotation = waterRotation2 });
             }
         }

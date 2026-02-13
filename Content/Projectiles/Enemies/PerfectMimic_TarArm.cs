@@ -76,7 +76,7 @@ sealed class TarArm : ModProjectile {
             center = Vector2.Lerp(center, Owner.Center - Vector2.UnitY * 10f, DeathProgress);
         }
         if (Projectile.Opacity == 0f) {
-            if (Small && Projectile.whoAmI % 2 == 0) {
+            if (Small && Projectile.identity % 2 == 0) {
                 Projectile.localAI[0] = -ATTACKTIME / 2;
             }
             Projectile.velocity = Projectile.Center.DirectionTo(center);

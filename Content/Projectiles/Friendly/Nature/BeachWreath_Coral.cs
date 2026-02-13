@@ -100,7 +100,7 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
         }
         void makeCoralFeelAlive() {
             _ = new CoralValues(Projectile) {
-                WaveValue = Projectile.whoAmI + (float)(Main.timeForVisualEffects / 10.0 % MathHelper.TwoPi)
+                WaveValue = Projectile.identity + (float)(Main.timeForVisualEffects / 10.0 % MathHelper.TwoPi)
             };
             Projectile.rotation = -Projectile.velocity.X * 0.1f;
         }

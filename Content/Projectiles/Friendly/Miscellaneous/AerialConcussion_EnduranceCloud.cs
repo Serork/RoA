@@ -79,7 +79,7 @@ sealed class EnduranceCloud : ModProjectile {
             Projectile.velocity *= 0f;
 
             if (Main.rand.NextBool()) {
-                ShouldBeRenderedOverPlayer = Projectile.whoAmI % 2 == 0;
+                ShouldBeRenderedOverPlayer = Projectile.identity % 2 == 0;
             }
             else {
                 ShouldBeRenderedOverPlayer = Main.rand.NextBool();

@@ -78,8 +78,8 @@ sealed class CoralClarionet : NatureProjectile_NoTextureLoad, IRequestAssets {
     public override bool? CanCutTiles() => false;
 
     public override void AI() {
-        WaveValue2 = (float)(Projectile.whoAmI + Main.timeForVisualEffects) * TimeSystem.LogicDeltaTime;
-        WaveValue = Projectile.whoAmI + (float)(Main.timeForVisualEffects / 10 % MathHelper.TwoPi);
+        WaveValue2 = (float)(Projectile.identity + Main.timeForVisualEffects) * TimeSystem.LogicDeltaTime;
+        WaveValue = Projectile.identity + (float)(Main.timeForVisualEffects / 10 % MathHelper.TwoPi);
 
         Player owner = Projectile.GetOwnerAsPlayer();
         CaneBaseProjectile? heldCane = owner.GetWreathHandler().GetHeldCane();

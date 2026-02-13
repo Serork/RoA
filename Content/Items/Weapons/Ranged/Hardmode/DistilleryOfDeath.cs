@@ -275,7 +275,7 @@ sealed class DistilleryOfDeath : ModItem {
                 float shootProgress = 1f - ShootProgress2;
                 shootProgress = Ease.QuartOut(shootProgress);
                 float maxRotation = 0.025f * shootProgress;
-                float extraRotation = Helper.Wave(-maxRotation, maxRotation, 10f, Projectile.whoAmI);
+                float extraRotation = Helper.Wave(-maxRotation, maxRotation, 10f, Projectile.identity);
                 _extraRotation = Utils.AngleLerp(_extraRotation, extraRotation, 0.25f);
             }
 
@@ -451,7 +451,7 @@ sealed class DistilleryOfDeath : ModItem {
                 }
 
                 for (float num11 = 0f; num11 < 1f; num11 += 1f / 3f) {
-                    float num12 = (TimeSystem.TimeForVisualEffects + Projectile.whoAmI) % 2f / 1f * Projectile.direction;
+                    float num12 = (TimeSystem.TimeForVisualEffects + Projectile.identity) % 2f / 1f * Projectile.direction;
                     Color color = Main.hslToRgb((num12 + num11) % 1f, 1f, 0.5f).MultiplyRGB(baseColor);
                     color.A = 0;
                     color *= 0.5f;

@@ -268,7 +268,7 @@ sealed class ClingerHideway : NatureProjectile_NoTextureLoad, IRequestAssets {
                 clingerFollowCursorFactor = Helper.Approach(clingerFollowCursorFactor, 0f, 0.01f);
                 _clingerPosition = Vector2.Lerp(_clingerPosition, destination, 0.15f/* * clingerFollowCursorFactor*/);
                 float baseRotation = Projectile.DirectionTo(_clingerPosition).ToRotation() - MathHelper.PiOver2;
-                _clingerPosition += (Vector2.UnitY * Utils.Remap(1f - hidewayValues.ClingerAITimer / CLINGERTIMETOSPAWNINTICKS, 0f, 1f, 1.5f, 5f)).RotatedBy(baseRotation + Math.Sin(Projectile.whoAmI + Main.timeForVisualEffects / 10))/* * clingerFollowCursorFactor*/;
+                _clingerPosition += (Vector2.UnitY * Utils.Remap(1f - hidewayValues.ClingerAITimer / CLINGERTIMETOSPAWNINTICKS, 0f, 1f, 1.5f, 5f)).RotatedBy(baseRotation + Math.Sin(Projectile.identity + Main.timeForVisualEffects / 10))/* * clingerFollowCursorFactor*/;
             }
         }
         void handleClingerBody() {
