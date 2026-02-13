@@ -83,6 +83,7 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
 
     public void RecoverAmmo(Player player) {
         if (HasMaxAmmo(player)) {
+            _currentAmmoAmount = GetCurrentMaxAmmoAmount(player);
             return;
         }
 
