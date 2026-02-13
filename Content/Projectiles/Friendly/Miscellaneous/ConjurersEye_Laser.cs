@@ -2,12 +2,14 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Common.Players;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -53,7 +55,28 @@ sealed class ConjurersEyeLaser : ModProjectile {
         overPlayers.Add(index);
     }
 
+    public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+        Projectile.hostile = false;
+    }
+
     public override void AI() {
+        Player player = Projectile.GetOwnerAsPlayer();
+        if (player.GetCommon().IsEyePatchEffectActive) {
+            bool flag = false;
+            if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.LeftEye && player.FacedRight()) {
+                flag = true;
+            }
+            if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.RightEye && !player.FacedRight()) {
+                flag = true;
+            }
+            if (!flag) {
+                Projectile.friendly = false;
+                Projectile.hostile = true;
+                Projectile.Center = player.Center;
+                Projectile.velocity = Vector2.Zero;
+            }
+        }
+
         Projectile.SetTrail(-1, 6);
 
         if (Projectile.localAI[0] == 0f) {
@@ -88,41 +111,46 @@ sealed class ConjurersEyeLaser : ModProjectile {
     }
 
     public override void OnKill(int timeLeft) {
+        if (!Projectile.friendly) {
+            return;
+        }
         Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
         SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Main.instance.LoadProjectile(ProjectileID.HallowBossRainbowStreak); 
-        Main.instance.LoadProjectile(ProjectileID.DD2BetsyFireball);
+        if (Projectile.velocity != Vector2.Zero) {
+            Main.instance.LoadProjectile(ProjectileID.HallowBossRainbowStreak);
+            Main.instance.LoadProjectile(ProjectileID.DD2BetsyFireball);
 
-        Vector2 center = Projectile.Center - Projectile.velocity.SafeNormalize() * 30f;
+            Vector2 center = Projectile.Center - Projectile.velocity.SafeNormalize() * 30f;
 
-        Projectile projectile = Projectile;
-        int trailLength = Projectile.GetTrailCount();
-        for (int i = 0; i < trailLength; i++) {
-            var texture = TextureAssets.Projectile[ProjectileID.HallowBossRainbowStreak].Value;
+            Projectile projectile = Projectile;
+            int trailLength = Projectile.GetTrailCount();
+            for (int i = 0; i < trailLength; i++) {
+                var texture = TextureAssets.Projectile[ProjectileID.HallowBossRainbowStreak].Value;
 
-            float lerp = 1f - i / (float)(trailLength - 1);
-            var brightest = Color.LightYellow;
-            var color = (Color.Lerp(brightest.MultiplyRGBA(Color.Black * .5f), brightest, lerp) with { A = 0 }) * lerp;
-            var position = center - projectile.velocity * i;
-            var scale = new Vector2(.5f * lerp, 1f) * projectile.scale;
+                float lerp = 1f - i / (float)(trailLength - 1);
+                var brightest = Color.LightYellow;
+                var color = (Color.Lerp(brightest.MultiplyRGBA(Color.Black * .5f), brightest, lerp) with { A = 0 }) * lerp;
+                var position = center - projectile.velocity * i;
+                var scale = new Vector2(.5f * lerp, 1f) * projectile.scale;
 
-            texture = TextureAssets.Projectile[ProjectileID.HallowBossRainbowStreak].Value;
-            lerp = 1f - i / (float)(trailLength - 1);
-            brightest = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, i * 10));
-            color = (Color.Lerp(brightest.MultiplyRGBA(Color.Black * .5f), brightest, lerp) with { A = 50 }) * lerp * Projectile.Opacity;
-            color *= 1.5f;
-            color *= 0.9f;
-            position = center - projectile.velocity * i * 3f;
-            float y = 3f;
-            //if (IsOutsideAngle(new Vector2(Projectile.ai[0], Projectile.ai[1]), Projectile.velocity, position + Projectile.velocity.SafeNormalize() * -60f, 100f)) {
-            //    color *= 0f;
-            //}
-            scale = new Vector2(Helper.Wave(Projectile.localAI[2], 0.25f, 0.675f, 20f, i * 10) * lerp * 0.5f, 3f) * projectile.scale;
+                texture = TextureAssets.Projectile[ProjectileID.HallowBossRainbowStreak].Value;
+                lerp = 1f - i / (float)(trailLength - 1);
+                brightest = Color.Lerp(new Color(27, 177, 223), new Color(124, 255, 255), Helper.Wave(Projectile.localAI[2], 0f, 1f, 20f, i * 10));
+                color = (Color.Lerp(brightest.MultiplyRGBA(Color.Black * .5f), brightest, lerp) with { A = 50 }) * lerp * Projectile.Opacity;
+                color *= 1.5f;
+                color *= 0.9f;
+                position = center - projectile.velocity * i * 3f;
+                float y = 3f;
+                //if (IsOutsideAngle(new Vector2(Projectile.ai[0], Projectile.ai[1]), Projectile.velocity, position + Projectile.velocity.SafeNormalize() * -60f, 100f)) {
+                //    color *= 0f;
+                //}
+                scale = new Vector2(Helper.Wave(Projectile.localAI[2], 0.25f, 0.675f, 20f, i * 10) * lerp * 0.5f, 3f) * projectile.scale;
 
-            Main.EntitySpriteDraw(texture, position - Main.screenPosition, null, color, projectile.rotation, texture.Size() / 2, scale, SpriteEffects.None);
+                Main.EntitySpriteDraw(texture, position - Main.screenPosition, null, color, projectile.rotation, texture.Size() / 2, scale, SpriteEffects.None);
+            }
         }
 
         Texture2D flare = ResourceManager.Flare;
