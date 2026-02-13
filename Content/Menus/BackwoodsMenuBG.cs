@@ -46,7 +46,7 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
             BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures + "BackwoodsMidMenu"),
             BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures + "BackwoodsClose")
         };
-        Color color = typeof(Main).GetFieldValue<Color>("ColorOfSurfaceBackgroundsModified", Main.instance);
+        Color color = typeof(Main).GetFieldValue<Color>("ColorOfSurfaceBackgroundsModified", Main.instance) * 1f;
 
         int length = numArray.Length;
         for (int index1 = 0; index1 < numArray.Length; ++index1) {
@@ -56,7 +56,7 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
             float num3 = (float)(0.5 - 0.1 * (length - index1));
             int i = numArray[index1];
             Main.instance.LoadBackground(i);
-            float scale = 2.2f;
+            float scale = 2.5f;
             int num4 = (int)(Main.backgroundWidth[i] * (double)scale);
             SkyManager.Instance.DrawToDepth(spriteBatch, 1f / num3);
             float fieldValue1 = typeof(Main).GetFieldValue<float>("screenOff", Main.instance);
@@ -71,11 +71,12 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
                 extraY -= 25;
             }
             if (index1 == 1) {
-                extraY += 40;
+                extraY += 70;
             }
             if (index1 == 3) {
                 extraY -= 5;
             }
+            extraY -= 100f;
             int num7 = Main.screenWidth / num4 + 2;
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int index2 = 0; index2 < num7; ++index2) {
