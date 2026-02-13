@@ -57,7 +57,7 @@ sealed class VanillaEyePatchChanges : GlobalItem {
     }
 
     public override void LoadData(Item item, TagCompound tag) {
-        item.GetGlobalItem<VanillaEyePatchChanges>().CurrentEyePatchMode = tag.GetByte("eyepatchmode");
+        item.GetGlobalItem<VanillaEyePatchChanges>().CurrentEyePatchMode = (EyePatchMode)tag.GetByte("eyepatchmode");
     }
 
     public override void NetSend(Item item, BinaryWriter writer) {
