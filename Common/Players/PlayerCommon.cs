@@ -39,6 +39,7 @@ using Terraria.ModLoader.IO;
 using Terraria.UI;
 using Terraria.WorldBuilding;
 
+using static RoA.Common.Items.VanillaEyePatchChanges;
 using static RoA.Content.Projectiles.Friendly.Ranged.DistilleryOfDeathGust;
 
 namespace RoA.Common.Players;
@@ -192,6 +193,20 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool ScrapRingWet;
     public float ScrapRingStrength;
     public Color ScrapRingLiquidColor;
+
+    public bool IsEyePatchEffectActive, IsEyePatchEffectActive_Hidden;
+
+    public enum EyePatchMode : byte {
+        LeftEye = 0,
+        RightEye = 1,
+        BothEyes = 2,
+        Count
+    }
+    public EyePatchMode _currentEyePatchMode;
+    public EyePatchMode CurrentEyePatchMode {
+        get => _currentEyePatchMode;
+        set => _currentEyePatchMode = (EyePatchMode)Utils.Clamp((byte)value, (byte)EyePatchMode.LeftEye, (byte)EyePatchMode.Count);
+    }
 
     public byte CrystallineNeedleIndexToBeAdded { get; private set; }
     public (ushort, ushort)[] CrystallineNeedleTime { get; private set; } = new (ushort, ushort)[5];
@@ -386,10 +401,13 @@ sealed partial class PlayerCommon : ModPlayer {
         if (PerfectClotActivated) {
             tag[RoA.ModName + nameof(PerfectClotActivated)] = true;
         }
+
+        tag[RoA.ModName + nameof(CurrentEyePatchMode)] = (byte)CurrentEyePatchMode;
     }
 
     public override void LoadData(TagCompound tag) {
-        PerfectClotActivated = tag.GetBool(RoA.ModName + nameof(PerfectClotActivated));
+        PerfectClotActivated = tag.ContainsKey(RoA.ModName + nameof(PerfectClotActivated));
+        CurrentEyePatchMode = (EyePatchMode)tag.GetByte(RoA.ModName + nameof(CurrentEyePatchMode));
     }
 
     public override void Load() {
@@ -1526,6 +1544,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsEyePatchEffectActive_Hidden = false;
+        IsEyePatchEffectActive = false;
+
         IsScrapRingEffectActive = false;
 
         IsFeathersInABalloonEffectActive = false;
