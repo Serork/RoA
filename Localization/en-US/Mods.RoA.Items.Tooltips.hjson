@@ -58,9 +58,9 @@ WorshipperSetBonus:
 	'''
 DynastySetBonus: Attacking in close range provides a brief flutter of speed
 ElderwoodSetBonus: Provides a chance to reduce damage taken at the cost of briefly reduced mobility
-EyePatchLeftEye: LeftEye
-EyePatchLeftEye_Desc: LeftEye - right side damage increase (20%)
-EyePatchRightEye: RightEye
-EyePatchRightEye_Desc: RightEye - left side damage increase (20%)
-EyePatchBothEyes: BothEyes
-EyePatchBothEyes_Desc: BothEyes - both sides damage increase (10%)
+EyePatchLeftEye: Left
+EyePatchLeftEye_Desc: 20% increased ranged damage when attacking to the right
+EyePatchRightEye: Right
+EyePatchRightEye_Desc: 20% increased ranged damage when attacking to the left
+EyePatchBothEyes: Both
+EyePatchBothEyes_Desc: 10% increased ranged damage when attacking in any direction
