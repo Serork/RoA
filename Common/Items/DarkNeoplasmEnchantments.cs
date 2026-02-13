@@ -541,7 +541,7 @@ sealed partial class ItemCommon : GlobalItem {
         return base.PreDrawTooltipLine(item, line, ref yOffset);
     }
 
-    public static bool CanApplyTarEnchantment(Item item) => !item.GetCommon().HasTarEnchantment() && /*item.damage > 0 || */!item.vanity && (item.headSlot >= 0 || item.bodySlot >= 0 || item.legSlot >= 0);
+    public static bool CanApplyTarEnchantment(Item item) => !item.GetCommon().HasTarEnchantment() && Main.LocalPlayer.trashItem != item && /*item.damage > 0 || */!item.vanity && (item.headSlot >= 0 || item.bodySlot >= 0 || item.legSlot >= 0);
 
     public void ApplyTarEnchantment(TarEnchantmentStat tarEnchantmentStat) {
         if (HasEnoughTarEnchantment()) {

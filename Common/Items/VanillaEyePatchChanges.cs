@@ -89,7 +89,10 @@ sealed class VanillaEyePatchChanges : GlobalItem {
             return;
         }
 
-        if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.LeftEye) {
+        if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.LeftEye && player.FacedRight()) {
+            return;
+        }
+        if (player.GetCommon().CurrentEyePatchMode == PlayerCommon.EyePatchMode.RightEye && !player.FacedRight()) {
             return;
         }
 
