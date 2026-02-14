@@ -82,7 +82,6 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
 
         _currentAmmoAmount--;
 
-        player.GetModPlayer<RangedArmorSetPlayer>().UsedRangedWeaponWithCustomAmmo = Item;
         player.GetModPlayer<RangedArmorSetPlayer>().CanReceiveCustomAmminition = true;
     }
 

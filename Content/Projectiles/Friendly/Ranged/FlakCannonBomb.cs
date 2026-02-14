@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Players;
 using RoA.Common.Projectiles;
 using RoA.Content.Dusts;
 using RoA.Core;
@@ -18,7 +19,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
-sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
+sealed class FlakCannonBomb : WeaponWithCustomAmmoProjectile, ISpawnCopies {
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(1);
 
     float ISpawnCopies.CopyDeathFrequency => 0.1f;
@@ -123,6 +124,8 @@ sealed class FlakCannonBomb : ModProjectile, ISpawnCopies {
     }
 
     public override void OnKill(int timeLeft) {
+        Projectile.GetOwnerAsPlayer().GetModPlayer<RangedArmorSetPlayer>().UsedRangedWeaponWithCustomAmmo = AttachedWeapon;
+
         if (Projectile.IsOwnerLocal()) {
             int count = 16;
             for (int i = 0; i < count; i++) {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Players;
 using RoA.Common.Projectiles;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -17,7 +18,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
-sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
+sealed class GraveDangerGrave : WeaponWithCustomAmmoProjectile, ISpawnCopies {
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(6);
 
     float ISpawnCopies.CopyDeathFrequency => 0.1f;
@@ -188,6 +189,8 @@ sealed class GraveDangerGrave : ModProjectile, ISpawnCopies {
     }
 
     public override void OnKill(int timeLeft) {
+        Projectile.GetOwnerAsPlayer().GetModPlayer<RangedArmorSetPlayer>().UsedRangedWeaponWithCustomAmmo = AttachedWeapon;
+
         if (Projectile.IsOwnerLocal()) {
             int count = 6;
             for (int i = 0; i < count; i++) {

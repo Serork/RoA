@@ -10,7 +10,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
-sealed class GraveDangerSplinter : ModProjectile {
+sealed class GraveDangerSplinter : WeaponWithCustomAmmoProjectile {
+    protected override bool ShouldAttachWeapon => false;
+
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(20f);
 
     public override void SetStaticDefaults() {

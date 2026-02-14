@@ -13,12 +13,13 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
-sealed class BlueRoseBullet : ModProjectile, ISpawnCopies {
+sealed class BlueRoseBullet : WeaponWithCustomAmmoProjectile, ISpawnCopies {
     private float _scale, _trailOpacity, _copyCounter;
     private Dictionary<NPC, byte> _hitNPCs = null!;
 

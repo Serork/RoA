@@ -9,7 +9,9 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Ranged;
 
-sealed class FlakCannonBullet : ModProjectile {
+sealed class FlakCannonBullet : WeaponWithCustomAmmoProjectile {
+    protected override bool ShouldAttachWeapon => false;
+
     public override void SetStaticDefaults() {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 8; // The length of old position to be recorded
         ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // The recording mode

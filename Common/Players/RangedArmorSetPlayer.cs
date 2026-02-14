@@ -23,12 +23,13 @@ public class RangedArmorSetPlayer : ModPlayer {
     public Item UsedRangedWeaponWithCustomAmmo = null!;
     public bool CanReceiveCustomAmminition;
 
-    public void ReceiveCustomAmmunition() {
-        if (UsedRangedWeaponWithCustomAmmo.IsEmpty()) {
+    public void ReceiveCustomAmmunition(Item weaponWithCustomAmmo) {
+        if (weaponWithCustomAmmo.IsEmpty() || !weaponWithCustomAmmo.IsModded()) {
             return;
         }
-
-        RangedWeaponWithCustomAmmo item = (UsedRangedWeaponWithCustomAmmo.ModItem as RangedWeaponWithCustomAmmo)!;
+        if (weaponWithCustomAmmo.ModItem is not RangedWeaponWithCustomAmmo item) {
+            return;
+        }
 
         if (item.HasMaxAmmo(Player)) {
             return;
@@ -82,16 +83,6 @@ public class RangedArmorSetPlayer : ModPlayer {
             color, "+1", dramatic: false, customAmmoReceive: true);
 
         item.RecoverAmmo(Player, true);
-    }
-
-    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        if (Player.GetCommon().IsBadgeOfHonorEffectActive && target.life <= 0 && target.CanActivateOnHitEffect()) {
-            if (!CanReceiveCustomAmminition) {
-                return;
-            }
-            ReceiveCustomAmmunition();
-            CanReceiveCustomAmminition = false;
-        }
     }
 
     public override void ResetEffects() {
