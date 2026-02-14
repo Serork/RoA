@@ -92,6 +92,16 @@ sealed class FungalCaneMushroom : NatureProjectile {
         float preparationTime = 5f;
         float delayTime = 30f;
         if (Projectile.ai[2] == 1f) {
+            if ((int)Projectile.ai[0] % 2 == 0) {
+                if (Projectile.IsOwnerLocal()) {
+                    ProjectileUtils.SpawnPlayerOwnedProjectile<FungalCaneFumes>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromThis()) {
+                        Position = Projectile.Center,
+                        Velocity = new Vector2(-4f * Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextBool().ToDirectionInt(), -2f),
+                        Damage = Projectile.damage,
+                        KnockBack = Projectile.knockBack
+                    });
+                }
+            }
             Projectile.ai[0] = Helper.Approach(Projectile.ai[0], preparationTime, 1f);
         }
         else {
