@@ -140,14 +140,14 @@ sealed class VanillaEyePatchChanges : GlobalItem {
     private void On_ItemSlot_OverrideHover_ItemArray_int_int(On_ItemSlot.orig_OverrideHover_ItemArray_int_int orig, Item[] inv, int context, int slot) {
         orig(inv, context, slot);
 
-        if (context == ItemSlot.Context.EquipAccessory) {
+        Item item = inv[slot];
+        if (item.type == ItemID.EyePatch && context == ItemSlot.Context.EquipAccessory) {
             if (!Main.mouseRight)
                 return;
 
             if (Main.mouseRightRelease) {
                 SoundEngine.PlaySound(SoundID.Grab);
 
-                Item item = inv[slot];
                 var handler = Main.LocalPlayer.GetCommon();
                 handler.CurrentEyePatchMode++;
                 if (handler.CurrentEyePatchMode > PlayerCommon.EyePatchMode.BothEyes) {
