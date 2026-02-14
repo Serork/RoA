@@ -110,14 +110,10 @@ sealed class Clarity : ModBuff {
     }
 
     private void On_Main_DrawLiquid(On_Main.orig_DrawLiquid orig, Main self, bool bg, int waterStyle, float Alpha, bool drawSinglePassLiquids) {
-        if (!bg) {
-            _isDrawingLiquid = true;
-        }
+        _isDrawingLiquid = true;
 
         orig(self, bg, waterStyle, Alpha, drawSinglePassLiquids);
 
-        if (!bg) {
-            _isDrawingLiquid = false;
-        }
+        _isDrawingLiquid = false;
     }
 }
