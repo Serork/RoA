@@ -53,7 +53,7 @@ sealed class FungalCane : CaneBaseItem<FungalCane.FungalCaneBase> {
                 distance *= 0.9625f;
             }
             for (int num1597 = 0; (float)num1597 < num1596; num1597++) {
-                if (Main.rand.NextBool(2)) {
+                if (!Main.rand.NextBool(3)) {
                     continue;
                 }
                 float num1598 = (float)num1597 / num1596 * ((float)Math.PI * 2f);
@@ -82,7 +82,7 @@ sealed class FungalCane : CaneBaseItem<FungalCane.FungalCaneBase> {
             float num1595 = Main.rand.NextFloat() * ((float)Math.PI * 2f);
             float num1596 = 10;
             for (int num1597 = 0; (float)num1597 < num1596; num1597++) {
-                if (Main.rand.NextBool(3)) {
+                if (!Main.rand.NextBool(3)) {
                     continue;
                 }
                 float num1598 = (float)num1597 / num1596 * ((float)Math.PI * 2f);

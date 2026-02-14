@@ -120,7 +120,7 @@ sealed class FungalCaneMushroom : NatureProjectile {
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
 
             if (Projectile.Opacity < 1f) {
-                if (Main.rand.NextBool(20)) {
+                if (Main.rand.NextBool(3)) {
                     for (int i = 0; i < 1; i++) {
                         Vector2 position = Projectile.Center + Main.rand.RandomPointInArea(20f, 10f + 20f);
                         Vector2 velocity = -Vector2.UnitY * Main.rand.NextFloat(1f, 2f) + Vector2.UnitX * Main.rand.NextFloat(-1f, 1f);

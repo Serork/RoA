@@ -23,7 +23,7 @@ sealed class FungalCaneFumes : NatureProjectile {
         Projectile.penetrate = -1;
 
         Projectile.timeLeft = 250;
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
 
         Projectile.friendly = true;
 
@@ -44,8 +44,7 @@ sealed class FungalCaneFumes : NatureProjectile {
     //public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        Projectile.Opacity -= 0.1f;
-        return false;
+        return base.OnTileCollide(oldVelocity);
     }
 
     public override void AI() {
