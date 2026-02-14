@@ -9,6 +9,7 @@ using RoA.Common.Players;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -18,7 +19,7 @@ namespace RoA.Content.Items.Weapons.Ranged;
 
 // also see Hooks_Player.cs
 abstract class RangedWeaponWithCustomAmmo : ModItem {
-    protected enum BaseMaxAmmoAmount : byte {
+    public enum BaseMaxAmmoAmount : byte {
         Two,
         Three,
         Four
@@ -35,12 +36,13 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
     private byte _currentAmmoAmount = 0;
     private ushort _timeForAmmorRecoveryInTicks = 0;
 
-    private byte GetCurrentAmmoAmount(Player player) => (byte)Utils.Clamp(_currentAmmoAmount, 0, GetCurrentMaxAmmoAmount(player));
+    public byte GetCurrentAmmoAmount(Player player) => (byte)Utils.Clamp(_currentAmmoAmount, 0, GetCurrentMaxAmmoAmount(player));
 
     private bool HasAmmo(Player player) => GetCurrentAmmoAmount(player) > 0;
-    private bool HasMaxAmmo(Player player) => GetCurrentAmmoAmount(player) == GetCurrentMaxAmmoAmount(player);
+    public bool HasMaxAmmo(Player player) => GetCurrentAmmoAmount(player) == GetCurrentMaxAmmoAmount(player);
 
-    private byte GetCurrentMaxAmmoAmount(Player player) => (byte)(MaxAmmoAmount + player.GetModPlayer<RangedArmorSetPlayer>().ExtraCustomAmmoAmount + 2);
+    public byte GetCurrentMaxAmmoAmount(Player player) => (byte)(MaxAmmoAmount + player.GetModPlayer<RangedArmorSetPlayer>().ExtraCustomAmmoAmount + 2);
+    public BaseMaxAmmoAmount GetCurrentMaxAmmoAmount2(Player player) => (BaseMaxAmmoAmount)(GetCurrentMaxAmmoAmount(player) - 2);
 
     private void UseAmmo(Player player) {
         if (!HasAmmo(player)) {
@@ -79,11 +81,20 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
             return;
 
         _currentAmmoAmount--;
+
+        player.GetModPlayer<RangedArmorSetPlayer>().UsedRangedWeaponWithCustomAmmo = Item;
+        player.GetModPlayer<RangedArmorSetPlayer>().CanReceiveCustomAmminition = true;
     }
 
-    public void RecoverAmmo(Player player) {
+    public void RecoverAmmo(Player player, bool insta = false) {
+        if (insta) {
+            _currentAmmoAmount++;
+        }
         if (HasMaxAmmo(player)) {
             _currentAmmoAmount = GetCurrentMaxAmmoAmount(player);
+            return;
+        }
+        if (insta) {
             return;
         }
 

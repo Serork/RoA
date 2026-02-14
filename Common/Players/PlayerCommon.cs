@@ -198,6 +198,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsBlindFoldEffectActive;
 
+    public bool IsBadgeOfHonorEffectActive;
+
     public enum EyePatchMode : byte {
         LeftEye = 0,
         RightEye = 1,
@@ -1560,6 +1562,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsBadgeOfHonorEffectActive = false;
+
         IsBlindFoldEffectActive = false;
 
         if (!Main.gameMenu) {

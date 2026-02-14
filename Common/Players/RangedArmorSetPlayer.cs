@@ -1,5 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.CombatTexts;
+using RoA.Content.Items.Weapons.Ranged;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,6 +19,80 @@ public class RangedArmorSetPlayer : ModPlayer {
 
     public byte ExtraCustomAmmoAmount;
     public float ExtraCustomAmmoConsumptionReduce;
+
+    public Item UsedRangedWeaponWithCustomAmmo = null!;
+    public bool CanReceiveCustomAmminition;
+
+    public void ReceiveCustomAmmunition() {
+        if (UsedRangedWeaponWithCustomAmmo.IsEmpty()) {
+            return;
+        }
+
+        RangedWeaponWithCustomAmmo item = (UsedRangedWeaponWithCustomAmmo.ModItem as RangedWeaponWithCustomAmmo)!;
+
+        if (item.HasMaxAmmo(Player)) {
+            return;
+        }
+
+        Color color = Color.White;
+
+        switch (item.GetCurrentMaxAmmoAmount2(Player)) {
+            case RangedWeaponWithCustomAmmo.BaseMaxAmmoAmount.Two:
+                switch (item.GetCurrentAmmoAmount(Player)) {
+                    case 0:
+                        color = CustomCombatText.AmmorReceiveLightOrange;
+                        break;
+                    case 1:
+                        color = CustomCombatText.AmmoReceiveGreen;
+                        break;
+                }
+                break;
+            case RangedWeaponWithCustomAmmo.BaseMaxAmmoAmount.Three:
+                switch (item.GetCurrentAmmoAmount(Player)) {
+                    case 0:
+                        color = CustomCombatText.AmmoReceiveOrange;
+                        break;
+                    case 1:
+                        color = CustomCombatText.AmmoReceiveYellow;
+                        break;
+                    case 2:
+                        color = CustomCombatText.AmmoReceiveGreen;
+                        break;
+                }
+                break;
+            case RangedWeaponWithCustomAmmo.BaseMaxAmmoAmount.Four:
+                switch (item.GetCurrentAmmoAmount(Player)) {
+                    case 0:
+                        color = CustomCombatText.AmmoReceiveRed;
+                        break;
+                    case 1:
+                        color = CustomCombatText.AmmoReceiveOrange;
+                        break;
+                    case 2:
+                        color = CustomCombatText.AmmoReceiveYellow;
+                        break;
+                    case 3:
+                        color = CustomCombatText.AmmoReceiveGreen;
+                        break;
+                }
+                break;
+        }
+
+        CustomCombatText.NewText(new Rectangle((int)Player.position.X, (int)Player.position.Y, Player.width, Player.height),
+            color, "+1", dramatic: false, customAmmoReceive: true);
+
+        item.RecoverAmmo(Player, true);
+    }
+
+    public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+        if (Player.GetCommon().IsBadgeOfHonorEffectActive/* && target.life <= 0 && target.CanActivateOnHitEffect()*/) {
+            if (!CanReceiveCustomAmminition) {
+                return;
+            }
+            ReceiveCustomAmmunition();
+            CanReceiveCustomAmminition = false;
+        }
+    }
 
     public override void ResetEffects() {
         ArrowConsumptionReduce = 0;

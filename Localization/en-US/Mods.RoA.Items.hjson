@@ -2950,23 +2950,28 @@ BulbIcon: {
 AmmoBelt: {
 	DisplayName: Ammo Belt
 	Tooltip:
-	'''
-	10% chance to save ammo
-	+1 maximum ammo for heavy ranged weapons
-	'''
+		'''
+		10% chance to save ammo
+		+1 maximum ammo for heavy ranged weapons
+		'''
 }
 
 CommandosBelt: {
 	DisplayName: Commando's Belt
 	Tooltip:
-	'''
-	10% increased ranged damage
-	10% chance to save ammo
-	+1 maximum ammo for heavy ranged weapons
-	'''
+		'''
+		10% increased ranged damage
+		10% chance to save ammo
+		+1 maximum ammo for heavy ranged weapons
+		'''
 }
 
 FungalCane: {
 	DisplayName: Fungal Cane
 	Tooltip: Grows a bouncy mushroom that releases spore clouds when landed on
+}
+
+BadgeOfHonor: {
+	DisplayName: Badge Of Honor
+	Tooltip: ""
 }

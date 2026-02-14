@@ -40,6 +40,6 @@ SatchelCharge1: "{0} got rocked like a stone."
 Phoenix0: "{0} failed to rise from the ashes."
 //Died from Conjurer's Eye Laser
 ConjurersEyeLaser0: "{0} should have seen this coming."
-ConjurersEyeLaser1: "An eye for an eye made {0} blind."
+ConjurersEyeLaser1: An eye for an eye made {0} blind.
 ConjurersEyeLaser2: "{0} was gone in a blink of an eye."
 ConjurersEyeLaser3: "{0} was blinded by their own beauty."

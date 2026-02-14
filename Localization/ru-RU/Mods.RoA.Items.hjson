@@ -2950,12 +2950,12 @@ Taproot: {
 
 ChainedCloud: {
 	DisplayName: Облако на цепи
-	// Tooltip: ""
+	// Tooltip: Allows the holder to triple jump, creating cloud platforms mid-air
 }
 
 ThunderKingsGrace: {
 	DisplayName: Благо владыки молний
-	// Tooltip: ""
+	// Tooltip: Allows the holder to air jump, creating angry clouds mid-air and consuming 25% of wreath charge
 }
 
 ScrapRing: {
@@ -2970,15 +2970,29 @@ BulbIcon: {
 
 AmmoBelt: {
 	// DisplayName: Ammo Belt
-	// Tooltip: ""
+	/* Tooltip:
+		'''
+		10% chance to save ammo
+		+1 maximum ammo for heavy ranged weapons
+		''' */
 }
 
 CommandosBelt: {
-	// DisplayName: Commandos Belt
-	// Tooltip: ""
+	// DisplayName: Commando's Belt
+	/* Tooltip:
+		'''
+		10% increased ranged damage
+		10% chance to save ammo
+		+1 maximum ammo for heavy ranged weapons
+		''' */
 }
 
 FungalCane: {
 	// DisplayName: Fungal Cane
+	// Tooltip: Grows a bouncy mushroom that releases spore clouds when landed on
+}
+
+BadgeOfHonor: {
+	// DisplayName: Badge Of Honor
 	// Tooltip: ""
 }
