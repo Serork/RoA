@@ -73,6 +73,19 @@ sealed class FungalCaneMushroom : NatureProjectile {
     }
 
     public override void AI() {
+        if (Init) {
+            float targetY = 1f;
+            float targetX = 1f;
+            if (Projectile.ai[0] > 0f) {
+                targetY = 0.625f;
+                targetX = 1.375f;
+                Projectile.rotation = 0f;
+            }
+            float lerpValue = 0.1f;
+            _scale.Y = Helper.Approach(_scale.Y, targetY, lerpValue);
+            _scale.X = Helper.Approach(_scale.X, targetX, lerpValue);
+        }
+
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
 
         if (!Init) {
@@ -92,11 +105,12 @@ sealed class FungalCaneMushroom : NatureProjectile {
         float preparationTime = 5f;
         float delayTime = 30f;
         if (Projectile.ai[2] == 1f) {
-            if ((int)Projectile.ai[0] % 2 == 0) {
+            for (int i = 0; i < 2; i++) {
                 if (Projectile.IsOwnerLocal()) {
+                    Vector2 offset = Main.rand.RandomPointInArea(20f, 10f);
                     ProjectileUtils.SpawnPlayerOwnedProjectile<FungalCaneFumes>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromThis()) {
-                        Position = Projectile.Center,
-                        Velocity = new Vector2(-4f * Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextBool().ToDirectionInt(), -2f),
+                        Position = Projectile.Center + offset - Vector2.UnitY * 5f,
+                        Velocity = new Vector2(-4f * Main.rand.NextFloat(0.875f, 1f) * offset.X.GetDirection(), -2f * Main.rand.NextFloat(0.875f, 1f)).RotatedBy(MathHelper.PiOver4 * 0.5f * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(0.15f, 0.325f),
                         Damage = Projectile.damage,
                         KnockBack = Projectile.knockBack
                     });
@@ -108,19 +122,13 @@ sealed class FungalCaneMushroom : NatureProjectile {
             Projectile.ai[0] = Helper.Approach(Projectile.ai[0], 0f, 1f);
         }
 
-        float targetY = 1f;
-        float targetX = 1f;
-        if (Projectile.ai[0] > 0f) {
-            targetY = 0.625f;
-            targetX = 1.375f;
-        }
-        float lerpValue = 0.1f;
-        _scale.Y = Helper.Approach(_scale.Y, targetY, lerpValue);
-        _scale.X = Helper.Approach(_scale.X, targetX, lerpValue);
-
         if (Projectile.ai[0] >= preparationTime) {
             Projectile.ai[2] = 0f;
             Projectile.ai[0] = -delayTime;
+        }
+
+        if (Projectile.ai[0] > 0f) {
+            return;
         }
 
         float maxRotation = 0.05f;

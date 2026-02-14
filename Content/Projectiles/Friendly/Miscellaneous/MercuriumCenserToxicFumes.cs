@@ -5,6 +5,7 @@ using RoA.Common;
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -37,6 +38,8 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
         ShouldChargeWreathOnDamage = false;
 
         Projectile.aiStyle = -1;
+
+        Projectile.manualDirectionChange = true;
     }
 
     //public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
@@ -53,7 +56,10 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
                 Projectile.netUpdate = true;
             }
 
+            Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
+
             Projectile.localAI[0] = 1f;
+
         }
 
         if (Projectile.ai[1] != 0f) {
@@ -86,9 +92,16 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
         }
 
         Projectile.velocity *= 0.995f;
+
+        Projectile.rotation += Projectile.velocity.X * 0.005f;
+
+        if (Main.rand.Next(10) == 0) {
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.ToxicFumes>(), Scale: 1.3f);
+            Main.dust[dust].customData = 0.15f;
+        }
     }
 
-    public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity * 0.75f;
+    public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity * 0.5f;
 
     //public override bool? CanCutTiles() => false;
 
@@ -97,7 +110,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
         Texture2D texture = Projectile.GetTexture();
         int frameHeight = texture.Height / Main.projFrames[Projectile.type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
-        Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, texture.Height * 0.5f);
+        Vector2 drawOrigin = frameRect.Centered();
         Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
         Color color = Projectile.GetAlpha(lightColor) * 0.5f;
         for (int i = 0; i < 2; i++)

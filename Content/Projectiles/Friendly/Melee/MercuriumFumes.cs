@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -26,6 +27,8 @@ sealed class MercuriumFumes : ModProjectile {
         Projectile.localNPCHitCooldown = 10;
 
         Projectile.aiStyle = -1;
+
+        Projectile.manualDirectionChange = true;
     }
 
     //public override bool? CanDamage() => Projectile.Opacity >= 0.3f;
@@ -42,6 +45,9 @@ sealed class MercuriumFumes : ModProjectile {
 
         if (Projectile.ai[1] != 0f) {
             Projectile.Opacity = Projectile.ai[1];
+
+            Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
+
             Projectile.ai[1] = 0f;
         }
 
@@ -71,9 +77,16 @@ sealed class MercuriumFumes : ModProjectile {
         else {
             Projectile.Kill();
         }
+
+        Projectile.rotation += Projectile.velocity.X * 0.01f;
+
+        if (Main.rand.Next(5) == 0) {
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.ToxicFumes>(), Scale: 1.3f);
+            Main.dust[dust].customData = 0.15f;
+        }
     }
 
-    public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity;
+    public override Color? GetAlpha(Color lightColor) => new Color(106, 140, 34, 100).MultiplyRGB(lightColor) * Projectile.Opacity * 0.5f;
 
     //public override bool? CanCutTiles() => false;
 }

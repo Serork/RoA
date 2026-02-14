@@ -1216,7 +1216,7 @@ sealed partial class PlayerCommon : ModPlayer {
         if (!CollidedWithFungalMushroom && Player.velocity.Y > Player.gravity) {
             foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<FungalCaneMushroom>()) {
                 if (Player.getRect().Intersects(projectile.getRect())) {
-                    if (projectile.ai[0] < 0f) {
+                    if (projectile.ai[0] < 0f || projectile.ai[1] < 1f) {
                         continue;
                     }
                     CollidedWithFungalMushroom = true;
