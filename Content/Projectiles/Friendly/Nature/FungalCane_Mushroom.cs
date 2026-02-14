@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -86,8 +87,6 @@ sealed class FungalCaneMushroom : NatureProjectile {
             _scale.X = Helper.Approach(_scale.X, targetX, lerpValue);
         }
 
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
-
         if (!Init) {
             Init = true;
 
@@ -100,12 +99,23 @@ sealed class FungalCaneMushroom : NatureProjectile {
             _scale = Vector2.One;
         }
 
-        Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
+        if (Projectile.timeLeft > 20) {
+            Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
+        }
+        else {
+            float lerpValue = 0.15f;
+            Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 0f, lerpValue);
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, lerpValue * 0.9f);
+            if (Projectile.Opacity <= 0f) {
+                Projectile.Kill();
+            }
+        }
 
         float preparationTime = 5f;
         float delayTime = 30f;
         if (Projectile.ai[2] == 1f) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 1; i++) {
                 if (Projectile.IsOwnerLocal()) {
                     Vector2 offset = Main.rand.RandomPointInArea(20f, 10f);
                     ProjectileUtils.SpawnPlayerOwnedProjectile<FungalCaneFumes>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromThis()) {
@@ -145,12 +155,12 @@ sealed class FungalCaneMushroom : NatureProjectile {
         int height = (int)(baseHeight * progress);
         Vector2 position = Projectile.position;
         Projectile.position.Y += (int)(baseHeight * (1f - progress));
-        sourceRectangle.Height = Math.Clamp(height, 2, baseHeight);
+        sourceRectangle.Height = Math.Clamp(height, 0, baseHeight);
 
         Projectile.position.Y += baseHeight / 2 * (progress);
 
         Vector2 baseScale = _scale;
-        Vector2 scale = baseScale * progress;
+        Vector2 scale = baseScale * (Projectile.timeLeft > 20 ? progress : 1f);
 
         Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, scale: scale, frameBox: sourceRectangle, origin: sourceRectangle.BottomCenter());
 

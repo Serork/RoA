@@ -89,8 +89,6 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
     public override void AI() {
         Projectile.hide = Projectile.Opacity < 0.75f;
 
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
-
         if (!Init) {
             Init = true;
 
@@ -101,7 +99,18 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
             Projectile.localAI[2] = Main.rand.NextFloat(10f);
         }
 
-        Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
+        if (Projectile.timeLeft > 20) {
+            Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
+        }
+        else {
+            float lerpValue = 0.15f;
+            Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 0f, lerpValue);
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, lerpValue * 0.8f);
+            if (Projectile.Opacity <= 0f) {
+                Projectile.Kill();
+            }
+        }
 
         float maxRotation = 0.05f;
         Projectile.localAI[2] += TimeSystem.LogicDeltaTime;
@@ -117,11 +126,11 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
         int height = (int)(baseHeight * progress);
         Vector2 position = Projectile.position;
         Projectile.position.Y += (int)(baseHeight * (1f - progress));
-        sourceRectangle.Height = Math.Clamp(height, 2, baseHeight);
+        sourceRectangle.Height = Math.Clamp(height, 0, baseHeight);
 
         Projectile.position.Y += baseHeight / 2 * (progress);
 
-        Vector2 scale = Vector2.One * progress;
+        Vector2 scale = Vector2.One * (Projectile.timeLeft > 20 ? progress : 1f);
 
         Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, scale: scale, frameBox: sourceRectangle, origin: sourceRectangle.BottomCenter());
 
