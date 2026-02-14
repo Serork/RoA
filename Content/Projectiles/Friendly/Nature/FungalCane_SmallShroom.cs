@@ -79,7 +79,7 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
         }
         Projectile.position.Y -= 0f;
 
-        if (WorldGenHelper.GetTileSafely(Projectile.position.ToTileCoordinates()).IsHalfBlock) {
+        if (WorldGenHelper.GetTileSafely(Projectile.position.ToTileCoordinates() + new Point(1, 0)).IsHalfBlock) {
             Projectile.position.Y -= 3f;
         }
 
