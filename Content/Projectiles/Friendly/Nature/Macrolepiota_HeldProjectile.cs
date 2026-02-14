@@ -196,7 +196,7 @@ sealed class Macrolepiota_HeldProjectile : NatureProjectile_NoTextureLoad, Druid
             }
 
             bool shouldUseGlowingMushroomDust = Main.rand.NextBool(4);
-            int dustType = shouldUseGlowingMushroomDust ? DustID.GlowingMushroom : DustID.MushroomSpray;
+            int dustType = shouldUseGlowingMushroomDust ? ModContent.DustType<Dusts.GlowingMushroom>() : DustID.MushroomSpray;
             Vector2 dustVelocity = -new Vector2(Main.rand.NextFloatRange(0.5f), 1f).RotatedBy(Projectile.rotation) * Main.rand.NextFloat(1f, owner.velocity.Y) + Main.rand.NextVector2Circular(4f, 4f);
             Dust dust = Dust.NewDustPerfect(GetShrivelPosition(), dustType, dustVelocity);
             dust.noGravity = true;

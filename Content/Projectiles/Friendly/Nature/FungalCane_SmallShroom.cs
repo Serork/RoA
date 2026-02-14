@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -105,9 +107,9 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
                 Vector2 position = Projectile.Center + Main.rand.RandomPointInArea(4f, 10f);
                 Vector2 velocity = -Vector2.UnitY * Main.rand.NextFloat(1f, 2f) + Vector2.UnitX * Main.rand.NextFloat(-1f, 1f);
                 velocity.Y *= 0.25f;
-                Dust dust = Dust.NewDustPerfect(position, DustID.GlowingMushroom, velocity, Alpha: 25);
+                Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<Dusts.GlowingMushroom>(), velocity, Alpha: 25);
                 dust.scale = Main.rand.NextFloat(0.8f, 1.2f);
-                dust.scale *= 0.5f;
+                dust.scale *= 0.75f;
                 dust.noLight = dust.noLightEmittence = true;
                 if (Main.rand.NextBool(5)) {
                     dust.noGravity = false;
