@@ -16,6 +16,7 @@ using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
 using RoA.Content.Projectiles;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
@@ -199,6 +200,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsBlindFoldEffectActive;
 
     public bool IsBadgeOfHonorEffectActive;
+
+    public bool CollidedWithFungalMushroom;
+    public Projectile FungalMushroomICollidedWith = null!;
 
     public enum EyePatchMode : byte {
         LeftEye = 0,
@@ -580,6 +584,10 @@ sealed partial class PlayerCommon : ModPlayer {
     public override void SetControls() {
         var handler = Player.GetCommon();
         if (handler._isTeleportingBackViaObisidianStopwatch) {
+            ResetControls();
+        }
+
+        if (CollidedWithFungalMushroom) {
             ResetControls();
         }
     }
@@ -1203,6 +1211,34 @@ sealed partial class PlayerCommon : ModPlayer {
             Player.shimmerWet = false;
             Player.honeyWet = false;
             Player.wet = false;
+        }
+
+        if (!CollidedWithFungalMushroom && Player.velocity.Y > Player.gravity) {
+            foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<FungalCaneMushroom>()) {
+                if (Player.getRect().Intersects(projectile.getRect())) {
+                    if (projectile.ai[0] < 0f) {
+                        continue;
+                    }
+                    CollidedWithFungalMushroom = true;
+                    FungalMushroomICollidedWith = projectile;
+                    break;
+                }
+            }
+        }
+
+        if (CollidedWithFungalMushroom) {
+            bool flag = FungalMushroomICollidedWith.ai[0] < 0f;
+            if (!FungalMushroomICollidedWith.active || flag) {
+                if (flag) {
+                    Player.velocity.Y = -10f;
+                }
+                CollidedWithFungalMushroom = false;
+                return;
+            }
+            FungalMushroomICollidedWith.ai[2] = 1f;
+            Player.position.Y = MathHelper.Lerp(Player.position.Y, FungalMushroomICollidedWith.Center.Y - Player.height - Player.height * 0.5f, 0.25f);
+            Player.fallStart = (int)(Player.position.Y / 16f);
+            Player.gravity = 0f;
         }
     }
 

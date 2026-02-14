@@ -16,8 +16,11 @@ using Terraria.DataStructures;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+[Tracked]
 sealed class FungalCaneMushroom : NatureProjectile {
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(5);
+
+    private Vector2 _scale;
 
     public ref float InitValue => ref Projectile.localAI[0];
 
@@ -34,7 +37,7 @@ sealed class FungalCaneMushroom : NatureProjectile {
         Projectile.SetSizeValues(16);
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
-        Projectile.timeLeft = 300;
+        Projectile.timeLeft = TIMELEFT;
         Projectile.penetrate = -1;
         Projectile.hide = true;
 
@@ -80,9 +83,35 @@ sealed class FungalCaneMushroom : NatureProjectile {
             Projectile.frame = Main.rand.Next(2);
 
             Projectile.localAI[2] = Main.rand.NextFloat(10f);
+
+            _scale = Vector2.One;
         }
 
         Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
+
+        float preparationTime = 5f;
+        float delayTime = 30f;
+        if (Projectile.ai[2] == 1f) {
+            Projectile.ai[0] = Helper.Approach(Projectile.ai[0], preparationTime, 1f);
+        }
+        else {
+            Projectile.ai[0] = Helper.Approach(Projectile.ai[0], 0f, 1f);
+        }
+
+        float targetY = 1f;
+        float targetX = 1f;
+        if (Projectile.ai[0] > 0f) {
+            targetY = 0.625f;
+            targetX = 1.375f;
+        }
+        float lerpValue = 0.1f;
+        _scale.Y = Helper.Approach(_scale.Y, targetY, lerpValue);
+        _scale.X = Helper.Approach(_scale.X, targetX, lerpValue);
+
+        if (Projectile.ai[0] >= preparationTime) {
+            Projectile.ai[2] = 0f;
+            Projectile.ai[0] = -delayTime;
+        }
 
         float maxRotation = 0.05f;
         Projectile.localAI[2] += TimeSystem.LogicDeltaTime;
@@ -102,7 +131,8 @@ sealed class FungalCaneMushroom : NatureProjectile {
 
         Projectile.position.Y += baseHeight / 2 * (progress);
 
-        Vector2 scale = Vector2.One * progress;
+        Vector2 baseScale = _scale;
+        Vector2 scale = baseScale * progress;
 
         Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, scale: scale, frameBox: sourceRectangle, origin: sourceRectangle.BottomCenter());
 
