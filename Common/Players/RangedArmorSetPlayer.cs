@@ -66,7 +66,7 @@ public class RangedArmorSetPlayer : ModPlayer {
                         color = CustomCombatText.AmmoReceiveRed;
                         break;
                     case 1:
-                        color = CustomCombatText.AmmoReceiveOrange;
+                        color = CustomCombatText.AmmorReceiveLightOrange;
                         break;
                     case 2:
                         color = CustomCombatText.AmmoReceiveYellow;
