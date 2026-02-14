@@ -30,12 +30,18 @@ abstract class WeaponWithCustomAmmoProjectile : ModProjectile {
         Player player = Projectile.GetOwnerAsPlayer();
         if (player.GetCommon().IsBadgeOfHonorEffectActive && target.life <= 0 && target.CanActivateOnHitEffect()) {
             var handler = player.GetModPlayer<RangedArmorSetPlayer>();
-            (Item, bool) neededPair = handler.CanReceiveCustomAmminition.FirstOrDefault(x => x.Item1 == AttachedWeapon);
-            if (!neededPair.Item2) {
+            (Item, bool)? neededPair = handler.CanReceiveCustomAmminition.FirstOrDefault(x => x.Item1 == AttachedWeapon);
+            if (neededPair is null) {
+                return;
+            }
+            if (neededPair.Value.Item1.IsEmpty()) {
+                return;
+            }
+            if (!neededPair.Value.Item2) {
                 return;
             }
             handler.ReceiveCustomAmmunition(AttachedWeapon);
-            handler.CanReceiveCustomAmminition.Remove(neededPair);
+            handler.CanReceiveCustomAmminition.Remove(neededPair.Value);
         }
     }
 }
