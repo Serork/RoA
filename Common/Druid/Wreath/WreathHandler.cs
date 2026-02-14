@@ -425,7 +425,7 @@ sealed class WreathHandler : ModPlayer {
     }
 
     internal void ClawsReset(Item selectedItem, bool nonDataReset = false) {
-        if (!Player.GetCommon().ShouldResetClawsOnNextAttack) {
+        if (Player.GetCommon().IsGardeningGlovesEffectActive && !Player.GetCommon().ShouldResetClawsOnNextAttack) {
             return;
         }
 
