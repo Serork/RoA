@@ -82,6 +82,8 @@ abstract class RangedWeaponWithCustomAmmo : ModItem {
 
         _currentAmmoAmount--;
 
+        _timeForAmmorRecoveryInTicks = 0;
+
         player.GetModPlayer<RangedArmorSetPlayer>().CanReceiveCustomAmminition = true;
     }
 

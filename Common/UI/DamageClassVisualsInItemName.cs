@@ -7,6 +7,7 @@ using RoA.Common.Cache;
 using RoA.Common.Configs;
 using RoA.Common.InterfaceElements;
 using RoA.Common.Items;
+using RoA.Common.Players;
 using RoA.Content;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
@@ -176,6 +177,7 @@ sealed class DamageClassItemsStorage : IInitializer {
                         values.Add(testPlayer.specialistDamage);
                         values.Add(testPlayer.ammoCost75);
                         values.Add(testPlayer.ammoCost80);
+                        values.Add(testPlayer.GetModPlayer<RangedArmorSetPlayer>().AllAmmoConsumptionReduce);
                     }
                 }
                 try {
