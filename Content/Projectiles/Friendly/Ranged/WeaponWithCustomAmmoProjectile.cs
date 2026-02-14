@@ -2,6 +2,8 @@
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
+using System.Linq;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -28,11 +30,12 @@ abstract class WeaponWithCustomAmmoProjectile : ModProjectile {
         Player player = Projectile.GetOwnerAsPlayer();
         if (player.GetCommon().IsBadgeOfHonorEffectActive && target.life <= 0 && target.CanActivateOnHitEffect()) {
             var handler = player.GetModPlayer<RangedArmorSetPlayer>();
-            if (!handler.CanReceiveCustomAmminition) {
+            (Item, bool) neededPair = handler.CanReceiveCustomAmminition.FirstOrDefault(x => x.Item1 == AttachedWeapon);
+            if (!neededPair.Item2) {
                 return;
             }
             handler.ReceiveCustomAmmunition(AttachedWeapon);
-            handler.CanReceiveCustomAmminition = false;
+            handler.CanReceiveCustomAmminition.Remove(neededPair);
         }
     }
 }

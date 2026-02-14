@@ -4,7 +4,8 @@ using RoA.Common.CombatTexts;
 using RoA.Content.Items.Weapons.Ranged;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
-using RoA.Core.Utility.Vanilla;
+
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.ID;
@@ -21,7 +22,7 @@ public class RangedArmorSetPlayer : ModPlayer {
     public float ExtraCustomAmmoConsumptionReduce;
 
     public Item UsedRangedWeaponWithCustomAmmo = null!;
-    public bool CanReceiveCustomAmminition;
+    public List<(Item, bool)> CanReceiveCustomAmminition = null!;
 
     public void ReceiveCustomAmmunition(Item weaponWithCustomAmmo) {
         if (weaponWithCustomAmmo.IsEmpty() || !weaponWithCustomAmmo.IsModded()) {
