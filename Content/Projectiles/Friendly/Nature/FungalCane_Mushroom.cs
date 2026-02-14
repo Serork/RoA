@@ -106,7 +106,7 @@ sealed class FungalCaneMushroom : NatureProjectile {
         else {
             float lerpValue = 0.15f;
             Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 0f, lerpValue);
-            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, lerpValue * 0.9f);
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, lerpValue * 0.8f);
             if (Projectile.Opacity <= 0f) {
                 Projectile.Kill();
             }
