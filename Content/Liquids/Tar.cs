@@ -347,6 +347,11 @@ sealed partial class Tar : ModLiquid {
         return false;
     }
 
+    // TODO: retro fix
+    public override bool PreRetroDraw(int i, int j, SpriteBatch spriteBatch) {
+        return base.PreRetroDraw(i, j, spriteBatch);
+    }
+
     public override bool PreDraw(int i, int j, LiquidRenderer.LiquidDrawCache liquidDrawCache, Vector2 drawOffset, bool isBackgroundDraw) {
         Lighting.GetCornerColors(i, j, out VertexColors vertices);
         Texture2D texture = LiquidLoader.LiquidAssets[Type].Value;
