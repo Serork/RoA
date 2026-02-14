@@ -58,7 +58,6 @@ sealed class DistilleryOfDeath : ModItem {
                 float num3 = -4f;
                 float num4 = -8f;
                 int shader = 0;
-                shader = drawinfo.cBody;
 
                 Vector2 vector3 = new Vector2(-4f * player.direction, 12f);
                 Vector2 vec5 = drawinfo.Position - Main.screenPosition + drawinfo.drawPlayer.bodyPosition + new Vector2(drawinfo.drawPlayer.width / 2, drawinfo.drawPlayer.height - drawinfo.drawPlayer.bodyFrame.Height / 2) + new Vector2(0f, -4f) + vector3;
