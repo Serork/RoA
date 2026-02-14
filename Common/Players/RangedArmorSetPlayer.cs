@@ -85,7 +85,7 @@ public class RangedArmorSetPlayer : ModPlayer {
     }
 
     public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-        if (Player.GetCommon().IsBadgeOfHonorEffectActive/* && target.life <= 0 && target.CanActivateOnHitEffect()*/) {
+        if (Player.GetCommon().IsBadgeOfHonorEffectActive && target.life <= 0 && target.CanActivateOnHitEffect()) {
             if (!CanReceiveCustomAmminition) {
                 return;
             }
