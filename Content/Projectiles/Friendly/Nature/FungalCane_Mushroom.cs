@@ -99,6 +99,20 @@ sealed class FungalCaneMushroom : NatureProjectile {
             _scale = Vector2.One;
         }
 
+        if (Main.rand.NextBool(100)) {
+            for (int i = 0; i < 1; i++) {
+                Vector2 position = Projectile.Center + Main.rand.RandomPointInArea(20f, 10f + 20f);
+                Vector2 velocity = -Vector2.UnitY * Main.rand.NextFloat(1f, 2f) + Vector2.UnitX * Main.rand.NextFloat(-1f, 1f);
+                velocity.Y *= 0.5f;
+                Dust dust = Dust.NewDustPerfect(position, DustID.GlowingMushroom, velocity, Alpha: 25);
+                dust.scale = Main.rand.NextFloat(0.8f, 1.2f);
+                dust.scale *= 0.5f;
+                if (Main.rand.NextBool(5)) {
+                    dust.noGravity = false;
+                }
+            }
+        }
+
         if (Projectile.timeLeft > 20) {
             Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
@@ -111,6 +125,13 @@ sealed class FungalCaneMushroom : NatureProjectile {
                 Projectile.Kill();
             }
         }
+
+        float num11 = (float)Main.rand.Next(28, 42) * 0.005f;
+        num11 += (float)(270 - Main.mouseTextColor) / 1000f;
+        float R = 0f;
+        float G = 0.2f + num11 / 2f;
+        float B = 1f;
+        Lighting.AddLight(Projectile.Center, new Vector3(R, G, B) * Projectile.Opacity * 0.875f);
 
         float preparationTime = 5f;
         float delayTime = 30f;
@@ -161,6 +182,8 @@ sealed class FungalCaneMushroom : NatureProjectile {
 
         Vector2 baseScale = _scale;
         Vector2 scale = baseScale * (Projectile.timeLeft > 20 ? progress : 1f);
+
+        lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
 
         Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, scale: scale, frameBox: sourceRectangle, origin: sourceRectangle.BottomCenter());
 

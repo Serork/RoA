@@ -6,6 +6,7 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
@@ -66,6 +67,13 @@ sealed class FungalCaneFumes : NatureProjectile {
             _color = _color with { A = 0 };
         }
 
+        float num11 = (float)Main.rand.Next(28, 42) * 0.005f;
+        num11 += (float)(270 - Main.mouseTextColor) / 1000f;
+        float R = 0f;
+        float G = 0.2f + num11 / 2f;
+        float B = 1f;
+        Lighting.AddLight(Projectile.Center, new Vector3(R, G, B) * 0.75f * Projectile.Opacity);
+
         if (Projectile.ai[1] != 0f) {
             Projectile.Opacity = Projectile.ai[1];
             Projectile.localAI[0] = Projectile.Opacity;
@@ -94,6 +102,15 @@ sealed class FungalCaneFumes : NatureProjectile {
             Main.dust[dust].color = _color;
             Main.dust[dust].customData = 0.15f;
         }
+
+        if (Projectile.Opacity > 0.5f && Main.rand.Next(200) == 0) {
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.MushroomSpray, Alpha: 255, Scale: 1.3f);
+            Main.dust[dust].scale = Main.rand.NextFloat(0.8f, 1.2f) * 0.5f;
+            Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
+            if (Main.rand.NextBool(5)) {
+                Main.dust[dust].noGravity = false;
+            }
+        }
     }
 
     public override Color? GetAlpha(Color lightColor) => _color.MultiplyRGB(lightColor) * Projectile.Opacity * 0.5f;
@@ -107,6 +124,9 @@ sealed class FungalCaneFumes : NatureProjectile {
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
         Vector2 drawOrigin = frameRect.Centered();
         Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
+
+        lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
+
         Color color = Projectile.GetAlpha(lightColor) * 0.5f;
         for (int i = 0; i < 2; i++)
             spriteBatch.Draw(texture, drawPos + new Vector2(0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(TimeSystem.TimeForVisualEffects * 4f), frameRect, color * Projectile.localAI[2], Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);

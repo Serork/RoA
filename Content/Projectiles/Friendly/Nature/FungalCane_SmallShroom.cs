@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -99,6 +100,28 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
             Projectile.localAI[2] = Main.rand.NextFloat(10f);
         }
 
+        if (Main.rand.NextBool(200)) {
+            for (int i = 0; i < 1; i++) {
+                Vector2 position = Projectile.Center + Main.rand.RandomPointInArea(4f, 10f);
+                Vector2 velocity = -Vector2.UnitY * Main.rand.NextFloat(1f, 2f) + Vector2.UnitX * Main.rand.NextFloat(-1f, 1f);
+                velocity.Y *= 0.25f;
+                Dust dust = Dust.NewDustPerfect(position, DustID.GlowingMushroom, velocity, Alpha: 25);
+                dust.scale = Main.rand.NextFloat(0.8f, 1.2f);
+                dust.scale *= 0.5f;
+                dust.noLight = dust.noLightEmittence = true;
+                if (Main.rand.NextBool(5)) {
+                    dust.noGravity = false;
+                }
+            }
+        }
+
+        float num11 = (float)Main.rand.Next(28, 42) * 0.005f;
+        num11 += (float)(270 - Main.mouseTextColor) / 1000f;
+        float R = 0f;
+        float G = 0.2f + num11 / 2f;
+        float B = 1f;
+        Lighting.AddLight(Projectile.Center, new Vector3(R, G, B) * 0.75f * Projectile.Opacity);
+
         if (Projectile.timeLeft > 20) {
             Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
@@ -131,6 +154,8 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
         Projectile.position.Y += baseHeight / 2 * (progress);
 
         Vector2 scale = Vector2.One * (Projectile.timeLeft > 20 ? progress : 1f);
+
+        lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
 
         Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, scale: scale, frameBox: sourceRectangle, origin: sourceRectangle.BottomCenter());
 
