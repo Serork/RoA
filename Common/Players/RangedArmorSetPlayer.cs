@@ -22,11 +22,7 @@ public class RangedArmorSetPlayer : ModPlayer {
     public float ExtraCustomAmmoConsumptionReduce;
 
     public Item UsedRangedWeaponWithCustomAmmo = null!;
-    public List<(Item, bool)> CanReceiveCustomAmminition = null!;
-
-    public override void Load() {
-        CanReceiveCustomAmminition = [];
-    }
+    public List<(Item, bool)> CanReceiveCustomAmminition = [];
 
     public override void Unload() {
         CanReceiveCustomAmminition.Clear();
