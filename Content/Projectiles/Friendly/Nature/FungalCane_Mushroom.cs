@@ -118,6 +118,23 @@ sealed class FungalCaneMushroom : NatureProjectile {
         if (Projectile.timeLeft > 20) {
             Projectile.ai[1] = Helper.Approach(Projectile.ai[1], 1f, 0.1f);
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
+
+            if (Projectile.Opacity < 1f) {
+                if (Main.rand.NextBool(20)) {
+                    for (int i = 0; i < 1; i++) {
+                        Vector2 position = Projectile.Center + Main.rand.RandomPointInArea(20f, 10f + 20f);
+                        Vector2 velocity = -Vector2.UnitY * Main.rand.NextFloat(1f, 2f) + Vector2.UnitX * Main.rand.NextFloat(-1f, 1f);
+                        velocity.Y *= 0.5f;
+                        Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<Dusts.GlowingMushroom>(), velocity, Alpha: 25);
+                        dust.scale = Main.rand.NextFloat(0.8f, 1.2f);
+                        dust.scale *= 0.75f;
+                        dust.noLight = dust.noLightEmittence = true;
+                        if (Main.rand.NextBool(5)) {
+                            dust.noGravity = false;
+                        }
+                    }
+                }
+            }
         }
         else {
             float lerpValue = 0.15f;
@@ -143,7 +160,7 @@ sealed class FungalCaneMushroom : NatureProjectile {
                     Vector2 offset = Main.rand.RandomPointInArea(20f, 10f);
                     ProjectileUtils.SpawnPlayerOwnedProjectile<FungalCaneFumes>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromThis()) {
                         Position = Projectile.Center + offset - Vector2.UnitY * 5f,
-                        Velocity = new Vector2(-4f * Main.rand.NextFloat(0.875f, 1f) * offset.X.GetDirection(), -2f * Main.rand.NextFloat(0.875f, 1f)).RotatedBy(MathHelper.PiOver4 * 0.5f * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(0.15f, 0.325f),
+                        Velocity = new Vector2(-5f * Main.rand.NextFloat(0.875f, 1f) * offset.X.GetDirection(), -2f * Main.rand.NextFloat(0.875f, 1f)).RotatedBy(MathHelper.PiOver4 * 0.5f * Main.rand.NextFloatDirection()) * Main.rand.NextFloat(0.15f, 0.325f),
                         Damage = Projectile.damage,
                         KnockBack = Projectile.knockBack
                     });
