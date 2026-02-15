@@ -95,7 +95,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
 
         Projectile.rotation += Projectile.velocity.X * 0.005f;
 
-        if (Main.rand.Next(10) == 0) {
+        if (Main.rand.Next(7) == 0) {
             int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.ToxicFumes>(), Scale: 1.3f);
             Main.dust[dust].position = Projectile.Center + Main.rand.RandomPointInArea(6);
             Main.dust[dust].customData = 0.15f;
