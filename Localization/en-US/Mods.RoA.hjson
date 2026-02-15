@@ -29,4 +29,4 @@ TarMaximumLife: maximum life
 SwitchSpells: "{$Controls.RightClick} to switch spells"
 Catalogue0: Eccentric Tome
 Catalogue1: Eccentric Tome (Empty)
-CatalogueNoSpells: Allows easy access to any spell book stored inside
+CatalogueNoSpells: Allows easy access to any spell book stored in the Scholar's Archive

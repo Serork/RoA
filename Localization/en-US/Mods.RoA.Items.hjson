@@ -1891,7 +1891,7 @@ RoyalQualityHoney: {
 	DisplayName: Royal Quality Honey
 	Tooltip:
 		'''
-		Increasing life regeneration applies "Honey" buff
+		Increasing life regeneration douses the user in honey
 		'Figs, cheese and a drizzle of honey'
 		'''
 }
@@ -2433,8 +2433,8 @@ HoneyPunch: {
 	DisplayName: Honey Punch
 	Tooltip:
 		'''
-		Increasing life regeneration applies "Honey" buff
-		Life hearts recover more life and apply "Honey" buff
+		Increasing life regeneration douses the user in honey
+		Life hearts recover more life and douse the user in honey
 		'''
 }
 
@@ -2739,7 +2739,7 @@ ObsidianStopwatch: {
 
 HereticsVeil: {
 	DisplayName: Heretic's Veil
-	Tooltip: THe wearer's soul burns when under 100 life, increasing life regeneration and reducing damage taken
+	Tooltip: The wearer's soul burns when under 100 life, igniting nearby enemies, increasing life regeneration and reducing damage taken
 }
 
 BansheesGuard: {

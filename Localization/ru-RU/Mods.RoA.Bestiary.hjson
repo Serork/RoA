@@ -1,7 +1,7 @@
 // FOREST
 PettyGoblin: Этот мелкий негодяй не упустит шанса оставить вас без денег.
 SapSlime: Когда живица переполняет подсочник и льется через край, образуются эти сгустки, которые были бы еще вкуснее, чем обычная слизь... вот только бы не вся эта грязь, что с легкостью к ним прилипла.
-// WardenOfTheWoods: SOME TEXT
+// WardenOfTheWoods: These sophisticated constructs had been carefully grown for years before the Dryads' disappearance. Now that corruption is spreading rampantly, time has come for them to finally awake.
 // DUNGEON
 Sentinel: Жить тяжело, а жить для неживых - еще тяжелее. Неудивительно, что неупокоенные души Темницы нашли дом в этих древних доспехах.
 SentinelWarrior: Никого уже и не удивить живыми доспехами в жутком подземелье. До тех пор, пока живые доспехи со всей скорости не проломят череп этому никому.
@@ -22,17 +22,17 @@ Archdruid: Сильнейшие члены шабаша, Архидруиды, �
 Ent: Жалкая попытка заново вырастить Дриад привела к созданию этих уродливых, чудовищных гигантов, лишь усугубив падение друидского шабаша.
 DruidSoul: Участник нечестивого ритуала Лотора или же его жертва? Эта бедная, несчастная душа все еще связана путами коварного заклинания.
 GrimDefender: Давным-давно Дриады сотворили этих духов природы, чтобы защищать тех, кто еще живет близ корней в глубине чащи.
-// Menhir: An animate standing stone, brough to life by the nature of the backwoods themselves, like how a body releases antigenes to battle the intruders. Made entirely of stone and lacking a soul, it greates foe comes in shape of a sharpened tool.
-// WardenOfTheWoods2: SOME TEXT
-// Woodpecker: These overfed avians are closer to chickens than actual birds for the simple matter of lacking capabilities of real flight, instead bumbling around and flapping their wings. Yet, their prey should still beware for these carnivorous creatures developed a fascinating tongue able to latch onto things from great distances.
+// Menhir: A standing stone brought to life by ancient runes, it springs up to fulfil its instructions - yet there are only monsters left to protect. Made entirely of rock and lacking a soul, its greatest foe comes in the shape of a sharpened tool.
+// WardenOfTheWoods2: Like bonsai trees, these wardens were meant to be diligently pruned and nurtured. It's only natural that centuries of neglect took a toll on their primitive minds.
+// Woodpecker: These overfed avians lost their ability to fly, instead bumbling around and flapping their wings more akin to chickens. Yet, their prey should still beware of their fascinating tongue, developed to latch onto things from great distances.
 ElderSnail: SOME TEXT
 // FOG
 Ravencaller: Неуловимые Воронари, сошедшие с ума из-за чащи, с жестокостью защищают свой новый дом. Забыв родной язык, они помыкают врановыми путем мерзкого подражания их крикам.
 DeerSkull: Заманив Лотора в западню заведомо обреченного ритуала, Некроманты заполучили значительное влияние над чащей, и эти заклятые трупы лишь доказывают то, насколько оно укоренилось.
 //TAR
-// TarSlime: A swarming mass of tar and assimilated flesh, brought to life by hopeless thrashing of souls, swallowed by the murky darkness.
-// MurkyCarcass: Not supported by any means, but it seams that tar is trying to lul others into comfort, by acting like a any other liquid, even down to creating its own forms of fish.
-// PerfectMimic: Mimics the shape of other creatures to lure prey to its lair. In the deepest darkness, there are beasts who wear faces stolen from your memories and pluck at the strings in your heart. Know yourself, and stay strong.
+// TarSlime: A swarming mass of tar and assimilated flesh, brought to life by hopeless thrashing of souls that got swallowed by the murky darkness.
+// MurkyCarcass: With every item and creature that fell into tar, it learned more about the outside world - and how to mimic it. Like any other liquid, it even created its own form of fish.
+// PerfectMimic: In the deepest darkness, there are monsters who wear faces stolen from your memories and pluck at the strings of your heart. Know yourself, and stay strong.
 // BOSSES
 Lothor: Спустя много лет после смерти Лотора, его душу вырвали из Лимба и заточили в теле гигантской летучей мыши средствами высшей некромантии. Существо, порожденное этим заклинанием, действительно чудовищно.. И всё же, оно следит из тени, будто охотится только на тех, кто понастоящему достоин стать добычей или, конечно же, достаточно глуп, чтобы скормить потерянную душу алтарю.
 Lothor2: Лотор Мудрый - самый могущественный друид в истории, преданный и убитый посреди ритуала, который должен был даровать ему бессмертие.
