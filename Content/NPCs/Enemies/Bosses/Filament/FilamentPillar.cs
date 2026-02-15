@@ -6,6 +6,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.BossBars;
+using RoA.Common.World;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility.Vanilla;
@@ -66,6 +67,12 @@ sealed class FilamentPillar : ModNPC {
 
         On_Main.ClearVisualPostProcessEffects += On_Main_ClearVisualPostProcessEffects;
         On_Player.UpdateBiomes += On_Player_UpdateBiomes;
+
+        WorldCommon.ClearWorldEvent += WorldCommon_ClearWorldEvent;
+    }
+
+    private void WorldCommon_ClearWorldEvent() {
+        NPC.LunarShieldPowerNormal = 80;
     }
 
     private void On_Player_UpdateBiomes(On_Player.orig_UpdateBiomes orig, Player self) {
@@ -238,8 +245,6 @@ sealed class FilamentPillar : ModNPC {
         //    if (!flag)
         //        NPC.NewNPC(new EntitySource_WorldEvent(), num3 * 16, (num2 - 40) * 16, array[j]);
         //}
-
-        NPC.LunarShieldPowerNormal = 80;
 
         TowerActiveFilament = NPC.TowerActiveVortex = (NPC.TowerActiveNebula = (NPC.TowerActiveSolar = (NPC.TowerActiveStardust = true)));
         NPC.LunarApocalypseIsUp = true;

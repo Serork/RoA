@@ -104,6 +104,7 @@ sealed class FungalCaneFumes : NatureProjectile {
 
         if (Main.rand.Next(150) == 0) {
             int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.MushroomSpray, Alpha: 255, Scale: 1.3f);
+            Main.dust[dust].position = Projectile.Center + Main.rand.RandomPointInArea(6);
             Main.dust[dust].scale = Main.rand.NextFloat(0.8f, 1.2f) * 0.5f;
             Main.dust[dust].noLight = Main.dust[dust].noLightEmittence = true;
             if (Main.rand.NextBool(5)) {
@@ -122,7 +123,7 @@ sealed class FungalCaneFumes : NatureProjectile {
         int frameHeight = texture.Height / Main.projFrames[Projectile.type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
         Vector2 drawOrigin = frameRect.Centered();
-        Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
+        Vector2 drawPos = Projectile.Center - Main.screenPosition;
 
         lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
 

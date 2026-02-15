@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Content.Buffs;
+using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using Terraria;
@@ -82,6 +83,7 @@ sealed class MercuriumFumes : ModProjectile {
 
         if (Main.rand.Next(5) == 0) {
             int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.ToxicFumes>(), Scale: 1.3f);
+            Main.dust[dust].position = Projectile.Center + Main.rand.RandomPointInArea(6);
             Main.dust[dust].customData = 0.15f;
         }
     }

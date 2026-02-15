@@ -30,6 +30,7 @@ sealed class WorldCommon : ModSystem {
     public override void PreUpdateNPCs() {
         PreUpdateNPCsEvent?.Invoke();
     }
+    
 
     public static class NewGuideHelpTextID {
         public const byte DryadCocoon1 = 0;
@@ -131,9 +132,13 @@ sealed class WorldCommon : ModSystem {
         return false;
     }
 
+    public delegate void ClearWorldDelegate();
+    public static event ClearWorldDelegate ClearWorldEvent = null!;
     public override void ClearWorld() {
         _shownGuideTexts = new bool[NEWGUIDETEXTCOUNT];
         ShouldRemindOfNewGuideText = false;
+
+        ClearWorldEvent?.Invoke();
     }
 
     public override void SaveWorldData(TagCompound tag) {

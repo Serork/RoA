@@ -97,6 +97,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
 
         if (Main.rand.Next(10) == 0) {
             int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.ToxicFumes>(), Scale: 1.3f);
+            Main.dust[dust].position = Projectile.Center + Main.rand.RandomPointInArea(6);
             Main.dust[dust].customData = 0.15f;
         }
     }
@@ -111,7 +112,7 @@ sealed class MercuriumCenserToxicFumes : NatureProjectile {
         int frameHeight = texture.Height / Main.projFrames[Projectile.type];
         Rectangle frameRect = new Rectangle(0, Projectile.frame * frameHeight, texture.Width, frameHeight);
         Vector2 drawOrigin = frameRect.Centered();
-        Vector2 drawPos = Projectile.position - Main.screenPosition + drawOrigin;
+        Vector2 drawPos = Projectile.Center - Main.screenPosition;
         Color color = Projectile.GetAlpha(lightColor) * 0.5f;
         for (int i = 0; i < 2; i++)
             spriteBatch.Draw(texture, drawPos + new Vector2(0, (i == 1 ? 2f : -2f) * (1f - Projectile.Opacity) * 2f).RotatedBy(TimeSystem.TimeForVisualEffects * 4f), frameRect, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0f);
