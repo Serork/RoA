@@ -47,7 +47,7 @@ sealed class FilamentSky : CustomSky {
     public override Color OnTileColor(Color inColor) => new Color(Vector4.Lerp(inColor.ToVector4(), Vector4.One, _fadeOpacity * 0.5f));
 
     public static Color FilterColor => new(212, 163, 34);
-    public static float FilterOpacity => 0.4f;
+    public static float FilterOpacity => 0.5f;
 
     public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {
@@ -63,7 +63,7 @@ sealed class FilamentSky : CustomSky {
             Vector2 vector2 = 0.01f * (new Vector2((float)Main.maxTilesX * 8f, (float)Main.worldSurface / 2f) - Main.screenPosition);
             Vector2 positionOffset = new Vector2(200f, -200f);
             spriteBatch.Draw(_planetTexture.Value, vector + positionOffset + vector2, null,
-                Color.White * 0.9f * _fadeOpacity, 0f, new Vector2(_planetTexture.Width() >> 1, _planetTexture.Height() >> 1), 1f, SpriteEffects.None, 1f);
+                Color.White.MultiplyAlpha(1f) * 0.9f * _fadeOpacity, 0f, new Vector2(_planetTexture.Width() >> 1, _planetTexture.Height() >> 1), 1f, SpriteEffects.None, 1f);
             
             // gradient after planet
             spriteBatch.Draw(_bgTexture.Value, new Rectangle(0, Math.Max(0, (int)((Main.worldSurface * 16.0 - (double)Main.screenPosition.Y - 2400.0) * 0.10000000149011612)), Main.screenWidth, Main.screenHeight),
