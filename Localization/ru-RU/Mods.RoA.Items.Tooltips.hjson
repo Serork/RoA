@@ -71,8 +71,8 @@ EyePatchRightEye_Desc:
 	Нажмите {0}, чтобы сменить направление
 	'''
 EyePatchBothEyes: Оба глаза
-/EyePatchBothEyes_Desc:
+EyePatchBothEyes_Desc:
 	'''
-	10%-ное увеличение урона дальнего боя при атаке в любом направлении
-	Нажмите {0}, чтобы сменить направление
+	10% increased ranged damage when attacking in any direction
+	{0} to change direction
 	'''

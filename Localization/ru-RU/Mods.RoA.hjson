@@ -26,7 +26,7 @@ NixieTubeFlickerButton2: Включить мерцание
 TarKillCount: Убийства врагов стимулируют мутацию
 TarDamage: ед. урона
 TarMaximumLife: ед. максимальной жизни
-SwitchSpells: "Нажмите {$Controls.RightClick}, чтобы сменить книгу заклинаний"
+SwitchSpells: Нажмите {$Controls.RightClick}, чтобы сменить книгу заклинаний
 Catalogue0: Эксцентричный том
 Catalogue1: Эксцентричный том (Пустой)
 CatalogueNoSpells: Обеспечивает легкий доступ к любой книге заклинаний, хранящейся внутри
