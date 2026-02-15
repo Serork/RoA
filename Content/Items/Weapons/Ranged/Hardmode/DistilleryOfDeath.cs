@@ -225,6 +225,11 @@ sealed class DistilleryOfDeath : ModItem {
                 Projectile.Kill();
             }
 
+            if (!player.GetCommon().DistilleryOfDeathInitialized) {
+                player.GetCommon().DistilleryOfDeathInitialized = true;
+                ChangeType();
+            }
+
             int shootCount = SHOOTCOUNTPERTYPE;
 
             float scale = Projectile.scale;

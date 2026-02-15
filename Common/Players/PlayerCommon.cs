@@ -164,6 +164,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsBrawlerMaskEffectActive;
     public HashSet<(int, int)> BeforeHitActiveDebuffs = [];
 
+    public bool DistilleryOfDeathInitialized;
     public GustType DistilleryOfDeathLastShootType_Current, DistilleryOfDeathLastShootType_Next, DistilleryOfDeathLastShootType_Next_Next;
     public byte DistilleryOfDeathShootCount;
     public GustType DistilleryOfDeathLastShootType_Back1, DistilleryOfDeathLastShootType_Back1_2, DistilleryOfDeathLastShootType_Back2, DistilleryOfDeathLastShootType_Back2_2;
@@ -216,6 +217,10 @@ sealed partial class PlayerCommon : ModPlayer {
     public EyePatchMode CurrentEyePatchMode {
         get => _currentEyePatchMode;
         set => _currentEyePatchMode = (EyePatchMode)Utils.Clamp((byte)value, (byte)EyePatchMode.LeftEye, (byte)EyePatchMode.Count);
+    }
+
+    public override void OnEnterWorld() {
+
     }
 
     public byte CrystallineNeedleIndexToBeAdded { get; private set; }
