@@ -238,6 +238,8 @@ sealed class Filament : ModNPC {
         //        NPC.NewNPC(new EntitySource_WorldEvent(), num3 * 16, (num2 - 40) * 16, array[j]);
         //}
 
+        NPC.LunarShieldPowerNormal = 80;
+
         TowerActiveFilament = NPC.TowerActiveVortex = (NPC.TowerActiveNebula = (NPC.TowerActiveSolar = (NPC.TowerActiveStardust = true)));
         NPC.LunarApocalypseIsUp = true;
         ShieldStrengthTowerFilamentTower = NPC.ShieldStrengthTowerSolar = (NPC.ShieldStrengthTowerVortex = (NPC.ShieldStrengthTowerNebula = (NPC.ShieldStrengthTowerStardust = NPC.ShieldStrengthTowerMax)));
