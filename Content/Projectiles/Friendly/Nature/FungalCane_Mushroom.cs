@@ -64,7 +64,7 @@ sealed class FungalCaneMushroom : NatureProjectile {
         }
 
         Player player = Main.player[Projectile.owner];
-        EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f, random: false);
+        EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: TileHelper.TileSize * 30, random: false);
         Projectile.Center = point2.ToWorldCoordinates();
         while (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
             Projectile.position.Y -= 1f;

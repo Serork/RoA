@@ -68,7 +68,7 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
         }
 
         Player player = Main.player[Projectile.owner];
-        EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
+        EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: TileHelper.TileSize * 30);
         Projectile.Center = point2.ToWorldCoordinates();
         Projectile.position.X += Main.rand.NextFloatDirection() * TileHelper.TileSize * 2f;
         while (!WorldGen.SolidTile(Projectile.position.ToTileCoordinates())) {
