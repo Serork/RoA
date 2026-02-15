@@ -207,6 +207,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool ZoneFilament;
 
+    public bool IsHoneyPunchEffectActive;
+
     public enum EyePatchMode : byte {
         LeftEye = 0,
         RightEye = 1,
@@ -473,7 +475,6 @@ sealed partial class PlayerCommon : ModPlayer {
         On_Player.ApplyVanillaHurtEffectModifiers += On_Player_ApplyVanillaHurtEffectModifiers;
 
         On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull1;
-
 
         On_Player.RotatedRelativePoint += On_Player_RotatedRelativePoint;
     }
@@ -1032,6 +1033,9 @@ sealed partial class PlayerCommon : ModPlayer {
                     }
                     if (self.statLife > self.statLifeMax2) {
                         self.statLife = self.statLifeMax2;
+                    }
+                    if (self.GetCommon().IsHoneyPunchEffectActive) {
+                        self.AddBuff(BuffID.Honey, MathUtils.SecondsToFrames(10));
                     }
                 }
                 if (self.GetCommon().DontShowManaEffect && manaStars.Contains(itemToPickUp2.type)) {
@@ -1605,6 +1609,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsHoneyPunchEffectActive = false;
+
         IsBadgeOfHonorEffectActive = false;
 
         IsBlindFoldEffectActive = false;

@@ -15,6 +15,7 @@ sealed class HoneyPunch : ModItem {
 
     public override void UpdateAccessory(Player player, bool hideVisual) {
         player.GetCommon().ExtraLifeFromHeartsModifier *= 1.5f;
+        player.GetCommon().IsHoneyPunchEffectActive = true;
         player.GetModPlayer<RoyalQualityHoney.RoyalQualityHoneyHandler>().IsEffectActive = true;
     }
 }

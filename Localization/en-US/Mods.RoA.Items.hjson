@@ -2431,7 +2431,11 @@ PerfectedConcoction: {
 
 HoneyPunch: {
 	DisplayName: Honey Punch
-	Tooltip: Increases the effectiveness of life hearts and grants honey restoration when they are picked up
+	Tooltip:
+		'''
+		Increasing life regeneration provides a further honey boost
+		Increases the effectiveness of life hearts and grants honey restoration when they are picked up
+		'''
 }
 
 GraspOfTheWarden: {
