@@ -26,7 +26,7 @@ TarDebuff2: "{0} был испечён, а потом был торт."
 //Died from Perfect Mimic
 PerfectMimic0: "{0} всё ещё жив..."
 PerfectMimic1: "{0} хорош как никогда..."
-PerfectMimic2: Да, вот же {0}, смотри...
+PerfectMimic2: Вот же и {0}, смотри...
 //Died from Maiden's Bracers
 MaidensBracers0: "{0} теперь дышит всем телом."
 MaidensBracers1: "{0} превратился в сыр."
@@ -34,12 +34,12 @@ MaidensBracers1: "{0} превратился в сыр."
 AvengingSoul0: "{0} был досмерти напуган."
 AvengingSoul1: "{0} был унесён духами."
 //Died from Satchel Charge
-// SatchelCharge0: "{0} was not ready to blow."
-// SatchelCharge1: "{0} got rocked like a stone."
+SatchelCharge0: "{0} был неготов взорваться."
+SatchelCharge1: Одна рука {0} здесь, другая - там.
 //Phoenix form death
-// Phoenix0: "{0} failed to rise from the ashes."
+Phoenix0: "{0} не смог восстать из пепла."
 //Died from Conjurer's Eye Laser
-// ConjurersEyeLaser0: "{0} should have seen this coming."
-// ConjurersEyeLaser1: An eye for an eye made {0} blind.
-// ConjurersEyeLaser2: "{0} was gone in a blink of an eye."
-// ConjurersEyeLaser3: "{0} was blinded by their own beauty."
+ConjurersEyeLaser0: "{0} стоило этого ожидать."
+ConjurersEyeLaser1: Глаз за глаз и {0} остался без глаз.
+ConjurersEyeLaser2: "{0} исчез в мгновении ока."
+ConjurersEyeLaser3: "{0} был ослеплён своей красотой."

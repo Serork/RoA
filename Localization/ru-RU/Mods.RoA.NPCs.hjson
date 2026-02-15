@@ -39,6 +39,6 @@ WardenOfTheWoods2.DisplayName: Страж чащи
 TarSlime.DisplayName: Смоляной слизень
 Menhir.DisplayName: Мейнхир
 PerfectMimic.DisplayName: Точная копия
-// ElderSnail.DisplayName: Elder Snail
-// GrimrockMimic.DisplayName: Grimrock Mimic
-// FilamentPillar.DisplayName: Filament Pillar
+ElderSnail.DisplayName: Древняя улитка
+GrimrockMimic.DisplayName: Подражатель чащи
+FilamentPillar.DisplayName: Нитевидный столп
