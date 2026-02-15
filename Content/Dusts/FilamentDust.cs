@@ -8,6 +8,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class FilamentDust : ModDust {
+    public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 25);
+
     public override void SetStaticDefaults() {
      
     }
@@ -38,13 +40,13 @@ sealed class FilamentDust : ModDust {
             }
         }
 
-        //if (!dust.noLight && !dust.noLightEmittence) {
-        //    float num56 = dust.scale * 1.4f;
-        //    if (num56 > 0.6f)
-        //        num56 = 0.6f;
+        if (!dust.noLight && !dust.noLightEmittence) {
+            float num56 = dust.scale * 1.4f;
+            if (num56 > 0.6f)
+                num56 = 0.6f;
 
-        //    Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), num56, num56 * 0.65f, num56 * 0.4f);
-        //}
+            Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), num56 * 0.95f, num56 * 0.9f, num56 * 0.2f);
+        }
 
         return false;
     }
