@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Common.BossBars;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility.Vanilla;
@@ -26,7 +27,7 @@ using Terraria.WorldBuilding;
 namespace RoA.Content.NPCs.Enemies.Bosses.Filament;
 
 [AutoloadBossHead]
-sealed class Filament : ModNPC {
+sealed class FilamentPillar : ModNPC {
     private static Asset<Texture2D> _glowMaskTexture = null!;
 
     public static int ShieldStrengthTowerFilamentTower = 0;
@@ -75,7 +76,7 @@ sealed class Filament : ModNPC {
             if (!Main.npc[i].active)
                 continue;
 
-            if (Main.npc[i].type == ModContent.NPCType<Filament>()) {
+            if (Main.npc[i].type == ModContent.NPCType<FilamentPillar>()) {
                 if (self.Distance(Main.npc[i].Center) <= 4000f) {
                     self.GetCommon().ZoneFilament = true;
                     vector = Main.npc[i].Center;
@@ -112,7 +113,7 @@ sealed class Filament : ModNPC {
             422,
             507,
             493,
-            ModContent.NPCType<Filament>()
+            ModContent.NPCType<FilamentPillar>()
         };
 
         int[] array = new int[5];
@@ -250,7 +251,7 @@ sealed class Filament : ModNPC {
     }
 
     private bool On_NPC_DoesntDespawnToInactivity(On_NPC.orig_DoesntDespawnToInactivity orig, NPC self) {
-        if (self.type == ModContent.NPCType<Filament>()) {
+        if (self.type == ModContent.NPCType<FilamentPillar>()) {
             return true;
         }
 
@@ -258,7 +259,7 @@ sealed class Filament : ModNPC {
     }
 
     private void On_NPC_getTenthAnniversaryAdjustments(On_NPC.orig_getTenthAnniversaryAdjustments orig, NPC self) {
-        if (self.type == ModContent.NPCType<Filament>()) {
+        if (self.type == ModContent.NPCType<FilamentPillar>()) {
             float num = self.scale;
             float num2 = 0.5f;
 
@@ -305,6 +306,8 @@ sealed class Filament : ModNPC {
         NPC.noGravity = true;
         NPC.noTileCollide = true;
         NPC.npcSlots = 0f;
+
+        NPC.BossBar = ModContent.GetInstance<FilamentPillarBigProgressBar>();
     }
 
     public override void AI() {
