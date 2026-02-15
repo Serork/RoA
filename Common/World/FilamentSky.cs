@@ -47,7 +47,7 @@ sealed class FilamentSky : CustomSky {
     public override Color OnTileColor(Color inColor) => new Color(Vector4.Lerp(inColor.ToVector4(), Vector4.One, _fadeOpacity * 0.5f));
 
     public static Color FilterColor => new(160, 148, 57);
-    public static float FilterOpacity => 0.6f;
+    public static float FilterOpacity => 0.7f;
 
     public static Color BeforePlanetGradientColor => new Color(251, 232, 193);
     public static Color PlanetColor => Color.White;
