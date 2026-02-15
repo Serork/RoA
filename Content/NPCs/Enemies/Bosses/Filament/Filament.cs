@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using RoA.Common;
 using RoA.Content.Dusts;
 using RoA.Core;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -17,17 +18,34 @@ using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
 
-namespace RoA.Content.NPCs.Enemies.Bosses.GreatFilter;
+namespace RoA.Content.NPCs.Enemies.Bosses.Filament;
 
 [AutoloadBossHead]
-sealed class GreatFilter : ModNPC {
-    public static int ShieldStrengthTowerGreatFilter = 0;
-    public static bool TowerActiveGreatFilter;
+sealed class Filament : ModNPC {
+    public static int ShieldStrengthTowerFilamentTower = 0;
+    public static bool TowerActiveFilament;
 
-    // temp
-    public static bool ZoneGreatFilter;
+    public override void SaveData(TagCompound tag) {
+        if (TowerActiveFilament) {
+            tag[nameof(TowerActiveFilament)] = true;
+        }
+        tag[nameof(ShieldStrengthTowerFilamentTower)] = ShieldStrengthTowerFilamentTower;
+    }
+
+    public override void LoadData(TagCompound tag) {
+        TowerActiveFilament = tag.ContainsKey(nameof(TowerActiveFilament));
+        ShieldStrengthTowerFilamentTower = tag.GetInt(nameof(ShieldStrengthTowerFilamentTower));
+    }
+
+    public override void SetStaticDefaults() {
+        NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
+        NPCID.Sets.DangerThatPreventsOtherDangers[Type] = true;
+    }
+
+    public override bool NeedSaving() => true;
 
     public override void Load() {
         On_NPC.getTenthAnniversaryAdjustments += On_NPC_getTenthAnniversaryAdjustments;
@@ -42,21 +60,21 @@ sealed class GreatFilter : ModNPC {
     }
 
     private void On_Player_UpdateBiomes(On_Player.orig_UpdateBiomes orig, Player self) {
-        ZoneGreatFilter = false;
+        self.GetCommon().ZoneFilament = false;
 
         Vector2 vector = Vector2.Zero;
         for (int i = 0; i < 200; i++) {
             if (!Main.npc[i].active)
                 continue;
 
-            if (Main.npc[i].type == ModContent.NPCType<GreatFilter>()) {
+            if (Main.npc[i].type == ModContent.NPCType<Filament>()) {
                 if (self.Distance(Main.npc[i].Center) <= 4000f) {
-                    ZoneGreatFilter = true;
+                    self.GetCommon().ZoneFilament = true;
                     vector = Main.npc[i].Center;
                 }
             }
         }
-        self.ManageSpecialBiomeVisuals(ShaderLoader.GreatFilter, ZoneGreatFilter, vector - new Vector2(0f, 10f));
+        self.ManageSpecialBiomeVisuals(ShaderLoader.Filament, self.GetCommon().ZoneFilament, vector - new Vector2(0f, 10f));
 
         orig(self);
     }
@@ -64,7 +82,7 @@ sealed class GreatFilter : ModNPC {
     private void On_Main_ClearVisualPostProcessEffects(On_Main.orig_ClearVisualPostProcessEffects orig) {
         orig();
 
-        string key = ShaderLoader.GreatFilter;
+        string key = ShaderLoader.Filament;
         if (SkyManager.Instance[key] != null && SkyManager.Instance[key].IsActive())
             SkyManager.Instance[key].Deactivate();
 
@@ -86,7 +104,7 @@ sealed class GreatFilter : ModNPC {
             422,
             507,
             493,
-            ModContent.NPCType<GreatFilter>()
+            ModContent.NPCType<Filament>()
         };
 
         int[] array = new int[5];
@@ -212,9 +230,9 @@ sealed class GreatFilter : ModNPC {
         //        NPC.NewNPC(new EntitySource_WorldEvent(), num3 * 16, (num2 - 40) * 16, array[j]);
         //}
 
-        TowerActiveGreatFilter = NPC.TowerActiveVortex = (NPC.TowerActiveNebula = (NPC.TowerActiveSolar = (NPC.TowerActiveStardust = true)));
+        TowerActiveFilament = NPC.TowerActiveVortex = (NPC.TowerActiveNebula = (NPC.TowerActiveSolar = (NPC.TowerActiveStardust = true)));
         NPC.LunarApocalypseIsUp = true;
-        ShieldStrengthTowerGreatFilter = NPC.ShieldStrengthTowerSolar = (NPC.ShieldStrengthTowerVortex = (NPC.ShieldStrengthTowerNebula = (NPC.ShieldStrengthTowerStardust = NPC.ShieldStrengthTowerMax)));
+        ShieldStrengthTowerFilamentTower = NPC.ShieldStrengthTowerSolar = (NPC.ShieldStrengthTowerVortex = (NPC.ShieldStrengthTowerNebula = (NPC.ShieldStrengthTowerStardust = NPC.ShieldStrengthTowerMax)));
 
         // TODO: add support
         NetMessage.SendData(101);
@@ -222,7 +240,7 @@ sealed class GreatFilter : ModNPC {
     }
 
     private bool On_NPC_DoesntDespawnToInactivity(On_NPC.orig_DoesntDespawnToInactivity orig, NPC self) {
-        if (self.type == ModContent.NPCType<GreatFilter>()) {
+        if (self.type == ModContent.NPCType<Filament>()) {
             return true;
         }
 
@@ -230,7 +248,7 @@ sealed class GreatFilter : ModNPC {
     }
 
     private void On_NPC_getTenthAnniversaryAdjustments(On_NPC.orig_getTenthAnniversaryAdjustments orig, NPC self) {
-        if (self.type == ModContent.NPCType<GreatFilter>()) {
+        if (self.type == ModContent.NPCType<Filament>()) {
             float num = self.scale;
             float num2 = 0.5f;
 
@@ -293,7 +311,7 @@ sealed class GreatFilter : ModNPC {
             if (NPC.ai[1] > 120f)
                 NPC.Opacity = 1f - (NPC.ai[1] - 120f) / 60f;
 
-            int num1465 = ModContent.DustType<GreatFilterDust>();
+            int num1465 = ModContent.DustType<FilamentDust>();
             //switch (type) {
             //    case 517:
             //        num1465 = 127;
@@ -373,7 +391,7 @@ sealed class GreatFilter : ModNPC {
 
         if (NPC.ai[3] > 0f) {
             bool flag88 = NPC.dontTakeDamage;
-            flag88 = ShieldStrengthTowerGreatFilter != 0;
+            flag88 = ShieldStrengthTowerFilamentTower != 0;
             //switch (type) {
             //    case 517:
             //        flag88 = ShieldStrengthTowerSolar != 0;
@@ -414,7 +432,7 @@ sealed class GreatFilter : ModNPC {
         //        break;
         //}
 
-        NPC.dontTakeDamage = ShieldStrengthTowerGreatFilter != 0;
+        NPC.dontTakeDamage = ShieldStrengthTowerFilamentTower != 0;
 
         NPC.TargetClosest(faceTarget: false);
         if (Main.player[NPC.target].Distance(NPC.Center) > 2000f)
@@ -467,7 +485,7 @@ sealed class GreatFilter : ModNPC {
         for (int num1486 = 0; num1486 < 3; num1486++) {
             if (Main.rand.Next(5) == 0) {
                 Dust dust20 = Main.dust[Dust.NewDust(NPC.Top + new Vector2((float)(-NPC.width) * (0.33f - 0.11f * (float)num1486), -20f), (int)((float)NPC.width * (0.66f - 0.22f * (float)num1486)), 20,
-                    ModContent.DustType<GreatFilterDust>())];
+                    ModContent.DustType<FilamentDust>())];
                 dust20.velocity.X = 0f;
                 dust20.velocity.Y = (0f - Math.Abs(dust20.velocity.Y - (float)num1486 + NPC.velocity.Y - 4f)) * 1f;
                 dust20.noGravity = true;
@@ -655,8 +673,8 @@ sealed class GreatFilter : ModNPC {
         SpriteBatch mySpriteBatch = spriteBatch;
         NPC rCurrentNPC = NPC;
 
-        int num230 = ShieldStrengthTowerGreatFilter;
-        string key = ShaderLoader.GreatFilter;
+        int num230 = ShieldStrengthTowerFilamentTower;
+        string key = ShaderLoader.Filament;
 
         SpriteEffects spriteEffects = SpriteEffects.None;
 

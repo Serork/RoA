@@ -6,7 +6,7 @@ using ReLogic.Content;
 using RoA.Common.Cache;
 ﻿using RoA.Common.World;
 using RoA.Content.Backgrounds;
-using RoA.Content.NPCs.Enemies.Bosses.GreatFilter;
+using RoA.Content.NPCs.Enemies.Bosses.Filament;
 using RoA.Core;
 
 using System;
@@ -19,6 +19,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Skies;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
+using Terraria.Initializers;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Core;
 
@@ -192,7 +193,7 @@ sealed class ShaderLoader : ModSystem {
     public static readonly string EnragedLothorSky = RoA.ModName + "Enraged Lothor Sky";
     public static readonly string FogVignette = RoA.ModName + "FogVignette";
     public static readonly string Vignette = RoA.ModName + "Vignette";
-    public static readonly string GreatFilter = RoA.ModName + "GreatFilter";
+    public static readonly string Filament = RoA.ModName + "Filament";
 
     public static VignetteScreenShaderData FogVignetteShaderData { get; private set; } = null!;
     public static Effect FogVignetteEffectData { get; private set; } = null!;
@@ -220,9 +221,9 @@ sealed class ShaderLoader : ModSystem {
         }
 
         void load01Shaders() {
-            Filters.Scene[GreatFilter] = new Filter(new ScreenShaderData("FilterTower").UseColor(1f, 1f, 1f).UseOpacity(0.5f), EffectPriority.High);
-            SkyManager.Instance[GreatFilter] = new GreatFilterSky();
-            Filters.Scene[GreatFilter].Load();
+            Filters.Scene[Filament] = new Filter(new ScreenShaderData("FilterTower").UseColor(FilamentSky.FilterColor.R / 255f, FilamentSky.FilterColor.G / 255f, FilamentSky.FilterColor.B / 255f).UseOpacity(FilamentSky.FilterOpacity), EffectPriority.High);
+            SkyManager.Instance[Filament] = new FilamentSky();
+            Filters.Scene[Filament].Load();
 
             Asset<Effect> vignetteShader = ModContent.Request<Effect>(ResourceManager.Effects + "FogVignette", AssetRequestMode.ImmediateLoad);
             FogVignetteEffectData = vignetteShader.Value;

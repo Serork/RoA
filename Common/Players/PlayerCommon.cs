@@ -204,6 +204,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool CollidedWithFungalMushroom;
     public Projectile FungalMushroomICollidedWith = null!;
 
+    public bool ZoneFilament;
+
     public enum EyePatchMode : byte {
         LeftEye = 0,
         RightEye = 1,

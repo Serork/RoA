@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Core;
+using RoA.Core.Utility;
 
 using System;
 
@@ -15,7 +16,7 @@ using Terraria.Utilities;
 
 namespace RoA.Common.World;
 
-sealed class GreatFilterSky : CustomSky {
+sealed class FilamentSky : CustomSky {
     private struct Meteor {
         public Vector2 Position;
         public float Depth;
@@ -32,8 +33,8 @@ sealed class GreatFilterSky : CustomSky {
     private float _fadeOpacity;
 
     public override void OnLoad() {
-        _planetTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "GreatFilterPlanet");
-        _bgTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "GreatFilterBackground");
+        _planetTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentPlanet");
+        _bgTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBackground");
     }
 
     public override void Update(GameTime gameTime) {
@@ -45,13 +46,28 @@ sealed class GreatFilterSky : CustomSky {
 
     public override Color OnTileColor(Color inColor) => new Color(Vector4.Lerp(inColor.ToVector4(), Vector4.One, _fadeOpacity * 0.5f));
 
+    public static Color FilterColor => new(212, 163, 34);
+    public static float FilterOpacity => 0.5f;
+
     public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {
+            // black background
             spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.Black * _fadeOpacity);
-            spriteBatch.Draw(_bgTexture.Value, new Rectangle(0, Math.Max(0, (int)((Main.worldSurface * 16.0 - (double)Main.screenPosition.Y - 2400.0) * 0.10000000149011612)), Main.screenWidth, Main.screenHeight), Color.White * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _fadeOpacity));
+
+            // gradient before planet
+            spriteBatch.Draw(_bgTexture.Value, new Rectangle(0, Math.Max(0, (int)((Main.worldSurface * 16.0 - (double)Main.screenPosition.Y - 2400.0) * 0.10000000149011612)), Main.screenWidth, Main.screenHeight), 
+                new Color(251, 228, 193) * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _fadeOpacity));
+
+            // planet
             Vector2 vector = new Vector2(Main.screenWidth >> 1, Main.screenHeight >> 1);
             Vector2 vector2 = 0.01f * (new Vector2((float)Main.maxTilesX * 8f, (float)Main.worldSurface / 2f) - Main.screenPosition);
-            spriteBatch.Draw(_planetTexture.Value, vector + new Vector2(200f, -200f) + vector2, null, Color.White * 0.9f * _fadeOpacity, 0f, new Vector2(_planetTexture.Width() >> 1, _planetTexture.Height() >> 1), 1f, SpriteEffects.None, 1f);
+            Vector2 positionOffset = new Vector2(200f, -200f);
+            spriteBatch.Draw(_planetTexture.Value, vector + positionOffset + vector2, null,
+                Color.White * 0.9f * _fadeOpacity, 0f, new Vector2(_planetTexture.Width() >> 1, _planetTexture.Height() >> 1), 1f, SpriteEffects.None, 1f);
+            
+            // gradient after planet
+            spriteBatch.Draw(_bgTexture.Value, new Rectangle(0, Math.Max(0, (int)((Main.worldSurface * 16.0 - (double)Main.screenPosition.Y - 2400.0) * 0.10000000149011612)), Main.screenWidth, Main.screenHeight),
+        (new Color(247, 206, 91) * 0.5f).MultiplyAlpha(1f) * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _fadeOpacity));
         }
     }
 

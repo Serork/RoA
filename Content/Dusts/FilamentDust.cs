@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class GreatFilterDust : ModDust {
+sealed class FilamentDust : ModDust {
     public override void SetStaticDefaults() {
      
     }
