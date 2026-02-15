@@ -102,7 +102,7 @@ sealed class FungalCaneFumes : NatureProjectile {
 
         Projectile.rotation += Projectile.velocity.X * 0.01f;
 
-        if (Main.rand.Next(10) == 0) {
+        if (Main.rand.Next(7) == 0) {
             int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.MushroomFumes>(), Scale: 1.3f);
             Main.dust[dust].color = _color;
             Main.dust[dust].customData = 0.15f;
