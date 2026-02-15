@@ -62,8 +62,14 @@ sealed class FungalCaneFumes : NatureProjectile {
 
             Projectile.localAI[0] = 1f;
 
-            _color = Color.Lerp(new Color(135, 137, 225), new Color(95, 98, 215), Main.rand.NextFloat());
+            _color = Color.Lerp(new Color(135, 137, 225), new Color(95, 98, 215), Main.rand.NextFloat() * 0.75f);
             _color = _color with { A = 0 };
+
+            for (int i = 0; i < 3; i++) {
+                int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ModContent.DustType<Dusts.MushroomFumes>(), Scale: 1.3f);
+                Main.dust[dust].color = _color;
+                Main.dust[dust].customData = 0.15f;
+            }
         }
 
         float num11 = (float)Main.rand.Next(28, 42) * 0.005f;
