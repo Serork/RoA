@@ -46,12 +46,12 @@ sealed class FilamentSky : CustomSky {
 
     public override Color OnTileColor(Color inColor) => new Color(Vector4.Lerp(inColor.ToVector4(), Vector4.One, _fadeOpacity * 0.5f));
 
-    public static Color FilterColor => new(212, 163, 34);
+    public static Color FilterColor => new(212, 213, 34);
     public static float FilterOpacity => 0.5f;
 
-    public static Color BeforePlanetGradientColor => new Color(251, 228, 193);
+    public static Color BeforePlanetGradientColor => new Color(251, 232, 193);
     public static Color PlanetColor => Color.White;
-    public static Color AfterPlanetGradientColor => new Color(247, 206, 91) * 0.5f;
+    public static Color AfterPlanetGradientColor => new Color(233, 206, 83) * 0.5f;
 
     public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {
