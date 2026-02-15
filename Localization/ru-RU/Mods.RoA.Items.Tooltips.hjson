@@ -58,21 +58,21 @@ WorshipperSetBonus:
 	'''
 DynastySetBonus: Нанесение урона вблизи кратковременно увеличивает скорость передвижения
 ElderwoodSetBonus: Дает шанс, что полученный урон будет снижен, взамен на кратковременное снижение скорости передвижения
-// EyePatchLeftEye: Left
-/* EyePatchLeftEye_Desc:
+EyePatchLeftEye: Левый глаз
+EyePatchLeftEye_Desc:
 	'''
-	20% increased ranged damage when attacking to the right
-	{0} to change direction
-	''' */
-// EyePatchRightEye: Right
-/* EyePatchRightEye_Desc:
+	20%-ное увеличение урона дальнего боя, если атаковать налево
+	Нажмите {0}, чтобы сменить направление
 	'''
-	20% increased ranged damage when attacking to the left
-	{0} to change direction
-	''' */
-// EyePatchBothEyes: Both
-/* EyePatchBothEyes_Desc:
+EyePatchRightEye: Правый глаз
+EyePatchRightEye_Desc:
 	'''
-	10% increased ranged damage when attacking in any direction
-	{0} to change direction
-	''' */
+	20%-ное увеличение урона дальнего боя, если атаковать направо
+	Нажмите {0}, чтобы сменить направление
+	'''
+EyePatchBothEyes: Оба глаза
+/EyePatchBothEyes_Desc:
+	'''
+	10%-ное увеличение урона дальнего боя при атаке в любом направлении
+	Нажмите {0}, чтобы сменить направление
+	'''

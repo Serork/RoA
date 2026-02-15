@@ -157,7 +157,7 @@ RodOfTheTerra: {
 
 RodOfTheCondor: {
 	DisplayName: Rod of the Condor
-	Tooltip: Launches the wielder forward with the power of ethereal wings
+	Tooltip: Launches the user forward with the power of ethereal wings
 }
 
 BeastBow: {
@@ -1891,7 +1891,7 @@ RoyalQualityHoney: {
 	DisplayName: Royal Quality Honey
 	Tooltip:
 		'''
-		Increasing life regeneration provides a further honey boost
+		Increasing life regeneration applies "Honey" buff
 		'Figs, cheese and a drizzle of honey'
 		'''
 }
@@ -2414,27 +2414,27 @@ LittleElixir: {
 	DisplayName: Little Elixir
 	Tooltip:
 		'''
-		Increases the effectiveness of life hearts
+		Life hearts recover more life
 		'You're my soda pop, gotta drink every drop'
 		'''
 }
 
 ManaDraught: {
 	DisplayName: Mana Draught
-	Tooltip: Increases the effectiveness of mana stars
+	Tooltip: Mana stars recover more mana
 }
 
 PerfectedConcoction: {
 	DisplayName: Perfected Concoction
-	Tooltip: Increases the effectiveness of life hearts and mana stars
+	Tooltip: Life hearts and mana stars recover more life and mana respectively
 }
 
 HoneyPunch: {
 	DisplayName: Honey Punch
 	Tooltip:
 		'''
-		Increasing life regeneration provides a further honey boost
-		Increases the effectiveness of life hearts and grants honey restoration when they are picked up
+		Increasing life regeneration applies "Honey" buff
+		Life hearts recover more life and apply "Honey" buff
 		'''
 }
 
@@ -2732,14 +2732,14 @@ ObsidianStopwatch: {
 	DisplayName: Obsidian Stopwatch
 	Tooltip:
 		'''
-		Rewinds position and grants temporary improvements to all stats when damaged 
+		Rewinds the user's position and grants temporary improvements to all stats when damaged 
 		'Welcome... to the True Man's World'
 		'''
 }
 
 HereticsVeil: {
 	DisplayName: Heretic's Veil
-	Tooltip: Wearer's soul burns when under 100 life, increasing life regeneration and reducing damage taken
+	Tooltip: THe wearer's soul burns when under 100 life, increasing life regeneration and reducing damage taken
 }
 
 BansheesGuard: {
@@ -2757,7 +2757,7 @@ BoneSerpentTail: {
 	Tooltip:
 		'''
 		6% increased critical strike chance
-		The effect is doubled if the wearer affected by a damaging debuff
+		The effect is doubled if the holder affected by a damaging debuff
 		'''
 }
 
@@ -2766,7 +2766,7 @@ SnakeIdol: {
 	Tooltip:
 		'''
 		Enemies take additional damage for every debuff inflicted
-		Reduces holder's defense by 5 if affected by a debuff
+		Reduces the holder's defense by 5 if affected by a debuff
 		'''
 }
 
@@ -2775,7 +2775,7 @@ GobletOfPain: {
 	Tooltip:
 		'''
 		10% increased damage
-		May poison the user upon dealing a critical hit
+		May poison the holder upon dealing a critical hit
 		'It eats away at my flesh!'
 		'''
 }
