@@ -84,7 +84,7 @@ sealed class Spore : NatureProjectile {
             Projectile.rotation = Projectile.velocity.X * 0.1f;
         }
         void lightUp() {
-            Lighting.AddLight(Projectile.Center, new Vector3(0.1f, 0.4f, 1f) * 0.5f);
+            Lighting.AddLight(Projectile.Center, new Vector3(0.1f, 0.4f, 1f) * 0.5f * Projectile.Opacity);
         }
 
         init();
