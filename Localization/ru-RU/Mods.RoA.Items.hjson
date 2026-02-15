@@ -2993,6 +2993,6 @@ FungalCane: {
 }
 
 BadgeOfHonor: {
-	// DisplayName: Badge Of Honor
-	// Tooltip: ""
+	// DisplayName: Badge of Honor
+	// Tooltip: Heavy ranged weapons restore used ammo upon killing an enemy
 }

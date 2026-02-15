@@ -62,17 +62,17 @@ EyePatchLeftEye: Left
 EyePatchLeftEye_Desc:
 	'''
 	20% increased ranged damage when attacking to the right
-	{1} to change direction
+	{0} to change direction
 	'''
 EyePatchRightEye: Right
 EyePatchRightEye_Desc:
 	'''
 	20% increased ranged damage when attacking to the left
-	{1} to change direction
+	{0} to change direction
 	'''
 EyePatchBothEyes: Both
 EyePatchBothEyes_Desc:
 	'''
 	10% increased ranged damage when attacking in any direction
-	{1} to change direction
+	{0} to change direction
 	'''

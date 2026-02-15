@@ -50,8 +50,8 @@ sealed class VanillaEyePatchChanges : GlobalItem {
         int index = tooltips.FindIndex(x => x.Name == "ItemName");
         tooltips[index].Text += $" ({sideText_Name})";
 
-        string sideText = Language.GetTextValue($"Mods.RoA.Items.Tooltips.EyePatch{Main.LocalPlayer.GetCommon().CurrentEyePatchMode}_Desc");
-        TooltipLine line = new(Mod, "eyepatchtooltip", sideText);
+        string tooltipText = Language.GetText($"Mods.RoA.Items.Tooltips.EyePatch{Main.LocalPlayer.GetCommon().CurrentEyePatchMode}_Desc").WithFormatArgs(Language.GetTextValue("Controls.RightClick")).Value;
+        TooltipLine line = new(Mod, "eyepatchtooltip", tooltipText);
         tooltips.Add(line);
     }
 

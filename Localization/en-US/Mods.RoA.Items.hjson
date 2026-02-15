@@ -2975,15 +2975,3 @@ BadgeOfHonor: {
 	DisplayName: Badge of Honor
 	Tooltip: Heavy ranged weapons restore used ammo upon killing an enemy
 }
-
-/*
-StarfruitCharm: {
-	DisplayName: Starfruit Charm
-	Tooltip:
-		'''
-		Causes stars to fall, charges up wreath and increases length of invincibility after taking damage
-		Consumes a full wreath charge to make the stars grow into starfruit, distracting enemies
-		'Slightly sweet with a sour undertone'
-		'''
-}
-*/
