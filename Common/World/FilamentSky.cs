@@ -47,7 +47,7 @@ sealed class FilamentSky : CustomSky {
     public override Color OnTileColor(Color inColor) => new Color(Vector4.Lerp(inColor.ToVector4(), Vector4.One, _fadeOpacity * 0.5f));
 
     public static Color FilterColor => new(212, 163, 34);
-    public static float FilterOpacity => 0.5f;
+    public static float FilterOpacity => 0.4f;
 
     public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {

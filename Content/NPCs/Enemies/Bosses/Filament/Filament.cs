@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Content.Dusts;
 using RoA.Core;
@@ -25,6 +27,8 @@ namespace RoA.Content.NPCs.Enemies.Bosses.Filament;
 
 [AutoloadBossHead]
 sealed class Filament : ModNPC {
+    private static Asset<Texture2D> _glowMaskTexture = null!;
+
     public static int ShieldStrengthTowerFilamentTower = 0;
     public static bool TowerActiveFilament;
 
@@ -43,6 +47,10 @@ sealed class Filament : ModNPC {
     public override void SetStaticDefaults() {
         NPCID.Sets.ShouldBeCountedAsBoss[Type] = true;
         NPCID.Sets.DangerThatPreventsOtherDangers[Type] = true;
+
+        if (!Main.dedServ) {
+            _glowMaskTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        }
     }
 
     public override bool NeedSaving() => true;
@@ -693,6 +701,12 @@ sealed class Filament : ModNPC {
         vector65 -= new Vector2(value60.Width, value60.Height / Main.npcFrameCount[type]) * rCurrentNPC.scale / 2f;
         vector65 += halfSize * rCurrentNPC.scale + new Vector2(0f, num35 + num36 + rCurrentNPC.gfxOffY);
         mySpriteBatch.Draw(value60, vector65, rCurrentNPC.frame, rCurrentNPC.GetAlpha(npcColor), rCurrentNPC.rotation, halfSize, rCurrentNPC.scale, spriteEffects, 0f);
+
+        value60 = _glowMaskTexture.Value;
+        float num226 = 4f + (rCurrentNPC.GetAlpha(npcColor).ToVector3() - new Vector3(0.5f)).Length() * 4f;
+        for (int num227 = 0; num227 < 4; num227++) {
+            mySpriteBatch.Draw(value60, vector65 + rCurrentNPC.velocity.RotatedBy((float)num227 * ((float)Math.PI / 2f)) * num226, rCurrentNPC.frame, new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * rCurrentNPC.Opacity, rCurrentNPC.rotation, halfSize, rCurrentNPC.scale, spriteEffects, 0f);
+        }
 
         float num231 = (float)num230 / (float)NPC.ShieldStrengthTowerMax;
         if (rCurrentNPC.IsABestiaryIconDummy)
