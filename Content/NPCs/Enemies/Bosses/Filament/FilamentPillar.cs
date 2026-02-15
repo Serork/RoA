@@ -21,6 +21,7 @@ using Terraria.GameContent;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.WorldBuilding;
@@ -69,6 +70,92 @@ sealed class FilamentPillar : ModNPC {
         On_Player.UpdateBiomes += On_Player_UpdateBiomes;
 
         WorldCommon.ClearWorldEvent += WorldCommon_ClearWorldEvent;
+
+        On_WorldGen.UpdateLunarApocalypse += On_WorldGen_UpdateLunarApocalypse;
+        On_WorldGen.MessageLunarApocalypse += On_WorldGen_MessageLunarApocalypse;
+    }
+
+    private void On_WorldGen_MessageLunarApocalypse(On_WorldGen.orig_MessageLunarApocalypse orig) {
+        if (NPC.LunarApocalypseIsUp) {
+            int num = 0;
+            if (!NPC.TowerActiveSolar)
+                num++;
+
+            if (!NPC.TowerActiveVortex)
+                num++;
+
+            if (!NPC.TowerActiveNebula)
+                num++;
+
+            if (!NPC.TowerActiveStardust)
+                num++;
+
+            if (!TowerActiveFilament)
+                num++;
+
+            if (num == 1) {
+                WorldGen.BroadcastText(NetworkText.FromKey("Mods.RoA.World.CelestialPillar1Destroyed"), 175, 75, 255);
+            }
+            else {
+                num -= 1;
+                WorldGen.BroadcastText(NetworkText.FromKey(Lang.misc[43 + num].Key), 175, 75, 255);
+            }
+        }
+    }
+
+    private void On_WorldGen_UpdateLunarApocalypse(On_WorldGen.orig_UpdateLunarApocalypse orig) {
+        if (!NPC.LunarApocalypseIsUp)
+            return;
+
+        bool flag = false;
+        bool flag2 = false;
+        bool flag3 = false;
+        bool flag4 = false;
+        bool flag5 = false;
+        bool flag6 = false;
+        ushort filament = (ushort)ModContent.NPCType<FilamentPillar>();
+        for (int i = 0; i < 200; i++) {
+            if (Main.npc[i].active) {
+                switch (Main.npc[i].type) {
+                    case NPCID.MoonLordCore:
+                        flag = true;
+                        break;
+                    case 517:
+                        flag2 = true;
+                        break;
+                    case 422:
+                        flag3 = true;
+                        break;
+                    case 507:
+                        flag4 = true;
+                        break;
+                    case 493:
+                        flag5 = true;
+                        break;
+                }
+                if (Main.npc[i].type == filament) {
+                    flag6 = true;
+                }
+            }
+        }
+
+        if (!flag2)
+            NPC.TowerActiveSolar = false;
+
+        if (!flag3)
+            NPC.TowerActiveVortex = false;
+
+        if (!flag4)
+            NPC.TowerActiveNebula = false;
+
+        if (!flag5)
+            NPC.TowerActiveStardust = false;
+
+        if (!flag6)
+            TowerActiveFilament = false;
+
+        if (!NPC.TowerActiveSolar && !NPC.TowerActiveVortex && !NPC.TowerActiveNebula && !NPC.TowerActiveStardust && !TowerActiveFilament && !flag)
+            WorldGen.StartImpendingDoom(3600);
     }
 
     private void WorldCommon_ClearWorldEvent() {
