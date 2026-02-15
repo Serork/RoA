@@ -115,7 +115,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         float screenOff = typeof(Main).GetFieldValue<float>("screenOff", Main.instance);
         float scAdj = typeof(Main).GetFieldValue<float>("scAdj", Main.instance);
         Color colorOfSurfaceBackgroundsModified = typeof(Main).GetFieldValue<Color>("ColorOfSurfaceBackgroundsModified", Main.instance);
-        Color backgroundColor = colorOfSurfaceBackgroundsModified/* * Math.Max(0.5f, 1f - BackwoodsFogHandler.Opacity)*/;
+        Color backgroundColor = colorOfSurfaceBackgroundsModified * 1f/* * Math.Max(0.5f, 1f - BackwoodsFogHandler.Opacity)*/;
         bool canBGDraw = false;
         if ((!Main.remixWorld || Main.gameMenu && !WorldGen.remixWorldGen) && (!WorldGen.remixWorldGen || !WorldGen.drunkWorldGen)) {
             canBGDraw = true;
@@ -173,6 +173,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                     Main.spriteBatch.Draw(mid2, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + MidOffset2 + captureOffset), new Rectangle(0, 0, mid2.Width, mid2.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
                 }
             }
+
             bgScale = 1.25f;
             bgParallax = 0.4;
             bgTopY = (int)(backgroundTopMagicNumber * 1800.0 + 600.0) + (int)scAdj + pushBGTopHack;
@@ -202,9 +203,10 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             }
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
             SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
+            // line here
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
-                    Main.spriteBatch.Draw(mid, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + MidOffset + captureOffset), new Rectangle(0, 0, mid.Width, mid.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(mid, new Vector2(bgStartX + bgWidthScaled * i + 0.5f * i, bgTopY + MidOffset + captureOffset), new Rectangle(0, 0, mid.Width, mid.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
                 }
             }
 
@@ -220,9 +222,10 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             }
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
             SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
+            // line here
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
-                    Main.spriteBatch.Draw(mid, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + MidOffset + captureOffset), new Rectangle(0, 0, mid.Width, mid.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
+                    Main.spriteBatch.Draw(mid, new Vector2(bgStartX + bgWidthScaled * i + 0.5f * i, bgTopY + MidOffset + captureOffset), new Rectangle(0, 0, mid.Width, mid.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
                 }
             }
 
