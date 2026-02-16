@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.UI;
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 
@@ -17,7 +18,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories;
 
 [AutoloadEquip(EquipType.Face)]
-sealed class CosmicHat : ModItem {
+sealed class CosmicHat : ModItem, IMagicItemForVisuals {
     private static Asset<Texture2D> _faceGlow = null!,
                                     _faceMask = null!;
 

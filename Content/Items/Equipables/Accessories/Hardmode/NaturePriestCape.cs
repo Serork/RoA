@@ -9,8 +9,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
 [AutoloadEquip(EquipType.Back, EquipType.Front)]
-sealed class NaturePriestCape : ModItem {
-    public override void SetDefaults() {
+sealed class NaturePriestCape : NatureItem {
+    protected override void SafeSetDefaults() {
         Item.DefaultToAccessory(30, 30);
 
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));

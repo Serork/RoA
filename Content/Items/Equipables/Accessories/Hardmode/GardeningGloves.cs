@@ -8,8 +8,8 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
 [AutoloadEquip(EquipType.HandsOn)]
-sealed class GardeningGloves : ModItem {
-    public override void SetDefaults() {
+sealed class GardeningGloves : NatureItem {
+    protected override void SafeSetDefaults() {
         Item.DefaultToAccessory(26, 34);
 
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));

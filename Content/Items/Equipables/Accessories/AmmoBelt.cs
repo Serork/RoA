@@ -1,4 +1,5 @@
 ﻿using RoA.Common.Players;
+using RoA.Common.UI;
 
 using Terraria;
 using Terraria.Enums;
@@ -6,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories;
 
-sealed class AmmoBelt : ModItem {
+sealed class AmmoBelt : ModItem, IRangedItemForVisuals {
     public override void SetDefaults() {
         Item.DefaultToAccessory(30, 30);
 

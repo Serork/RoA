@@ -1,4 +1,5 @@
-﻿using RoA.Core.Utility.Vanilla;
+﻿using RoA.Common.UI;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Enums;
@@ -6,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
-sealed class ManaDraught : ModItem {
+sealed class ManaDraught : ModItem, IMagicItemForVisuals {
     public override void SetDefaults() {
         Item.DefaultToAccessory(26, 26);
 

@@ -12,6 +12,7 @@ using RoA.Content;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -27,6 +28,11 @@ using Terraria.UI;
 using static RoA.Common.UI.DamageClassVisualsInItemName;
 
 namespace RoA.Common.UI;
+
+interface IMagicItemForVisuals { }
+interface IRangedItemForVisuals { }
+interface IMeleeItemForVisuals { }
+interface ISummonItemForVisuals { }
 
 sealed class DamageClassItemsStorage : IInitializer {
     private static Player? _testPlayer;
@@ -230,7 +236,22 @@ sealed class DamageClassItemsStorage : IInitializer {
                     }
                 }
             }
-
+            void tryToAddAnyway() {
+                if (self.IsModded(out ModItem modItem)) {
+                    if (modItem is IRangedItemForVisuals) {
+                        AddItem(self, DamageClass.Ranged);
+                    }
+                    else if (modItem is IMagicItemForVisuals) {
+                        AddItem(self, DamageClass.Magic);
+                    }
+                    else if (modItem is IMeleeItemForVisuals) {
+                        AddItem(self, DamageClass.Melee);
+                    }
+                    else if (modItem is ISummonItemForVisuals) {
+                        AddItem(self, DamageClass.Summon);
+                    }
+                }
+            }
             if (self.IsAWeapon()) {
                 AddItem(self, self.DamageType);
             }
@@ -241,6 +262,10 @@ sealed class DamageClassItemsStorage : IInitializer {
                     }
                     checkForDamageClassEquips(damageClass);
                 }
+                tryToAddAnyway();
+            }
+            else {
+                tryToAddAnyway();
             }
         }
 

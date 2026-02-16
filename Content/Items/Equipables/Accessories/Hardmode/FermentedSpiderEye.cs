@@ -6,8 +6,8 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
-sealed class FermentedSpiderEye : ModItem {
-    public override void SetDefaults() {
+sealed class FermentedSpiderEye : NatureItem {
+    protected override void SafeSetDefaults() {
         Item.DefaultToAccessory(22, 28);
 
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));

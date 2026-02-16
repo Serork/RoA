@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Common.UI;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
@@ -15,7 +16,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
 [AutoloadEquip(EquipType.Face)]
-sealed class DoubleGoggles : ModItem {
+sealed class DoubleGoggles : ModItem, IMagicItemForVisuals {
     public override void Load() {
         On_PlayerDrawHelper.SetShaderForData += On_PlayerDrawHelper_SetShaderForData;
     }

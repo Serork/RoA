@@ -1,4 +1,5 @@
-﻿using RoA.Core.Utility.Vanilla;
+﻿using RoA.Common.UI;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.Enums;
@@ -6,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
-sealed class BadgeOfHonor : ModItem {
+sealed class BadgeOfHonor : ModItem, IRangedItemForVisuals {
     public override void SetDefaults() {
         Item.DefaultToAccessory(28, 38);
 

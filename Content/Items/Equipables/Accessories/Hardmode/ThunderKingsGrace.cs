@@ -12,8 +12,8 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
-sealed class ThunderKingsGrace : ModItem {
-    public override void SetDefaults() {
+sealed class ThunderKingsGrace : NatureItem {
+    protected override void SafeSetDefaults() {
         Item.DefaultToAccessory(32, 28);
 
         Item.SetShopValues(ItemRarityColor.LightRed4, Item.sellPrice(0, 1));

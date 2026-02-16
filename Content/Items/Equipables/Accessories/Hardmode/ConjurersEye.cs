@@ -2,6 +2,7 @@
 
 using ReLogic.Content;
 
+using RoA.Common.UI;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -11,7 +12,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Items.Equipables.Accessories.Hardmode;
 
 // also see ExtraDrawLayerSupport.cs
-sealed class ConjurersEye : ModItem {
+sealed class ConjurersEye : ModItem, IMagicItemForVisuals {
     public static Asset<Texture2D> EyeTexture { get; private set; } = null!;
 
     public override void SetStaticDefaults() {
