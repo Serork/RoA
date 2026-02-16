@@ -15,7 +15,6 @@ sealed class CottonBoll : NatureProjectile {
         Projectile.friendly = true;
         Projectile.timeLeft = TIMELEFT;
         Projectile.penetrate = -1;
-        Projectile.hide = true;
 
         Projectile.tileCollide = false;
 
