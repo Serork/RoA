@@ -61,8 +61,23 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             }
         }
         if (availableIndex >= 0) {
+            Vector2 getPosition() => new(Main.rand.Next(Main.screenWidth * 4), -Main.screenHeight / 3 * Main.rand.NextFloatDirection());
+            Vector2 position = getPosition();
+            int attempts = 100;
+            while (attempts-- > 0) {
+                bool shouldBreak = true;
+                for (int i = 0; i < ThemBG.Length; i++) {
+                    if (Vector2.Distance(ThemBG[availableIndex].Position, position) < 200f) {
+                        position = getPosition();
+                        shouldBreak = false;
+                    }
+                }
+                if (shouldBreak) {
+                    break;
+                }
+            }
             ThemBG[availableIndex] = new ThemBGInfo((byte)Main.rand.Next(THEMBGTEXTURECOUNT), 
-                                                    new Vector2(Main.rand.Next(Main.screenWidth * 4), -Main.screenHeight / 3 * Main.rand.NextFloatDirection()),
+                                                    position,
                                                     (ushort)(THEMACTIVETIME * Main.rand.NextFloat(0.75f, 1f)),
                                                     FacedRight: Main.rand.NextBool());
             return true;
