@@ -53,8 +53,8 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
         Projectile.Opacity = 0f;
     }
 
-    public override bool? CanDamage() => false;
-    public override bool? CanCutTiles() => false;
+    public override bool? CanDamage() => true;
+    public override bool? CanCutTiles() => true;
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
         if (Projectile.hide) {
