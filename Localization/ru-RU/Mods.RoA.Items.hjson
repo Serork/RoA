@@ -661,7 +661,7 @@ DeerSkull: {
 
 OniMask: {
 	DisplayName: Маска Они
-	Tooltip: Изгоняет Ёки
+	Tooltip: Снижает скорость появления противников
 }
 
 ElderwoodBathtub: {
@@ -2594,7 +2594,7 @@ OvergrownAltar: {
 
 ScholarsArchive: {
 	DisplayName: Архив Учёного
-	// Tooltip: ""
+	Tooltip: Позволяет хранить книги заклинаний и начертать их способности в Эксцентричный том
 }
 
 ScholarsDesk: {

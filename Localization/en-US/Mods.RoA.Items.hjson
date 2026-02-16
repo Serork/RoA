@@ -645,7 +645,7 @@ DeerSkull: {
 
 OniMask: {
 	DisplayName: Oni Mask
-	Tooltip: Scares away the Yōkai
+	Tooltip: Decreases enemy spawn rate
 }
 
 ElderwoodBathtub: {
@@ -2573,7 +2573,7 @@ OvergrownAltar: {
 
 ScholarsArchive: {
 	DisplayName: Scholar's Archive
-	Tooltip: ""
+	Tooltip: Can store spell books and inscribing their powers into an Eccentric Tome
 }
 
 ScholarsDesk: {
@@ -2982,5 +2982,10 @@ BadgeOfHonor: {
 
 CottonCane: {
 	DisplayName: Cotton Cane
-	Tooltip: ""
+	Tooltip:
+		'''
+		Launches cotton bolls that hover in the air
+		Right click a cotton boll to launch upwards, spreading cotton fiber
+		'Can we get much higher?'
+		'''
 }
