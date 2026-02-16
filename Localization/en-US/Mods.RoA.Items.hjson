@@ -2979,3 +2979,8 @@ BadgeOfHonor: {
 	DisplayName: Badge of Honor
 	Tooltip: Heavy ranged weapons restore used ammo upon killing an enemy
 }
+
+CottonCane: {
+	DisplayName: Cotton Cane
+	Tooltip: ""
+}
