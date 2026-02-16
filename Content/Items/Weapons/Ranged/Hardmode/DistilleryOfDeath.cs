@@ -227,7 +227,7 @@ sealed class DistilleryOfDeath : ModItem {
 
             if (!player.GetCommon().DistilleryOfDeathInitialized) {
                 player.GetCommon().DistilleryOfDeathInitialized = true;
-                ChangeType();
+                ChangeType(true);
             }
 
             int shootCount = SHOOTCOUNTPERTYPE;
@@ -339,7 +339,7 @@ sealed class DistilleryOfDeath : ModItem {
             }
         }
 
-        private void ChangeType() {
+        private void ChangeType(bool init = false) {
             int owner = Projectile.owner;
             Player player = Main.player[owner];
 
@@ -358,10 +358,16 @@ sealed class DistilleryOfDeath : ModItem {
             }
             var handler = player.GetCommon();
             handler.DistilleryOfDeathLastShootType_Back1_2 = handler.DistilleryOfDeathLastShootType_Back1;
+            if (init) {
+                handler.DistilleryOfDeathLastShootType_Back1_2 = Main.rand.GetRandomEnumValue<GustType>(1);
+            }
             while (handler.DistilleryOfDeathLastShootType_Back1 == handler.DistilleryOfDeathLastShootType_Back1_2) {
                 handler.DistilleryOfDeathLastShootType_Back1 = Main.rand.GetRandomEnumValue<GustType>(1);
             }
             handler.DistilleryOfDeathLastShootType_Back2_2 = handler.DistilleryOfDeathLastShootType_Back2;
+            if (init) {
+                handler.DistilleryOfDeathLastShootType_Back2_2 = Main.rand.GetRandomEnumValue<GustType>(1);
+            }
             while (handler.DistilleryOfDeathLastShootType_Back2 == handler.DistilleryOfDeathLastShootType_Back2_2) {
                 handler.DistilleryOfDeathLastShootType_Back2 = Main.rand.GetRandomEnumValue<GustType>(1);
             }
