@@ -645,7 +645,7 @@ DeerSkull: {
 
 OniMask: {
 	DisplayName: Oni Mask
-	Tooltip: 'Scares away the Yōkai'
+	Tooltip: Scares away the Yōkai
 }
 
 ElderwoodBathtub: {

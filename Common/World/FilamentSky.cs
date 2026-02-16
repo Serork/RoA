@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -46,12 +47,14 @@ sealed class FilamentSky : CustomSky {
 
     public override Color OnTileColor(Color inColor) => new Color(Vector4.Lerp(inColor.ToVector4(), Vector4.One, _fadeOpacity * 0.5f));
 
-    public static Color FilterColor => new(160, 148, 57);
+    public static float DarkenFactor => 0.03f;
+
+    public static Color FilterColor => new Color(155, 160, 57).ModifyRGB(1f - DarkenFactor);
     public static float FilterOpacity => 0.65f;
 
-    public static Color BeforePlanetGradientColor => new Color(251, 232, 193);
-    public static Color PlanetColor => Color.White;
-    public static Color AfterPlanetGradientColor => new Color(233, 206, 83) * 0.5f;
+    public static Color BeforePlanetGradientColor => new Color(251, 242, 193).ModifyRGB(1f - DarkenFactor);
+    public static Color PlanetColor => Color.White.ModifyRGB(1f - DarkenFactor);
+    public static Color AfterPlanetGradientColor => new Color(233, 231, 83).ModifyRGB(1f - DarkenFactor) * 0.5f;
 
     public override void Draw(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         if (maxDepth >= float.MaxValue && minDepth < float.MaxValue) {

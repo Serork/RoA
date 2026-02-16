@@ -661,7 +661,7 @@ DeerSkull: {
 
 OniMask: {
 	DisplayName: Маска Они
-	Tooltip: 'Изгоняет Ёки'
+	Tooltip: Изгоняет Ёки
 }
 
 ElderwoodBathtub: {
