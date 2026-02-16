@@ -164,7 +164,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool IsBrawlerMaskEffectActive;
     public HashSet<(int, int)> BeforeHitActiveDebuffs = [];
 
-    public bool DistilleryOfDeathInitialized;
+    public bool DistilleryOfDeathInitialized, DistilleryOfDeathInitialized2;
     public GustType DistilleryOfDeathLastShootType_Current, DistilleryOfDeathLastShootType_Next, DistilleryOfDeathLastShootType_Next_Next;
     public byte DistilleryOfDeathShootCount;
     public GustType DistilleryOfDeathLastShootType_Back1, DistilleryOfDeathLastShootType_Back1_2, DistilleryOfDeathLastShootType_Back2, DistilleryOfDeathLastShootType_Back2_2;
@@ -1502,6 +1502,28 @@ sealed partial class PlayerCommon : ModPlayer {
     public static event PreUpdateDelegate PreUpdateEvent;
     public override void PreUpdate() {
         PreUpdateEvent?.Invoke(Player);
+
+        if (!DistilleryOfDeathInitialized) {
+            DistilleryOfDeathInitialized = true;
+
+            DistilleryOfDeathLastShootType_Next = DistilleryOfDeathLastShootType_Next_Next;
+            DistilleryOfDeathLastShootType_Next_Next = Main.rand.GetRandomEnumValue<GustType>(1);
+            while (DistilleryOfDeathLastShootType_Next_Next == DistilleryOfDeathLastShootType_Next ||
+                   DistilleryOfDeathLastShootType_Next_Next == DistilleryOfDeathLastShootType_Current) {
+                DistilleryOfDeathLastShootType_Next_Next = Main.rand.GetRandomEnumValue<GustType>(1);
+            }
+
+            DistilleryOfDeathLastShootType_Back1 = Main.rand.GetRandomEnumValue<GustType>(1);
+            DistilleryOfDeathLastShootType_Back1_2 = DistilleryOfDeathLastShootType_Back1;
+            while (DistilleryOfDeathLastShootType_Back1 == DistilleryOfDeathLastShootType_Back1_2) {
+                DistilleryOfDeathLastShootType_Back1 = Main.rand.GetRandomEnumValue<GustType>(1);
+            }
+            DistilleryOfDeathLastShootType_Back2 = Main.rand.GetRandomEnumValue<GustType>(1);
+            DistilleryOfDeathLastShootType_Back2_2 = DistilleryOfDeathLastShootType_Back2;
+            while (DistilleryOfDeathLastShootType_Back2 == DistilleryOfDeathLastShootType_Back2_2) {
+                DistilleryOfDeathLastShootType_Back2 = Main.rand.GetRandomEnumValue<GustType>(1);
+            }
+        }
     }
 
     public void ActivateNaturePriestCapeEffect() {

@@ -225,11 +225,6 @@ sealed class DistilleryOfDeath : ModItem {
                 Projectile.Kill();
             }
 
-            if (!player.GetCommon().DistilleryOfDeathInitialized) {
-                player.GetCommon().DistilleryOfDeathInitialized = true;
-                ChangeType(true);
-            }
-
             int shootCount = SHOOTCOUNTPERTYPE;
 
             float scale = Projectile.scale;
@@ -314,6 +309,16 @@ sealed class DistilleryOfDeath : ModItem {
                     DelayValue = _delay = useTime * 5;
 
                     ChangeType();
+
+                    var handler = player.GetCommon();
+                    handler.DistilleryOfDeathLastShootType_Back1_2 = handler.DistilleryOfDeathLastShootType_Back1;
+                    while (handler.DistilleryOfDeathLastShootType_Back1 == handler.DistilleryOfDeathLastShootType_Back1_2) {
+                        handler.DistilleryOfDeathLastShootType_Back1 = Main.rand.GetRandomEnumValue<GustType>(1);
+                    }
+                    handler.DistilleryOfDeathLastShootType_Back2_2 = handler.DistilleryOfDeathLastShootType_Back2;
+                    while (handler.DistilleryOfDeathLastShootType_Back2 == handler.DistilleryOfDeathLastShootType_Back2_2) {
+                        handler.DistilleryOfDeathLastShootType_Back2 = Main.rand.GetRandomEnumValue<GustType>(1);
+                    }
                 }
             }
 
@@ -339,7 +344,7 @@ sealed class DistilleryOfDeath : ModItem {
             }
         }
 
-        private void ChangeType(bool init = false) {
+        private void ChangeType() {
             int owner = Projectile.owner;
             Player player = Main.player[owner];
 
@@ -355,21 +360,6 @@ sealed class DistilleryOfDeath : ModItem {
                     NextNextGustType = Main.rand.GetRandomEnumValue<GustType>(1);
                 }
                 Projectile.netUpdate = true;
-            }
-            var handler = player.GetCommon();
-            handler.DistilleryOfDeathLastShootType_Back1_2 = handler.DistilleryOfDeathLastShootType_Back1;
-            if (init) {
-                handler.DistilleryOfDeathLastShootType_Back1_2 = Main.rand.GetRandomEnumValue<GustType>(1);
-            }
-            while (handler.DistilleryOfDeathLastShootType_Back1 == handler.DistilleryOfDeathLastShootType_Back1_2) {
-                handler.DistilleryOfDeathLastShootType_Back1 = Main.rand.GetRandomEnumValue<GustType>(1);
-            }
-            handler.DistilleryOfDeathLastShootType_Back2_2 = handler.DistilleryOfDeathLastShootType_Back2;
-            if (init) {
-                handler.DistilleryOfDeathLastShootType_Back2_2 = Main.rand.GetRandomEnumValue<GustType>(1);
-            }
-            while (handler.DistilleryOfDeathLastShootType_Back2 == handler.DistilleryOfDeathLastShootType_Back2_2) {
-                handler.DistilleryOfDeathLastShootType_Back2 = Main.rand.GetRandomEnumValue<GustType>(1);
             }
         }
 
