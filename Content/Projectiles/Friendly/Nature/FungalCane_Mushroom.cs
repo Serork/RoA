@@ -20,7 +20,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class FungalCaneMushroom : NatureProjectile {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(5);
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
 
     private Vector2 _scale;
 

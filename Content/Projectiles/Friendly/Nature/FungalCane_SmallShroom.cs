@@ -20,7 +20,7 @@ using Terraria.ModLoader.Config;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class FungalCaneSmallShroom : NatureProjectile {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(5);
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
 
     public ref float InitValue => ref Projectile.localAI[0];
 
