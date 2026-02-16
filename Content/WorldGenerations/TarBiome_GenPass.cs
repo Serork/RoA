@@ -99,7 +99,7 @@ sealed class TarBiome_GenPass : ModSystem {
 
         tasks.Insert(tasks.FindIndex(task => task.Name == "Settle Liquids") + 1, new PassLegacy("Tar", delegate (GenerationProgress progress, GameConfiguration passConfig) {
             int num916 = 5 * WorldGenHelper.WorldSize;
-            int beachWidth = GenVars.beachBordersWidth / 2;
+            int beachWidth = GenVars.beachBordersWidth;
             double num917 = (double)(Main.maxTilesX - beachWidth) / (double)num916;
             List<Point> list2 = new List<Point>(num916);
             int num918 = 0;
