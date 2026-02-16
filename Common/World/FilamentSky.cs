@@ -18,18 +18,9 @@ using Terraria.Utilities;
 namespace RoA.Common.World;
 
 sealed class FilamentSky : CustomSky {
-    private struct Meteor {
-        public Vector2 Position;
-        public float Depth;
-        public int FrameCounter;
-        public float Scale;
-        public float StartX;
-    }
-
     private UnifiedRandom _random = new UnifiedRandom();
     private Asset<Texture2D> _planetTexture;
     private Asset<Texture2D> _bgTexture;
-    private Asset<Texture2D> _meteorTexture;
     private bool _isActive;
     private float _fadeOpacity;
 
@@ -84,8 +75,6 @@ sealed class FilamentSky : CustomSky {
         _fadeOpacity = 0.002f;
         _isActive = true;
     }
-
-    private int SortMethod(Meteor meteor1, Meteor meteor2) => meteor2.Depth.CompareTo(meteor1.Depth);
 
     public override void Deactivate(params object[] args) {
         _isActive = false;
