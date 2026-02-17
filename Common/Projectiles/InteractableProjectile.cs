@@ -56,16 +56,17 @@ abstract class InteractableProjectile_Nature : NatureProjectile {
         if (num418 > 10) {
             Color selectionGlowColor = Colors.GetSelectionGlowColor(num417 == 2, num418);
             SpriteBatch spriteBatch = Main.spriteBatch;
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
-            Texture2D texture = HoverTexture.Value;
-            int height = texture.Height / Main.projFrames[Projectile.type];
-            Vector2 drawOrigin = new(texture.Width / 2f, height * 0.5f);
-            Vector2 position = Projectile.position + drawOrigin - Main.screenPosition;
-            Rectangle rect = new(0, height * Projectile.frame, texture.Width, height);
-            spriteBatch.Draw(texture, position + DrawOffset, rect, selectionGlowColor, Projectile.rotation, drawOrigin, Projectile.scale, SetSpriteEffects(), 0);
-            spriteBatch.EndBlendState();
+            DrawHoverMask(spriteBatch, selectionGlowColor);
         }
+    }
+
+    protected virtual void DrawHoverMask(SpriteBatch spriteBatch, Color selectionGlowColor) {
+        Texture2D texture = HoverTexture.Value;
+        int height = texture.Height / Main.projFrames[Projectile.type];
+        Vector2 drawOrigin = new(texture.Width / 2f, height * 0.5f);
+        Vector2 position = Projectile.position + drawOrigin - Main.screenPosition;
+        Rectangle rect = new(0, height * Projectile.frame, texture.Width, height);
+        spriteBatch.Draw(texture, position + DrawOffset, rect, selectionGlowColor, Projectile.rotation, drawOrigin, Projectile.scale, SetSpriteEffects(), 0);
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
@@ -164,16 +165,17 @@ abstract class InteractableProjectile : ModProjectile {
         if (num418 > 10) {
             Color selectionGlowColor = Colors.GetSelectionGlowColor(num417 == 2, num418);
             SpriteBatch spriteBatch = Main.spriteBatch;
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.TransformationMatrix);
-            Texture2D texture = HoverTexture.Value;
-            int height = texture.Height / Main.projFrames[Projectile.type];
-            Vector2 drawOrigin = new(texture.Width / 2f, height * 0.5f);
-            Vector2 position = Projectile.position + drawOrigin - Main.screenPosition;
-            Rectangle rect = new(0, height * Projectile.frame, texture.Width, height);
-            spriteBatch.Draw(texture, position + DrawOffset, rect, selectionGlowColor, Projectile.rotation, drawOrigin, Projectile.scale, SetSpriteEffects(), 0);
-            spriteBatch.EndBlendState();
+            DrawHoverMask(spriteBatch, selectionGlowColor);
         }
+    }
+
+    protected virtual void DrawHoverMask(SpriteBatch spriteBatch, Color selectionGlowColor) {
+        Texture2D texture = HoverTexture.Value;
+        int height = texture.Height / Main.projFrames[Projectile.type];
+        Vector2 drawOrigin = new(texture.Width / 2f, height * 0.5f);
+        Vector2 position = Projectile.position + drawOrigin - Main.screenPosition;
+        Rectangle rect = new(0, height * Projectile.frame, texture.Width, height);
+        spriteBatch.Draw(texture, position + DrawOffset, rect, selectionGlowColor, Projectile.rotation, drawOrigin, Projectile.scale, SetSpriteEffects(), 0);
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {

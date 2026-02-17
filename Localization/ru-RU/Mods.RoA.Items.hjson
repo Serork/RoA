@@ -3024,3 +3024,8 @@ FilamentFragment2: {
 	// DisplayName: Filament Fragment2
 	// Tooltip: ""
 }
+
+CottonBollSmall: {
+	// DisplayName: Cotton Boll Small
+	// Tooltip: ""
+}

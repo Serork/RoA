@@ -2938,7 +2938,7 @@ ChainedCloud: {
 
 ThunderKingsGrace: {
 	DisplayName: Thunder King's Grace
-	Tooltip: 
+	Tooltip:
 		'''
 		Allows the holder to air jump, creating angry clouds mid-air and consuming 25% of wreath charge
 		'And wash away the rain'
@@ -3001,5 +3001,10 @@ FilamentFragment: {
 
 FilamentFragment2: {
 	DisplayName: Filament Fragment2
+	Tooltip: ""
+}
+
+CottonBollSmall: {
+	DisplayName: Cotton Boll Small
 	Tooltip: ""
 }

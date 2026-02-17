@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Projectiles;
+using RoA.Content.Items;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -27,7 +28,7 @@ sealed class CottonBoll : InteractableProjectile_Nature {
     }
 
     protected override void SafeSetDefaults() {
-        Projectile.SetSizeValues(10);
+        Projectile.SetSizeValues(48, 64);
         Projectile.aiStyle = -1;
         Projectile.friendly = true;
         Projectile.timeLeft = TIMELEFT;
@@ -50,10 +51,16 @@ sealed class CottonBoll : InteractableProjectile_Nature {
     }
 
     protected override void OnInteraction(Player player) {
-        throw new System.NotImplementedException();
+
     }
 
     protected override void OnHover(Player player) {
-        throw new System.NotImplementedException();
+        player.noThrow = 2;
+        player.cursorItemIconEnabled = true;
+        player.cursorItemIconID = ModContent.ItemType<CottonBollSmall>();
+    }
+
+    protected override void DrawHoverMask(SpriteBatch spriteBatch, Color selectionGlowColor) {
+        Projectile.QuickDraw(selectionGlowColor, texture: _hoverTexture.Value);
     }
 }
