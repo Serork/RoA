@@ -113,17 +113,19 @@ sealed class FilamentSky : CustomSky {
             Vector2 vector4 = new Vector2(1f / _beams[j].Depth, 1.1f / _beams[j].Depth);
             Vector2 position = (_beams[j].Position - vector3) * vector4 + vector3 - Main.screenPosition;
             if (rectangle.Contains((int)position.X, (int)position.Y)) {
-                _beams[j].Opacity = Helper.Approach(_beams[j].Opacity, 1f * _fadeOpacity, 0.1f);
+                _beams[j].Opacity = Helper.Approach(_beams[j].Opacity, 1f * _fadeOpacity, 0.01f);
 
             }
             else {
-                _beams[j].Opacity = Helper.Approach(_beams[j].Opacity, 0f, 0.1f);
+                _beams[j].Opacity = Helper.Approach(_beams[j].Opacity, 0f, 0.01f);
             }
             float value = (float)Math.Sin(_beams[j].AlphaFrequency * TimeSystem.TimeForVisualEffects * 0.25f + _beams[j].SinOffset) * _beams[j].AlphaAmplitude + _beams[j].AlphaAmplitude;
-            float num4 = (float)Math.Sin(_beams[j].AlphaFrequency * TimeSystem.TimeForVisualEffects * 10f + _beams[j].SinOffset) * 0.1f - 0.1f;
+            float num4 = (float)Math.Sin(_beams[j].AlphaFrequency * TimeSystem.TimeForVisualEffects * 5f + _beams[j].SinOffset) * 0.1f - 0.1f;
             value = MathHelper.Clamp(value, 0.5f, 1f);
             Texture2D value2 = _beamTexture.Value;
             Color color = Color.White;
+            color = Color.Lerp(color, Color.Yellow, 0.5f);
+            color = Color.Lerp(color, Color.LightYellow, 0.5f);
             color.A = 0;
             Vector2 scale = new Vector2(vector4.X * 0.5f + 0.5f) * (value * 0.1f + 0.9f);
             float rotation = _beams[j].SinOffset;
@@ -133,7 +135,7 @@ sealed class FilamentSky : CustomSky {
             int width = value2.Width / 2;
             Rectangle bounds = new Rectangle((int)((_beams[j].ClipX * width) + _beams[j].Depth * width) % width, 0, width, value2.Height);
             Vector2 origin = bounds.LeftCenter();
-            Color color2 = color * num3 * value * 0.8f * (1f - num4) * 0.5f * _beams[j].Opacity;
+            Color color2 = color * num3 * value * 0.8f * (1f - num4) * 0.45f * _beams[j].Opacity;
             while (attempts-- > 0) {
                 spriteBatch.Draw(value2, position2, bounds, color2, rotation, origin, scale, SpriteEffects.None, 0f);
                 position2 += Vector2.UnitX.RotatedBy(rotation) * width * scale;
@@ -163,7 +165,7 @@ sealed class FilamentSky : CustomSky {
                 float num5 = (float)j / (float)num2;
                 _beams[num3].Position.X = num4 * (float)Main.maxTilesX * 16f;
                 _beams[num3].Position.Y = num5 * ((float)Main.worldSurface * 16f + 2000f) - 1000f;
-                _beams[num3].Depth = _random.NextFloat() * 8f + 1.5f;
+                _beams[num3].Depth = MathF.Max(0f, _random.NextFloat() * 8f);
                 _beams[num3].SinOffset = _random.NextFloat() * 6.28f;
                 _beams[num3].AlphaAmplitude = _random.NextFloat() * 5f;
                 _beams[num3].AlphaFrequency = _random.NextFloat() + 1f;
