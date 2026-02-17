@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Content.Projectiles.Friendly.Magic;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -19,7 +20,31 @@ namespace RoA.Content.Items.Equipables.Armor.Magic;
 sealed class FlametrackerSetBonusHandler : ModPlayer {
     public bool IsActive { get; internal set; }
 
+    public bool ShouldAttack;
+
     public override void ResetEffects() {
+        if (ShouldAttack) {
+            ShouldAttack = false;
+            if (Player.whoAmI == Main.myPlayer) {
+                Vector2 mousePos = Player.GetViableMousePosition();
+                int direction = (mousePos - Player.GetPlayerCorePoint()).X.GetDirection();
+                Vector2 projectilePos = Player.GetPlayerCorePoint() + new Vector2(10f * Player.direction, -26f);
+                if (Player.gravDir < 0) {
+                    projectilePos.Y += Player.defaultHeight;
+                }
+                if (Player.head != EquipLoader.GetEquipSlot(RoA.Instance, nameof(FlametrackerHat), EquipType.Head)) {
+                    projectilePos = Player.GetPlayerCorePoint();
+                }
+                Projectile.NewProjectile(Player.GetSource_Misc("frametrackersetbonus"),
+                    projectilePos - mousePos.SafeNormalize() * 4f * new Vector2(1f * Player.direction, 1f),
+                    Helper.VelocityToPoint(projectilePos, mousePos, 5f),
+                    ModContent.ProjectileType<TrackingBolt>(),
+                    (int)Player.GetTotalDamage(DamageClass.Magic).ApplyTo(25),
+                    Player.GetTotalKnockback(DamageClass.Magic).ApplyTo(1.5f),
+                    Player.whoAmI);
+            }
+        }
+
         IsActive = false;
     }
 
@@ -27,21 +52,7 @@ sealed class FlametrackerSetBonusHandler : ModPlayer {
         if (IsActive) {
             if (Player.statMana == Player.statManaMax2 && Player.altFunctionUse != 2) {
                 SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "FireWoosh") { Volume = 5.5f }, Player.Center);
-                if (Player.whoAmI == Main.myPlayer) {
-                    Vector2 mousePos = Player.GetViableMousePosition();
-                    int direction = (mousePos - Player.Center).X.GetDirection();
-                    Vector2 projectilePos = new Vector2(Player.Top.X + 16f * direction + (direction == 1 && mousePos.Y < Player.Bottom.Y ? -10f : 0f), Player.Top.Y - 2f);
-                    if (Player.gravDir < 0) {
-                        projectilePos.Y += Player.defaultHeight;
-                    }
-                    Projectile.NewProjectile(Player.GetSource_Misc("frametrackersetbonus"),
-                        projectilePos,
-                        Helper.VelocityToPoint(projectilePos, mousePos, 5f),
-                        ModContent.ProjectileType<TrackingBolt>(),
-                        (int)Player.GetTotalDamage(DamageClass.Magic).ApplyTo(25),
-                        Player.GetTotalKnockback(DamageClass.Magic).ApplyTo(1.5f),
-                        Player.whoAmI);
-                }
+                ShouldAttack = true;
             }
         }
     }
