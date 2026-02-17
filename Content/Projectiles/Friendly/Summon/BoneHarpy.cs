@@ -7,6 +7,7 @@ using RoA.Common.Projectiles;
 using RoA.Content.Items;
 using RoA.Content.Items.Equipables.Armor.Summon;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -84,7 +85,7 @@ sealed class BoneHarpy : InteractableProjectile {
         Player player = Main.player[Projectile.owner];
 
         if (player.Distance(Projectile.Center) > 1000f) {
-            Projectile.Center = player.Center;
+            Projectile.Center = player.GetPlayerCorePoint();
         }
 
         if (IsBeingControlled(player)) {

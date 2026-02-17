@@ -7,6 +7,7 @@ using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Content.Items.Miscellaneous;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -449,7 +450,7 @@ sealed class LittleFleder : ModProjectile {
                 num31 = 15f;
 
             Vector2 center2 = Projectile.Center;
-            AI_156_GetIdlePosition(player.Center, index, totalIndexesInGroup, out var idleSpot, out var idleRotation, offset: 50f);
+            AI_156_GetIdlePosition(player.GetPlayerCorePoint(), index, totalIndexesInGroup, out var idleSpot, out var idleRotation, offset: 50f);
             Vector2 v2 = idleSpot - center2;
 
             Projectile.ai[1] = ATTACKRATE;

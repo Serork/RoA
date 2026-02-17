@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -36,7 +37,7 @@ sealed class PineCone : NatureProjectile {
         if (player.whoAmI != Main.myPlayer) {
             return;
         }
-        Vector2 center = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 200f) + new Vector2(Projectile.width * 0.2f, Projectile.Size.Y / 2f + Projectile.height * 0.1f) - new Vector2(2f, 2f);
+        Vector2 center = Helper.GetLimitedPosition(player.GetPlayerCorePoint(), player.GetViableMousePosition(), 200f) + new Vector2(Projectile.width * 0.2f, Projectile.Size.Y / 2f + Projectile.height * 0.1f) - new Vector2(2f, 2f);
         Projectile.Center = center;
         Projectile.netUpdate = true;
     }

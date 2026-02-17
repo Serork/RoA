@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -76,8 +77,8 @@ sealed class HellfireFracture : NatureProjectile {
                 Projectile.ai[1] = 0f;
                 Projectile.position = proj.As<UltimateHellfireClawsSlash>().GetPos(MathHelper.PiOver4 * 0.5f);
                 Projectile.position += Vector2.UnitY * 5f * -player.direction;
-                Projectile.position += Helper.VelocityToPoint(Projectile.position, player.Center, Projectile.ai[0]) * 10f;
-                Projectile.velocity = Helper.VelocityToPoint(player.Center, Projectile.position, 1f).SafeNormalize(Vector2.Zero);
+                Projectile.position += Helper.VelocityToPoint(Projectile.position, player.GetPlayerCorePoint(), Projectile.ai[0]) * 10f;
+                Projectile.velocity = Helper.VelocityToPoint(player.GetPlayerCorePoint(), Projectile.position, 1f).SafeNormalize(Vector2.Zero);
                 Projectile.direction = player.direction;
                 Projectile.netUpdate = true;
             }

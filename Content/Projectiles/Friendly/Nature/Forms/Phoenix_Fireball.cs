@@ -1,14 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common;
-using RoA.Content.Forms;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
-using System.Linq;
 
 using Terraria;
 using Terraria.Audio;
@@ -105,7 +103,7 @@ sealed class PhoenixFireball : FormProjectile {
             Projectile.timeLeft = 120;
         }
 
-        Lighting.AddLight(player.Center, 0.5f * new Color(254, 158, 135).ToVector3() * MathHelper.Lerp(1f, 1.5f, BaseFormDataStorage.GetAttackCharge(player)));
+        Lighting.AddLight(Projectile.Center, 0.5f * new Color(254, 158, 135).ToVector3() * MathHelper.Lerp(1f, 1.5f, BaseFormDataStorage.GetAttackCharge(player)));
 
         if (!_phoenixDashed && player.GetFormHandler().AttackFactor2 >= 4f && player.GetFormHandler().AttackFactor2 < 10f) {
             _phoenixDashed = true;
