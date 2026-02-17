@@ -50,17 +50,43 @@ sealed class CottonBoll : InteractableProjectile_Nature {
         return false;
     }
 
-    protected override void OnInteraction(Player player) {
+    public override void SafeAI() {
+        if (Projectile.ai[1]-- > 0f) {
+            Projectile.velocity.Y -= 0.4f;
+            if (Projectile.velocity.Y > 16f) {
+                Projectile.velocity.Y = 16f;
+            }
+            if (Projectile.IsOwnerLocal()) {
+                Player.BlockInteractionWithProjectiles = 30;
+            }
+        }
+        else {
+            Projectile.velocity *= 0.9f;
+        }
+    }
 
+    protected override void OnInteraction(Player player) {
+        player.GetCommon().CollideWithCottonBall(this);
+
+        Projectile.ai[1] = 30f;
+        Projectile.netUpdate = true;
     }
 
     protected override void OnHover(Player player) {
+        if (Player.BlockInteractionWithProjectiles > 0) {
+            return;
+        }
+
         player.noThrow = 2;
         player.cursorItemIconEnabled = true;
         player.cursorItemIconID = ModContent.ItemType<CottonBollSmall>();
     }
 
     protected override void DrawHoverMask(SpriteBatch spriteBatch, Color selectionGlowColor) {
+        if (Projectile.IsOwnerLocal() && Player.BlockInteractionWithProjectiles > 0) {
+            return;
+        }
+
         Projectile.QuickDraw(selectionGlowColor, texture: _hoverTexture.Value);
     }
 }

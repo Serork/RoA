@@ -205,6 +205,9 @@ sealed partial class PlayerCommon : ModPlayer {
     public bool CollidedWithFungalMushroom;
     public Projectile FungalMushroomICollidedWith = null!;
 
+    public bool CollidedWithCottonBoll;
+    public Projectile CottonBollICollidedWith = null!;
+
     public bool ZoneFilament;
 
     public bool IsHoneyPunchEffectActive;
@@ -596,6 +599,9 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         if (CollidedWithFungalMushroom) {
+            ResetControls();
+        }
+        if (CollidedWithCottonBoll) {
             ResetControls();
         }
     }
@@ -1224,33 +1230,53 @@ sealed partial class PlayerCommon : ModPlayer {
             Player.wet = false;
         }
 
-        if (!CollidedWithFungalMushroom && Player.velocity.Y > Player.gravity) {
-            foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<FungalCaneMushroom>()) {
-                if (Player.getRect().Intersects(projectile.getRect())) {
-                    if (projectile.ai[0] < 0f || projectile.ai[1] < 1f) {
-                        continue;
+        {
+            if (!CollidedWithFungalMushroom && Player.velocity.Y > Player.gravity) {
+                foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<FungalCaneMushroom>()) {
+                    if (Player.getRect().Intersects(projectile.getRect())) {
+                        if (projectile.ai[0] < 0f || projectile.ai[1] < 1f) {
+                            continue;
+                        }
+                        CollidedWithFungalMushroom = true;
+                        FungalMushroomICollidedWith = projectile;
+                        break;
                     }
-                    CollidedWithFungalMushroom = true;
-                    FungalMushroomICollidedWith = projectile;
-                    break;
                 }
             }
+            if (CollidedWithFungalMushroom) {
+                bool flag = FungalMushroomICollidedWith.ai[0] < 0f;
+                if (!FungalMushroomICollidedWith.active || flag) {
+                    if (flag) {
+                        Player.velocity.Y = -10f;
+                    }
+                    CollidedWithFungalMushroom = false;
+                    return;
+                }
+                FungalMushroomICollidedWith.ai[2] = 1f;
+                Player.position.Y = MathHelper.Lerp(Player.position.Y, FungalMushroomICollidedWith.Center.Y - Player.height - Player.height * 0.5f, 0.25f);
+                Player.fallStart = (int)(Player.position.Y / 16f);
+                Player.gravity = 0f;
+            }
         }
-
-        if (CollidedWithFungalMushroom) {
-            bool flag = FungalMushroomICollidedWith.ai[0] < 0f;
-            if (!FungalMushroomICollidedWith.active || flag) {
-                if (flag) {
+        {
+            if (CollidedWithCottonBoll) {
+                if (!CottonBollICollidedWith.active || CottonBollICollidedWith.ai[1] <= 0f) {
+                    CollidedWithCottonBoll = false;
                     Player.velocity.Y = -10f;
+                    return;
                 }
-                CollidedWithFungalMushroom = false;
-                return;
+
+                Player.position = Vector2.Lerp(Player.position, CottonBollICollidedWith.Center - Player.Size / 2f, 0.5f);
+                Player.velocity.Y = 0f;
+                Player.fallStart = (int)(Player.position.Y / 16f);
+                Player.gravity = 0f;
             }
-            FungalMushroomICollidedWith.ai[2] = 1f;
-            Player.position.Y = MathHelper.Lerp(Player.position.Y, FungalMushroomICollidedWith.Center.Y - Player.height - Player.height * 0.5f, 0.25f);
-            Player.fallStart = (int)(Player.position.Y / 16f);
-            Player.gravity = 0f;
         }
+    }
+
+    public void CollideWithCottonBall(CottonBoll cottonBoll) {
+        CottonBollICollidedWith = cottonBoll.Projectile;
+        CollidedWithCottonBoll = true;
     }
 
     public delegate void PostUpdateEquipsDelegate(Player player);
