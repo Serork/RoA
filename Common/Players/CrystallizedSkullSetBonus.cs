@@ -229,7 +229,6 @@ sealed partial class PlayerCommon : ModPlayer {
                         colorIndex = Main.rand.Next(max);
                     }
                     taken.Add(colorIndex);
-                    Main.NewText(player.height);
                     handler._crystalData[i] = new CrystalInfo(
                         Main.rand.RandomPointInArea(4f) - Vector2.UnitY * Player.defaultHeight * 0.6f,
                         Main.rand.NextBool(),
