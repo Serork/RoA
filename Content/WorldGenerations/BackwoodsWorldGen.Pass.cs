@@ -1700,10 +1700,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void WallBush_Moss(int i, int j, bool ignoreWalls = true) {
         float progressX = 1f;
         if (i < Left) {
-            progressX *= (1f - MathF.Abs(((float)i - Left) / 50f));
+            progressX *= (1f - MathF.Abs(((float)i - Left) / 100f));
         }
         if (i > Right) {
-            progressX *= (((float)i - Right) / 50f);
+            progressX *= (1f - ((float)i - Right) / 100f);
         }
         progressX = MathUtils.Clamp01(progressX);
         int sizeX = (int)(_random.Next(8, 14) * progressX);
