@@ -155,7 +155,7 @@ sealed class FilamentSky : CustomSky {
             Vector2 origin = bounds.LeftCenter();
             Color color2 = color * num3 * value * 0.8f * (1f - num4) * 0.45f * _beams[j].Opacity;
             float globalOpacity = 0.375f;
-            float starOpacity = 0.75f;
+            float starOpacity = 0.825f;
             while (attempts-- > 0) {
                 if (rectangle.Contains((int)position2.X, (int)position2.Y)) {
                     spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);

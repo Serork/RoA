@@ -2989,3 +2989,13 @@ CottonCane: {
 		'Can we get much higher?'
 		'''
 }
+
+FilamentFragment: {
+	DisplayName: Filament Fragment
+	Tooltip: ""
+}
+
+FilamentFragment2: {
+	DisplayName: Filament Fragment2
+	Tooltip: ""
+}
