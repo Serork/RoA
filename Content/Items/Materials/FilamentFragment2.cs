@@ -30,6 +30,6 @@ sealed class FilamentFragment2 : ModItem {
     }
 
     public override void PostUpdate() {
-        Lighting.AddLight(Item.Center, FilamentSky.FilterColor.ToVector3() / 255f * Main.essScale);
+        Lighting.AddLight(Item.Center, new Color(235, 225, 65).ToVector3() * 0.5f * Main.essScale);
     }
 }
