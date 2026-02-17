@@ -328,7 +328,7 @@ sealed class LittleFleder : ModProjectile {
         int targetWhoAmI = -1;
         Projectile.tileCollide = true;
 
-        Vector2 center = Main.player[Projectile.owner].Center;
+        Vector2 center = Main.player[Projectile.owner].GetPlayerCorePoint();
         Vector2 vector2 = new Vector2(0.5f);
         vector2.Y = 0f;
 
@@ -483,8 +483,8 @@ sealed class LittleFleder : ModProjectile {
             }
 
             if (num34 > 2000f) {
-                Projectile.position.X = Main.player[Projectile.owner].Center.X - (float)(Projectile.width / 2);
-                Projectile.position.Y = Main.player[Projectile.owner].Center.Y - (float)(Projectile.width / 2);
+                Projectile.position.X = Main.player[Projectile.owner].GetPlayerCorePoint().X - (float)(Projectile.width / 2);
+                Projectile.position.Y = Main.player[Projectile.owner].GetPlayerCorePoint().Y - (float)(Projectile.width / 2);
             }
 
             if (num34 > 10f) {

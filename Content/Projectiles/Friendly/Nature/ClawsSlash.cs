@@ -8,26 +8,22 @@ using RoA.Common.Druid.Claws;
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Common.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Weapons.Nature;
-using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
-using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Media;
 
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent;
-using Terraria.Graphics.Renderers;
 using Terraria.ID;
 using Terraria.ModLoader;
 
