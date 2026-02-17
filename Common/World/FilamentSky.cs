@@ -103,6 +103,10 @@ sealed class FilamentSky : CustomSky {
        AfterPlanetGradientColor.MultiplyAlpha(1f) * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _fadeOpacity));
         }
 
+        DrawBeams(spriteBatch, minDepth, maxDepth);
+    }
+
+    public void DrawBeams(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         int num = -1;
         int num2 = 0;
         for (int i = 0; i < _beams.Length; i++) {
