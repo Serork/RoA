@@ -77,6 +77,9 @@ sealed class FlametrackerJacketFlame : PlayerDrawLayer {
             float shakePointY = Utils.RandomInt(ref speed, -5, 6) * 0.3f;
             int x = (int)(drawInfo.Position.X + player.width / 2f - Main.screenPosition.X + shakePointX + 1);
             int y = (int)(drawInfo.Position.Y + player.height / 2f - Main.screenPosition.Y + shakePointY - 5);
+            if (player.gravDir < 0) {
+                y += 9;
+            }
             DrawData drawData = new DrawData(texture, new Vector2(x, y), new Rectangle?(bodyFrame), color, player.bodyRotation, new Vector2(texture.Width / 2f, height / 2f), 1f, drawInfo.playerEffect, 0);
             drawInfo.DrawDataCache.Add(drawData);
         }
@@ -117,6 +120,9 @@ sealed class FlametrackerJacketMask : PlayerDrawLayer {
         int height = texture.Height / 20;
         int x = (int)(drawInfo.Position.X + player.width / 2.0 - Main.screenPosition.X);
         int y = (int)(drawInfo.Position.Y + player.height / 2.0 - Main.screenPosition.Y - 3);
+        if (player.gravDir < 0) {
+            y += 6;
+        }
         DrawData drawData = new DrawData(texture, new Vector2(x, y), new Rectangle?(bodyFrame), color, player.bodyRotation, new Vector2(texture.Width / 2f, height / 2f), 1f, drawInfo.playerEffect, 0);
         drawInfo.DrawDataCache.Add(drawData);
     }

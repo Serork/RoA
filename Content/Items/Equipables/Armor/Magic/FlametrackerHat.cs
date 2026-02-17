@@ -31,6 +31,9 @@ sealed class FlametrackerSetBonusHandler : ModPlayer {
                     Vector2 mousePos = Player.GetViableMousePosition();
                     int direction = (mousePos - Player.Center).X.GetDirection();
                     Vector2 projectilePos = new Vector2(Player.Top.X + 16f * direction + (direction == 1 && mousePos.Y < Player.Bottom.Y ? -10f : 0f), Player.Top.Y - 2f);
+                    if (Player.gravDir < 0) {
+                        projectilePos.Y += Player.defaultHeight;
+                    }
                     Projectile.NewProjectile(Player.GetSource_Misc("frametrackersetbonus"),
                         projectilePos,
                         Helper.VelocityToPoint(projectilePos, mousePos, 5f),
@@ -122,6 +125,9 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
             float shakePointY = Utils.RandomInt(ref speed, -5, 6) * 0.3f;
             int x = (int)(drawInfo.Position.X + player.width / 2f - Main.screenPosition.X + shakePointX);
             int y = (int)(drawInfo.Position.Y + player.height / 2f - Main.screenPosition.Y + shakePointY - 4);
+            if (player.gravDir < 0) {
+                y += 9;
+            }
             DrawData drawData = new DrawData(texture, new Vector2(x, y) + new Vector2(drawInfo.headOnlyRender ? 1f * player.direction : 0f, 0f), new Rectangle?(bodyFrame), color, player.bodyRotation, new Vector2(texture.Width / 2f, height / 2f), 1f, drawInfo.playerEffect, 0);
             drawInfo.DrawDataCache.Add(drawData);
         }
@@ -162,6 +168,9 @@ sealed class FlametrackerHatMask : PlayerDrawLayer {
         int height = texture.Height / 20;
         int x = (int)(drawInfo.Position.X + player.width / 2.0 - Main.screenPosition.X);
         int y = (int)(drawInfo.Position.Y + player.height / 2.0 - Main.screenPosition.Y - 4);
+        if (player.gravDir < 0) {
+            y += 8;
+        }
         DrawData drawData = new DrawData(texture, new Vector2(x, y), new Rectangle?(bodyFrame), color, player.bodyRotation, new Vector2(texture.Width / 2f, height / 2f), 1f, drawInfo.playerEffect, 0);
         drawInfo.DrawDataCache.Add(drawData);
     }
