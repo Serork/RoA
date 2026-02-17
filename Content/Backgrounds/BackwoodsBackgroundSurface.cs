@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Utilities.Extensions;
 using RoA.Common.World;
@@ -21,6 +22,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Backgrounds;
 
 sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
+    private static bool _isDrawingBackwoodsBackground, _isDrawingBackwoodsBackground2;
+    private static float _minDepth;
+
     public static byte THEMBGTEXTURECOUNT => 3;
     private static ushort THEMACTIVETIME => (ushort)MathUtils.SecondsToFrames(30);
     private static byte MAXTHEMCOUNT => 50;
@@ -106,6 +110,8 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             }
         }
         UpdateThem();
+
+        _isDrawingBackwoodsBackground = fades[Slot] > 0f;
     }
 
     public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => -1;
@@ -114,7 +120,38 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
 
     public override int ChooseFarTexture() => -1;
 
+    public override void Load() {
+        On_SkyManager.DrawRemainingDepth += On_SkyManager_DrawRemainingDepth;
+        On_SkyManager.DrawToDepth += On_SkyManager_DrawToDepth;
+
+        On_Main.DrawSurfaceBG += On_Main_DrawSurfaceBG;
+    }
+
+    private void On_Main_DrawSurfaceBG(On_Main.orig_DrawSurfaceBG orig, Main self) {
+        orig(self);
+    }
+
+    private void On_SkyManager_DrawToDepth(On_SkyManager.orig_DrawToDepth orig, SkyManager self, SpriteBatch spriteBatch, float minDepth) {
+        if (!_isDrawingBackwoodsBackground) {
+            _minDepth = minDepth;
+        }
+
+        orig(self, spriteBatch, minDepth);
+    }
+
+    private void On_SkyManager_DrawRemainingDepth(On_SkyManager.orig_DrawRemainingDepth orig, SkyManager self, SpriteBatch spriteBatch) {
+        orig(self, spriteBatch);
+
+        _isDrawingBackwoodsBackground = false;
+    }
+
     public override bool PreDrawCloseBackground(SpriteBatch spriteBatch) {
+        DrawSurfaceBackground(spriteBatch);
+
+        return false;
+    }
+
+    private void DrawSurfaceBackground(SpriteBatch spriteBatch) {
         int[] slotAArray = [
             BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures + "BackwoodsFar"),
             BackgroundTextureLoader.GetBackgroundSlot(ResourceManager.BackgroundTextures + "BackwoodsMid"),
@@ -171,7 +208,10 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
             captureOffset = 0;
         }
+        float parallaxModifier = 1f;
         if (canBGDraw) {
+            _isDrawingBackwoodsBackground2 = true;
+            SkyManager.Instance.SetStartingDepth(_minDepth * 2f);
             var bgScale = 1.25f;
             var bgParallax = 0.3;
             var bgTopY = (int)(backgroundTopMagicNumber * 1800.0 + 500.0) + (int)scAdj + pushBGTopHack;
@@ -182,7 +222,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                 bgTopY = 320 + pushBGTopHack;
             }
             var bgLoops = Main.screenWidth / bgWidthScaled + 2;
-            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
+            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax * parallaxModifier);
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
                     Main.spriteBatch.Draw(mid2, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + MidOffset2 + captureOffset), new Rectangle(0, 0, mid2.Width, mid2.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
@@ -199,7 +239,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                 bgTopY = 320 + pushBGTopHack;
             }
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
-            SkyManager.Instance.DrawToDepth(spriteBatch, 1.4f / (float)bgParallax);
+            SkyManager.Instance.DrawToDepth(spriteBatch, 1.4f / (float)bgParallax * parallaxModifier);
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
                     Main.spriteBatch.Draw(far, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + FarOffset + captureOffset), new Rectangle(0, 0, far.Width, far.Height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
@@ -217,7 +257,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                 bgStartX -= 80;
             }
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
-            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
+            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax * parallaxModifier);
             // line here
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
@@ -236,7 +276,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                 bgStartX -= 80;
             }
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
-            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
+            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax * parallaxModifier);
             // line here
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
@@ -255,7 +295,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                 bgStartX -= 120;
             }
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
-            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
+            SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax * parallaxModifier);
             int close2Offset = 600;
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
                 for (int i = 0; i < bgLoops; i++) {
@@ -342,9 +382,8 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                     }
                 }
             }
-        }
-        return false;
-    }
 
-    private int testTImer;
+            _isDrawingBackwoodsBackground2 = false;
+        }
+    }
 }
