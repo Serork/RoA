@@ -132,8 +132,8 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             if ((_isDrawingSurfaceBackground && !_isDrawingBackwoodsBackground) ||
                 _isDrawingBackwoodsBackground) {
                 orig(self, spriteBatch, minDepth, maxDepth);
-                return;
             }
+            return;
         }
         orig(self, spriteBatch, minDepth, maxDepth);
     }
