@@ -120,8 +120,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private int Bottom => CenterY + _biomeHeight;
     private int Left => CenterX - _biomeWidth;
     private int Right => CenterX + _biomeWidth;
-    private Point TopLeft => new(Left, Top);
-    private Point TopRight => new(Right, Top);
+    private Point TopLeft => new(Left, WorldGenHelper.SafeFloatingIslandY);
+    private Point TopRight => new(Right, WorldGenHelper.SafeFloatingIslandY);
     private int EdgeX => _biomeWidth / 4;
     internal int EdgeY => _biomeHeight / 4;
 
@@ -1705,11 +1705,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void WallBush_Moss(int i, int j, bool ignoreWalls = true) {
         float progressX = 1f;
         if (i < Left) {
-            progressX *= (1f - MathF.Abs(((float)i - Left) / 100f));
+            progressX *= (1f - MathF.Abs(((float)i - Left) / 50f));
         }
         if (i > Right) {
-            progressX *= (((float)i - Right) / 100f);
+            progressX *= (((float)i - Right) / 50f);
         }
+        progressX = MathUtils.Clamp01(progressX);
         int sizeX = (int)(_random.Next(8, 14) * progressX);
         int sizeY = _random.Next(2, 5);
         int sizeY2 = sizeY;
@@ -1743,11 +1744,12 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void WallBush(int i, int j, bool ignoreWalls = true) {
         float progressX = 1f;
         if (i < Left) {
-            progressX *= (1f - MathF.Abs(((float)i - Left) / 100f));
+            progressX *= (1f - MathF.Abs(((float)i - Left) / 50f));
         }
         if (i > Right) {
-            progressX *= (((float)i - Right) / 100f);
+            progressX *= (((float)i - Right) / 50f);
         }
+        progressX = MathUtils.Clamp01(progressX);
         int sizeX = (int)(_random.Next(8, 17) * progressX);
         int sizeY = _random.Next(2, 5);
         int sizeY2 = sizeY;
@@ -3128,7 +3130,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         Step10_SpreadMossGrass();
 
         // place bushes
-        for (i = Left - 50; i <= Right + 50; i++) {
+        for (i = Left - 100; i <= Right + 100; i++) {
             for (j = WorldGenHelper.SafeFloatingIslandY; j < CenterY - EdgeY; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_grassTileType)) {
@@ -3632,7 +3634,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         progress.Message = Language.GetOrRegister("Mods.RoA.WorldGen.Backwoods5").Value;
 
         // place plants
-        for (int i = Left - 50; i <= Right + 50; i++) {
+        for (int i = Left - 100; i <= Right + 100; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY + 20; j++) {
                 Tile aboveTile = WorldGenHelper.GetTileSafely(i, j - 1);
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
@@ -4870,8 +4872,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     private void Step3_GenerateBase() {
-        int topLeftTileX = TopLeft.X - 2, topLeftTileY = WorldGenHelper.GetFirstTileY(topLeftTileX);
-        int topRightTileX = TopRight.X + 2, topRightTileY = WorldGenHelper.GetFirstTileY(topRightTileX);
+        int topLeftTileX = TopLeft.X - 10, topLeftTileY = WorldGenHelper.GetFirstTileY(topLeftTileX);
+        int topRightTileX = TopRight.X + 10, topRightTileY = WorldGenHelper.GetFirstTileY(topRightTileX);
         int surfaceY = 0;
         int angle = 25;
         int between = Math.Clamp(topRightTileY - topLeftTileY, -angle, angle);
@@ -5010,7 +5012,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             while (testJ <= max) {
                 x = cliffX + (randomnessPoints[max - testJ] + 1) * dir;
                 if (testJ < startY + 3) {
-                    for (int j = testJ - 25; j < testJ; j++) {
+                    for (int j = testJ - 30; j < testJ; j++) {
                         if (Main.tile[x, j].TileType != CliffPlaceholderTileType && Main.tile[x, j].TileType != _dirtTileType) {
                             WorldGen.KillTile(x, j);
                         }

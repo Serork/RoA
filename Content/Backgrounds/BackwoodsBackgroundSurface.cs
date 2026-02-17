@@ -127,12 +127,15 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     }
 
     private void On_SkyManager_DrawDepthRange(On_SkyManager.orig_DrawDepthRange orig, SkyManager self, SpriteBatch spriteBatch, float minDepth, float maxDepth) {
-        _isDrawingBackwoodsBackground = Main.bgAlphaFrontLayer[ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface").Slot] > 0f;
-
-        if ((_isDrawingSurfaceBackground && !_isDrawingBackwoodsBackground) ||
-            _isDrawingBackwoodsBackground) {
-            orig(self, spriteBatch, minDepth, maxDepth);
+        if (!Main.gameMenu) {
+            _isDrawingBackwoodsBackground = Main.bgAlphaFrontLayer[ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface").Slot] > 0f;
+            if ((_isDrawingSurfaceBackground && !_isDrawingBackwoodsBackground) ||
+                _isDrawingBackwoodsBackground) {
+                orig(self, spriteBatch, minDepth, maxDepth);
+                return;
+            }
         }
+        orig(self, spriteBatch, minDepth, maxDepth);
     }
 
     private void On_Main_DrawSurfaceBG(On_Main.orig_DrawSurfaceBG orig, Main self) {
