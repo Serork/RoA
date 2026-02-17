@@ -1,13 +1,30 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
+using RoA.Common.Projectiles;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
 
+using Terraria;
+using Terraria.ModLoader;
+
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class CottonBoll : NatureProjectile {
+sealed class CottonBoll : InteractableProjectile_Nature {
+    private static Asset<Texture2D> _hoverTexture = null!;
+
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(15);
+
+    protected override Asset<Texture2D> HoverTexture => _hoverTexture;
+
+    public override void SetStaticDefaults() {
+        if (!Main.dedServ) {
+            _hoverTexture = ModContent.Request<Texture2D>(Texture + "_Hover");
+        }
+    }
 
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(10);
@@ -30,5 +47,13 @@ sealed class CottonBoll : NatureProjectile {
         Projectile.QuickDraw(lightColor);
 
         return false;
+    }
+
+    protected override void OnInteraction(Player player) {
+        throw new System.NotImplementedException();
+    }
+
+    protected override void OnHover(Player player) {
+        throw new System.NotImplementedException();
     }
 }
