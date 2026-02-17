@@ -171,7 +171,7 @@ sealed class FilamentSky : CustomSky {
                 _beams[num3].SinOffset = _random.NextFloat() * 6.28f;
                 _beams[num3].AlphaAmplitude = _random.NextFloat() * 5f;
                 _beams[num3].AlphaFrequency = _random.NextFloat() + 1f;
-                _beams[num3].ScaleX = _random.NextFloat(0.75f, 1f);
+                _beams[num3].ScaleX = _random.NextFloat(0.85f, 1f);
                 num3++;
             }
         }
