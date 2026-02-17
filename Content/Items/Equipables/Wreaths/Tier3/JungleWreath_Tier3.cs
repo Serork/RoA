@@ -52,7 +52,7 @@ sealed class JungleWreathTier3 : WreathItem {
         }
 
         private void GrowThorns(Player.HurtInfo info) {
-            Vector2 thornsSpawnPosition = Player.Center;
+            Vector2 thornsSpawnPosition = Player.GetPlayerCorePoint();
             float lostHPPercentageValue = info.Damage / (float)Player.statLifeMax2;
             NPC? target = NPCUtils.FindClosestNPC(thornsSpawnPosition, 300, false);
             bool foundTarget = target != null;

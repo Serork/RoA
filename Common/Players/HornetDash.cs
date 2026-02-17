@@ -147,7 +147,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
 
         ProjectileUtils.SpawnPlayerOwnedProjectile<HornetSpear>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_Misc("hornetspear")) {
-            Position = Player.Center,
+            Position = Player.GetPlayerCorePoint(),
             Velocity = SavedVelocity.SafeNormalize(),
             AI0 = DashTime,
             Damage = 50

@@ -6,6 +6,7 @@ using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -196,7 +197,7 @@ abstract class TulipBase : CaneBaseProjectile {
     // adapted vanilla
     public static Point GetTilePosition(Player player, Vector2 targetSpot, bool randomlySelected = true) {
         Point point;
-        Vector2 center = player.Center;
+        Vector2 center = player.GetPlayerCorePoint();
         Vector2 endPoint = targetSpot;
         int samplesToTake = 3;
         float samplingWidth = 4f;

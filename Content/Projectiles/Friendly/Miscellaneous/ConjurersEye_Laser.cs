@@ -74,7 +74,7 @@ sealed class ConjurersEyeLaser : ModProjectile {
             if (!flag) {
                 Projectile.friendly = false;
                 Projectile.hostile = true;
-                Projectile.Center = player.Center;
+                Projectile.Center = player.GetPlayerCorePoint();
                 Projectile.velocity = Vector2.Zero;
             }
         }

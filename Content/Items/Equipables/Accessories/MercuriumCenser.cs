@@ -3,6 +3,7 @@
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -40,7 +41,7 @@ sealed class MercuriumCenser : NatureItem {
                 IEntitySource source = Player.GetSource_FromThis();
                 int damage = (int)Player.GetTotalDamage(DruidClass.Nature).ApplyTo(8);
                 float knockback = 0f;
-                Vector2 spawnPosition = Player.Center;
+                Vector2 spawnPosition = Player.GetPlayerCorePoint();
 
                 if (Player.whoAmI == Main.myPlayer) {
                     float offset = Main.rand.NextFloat(MathHelper.TwoPi);

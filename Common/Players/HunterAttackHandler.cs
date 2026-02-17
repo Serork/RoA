@@ -4,6 +4,7 @@ using RoA.Common.BackwoodsSystems;
 using RoA.Content.Biomes.Backwoods;
 using RoA.Content.Projectiles;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -54,8 +55,8 @@ sealed class HunterAttackPlayer : ModPlayer {
                 int num = 40;
                 num = Main.DamageVar(num, 0f - player.luck);
                 float knockBack = 2f;
-                Vector2 position = player.Center;
-                setUpPosition(player.Center, ref position);
+                Vector2 position = player.GetPlayerCorePoint();
+                setUpPosition(player.GetPlayerCorePoint(), ref position);
                 bool flag2 = position.Y / 16 < BackwoodsVars.FirstTileYAtCenter + 20;
                 if (flag2 && Main.rand.NextBool(10)) {
                     if (Collision.CanHit(player.position, player.width, player.height, position, 0, 0)) {

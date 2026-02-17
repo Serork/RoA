@@ -9,6 +9,7 @@ using RoA.Common.Networking.Packets;
 ﻿using RoA.Common.World;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -486,7 +487,7 @@ sealed class SphereHandler : GlobalItem {
             Item item = player.GetItem(Main.myPlayer, Main.reforgeItem, GetItemSettings.GetItemInDropItemCheck);
             MakeEffects(item, new(60, 222, 190), Main.LocalPlayer.Center);
             if (!item.IsEmpty()) {
-                Main.reforgeItem.position = player.Center;
+                Main.reforgeItem.position = player.GetPlayerCorePoint();
                 int whoAmI = Item.NewItem(player.GetSource_Misc("reforgeitemdrop"), (int)player.position.X, (int)player.position.Y, player.width, player.height,
                     Main.reforgeItem.type, Main.reforgeItem.stack,
                     noBroadcast: false, Main.reforgeItem.prefix, noGrabDelay: true);

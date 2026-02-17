@@ -10,6 +10,7 @@ using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Wreaths;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -240,7 +241,7 @@ sealed class Fireblossom : NatureProjectile {
                 Projectile.localAI[2] = !CanExplode ? Projectile.ai[2] * 0.015f : 2f;
             }
             targetPlayer.onFire = false;
-            Projectile.Center = new Vector2((int)targetPlayer.Center.X, (int)targetPlayer.Center.Y) + new Vector2(0f, targetPlayer.gfxOffY);
+            Projectile.Center = new Vector2((int)targetPlayer.GetPlayerCorePoint().X, (int)targetPlayer.GetPlayerCorePoint().Y) + new Vector2(0f, targetPlayer.gfxOffY);
         }
         float rate = (float)(Speed % 5.0);
         Color color = Color.Lerp(Color.Orange, Color.DarkOrange, Ease.QuartOut(MathHelper.Clamp(1f - (rate - 0.5f) / 0.5f, 0f, 1f))) * 0.75f;

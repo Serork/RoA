@@ -147,8 +147,8 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         Player player = Main.player[Projectile.owner];
         if (Projectile.owner == Main.myPlayer) {
             if (!_init) {
-                _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
-                Projectile.Center = player.MountedCenter;
+                _direction = player.GetViableMousePosition().X > player.GetPlayerCorePoint().X ? 1 : -1;
+                Projectile.Center = player.GetPlayerCorePoint();
                 Projectile.direction = Projectile.spriteDirection = _direction;
                 player.ChangeDir(Projectile.spriteDirection);
                 _timeLeft = Projectile.timeLeft;
@@ -225,7 +225,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         if (Projectile.localAI[2] == 0f) {
             Projectile.localAI[2] = 1f;
 
-            SoundEngine.PlaySound(SoundID.Item1, player.Center);
+            SoundEngine.PlaySound(SoundID.Item1, player.GetPlayerCorePoint());
 
             float scale = Main.player[Projectile.owner].CappedMeleeOrDruidScale();
             if (scale != 1f) {
@@ -250,7 +250,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             Projectile.Kill();
         }
         else {
-            Projectile.Center = player.MountedCenter + Vector2.Normalize(Projectile.velocity);
+            Projectile.Center = player.GetPlayerCorePoint() + Vector2.Normalize(Projectile.velocity);
             float dir = (float)(Math.PI / 2.0 + (double)playerDirection * 1.0);
             float offset = MathHelper.Pi / 1.15f * playerDirection;
             SoundStyle style = new SoundStyle(ResourceManager.ItemSounds + "Whisper") { Volume = 1.15f };
@@ -293,7 +293,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                 }
 
                 Projectile.velocity = Vector2.Lerp(Projectile.velocity, (dir - offset).ToRotationVector2() * 50f, 0.1f);
-                Projectile.velocity += Projectile.DirectionFrom(player.MountedCenter) * 3f;
+                Projectile.velocity += Projectile.DirectionFrom(player.GetPlayerCorePoint()) * 3f;
 
                 _offset = Vector2.SmoothStep(_offset, new Vector2(-10f * playerDirection, 12f), 3f);
 
@@ -429,7 +429,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
                                             float value = _empoweredAttack ? 1.25f : 1f;
                                             float value0 = _empoweredAttack ? 1.5f : 1f;
                                             float value2 = MathHelper.Clamp(_charge * 1.5f, 0f, 1f);
-                                            Vector2 velocity = Helper.VelocityToPoint(player.MountedCenter, projectileCenter, 35f * value2 * player.GetTotalAttackSpeed(DamageClass.Melee) * value);
+                                            Vector2 velocity = Helper.VelocityToPoint(player.GetPlayerCorePoint(), projectileCenter, 35f * value2 * player.GetTotalAttackSpeed(DamageClass.Melee) * value);
                                             float size = 2f * (value2 * 1.15f + 0.15f) * value * Projectile.scale;
                                             int damage = (int)((Projectile.damage + Projectile.damage / 2) * (value2 * 1.15f + 0.15f) * value0);
                                             if (Main.player[Projectile.owner].gravDir != -1f) {
@@ -607,7 +607,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         Vector2 offset = -new Vector2((_released ? 20f : 18f) * (Projectile.localAI[2] - 0.5f), 0f).RotatedBy(Projectile.rotation);
         offset += Projectile.rotation.ToRotationVector2() * (-30f * (MathHelper.Clamp(Projectile.scale - 1.25f, 0f, 1f)));
         Player player = Main.player[Projectile.owner];
-        Vector2 center = Projectile.Center + Vector2.UnitY * player.gfxOffY;
+        Vector2 center = Projectile.Center;
         SpriteBatchSnapshot snapshot = SpriteBatchSnapshot.Capture(spriteBatch);
         Vector2 position = center - Main.screenPosition + offset;
         Vector2 shiftFix = -(Projectile.spriteDirection == -1 ? new Vector2(0, -2) : Vector2.Zero);
@@ -764,7 +764,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             var effects = Main.player[Projectile.owner].direction == -1 ? (SpriteEffects.FlipHorizontally | SpriteEffects.FlipVertically) :
                 (SpriteEffects.None | SpriteEffects.FlipVertically);
             Main.spriteBatch.Draw(texture2D,
-                                  Projectile.Center + new Vector2(0f, 0f) - Main.screenPosition + new Vector2(0f, Projectile.gfxOffY),
+                                  Projectile.Center + new Vector2(0f, 0f) - Main.screenPosition,
                                   null,
                                   Lighting.GetColor((int)Projectile.Center.X / 16, (int)Projectile.Center.Y / 16 - 2) * Projectile.Opacity,
                                   Projectile.rotation + (flag ? 0f : 0f),
@@ -854,7 +854,7 @@ sealed class FlederSlayer : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
             Projectile.direction = Projectile.velocity.X > 0f ? 1 : -1;
             Player player = Main.player[Projectile.owner];
             Projectile.velocity *= 0.9f + Math.Clamp((player.GetTotalAttackSpeed(DamageClass.Melee) - 1f) * 0.05f, 0f, 1f);
-            float y = player.Center.Y - 10f;
+            float y = player.GetPlayerCorePoint().Y - 10f;
             while (!WorldGenHelper.SolidTile((int)(Projectile.Center.X + Projectile.width / 5 * Projectile.direction * player.gravDir) / 16, (int)y / 16)) {
                 y += 1;
             }

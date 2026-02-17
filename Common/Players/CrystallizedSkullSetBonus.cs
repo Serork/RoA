@@ -168,14 +168,14 @@ sealed partial class PlayerCommon : ModPlayer {
                     Vector2 vector3 = (new Vector2(0f, y) + info.Offset * info.Opacity * new Vector2(direction, 1f)).RotatedBy(rotation);
                     int currentIndex = i + 1;
                     float progress = currentIndex / goreCount;
-                    Vector2 gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 +
+                    Vector2 gorePosition = player.GetPlayerCorePoint() + Main.rand.RandomPointInArea(6f) + vector3 +
                         (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
                     int gore = Gore.NewGore(player.GetSource_Misc("manacrystalgore"),
                         gorePosition,
                         Vector2.One.RotatedBy(currentIndex * MathHelper.TwoPi / goreCount) * 2f, ModContent.Find<ModGore>(RoA.ModName + $"/ManaCrystalGore").Type, 1f);
                     Main.gore[gore].velocity *= 0.5f;
                     Main.gore[gore].frameCounter = info.ColorIndex;
-                    gorePosition = player.Center + Main.rand.RandomPointInArea(6f) + vector3 + (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
+                    gorePosition = player.GetPlayerCorePoint() + Main.rand.RandomPointInArea(6f) + vector3 + (Vector2.UnitY * 42f * 0.75f).RotatedBy(rotation);
 
                     Color color = info.Color;
                     for (int k = 0; k < 4; k++) {

@@ -7,6 +7,7 @@ using RoA.Content.NPCs.Enemies.Bosses.Lothor;
 using RoA.Content.NPCs.Enemies.Bosses.Lothor.Summon;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.IO;
@@ -595,7 +596,7 @@ sealed class LothorSummoningHandler : ModSystem {
         if (Main.netMode != NetmodeID.Server) {
             foreach (Player player in Main.player) {
                 if (player.active && player.InModBiome<BackwoodsBiome>()) {
-                    Vector2 position = player.Center - tileCoords;
+                    Vector2 position = player.GetPlayerCorePoint() - tileCoords;
                     position.Normalize();
                     PunchCameraModifier punchCameraModifier = new PunchCameraModifier(tileCoords, ((float)Math.Atan2(position.Y, position.X) + MathHelper.PiOver2).ToRotationVector2(), strength, vibeStrength, 20, 2000f, "Lothor Invasion");
                     Main.instance.CameraModifiers.Add(punchCameraModifier);

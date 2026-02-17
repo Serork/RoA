@@ -3,6 +3,7 @@
 using RoA.Content.Dusts.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -52,7 +53,7 @@ sealed class ProtectiveRoots : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         float distY = Projectile.ai[2];
         Projectile.spriteDirection = player.direction;
-        Vector2 pos = player.Center;
+        Vector2 pos = player.GetPlayerCorePoint();
         Vector2 velocity = Helper.VelocityToPoint(pos, new Vector2(Projectile.ai[0], Projectile.ai[1]), 1f).SafeNormalize(Vector2.Zero);
         Vector2 muzzleOffset = Vector2.Normalize(new Vector2(velocity.X, velocity.Y)) * distY;
         pos += muzzleOffset;

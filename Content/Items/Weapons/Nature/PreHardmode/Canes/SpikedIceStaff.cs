@@ -204,7 +204,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
             if (player.whoAmI == Main.myPlayer) {
                 Vector2 pointPosition = player.GetViableMousePosition();
-                Vector2 center = player.Center;
+                Vector2 center = player.GetPlayerCorePoint();
                 float speed = MathHelper.Clamp((pointPosition - center).Length() * 0.025f, 8.5f, 11f);
 
                 velocity = Helper.VelocityToPoint(center, pointPosition, speed) * NatureWeaponHandler.GetUseSpeedMultiplier(player.GetSelectedItem(), player);

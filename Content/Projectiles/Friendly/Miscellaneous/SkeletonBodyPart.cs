@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -33,7 +34,7 @@ abstract class SkeletonBodyPart : ModProjectile {
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 3;
 
         Player player = Main.player[Projectile.owner];
-        Vector2 targetPos = player.Center;
+        Vector2 targetPos = player.GetPlayerCorePoint();
         float speed = 10f;
         float speedFactor = 0.7f;
         Vector2 projCenter = new Vector2(Projectile.position.X + (float)Projectile.width * 0.5f, Projectile.position.Y + (float)Projectile.height * 0.5f);

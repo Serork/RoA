@@ -109,7 +109,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
             opacity *= Utils.GetLerpValue(0.2f, 0.285f, _strength, true);
             Player player = Owner;
             float distY = 100f * Strength;
-            Vector2 pos = player.Center;
+            Vector2 pos = player.GetPlayerCorePoint();
             Vector2 velocity = Helper.VelocityToPoint(pos, _mousePosition, 1f).SafeNormalize(Vector2.Zero);
             Vector2 muzzleOffset = Vector2.Normalize(new Vector2(velocity.X, velocity.Y)) * distY;
             pos += muzzleOffset;

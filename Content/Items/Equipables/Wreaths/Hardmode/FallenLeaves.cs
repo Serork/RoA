@@ -40,7 +40,7 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
         if (!player.HasProjectile<FallenLeavesSprout>()) {
             int direction = -1;
             for (int i = 0; i < 2; i++) {
-                Vector2 position = player.Center,
+                Vector2 position = player.GetPlayerCorePoint(),
                         velocity = -Vector2.UnitY.RotatedBy(MathHelper.PiOver4 * Main.rand.NextFloat(0.5f, 1f) * direction);
                 ProjectileUtils.SpawnPlayerOwnedProjectile<FallenLeavesSprout>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_FromThis()) {
                     Position = position,
@@ -97,7 +97,7 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
             bool direction = false;
             bool wreathIsFull = WreathHandler.IsWreathCharged(player);
             for (int i = 0; i < countToMake; i++) {
-                Vector2 position = player.Center;
+                Vector2 position = player.GetPlayerCorePoint();
                 ProjectileUtils.SpawnPlayerOwnedProjectile<FallenLeavesBranch>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_FromThis()) {
                     Position = position,
                     AI0 = direction.ToInt(),

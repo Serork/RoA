@@ -1,6 +1,11 @@
-﻿using RoA.Common.Druid;
+﻿using Microsoft.Xna.Framework;
+
+using RoA.Common.Druid;
+using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
+using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Enums;
@@ -26,5 +31,18 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
 
     public sealed class CottonCaneBase : CaneBaseProjectile {
         protected override bool ShouldWaitUntilProjDespawn() => false;
+
+        protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
+            spawnPosition = GetSpawnPosition(player);
+        }
+
+        public static Vector2 GetSpawnPosition(Player player) {
+            Vector2 spawnPosition = player.GetPlayerCorePoint();
+            int maxChecks = 50;
+            while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
+                spawnPosition += spawnPosition.DirectionTo(player.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
+            }
+            return spawnPosition;
+        }
     }
 }

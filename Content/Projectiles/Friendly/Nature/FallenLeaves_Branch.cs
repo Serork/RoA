@@ -117,7 +117,7 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 BranchSegmentInfo[] sampleBranchInfo = new BranchSegmentInfo[segmentCount + 1];
                 int direction = Reversed.ToDirectionInt();
                 Player player = Projectile.GetOwnerAsPlayer();
-                float mouseRotation = player.Center.AngleTo(player.GetViableMousePosition()) - MathHelper.PiOver2;
+                float mouseRotation = player.GetPlayerCorePoint().AngleTo(player.GetViableMousePosition()) - MathHelper.PiOver2;
                 mouseRotation += 0.2f * Main.rand.NextFloatDirection();
                 Vector2 startVelocity = Vector2.UnitY.RotatedBy(mouseRotation),
                         baseStartVelocity = startVelocity;

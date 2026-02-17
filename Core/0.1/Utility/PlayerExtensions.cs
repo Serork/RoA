@@ -5,6 +5,7 @@ using RoA.Common.Druid.Forms;
 using RoA.Common.Players;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Core.Graphics.Data;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -136,7 +137,7 @@ static partial class PlayerExtensions {
 
     // adapted vanilla
     public static void LimitPointToPlayerReachableArea(this Player player, ref Vector2 pointPoisition, float maxX = 960f, float maxY = 600f) {
-        Vector2 center = player.Center;
+        Vector2 center = player.GetPlayerCorePoint();
         Vector2 vector = pointPoisition - center;
         float num = Math.Abs(vector.X);
         float num2 = Math.Abs(vector.Y);

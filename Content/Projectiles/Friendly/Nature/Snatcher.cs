@@ -6,6 +6,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Items.Weapons.Nature.PreHardmode.Claws;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -230,7 +231,7 @@ sealed class Snatcher : NatureProjectile {
 
     private bool CantAttack() {
         Player player = Main.player[Projectile.owner];
-        Vector2 mousePos = Helper.GetLimitedPosition(player.Center, _mousePos, 200f, DIST * 0.75f);
+        Vector2 mousePos = Helper.GetLimitedPosition(player.GetPlayerCorePoint(), _mousePos, 200f, DIST * 0.75f);
         return GetPos().Distance(mousePos) < 40f;
     }
 
@@ -309,7 +310,7 @@ sealed class Snatcher : NatureProjectile {
             player.itemAnimation > player.itemAnimationMax - player.itemAnimationMax / 2 && !flag && !IsAttacking && !IsAttacking2) {
             Projectile.ai[2] = 5f;
 
-            Vector2 mousePos = Helper.GetLimitedPosition(player.Center, _mousePos, 200f, DIST * 0.75f);
+            Vector2 mousePos = Helper.GetLimitedPosition(player.GetPlayerCorePoint(), _mousePos, 200f, DIST * 0.75f);
             Projectile.localAI[1] = mousePos.X;
             Projectile.localAI[2] = mousePos.Y;
             Projectile.netUpdate = true;
@@ -320,7 +321,7 @@ sealed class Snatcher : NatureProjectile {
                 _shouldPlayAttackSound2 = true;
             }
             if (_shouldPlayAttackSound) {
-                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SnatcherBite") { Volume = 0.75f }, player.Center);
+                SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SnatcherBite") { Volume = 0.75f }, player.GetPlayerCorePoint());
                 _shouldPlayAttackSound = false;
             }
 
@@ -345,8 +346,7 @@ sealed class Snatcher : NatureProjectile {
         int direction = (int)Projectile.ai[1];
         float progress = 0.5f;
         Player player = Main.player[Projectile.owner];
-        Vector2 playerCenter = player.MountedCenter;
-        playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * player.gfxOffY;
+        Vector2 playerCenter = player.GetPlayerCorePoint();
         Vector2 drawPosition = playerCenter + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * DIST;
         Vector2 endLocation = playerCenter + _targetVector2 + Vector2.Normalize(Projectile.velocity.RotatedBy(MathHelper.PiOver2 * direction)) * Math.Max(DIST * (1f - progress), 8f);
         Vector2 result = Vector2.Lerp(drawPosition, endLocation, progress) + _attackVector;
@@ -357,7 +357,7 @@ sealed class Snatcher : NatureProjectile {
         if (Projectile.Opacity > 0f) {
             Vector2 to = Vector2.Lerp(playerCenter, result, MathHelper.Clamp(result.Length() * (1f - Projectile.Opacity), 0f, 1f));
             if (player.Distance(result) > 200f) {
-                to = player.MountedCenter;
+                to = player.GetPlayerCorePoint();
                 ResetAttackState();
                 _attackVector = Vector2.Zero;
             }
@@ -368,8 +368,7 @@ sealed class Snatcher : NatureProjectile {
 
     private Vector2 GetLookUpPos() {
         Player player = Main.player[Projectile.owner];
-        Vector2 playerCenter = player.MountedCenter;
-        playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * player.gfxOffY;
+        Vector2 playerCenter = player.GetPlayerCorePoint();
         int mouseDir = (_mousePos - playerCenter).X.GetDirection();
         return IsAttacking ? AttackPos : (playerCenter + Vector2.UnitX * 50f * mouseDir);
     }
@@ -387,8 +386,7 @@ sealed class Snatcher : NatureProjectile {
         if (Projectile.Opacity > 0f) {
             Projectile.Opacity -= 0.1f;
         }
-        Vector2 playerCenter = player.MountedCenter;
-        playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * player.gfxOffY;
+        Vector2 playerCenter = player.GetPlayerCorePoint();
         Projectile.direction = player.direction;
         Projectile.Center = playerCenter;
         if (Projectile.ai[0] == 0f) {
@@ -475,7 +473,7 @@ sealed class Snatcher : NatureProjectile {
 
         SpriteEffects effects = direction == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
-        Vector2 mountedCenter = Main.player[Projectile.owner].MountedCenter;
+        Vector2 mountedCenter = Main.player[Projectile.owner].GetPlayerCorePoint();
         float opacity = 1f - (_alpha / 255f);
         Color color = Color.White * opacity;
         Vector2 position = Projectile.position;

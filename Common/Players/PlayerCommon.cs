@@ -1620,7 +1620,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     int result = (int)Player.Hurt(playerDeathReason, num, direction);
                     if (result > 0) {
                         ProjectileUtils.SpawnPlayerOwnedProjectile<MaidensBracersSpike>(new ProjectileUtils.SpawnProjectileArgs(Player, Player.GetSource_OnHurt(playerDeathReason)) with {
-                            Position = Player.Center
+                            Position = Player.GetPlayerCorePoint()
                         });
                     }
                 }

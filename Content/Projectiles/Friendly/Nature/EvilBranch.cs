@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Druid;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -137,7 +138,7 @@ sealed class EvilBranch : NatureProjectile {
 
     internal static void GetPos(Player player, out Point point, out Point point2, bool random = true, float maxDistance = 400f) {
         Vector2 targetSpot = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), maxDistance);
-        Vector2 center = player.Center;
+        Vector2 center = player.GetPlayerCorePoint();
         Vector2 endPoint = targetSpot;
         int samplesToTake = 3;
         float samplingWidth = 4f;

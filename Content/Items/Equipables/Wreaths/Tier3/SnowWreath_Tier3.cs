@@ -69,7 +69,7 @@ sealed class SnowWreathTier3 : WreathItem {
             }
 
             int cloudberryCount = Main.rand.Next(3, 5);
-            Vector2 cloudberrySpawnPosition = Player.Center;
+            Vector2 cloudberrySpawnPosition = Player.GetPlayerCorePoint();
 
             int damage = 75;
             if (Main.masterMode) {

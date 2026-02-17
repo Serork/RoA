@@ -48,7 +48,7 @@ sealed class HandOfGod : ClawsBaseItem {
         ushort type = (ushort)ModContent.ProjectileType<GodFeather>();
         bool hasShieldAlready = player.HasProjectile<GodFeather>();
         args.ShouldSpawn = !hasShieldAlready;
-        args.SpawnPosition = player.Center;
+        args.SpawnPosition = player.GetPlayerCorePoint();
         args.ProjectileTypeToSpawn = type;
         args.ShouldReset = !hasShieldAlready;
     }

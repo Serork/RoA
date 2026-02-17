@@ -7,6 +7,7 @@ using RoA.Common.Players;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,7 @@ sealed class ClingerStaff : NatureItem {
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) {
         //Vector2 getOffset() => Vector2.One.RotatedByRandom(MathHelper.TwoPi) * SPAWNOFFSET;
         Vector2 mousePosition = player.GetWorldMousePosition();
-        Vector2 spawnPosition = player.Center;
+        Vector2 spawnPosition = player.GetPlayerCorePoint();
         int maxChecks = 30;
         while (maxChecks-- > 0 && !WorldGenHelper.SolidTile(spawnPosition.ToTileCoordinates())) {
             spawnPosition += spawnPosition.DirectionTo(mousePosition) * WorldGenHelper.TILESIZE;

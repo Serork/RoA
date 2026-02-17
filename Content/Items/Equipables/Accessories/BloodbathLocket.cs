@@ -7,6 +7,7 @@ using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -239,7 +240,7 @@ sealed class BloodbathLocket : ModItem {
                         continue;
                     }
                     eyes.MaxTimeLeft = eyes.TimeLeft = 210 + Main.rand.Next(60) + eyesCount * 60;
-                    eyes.Position = player.Center + Main.rand.RandomPointInArea(100f);
+                    eyes.Position = player.GetPlayerCorePoint() + Main.rand.RandomPointInArea(100f);
                     eyes.Rotation = Main.rand.NextFloatRange(MathHelper.PiOver4 / 2f);
                     eyes.Extra = Main.rand.NextBool();
                     _eyesTimer = 0f;

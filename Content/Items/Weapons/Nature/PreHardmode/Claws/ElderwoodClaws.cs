@@ -9,6 +9,7 @@ using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -99,7 +100,7 @@ sealed class ElderwoodClaws : ClawsBaseItem {
     }
 
     private static void GetPoints(Player player, int direction, out Point point1, out Point point2) {
-        Vector2 startPoint = player.Center - Vector2.UnitY * player.height * 3f;
+        Vector2 startPoint = player.GetPlayerCorePoint() - Vector2.UnitY * player.height * 3f;
         Vector2 dir = new(player.direction * direction, 0f);
         Vector2 destination = startPoint + dir * 75f;
         while (Vector2.Distance(startPoint, destination) > 32f) {
@@ -108,7 +109,7 @@ sealed class ElderwoodClaws : ClawsBaseItem {
             }
             startPoint = Vector2.Lerp(startPoint, destination, 1f);
         }
-        Vector2 endPoint = player.Center;
+        Vector2 endPoint = player.GetPlayerCorePoint();
         destination = endPoint + dir * 125f;
         while (Vector2.Distance(endPoint, destination) > 32f) {
             if (WorldGenHelper.CustomSolidCollision(endPoint, 0, 0, TileID.Sets.Platforms)) {
@@ -122,7 +123,7 @@ sealed class ElderwoodClaws : ClawsBaseItem {
                 break;
             }
             point1.Y++;
-            if (Vector2.Distance(startPoint, player.Center) > player.height * 3f) {
+            if (Vector2.Distance(startPoint, player.GetPlayerCorePoint()) > player.height * 3f) {
                 break;
             }
         }
@@ -132,7 +133,7 @@ sealed class ElderwoodClaws : ClawsBaseItem {
                 break;
             }
             point2.Y++;
-            if (Vector2.Distance(endPoint, player.Center) > player.height * 3f) {
+            if (Vector2.Distance(endPoint, player.GetPlayerCorePoint()) > player.height * 3f) {
                 break;
             }
         }

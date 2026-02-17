@@ -8,6 +8,7 @@ using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -52,7 +53,7 @@ sealed class ThornyClaws : ClawsBaseItem {
         if (count > 1) {
             shouldReset = false;
         }
-        args.SpawnPosition = player.Center;
+        args.SpawnPosition = player.GetPlayerCorePoint();
         args.StartVelocity = Helper.VelocityToPoint(player.Center, player.GetViableMousePosition(), 1f).SafeNormalize(Vector2.Zero);
         args.ProjectileTypeToSpawn = type;
         args.ShouldReset = shouldReset;
