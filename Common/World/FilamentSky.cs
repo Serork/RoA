@@ -26,6 +26,7 @@ sealed class FilamentSky : CustomSky {
         public float AlphaAmplitude;
         public float ClipX;
         public float Opacity;
+        public float ScaleX;
     }
 
     private UnifiedRandom _random = new UnifiedRandom();
@@ -128,6 +129,7 @@ sealed class FilamentSky : CustomSky {
             color = Color.Lerp(color, Color.LightYellow, 0.5f);
             color.A = 0;
             Vector2 scale = new Vector2(vector4.X * 0.5f + 0.5f) * (value * 0.1f + 0.9f);
+            scale.Y *= _beams[j].ScaleX;
             float rotation = _beams[j].SinOffset;
             int attempts2 = 50;
             int attempts = attempts2;
@@ -138,12 +140,12 @@ sealed class FilamentSky : CustomSky {
             Color color2 = color * num3 * value * 0.8f * (1f - num4) * 0.45f * _beams[j].Opacity;
             while (attempts-- > 0) {
                 spriteBatch.Draw(value2, position2, bounds, color2, rotation, origin, scale, SpriteEffects.None, 0f);
-                position2 += Vector2.UnitX.RotatedBy(rotation) * width * scale;
+                position2 += Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
             }
             attempts = attempts2;
             position2 = position;
             while (attempts-- > 0) {
-                position2 -= Vector2.UnitX.RotatedBy(rotation) * width * scale;
+                position2 -= Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
                 spriteBatch.Draw(value2, position2, bounds, color2, rotation, origin, scale, SpriteEffects.None, 0f);
             }
         }
@@ -165,10 +167,11 @@ sealed class FilamentSky : CustomSky {
                 float num5 = (float)j / (float)num2;
                 _beams[num3].Position.X = num4 * (float)Main.maxTilesX * 16f;
                 _beams[num3].Position.Y = num5 * ((float)Main.worldSurface * 16f + 2000f) - 1000f;
-                _beams[num3].Depth = MathF.Max(0f, _random.NextFloat() * 8f);
+                _beams[num3].Depth = MathF.Max(0f, _random.NextFloat(0.25f, 1f) * 8f);
                 _beams[num3].SinOffset = _random.NextFloat() * 6.28f;
                 _beams[num3].AlphaAmplitude = _random.NextFloat() * 5f;
                 _beams[num3].AlphaFrequency = _random.NextFloat() + 1f;
+                _beams[num3].ScaleX = _random.NextFloat(0.75f, 1f);
                 num3++;
             }
         }
