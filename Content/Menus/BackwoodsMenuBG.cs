@@ -36,6 +36,10 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
     public override int ChooseFarTexture() => -1;
 
     public override bool PreDrawCloseBackground(SpriteBatch spriteBatch) {
+        if (!Main.gameMenu) {
+            return false;
+        }
+
         DrawDarkerBackground(spriteBatch);
 
         float num1 = 1200f;
