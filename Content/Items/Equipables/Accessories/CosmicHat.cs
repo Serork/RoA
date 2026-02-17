@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common.UI;
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -160,7 +161,7 @@ sealed class CosmicHat : ModItem, IMagicItemForVisuals {
                     for (int i = 0; i < 3; i++) {
                         if (player.whoAmI == Main.myPlayer) {
                             Projectile.NewProjectile(player.GetSource_Misc("cosmichat"),
-                                Player.Center.X, Player.Center.Y, 0f, 0f, ModContent.ProjectileType<CosmicMana>(), 0, 0f, player.whoAmI, i, 0f);
+                                Player.GetPlayerCorePoint().X, Player.GetPlayerCorePoint().Y, 0f, 0f, ModContent.ProjectileType<CosmicMana>(), 0, 0f, player.whoAmI, i, 0f);
                         }
                         SoundEngine.PlaySound(SoundID.Item9 with { Volume = 0.5f, PitchVariance = 0.5f }, player.Center);
                     }

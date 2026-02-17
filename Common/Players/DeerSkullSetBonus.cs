@@ -124,7 +124,7 @@ sealed partial class PlayerCommon : ModPlayer, IDoubleTap {
 
         DeerSkullAppearanceProgress = Helper.Approach(DeerSkullAppearanceProgress, targetValue, lerpValue);
 
-        Vector2 checkPosition = Player.Center;
+        Vector2 checkPosition = Player.GetPlayerCorePoint();
         int checkDistance = DEERSKULLATTACKDISTANCE;
         NPC? target = NPCUtils.FindClosestNPC(checkPosition, checkDistance, false);
         DeerSkullHornsTarget = target;

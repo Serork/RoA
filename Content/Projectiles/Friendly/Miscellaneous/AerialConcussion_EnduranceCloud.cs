@@ -64,9 +64,8 @@ sealed class EnduranceCloud : ModProjectile {
                 Vector2 randomOffset = Main.rand.NextVector2(facedRight ? owner.width * 1.5f : owner.width * 0.25f, owner.height * 0.25f, facedRight ? owner.width * 2.25f : owner.width * 1f, owner.height * 1.75f);
                 offsetX = randomOffset.X;
                 offsetY = randomOffset.Y;
-                Vector2 playerCenter = owner.MountedCenter;
-                playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * owner.gfxOffY;
-                Projectile.Center = playerCenter + new Vector2(offsetX, offsetY) - owner.Size;
+                Vector2 playerCenter = owner.GetPlayerCorePoint();
+                Projectile.Center = playerCenter + new Vector2(offsetX, offsetY) - owner.DefaultSize;
                 foreach (Projectile trackedCloud in TrackedEntitiesSystem.GetTrackedProjectile<EnduranceCloud>(checkProjectile => checkProjectile.owner != Projectile.owner || checkProjectile.whoAmI == Projectile.whoAmI)) {
                     float distance = trackedCloud.Distance(Projectile.Center);
                     if (distance < 30f) {
@@ -102,9 +101,8 @@ sealed class EnduranceCloud : ModProjectile {
         }
         Projectile.Opacity = 0.65f * Utils.GetLerpValue(0f, 30f, opacityFactor, true) * Utils.GetLerpValue(TIMELEFT, opacityFluffMin, opacityFactor, true);
 
-        Vector2 playerCenter2 = owner.MountedCenter;
-        playerCenter2 = Utils.Floor(playerCenter2) + Vector2.UnitY * owner.gfxOffY;
-        Projectile.Center = playerCenter2 + new Vector2(offsetX, offsetY) - owner.Size;
+        Vector2 playerCenter2 = owner.GetPlayerCorePoint();
+        Projectile.Center = playerCenter2 + new Vector2(offsetX, offsetY) - owner.DefaultSize;
         Projectile.Center = Vector2.Lerp(Projectile.Center, Projectile.Center + Projectile.velocity, 0.05f);
         Projectile.velocity.X -= 1f * owner.direction;
     }

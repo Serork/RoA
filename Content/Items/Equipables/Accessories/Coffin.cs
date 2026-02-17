@@ -2,6 +2,7 @@
 
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -67,7 +68,7 @@ sealed class CoffinPlayer : ModPlayer {
             void spawn(int type) {
                 Vector2 boneVel = Vector2.One.RotatedBy(MathHelper.Pi * (float)index / max + Main.rand.NextFloatRange(MathHelper.PiOver2));
                 boneVel *= 2.5f + Main.rand.NextFloat(2.5f);
-                Projectile.NewProjectile(source, Player.Center.X, Player.Center.Y, boneVel.X, boneVel.Y, type,
+                Projectile.NewProjectile(source, Player.GetPlayerCorePoint().X, Player.GetPlayerCorePoint().Y, boneVel.X, boneVel.Y, type,
                     damage, knockback,
                     Player.whoAmI);
                 index++;

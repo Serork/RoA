@@ -156,7 +156,7 @@ sealed class BeastProj : ModProjectile {
                 Projectile.Kill();
                 return;
             }
-            Vector2 center = player.MountedCenter;
+            Vector2 center = player.GetPlayerCorePoint();
             Vector2 mouseWorld = Main.MouseWorld;
             Vector2 position = Vector2.Subtract(mouseWorld, center);
             position.Normalize();

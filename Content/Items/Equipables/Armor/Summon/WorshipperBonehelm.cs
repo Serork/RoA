@@ -7,6 +7,7 @@ using RoA.Common.Players;
 using RoA.Content.Buffs;
 using RoA.Content.Projectiles.Friendly.Summon;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -201,7 +202,7 @@ sealed class WorshipperBonehelm : ModItem {
         if (player.ownedProjectileCounts[type] < 1) {
             int damage = (int)player.GetTotalDamage(DamageClass.Summon).ApplyTo(30);
             float knockBack = player.GetTotalKnockback(DamageClass.Summon).ApplyTo(2.5f);
-            Projectile.NewProjectile(player.GetSource_Misc("worshipperarmorset"), player.MountedCenter, Vector2.Zero, type,
+            Projectile.NewProjectile(player.GetSource_Misc("worshipperarmorset"), player.GetPlayerCorePoint(), Vector2.Zero, type,
                 damage,
                 knockBack,
                 player.whoAmI);

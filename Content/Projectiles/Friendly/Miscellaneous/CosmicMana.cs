@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -51,9 +52,9 @@ sealed class CosmicMana : ModProjectile {
         double rad = deg * (Math.PI / 180);
         double dist = 35;
         Projectile.position.X = MathHelper.SmoothStep(Projectile.position.X,
-            player.MountedCenter.X - (int)(Math.Cos(rad) * dist) - player.width / 2 + Projectile.velocity.X, 0.3f);
+            player.GetPlayerCorePoint().X - (int)(Math.Cos(rad) * dist) - player.width / 2 + Projectile.velocity.X, 0.3f);
         Projectile.position.Y = MathHelper.SmoothStep(Projectile.position.Y,
-            player.MountedCenter.Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + 4 + player.gfxOffY + Projectile.velocity.Y, 0.3f);
+            player.GetPlayerCorePoint().Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + 4 + Projectile.velocity.Y, 0.3f);
         Projectile.ai[1] += 3f;
         //Projectile.velocity = -Helper.VelocityToPoint(player.MountedCenter, Projectile.Center, 1f) * Projectile.ai[1] / 200f;
 

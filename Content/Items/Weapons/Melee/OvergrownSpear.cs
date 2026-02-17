@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 
 using RoA.Common.GlowMasks;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -54,7 +55,7 @@ sealed class OvergrownSpearPlayer : ModPlayer {
                 if (!_overgrownSphereSpawned && flag) {
                     int _randCord = Main.rand.Next(-20, 20);
                     for (int i = 0; i < 3; i++) {
-                        Projectile.NewProjectile(Player.GetSource_Misc("orbsspawned"), Player.MountedCenter.X + _randCord, Player.MountedCenter.Y + _randCord, 0f, 0f, type, 0, 0f, Player.whoAmI, 1 * i, 0);
+                        Projectile.NewProjectile(Player.GetSource_Misc("orbsspawned"), Player.GetPlayerCorePoint().X + _randCord, Player.GetPlayerCorePoint().Y + _randCord, 0f, 0f, type, 0, 0f, Player.whoAmI, 1 * i, 0);
                     }
                     _overgrownSphereSpawned = true;
                 }

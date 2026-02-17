@@ -112,7 +112,7 @@ sealed class TerraClaws : ClawsBaseItem<TerraClaws.TerraClawsSlash> {
             }
 
             Player owner = Projectile.GetOwnerAsPlayer();
-            Vector2 position = Utils.Floor(owner.MountedCenter) + Vector2.UnitY * owner.gfxOffY + Vector2.UnitX * CollidingSize() * 1f * owner.direction;
+            Vector2 position = owner.GetPlayerCorePoint() + Vector2.UnitX * CollidingSize() * 1f * owner.direction;
             if (num2 >= 0.75f && _spawnFracture) {
                 proj.localAI[0]--;
                 if (proj.localAI[2] < proj.localAI[0]) {

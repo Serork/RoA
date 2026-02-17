@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using RoA.Common.Druid.Forms;
 using RoA.Content.Dusts;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -110,8 +111,8 @@ sealed class OvergrownSphere : ModProjectile {
         double deg = (double)(Projectile.ai[1] + Projectile.ai[0] * 240) / 2;
         double rad = deg * (Math.PI / 180);
         double dist = 70;
-        Projectile.position.X = Utils.Floor(player.MountedCenter).X - (int)(Math.Cos(rad) * dist) - player.width / 2;
-        Projectile.position.Y = Utils.Floor(player.MountedCenter).Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + player.height / 4f + Projectile.GetOwnerAsPlayer().gfxOffY;
+        Projectile.position.X = player.GetPlayerCorePoint().X - (int)(Math.Cos(rad) * dist) - player.width / 2;
+        Projectile.position.Y = player.GetPlayerCorePoint().Y - (int)(Math.Sin(rad) * dist) - player.height / 2 + player.height / 4f;
         Projectile.ai[1] += 2f;
         Projectile.rotation = Projectile.velocity.ToRotation();
 
