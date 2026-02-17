@@ -61,7 +61,7 @@ sealed class BeachWreath_Coral : NatureProjectile_NoTextureLoad {
         }
 
         public readonly Vector2 Destination => new(DestinationPositionX, DestinationPositionY);
-        public readonly Vector2 FinalDestinationPosition => projectile.GetOwnerAsPlayer().MountedCenter + Destination;
+        public readonly Vector2 FinalDestinationPosition => projectile.GetOwnerAsPlayer().GetPlayerCorePoint() + Destination;
     }
 
     public override void SetStaticDefaults() {

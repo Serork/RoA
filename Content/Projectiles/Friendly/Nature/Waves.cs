@@ -75,8 +75,7 @@ abstract class Wave : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         if (player.whoAmI == Main.myPlayer) {
             Vector2 pointPosition = player.GetViableMousePosition();
-            Vector2 playerCenter = player.MountedCenter;
-            playerCenter = Utils.Floor(playerCenter) + Vector2.UnitY * player.gfxOffY;
+            Vector2 playerCenter = player.GetPlayerCorePoint();
             Vector2 velocity = Vector2.Subtract(pointPosition, playerCenter);
             velocity.Normalize();
             Projectile.velocity = velocity;
@@ -86,7 +85,7 @@ abstract class Wave : NatureProjectile {
 
     public override void AI() {
         Player player = Main.player[Projectile.owner];
-        Projectile.Center = Utils.Floor(player.MountedCenter) + Vector2.UnitY * player.gfxOffY + Projectile.velocity * 50f * Projectile.scale;
+        Projectile.Center = player.GetPlayerCorePoint() + Projectile.velocity * 50f * Projectile.scale;
         Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
         Projectile.rotation = Projectile.velocity.ToRotation() + 1.57f;
         if (Projectile.Opacity == 0f) {

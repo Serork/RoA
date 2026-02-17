@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using Terraria;
 using Terraria.Audio;
@@ -78,8 +79,7 @@ sealed class MoonSickle : NatureProjectile {
         base.SafeOnSpawn(source);
 
         Player player = Main.player[Projectile.owner];
-        Vector2 pos = player.MountedCenter;
-        pos = Utils.Floor(pos) + Vector2.UnitY * player.gfxOffY;
+        Vector2 pos = player.GetPlayerCorePoint();
         Projectile.ai[2] = player.direction;
         Projectile.ai[1] = Main.rand.NextFloat(5f, 10f);
         Projectile.Center = pos - Vector2.UnitX * Projectile.ai[1] * 10f * Projectile.ai[2];

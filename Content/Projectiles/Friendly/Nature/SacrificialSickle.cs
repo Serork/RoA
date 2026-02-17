@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -80,8 +81,7 @@ sealed class SacrificialSickle : NatureProjectile {
             }
         }
         SpriteBatch _spriteBatch = Main.spriteBatch;
-        Vector2 pos = player.MountedCenter;
-        pos = Utils.Floor(pos) + Vector2.UnitY * player.gfxOffY;
+        Vector2 pos = player.GetPlayerCorePoint();
         if (player.direction == -1) {
             pos.X -= 2f;
         }
@@ -124,8 +124,7 @@ sealed class SacrificialSickle : NatureProjectile {
         base.SafeOnSpawn(source);
 
         Player player = Main.player[Projectile.owner];
-        Vector2 pos = player.MountedCenter;
-        pos = Utils.Floor(pos) + Vector2.UnitY * player.gfxOffY;
+        Vector2 pos = player.GetPlayerCorePoint();
         Projectile.Center = pos;
         float randomness = Main.rand.NextFloatDirection();
         float min = 0.75f;
@@ -207,8 +206,7 @@ sealed class SacrificialSickle : NatureProjectile {
                 Projectile.ai[1] = 0f;
                 Projectile.netUpdate = true;
             }
-            Vector2 pos = player.MountedCenter;
-            pos = Utils.Floor(pos) + Vector2.UnitY * player.gfxOffY;
+            Vector2 pos = player.GetPlayerCorePoint();
             Vector2 dif = _to - pos;
             int dir = dif.X.GetDirection();
             _direction = dir;

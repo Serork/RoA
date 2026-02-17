@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Content.Items.Weapons.Summon;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.IO;
@@ -97,7 +98,7 @@ sealed class Moth : ModProjectile {
 
         #region General behavior
 
-        Vector2 idlePosition = Utils.Floor(player.MountedCenter) + Vector2.UnitY * player.gfxOffY;
+        Vector2 idlePosition = player.GetPlayerCorePoint();
         mothCount = player.ownedProjectileCounts[ModContent.ProjectileType<Moth>()];
         if (mothCount == 0) mothCount++;
         if (player.whoAmI == Main.myPlayer && Main.mouseLeft && Main.mouseLeftRelease && player.inventory[player.selectedItem].type == ModContent.ItemType<MothStaff>()) {

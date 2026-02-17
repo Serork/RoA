@@ -206,7 +206,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
 
         if (Progress == 0f) {
             if (player.whoAmI == Main.myPlayer) {
-                int direction = (player.MountedCenter - target.Center).X.GetDirection();
+                int direction = (player.GetPlayerCorePoint() - target.Center).X.GetDirection();
                 if (Projectile.localAI[2] != direction) {
                     Projectile.localAI[2] = direction;
                     Projectile.netUpdate = true;
@@ -214,7 +214,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
             }
         }
 
-        Vector2 basePosition = player.MountedCenter + Vector2.UnitY * player.gfxOffY;
+        Vector2 basePosition = player.GetPlayerCorePoint();
         Vector2 startPosition = basePosition,
                 endPosition = Projectile.position;
         Vector2 diff = (endPosition - startPosition).SafeNormalize(Vector2.Zero);
@@ -297,7 +297,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
     private void Dusts() {
         int height = 8;
         Player player = Main.player[Projectile.owner];
-        Vector2 basePosition = player.MountedCenter + Vector2.UnitY * player.gfxOffY;
+        Vector2 basePosition = player.GetPlayerCorePoint();
         Vector2 startPosition = basePosition,
                 endPosition = Projectile.position;
         while (true) {
@@ -331,7 +331,7 @@ sealed class MercuriumZipper_Effect : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Player player = Main.player[Projectile.owner];
-        Vector2 basePosition = player.MountedCenter + Vector2.UnitY * player.gfxOffY;
+        Vector2 basePosition = player.GetPlayerCorePoint();
         Vector2 startPosition = Projectile.position,
                 endPosition = basePosition;
         ModProjectile zipperWhip = ProjectileLoader.GetProjectile(ModContent.ProjectileType<MercuriumZipperProjectile>());

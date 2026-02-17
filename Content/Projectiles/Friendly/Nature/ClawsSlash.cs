@@ -597,7 +597,7 @@ class ClawsSlash : NatureProjectile {
             player.itemAnimationMax = player.itemTimeMax = (int)Projectile.ai[1];
         }
 
-        Projectile.Center = Utils.Floor(player.MountedCenter) + Vector2.UnitY * player.gfxOffY - Projectile.velocity + GetPositionOffset(player);
+        Projectile.Center = player.GetPlayerCorePoint() - Projectile.velocity + GetPositionOffset(player);
 
         UpdateMainCycle();
 
