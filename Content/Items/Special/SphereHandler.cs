@@ -485,7 +485,7 @@ sealed class SphereHandler : GlobalItem {
             Main.reforgeItem.ChangeItemType(ModContent.ItemType<SphereOfShock>());
             Player player = Main.LocalPlayer;
             Item item = player.GetItem(Main.myPlayer, Main.reforgeItem, GetItemSettings.GetItemInDropItemCheck);
-            MakeEffects(item, new(60, 222, 190), Main.LocalPlayer.Center);
+            MakeEffects(item, new(60, 222, 190), Main.LocalPlayer.GetPlayerCorePoint());
             if (!item.IsEmpty()) {
                 Main.reforgeItem.position = player.GetPlayerCorePoint();
                 int whoAmI = Item.NewItem(player.GetSource_Misc("reforgeitemdrop"), (int)player.position.X, (int)player.position.Y, player.width, player.height,

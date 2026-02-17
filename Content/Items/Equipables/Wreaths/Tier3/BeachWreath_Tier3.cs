@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System.Collections.Generic;
@@ -84,7 +85,7 @@ sealed class BeachWreathTier3 : WreathItem {
             IReadOnlyCollection<Vector2> allCoralsPositions = BeachWreath_Coral.AllCoralsPositions;
             Vector2 getRandomazedOffsetValue() => (Vector2.UnitY * maxDistance * Main.rand.NextFloat(0.5f, 1f)).RotatedByRandom(MathHelper.TwoPi);
             Vector2 spawnPositionOffset = getRandomazedOffsetValue();
-            Vector2 getFinalDestinationPosition() => Player.Center + spawnPositionOffset;
+            Vector2 getFinalDestinationPosition() => Player.GetPlayerCorePoint() + spawnPositionOffset;
             int maxAttempts = 100;
             while (maxAttempts-- > 0 && allCoralsPositions.Any(checkCoralPosition => Vector2.Distance(checkCoralPosition, spawnPositionOffset) < 60f) ||
                    WorldGen.SolidTile(getFinalDestinationPosition().ToTileCoordinates())) {

@@ -168,7 +168,7 @@ sealed class ArterialSprayProjectile3 : ModProjectile, ProjectileHooks.IDrawLike
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "RazorThree") { Volume = 0.3f, Pitch = 0.1f, PitchVariance = 0.1f }, player.Center);
 
             if (player.whoAmI == Main.myPlayer) {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center, Projectile.velocity, ModContent.ProjectileType<ArterialSprayProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.GetPlayerCorePoint(), Projectile.velocity, ModContent.ProjectileType<ArterialSprayProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
             }
         }
     }

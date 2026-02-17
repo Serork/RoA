@@ -91,7 +91,7 @@ sealed class Cacti : NatureProjectile {
         _useTimeFactor = 0.0275f * (float)(1f - Projectile.ai[2] / (Main.player[Projectile.owner].itemTimeMax + Main.player[Projectile.owner].itemTimeMax / 6f));
 
         Vector2 basePosition = _parent.As<CactiCaster.CactiCasterBase>()._position;
-        basePosition.Y += player.height - player.height * (3f + _useTimeFactor * player.height * 0.75f);
+        basePosition.Y += Player.defaultHeight - Player.defaultHeight * (3f + _useTimeFactor * Player.defaultHeight * 0.75f);
         Vector2 pointPosition = basePosition;
         float lastY = Math.Abs(basePosition.Y - Main.screenPosition.Y + Main.screenHeight);
         Projectile.Center = pointPosition + Vector2.UnitY * lastY;

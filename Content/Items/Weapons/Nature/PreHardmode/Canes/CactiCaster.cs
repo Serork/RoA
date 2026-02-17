@@ -5,6 +5,7 @@ using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System.IO;
 
@@ -58,7 +59,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
 
         public override void SafePostAI() {
             Player player = Owner;
-            Vector2 mousePoint = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
+            Vector2 mousePoint = Helper.GetLimitedPosition(player.GetPlayerCorePoint(), player.GetViableMousePosition(), 400f);
             float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
             float y = mousePoint.Y + player.height - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
             if (CurrentUseTime > UseTime * MinUseTimeToShootFactor()) {
@@ -81,7 +82,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
             Player player = Owner;
             int type = ModContent.ProjectileType<Cacti>();
             //float opacity = 1f;
-            Vector2 mousePoint = Helper.GetLimitedPosition(player.Center, player.GetViableMousePosition(), 400f);
+            Vector2 mousePoint = Helper.GetLimitedPosition(player.GetPlayerCorePoint(), player.GetViableMousePosition(), 400f);
             float useTimeFactor = 0.0275f * (float)(1f - 0.75f);
             float y = mousePoint.Y + player.height - player.height * (0.9f + useTimeFactor * player.height * 0.75f);
             if (CurrentUseTime > UseTime * MinUseTimeToShootFactor()) {
@@ -89,30 +90,34 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
             }
             else if (CurrentReleaseTime <= TimeAfterShootToExist(player) * 0.6f && _makeDust) {
                 _makeDust = false;
-                for (int num559 = 0; num559 < 10; num559++) {
+                if (!Main.gamePaused && Main.instance.IsActive) {
+                    for (int num559 = 0; num559 < 10; num559++) {
+                        int dustType = DustID.OasisCactus;
+                        int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: Main.rand.Next(80));
+                        Dust dust2 = Main.dust[num560];
+                        dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
+                        dust2.scale *= 1.2f;
+                        dust2.velocity *= Main.rand.NextFloat(1f, 1.25f);
+                        dust2.velocity *= 1.25f;
+                        dust2.noGravity = true;
+                        if (Main.rand.NextBool(2)) {
+                            dust2.scale *= 1.2f;
+                        }
+                    }
+                }
+            }
+            if (!Main.gamePaused && Main.instance.IsActive) {
+                if (Main.rand.NextBool(5)) {
                     int dustType = DustID.OasisCactus;
                     int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: Main.rand.Next(80));
                     Dust dust2 = Main.dust[num560];
                     dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
-                    dust2.scale *= 1.2f;
-                    dust2.velocity *= Main.rand.NextFloat(1f, 1.25f);
-                    dust2.velocity *= 1.25f;
+                    dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
                     dust2.noGravity = true;
+                    dust2.scale *= 1f;
                     if (Main.rand.NextBool(2)) {
                         dust2.scale *= 1.2f;
                     }
-                }
-            }
-            if (Main.rand.NextBool(5)) {
-                int dustType = DustID.OasisCactus;
-                int num560 = Dust.NewDust(_position - Vector2.One * 12, 24, 24, dustType, Alpha: Main.rand.Next(80));
-                Dust dust2 = Main.dust[num560];
-                dust2.velocity = dust2.velocity.RotatedByRandom(Main.rand.NextFloat(MathHelper.TwoPi));
-                dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
-                dust2.noGravity = true;
-                dust2.scale *= 1f;
-                if (Main.rand.NextBool(2)) {
-                    dust2.scale *= 1.2f;
                 }
             }
         }

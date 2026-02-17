@@ -10,6 +10,7 @@ using RoA.Common.Networking.Packets;
 using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
@@ -118,7 +119,7 @@ sealed class RodOfTheCondor : ModItem {
 
         public override void PostUpdate() {
             if (IsActive) {
-                Lighting.AddLight(Player.Center, LightingColor.ToVector3() * 0.75f * Opacity);
+                Lighting.AddLight(Player.GetPlayerCorePoint(), LightingColor.ToVector3() * 0.75f * Opacity);
 
                 bool flag3 = Player.CanVisuallyHoldItem(Player.HeldItem);
                 bool flag4 = false;
