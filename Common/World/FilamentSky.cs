@@ -145,17 +145,18 @@ sealed class FilamentSky : CustomSky {
             Rectangle bounds2 = new Rectangle((int)((_beams[j].ClipX2 * width) + _beams[j].Depth * width) % width, 0, width, value2.Height);
             Vector2 origin = bounds.LeftCenter();
             Color color2 = color * num3 * value * 0.8f * (1f - num4) * 0.45f * _beams[j].Opacity;
+            float globalOpacity = 0.375f;
             while (attempts-- > 0) {
-                spriteBatch.Draw(value2, position2, bounds, color2 * 0.5f, rotation, origin, scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(value3, position2, bounds2, color2 * 0.5f, rotation, origin, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
                 position2 += Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
             }
             attempts = attempts2;
             position2 = position;
             while (attempts-- > 0) {
                 position2 -= Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
-                spriteBatch.Draw(value2, position2, bounds, color2 * 0.5f, rotation, origin, scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(value3, position2, bounds2, color2 * 0.5f, rotation, origin, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
             }
         }
     }
