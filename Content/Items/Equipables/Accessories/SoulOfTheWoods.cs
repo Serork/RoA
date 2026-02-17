@@ -5,6 +5,7 @@ using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -41,7 +42,7 @@ sealed class SoulOfTheWoods : NatureItem {
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "FireWoosh") { Volume = 0.75f }, player.Center);
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Leaves1") { Volume = 0.75f, Pitch = -0.3f }, player.Center);
             SoundEngine.PlaySound(SoundID.Item8 with { Volume = 0.75f, Pitch = 0.3f }, player.Center);
-            Projectile.NewProjectile(player.GetSource_Accessory(Item), player.Center, Vector2.Zero, type,
+            Projectile.NewProjectile(player.GetSource_Accessory(Item), player.GetPlayerCorePoint(), Vector2.Zero, type,
                damage, knockback, player.whoAmI);
         }
     }

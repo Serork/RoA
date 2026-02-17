@@ -123,10 +123,13 @@ sealed class FlametrackerHatFlame : PlayerDrawLayer {
         for (int i = 0; i < 7; ++i) {
             float shakePointX = Utils.RandomInt(ref speed, -10, 11) * 0.15f;
             float shakePointY = Utils.RandomInt(ref speed, -5, 6) * 0.3f;
-            int x = (int)(drawInfo.Position.X + player.width / 2f - Main.screenPosition.X + shakePointX);
-            int y = (int)(drawInfo.Position.Y + player.height / 2f - Main.screenPosition.Y + shakePointY - 4);
+            Vector2 position = drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2);
+            position.X += shakePointX;
+            position.Y += shakePointY;
+            float x = position.X - player.direction;
+            float y = position.Y;
             if (player.gravDir < 0) {
-                y += 9;
+                y += 8;
             }
             DrawData drawData = new DrawData(texture, new Vector2(x, y) + new Vector2(drawInfo.headOnlyRender ? 1f * player.direction : 0f, 0f), new Rectangle?(bodyFrame), color, player.bodyRotation, new Vector2(texture.Width / 2f, height / 2f), 1f, drawInfo.playerEffect, 0);
             drawInfo.DrawDataCache.Add(drawData);
@@ -166,10 +169,11 @@ sealed class FlametrackerHatMask : PlayerDrawLayer {
         Color color = drawInfo.colorArmorHead;
 
         int height = texture.Height / 20;
-        int x = (int)(drawInfo.Position.X + player.width / 2.0 - Main.screenPosition.X);
-        int y = (int)(drawInfo.Position.Y + player.height / 2.0 - Main.screenPosition.Y - 4);
+        Vector2 position = drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2);
+        float x = position.X;
+        float y = position.Y + 4;
         if (player.gravDir < 0) {
-            y += 8;
+            y += 0;
         }
         DrawData drawData = new DrawData(texture, new Vector2(x, y), new Rectangle?(bodyFrame), color, player.bodyRotation, new Vector2(texture.Width / 2f, height / 2f), 1f, drawInfo.playerEffect, 0);
         drawInfo.DrawDataCache.Add(drawData);

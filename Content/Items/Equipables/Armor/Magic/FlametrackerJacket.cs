@@ -6,6 +6,8 @@ using ReLogic.Content;
 using RoA.Core;
 using RoA.Core.Utility;
 
+using System;
+
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -34,7 +36,7 @@ sealed class FlametrackerJacket : ModItem {
     public override void UpdateEquip(Player player) {
         player.manaCost -= 0.12f;
         player.GetDamage(DamageClass.Magic) += 0.05f;
-        Lighting.AddLight(player.Center - new Vector2(6f * player.direction, 4f), new Vector3(194, 44, 44) * 0.0035f);
+        Lighting.AddLight(player.GetPlayerCorePoint() - new Vector2(6f * player.direction, 4f), new Vector3(194, 44, 44) * 0.0035f);
     }
 }
 
@@ -75,10 +77,13 @@ sealed class FlametrackerJacketFlame : PlayerDrawLayer {
         for (int i = 0; i < 7; ++i) {
             float shakePointX = Utils.RandomInt(ref speed, -10, 11) * 0.15f;
             float shakePointY = Utils.RandomInt(ref speed, -5, 6) * 0.3f;
-            int x = (int)(drawInfo.Position.X + player.width / 2f - Main.screenPosition.X + shakePointX + 1);
-            int y = (int)(drawInfo.Position.Y + player.height / 2f - Main.screenPosition.Y + shakePointY - 5);
+            Vector2 position = drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2);
+            position.X += shakePointX;
+            position.Y += shakePointY;
+            float x = position.X - player.direction;
+            float y = position.Y;
             if (player.gravDir < 0) {
-                y += 9;
+                y += 8;
             }
             DrawData drawData = new DrawData(texture, new Vector2(x, y), new Rectangle?(bodyFrame), color, player.bodyRotation, new Vector2(texture.Width / 2f, height / 2f), 1f, drawInfo.playerEffect, 0);
             drawInfo.DrawDataCache.Add(drawData);
@@ -118,12 +123,13 @@ sealed class FlametrackerJacketMask : PlayerDrawLayer {
         Color color = drawInfo.colorArmorBody;
 
         int height = texture.Height / 20;
-        int x = (int)(drawInfo.Position.X + player.width / 2.0 - Main.screenPosition.X);
-        int y = (int)(drawInfo.Position.Y + player.height / 2.0 - Main.screenPosition.Y - 3);
+        Vector2 position = drawInfo.Position - Main.screenPosition + drawInfo.drawPlayer.bodyPosition + new Vector2(drawInfo.drawPlayer.width / 2, drawInfo.drawPlayer.height - drawInfo.drawPlayer.bodyFrame.Height / 2);
+        float x = position.X;
+        float y = position.Y + 4;
         if (player.gravDir < 0) {
-            y += 6;
+            y += 0;
         }
-        DrawData drawData = new DrawData(texture, new Vector2(x, y), new Rectangle?(bodyFrame), color, player.bodyRotation, new Vector2(texture.Width / 2f, height / 2f), 1f, drawInfo.playerEffect, 0);
+        DrawData drawData = new DrawData(texture, Utils.Floor(new Vector2(x, y)), new Rectangle?(bodyFrame), color, player.bodyRotation, new Vector2(texture.Width / 2f, height / 2f), 1f, drawInfo.playerEffect, 0);
         drawInfo.DrawDataCache.Add(drawData);
     }
 }
