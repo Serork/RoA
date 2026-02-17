@@ -24,7 +24,7 @@ sealed class FilamentSky : CustomSky {
         public float SinOffset;
         public float AlphaFrequency;
         public float AlphaAmplitude;
-        public float ClipX;
+        public float ClipX, ClipX2;
         public float Opacity;
         public float ScaleX;
     }
@@ -35,13 +35,14 @@ sealed class FilamentSky : CustomSky {
     private bool _isActive;
     private float _fadeOpacity;
 
-    private Asset<Texture2D> _beamTexture;
+    private Asset<Texture2D> _beamTexture, _beamTexture2;
     private Beam[] _beams;
 
     public override void OnLoad() {
         _planetTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentPlanet");
         _bgTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBackground");
         _beamTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBeam");
+        _beamTexture2 = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBeam2");
     }
 
     public override void Update(GameTime gameTime) {
@@ -54,6 +55,10 @@ sealed class FilamentSky : CustomSky {
             _beams[i].ClipX = Helper.Approach(_beams[i].ClipX, 1f, 0.01f);
             if (_beams[i].ClipX >= 1f) {
                 _beams[i].ClipX = 0f;
+            }
+            _beams[i].ClipX2 = Helper.Approach(_beams[i].ClipX2, 1f, 0.02f);
+            if (_beams[i].ClipX2 >= 1f) {
+                _beams[i].ClipX2 = 0f;
             }
             _beams[i].Opacity = MathF.Min(_fadeOpacity, _beams[i].Opacity);
         }
@@ -124,6 +129,7 @@ sealed class FilamentSky : CustomSky {
             float num4 = (float)Math.Sin(_beams[j].AlphaFrequency * TimeSystem.TimeForVisualEffects * 5f + _beams[j].SinOffset) * 0.1f - 0.1f;
             value = MathHelper.Clamp(value, 0.5f, 1f);
             Texture2D value2 = _beamTexture.Value;
+            Texture2D value3 = _beamTexture2.Value;
             Color color = Color.White;
             color = Color.Lerp(color, Color.Yellow, 0.5f);
             color = Color.Lerp(color, Color.LightYellow, 0.5f);
@@ -136,17 +142,20 @@ sealed class FilamentSky : CustomSky {
             Vector2 position2 = position;
             int width = value2.Width / 2;
             Rectangle bounds = new Rectangle((int)((_beams[j].ClipX * width) + _beams[j].Depth * width) % width, 0, width, value2.Height);
+            Rectangle bounds2 = new Rectangle((int)((_beams[j].ClipX2 * width) + _beams[j].Depth * width) % width, 0, width, value2.Height);
             Vector2 origin = bounds.LeftCenter();
             Color color2 = color * num3 * value * 0.8f * (1f - num4) * 0.45f * _beams[j].Opacity;
             while (attempts-- > 0) {
-                spriteBatch.Draw(value2, position2, bounds, color2, rotation, origin, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value2, position2, bounds, color2 * 0.5f, rotation, origin, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value3, position2, bounds2, color2 * 0.5f, rotation, origin, scale, SpriteEffects.None, 0f);
                 position2 += Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
             }
             attempts = attempts2;
             position2 = position;
             while (attempts-- > 0) {
                 position2 -= Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
-                spriteBatch.Draw(value2, position2, bounds, color2, rotation, origin, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value2, position2, bounds, color2 * 0.5f, rotation, origin, scale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(value3, position2, bounds2, color2 * 0.5f, rotation, origin, scale, SpriteEffects.None, 0f);
             }
         }
     }
@@ -171,7 +180,7 @@ sealed class FilamentSky : CustomSky {
                 _beams[num3].SinOffset = _random.NextFloat() * 6.28f;
                 _beams[num3].AlphaAmplitude = _random.NextFloat() * 5f;
                 _beams[num3].AlphaFrequency = _random.NextFloat() + 1f;
-                _beams[num3].ScaleX = _random.NextFloat(0.85f, 1f);
+                _beams[num3].ScaleX = _random.NextFloat(0.75f, 1f);
                 num3++;
             }
         }
