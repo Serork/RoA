@@ -3003,5 +3003,10 @@ BadgeOfHonor: {
 
 CottonCane: {
 	// DisplayName: Cotton Cane
-	// Tooltip: ""
+	/* Tooltip:
+		'''
+		Launches cotton bolls that hover in the air
+		Right click a cotton boll to launch upwards, spreading cotton fiber
+		'Can we get much higher?'
+		''' */
 }
