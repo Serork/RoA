@@ -2938,7 +2938,11 @@ ChainedCloud: {
 
 ThunderKingsGrace: {
 	DisplayName: Thunder King's Grace
-	Tooltip: Allows the holder to air jump, creating angry clouds mid-air and consuming 25% of wreath charge
+	Tooltip: 
+		'''
+		Allows the holder to air jump, creating angry clouds mid-air and consuming 25% of wreath charge
+		'And wash away the rain'
+		''''
 }
 
 ScrapRing: {
