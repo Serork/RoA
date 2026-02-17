@@ -22,7 +22,9 @@ using Terraria.ModLoader;
 namespace RoA.Content.Backgrounds;
 
 sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
-    private static bool _isDrawingBackwoodsBackground, _isDrawingSurfaceBackground;
+    public static bool IsDrawingBackwoodsBackground { get; private set; }
+    public static bool IsDrawingSurfaceBackground { get; private set; }
+
     private static float _minDepth;
 
     public static byte THEMBGTEXTURECOUNT => 3;
@@ -128,9 +130,9 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
 
     private void On_SkyManager_DrawDepthRange(On_SkyManager.orig_DrawDepthRange orig, SkyManager self, SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         if (!Main.gameMenu) {
-            _isDrawingBackwoodsBackground = Main.bgAlphaFrontLayer[ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface").Slot] > 0f;
-            if ((_isDrawingSurfaceBackground && !_isDrawingBackwoodsBackground) ||
-                _isDrawingBackwoodsBackground) {
+            IsDrawingBackwoodsBackground = Main.bgAlphaFrontLayer[ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface").Slot] > 0f;
+            if ((IsDrawingSurfaceBackground && !IsDrawingBackwoodsBackground) ||
+                IsDrawingBackwoodsBackground) {
                 orig(self, spriteBatch, minDepth, maxDepth);
             }
             return;
@@ -139,12 +141,12 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     }
 
     private void On_Main_DrawSurfaceBG(On_Main.orig_DrawSurfaceBG orig, Main self) {
-        _isDrawingSurfaceBackground = true;
+        IsDrawingSurfaceBackground = true;
         orig(self);
     }
 
     private void On_SkyManager_DrawToDepth(On_SkyManager.orig_DrawToDepth orig, SkyManager self, SpriteBatch spriteBatch, float minDepth) {
-        if (!_isDrawingBackwoodsBackground) {
+        if (!IsDrawingBackwoodsBackground) {
             _minDepth = minDepth;
         }
 
@@ -156,7 +158,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     }
 
     public override bool PreDrawCloseBackground(SpriteBatch spriteBatch) {
-        _isDrawingSurfaceBackground = false;
+        IsDrawingSurfaceBackground = false;
         DrawSurfaceBackground(spriteBatch);
 
         return false;

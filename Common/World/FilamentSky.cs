@@ -160,6 +160,10 @@ sealed class FilamentSky : CustomSky {
             Rectangle bounds3 = new Rectangle((int)((_beams[j].ClipX3 * width) + _beams[j].Depth * width) % width, 0, width, value2.Height);
             Vector2 origin = bounds.LeftCenter();
             Color color2 = color * num3 * value * 0.8f * (1f - num4) * 0.45f * _beams[j].Opacity;
+            float biomeOpacity = Main.bgAlphaFrontLayer[ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface").Slot];
+            if (!BackwoodsBackgroundSurface.IsDrawingSurfaceBackground && BackwoodsBackgroundSurface.IsDrawingBackwoodsBackground && biomeOpacity > 0f) {
+                color2 *= biomeOpacity;
+            }
             float globalOpacity = 0.375f;
             float starOpacity = 0.825f;
             while (attempts-- > 0) {
