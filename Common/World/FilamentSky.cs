@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using ReLogic.Content;
 
 using RoA.Core;
@@ -24,7 +26,7 @@ sealed class FilamentSky : CustomSky {
         public float SinOffset;
         public float AlphaFrequency;
         public float AlphaAmplitude;
-        public float ClipX, ClipX2;
+        public float ClipX, ClipX2, ClipX3;
         public float Opacity;
         public float ScaleX;
     }
@@ -35,7 +37,7 @@ sealed class FilamentSky : CustomSky {
     private bool _isActive;
     private float _fadeOpacity;
 
-    private Asset<Texture2D> _beamTexture, _beamTexture2;
+    private Asset<Texture2D> _beamTexture, _beamTexture2, _beamTexture3;
     private Beam[] _beams;
 
     public override void OnLoad() {
@@ -43,6 +45,7 @@ sealed class FilamentSky : CustomSky {
         _bgTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBackground");
         _beamTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBeam");
         _beamTexture2 = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBeam2");
+        _beamTexture3 = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBeam3");
     }
 
     public override void Update(GameTime gameTime) {
@@ -52,6 +55,10 @@ sealed class FilamentSky : CustomSky {
             _fadeOpacity = Math.Max(0f, _fadeOpacity - 0.01f);
 
         for (int i = 0; i < _beams.Length; i++) {
+            _beams[i].ClipX3 = Helper.Approach(_beams[i].ClipX3, 1f, 0.005f);
+            if (_beams[i].ClipX3 >= 1f) {
+                _beams[i].ClipX3 = 0f;
+            }
             _beams[i].ClipX = Helper.Approach(_beams[i].ClipX, 1f, 0.01f);
             if (_beams[i].ClipX >= 1f) {
                 _beams[i].ClipX = 0f;
@@ -130,6 +137,7 @@ sealed class FilamentSky : CustomSky {
             value = MathHelper.Clamp(value, 0.5f, 1f);
             Texture2D value2 = _beamTexture.Value;
             Texture2D value3 = _beamTexture2.Value;
+            Texture2D value4 = _beamTexture3.Value;
             Color color = Color.White;
             color = Color.Lerp(color, Color.Yellow, 0.5f);
             color = Color.Lerp(color, Color.LightYellow, 0.5f);
@@ -143,20 +151,28 @@ sealed class FilamentSky : CustomSky {
             int width = value2.Width / 2;
             Rectangle bounds = new Rectangle((int)((_beams[j].ClipX * width) + _beams[j].Depth * width) % width, 0, width, value2.Height);
             Rectangle bounds2 = new Rectangle((int)((_beams[j].ClipX2 * width) + _beams[j].Depth * width) % width, 0, width, value2.Height);
+            Rectangle bounds3 = new Rectangle((int)((_beams[j].ClipX3 * width) + _beams[j].Depth * width) % width, 0, width, value2.Height);
             Vector2 origin = bounds.LeftCenter();
             Color color2 = color * num3 * value * 0.8f * (1f - num4) * 0.45f * _beams[j].Opacity;
             float globalOpacity = 0.375f;
+            float starOpacity = 0.75f;
             while (attempts-- > 0) {
-                spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                if (rectangle.Contains((int)position2.X, (int)position2.Y)) {
+                    spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(value4, position2, bounds3, color2 * starOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                }
                 position2 += Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
             }
             attempts = attempts2;
             position2 = position;
             while (attempts-- > 0) {
                 position2 -= Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
-                spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                if (rectangle.Contains((int)position2.X, (int)position2.Y)) {
+                    spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(value4, position2, bounds3, color2 * starOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                }
             }
         }
     }
