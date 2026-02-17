@@ -5,7 +5,7 @@ using ReLogic.Utilities;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Configs;
 using RoA.Common.Sets;
-﻿using RoA.Common.World;
+using RoA.Common.World;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Vanity;
 using RoA.Content.Items.Placeable.Miscellaneous;
@@ -16,26 +16,21 @@ using RoA.Content.Items.Weapons.Ranged;
 using RoA.Content.Items.Weapons.Summon;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.Danger;
-using RoA.Content.Tiles.Decorations;
 using RoA.Content.Tiles.Furniture;
 using RoA.Content.Tiles.LiquidsSpecific;
 using RoA.Content.Tiles.Miscellaneous;
-using RoA.Content.Tiles.Plants;
 using RoA.Content.Tiles.Platforms;
 using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Content.Tiles.Station;
 using RoA.Content.Tiles.Walls;
-using RoA.Content.WorldGenerations;
 using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Biomes.CaveHouse;
 using Terraria.GameContent.Generation;
 using Terraria.ID;
@@ -1744,10 +1739,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void WallBush(int i, int j, bool ignoreWalls = true) {
         float progressX = 1f;
         if (i < Left) {
-            progressX *= (1f - MathF.Abs(((float)i - Left) / 50f));
+            progressX *= (1f - MathF.Abs(((float)i - Left) / 100f));
         }
         if (i > Right) {
-            progressX *= (((float)i - Right) / 50f);
+            progressX *= (1f - ((float)i - Right) / 100f);
         }
         progressX = MathUtils.Clamp01(progressX);
         int sizeX = (int)(_random.Next(8, 17) * progressX);
@@ -4470,6 +4465,11 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(CliffPlaceholderTileType)) {
                     WorldGenHelper.ReplaceTile(i, j, _dirtTileType);
+                    if (_random.NextChance(0.005)) {
+                        int sizeX2 = _random.Next(4, 9);
+                        int sizeY2 = _random.Next(5, 18);
+                        WorldGen.TileRunner(i, j, sizeX2, sizeY2, _stoneTileType);
+                    }
                 }
             }
         }
@@ -5012,8 +5012,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             while (testJ <= max) {
                 x = cliffX + (randomnessPoints[max - testJ] + 1) * dir;
                 if (testJ < startY + 3) {
-                    for (int j = testJ - 30; j < testJ; j++) {
-                        if (Main.tile[x, j].TileType != CliffPlaceholderTileType && Main.tile[x, j].TileType != _dirtTileType) {
+                    for (int j = testJ - 35; j < testJ; j++) {
+                        if (Main.tile[x, j].TileType != _dirtTileType) {
                             WorldGen.KillTile(x, j);
                         }
                     }
