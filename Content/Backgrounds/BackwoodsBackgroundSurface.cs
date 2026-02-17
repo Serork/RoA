@@ -110,8 +110,6 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             }
         }
         UpdateThem();
-
-        _isDrawingBackwoodsBackground = fades[Slot] > 0f;
     }
 
     public override int ChooseCloseTexture(ref float scale, ref double parallax, ref float a, ref float b) => -1;
@@ -125,6 +123,16 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         On_SkyManager.DrawToDepth += On_SkyManager_DrawToDepth;
 
         On_Main.DrawSurfaceBG += On_Main_DrawSurfaceBG;
+        On_SkyManager.DrawDepthRange += On_SkyManager_DrawDepthRange;
+    }
+
+    private void On_SkyManager_DrawDepthRange(On_SkyManager.orig_DrawDepthRange orig, SkyManager self, SpriteBatch spriteBatch, float minDepth, float maxDepth) {
+        _isDrawingBackwoodsBackground = Main.bgAlphaFrontLayer[ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface").Slot] > 0f;
+
+        if ((_isDrawingSurfaceBackground && !_isDrawingBackwoodsBackground) ||
+            _isDrawingBackwoodsBackground) {
+            orig(self, spriteBatch, minDepth, maxDepth);
+        }
     }
 
     private void On_Main_DrawSurfaceBG(On_Main.orig_DrawSurfaceBG orig, Main self) {
@@ -141,12 +149,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     }
 
     private void On_SkyManager_DrawRemainingDepth(On_SkyManager.orig_DrawRemainingDepth orig, SkyManager self, SpriteBatch spriteBatch) {
-        if ((_isDrawingSurfaceBackground && !_isDrawingBackwoodsBackground) ||
-            (_isDrawingBackwoodsBackground && !_isDrawingSurfaceBackground)) {
-            orig(self, spriteBatch);
-        }
-
-        _isDrawingBackwoodsBackground = false;
+        orig(self, spriteBatch);
     }
 
     public override bool PreDrawCloseBackground(SpriteBatch spriteBatch) {
@@ -386,8 +389,6 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                     }
                 }
             }
-
-            _isDrawingSurfaceBackground = false;
         }
     }
 }
