@@ -9,7 +9,7 @@ namespace RoA.Content.Dusts;
 sealed class MercuriumDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) => new(200, 200, 200, 0);
 
-    public override void OnSpawn(Dust dust) {
+    public override void SetStaticDefaults() {
         UpdateType = DustID.Clentaminator_Green;
     }
 

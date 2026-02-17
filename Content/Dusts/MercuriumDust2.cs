@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class MercuriumDust2 : ModDust {
-    public override void OnSpawn(Dust dust) {
+    public override void SetStaticDefaults() {
         UpdateType = DustID.Platinum;
     }
 }

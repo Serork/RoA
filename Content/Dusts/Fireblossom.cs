@@ -9,7 +9,7 @@ namespace RoA.Content.Dusts;
 class Fireblossom : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) => new Color(Color.White.R, Color.White.G, Color.White.B, 0) * (1f - (float)dust.alpha / 255f);
 
-    public override void OnSpawn(Dust dust) => UpdateType = DustID.MeteorHead;
+    public override void SetStaticDefaults() => UpdateType = DustID.MeteorHead;
 
     public override bool PreDraw(Dust dust) {
         if (!dust.noLight)
@@ -22,9 +22,11 @@ class Fireblossom : ModDust {
 sealed class Fireblossom2 : Fireblossom {
     public override string Texture => base.Texture[..^1];
 
-    public override void OnSpawn(Dust dust) {
+    public override void SetStaticDefaults() {
         UpdateType = DustID.MeteorHead;
+    }
 
+    public override void OnSpawn(Dust dust) {
         dust.scale *= 0.75f;
     }
 }

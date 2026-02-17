@@ -4,5 +4,5 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class PineCone : ModDust {
-    public override void OnSpawn(Dust dust) => UpdateType = 53;
+    public override void SetStaticDefaults() => UpdateType = 53;
 }

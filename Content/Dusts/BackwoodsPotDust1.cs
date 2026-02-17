@@ -8,5 +8,5 @@ class BackwoodsPotDust2 : BackwoodsPotDust1 {
 }
 
 class BackwoodsPotDust1 : ModDust {
-    public override void OnSpawn(Dust dust) => UpdateType = DustID.Pot;
+    public override void SetStaticDefaults() => UpdateType = DustID.Pot;
 }

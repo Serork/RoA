@@ -9,5 +9,5 @@ namespace RoA.Content.Dusts;
 sealed class DungeonWindowDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) => base.GetAlpha(dust, lightColor) * Tiles.Decorations.DungeonWindow.OPACITY;
 
-    public override void OnSpawn(Dust dust) => UpdateType = DustID.Glass;
+    public override void SetStaticDefaults() => UpdateType = DustID.Glass;
 }

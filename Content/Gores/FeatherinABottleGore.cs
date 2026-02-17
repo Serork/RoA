@@ -25,7 +25,7 @@ class FeatherinABottleGore1 : ModGore {
 
     public override Color? GetAlpha(Gore gore, Color lightColor) => Color.White * 0.9f;
 
-    public override void OnSpawn(Gore gore, IEntitySource source) {
+    public override void SetStaticDefaults() {
         UpdateType = 11;
     }
 

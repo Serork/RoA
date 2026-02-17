@@ -5,9 +5,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class MiracleMintDust : ModDust {
-    public override void OnSpawn(Dust dust) {
+    public override void SetStaticDefaults() {
         UpdateType = DustID.Demonite;
+    }
 
+    public override void OnSpawn(Dust dust) {
         dust.velocity *= 0.25f;
     }
 
@@ -18,7 +20,9 @@ sealed class MiracleMintDust : ModDust {
     }
 
     public override bool PreDraw(Dust dust) {
-        Lighting.AddLight(dust.position, new Microsoft.Xna.Framework.Vector3(0.3f, 0.6f, 1.2f) * 0.5f);
+        if (!Main.dedServ) {
+            Lighting.AddLight(dust.position, new Microsoft.Xna.Framework.Vector3(0.3f, 0.6f, 1.2f) * 0.5f);
+        }
 
         return base.PreDraw(dust);
     }

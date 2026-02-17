@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class TectonicDust : ModDust {
-    public override void OnSpawn(Dust dust) => UpdateType = -1;
+    public override void SetStaticDefaults() => UpdateType = -1;
 
     public override bool Update(Dust dust) {
         if (dust.customData is int v && v == 1) {

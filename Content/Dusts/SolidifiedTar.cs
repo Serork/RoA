@@ -5,5 +5,5 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class SolidifiedTar : ModDust {
-    public override void OnSpawn(Dust dust) => UpdateType = DustID.Dirt;
+    public override void SetStaticDefaults() => UpdateType = DustID.Dirt;
 }

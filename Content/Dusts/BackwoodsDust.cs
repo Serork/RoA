@@ -5,9 +5,11 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class BackwoodsDust : ModDust {
-    public override void OnSpawn(Dust dust) {
+    public override void SetStaticDefaults() {
         UpdateType = DustID.Demonite;
+    }
 
+    public override void OnSpawn(Dust dust) {
         dust.velocity *= 0.35f;
     }
 

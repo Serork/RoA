@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class SnowDust : ModDust, IDrawDustPrePlayer {
-    public override void OnSpawn(Dust dust) => UpdateType = DustID.Snow;
+    public override void SetStaticDefaults() => UpdateType = DustID.Snow;
 
     public override bool PreDraw(Dust dust) => false;
 

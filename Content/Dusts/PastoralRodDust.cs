@@ -8,5 +8,5 @@ namespace RoA.Content.Dusts;
 sealed class PastoralRodDust : ModDust {
     public override Color? GetAlpha(Dust dust, Color lightColor) => lightColor * (1f - (dust.alpha / 255f));
 
-    public override void OnSpawn(Dust dust) => UpdateType = 262;
+    public override void SetStaticDefaults() => UpdateType = 262;
 }
