@@ -22,7 +22,7 @@ using Terraria.ModLoader;
 namespace RoA.Content.Backgrounds;
 
 sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
-    private static bool _isDrawingBackwoodsBackground, _isDrawingBackwoodsBackground2;
+    private static bool _isDrawingBackwoodsBackground, _isDrawingSurfaceBackground;
     private static float _minDepth;
 
     public static byte THEMBGTEXTURECOUNT => 3;
@@ -128,6 +128,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     }
 
     private void On_Main_DrawSurfaceBG(On_Main.orig_DrawSurfaceBG orig, Main self) {
+        _isDrawingSurfaceBackground = true;
         orig(self);
     }
 
@@ -140,12 +141,16 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     }
 
     private void On_SkyManager_DrawRemainingDepth(On_SkyManager.orig_DrawRemainingDepth orig, SkyManager self, SpriteBatch spriteBatch) {
-        orig(self, spriteBatch);
+        if ((_isDrawingSurfaceBackground && !_isDrawingBackwoodsBackground) ||
+            (_isDrawingBackwoodsBackground && !_isDrawingSurfaceBackground)) {
+            orig(self, spriteBatch);
+        }
 
         _isDrawingBackwoodsBackground = false;
     }
 
     public override bool PreDrawCloseBackground(SpriteBatch spriteBatch) {
+        _isDrawingSurfaceBackground = false;
         DrawSurfaceBackground(spriteBatch);
 
         return false;
@@ -210,7 +215,6 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         }
         float parallaxModifier = 1f;
         if (canBGDraw) {
-            _isDrawingBackwoodsBackground2 = true;
             SkyManager.Instance.SetStartingDepth(_minDepth * 2f);
             var bgScale = 1.25f;
             var bgParallax = 0.3;
@@ -383,7 +387,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                 }
             }
 
-            _isDrawingBackwoodsBackground2 = false;
+            _isDrawingSurfaceBackground = false;
         }
     }
 }
