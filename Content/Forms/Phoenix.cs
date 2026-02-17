@@ -115,6 +115,9 @@ sealed class Phoenix : BaseForm {
         Vector2 drawPosition = new Vector2((int)(drawinfo.Position.X - Main.screenPosition.X - (float)(drawinfo.drawPlayer.bodyFrame.Width / 2) + (float)(drawinfo.drawPlayer.width / 2)), (int)(drawinfo.Position.Y - Main.screenPosition.Y + (float)drawinfo.drawPlayer.height - (float)drawinfo.drawPlayer.bodyFrame.Height + 4f)) + drawinfo.drawPlayer.headPosition + drawinfo.headVect;
         drawPosition += new Vector2(GetData<Phoenix>().xOffset * player.direction, GetData<Phoenix>().yOffset);
         drawPosition.Y += 2f;
+        if (player.gravDir < 0) {
+            drawPosition.Y += 19f;
+        }
         float opacity = player.GetWreathHandler().ActualProgress4;
         float opacity2 = opacity;
         opacity = Utils.GetLerpValue(0.85f, 0.95f, opacity2, true);

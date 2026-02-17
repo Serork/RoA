@@ -155,7 +155,7 @@ sealed class Fireblossom : NatureProjectile {
 
     public void SetPosition(Vector2 position) {
         _position = position;
-        Vector2 center = Main.player[Projectile.owner].Center;
+        Vector2 center = Main.player[Projectile.owner].GetPlayerCorePoint();
         bool flag = (int)Projectile.ai[0] == Projectile.owner;
         Entity entity = flag ? Main.player[(int)Projectile.ai[0]] : Main.npc[(int)Projectile.ai[0]];
         Projectile.rotation = Helper.VelocityAngle((entity.Center - center).SafeNormalize(Vector2.Zero)) + (flag ? MathHelper.PiOver2 : MathHelper.Pi);

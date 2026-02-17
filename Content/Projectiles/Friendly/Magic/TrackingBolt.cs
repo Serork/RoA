@@ -182,21 +182,35 @@ sealed class TrackingBolt : ModProjectile {
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
         float lifetime = 10;
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-        MiscShaderData miscShaderData = GameShaders.Misc["RainbowRod"];
-        miscShaderData.UseSaturation(-2.8f);
-        miscShaderData.UseOpacity(1f);
-        miscShaderData.Apply();
-        _vertexStrip.PrepareStripWithProceduralPadding(
-            Projectile.oldPos,
-            Projectile.oldRot,
-            p => Color.Lerp(new Color(194, 44, 44).MultiplyAlpha(lifetime * (p <= 0.25 ? p / 0.25f : 1f)) * Projectile.Opacity, new Color(250, 198, 164).MultiplyAlpha(0.5f) * Projectile.Opacity, p),
-            p => (float)(35 * Projectile.scale * (1.0 - p)),
-            -Main.screenPosition + Projectile.Size / 2, true);
-        _vertexStrip.DrawTrail();
-        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        spriteBatch.EndBlendState();
+        spriteBatch.DrawWithSnapshot(() => {
+            MiscShaderData miscShaderData = GameShaders.Misc["RainbowRod"];
+            miscShaderData.UseSaturation(-2.8f);
+            miscShaderData.UseOpacity(1f);
+            miscShaderData.Apply();
+            _vertexStrip.PrepareStripWithProceduralPadding(
+                Projectile.oldPos,
+                Projectile.oldRot,
+                p => Color.Lerp(new Color(194, 44, 44).MultiplyAlpha(lifetime * (p <= 0.25 ? p / 0.25f : 1f)) * Projectile.Opacity, new Color(250, 198, 164).MultiplyAlpha(0.5f) * Projectile.Opacity, p),
+                p => (float)(35 * Projectile.scale * (1.0 - p)),
+                -Main.screenPosition + Projectile.Size / 2, true);
+            _vertexStrip.DrawTrail();
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }, sortMode: SpriteSortMode.Immediate, blendState: BlendState.Additive, samplerState: SamplerState.LinearClamp, depthStencilState: DepthStencilState.Default, rasterizerState: RasterizerState.CullNone);
+        //spriteBatch.End();
+        //spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
+        //MiscShaderData miscShaderData = GameShaders.Misc["RainbowRod"];
+        //miscShaderData.UseSaturation(-2.8f);
+        //miscShaderData.UseOpacity(1f);
+        //miscShaderData.Apply();
+        //_vertexStrip.PrepareStripWithProceduralPadding(
+        //    Projectile.oldPos,
+        //    Projectile.oldRot,
+        //    p => Color.Lerp(new Color(194, 44, 44).MultiplyAlpha(lifetime * (p <= 0.25 ? p / 0.25f : 1f)) * Projectile.Opacity, new Color(250, 198, 164).MultiplyAlpha(0.5f) * Projectile.Opacity, p),
+        //    p => (float)(35 * Projectile.scale * (1.0 - p)),
+        //    -Main.screenPosition + Projectile.Size / 2, true);
+        //_vertexStrip.DrawTrail();
+        //Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        //spriteBatch.EndBlendState();
         return false;
     }
 

@@ -73,17 +73,17 @@ sealed class CosmicMana : ModProjectile {
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
         float lifetime = Projectile.timeLeft < 25 ? Projectile.timeLeft / 25f : 1f;
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Main.GameViewMatrix.ZoomMatrix);
-        MiscShaderData miscShaderData = GameShaders.Misc["EmpressBlade"];
-        miscShaderData.UseSaturation(-2.8f);
-        miscShaderData.UseOpacity(2f);
-        miscShaderData.Apply();
-        vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot,
-            StripColors, StripWidth, -Main.screenPosition + Projectile.Size / 2f);
-        vertexStrip.DrawTrail();
-        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        spriteBatch.EndBlendState();
+        spriteBatch.DrawWithSnapshot(() => {
+            MiscShaderData miscShaderData = GameShaders.Misc["EmpressBlade"];
+            miscShaderData.UseSaturation(-2.8f);
+            miscShaderData.UseOpacity(2f);
+            miscShaderData.Apply();
+            vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot,
+                StripColors, StripWidth, -Main.screenPosition + Projectile.Size / 2f);
+            vertexStrip.DrawTrail();
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }, sortMode: SpriteSortMode.Immediate, blendState: BlendState.Additive, samplerState: SamplerState.LinearClamp, depthStencilState: DepthStencilState.Default, rasterizerState: RasterizerState.CullNone);
+
         Texture2D projectileTexture = Projectile.GetTexture();
         spriteBatch.Draw(projectileTexture, Projectile.Center - Main.screenPosition, new Rectangle?(),
             new Color(0.1f + Utils.Remap(Projectile.ai[1], 0, 300, 0, 0.9f), 0.1f + Utils.Remap(Projectile.ai[1], 0, 300, 0, 0.9f), 1f, 1f) * Projectile.Opacity, Projectile.rotation, projectileTexture.Size() / 2f,

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Common.Cache;
 using RoA.Core.Utility;
 
 using System;
@@ -148,14 +149,14 @@ sealed class MeltingStar : ModProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         SpriteBatch spriteBatch = Main.spriteBatch;
+        SpriteBatchSnapshot snapshot = spriteBatch.CaptureSnapshot();
         float lifetime = Projectile.timeLeft < 15 ? Projectile.timeLeft / 15f : 1f;
         spriteBatch.BeginBlendState(BlendState.AlphaBlend, shader: true);
         GameShaders.Misc["MagicMissile"].Apply();
         vertexStrip.PrepareStripWithProceduralPadding(Projectile.oldPos, Projectile.oldRot, p => Color.Lerp(Color.OrangeRed.MultiplyAlpha(lifetime * (p <= 0.2 ? p / 0.2f : 1f)), Color.Yellow.MultiplyAlpha(0.5f), p), p => (float)(60.0 * Projectile.scale * (1.0 - p)), -Main.screenPosition + Projectile.Size / 2, true);
         vertexStrip.DrawTrail();
         Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, RasterizerState.CullCounterClockwise, null, Main.GameViewMatrix.ZoomMatrix);
+        spriteBatch.Begin(in snapshot, true);
         //spriteBatch.BeginBlendState(BlendState.Additive);
         //Texture2D backTexture = (Texture2D)ModContent.Request<Texture2D>(ResourceManager.TexturesPerType + "Light");
         //spriteBatch.DrawSelf(backTexture, Projectile.Center - Main.screenPosition, new Rectangle?(), DrawColor.FromNonPremultiplied(byte.MaxValue, 255, 0, 50) * Projectile.Opacity, 0.0f, backTexture.Size() / 2f, (float)(0.8f + 0.2f * Math.Sin(Main.time / 10)) * 0.75f, SpriteEffects.None, 0.0f);

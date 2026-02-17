@@ -7,6 +7,7 @@ using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
@@ -67,7 +68,7 @@ sealed class RootRing : NatureProjectile {
         float projOpacity = 1f - (float)_alpha / 255f;
         Lighting.AddLight(Projectile.Center, new Color(248, 119, 119).ToVector3() * projOpacity * 1.125f);
 
-        Vector2 position = new((float)(player.Center.X - (Projectile.width / 2)), (float)(player.Center.Y - 90 + (float)(player.gfxOffY - 60.0 +
+        Vector2 position = new((float)(player.Center.X - (Projectile.width / 2)), (float)(player.GetPlayerCorePoint().Y - 88 + (float)(-60.0 +
             (player.gravDir == -1f ? -120f : 0f))));
         Projectile.position = new Vector2((int)position.X, (int)position.Y);
         if (player.gravDir == -1.0) Projectile.position.Y += 120f;
@@ -116,7 +117,7 @@ sealed class RootRing : NatureProjectile {
         SpriteBatch batch = Main.spriteBatch;
         SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
         batch.End();
-        batch.Begin(SpriteSortMode.Deferred, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, Main.GameViewMatrix.ZoomMatrix);
+        batch.Begin(SpriteSortMode.Deferred, snapshot.blendState, SamplerState.PointClamp, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
         Texture2D texture = Projectile.GetTexture();
         Vector2 position = Projectile.Center - Main.screenPosition;
         Player player = Main.player[Projectile.owner];
