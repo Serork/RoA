@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Core;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 
