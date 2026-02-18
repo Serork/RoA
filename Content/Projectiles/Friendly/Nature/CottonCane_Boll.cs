@@ -60,7 +60,7 @@ sealed class CottonBoll : InteractableProjectile_Nature {
 
         Projectile.Opacity = 0f;
 
-        _scale = 0.25f;
+        _scale = 0.5f;
     }
 
     public override bool? CanDamage() => false;
