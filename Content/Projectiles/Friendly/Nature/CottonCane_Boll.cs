@@ -5,7 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Projectiles;
-using RoA.Content.Items;
+using RoA.Content.Dusts;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -84,46 +84,96 @@ sealed class CottonBoll : InteractableProjectile_Nature {
         Projectile.Animate(10);
 
         if (Projectile.ai[2] > 1f) {
+            Projectile.timeLeft = 21;
+
             Projectile.ai[2]--;
         }
         else if (Projectile.ai[2] == 1f) {
+            Projectile.timeLeft = 21;
+
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.1f);
             if (Projectile.Opacity <= 0f) {
                 Projectile.Kill();
             }
         }
         else {
-            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+            if (Projectile.timeLeft < 20) {
+                Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.1f);
+                if (Projectile.Opacity <= 0f) {
+                    Projectile.Kill();
+                }
+            }
+            else {
+                Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
+            }
         }
 
-            bool flag = false;
+        bool flag = false;
         if (Projectile.ai[2] > 0f) {
             Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.X * 0.1f, 0.1f);
             flag = true;
         }
 
+        if (Main.rand.NextBool(50)) {
+            for (int i = 0; i < 1; i++) {
+                Vector2 position = Projectile.Center - Vector2.UnitY * Projectile.height / 3 + Main.rand.NextVector2CircularEdge(10f, 10f);
+                Vector2 velocity = -Vector2.UnitY * Main.rand.NextFloat(1f, 2f) + Vector2.UnitX * Main.rand.NextFloat(-1f, 1f);
+                velocity.Y *= 0.5f;
+                Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<Dusts.CottonDust>(), velocity, Alpha: 25);
+                dust.scale = Main.rand.NextFloat(0.8f, 1.2f);
+                dust.scale *= 1f;
+                dust.alpha = Projectile.alpha;
+            }
+        }
+
         if (Projectile.ai[1]-- > 0f) {
+            Projectile.timeLeft = 21;
+
             pushOthers();
             pushOthers();
 
             Projectile.localAI[2]++;
-            if (Projectile.IsOwnerLocal() && Projectile.localAI[2] > 4f) {
+            if (Projectile.localAI[2] > 2f) {
                 Projectile.localAI[2] = 0f;
 
-                _nextFiberDirectedLeft = !_nextFiberDirectedLeft;
-
-                Vector2 position = Projectile.Center;
                 Vector2 velocity = Vector2.UnitX * 5f * _nextFiberDirectedLeft.ToDirectionInt();
-                int damage = Projectile.damage;
-                float knockBack = Projectile.knockBack;
-                ProjectileUtils.SpawnPlayerOwnedProjectile<CottonFiber>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromThis()) {
-                    Position = position,
-                    Velocity = velocity,
-                    Damage = damage,
-                    KnockBack = knockBack
-                });
 
-                Projectile.netUpdate = true;
+                if (Main.rand.NextBool(3)) {
+                    int num693 = 1;
+                    for (int num694 = 0; num694 < num693; num694++) {
+                        int num695 = Dust.NewDust(Projectile.Center, 0, 0, ModContent.DustType<CottonDust>(), 0f, 0f, 0);
+                        Dust dust2 = Main.dust[num695];
+                        Vector2 position = Projectile.Center - Vector2.UnitY * Projectile.height / 4 + Main.rand.RandomPointInArea(4f);
+                        dust2.position = position;
+                        dust2.velocity *= 1.6f;
+                        dust2 = Main.dust[num695];
+                        dust2.velocity += -Projectile.velocity * (Main.rand.NextFloat() * 2f - 1f) * 2f;
+                        Main.dust[num695].scale = 1f;
+                        Main.dust[num695].fadeIn = 1.5f;
+                        Main.dust[num695].noGravity = true;
+                        dust2 = Main.dust[num695];
+                        dust2.velocity *= 0.7f;
+                        dust2 = Main.dust[num695];
+                        dust2.position += Main.dust[num695].velocity * 5f;
+                        dust2.velocity += velocity;
+                    }
+                }
+
+                if (Projectile.IsOwnerLocal()) {
+                    _nextFiberDirectedLeft = !_nextFiberDirectedLeft;
+
+                    Vector2 position = Projectile.Center - Vector2.UnitY * Projectile.height / 3 + Main.rand.RandomPointInArea(10f);
+                    int damage = Projectile.damage;
+                    float knockBack = Projectile.knockBack;
+                    ProjectileUtils.SpawnPlayerOwnedProjectile<CottonFiber>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromThis()) {
+                        Position = position,
+                        Velocity = velocity,
+                        Damage = damage,
+                        KnockBack = knockBack
+                    });
+
+                    Projectile.netUpdate = true;
+                }
             }
 
             Projectile.velocity.Y -= 0.4f;

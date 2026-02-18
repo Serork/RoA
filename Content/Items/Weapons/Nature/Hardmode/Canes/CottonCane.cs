@@ -1,7 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
 using RoA.Common.Players;
+using RoA.Common.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -18,6 +22,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 
 using static System.Net.Mime.MediaTypeNames;
+using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 
@@ -61,6 +66,25 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
                 spawnPosition += spawnPosition.DirectionTo(player.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
             }
             return spawnPosition;
+        }
+
+        protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
+            Vector2 to = GetSpawnPosition(player);
+            Vector2 to2 = to;
+            Vector2 velocity = Owner.GetPlayerCorePoint().DirectionTo(to);
+
+            if (Main.rand.NextBool(10)) {
+                for (int i = 0; i < 1; i++) {
+                    Vector2 position = corePosition + Main.rand.RandomPointInArea(10f) * 0.75f;
+                    Vector2 velocity2 = -Vector2.UnitY * Main.rand.NextFloat(1f, 2f) + Vector2.UnitX * Main.rand.NextFloat(-1f, 1f);
+                    velocity2.Y *= 0.5f;
+                    Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<Dusts.CottonDust>(), velocity2, Alpha: 25);
+                    dust.scale = Main.rand.NextFloat(0.8f, 1.2f);
+                    dust.scale *= 1.05f;
+                    dust.alpha = Projectile.alpha;
+                    dust.velocity += velocity * 0.5f;
+                }
+            }
         }
 
         protected override void AfterProcessingCane() {
@@ -110,6 +134,30 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
                     }
                 }
                 index++;
+            }
+
+            if (Shot) {
+                Projectile.localAI[2]++;
+            }
+
+            {
+                if (Main.rand.NextChance(Projectile.localAI[2] / 10f)) {
+                    return;
+                }
+                if (Main.rand.NextBool()) {
+                    return;
+                }
+                Vector2 to = GetSpawnPosition(Owner);
+                Vector2 to2 = to;
+                Vector2 velocity = Owner.GetPlayerCorePoint().DirectionTo(to);
+                to -= velocity * 20f;
+                velocity = velocity.RotatedBy(MathHelper.PiOver2 * 0.75f * Main.rand.NextFloat(0.5f, 1f) * Main.rand.NextBool().ToDirectionInt());
+                velocity *= Main.rand.NextFloat(2.5f, 5f);
+                CottonDust2? cottonDust = AdvancedDustSystem.New<CottonDust2>(AdvancedDustLayer.ABOVEDUSTS)?
+                    .Setup(to + Main.rand.RandomPointInArea(35f),
+                           velocity,
+                           scale: 1f);
+                cottonDust?.CorePosition = to2;
             }
         }
     }

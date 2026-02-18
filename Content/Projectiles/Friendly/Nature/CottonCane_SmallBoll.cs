@@ -33,12 +33,22 @@ sealed class CottonBollSmall : NatureProjectile {
     }
 
     public override void AI() {
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
-
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
             Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
+        }
+
+        if (Main.rand.NextBool(100)) {
+            for (int i = 0; i < 1; i++) {
+                Vector2 position = Projectile.Center - Vector2.UnitY * Projectile.height / 3 + Main.rand.RandomPointInArea(4f);
+                Vector2 velocity = -Vector2.UnitY * Main.rand.NextFloat(1f, 2f) + Vector2.UnitX * Main.rand.NextFloat(-1f, 1f);
+                velocity.Y *= 0.25f;
+                Dust dust = Dust.NewDustPerfect(position, ModContent.DustType<Dusts.CottonDust>(), velocity, Alpha: 25);
+                dust.scale = Main.rand.NextFloat(0.8f, 1.2f);
+                dust.scale *= 0.75f;
+                dust.alpha = Projectile.alpha;
+            }
         }
 
         float offsetY = 0.1f;
@@ -48,7 +58,17 @@ sealed class CottonBollSmall : NatureProjectile {
 
         Projectile.velocity *= 0.97f;
 
-        Projectile.OffsetTheSameProjectile(.05f);
+        Projectile.OffsetTheSameProjectile(0.05f);
+
+        if (Projectile.timeLeft < 20) {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.1f);
+            if (Projectile.Opacity <= 0f) {
+                Projectile.Kill();
+            }
+        }
+        else {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+        }
     }
 
     public override void OnKill(int timeLeft) {
