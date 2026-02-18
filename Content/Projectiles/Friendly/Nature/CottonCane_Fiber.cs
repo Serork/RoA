@@ -1,18 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 
-using RoA.Common;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
-using Terraria;
-using Terraria.ModLoader;
+using System;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-[Tracked]
-sealed class CottonBollSmall : NatureProjectile {
+sealed class CottonFiber : NatureProjectile {
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(5);
 
     protected override void SafeSetDefaults() {
@@ -28,31 +25,27 @@ sealed class CottonBollSmall : NatureProjectile {
         Projectile.aiStyle = -1;
 
         Projectile.manualDirectionChange = true;
-
-        Projectile.Opacity = 0f;
     }
 
     public override void AI() {
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
-
-        if (Projectile.localAI[0] == 0f) {
-            Projectile.localAI[0] = 1f;
-
-            Projectile.SetDirection(Main.rand.NextBool().ToDirectionInt());
-        }
-
-        float offsetY = 0.1f;
-        Projectile.localAI[0] = Helper.Wave(-offsetY, offsetY, 2.5f, Projectile.identity);
-        Projectile.velocity.Y += Projectile.localAI[0] * 0.1f;
-        Projectile.rotation = Projectile.localAI[0] * 1f + Projectile.velocity.X * 0.1f;
-
         Projectile.velocity *= 0.97f;
 
-        Projectile.OffsetTheSameProjectile(.05f);
+        if (Projectile.velocity.Length() > 0.1f) {
+            Projectile.SetDirection(Projectile.velocity.X.GetDirection());
+        }
+
+        Projectile.rotation += 0.5f * Projectile.spriteDirection * MathUtils.Clamp01(Projectile.SpeedX());
+
+        if (Projectile.SpeedX() < 1f) {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.025f);
+            if (Projectile.Opacity <= 0f) {
+                Projectile.Kill();
+            }
+        }
     }
 
     public override void OnKill(int timeLeft) {
-        
+
     }
 
     public override bool PreDraw(ref Color lightColor) {

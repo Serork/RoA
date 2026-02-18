@@ -11,6 +11,8 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
+using System.IO;
+
 using Terraria;
 using Terraria.ModLoader;
 
@@ -22,7 +24,17 @@ sealed class CottonBoll : InteractableProjectile_Nature {
 
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(15);
 
+    private bool _nextFiberDirectedLeft;
+
     protected override Asset<Texture2D> HoverTexture => _hoverTexture;
+
+    protected override void SafeSendExtraAI(BinaryWriter writer) {
+        writer.Write(_nextFiberDirectedLeft);
+    }
+
+    protected override void SafeReceiveExtraAI(BinaryReader reader) {
+        _nextFiberDirectedLeft = reader.ReadBoolean();
+    }
 
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(4);
@@ -52,10 +64,6 @@ sealed class CottonBoll : InteractableProjectile_Nature {
     public override bool? CanCutTiles() => false;
 
     public override void SafeAI() {
-        if (Projectile.localAI[2] == 0f) {
-            Projectile.localAI[2] = 1f;
-        }
-
         void pushOthers() {
             foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CottonBoll>(checkProjectile => checkProjectile.SameAs(Projectile))) {
                 if (Projectile.Distance(projectile.Center) > Projectile.width * 1.25f) {
@@ -84,8 +92,11 @@ sealed class CottonBoll : InteractableProjectile_Nature {
                 Projectile.Kill();
             }
         }
+        else {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+        }
 
-        bool flag = false;
+            bool flag = false;
         if (Projectile.ai[2] > 0f) {
             Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.X * 0.1f, 0.1f);
             flag = true;
@@ -94,6 +105,26 @@ sealed class CottonBoll : InteractableProjectile_Nature {
         if (Projectile.ai[1]-- > 0f) {
             pushOthers();
             pushOthers();
+
+            Projectile.localAI[2]++;
+            if (Projectile.IsOwnerLocal() && Projectile.localAI[2] > 4f) {
+                Projectile.localAI[2] = 0f;
+
+                _nextFiberDirectedLeft = !_nextFiberDirectedLeft;
+
+                Vector2 position = Projectile.Center;
+                Vector2 velocity = Vector2.UnitX * 5f * _nextFiberDirectedLeft.ToDirectionInt();
+                int damage = Projectile.damage;
+                float knockBack = Projectile.knockBack;
+                ProjectileUtils.SpawnPlayerOwnedProjectile<CottonFiber>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromThis()) {
+                    Position = position,
+                    Velocity = velocity,
+                    Damage = damage,
+                    KnockBack = knockBack
+                });
+
+                Projectile.netUpdate = true;
+            }
 
             Projectile.velocity.Y -= 0.4f;
             if (Projectile.velocity.Y > 16f) {
@@ -113,10 +144,6 @@ sealed class CottonBoll : InteractableProjectile_Nature {
         }
         else {
             Projectile.velocity *= Projectile.ai[2] > 0f ? 0.9f : 0.97f;
-
-            if (!flag) {
-                Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
-            }
         }
 
         if (!flag) {
