@@ -46,13 +46,14 @@ static class ProjectileUtils {
             frameBox.Size() / 2, projectile.scale, 0, 0);
     }
 
-    public static void QuickDrawAnimated(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null, byte maxFrames = 0, Vector2? scale = null, Vector2? origin = null, Vector2? originScale = null, SpriteEffects? spriteEffects = null, Rectangle? frameBox = null) {
+    public static void QuickDrawAnimated(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null, byte maxFrames = 0, Vector2? scale = null, float? scale_float = null, Vector2? origin = null, Vector2? originScale = null, SpriteEffects? spriteEffects = null, Rectangle? frameBox = null) {
         Texture2D mainTex = texture ?? projectile.GetTexture();
 
         int frameSize = mainTex.Height / (maxFrames != 0 ? maxFrames : Main.projFrames[projectile.type]);
         frameBox ??= new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
         SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
         origin ??= frameBox.Value.Size() / 2;
+        scale_float ??= projectile.scale;
         if (originScale != null) {
             origin *= originScale;
         }
@@ -62,27 +63,7 @@ static class ProjectileUtils {
         }
         else {
             Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition /*+ Vector2.UnitY * projectile.gfxOffY*/, frameBox, lightColor, projectile.rotation + exRot,
-                origin.Value, projectile.scale, effects, 0);
-        }
-    }
-
-    public static void QuickDrawAnimated(this Projectile projectile, Color lightColor, float exRot = 0f, Texture2D? texture = null, byte maxFrames = 0, float? scale = null, Vector2? origin = null, Vector2? originScale = null, SpriteEffects? spriteEffects = null, Rectangle? frameBox = null) {
-        Texture2D mainTex = texture ?? projectile.GetTexture();
-
-        int frameSize = mainTex.Height / (maxFrames != 0 ? maxFrames : Main.projFrames[projectile.type]);
-        frameBox ??= new(0, frameSize * projectile.frame, mainTex.Width, frameSize);
-        SpriteEffects effects = spriteEffects ?? projectile.spriteDirection.ToSpriteEffects();
-        origin ??= frameBox.Value.Size() / 2;
-        if (originScale != null) {
-            origin *= originScale;
-        }
-        if (scale != null) {
-            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition/* + Vector2.UnitY * projectile.gfxOffY*/, frameBox, lightColor, projectile.rotation + exRot,
-                origin.Value, scale.Value, effects, 0);
-        }
-        else {
-            Main.spriteBatch.Draw(mainTex, projectile.Center - Main.screenPosition /*+ Vector2.UnitY * projectile.gfxOffY*/, frameBox, lightColor, projectile.rotation + exRot,
-                origin.Value, projectile.scale, effects, 0);
+                origin.Value, scale_float.Value, effects, 0);
         }
     }
 

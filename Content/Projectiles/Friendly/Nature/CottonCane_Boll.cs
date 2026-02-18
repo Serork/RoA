@@ -227,7 +227,7 @@ sealed class CottonBoll : InteractableProjectile_Nature {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, scale: _scale);
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, scale_float: _scale);
 
         return false;
     }
@@ -240,6 +240,6 @@ sealed class CottonBoll : InteractableProjectile_Nature {
             return;
         }
 
-        Projectile.QuickDrawAnimated(selectionGlowColor, texture: _hoverTexture.Value, scale: _scale);
+        Projectile.QuickDrawAnimated(selectionGlowColor, texture: _hoverTexture.Value, scale_float: _scale);
     }
 }
