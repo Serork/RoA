@@ -45,12 +45,28 @@ sealed class CottonBoll : InteractableProjectile_Nature {
     public override bool? CanCutTiles() => false;
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDraw(lightColor);
+        Projectile.QuickDraw(lightColor * Projectile.Opacity);
 
         return false;
     }
 
     public override void SafeAI() {
+        if (Projectile.ai[2] > 1f) {
+            Projectile.ai[2]--;
+        }
+        else if (Projectile.ai[2] == 1f) {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 0f, 0.1f);
+            if (Projectile.Opacity <= 0f) {
+                Projectile.Kill();
+            }
+        }
+
+        bool flag = false;
+        if (Projectile.ai[2] > 0f) {
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, 0f, 0.2f);
+            flag = true;
+        }
+
         if (Projectile.ai[1]-- > 0f) {
             Projectile.velocity.Y -= 0.4f;
             if (Projectile.velocity.Y > 16f) {
@@ -59,9 +75,22 @@ sealed class CottonBoll : InteractableProjectile_Nature {
             if (Projectile.IsOwnerLocal()) {
                 Player.BlockInteractionWithProjectiles = 30;
             }
+            if (Projectile.ai[1] == 1f) {
+                Projectile.ai[2] = 30f;
+            }
+
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, 0f, 0.2f);
+            flag = true;
         }
         else {
             Projectile.velocity *= 0.9f;
+        }
+
+        if (!flag) {
+            float offsetY = 0.1f;
+            Projectile.localAI[0] = Helper.Wave(-offsetY, offsetY, 2.5f, Projectile.identity);
+            Projectile.velocity.Y += Projectile.localAI[0] * 0.25f;
+            Projectile.rotation = Projectile.localAI[0] * 1f;
         }
     }
 
@@ -73,7 +102,7 @@ sealed class CottonBoll : InteractableProjectile_Nature {
     }
 
     protected override void OnHover(Player player) {
-        if (Player.BlockInteractionWithProjectiles > 0) {
+        if (Player.BlockInteractionWithProjectiles > 0 || Projectile.Opacity < 1f) {
             return;
         }
 
@@ -84,6 +113,9 @@ sealed class CottonBoll : InteractableProjectile_Nature {
 
     protected override void DrawHoverMask(SpriteBatch spriteBatch, Color selectionGlowColor) {
         if (Projectile.IsOwnerLocal() && Player.BlockInteractionWithProjectiles > 0) {
+            return;
+        }
+        if (Projectile.Opacity < 1f) {
             return;
         }
 

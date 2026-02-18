@@ -38,7 +38,7 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
 
         public static Vector2 GetSpawnPosition(Player player) {
             Vector2 spawnPosition = player.GetPlayerCorePoint();
-            int maxChecks = 50;
+            int maxChecks = 25;
             while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
                 spawnPosition += spawnPosition.DirectionTo(player.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
             }

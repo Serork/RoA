@@ -314,7 +314,7 @@ sealed class Phoenix : BaseForm {
             }
 
             if (player.whoAmI == Main.myPlayer) {
-                Main.SetCameraLerp(0.075f, 1);
+                Main.SetCameraLerp(0.075f, 0);
                 //if (Main.mapTime < 5)
                 //    Main.mapTime = 5;
 

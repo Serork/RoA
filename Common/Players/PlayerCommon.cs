@@ -1260,14 +1260,23 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         {
             if (CollidedWithCottonBoll) {
-                if (!CottonBollICollidedWith.active || CottonBollICollidedWith.ai[1] <= 0f) {
+                if (!CottonBollICollidedWith.active || CottonBollICollidedWith.ai[1] <= 0f || CottonBollICollidedWith.ai[2] >= 1f) {
                     CollidedWithCottonBoll = false;
+                    Player.shimmering = false;
                     Player.velocity.Y = -10f;
                     return;
                 }
 
-                Player.position = Vector2.Lerp(Player.position, CottonBollICollidedWith.Center - Player.Size / 2f, 0.5f);
-                Player.velocity.Y = 0f;
+                if (Player.IsLocal()) {
+                    Main.SetCameraLerp(0.25f, 0);
+                }
+
+                Player.shimmering = true;
+                Player.shimmerTransparency = 0f;
+
+                Player.velocity.Y = 1f;
+
+                Player.position = Vector2.Lerp(Player.position, CottonBollICollidedWith.Center - Player.Size / 2f, MathUtils.Clamp01(0.01f + (CottonBollICollidedWith.velocity.Y < 0f ? MathF.Abs(CottonBollICollidedWith.velocity.Y * 0.1f) : 0f)));
                 Player.fallStart = (int)(Player.position.Y / 16f);
                 Player.gravity = 0f;
             }

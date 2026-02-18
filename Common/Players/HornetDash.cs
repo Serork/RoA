@@ -74,7 +74,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         Player.eocDash = (int)DashTime;
         if (DashTime == 0f) {
-            Projectile hornetSpear = TrackedEntitiesSystem.GetSingleTrackedProjectile<HornetSpear>(checkProjectile => checkProjectile.owner != Player.whoAmI);
+            Projectile hornetSpear = TrackedEntitiesSystem.GetSingleTrackedProjectile<HornetSpear>(checkProjectile => checkProjectile.owner != Player.whoAmI)!;
             hornetSpear.ai[1] = 1f;
             hornetSpear.netUpdate = true;
 
