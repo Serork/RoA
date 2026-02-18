@@ -23,10 +23,11 @@ static partial class ProjectileExtensions {
         }
     }
 
-    public static bool NearestTheSame(this Projectile projectile, out Projectile checkProjectile, int type = -1) {
+    public static bool NearestTheSame(this Projectile projectile, out Projectile checkProjectile, int type = -1, int? width = null) {
+        width ??= projectile.width;
         for (int i = 0; i < Main.projectile.Length; i++) {
             Projectile projectile2 = Main.projectile[i];
-            if (i != projectile.whoAmI && projectile2.active && (projectile2.type == projectile.type || type == projectile2.type) && Math.Abs(projectile.position.X - projectile2.position.X) + Math.Abs(projectile.position.Y - projectile2.position.Y) < projectile.width) {
+            if (i != projectile.whoAmI && projectile2.active && (projectile2.type == projectile.type || type == projectile2.type) && Math.Abs(projectile.position.X - projectile2.position.X) + Math.Abs(projectile.position.Y - projectile2.position.Y) < width) {
                 checkProjectile = projectile2;
                 return true;
             }

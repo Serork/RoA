@@ -1276,7 +1276,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
                 Player.velocity.Y = 1f;
 
-                Player.position = Vector2.Lerp(Player.position, CottonBollICollidedWith.Center - Player.Size / 2f, MathUtils.Clamp01(0.01f + (CottonBollICollidedWith.velocity.Y < 0f ? MathF.Abs(CottonBollICollidedWith.velocity.Y * 0.1f) : 0f)));
+                Player.position = Vector2.Lerp(Player.position, CottonBollICollidedWith.Center - Player.Size / 2f + Vector2.UnitY * 10f, MathUtils.Clamp01(0.01f + (CottonBollICollidedWith.velocity.Y < 0f ? MathF.Abs(CottonBollICollidedWith.velocity.Y * 0.1f) : 0f)));
                 Player.fallStart = (int)(Player.position.Y / 16f);
                 Player.gravity = 0f;
             }

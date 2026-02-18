@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common;
 using RoA.Common.Projectiles;
 using RoA.Content.Items;
 using RoA.Core.Defaults;
@@ -15,6 +16,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+[Tracked]
 sealed class CottonBoll : InteractableProjectile_Nature {
     private static Asset<Texture2D> _hoverTexture = null!;
 
@@ -23,6 +25,8 @@ sealed class CottonBoll : InteractableProjectile_Nature {
     protected override Asset<Texture2D> HoverTexture => _hoverTexture;
 
     public override void SetStaticDefaults() {
+        Projectile.SetFrameCount(4);
+
         if (!Main.dedServ) {
             _hoverTexture = ModContent.Request<Texture2D>(Texture + "_Hover");
         }
@@ -40,18 +44,33 @@ sealed class CottonBoll : InteractableProjectile_Nature {
         Projectile.netImportant = true;
 
         Projectile.manualDirectionChange = true;
+
+        Projectile.Opacity = 0f;
     }
 
     public override bool? CanDamage() => false;
     public override bool? CanCutTiles() => false;
 
-    public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDraw(lightColor * Projectile.Opacity);
-
-        return false;
-    }
-
     public override void SafeAI() {
+        if (Projectile.localAI[2] == 0f) {
+            Projectile.localAI[2] = 1f;
+        }
+
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CottonBoll>(checkProjectile => checkProjectile.SameAs(Projectile))) {
+            if (Projectile.Distance(projectile.Center) > Projectile.width * 1.25f) {
+                continue;
+            }
+            projectile.velocity += projectile.DirectionFrom(Projectile.Center) * TimeSystem.LogicDeltaTime * 2f;
+        }
+        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CottonBollSmall>()) {
+            if (Projectile.Distance(projectile.Center) > Projectile.width * 1.25f) {
+                continue;
+            }
+            projectile.velocity += projectile.DirectionFrom(Projectile.Center) * TimeSystem.LogicDeltaTime * 2f;
+        }
+
+        Projectile.Animate(10);
+
         if (Projectile.ai[2] > 1f) {
             Projectile.ai[2]--;
         }
@@ -86,13 +105,15 @@ sealed class CottonBoll : InteractableProjectile_Nature {
             flag = true;
         }
         else {
-            Projectile.velocity *= 0.9f;
+            Projectile.velocity *= 0.97f;
+
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
         }
 
         if (!flag) {
             float offsetY = 0.1f;
             Projectile.localAI[0] = Helper.Wave(-offsetY, offsetY, 2.5f, Projectile.identity);
-            Projectile.velocity.Y += Projectile.localAI[0] * 0.25f;
+            Projectile.velocity.Y += Projectile.localAI[0] * 0.15f;
             Projectile.rotation = Projectile.localAI[0] * 1f;
         }
     }
@@ -111,7 +132,13 @@ sealed class CottonBoll : InteractableProjectile_Nature {
 
         player.noThrow = 2;
         player.cursorItemIconEnabled = true;
-        player.cursorItemIconID = ModContent.ItemType<CottonBollSmall>();
+        player.cursorItemIconID = ModContent.ItemType<Items.CottonBollSmall>();
+    }
+
+    public override bool PreDraw(ref Color lightColor) {
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity);
+
+        return false;
     }
 
     protected override void DrawHoverMask(SpriteBatch spriteBatch, Color selectionGlowColor) {
@@ -122,6 +149,6 @@ sealed class CottonBoll : InteractableProjectile_Nature {
             return;
         }
 
-        Projectile.QuickDraw(selectionGlowColor, texture: _hoverTexture.Value);
+        Projectile.QuickDrawAnimated(selectionGlowColor, texture: _hoverTexture.Value);
     }
 }
