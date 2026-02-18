@@ -7,6 +7,7 @@ using RoA.Common.Projectiles;
 using RoA.Content.Items;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
@@ -63,7 +64,7 @@ sealed class CottonBoll : InteractableProjectile_Nature {
 
         bool flag = false;
         if (Projectile.ai[2] > 0f) {
-            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, 0f, 0.2f);
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.X * 0.1f, 0.1f);
             flag = true;
         }
 
@@ -79,7 +80,9 @@ sealed class CottonBoll : InteractableProjectile_Nature {
                 Projectile.ai[2] = 30f;
             }
 
-            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, 0f, 0.2f);
+            Projectile.velocity += Projectile.Center.DirectionTo(Projectile.GetOwnerAsPlayer().GetPlayerCorePoint()) * 0.1f * new Vector2(1f, 1f);
+
+            Projectile.rotation = Utils.AngleLerp(Projectile.rotation, Projectile.velocity.X * 0.1f, 0.1f);
             flag = true;
         }
         else {
