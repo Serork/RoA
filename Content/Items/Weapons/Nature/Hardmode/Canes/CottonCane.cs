@@ -52,6 +52,8 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
             _anglesTaken = [];
         }
 
+        protected override Vector2 CorePositionOffsetFactor() => new(0.1f, 0f);
+
         protected override bool ShouldWaitUntilProjDespawn() => false;
 
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
