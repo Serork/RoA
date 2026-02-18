@@ -97,7 +97,7 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
                     _smallBollSpawned[index] = true;
                     Projectile.localAI[0] = 1f;
 
-                    SoundEngine.PlaySound(SoundID.Item20 with { Pitch = 1.75f, Volume = 0.5f }, CorePosition);
+                    SoundEngine.PlaySound(SoundID.Item20 with { Pitch = 1f, Volume = 0.5f }, CorePosition);
 
                     Vector2 spawnPosition = CorePosition;
                     Vector2 velocity = Vector2.Zero;
