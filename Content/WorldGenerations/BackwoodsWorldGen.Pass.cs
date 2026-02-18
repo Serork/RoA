@@ -5178,7 +5178,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //    }
         //}
         for (int i = left - 20; i <= right + 20; i++) {
-            if (i > CenterX - 10 && i < CenterX + 22) {
+            if (i > CenterX - 10 && i < CenterX + 25) {
                 continue;
             }
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < BackwoodsVars.FirstTileYAtCenter + 20; j++) {
