@@ -37,11 +37,13 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
     protected override ushort ProjectileTypeToCreate() => (ushort)ModContent.ProjectileType<CottonBoll>();
 
     public sealed class CottonCaneBase : CaneBaseProjectile {
+        private static ushort SMALLBOUNTCOUNT => 5;
+
         private bool[] _smallBollSpawned = null!;
         private List<float> _anglesTaken = null!;
 
         protected override void Initialize() {
-            _smallBollSpawned = new bool[10];
+            _smallBollSpawned = new bool[SMALLBOUNTCOUNT];
             _anglesTaken = [];
         }
 
@@ -64,7 +66,7 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
         protected override void AfterProcessingCane() {
             int index = 0;
             for (float i = 0f; i < 1f;) {
-                i += 0.1f;
+                i += 1f / SMALLBOUNTCOUNT;
                 if (AttackProgress01 > i && !_smallBollSpawned[index]) {
                     _smallBollSpawned[index] = true;
                     Projectile.localAI[0] = 1f;
@@ -96,7 +98,7 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
                                 break;
                             }
                         }
-                        spawnPosition += Vector2.One.RotatedBy(angle) * offset * Main.rand.NextFloat(0.5f, 1.25f);
+                        spawnPosition += Vector2.One.RotatedBy(angle) * offset * Main.rand.NextFloat(0.5f, 0.75f);
                         velocity = Owner.GetPlayerCorePoint().DirectionTo(spawnPosition) * 1f;
                         _anglesTaken.Add(angle);
                         ProjectileUtils.SpawnPlayerOwnedProjectile<Projectiles.Friendly.Nature.CottonBollSmall>(new ProjectileUtils.SpawnProjectileArgs(Owner, Projectile.GetSource_FromThis()) {
