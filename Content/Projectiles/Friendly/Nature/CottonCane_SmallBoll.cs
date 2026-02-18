@@ -13,7 +13,7 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 
 [Tracked]
 sealed class CottonBollSmall : NatureProjectile {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(15);
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(5);
 
     private Vector2 _velocity;
 
@@ -22,7 +22,7 @@ sealed class CottonBollSmall : NatureProjectile {
 
         Projectile.SetSizeValues(20);
         Projectile.friendly = true;
-        Projectile.penetrate = -1;
+        Projectile.penetrate = 1;
         Projectile.tileCollide = false;
 
         Projectile.timeLeft = TIMELEFT;
@@ -46,7 +46,7 @@ sealed class CottonBollSmall : NatureProjectile {
         float offsetY = 0.1f;
         Projectile.localAI[0] = Helper.Wave(-offsetY, offsetY, 2.5f, Projectile.identity);
         Projectile.velocity.Y += Projectile.localAI[0] * 0.1f;
-        Projectile.rotation = Projectile.localAI[0] * 1f;
+        Projectile.rotation = Projectile.localAI[0] * 1f + Projectile.velocity.X * 0.1f;
 
         Projectile.velocity *= 0.97f;
 

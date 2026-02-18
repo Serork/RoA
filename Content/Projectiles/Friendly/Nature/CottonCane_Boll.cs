@@ -56,18 +56,22 @@ sealed class CottonBoll : InteractableProjectile_Nature {
             Projectile.localAI[2] = 1f;
         }
 
-        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CottonBoll>(checkProjectile => checkProjectile.SameAs(Projectile))) {
-            if (Projectile.Distance(projectile.Center) > Projectile.width * 1.25f) {
-                continue;
+        void pushOthers() {
+            foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CottonBoll>(checkProjectile => checkProjectile.SameAs(Projectile))) {
+                if (Projectile.Distance(projectile.Center) > Projectile.width * 1.25f) {
+                    continue;
+                }
+                projectile.velocity += projectile.DirectionFrom(Projectile.Center) * TimeSystem.LogicDeltaTime * 2f;
             }
-            projectile.velocity += projectile.DirectionFrom(Projectile.Center) * TimeSystem.LogicDeltaTime * 2f;
-        }
-        foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CottonBollSmall>()) {
-            if (Projectile.Distance(projectile.Center) > Projectile.width * 1.25f) {
-                continue;
+            foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CottonBollSmall>()) {
+                if (Projectile.Distance(projectile.Center) > Projectile.width * 1.25f) {
+                    continue;
+                }
+                projectile.velocity += projectile.DirectionFrom(Projectile.Center) * TimeSystem.LogicDeltaTime * 2f;
             }
-            projectile.velocity += projectile.DirectionFrom(Projectile.Center) * TimeSystem.LogicDeltaTime * 2f;
         }
+
+        pushOthers();
 
         Projectile.Animate(10);
 
@@ -88,6 +92,9 @@ sealed class CottonBoll : InteractableProjectile_Nature {
         }
 
         if (Projectile.ai[1]-- > 0f) {
+            pushOthers();
+            pushOthers();
+
             Projectile.velocity.Y -= 0.4f;
             if (Projectile.velocity.Y > 16f) {
                 Projectile.velocity.Y = 16f;
@@ -105,16 +112,18 @@ sealed class CottonBoll : InteractableProjectile_Nature {
             flag = true;
         }
         else {
-            Projectile.velocity *= 0.97f;
+            Projectile.velocity *= Projectile.ai[2] > 0f ? 0.9f : 0.97f;
 
-            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+            if (!flag) {
+                Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+            }
         }
 
         if (!flag) {
             float offsetY = 0.1f;
             Projectile.localAI[0] = Helper.Wave(-offsetY, offsetY, 2.5f, Projectile.identity);
             Projectile.velocity.Y += Projectile.localAI[0] * 0.15f;
-            Projectile.rotation = Projectile.localAI[0] * 1f;
+            Projectile.rotation = Projectile.localAI[0] * 1f + Projectile.velocity.X * 0.1f;
         }
     }
 
