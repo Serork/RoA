@@ -25,6 +25,7 @@ sealed class CottonBoll : InteractableProjectile_Nature {
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(15);
 
     private bool _nextFiberDirectedLeft;
+    private float _scale;
 
     protected override Asset<Texture2D> HoverTexture => _hoverTexture;
 
@@ -58,12 +59,16 @@ sealed class CottonBoll : InteractableProjectile_Nature {
         Projectile.manualDirectionChange = true;
 
         Projectile.Opacity = 0f;
+
+        _scale = 0.25f;
     }
 
     public override bool? CanDamage() => false;
     public override bool? CanCutTiles() => false;
 
     public override void SafeAI() {
+        _scale = Helper.Approach(_scale, 1f, 0.1f);
+
         void pushOthers() {
             foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CottonBoll>(checkProjectile => checkProjectile.SameAs(Projectile))) {
                 if (Projectile.Distance(projectile.Center) > Projectile.width * 1.25f) {
@@ -222,7 +227,7 @@ sealed class CottonBoll : InteractableProjectile_Nature {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity);
+        Projectile.QuickDrawAnimated(lightColor * Projectile.Opacity, scale: _scale);
 
         return false;
     }
@@ -235,6 +240,6 @@ sealed class CottonBoll : InteractableProjectile_Nature {
             return;
         }
 
-        Projectile.QuickDrawAnimated(selectionGlowColor, texture: _hoverTexture.Value);
+        Projectile.QuickDrawAnimated(selectionGlowColor, texture: _hoverTexture.Value, scale: _scale);
     }
 }
