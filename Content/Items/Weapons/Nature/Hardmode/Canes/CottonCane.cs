@@ -59,7 +59,7 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
             velocity = Owner.GetPlayerCorePoint().DirectionTo(spawnPosition) * 1f;
         }
 
-        public static Vector2 GetSpawnPosition(Player player) {
+        private static Vector2 GetSpawnPosition(Player player) {
             Vector2 spawnPosition = player.GetPlayerCorePoint();
             int maxChecks = 25;
             while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
@@ -69,11 +69,11 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
         }
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
-            Vector2 to = GetSpawnPosition(player);
-            Vector2 to2 = to;
-            Vector2 velocity = Owner.GetPlayerCorePoint().DirectionTo(to);
-
             if (Main.rand.NextBool(10)) {
+                player.SyncMousePosition();
+                Vector2 to = GetSpawnPosition(player);
+                Vector2 to2 = to;
+                Vector2 velocity = Owner.GetPlayerCorePoint().DirectionTo(to);
                 for (int i = 0; i < 1; i++) {
                     Vector2 position = corePosition + Main.rand.RandomPointInArea(10f) * 0.75f;
                     Vector2 velocity2 = -Vector2.UnitY * Main.rand.NextFloat(1f, 2f) + Vector2.UnitX * Main.rand.NextFloat(-1f, 1f);
@@ -147,6 +147,7 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
                 if (Main.rand.NextBool()) {
                     return;
                 }
+                Owner.SyncMousePosition();
                 Vector2 to = GetSpawnPosition(Owner);
                 Vector2 to2 = to;
                 Vector2 velocity = Owner.GetPlayerCorePoint().DirectionTo(to);

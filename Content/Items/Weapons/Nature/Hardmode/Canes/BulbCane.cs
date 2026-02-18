@@ -61,7 +61,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
             spawnPosition = GetSpawnPosition(player);
         }
 
-        public static Vector2 GetSpawnPosition(Player player) {
+        private static Vector2 GetSpawnPosition(Player player) {
             Vector2 spawnPosition = player.GetPlayerCorePoint();
             int maxChecks = 60;
             while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
