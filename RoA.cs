@@ -54,7 +54,7 @@ sealed partial class RoA : Mod {
         DoMusicDisplayIntegration();
         DoRecipeBrowserIntergration();
 
-        NetManager.Instance.Register<CustomNetAmbienceModule>();
+        //NetManager.Instance.Register<CustomNetAmbienceModule>();
     }
 
     public override object Call(params object[] args) => DruidModCalls.Call(args);
