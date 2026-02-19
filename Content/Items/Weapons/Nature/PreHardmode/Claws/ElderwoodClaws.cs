@@ -42,6 +42,8 @@ sealed class ElderwoodClaws : ClawsBaseItem {
         int direction = leftSided ? -1 : 1;
         GetPoints(player, direction, out Point point1, out Point point2);
         Vector2 position = GetPoint(point1, point2).ToWorldCoordinates();
+        Vector2 offset = Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(position.ToTileCoordinates() - new Point(0, 1)));
+        position += offset;
         foreach (Projectile projectile in Main.ActiveProjectiles) {
             int attempts = 10;
             while (projectile.owner == player.whoAmI && projectile.type == Type &&

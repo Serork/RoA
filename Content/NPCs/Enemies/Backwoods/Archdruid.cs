@@ -508,9 +508,10 @@ sealed class Archdruid : DruidNPC {
         while (!Framing.GetTileSafely(positionX, positionY - 1).HasTile || !WorldGen.SolidTile2(positionX, positionY - 1)) {
             positionY++;
         }
+        Vector2 offset = Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(new Vector2(positionX, positionY).ToTileCoordinates() - new Point(0, 1)));
         SoundEngine.PlaySound(SoundID.Item76, position);
         if (Main.netMode != NetmodeID.MultiplayerClient) {
-            Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(positionX * 16f + 8, positionY * 16f - 30), Vector2.Zero, ModContent.ProjectileType<ArchVileSpike>(),
+            Projectile.NewProjectile(NPC.GetSource_FromAI(), new Vector2(positionX * 16f + 8 + offset.X, positionY * 16f - 30 + offset.Y), Vector2.Zero, ModContent.ProjectileType<ArchVileSpike>(),
                 50 / 2, 2.5f, Main.myPlayer);
         }
     }
@@ -556,8 +557,9 @@ sealed class Archdruid : DruidNPC {
             positionX = point2.X;
             positionY = point2.Y;
             float stateTimer = StateTimer - 0.25f;
+            Vector2 offset = Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(new Vector2(positionX, positionY).ToTileCoordinates() - new Point(0, 1)));
             if (Main.rand.NextChance(Math.Min(1f, stateTimer))) {
-                int dust = Dust.NewDust(new Vector2(positionX * 16f + Main.rand.Next(-32, 32), positionY * 16f - 26 + 8f), 8, 8, dustType, 0f, Main.rand.NextFloat(-2.5f, -0.5f), 255, Scale: 0.9f + Main.rand.NextFloat(0f, 0.4f));
+                int dust = Dust.NewDust(new Vector2(positionX * 16f + Main.rand.Next(-32, 32) + offset.X, positionY * 16f - 26 + 8f + offset.Y), 8, 8, dustType, 0f, Main.rand.NextFloat(-2.5f, -0.5f), 255, Scale: 0.9f + Main.rand.NextFloat(0f, 0.4f));
                 Main.dust[dust].velocity *= 0.5f;
             }
         }
