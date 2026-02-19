@@ -3009,3 +3009,8 @@ CottonBollSmall: {
 	DisplayName: ""
 	Tooltip: ""
 }
+
+BrambleMaze: {
+	DisplayName: Bramble Maze
+	Tooltip: ""
+}

@@ -3027,6 +3027,11 @@ FilamentFragment2: {
 }
 
 CottonBollSmall: {
-	// DisplayName: Cotton Boll Small
+	// DisplayName: ""
+	// Tooltip: ""
+}
+
+BrambleMaze: {
+	// DisplayName: Bramble Maze
 	// Tooltip: ""
 }

@@ -14,6 +14,8 @@ sealed class TectonicDebris : AdvancedDust<TectonicDebris> {
         MaxTimeLeft = TimeLeft = 120;
 
         SetFramedTexture(3);
+
+        DrawColor = Lighting.GetColor(Position.ToTileCoordinates());
     }
 
     public override void Update(ref ParticleRendererSettings settings) {

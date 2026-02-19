@@ -24,6 +24,8 @@ sealed class Snowflake : AdvancedDust<Snowflake> {
         CorePosition = Vector2.Zero;
 
         SetFramedTexture(3);
+
+        DrawColor = Lighting.GetColor(Position.ToTileCoordinates());
     }
 
     public override void Update(ref ParticleRendererSettings settings) {

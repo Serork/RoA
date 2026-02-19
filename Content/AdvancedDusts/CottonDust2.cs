@@ -17,6 +17,8 @@ sealed class CottonDust2 : AdvancedDust<CottonDust2> {
         CorePosition = Vector2.Zero;
 
         TimeLeft = 20;
+
+        DrawColor = Lighting.GetColor(Position.ToTileCoordinates());
     }
 
     public override void Update(ref ParticleRendererSettings settings) {

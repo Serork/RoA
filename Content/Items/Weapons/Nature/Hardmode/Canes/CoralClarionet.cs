@@ -51,8 +51,11 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
         private static Vector2 GetSpawnPosition(Player player) {
             Vector2 spawnPosition = player.GetPlayerCorePoint();
             int maxChecks = 50;
-            while (maxChecks-- > 0 && !WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
+            while (maxChecks-- > 0) {
                 spawnPosition += spawnPosition.DirectionTo(player.GetWorldMousePosition()) * WorldGenHelper.TILESIZE;
+                if (WorldGenHelper.SolidTileNoPlatform(spawnPosition.ToTileCoordinates())) {
+                    break;
+                }
             }
             return spawnPosition;
         }
