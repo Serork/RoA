@@ -42,6 +42,8 @@ sealed class BrambleMazeRootAir : NatureProjectile {
         Projectile.Opacity = 0f;
 
         Projectile.extraUpdates = 1;
+
+        Projectile.manualDirectionChange = true;
     }
 
     public override void AI() {
@@ -69,6 +71,8 @@ sealed class BrambleMazeRootAir : NatureProjectile {
 
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
+
+            Projectile.SetDirection(Projectile.GetOwnerAsPlayer().direction);
 
             Projectile.velocity = Projectile.velocity.SafeNormalize() * 5f;
 
@@ -143,7 +147,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                 continue;
             }
             byte textureIndex = rootAirInfo.TextureIndex;
-            if (index >= data.Count - 1) {
+            if (Projectile.ai[2] == 1f && index >= data.Count - 1) {
                 textureIndex = 3;
             }
             Rectangle clip = Utils.Frame(texture, 1, Projectile.GetFrameCount(), frameY: textureIndex);
@@ -158,13 +162,16 @@ sealed class BrambleMazeRootAir : NatureProjectile {
 
             float opacity2 = Ease.QuadOut(opacity);
 
+            SpriteEffects flip = Projectile.spriteDirection.ToSpriteEffects();
+
             int height = clip.Height;
             clip.Height = (int)(height * opacity3);
             DrawInfo drawInfo = new() {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation,
-                Color = color.ModifyRGB(borderColorRGBFactor) * opacity2
+                Color = color.ModifyRGB(borderColorRGBFactor) * opacity2,
+                ImageFlip = flip
             };
             if (opacity != 1f) {
                 Main.spriteBatch.Draw(texture, position, drawInfo);
@@ -175,7 +182,8 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation,
-                Color = color * opacity2
+                Color = color * opacity2,
+                ImageFlip = flip
             };
             Main.spriteBatch.Draw(texture, position, drawInfo);
 
