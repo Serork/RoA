@@ -96,7 +96,7 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
     }
 
     public override void AI() {
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.15f);
 
         if (!Init) {
             Init = true;
