@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -8,10 +9,14 @@ using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 
+using static Terraria.GameContent.Animations.Actions.Sprites;
+
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BrambleMazeTrap : NatureProjectile {
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
+
+    private Vector2 _scale;
 
     public override void SetStaticDefaults() {
 
@@ -25,6 +30,9 @@ sealed class BrambleMazeTrap : NatureProjectile {
         Projectile.tileCollide = false;
 
         Projectile.timeLeft = TIMELEFT;
+
+        Projectile.Opacity = 0f;
+        _scale = new Vector2(1.5f, 0f);
     }
 
     public override bool ShouldUpdatePosition() => false;
@@ -53,12 +61,20 @@ sealed class BrambleMazeTrap : NatureProjectile {
                 Projectile.position.Y += 8f;
             }
         }
+
+        Vector2 desiredScale = Vector2.One;
+
+        _scale.X = Helper.Approach(_scale.X, 1f, 0.1f);
+        _scale.Y = Helper.Approach(_scale.Y, 1f, 0.2f);
+
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
     }
 
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = Projectile.GetTexture();
         Vector2 origin = texture.Bounds.BottomCenter();
-        Projectile.QuickDrawAnimated(lightColor, origin: origin);
+        float opacity2 = Ease.QuintOut(Projectile.Opacity);
+        Projectile.QuickDrawAnimated(lightColor * opacity2, origin: origin, scale: new Vector2(_scale.X, Ease.CubeOut(_scale.Y)));
 
         return false;
     }
