@@ -1,2 +1,1 @@
-- Fixed "Lothor the Wild is no longer after you..." issue Boss Checklist in multiplayer.
-- Fixed "Index is out of bounds of the array" upon entering the Backwoods in multiplayer.
+- Fixed a game crash upon entering the Backwoods in multiplayer
