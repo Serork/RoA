@@ -64,7 +64,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
 
         Vector2 desiredScale = Vector2.One;
 
-        float lerpModifier = 1f;
+        float lerpModifier = 1.25f;
         _scale.X = Helper.Approach(_scale.X, 1f, 0.1f * lerpModifier);
         _scale.Y = Helper.Approach(_scale.Y, 1f, 0.2f * lerpModifier);
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f * lerpModifier);
