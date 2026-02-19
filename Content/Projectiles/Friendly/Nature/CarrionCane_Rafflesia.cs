@@ -105,6 +105,8 @@ sealed class Rafflesia : NatureProjectile_NoTextureLoad, IRequestAssets {
                     Vector2 mousePosition = owner.GetCappedWorldMousePosition(CarrionCane.CarrionCaneBase.CAPPEDMOUSEPOSITIONWIDTH, CarrionCane.CarrionCaneBase.CAPPEDMOUSEPOSITIONHEIGHT);
                     Vector2 position = CarrionCane.CarrionCaneBase.GetTilePosition(owner, mousePosition, false, 0, (int)CarrionCane.CarrionCaneBase.CAPPEDMOUSEPOSITIONWIDTH, (int)CarrionCane.CarrionCaneBase.CAPPEDMOUSEPOSITIONHEIGHT).ToWorldCoordinates() - Vector2.UnitY * 4f;
                     _spawnPosition = position;
+                    Vector2 offset = Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(_spawnPosition.ToTileCoordinates() + new Point(0, 0)));
+                    _spawnPosition += offset;
 
                     Projectile.Center = GetMoveTowardsPosition();
 
