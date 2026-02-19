@@ -739,6 +739,7 @@ sealed class MercuriumZipperProjectile : ModProjectile {
             // They can also be changed to suit your sprite.
             if (i == list.Count - 2) {
                 // This is the head of the whip. You need to measure the sprite to figure out these values.
+                origin.X += 2;
                 frame.X = 12;
                 frame.Y = 112;
                 frame.Width = 14;
