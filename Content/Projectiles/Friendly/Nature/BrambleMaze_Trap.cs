@@ -82,7 +82,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
         Vector2 origin = Utils.Frame(texture, 1, Projectile.GetFrameCount()).BottomCenter();
         float opacity2 = Ease.QuadOut(Projectile.Opacity);
         Vector2 position = Projectile.position;
-        Projectile.position.Y += 10f;
+        Projectile.position.Y += 12f;
         if (Projectile.ai[1] > 0) {
             Projectile.position.X -= 5f * Projectile.ai[1];
         }
