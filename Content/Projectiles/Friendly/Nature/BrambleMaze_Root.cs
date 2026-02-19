@@ -74,10 +74,11 @@ sealed class BrambleMazeRoot : NatureProjectile {
             Player player = Projectile.GetOwnerAsPlayer();
             Vector2 mousePosition = player.GetViableMousePosition();
             float xDif = mousePosition.X - Projectile.Center.X;
+            int direction = xDif.GetDirection();
             if (MathF.Abs(xDif) <= TileHelper.TileSize) {
                 Projectile.ai[0] = max;
+                direction = Projectile.direction;
             }
-            int direction = xDif.GetDirection();
 
             Vector2 position = Projectile.Center + Vector2.UnitX * Projectile.width * Projectile.direction;
             int damage = Projectile.damage;
@@ -108,14 +109,20 @@ sealed class BrambleMazeRoot : NatureProjectile {
         float opacity3 = opacity + 0.075f;
         float borderColorRGBFactor = 0.5f;
         Vector2 position = Projectile.position;
-        Projectile.position.Y += 2f;
-        int width = clip.Width;
-        clip.Width = (int)(width * opacity3);
         bool facedRight = Projectile.FacedRight();
+        int width = clip.Width;
+        if (!facedRight) {
+            Projectile.position.X += width;
+        }
+        Projectile.position.Y += 2f;
+        clip.Width = (int)(width * opacity3);
         Projectile.position.X -= width * (1f - opacity3 * facedRight.ToDirectionInt() + (!facedRight).ToInt()) / 2f;
         float opacity2 = Ease.QuadOut(Projectile.Opacity);
         Projectile.QuickDrawAnimated(lightColor.ModifyRGB(borderColorRGBFactor) * opacity2, frameBox: clip);
         Projectile.position = position;
+        if (!facedRight) {
+            Projectile.position.X += width;
+        }
         Projectile.position.X -= width * (1f - opacity * facedRight.ToDirectionInt() + (!facedRight).ToInt()) / 2f;
         clip.Width = (int)(width * opacity);
         Projectile.QuickDrawAnimated(lightColor * opacity2, frameBox: clip);
