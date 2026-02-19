@@ -1,3 +1,5 @@
+using RoA.Common.Networking;
+using RoA.Common.Networking.Packets;
 using RoA.Content.Biomes.Backwoods;
 
 using System;
@@ -7,6 +9,7 @@ using System.Linq;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Ambience;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Net;
@@ -23,7 +26,7 @@ sealed class CustomAmbienceServer : ILoadable {
     }
 
     private void On_BackgroundChangeFlashInfo_UpdateFlashValues(On_BackgroundChangeFlashInfo.orig_UpdateFlashValues orig, BackgroundChangeFlashInfo self) {
-        if ((Main.dedServ || (Main.netMode != 1 && !Main.gameMenu && !Main.gamePaused)) && customAmbienceServer != null)
+        if (((Main.netMode != NetmodeID.Server && !Main.gameMenu && !Main.gamePaused)) && customAmbienceServer != null)
             customAmbienceServer.Update();
 
         orig(self);
@@ -177,6 +180,20 @@ sealed class CustomAmbienceServer : ILoadable {
     private static bool IsPlayerInAPlaceWhereTheyCanSeeAmbienceHell(Player plr) => plr.position.Y >= (Main.UnderworldLayer - 100) * 16;
 
     private void SpawnForPlayer(Player player, CustomSkyEntityType type) {
-        NetManager.Instance.BroadcastOrLoopback(CustomNetAmbienceModule.SerializeSkyEntitySpawn(player, type));
+        if (Main.remixWorld)
+            return;
+
+        if (Main.netMode == NetmodeID.MultiplayerClient) {
+            MultiplayerSystem.SendPacket(new CustomAmbiencePacket(player, type, Main.rand.Next()));
+            return;
+        }
+
+        if (Main.netMode != NetmodeID.SinglePlayer) {
+            return;
+        }
+        int seed = Main.rand.Next();
+        Main.QueueMainThreadAction(delegate {
+            ((CustomAmbientSky)SkyManager.Instance["CustomAmbience"]).Spawn(player, type, seed);
+        });
     }
 }

@@ -28,7 +28,7 @@ class BackwoodsBirdsPackSkyEntity : FadingSkyEntity {
         if (surfacePosition == 0f) {
             surfacePosition = 1f;
         }
-        Depth = Main.rand.NextFloat(1.75f, 4f);
+        Depth = MathHelper.Lerp(1.75f, 4f, random.NextFloat());
         bool flag2 = Depth <= 2.2f;
         Position.Y = MathHelper.Clamp(random.NextFloat(), flag2 ? 0.4f : 0.6f, 0.85f) * ((float)surfacePosition * 16f - 1600f) + 2400f;
         SetPositionInWorldBasedOnScreenSpace(Position);
