@@ -104,19 +104,19 @@ sealed class BrambleMazeRoot : NatureProjectile {
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = Projectile.GetTexture();
         Rectangle clip = Utils.Frame(texture, 1, Projectile.GetFrameCount(), frameY: Projectile.frame);
-        float opacity = Ease.CircOut(Projectile.Opacity);
+        float opacity = Projectile.Opacity;
         float opacity3 = opacity + 0.075f;
-        opacity3 = MathUtils.Clamp01(opacity3);
         float borderColorRGBFactor = 0.5f;
         Vector2 position = Projectile.position;
         Projectile.position.Y += 2f;
         int width = clip.Width;
         clip.Width = (int)(width * opacity3);
-        Projectile.position.X -= width * (1f - opacity3) / 2f;
-        float opacity2 = Ease.QuintOut(Projectile.Opacity);
+        bool facedRight = Projectile.FacedRight();
+        Projectile.position.X -= width * (1f - opacity3 * facedRight.ToDirectionInt() + (!facedRight).ToInt()) / 2f;
+        float opacity2 = Ease.QuadOut(Projectile.Opacity);
         Projectile.QuickDrawAnimated(lightColor.ModifyRGB(borderColorRGBFactor) * opacity2, frameBox: clip);
         Projectile.position = position;
-        Projectile.position.X -= width * (1f - opacity) / 2f;
+        Projectile.position.X -= width * (1f - opacity * facedRight.ToDirectionInt() + (!facedRight).ToInt()) / 2f;
         clip.Width = (int)(width * opacity);
         Projectile.QuickDrawAnimated(lightColor * opacity2, frameBox: clip);
         Projectile.position = position;

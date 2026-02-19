@@ -64,16 +64,16 @@ sealed class BrambleMazeTrap : NatureProjectile {
 
         Vector2 desiredScale = Vector2.One;
 
-        _scale.X = Helper.Approach(_scale.X, 1f, 0.1f);
-        _scale.Y = Helper.Approach(_scale.Y, 1f, 0.2f);
-
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
+        float lerpModifier = 0.875f;
+        _scale.X = Helper.Approach(_scale.X, 1f, 0.1f * lerpModifier);
+        _scale.Y = Helper.Approach(_scale.Y, 1f, 0.2f * lerpModifier);
+        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f * lerpModifier);
     }
 
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = Projectile.GetTexture();
         Vector2 origin = texture.Bounds.BottomCenter();
-        float opacity2 = Ease.QuintOut(Projectile.Opacity);
+        float opacity2 = Ease.QuadOut(Projectile.Opacity);
         Projectile.QuickDrawAnimated(lightColor * opacity2, origin: origin, scale: new Vector2(_scale.X, Ease.CubeOut(_scale.Y)));
 
         return false;
