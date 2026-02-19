@@ -62,6 +62,8 @@ sealed class TectonicCaneProjectile : NatureProjectile {
         Player player = Main.player[Projectile.owner];
         EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);
         Projectile.Center = point2.ToWorldCoordinates();
+        Vector2 offset = Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.TopLeft.ToTileCoordinates() - new Point(0, 1)));
+        Projectile.Center -= offset;
 
         SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "Quake") { Pitch = 0.3f, Volume = 0.6f }, Projectile.Center);
 

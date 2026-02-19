@@ -177,6 +177,8 @@ sealed class EvilBranch : NatureProjectile {
 
                 GetPos(player, out Point point, out Point point2);
                 Projectile.Center = point2.ToWorldCoordinates();
+                Vector2 offset = Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.TopLeft.ToTileCoordinates() - new Point(0, 1)));
+                Projectile.Center -= offset;
                 Vector2 velocity = (Projectile.Center - point.ToWorldCoordinates()).SafeNormalize(-Vector2.UnitY) * 16f;
                 float maxRadians = 0.375f;
                 Projectile.rotation = MathHelper.Clamp(velocity.ToRotation() - MathHelper.PiOver2, -maxRadians, maxRadians);
