@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Utilities;
 
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.Graphics.Effects;
 using Terraria.Utilities;
