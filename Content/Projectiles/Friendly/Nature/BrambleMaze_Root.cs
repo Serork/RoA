@@ -24,7 +24,7 @@ sealed class BrambleMazeRoot : NatureProjectile {
         Projectile.SetSizeValues(24, 16);
 
         Projectile.friendly = true;
-        Projectile.penetrate = 1;
+        Projectile.penetrate = -1;
         Projectile.tileCollide = false;
 
         Projectile.timeLeft = TIMELEFT;

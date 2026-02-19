@@ -35,6 +35,11 @@ sealed class BrambleMazeTrap : NatureProjectile {
         _scale = new Vector2(1.5f, 0f);
     }
 
+    public override void ModifyDamageHitbox(ref Rectangle hitbox) {
+        hitbox = hitbox.AdjustY(-80).AdjustHeight(80 - Projectile.height);
+        hitbox.Inflate(20, 0);
+    }
+
     public override bool ShouldUpdatePosition() => false;
 
     public override void AI() {
