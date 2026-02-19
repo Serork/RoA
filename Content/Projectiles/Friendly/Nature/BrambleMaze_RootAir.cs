@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -18,10 +19,12 @@ namespace RoA.Content.Projectiles.Friendly.Nature;
 sealed class BrambleMazeRootAir : NatureProjectile {
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
 
-    private readonly record struct RootAirInfo(Vector2 Position, float Rotation, byte TextureIndex, float Progress = 0f);
+    private record struct RootAirInfo(Vector2 Position, float Rotation, byte TextureIndex, float Progress = 0f);
 
-    private List<RootAirInfo> _rootAirData = null!;
+    private List<RootAirInfo> _rootAirData = null!,
+                              _rootAirData2 = null!;
     private Vector2 _previousPosition;
+    private byte _currentIndex;
 
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(4);
@@ -32,20 +35,49 @@ sealed class BrambleMazeRootAir : NatureProjectile {
 
         Projectile.friendly = true;
         Projectile.penetrate = -1;
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
 
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.Opacity = 0f;
+
+        Projectile.extraUpdates = 1;
     }
 
     public override void AI() {
+        bool flag3 = false;
+        if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
+            if (Projectile.velocity.Length() < 1f && Projectile.localAI[2] >= 1f) {
+                if (Projectile.ai[2] != 1f && Projectile.IsOwnerLocal()) {
+                    Vector2 position = _rootAirData2.Last().Position;
+                    ProjectileUtils.SpawnPlayerOwnedProjectile<BrambleMazeRoot>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromThis()) {
+                        Position = position,
+                        Damage = Projectile.damage,
+                        KnockBack = Projectile.knockBack,
+                        AI1 = Projectile.velocity.X.GetDirection()
+                    });
+                }
+
+                Projectile.ai[2] = 1f;
+            }
+
+            Projectile.velocity *= 0.825f;
+            flag3 = true;
+        }
+
+        Vector2 center = Projectile.Center;
+
         if (Projectile.localAI[0] == 0f) {
             Projectile.localAI[0] = 1f;
 
             Projectile.velocity = Projectile.velocity.SafeNormalize() * 5f;
 
             _rootAirData = [];
+            _rootAirData2 = [];
+
+            var root = new RootAirInfo(center, Projectile.velocity.ToRotation() - MathHelper.PiOver2, 0);
+            _rootAirData.Add(root);
+            _rootAirData2.Add(root);
         }
 
         bool flag = true;
@@ -54,7 +86,6 @@ sealed class BrambleMazeRootAir : NatureProjectile {
             flag = false;
         }
 
-        Vector2 center = Projectile.Center;
         ref float checkFactor = ref Projectile.ai[0];
         if (checkFactor == 0f) {
             _previousPosition = center;
@@ -62,65 +93,92 @@ sealed class BrambleMazeRootAir : NatureProjectile {
 
         checkFactor++;
         if (Vector2.Distance(_previousPosition, center + Projectile.velocity) > 20) {
-            byte textureIndex = 0;
-            if (Projectile.ai[1] > 0f) {
-                textureIndex = (byte)(1 + Main.rand.NextBool().ToInt());
-            }
+            byte textureIndex = (byte)(1 + Main.rand.NextBool().ToInt());
             _rootAirData.Add(new RootAirInfo(center, Projectile.velocity.ToRotation() - MathHelper.PiOver2, textureIndex));
             Projectile.ai[1]++;
             checkFactor = 0f;
+
+            Vector2 position = _rootAirData2[_currentIndex].Position;
+            int nextIndex = _currentIndex + 1;
+            Vector2 velocity = position.DirectionTo(_rootAirData[nextIndex].Position);
+            Vector2 position2 = position + velocity * 20;
+            _rootAirData2.Add(new RootAirInfo(position2, velocity.ToRotation() - MathHelper.PiOver2, _rootAirData[_currentIndex].TextureIndex, _rootAirData[_currentIndex].Progress));
+            _currentIndex++;
+        }
+        if (_rootAirData2.Count > 0) {
+            float allProgress = 0f;
+            for (int i = 0; i < _rootAirData2.Count; i++) {
+                int currentSegmentIndex = i;
+                if (i == 0 || _rootAirData2[i - 1].Progress >= 1f) {
+                    float lerpValue = 0.2f;
+                    RootAirInfo rootAirInfo = _rootAirData2[currentSegmentIndex];
+                    rootAirInfo.Progress = Helper.Approach(rootAirInfo.Progress, 1f, lerpValue);
+                    _rootAirData2[currentSegmentIndex] = rootAirInfo;
+                }
+                allProgress += _rootAirData2[currentSegmentIndex].Progress;
+            }
+            allProgress /= _rootAirData2.Count;
+            Projectile.localAI[2] = allProgress;
         }
 
-        if (!flag) {
+        if (!flag || flag3) {
             return;
+        }
+        float minX = 3f;
+        if (Projectile.SpeedX() < minX) {
+            Projectile.velocity.X = minX * Projectile.velocity.X.GetDirection();
         }
         Projectile.velocity.Y = Projectile.velocity.Y + 0.2f;
         if (Projectile.velocity.Y > 16f)
             Projectile.velocity.Y = 16f;
     }
 
-    private List<RootAirInfo> GetRootAirData() {
-        int index = 0;
-        int count = _rootAirData.Count;
-        List<RootAirInfo> rootAirData = [];
-        Vector2 position = _rootAirData[0].Position;
-        while (true) {
-            if (index >= count) {
-                break;
-            }
-            int nextIndex = Math.Min(index + 1, count - 1);
-            Vector2 velocity = _rootAirData[index].Position.DirectionTo(_rootAirData[nextIndex].Position);
-            Vector2 position2 = position + velocity * 22;
-            rootAirData.Add(new RootAirInfo(position2, velocity.ToRotation() - MathHelper.PiOver2, _rootAirData[index].TextureIndex));
-            position = position2;
-            index++;
-        }
-        return rootAirData;
-    }
-
     public override bool PreDraw(ref Color lightColor) {
-        if (_rootAirData.Count < 1) {
-            return false;
-        }
-
         int index = 0;
         Texture2D texture = Projectile.GetTexture();
-        var data = GetRootAirData();
+        var data = _rootAirData2;
         foreach (RootAirInfo rootAirInfo in data) {
+            if (index == 0) {
+                index++;
+                continue;
+            }
             byte textureIndex = rootAirInfo.TextureIndex;
-            if (index == data.Count - 2) {
+            if (index >= data.Count - 1) {
                 textureIndex = 3;
             }
             Rectangle clip = Utils.Frame(texture, 1, Projectile.GetFrameCount(), frameY: textureIndex);
-            Vector2 origin = clip.Centered();
             float rotation = rootAirInfo.Rotation;
+            Vector2 origin = clip.Centered();
+            float opacity = MathUtils.Clamp01(rootAirInfo.Progress);
+            float opacity3 = opacity + 0.075f;
+            float borderColorRGBFactor = 0.5f;
+            Vector2 position = rootAirInfo.Position;
+
+            Color color = Lighting.GetColor(position.ToTileCoordinates());
+
+            float opacity2 = Ease.QuadOut(opacity);
+
+            int height = clip.Height;
+            clip.Height = (int)(height * opacity3);
             DrawInfo drawInfo = new() {
                 Clip = clip,
                 Origin = origin,
-                Rotation = rotation
+                Rotation = rotation,
+                Color = color.ModifyRGB(borderColorRGBFactor) * opacity2
             };
-            Vector2 position = rootAirInfo.Position;
+            if (opacity != 1f) {
+                Main.spriteBatch.Draw(texture, position, drawInfo);
+            }
+
+            clip.Height = (int)(height * opacity);
+            drawInfo = new() {
+                Clip = clip,
+                Origin = origin,
+                Rotation = rotation,
+                Color = color * opacity2
+            };
             Main.spriteBatch.Draw(texture, position, drawInfo);
+
             index++;
         }
 
@@ -128,17 +186,6 @@ sealed class BrambleMazeRootAir : NatureProjectile {
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        if (Projectile.ai[2] != 1f && Projectile.IsOwnerLocal()) {
-            ProjectileUtils.SpawnPlayerOwnedProjectile<BrambleMazeRoot>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_FromThis()) {
-                Position = Projectile.Center,
-                Damage = Projectile.damage,
-                KnockBack = Projectile.knockBack,
-                AI1 = Projectile.velocity.X.GetDirection()
-            });
-        }
-
-        Projectile.ai[2] = 1f;
-
         return false;
     }
 }

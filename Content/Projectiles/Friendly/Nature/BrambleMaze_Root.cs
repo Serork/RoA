@@ -117,7 +117,7 @@ sealed class BrambleMazeRoot : NatureProjectile {
         Projectile.position.Y += 2f;
         clip.Width = (int)(width * opacity3);
         Projectile.position.X -= width * (1f - opacity3 * facedRight.ToDirectionInt() + (!facedRight).ToInt()) / 2f;
-        float opacity2 = Ease.QuadOut(Projectile.Opacity);
+        float opacity2 = Ease.QuadOut(opacity);
         Projectile.QuickDrawAnimated(lightColor.ModifyRGB(borderColorRGBFactor) * opacity2, frameBox: clip);
         Projectile.position = position;
         if (!facedRight) {
