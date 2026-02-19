@@ -40,7 +40,8 @@ sealed class BrambleMazeRoot : NatureProjectile {
         if (Projectile.localAI[1] == 0f) {
             Projectile.localAI[1] = 1f;
 
-            Projectile.frame = Main.rand.Next(4);
+            int frame = (int)Projectile.ai[2];
+            Projectile.frame = Projectile.ai[0] == 0f ? Main.rand.Next(4) : frame;
 
             Projectile.SetDirection(Projectile.ai[1] == 0f ? Projectile.GetOwnerAsPlayer().direction : (int)Projectile.ai[1]);
 
@@ -80,6 +81,12 @@ sealed class BrambleMazeRoot : NatureProjectile {
                 direction = Projectile.direction;
             }
 
+            int frame = Projectile.frame;
+            frame++;
+            if (frame > Projectile.GetFrameCount() - 1) {
+                frame = 0;
+            }
+
             Vector2 position = Projectile.Center + Vector2.UnitX * Projectile.width * Projectile.direction;
             int damage = Projectile.damage;
             float knockBack = Projectile.knockBack;
@@ -97,7 +104,8 @@ sealed class BrambleMazeRoot : NatureProjectile {
                 Damage = damage,
                 KnockBack = knockBack,
                 AI0 = Projectile.ai[0],
-                AI1 = direction
+                AI1 = direction,
+                AI2 = frame
             });
         }
     }

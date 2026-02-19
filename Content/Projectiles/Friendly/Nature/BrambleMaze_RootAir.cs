@@ -25,6 +25,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                               _rootAirData2 = null!;
     private Vector2 _previousPosition;
     private byte _currentIndex;
+    private byte _lastTextureIndex;
 
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(4);
@@ -97,8 +98,11 @@ sealed class BrambleMazeRootAir : NatureProjectile {
 
         checkFactor++;
         if (Vector2.Distance(_previousPosition, center + Projectile.velocity) > 20) {
-            byte textureIndex = (byte)(1 + Main.rand.NextBool().ToInt());
-            _rootAirData.Add(new RootAirInfo(center, Projectile.velocity.ToRotation() - MathHelper.PiOver2, textureIndex));
+            _lastTextureIndex++;
+            if (_lastTextureIndex > 2) {
+                _lastTextureIndex = 1;
+            }
+            _rootAirData.Add(new RootAirInfo(center, Projectile.velocity.ToRotation() - MathHelper.PiOver2, _lastTextureIndex));
             Projectile.ai[1]++;
             checkFactor = 0f;
 
