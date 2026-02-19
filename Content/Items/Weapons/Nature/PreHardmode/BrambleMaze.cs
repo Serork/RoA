@@ -19,7 +19,7 @@ sealed class BrambleMaze : NatureItem {
     }
 
     protected override void SafeSetDefaults() {
-        int width = 42; int height = 48;
+        int width = 40; int height = 40;
         Item.Size = new Vector2(width, height);
 
         Item.useStyle = ItemUseStyleID.Shoot;
