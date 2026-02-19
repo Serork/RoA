@@ -130,7 +130,7 @@ sealed class CloudPlatformAngry : NatureProjectile_NoTextureLoad, IDrawProjectil
             }
         }
 
-        if (Projectile.Opacity >= 1f) {
+        if (Projectile.Opacity >= 0f) {
             bool flag18 = true;
             int num352 = (int)Projectile.Center.X;
             int num353 = (int)(Projectile.position.Y + (float)Projectile.height);
@@ -180,10 +180,11 @@ sealed class CloudPlatformAngry : NatureProjectile_NoTextureLoad, IDrawProjectil
 
         Projectile.Animate(6);
 
-        Player player = Projectile.GetOwnerAsPlayer();
-        bool collided = player.position.Y < Projectile.position.Y && Projectile.getRect().Intersects(player.getRect());
-        if (player.velocity.Y > 0f && collided) {
-            Impact(player.velocity.SafeNormalize() * 20f);
+        foreach (Player player in Main.ActivePlayers) {
+            bool collided = player.Bottom.Y <= Projectile.position.Y + 2 && Projectile.getRect().Intersects(player.getRect());
+            if (player.velocity.Y > 0f && collided) {
+                Impact(player, player.velocity.SafeNormalize() * 20f);
+            }
         }
     }
 
@@ -197,8 +198,12 @@ sealed class CloudPlatformAngry : NatureProjectile_NoTextureLoad, IDrawProjectil
         }
     }
 
-    public void Impact(Vector2 velocity) {
+    public void Impact(Player player, Vector2 velocity) {
         if (Impacted) {
+            return;
+        }
+
+        if (player.controlDown) {
             return;
         }
 

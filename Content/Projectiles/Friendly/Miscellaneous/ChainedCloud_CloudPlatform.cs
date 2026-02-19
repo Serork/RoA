@@ -156,10 +156,11 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
 
         Projectile.Animate(6);
 
-        Player player = Projectile.GetOwnerAsPlayer();
-        bool collided = player.position.Y < Projectile.position.Y && Projectile.getRect().Intersects(player.getRect());
-        if (player.velocity.Y > 0f && collided) {
-            Impact(player.velocity.SafeNormalize() * 20f);
+        foreach (Player player in Main.ActivePlayers) {
+            bool collided = player.Bottom.Y <= Projectile.position.Y + 2 && Projectile.getRect().Intersects(player.getRect());
+            if (player.velocity.Y > 0f && collided) {
+                Impact(player, player.velocity.SafeNormalize() * 20f);
+            }
         }
     }
 
@@ -173,8 +174,12 @@ sealed class CloudPlatform : ModProjectile_NoTextureLoad {
         }
     }
 
-    public void Impact(Vector2 velocity) {
+    public void Impact(Player player, Vector2 velocity) {
         if (Impacted) {
+            return;
+        }
+
+        if (player.controlDown) {
             return;
         }
 
