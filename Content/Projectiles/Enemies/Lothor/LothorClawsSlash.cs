@@ -211,7 +211,7 @@ sealed class LothorClawsSlash : ModProjectile {
             lightColor2 *= MathUtils.Clamp01(num4 * 3f);
             Color lightColor3 = true ? Color.Lerp(Color.White, lightColor, 1f - num4) : lightColor;
 
-            Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)texture.Width * 0.59f - Utils.Remap(num1, 0f, 1f, 0f, 20f)) * scale;
+            Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 0.5f * Projectile.direction).ToRotationVector2() * ((float)texture.Width * 0.595f - Utils.Remap(num1, 0f, 1f, 0f, 20f)) * scale;
             DrawPrettyStarSparkle(Projectile.Opacity, effects, drawpos2, (Color.Lerp(Color.White, GetSlashColor(), Main.rand.NextFloat()) with { A = 0 }).MultiplyRGB(lightColor3) * num3 * num4, Color.Lerp(color1, color2, 0.666f).MultiplyRGB(lightColor2), num1, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(num2, 0f, 1f, 4f, 1f)) * scale, Vector2.One * scale * 2f);
 
             drawpos2 = position + (Projectile.rotation + Utils.Remap(num2, 0f, 1f, 0f, (float)Math.PI / 4f) * Projectile.ai[2] - MathHelper.PiOver4 * 1.25f * Projectile.direction).ToRotationVector2() * ((float)texture.Width * 0.515f - 4f - Utils.Remap(num1, 0f, 1f, 0f, 4f)) * scale;
