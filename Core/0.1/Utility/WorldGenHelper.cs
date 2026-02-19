@@ -554,21 +554,21 @@ static class WorldGenHelper {
 
     public static bool SolidTile(Point tilePosition) {
         Tile tile = GetTileSafely(tilePosition.X, tilePosition.Y);
-        return tile.HasTile && (Main.tileSolid[tile.TileType] /*|| Main.tileSolidTop[tile.TileType]*/ || IsPlatform(tilePosition));
+        return tile.HasTile && tile.HasUnactuatedTile && (Main.tileSolid[tile.TileType] /*|| Main.tileSolidTop[tile.TileType]*/ || IsPlatform(tilePosition));
     }
 
     public static bool SolidTile2(int i, int j) => SolidTile2(new Point(i, j));
 
     public static bool SolidTile2(Point tilePosition) {
         Tile tile = GetTileSafely(tilePosition.X, tilePosition.Y);
-        return tile.HasTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] || IsPlatform(tilePosition));
+        return tile.HasTile && tile.HasUnactuatedTile && (Main.tileSolid[tile.TileType] || Main.tileSolidTop[tile.TileType] || IsPlatform(tilePosition));
     }
 
     public static bool SolidTileNoPlatform(int i, int j) => SolidTileNoPlatform(new Point(i, j));
 
     public static bool SolidTileNoPlatform(Point tilePosition) {
         Tile tile = GetTileSafely(tilePosition.X, tilePosition.Y);
-        return tile.HasTile && (Main.tileSolid[tile.TileType]/* || Main.tileSolidTop[tile.TileType]*/) && !IsPlatform(tilePosition);
+        return tile.HasTile && tile.HasUnactuatedTile && (Main.tileSolid[tile.TileType]/* || Main.tileSolidTop[tile.TileType]*/) && !IsPlatform(tilePosition);
     }
 
     public static bool IsPlatform(int i, int j) => IsPlatform(new Point(i, j));
