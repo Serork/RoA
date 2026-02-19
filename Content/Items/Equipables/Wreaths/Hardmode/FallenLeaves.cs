@@ -25,10 +25,6 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
     }
 
     private void PlayerCommon_PreItemCheckEvent(Player player) {
-        if (!player.IsLocal()) {
-            return;
-        }
-
         if (!player.GetCommon().IsFallenLeavesEffectActive) {
             return;
         }
@@ -37,7 +33,7 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
             return;
         }
 
-        if (!player.HasProjectile<FallenLeavesSprout>()) {
+        if (player.IsLocal() && !player.HasProjectile<FallenLeavesSprout>()) {
             int direction = -1;
             for (int i = 0; i < 2; i++) {
                 Vector2 position = player.GetPlayerCorePoint(),
@@ -52,10 +48,6 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
     }
 
     private void ItemCommon_UseItemEvent(Item item, Player player) {
-        if (!player.IsLocal()) {
-            return;
-        }
-
         if (!player.GetCommon().IsFallenLeavesEffectActive) {
             return;
         }
@@ -68,10 +60,6 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
             return;
         }
 
-        if (!player.ItemAnimationJustStarted) {
-            return;
-        }
-
         //if (player.HasProjectile<FallenLeavesBranch>()) {
         //    return;
         //}
@@ -79,34 +67,37 @@ sealed class FallenLeaves : WreathItem, WreathItem.IWreathGlowMask {
         //float chance = 1f * player.GetWreathHandler().ActualProgress4;
         //if (Main.rand.NextChance(chance))
 
-        int damage = 75;
-        if (Main.masterMode) {
-            damage *= 3;
-        }
-        else if (Main.expertMode) {
-            damage *= 2;
-        }
-        float knockBack = 7f;
 
-        int denom = 1;
-        damage /= denom;
-        knockBack /= denom;
+        if (player.IsLocal() && player.ItemAnimationJustStarted) {
+            int damage = 75;
+            if (Main.masterMode) {
+                damage *= 3;
+            }
+            else if (Main.expertMode) {
+                damage *= 2;
+            }
+            float knockBack = 7f;
 
-        {
-            int countToMake = 2;
-            bool direction = false;
-            bool wreathIsFull = WreathHandler.IsWreathCharged(player);
-            for (int i = 0; i < countToMake; i++) {
-                Vector2 position = player.GetPlayerCorePoint();
-                ProjectileUtils.SpawnPlayerOwnedProjectile<FallenLeavesBranch>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_FromThis()) {
-                    Position = position,
-                    AI0 = direction.ToInt(),
-                    AI1 = Main.rand.NextFloat(0.5f, 1.5f),
-                    AI2 = wreathIsFull.ToInt(),
-                    Damage = damage,
-                    KnockBack = knockBack
-                });
-                direction = !direction;
+            int denom = 1;
+            damage /= denom;
+            knockBack /= denom;
+
+            {
+                int countToMake = 2;
+                bool direction = false;
+                bool wreathIsFull = WreathHandler.IsWreathCharged(player);
+                for (int i = 0; i < countToMake; i++) {
+                    Vector2 position = player.GetPlayerCorePoint();
+                    ProjectileUtils.SpawnPlayerOwnedProjectile<FallenLeavesBranch>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_FromThis()) {
+                        Position = position,
+                        AI0 = direction.ToInt(),
+                        AI1 = Main.rand.NextFloat(0.5f, 1.5f),
+                        AI2 = wreathIsFull.ToInt(),
+                        Damage = damage,
+                        KnockBack = knockBack
+                    });
+                    direction = !direction;
+                }
             }
         }
 

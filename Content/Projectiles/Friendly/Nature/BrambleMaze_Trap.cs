@@ -9,8 +9,6 @@ using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 
-using static Terraria.GameContent.Animations.Actions.Sprites;
-
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BrambleMazeTrap : NatureProjectile {
@@ -19,7 +17,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
     private Vector2 _scale;
 
     public override void SetStaticDefaults() {
-
+        Projectile.SetFrameCount(2);
     }
 
     protected override void SafeSetDefaults() {
@@ -67,9 +65,13 @@ sealed class BrambleMazeTrap : NatureProjectile {
             }
         }
 
+        if (Projectile.frameCounter++ > 4) {
+            Projectile.frame = 1;
+        }
+
         Vector2 desiredScale = Vector2.One;
 
-        float lerpModifier = 1.25f;
+        float lerpModifier = 1f;
         _scale.X = Helper.Approach(_scale.X, 1f, 0.1f * lerpModifier);
         _scale.Y = Helper.Approach(_scale.Y, 1f, 0.2f * lerpModifier);
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f * lerpModifier);
@@ -77,7 +79,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
 
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = Projectile.GetTexture();
-        Vector2 origin = texture.Bounds.BottomCenter();
+        Vector2 origin = Utils.Frame(texture, 1, Projectile.GetFrameCount()).BottomCenter();
         float opacity2 = Ease.QuadOut(Projectile.Opacity);
         Vector2 position = Projectile.position;
         Projectile.position.Y += 10f;

@@ -158,12 +158,20 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 index = 0;
                 _branchData = new BranchSegmentInfo[sampleBranchInfo.Length];
                 Vector2 position = baseStartPosition;
+                Vector2 velocity = Vector2.Zero;
                 while (true) {
                     if (index > segmentCount) {
                         break;
                     }
                     int nextIndex = Math.Min(index + 1, segmentCount - 1);
-                    Vector2 branchPosition = position + sampleBranchInfo[index].Position.DirectionTo(sampleBranchInfo[nextIndex].Position) * segmentHeight * 0.975f;
+                    Vector2 velocity2 = sampleBranchInfo[index].Position.DirectionTo(sampleBranchInfo[nextIndex].Position);
+                    if (velocity == Vector2.Zero) {
+                        velocity = velocity2;
+                    }
+                    else {
+                        velocity = Vector2.Lerp(velocity, velocity2, 0.5f);
+                    }
+                    Vector2 branchPosition = position + velocity * segmentHeight * 0.975f;
                     _branchData[index] = new BranchSegmentInfo(branchPosition, (byte)Main.rand.Next(3), 0f, Main.rand.NextBool(), false, Main.rand.NextBool(5));
                     position = branchPosition;
                     index++;
@@ -368,7 +376,7 @@ sealed class FallenLeavesBranch : NatureProjectile_NoTextureLoad, IRequestAssets
                 frameY = 0;
             }
             Rectangle clip = Utils.Frame(branchTexture, 1, 5, frameY: frameY);
-            Vector2 origin = clip.BottomCenter();
+            Vector2 origin = clip.BottomCenter() - new Vector2(0f, 2f);
             Vector2 position = currentBranchInfo.Position,
                     nextPosition = nextBranchInfo.Position;
             float rotation = position.AngleTo(nextPosition) + MathHelper.PiOver2;

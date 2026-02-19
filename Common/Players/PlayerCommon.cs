@@ -314,7 +314,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool StandingStill => StandingStillTimer > 0;
 
-    public bool CanSpawnFallenLeavesBranch => FallenLeavesCounter >= FallenLeaves.ATTACKTIME;
+    public bool CanSpawnFallenLeavesBranch => FallenLeavesCounter >= 60f;
 
     public bool DoingBackflip => _backflipTimer > 0f;
     public float BackflipProgress => Ease.CubeIn(_backflipTimer / BACKFLIPTIME);
