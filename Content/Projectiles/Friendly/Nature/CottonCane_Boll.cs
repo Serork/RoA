@@ -143,7 +143,7 @@ sealed class CottonBoll : InteractableProjectile_Nature {
 
                 Vector2 velocity = Vector2.UnitX * 5f * _nextFiberDirectedLeft.ToDirectionInt();
 
-                if (Main.rand.NextBool(3)) {
+                if (Main.rand.NextChance(0.5f)) {
                     int num693 = 1;
                     for (int num694 = 0; num694 < num693; num694++) {
                         int num695 = Dust.NewDust(Projectile.Center, 0, 0, ModContent.DustType<CottonDust>(), 0f, 0f, 0);

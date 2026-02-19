@@ -53,7 +53,7 @@ sealed class CottonFiber : NatureProjectile {
         pushOthers();
         pushOthers();
 
-        if (Main.rand.NextBool(15)) {
+        if (Main.rand.NextBool(17)) {
             for (int i = 0; i < 1; i++) {
                 Dust dust = Dust.NewDustPerfect(Projectile.Center + Main.rand.NextVector2CircularEdge(Projectile.width, Projectile.height) * 0.5f, ModContent.DustType<CottonDust>(), Main.rand.NextVector2CircularEdge(3f, 3f) * (Main.rand.NextFloat() * 0.5f + 0.5f), 0);
                 dust.scale *= 1.2f;
