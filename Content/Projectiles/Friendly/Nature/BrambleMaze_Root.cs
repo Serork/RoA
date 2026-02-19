@@ -41,7 +41,7 @@ sealed class BrambleMazeRoot : NatureProjectile {
             Projectile.localAI[1] = 1f;
 
             int frame = (int)Projectile.ai[2];
-            Projectile.frame = Projectile.ai[0] == 0f ? Main.rand.Next(4) : frame;
+            Projectile.frame = Projectile.ai[0] == 0f ? 0 : frame;
 
             Projectile.SetDirection(Projectile.ai[1] == 0f ? Projectile.GetOwnerAsPlayer().direction : (int)Projectile.ai[1]);
 
@@ -66,7 +66,7 @@ sealed class BrambleMazeRoot : NatureProjectile {
         if (Projectile.Opacity < 1f) {
             return;
         }
-        float max = 50f;
+        float max = 15;
         if (Projectile.IsOwnerLocal() && Projectile.localAI[0] == 0f && Projectile.ai[0] < max) {
             Projectile.localAI[0] = 1f;
 
@@ -87,7 +87,7 @@ sealed class BrambleMazeRoot : NatureProjectile {
                 frame = 0;
             }
 
-            Vector2 position = Projectile.Center + Vector2.UnitX * Projectile.width * Projectile.direction;
+            Vector2 position = Projectile.Center + Vector2.UnitX * (Projectile.width + 2) * Projectile.direction;
             int damage = Projectile.damage;
             float knockBack = Projectile.knockBack;
             if (Projectile.ai[0] == max) {

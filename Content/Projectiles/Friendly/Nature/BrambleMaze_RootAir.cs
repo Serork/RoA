@@ -64,7 +64,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                 Projectile.ai[2] = 1f;
             }
 
-            Projectile.velocity *= 0.825f;
+            Projectile.velocity *= 0.8f;
             flag3 = true;
         }
 
