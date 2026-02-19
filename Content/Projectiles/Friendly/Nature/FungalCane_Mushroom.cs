@@ -71,6 +71,8 @@ sealed class FungalCaneMushroom : NatureProjectile {
         }
         Projectile.position.Y -= 5f;
 
+        Projectile.position += Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.Bottom.ToTileCoordinates() + new Point(0, 1)), onlySlope: true);
+
         Projectile.netUpdate = true;
     }
 

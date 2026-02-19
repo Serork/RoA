@@ -10,6 +10,17 @@ using Terraria.ModLoader;
 namespace RoA.Core.Utility; 
 
 static partial class Helper {
+    public static Vector2 OffsetPerSolidTileSlope_Bottom(Tile tile, bool onlySlope = false) {
+        Vector2 result = Vector2.Zero;
+        if (!onlySlope && tile.IsHalfBlock) {
+            result.Y += 8f;
+        }
+        if (tile.TopSlope) {
+            result.Y += 8f;
+        }
+        return result;
+    }
+
     public static void SpawnDebugDusts(Vector2 position) {
         Dust.NewDustPerfect(position, ModContent.DustType<Content.Dusts.Torch>(), Vector2.Zero).noGravity = true;
     }

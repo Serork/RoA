@@ -82,9 +82,7 @@ sealed class FungalCaneSmallShroom : NatureProjectile {
         }
         Projectile.position.Y -= 0f;
 
-        if (WorldGenHelper.GetTileSafely(Projectile.position.ToTileCoordinates() + new Point(1, 0)).IsHalfBlock) {
-            Projectile.position.Y -= 3f;
-        }
+        Projectile.position += Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.Bottom.ToTileCoordinates()));
 
         Projectile.netUpdate = true;
     }

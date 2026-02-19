@@ -51,18 +51,19 @@ sealed class BrambleMazeTrap : NatureProjectile {
 
             int attempts = 16;
             while (attempts-- > 0) {
-                if (!WorldGenHelper.SolidTile(Projectile.Bottom.ToTileCoordinates())) {
+                if (!WorldGenHelper.SolidTile(Projectile.BottomLeft.ToTileCoordinates())) {
                     break;
                 }
                 Projectile.position.Y -= 1f;
             }
             attempts = 16;
             while (attempts-- > 0) {
-                if (WorldGenHelper.SolidTile(Projectile.Bottom.ToTileCoordinates())) {
+                if (WorldGenHelper.SolidTile(Projectile.BottomLeft.ToTileCoordinates())) {
                     break;
                 }
                 Projectile.position.Y += 1f;
             }
+            Projectile.position += Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.BottomLeft.ToTileCoordinates()));
         }
 
         if (Projectile.frameCounter++ > 4) {
