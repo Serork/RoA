@@ -4585,7 +4585,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
 
         var config = ModContent.GetInstance<RoAServerConfig>();
         _biomeWidth = (int)(100 * config.BackwoodsWidthMultiplier);
-        _biomeHeight = (int)(200 * config.BackwoodsHeightMultiplier);
+        _biomeHeight = (int)(250 * config.BackwoodsHeightMultiplier);
         _biomeWidth += (int)(_biomeWidth * 1.35f * WorldGenHelper.WorldSize2);
         _biomeHeight += (int)(_biomeHeight * 1.35f * WorldGenHelper.WorldSize2);
 
@@ -4793,7 +4793,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         //}
         BackwoodsVars.BackwoodsCenterX = (ushort)CenterX;
         CenterY = WorldGenHelper.GetFirstTileY2(CenterX, skipWalls: true);
-        _biomeHeight += (int)MathF.Abs(WorldGenHelper.SafeFloatingIslandY - CenterY) / 2;
+        //_biomeHeight += (int)MathF.Abs(WorldGenHelper.SafeFloatingIslandY - CenterY) / 2;
         CenterY += _biomeHeight / 2;
         BackwoodsVars.BackwoodsHalfSizeX = (ushort)(_biomeWidth / 2);
     }
@@ -4882,7 +4882,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int extraHeight = _biomeHeight / 7;
         //CenterY += extraHeight;
         //_biomeHeight += extraHeight;
-        _biomeHeight += (int)MathF.Abs(topLeftTileY - topRightTileY) / 2;
+        //_biomeHeight += (int)MathF.Abs(topLeftTileY - topRightTileY) / 2;
         _toLeft = max == topLeftTileX;
         void setSurfaceY() {
             int getSurfaceOffset() {
