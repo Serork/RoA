@@ -1279,7 +1279,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         double num1007 = (double)Main.maxTilesX / 4200.0;
-        for (int num1008 = 0; (double)num1008 < 6.0 * num1007; num1008++) {
+        for (int num1008 = 0; (double)num1008 < 10 * num1007; num1008++) {
             int num1009 = CenterY + EdgeY;
             int num1010 = Bottom;
             if (num1009 >= num1010)
