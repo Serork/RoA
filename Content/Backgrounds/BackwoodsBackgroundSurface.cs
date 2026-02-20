@@ -205,14 +205,18 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             surfacePosition = 1f;
         }
         float screenPosition = Main.screenPosition.Y + Main.screenHeight / 2 - 600f;
+        if (Main.gameMenu) {
+            surfacePosition = 350;
+        }
         double backgroundTopMagicNumber = (0f - screenPosition + screenOff / 2f) / (surfacePosition * 16f);
         float bgGlobalScaleMultiplier = 2f;
         int pushBGTopHack;
         int offset2 = -180;
         int menuOffset = 0;
         if (Main.gameMenu) {
+            //menuOffset += 900;
             //menuOffset -= offset2;
-            menuOffset += (int)Main.worldSurface - 100;
+            //menuOffset += (int)Main.worldSurface - 100;
         }
         pushBGTopHack = menuOffset;
         pushBGTopHack += offset;
