@@ -12,7 +12,7 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BrambleMazeTrap : NatureProjectile {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(2);
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(1);
 
     private Vector2 _scale;
     private bool _shouldDisappear;
@@ -44,30 +44,30 @@ sealed class BrambleMazeTrap : NatureProjectile {
     }
 
     public override void AI() {
-        if (Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced && !_shouldDisappear) {
-            _shouldDisappear = true;
-        }
-        if (!_shouldDisappear) {
-            Projectile.timeLeft++;
-        }
+        //if (Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced && !_shouldDisappear) {
+        //    _shouldDisappear = true;
+        //}
+        //if (!_shouldDisappear) {
+        //    Projectile.timeLeft++;
+        //}
 
         if (Projectile.localAI[1] == 0f) {
-            Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced = true;
+            //Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced = true;
 
             Projectile.localAI[1] = 1f;
 
             int dustType = TileHelper.GetKillTileDust((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1, Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1]);
-            for (int k = 0; k < 12; k++) { 
+            for (int k = 0; k < 9; k++) { 
                 int dust = Dust.NewDust(Projectile.Center, 60, 6, dustType, 0, Main.rand.NextFloat(-5f, -1f));
-                Main.dust[dust].position.X = Projectile.Center.X + 40f * Main.rand.NextFloatDirection() - 10f;
+                Main.dust[dust].position.X = Projectile.Center.X + 32f * Main.rand.NextFloatDirection() - 8f;
                 Main.dust[dust].position.Y = ((int)Projectile.position.Y / 16 + 1) * 16;
                 Main.dust[dust].scale *= 1.2f;
             }
 
-            Projectile.SetDirection(Projectile.ai[1] == 0f ? Projectile.GetOwnerAsPlayer().direction : (int)Projectile.ai[1]);
-            if (Main.rand.NextBool()) {
-                Projectile.SetDirection(-Projectile.spriteDirection);
-            }
+            Projectile.SetDirection(-(int)Projectile.ai[1]);
+            //if (Main.rand.NextBool()) {
+            //    Projectile.SetDirection(-Projectile.spriteDirection);
+            //}
 
             int attempts = 16;
             while (attempts-- > 0) {

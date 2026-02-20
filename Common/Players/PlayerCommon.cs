@@ -212,7 +212,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsHoneyPunchEffectActive;
 
-    public bool IsBrambleMazePlaced, IsBrambleMazeUsed;
+    //public bool IsBrambleMazePlaced, IsBrambleMazeUsed;
 
     public enum EyePatchMode : byte {
         LeftEye = 0,
@@ -1789,14 +1789,14 @@ sealed partial class PlayerCommon : ModPlayer {
             Player.noItems = true;
         }
 
-        if (IsBrambleMazeUsed) {
-            Player.itemTime = Player.itemTimeMax - 1;
-            Player.itemAnimation = Player.itemAnimationMax - 1;
+        //if (IsBrambleMazeUsed) {
+        //    //Player.itemTime = Player.itemTimeMax - 1;
+        //    //Player.itemAnimation = Player.itemAnimationMax - 1;
 
-            if (IsBrambleMazePlaced || !Player.HasProjectile<BrambleMazeRootAir>()) {
-                IsBrambleMazeUsed = false;
-            }
-        }
+        //    if (IsBrambleMazePlaced || !Player.HasProjectile<BrambleMazeRootAir>()) {
+        //        IsBrambleMazeUsed = false;
+        //    }
+        //}
 
         return base.PreItemCheck();
     }

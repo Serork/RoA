@@ -15,7 +15,7 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BrambleMazeRoot : NatureProjectile {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(2);
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(1);
 
     private bool _shouldDisappear;
 
@@ -48,12 +48,12 @@ sealed class BrambleMazeRoot : NatureProjectile {
     }
 
     public override void AI() {
-        if (Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced && !_shouldDisappear) {
-            _shouldDisappear = true;
-        }
-        if (!_shouldDisappear) {
-            Projectile.timeLeft++;
-        }
+        //if (Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced && !_shouldDisappear) {
+        //    _shouldDisappear = true;
+        //}
+        //if (!_shouldDisappear) {
+        //    Projectile.timeLeft++;
+        //}
 
         if (Projectile.localAI[1] == 0f) {
             Projectile.localAI[1] = 1f;

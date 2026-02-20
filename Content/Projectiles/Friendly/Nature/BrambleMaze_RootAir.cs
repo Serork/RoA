@@ -8,7 +8,6 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +16,7 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BrambleMazeRootAir : NatureProjectile {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(2);
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
     private static ushort TIMELEFT2 => MathUtils.SecondsToFrames(2);
 
     private record struct RootAirInfo(Vector2 Position, float Rotation, byte TextureIndex, float Progress = 0f, ushort TimeLeft = 0) {
@@ -52,13 +51,11 @@ sealed class BrambleMazeRootAir : NatureProjectile {
     }
 
     public override void AI() {
-        if (Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced && !_shouldDisappear) {
-            Projectile.extraUpdates = Projectile.numUpdates = 0;
-            _shouldDisappear = true;
-        }
-        if (!_shouldDisappear) {
-            Projectile.timeLeft++;
-        }
+        //if (Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced && !_shouldDisappear) {
+        //    Projectile.extraUpdates = Projectile.numUpdates = 0;
+        //    _shouldDisappear = true;
+        //}
+        //Projectile.timeLeft++;
 
         bool flag3 = false;
         if (Collision.SolidCollision(Projectile.position, Projectile.width, Projectile.height)) {
@@ -125,6 +122,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
             _rootAirData2.Add(new RootAirInfo(position2, velocity.ToRotation() - MathHelper.PiOver2, _rootAirData[_currentIndex].TextureIndex, _rootAirData[_currentIndex].Progress));
             _currentIndex++;
         }
+        int allTimeLeft = 0;
         if (_rootAirData2.Count > 0) {
             float allProgress = 0f;
             for (int i = 0; i < _rootAirData2.Count; i++) {
@@ -133,12 +131,14 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                 RootAirInfo rootAirInfo = _rootAirData2[currentSegmentIndex];
                 if (i == 0 || _rootAirData2[i - 1].Progress >= 1f) {
                     rootAirInfo.Progress = Helper.Approach(rootAirInfo.Progress, 1f, lerpValue);
-                    //rootAirInfo.TimeLeft = (ushort)Helper.Approach(rootAirInfo.TimeLeft, TIMELEFT2, 1);
-                }
+                    rootAirInfo.TimeLeft = (ushort)Helper.Approach(rootAirInfo.TimeLeft, TIMELEFT2, 1);
 
-                //if (!_shouldDisappear) {
-                //    rootAirInfo.TimeLeft = (ushort)Helper.Approach(rootAirInfo.TimeLeft, 0, 1);
-                //}
+                    allTimeLeft += rootAirInfo.TimeLeft;
+
+                    //if (_shouldDisappear && (i == 0 || _rootAirData2[i - 1].TimeLeft >= 4)) {
+                    //    rootAirInfo.TimeLeft = (ushort)Helper.Approach(rootAirInfo.TimeLeft, TIMELEFT2, 1);
+                    //}
+                }
 
                 _rootAirData2[currentSegmentIndex] = rootAirInfo;
 
@@ -146,6 +146,10 @@ sealed class BrambleMazeRootAir : NatureProjectile {
             }
             allProgress /= _rootAirData2.Count;
             Projectile.localAI[2] = allProgress;
+        }
+
+        if (allTimeLeft >= TIMELEFT2 * _rootAirData2.Count) {
+            Projectile.Kill();
         }
 
         if (!flag || flag3) {
@@ -188,7 +192,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
             Color color = Lighting.GetColor(position.ToTileCoordinates());
 
             float opacity2 = Ease.QuadOut(opacity);
-            opacity2 *= Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
+            opacity2 *= Utils.GetLerpValue(TIMELEFT2, TIMELEFT2 - 30, rootAirInfo.TimeLeft, true);
 
             SpriteEffects flip = Projectile.spriteDirection.ToSpriteEffects();
 

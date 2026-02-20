@@ -44,10 +44,10 @@ sealed class BrambleMaze : NatureItem {
     }
 
     public override bool? UseItem(Player player) {
-        if (player.ItemAnimationJustStarted) {
-            player.GetCommon().IsBrambleMazePlaced = false;
-            player.GetCommon().IsBrambleMazeUsed = true;
-        }
+        //if (player.ItemAnimationJustStarted) {
+        //    player.GetCommon().IsBrambleMazePlaced = false;
+        //    player.GetCommon().IsBrambleMazeUsed = true;
+        //}
 
         return true;
     }
