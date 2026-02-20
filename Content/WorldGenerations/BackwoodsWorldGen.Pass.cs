@@ -4882,7 +4882,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int extraHeight = _biomeHeight / 7;
         //CenterY += extraHeight;
         //_biomeHeight += extraHeight;
-        //_biomeHeight += (int)MathF.Abs(topLeftTileY - topRightTileY) / 2;
+        _biomeHeight += (int)MathF.Abs(topLeftTileY - topRightTileY) / 2;
         _toLeft = max == topLeftTileX;
         void setSurfaceY() {
             int getSurfaceOffset() {
