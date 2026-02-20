@@ -271,7 +271,12 @@ sealed class TarBiome_GenPass : ModSystem {
         tasks.Insert(tasks.FindIndex(task => task.Name == "Micro Biomes") - 2, new PassLegacy(string.Empty, delegate (GenerationProgress progress, GameConfiguration passConfig) {
             foreach (Point16 poundPosition in TileToPound) {
                 Tile tile = Main.tile[poundPosition.X, poundPosition.Y];
-                tile.IsHalfBlock = true;
+                if (!Main.tile[poundPosition.X + 1, poundPosition.Y].IsHalfBlock &&
+                    !Main.tile[poundPosition.X - 1, poundPosition.Y].IsHalfBlock &&
+                    !Main.tile[poundPosition.X, poundPosition.Y - 1].IsHalfBlock &&
+                    !Main.tile[poundPosition.X, poundPosition.Y + 1].IsHalfBlock) {
+                    tile.IsHalfBlock = true;
+                }
             }
         }));
     }

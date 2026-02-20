@@ -1813,8 +1813,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int num1050 = 0;
         //int y = CenterY - EdgeY / 2;
         double y = Math.Max(CenterY - EdgeY, Main.worldSurface);
-        int maxLeft = Left - 50;
-        int maxRight = Right + 50;
+        int maxLeft = Left - 75;
+        int maxRight = Right + 75;
         ushort[] invalidWalls = [(ushort)ModContent.WallType<TealMossWall2>(), (ushort)ModContent.WallType<BackwoodsRootWall2>(), WallID.JungleUnsafe1, WallID.JungleUnsafe2, WallID.JungleUnsafe3, WallID.JungleUnsafe4, WallID.LihzahrdBrickUnsafe, 59, WallID.CaveUnsafe, WallID.Cave2Unsafe, WallID.Cave3Unsafe, WallID.Cave4Unsafe, WallID.Cave5Unsafe, WallID.Cave7Unsafe, WallID.CaveWall, WallID.CaveWall2];
         ushort[] invalidWalls2 = [23, 24, 42, 45, 10, 179, 181, 196, 197, 198, 199, 212, 213, 214, 215, 208, 209, 210, 211];
         for (int num1048 = maxLeft; num1048 < maxRight; num1048++) {
