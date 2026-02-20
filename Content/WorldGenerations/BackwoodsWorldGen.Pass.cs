@@ -3895,7 +3895,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
         num568 = (double)(Main.maxTilesX * Main.maxTilesY) / 5040000.0;
-        num569 = (int)(300.0 * num568);
+        num569 = (int)(350.0 * num568);
         num570 = num569;
         shapeData = new ShapeData();
         while (num569 > 0) {
