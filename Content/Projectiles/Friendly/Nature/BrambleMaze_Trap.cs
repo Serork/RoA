@@ -113,7 +113,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
         else {
             Projectile.position.X += 9f * Projectile.ai[1];
         }
-        Projectile.QuickDrawAnimated(lightColor * opacity2, origin: origin, scale: new Vector2(_scale.X, Ease.CubeOut(_scale.Y)));
+        Projectile.QuickDrawAnimated(Lighting.GetColor(Projectile.Top.ToTileCoordinates()) * opacity2, origin: origin, scale: new Vector2(_scale.X, Ease.CubeOut(_scale.Y)));
         Projectile.position = position;
 
         return false;

@@ -153,6 +153,7 @@ sealed class BrambleMazeRoot : NatureProjectile {
         if (!facedRight) {
             Projectile.position.X += width;
         }
+        lightColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates());
         Projectile.position.Y += 2f;
         clip.Width = (int)(width * opacity3);
         Projectile.position.X -= width * (1f - opacity3 * facedRight.ToDirectionInt() + (!facedRight).ToInt()) / 2f;
