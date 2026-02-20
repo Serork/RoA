@@ -112,8 +112,8 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
             Vector2 position = GetTilePosition(player, mousePosition, false, cappedWidth: (int)CAPPEDMOUSEPOSITIONWIDTH, cappedHeight: (int)CAPPEDMOUSEPOSITIONHEIGHT).ToWorldCoordinates() - Vector2.UnitY * 4f;
             Vector2 offset = Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(position.ToTileCoordinates() + new Point(0, 0)));
             position += offset;
-             Vector2 velocity = (mousePosition + Main.rand.NextVector2Circular(10f, 10f) - position).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.PiOver2) * 3f * velocityFactor;
-            Vector2 dustPos = position + Vector2.UnitY * 4f + Main.rand.NextVector2Circular(10f, 10f).RotatedByRandom(MathHelper.Pi);
+            Vector2 velocity = (mousePosition + Main.rand.NextVector2Circular(10f, 10f) - position).SafeNormalize(Vector2.Zero).RotatedByRandom(MathHelper.PiOver2) * 3f * velocityFactor;
+            Vector2 dustPos = position + Vector2.UnitY * 4f + Main.rand.NextVector2Circular(16f, 16f).RotatedByRandom(MathHelper.Pi);
             //int x = (int)dustPos.X / 16, y = (int)dustPos.Y / 16;
 
             bool flag = true;
