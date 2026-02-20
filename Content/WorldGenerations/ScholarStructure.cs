@@ -7,6 +7,7 @@ using RoA.Common.World;
 using RoA.Content.Tiles.Ambient;
 using RoA.Content.Tiles.LiquidsSpecific;
 using RoA.Content.Tiles.Miscellaneous;
+using RoA.Content.Tiles.Solid.Backwoods;
 using RoA.Core;
 using RoA.Core.Utility;
 
@@ -100,7 +101,8 @@ sealed class ScholarStructure : IInitializer {
             for (int num936 = num932 - num934; num936 < num932 + num934; num936 += 3) {
                 for (int num937 = num933 - num934; num937 < num933 + num934; num937 += 3) {
                     if (WorldGen.InWorld(num936, num937)) {
-                        ushort[] skipTileTypes = [TileID.Containers, TileID.Crimstone, TileID.Ebonstone, TileID.MushroomGrass, 147, 161, 162, 60, 368, 367, (ushort)ModContent.TileType<SolidifiedTar>()];
+                        ushort[] skipTileTypes = [TileID.Containers, TileID.Crimstone, TileID.Ebonstone, TileID.MushroomGrass, 147, 161, 162, 60, 368, 367, 
+                            (ushort)ModContent.TileType<SolidifiedTar>(), (ushort)ModContent.TileType<BackwoodsStone>()];
                         if (Main.tile[num936, num937].HasTile && skipTileTypes.Contains(Main.tile[num936, num937].TileType)) {
                             flag56 = true;
                             break;
