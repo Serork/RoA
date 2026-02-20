@@ -4681,13 +4681,13 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 flag50 = false;
 
             if (!remixWorldGen) {
-                if (num793 > GenVars.UndergroundDesertLocation.X - 50 && num793 < GenVars.UndergroundDesertLocation.X + GenVars.UndergroundDesertLocation.Width + 50)
+                if (num793 > GenVars.UndergroundDesertLocation.X - 100 && num793 < GenVars.UndergroundDesertLocation.X + GenVars.UndergroundDesertLocation.Width + 100)
                     flag50 = false;
 
-                if (num794 > GenVars.UndergroundDesertLocation.X - 50 && num794 < GenVars.UndergroundDesertLocation.X + GenVars.UndergroundDesertLocation.Width + 50)
+                if (num794 > GenVars.UndergroundDesertLocation.X - 100 && num794 < GenVars.UndergroundDesertLocation.X + GenVars.UndergroundDesertLocation.Width + 100)
                     flag50 = false;
 
-                if (num795 > GenVars.UndergroundDesertLocation.X - 50 && num795 < GenVars.UndergroundDesertLocation.X + GenVars.UndergroundDesertLocation.Width + 50)
+                if (num795 > GenVars.UndergroundDesertLocation.X - 100 && num795 < GenVars.UndergroundDesertLocation.X + GenVars.UndergroundDesertLocation.Width + 100)
                     flag50 = false;
 
                 if (num794 < num790 && num795 > num789) {
