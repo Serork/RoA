@@ -212,6 +212,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
     public bool IsHoneyPunchEffectActive;
 
+    public bool IsBrambleMazePlaced, IsBrambleMazeUsed;
+
     public enum EyePatchMode : byte {
         LeftEye = 0,
         RightEye = 1,
@@ -1785,6 +1787,15 @@ sealed partial class PlayerCommon : ModPlayer {
 
         if (IsAetherInvincibilityActive) {
             Player.noItems = true;
+        }
+
+        if (IsBrambleMazeUsed) {
+            Player.itemTime = Player.itemTimeMax - 1;
+            Player.itemAnimation = Player.itemAnimationMax - 1;
+
+            if (IsBrambleMazePlaced) {
+                IsBrambleMazeUsed = false;
+            }
         }
 
         return base.PreItemCheck();

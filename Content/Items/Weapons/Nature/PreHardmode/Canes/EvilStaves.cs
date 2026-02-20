@@ -136,7 +136,7 @@ abstract class EvilStaffBase : CaneBaseProjectile {
         if (Main.rand.NextChance(Math.Min(0.5f, 0.5f * step * 1.5f))) {
             bool flag = Main.rand.NextBool(3);
             Point mousePositionInTiles = _mousePosition.ToTileCoordinates();
-            Dust dust = Dust.NewDustPerfect(_mousePosition - new Vector2(0f, -2f + Main.rand.NextFloat() * 3f),
+            Dust dust = Dust.NewDustPerfect(_mousePosition - new Vector2(0f, -2f + Main.rand.NextFloat() * 4f),
                 flag ? Dust2Type : TileHelper.GetKillTileDust(mousePositionInTiles.X, mousePositionInTiles.Y, WorldGenHelper.GetTileSafely(mousePositionInTiles)));
             if (Main.rand.NextChance(0.5)) {
                 dust.noLight = true;

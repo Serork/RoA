@@ -12,9 +12,10 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BrambleMazeTrap : NatureProjectile {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(2);
 
     private Vector2 _scale;
+    private bool _shouldDisappear;
 
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(2);
@@ -25,7 +26,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
 
         Projectile.friendly = true;
         Projectile.penetrate = -1;
-        Projectile.tileCollide = false;
+        Projectile.tileCollide = true;
 
         Projectile.timeLeft = TIMELEFT;
 
@@ -38,10 +39,21 @@ sealed class BrambleMazeTrap : NatureProjectile {
         hitbox.Inflate(20, 0);
     }
 
-    public override bool ShouldUpdatePosition() => false;
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        return false;
+    }
 
     public override void AI() {
+        if (Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced && !_shouldDisappear) {
+            _shouldDisappear = true;
+        }
+        if (!_shouldDisappear) {
+            Projectile.timeLeft++;
+        }
+
         if (Projectile.localAI[1] == 0f) {
+            Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced = true;
+
             Projectile.localAI[1] = 1f;
 
             Projectile.SetDirection(Projectile.ai[1] == 0f ? Projectile.GetOwnerAsPlayer().direction : (int)Projectile.ai[1]);
@@ -66,6 +78,8 @@ sealed class BrambleMazeTrap : NatureProjectile {
             Projectile.position += Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.BottomLeft.ToTileCoordinates()));
         }
 
+        Projectile.velocity *= 0f;
+
         if (Projectile.frameCounter++ > 4) {
             Projectile.frame = 1;
         }
@@ -82,6 +96,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
         Texture2D texture = Projectile.GetTexture();
         Vector2 origin = Utils.Frame(texture, 1, Projectile.GetFrameCount()).BottomCenter();
         float opacity2 = Ease.QuadOut(Projectile.Opacity);
+        opacity2 *= Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
         Vector2 position = Projectile.position;
         Projectile.position.Y += 12f;
         if (Projectile.ai[1] > 0) {

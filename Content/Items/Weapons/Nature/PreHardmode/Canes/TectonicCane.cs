@@ -82,7 +82,7 @@ sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
             float progress = 1.25f * Ease.ExpoInOut(Math.Max(step, 0.25f)) + 0.25f;
             int count = (int)(4 * Math.Max(0.25f, progress));
             for (int k = 0; k < count; k++) {
-                Dust.NewDust(position - new Vector2(32f, 0f), 60, 2, dustType, 0, Main.rand.NextFloat(-(2f + 1.5f * Main.rand.NextFloat() * progress), -1f) * progress, count < 2 ? 0 : Main.rand.Next(255), default,
+                Dust.NewDust(position - new Vector2(32f, -2f + Main.rand.NextFloat() * 4f), 60, 2, dustType, 0, Main.rand.NextFloat(-(2f + 1.5f * Main.rand.NextFloat() * progress), -1f) * progress, count < 2 ? 0 : Main.rand.Next(255), default,
                     Main.rand.NextFloat(0.4f, 1.5f) * MathHelper.Clamp(progress, 0.7f, 0.925f));
             }
         }

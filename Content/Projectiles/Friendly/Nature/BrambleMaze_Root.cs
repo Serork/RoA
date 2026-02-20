@@ -8,13 +8,16 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BrambleMazeRoot : NatureProjectile {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(2);
+
+    private bool _shouldDisappear;
 
     public override void SetStaticDefaults() {
         Projectile.SetFrameCount(4);
@@ -25,18 +28,33 @@ sealed class BrambleMazeRoot : NatureProjectile {
 
         Projectile.friendly = true;
         Projectile.penetrate = -1;
-        Projectile.tileCollide = false;
+        Projectile.tileCollide = true;
 
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.manualDirectionChange = true;
 
         Projectile.Opacity = 0f;
+
+        Projectile.hide = true;
     }
 
-    public override bool ShouldUpdatePosition() => false;
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+        behindProjectiles.Add(index);
+    }
+
+    public override bool OnTileCollide(Vector2 oldVelocity) {
+        return false;
+    }
 
     public override void AI() {
+        if (Projectile.GetOwnerAsPlayer().GetCommon().IsBrambleMazePlaced && !_shouldDisappear) {
+            _shouldDisappear = true;
+        }
+        if (!_shouldDisappear) {
+            Projectile.timeLeft++;
+        }
+
         if (Projectile.localAI[1] == 0f) {
             Projectile.localAI[1] = 1f;
 
@@ -62,6 +80,8 @@ sealed class BrambleMazeRoot : NatureProjectile {
             Projectile.position += Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.BottomLeft.ToTileCoordinates()));
             Projectile.position += Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.Bottom.ToTileCoordinates()));
         }
+
+        Projectile.velocity *= 0f;
 
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f);
 
@@ -128,6 +148,7 @@ sealed class BrambleMazeRoot : NatureProjectile {
         clip.Width = (int)(width * opacity3);
         Projectile.position.X -= width * (1f - opacity3 * facedRight.ToDirectionInt() + (!facedRight).ToInt()) / 2f;
         float opacity2 = Ease.QuadOut(opacity);
+        opacity2 *= Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
         Projectile.QuickDrawAnimated(lightColor.ModifyRGB(borderColorRGBFactor) * opacity2, frameBox: clip);
         Projectile.position = position;
         if (!facedRight) {

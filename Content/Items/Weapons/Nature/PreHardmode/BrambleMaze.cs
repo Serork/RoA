@@ -3,6 +3,7 @@
 using RoA.Common.Druid;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -40,6 +41,15 @@ sealed class BrambleMaze : NatureItem {
         Item.shoot = ModContent.ProjectileType<BrambleMazeRootAir>();
 
         Item.value = Item.sellPrice(silver: 20);
+    }
+
+    public override bool? UseItem(Player player) {
+        if (player.ItemAnimationJustStarted) {
+            player.GetCommon().IsBrambleMazePlaced = false;
+            player.GetCommon().IsBrambleMazeUsed = true;
+        }
+
+        return true;
     }
 
     public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) {
