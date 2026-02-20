@@ -34,9 +34,12 @@ sealed class BackwoodsSky : CustomSky {
             globalOpacity *= 0f;
         }
         if (ModContent.GetInstance<TileCount>().BackwoodsTiles <= 0f) {
-            _opacity = 0f;
+            globalOpacity *= 0f;
+            _opacity = 0.02f;
         }
-        _opacity = Helper.Approach(_opacity, globalOpacity, 0.02f);
+        float lerpValue = 0.02f;
+        float tileFactor = MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f);
+        _opacity = Helper.Approach(_opacity, globalOpacity, lerpValue * MathHelper.Lerp(1f, 7.5f, 1f - tileFactor));
     }
 
     public override Color OnTileColor(Color inColor) {

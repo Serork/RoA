@@ -256,6 +256,9 @@ sealed class BackwoodsFogHandler : ModSystem {
         float tileFactor = MathUtils.Clamp01(ModContent.GetInstance<TileCount>().BackwoodsTiles / 1000f);
         if (!BackwoodsBiome.IsActiveForFogEffect || !IsFogActive) {
             Opacity = Helper.Approach(Opacity, 0f, lerpValue * MathHelper.Lerp(1f, 7.5f, 1f - tileFactor));
+            if (ModContent.GetInstance<TileCount>().BackwoodsTiles <= 0f) {
+                Opacity = 0f;
+            }
 
             //if (Opacity > 0f) {
             //    Opacity -= 0.005f * 0.25f;
