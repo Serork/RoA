@@ -1177,6 +1177,33 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 WorldGen.TileRunner(x, y, sizeX, sizeY, type);
             }
         }
+
+        int num992 = (int)((double)Main.maxTilesX * 0.002);
+        int num993 = (int)((double)Main.maxTilesX * 0.0007);
+        int num994 = (int)((double)Main.maxTilesX * 0.0003);
+        //if (WorldGen.remixWorldGen) {
+        //    num992 *= 3;
+        //    num993 *= 3;
+        //    num994 *= 3;
+        //}
+
+        for (int num995 = 0; num995 < num992; num995++) {
+            int num996 = WorldGen.genRand.Next(0, Main.maxTilesX);
+            while (((double)num996 > (double)Main.maxTilesX * 0.45 && (double)num996 < (double)Main.maxTilesX * 0.55) || 
+                   num996 < GenVars.leftBeachEnd + 20 || num996 > GenVars.rightBeachStart - 20) {
+                num996 = WorldGen.genRand.Next(0, Main.maxTilesX);
+            }
+
+            for (int num997 = 0; (double)num997 < GenVars.worldSurfaceHigh; num997++) {
+                if (num997 < minY && num996 > CenterX - 4 && num996 < CenterX + 27) {
+                    continue;
+                }
+                if (WorldGenHelper.ActiveTile(num996, num997, _dirtTileType)) {
+                    WorldGen.TileRunner(num996, num997, WorldGen.genRand.Next(3, 6), WorldGen.genRand.Next(5, 50), -1, addTile: false, (double)WorldGen.genRand.Next(-10, 11) * 0.1, 1.0);
+                    break;
+                }
+            }
+        }
     }
 
 
