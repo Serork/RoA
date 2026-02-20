@@ -232,10 +232,10 @@ sealed class FilamentPillar : ModNPC {
             x += step / 2;
 
             if (currentSection == 2 && onRightSide) {
-                x += step + step / 6;
+                x += step + step / sectionCount;
             }
             if (currentSection > 2 && onRightSide) {
-                x += step / 6;
+                x += step / sectionCount;
             }
 
             //if (currentSection == 4 || currentSection == 5) {
@@ -252,7 +252,7 @@ sealed class FilamentPillar : ModNPC {
             int pillarNPCType = array[currentAddedPillarIndex];
 
             for (int k = 0; k < 30; k++) {
-                int num4 = Main.rand.Next(-100, 101);
+                int num4 = 0;
                 if (Main.remixWorld && Main.getGoodWorld) {
                     int num5 = Main.rand.Next((int)Main.worldSurface, Main.maxTilesY - 350);
                     if (!WorldGen.PlayerLOS(num3 + num4 - 10, num5) && !WorldGen.PlayerLOS(num3 + num4 + 10, num5) && !WorldGen.PlayerLOS(num3 + num4 - 10, num5 - 20) && !WorldGen.PlayerLOS(num3 + num4 + 10, num5 - 20)) {
