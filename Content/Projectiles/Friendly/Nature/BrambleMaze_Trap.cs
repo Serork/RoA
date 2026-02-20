@@ -56,6 +56,12 @@ sealed class BrambleMazeTrap : NatureProjectile {
 
             Projectile.localAI[1] = 1f;
 
+            int dustType = TileHelper.GetKillTileDust((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1, Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1]);
+            for (int k = 0; k < 18; k++) { 
+                int dust = Dust.NewDust(Projectile.Center, 60, 2, dustType, 0, Main.rand.NextFloat(-5f, -1f), 0, default, Main.rand.NextFloat(1f, 1.2f));
+                Main.dust[dust].position.X = Projectile.Center.X + 40f * Main.rand.NextFloatDirection() - 8f;
+            }
+
             Projectile.SetDirection(Projectile.ai[1] == 0f ? Projectile.GetOwnerAsPlayer().direction : (int)Projectile.ai[1]);
             if (Main.rand.NextBool()) {
                 Projectile.SetDirection(-Projectile.spriteDirection);

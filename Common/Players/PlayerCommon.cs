@@ -1793,7 +1793,7 @@ sealed partial class PlayerCommon : ModPlayer {
             Player.itemTime = Player.itemTimeMax - 1;
             Player.itemAnimation = Player.itemAnimationMax - 1;
 
-            if (IsBrambleMazePlaced) {
+            if (IsBrambleMazePlaced || !Player.HasProjectile<BrambleMazeRootAir>()) {
                 IsBrambleMazeUsed = false;
             }
         }

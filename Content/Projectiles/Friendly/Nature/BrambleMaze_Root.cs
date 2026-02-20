@@ -58,6 +58,10 @@ sealed class BrambleMazeRoot : NatureProjectile {
         if (Projectile.localAI[1] == 0f) {
             Projectile.localAI[1] = 1f;
 
+            if (Main.rand.NextChance(0.75f)) {
+                Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
+            }
+
             int frame = (int)Projectile.ai[2];
             Projectile.frame = Projectile.ai[0] == 0f ? 0 : frame;
 
