@@ -28,8 +28,6 @@ namespace RoA.Content.WorldGenerations;
 
 // TODO: seeds support
 sealed class TarBiome : MicroBiome {
-    public static List<Point16> TileToPound = null!;
-
     private struct Magma {
         public readonly double Pressure;
         public readonly double Resistance;
@@ -119,7 +117,6 @@ sealed class TarBiome : MicroBiome {
         if (TooCloseToImportantLocations(origin)) {
             return false;
         }
-        TileToPound ??= [];
         _sourceMagmaMap = new Magma[90, 70];
         _targetMagmaMap = new Magma[90, 70];
         origin.X -= _sourceMagmaMap.GetLength(0) / 2;
@@ -592,7 +589,7 @@ sealed class TarBiome : MicroBiome {
             x += dir;
             if (WorldGen.SolidTile(x, y)) {
                 WorldGen.PoundTile(x, y);
-                TileToPound.Add(new Point16(x, y));
+                TarBiome_GenPass.TileToPound.Add(new Point16(x, y));
                 if (!Main.tile[x, y + 1].HasTile) {
                     Tile tile = Main.tile[x, y + 1];
                     tile.HasTile = true;

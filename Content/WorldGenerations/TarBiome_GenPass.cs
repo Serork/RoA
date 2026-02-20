@@ -12,6 +12,7 @@ using RoA.Core.Utility;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -27,6 +28,16 @@ namespace RoA.Content.WorldGenerations;
 
 // TODO: seeds support
 sealed class TarBiome_GenPass : ModSystem {
+    public static HashSet<Point16> TileToPound { get; private set; } = [];
+
+    public override void Load() {
+        TileToPound ??= [];
+    }
+
+    public override void PostWorldGen() {
+        TileToPound.Clear();
+    }
+
     private void WallVariety(GenerationProgress progress, GameConfiguration configuration) {
         progress.Message = Lang.gen[79].Value;
         double num568 = (double)(Main.maxTilesX * Main.maxTilesY) / 5040000.0;
@@ -228,9 +239,6 @@ sealed class TarBiome_GenPass : ModSystem {
             for (int j = 5; j < Main.maxTilesX - 5; j++) {
                 for (int k = 5; k < Main.maxTilesY - 5; k++) {
                     Tile tile = Main.tile[j, k];
-                    if (TarBiome.TileToPound.Contains(new Point16(j, k))) {
-                        tile.IsHalfBlock = true;
-                    }
                     if (tile.HasTile) {
                         if (tile.TileType == TarBiome.TARTILETYPE && !tile.IsHalfBlock) {
                             bool flag = false;
@@ -259,12 +267,17 @@ sealed class TarBiome_GenPass : ModSystem {
                     }
                 }
             }
-            TarBiome.TileToPound.Clear();
+        }));
+        tasks.Insert(tasks.FindIndex(task => task.Name == "Micro Biomes") - 2, new PassLegacy(string.Empty, delegate (GenerationProgress progress, GameConfiguration passConfig) {
+            foreach (Point16 poundPosition in TileToPound) {
+                Tile tile = Main.tile[poundPosition.X, poundPosition.Y];
+                tile.IsHalfBlock = true;
+            }
         }));
     }
 
     public override void Unload() {
-        TarBiome.TileToPound.Clear();
-        TarBiome.TileToPound = null!;
+        TileToPound.Clear();
+        TileToPound = null!;
     }
 }
