@@ -73,7 +73,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             while (attempts-- > 0) {
                 bool shouldBreak = true;
                 for (int i = 0; i < ThemBG.Length; i++) {
-                    if (Vector2.Distance(ThemBG[availableIndex].Position, position) < 200f) {
+                    if (Vector2.Distance(ThemBG[availableIndex].Position, position) < 300f) {
                         position = getPosition();
                         shouldBreak = false;
                     }
