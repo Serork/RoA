@@ -206,7 +206,9 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         }
         float screenPosition = Main.screenPosition.Y + Main.screenHeight / 2 - 600f;
         if (Main.gameMenu) {
-            surfacePosition = 325;
+            screenPosition = 4370 + Main.screenHeight / 2 - 600f;
+            surfacePosition = 300;
+            scAdj = screenOff = 0f;
         }
         double backgroundTopMagicNumber = (0f - screenPosition + screenOff / 2f) / (surfacePosition * 16f);
         float bgGlobalScaleMultiplier = 2f;
