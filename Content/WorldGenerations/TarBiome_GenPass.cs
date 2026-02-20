@@ -14,7 +14,9 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.Generation;
+using Terraria.ID;
 using Terraria.IO;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -226,6 +228,9 @@ sealed class TarBiome_GenPass : ModSystem {
             for (int j = 5; j < Main.maxTilesX - 5; j++) {
                 for (int k = 5; k < Main.maxTilesY - 5; k++) {
                     Tile tile = Main.tile[j, k];
+                    if (TarBiome.TileToPound.Contains(new Point16(j, k))) {
+                        tile.IsHalfBlock = true;
+                    }
                     if (tile.HasTile) {
                         if (tile.TileType == TarBiome.TARTILETYPE && !tile.IsHalfBlock) {
                             bool flag = false;
@@ -254,6 +259,12 @@ sealed class TarBiome_GenPass : ModSystem {
                     }
                 }
             }
+            TarBiome.TileToPound.Clear();
         }));
+    }
+
+    public override void Unload() {
+        TarBiome.TileToPound.Clear();
+        TarBiome.TileToPound = null!;
     }
 }
