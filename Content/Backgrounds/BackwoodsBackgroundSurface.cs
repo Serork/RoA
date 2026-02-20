@@ -190,7 +190,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         }
         int offset = 30;
         if (Main.gameMenu) {
-            offset = 0;
+        //    offset = 0;
         }
         if (WorldGen.drunkWorldGen) {
             offset = -180;
@@ -211,8 +211,8 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
         int offset2 = -180;
         int menuOffset = 0;
         if (Main.gameMenu) {
-            menuOffset -= offset2;
-            menuOffset -= 1300;
+            //menuOffset -= offset2;
+            menuOffset += 900;
         }
         pushBGTopHack = menuOffset;
         pushBGTopHack += offset;
@@ -230,9 +230,9 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             bgScale *= bgGlobalScaleMultiplier * 0.8f;
             var bgWidthScaled = (int)(mid2.Width * bgScale);
             var bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled) - bgWidthScaled / 2);
-            if (Main.gameMenu) {
-                bgTopY = 320 + pushBGTopHack;
-            }
+            //if (Main.gameMenu) {
+            //    bgTopY = 320 + pushBGTopHack;
+            //}
             var bgLoops = Main.screenWidth / bgWidthScaled + 2;
             SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax * parallaxModifier);
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
@@ -247,9 +247,9 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             bgScale *= bgGlobalScaleMultiplier * 0.8f;
             bgWidthScaled = (int)(far.Width * bgScale);
             bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled) - bgWidthScaled / 2);
-            if (Main.gameMenu) {
-                bgTopY = 320 + pushBGTopHack;
-            }
+            //if (Main.gameMenu) {
+            //    bgTopY = 320 + pushBGTopHack;
+            //}
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
             SkyManager.Instance.DrawToDepth(spriteBatch, 1.4f / (float)bgParallax * parallaxModifier);
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
@@ -264,10 +264,10 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             bgScale *= bgGlobalScaleMultiplier * 0.9f;
             bgWidthScaled = (int)(mid.Width * bgScale);
             bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled) - bgWidthScaled / 2) - 150;
-            if (Main.gameMenu) {
-                bgTopY = 400 + pushBGTopHack;
-                bgStartX -= 80;
-            }
+            //if (Main.gameMenu) {
+            //    bgTopY = 400 + pushBGTopHack;
+            //    bgStartX -= 80;
+            //}
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
             SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax * parallaxModifier);
             // line here
@@ -283,10 +283,10 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             bgScale *= bgGlobalScaleMultiplier * 0.9f;
             bgWidthScaled = (int)(mid.Width * bgScale);
             bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled) - bgWidthScaled / 2) - 150;
-            if (Main.gameMenu) {
-                bgTopY = 400 + pushBGTopHack;
-                bgStartX -= 80;
-            }
+            //if (Main.gameMenu) {
+            //    bgTopY = 400 + pushBGTopHack;
+            //    bgStartX -= 80;
+            //}
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
             SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax * parallaxModifier);
             // line here
@@ -302,10 +302,10 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             bgScale *= bgGlobalScaleMultiplier;
             bgWidthScaled = (int)(close2.Width * bgScale);
             bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled) - bgWidthScaled / 2);
-            if (Main.gameMenu) {
-                bgTopY = 480 + pushBGTopHack;
-                bgStartX -= 120;
-            }
+            //if (Main.gameMenu) {
+            //    bgTopY = 480 + pushBGTopHack;
+            //    bgStartX -= 120;
+            //}
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
             SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax * parallaxModifier);
             int close2Offset = 600;
@@ -322,10 +322,10 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             bgScale *= bgGlobalScaleMultiplier;
             bgWidthScaled = (int)(close.Width * bgScale);
             bgStartX = (int)(0.0 - Math.IEEERemainder(Main.screenPosition.X * bgParallax, bgWidthScaled) - bgWidthScaled / 2);
-            if (Main.gameMenu) {
-                bgTopY = 480 + pushBGTopHack;
-                bgStartX -= 120;
-            }
+            //if (Main.gameMenu) {
+            //    bgTopY = 480 + pushBGTopHack;
+            //    bgStartX -= 120;
+            //}
             bgLoops = Main.screenWidth / bgWidthScaled + 2;
             SkyManager.Instance.DrawToDepth(spriteBatch, 1.5f / (float)bgParallax);
             if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
