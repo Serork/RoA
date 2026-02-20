@@ -33,6 +33,9 @@ sealed class BackwoodsSky : CustomSky {
         if (Main.gameMenu) {
             globalOpacity *= 0f;
         }
+        if (ModContent.GetInstance<TileCount>().BackwoodsTiles <= 0f) {
+            _opacity = 0f;
+        }
         _opacity = Helper.Approach(_opacity, globalOpacity, 0.02f);
     }
 
