@@ -31,6 +31,10 @@ sealed class BackwoodsSky : CustomSky {
             globalOpacity *= 0f;
         }
         _opacity = Helper.Approach(_opacity, globalOpacity, 0.02f);
+
+        if (Main.gameMenu) {
+            _opacity = 0f;
+        }
     }
 
     public override Color OnTileColor(Color inColor) {
