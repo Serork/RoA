@@ -252,7 +252,7 @@ sealed class FilamentPillar : ModNPC {
             int pillarNPCType = array[currentAddedPillarIndex];
 
             for (int k = 0; k < 30; k++) {
-                int num4 = 0;
+                int num4 = Main.rand.Next(-100, 101) / 2;
                 if (Main.remixWorld && Main.getGoodWorld) {
                     int num5 = Main.rand.Next((int)Main.worldSurface, Main.maxTilesY - 350);
                     if (!WorldGen.PlayerLOS(num3 + num4 - 10, num5) && !WorldGen.PlayerLOS(num3 + num4 + 10, num5) && !WorldGen.PlayerLOS(num3 + num4 - 10, num5 - 20) && !WorldGen.PlayerLOS(num3 + num4 + 10, num5 - 20)) {
