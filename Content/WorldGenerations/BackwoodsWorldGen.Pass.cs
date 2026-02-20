@@ -2810,7 +2810,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     }
 
     public void BackwoodsCleanup(GenerationProgress progress, GameConfiguration config) {
-        for (int i = Left - 100; i < Right + 100; i++) {
+        for (int i = Left - 150; i < Right + 150; i++) {
             for (int j = WorldGenHelper.SafeFloatingIslandY; j < Bottom + 15; j++) {
                 Tile tile = WorldGenHelper.GetTileSafely(i, j);
                 if (tile.ActiveTile(_dirtTileType)) {
@@ -2823,15 +2823,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         }
 
         /*if (ModLoader.HasMod("SpiritMod"))*/
-        {
-            for (int i = Left - 50; i <= Right + 50; i++) {
-                for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
-                    if (WorldGenHelper.ActiveTile(i, j, _dirtTileType)) {
-                        WorldGenHelper.GetTileSafely(i, j).TileType = TileID.Dirt;
-                    }
-                }
-            }
-        }
+        //{
+        //    for (int i = Left - 50; i <= Right + 50; i++) {
+        //        for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
+        //            if (WorldGenHelper.ActiveTile(i, j, _dirtTileType)) {
+        //                WorldGenHelper.GetTileSafely(i, j).TileType = TileID.Dirt;
+        //            }
+        //        }
+        //    }
+        //}
 
         Step_AddGrassWalls();
     }
@@ -4918,7 +4918,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (edge) {
                     int randomnessX = (int)(_random.Next(-20, 21) * 1f);
                     int strength = _random.Next(15, 40), step = _random.Next(2, 13);
-                    WorldGenHelper.ModifiedTileRunnerForBackwoods(i + randomnessX, j, strength * 2.0, step, _dirtTileType, _dirtWallType, true, 0f, 0f, true, true, true, false);
+                    WorldGenHelper.ModifiedTileRunnerForBackwoods(i + randomnessX, j, strength * 2, step, _dirtTileType, _dirtWallType, true, 0f, 0f, true, true, true, false);
                     j += strength;
                 }
                 else {
