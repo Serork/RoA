@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -58,8 +60,11 @@ sealed class BrambleMazeRoot : NatureProjectile {
         if (Projectile.localAI[1] == 0f) {
             Projectile.localAI[1] = 1f;
 
-            if (Main.rand.NextChance(0.75f)) {
+            if (Projectile.ai[0] == 0f || Main.rand.NextChance(0.75f)) {
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
+            }
+            if (Projectile.ai[0] == 0f) {
+                SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
             }
 
             int frame = (int)Projectile.ai[2];
