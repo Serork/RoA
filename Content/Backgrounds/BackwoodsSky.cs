@@ -30,11 +30,10 @@ sealed class BackwoodsSky : CustomSky {
         if (player.ZoneTowerNebula || player.ZoneTowerSolar || player.ZoneTowerVortex || player.ZoneTowerStardust || player.GetCommon().ZoneFilament) {
             globalOpacity *= 0f;
         }
-        _opacity = Helper.Approach(_opacity, globalOpacity, 0.02f);
-
         if (Main.gameMenu) {
-            _opacity = 0f;
+            globalOpacity *= 0f;
         }
+        _opacity = Helper.Approach(_opacity, globalOpacity, 0.02f);
     }
 
     public override Color OnTileColor(Color inColor) {
