@@ -12,7 +12,7 @@ using Terraria;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class BrambleMazeTrap : NatureProjectile {
-    private static ushort TIMELEFT => MathUtils.SecondsToFrames(1);
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(3);
 
     private Vector2 _scale;
     private bool _shouldDisappear;
