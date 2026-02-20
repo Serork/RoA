@@ -95,7 +95,7 @@ sealed class ScholarStructure : IInitializer {
         while (flag56) {
             int num932 = genRand.Next((int)((double)Main.maxTilesX * 0.3), (int)((double)Main.maxTilesX * 0.7));
 
-            int num933 = genRand.Next((int)Main.worldSurface + 100, GenVars.lavaLine - 100);
+            int num933 = genRand.Next((int)Main.worldSurface + 200, GenVars.lavaLine - 100);
             flag56 = false;
             int num934 = 100;
             for (int num936 = num932 - num934; num936 < num932 + num934; num936 += 3) {
