@@ -4918,7 +4918,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                 if (edge) {
                     int randomnessX = (int)(_random.Next(-20, 21) * 1f);
                     int strength = _random.Next(15, 40), step = _random.Next(2, 13);
-                    WorldGenHelper.ModifiedTileRunnerForBackwoods(i + randomnessX, j, strength * 2, step, _dirtTileType, _dirtWallType, true, 0f, 0f, true, true, true, false);
+                    WorldGenHelper.ModifiedTileRunnerForBackwoods(i + randomnessX, j, strength * (j > (CenterY + EdgeY) ? 2 : 1), step, _dirtTileType, _dirtWallType, true, 0f, 0f, true, true, true, false);
                     j += strength;
                 }
                 else {
