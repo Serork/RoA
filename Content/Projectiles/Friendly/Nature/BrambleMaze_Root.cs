@@ -63,9 +63,9 @@ sealed class BrambleMazeRoot : NatureProjectile {
             if (Projectile.ai[0] == 0f || Main.rand.NextChance(0.75f)) {
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
             }
-            if (Projectile.ai[0] == 0f) {
-                SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-            }
+            //if (Projectile.ai[0] == 0f) {
+            //    SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            //}
 
             int frame = (int)Projectile.ai[2];
             Projectile.frame = Projectile.ai[0] == 0f ? 0 : frame;
