@@ -7,7 +7,7 @@ namespace RoA.Content.Tiles.Danger;
 
 sealed class IceStalactite : StalactiteBase<IceStalactiteTE, IceStalactiteProjectile> {
     protected override void SafeSetStaticDefaults() {
-        AddMapEntry(new Color(40, 105, 240));
+        AddMapEntry(new Color(40, 105, 240), CreateMapEntryName());
     }
 }
 

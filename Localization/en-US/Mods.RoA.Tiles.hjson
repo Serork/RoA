@@ -65,3 +65,7 @@ Nihility.MapEntry: '''"Nihility"'''
 Them.MapEntry: '''"Them"'''
 Her.MapEntry: '''"Her"'''
 FourPixels.MapEntry: '''"Four Pixels"'''
+GrimrockStalactite.MapEntry: Grimrock Stalactite
+IceStalactite.MapEntry: Ice Stalactite
+SolidifiedTarStalactite.MapEntry: Solidified Tar Stalactite
+StoneStalactite.MapEntry: Stone Stalactite

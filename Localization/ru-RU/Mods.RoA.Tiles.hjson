@@ -65,3 +65,7 @@ Nihility.MapEntry: '''"Небытие"'''
 Them.MapEntry: '''"Они"'''
 Her.MapEntry: '''"Она"'''
 FourPixels.MapEntry: '''"Четыре пикселя"'''
+// GrimrockStalactite.MapEntry: Grimrock Stalactite
+// IceStalactite.MapEntry: Ice Stalactite
+// SolidifiedTarStalactite.MapEntry: Solidified Tar Stalactite
+// StoneStalactite.MapEntry: Stone Stalactite
