@@ -200,7 +200,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
     private void Step_AddWallRootsAndMoss() {
         int minY = (int)Main.worldSurface + 10;
 
-        for (int i = Left - 75; i < Right + 75; i++) {
+        for (int i = Left - 100; i < Right + 100; i++) {
             for (int j = minY; j < Bottom + EdgeY / 2; j++) {
                 if ((WorldGenHelper.ActiveTile(i, j, _dirtTileType) || WorldGenHelper.ActiveTile(i, j, _stoneTileType) ||
                     WorldGenHelper.ActiveTile(i, j, WallID.DirtUnsafe)) &&
@@ -210,7 +210,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             }
         }
 
-        for (int i = Left - 75; i < Right + 75; i++) {
+        for (int i = Left - 100; i < Right + 100; i++) {
             for (int j = minY; j < Bottom + EdgeY / 2; j++) {
                 if ((WorldGenHelper.ActiveTile(i, j, _mossTileType)) &&
                     _random.NextChance(0.035) && _random.NextChance(0.75)) {
@@ -4880,9 +4880,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int leftY = WorldGenHelper.GetFirstTileY(topLeftTileX), rightY = WorldGenHelper.GetFirstTileY(topRightTileX);
         int max = Math.Min(leftY, rightY) == leftY ? topLeftTileX : topRightTileX;
         int extraHeight = _biomeHeight / 7;
-        CenterY += extraHeight;
+        //CenterY += extraHeight;
         //_biomeHeight += extraHeight;
-        //_biomeHeight += (int)MathF.Abs(topLeftTileY - topRightTileY) / 2;
+        _biomeHeight += (int)MathF.Abs(topLeftTileY - topRightTileY) / 2;
         _toLeft = max == topLeftTileX;
         void setSurfaceY() {
             int getSurfaceOffset() {
