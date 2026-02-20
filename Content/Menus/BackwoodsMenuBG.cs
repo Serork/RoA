@@ -101,12 +101,13 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
         int num4 = (int)(width * (double)scale);
         float num1 = 1200f;
         float num2 = 1550f;
-        Color color = typeof(Main).GetFieldValue<Color>("ColorOfSurfaceBackgroundsModified", Main.instance) * 1.35f;
+        Color color = typeof(Main).GetFieldValue<Color>("ColorOfSurfaceBackgroundsModified", Main.instance) * 1f;
         int num7 = Main.screenWidth / num4 + 2;
         float fieldValue1 = typeof(Main).GetFieldValue<float>("screenOff", Main.instance);
         float fieldValue2 = typeof(Main).GetFieldValue<float>("scAdj", Main.instance);
         float num3 = 0.07f;
-        spriteBatch.Draw(texture, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color);
+        spriteBatch.Draw(texture, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color * 0.95f);
+        spriteBatch.Draw(texture, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), color.MultiplyRGB(Color.Black) * 0.15f);
         if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
             for (int index2 = 0; index2 < num7; ++index2) {
                 int num5 = (int)(-Math.IEEERemainder(Main.screenPosition.X * (double)num3, num4) - num4 / 2);
@@ -121,8 +122,8 @@ sealed class BackwoodsMenuBG : ModSurfaceBackgroundStyle {
                     new Rectangle?(new Rectangle(0, 0, texture.Width, 1160)), color, 0.0f, new Vector2(), scale, SpriteEffects.None, 0.0f);
             }
         }
-        float opacity = (color.R + color.G + color.B) / 255f / 3f;
-        spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Color(30, 30, 30).MultiplyRGB(color) * 0.5f * opacity);
+        //float opacity = (color.R + color.G + color.B) / 255f / 3f;
+        //spriteBatch.Draw(TextureAssets.BlackTile.Value, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), new Color(30, 30, 30).MultiplyRGB(color) * 0.5f * opacity);
     }
 
     public override void ModifyFarFades(float[] fades, float transitionSpeed) {
