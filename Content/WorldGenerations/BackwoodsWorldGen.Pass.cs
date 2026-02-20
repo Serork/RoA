@@ -4589,7 +4589,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         _biomeWidth += (int)(_biomeWidth * 1.35f * WorldGenHelper.WorldSize2);
         _biomeHeight += (int)(_biomeHeight * 1.35f * WorldGenHelper.WorldSize2);
 
-        bool hasRemnants = ModLoader.HasMod("Remnants");
+        //bool hasRemnants = ModLoader.HasMod("Remnants");
 
         //CenterX = GenVars.JungleX;
 
@@ -4982,15 +4982,15 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         AddCliffIfNeeded(topLeftTileX, topRightTileX);
 
         /*if (ModLoader.HasMod("SpiritMod")) */
-        {
-            for (int i = Left - 50; i <= Right + 50; i++) {
-                for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
-                    if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt)) {
-                        WorldGenHelper.GetTileSafely(i, j).TileType = _dirtTileType;
-                    }
-                }
-            }
-        }
+        //{
+        //    for (int i = Left - 50; i <= Right + 50; i++) {
+        //        for (int j = WorldGenHelper.SafeFloatingIslandY; j < CenterY; j++) {
+        //            if (WorldGenHelper.ActiveTile(i, j, TileID.Dirt)) {
+        //                WorldGenHelper.GetTileSafely(i, j).TileType = _dirtTileType;
+        //            }
+        //        }
+        //    }
+        //}
     }
 
     private void AddCliffIfNeeded(int topLeftTileX, int topRightTileX) {
