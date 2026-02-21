@@ -92,8 +92,10 @@ sealed class CustomAmbienceServer : ILoadable {
         ResetSpawnTime();
         _spawnConditions[CustomSkyEntityType.BackwoodsBirdsV] = () => true;
         _spawnConditions[CustomSkyEntityType.LittleFleder] = () => true;
+        _spawnConditions[CustomSkyEntityType.Fleder] = () => NPC.downedBoss2;
         _secondarySpawnConditionsPerPlayer[CustomSkyEntityType.BackwoodsBirdsV] = (Player player) => player.InModBiome<BackwoodsBiome>();
         _secondarySpawnConditionsPerPlayer[CustomSkyEntityType.LittleFleder] = (Player player) => player.InModBiome<BackwoodsBiome>();
+        _secondarySpawnConditionsPerPlayer[CustomSkyEntityType.Fleder] = (Player player) => player.InModBiome<BackwoodsBiome>();
     }
 
     private bool IsPlayerAtRightHeightForType(CustomSkyEntityType type, Player plr) {

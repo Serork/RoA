@@ -17,6 +17,7 @@ abstract class SkyEntity {
     public SpriteEffects Effects;
     public bool IsActive = true;
     public float Rotation;
+    public float Scale = 1f;
 
     public Rectangle SourceRectangle => Frame.GetSourceRectangle(Texture.Value);
 
@@ -45,7 +46,7 @@ abstract class SkyEntity {
             Vector2 drawPositionByDepth = GetDrawPositionByDepth();
             Color color = GetColor(Main.ColorOfTheSkies) * Main.atmo;
             Vector2 origin = SourceRectangle.Size() / 2f;
-            float scale = depthScale / Depth;
+            float scale = depthScale / Depth * Scale;
             spriteBatch.Draw(Texture.Value, drawPositionByDepth - Main.Camera.UnscaledPosition, SourceRectangle, color, Rotation, origin, scale, Effects, 0f);
         }
     }

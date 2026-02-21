@@ -15,16 +15,16 @@ using Terraria.Utilities;
 
 namespace RoA.Common.CustomSkyAmbience;
 
-sealed class LittleFlederSkyEntity : FadingSkyEntity {
+sealed class FlederSkyEntity : FadingSkyEntity {
     private const int STATE_ZIGZAG = 1;
     private const int STATE_GOOVERPLAYER = 2;
     private int _state;
     private int _direction;
     private float _waviness;
 
-    public LittleFlederSkyEntity(Player player, FastRandom random) {
+    public FlederSkyEntity(Player player, FastRandom random) {
         VirtualCamera camera = new VirtualCamera(player);
-        Texture = ModContent.Request<Texture2D>(ResourceManager.AmbienceTextures + "LittleFleder");
+        Texture = random.NextFloat() < 0.5f ? ModContent.Request<Texture2D>(ResourceManager.AmbienceTextures + "Fleder") : ModContent.Request<Texture2D>(ResourceManager.AmbienceTextures + "Fleder2");
         Frame = new SpriteFrame(1, 10);
 
         BeginZigZag(ref random, camera, (random.Next(2) == 1) ? 1 : (-1));
@@ -42,7 +42,7 @@ sealed class LittleFlederSkyEntity : FadingSkyEntity {
     private void BeginZigZag(ref FastRandom random, VirtualCamera camera, int direction) {
         _state = 1;
         LifeTime = random.Next(18, 31) * 60;
-        _waviness = (random.NextFloat() * 1f + 1f) * 0.5f;
+        _waviness = (random.NextFloat() * 1f + 1f) * 1f;
         float surfacePosition = (float)BackwoodsVars.BackwoodsTileForBackground - 1;
         if (surfacePosition == 0f) {
             surfacePosition = 1f;
