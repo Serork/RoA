@@ -92,10 +92,11 @@ sealed class ScholarStructure : IInitializer {
         Point origin = Point.Zero;
 
         bool flag56 = true;
+        int attempt = 0;
         while (flag56) {
             int num932 = genRand.Next((int)((double)Main.maxTilesX * 0.3), (int)((double)Main.maxTilesX * 0.7));
 
-            int num933 = genRand.Next((int)Main.worldSurface + 200, GenVars.lavaLine - 100);
+            int num933 = genRand.Next((int)Main.worldSurface + (200 - Math.Min(100, attempt)), GenVars.lavaLine - 100);
             flag56 = false;
             int num934 = 100;
             for (int num936 = num932 - num934; num936 < num932 + num934; num936 += 3) {
@@ -122,6 +123,8 @@ sealed class ScholarStructure : IInitializer {
             if (!flag56) {
                 origin = new(num932, num933);
             }
+
+            attempt++;
         }
 
         Point baseOrigin = origin;
