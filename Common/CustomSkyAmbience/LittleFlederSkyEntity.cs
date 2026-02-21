@@ -36,7 +36,7 @@ sealed class LittleFlederSkyEntity : FadingSkyEntity {
         FinalOpacityMultiplier = 1f;
         FramingSpeed = 5;
 
-        Scale = 1.5f;
+        Scale = 1.75f;
     }
 
     private void BeginZigZag(ref FastRandom random, VirtualCamera camera, int direction) {
