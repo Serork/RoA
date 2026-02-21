@@ -9,6 +9,7 @@ using RoA.Content.Projectiles.Friendly.Melee;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -78,6 +79,22 @@ sealed class DiabolicDaikatana : ModItem {
         Item.value = Item.sellPrice(0, 2, 50, 0);
     }
 
+    public override void HoldItem(Player player) {
+        if (player.HasProjectile<DiabolicDaikatanaProj2>()) {
+            return;
+        }
+
+        if (player.ItemAnimationActive) {
+            return;
+        }
+
+        if (player.IsLocal()) {
+            ProjectileUtils.SpawnPlayerOwnedProjectile<DiabolicDaikatanaProj2>(new ProjectileUtils.SpawnProjectileArgs(player, player.GetSource_FromThis()) {
+                Position = player.GetPlayerCorePoint()
+            });
+        }
+    }
+
     //public override void AddRecipes() {
     //    CreateRecipe()
     //        .AddIngredient(ItemID.Muramasa)
@@ -85,113 +102,14 @@ sealed class DiabolicDaikatana : ModItem {
     //        .AddTile(TileID.DemonAltar)
     //        .RegisterTrackedEntity();
     //}
-
-    private class DaikatanaLayer : PlayerDrawLayer {
-        private static Asset<Texture2D> _daikatanaTexture, _daikatanaTextureGlow;
-
-        public override void SetStaticDefaults() {
-            if (Main.dedServ) {
-                return;
-            }
-
-            string textureName = ResourceManager.MeleeWeaponTextures + "DiabolicDaikatanaUse";
-            _daikatanaTexture = ModContent.Request<Texture2D>(textureName);
-            _daikatanaTextureGlow = ModContent.Request<Texture2D>(textureName + "_Glow");
-        }
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo) => true;
-
-        public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.ArmOverItem);
-
-        protected override void Draw(ref PlayerDrawSet drawInfo) {
-            if (drawInfo.hideEntirePlayer) {
-                return;
-            }
-
-            Player player = drawInfo.drawPlayer;
-            if (drawInfo.shadow != 0f || player.dead) {
-                return;
-            }
-
-            if (player.inventory[player.selectedItem].type != ModContent.ItemType<DiabolicDaikatana>()) {
-                return;
-            }
-
-            Vector2 drawPosition = drawInfo.drawPlayer.GetPlayerCorePoint() - drawInfo.drawPlayer.Size / 2f + new Vector2(0f, -2f);
-            drawPosition.X += 12f;
-            if (player.direction == 1) {
-                drawPosition.X -= 4f;
-            }
-            if (player.sitting.isSitting) {
-                drawPosition.Y -= 4f;
-            }
-            if (player.itemAnimation < player.itemAnimationMax - 1 && player.itemAnimation != 0) {
-                return;
-            }
-
-            float scale = player.CappedMeleeOrDruidScale();
-            Texture2D texture = _daikatanaTexture.Value;
-            Vector2 position = new((int)(drawPosition.X), (int)(drawPosition.Y));
-            Vector2 offset = new(texture.Width / 2f * player.direction, 0f);
-            if (player.direction < 0) {
-                offset.Y += (int)(texture.Height * 0.8f - 2f);
-                offset.X += (int)(-texture.Width * (float)player.direction);
-                offset.X += 1;
-            }
-            offset.X -= (int)(texture.Width * 0.7f - 2f);
-            offset.X -= (int)(player.width * 0.75f * player.direction);
-            offset.Y += (int)(player.height / 3f);
-            if (player.gravDir == -1f) {
-                if (player.direction > 0) {
-                    offset.X -= 1f;
-                    offset.Y -= 1f;
-                }
-                else {
-                    offset.X -= 2;
-                    offset.Y -= 4;
-                }
-                offset.Y -= 13;
-            }
-            if (player.gravDir == -1f) {
-            }
-
-            if (player.gravDir != 1) {
-                if (player.direction == 1) {
-                    position += new Vector2(-0.75f, -0.75f);
-                }
-                else {
-                    position += new Vector2(0.5f, -0.5f);
-                }
-            }
-
-            position += offset * scale;
-            position.Y -= (texture.Height / 2f + 8f) * (scale - 1f);
-            position.X -= texture.Width / 6f * (scale - 1f) * player.direction;
-            SpriteEffects effects = player.direction < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            float rotation = 2.3f + (player.gravDir == -1 ? 0.1f : 0f);
-            bool gravReversed = player.gravDir == -1f;
-            for (int i = 0; i < 2; i++) {
-                Color color = drawInfo.itemColor;
-                if (i != 0) {
-                    texture = _daikatanaTextureGlow.Value;
-                    color = Color.Lerp(Color.Blue * 0.7f, Lighting.GetColor((int)position.X / 16, (int)position.Y / 16), Lighting.Brightness((int)position.X / 16, (int)position.Y / 16));
-                }
-                DrawData drawData = new(texture,
-                                        position - Main.screenPosition,
-                                        new Rectangle((player.gravDir == -1).ToInt() * 46, 0, 46, 46),
-                                        player.HeldItem.GetAlpha(color) * drawInfo.stealth * (1f - drawInfo.shadow),
-                                        player.direction > 0 ? -rotation : rotation,
-                                        texture.Size() / 2f,
-                                        scale,
-                                        effects);
-                drawInfo.DrawDataCache.Add(drawData);
-            }
-        }
-    }
 }
 
 // adapted aequus 
-sealed class DiabolicDaikatanaProj : ModProjectile {
+class DiabolicDaikatanaProj2 : DiabolicDaikatanaProj {
+
+}
+
+class DiabolicDaikatanaProj : ModProjectile {
     private static Asset<Texture2D> _glowTexture = null!;
 
     private float _armRotation;
@@ -253,10 +171,12 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
             Projectile.localAI[0] = 1f;
             _swingTimeMax = player.itemAnimationMax;
 
-            player.itemTime = _swingTimeMax + 1;
-            player.itemTimeMax = _swingTimeMax + 1;
-            player.itemAnimation = _swingTimeMax + 1;
-            player.itemAnimationMax = _swingTimeMax + 1;
+            if (Projectile.ModProjectile is not DiabolicDaikatanaProj2) {
+                player.itemTime = _swingTimeMax + 1;
+                player.itemTimeMax = _swingTimeMax + 1;
+                player.itemAnimation = _swingTimeMax + 1;
+                player.itemAnimationMax = _swingTimeMax + 1;
+            }
 
             _swingTimeMax *= Projectile.extraUpdates + 1;
             _swingTime = _swingTimeMax;
@@ -271,7 +191,10 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
                 }
             }
         }
-        player.heldProj = Projectile.whoAmI;
+        bool active = player.ItemAnimationActive && player.itemAnimation < player.itemAnimationMax - 1;
+        if (active || Projectile.ModProjectile is DiabolicDaikatanaProj2) {
+            player.heldProj = Projectile.whoAmI;
+        }
         if (player.IsAliveAndFree()) {
             float progress = Progress;
             Projectile.direction = player.direction;
@@ -314,7 +237,15 @@ sealed class DiabolicDaikatanaProj : ModProjectile {
         else {
             Projectile.Kill();
         }
-        _swingTime--;
+        if (Projectile.ModProjectile is not DiabolicDaikatanaProj2) {
+            _swingTime--;
+        }
+        else if (active || player.GetSelectedItem().type != ModContent.ItemType<DiabolicDaikatana>()) {
+            Projectile.Kill();
+        }
+        else {
+            Projectile.timeLeft++;
+        }
         Projectile.hide = true;
     }
 
