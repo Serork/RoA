@@ -151,7 +151,7 @@ sealed class StarfruitCharmStar : ModProjectile {
             dust48.velocity.X *= 2f;
         }
 
-        if (Projectile.IsOwnerLocal()) {
+        if (Projectile.ai[2] == 2f && Projectile.IsOwnerLocal()) {
             ProjectileUtils.SpawnPlayerOwnedProjectile<Starfruit>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
                 Position = Projectile.Center
             });

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Common.Druid.Wreath;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
@@ -12,6 +13,26 @@ using Terraria.ModLoader;
 namespace RoA.Common.Druid;
 
 sealed partial class DruidStats : ModPlayer {
+    public override void Load() {
+        WreathHandler.OnHitByAnythingEvent += WreathHandler_OnHitByAnythingEvent;
+    }
+
+    private void WreathHandler_OnHitByAnythingEvent(Player player, Player.HurtInfo hurtInfo) {
+        if (!player.GetDruidStats().IsStarfruitCharmEffectActive) {
+            return;
+        }
+
+        if (!player.GetWreathHandler().IsFull1) {
+            return;
+        }
+
+        if (player.GetFormHandler().IsInADruidicForm) {
+            return;
+        }
+
+        player.GetWreathHandler().ForcedHardReset(makeDusts: true);
+    }
+
     private float _druidPotentialDamageMultiplier = 1f;
     private float _druidDamageExtraIncreaseValueMultiplier = 1f;
     private float _keepBonusesForTime = 0f;
@@ -137,6 +158,8 @@ sealed partial class DruidStats : ModPlayer {
     }
 
     public override void OnHurt(Player.HurtInfo info) {
+        bool empowered = Player.GetWreathHandler().IsFull1;
+
         if (Player.whoAmI == Main.myPlayer) {
             int cooldownCounter = info.CooldownCounter;
             if (Player.starCloakItem == null && IsStarfruitCharmEffectActive /*&& (cooldownCounter == -1 || cooldownCounter == 1)*/) {
@@ -175,7 +198,7 @@ sealed partial class DruidStats : ModPlayer {
                     else if (Main.expertMode)
                         num19 *= 2;
 
-                    Projectile.NewProjectile(Player.GetSource_OnHurt(info.DamageSource), x, y, num16, num17, type, num19, 5f, Player.whoAmI, 0f, Player.position.Y);
+                    Projectile.NewProjectile(Player.GetSource_OnHurt(info.DamageSource), x, y, num16, num17, type, num19, 5f, Player.whoAmI, 0f, Player.position.Y, 2f * empowered.ToInt());
                 }
             }
         }

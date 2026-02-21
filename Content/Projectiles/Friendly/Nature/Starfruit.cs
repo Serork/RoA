@@ -83,15 +83,16 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
 
         GrowFactorValue = Helper.Approach(GrowFactorValue, 1f, TimeSystem.LogicDeltaTime * 1f);
 
-        Vector2 position = _growToPosition - Vector2.UnitY * 40f;
+        Vector2 position = _growToPosition - Vector2.UnitY * 20f;
         float glowWaveFactor = Helper.Wave(0f, 1f, 10f, Projectile.identity);
         Lighting.AddLight(position, Color.Lerp(new Color(252, 232, 154), new Color(255, 214, 56), glowWaveFactor).ToVector3() * 0.75f * GrowFactorValue);
         if (!Main.dedServ && Main.rand.Next(100) == 0) {
-            Gore.NewGore(Projectile.GetSource_FromThis(), position - new Vector2(12f, 0f), Vector2.Zero, 16);
+            Gore.NewGore(Projectile.GetSource_FromThis(), position - new Vector2(12f, 0f) + Main.rand.RandomPointInArea(10), Vector2.Zero, 16);
         }
         if (Main.rand.NextBool(50)) {
             int type = DustID.YellowStarDust;
-            Dust.NewDust(position - Vector2.One * 5, 10, 10, type, Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-2f, -1f));
+            int size = 20;
+            Dust.NewDust(position - Vector2.One * size / 2f, size, size, type, Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-2f, 0f));
         }
 
         _flowerGrowthFactor = Helper.Approach(_flowerGrowthFactor, 1f, TimeSystem.LogicDeltaTime * 1.5f * Ease.QuadOut(GrowFactorValue));
