@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 using RoA.Common;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -148,6 +149,12 @@ sealed class StarfruitCharmStar : ModProjectile {
             Dust dust48 = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.GemTopaz, Projectile.velocity.X * 0.1f, Projectile.velocity.Y * 0.1f, 150, Color.LightYellow, 1.2f);
             dust48.noGravity = true;
             dust48.velocity.X *= 2f;
+        }
+
+        if (Projectile.IsOwnerLocal()) {
+            ProjectileUtils.SpawnPlayerOwnedProjectile<Starfruit>(new ProjectileUtils.SpawnProjectileArgs(Projectile.GetOwnerAsPlayer(), Projectile.GetSource_Death()) {
+                Position = Projectile.Center
+            });
         }
 
         if (Main.dedServ) {
