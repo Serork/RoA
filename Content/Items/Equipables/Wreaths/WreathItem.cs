@@ -31,7 +31,6 @@ abstract class WreathItem : NatureItem {
     public override bool CanEquipAccessory(Player player, int slot, bool modded) => modded;
 
     public sealed override void SetStaticDefaults() {
-
         SafeSetStaticDefaults();
     }
 

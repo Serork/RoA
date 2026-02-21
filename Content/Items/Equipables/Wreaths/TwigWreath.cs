@@ -16,6 +16,10 @@ sealed class TwigWreath : WreathItem {
         Item.value = Item.sellPrice(0, 0, 50, 0);
     }
 
+    protected override void SafeSetDefaults3() {
+        Item.accessory = false;
+    }
+
     public override void UpdateAccessory(Player player, bool hideVisual) {
         //float value = 0.05f * player.GetWreathHandler().ActualProgress4;
         //player.endurance += value;
