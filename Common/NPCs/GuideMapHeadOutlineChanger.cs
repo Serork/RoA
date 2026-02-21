@@ -20,7 +20,7 @@ namespace RoA.Common.NPCs;
 sealed class GuideMapHeadOutlineChanger : IInitializer {
     private static int _guideHead = -1;
 
-    public static LerpColor LerpColor { get; private set; } = new(0.03f);
+    public static LerpColor LerpColor { get; private set; } = new(0.025f);
 
     public static Color GetLerpColor() => LerpColor.GetLerpColor([Color.Lerp(Color.Orange, Color.Yellow, 0.75f), Color.Lerp(Color.Orange, Color.Yellow, 0.25f)]);
 
