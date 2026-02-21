@@ -99,17 +99,18 @@ sealed class BrambleMazeTrap : NatureProjectile {
 
         float lerpModifier = 1f;
         if (Projectile.timeLeft > 40) {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f * lerpModifier);
             _scale.X = Helper.Approach(_scale.X, 1f, 0.1f * lerpModifier);
             _scale.Y = Helper.Approach(_scale.Y, 1f, 0.2f * lerpModifier);
         }
         else {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f * lerpModifier * 0.75f);
             _scale.X = Helper.Approach(_scale.X, 0f, 0.1f * lerpModifier * 0.5f);
             _scale.Y = Helper.Approach(_scale.Y, 0f, 0.15f * lerpModifier * 0.5f);
             if (_scale.X <= 0f && _scale.Y <= 0f) {
                 Projectile.Kill();
             }
         }
-        Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f * lerpModifier);
 
         float maxRotation = 0.05f;
         Projectile.rotation = Helper.Wave(-maxRotation, maxRotation, 1.5f, Projectile.identity) * Projectile.Opacity;
