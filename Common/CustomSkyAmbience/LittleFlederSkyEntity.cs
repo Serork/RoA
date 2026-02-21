@@ -51,7 +51,7 @@ sealed class LittleFlederSkyEntity : FadingSkyEntity {
         bool flag2 = Depth <= 2.2f;
         Position.Y = MathHelper.Clamp(random.NextFloat(), flag2 ? 0.4f : 0.6f, 0.85f) * ((float)surfacePosition * 16f - 1600f) + 2400f;
 
-        _direction = (random.NextFloat() < 0.5f).ToDirectionInt();
+        _direction = direction;
         Effects = _direction.ToSpriteEffects();
 
         int num = Main.screenWidth;
