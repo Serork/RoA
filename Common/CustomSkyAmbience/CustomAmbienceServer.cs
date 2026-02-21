@@ -57,7 +57,7 @@ sealed class CustomAmbienceServer : ILoadable {
     private const int MAXIMUM_SECONDS_BETWEEN_SPAWNS = 120;
     private readonly Dictionary<CustomSkyEntityType, Func<bool>> _spawnConditions = new Dictionary<CustomSkyEntityType, Func<bool>>();
     private readonly Dictionary<CustomSkyEntityType, Func<Player, bool>> _secondarySpawnConditionsPerPlayer = new Dictionary<CustomSkyEntityType, Func<Player, bool>>();
-    private double _updatesUntilNextAttempt;
+    private double _updatesUntilNextAttempt, _updatesUntilNextAttempt2;
     private List<AmbienceSpawnInfo> _forcedSpawns = new List<AmbienceSpawnInfo>();
 
     private static bool IsInBackwoods() {
@@ -90,24 +90,63 @@ sealed class CustomAmbienceServer : ILoadable {
 
     public CustomAmbienceServer() {
         ResetSpawnTime();
+        ResetSpawnTime2();
+        _spawnConditions[CustomSkyEntityType.Leaf] = () => true;
         _spawnConditions[CustomSkyEntityType.BackwoodsBirdsV] = () => true;
         _spawnConditions[CustomSkyEntityType.LittleFleder] = () => !NPC.downedBoss2;
         _spawnConditions[CustomSkyEntityType.Fleder] = () => NPC.downedBoss2;
+        _secondarySpawnConditionsPerPlayer[CustomSkyEntityType.Leaf] = (Player player) => player.InModBiome<BackwoodsBiome>();
         _secondarySpawnConditionsPerPlayer[CustomSkyEntityType.BackwoodsBirdsV] = (Player player) => player.InModBiome<BackwoodsBiome>();
         _secondarySpawnConditionsPerPlayer[CustomSkyEntityType.LittleFleder] = (Player player) => player.InModBiome<BackwoodsBiome>();
         _secondarySpawnConditionsPerPlayer[CustomSkyEntityType.Fleder] = (Player player) => player.InModBiome<BackwoodsBiome>();
     }
 
     private bool IsPlayerAtRightHeightForType(CustomSkyEntityType type, Player plr) {
-        if (type == CustomSkyEntityType.BackwoodsBirdsV)
-            return plr.InModBiome<BackwoodsBiome>();
+        return plr.InModBiome<BackwoodsBiome>();
+        //if (type == CustomSkyEntityType.BackwoodsBirdsV)
+        //    return plr.InModBiome<BackwoodsBiome>();
 
-        return IsPlayerInAPlaceWhereTheyCanSeeAmbienceSky(plr);
+        //return IsPlayerInAPlaceWhereTheyCanSeeAmbienceSky(plr);
     }
 
     public void Update() {
         SpawnForcedEntities();
         //Main.NewText(_updatesUntilNextAttempt);
+        Spawn();
+        Spawn2();
+    }
+
+    private void Spawn2() {
+        if (_updatesUntilNextAttempt2 > 0) {
+            _updatesUntilNextAttempt2 -= Main.dayRate * 10;
+            return;
+        }
+
+        ResetSpawnTime2();
+        IEnumerable<CustomSkyEntityType> source = from pair in _spawnConditions
+                                                  where pair.Value()
+                                                  select pair.Key;
+
+        if (source.Count((type) => true) == 0)
+            return;
+
+        FindPlayerThatCanSeeBackgroundAmbience(out var player);
+        if (player == null)
+            return;
+
+        IEnumerable<CustomSkyEntityType> source2 = source.Where((type) => IsPlayerAtRightHeightForType(type, player) && _secondarySpawnConditionsPerPlayer.ContainsKey(type) && _secondarySpawnConditionsPerPlayer[type](player));
+        int num = source2.Count((type) => true);
+        if (num == 0 || Main.rand.Next(5) < 3) {
+            source2 = source.Where((type) => IsPlayerAtRightHeightForType(type, player) && (!_secondarySpawnConditionsPerPlayer.ContainsKey(type) || _secondarySpawnConditionsPerPlayer[type](player)));
+            num = source2.Count((type) => true);
+        }
+        if (num != 0) {
+            CustomSkyEntityType type2 = CustomSkyEntityType.Leaf;
+            SpawnForPlayer(player, type2);
+        }
+    }
+
+    private void Spawn() {
         if (_updatesUntilNextAttempt > 0) {
             _updatesUntilNextAttempt -= Main.dayRate * 10;
             return;
@@ -133,6 +172,9 @@ sealed class CustomAmbienceServer : ILoadable {
         }
         if (num != 0) {
             CustomSkyEntityType type2 = source2.ElementAt(Main.rand.Next(num));
+            while (type2 == CustomSkyEntityType.Leaf) {
+                type2 = source2.ElementAt(Main.rand.Next(num)); 
+            }
             SpawnForPlayer(player, type2);
         }
     }
@@ -141,6 +183,10 @@ sealed class CustomAmbienceServer : ILoadable {
         _updatesUntilNextAttempt = Main.rand.Next(1200, 7200);
         if (Main.tenthAnniversaryWorld)
             _updatesUntilNextAttempt /= 2;
+    }
+
+    public void ResetSpawnTime2() {
+        _updatesUntilNextAttempt2 = 300;
     }
 
     public void ForceEntitySpawn(AmbienceSpawnInfo info) {

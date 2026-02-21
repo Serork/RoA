@@ -72,6 +72,9 @@ sealed class CustomAmbientSky : CustomSky {
     public void Spawn(Player player, CustomSkyEntityType type, int seed) {
         FastRandom random = new FastRandom(seed);
         switch (type) {
+            case CustomSkyEntityType.Leaf:
+                _entities.Add(new LeafSkyEntity(player, random));
+                break;
             case CustomSkyEntityType.BackwoodsBirdsV:
                 _entities.Add(new BackwoodsBirdsPackSkyEntity(player, random));
                 break;
