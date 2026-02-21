@@ -163,7 +163,7 @@ sealed partial class DruidStats : ModPlayer {
 
         if (Player.whoAmI == Main.myPlayer) {
             int cooldownCounter = info.CooldownCounter;
-            if (Player.starCloakItem == null && IsStarfruitCharmEffectActive /*&& (cooldownCounter == -1 || cooldownCounter == 1)*/) {
+            if (Player.starCloakItem == null && IsStarfruitCharmEffectActive && (cooldownCounter == -1 || cooldownCounter == 1)) {
                 for (int num15 = 0; num15 < 3; num15++) {
                     float x = Player.position.X + (float)Main.rand.Next(-400, 400);
                     float y = Player.position.Y - (float)Main.rand.Next(500, 800);
