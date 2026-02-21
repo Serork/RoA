@@ -41,7 +41,7 @@ sealed class FlederSkyEntity : FadingSkyEntity {
 
     private void BeginZigZag(ref FastRandom random, VirtualCamera camera, int direction) {
         _state = 1;
-        LifeTime = random.Next(18, 31) * 60;
+        LifeTime = random.Next(18, 31) * 120;
         _waviness = (random.NextFloat() * 1f + 1f) * 1f;
         float surfacePosition = (float)BackwoodsVars.BackwoodsTileForBackground - 1;
         if (surfacePosition == 0f) {
