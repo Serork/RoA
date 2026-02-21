@@ -43,8 +43,8 @@ float4 MainPS(float2 coords : TEXCOORD0) : COLOR0
     float sine = sin((coords.y - 0.05) * 10);
     float2 offset = float2(uProgress, refract((0, sine), 1, sin(coords.y * 0.2) - 0.5));
     float2 noiseCoords = (coords * uImageSize1 - uSourceRect.xy) / uImageSize2; 
-    noiseCoords.x *= 0.625;
-    noiseCoords.y *= 2.0;  
+    noiseCoords.x *= 0.5;
+    noiseCoords.y *= 1.5;  
     noiseCoords = frac(noiseCoords + offset);
     float4 otherTex = tex2D(uImage1, noiseCoords);
     otherTex = lerp(BORDERCOLOR, otherTex * vig, vig);
