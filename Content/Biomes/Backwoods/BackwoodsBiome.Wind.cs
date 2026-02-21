@@ -21,7 +21,7 @@ sealed partial class BackwoodsBiome : ModBiome {
     private float On_TileDrawing_GetWindCycle(On_TileDrawing.orig_GetWindCycle orig, TileDrawing self, int x, int y, double windCounter) {
         float num = (float)x * 0.5f + (float)(y / 100) * 0.5f;
         float num2 = (float)Math.Cos(windCounter * 6.2831854820251465 + (double)num) * 0.5f;
-        float windForVisuals = Math.Max(1f, Main.WindForVisuals);
+        float windForVisuals = Main.WindForVisuals;
         if (Main.remixWorld) {
             //if (!((double)y > Main.worldSurface))
             //    return 0f;
