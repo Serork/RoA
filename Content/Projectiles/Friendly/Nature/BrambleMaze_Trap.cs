@@ -86,6 +86,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
                 Projectile.position.Y += 1f;
             }
             Projectile.position += Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.BottomLeft.ToTileCoordinates()));
+            Projectile.position += Helper.OffsetPerSolidTileSlope_Bottom(WorldGenHelper.GetTileSafely(Projectile.Bottom.ToTileCoordinates()));
         }
 
         Projectile.velocity *= 0f;
@@ -97,8 +98,17 @@ sealed class BrambleMazeTrap : NatureProjectile {
         Vector2 desiredScale = Vector2.One;
 
         float lerpModifier = 1f;
-        _scale.X = Helper.Approach(_scale.X, 1f, 0.1f * lerpModifier);
-        _scale.Y = Helper.Approach(_scale.Y, 1f, 0.2f * lerpModifier);
+        if (Projectile.timeLeft > 40) {
+            _scale.X = Helper.Approach(_scale.X, 1f, 0.1f * lerpModifier);
+            _scale.Y = Helper.Approach(_scale.Y, 1f, 0.2f * lerpModifier);
+        }
+        else {
+            _scale.X = Helper.Approach(_scale.X, 0f, 0.1f * lerpModifier * 0.5f);
+            _scale.Y = Helper.Approach(_scale.Y, 0f, 0.15f * lerpModifier * 0.5f);
+            if (_scale.X <= 0f && _scale.Y <= 0f) {
+                Projectile.Kill();
+            }
+        }
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f * lerpModifier);
 
         float maxRotation = 0.05f;
@@ -106,26 +116,26 @@ sealed class BrambleMazeTrap : NatureProjectile {
     }
 
     public override void OnKill(int timeLeft) {
-        for (int i2 = 0; i2 < 36; i2++) {
-            int greenDust = ModContent.DustType<BrambleMazeDust1>();
-            int pinkDust = ModContent.DustType<BrambleMazeDust2>();
-            int yellowDust = ModContent.DustType<BrambleMazeDust3>();
-            int orangeDust = ModContent.DustType<BrambleMazeDust4>();
-            int dustType = Main.rand.NextBool(2) ? pinkDust : greenDust;
-            switch (Main.rand.Next(4)) {
-                case 1:
-                    dustType = Main.rand.NextBool(2) ? orangeDust : pinkDust;
-                    break;
-                case 2:
-                    dustType = Main.rand.NextBool(2) ? yellowDust : orangeDust;
-                    break;
-                case 3:
-                    dustType = Main.rand.NextBool(2) ? greenDust : yellowDust;
-                    break;
-            }
-            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType);
-            Main.dust[dust].position = Projectile.Top - Vector2.UnitY * 20f + Main.rand.RandomPointInArea(30);
-        }
+        //for (int i2 = 0; i2 < 36; i2++) {
+        //    int greenDust = ModContent.DustType<BrambleMazeDust1>();
+        //    int pinkDust = ModContent.DustType<BrambleMazeDust2>();
+        //    int yellowDust = ModContent.DustType<BrambleMazeDust3>();
+        //    int orangeDust = ModContent.DustType<BrambleMazeDust4>();
+        //    int dustType = Main.rand.NextBool(2) ? pinkDust : greenDust;
+        //    switch (Main.rand.Next(4)) {
+        //        case 1:
+        //            dustType = Main.rand.NextBool(2) ? orangeDust : pinkDust;
+        //            break;
+        //        case 2:
+        //            dustType = Main.rand.NextBool(2) ? yellowDust : orangeDust;
+        //            break;
+        //        case 3:
+        //            dustType = Main.rand.NextBool(2) ? greenDust : yellowDust;
+        //            break;
+        //    }
+        //    int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType);
+        //    Main.dust[dust].position = Projectile.Top - Vector2.UnitY * 20f + Main.rand.RandomPointInArea(30);
+        //}
     }
 
     public override bool PreDraw(ref Color lightColor) {
@@ -134,7 +144,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
         float opacity2 = Ease.QuadOut(Projectile.Opacity);
         //opacity2 *= Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
         Vector2 position = Projectile.position;
-        Projectile.position.Y += 11.5f;
+        Projectile.position.Y += 12f;
         if (Projectile.ai[1] > 0) {
             Projectile.position.X -= 5f * Projectile.ai[1];
         }

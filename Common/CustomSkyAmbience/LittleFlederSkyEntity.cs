@@ -25,10 +25,8 @@ sealed class LittleFlederSkyEntity : FadingSkyEntity {
         Texture = ModContent.Request<Texture2D>(ResourceManager.Textures + "Ambience/LittleFleder");
         Frame = new SpriteFrame(1, 9);
         Depth = random.NextFloat() * 3f + 4.5f;
-        if (random.Next(4) != 0)
-            BeginZigZag(ref random, camera, (random.Next(2) == 1) ? 1 : (-1));
-        else
-            BeginChasingPlayer(ref random, camera);
+
+        BeginChasingPlayer(ref random, camera);
 
         SetPositionInWorldBasedOnScreenSpace(Position);
         OpacityNormalizedTimeToFadeIn = 0.1f;
@@ -66,6 +64,8 @@ sealed class LittleFlederSkyEntity : FadingSkyEntity {
                 ChasePlayerTop(frameCount);
                 break;
         }
+
+        Main.NewText(Position);
 
         Rotation = Velocity.X * 0.1f;
     }
