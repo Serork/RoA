@@ -1,7 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
+using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Vanilla;
+
+using System;
 
 using Terraria;
 using Terraria.ModLoader;
@@ -21,12 +24,15 @@ sealed partial class DruidStats : ModPlayer {
     public enum DruidEyesType : byte {
         PricklenutCharm,
         PinCushion,
-        DruidsEyes
+        DruidsEyes,
+        StarfruitCharm
     }
 
     public (bool, DruidEyesType) IsDruidsEyesEffectActive;
 
     public bool IsCrystallineNeedleEffectActive;
+
+    public bool IsStarfruitCharmEffectActive;
 
     public float DruidPotentialDamageMultiplier {
         get => _druidPotentialDamageMultiplier;
@@ -126,5 +132,50 @@ sealed partial class DruidStats : ModPlayer {
 
     public override void OnHitNPCWithItem(Item item, NPC target, NPC.HitInfo hit, int damageDone) {
         ApplyPoisonOnNatureDamage(Player, target, item);
+    }
+
+    public override void OnHurt(Player.HurtInfo info) {
+        if (Player.whoAmI == Main.myPlayer) {
+            int cooldownCounter = info.CooldownCounter;
+            if (Player.starCloakItem == null && IsStarfruitCharmEffectActive && (cooldownCounter == -1 || cooldownCounter == 1)) {
+                for (int num15 = 0; num15 < 3; num15++) {
+                    float x = Player.position.X + (float)Main.rand.Next(-400, 400);
+                    float y = Player.position.Y - (float)Main.rand.Next(500, 800);
+                    Vector2 vector = new Vector2(x, y);
+                    float num16 = Player.position.X + (float)(Player.width / 2) - vector.X;
+                    float num17 = Player.position.Y + (float)(Player.height / 2) - vector.Y;
+                    num16 += (float)Main.rand.Next(-100, 101);
+                    float num18 = (float)Math.Sqrt(num16 * num16 + num17 * num17);
+                    num18 = 23f / num18;
+                    num16 *= num18;
+                    num17 *= num18;
+
+                    int type = ModContent.ProjectileType<StarfruitCharmStar>();
+                    //Item item = starCloakItem;
+                    //if (starCloakItem_starVeilOverrideItem != null) {
+                    //    item = starCloakItem_starVeilOverrideItem;
+                    //    type = 725;
+                    //}
+
+                    //if (starCloakItem_beeCloakOverrideItem != null) {
+                    //    item = starCloakItem_beeCloakOverrideItem;
+                    //    type = 724;
+                    //}
+
+                    //if (starCloakItem_manaCloakOverrideItem != null) {
+                    //    item = starCloakItem_manaCloakOverrideItem;
+                    //    type = 723;
+                    //}
+
+                    int num19 = 75;
+                    if (Main.masterMode)
+                        num19 *= 3;
+                    else if (Main.expertMode)
+                        num19 *= 2;
+
+                    Projectile.NewProjectile(Player.GetSource_OnHurt(info.DamageSource), x, y, num16, num17, type, num19, 5f, Player.whoAmI, 0f, Player.position.Y);
+                }
+            }
+        }
     }
 }

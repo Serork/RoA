@@ -57,7 +57,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
             Projectile.localAI[1] = 1f;
 
             int dustType = TileHelper.GetKillTileDust((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1, Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1]);
-            for (int k = 0; k < 9; k++) { 
+            for (int k = 0; k < 12; k++) { 
                 int dust = Dust.NewDust(Projectile.Center, 60, 6, dustType, 0, Main.rand.NextFloat(-5f, -1f));
                 Main.dust[dust].position.X = Projectile.Center.X + 32f * Main.rand.NextFloatDirection() - 8f;
                 Main.dust[dust].position.Y = ((int)Projectile.position.Y / 16 + 1) * 16;

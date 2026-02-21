@@ -269,10 +269,13 @@ sealed class WreathDrawing : PlayerDrawLayer {
             Color effectColor = new(57, 197, 71);
             switch (player.GetDruidStats().IsDruidsEyesEffectActive.Item2) {
                 case Druid.DruidStats.DruidEyesType.PricklenutCharm:
-                    effectColor = new(171, 79, 121);
+                    effectColor = new(203, 120, 144);
                     break;
                 case Druid.DruidStats.DruidEyesType.PinCushion:
                     effectColor = new(210, 64, 64);
+                    break;
+                case Druid.DruidStats.DruidEyesType.StarfruitCharm:
+                    effectColor = new(255, 214, 56);
                     break;
             }
 

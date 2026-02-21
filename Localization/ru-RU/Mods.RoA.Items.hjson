@@ -3035,3 +3035,8 @@ BrambleMaze: {
 	// DisplayName: Bramble Maze
 	// Tooltip: ""
 }
+
+StarfruitCharm: {
+	// DisplayName: Starfruit Charm
+	// Tooltip: ""
+}
