@@ -109,21 +109,21 @@ sealed class FilamentSky : CustomSky {
     }
 
     public void DrawBeams(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
-            int num = -1;
-            int num2 = 0;
-            for (int i = 0; i < _beams.Length; i++) {
-                float depth = _beams[i].Depth;
-                if (num == -1 && depth < maxDepth)
-                    num = i;
+        int num = -1;
+        int num2 = 0;
+        for (int i = 0; i < _beams.Length; i++) {
+            float depth = _beams[i].Depth;
+            if (num == -1 && depth < maxDepth)
+                num = i;
 
-                if (depth <= minDepth)
-                    break;
+            if (depth <= minDepth)
+                break;
 
-                num2 = i;
-            }
+            num2 = i;
+        }
 
-            if (num == -1)
-                return;
+        if (num == -1)
+            return;
 
         float num3 = Math.Min(1f, (Main.screenPosition.Y - 1000f) / 1000f);
         Vector2 vector3 = Main.screenPosition + new Vector2(Main.screenWidth >> 1, Main.screenHeight >> 1);
