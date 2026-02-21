@@ -189,7 +189,18 @@ sealed class RagingBoots : NatureItem {
                 int count = (int)_speedBeforeGround.Length();
                 int count2 = (int)MathHelper.Clamp(_fallLength, 0, 20);
                 bool onIceBlock = false;
-                if (TileHelper.CustomSolidCollision_CheckForIceBlocks(Player, Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms, land)) {
+                if (TileHelper.CustomSolidCollision_CheckForIceBlocks(Player, Player.position - Vector2.One * 3, Player.width + 6, Player.height + 6, TileID.Sets.Platforms, land,
+                    onDestroyingIceBlock: (player) => {
+                        if (!woodBoots) {
+                            if (player.whoAmI == Main.myPlayer) {
+                                float startAngle = Main.rand.NextFloat(MathHelper.TwoPi);
+                                for (float i = 0; i < MathHelper.TwoPi; i += MathHelper.TwoPi / count2) {
+                                    Projectile.NewProjectile(Player.GetSource_Accessory(woodBootsItem), Player.Bottom, _speedBeforeGround.RotatedBy(i + startAngle) * Main.rand.NextFloat(0.25f, 0.75f), ModContent.ProjectileType<IceShard>(), NatureWeaponHandler.GetNatureDamage(woodBootsItem, Player) * 2, Player.GetTotalKnockback(DruidClass.Nature).ApplyTo(woodBootsItem.knockBack) * 0.5f);
+                                }
+                            }
+                            onIceBlock = true;
+                        }
+                    })) {
                     if (land) {
                         if (!_onGround) {
                             SoundEngine.PlaySound(SoundID.Item167 with { PitchVariance = 0.1f }, Player.Bottom);
