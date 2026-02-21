@@ -3,6 +3,7 @@
 using RoA.Common.Druid;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
+using RoA.Content.Dusts;
 using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Projectiles.Friendly.Nature;
@@ -124,14 +125,14 @@ sealed class RagingBoots : NatureItem {
 
                         Vector2 velocity = _speedBeforeGround * 0.35f;
                         List<Color> colors = [new Color(147, 177, 253), new Color(50, 107, 197), new Color(9, 61, 191)];
-                        for (int i = 0; i < 30; i++) {
+                        for (int i = 0; i < 15; i++) {
                             if (Main.rand.Next(3) != 0) {
-                                int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height - 2f), Player.width + 2, 6, DustID.Snow, 0f, 0f, 50, Main.rand.NextFromList([.. colors]));
+                                int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height - 2f), Player.width + 2, 6, ModContent.DustType<SnowDust3>(), 0f, 0f, 50, Main.rand.NextFromList([.. colors]));
                                 if (Player.gravDir == -1f)
                                     Main.dust[num6].position.Y -= Player.height + 4;
                                 Main.dust[num6].noGravity = true;
 
-                                Main.dust[num6].scale *= 2f;
+                                Main.dust[num6].scale *= 1.5f;
                                 Main.dust[num6].position.X -= _speedBeforeGround.X * 1f;
                                 if (Player.gravDir == -1f)
                                     Main.dust[num6].velocity.Y *= -1f;
@@ -214,14 +215,14 @@ sealed class RagingBoots : NatureItem {
                             colors.Add(WreathHandler.GetCurrentColor(Player).ModifyRGB(1.3f));
                             colors.Add(WreathHandler.GetCurrentColor(Player).ModifyRGB(0.7f));
                         }
-                        for (int i = 0; i < 30; i++) {
+                        for (int i = 0; i < 15; i++) {
                             if (Main.rand.Next(3) != 0) {
-                                int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height - 2f), Player.width + 2, 6, DustID.Snow, 0f, 0f, 50, Main.rand.NextFromList([.. colors]));
+                                int num6 = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)Player.height - 2f), Player.width + 2, 6, ModContent.DustType<SnowDust3>(), 0f, 0f, 50, Main.rand.NextFromList([.. colors]));
                                 if (Player.gravDir == -1f)
                                     Main.dust[num6].position.Y -= Player.height + 4;
                                 Main.dust[num6].noGravity = true;
 
-                                Main.dust[num6].scale *= 2f;
+                                Main.dust[num6].scale *= 1.5f;
                                 Main.dust[num6].position.X -= _speedBeforeGround.X * 1f;
                                 if (Player.gravDir == -1f)
                                     Main.dust[num6].velocity.Y *= -1f;
