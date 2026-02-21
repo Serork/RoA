@@ -201,7 +201,6 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
             return;
         }
 
-
         Texture2D baseTexture = indexedTextureAssets[(byte)CoralBubbleRequstedTextureType.Base].Value,
                   outlineTexture = indexedTextureAssets[(byte)CoralBubbleRequstedTextureType.Outline].Value;
         Vector2 scale = Vector2.One * BubbleSquish;
