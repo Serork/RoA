@@ -110,6 +110,16 @@ sealed class BrambleMazeTrap : NatureProjectile {
             if (_scale.X <= 0f && _scale.Y <= 0f) {
                 Projectile.Kill();
             }
+
+            if (Main.rand.NextBool()) {
+                int dustType = TileHelper.GetKillTileDust((int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1, Main.tile[(int)Projectile.position.X / 16, (int)Projectile.position.Y / 16 + 1]);
+                for (int k = 0; k < 1; k++) {
+                    int dust = Dust.NewDust(Projectile.Center, 60, 6, dustType);
+                    Main.dust[dust].position.X = Projectile.Center.X + 16f * Projectile.Opacity * Main.rand.NextFloatDirection() - 8f;
+                    Main.dust[dust].position.Y = ((int)Projectile.position.Y / 16 + 1) * 16;
+                    Main.dust[dust].scale *= 1f;
+                }
+            }
         }
 
         float maxRotation = 0.05f;
