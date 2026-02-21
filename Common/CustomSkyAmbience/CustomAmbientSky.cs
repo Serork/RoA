@@ -6,6 +6,7 @@ using ReLogic.Utilities;
 using RoA.Core.Utility;
 
 using Terraria;
+using Terraria.GameContent.Ambience;
 using Terraria.Graphics.Effects;
 using Terraria.Utilities;
 
@@ -73,6 +74,9 @@ sealed class CustomAmbientSky : CustomSky {
         switch (type) {
             case CustomSkyEntityType.BackwoodsBirdsV:
                 _entities.Add(new BackwoodsBirdsPackSkyEntity(player, random));
+                break;
+            case CustomSkyEntityType.LittleFleder:
+                _entities.Add(new LittleFlederSkyEntity(player, random));
                 break;
         }
 

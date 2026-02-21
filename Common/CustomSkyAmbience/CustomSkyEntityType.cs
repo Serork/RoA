@@ -1,5 +1,6 @@
 namespace RoA.Common.CustomSkyAmbience;
 
 enum CustomSkyEntityType : byte {
-    BackwoodsBirdsV
+    BackwoodsBirdsV,
+    LittleFleder
 }

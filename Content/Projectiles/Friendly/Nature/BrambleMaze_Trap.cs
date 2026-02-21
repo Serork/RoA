@@ -100,6 +100,9 @@ sealed class BrambleMazeTrap : NatureProjectile {
         _scale.X = Helper.Approach(_scale.X, 1f, 0.1f * lerpModifier);
         _scale.Y = Helper.Approach(_scale.Y, 1f, 0.2f * lerpModifier);
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f * lerpModifier);
+
+        float maxRotation = 0.05f;
+        Projectile.rotation = Helper.Wave(-maxRotation, maxRotation, 1.5f, Projectile.identity) * Projectile.Opacity;
     }
 
     public override void OnKill(int timeLeft) {

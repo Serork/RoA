@@ -90,8 +90,10 @@ sealed class CustomAmbienceServer : ILoadable {
 
     public CustomAmbienceServer() {
         ResetSpawnTime();
-        _spawnConditions[CustomSkyEntityType.BackwoodsBirdsV] = () => IsSunnyDay();
+        _spawnConditions[CustomSkyEntityType.BackwoodsBirdsV] = () => true;
+        _spawnConditions[CustomSkyEntityType.LittleFleder] = () => true;
         _secondarySpawnConditionsPerPlayer[CustomSkyEntityType.BackwoodsBirdsV] = (Player player) => player.InModBiome<BackwoodsBiome>();
+        _secondarySpawnConditionsPerPlayer[CustomSkyEntityType.LittleFleder] = (Player player) => player.InModBiome<BackwoodsBiome>();
     }
 
     private bool IsPlayerAtRightHeightForType(CustomSkyEntityType type, Player plr) {
