@@ -76,13 +76,15 @@ sealed class CustomAmbientSky : CustomSky {
                 _entities.Add(new BackwoodsBirdsPackSkyEntity(player, random));
                 break;
             case CustomSkyEntityType.LittleFleder:
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 5; i++) {
                     _entities.Add(new LittleFlederSkyEntity(player, random));
+                    random = new FastRandom(seed);
                 }
                 break;
             case CustomSkyEntityType.Fleder:
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 5; i++) {
                     _entities.Add(new FlederSkyEntity(player, random));
+                    random = new FastRandom(seed);
                 }
                 break;
         }
