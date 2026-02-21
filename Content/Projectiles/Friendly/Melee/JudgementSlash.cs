@@ -111,39 +111,35 @@ sealed class JudgementSlash : ModProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+        Main.spriteBatch.DrawWithSnapshot(() => {
+            Vector2 hitCenter = _startCenter + Vector2.Normalize(Projectile.velocity) * 120f;
+            Color lightColor = Lighting.GetColor((int)(hitCenter.X / 16f), (int)(hitCenter.Y / 16f));
+            float value0 = (120 - Projectile.timeLeft) / 120f;
+            float value1 = (float)Math.Pow(value0, 0.5f);
+            float width = (float)(1f - Math.Cos(value1 * 2f * Math.PI)) * 9f;
+            Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize(Vector2.Zero);
+            Vector2 normalize = normalizedVelocity.RotatedBy(Math.PI / 2f) * width;
+            Color color = _baseColor.MultiplyRGB(lightColor);
+            color *= width / 9.5f;
+            normalize *= width * width / 375f;
+            List<Vertex2D> bars = [new(_startCenter + normalize - Main.screenPosition, color, new Vector3(0f, 0f, 0f)),
+                                   new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
+                                   new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
+                                   new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
+            //Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            Main.graphics.GraphicsDevice.Textures[0] = _slashShadowTexture.Value;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 
-        Vector2 hitCenter = _startCenter + Vector2.Normalize(Projectile.velocity) * 120f;
-        lightColor = Lighting.GetColor((int)(hitCenter.X / 16f), (int)(hitCenter.Y / 16f));
-        float value0 = (120 - Projectile.timeLeft) / 120f;
-        float value1 = (float)Math.Pow(value0, 0.5f);
-        float width = (float)(1f - Math.Cos(value1 * 2f * Math.PI)) * 9f;
-        Vector2 normalizedVelocity = Projectile.velocity.SafeNormalize(Vector2.Zero);
-        Vector2 normalize = normalizedVelocity.RotatedBy(Math.PI / 2f) * width;
-        Color color = _baseColor.MultiplyRGB(lightColor);
-        color *= width / 9.5f;
-        normalize *= width * width / 375f;
-        List<Vertex2D> bars = [new(_startCenter + normalize - Main.screenPosition, color, new Vector3(0f, 0f, 0f)),
-                               new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
-                               new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
-                               new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
-        //Main.graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
-        Main.graphics.GraphicsDevice.Textures[0] = _slashShadowTexture.Value;
-        Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-
-        color = _slashColor.MultiplyRGB(lightColor);
-        color *= width / 9.5f;
-        normalize *= width * width / 385f;
-        bars = [new(_startCenter + normalize - Main.screenPosition, color, new Vector3(0f, 0f, 0f)),
-                new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
-                new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
-                new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
-        Main.graphics.GraphicsDevice.Textures[0] = _slashTexture.Value;
-        Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-
-        Main.spriteBatch.End();
-        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
+            color = _slashColor.MultiplyRGB(lightColor);
+            color *= width / 9.5f;
+            normalize *= width * width / 385f;
+            bars = [new(_startCenter + normalize - Main.screenPosition, color, new Vector3(0f, 0f, 0f)),
+                    new(_startCenter - normalize - Main.screenPosition, color, new Vector3(0f, 1f, 0f)),
+                    new(Projectile.Center + normalize - Main.screenPosition, color, new Vector3(1f, 0f, 0f)),
+                    new(Projectile.Center - normalize - Main.screenPosition, color, new Vector3(1f, 1f, 0f))];
+            Main.graphics.GraphicsDevice.Textures[0] = _slashTexture.Value;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+        });
         return false;
     }
 }

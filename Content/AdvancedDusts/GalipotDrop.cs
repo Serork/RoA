@@ -94,22 +94,21 @@ sealed class GalipotDrop : AdvancedDust<GalipotDrop> {
     }
 
     private void DrawSelf(SpriteBatch spritebatch) {
-        spritebatch.End();
-        spritebatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
-        float opacity = _opacity;
-        Vector2 toCorner = new Vector2(0f, Scale).RotatedBy(Rotation);
-        Color color2 = new Color(204, 128, 14) * opacity * 1f;
-        Color color1 = new Color(126, 33, 0) * opacity * 1f;
-        color1 = Color.Lerp(color1, color2, 0.65f);
-        List<Vertex2D> bars = [
-            new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(0f, 0f, 0f)),
-            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)),  new Vector3(0f, 1f, 0f)),
-            new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 1.5f), color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 0f, 0f)),
-            new Vertex2D(Position - Main.screenPosition - Velocity * AI0 + toCorner.RotatedBy(MathHelper.Pi), color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 1f, 0f))
-        ];
-        Main.graphics.GraphicsDevice.Textures[0] = _lightBallTexture.Value;
-        Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
-        Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-        spritebatch.EndBlendState();
+        spritebatch.DrawWithSnapshot(() => {
+            float opacity = _opacity;
+            Vector2 toCorner = new Vector2(0f, Scale).RotatedBy(Rotation);
+            Color color2 = new Color(204, 128, 14) * opacity * 1f;
+            Color color1 = new Color(126, 33, 0) * opacity * 1f;
+            color1 = Color.Lerp(color1, color2, 0.65f);
+            List<Vertex2D> bars = [
+                new Vertex2D(Position - Main.screenPosition + Velocity + toCorner, color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(0f, 0f, 0f)),
+                new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 0.5f), color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)),  new Vector3(0f, 1f, 0f)),
+                new Vertex2D(Position - Main.screenPosition + toCorner.RotatedBy(MathHelper.Pi * 1.5f), color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 0f, 0f)),
+                new Vertex2D(Position - Main.screenPosition - Velocity * AI0 + toCorner.RotatedBy(MathHelper.Pi), color1.MultiplyRGBA(Lighting.GetColor((int)Position.X / 16, (int)Position.Y / 16)), new Vector3(1f, 1f, 0f))
+            ];
+            Main.graphics.GraphicsDevice.Textures[0] = _lightBallTexture.Value;
+            Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }, sortMode: SpriteSortMode.Immediate);
     }
 }
