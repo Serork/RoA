@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.UI;
 using RoA.Common.World;
 using RoA.Core;
 using RoA.Core.Data;
@@ -45,6 +46,10 @@ sealed class GuideMapHeadOutlineChanger : IInitializer {
 
     private void On_NPCHeadRenderer_PrepareRenderTarget(On_NPCHeadRenderer.orig_PrepareRenderTarget orig, NPCHeadRenderer self, GraphicsDevice device, SpriteBatch spriteBatch) {
         orig(self, device, spriteBatch);
+
+        if (Main.gameMenu) {
+            return;
+        }
 
         ref NPCHeadDrawRenderTargetContent[] contents = ref NPCHeadRenderer__contents(self);
         if (_guideHead != -1) {
