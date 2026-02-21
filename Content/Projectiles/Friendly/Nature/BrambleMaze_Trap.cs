@@ -131,7 +131,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
         float opacity2 = Ease.QuadOut(Projectile.Opacity);
         //opacity2 *= Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
         Vector2 position = Projectile.position;
-        Projectile.position.Y += 11f;
+        Projectile.position.Y += 11.5f;
         if (Projectile.ai[1] > 0) {
             Projectile.position.X -= 5f * Projectile.ai[1];
         }
