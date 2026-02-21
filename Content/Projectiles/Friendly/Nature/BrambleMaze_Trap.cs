@@ -129,7 +129,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
         Texture2D texture = Projectile.GetTexture();
         Vector2 origin = Utils.Frame(texture, 1, Projectile.GetFrameCount()).BottomCenter();
         float opacity2 = Ease.QuadOut(Projectile.Opacity);
-        opacity2 *= Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
+        //opacity2 *= Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
         Vector2 position = Projectile.position;
         Projectile.position.Y += 11f;
         if (Projectile.ai[1] > 0) {
@@ -138,7 +138,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
         else {
             Projectile.position.X += 9f * Projectile.ai[1];
         }
-        Projectile.QuickDrawAnimated(Lighting.GetColor((Projectile.Top - Vector2.UnitY * 16f).ToTileCoordinates())/* * opacity2*/, origin: origin, scale: new Vector2(_scale.X, Ease.CubeOut(_scale.Y)));
+        Projectile.QuickDrawAnimated(Lighting.GetColor((Projectile.Top - Vector2.UnitY * 16f).ToTileCoordinates()) * opacity2, origin: origin, scale: new Vector2(_scale.X, Ease.CubeOut(_scale.Y)));
         Projectile.position = position;
 
         return false;

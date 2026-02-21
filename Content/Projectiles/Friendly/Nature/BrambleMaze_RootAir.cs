@@ -220,7 +220,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
             Color color = Lighting.GetColor(position.ToTileCoordinates());
 
             float opacity2 = Ease.QuadOut(opacity);
-            opacity2 *= Utils.GetLerpValue(TIMELEFT2, TIMELEFT2 - 30, rootAirInfo.TimeLeft, true);
+            //opacity2 *= Utils.GetLerpValue(TIMELEFT2, TIMELEFT2 - 30, rootAirInfo.TimeLeft, true);
 
             SpriteEffects flip = Projectile.spriteDirection.ToSpriteEffects();
 
@@ -230,7 +230,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation,
-                Color = color.ModifyRGB(borderColorRGBFactor)/* * opacity2*/,
+                Color = color.ModifyRGB(borderColorRGBFactor) * opacity2,
                 ImageFlip = flip
             };
             if (opacity != 1f) {
@@ -242,7 +242,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation,
-                Color = color/* * opacity2*/,
+                Color = color * opacity2,
                 ImageFlip = flip
             };
             Main.spriteBatch.Draw(texture, position, drawInfo);
