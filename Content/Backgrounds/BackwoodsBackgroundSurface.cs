@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
-using RoA.Common;
 using RoA.Common.BackwoodsSystems;
 using RoA.Common.Utilities.Extensions;
 using RoA.Common.World;
@@ -73,7 +72,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
             while (attempts-- > 0) {
                 bool shouldBreak = true;
                 for (int i = 0; i < ThemBG.Length; i++) {
-                    if (Vector2.Distance(ThemBG[availableIndex].Position, position) < 300f) {
+                    if (Vector2.Distance(ThemBG[availableIndex].Position, position) < 600f) {
                         position = getPosition();
                         shouldBreak = false;
                     }
@@ -143,6 +142,54 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     private void On_Main_DrawSurfaceBG(On_Main.orig_DrawSurfaceBG orig, Main self) {
         IsDrawingSurfaceBackground = true;
         orig(self);
+
+        if (Main.gameMenu) {
+            return;
+        }
+        bool canBGDraw = false;
+        if ((!Main.remixWorld || Main.gameMenu && !WorldGen.remixWorldGen) && (!WorldGen.remixWorldGen || !WorldGen.drunkWorldGen)) {
+            canBGDraw = true;
+        }
+        if (Main.mapFullscreen) {
+            canBGDraw = false;
+        }
+        if (!canBGDraw) {
+            return;
+        }
+        float value2 = Main.GraveyardVisualIntensity * 0.92f;
+        bool flag = false;
+        float backgroundOpacity = 1f;
+        Color colorOfSurfaceBackgroundsModified = typeof(Main).GetFieldValue<Color>("ColorOfSurfaceBackgroundsModified", Main.instance);
+        Color backgroundColor = Main.ColorOfTheSkies * 1f/* * Math.Max(0.5f, 1f - BackwoodsFogHandler.Opacity)*/;
+        if (IsFogActiveForBackground()) {
+            backgroundOpacity = Math.Max(BackwoodsFogHandler.Opacity * 0.3f, Math.Max(Main.cloudAlpha, value2) * 0.1f);
+            backgroundColor *= backgroundOpacity;
+            flag = true;
+        }
+        bool capturing = CaptureManager.Instance.IsCapturing &&
+            CaptureBiome.GetCaptureBiome(CaptureInterface.Settings.BiomeChoiceIndex).BackgroundIndex == ModContent.GetInstance<BackwoodsBackgroundSurface>().Slot;
+        float captureOffset = capturing ? 200f : 0f;
+        if (Main.LocalPlayer.InModBiome<BackwoodsBiome>()) {
+            captureOffset = 0;
+        }
+        if (flag) {
+            Texture2D value = TextureAssets.Background[49].Value;
+            float bgScale = 1f;
+            float bgGlobalScaleMultiplier = 2f;
+            bgScale *= bgGlobalScaleMultiplier;
+            int backgroundWidth = Main.screenWidth;
+            int bgWidthScaled = (int)(backgroundWidth * bgScale);
+            float bgTopY = (int)((double)(0f - Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
+            double bgParallax = 0.1;
+            float bgStartX = 0;
+            float bgLoops = Main.screenWidth / bgWidthScaled + 2;
+            if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
+                for (int i = 0; i < bgLoops; i++) {
+                    int height = Math.Max(Main.screenHeight + 210, value.Height);
+                    Main.spriteBatch.Draw(value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + captureOffset), new Rectangle(0, 0, bgWidthScaled, height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
+                }
+            }
+        }
     }
 
     private void On_SkyManager_DrawToDepth(On_SkyManager.orig_DrawToDepth orig, SkyManager self, SpriteBatch spriteBatch, float minDepth) {
@@ -383,23 +430,23 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
                 }
             }
 
-            if (flag) {
-                Texture2D value = TextureAssets.Background[49].Value;
-                bgScale = 1f;
-                bgScale *= bgGlobalScaleMultiplier;
-                int backgroundWidth = Main.screenWidth;
-                bgWidthScaled = (int)(backgroundWidth * bgScale);
-                bgTopY = (int)((double)(0f - Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
-                bgParallax = 0.1;
-                bgStartX = 0;
-                bgLoops = Main.screenWidth / bgWidthScaled + 2;
-                if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
-                    for (int i = 0; i < bgLoops; i++) {
-                        int height = Math.Max(Main.screenHeight + 210, value.Height);
-                        Main.spriteBatch.Draw(value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + captureOffset), new Rectangle(0, 0, bgWidthScaled, height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
-                    }
-                }
-            }
+            //if (flag) {
+            //    Texture2D value = TextureAssets.Background[49].Value;
+            //    bgScale = 1f;
+            //    bgScale *= bgGlobalScaleMultiplier;
+            //    int backgroundWidth = Main.screenWidth;
+            //    bgWidthScaled = (int)(backgroundWidth * bgScale);
+            //    bgTopY = (int)((double)(0f - Main.screenPosition.Y) / (Main.worldSurface * 16.0 - 600.0) * 200.0);
+            //    bgParallax = 0.1;
+            //    bgStartX = 0;
+            //    bgLoops = Main.screenWidth / bgWidthScaled + 2;
+            //    if (Main.screenPosition.Y < Main.worldSurface * 16.0 + 16.0) {
+            //        for (int i = 0; i < bgLoops; i++) {
+            //            int height = Math.Max(Main.screenHeight + 210, value.Height);
+            //            Main.spriteBatch.Draw(value, new Vector2(bgStartX + bgWidthScaled * i, bgTopY + captureOffset), new Rectangle(0, 0, bgWidthScaled, height), backgroundColor, 0f, default, bgScale, SpriteEffects.None, 0f);
+            //        }
+            //    }
+            //}
         }
     }
 }
