@@ -19,8 +19,12 @@ using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+// also see NPCTargetting.cs
+[Tracked]
 sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
     private static float GLOWTO => 1.25f;
+    public static ushort NPCTARGETTINGTILECOUNTDISTANCE => 15;
+    private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
 
     public enum StarfruitRequstedTextureType : byte {
         Stem,
@@ -52,6 +56,7 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
     public int Direction => (int)DirectionValue;
     public float GrowFactor => Ease.CubeIn(1f - MathUtils.Clamp01(GrowFactorValue));
     public int StemLength => (int)StemLengthValue;
+    public Vector2 NPCTargetPosition => _growToPosition - Vector2.UnitY * 20f;
 
     public override void SetDefaults() {
         Projectile.SetSizeValues(1);
@@ -60,11 +65,13 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
         Projectile.tileCollide = false;
         Projectile.penetrate = -1;
 
+        Projectile.timeLeft = TIMELEFT;
+
         Projectile.manualDirectionChange = true;
     }
 
     public override void AI() {
-        Projectile.timeLeft = 2;
+        Projectile.Opacity = Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
 
         if (!Init) {
             Init = true;
@@ -86,13 +93,13 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
 
         GrowFactorValue = Helper.Approach(GrowFactorValue, 1f, TimeSystem.LogicDeltaTime * 1f);
 
-        Vector2 position = _growToPosition - Vector2.UnitY * 20f;
+        Vector2 position = NPCTargetPosition;
         float glowWaveFactor = Helper.Wave(0f, 1f, 10f, Projectile.identity);
-        Lighting.AddLight(position, Color.Lerp(new Color(252, 232, 154), new Color(255, 214, 56), glowWaveFactor).ToVector3() * 0.875f * GrowFactorValue);
-        if (!Main.dedServ && Main.rand.Next(100) == 0) {
+        Lighting.AddLight(position, Color.Lerp(new Color(252, 232, 154), new Color(255, 214, 56), glowWaveFactor).ToVector3() * 0.875f * GrowFactorValue * Projectile.Opacity);
+        if (!Main.dedServ && Main.rand.Next(100 + (int)(100 * (1f - Projectile.Opacity))) == 0) {
             Gore.NewGore(Projectile.GetSource_FromThis(), position - new Vector2(12f, 0f) + Main.rand.RandomPointInArea(10), Vector2.Zero, 16);
         }
-        if (Main.rand.NextBool(50)) {
+        if (Main.rand.NextBool(50 + (int)(50 * (1f - Projectile.Opacity)))) {
             int type = DustID.YellowStarDust;
             int size = 20;
             Dust.NewDust(position - Vector2.One * size / 2f, size, size, type, Main.rand.NextFloat(-1f, 1f), Main.rand.NextFloat(-2f, 0f));
@@ -142,6 +149,8 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
         scaleFactor = MathF.Max(0.1f, scaleFactor);
         Vector2 scale = Vector2.One * scaleFactor;
 
+        float globalOpacity = Projectile.Opacity;
+
         ulong seed = (ulong)_seed;
         while (true) {
             if (stemCurrentIndex >= stemCount) {
@@ -176,7 +185,7 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
                 Origin = stemOrigin,
                 Rotation = rotation,
                 ImageFlip = stemFlip,
-                Color = color,
+                Color = color * globalOpacity,
                 Scale = scale
             };
             batch.Draw(stemTexture, position, stemDrawInfo);
@@ -191,7 +200,7 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
                     Origin = topOrigin,
                     Rotation = rotation,
                     ImageFlip = topFlip,
-                    Color = color,
+                    Color = color * globalOpacity,
                     Scale = scale
                 };
                 batch.Draw(topTexture, topPosition, topDrawInfo);
@@ -221,7 +230,7 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
                     Origin = glowOrigin,
                     Rotation = rotation,
                     ImageFlip = topFlip,
-                    Color = glowColor2,
+                    Color = glowColor2 * globalOpacity,
                     Scale = glowScale
                 };
                 batch.Draw(glowTexture, glowPosition, glowDrawInfo.WithScale(Ease.CubeOut(_flowerGrowthFactor) * glowScaleFactor));
@@ -229,7 +238,7 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
                 topClip2 = Utils.Frame(topTexture, 1, 3, frameY: 2);
                 batch.Draw(topTexture, topPosition, topDrawInfo.WithScale(Ease.CubeOut(_flowerGrowthFactor)) with {
                     Clip = topClip2,
-                    Color = glowColor.MultiplyAlpha(MathHelper.Lerp(0.75f, 1f, glowWaveFactor3)) * 0.875f
+                    Color = Color.Lerp(color, glowColor, 0.875f).MultiplyAlpha(MathHelper.Lerp(0.75f, 1f, glowWaveFactor3)) * 1f * globalOpacity
                 });
             }
             startPosition += velocity * step;

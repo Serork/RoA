@@ -48,13 +48,14 @@ sealed class RavencallersCloak : ModItem {
         data.RavencallersCloakVisible = !hideVisual;
     }
 
-    private class RavencallerPlayer : ModPlayer {
+    // also see NPCTargetting.cs
+    public sealed class RavencallerPlayer : ModPlayer {
         private const float RESETTIME = 300f;
 
         [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "DrawPlayerInternal")]
         public extern static void LegacyPlayerRenderer_DrawPlayerInternal(LegacyPlayerRenderer playerRenderer, Camera camera, Player drawPlayer, Vector2 position, float rotation, Vector2 rotationOrigin, float shadow = 0f, float alpha = 1f, float scale = 1f, bool headOnly = false);
 
-        private struct OldPositionInfo {
+        public struct OldPositionInfo {
             public Vector2 Position, Velocity;
             public float Rotation;
             public Vector2 RotationOrigin;
@@ -68,7 +69,7 @@ sealed class RavencallersCloak : ModItem {
         }
 
         private bool _resetted = false, _resetted2 = false;
-        private OldPositionInfo[] _oldPositionInfos = new OldPositionInfo[20];
+        public OldPositionInfo[] OldPositionInfos { get; private set; } = new OldPositionInfo[20];
         private float _resetTime;
         private float _opacity;
 
@@ -87,7 +88,7 @@ sealed class RavencallersCloak : ModItem {
 
         public override void OnHurt(Player.HurtInfo info) {
             _resetTime = RESETTIME;
-            OldPositionInfo[] playerOldPositions = _oldPositionInfos;
+            OldPositionInfo[] playerOldPositions = OldPositionInfos;
             OldPositionInfo lastPositionInfo = playerOldPositions[^1];
             for (int i = 0; i < 25; i++) {
                 int dust = Dust.NewDust(lastPositionInfo.Position, Player.width, Player.height, 240, lastPositionInfo.Velocity.X * 0.4f, lastPositionInfo.Velocity.Y * 0.4f, 110, default, 1.7f);
@@ -104,8 +105,8 @@ sealed class RavencallersCloak : ModItem {
 
         public void ResetPositions(bool resetPositions = true) {
             if (resetPositions) {
-                for (int j = 0; j < _oldPositionInfos.Length; j++) {
-                    _oldPositionInfos[j].Position = Vector2.Zero;
+                for (int j = 0; j < OldPositionInfos.Length; j++) {
+                    OldPositionInfos[j].Position = Vector2.Zero;
                 }
             }
             _opacity = 0f;
@@ -181,7 +182,7 @@ sealed class RavencallersCloak : ModItem {
             Vector2 fullRotationOrigin = drawPlayer.fullRotationOrigin;
             int mountFrame = drawPlayer.mount._frame;
             if (!drawPlayer.ShouldNotDraw && !drawPlayer.dead) {
-                OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
+                OldPositionInfo[] playerOldPositions = data.OldPositionInfos;
                 OldPositionInfo lastPositionInfo = playerOldPositions[^1];
                 if (lastPositionInfo.Position != Vector2.Zero) {
                     drawPlayer.velocity = lastPositionInfo.Velocity;
@@ -270,22 +271,22 @@ sealed class RavencallersCloak : ModItem {
                 _resetted = false;
 
                 if (!_resetted2) {
-                    for (int num2 = _oldPositionInfos.Length - 1; num2 > 0; num2--) {
-                        _oldPositionInfos[num2] = _oldPositionInfos[num2 - 1];
+                    for (int num2 = OldPositionInfos.Length - 1; num2 > 0; num2--) {
+                        OldPositionInfos[num2] = OldPositionInfos[num2 - 1];
                     }
-                    _oldPositionInfos[0].Position = Player.position;
-                    _oldPositionInfos[0].Velocity = Player.velocity;
-                    _oldPositionInfos[0].Rotation = Player.fullRotation;
-                    _oldPositionInfos[0].RotationOrigin = Player.fullRotationOrigin;
-                    _oldPositionInfos[0].Direction = Player.direction;
-                    _oldPositionInfos[0].HeadFrame = Player.headFrame;
-                    _oldPositionInfos[0].BodyFrame = Player.bodyFrame;
-                    _oldPositionInfos[0].LegFrame = Player.legFrame;
-                    _oldPositionInfos[0].WingFrame = Player.wingFrame;
-                    _oldPositionInfos[0].GfxOffY = Player.gfxOffY;
-                    _oldPositionInfos[0].Step = Player.step;
-                    _oldPositionInfos[0].StepSpeed = Player.stepSpeed;
-                    _oldPositionInfos[0].MountFrame = Player.mount._frame;
+                    OldPositionInfos[0].Position = Player.position;
+                    OldPositionInfos[0].Velocity = Player.velocity;
+                    OldPositionInfos[0].Rotation = Player.fullRotation;
+                    OldPositionInfos[0].RotationOrigin = Player.fullRotationOrigin;
+                    OldPositionInfos[0].Direction = Player.direction;
+                    OldPositionInfos[0].HeadFrame = Player.headFrame;
+                    OldPositionInfos[0].BodyFrame = Player.bodyFrame;
+                    OldPositionInfos[0].LegFrame = Player.legFrame;
+                    OldPositionInfos[0].WingFrame = Player.wingFrame;
+                    OldPositionInfos[0].GfxOffY = Player.gfxOffY;
+                    OldPositionInfos[0].Step = Player.step;
+                    OldPositionInfos[0].StepSpeed = Player.stepSpeed;
+                    OldPositionInfos[0].MountFrame = Player.mount._frame;
                 }
                 else {
                     _resetted2 = false;
@@ -310,42 +311,6 @@ sealed class RavencallersCloak : ModItem {
 
                     ResetPositions();
                     _resetted = true;
-                }
-            }
-        }
-
-        private class NPCTargetSystem : GlobalNPC {
-            private readonly static Vector2[] _before = new Vector2[256];
-
-            public override bool PreAI(NPC npc) {
-                if (!npc.friendly) {
-                    foreach (Player player in Main.ActivePlayers) {
-                        RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();
-                        if (data.AvailableForNPCs) {
-                            _before[player.whoAmI] = player.Center;
-                            OldPositionInfo[] playerOldPositions = data._oldPositionInfos;
-                            OldPositionInfo lastPositionInfo = playerOldPositions[^1];
-                            Vector2 position = lastPositionInfo.Position;
-                            if (position != Vector2.Zero) {
-                                player.Center = lastPositionInfo.Position;
-                            }
-
-                            return true;
-                        }
-                    }
-                }
-
-                return base.PreAI(npc);
-            }
-
-            public override void PostAI(NPC npc) {
-                if (!npc.friendly) {
-                    foreach (Player player in Main.ActivePlayers) {
-                        RavencallerPlayer data = player.GetModPlayer<RavencallerPlayer>();
-                        if (data.AvailableForNPCs) {
-                            player.Center = _before[player.whoAmI];
-                        }
-                    }
                 }
             }
         }
