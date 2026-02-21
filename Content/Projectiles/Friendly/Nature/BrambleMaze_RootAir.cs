@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Terraria;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -133,6 +135,32 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                     rootAirInfo.Progress = Helper.Approach(rootAirInfo.Progress, 1f, lerpValue);
                     rootAirInfo.TimeLeft = (ushort)Helper.Approach(rootAirInfo.TimeLeft, TIMELEFT2, 1);
 
+                    if (rootAirInfo.TimeLeft == TIMELEFT2 - 1) {
+                        for (int i2 = 0; i2 < 9; i2++) {
+                            if (Main.rand.NextBool()) {
+                                continue;
+                            }
+                            int greenDust = ModContent.DustType<BrambleMazeDust1>();
+                            int pinkDust = ModContent.DustType<BrambleMazeDust2>();
+                            int yellowDust = ModContent.DustType<BrambleMazeDust3>();
+                            int orangeDust = ModContent.DustType<BrambleMazeDust4>();
+                            int dustType = Main.rand.NextBool(2) ? pinkDust : greenDust;
+                            switch (Projectile.frame) {
+                                case 1:
+                                    dustType = Main.rand.NextBool(2) ? orangeDust : pinkDust;
+                                    break;
+                                case 2:
+                                    dustType = Main.rand.NextBool(2) ? yellowDust : orangeDust;
+                                    break;
+                                case 3:
+                                    dustType = Main.rand.NextBool(2) ? greenDust : yellowDust;
+                                    break;
+                            }
+                            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType);
+                            Main.dust[dust].position = rootAirInfo.Position + Main.rand.RandomPointInArea(10f);
+                        }
+                    }
+
                     allTimeLeft += rootAirInfo.TimeLeft;
 
                     //if (_shouldDisappear && (i == 0 || _rootAirData2[i - 1].TimeLeft >= 4)) {
@@ -202,7 +230,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation,
-                Color = color.ModifyRGB(borderColorRGBFactor) * opacity2,
+                Color = color.ModifyRGB(borderColorRGBFactor)/* * opacity2*/,
                 ImageFlip = flip
             };
             if (opacity != 1f) {
@@ -214,7 +242,7 @@ sealed class BrambleMazeRootAir : NatureProjectile {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation,
-                Color = color * opacity2,
+                Color = color/* * opacity2*/,
                 ImageFlip = flip
             };
             Main.spriteBatch.Draw(texture, position, drawInfo);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -8,6 +9,7 @@ using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
 
 using Terraria;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -100,20 +102,43 @@ sealed class BrambleMazeTrap : NatureProjectile {
         Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.2f * lerpModifier);
     }
 
+    public override void OnKill(int timeLeft) {
+        for (int i2 = 0; i2 < 36; i2++) {
+            int greenDust = ModContent.DustType<BrambleMazeDust1>();
+            int pinkDust = ModContent.DustType<BrambleMazeDust2>();
+            int yellowDust = ModContent.DustType<BrambleMazeDust3>();
+            int orangeDust = ModContent.DustType<BrambleMazeDust4>();
+            int dustType = Main.rand.NextBool(2) ? pinkDust : greenDust;
+            switch (Main.rand.Next(4)) {
+                case 1:
+                    dustType = Main.rand.NextBool(2) ? orangeDust : pinkDust;
+                    break;
+                case 2:
+                    dustType = Main.rand.NextBool(2) ? yellowDust : orangeDust;
+                    break;
+                case 3:
+                    dustType = Main.rand.NextBool(2) ? greenDust : yellowDust;
+                    break;
+            }
+            int dust = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType);
+            Main.dust[dust].position = Projectile.Top - Vector2.UnitY * 20f + Main.rand.RandomPointInArea(30);
+        }
+    }
+
     public override bool PreDraw(ref Color lightColor) {
         Texture2D texture = Projectile.GetTexture();
         Vector2 origin = Utils.Frame(texture, 1, Projectile.GetFrameCount()).BottomCenter();
         float opacity2 = Ease.QuadOut(Projectile.Opacity);
         opacity2 *= Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
         Vector2 position = Projectile.position;
-        Projectile.position.Y += 12f;
+        Projectile.position.Y += 11f;
         if (Projectile.ai[1] > 0) {
             Projectile.position.X -= 5f * Projectile.ai[1];
         }
         else {
             Projectile.position.X += 9f * Projectile.ai[1];
         }
-        Projectile.QuickDrawAnimated(Lighting.GetColor((Projectile.Top - Vector2.UnitY * 16f).ToTileCoordinates()) * opacity2, origin: origin, scale: new Vector2(_scale.X, Ease.CubeOut(_scale.Y)));
+        Projectile.QuickDrawAnimated(Lighting.GetColor((Projectile.Top - Vector2.UnitY * 16f).ToTileCoordinates())/* * opacity2*/, origin: origin, scale: new Vector2(_scale.X, Ease.CubeOut(_scale.Y)));
         Projectile.position = position;
 
         return false;

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Content.Dusts;
+using RoA.Content.Items.Equipables.Wreaths.Tier1;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -13,6 +15,8 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -159,20 +163,41 @@ sealed class BrambleMazeRoot : NatureProjectile {
         Projectile.position.X -= width * (1f - opacity3 * facedRight.ToDirectionInt() + (!facedRight).ToInt()) / 2f;
         float opacity2 = Ease.QuadOut(opacity);
         opacity2 *= Utils.GetLerpValue(0, 30, Projectile.timeLeft, true);
-        Projectile.QuickDrawAnimated(lightColor.ModifyRGB(borderColorRGBFactor) * opacity2, frameBox: clip);
+        Projectile.QuickDrawAnimated(lightColor.ModifyRGB(borderColorRGBFactor)/* * opacity2*/, frameBox: clip);
         Projectile.position = position;
         if (!facedRight) {
             Projectile.position.X += width;
         }
         Projectile.position.X -= width * (1f - opacity * facedRight.ToDirectionInt() + (!facedRight).ToInt()) / 2f;
         clip.Width = (int)(width * opacity);
-        Projectile.QuickDrawAnimated(lightColor * opacity2, frameBox: clip);
+        Projectile.QuickDrawAnimated(lightColor/* * opacity2*/, frameBox: clip);
         Projectile.position = position;
 
         return false;
     }
 
     public override void OnKill(int timeLeft) {
-        
+        for (int i = 0; i < 9; i++) {
+            if (Main.rand.NextBool()) {
+                continue;
+            }
+            int greenDust = ModContent.DustType<BrambleMazeDust1>();
+            int pinkDust = ModContent.DustType<BrambleMazeDust2>();
+            int yellowDust = ModContent.DustType<BrambleMazeDust3>();
+            int orangeDust = ModContent.DustType<BrambleMazeDust4>();
+            int dustType = Main.rand.NextBool(2) ? pinkDust : greenDust;
+            switch (Projectile.frame) {
+                case 1:
+                    dustType = Main.rand.NextBool(2) ? orangeDust : pinkDust;
+                    break;
+                case 2:
+                    dustType = Main.rand.NextBool(2) ? yellowDust : orangeDust;
+                    break;
+                case 3:
+                    dustType = Main.rand.NextBool(2) ? greenDust : yellowDust;
+                    break;
+            }
+            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, dustType);
+        }
     }
 }
