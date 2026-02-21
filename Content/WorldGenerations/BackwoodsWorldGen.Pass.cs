@@ -1536,8 +1536,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                     //WorldGenHelper.ReplaceWall(i + i2, j + j2, _leavesWallType);
                                     if (_random.NextChance(0.5)) {
                                         var above = WorldGenHelper.GetTileSafely(i + i2, j + j2 - 1);
-                                        WorldGenHelper.ReplaceTile(i + i2, j + j2, 
-                                            above.TileType == _grassTileType ? TileID.Dirt : _leavesTileType);
+                                        var above2 = WorldGenHelper.GetTileSafely(i + i2, j + j2 - 2);
+                                        WorldGenHelper.ReplaceTile(i + i2, j + j2,
+                                            !above2.HasTile && above.TileType == _grassTileType ? TileID.Dirt : _leavesTileType);
                                     }
                                 }
                             }
@@ -1555,7 +1556,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                     //WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
                                     if (_random.NextChance(0.75)) {
                                         var above = WorldGenHelper.GetTileSafely(i, j - 1);
-                                        WorldGenHelper.ReplaceTile(i, j, above.TileType == _grassTileType ? TileID.Dirt : _leavesTileType);
+                                        var above2 = WorldGenHelper.GetTileSafely(i, j - 12);
+                                        WorldGenHelper.ReplaceTile(i, j, !above2.HasTile && above.TileType == _grassTileType ? TileID.Dirt : _leavesTileType);
                                     }
                                     else {
                                         WorldGenHelper.ReplaceTile(i, j, _grassTileType);
@@ -4707,7 +4709,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (num794 < num796 + num797_2 && num795 > num796 - num797_2)
                 flag50 = false;
 
-            if (num794 > GenVars.dungeonLocation - num786 * 2 && num795 < GenVars.dungeonLocation + num786 * 2)
+            if (num794 > GenVars.dungeonLocation - num786 * 3 && num795 < GenVars.dungeonLocation + num786 * 3)
                 flag50 = false;
 
             if (!remixWorldGen) {
