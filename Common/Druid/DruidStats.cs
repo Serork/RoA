@@ -124,6 +124,7 @@ sealed partial class DruidStats : ModPlayer {
     public bool SoulOfTheWoods { get; set; }
 
     public override void ResetEffects() {
+        IsCrystallineNeedleEffectActive = false;
         IsStarfruitCharmEffectActive = false;
 
         DruidPotentialDamageMultiplier = 1f;

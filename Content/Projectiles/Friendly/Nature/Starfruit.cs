@@ -20,6 +20,8 @@ using Terraria.ID;
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
 sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
+    private static float GLOWTO => 1.25f;
+
     public enum StarfruitRequstedTextureType : byte {
         Stem,
         Top,
@@ -34,6 +36,7 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
     private Vector2 _startPosition, _growToPosition;
     private int _seed;
     private float _flowerGrowthFactor;
+    private float _glowFactor;
 
     public ref float InitValue => ref Projectile.localAI[0];
 
@@ -96,6 +99,12 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
         }
 
         _flowerGrowthFactor = Helper.Approach(_flowerGrowthFactor, 1f, TimeSystem.LogicDeltaTime * 1.5f * Ease.QuadOut(GrowFactorValue));
+
+        float to = GLOWTO;
+        _glowFactor = Helper.Approach(_glowFactor, to, TimeSystem.LogicDeltaTime);
+        if (_glowFactor >= to) {
+            _glowFactor = 0f;
+        }
     }
 
     protected override void Draw(ref Color lightColor) {
@@ -198,27 +207,30 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
 
                 Color glowColor = Color.White * opacity;
 
-                topClip2 = Utils.Frame(topTexture, 1, 3, frameY: 2);
-                batch.Draw(topTexture, topPosition, topDrawInfo.WithScale(Ease.CubeOut(_flowerGrowthFactor)) with {
-                    Clip = topClip2,
-                    Color = glowColor.MultiplyAlpha(MathHelper.Lerp(0.75f, 1f, glowWaveFactor3)) * 0.875f
-                });
-
                 Vector2 glowPosition = topPosition - Vector2.UnitY.RotatedBy(rotation) * step * 0.5f;
                 Rectangle glowClip = glowTexture.Bounds;
                 Vector2 glowOrigin = glowClip.Centered();
                 float glowColorFactor = MathHelper.Lerp(0.725f, 0.775f, glowWaveFactor2) * 0.75f;
-                glowColor = glowColor.MultiplyRGB(Color.Lerp(new Color(252, 232, 154), new Color(255, 214, 56), glowWaveFactor)).MultiplyAlpha(0f) * glowColorFactor;
+                Color glowColor2 = glowColor.MultiplyRGB(Color.Lerp(new Color(252, 232, 154), new Color(255, 214, 56), glowWaveFactor)).MultiplyAlpha(0f) * glowColorFactor;
+                glowColor2 *= Utils.GetLerpValue(0f, 0.15f, _glowFactor, true);
+                glowColor2 *= 1f - Utils.GetLerpValue(GLOWTO * 0.85f, GLOWTO, _glowFactor, true);
                 float glowScaleFactor = MathHelper.Lerp(0.65f, 0.775f, glowWaveFactor3);
+                Vector2 glowScale = scale * (Utils.Remap(_glowFactor, 0f, GLOWTO, 1f, 0.5f, true));
                 DrawInfo glowDrawInfo = new() {
                     Clip = glowClip,
                     Origin = glowOrigin,
                     Rotation = rotation,
                     ImageFlip = topFlip,
-                    Color = glowColor,
-                    Scale = scale
+                    Color = glowColor2,
+                    Scale = glowScale
                 };
                 batch.Draw(glowTexture, glowPosition, glowDrawInfo.WithScale(Ease.CubeOut(_flowerGrowthFactor) * glowScaleFactor));
+
+                topClip2 = Utils.Frame(topTexture, 1, 3, frameY: 2);
+                batch.Draw(topTexture, topPosition, topDrawInfo.WithScale(Ease.CubeOut(_flowerGrowthFactor)) with {
+                    Clip = topClip2,
+                    Color = glowColor.MultiplyAlpha(MathHelper.Lerp(0.75f, 1f, glowWaveFactor3)) * 0.875f
+                });
             }
             startPosition += velocity * step;
 
