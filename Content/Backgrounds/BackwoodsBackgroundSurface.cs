@@ -55,7 +55,7 @@ sealed class BackwoodsBackgroundSurface : ModSurfaceBackgroundStyle {
     public readonly int MidOffset2 = 1740;
     public readonly int FarOffset = 1200;
 
-    private bool IsFogActiveForBackground() => BackwoodsFogHandler.Opacity > 0f && Main.cloudAlpha <= 0f && Main.GraveyardVisualIntensity * 0.92f <= 0f;
+    private bool IsFogActiveForBackground() => BackwoodsFogHandler.Opacity > 0f;
 
     private bool SpawnThem() {
         int availableIndex = -1;
