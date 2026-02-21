@@ -88,7 +88,7 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
 
         Vector2 position = _growToPosition - Vector2.UnitY * 20f;
         float glowWaveFactor = Helper.Wave(0f, 1f, 10f, Projectile.identity);
-        Lighting.AddLight(position, Color.Lerp(new Color(252, 232, 154), new Color(255, 214, 56), glowWaveFactor).ToVector3() * 0.75f * GrowFactorValue);
+        Lighting.AddLight(position, Color.Lerp(new Color(252, 232, 154), new Color(255, 214, 56), glowWaveFactor).ToVector3() * 0.875f * GrowFactorValue);
         if (!Main.dedServ && Main.rand.Next(100) == 0) {
             Gore.NewGore(Projectile.GetSource_FromThis(), position - new Vector2(12f, 0f) + Main.rand.RandomPointInArea(10), Vector2.Zero, 16);
         }
