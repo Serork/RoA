@@ -65,8 +65,6 @@ sealed class LittleFlederSkyEntity : FadingSkyEntity {
                 break;
         }
 
-        Main.NewText(Position);
-
         Rotation = Velocity.X * 0.1f;
     }
 
