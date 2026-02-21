@@ -1535,7 +1535,9 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 if (!(i + i2 > x - 2 && i + i2 < x + 4) && Main.tile[i + i2, j + j2].TileType != _grassTileType && Main.tile[i + i2, j + j2].TileType != _elderwoodTileType && Main.tile[i + i2, j + j2].HasTile) {
                                     //WorldGenHelper.ReplaceWall(i + i2, j + j2, _leavesWallType);
                                     if (_random.NextChance(0.5)) {
-                                        WorldGenHelper.ReplaceTile(i + i2, j + j2, _leavesTileType);
+                                        var above = WorldGenHelper.GetTileSafely(i + i2, j + j2 - 1);
+                                        WorldGenHelper.ReplaceTile(i + i2, j + j2, 
+                                            above.TileType == _grassTileType ? TileID.Dirt : _leavesTileType);
                                     }
                                 }
                             }
@@ -1552,7 +1554,8 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
                                 if ((_random.NextChance(0.75) && !flag) || flag) {
                                     //WorldGenHelper.ReplaceWall(i, j, _leavesWallType);
                                     if (_random.NextChance(0.75)) {
-                                        WorldGenHelper.ReplaceTile(i, j, _leavesTileType);
+                                        var above = WorldGenHelper.GetTileSafely(i, j - 1);
+                                        WorldGenHelper.ReplaceTile(i, j, above.TileType == _grassTileType ? TileID.Dirt : _leavesTileType);
                                     }
                                     else {
                                         WorldGenHelper.ReplaceTile(i, j, _grassTileType);
