@@ -212,7 +212,7 @@ sealed class Starfruit : ModProjectile_NoTextureLoad, IRequestAssets {
                 Vector2 glowOrigin = glowClip.Centered();
                 float glowColorFactor = MathHelper.Lerp(0.725f, 0.775f, glowWaveFactor2) * 0.75f;
                 Color glowColor2 = glowColor.MultiplyRGB(Color.Lerp(new Color(252, 232, 154), new Color(255, 214, 56), glowWaveFactor)).MultiplyAlpha(0f) * glowColorFactor;
-                glowColor2 *= Utils.GetLerpValue(0f, 0.15f, _glowFactor, true);
+                glowColor2 *= Utils.GetLerpValue(0f, 0.25f, _glowFactor, true);
                 glowColor2 *= 1f - Utils.GetLerpValue(GLOWTO * 0.85f, GLOWTO, _glowFactor, true);
                 float glowScaleFactor = MathHelper.Lerp(0.65f, 0.775f, glowWaveFactor3);
                 Vector2 glowScale = scale * (Utils.Remap(_glowFactor, 0f, GLOWTO, 1f, 0.5f, true));
