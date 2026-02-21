@@ -138,7 +138,7 @@ sealed class CustomAmbienceServer : ILoadable {
     }
 
     public void ResetSpawnTime() {
-        _updatesUntilNextAttempt = 300;
+        _updatesUntilNextAttempt = Main.rand.Next(1200, 7200);
         if (Main.tenthAnniversaryWorld)
             _updatesUntilNextAttempt /= 2;
     }
