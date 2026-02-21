@@ -4,6 +4,8 @@ using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Utility;
 
+using System.Linq;
+
 using Terraria;
 using Terraria.ModLoader;
 
@@ -26,7 +28,8 @@ sealed class NPCTargetting : GlobalNPC {
                     }
                 }
             }
-            foreach (Projectile starfruit in TrackedEntitiesSystem.GetTrackedProjectile<Starfruit>()) {
+            var list = TrackedEntitiesSystem.GetTrackedProjectile<Starfruit>().OrderBy(x => npc.Distance(x.As<Starfruit>().NPCTargetPosition));
+            foreach (Projectile starfruit in list) {
                 Vector2 checkPosition = starfruit.As<Starfruit>().NPCTargetPosition;
                 if (npc.Distance(checkPosition) > TileHelper.TileSize * Starfruit.NPCTARGETTINGTILECOUNTDISTANCE) {
                     continue;
@@ -49,7 +52,8 @@ sealed class NPCTargetting : GlobalNPC {
                     player.Center = _before[player.whoAmI];
                 }
             }
-            foreach (Projectile starfruit in TrackedEntitiesSystem.GetTrackedProjectile<Starfruit>()) {
+            var list = TrackedEntitiesSystem.GetTrackedProjectile<Starfruit>().OrderBy(x => npc.Distance(x.As<Starfruit>().NPCTargetPosition));
+            foreach (Projectile starfruit in list) {
                 Vector2 checkPosition = starfruit.As<Starfruit>().NPCTargetPosition;
                 if (npc.Distance(checkPosition) > TileHelper.TileSize * Starfruit.NPCTARGETTINGTILECOUNTDISTANCE) {
                     continue;
