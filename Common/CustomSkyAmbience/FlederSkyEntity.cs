@@ -77,7 +77,7 @@ sealed class FlederSkyEntity : FadingSkyEntity {
                 break;
         }
 
-        Rotation = Velocity.X * 0.05f;
+        Rotation = Velocity.ToRotation();
     }
 
     private void ZigzagMove(int frameCount) {
