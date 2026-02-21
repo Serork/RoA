@@ -3017,7 +3017,7 @@ BrambleMaze: {
 
 StarfruitCharm: {
 	DisplayName: Starfruit Charm
-	 Tooltip:
+	Tooltip:
 		'''
 		Causes stars to fall, charges up wreath and increases length of invincibility after taking damage
 		Consumes a full wreath charge to make the stars grow into starfruit, distracting enemies
