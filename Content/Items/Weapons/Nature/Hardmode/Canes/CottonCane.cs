@@ -163,7 +163,9 @@ sealed class CottonCane : CaneBaseItem<CottonCane.CottonCaneBase> {
                     .Setup(to + Main.rand.RandomPointInArea(35f),
                            velocity,
                            scale: 1f);
-                cottonDust?.CorePosition = to2;
+                if (cottonDust != null) {
+                    cottonDust.CorePosition = to2;
+                }
             }
         }
     }
