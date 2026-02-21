@@ -4709,7 +4709,7 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
             if (num794 < num796 + num797_2 && num795 > num796 - num797_2)
                 flag50 = false;
 
-            if (num794 > GenVars.dungeonLocation - num786 * 3 && num795 < GenVars.dungeonLocation + num786 * 3)
+            if (num794 > GenVars.dungeonLocation - num786 * 2.5 && num795 < GenVars.dungeonLocation + num786 * 2.5)
                 flag50 = false;
 
             if (!remixWorldGen) {
