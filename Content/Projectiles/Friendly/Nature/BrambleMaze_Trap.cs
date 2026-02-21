@@ -28,7 +28,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
 
         Projectile.friendly = true;
         Projectile.penetrate = -1;
-        Projectile.tileCollide = true;
+        Projectile.tileCollide = false;
 
         Projectile.timeLeft = TIMELEFT;
 
@@ -42,7 +42,7 @@ sealed class BrambleMazeTrap : NatureProjectile {
     }
 
     public override bool OnTileCollide(Vector2 oldVelocity) {
-        return false;
+        return base.OnTileCollide(oldVelocity);
     }
 
     public override void AI() {

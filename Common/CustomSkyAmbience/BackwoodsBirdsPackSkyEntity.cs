@@ -32,7 +32,7 @@ class BackwoodsBirdsPackSkyEntity : FadingSkyEntity {
         bool flag2 = Depth <= 2.2f;
         Position.Y = MathHelper.Clamp(random.NextFloat(), flag2 ? 0.4f : 0.6f, 0.85f) * ((float)surfacePosition * 16f - 1600f) + 2400f;
         SetPositionInWorldBasedOnScreenSpace(Position);
-        Texture = random.NextFloat() < 0.35f ? ModContent.Request<Texture2D>(ResourceManager.Textures + "Ambience/BirdsVShape") : Main.Assets.Request<Texture2D>("Images/Backgrounds/Ambience/BirdsVShape");
+        Texture = random.NextFloat() < 0.35f ? ModContent.Request<Texture2D>(ResourceManager.AmbienceTextures + "BirdsVShape") : Main.Assets.Request<Texture2D>("Images/Backgrounds/Ambience/BirdsVShape");
         Frame = new SpriteFrame(1, 4);
         LifeTime = random.Next(60, 121) * 60;
         OpacityNormalizedTimeToFadeIn = 0.085f;
