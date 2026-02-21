@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using Terraria;
+using Terraria.ModLoader;
 
 namespace RoA.Common.CustomSkyAmbience;
 
@@ -45,6 +46,10 @@ class FadingSkyEntity : SkyEntity {
             Opacity = Utils.GetLerpValue(LifeTime, LifeTime * OpacityNormalizedTimeToFadeOut, num, clamped: true);
         else
             Opacity = Utils.GetLerpValue(0f, LifeTime * OpacityNormalizedTimeToFadeIn, num, clamped: true);
+
+        if (this is LeafSkyEntity) {
+            Opacity *= Main.bgAlphaFrontLayer[ModContent.Find<ModSurfaceBackgroundStyle>(RoA.ModName + "/BackwoodsBackgroundSurface").Slot];
+        }
     }
 
     private bool IsMovementDone(int frameCount) {
