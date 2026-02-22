@@ -8,6 +8,7 @@ using RoA.Common;
 using RoA.Common.BossBars;
 using RoA.Common.World;
 using RoA.Content.Dusts;
+using RoA.Content.Items.Materials;
 using RoA.Core;
 using RoA.Core.Utility.Vanilla;
 
@@ -18,6 +19,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
@@ -772,6 +774,25 @@ sealed class FilamentPillar : ModNPC {
         //    Main.npc[num1487].netUpdate = true;
         //    this.ai[1] = 60f;
         //}
+    }
+
+    public override void ModifyNPCLoot(NPCLoot npcLoot) {
+        DropOneByOne.Parameters parameters = default(DropOneByOne.Parameters);
+        parameters.MinimumItemDropsCount = 12;
+        parameters.MaximumItemDropsCount = 20;
+        parameters.ChanceNumerator = 1;
+        parameters.ChanceDenominator = 1;
+        parameters.MinimumStackPerChunkBase = 1;
+        parameters.MaximumStackPerChunkBase = 3;
+        parameters.BonusMinDropsPerChunkPerPlayer = 0;
+        parameters.BonusMaxDropsPerChunkPerPlayer = 0;
+        DropOneByOne.Parameters parameters2 = parameters;
+        DropOneByOne.Parameters parameters3 = parameters2;
+        parameters3.BonusMinDropsPerChunkPerPlayer = 1;
+        parameters3.BonusMaxDropsPerChunkPerPlayer = 1;
+        parameters3.MinimumStackPerChunkBase = (int)((float)parameters2.MinimumStackPerChunkBase * 1.5f);
+        parameters3.MaximumStackPerChunkBase = (int)((float)parameters2.MaximumStackPerChunkBase * 1.5f);
+        npcLoot.Add(new DropBasedOnExpertMode(new DropOneByOne(ModContent.ItemType<FilamentFragment>(), parameters2), new DropOneByOne(ModContent.ItemType<FilamentFragment>(), parameters3)));
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {

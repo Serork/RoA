@@ -1,4 +1,5 @@
 ﻿using RoA.Content.Items.Food;
+using RoA.Content.Items.Materials;
 using RoA.Content.Items.Placeable.Crafting;
 using RoA.Content.Items.Placeable.Solid;
 
@@ -14,5 +15,7 @@ sealed class RecipeGroups : ModSystem {
 
         RecipeGroup.recipeGroups[RecipeGroupID.Fruit].ValidItems.Add(ModContent.ItemType<Almond>());
         RecipeGroup.recipeGroups[RecipeGroupID.Fruit].ValidItems.Add(ModContent.ItemType<Pistachio>());
+
+        RecipeGroup.recipeGroups[RecipeGroupID.Fragment].ValidItems.Add(ModContent.ItemType<FilamentFragment>());
     }
 }
