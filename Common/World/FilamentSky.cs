@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using ReLogic.Content;
 
+using RoA.Common.Cache;
 using RoA.Content.Backgrounds;
 using RoA.Core;
 using RoA.Core.Utility;
@@ -20,13 +21,16 @@ using Terraria.Utilities;
 namespace RoA.Common.World;
 
 sealed class TargetLoader : ILoadable {
+    public static ushort PADDING => 0;
+    public static float PADDINGMODIFIER => 2f;
+
     public static RenderTarget2D BeamRenderTarget = null!;
 
     void ILoadable.Load(Mod mod) {
         using var eventSlim = new ManualResetEventSlim();
 
         Main.QueueMainThreadAction(() => {
-            BeamRenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+            BeamRenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)(Main.screenWidth * PADDINGMODIFIER) + PADDING * 2, (int)(Main.screenHeight * PADDINGMODIFIER) + PADDING * 2);
 
             eventSlim.Set();
         });
@@ -42,7 +46,7 @@ sealed class TargetLoader : ILoadable {
         var parameters = gd.PresentationParameters;
 
         BeamRenderTarget?.Dispose();
-        BeamRenderTarget = new RenderTarget2D(gd, parameters.BackBufferWidth, parameters.BackBufferHeight);
+        BeamRenderTarget = new RenderTarget2D(gd, (int)(parameters.BackBufferWidth * PADDINGMODIFIER) + PADDING * 2, (int)(parameters.BackBufferHeight * PADDINGMODIFIER) + PADDING * 2);
     }
 
     void ILoadable.Unload() {
@@ -154,7 +158,9 @@ sealed class FilamentSky : CustomSky {
         spriteBatch.End();
 
         var graphicsDevice = Main.instance.GraphicsDevice;
-        var sb = Main.spriteBatch;
+        var sb = spriteBatch;
+
+        SpriteBatchSnapshot snapshot = sb.CaptureSnapshot();
 
         graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
         graphicsDevice.Clear(Color.Transparent);
@@ -164,9 +170,9 @@ sealed class FilamentSky : CustomSky {
 
         graphicsDevice.SetRenderTarget(TargetLoader.BeamRenderTarget);
         graphicsDevice.Clear(Color.Transparent);
-        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        sb.Begin(snapshot);
 
-        DrawBeams(spriteBatch, minDepth, maxDepth);
+        DrawBeams(sb, minDepth, maxDepth);
 
         sb.End();
 
@@ -177,19 +183,20 @@ sealed class FilamentSky : CustomSky {
         sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
         sb.End();
 
-        sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        sb.Begin(snapshot);
         float wavePhase = 0f;
-        float waveAmplitude = 0.25f;
-        float waveFrequency = 0.5f;
+        float waveAmplitude = 0.1f;
+        float waveFrequency = 1f;
+        Vector2 renderTargetOffset = new Vector2(0, 0);
         ShaderLoader.FilamentThreadShader.WaveFrequency = waveFrequency;
         ShaderLoader.FilamentThreadShader.WavePhase = wavePhase;
         ShaderLoader.FilamentThreadShader.WaveAmplitude = waveAmplitude;
-        ShaderLoader.FilamentThreadShader.Apply(spriteBatch, () => {
-            sb.Draw(TargetLoader.BeamRenderTarget, Vector2.Zero, null, Color.White);
+        ShaderLoader.FilamentThreadShader.Apply(sb, () => {
+            sb.Draw(TargetLoader.BeamRenderTarget, renderTargetOffset, null, Color.White);
         });
         sb.End();
 
-        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        sb.Begin(snapshot);
     }
 
     private void DrawBeams(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
@@ -225,6 +232,7 @@ sealed class FilamentSky : CustomSky {
             float value = (float)Math.Sin(_beams[j].AlphaFrequency * TimeSystem.TimeForVisualEffects * 0.25f + _beams[j].SinOffset) * _beams[j].AlphaAmplitude + _beams[j].AlphaAmplitude;
             float num4 = (float)Math.Sin(_beams[j].AlphaFrequency * TimeSystem.TimeForVisualEffects * 5f + _beams[j].SinOffset) * 0.1f - 0.1f;
             value = MathHelper.Clamp(value, 0.5f, 1f);
+            value = 1f;
             Texture2D value2 = _beamTexture.Value;
             Texture2D value3 = _beamTexture2.Value;
             Texture2D value4 = _beamTexture3.Value;
@@ -235,7 +243,7 @@ sealed class FilamentSky : CustomSky {
             Vector2 scale = new Vector2(vector4.X * 0.5f + 0.5f) * (value * 0.1f + 0.9f);
             scale.Y *= _beams[j].ScaleX;
             float rotation = _beams[j].SinOffset;
-            int attempts2 = 2;
+            int attempts2 = 3;
             int attempts = attempts2;
             Vector2 position2 = position;
             int width = value2.Width / 2;
