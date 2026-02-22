@@ -25,6 +25,10 @@ static partial class Helper {
         Dust.NewDustPerfect(position, ModContent.DustType<Content.Dusts.Torch>(), Vector2.Zero).noGravity = true;
     }
 
+    public static void SpawnDebugDusts(Vector2 position, int type) {
+        Dust.NewDustPerfect(position, type, Vector2.Zero).noGravity = true;
+    }
+
     public static Vector2 GetBezierPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 d, float t) {
         t = MathHelper.Clamp(t, 0.0f, 1f);
         float num = 1f - t;

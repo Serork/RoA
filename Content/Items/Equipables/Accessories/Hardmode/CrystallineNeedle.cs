@@ -92,6 +92,7 @@ sealed class CrystallineNeedle : NatureItem {
             }
             effect |= SpriteEffects.FlipVertically;
 
+            position += Vector2.UnitX.RotatedBy(rotation) * -2f;
             Rectangle sourceRectangle2 = sourceRectangle;
             sourceRectangle2.Height += 2;
             DrawData item2 = new(texture, position + Vector2.UnitY.RotatedBy(rotation) * 1f + Vector2.UnitX.RotatedBy(rotation) * 2f + player.MovementOffset(), 
@@ -117,7 +118,7 @@ sealed class CrystallineNeedle : NatureItem {
                 drawinfo.DrawDataCache.Add(item);
             }
 
-            position += Vector2.UnitX.RotatedBy(rotation) * 1f;
+            position += Vector2.UnitX.RotatedBy(rotation) * 2f;
             if (!Main.gamePaused && Main.instance.IsActive) {
                 for (int i2 = 0; i2 < 1; i2++) {
                     if (Main.rand.NextBool(3)) {

@@ -44,11 +44,11 @@ sealed class CrystallineNeedleDust : ModDust, IDrawDustPrePlayer {
         Color color = Color.White.MultiplyRGB(dust.color) with { A = (byte)(dust.color.A / 2) } * (1f - dust.alpha / 255f);
         Texture2D texture = Texture2D.Value;
         Rectangle sourceRectangle = dust.frame;
-        Vector2 origin = dust.frame.Size() / 2f;
+        Vector2 origin = sourceRectangle.Centered();
         float scale = dust.scale;
         float rotation = dust.rotation;
         Main.EntitySpriteDraw(texture, dust.position - Main.screenPosition, sourceRectangle, color, rotation, origin, scale, 0, 0);
-        float waveOffset = (float)dust.customData;
+        float waveOffset = dust.customData is float ? (float)dust.customData : 0f;
         for (float num10 = -0.02f; num10 <= 0.02f; num10 += 0.01f) {
             float num11 = (float)Math.PI * 2f * num10 * 0.5f;
             Vector2 vector2 = dust.position + num11.ToRotationVector2() * 2f * dust.velocity.X.GetDirection();
