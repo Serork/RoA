@@ -152,6 +152,7 @@ sealed class FilamentSky : CustomSky {
             int attempts = attempts2;
             Vector2 position2 = position;
             int width = 5120 / 2;
+            2
             Rectangle bounds = new Rectangle((int)(_beams[j].ClipX * width + _beams[j].Depth * width) % width, 0, width, value2.Height);
             Rectangle bounds2 = new Rectangle((int)(_beams[j].ClipX2 * width + _beams[j].Depth * width) % width, 0, width, value2.Height);
             Rectangle bounds3 = new Rectangle((int)(_beams[j].ClipX3 * width + _beams[j].Depth * width) % width, 0, width, value2.Height);
