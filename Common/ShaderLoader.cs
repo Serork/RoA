@@ -28,6 +28,39 @@ using static Terraria.ModLoader.Core.TmodFile;
 namespace RoA.Common;
 
 sealed class ShaderLoader : ModSystem {
+    public static class FilamentThreadShader {
+        private static float _waveFrequency = 0f;
+        private static float _wavePhase = 0f;
+        private static float _waveAmplitude = 0f;
+
+        public static float WaveFrequency {
+            get => _waveFrequency;
+            set => Effect?.Parameters["waveFrequency"].SetValue(_waveFrequency = value);
+        }
+
+        public static float WavePhase {
+            get => _wavePhase;
+            set => Effect?.Parameters["wavePhase"].SetValue(_wavePhase = value);
+        }
+
+        public static float WaveAmplitude {
+            get => _waveAmplitude;
+            set => Effect?.Parameters["waveAmplitude"].SetValue(_waveAmplitude = value);
+        }
+
+        public static Effect? Effect => _loadedShaders["FilamentThread"].Value;
+
+        public static void Apply(SpriteBatch batch, Action draw) {
+            SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
+            batch.End();
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, snapshot.samplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
+            Effect?.CurrentTechnique.Passes[0].Apply();
+            draw();
+            batch.End();
+            batch.Begin(in snapshot);
+        }
+    }
+
     public static class SunShader {
         private static float _time = 0f;
         private static Color _color = Color.Transparent;
@@ -212,6 +245,7 @@ sealed class ShaderLoader : ModSystem {
     public static Asset<Effect> ChromaticAberration => _loadedShaders["ChromaticAberration"];
     public static Asset<Effect> LightCompressor => _loadedShaders["LightCompressor"];
     public static Asset<Effect> FlameTint => _loadedShaders["FlameTint"];
+    public static Asset<Effect> FilamentThread => _loadedShaders["FilamentThread"];
 
     public static Asset<Effect> SimpleReflection => _loadedShaders["SimpleReflection"];
 
