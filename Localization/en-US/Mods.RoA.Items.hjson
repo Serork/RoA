@@ -2997,7 +2997,7 @@ CottonCane: {
 
 FilamentFragment: {
 	DisplayName: Filament Fragment
-	Tooltip: ""
+	Tooltip: "'The cosmic thread of life weaves through this fragment'"
 }
 
 FilamentFragment2: {
