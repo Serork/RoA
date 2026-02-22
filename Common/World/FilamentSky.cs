@@ -9,6 +9,7 @@ using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System;
+using System.Threading;
 
 using Terraria;
 using Terraria.GameContent;
@@ -17,6 +18,50 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 
 namespace RoA.Common.World;
+
+sealed class TargetLoader : ILoadable {
+    public static RenderTarget2D BeamRenderTarget = null!;
+
+    void ILoadable.Load(Mod mod) {
+        using var eventSlim = new ManualResetEventSlim();
+
+        Main.QueueMainThreadAction(() => {
+            BeamRenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, Main.screenWidth, Main.screenHeight);
+
+            eventSlim.Set();
+        });
+
+        eventSlim.Wait();
+
+        Main.graphics.GraphicsDevice.DeviceReset += OnDeviceReset!;
+    }
+
+    private static void OnDeviceReset(object sender, EventArgs eventArgs) {
+        var gd = (GraphicsDevice)sender;
+
+        var parameters = gd.PresentationParameters;
+
+        BeamRenderTarget?.Dispose();
+        BeamRenderTarget = new RenderTarget2D(gd, parameters.BackBufferWidth, parameters.BackBufferHeight);
+    }
+
+    void ILoadable.Unload() {
+        Main.graphics.GraphicsDevice.DeviceReset -= OnDeviceReset!;
+
+        if (BeamRenderTarget is not null) {
+            using var eventSlim = new ManualResetEventSlim();
+
+            Main.QueueMainThreadAction(() => {
+                BeamRenderTarget.Dispose();
+                eventSlim.Set();
+            });
+
+            eventSlim.Wait();
+
+            BeamRenderTarget = null;
+        }
+    }
+}
 
 sealed class FilamentSky : CustomSky {
     private struct Beam {
@@ -40,6 +85,10 @@ sealed class FilamentSky : CustomSky {
     private Beam[] _beams;
 
     public override void OnLoad() {
+        if (Main.dedServ) {
+            return;
+        }
+
         _planetTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentPlanet");
         _bgTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBackground");
         _beamTexture = ModContent.Request<Texture2D>(ResourceManager.BackgroundTextures + "FilamentBeam");
@@ -54,7 +103,7 @@ sealed class FilamentSky : CustomSky {
             _fadeOpacity = Math.Max(0f, _fadeOpacity - 0.01f);
 
         for (int i = 0; i < _beams.Length; i++) {
-            _beams[i].ClipX3 = Helper.Approach(_beams[i].ClipX3, 1f, 0.01f / 10f);
+            _beams[i].ClipX3 = Helper.Approach(_beams[i].ClipX3, 1f, 0.005f / 10f);
             if (_beams[i].ClipX3 >= 1f) {
                 _beams[i].ClipX3 = 0f;
             }
@@ -62,7 +111,7 @@ sealed class FilamentSky : CustomSky {
             if (_beams[i].ClipX >= 1f) {
                 _beams[i].ClipX = 0f;
             }
-            _beams[i].ClipX2 = Helper.Approach(_beams[i].ClipX2, 1f, 0.01f / 10f);
+            _beams[i].ClipX2 = Helper.Approach(_beams[i].ClipX2, 1f, 0.02f / 10f);
             if (_beams[i].ClipX2 >= 1f) {
                 _beams[i].ClipX2 = 0f;
             }
@@ -102,10 +151,48 @@ sealed class FilamentSky : CustomSky {
        AfterPlanetGradientColor.MultiplyAlpha(1f) * Math.Min(1f, (Main.screenPosition.Y - 800f) / 1000f * _fadeOpacity));
         }
 
+        spriteBatch.End();
+
+        var graphicsDevice = Main.instance.GraphicsDevice;
+        var sb = Main.spriteBatch;
+
+        graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+        graphicsDevice.Clear(Color.Transparent);
+        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+        sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+        sb.End();
+
+        graphicsDevice.SetRenderTarget(TargetLoader.BeamRenderTarget);
+        graphicsDevice.Clear(Color.Transparent);
+        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+
         DrawBeams(spriteBatch, minDepth, maxDepth);
+
+        sb.End();
+
+        graphicsDevice.SetRenderTarget(Main.screenTarget);
+        graphicsDevice.Clear(Color.Transparent);
+
+        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+        sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+        sb.End();
+
+        sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
+        float wavePhase = 0f;
+        float waveAmplitude = 0.25f;
+        float waveFrequency = 0.5f;
+        ShaderLoader.FilamentThreadShader.WaveFrequency = waveFrequency;
+        ShaderLoader.FilamentThreadShader.WavePhase = wavePhase;
+        ShaderLoader.FilamentThreadShader.WaveAmplitude = waveAmplitude;
+        ShaderLoader.FilamentThreadShader.Apply(spriteBatch, () => {
+            sb.Draw(TargetLoader.BeamRenderTarget, Vector2.Zero, null, Color.White);
+        });
+        sb.End();
+
+        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.Transform);
     }
 
-    public void DrawBeams(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
+    private void DrawBeams(SpriteBatch spriteBatch, float minDepth, float maxDepth) {
         int num = -1;
         int num2 = 0;
         for (int i = 0; i < _beams.Length; i++) {
@@ -164,21 +251,12 @@ sealed class FilamentSky : CustomSky {
             float globalOpacity = 0.375f;
             float starOpacity = 0.825f;
 
-            float wavePhase = 0f;
-            float waveAmplitude = 0.25f;
-            float waveFrequency = 2f;
-
             while (attempts-- > 0) {
                 //if (rectangle.Contains((int)position2.X, (int)position2.Y))
                 {
-                    ShaderLoader.FilamentThreadShader.WaveFrequency = waveFrequency;
-                    ShaderLoader.FilamentThreadShader.WavePhase = wavePhase;
-                    ShaderLoader.FilamentThreadShader.WaveAmplitude = waveAmplitude;
-                    ShaderLoader.FilamentThreadShader.Apply(spriteBatch, () => {
-                        spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
-                        spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
-                        spriteBatch.Draw(value4, position2, bounds3, color2 * starOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
-                    });
+                    spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(value4, position2, bounds3, color2 * starOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
                 }
                 position2 += Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
             }
@@ -188,14 +266,9 @@ sealed class FilamentSky : CustomSky {
                 position2 -= Vector2.UnitX.RotatedBy(rotation) * width * new Vector2(scale.X);
                 //if (rectangle.Contains((int)position2.X, (int)position2.Y))
                 {
-                    ShaderLoader.FilamentThreadShader.WaveFrequency = waveFrequency;
-                    ShaderLoader.FilamentThreadShader.WavePhase = wavePhase;
-                    ShaderLoader.FilamentThreadShader.WaveAmplitude = waveAmplitude;
-                    ShaderLoader.FilamentThreadShader.Apply(spriteBatch, () => {
-                        spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
-                        spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
-                        spriteBatch.Draw(value4, position2, bounds3, color2 * starOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
-                    });
+                    spriteBatch.Draw(value2, position2, bounds, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(value3, position2, bounds2, color2 * globalOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
+                    spriteBatch.Draw(value4, position2, bounds3, color2 * starOpacity, rotation, origin, scale, SpriteEffects.None, 0f);
                 }
             }
         }
