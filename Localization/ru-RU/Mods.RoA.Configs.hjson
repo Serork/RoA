@@ -157,7 +157,7 @@ RoAServerConfig: {
 	}
 
 	ChangeLunarPillarLogic: {
-		// Label: Change Lunar Pillar Logic
+		// Label: LUNAR PILLAR NEW LOGIC TEXT
 		// Tooltip: ""
 	}
 }
