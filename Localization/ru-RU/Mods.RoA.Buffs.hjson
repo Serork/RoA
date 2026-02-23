@@ -370,3 +370,8 @@ Aries: {
 	DisplayName: Козерог
 	Description: Коб с интересом наблюдает за {0}
 }
+
+FilamentBinding: {
+	// DisplayName: Filament Binding
+	// Description: Mods.RoA.Buffs.FilamentBinding.Description
+}

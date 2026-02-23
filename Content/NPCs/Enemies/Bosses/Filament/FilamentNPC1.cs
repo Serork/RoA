@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common;
+using RoA.Content.Buffs;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -51,6 +52,13 @@ sealed class FilamentNPC1 : ModNPC {
         NPC.noGravity = true;
         NPC.knockBackResist = 0.1f;
         NPC.npcSlots = 3f;
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) {
+        if (Main.expertMode)
+            target.AddBuff(ModContent.BuffType<FilamentBinding>(), Main.rand.Next(300, 540) / 5);
+        else if (Main.rand.Next(2) == 0)
+            target.AddBuff(ModContent.BuffType<FilamentBinding>(), Main.rand.Next(360, 720) / 5);
     }
 
     public override void AI() {

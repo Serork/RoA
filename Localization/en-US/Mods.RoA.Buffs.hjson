@@ -370,3 +370,8 @@ Aries: {
 	DisplayName: Aries
 	Description: Cob is watching {0} with great interest
 }
+
+FilamentBinding: {
+	DisplayName: Filament Binding
+	Description: Mods.RoA.Buffs.FilamentBinding.Description
+}

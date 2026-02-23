@@ -214,6 +214,16 @@ sealed partial class PlayerCommon : ModPlayer {
 
     //public bool IsBrambleMazePlaced, IsBrambleMazeUsed;
 
+    public readonly record struct ControlsCache(
+        bool ControlUp,
+        bool ControlLeft,
+        bool ControlRight,
+        bool ControlDown,
+        bool ControlJump);
+
+    public bool IsFilamentBindingEffectActive, IsFilamentBindingEffectActive2;
+    public ControlsCache FilamentBindingControlsCache { get; private set; } 
+
     public enum EyePatchMode : byte {
         LeftEye = 0,
         RightEye = 1,
@@ -605,6 +615,22 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         if (CollidedWithCottonBoll) {
             ResetControls();
+        }
+
+        if (IsFilamentBindingEffectActive && !IsFilamentBindingEffectActive2) {
+            FilamentBindingControlsCache = new ControlsCache(Player.controlUp, Player.controlLeft, Player.controlRight, Player.controlDown, Player.controlJump);
+            IsFilamentBindingEffectActive2 = true;
+        }
+
+        if (IsFilamentBindingEffectActive) {
+            Player.controlUp = FilamentBindingControlsCache.ControlUp;
+            Player.controlLeft = FilamentBindingControlsCache.ControlLeft;
+            Player.controlDown = FilamentBindingControlsCache.ControlDown;
+            Player.controlRight = FilamentBindingControlsCache.ControlRight;
+            Player.controlJump = FilamentBindingControlsCache.ControlJump;
+        }
+        else {
+            IsFilamentBindingEffectActive2 = false;
         }
     }
 
@@ -1668,6 +1694,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsFilamentBindingEffectActive = false;
+
         IsHoneyPunchEffectActive = false;
 
         IsBadgeOfHonorEffectActive = false;
