@@ -18,6 +18,10 @@ sealed class RoAServerConfig : ModConfig {
     [DefaultValue(true)]
     public bool DropDevSets;
 
+    [DefaultValue(true)]
+    [ReloadRequired]
+    public bool ChangeLunarPillarLogic;
+
     [Range(0f, 1f)]
     [Increment(0.5f)]
     //[DrawTicks]

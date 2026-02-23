@@ -155,6 +155,11 @@ RoAServerConfig: {
 		Label: Vanilla Recipe Changes
 		Tooltip: Replaces several item recipes i. e. potions
 	}
+
+	ChangeLunarPillarLogic: {
+		Label: LUNAR PILLAR NEW LOGIC TEXT
+		Tooltip: ""
+	}
 }
 
 WreathPositions: {

@@ -6,6 +6,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.BossBars;
+using RoA.Common.Configs;
 using RoA.Common.World;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Materials;
@@ -161,7 +162,7 @@ sealed class FilamentPillar : ModNPC {
     }
 
     private void WorldCommon_ClearWorldEvent() {
-        NPC.LunarShieldPowerNormal = 80;
+        NPC.LunarShieldPowerNormal = ModContent.GetInstance<RoAServerConfig>().ChangeLunarPillarLogic ? 80 : 100;
     }
 
     private void On_Player_UpdateBiomes(On_Player.orig_UpdateBiomes orig, Player self) {
@@ -203,6 +204,16 @@ sealed class FilamentPillar : ModNPC {
     }
 
     private void On_WorldGen_TriggerLunarApocalypse(On_WorldGen.orig_TriggerLunarApocalypse orig) {
+        if (!ModContent.GetInstance<RoAServerConfig>().ChangeLunarPillarLogic) {
+            VanillaLunarEventTrigger();
+
+            return;
+        }
+
+        RemadeLunarEventTrigger();
+    }
+
+    private void RemadeLunarEventTrigger() {
         int currentAddedPillarIndex = 0;
         List<int> list = new List<int> {
             517,
@@ -294,50 +305,97 @@ sealed class FilamentPillar : ModNPC {
             }
         }
 
-        //int num = Main.maxTilesX / 5;
-        //int num2 = (int)Main.worldSurface;
-        //for (int j = 0; j < 5; j++) {
-        //    int num3 = num * (1 + j);
-        //    num3 -= num / 2;
-        //    bool flag = false;
-        //    for (int k = 0; k < 30; k++) {
-        //        int num4 = Main.rand.Next(-100, 101);
-        //        if (Main.remixWorld && Main.getGoodWorld) {
-        //            int num5 = Main.rand.Next((int)Main.worldSurface, Main.maxTilesY - 350);
-        //            if (!WorldGen.PlayerLOS(num3 + num4 - 10, num5) && !WorldGen.PlayerLOS(num3 + num4 + 10, num5) && !WorldGen.PlayerLOS(num3 + num4 - 10, num5 - 20) && !WorldGen.PlayerLOS(num3 + num4 + 10, num5 - 20)) {
-        //                int num6 = NPC.NewNPC(new EntitySource_WorldEvent(), (num3 + num4) * 16, num5 * 16, array[j]);
-        //                if (Main.netMode == 2 && num6 < 200)
-        //                    NetMessage.SendData(23, -1, -1, null, num6);
-
-        //                flag = true;
-        //                break;
-        //            }
-
-        //            continue;
-        //        }
-
-        //        for (int num7 = num2; num7 > 100; num7--) {
-        //            if (!Collision.SolidTiles(num3 + num4 - 10, num3 + num4 + 10, num7 - 20, num7 + 15) && !WorldGen.PlayerLOS(num3 + num4 - 10, num7) && !WorldGen.PlayerLOS(num3 + num4 + 10, num7) && !WorldGen.PlayerLOS(num3 + num4 - 10, num7 - 20) && !WorldGen.PlayerLOS(num3 + num4 + 10, num7 - 20)) {
-        //                int num8 = NPC.NewNPC(new EntitySource_WorldEvent(), (num3 + num4) * 16, num7 * 16, array[j]);
-        //                if (Main.netMode == 2 && num8 < 200)
-        //                    NetMessage.SendData(23, -1, -1, null, num8);
-
-        //                flag = true;
-        //                break;
-        //            }
-        //        }
-
-        //        if (flag)
-        //            break;
-        //    }
-
-        //    if (!flag)
-        //        NPC.NewNPC(new EntitySource_WorldEvent(), num3 * 16, (num2 - 40) * 16, array[j]);
-        //}
-
         TowerActiveFilament = NPC.TowerActiveVortex = (NPC.TowerActiveNebula = (NPC.TowerActiveSolar = (NPC.TowerActiveStardust = true)));
         NPC.LunarApocalypseIsUp = true;
         ShieldStrengthTowerFilamentTower = NPC.ShieldStrengthTowerSolar = (NPC.ShieldStrengthTowerVortex = (NPC.ShieldStrengthTowerNebula = (NPC.ShieldStrengthTowerStardust = NPC.ShieldStrengthTowerMax)));
+
+        // TODO: add support
+        NetMessage.SendData(101);
+        WorldGen.MessageLunarApocalypse();
+    }
+
+    private void VanillaLunarEventTrigger() {
+        //List<int> list = new List<int> {
+        //    517,
+        //    422,
+        //    507,
+        //    493
+        //};
+        List<int> shuffleList = [517, 422, 507, 493, ModContent.NPCType<FilamentPillar>()];
+
+        int[] array = new int[4];
+        for (int i = 0; i < 4; i++) {
+            array[i] = shuffleList[Main.rand.Next(shuffleList.Count)];
+            shuffleList.Remove(array[i]);
+        }
+
+        int num = Main.maxTilesX / 5;
+        int num2 = (int)Main.worldSurface;
+        for (int j = 0; j < 4; j++) {
+            int num3 = num * (1 + j);
+            bool flag = false;
+            for (int k = 0; k < 30; k++) {
+                int num4 = Main.rand.Next(-100, 101);
+                if (Main.remixWorld && Main.getGoodWorld) {
+                    int num5 = Main.rand.Next((int)Main.worldSurface, Main.maxTilesY - 350);
+                    if (!WorldGen.PlayerLOS(num3 + num4 - 10, num5) && !WorldGen.PlayerLOS(num3 + num4 + 10, num5) && !WorldGen.PlayerLOS(num3 + num4 - 10, num5 - 20) && !WorldGen.PlayerLOS(num3 + num4 + 10, num5 - 20)) {
+                        int num6 = NPC.NewNPC(new EntitySource_WorldEvent(), (num3 + num4) * 16, num5 * 16, array[j]);
+                        if (Main.netMode == 2 && num6 < 200)
+                            NetMessage.SendData(23, -1, -1, null, num6);
+
+                        flag = true;
+                        break;
+                    }
+
+                    continue;
+                }
+
+                for (int num7 = num2; num7 > 100; num7--) {
+                    if (!Collision.SolidTiles(num3 + num4 - 10, num3 + num4 + 10, num7 - 20, num7 + 15) && !WorldGen.PlayerLOS(num3 + num4 - 10, num7) && !WorldGen.PlayerLOS(num3 + num4 + 10, num7) && !WorldGen.PlayerLOS(num3 + num4 - 10, num7 - 20) && !WorldGen.PlayerLOS(num3 + num4 + 10, num7 - 20)) {
+                        int num8 = NPC.NewNPC(new EntitySource_WorldEvent(), (num3 + num4) * 16, num7 * 16, array[j]);
+                        if (Main.netMode == 2 && num8 < 200)
+                            NetMessage.SendData(23, -1, -1, null, num8);
+
+                        flag = true;
+                        break;
+                    }
+                }
+
+                if (flag)
+                    break;
+            }
+
+            if (!flag)
+                NPC.NewNPC(new EntitySource_WorldEvent(), num3 * 16, (num2 - 40) * 16, array[j]);
+        }
+
+        for (int i = 0; i < array.Length; i++) {
+            switch (array[i]) {
+                case NPCID.LunarTowerNebula:
+                    NPC.TowerActiveNebula = true;
+                    NPC.ShieldStrengthTowerNebula = NPC.ShieldStrengthTowerMax;
+                    break;
+                case NPCID.LunarTowerSolar:
+                    NPC.TowerActiveSolar = true;
+                    NPC.ShieldStrengthTowerSolar = NPC.ShieldStrengthTowerMax;
+                    break;
+                case NPCID.LunarTowerStardust:
+                    NPC.TowerActiveStardust = true;
+                    NPC.ShieldStrengthTowerStardust = NPC.ShieldStrengthTowerMax;
+                    break;
+                case NPCID.LunarTowerVortex:
+                    NPC.TowerActiveVortex = true;
+                    NPC.ShieldStrengthTowerVortex = NPC.ShieldStrengthTowerMax;
+                    break;
+            }
+            if (array[i] == ModContent.NPCType<FilamentPillar>()) {
+                TowerActiveFilament = true;
+            }
+        }
+
+        //NPC.TowerActiveVortex = (NPC.TowerActiveNebula = (NPC.TowerActiveSolar = (NPC.TowerActiveStardust = true)));
+        NPC.LunarApocalypseIsUp = true;
+        //NPC.ShieldStrengthTowerSolar = (NPC.ShieldStrengthTowerVortex = (NPC.ShieldStrengthTowerNebula = (NPC.ShieldStrengthTowerStardust = NPC.ShieldStrengthTowerMax)));
 
         // TODO: add support
         NetMessage.SendData(101);

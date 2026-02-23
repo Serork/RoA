@@ -155,6 +155,11 @@ RoAServerConfig: {
 		Label: Изменения рецептов оригинальной игры
 		Tooltip: Изменяет некоторые рецепты крафта, в том числе зелий
 	}
+
+	ChangeLunarPillarLogic: {
+		// Label: Change Lunar Pillar Logic
+		// Tooltip: ""
+	}
 }
 
 WreathPositions: {
