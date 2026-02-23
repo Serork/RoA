@@ -11,13 +11,16 @@ using RoA.Core.Utility.Extensions;
 using System;
 
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Filament;
 
 sealed class FilamentNPC1 : ModNPC {
-    private static Asset<Texture2D> _tentaclesTexture = null!;
+    private static Asset<Texture2D> _tentaclesTexture = null!,
+                                    _glowTexture = null!,
+                                    _tentaclesTexture_Glow = null!;
 
     private Vector2 _endPosition;
     private Vector2 _endPosition2;
@@ -32,6 +35,8 @@ sealed class FilamentNPC1 : ModNPC {
         }
 
         _tentaclesTexture = ModContent.Request<Texture2D>(Texture + "_Tentacles");
+        _glowTexture = ModContent.Request<Texture2D>(Texture + "_Glow");
+        _tentaclesTexture_Glow = ModContent.Request<Texture2D>(Texture + "_Tentacles_Glow");
     }
 
     public override void SetDefaults() {
@@ -59,9 +64,18 @@ sealed class FilamentNPC1 : ModNPC {
 
         NPC.TargetClosest();
 
+        bool changedState = MathF.Abs(NPC.Center.X - NPC.GetTargetPlayer().Center.X) < 100f && NPC.Center.Y < NPC.GetTargetPlayer().Center.Y - 50f;
+
+        if (NPC.ai[0] > 0f) {
+            NPC.ai[0]--;
+        }
+
         float to = 0f;
-        if (MathF.Abs(NPC.Center.X - NPC.GetTargetPlayer().Center.X) < 100f && NPC.Center.Y < NPC.GetTargetPlayer().Center.Y - 50f) {
+        if (NPC.ai[0] > 0f || changedState) {
             to = 1f;
+            if (changedState) {
+                NPC.ai[0] = 10f;
+            }
         }
         NPC.ai[2] = Helper.Approach(NPC.ai[2], to, TimeSystem.LogicDeltaTime * 1.5f);
         NPC.ai[1] = Helper.Approach(NPC.ai[1], to, TimeSystem.LogicDeltaTime * 3f);
@@ -102,12 +116,43 @@ sealed class FilamentNPC1 : ModNPC {
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
-        DrawTentacles(spriteBatch);
+        DrawTentacles(spriteBatch, drawColor);
 
         return base.PreDraw(spriteBatch, screenPos, drawColor);
     }
 
-    private void DrawTentacles(SpriteBatch spriteBatch) {
+    public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
+        SpriteBatch mySpriteBatch = spriteBatch;
+        NPC rCurrentNPC = NPC;
+
+        SpriteEffects spriteEffects = SpriteEffects.None;
+
+        int type = NPC.type;
+
+        Color npcColor = drawColor;
+
+        float num35 = 0f;
+        float num36 = Main.NPCAddHeight(rCurrentNPC);
+
+        Vector2 halfSize = new Vector2(TextureAssets.Npc[type].Width() / 2, TextureAssets.Npc[type].Height() / Main.npcFrameCount[type] / 2);
+
+        Texture2D value60 = TextureAssets.Npc[type].Value;
+        Vector2 vector65 = rCurrentNPC.Center - screenPos;
+        Vector2 vector66 = vector65 - new Vector2(300f, 310f);
+        vector65 -= new Vector2(value60.Width, value60.Height / Main.npcFrameCount[type]) * rCurrentNPC.scale / 2f;
+        vector65 += halfSize * rCurrentNPC.scale + new Vector2(0f, num35 + num36 + rCurrentNPC.gfxOffY);
+
+        mySpriteBatch.Draw(_glowTexture.Value, rCurrentNPC.Bottom - screenPos + new Vector2((float)(-TextureAssets.Npc[type].Width()) * rCurrentNPC.scale / 2f + halfSize.X * rCurrentNPC.scale, (float)(-TextureAssets.Npc[type].Height()) * rCurrentNPC.scale / (float)Main.npcFrameCount[type] + 4f + halfSize.Y * rCurrentNPC.scale + num36 + rCurrentNPC.gfxOffY), rCurrentNPC.frame, new Microsoft.Xna.Framework.Color(255 - rCurrentNPC.alpha, 255 - rCurrentNPC.alpha, 255 - rCurrentNPC.alpha, 255 - rCurrentNPC.alpha), rCurrentNPC.rotation, halfSize, rCurrentNPC.scale, spriteEffects, 0f);
+        float num184 = Helper.Wave(2f, 6f, 1f, NPC.whoAmI);
+        for (int num185 = 0; num185 < 4; num185++) {
+            mySpriteBatch.Draw(_glowTexture.Value, rCurrentNPC.Bottom - screenPos + new Vector2((float)(-TextureAssets.Npc[type].Width()) * rCurrentNPC.scale / 2f + halfSize.X * rCurrentNPC.scale, (float)(-TextureAssets.Npc[type].Height()) * rCurrentNPC.scale / (float)Main.npcFrameCount[type] + 4f + halfSize.Y * rCurrentNPC.scale + num36 + rCurrentNPC.gfxOffY)
+                + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, rCurrentNPC.frame,
+                new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 1f, 
+                rCurrentNPC.rotation, halfSize, rCurrentNPC.scale, spriteEffects, 0f);
+        }
+    }
+
+    private void DrawTentacles(SpriteBatch spriteBatch, Color drawColor) {
         if (NPC.localAI[2] == 0f) {
             return;
         }
@@ -139,15 +184,27 @@ sealed class FilamentNPC1 : ModNPC {
                     Clip = clip1,
                     Origin = origin1,
                     Rotation = rotation,
-                    ImageFlip = flip
+                    ImageFlip = flip,
+                    Color = drawColor
                 };
                 if (index == count) {
                     drawInfo = new() {
                         Clip = drawTail ? clip3 : clip2,
                         Origin = drawTail ? origin3 : origin2,
                         Rotation = rotation,
-                        ImageFlip = flip
+                        ImageFlip = flip,
+                        Color = drawColor
                     };
+                    NPC rCurrentNPC = NPC;
+                    spriteBatch.Draw(_tentaclesTexture_Glow.Value, startPosition, drawInfo with {
+                        Color = new Microsoft.Xna.Framework.Color(255 - rCurrentNPC.alpha, 255 - rCurrentNPC.alpha, 255 - rCurrentNPC.alpha, 255 - rCurrentNPC.alpha)
+                    });
+                    float num184 = Helper.Wave(2f, 6f, 1f, NPC.whoAmI);
+                    for (int num185 = 0; num185 < 4; num185++) {
+                        spriteBatch.Draw(_tentaclesTexture_Glow.Value, startPosition + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
+                            Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 1f
+                        });
+                    }
                 }
                 spriteBatch.Draw(texture, startPosition, drawInfo);
 
