@@ -3000,11 +3000,6 @@ FilamentFragment: {
 	Tooltip: "'The cosmic thread of life weaves through this fragment'"
 }
 
-FilamentFragment2: {
-	DisplayName: Filament Fragment2
-	Tooltip: ""
-}
-
 CottonBollSmall: {
 	DisplayName: ""
 	Tooltip: ""
