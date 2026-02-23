@@ -276,7 +276,8 @@ sealed class FilamentNPC1 : ModNPC {
             return;
         }
 
-        bool drawTail = NPC.whoAmI % 2 == 0;
+        bool second = NPC.whoAmI % 2 == 0;
+        bool drawTail = second;
         bool flip2 = false;
         void drawTentacle(int style, int count = 8) {
             Texture2D texture = _tentaclesTexture.Value;
@@ -324,7 +325,7 @@ sealed class FilamentNPC1 : ModNPC {
 
                 velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
 
-                SpriteEffects flip = (index % 2 == 0).ToSpriteEffects();
+                SpriteEffects flip = (second ? (index % 2 == 0) : (index % 2 != 0)).ToSpriteEffects();
                 if (!flip2) {
                     flip |= SpriteEffects.FlipHorizontally;
                 }
