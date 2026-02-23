@@ -36,13 +36,13 @@ sealed class DiabolicDaikatana : ModItem {
             vector.Y = (float)player.bodyFrame.Height - vector.Y;
 
         vector -= new Vector2(player.bodyFrame.Width - player.width, player.bodyFrame.Height - 42) / 2f;
-        Vector2 pos = player.MountedCenter - new Vector2(20f, 42f) / 2f + vector;
-        if (player.mount.Active && player.mount.Type == 52) {
-            pos.Y -= player.mount.PlayerOffsetHitbox;
-            pos += new Vector2(12 * player.direction, -12f);
-        }
+        //Vector2 pos = player.MountedCenter - new Vector2(20f, 42f) / 2f + vector;
+        //if (player.mount.Active && player.mount.Type == 52) {
+        //    pos.Y -= player.mount.PlayerOffsetHitbox;
+        //    pos += new Vector2(12 * player.direction, -12f);
+        //}
 
-        return player.RotatedRelativePoint(pos, true);
+        return player.GetPlayerCorePoint() - new Vector2(20f, 42f) / 2f + vector;
     }
 
     public override void SetStaticDefaults() {
@@ -273,7 +273,6 @@ class DiabolicDaikatanaProj : ModProjectile {
         texture = TextureAssets.Projectile[Type].Value;
         Player player = Main.player[Projectile.owner];
         handPosition = DiabolicDaikatana.GetPlayerArmPosition(Projectile);
-        handPosition = Utils.Floor(handPosition);
         if (Progress <= 0.5f) {
             handPosition += new Vector2(11f * player.direction, 1f);
             if (player.direction > 0) {
