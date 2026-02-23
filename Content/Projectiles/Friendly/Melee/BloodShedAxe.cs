@@ -233,7 +233,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         if (Projectile.owner == Main.myPlayer) {
             if (!_init) {
                 _time = itemAnimationMax;
-                _direction = player.GetViableMousePosition().X > player.MountedCenter.X ? 1 : -1;
+                _direction = player.GetViableMousePosition().X > player.GetPlayerCorePoint().X ? 1 : -1;
                 Projectile.Center = player.GetPlayerCorePoint();
                 Projectile.direction = Projectile.spriteDirection = player.direction = _direction;
                 _init = true;
@@ -313,7 +313,7 @@ sealed class BloodshedAxe : ModProjectile, DruidPlayerShouldersFix.IProjectileFi
         float value = 1f - itemAnimation / (float)itemAnimationMax;
         Vector2 rotationVector2 = (f2 + value * 1.25f * MathHelper.PiOver2).ToRotationVector2();
         Vector2 position = Projectile.Center + f2.ToRotationVector2() * (float)((double)Main.rand.NextFloat() * 80.0 * Projectile.scale + 10.0 * Projectile.scale);
-        if (position.Distance(player.MountedCenter) > 40f && Projectile.timeLeft <= min + itemAnimationMax / 5) {
+        if (position.Distance(player.GetPlayerCorePoint()) > 40f && Projectile.timeLeft <= min + itemAnimationMax / 5) {
             Dust dust = Dust.NewDustPerfect(position, DustID.Blood, new Vector2?(rotationVector2 * 1f), (int)(255f - (1f - Projectile.timeLeft / min) * 1.5f * 255f), default, Main.rand.NextFloat(0.75f, 0.9f) * 1.3f);
             dust.fadeIn = (float)(0.4 + (double)Main.rand.NextFloat() * 0.15);
             dust.noLight = dust.noLightEmittence = true;
