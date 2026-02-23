@@ -352,7 +352,14 @@ class DiabolicDaikatanaProj : ModProjectile {
     }
 
     private void SetArmRotation(Player player, float progress) {
-        Vector2 diff = DiabolicDaikatana.GetPlayerArmPosition(Projectile) - Projectile.Center;
+        Vector2 armPosition = DiabolicDaikatana.GetPlayerArmPosition(Projectile);
+        if (armPosition.HasNaNs()) {
+            return;
+        }
+        Vector2 diff = armPosition - Projectile.Center;
+        if (diff.HasNaNs()) {
+            return;
+        }
         if (Math.Sign(diff.X) == -player.direction) {
             Vector2 velocity = diff;
             velocity.X = Math.Abs(diff.X);
