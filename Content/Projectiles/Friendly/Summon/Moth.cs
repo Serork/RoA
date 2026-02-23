@@ -109,7 +109,7 @@ sealed class Moth : ModProjectile {
         if (mothRotation < 360) mothRotation += 1f;
         else mothRotation = 0;
 
-        // need sync
+        // TODO: need sync
         if (player.inventory[player.selectedItem].type == ModContent.ItemType<MothStaff>()) {
             idlePosition += new Vector2(34f * player.direction, -12.5f);
             if (player.direction == -1) {
