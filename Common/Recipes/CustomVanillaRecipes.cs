@@ -294,6 +294,63 @@ sealed class CustomVanillaRecipes : ModSystem {
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
         }
+        // super healing potion
+        {
+            var superHealingPotion = Main.recipe.First(x => x.HasResult(ItemID.SuperHealingPotion));
+            superHealingPotion.DisableRecipe();
+
+            int needFragmentCount = 1;
+            int needPotionCount = 4;
+            Recipe superHealingPotionNewRecipe = Recipe.Create(ItemID.SuperHealingPotion, needPotionCount);
+            superHealingPotionNewRecipe
+                .AddIngredient(ItemID.GreaterHealingPotion, needPotionCount)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddTile(TileID.Bottles)
+                .Register();
+
+            superHealingPotionNewRecipe = Recipe.Create(ItemID.SuperHealingPotion, needPotionCount);
+            superHealingPotionNewRecipe
+                .AddIngredient(ItemID.GreaterHealingPotion, needPotionCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
+                .AddTile(TileID.Bottles)
+                .Register();
+
+            superHealingPotionNewRecipe = Recipe.Create(ItemID.SuperHealingPotion, needPotionCount);
+            superHealingPotionNewRecipe
+                .AddIngredient(ItemID.GreaterHealingPotion, needPotionCount)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
+                .AddTile(TileID.Bottles)
+                .Register();
+
+            superHealingPotionNewRecipe = Recipe.Create(ItemID.SuperHealingPotion, needPotionCount);
+            superHealingPotionNewRecipe
+                .AddIngredient(ItemID.GreaterHealingPotion, needPotionCount)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
+                .AddTile(TileID.Bottles)
+                .Register();
+
+            superHealingPotionNewRecipe = Recipe.Create(ItemID.SuperHealingPotion, needPotionCount);
+            superHealingPotionNewRecipe
+                .AddIngredient(ItemID.GreaterHealingPotion, needPotionCount)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
+                .AddTile(TileID.Bottles)
+                .Register();
+        }
     }
 
     private void NewLunarRecipes() {
@@ -366,6 +423,24 @@ sealed class CustomVanillaRecipes : ModSystem {
                 .AddIngredient(ItemID.FragmentNebula, 1)
                 .AddIngredient(ModContent.ItemType<FilamentFragment>(), 1)
                 .AddTile(TileID.LunarCraftingStation)
+                .Register();
+        }
+        // celestial sigil
+        {
+            var superHealingPotion = Main.recipe.First(x => x.HasResult(ItemID.SuperHealingPotion));
+            superHealingPotion.DisableRecipe();
+
+            int needFragmentCount = 1;
+            int needPotionCount = 5;
+            Recipe superHealingPotionNewRecipe = Recipe.Create(ItemID.SuperHealingPotion, needPotionCount);
+            superHealingPotionNewRecipe
+                .AddIngredient(ItemID.GreaterHealingPotion, needPotionCount)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), 1)
+                .AddTile(TileID.Bottles)
                 .Register();
         }
     }
