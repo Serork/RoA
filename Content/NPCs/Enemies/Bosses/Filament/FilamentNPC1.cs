@@ -162,6 +162,9 @@ sealed class FilamentNPC1 : ModNPC {
             //}
 
             for (int num217 = 0; num217 < 20; num217++) {
+                if (Main.rand.NextBool()) {
+                    continue;
+                }
                 int num218 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, ModContent.DustType<FilamentDust>(), 0f, 0f,
                     0, default(Color), 2.7f);
                 Main.dust[num218].position = GetStarPosition() + Main.rand.RandomPointInArea(4f);
