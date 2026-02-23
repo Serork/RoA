@@ -3,6 +3,7 @@
 using RoA.Common.Networking;
 using RoA.Common.Networking.Packets;
 using RoA.Content.Projectiles.Friendly.Summon;
+using RoA.Core.Utility.Extensions;
 
 using System.Runtime.CompilerServices;
 
@@ -105,7 +106,8 @@ sealed class MothStaff : ModItem {
         UpdatePositionInPlayersHand(player);
     }
 
-    private static Vector2 GetDustsPosition(Player player) => new Vector2(player.MountedCenter.X + 30f * player.direction - (player.direction != 1 ? 8f : 0f), player.itemLocation.Y + (16f - 32f - 2f) * player.gravDir);
+    private static Vector2 GetDustsPosition(Player player) 
+        => new Vector2(player.GetPlayerCorePoint().X + 30f * player.direction - (player.direction != 1 ? 8f : 0f), player.itemLocation.Y + (16f - 32f - 2f) * player.gravDir);
 
     private static void UpdatePositionInPlayersHand(Player player) {
         player.itemLocation.X = player.MountedCenter.X + 4f * player.direction;
