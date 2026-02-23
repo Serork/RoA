@@ -184,8 +184,6 @@ sealed class FilamentNPC1 : ModNPC {
             NPC.localAI[1] = 0f;
         }
 
-        NPC.velocity *= 0f;
-
         float max0 = 100f;
         float max = 200f;
         _endPosition3 = Vector2.Lerp(_endPosition3, 
