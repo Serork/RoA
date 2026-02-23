@@ -126,7 +126,9 @@ sealed class FilamentPillar : ModNPC {
                 WorldGen.BroadcastText(NetworkText.FromKey("Mods.RoA.World.CelestialPillar1Destroyed"), 175, 75, 255);
             }
             else {
-                num -= 1;
+                if (num > 0) {
+                    num -= 1;
+                }
                 WorldGen.BroadcastText(NetworkText.FromKey(Lang.misc[43 + num].Key), 175, 75, 255);
             }
         }
