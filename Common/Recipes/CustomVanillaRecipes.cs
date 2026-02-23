@@ -57,48 +57,49 @@ sealed class CustomVanillaRecipes : ModSystem {
             var celestialSigil = Main.recipe.First(x => x.HasResult(ItemID.CelestialSigil));
             celestialSigil.DisableRecipe();
 
+            int needFragmentCount = 12;
             Recipe celestialSigilNewRecipe = Recipe.Create(ItemID.CelestialSigil, 1);
             celestialSigilNewRecipe
-                .AddIngredient(ItemID.FragmentSolar, 10)
-                .AddIngredient(ItemID.FragmentVortex, 10)
-                .AddIngredient(ItemID.FragmentNebula, 10)
-                .AddIngredient(ItemID.FragmentStardust, 10)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
 
             celestialSigilNewRecipe = Recipe.Create(ItemID.CelestialSigil, 1);
             celestialSigilNewRecipe
-                .AddIngredient(ItemID.FragmentVortex, 10)
-                .AddIngredient(ItemID.FragmentNebula, 10)
-                .AddIngredient(ItemID.FragmentStardust, 10)
-                .AddIngredient(ModContent.ItemType<FilamentFragment>(), 10)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
 
             celestialSigilNewRecipe = Recipe.Create(ItemID.CelestialSigil, 1);
             celestialSigilNewRecipe
-                .AddIngredient(ItemID.FragmentSolar, 10)
-                .AddIngredient(ItemID.FragmentNebula, 10)
-                .AddIngredient(ItemID.FragmentStardust, 10)
-                .AddIngredient(ModContent.ItemType<FilamentFragment>(), 10)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
 
             celestialSigilNewRecipe = Recipe.Create(ItemID.CelestialSigil, 1);
             celestialSigilNewRecipe
-                .AddIngredient(ItemID.FragmentSolar, 10)
-                .AddIngredient(ItemID.FragmentVortex, 10)
-                .AddIngredient(ItemID.FragmentStardust, 10)
-                .AddIngredient(ModContent.ItemType<FilamentFragment>(), 10)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
 
             celestialSigilNewRecipe = Recipe.Create(ItemID.CelestialSigil, 1);
             celestialSigilNewRecipe
-                .AddIngredient(ItemID.FragmentSolar, 10)
-                .AddIngredient(ItemID.FragmentVortex, 10)
-                .AddIngredient(ItemID.FragmentNebula, 10)
-                .AddIngredient(ModContent.ItemType<FilamentFragment>(), 10)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
         }
@@ -106,48 +107,50 @@ sealed class CustomVanillaRecipes : ModSystem {
         {
             var lunakHook = Main.recipe.First(x => x.HasResult(ItemID.LunarHook));
             lunakHook.DisableRecipe();
+
+            int needFragmentCount = 6;
             Recipe lunarHookNewRecipe = Recipe.Create(ItemID.LunarHook, 1);
             lunarHookNewRecipe
-                .AddIngredient(ItemID.FragmentSolar, 5)
-                .AddIngredient(ItemID.FragmentVortex, 5)
-                .AddIngredient(ItemID.FragmentNebula, 5)
-                .AddIngredient(ItemID.FragmentStardust, 5)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
 
             lunarHookNewRecipe = Recipe.Create(ItemID.LunarHook, 1);
             lunarHookNewRecipe
-                .AddIngredient(ItemID.FragmentVortex, 5)
-                .AddIngredient(ItemID.FragmentNebula, 5)
-                .AddIngredient(ItemID.FragmentStardust, 5)
-                .AddIngredient(ModContent.ItemType<FilamentFragment>(), 5)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
 
             lunarHookNewRecipe = Recipe.Create(ItemID.LunarHook, 1);
             lunarHookNewRecipe
-                .AddIngredient(ItemID.FragmentSolar, 5)
-                .AddIngredient(ItemID.FragmentNebula, 5)
-                .AddIngredient(ItemID.FragmentStardust, 5)
-                .AddIngredient(ModContent.ItemType<FilamentFragment>(), 5)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
 
             lunarHookNewRecipe = Recipe.Create(ItemID.LunarHook, 1);
             lunarHookNewRecipe
-                .AddIngredient(ItemID.FragmentSolar, 5)
-                .AddIngredient(ItemID.FragmentVortex, 5)
-                .AddIngredient(ItemID.FragmentStardust, 5)
-                .AddIngredient(ModContent.ItemType<FilamentFragment>(), 5)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentStardust, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
 
             lunarHookNewRecipe = Recipe.Create(ItemID.LunarHook, 1);
             lunarHookNewRecipe
-                .AddIngredient(ItemID.FragmentSolar, 5)
-                .AddIngredient(ItemID.FragmentVortex, 5)
-                .AddIngredient(ItemID.FragmentNebula, 5)
-                .AddIngredient(ModContent.ItemType<FilamentFragment>(), 5)
+                .AddIngredient(ItemID.FragmentSolar, needFragmentCount)
+                .AddIngredient(ItemID.FragmentVortex, needFragmentCount)
+                .AddIngredient(ItemID.FragmentNebula, needFragmentCount)
+                .AddIngredient(ModContent.ItemType<FilamentFragment>(), needFragmentCount)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
         }
