@@ -13,6 +13,8 @@ using Terraria.WorldBuilding;
 namespace RoA.Common.World;
 
 sealed class WorldCommon : ModSystem {
+    public static int[] ActivatedLunarPillars_VanillaLogic = null!; 
+
     public delegate void ModifyWorldGenTasksDelegate(List<GenPass> tasks, ref double totalWeight);
     public static event ModifyWorldGenTasksDelegate ModifyWorldGenTasksEvent = null!;
     public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight) {
@@ -138,6 +140,8 @@ sealed class WorldCommon : ModSystem {
         _shownGuideTexts = new bool[NEWGUIDETEXTCOUNT];
         ShouldRemindOfNewGuideText = false;
 
+        ActivatedLunarPillars_VanillaLogic = new int[5];
+
         ClearWorldEvent?.Invoke();
     }
 
@@ -148,6 +152,8 @@ sealed class WorldCommon : ModSystem {
         if (ShouldRemindOfNewGuideText) {
             tag[RoA.ModName + nameof(ShouldRemindOfNewGuideText)] = true;
         }
+
+        tag[RoA.ModName + nameof(ActivatedLunarPillars_VanillaLogic)] = ActivatedLunarPillars_VanillaLogic;
     }
 
     public override void LoadWorldData(TagCompound tag) {
@@ -155,6 +161,8 @@ sealed class WorldCommon : ModSystem {
             _shownGuideTexts[i] = tag.GetBool(GetKeyText(i));
         }
         ShouldRemindOfNewGuideText = tag.GetBool(RoA.ModName + nameof(ShouldRemindOfNewGuideText));
+
+        ActivatedLunarPillars_VanillaLogic = tag.GetIntArray(RoA.ModName + nameof(ActivatedLunarPillars_VanillaLogic));
     }
 
     public override void PostUpdatePlayers() {

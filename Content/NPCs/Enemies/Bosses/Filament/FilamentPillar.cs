@@ -79,6 +79,32 @@ sealed class FilamentPillar : ModNPC {
     }
 
     private void On_WorldGen_MessageLunarApocalypse(On_WorldGen.orig_MessageLunarApocalypse orig) {
+        if (!ModContent.GetInstance<RoAServerConfig>().ChangeLunarPillarLogic) {
+            if (NPC.LunarApocalypseIsUp) {
+                int num = 0;
+                for (int i = 0; i < WorldCommon.ActivatedLunarPillars_VanillaLogic.Length; i++) {
+                    if (WorldCommon.ActivatedLunarPillars_VanillaLogic[i] == NPCID.LunarTowerSolar && !NPC.TowerActiveSolar) {
+                        num++;
+                    }
+                    if (WorldCommon.ActivatedLunarPillars_VanillaLogic[i] == NPCID.LunarTowerVortex && !NPC.TowerActiveVortex) {
+                        num++;
+                    }
+                    if (WorldCommon.ActivatedLunarPillars_VanillaLogic[i] == NPCID.LunarTowerNebula && !NPC.TowerActiveNebula) {
+                        num++;
+                    }
+                    if (WorldCommon.ActivatedLunarPillars_VanillaLogic[i] == NPCID.LunarTowerStardust && !NPC.TowerActiveStardust) {
+                        num++;
+                    }
+                    if (WorldCommon.ActivatedLunarPillars_VanillaLogic[i] == ModContent.NPCType<FilamentPillar>() && !TowerActiveFilament) {
+                        num++;
+                    }
+                }
+
+                WorldGen.BroadcastText(NetworkText.FromKey(Lang.misc[43 + num].Key), 175, 75, 255);
+            }
+
+            return;
+        }
         if (NPC.LunarApocalypseIsUp) {
             int num = 0;
             if (!NPC.TowerActiveSolar)
@@ -369,27 +395,40 @@ sealed class FilamentPillar : ModNPC {
                 NPC.NewNPC(new EntitySource_WorldEvent(), num3 * 16, (num2 - 40) * 16, array[j]);
         }
 
+        WorldCommon.ActivatedLunarPillars_VanillaLogic = new int[5];
+
+        int index = 0;
         for (int i = 0; i < array.Length; i++) {
             switch (array[i]) {
                 case NPCID.LunarTowerNebula:
                     NPC.TowerActiveNebula = true;
                     NPC.ShieldStrengthTowerNebula = NPC.ShieldStrengthTowerMax;
+                    WorldCommon.ActivatedLunarPillars_VanillaLogic[index] = (ushort)NPCID.LunarTowerNebula;
+                    index++;
                     break;
                 case NPCID.LunarTowerSolar:
                     NPC.TowerActiveSolar = true;
                     NPC.ShieldStrengthTowerSolar = NPC.ShieldStrengthTowerMax;
+                    WorldCommon.ActivatedLunarPillars_VanillaLogic[index] = (ushort)NPCID.LunarTowerSolar;
+                    index++;
                     break;
                 case NPCID.LunarTowerStardust:
                     NPC.TowerActiveStardust = true;
                     NPC.ShieldStrengthTowerStardust = NPC.ShieldStrengthTowerMax;
+                    WorldCommon.ActivatedLunarPillars_VanillaLogic[index] = (ushort)NPCID.LunarTowerStardust;
+                    index++;
                     break;
                 case NPCID.LunarTowerVortex:
                     NPC.TowerActiveVortex = true;
                     NPC.ShieldStrengthTowerVortex = NPC.ShieldStrengthTowerMax;
+                    WorldCommon.ActivatedLunarPillars_VanillaLogic[index] = (ushort)NPCID.LunarTowerVortex;
+                    index++;
                     break;
             }
             if (array[i] == ModContent.NPCType<FilamentPillar>()) {
                 TowerActiveFilament = true;
+                WorldCommon.ActivatedLunarPillars_VanillaLogic[index] = (ushort)ModContent.NPCType<FilamentPillar>();
+                index++;
             }
         }
 
