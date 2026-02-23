@@ -4,9 +4,8 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 
 using RoA.Common.Cache;
-﻿using RoA.Common.World;
+using RoA.Common.World;
 using RoA.Content.Backgrounds;
-using RoA.Content.NPCs.Enemies.Bosses.Filament;
 using RoA.Core;
 
 using System;
@@ -16,10 +15,8 @@ using System.Reflection;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.Skies;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
-using Terraria.Initializers;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Core;
 
@@ -28,6 +25,55 @@ using static Terraria.ModLoader.Core.TmodFile;
 namespace RoA.Common;
 
 sealed class ShaderLoader : ModSystem {
+    public static class WavyCircleShader {
+        private static float _uTime = 0f;
+        private static float _waveCount1 = 6f, _waveCount2 = 6f;
+        private static float _waveSize1 = 0.08f, _waveSize2 = 0.01f;
+        private static float _waveRadius = 0.5f;
+
+        public static float Time {
+            get => _uTime;
+            set => Effect?.Parameters["uTime"].SetValue(_uTime = value);
+        }
+
+        public static float WaveCount1 {
+            get => _waveCount1;
+            set => Effect?.Parameters["waveCount1"].SetValue(_waveCount1 = value);
+        }
+
+        public static float WaveCount2 {
+            get => _waveCount2;
+            set => Effect?.Parameters["waveCount2"].SetValue(_waveCount2 = value);
+        }
+
+        public static float WaveSize1 {
+            get => _waveSize1;
+            set => Effect?.Parameters["waveSize1"].SetValue(_waveSize1 = value);
+        }
+
+        public static float WaveSize2 {
+            get => _waveSize2;
+            set => Effect?.Parameters["waveSize2"].SetValue(_waveSize2 = value);
+        }
+
+        public static float WaveRadius {
+            get => _waveRadius;
+            set => Effect?.Parameters["waveRadius"].SetValue(_waveRadius = value);
+        }
+
+        public static Effect? Effect => _loadedShaders["WavyCircle"].Value;
+
+        public static void Apply(SpriteBatch batch, Action draw) {
+            SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
+            batch.End();
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, snapshot.samplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
+            Effect?.CurrentTechnique.Passes[0].Apply();
+            draw();
+            batch.End();
+            batch.Begin(in snapshot);
+        }
+    }
+
     public static class FilamentThreadShader {
         private static float _waveFrequency = 0f;
         private static float _wavePhase = 0f;
@@ -246,6 +292,7 @@ sealed class ShaderLoader : ModSystem {
     public static Asset<Effect> LightCompressor => _loadedShaders["LightCompressor"];
     public static Asset<Effect> FlameTint => _loadedShaders["FlameTint"];
     public static Asset<Effect> FilamentThread => _loadedShaders["FilamentThread"];
+    public static Asset<Effect> WavyCircle => _loadedShaders["WavyCircle"];
 
     public static Asset<Effect> SimpleReflection => _loadedShaders["SimpleReflection"];
 
