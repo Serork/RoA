@@ -41,7 +41,7 @@ sealed class FilamentNPC1 : ModNPC {
     }
 
     public override void SetDefaults() {
-        NPC.width = 44;
+        NPC.width = 54;
         NPC.height = 58;
         NPC.aiStyle = -1;
         NPC.damage = 70;
@@ -56,9 +56,9 @@ sealed class FilamentNPC1 : ModNPC {
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) {
         if (Main.expertMode)
-            target.AddBuff(ModContent.BuffType<FilamentBinding>(), Main.rand.Next(300, 540) / 5);
+            target.AddBuff(ModContent.BuffType<FilamentBinding>(), Main.rand.Next(300, 540) / 6);
         else if (Main.rand.Next(2) == 0)
-            target.AddBuff(ModContent.BuffType<FilamentBinding>(), Main.rand.Next(360, 720) / 5);
+            target.AddBuff(ModContent.BuffType<FilamentBinding>(), Main.rand.Next(360, 720) / 6);
     }
 
     public override void AI() {
