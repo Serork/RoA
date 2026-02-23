@@ -1,11 +1,14 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Configs;
+using RoA.Common.Utilities.Extensions;
 using RoA.Core;
 using RoA.Core.Defaults;
 
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -79,7 +82,48 @@ sealed class RespriteLoader : ILoadable {
         }
     }
 
+    private static ushort _lunarCraftingStationNewAnimateValue;
+
+    private void On_Main_AnimateTiles(On_Main.orig_AnimateTiles orig) {
+        orig();
+
+        if (++_lunarCraftingStationNewAnimateValue >= 300) {
+            _lunarCraftingStationNewAnimateValue = 0;
+        }
+        Main.tileFrame[TileID.LunarCraftingStation] = _lunarCraftingStationNewAnimateValue;
+    }
+
+    private void On_TileDrawing_DrawSpecialTilesLegacy(On_TileDrawing.orig_DrawSpecialTilesLegacy orig, TileDrawing self, Microsoft.Xna.Framework.Vector2 screenPosition, Microsoft.Xna.Framework.Vector2 offSet) {
+        int _specialTilesCount = typeof(TileDrawing).GetFieldValue<int>("_specialTilesCount", self);
+        int[] _specialTileX = typeof(TileDrawing).GetFieldValue<int[]>("_specialTileX", self);
+        int[] _specialTileY = typeof(TileDrawing).GetFieldValue<int[]>("_specialTileY", self);
+        for (int i = 0; i < _specialTilesCount; i++) {
+            int num = _specialTileX[i];
+            int num2 = _specialTileY[i];
+            Tile tile = Main.tile[num, num2];
+            ushort type = tile.TileType;
+            if (type == TileID.LunarCraftingStation) {
+                Texture2D value5 = TextureAssets.GlowMask[GlowMaskID.LunarCraftingStation].Value;
+                int num10 = Main.tileFrame[type] / 60;
+                int frameY2 = (num10 + 1) % 4;
+                float num11 = (float)(Main.tileFrame[type] % 60) / 60f;
+                Color color5 = new Color(255, 255, 255, 255);
+                Main.spriteBatch.Draw(value5, new Vector2(num * 16 - (int)screenPosition.X, num2 * 16 - (int)screenPosition.Y + 10) + offSet, value5.Frame(1, 5, 0, num10), color5 * (1f - num11), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(value5, new Vector2(num * 16 - (int)screenPosition.X, num2 * 16 - (int)screenPosition.Y + 10) + offSet, value5.Frame(1, 5, 0, frameY2), color5 * num11, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+
+                return;
+            }
+        }
+
+        orig(self, screenPosition, offSet);
+    }
+
     public void Load(Mod mod) {
+        On_Main.AnimateTiles += On_Main_AnimateTiles;
+        On_TileDrawing.DrawSpecialTilesLegacy += On_TileDrawing_DrawSpecialTilesLegacy;
+
+        TextureAssets.GlowMask[GlowMaskID.LunarCraftingStation] = ModContent.Request<Texture2D>(ResourceManager.TileTextures + $"Glow_{GlowMaskID.LunarCraftingStation}");
+
         string texturePath = ResourceManager.ItemTextures;
         int id;
         if (!ModContent.GetInstance<RoAClientConfig>().VanillaResprites) {
@@ -125,6 +169,8 @@ sealed class RespriteLoader : ILoadable {
     }
 
     private void UnloadInner() {
+        TextureAssets.GlowMask[GlowMaskID.LunarCraftingStation] = ModContent.Request<Texture2D>($"Terraria/Images/Glow_{GlowMaskID.LunarCraftingStation}");
+
         TextureAssets.Item[ItemID.Daybloom] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Daybloom}");
         TextureAssets.Item[ItemID.Blinkroot] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Blinkroot}");
         TextureAssets.Item[ItemID.Deathweed] = ModContent.Request<Texture2D>($"Terraria/Images/Item_{ItemID.Deathweed}");
