@@ -162,7 +162,6 @@ class DiabolicDaikatanaProj : ModProjectile {
 
     public override bool? CanCutTiles() => Progress > 0.375f && Progress < 0.575f;
 
-
     public override void AI() {
         Projectile.extraUpdates = 5;
         Player player = Main.player[Projectile.owner];
@@ -197,7 +196,7 @@ class DiabolicDaikatanaProj : ModProjectile {
         }
         if (player.IsAliveAndFree()) {
             float progress = Progress;
-            Projectile.direction = player.direction;
+            Projectile.SetDirection(player.direction);
             BaseAngleVector = new Vector2(0.88f * Projectile.direction, 0.47f);
             InterpolateSword(progress, out var angleVector, out float swingProgress, out float scale);
             SetArmRotation(player, swingProgress);
@@ -354,7 +353,7 @@ class DiabolicDaikatanaProj : ModProjectile {
     }
 
     private void SetArmRotation(Player player, float progress) {
-        Vector2 diff = player.MountedCenter - Projectile.Center;
+        Vector2 diff = DiabolicDaikatana.GetPlayerArmPosition(Projectile) - Projectile.Center;
         if (Math.Sign(diff.X) == -player.direction) {
             Vector2 velocity = diff;
             velocity.X = Math.Abs(diff.X);
