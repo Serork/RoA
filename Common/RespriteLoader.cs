@@ -105,7 +105,7 @@ sealed class RespriteLoader : ILoadable {
             if (type == TileID.LunarCraftingStation) {
                 Texture2D value5 = TextureAssets.GlowMask[GlowMaskID.LunarCraftingStation].Value;
                 int num10 = Main.tileFrame[type] / 60;
-                int frameY2 = (num10 + 1) % 4;
+                int frameY2 = (num10 + 1) % 5;
                 float num11 = (float)(Main.tileFrame[type] % 60) / 60f;
                 Color color5 = new Color(255, 255, 255, 255);
                 Main.spriteBatch.Draw(value5, new Vector2(num * 16 - (int)screenPosition.X, num2 * 16 - (int)screenPosition.Y + 10) + offSet, value5.Frame(1, 5, 0, num10), color5 * (1f - num11), 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
