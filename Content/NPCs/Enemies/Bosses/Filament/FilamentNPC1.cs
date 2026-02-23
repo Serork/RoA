@@ -60,6 +60,8 @@ sealed class FilamentNPC1 : ModNPC {
         NPC.noGravity = true;
         NPC.knockBackResist = 0.1f;
         NPC.npcSlots = 3f;
+
+        NPC.noTileCollide = true;
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo) {
