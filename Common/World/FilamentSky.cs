@@ -21,8 +21,8 @@ using Terraria.Utilities;
 namespace RoA.Common.World;
 
 sealed class TargetLoader : ILoadable {
-    public static ushort PADDING => 0;
-    public static float PADDINGMODIFIER => 2f;
+    public static ushort PADDING => 200;
+    public static float PADDINGMODIFIER => 1f;
 
     public static RenderTarget2D BeamRenderTarget = null!;
 
@@ -62,7 +62,7 @@ sealed class TargetLoader : ILoadable {
 
             eventSlim.Wait();
 
-            BeamRenderTarget = null;
+            BeamRenderTarget = null!;
         }
     }
 }
@@ -187,12 +187,12 @@ sealed class FilamentSky : CustomSky {
         float wavePhase = 0f;
         float waveAmplitude = 0.1f;
         float waveFrequency = 1f;
-        Vector2 renderTargetOffset = new Vector2(0, 0);
+        Vector2 renderTargetOffset = new Vector2(-TargetLoader.PADDING, -TargetLoader.PADDING);
         ShaderLoader.FilamentThreadShader.WaveFrequency = waveFrequency;
         ShaderLoader.FilamentThreadShader.WavePhase = wavePhase;
         ShaderLoader.FilamentThreadShader.WaveAmplitude = waveAmplitude;
         ShaderLoader.FilamentThreadShader.Apply(sb, () => {
-            sb.Draw(TargetLoader.BeamRenderTarget, renderTargetOffset, null, Color.White);
+            sb.Draw(TargetLoader.BeamRenderTarget, renderTargetOffset, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         });
         sb.End();
 
