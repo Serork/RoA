@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Content.Buffs;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -144,6 +145,47 @@ sealed class FilamentNPC1 : ModNPC {
         float progress2 = Utils.GetLerpValue(70f, 80f, _knockProgress2, true);
         progress2 *= Utils.GetLerpValue(100f, 70f, _knockProgress2, true);
         progress2 = Ease.CubeInOut(progress2);
+        if (progress2 >= 0.65f && NPC.localAI[1] == 0f) {
+            NPC.localAI[1] = 1f;
+
+            //for (int num213 = 0; num213 < 4; num213++) {
+            //    int num214 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
+            //    Main.dust[num214].position = GetStarPosition() + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * NPC.width / 2f;
+            //}
+
+            //for (int num215 = 0; num215 < 20; num215++) {
+            //    int num216 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.BubbleBurst_Blue, 0f, 0f, 200, default(Color), 3.7f);
+            //    Main.dust[num216].position = GetStarPosition() + Vector2.UnitY.RotatedByRandom(3.1415927410125732) * (float)Main.rand.NextDouble() * NPC.width / 2f;
+            //    Main.dust[num216].noGravity = true;
+            //    Dust dust2 = Main.dust[num216];
+            //    dust2.velocity *= 3f;
+            //}
+
+            for (int num217 = 0; num217 < 20; num217++) {
+                int num218 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, ModContent.DustType<FilamentDust>(), 0f, 0f,
+                    0, default(Color), 2.7f);
+                Main.dust[num218].position = GetStarPosition() + Main.rand.RandomPointInArea(4f);
+                Main.dust[num218].velocity += Main.dust[num218].position.DirectionTo(GetStarPosition() + Vector2.UnitX.RotatedByRandom(MathHelper.TwoPi).RotatedBy(NPC.velocity.ToRotation()) * NPC.width * 2f * (float)Main.rand.NextDouble())
+                    * Main.rand.NextFloat(2f, 5f) * 0.75f;
+                Main.dust[num218].noGravity = true;
+                Dust dust2 = Main.dust[num218];
+                dust2.velocity *= 3f;
+            }
+
+            //for (int num219 = 0; num219 < 10; num219++) {
+            //    int num220 = Dust.NewDust(new Vector2(NPC.position.X, NPC.position.Y), NPC.width, NPC.height, DustID.Smoke, 0f, 0f, 0, default(Color), 1.5f);
+            //    Main.dust[num220].position = GetStarPosition() + Vector2.UnitX.RotatedByRandom(3.1415927410125732).RotatedBy(NPC.velocity.ToRotation()) * NPC.width / 2f;
+            //    Main.dust[num220].noGravity = true;
+            //    Dust dust2 = Main.dust[num220];
+            //    dust2.velocity *= 3f;
+            //}
+        }
+        if (progress2 == 0f) {
+            NPC.localAI[1] = 0f;
+        }
+
+        NPC.velocity *= 0f;
+
         float max0 = 100f;
         float max = 200f;
         _endPosition3 = Vector2.Lerp(_endPosition3, 
