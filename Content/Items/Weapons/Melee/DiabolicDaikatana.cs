@@ -191,7 +191,7 @@ class DiabolicDaikatanaProj : ModProjectile {
                 }
             }
         }
-        bool active = player.ItemAnimationActive && player.itemAnimation < player.itemAnimationMax - 1;
+        bool active = player.ItemAnimationActive && player.itemAnimation < player.itemAnimationMax;
         if (active || Projectile.ModProjectile is DiabolicDaikatanaProj2) {
             player.heldProj = Projectile.whoAmI;
         }
