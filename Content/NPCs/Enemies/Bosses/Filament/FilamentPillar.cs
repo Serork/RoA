@@ -31,6 +31,24 @@ using Terraria.WorldBuilding;
 
 namespace RoA.Content.NPCs.Enemies.Bosses.Filament;
 
+sealed class FilamentPillar_TowerDamageBolt : GlobalProjectile {
+    public override void OnKill(Projectile projectile, int timeLeft) {
+        if (projectile.type == ProjectileID.TowerDamageBolt) {
+            if (Main.netMode != 1) {
+                if (Main.npc[(int)projectile.ai[0]].type == ModContent.NPCType<FilamentPillar>()) {
+                    if (FilamentPillar.ShieldStrengthTowerFilamentTower != 0)
+                        Main.npc[(int)projectile.ai[0]].ai[3] = 1f;
+                    FilamentPillar.ShieldStrengthTowerFilamentTower = (int)MathHelper.Clamp(FilamentPillar.ShieldStrengthTowerFilamentTower - 1, 0f, NPC.ShieldStrengthTowerMax);
+                }
+                Main.npc[(int)projectile.ai[0]].netUpdate = true;
+                
+                // TODO: net support
+                NetMessage.SendData(101);
+            }
+        }
+    }
+}
+
 [AutoloadBossHead]
 sealed class FilamentPillar : ModNPC {
     private static Asset<Texture2D> _glowMaskTexture = null!;
