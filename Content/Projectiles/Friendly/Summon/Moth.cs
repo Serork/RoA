@@ -291,7 +291,7 @@ sealed class Moth : ModProjectile {
                 // This is a simple movement formula using the two parameters and its desired direction to create a "homing" movement
                 vectorToIdlePosition.Normalize();
                 vectorToIdlePosition *= speed;
-                Projectile.velocity = (Projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia;
+                Projectile.velocity = Vector2.Lerp(Projectile.velocity, (Projectile.velocity * (inertia - 1) + vectorToIdlePosition) / inertia, 0.5f);
             }
             else if (Projectile.velocity == Vector2.Zero) {
                 // If there is a case where it's not moving at all, give it a little "poke"
