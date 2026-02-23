@@ -62,7 +62,9 @@ sealed class FilamentNPC1 : ModNPC {
     }
 
     public override void AI() {
-        NPC.SetDirection(NPC.velocity.X.GetDirection());
+        if (NPC.SpeedX() > 0.1f) {
+            NPC.SetDirection(NPC.velocity.X.GetDirection());
+        }
 
         if (NPC.localAI[2] == 0f) {
             NPC.localAI[2] = 1f;
