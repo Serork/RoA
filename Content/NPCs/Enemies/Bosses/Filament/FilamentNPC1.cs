@@ -109,6 +109,9 @@ sealed class FilamentNPC1 : ModNPC {
         float velocityFactor = baseLerpValue * 2f - NPC.velocity.Length() * 0.025f;
         float lerpValue = MathF.Max(baseLerpValue, velocityFactor);
         lerpValue *= 1f + 4f * NPC.ai[2];
+        if (NPC.localAI[2] != 2f) {
+            lerpValue = 1f;
+        }
         _endPosition = Vector2.Lerp(_endPosition, startPosition + new Vector2(5f + 30f * NPC.ai[2], 100f * (1f - NPC.ai[2])), lerpValue);
         _endPosition2 = Vector2.Lerp(_endPosition2, startPosition + new Vector2(-5f - 30f * NPC.ai[2], 100f * (1f - NPC.ai[2])), lerpValue);
         _endPosition3 = Vector2.Lerp(_endPosition3, startPosition + new Vector2(-5f - 40f * NPC.ai[2], 100f), lerpValue);
@@ -121,6 +124,8 @@ sealed class FilamentNPC1 : ModNPC {
             _endPosition3 += _endPosition3.DirectionFrom(_endPosition4) * 1f;
             _endPosition4 += _endPosition4.DirectionFrom(_endPosition3) * 1f;
         }
+
+        NPC.localAI[2] = 2f;
     }
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor) {
