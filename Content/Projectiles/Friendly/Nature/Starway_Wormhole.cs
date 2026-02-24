@@ -22,7 +22,7 @@ sealed class StarwayWormhole : NatureProjectile {
 
     private static float STEP_BASEDONTEXTUREWIDTH => 90f * 0.85f;
 
-    private record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, bool Body = true, bool Broken = false, float BrokenProgress = 0f, bool ShouldShake = false, float ShakeCooldown = 0f);
+    private record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, bool Body = true, bool Broken = false, float BrokenProgress = 0f, bool ShouldShake = false, float ShakeCooldown = 0f, float ShakeCooldown2 = 0f);
 
     private WormSegmentInfo[] _wormData = null!;
     private GeometryUtils.BezierCurve _bezierCurve = null!;
@@ -167,10 +167,11 @@ sealed class StarwayWormhole : NatureProjectile {
             for (int i = 0; i < length; i++) {
                 ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
                 if (wormSegmentInfo.Broken) {
-                    wormSegmentInfo.BrokenProgress = Helper.Approach(wormSegmentInfo.BrokenProgress, 1f, 0.025f);
-                    if ((wormSegmentInfo.BrokenProgress >= 0.333f || wormSegmentInfo.BrokenProgress >= 0.633f) && wormSegmentInfo.BrokenProgress < 1f && !wormSegmentInfo.ShouldShake && wormSegmentInfo.ShakeCooldown <= 0f) {
+                    wormSegmentInfo.BrokenProgress = Helper.Approach(wormSegmentInfo.BrokenProgress, 1f, 0.015f);
+                    if ((wormSegmentInfo.BrokenProgress > 0f || wormSegmentInfo.BrokenProgress > 0.5f) && wormSegmentInfo.BrokenProgress < 1f && !wormSegmentInfo.ShouldShake && wormSegmentInfo.ShakeCooldown <= 0f) {
                         wormSegmentInfo.ShouldShake = true;
                         wormSegmentInfo.ShakeCooldown = 2f;
+                        wormSegmentInfo.ShakeCooldown2 = wormSegmentInfo.ShakeCooldown;
                     }
                     wormSegmentInfo.ShakeCooldown = Helper.Approach(wormSegmentInfo.ShakeCooldown, 0f, 1f);
                     if (wormSegmentInfo.ShakeCooldown <= 0f) {
@@ -185,10 +186,11 @@ sealed class StarwayWormhole : NatureProjectile {
                         if (wormSegmentInfo.Broken) {
                             continue;
                         }
-                        if (player.Distance(wormSegmentInfo.Position) < 20f) {
+                        if (player.Distance(wormSegmentInfo.Position) < 40f) {
                             wormSegmentInfo.Broken = true;
                             wormSegmentInfo.ShouldShake = true;
                             wormSegmentInfo.ShakeCooldown = 10f;
+                            wormSegmentInfo.ShakeCooldown2 = wormSegmentInfo.ShakeCooldown;
                         }
                     }
                     break;
@@ -212,20 +214,23 @@ sealed class StarwayWormhole : NatureProjectile {
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = Projectile.GetTexture();
 
-        Color color = Color.White * Helper.Wave(0.5f, 0.75f, 5f, Projectile.identity);
-
         int length = _wormData.Length;
         bool first = true;
         for (int i = 0; i < length; i++) {
             WormSegmentInfo wormSegmentInfo = _wormData[i];
             int frameX = (!wormSegmentInfo.Body).ToInt(),
                 frameY = wormSegmentInfo.Frame;
-            if (wormSegmentInfo.BrokenProgress >= 0.333f) {
+            if (wormSegmentInfo.BrokenProgress > 0f) {
                 frameY++;
             }
-            if (wormSegmentInfo.BrokenProgress >= 0.666f) {
+            if (wormSegmentInfo.BrokenProgress > 0.5f) {
                 frameY++;
             }
+            float shakeProgress = wormSegmentInfo.ShakeCooldown / wormSegmentInfo.ShakeCooldown2;
+            if (float.IsNaN(shakeProgress)) {
+                shakeProgress = 0f;
+            }
+            Color color = Color.White * Helper.Wave(0.5f + 0.25f * shakeProgress, 0.75f + 0.25f * shakeProgress, 5f, Projectile.identity);
             Rectangle clip = Utils.Frame(texture, 2, 3, frameX: frameX, frameY: frameY);
             Vector2 origin = clip.Centered();
             float rotation = wormSegmentInfo.Rotation;
@@ -243,7 +248,7 @@ sealed class StarwayWormhole : NatureProjectile {
             Vector2 position = wormSegmentInfo.Position;
             Vector2 shakePosition = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f;
             if (wormSegmentInfo.ShouldShake) {
-                float shakeCooldown = wormSegmentInfo.ShakeCooldown;
+                shakePosition *= shakeProgress;
                 position += shakePosition;
             }
             batch.Draw(texture, position, drawInfo);

@@ -717,8 +717,24 @@ sealed partial class PlayerCommon : ModPlayer {
         }
     }
 
+    public override void HideDrawLayers(PlayerDrawSet drawInfo) {
+        if (CollidedWithStarwayWormhole) {
+            foreach (var layer in PlayerDrawLayerLoader.Layers) {
+                layer.Hide();
+            }
+        }
+    }
+
     public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
         int count = drawInfo.DrawDataCache.Count;
+
+        if (CollidedWithStarwayWormhole) {
+            for (int i = 0; i < count; i++) {
+                DrawData value = drawInfo.DrawDataCache[i];
+                value.color *= 0f;
+                drawInfo.DrawDataCache[i] = value;
+            }
+        }
 
         foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<CloudPlatform>(checkProjectile => !checkProjectile.SameOwnerAs(Player))) {
             for (int i = 0; i < count; i++) {
