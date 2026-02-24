@@ -66,16 +66,16 @@ sealed class StarwayWormhole : NatureProjectile {
                     float spawnOffset3 = MathF.Max(600f, mousePosition.Distance(playerCenter));
                     Vector2 startPosition = playerCenter + playerCenter.DirectionTo(mousePosition) * spawnOffset3,
                             endPosition = playerCenter;
-                    float spawnOffset = TileHelper.TileSize * 3;
+                    //float spawnOffset = TileHelper.TileSize * 3;
                     //float spawnOffset2 = TileHelper.TileSize * 0;
                     //startPosition += startPosition.DirectionFrom(playerCenter) * spawnOffset2;
-                    endPosition += endPosition.DirectionTo(mousePosition) * spawnOffset;
+                    //endPosition += endPosition.DirectionTo(mousePosition) * spawnOffset;
                     List<(Vector2, float)> segmentPositions = [];
                     Vector2 velocity = startPosition.DirectionTo(endPosition);
                     Vector2 startPosition2 = startPosition;
                     Vector2 velocity2 = velocity;
                     float waveWidth = 0.25f * Main.rand.NextBool().ToDirectionInt();
-                    int maxCount = 11;
+                    int maxCount = 10;
                     while (index < maxCount) {
                         float step = STEP_BASEDONTEXTUREWIDTH;
                         float distance = startPosition.Distance(endPosition);
