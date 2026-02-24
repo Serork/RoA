@@ -208,7 +208,13 @@ sealed class ExtraDrawLayerSupport : ILoadable {
     private void On_PlayerDrawLayers_DrawPlayer_31_ProjectileOverArm(On_PlayerDrawLayers.orig_DrawPlayer_31_ProjectileOverArm orig, ref PlayerDrawSet drawinfo) {
         PreProjectileOverArmDrawEvent?.Invoke(ref drawinfo);
 
-        orig(ref drawinfo);
+        if (drawinfo.drawPlayer.GetCommon().ShouldDrawProjectileOverArm) {
+            orig(ref drawinfo);
+
+            if (drawinfo.drawPlayer.heldProj >= 0 && drawinfo.shadow == 0f && !drawinfo.heldProjOverHand) {
+                Main.projectile[drawinfo.drawPlayer.heldProj].hide = true;
+            }
+        }
     }
 
     public delegate void PreHeldItemDelegate(ref PlayerDrawSet drawinfo);

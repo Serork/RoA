@@ -222,7 +222,9 @@ sealed partial class PlayerCommon : ModPlayer {
         bool ControlJump);
 
     public bool IsFilamentBindingEffectActive, IsFilamentBindingEffectActive2;
-    public ControlsCache FilamentBindingControlsCache { get; private set; } 
+    public ControlsCache FilamentBindingControlsCache { get; private set; }
+
+    public bool ShouldDrawProjectileOverArm;
 
     public enum EyePatchMode : byte {
         LeftEye = 0,
@@ -1388,6 +1390,8 @@ sealed partial class PlayerCommon : ModPlayer {
 
                 Player.velocity = Player.position.DirectionTo(to) * 10f;
 
+                ShouldDrawProjectileOverArm = false;
+
                 //if (Player.IsLocal()) {
                 //    Main.SetCameraLerp(0.15f, 0);
                 //}
@@ -1799,6 +1803,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        ShouldDrawProjectileOverArm = true;
+
         IsFilamentBindingEffectActive = false;
 
         IsHoneyPunchEffectActive = false;
