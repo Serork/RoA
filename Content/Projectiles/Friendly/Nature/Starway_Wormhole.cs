@@ -168,7 +168,7 @@ sealed class StarwayWormhole : NatureProjectile {
                 ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
                 if (wormSegmentInfo.Broken) {
                     wormSegmentInfo.BrokenProgress = Helper.Approach(wormSegmentInfo.BrokenProgress, 1f, 0.015f);
-                    if ((wormSegmentInfo.BrokenProgress > 0f || wormSegmentInfo.BrokenProgress > 0.5f) && wormSegmentInfo.BrokenProgress < 1f && !wormSegmentInfo.ShouldShake && wormSegmentInfo.ShakeCooldown <= 0f) {
+                    if ((wormSegmentInfo.BrokenProgress > 0f || wormSegmentInfo.BrokenProgress > 0.5f) && wormSegmentInfo.BrokenProgress < 0.75f && !wormSegmentInfo.ShouldShake && wormSegmentInfo.ShakeCooldown <= 0f) {
                         wormSegmentInfo.ShouldShake = true;
                         wormSegmentInfo.ShakeCooldown = 2f;
                         wormSegmentInfo.ShakeCooldown2 = wormSegmentInfo.ShakeCooldown;
@@ -189,7 +189,7 @@ sealed class StarwayWormhole : NatureProjectile {
                         if (player.Distance(wormSegmentInfo.Position) < 40f) {
                             wormSegmentInfo.Broken = true;
                             wormSegmentInfo.ShouldShake = true;
-                            wormSegmentInfo.ShakeCooldown = 10f;
+                            wormSegmentInfo.ShakeCooldown = 2f;
                             wormSegmentInfo.ShakeCooldown2 = wormSegmentInfo.ShakeCooldown;
                         }
                     }
