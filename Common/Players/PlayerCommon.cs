@@ -217,6 +217,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public ControlsCache FilamentBindingControlsCache { get; private set; }
 
     public bool ShouldDrawProjectileOverArm;
+    public bool MimicCCed;
 
     public enum EyePatchMode : byte {
         LeftEye = 0,
@@ -452,6 +453,9 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override void Load() {
+        On_PlayerDrawLayers.DrawPlayer_06_WebbedDebuffBack += On_PlayerDrawLayers_DrawPlayer_06_WebbedDebuffBack;
+        On_PlayerDrawLayers.DrawPlayer_33_FrozenOrWebbedDebuff += On_PlayerDrawLayers_DrawPlayer_33_FrozenOrWebbedDebuff;
+
         On_Player.PickupItem += On_Player_PickupItem;
         On_Player.HealEffect += On_Player_HealEffect;
         On_Player.ManaEffect += On_Player_ManaEffect;
@@ -492,6 +496,26 @@ sealed partial class PlayerCommon : ModPlayer {
         On_LegacyPlayerRenderer.DrawPlayerFull += On_LegacyPlayerRenderer_DrawPlayerFull1;
 
         On_Player.RotatedRelativePoint += On_Player_RotatedRelativePoint;
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_33_FrozenOrWebbedDebuff(On_PlayerDrawLayers.orig_DrawPlayer_33_FrozenOrWebbedDebuff orig, ref PlayerDrawSet drawinfo) {
+        if (drawinfo.drawPlayer.GetCommon().MimicCCed) {
+            drawinfo.drawPlayer.webbed = false;
+        }
+        orig(ref drawinfo);
+        if (drawinfo.drawPlayer.GetCommon().MimicCCed) {
+            drawinfo.drawPlayer.webbed = true;
+        }
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_06_WebbedDebuffBack(On_PlayerDrawLayers.orig_DrawPlayer_06_WebbedDebuffBack orig, ref PlayerDrawSet drawinfo) {
+        if (drawinfo.drawPlayer.GetCommon().MimicCCed) {
+            drawinfo.drawPlayer.webbed = false;
+        }
+        orig(ref drawinfo);
+        if (drawinfo.drawPlayer.GetCommon().MimicCCed) {
+            drawinfo.drawPlayer.webbed = true;
+        }
     }
 
     private Vector2 On_Player_RotatedRelativePoint(On_Player.orig_RotatedRelativePoint orig, Player self, Vector2 pos, bool reverseRotation, bool addGfxOffY) {
@@ -712,11 +736,11 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override void HideDrawLayers(PlayerDrawSet drawInfo) {
-        //if (CollidedWithStarwayWormhole) {
-        //    foreach (var layer in PlayerDrawLayerLoader.Layers) {
-        //        layer.Hide();
-        //    }
-        //}
+        if (CollidedWithStarwayWormhole) {
+            //foreach (var layer in PlayerDrawLayerLoader.Layers) {
+            //    layer.Hide();
+            //}
+        }
     }
 
     public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
@@ -1404,6 +1428,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 }
 
                 ShouldDrawProjectileOverArm = false;
+                MimicCCed = true;
 
                 //if (Player.IsLocal()) {
                 //    Main.SetCameraLerp(0.15f, 0);
@@ -1819,6 +1844,12 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        if (MimicCCed) {
+            Player.webbed = true;
+        }
+
+        MimicCCed = false;
+
         ShouldDrawProjectileOverArm = true;
 
         IsFilamentBindingEffectActive = false;
@@ -1955,7 +1986,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
         if (CollidedWithStarwayWormhole) {
             Player.channel = false;
-            Player.itemAnimation = (Player.itemAnimationMax = 0);
+            Player.itemAnimation = Player.itemAnimationMax = 0;
             return false;
         }
 

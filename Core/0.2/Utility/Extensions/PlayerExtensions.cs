@@ -3,6 +3,7 @@
 using RoA.Common;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Core.Data;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
 using Terraria.ModLoader;

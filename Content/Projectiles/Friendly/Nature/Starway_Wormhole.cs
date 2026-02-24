@@ -211,7 +211,7 @@ sealed class StarwayWormhole : NatureProjectile {
                 float y = 15f;
                 Player player = _lightPlayer;
                 Vector2 angle = Vector2.UnitY.RotatedBy(player.velocity.ToRotation());
-                Vector2 position = player.Center + angle * Helper.Wave(-y, y, 10f, i * 2f);
+                Vector2 position = player.Center + angle * Helper.Wave(-y, y, 10f, player.whoAmI + i * 2f);
                 position -= angle.RotatedBy(MathHelper.PiOver2) * -i * (i == 0 ? 15f : 10f);
                 position += angle.RotatedBy(MathHelper.PiOver2) * -10f;
                 float rotation = 0f;
