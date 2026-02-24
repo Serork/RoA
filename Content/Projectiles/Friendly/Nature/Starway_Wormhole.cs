@@ -369,7 +369,8 @@ sealed class StarwayWormhole : NatureProjectile {
             if (float.IsNaN(shakeProgress)) {
                 shakeProgress = 0f;
             }
-            Color color = Color.White * Helper.Wave(0.5f, 0.75f, 5f, Projectile.identity);
+            float shakeIncrease = 0f;
+            Color color = Color.White * Helper.Wave(0.5f + shakeIncrease * shakeProgress, 0.75f + shakeIncrease * shakeProgress, 5f, Projectile.identity);
             Rectangle clip = Utils.Frame(texture, 2, 3, frameX: frameX, frameY: frameY);
             Vector2 origin = clip.Centered();
             float rotation = wormSegmentInfo.Rotation;
