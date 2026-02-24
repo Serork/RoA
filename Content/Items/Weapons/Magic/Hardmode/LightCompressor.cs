@@ -52,7 +52,8 @@ sealed class LightCompressor : ModItem {
         private static float MAXDISTANCETOTARGETINPIXELS => 600f;
         private static float TARGETTIME => MathUtils.SecondsToFrames(0.5f);
 
-        private static Asset<Texture2D> _lightTexture = null!;
+        private static Asset<Texture2D> _lightTexture = null!,
+                                        _lightTexture2 = null!;
 
         private record struct TargetInfo(Vector2 Position, float LaserOpacity);
 
@@ -106,6 +107,7 @@ sealed class LightCompressor : ModItem {
             }
 
             _lightTexture = ModContent.Request<Texture2D>(Texture + "_Light");
+            _lightTexture2 = ModContent.Request<Texture2D>(Texture + "_Light2");
         }
 
         public override void SetDefaults() {
@@ -193,7 +195,7 @@ sealed class LightCompressor : ModItem {
                 int i = 0;
                 while (true) {
                     i++;
-                    Texture2D texture = _lightTexture.Value;
+                    Texture2D texture = _lightTexture2.Value;
                     float step = texture.Height;
                     float distance = Vector2.Distance(startPosition2, endPosition),
                           distance2 = Vector2.Distance(startPosition2, baseStartPosition);
