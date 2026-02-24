@@ -1364,8 +1364,14 @@ sealed partial class PlayerCommon : ModPlayer {
 
                 if (!StarwayWormholeICollidedWith.active || WormholeAdventureProgress >= maxProgress || completed) {
                     CollidedWithStarwayWormhole = false;
+                    if (StarwayWormholeICollidedWith.active) {
+                        if (Player.IsLocal()) {
+                            StarwayWormholeICollidedWith.ai[2] = 0f;
+                            StarwayWormholeICollidedWith.netUpdate = true;
+                        }
+                    }
                     Player.shimmering = false;
-                    WormholeCooldown = 60f;
+                    WormholeCooldown = 10f;
                     Player.velocity = Player.position.DirectionTo(to) * 10f;
                     return;
                 }
@@ -1399,6 +1405,10 @@ sealed partial class PlayerCommon : ModPlayer {
         CollidedWithStarwayWormhole = true;
         WormholeAdventureProgress = 0f;
         WormholeAdventureReversed = reversed;
+        if (Player.IsLocal()) {
+            StarwayWormholeICollidedWith.ai[2] = 1f;
+            StarwayWormholeICollidedWith.netUpdate = true;
+        }
     }
 
     public delegate void PostUpdateEquipsDelegate(Player player);

@@ -28,6 +28,7 @@ sealed class StarwayWormhole : NatureProjectile {
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float StartWaveValue => ref Projectile.ai[0];
+    public ref float UsedValue => ref Projectile.ai[2];
 
     public Vector2 GetNextPositionForAdventure(float progress) {
         progress = MathUtils.Clamp01(progress);
@@ -55,6 +56,11 @@ sealed class StarwayWormhole : NatureProjectile {
         set => InitValue = value.ToInt();
     }
 
+    public bool Used {
+        get => UsedValue != 0f;
+        set => UsedValue = value.ToInt();
+    }
+
     public override void SetStaticDefaults() {
 
     }
@@ -66,9 +72,19 @@ sealed class StarwayWormhole : NatureProjectile {
         Projectile.friendly = true;
 
         Projectile.timeLeft = TIMELEFT;
+
+        Projectile.hide = true;
+    }
+
+    public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
+        if (Used) {
+            overPlayers.Add(index);
+        }
     }
 
     public override void AI() {
+        Projectile.hide = Used;
+
         void init() {
             if (!Init) {
 
@@ -162,6 +178,8 @@ sealed class StarwayWormhole : NatureProjectile {
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = Projectile.GetTexture();
 
+        Color color = Color.White * Helper.Wave(0.5f, 0.75f, 5f, Projectile.identity);
+
         int length = _wormData.Length;
         bool first = true;
         for (int i = 0; i < length; i++) {
@@ -179,10 +197,17 @@ sealed class StarwayWormhole : NatureProjectile {
                 Clip = clip,
                 Origin = origin,
                 Rotation = rotation,
-                ImageFlip = flip
+                ImageFlip = flip,
+                Color = color
             };
             Vector2 position = wormSegmentInfo.Position;
             batch.Draw(texture, position, drawInfo);
+            float num184 = Helper.Wave(2f, 6f, 1f, Projectile.identity);
+            for (int num185 = 0; num185 < 4; num185++) {
+                batch.Draw(texture, position + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
+                    Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f
+                });
+            }
             first = false;
         }
 
