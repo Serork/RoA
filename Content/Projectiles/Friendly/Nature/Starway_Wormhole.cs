@@ -243,7 +243,7 @@ sealed class StarwayWormhole : NatureProjectile {
                     continue;
                 }
                 currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, 1f, 0.1f);
-                Lighting.AddLight(wormSegmentInfo.Position, new Color(127, 153, 22).ToVector3() * currentSegmentData.Opacity);
+                Lighting.AddLight(wormSegmentInfo.Position, new Color(127, 153, 22).ToVector3() * 1.5f * currentSegmentData.Opacity);
             }
             if (!Used) {
                 return;
