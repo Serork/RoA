@@ -24,17 +24,27 @@ sealed class StarwayWormhole : NatureProjectile {
     private readonly record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, bool Body = true);
 
     private WormSegmentInfo[] _wormData = null!;
+    private GeometryUtils.BezierCurve _bezierCurve = null!;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float StartWaveValue => ref Projectile.ai[0];
 
-    public Vector2 GetPositionForAdventure(float progress) {
+    public Vector2 GetNextPositionForAdventure(float progress) {
         progress = MathUtils.Clamp01(progress);
         int length = _wormData.Length;
         int index = (int)(length * progress);
         index = length - index;
         index = Math.Clamp(index, 0, length - 1);
         return _wormData[index].Position;
+    }
+
+    public List<Vector2> GetPositionsForAdventure(int pointCount) => _bezierCurve.GetPoints(pointCount);
+    public List<Vector2> GetPositionsForAdventure2() {
+        List<Vector2> result = [];
+        foreach (WormSegmentInfo wormSegmentInfo in _wormData) {
+            result.Add(wormSegmentInfo.Position);
+        }
+        return result;
     }
 
     public Vector2 LastPosition => _wormData[0].Position;
@@ -122,6 +132,11 @@ sealed class StarwayWormhole : NatureProjectile {
                         _wormData[i] = new WormSegmentInfo(position, 0, rotation, body);
                         body = true;
                     }
+                    List<Vector2> segmentPositions2 = [];
+                    foreach ((Vector2, float) segmentPosition in segmentPositions) {
+                        segmentPositions2.Add(segmentPosition.Item1);
+                    }
+                    _bezierCurve = new GeometryUtils.BezierCurve([.. segmentPositions2]);
                 }
 
                 initSegments();

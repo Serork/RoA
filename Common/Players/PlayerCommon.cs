@@ -240,6 +240,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public Projectile StarwayWormholeICollidedWith = null!;
     public float WormholeAdventureProgress;
     public float WormholeCooldown;
+    public bool WormholeAdventureReversed;
 
     public override void OnEnterWorld() {
 
@@ -1315,6 +1316,7 @@ sealed partial class PlayerCommon : ModPlayer {
             }
         }
         {
+            int checkWidth = Player.width * 4;
             if (!CollidedWithStarwayWormhole) {
                 if (WormholeCooldown <= 0f) {
                     foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<StarwayWormhole>()) {
@@ -1322,7 +1324,7 @@ sealed partial class PlayerCommon : ModPlayer {
                         if (!starwayWormhole.Init) {
                             continue;
                         }
-                        Rectangle getRect = GeometryUtils.CenteredSquare(Player.GetPlayerCorePoint(), Player.width * 4);
+                        Rectangle getRect = GeometryUtils.CenteredSquare(Player.GetPlayerCorePoint(), checkWidth);
                         if (getRect.Contains(starwayWormhole.StartPosition.ToPoint())) {
                             CollideWithStarwayWormhole(starwayWormhole);
                             break;
@@ -1339,32 +1341,46 @@ sealed partial class PlayerCommon : ModPlayer {
             }
             if (CollidedWithStarwayWormhole) {
                 float maxProgress = 1.5f;
-                bool reversed = false;
-                if (WormholeAdventureProgress < 0f) {
-                    maxProgress = -1f;
-                    reversed = true;
+                float progress = WormholeAdventureProgress;
+                if (!WormholeAdventureReversed) {
+                    progress = 1f - progress;
                 }
-                if (!StarwayWormholeICollidedWith.active || WormholeAdventureProgress >= maxProgress) {
+                progress = MathUtils.Clamp01(progress);
+                StarwayWormhole starwayWormhole = StarwayWormholeICollidedWith.As<StarwayWormhole>();
+                List<Vector2> wormholePositions = starwayWormhole.GetPositionsForAdventure2();
+                Vector2 targetPosition;
+                float exactIndex = (wormholePositions.Count - 1) * progress;
+                int index1 = (int)Math.Floor(exactIndex);
+                int index2 = Math.Min(index1 + 1, wormholePositions.Count - 1);
+                float lerpFactor = exactIndex - index1;
+                targetPosition = Vector2.Lerp(
+                    wormholePositions[index1],
+                    wormholePositions[index2],
+                    lerpFactor
+                );
+                Vector2 to = targetPosition - Player.Size / 2;
+
+                bool completed = WormholeAdventureProgress >= maxProgress * 0.7f && Player.Distance(WormholeAdventureReversed ? wormholePositions[^1] : wormholePositions[0]) < checkWidth;
+
+                if (!StarwayWormholeICollidedWith.active || WormholeAdventureProgress >= maxProgress || completed) {
                     CollidedWithStarwayWormhole = false;
                     Player.shimmering = false;
-                    WormholeCooldown = 30f;
+                    WormholeCooldown = 60f;
+                    Player.velocity = Player.position.DirectionTo(to) * 10f;
                     return;
                 }
 
-                if (Player.IsLocal()) {
-                    Main.SetCameraLerp(0.25f, 0);
-                }
+                Player.velocity = Player.position.DirectionTo(to) * 10f;
+
+                //if (Player.IsLocal()) {
+                //    Main.SetCameraLerp(0.15f, 0);
+                //}
 
                 Player.shimmering = true;
                 Player.shimmerTransparency = 0f;
 
-                Player.velocity.Y = 0f;
+                Player.position = Vector2.Lerp(Player.position, to, 0.25f);
 
-                StarwayWormhole starwayWormhole = StarwayWormholeICollidedWith.As<StarwayWormhole>();
-
-                Player.position = Vector2.Lerp(Player.position,
-                    starwayWormhole.GetPositionForAdventure(!reversed ? WormholeAdventureProgress : Utils.Remap(WormholeAdventureProgress, -2f, -1f, 1f, 0f, true)) - Player.Size / 2f, 
-                    1f);
                 Player.fallStart = (int)(Player.position.Y / 16f);
                 Player.gravity = 0f;
 
@@ -1381,7 +1397,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public void CollideWithStarwayWormhole(StarwayWormhole starwayWormhole, bool reversed = false) {
         StarwayWormholeICollidedWith = starwayWormhole.Projectile;
         CollidedWithStarwayWormhole = true;
-        WormholeAdventureProgress = reversed ? -2f : 0f;
+        WormholeAdventureProgress = 0f;
+        WormholeAdventureReversed = reversed;
     }
 
     public delegate void PostUpdateEquipsDelegate(Player player);
