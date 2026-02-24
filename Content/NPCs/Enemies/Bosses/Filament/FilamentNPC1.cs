@@ -343,15 +343,16 @@ sealed class FilamentNPC1 : ModNPC {
                     Origin = bottom_last ? origin4 : origin1,
                     Rotation = rotation,
                     ImageFlip = flip,
-                    Color = drawColor
+                    Color = Lighting.GetColor(startPosition.ToTileCoordinates())
                 };
+                spriteBatch.Draw(texture, startPosition, drawInfo);
                 if (last) {
                     drawInfo = new() {
                         Clip = drawTail ? clip3 : clip2,
                         Origin = drawTail ? origin3 : origin2,
                         Rotation = rotation,
                         ImageFlip = flip,
-                        Color = drawColor
+                        Color = Lighting.GetColor(startPosition.ToTileCoordinates())
                     };
                     NPC rCurrentNPC = NPC;
                     spriteBatch.Draw(_tentaclesTexture_Glow.Value, startPosition, drawInfo with {
@@ -364,7 +365,6 @@ sealed class FilamentNPC1 : ModNPC {
                         });
                     }
                 }
-                spriteBatch.Draw(texture, startPosition, drawInfo);
 
                 startPosition += velocity.SafeNormalize() * step;
 
