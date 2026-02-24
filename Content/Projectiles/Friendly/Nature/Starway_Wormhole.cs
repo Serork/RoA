@@ -45,7 +45,7 @@ sealed class StarwayWormhole : NatureProjectile {
 
     private static float STEP_BASEDONTEXTUREWIDTH => 90f * 0.85f;
 
-    private record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, bool Body = true, bool Broken = false, float BrokenProgress = 0f, bool ShouldShake = false, float ShakeCooldown = 0f, float ShakeCooldown2 = 0f);
+    private record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, bool Body = true, bool Broken = false, float BrokenProgress = 0f, bool ShouldShake = false, float ShakeCooldown = 0f, float ShakeCooldown2 = 0f, float Opacity = 0f);
 
     private WormSegmentInfo[] _wormData = null!;
     private GeometryUtils.BezierCurve _bezierCurve = null!;
@@ -231,11 +231,22 @@ sealed class StarwayWormhole : NatureProjectile {
                 }
             }
         }
-        void playerEnter() {
+        void processSegments() {
+            int length = _wormData.Length;
+            for (int i = length - 1; i >= 0; i--) {
+                ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
+                int currentSegmentIndex = i,
+                    previousSegmentIndex = Math.Min(length - 1, i + 1);
+                ref WormSegmentInfo currentSegmentData = ref _wormData[currentSegmentIndex],
+                                    previousSegmentData = ref _wormData[previousSegmentIndex];
+                if (i != length - 1 && previousSegmentData.Opacity < 0.375f) {
+                    continue;
+                }
+                currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, 1f, 0.1f);
+            }
             if (!Used) {
                 return;
             }
-            int length = _wormData.Length;
             for (int i = 0; i < length; i++) {
                 ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
                 if (wormSegmentInfo.Broken) {
@@ -283,7 +294,7 @@ sealed class StarwayWormhole : NatureProjectile {
         }
 
         init();
-        playerEnter();
+        processSegments();
         processLights();
     }
 
@@ -369,7 +380,12 @@ sealed class StarwayWormhole : NatureProjectile {
                 shakeProgress = 0f;
             }
             float shakeIncrease = 0f;
-            Color color = Color.White * Helper.Wave(0.5f + shakeIncrease * shakeProgress, 0.75f + shakeIncrease * shakeProgress, 5f, Projectile.identity);
+            float opacity = wormSegmentInfo.Opacity;
+            Color baseColor = Color.White;
+            baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
+            float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true);
+            baseColor *= mainOpacity;
+            Color color = baseColor * Helper.Wave(0.5f + shakeIncrease * shakeProgress, 0.75f + shakeIncrease * shakeProgress, 5f, Projectile.identity);
             Rectangle clip = Utils.Frame(texture, 2, 3, frameX: frameX, frameY: frameY);
             Vector2 origin = clip.Centered();
             float rotation = wormSegmentInfo.Rotation;
@@ -394,7 +410,7 @@ sealed class StarwayWormhole : NatureProjectile {
             float num184 = Helper.Wave(2f, 6f, 1f, Projectile.identity);
             for (int num185 = 0; num185 < 4; num185++) {
                 batch.Draw(texture, position + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
-                    Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f
+                    Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity
                 });
             }
             first = false;
