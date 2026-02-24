@@ -2363,7 +2363,11 @@ RodOfTheBifrost: {
 
 GlacierCane: {
 	DisplayName: Glacier Cane
-	Tooltip: Channels a big icicle that shatters enemies like glass
+	Tooltip: 
+		'''
+		Channels a big icicle that shatters enemies like glass
+		'Poppin bottles in the ice, like a blizzard'
+		'''
 }
 
 NewMoney: {
