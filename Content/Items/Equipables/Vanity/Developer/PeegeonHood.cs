@@ -150,7 +150,7 @@ sealed class PeegeonHood : ModItem {
             => true;
 
         public override Position GetDefaultPosition()
-            => new AfterParent(PlayerDrawLayers.LastVanillaLayer);
+            => new AfterParent(PlayerDrawLayers.Head);
 
         protected override void Draw(ref PlayerDrawSet drawInfo) {
             if (drawInfo.hideEntirePlayer) {

@@ -1,25 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 using ModLiquidLib.ModLoader;
 using ModLiquidLib.Utils;
 
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
-using RoA.Common.VisualEffects;
-using RoA.Content.AdvancedDusts;
 using RoA.Content.Buffs;
 using RoA.Content.Items.Equipables.Accessories;
-using RoA.Content.Items.Equipables.Accessories.Hardmode;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
-using RoA.Content.Projectiles;
 using RoA.Content.Projectiles.Friendly.Miscellaneous;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Content.Projectiles.Friendly.Ranged;
 using RoA.Core;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 using RoA.Core.Utility.Vanilla;
@@ -30,7 +24,6 @@ using System.Linq;
 
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.Liquid;
 using Terraria.Graphics;
 using Terraria.Graphics.Renderers;
 using Terraria.ID;
@@ -38,9 +31,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
-using Terraria.WorldBuilding;
 
-using static RoA.Common.Items.VanillaEyePatchChanges;
 using static RoA.Content.Projectiles.Friendly.Ranged.DistilleryOfDeathGust;
 
 namespace RoA.Common.Players;
