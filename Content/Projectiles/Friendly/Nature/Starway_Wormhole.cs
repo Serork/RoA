@@ -284,8 +284,6 @@ sealed class StarwayWormhole : NatureProjectile {
         init();
         playerEnter();
         processLights();
-
-        Projectile.timeLeft = 2;
     }
 
     public override void OnKill(int timeLeft) {

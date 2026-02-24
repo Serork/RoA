@@ -1362,29 +1362,37 @@ sealed partial class PlayerCommon : ModPlayer {
                 List<Vector2> wormholePositions = starwayWormhole.GetPositionsForAdventure2();
                 Vector2 targetPosition;
                 float exactIndex = (wormholePositions.Count - 1) * progress;
-                int index1 = (int)Math.Floor(exactIndex);
-                int index2 = Math.Min(index1 + 1, wormholePositions.Count - 1);
-                float lerpFactor = exactIndex - index1;
+                int index = (int)Math.Floor(exactIndex);
+                int index2 = Math.Min(index + 1, wormholePositions.Count - 1);
+                float lerpFactor = exactIndex - index;
                 targetPosition = Vector2.Lerp(
-                    wormholePositions[index1],
+                    wormholePositions[index],
                     wormholePositions[index2],
                     lerpFactor
                 );
                 Vector2 to = targetPosition - Player.Size / 2;
 
-                bool completed = WormholeAdventureProgress >= maxProgress * 0.7f && Player.Distance(WormholeAdventureReversed ? wormholePositions[^1] : wormholePositions[0]) < checkWidth;
+                Vector2 lastPosition = WormholeAdventureReversed ? wormholePositions[^1] : wormholePositions[0];
+                Vector2 lastPosition2 = !WormholeAdventureReversed ? wormholePositions[^1] : wormholePositions[0];
 
-                if (!StarwayWormholeICollidedWith.active || WormholeAdventureProgress >= 1f || completed) {
+                bool completed = WormholeAdventureProgress >= 1f && Player.Distance(lastPosition) < checkWidth / 2f;
+
+                float burstSpeed = 10f;
+
+                Vector2 velocity = wormholePositions[index].DirectionFrom(lastPosition2);
+                if (!velocity.HasNaNs()) {
+                    Player.velocity = velocity * burstSpeed;
+                }
+
+                if (!StarwayWormholeICollidedWith.active || completed) {
                     CollidedWithStarwayWormhole = false;
                     Player.shimmering = false;
                     WormholeCooldown = 10f;
 
-                    Player.velocity = Player.position.DirectionTo(to) * 7.5f;
+                    //Player.velocity = Player.position.DirectionTo(to) * burstSpeed;
 
                     return;
                 }
-
-                Player.velocity = Player.position.DirectionTo(to) * 7.5f;
 
                 ShouldDrawProjectileOverArm = false;
 
@@ -1400,7 +1408,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 Player.fallStart = (int)(Player.position.Y / 16f);
                 Player.gravity = 0f;
 
-                WormholeAdventureProgress = Helper.Approach(WormholeAdventureProgress, maxProgress, 0.01f);
+                WormholeAdventureProgress = Helper.Approach(WormholeAdventureProgress, maxProgress, 0.025f);
             }
         }
     }
