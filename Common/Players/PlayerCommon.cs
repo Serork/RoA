@@ -1381,8 +1381,6 @@ sealed partial class PlayerCommon : ModPlayer {
             }
             float maxProgress = 1.5f;
             if (CollidedWithStarwayWormhole) {
-                Player.controlUseItem = false;
-
                 float progress = WormholeAdventureProgress;
                 if (!WormholeAdventureReversed) {
                     progress = 1f - progress;
@@ -1403,15 +1401,13 @@ sealed partial class PlayerCommon : ModPlayer {
                 Vector2 to = targetPosition - Player.Size / 2;
 
                 Vector2 lastPosition = WormholeAdventureReversed ? wormholePositions[^1] : wormholePositions[0];
-                Vector2 lastPosition2 = WormholeAdventureReversed ? wormholePositions[wormholePositions.Count - 2] : wormholePositions[1];
 
                 bool completed = WormholeAdventureProgress >= 1f && Player.Distance(lastPosition) < checkWidth / 2f;
 
                 float burstSpeed = 10f;
 
-                Vector2 velocity = lastPosition2.DirectionTo(lastPosition);
                 if (completed) {
-                    Player.velocity = velocity * burstSpeed;
+                    Player.velocity = Player.position.DirectionTo(to) * burstSpeed / 2f + Vector2.UnitX.RotatedBy((!WormholeAdventureReversed ? starwayWormhole.LastAngle : starwayWormhole.FirstAngle) - MathHelper.Pi) * burstSpeed / 2f;
                 }
                 else {
                     Player.velocity = Player.position.DirectionTo(to) * burstSpeed;
@@ -1420,7 +1416,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (!StarwayWormholeICollidedWith.active || completed) {
                     CollidedWithStarwayWormhole = false;
                     Player.shimmering = false;
-                    WormholeCooldown = 10f;
+                    WormholeCooldown = 30f;
 
                     //Player.velocity = Player.position.DirectionTo(to) * burstSpeed;
 

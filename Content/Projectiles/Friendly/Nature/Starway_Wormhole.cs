@@ -81,6 +81,9 @@ sealed class StarwayWormhole : NatureProjectile {
     public Vector2 LastPosition => _wormData[0].Position;
     public Vector2 StartPosition => _wormData[^1].Position;
 
+    public float LastAngle => _wormData[^1].Rotation;
+    public float FirstAngle => _wormData[0].Rotation;
+
     public bool Init {
         get => InitValue != 0f;
         set => InitValue = value.ToInt();
