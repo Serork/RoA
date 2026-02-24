@@ -243,6 +243,7 @@ sealed class StarwayWormhole : NatureProjectile {
                     continue;
                 }
                 currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, 1f, 0.1f);
+                Lighting.AddLight(wormSegmentInfo.Position, new Color(127, 153, 22).ToVector3() * currentSegmentData.Opacity);
             }
             if (!Used) {
                 return;
@@ -289,6 +290,7 @@ sealed class StarwayWormhole : NatureProjectile {
         }
         void processLights() {
             if (_drawLights) {
+                Lighting.AddLight(_lightPlayer.GetPlayerCorePoint(), new Color(255, 217, 37).ToVector3() * GetLightOpacity());
                 initLights();
             }
         }
@@ -417,11 +419,16 @@ sealed class StarwayWormhole : NatureProjectile {
         }
     }
 
-    private void DrawLights(SpriteBatch batch) {
+    private float GetLightOpacity() {
         float progress2 = Utils.GetLerpValue(0f, 0.1f, _lightPlayer.GetCommon().WormholeAdventureProgress, true);
         progress2 = Ease.QuartOut(progress2);
         float progress3 = Ease.QuintIn(Utils.GetLerpValue(1f, 1.1f, _lightPlayer.GetCommon().WormholeAdventureProgress, true));
         progress2 -= progress3;
+        return progress2;
+    }
+
+    private void DrawLights(SpriteBatch batch) {
+        float progress2 = GetLightOpacity();
         //ShaderLoader.PixellateShader.BufferSize = new Vector2(320, 180);
         //ShaderLoader.PixellateShader.ScreenSize = new Vector2(640, 320);
         //ShaderLoader.PixellateShader.PixelDensity = 16f;
