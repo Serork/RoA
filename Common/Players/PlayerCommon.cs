@@ -1374,15 +1374,17 @@ sealed partial class PlayerCommon : ModPlayer {
 
                 bool completed = WormholeAdventureProgress >= maxProgress * 0.7f && Player.Distance(WormholeAdventureReversed ? wormholePositions[^1] : wormholePositions[0]) < checkWidth;
 
-                if (!StarwayWormholeICollidedWith.active || WormholeAdventureProgress >= maxProgress || completed) {
+                if (!StarwayWormholeICollidedWith.active || WormholeAdventureProgress >= 1f || completed) {
                     CollidedWithStarwayWormhole = false;
                     Player.shimmering = false;
                     WormholeCooldown = 10f;
-                    Player.velocity = Player.position.DirectionTo(to) * 10f;
+
+                    Player.velocity = Player.position.DirectionTo(to) * 7.5f;
+
                     return;
                 }
 
-                Player.velocity = Player.position.DirectionTo(to) * 10f;
+                Player.velocity = Player.position.DirectionTo(to) * 7.5f;
 
                 ShouldDrawProjectileOverArm = false;
 
@@ -1398,7 +1400,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 Player.fallStart = (int)(Player.position.Y / 16f);
                 Player.gravity = 0f;
 
-                WormholeAdventureProgress = Helper.Approach(WormholeAdventureProgress, maxProgress, 0.025f);
+                WormholeAdventureProgress = Helper.Approach(WormholeAdventureProgress, maxProgress, 0.01f);
             }
         }
     }

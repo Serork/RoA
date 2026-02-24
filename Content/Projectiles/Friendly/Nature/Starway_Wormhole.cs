@@ -210,11 +210,11 @@ sealed class StarwayWormhole : NatureProjectile {
                     }
                 }
 
-                float y = 10f;
+                float y = 15f;
                 Player player = _lightPlayer;
                 Vector2 angle = Vector2.UnitY.RotatedBy(player.velocity.ToRotation());
                 Vector2 position = player.Center + angle * Helper.Wave(-y, y, 10f, i * 2f);
-                position -= angle.RotatedBy(MathHelper.PiOver2) * -i * (i == 0 ? 10f : 5f);
+                position -= angle.RotatedBy(MathHelper.PiOver2) * -i * (i == 0 ? 15f : 10f);
                 position += angle.RotatedBy(MathHelper.PiOver2) * -10f;
                 float rotation = 0f;
 
@@ -432,12 +432,12 @@ sealed class StarwayWormhole : NatureProjectile {
                     num5++;
 
                 if (i2 < length2 * 0.25f) {
-                    color = Color.Lerp(color, new Color(255, 238, 166), 0.5f);
+                    color = Color.Lerp(color, new Color(255, 238, 166), 0.75f);
                 }
 
                 for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
                     batch.Draw(texture2, Vector2.Lerp(vector7, vector6, num6 / (float)num5) - Main.screenPosition, texture2.Bounds,
-                        color.MultiplyAlpha(1f) * 1f, 0f, texture2.Bounds.Centered(), scale * 0.01f * 0.75f * Helper.Wave(1f, 1.1f, 5f, i2 + Projectile.identity + 3f), 0, 0);
+                        color.MultiplyAlpha(1f) * 0.5f, 0f, texture2.Bounds.Centered(), scale * 0.01f * 0.75f * Helper.Wave(1f, 1.1f, 5f, i2 + Projectile.identity + 3f), 0, 0);
                 }
 
                 scale += scaleLerp;
@@ -454,9 +454,9 @@ sealed class StarwayWormhole : NatureProjectile {
             float rotation = playerLightInfo.Positions[1].AngleTo(playerLightInfo.Positions[0]);
 
             batch.Draw(texture2, position - Main.screenPosition, texture2.Bounds,
-                new Color(255, 238, 166) * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.185f * 0.25f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 2f), 0, 0);
+                new Color(255, 238, 166).MultiplyAlpha(1f) * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.185f * 0.25f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 2f), 0, 0);
             batch.Draw(texture2, position - Main.screenPosition, texture2.Bounds,
-                Color.White * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.155f * 0.25f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 1f), 0, 0);
+                Color.White.MultiplyAlpha(1f) * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.155f * 0.125f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 1f), 0, 0);
         }
         //});
     }
