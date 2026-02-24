@@ -412,7 +412,12 @@ sealed class FilamentNPC1 : ModNPC {
             ShaderLoader.WavyCircleShader.WaveSize2 = 0.04f;
             ShaderLoader.WavyCircleShader.WaveRadius = 0.5f;
             ShaderLoader.WavyCircleShader.Apply(spriteBatch, () => {
-                spriteBatch.Draw(circleTexture, circlePosition, circleDrawInfo.WithScale(2f * Ease.CircOut(scale)));
+                //         spriteBatch.Draw(circleTexture, circlePosition,
+                //circleDrawInfo.WithScale(2f * Ease.CircOut(scale)));
+                for (int num185 = 0; num185 < 4; num185++) {
+                    spriteBatch.Draw(circleTexture, circlePosition + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * 1f,
+                        circleDrawInfo.WithColorModifier(0.75f).WithScale(2f * Ease.CircOut(scale)));
+                }
             });
         }, sortMode: SpriteSortMode.Immediate, blendState: BlendState.Additive);
     }
