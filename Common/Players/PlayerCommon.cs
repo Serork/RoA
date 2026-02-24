@@ -1321,7 +1321,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (WormholeCooldown <= 0f) {
                     foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<StarwayWormhole>()) {
                         StarwayWormhole starwayWormhole = projectile.As<StarwayWormhole>();
-                        if (!starwayWormhole.Init) {
+                        if (!starwayWormhole.Init || starwayWormhole.Used) {
                             continue;
                         }
                         Rectangle getRect = GeometryUtils.CenteredSquare(Player.GetPlayerCorePoint(), checkWidth);
@@ -1364,12 +1364,6 @@ sealed partial class PlayerCommon : ModPlayer {
 
                 if (!StarwayWormholeICollidedWith.active || WormholeAdventureProgress >= maxProgress || completed) {
                     CollidedWithStarwayWormhole = false;
-                    if (StarwayWormholeICollidedWith.active) {
-                        if (Player.IsLocal()) {
-                            StarwayWormholeICollidedWith.ai[2] = 0f;
-                            StarwayWormholeICollidedWith.netUpdate = true;
-                        }
-                    }
                     Player.shimmering = false;
                     WormholeCooldown = 10f;
                     Player.velocity = Player.position.DirectionTo(to) * 10f;

@@ -7,6 +7,7 @@ using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ sealed class StarwayWormhole : NatureProjectile {
 
     private static float STEP_BASEDONTEXTUREWIDTH => 90f * 0.85f;
 
-    private readonly record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, bool Body = true);
+    private record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, bool Body = true, bool Broken = false, float BrokenProgress = 0f, bool ShouldShake = false, float ShakeCooldown = 0f);
 
     private WormSegmentInfo[] _wormData = null!;
     private GeometryUtils.BezierCurve _bezierCurve = null!;
@@ -159,7 +160,40 @@ sealed class StarwayWormhole : NatureProjectile {
             }
         }
         void playerEnter() {
-
+            if (!Used) {
+                return;
+            }
+            int length = _wormData.Length;
+            for (int i = 0; i < length; i++) {
+                ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
+                if (wormSegmentInfo.Broken) {
+                    wormSegmentInfo.BrokenProgress = Helper.Approach(wormSegmentInfo.BrokenProgress, 1f, 0.025f);
+                    if ((wormSegmentInfo.BrokenProgress >= 0.333f || wormSegmentInfo.BrokenProgress >= 0.633f) && wormSegmentInfo.BrokenProgress < 1f && !wormSegmentInfo.ShouldShake && wormSegmentInfo.ShakeCooldown <= 0f) {
+                        wormSegmentInfo.ShouldShake = true;
+                        wormSegmentInfo.ShakeCooldown = 2f;
+                    }
+                    wormSegmentInfo.ShakeCooldown = Helper.Approach(wormSegmentInfo.ShakeCooldown, 0f, 1f);
+                    if (wormSegmentInfo.ShakeCooldown <= 0f) {
+                        wormSegmentInfo.ShouldShake = false;
+                    }
+                }
+            }
+            foreach (Player player in Main.ActivePlayers) {
+                if (player.GetCommon().CollidedWithStarwayWormhole && player.GetCommon().StarwayWormholeICollidedWith == Projectile) {
+                    for (int i = 0; i < length; i++) {
+                        ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
+                        if (wormSegmentInfo.Broken) {
+                            continue;
+                        }
+                        if (player.Distance(wormSegmentInfo.Position) < 20f) {
+                            wormSegmentInfo.Broken = true;
+                            wormSegmentInfo.ShouldShake = true;
+                            wormSegmentInfo.ShakeCooldown = 10f;
+                        }
+                    }
+                    break;
+                }
+            }
         }
 
         init();
@@ -186,6 +220,12 @@ sealed class StarwayWormhole : NatureProjectile {
             WormSegmentInfo wormSegmentInfo = _wormData[i];
             int frameX = (!wormSegmentInfo.Body).ToInt(),
                 frameY = wormSegmentInfo.Frame;
+            if (wormSegmentInfo.BrokenProgress >= 0.333f) {
+                frameY++;
+            }
+            if (wormSegmentInfo.BrokenProgress >= 0.666f) {
+                frameY++;
+            }
             Rectangle clip = Utils.Frame(texture, 2, 3, frameX: frameX, frameY: frameY);
             Vector2 origin = clip.Centered();
             float rotation = wormSegmentInfo.Rotation;
@@ -201,6 +241,11 @@ sealed class StarwayWormhole : NatureProjectile {
                 Color = color
             };
             Vector2 position = wormSegmentInfo.Position;
+            Vector2 shakePosition = Vector2.One.RotatedByRandom(MathHelper.TwoPi) * 2f;
+            if (wormSegmentInfo.ShouldShake) {
+                float shakeCooldown = wormSegmentInfo.ShakeCooldown;
+                position += shakePosition;
+            }
             batch.Draw(texture, position, drawInfo);
             float num184 = Helper.Wave(2f, 6f, 1f, Projectile.identity);
             for (int num185 = 0; num185 < 4; num185++) {
