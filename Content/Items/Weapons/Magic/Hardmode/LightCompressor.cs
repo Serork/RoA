@@ -310,7 +310,7 @@ sealed class LightCompressor : ModItem {
                     float scaleFactor = Utils.GetLerpValue(0f, 10f, i_check, true);
                     scaleFactor *= Ease.CubeIn(MathUtils.Clamp01(distance / (step * 3f)));
                     scaleFactor = MathF.Max(0.625f, scaleFactor);
-                    Vector2 scale = new(Helper.Wave(1f - 0.5f * waveFactor, 1f + 0.5f * waveFactor, 20f, Projectile.identity * 3) * 2f * scaleFactor, 1f);
+                    Vector2 scale = new(Helper.Wave(1f - 0.5f * waveFactor, 1f + 0.5f * waveFactor, 20f, (Projectile.identity + 1) * 2) * 2f * scaleFactor, 1f);
                     velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), lerpValue);
 
                     scale *= extraScale;
@@ -326,7 +326,7 @@ sealed class LightCompressor : ModItem {
                     Vector2 position = startPosition;
                     startPosition += velocity.SafeNormalize() * step;
                     float offsetValue2 = 2f * scaleFactor * waveFactor * stepFactor2 * 2f;
-                    startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, Projectile.identity * 3 + i2 * 0.05f + index * 3) * offsetValue2;
+                    startPosition -= velocity.SafeNormalize().TurnLeft() * Helper.Wave(-1f, 1f, 10f, (Projectile.identity + 1) * 2 + i2 * 0.05f) * offsetValue2;
 
                     DrawInfo bloomDrawInfo = new() {
                         Clip = ResourceManager.Bloom.Bounds,
