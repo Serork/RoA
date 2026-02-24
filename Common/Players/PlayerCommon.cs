@@ -1319,6 +1319,9 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (WormholeCooldown <= 0f) {
                     foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<StarwayWormhole>()) {
                         StarwayWormhole starwayWormhole = projectile.As<StarwayWormhole>();
+                        if (!starwayWormhole.Init) {
+                            continue;
+                        }
                         Rectangle getRect = GeometryUtils.CenteredSquare(Player.GetPlayerCorePoint(), Player.width * 4);
                         if (getRect.Contains(starwayWormhole.StartPosition.ToPoint())) {
                             CollideWithStarwayWormhole(starwayWormhole);

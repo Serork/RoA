@@ -196,7 +196,7 @@ sealed class LightCompressor : ModItem {
                 while (true) {
                     i++;
                     Texture2D texture = _lightTexture2.Value;
-                    float step = texture.Height;
+                    float step = texture.Height * 0.8f;
                     float distance = Vector2.Distance(startPosition2, endPosition),
                           distance2 = Vector2.Distance(startPosition2, baseStartPosition);
                     if (distance < step * 1f) {

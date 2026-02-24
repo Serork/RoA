@@ -140,6 +140,10 @@ sealed class StarwayWormhole : NatureProjectile {
     }
 
     public override bool PreDraw(ref Color lightColor) {
+        if (!Init) {
+            return false;
+        }
+
         SpriteBatch batch = Main.spriteBatch;
         Texture2D texture = Projectile.GetTexture();
 
