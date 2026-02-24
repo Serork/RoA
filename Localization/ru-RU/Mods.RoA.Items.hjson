@@ -3039,3 +3039,8 @@ StarfruitCharm: {
 		'Slightly sweet with a sour undertone'
 		''' */
 }
+
+Starway: {
+	// DisplayName: Starway
+	// Tooltip: ""
+}

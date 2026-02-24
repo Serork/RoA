@@ -1,6 +1,4 @@
-﻿using Humanizer;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
 using RoA.Common.Players;
@@ -20,9 +18,6 @@ using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
-
-using static System.Net.Mime.MediaTypeNames;
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 
