@@ -74,7 +74,7 @@ sealed class StarwayWormhole : NatureProjectile {
                     Vector2 velocity = startPosition.DirectionTo(endPosition);
                     Vector2 startPosition2 = startPosition;
                     Vector2 velocity2 = velocity;
-                    float waveWidth = 0.375f * Main.rand.NextBool().ToDirectionInt();
+                    float waveWidth = MathHelper.Lerp(0.25f, 0.375f, 0.5f) * Main.rand.NextBool().ToDirectionInt();
                     int maxCount = 10;
                     while (index < maxCount) {
                         float step = STEP_BASEDONTEXTUREWIDTH;
