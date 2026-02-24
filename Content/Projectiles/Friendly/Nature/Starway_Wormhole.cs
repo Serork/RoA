@@ -52,8 +52,6 @@ sealed class StarwayWormhole : NatureProjectile {
     private bool _drawLights;
     private Player _lightPlayer = null!;
 
-    private static RenderTarget2D lowResTarget = null!;
-
     private record struct PlayerLightInfo(Vector2[] Positions, float[] Rotations);
 
     private PlayerLightInfo[] _playerLightData = null!;
@@ -252,7 +250,7 @@ sealed class StarwayWormhole : NatureProjectile {
             }
             bool hasActivePlayer = false;
             foreach (Player player in Main.ActivePlayers) {
-                if (player.GetCommon().CollidedWithStarwayWormhole && player.GetCommon().StarwayWormholeICollidedWith == Projectile) {
+                if (player.GetCommon().StarwayWormholeICollidedWith == Projectile && (player.GetCommon().WormholeAdventureProgress <= 1.1f || player.GetCommon().CollidedWithStarwayWormhole)) {
                     for (int i = 0; i < length; i++) {
                         ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
                         if (wormSegmentInfo.Broken) {
@@ -401,6 +399,10 @@ sealed class StarwayWormhole : NatureProjectile {
     }
 
     private void DrawLights(SpriteBatch batch) {
+        float progress2 = Utils.GetLerpValue(0f, 0.1f, _lightPlayer.GetCommon().WormholeAdventureProgress, true);
+        progress2 = Ease.QuartOut(progress2);
+        float progress3 = Ease.QuintIn(Utils.GetLerpValue(1f, 1.1f, _lightPlayer.GetCommon().WormholeAdventureProgress, true));
+        progress2 -= progress3;
         //ShaderLoader.PixellateShader.BufferSize = new Vector2(320, 180);
         //ShaderLoader.PixellateShader.ScreenSize = new Vector2(640, 320);
         //ShaderLoader.PixellateShader.PixelDensity = 16f;
@@ -435,7 +437,7 @@ sealed class StarwayWormhole : NatureProjectile {
 
                 for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
                     batch.Draw(texture2, Vector2.Lerp(vector7, vector6, num6 / (float)num5) - Main.screenPosition, texture2.Bounds,
-                        color.MultiplyAlpha(1f) * 1f, 0f, texture2.Bounds.Centered(), scale * 0.01f * 0.75f * Helper.Wave(1f, 1.1f, 5f, i2 + Projectile.identity + 3f), 0, 0);
+                        color.MultiplyAlpha(1f) * 1f * progress2, 0f, texture2.Bounds.Centered(), scale * 0.01f * 0.75f * Helper.Wave(1f, 1.1f, 5f, i2 + Projectile.identity + 3f), 0, 0);
                 }
 
                 scale += scaleLerp;
@@ -452,13 +454,13 @@ sealed class StarwayWormhole : NatureProjectile {
             float rotation = playerLightInfo.Positions[1].AngleTo(playerLightInfo.Positions[0]);
 
             batch.Draw(texture2, position - Main.screenPosition, texture2.Bounds,
-                new Color(255, 238, 166).MultiplyAlpha(1f) * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.185f * 0.25f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 2f), 0, 0);
+                new Color(255, 238, 166).MultiplyAlpha(1f) * 1f * progress2, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.185f * 0.25f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 2f), 0, 0);
             batch.Draw(texture2, position - Main.screenPosition, texture2.Bounds,
-                Color.White.MultiplyAlpha(1f) * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.155f * 0.125f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 1f), 0, 0);
+                Color.White.MultiplyAlpha(1f) * 1f * progress2, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.155f * 0.125f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 1f), 0, 0);
 
             Texture2D texture3 = ResourceManager.Bloom2;
             batch.Draw(texture3, position - Main.screenPosition, texture3.Bounds,
-                new Color(255, 217, 37).MultiplyAlpha(0f) * 0.5f, rotation, texture3.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.185f * 1f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 2f), 0, 0);
+                new Color(255, 217, 37).MultiplyAlpha(0f) * 0.5f * progress2, rotation, texture3.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.185f * 1f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 2f), 0, 0);
         }
         //});
     }

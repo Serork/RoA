@@ -712,11 +712,11 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override void HideDrawLayers(PlayerDrawSet drawInfo) {
-        if (CollidedWithStarwayWormhole) {
-            foreach (var layer in PlayerDrawLayerLoader.Layers) {
-                layer.Hide();
-            }
-        }
+        //if (CollidedWithStarwayWormhole) {
+        //    foreach (var layer in PlayerDrawLayerLoader.Layers) {
+        //        layer.Hide();
+        //    }
+        //}
     }
 
     public override void TransformDrawData(ref PlayerDrawSet drawInfo) {
@@ -725,7 +725,13 @@ sealed partial class PlayerCommon : ModPlayer {
         if (CollidedWithStarwayWormhole) {
             for (int i = 0; i < count; i++) {
                 DrawData value = drawInfo.DrawDataCache[i];
-                value.color *= 0f;
+                float progress3 = Ease.QuintIn(Utils.GetLerpValue(1f, 1.1f, WormholeAdventureProgress, true));
+                float progress1 = Utils.GetLerpValue(0f, 0.05f, WormholeAdventureProgress, true);
+                progress1 -= progress3;
+                value.color = Color.Lerp(value.color, new Color(255, 217, 37, 0), progress1);
+                float progress2 = 1f - Utils.GetLerpValue(0f, 0.1f, WormholeAdventureProgress, true);
+                progress2 += progress3;
+                value.color *= Ease.QuartOut(progress2);
                 drawInfo.DrawDataCache[i] = value;
             }
         }
@@ -1349,10 +1355,10 @@ sealed partial class PlayerCommon : ModPlayer {
                     WormholeCooldown = Helper.Approach(WormholeCooldown, 0f, 1f);
                 }
             }
+            float maxProgress = 1.5f;
             if (CollidedWithStarwayWormhole) {
                 Player.controlUseItem = false;
 
-                float maxProgress = 1.5f;
                 float progress = WormholeAdventureProgress;
                 if (!WormholeAdventureReversed) {
                     progress = 1f - progress;
@@ -1373,15 +1379,18 @@ sealed partial class PlayerCommon : ModPlayer {
                 Vector2 to = targetPosition - Player.Size / 2;
 
                 Vector2 lastPosition = WormholeAdventureReversed ? wormholePositions[^1] : wormholePositions[0];
-                Vector2 lastPosition2 = !WormholeAdventureReversed ? wormholePositions[^1] : wormholePositions[0];
+                Vector2 lastPosition2 = WormholeAdventureReversed ? wormholePositions[wormholePositions.Count - 2] : wormholePositions[1];
 
                 bool completed = WormholeAdventureProgress >= 1f && Player.Distance(lastPosition) < checkWidth / 2f;
 
                 float burstSpeed = 10f;
 
-                Vector2 velocity = wormholePositions[index].DirectionFrom(lastPosition2);
-                if (!velocity.HasNaNs()) {
+                Vector2 velocity = lastPosition2.DirectionTo(lastPosition);
+                if (completed) {
                     Player.velocity = velocity * burstSpeed;
+                }
+                else {
+                    Player.velocity = Player.position.DirectionTo(to) * burstSpeed;
                 }
 
                 if (!StarwayWormholeICollidedWith.active || completed) {
@@ -1408,6 +1417,9 @@ sealed partial class PlayerCommon : ModPlayer {
                 Player.fallStart = (int)(Player.position.Y / 16f);
                 Player.gravity = 0f;
 
+                WormholeAdventureProgress = Helper.Approach(WormholeAdventureProgress, maxProgress, 0.025f);
+            }
+            else {
                 WormholeAdventureProgress = Helper.Approach(WormholeAdventureProgress, maxProgress, 0.025f);
             }
         }
