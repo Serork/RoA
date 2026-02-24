@@ -300,7 +300,6 @@ sealed class StarwayWormhole : NatureProjectile {
         SpriteBatch batch = Main.spriteBatch;
 
         if (!(!Used || !_drawLights)) {
-
             var graphicsDevice = Main.instance.GraphicsDevice;
             var sb = batch;
 
@@ -437,7 +436,7 @@ sealed class StarwayWormhole : NatureProjectile {
 
                 for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
                     batch.Draw(texture2, Vector2.Lerp(vector7, vector6, num6 / (float)num5) - Main.screenPosition, texture2.Bounds,
-                        color.MultiplyAlpha(1f) * 0.5f, 0f, texture2.Bounds.Centered(), scale * 0.01f * 0.75f * Helper.Wave(1f, 1.1f, 5f, i2 + Projectile.identity + 3f), 0, 0);
+                        color.MultiplyAlpha(1f) * 1f, 0f, texture2.Bounds.Centered(), scale * 0.01f * 0.75f * Helper.Wave(1f, 1.1f, 5f, i2 + Projectile.identity + 3f), 0, 0);
                 }
 
                 scale += scaleLerp;
@@ -457,6 +456,10 @@ sealed class StarwayWormhole : NatureProjectile {
                 new Color(255, 238, 166).MultiplyAlpha(1f) * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.185f * 0.25f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 2f), 0, 0);
             batch.Draw(texture2, position - Main.screenPosition, texture2.Bounds,
                 Color.White.MultiplyAlpha(1f) * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.155f * 0.125f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 1f), 0, 0);
+
+            Texture2D texture3 = ResourceManager.Bloom2;
+            batch.Draw(texture3, position - Main.screenPosition, texture3.Bounds,
+                new Color(255, 217, 37).MultiplyAlpha(0f) * 0.5f, rotation, texture3.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.185f * 1f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 2f), 0, 0);
         }
         //});
     }
