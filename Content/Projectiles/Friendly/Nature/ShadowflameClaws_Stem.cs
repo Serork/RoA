@@ -514,7 +514,7 @@ sealed class ShadowflameStem : NatureProjectile_NoTextureLoad, IRequestAssets, I
                     flip = flip == SpriteEffects.FlipHorizontally ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
                 }
 
-                //Dust.NewDustPerfect(Projectile.Center + leafData.Position, DustID.Adamantite, Vector2.Zero).noGravity = true;
+                //Dust.NewDustPerfect(Projectile.Center + leafData.Positions, DustID.Adamantite, Vector2.Zero).noGravity = true;
                 batch.Draw(leafTexture, position2 + idleExtra * 5f, DrawInfo.Default with {
                     Clip = clip,
                     Color = color * opacity,

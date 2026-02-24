@@ -388,7 +388,7 @@ sealed class Bulb : NatureProjectile_NoTextureLoad, IRequestAssets, IUseCustomIm
                 summonMouthInfo.Rotation = Utils.AngleLerp(summonMouthInfo.Rotation, rotation, lerpValue);
                 summonMouthInfo.Velocity = velocity;
 
-                //summonMouthInfo.Position = Vector2.Lerp(summonMouthInfo.Position, center, dissappearanceFactor);
+                //summonMouthInfo.Positions = Vector2.Lerp(summonMouthInfo.Positions, center, dissappearanceFactor);
             }
         }
         void processSummonTentacles() {

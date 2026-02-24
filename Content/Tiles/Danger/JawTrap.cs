@@ -61,7 +61,7 @@ sealed class JawTrap : ModTile, TileHooks.ITileAfterPlayerDraw {
                 player.AddBuff(BuffID.Bleeding, 600);
             }
             SoundEngine.PlaySound(new SoundStyle(ResourceManager.ItemSounds + "SteelTrap") { Volume = 3f, Pitch = 0.3f, PitchVariance = 0.1f }, player.Center);
-            //NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y);
+            //NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Positions.X, Positions.Y);
         }
 
         public override void NetSend(BinaryWriter writer) {

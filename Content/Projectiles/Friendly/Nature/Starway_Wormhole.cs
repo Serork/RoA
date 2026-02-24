@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
+using RoA.Common.Cache;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -13,8 +14,30 @@ using System;
 using System.Collections.Generic;
 
 using Terraria;
+using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
+
+sealed class TargetLoader : ILoadable {
+    public static RenderTarget2D LowResTarget = null!;
+
+    void ILoadable.Load(Mod mod) {
+        Main.QueueMainThreadAction(() => {
+            LowResTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 840, 525, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+        });
+
+    }
+
+    void ILoadable.Unload() {
+        if (LowResTarget is not null) {
+            Main.QueueMainThreadAction(() => {
+                LowResTarget.Dispose();
+            });
+
+            LowResTarget = null!;
+        }
+    }
+}
 
 [Tracked]
 sealed class StarwayWormhole : NatureProjectile {
@@ -26,6 +49,14 @@ sealed class StarwayWormhole : NatureProjectile {
 
     private WormSegmentInfo[] _wormData = null!;
     private GeometryUtils.BezierCurve _bezierCurve = null!;
+    private bool _drawLights;
+    private Player _lightPlayer = null!;
+
+    private static RenderTarget2D lowResTarget = null!;
+
+    private record struct PlayerLightInfo(Vector2[] Positions, float[] Rotations);
+
+    private PlayerLightInfo[] _playerLightData = null!;
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float StartWaveValue => ref Projectile.ai[0];
@@ -155,8 +186,48 @@ sealed class StarwayWormhole : NatureProjectile {
                     }
                     _bezierCurve = new GeometryUtils.BezierCurve([.. segmentPositions2]);
                 }
+                void initLights() {
+                    _playerLightData = new PlayerLightInfo[3];
+                    for (int i = 0; i < _playerLightData.Length; i++) {
+                        ref PlayerLightInfo playerLightInfo = ref _playerLightData[i];
+                        int max = 10;
+                        playerLightInfo.Positions = new Vector2[max];
+                        playerLightInfo.Rotations = new float[max];
+                    }
+                }
 
                 initSegments();
+                initLights();
+            }
+        }
+        void initLights(bool hardInit = false) {
+            for (int i = 0; i < _playerLightData.Length; i++) {
+                ref PlayerLightInfo playerLightInfo = ref _playerLightData[i];
+                if (!hardInit) {
+                    for (int num28 = playerLightInfo.Positions.Length - 1; num28 > 0; num28--) {
+                        playerLightInfo.Positions[num28] = Vector2.Lerp(playerLightInfo.Positions[num28], playerLightInfo.Positions[num28 - 1], 0.5f);
+                        playerLightInfo.Rotations[num28] = Utils.AngleLerp(playerLightInfo.Rotations[num28], playerLightInfo.Rotations[num28 - 1], 0.5f);
+                    }
+                }
+
+                float y = 10f;
+                Player player = _lightPlayer;
+                Vector2 angle = Vector2.UnitY.RotatedBy(player.velocity.ToRotation());
+                Vector2 position = player.Center + angle * Helper.Wave(-y, y, 10f, i * 2f);
+                position -= angle.RotatedBy(MathHelper.PiOver2) * -i * (i == 0 ? 10f : 5f);
+                position += angle.RotatedBy(MathHelper.PiOver2) * -10f;
+                float rotation = 0f;
+
+                if (!hardInit) {
+                    playerLightInfo.Positions[0] = Vector2.Lerp(playerLightInfo.Positions[0], position, 0.5f);
+                    playerLightInfo.Rotations[0] = Utils.AngleLerp(playerLightInfo.Rotations[0], rotation, 0.5f);
+                }
+                else {
+                    for (int num28 = 0; num28 < playerLightInfo.Positions.Length; num28++) {
+                        playerLightInfo.Positions[num28] = position;
+                        playerLightInfo.Rotations[num28] = rotation;
+                    }
+                }
             }
         }
         void playerEnter() {
@@ -179,6 +250,7 @@ sealed class StarwayWormhole : NatureProjectile {
                     }
                 }
             }
+            bool hasActivePlayer = false;
             foreach (Player player in Main.ActivePlayers) {
                 if (player.GetCommon().CollidedWithStarwayWormhole && player.GetCommon().StarwayWormholeICollidedWith == Projectile) {
                     for (int i = 0; i < length; i++) {
@@ -193,13 +265,27 @@ sealed class StarwayWormhole : NatureProjectile {
                             wormSegmentInfo.ShakeCooldown2 = wormSegmentInfo.ShakeCooldown;
                         }
                     }
+                    hasActivePlayer = true;
+                    _lightPlayer = player;
+                    if (!_drawLights) {
+                        initLights(true);
+                    }
                     break;
                 }
+            }
+            _drawLights = hasActivePlayer;
+        }
+        void processLights() {
+            if (_drawLights) {
+                initLights();
             }
         }
 
         init();
         playerEnter();
+        processLights();
+
+        Projectile.timeLeft = 2;
     }
 
     public override void OnKill(int timeLeft) {
@@ -212,6 +298,60 @@ sealed class StarwayWormhole : NatureProjectile {
         }
 
         SpriteBatch batch = Main.spriteBatch;
+
+        if (!(!Used || !_drawLights)) {
+
+            var graphicsDevice = Main.instance.GraphicsDevice;
+            var sb = batch;
+
+            sb.End();
+
+            SpriteBatchSnapshot snapshot = sb.CaptureSnapshot();
+
+            graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+            graphicsDevice.Clear(Color.Transparent);
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+            sb.End();
+
+            graphicsDevice.SetRenderTarget(TargetLoader.LowResTarget);
+            graphicsDevice.Clear(Color.Transparent);
+
+            float scaleX = (float)TargetLoader.LowResTarget.Width / Main.screenWidth;
+            float scaleY = (float)TargetLoader.LowResTarget.Height / Main.screenHeight;
+            Matrix scaleMatrix = Matrix.CreateScale(scaleX, scaleY, 1f);
+            sb.Begin(SpriteSortMode.Deferred,
+                     BlendState.AlphaBlend,
+                     SamplerState.PointClamp,
+                     null, null, null,
+                     scaleMatrix);
+
+            DrawLights(batch);
+
+            sb.End();
+
+            graphicsDevice.SetRenderTarget(Main.screenTarget);
+            graphicsDevice.Clear(Color.Transparent);
+
+            sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+            sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+            sb.End();
+
+            sb.Begin(snapshot with { samplerState = SamplerState.PointClamp });
+            sb.Draw(TargetLoader.LowResTarget,
+                    new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
+                    Color.White);
+            sb.End();
+
+            sb.Begin(snapshot);
+        }
+
+        DrawWorm(batch);
+
+        return false;
+    }
+
+    private void DrawWorm(SpriteBatch batch) {
         Texture2D texture = Projectile.GetTexture();
 
         int length = _wormData.Length;
@@ -230,7 +370,7 @@ sealed class StarwayWormhole : NatureProjectile {
             if (float.IsNaN(shakeProgress)) {
                 shakeProgress = 0f;
             }
-            Color color = Color.White * Helper.Wave(0.5f + 0.25f * shakeProgress, 0.75f + 0.25f * shakeProgress, 5f, Projectile.identity);
+            Color color = Color.White * Helper.Wave(0.5f, 0.75f, 5f, Projectile.identity);
             Rectangle clip = Utils.Frame(texture, 2, 3, frameX: frameX, frameY: frameY);
             Vector2 origin = clip.Centered();
             float rotation = wormSegmentInfo.Rotation;
@@ -260,7 +400,64 @@ sealed class StarwayWormhole : NatureProjectile {
             }
             first = false;
         }
+    }
 
-        return false;
+    private void DrawLights(SpriteBatch batch) {
+        //ShaderLoader.PixellateShader.BufferSize = new Vector2(320, 180);
+        //ShaderLoader.PixellateShader.ScreenSize = new Vector2(640, 320);
+        //ShaderLoader.PixellateShader.PixelDensity = 16f;
+        //ShaderLoader.PixellateShader.Apply(batch, () => {
+        for (int i = 0; i < _playerLightData.Length; i++) {
+            PlayerLightInfo playerLightInfo = _playerLightData[i];
+            int length2 = playerLightInfo.Positions.Length;
+            Color color = new Color(255, 217, 37).ModifyRGB(1f);
+            float lerpValue = 0.25f;
+            float scale = 1f;
+            float scaleLerp = 0.75f;
+            for (int i2 = length2 - 1; i2 > 0; i2--) {
+                Vector2 position = playerLightInfo.Positions[i2];
+                Texture2D texture2 = ResourceManager.Circle2;
+
+                float num3 = 0f;
+                //float y = 0f;
+                Vector2 vector6 = playerLightInfo.Positions[i2];
+                Vector2 vector7 = playerLightInfo.Positions[i2 - 1];
+                if (vector6 == Vector2.Zero || vector7 == Vector2.Zero) {
+                    continue;
+                }
+                vector7.Y -= num3 / 2f;
+                vector6.Y -= num3 / 2f;
+                int num5 = (int)Vector2.Distance(vector6, vector7) / 3 + 1;
+                if (Vector2.Distance(vector6, vector7) % 3f != 0f)
+                    num5++;
+
+                if (i2 < length2 * 0.25f) {
+                    color = Color.Lerp(color, new Color(255, 238, 166), 0.5f);
+                }
+
+                for (float num6 = 1f; num6 <= (float)num5; num6 += 1f) {
+                    batch.Draw(texture2, Vector2.Lerp(vector7, vector6, num6 / (float)num5) - Main.screenPosition, texture2.Bounds,
+                        color.MultiplyAlpha(1f) * 1f, 0f, texture2.Bounds.Centered(), scale * 0.01f * 0.75f * Helper.Wave(1f, 1.1f, 5f, i2 + Projectile.identity + 3f), 0, 0);
+                }
+
+                scale += scaleLerp;
+                scaleLerp *= 0.975f;
+                lerpValue = Helper.Approach(lerpValue, 0.15f, 0.025f);
+            }
+        }
+        //});
+        //ShaderLoader.PixellateShader.Apply(batch, () => {
+        for (int i = 0; i < _playerLightData.Length; i++) {
+            PlayerLightInfo playerLightInfo = _playerLightData[i];
+            Vector2 position = playerLightInfo.Positions[0];
+            Texture2D texture2 = ResourceManager.Circle2;
+            float rotation = playerLightInfo.Positions[1].AngleTo(playerLightInfo.Positions[0]);
+
+            batch.Draw(texture2, position - Main.screenPosition, texture2.Bounds,
+                new Color(255, 238, 166) * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.185f * 0.25f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 2f), 0, 0);
+            batch.Draw(texture2, position - Main.screenPosition, texture2.Bounds,
+                Color.White * 1f, rotation, texture2.Bounds.Centered(), new Vector2(1f, 0.75f) * 0.155f * 0.25f * Helper.Wave(1f, 1.5f, 5f, Projectile.identity + 1f), 0, 0);
+        }
+        //});
     }
 }

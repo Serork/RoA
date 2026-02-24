@@ -21,6 +21,7 @@ using RoA.Core.Utility.Vanilla;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Channels;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -592,7 +593,7 @@ sealed partial class PlayerCommon : ModPlayer {
             _lastAddedAvancedShadow = 0;
 
         _advancedShadows[_lastAddedAvancedShadow].CopyPlayer(Player);
-        //_advancedShadows[_lastAddedAvancedShadow].Position.Y += Player.gfxOffY;
+        //_advancedShadows[_lastAddedAvancedShadow].Positions.Y += Player.gfxOffY;
     }
 
     public void ResetAdvancedShadows() {
@@ -1349,6 +1350,8 @@ sealed partial class PlayerCommon : ModPlayer {
                 }
             }
             if (CollidedWithStarwayWormhole) {
+                Player.controlUseItem = false;
+
                 float maxProgress = 1.5f;
                 float progress = WormholeAdventureProgress;
                 if (!WormholeAdventureReversed) {
@@ -1927,6 +1930,12 @@ sealed partial class PlayerCommon : ModPlayer {
         //        IsBrambleMazeUsed = false;
         //    }
         //}
+
+        if (CollidedWithStarwayWormhole) {
+            Player.channel = false;
+            Player.itemAnimation = (Player.itemAnimationMax = 0);
+            return false;
+        }
 
         return base.PreItemCheck();
     }

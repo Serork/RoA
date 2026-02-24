@@ -31,7 +31,7 @@ using RoA.Core.Utility;
 //        }
 //    }
 
-//    public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
+//    public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Positions.X, Positions.Y, 0f, 0, 0, 0);
 
 //    public override bool IsTileValidForEntity(int x, int y) => true;/*WorldGenHelper.GetTileSafely(x, y).ActiveTile(ModContent.TileType<Beacon>());*/
 //}

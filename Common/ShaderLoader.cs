@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 using Terraria;
 using Terraria.DataStructures;
@@ -25,6 +26,39 @@ using static Terraria.ModLoader.Core.TmodFile;
 namespace RoA.Common;
 
 sealed class ShaderLoader : ModSystem {
+    public static class PixellateShader {
+        private static float _pixelDensity = 0f;
+        private static Vector2 _bufferSize = new Vector2(320, 180);
+        private static Vector2 _screenSize = new Vector2(1280, 720);
+
+        public static float PixelDensity {
+            get => _pixelDensity;
+            set => Effect?.Parameters["pixelDensity"].SetValue(_pixelDensity = value);
+        }
+
+        public static Vector2 BufferSize {
+            get => _bufferSize;
+            set => Effect?.Parameters["bufferSize"].SetValue(_bufferSize = value);
+        }
+
+        public static Vector2 ScreenSize {
+            get => _screenSize;
+            set => Effect?.Parameters["screenSize"].SetValue(_screenSize = value);
+        }
+
+        public static Effect? Effect => _loadedShaders["Pixellate"].Value;
+
+        public static void Apply(SpriteBatch batch, Action draw) {
+            SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
+            batch.End();
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, snapshot.samplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
+            Effect?.CurrentTechnique.Passes[0].Apply();
+            draw();
+            batch.End();
+            batch.Begin(in snapshot);
+        }
+    }
+
     public static class WavyCircleShader {
         private static float _uTime = 0f;
         private static float _waveCount1 = 6f, _waveCount2 = 6f;
@@ -293,6 +327,7 @@ sealed class ShaderLoader : ModSystem {
     public static Asset<Effect> FlameTint => _loadedShaders["FlameTint"];
     public static Asset<Effect> FilamentThread => _loadedShaders["FilamentThread"];
     public static Asset<Effect> WavyCircle => _loadedShaders["WavyCircle"];
+    public static Asset<Effect> Pixellate => _loadedShaders["Pixellate"];
 
     public static Asset<Effect> SimpleReflection => _loadedShaders["SimpleReflection"];
 

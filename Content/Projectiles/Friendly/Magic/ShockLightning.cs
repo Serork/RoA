@@ -187,7 +187,7 @@ sealed class ShockLightning : ModProjectile {
         UpdateSegments();
 
         foreach (var segment in _results) {
-            //DrawColor color = DrawColor.Lerp(DrawColor.White, Lighting.GetColor((int)segment.Position.X / 16, (int)segment.Position.Y / 16), Lighting.Brightness((int)segment.Position.X / 16, (int)segment.Position.Y / 16));
+            //DrawColor color = DrawColor.Lerp(DrawColor.White, Lighting.GetColor((int)segment.Positions.X / 16, (int)segment.Positions.Y / 16), Lighting.Brightness((int)segment.Positions.X / 16, (int)segment.Positions.Y / 16));
             segment.Draw(Main.spriteBatch, Color.White);
 
             LightingCutTiles(segment.Position);

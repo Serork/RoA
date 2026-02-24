@@ -157,7 +157,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
             DoOnSegmentIteration((segmentIterationArgs) => {
                 //if (Main.rand.NextChance(1.5f - segmentIterationArgs.Index / (float)segmentIterationArgs.Length)) {
                 //    if (segmentIterationArgs.Info.DashTime < 1f) {
-                //        SpawnThornsDust(segmentIterationArgs.Position);
+                //        SpawnThornsDust(segmentIterationArgs.Positions);
                 //    }
                 //}
                 float opacity = segmentIterationArgs.Opacity * 255;
@@ -219,7 +219,7 @@ sealed class NettleThorn : NatureProjectile_NoTextureLoad {
         //    DoOnSegmentIteration((segmentIterationArgs) => {
         //        int dustCount = 4;
         //        for (int j = 0; j < dustCount; j++) {
-        //            SpawnThornsDust(segmentIterationArgs.Position);
+        //            SpawnThornsDust(segmentIterationArgs.Positions);
         //        }
         //    });
         //}

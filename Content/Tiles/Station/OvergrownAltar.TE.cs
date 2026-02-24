@@ -33,11 +33,11 @@ using Terraria;
 //    public override void Update() {
 
 //        //if (Main.netMode == NetmodeID.Server) {
-//        //    NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Position.X, number3: Position.Y);
+//        //    NetMessage.SendData(MessageID.TileEntitySharing, number: ID, number2: Positions.X, number3: Positions.Y);
 //        //}
 //    }
 
-//    public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Position.X, Position.Y, 0f, 0, 0, 0);
+//    public override void OnNetPlace() => NetMessage.SendData(MessageID.TileEntitySharing, -1, -1, null, ID, Positions.X, Positions.Y, 0f, 0, 0, 0);
 
 //    public override bool IsTileValidForEntity(int i, int j) => WorldGenHelper.GetTileSafely(i, j).ActiveTile(ModContent.TileType<OvergrownAltar>());
 //}

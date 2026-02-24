@@ -87,7 +87,7 @@ sealed class HiTechSlash : NatureProjectile {
         //            ProjectileUtils.SpawnPlayerOwnedProjectile<HiTechSlash>(new ProjectileUtils.SpawnProjectileArgs(owner, Projectile.GetSource_FromAI()) {
         //                Damage = Projectile.damage,
         //                KnockBack = Projectile.knockBack,
-        //                Position = Projectile.Center,
+        //                Positions = Projectile.Center,
         //                Velocity = Projectile.Center.DirectionTo(OwnerCenter).RotatedByRandom(MathHelper.PiOver2) * 10f,
         //                AI0 = Projectile.ai[0],
         //                AI1 = Projectile.ai[1],

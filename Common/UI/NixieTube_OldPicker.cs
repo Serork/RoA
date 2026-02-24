@@ -176,7 +176,7 @@
 //                    }
 //                }
 //                //if (needSync && Main.netMode == NetmodeID.MultiplayerClient) {
-//                //    MultiplayerSystem.SendPacket(new ExtraMannequinInfoItemsPacket(Main.LocalPlayer, MannequinsInWorldSystem.MannequinsInWorld.FindIndex(a => a.Position == data.Position), false));
+//                //    MultiplayerSystem.SendPacket(new ExtraMannequinInfoItemsPacket(Main.LocalPlayer, MannequinsInWorldSystem.MannequinsInWorld.FindIndex(a => a.Positions == data.Positions), false));
 //                //}
 //            }
 

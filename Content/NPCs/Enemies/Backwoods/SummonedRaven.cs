@@ -65,7 +65,7 @@ sealed class SummonedRaven : ModNPC {
         Main.npcFrameCount[Type] = 5;
 
         var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() {
-            //Position = new Vector2(2f, -10f),
+            //Positions = new Vector2(2f, -10f),
             //PortraitPositionXOverride = 0f,
             //PortraitPositionYOverride = -31f
             Hide = true

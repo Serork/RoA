@@ -272,15 +272,15 @@
 //        }
 //    }
 
-//	private static bool CustomLavaCollision(Vector2 Position, int Width, int Height) {
+//	private static bool CustomLavaCollision(Vector2 Positions, int Width, int Height) {
 //		if (!TryGetActiveStyle(out _)) {
 //			return false;
 //		}
 
-//        int value = (int)(Position.X / 16f) - 1;
-//        int value2 = (int)((Position.X + (float)Width) / 16f) + 2;
-//        int value3 = (int)(Position.Y / 16f) - 1;
-//        int value4 = (int)((Position.Y + (float)Height) / 16f) + 2;
+//        int value = (int)(Positions.X / 16f) - 1;
+//        int value2 = (int)((Positions.X + (float)Width) / 16f) + 2;
+//        int value3 = (int)(Positions.Y / 16f) - 1;
+//        int value4 = (int)((Positions.Y + (float)Height) / 16f) + 2;
 //        int num = Utils.Clamp(value, 0, Main.maxTilesX - 1);
 //        value2 = Utils.Clamp(value2, 0, Main.maxTilesX - 1);
 //        value3 = Utils.Clamp(value3, 0, Main.maxTilesY - 1);
@@ -296,7 +296,7 @@
 //                    num3 /= 32f;
 //                    vector.Y += num3 * 2f;
 //                    num2 -= (int)(num3 * 2f);
-//                    if (Position.X + (float)Width > vector.X && Position.X < vector.X + 16f && Position.Y + (float)Height > vector.Y && Position.Y < vector.Y + (float)num2)
+//                    if (Positions.X + (float)Width > vector.X && Positions.X < vector.X + 16f && Positions.Y + (float)Height > vector.Y && Positions.Y < vector.Y + (float)num2)
 //                        return true;
 //                }
 //            }
@@ -305,20 +305,20 @@
 //		return false;
 //    }
 
-//    private bool On_Collision_WetCollision(On_Collision.orig_WetCollision orig, Vector2 Position, int Width, int Height) {
+//    private bool On_Collision_WetCollision(On_Collision.orig_WetCollision orig, Vector2 Positions, int Width, int Height) {
 //        //if (TryGetActiveStyle(out _)) {
 //        //    return false;
 //        //}
 
-//        return orig(Position, Width, Height);
+//        return orig(Positions, Width, Height);
 //    }
 
-//    private bool On_Collision_LavaCollision(On_Collision.orig_LavaCollision orig, Vector2 Position, int Width, int Height) {
+//    private bool On_Collision_LavaCollision(On_Collision.orig_LavaCollision orig, Vector2 Positions, int Width, int Height) {
 //		if (TryGetActiveStyle(out _)) {
 //			return false;
 //		}
 
-//		return orig(Position, Width, Height);
+//		return orig(Positions, Width, Height);
 //    }
 
 //    private void On_TileDrawing_DrawPartialLiquid(On_TileDrawing.orig_DrawPartialLiquid orig, TileDrawing self, bool behindBlocks, Tile tileCache, ref Microsoft.Xna.Framework.Vector2 position, ref Microsoft.Xna.Framework.Rectangle liquidSize, int liquidType, ref Terraria.Graphics.VertexColors colors) {

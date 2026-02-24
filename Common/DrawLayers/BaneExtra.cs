@@ -14,7 +14,7 @@
 //sealed class BaneExtra : PlayerDrawLayer {
 //    private float _rotation;
 
-//    public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FirstVanillaLayer);
+//    public override Positions GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FirstVanillaLayer);
 
 //    protected override void Draw(ref PlayerDrawSet drawInfo) {
 //        return;

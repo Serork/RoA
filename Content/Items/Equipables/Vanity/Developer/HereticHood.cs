@@ -105,7 +105,7 @@ sealed class HereticHood : ModItem {
         }
 
         //private class HereticVisualsLegsGlowing : PlayerDrawLayer {
-        //    public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Torso);
+        //    public override Positions GetDefaultPosition() => new AfterParent(PlayerDrawLayers.Torso);
 
         //    protected override void DrawSelf(ref PlayerDrawSet drawInfo) {
         //        if (drawInfo.hideEntirePlayer) {
@@ -122,7 +122,7 @@ sealed class HereticHood : ModItem {
         //    private static void DrawArmorGlowMask(ref PlayerDrawSet drawInfo) {
         //        Player player = drawInfo.drawPlayer;
         //        if (player.legs == EquipLoader.GetEquipSlot(RoA.Instance, nameof(HereticPants), EquipType.Legs)) {
-        //            Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(player.width / 2 - player.legFrame.Width / 2, player.height - player.legFrame.Height + 4f) + player.legPosition;
+        //            Vector2 drawPos = drawInfo.Positions - Main.screenPosition + new Vector2(player.width / 2 - player.legFrame.Width / 2, player.height - player.legFrame.Height + 4f) + player.legPosition;
         //            Vector2 legsOffset = drawInfo.legsOffset;
         //            var drawinfo = drawInfo;
         //            DrawColor glowMaskColor = DrawColor.White;
