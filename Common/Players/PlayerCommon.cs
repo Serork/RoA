@@ -236,6 +236,11 @@ sealed partial class PlayerCommon : ModPlayer {
         set => _currentEyePatchMode = (EyePatchMode)Utils.Clamp((byte)value, (byte)EyePatchMode.LeftEye, (byte)EyePatchMode.Count);
     }
 
+    public bool CollidedWithStarwayWormhole;
+    public Projectile StarwayWormholeICollidedWith = null!;
+    public float WormholeAdventureProgress;
+    public float WormholeCooldown;
+
     public override void OnEnterWorld() {
 
     }
@@ -1309,11 +1314,71 @@ sealed partial class PlayerCommon : ModPlayer {
                 Player.gravity = 0f;
             }
         }
+        {
+            if (!CollidedWithStarwayWormhole) {
+                if (WormholeCooldown <= 0f) {
+                    foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<StarwayWormhole>()) {
+                        StarwayWormhole starwayWormhole = projectile.As<StarwayWormhole>();
+                        Rectangle getRect = GeometryUtils.CenteredSquare(Player.GetPlayerCorePoint(), Player.width * 4);
+                        if (getRect.Contains(starwayWormhole.StartPosition.ToPoint())) {
+                            CollideWithStarwayWormhole(starwayWormhole);
+                            break;
+                        }
+                        if (getRect.Contains(starwayWormhole.LastPosition.ToPoint())) {
+                            CollideWithStarwayWormhole(starwayWormhole, true);
+                            break;
+                        }
+                    }
+                }
+                else {
+                    WormholeCooldown = Helper.Approach(WormholeCooldown, 0f, 1f);
+                }
+            }
+            if (CollidedWithStarwayWormhole) {
+                float maxProgress = 1.5f;
+                bool reversed = false;
+                if (WormholeAdventureProgress < 0f) {
+                    maxProgress = -1f;
+                    reversed = true;
+                }
+                if (!StarwayWormholeICollidedWith.active || WormholeAdventureProgress >= maxProgress) {
+                    CollidedWithStarwayWormhole = false;
+                    Player.shimmering = false;
+                    WormholeCooldown = 30f;
+                    return;
+                }
+
+                if (Player.IsLocal()) {
+                    Main.SetCameraLerp(0.25f, 0);
+                }
+
+                Player.shimmering = true;
+                Player.shimmerTransparency = 0f;
+
+                Player.velocity.Y = 0f;
+
+                StarwayWormhole starwayWormhole = StarwayWormholeICollidedWith.As<StarwayWormhole>();
+
+                Player.position = Vector2.Lerp(Player.position,
+                    starwayWormhole.GetPositionForAdventure(!reversed ? WormholeAdventureProgress : Utils.Remap(WormholeAdventureProgress, -2f, -1f, 1f, 0f, true)) - Player.Size / 2f, 
+                    1f);
+                Player.fallStart = (int)(Player.position.Y / 16f);
+                Player.gravity = 0f;
+
+                WormholeAdventureProgress = Helper.Approach(WormholeAdventureProgress, maxProgress, 0.025f);
+            }
+        }
     }
 
     public void CollideWithCottonBall(CottonBoll cottonBoll) {
         CottonBollICollidedWith = cottonBoll.Projectile;
         CollidedWithCottonBoll = true;
+    }
+
+    public void CollideWithStarwayWormhole(StarwayWormhole starwayWormhole, bool reversed = false) {
+        StarwayWormholeICollidedWith = starwayWormhole.Projectile;
+        CollidedWithStarwayWormhole = true;
+        WormholeAdventureProgress = reversed ? -2f : 0f;
     }
 
     public delegate void PostUpdateEquipsDelegate(Player player);

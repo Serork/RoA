@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -9,12 +10,12 @@ using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 using Terraria;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
+[Tracked]
 sealed class StarwayWormhole : NatureProjectile {
     private static ushort TIMELEFT => MathUtils.SecondsToFrames(10);
 
@@ -26,6 +27,18 @@ sealed class StarwayWormhole : NatureProjectile {
 
     public ref float InitValue => ref Projectile.localAI[0];
     public ref float StartWaveValue => ref Projectile.ai[0];
+
+    public Vector2 GetPositionForAdventure(float progress) {
+        progress = MathUtils.Clamp01(progress);
+        int length = _wormData.Length;
+        int index = (int)(length * progress);
+        index = length - index;
+        index = Math.Clamp(index, 0, length - 1);
+        return _wormData[index].Position;
+    }
+
+    public Vector2 LastPosition => _wormData[0].Position;
+    public Vector2 StartPosition => _wormData[^1].Position;
 
     public bool Init {
         get => InitValue != 0f;
@@ -66,10 +79,6 @@ sealed class StarwayWormhole : NatureProjectile {
                     float spawnOffset3 = MathF.Max(600f, mousePosition.Distance(playerCenter));
                     Vector2 startPosition = playerCenter + playerCenter.DirectionTo(mousePosition) * spawnOffset3,
                             endPosition = playerCenter;
-                    //float spawnOffset = TileHelper.TileSize * 3;
-                    //float spawnOffset2 = TileHelper.TileSize * 0;
-                    //startPosition += startPosition.DirectionFrom(playerCenter) * spawnOffset2;
-                    //endPosition += endPosition.DirectionTo(mousePosition) * spawnOffset;
                     List<(Vector2, float)> segmentPositions = [];
                     Vector2 velocity = startPosition.DirectionTo(endPosition);
                     Vector2 startPosition2 = startPosition;
@@ -118,8 +127,12 @@ sealed class StarwayWormhole : NatureProjectile {
                 initSegments();
             }
         }
+        void playerEnter() {
+
+        }
 
         init();
+        playerEnter();
     }
 
     public override void OnKill(int timeLeft) {
