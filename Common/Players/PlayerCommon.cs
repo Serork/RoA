@@ -1416,7 +1416,7 @@ sealed partial class PlayerCommon : ModPlayer {
                 if (!StarwayWormholeICollidedWith.active || completed) {
                     CollidedWithStarwayWormhole = false;
                     Player.shimmering = false;
-                    WormholeCooldown = 30f;
+                    WormholeCooldown = 10f;
 
                     //Player.velocity = Player.position.DirectionTo(to) * burstSpeed;
 
