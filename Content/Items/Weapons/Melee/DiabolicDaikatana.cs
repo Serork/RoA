@@ -122,7 +122,7 @@ class DiabolicDaikatanaProj : ModProjectile {
     public Vector2 BaseAngleVector { get; private set; }
     public Vector2 AngleVector { get => _angleVector; private set => _angleVector = Vector2.Normalize(value); }
 
-    public float Progress => Math.Clamp(1f - _swingTime / (float)_swingTimeMax, 0f, 1f);
+    public float Progress => Math.Clamp(1f - (_swingTimeMax == 0 ? 1f : (_swingTime / (float)_swingTimeMax)), 0f, 1f);
 
     public override string Texture => ResourceManager.MeleeWeaponTextures + "DiabolicDaikatanaUse";
 
