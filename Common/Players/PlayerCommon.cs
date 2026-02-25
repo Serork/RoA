@@ -6,6 +6,7 @@ using ModLiquidLib.Utils;
 using RoA.Common.Druid.Wreath;
 using RoA.Common.Items;
 using RoA.Content.Buffs;
+using RoA.Content.Dusts;
 using RoA.Content.Items.Equipables.Accessories;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
@@ -1416,6 +1417,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
                 if (completed) {
                     Player.velocity = Player.position.DirectionTo(to) * burstSpeed / 2f + Vector2.UnitX.RotatedBy((!WormholeAdventureReversed ? starwayWormhole.LastAngle : starwayWormhole.FirstAngle) - MathHelper.Pi * (!WormholeAdventureReversed).ToInt()) * burstSpeed / 2f;
+                    Player.velocity *= 1.25f;
                 }
                 else {
                     Player.velocity = Player.position.DirectionTo(to) * burstSpeed;
@@ -1478,6 +1480,15 @@ sealed partial class PlayerCommon : ModPlayer {
         if (Player.IsLocal()) {
             StarwayWormholeICollidedWith.ai[2] = 1f;
             StarwayWormholeICollidedWith.netUpdate = true;
+        }
+        for (int i = 0; i < 20; i++) {
+            if (Main.rand.NextBool()) {
+                continue;
+            }
+            int size = 20;
+            int num492 = Dust.NewDust(Player.position - Vector2.One * size / 2f, Player.width + size, Player.height + size, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 1f);
+            Main.dust[num492].noGravity = true;
+            Main.dust[num492].velocity += Player.velocity * 0.25f;
         }
     }
 
