@@ -49,7 +49,7 @@ sealed class StarwayDust : ModDust {
             if (num56 > 0.6f)
                 num56 = 0.6f;
 
-            Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), num56 * 1f, num56 * 0.9f, num56 * 0.13f);
+            Lighting.AddLight(dust.position, new Color(127, 153, 22).ToVector3() * 1f * num56);
         }
 
         return false;

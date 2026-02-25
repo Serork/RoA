@@ -45,7 +45,7 @@ sealed class FilamentDust : ModDust {
             if (num56 > 0.6f)
                 num56 = 0.6f;
 
-            Lighting.AddLight((int)(dust.position.X / 16f), (int)(dust.position.Y / 16f), num56 * 0.95f, num56 * 0.9f, num56 * 0.2f);
+            Lighting.AddLight(dust.position, new Color(215, 230, 10).ToVector3() * 1f * num56);
         }
 
         return false;
