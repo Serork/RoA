@@ -314,7 +314,7 @@ sealed class StarwayWormhole : NatureProjectile {
                     if (!wormSegmentInfo.Body && wormSegmentInfo.DestroyProgress <= 0f) {
                         if (Main.rand.NextBool(15)) {
                             for (int num491 = 0; num491 < 1; num491++) {
-                                int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 0.75f);
+                                int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 0.625f);
                                 Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f)
                                     + Vector2.UnitY.RotatedBy(angle + wormSegmentInfo.Rotation - MathHelper.PiOver2 + MathHelper.PiOver4 * Main.rand.NextFloatDirection() * 0.25f) * 85f;
                                 Main.dust[num492].noGravity = true;
@@ -326,7 +326,7 @@ sealed class StarwayWormhole : NatureProjectile {
                         }
                         if (Main.rand.NextBool(15)) {
                             for (int num491 = 0; num491 < 1; num491++) {
-                                int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 0.5f);
+                                int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 0.625f);
                                 Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f)
                                     + Vector2.UnitY.RotatedBy(angle + wormSegmentInfo.Rotation - MathHelper.PiOver2) * 30f;
                                 Main.dust[num492].noGravity = true;
