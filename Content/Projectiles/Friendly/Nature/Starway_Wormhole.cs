@@ -15,7 +15,6 @@ using RoA.Core.Utility.Vanilla;
 
 using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
 
 using Terraria;
 using Terraria.ModLoader;
