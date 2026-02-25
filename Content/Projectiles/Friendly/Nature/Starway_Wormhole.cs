@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Cache;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -286,7 +287,7 @@ sealed class StarwayWormhole : NatureProjectile {
                             to = 0f;
                             down = true;
                         }
-                        currentSegmentData.TentacleData[k].Progress = Helper.Approach(currentSegmentData.TentacleData[k].Progress, to, down ? 0.2f : currentSegmentData.TentacleData[k].Progress < 0.375f ? 0.1f : 0.02f);
+                        currentSegmentData.TentacleData[k].Progress = Helper.Approach(currentSegmentData.TentacleData[k].Progress, to, down ? 0.2f : currentSegmentData.TentacleData[k].Progress < 0.4f ? 0.1f : 0.05f);
                     }
                 }
                 if (i != length - 1 && previousSegmentData.Opacity < 0.375f) {
@@ -312,7 +313,29 @@ sealed class StarwayWormhole : NatureProjectile {
                 if (wormSegmentInfo.Broken) {
                     float to = 2f;
                     wormSegmentInfo.BrokenProgress = Helper.Approach(wormSegmentInfo.BrokenProgress, to, 0.015f);
-                    if (((wormSegmentInfo.BrokenProgress > 0f && wormSegmentInfo.BrokenProgress < 0.2f) || wormSegmentInfo.BrokenProgress >= 1.8f) && wormSegmentInfo.BrokenProgress < to && !wormSegmentInfo.ShouldShake && wormSegmentInfo.ShakeCooldown <= 0f) {
+                    if (((wormSegmentInfo.BrokenProgress > 0.05f && wormSegmentInfo.BrokenProgress < 0.25f) || wormSegmentInfo.BrokenProgress >= 1.8f) && wormSegmentInfo.BrokenProgress < to && !wormSegmentInfo.ShouldShake && wormSegmentInfo.ShakeCooldown <= 0f) {
+                        if (!wormSegmentInfo.ShouldShake && wormSegmentInfo.Body && wormSegmentInfo.BrokenProgress < 0.1f) {
+                            for (int num491 = 0; num491 < 10; num491++) {
+                                int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f);
+                                Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f)
+                                    + Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation) * 25f;
+                                Main.dust[num492].noGravity = true;
+                                Dust dust2 = Main.dust[num492];
+                                dust2.velocity *= 1.2f;
+                                dust2 = Main.dust[num492];
+                                dust2.velocity += Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation) * Main.rand.NextFloat(2.5f, 5f);
+                            }
+                            for (int num491 = 0; num491 < 10; num491++) {
+                                int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f);
+                                Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f) +
+                                    Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation - MathHelper.Pi) * 25f;
+                                Main.dust[num492].noGravity = true;
+                                Dust dust2 = Main.dust[num492];
+                                dust2.velocity *= 1.2f;
+                                dust2 = Main.dust[num492];
+                                dust2.velocity += Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation - MathHelper.Pi) * Main.rand.NextFloat(2.5f, 5f);
+                            }
+                        }
                         wormSegmentInfo.ShouldShake = true;
                         wormSegmentInfo.ShakeCooldown = 4f;
                         wormSegmentInfo.ShakeCooldown2 = wormSegmentInfo.ShakeCooldown;
@@ -453,7 +476,7 @@ sealed class StarwayWormhole : NatureProjectile {
             WormSegmentInfo wormSegmentInfo = _wormData[i];
             int frameX = (!wormSegmentInfo.Body).ToInt(),
                 frameY = wormSegmentInfo.Frame;
-            if (wormSegmentInfo.BrokenProgress > 0f) {
+            if (wormSegmentInfo.BrokenProgress > 0.05f) {
                 frameY++;
             }
             if (wormSegmentInfo.BrokenProgress > 1.8f) {
