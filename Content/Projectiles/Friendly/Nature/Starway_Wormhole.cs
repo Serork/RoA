@@ -388,8 +388,10 @@ sealed class StarwayWormhole : NatureProjectile {
             float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true);
             baseColor *= mainOpacity;
             Color color = baseColor * Helper.Wave(0.5f + shakeIncrease * shakeProgress, 0.75f + shakeIncrease * shakeProgress, 5f, Projectile.identity);
-            Rectangle clip = Utils.Frame(texture, 2, 3, frameX: frameX, frameY: frameY);
+            Rectangle clip = Utils.Frame(texture, 3, 3, frameX: frameX, frameY: frameY);
             Vector2 origin = clip.Centered();
+            int mouthFrame = (int)((TimeSystem.TimeForVisualEffects * 10 + i + Projectile.identity) % 3);
+            Rectangle clip2 = Utils.Frame(texture, 3, 3, frameX: 2, frameY: mouthFrame);
             float rotation = wormSegmentInfo.Rotation;
             SpriteEffects flip = (-Projectile.spriteDirection).ToSpriteEffects2();
             if (first) {
@@ -409,11 +411,22 @@ sealed class StarwayWormhole : NatureProjectile {
                 position += shakePosition;
             }
             batch.Draw(texture, position, drawInfo);
+            if (!wormSegmentInfo.Body) {
+                batch.Draw(texture, position, drawInfo with {
+                    Clip = clip2
+                });
+            }
             float num184 = Helper.Wave(2f, 6f, 1f, Projectile.identity);
             for (int num185 = 0; num185 < 4; num185++) {
                 batch.Draw(texture, position + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
                     Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity
                 });
+                if (!wormSegmentInfo.Body) {
+                    batch.Draw(texture, position + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
+                        Clip = clip2,
+                        Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity
+                    });
+                }
             }
             first = false;
         }
