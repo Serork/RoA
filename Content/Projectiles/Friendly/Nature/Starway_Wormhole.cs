@@ -717,8 +717,8 @@ sealed class StarwayWormhole : NatureProjectile {
                         TentacleInfo tentacleInfo = wormSegmentInfo.TentacleData[k];
                         float progress = Ease.CubeInOut(MathUtils.Clamp01(tentacleInfo.Progress));
                         ShaderLoader.WormholeTentacleShader.WaveTime = TimeSystem.TimeForVisualEffects * 5f + k * 2 + i * 2;
-                        ShaderLoader.WormholeTentacleShader.WaveAmplitude = 0.75f * progress;
-                        ShaderLoader.WormholeTentacleShader.WaveFrequency = 2.5f;
+                        ShaderLoader.WormholeTentacleShader.WaveAmplitude = 0.75f * progress * mainOpacity;
+                        ShaderLoader.WormholeTentacleShader.WaveFrequency = 2.5f * progress * mainOpacity;
                         ShaderLoader.WormholeTentacleShader.WaveSpeed = 1f;
 
                         ShaderLoader.WormholeTentacleShader.BendDirection = 0f;
