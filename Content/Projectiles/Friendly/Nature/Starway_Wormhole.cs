@@ -285,7 +285,7 @@ sealed class StarwayWormhole : NatureProjectile {
                             to = 0f;
                             down = true;
                         }
-                        currentSegmentData.TentacleData[k].Progress = Helper.Approach(currentSegmentData.TentacleData[k].Progress, to, down ? 0.2f : currentSegmentData.TentacleData[k].Progress < 0.375f ? 0.1f : 0.01f);
+                        currentSegmentData.TentacleData[k].Progress = Helper.Approach(currentSegmentData.TentacleData[k].Progress, to, down ? 0.2f : currentSegmentData.TentacleData[k].Progress < 0.375f ? 0.1f : 0.02f);
                     }
                 }
                 if (i != length - 1 && previousSegmentData.Opacity < 0.375f) {
