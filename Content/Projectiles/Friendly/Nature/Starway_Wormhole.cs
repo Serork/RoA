@@ -541,7 +541,7 @@ sealed class StarwayWormhole : NatureProjectile {
                         continue;
                     }
                     int size = 15;
-                    int num492 = Dust.NewDust(_lightPlayer.position - Vector2.One * size / 2f, _lightPlayer.width + size, _lightPlayer.height + size, Main.rand.NextBool() ? ModContent.DustType<FilamentDust>() : ModContent.DustType<StarwayDust>(), 0f, 0f, 0, default(Color), 2.7f * 1f);
+                    int num492 = Dust.NewDust(_lightPlayer.position - Vector2.One * size / 2f, _lightPlayer.width + size, _lightPlayer.height + size, ModContent.DustType<StarwayDust>(), 0f, 0f, 0, default(Color), 2.7f * 1f);
                     Main.dust[num492].noGravity = true;
                     Main.dust[num492].velocity += _lightPlayer.velocity * 0.25f * Main.rand.NextFloat(1f, 2f);
                 }

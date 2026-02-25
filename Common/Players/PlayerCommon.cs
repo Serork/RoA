@@ -1487,7 +1487,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         for (int i = 0; i < 20; i++) {
             int size = 15;
-            int num492 = Dust.NewDust(Player.position - Vector2.One * size / 2f, Player.width + size, Player.height + size, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 1f);
+            int num492 = Dust.NewDust(Player.position - Vector2.One * size / 2f, Player.width + size, Player.height + size, ModContent.DustType<StarwayDust>(), 0f, 0f, 0, default(Color), 2.7f * 1f);
             Main.dust[num492].noGravity = true;
             Main.dust[num492].velocity += Player.velocity * 0.25f * Main.rand.NextFloat(1f, 2f);
         }
