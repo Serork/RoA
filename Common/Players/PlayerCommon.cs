@@ -234,7 +234,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public Projectile StarwayWormholeICollidedWith = null!;
     public float WormholeAdventureProgress;
     public float WormholeCooldown;
-    public bool WormholeAdventureReversed, WormholeAdventureReversed2;
+    public bool WormholeAdventureReversed, WormholeAdventureReversed2, WormholeAdventureReversed3;
 
     public override void OnEnterWorld() {
 
@@ -1358,7 +1358,7 @@ sealed partial class PlayerCommon : ModPlayer {
             }
         }
         {
-            int checkWidth = Player.width * 4;
+            int checkWidth = Player.width * 3;
             if (!CollidedWithStarwayWormhole) {
                 if (WormholeCooldown <= 0f) {
                     foreach (Projectile projectile in TrackedEntitiesSystem.GetTrackedProjectile<StarwayWormhole>()) {
@@ -1366,12 +1366,17 @@ sealed partial class PlayerCommon : ModPlayer {
                         if (!starwayWormhole.Init || starwayWormhole.Used) {
                             continue;
                         }
-                        Rectangle getRect = GeometryUtils.CenteredSquare(Player.GetPlayerCorePoint(), checkWidth);
-                        if (getRect.Contains(starwayWormhole.StartPosition.ToPoint())) {
+                        Vector2 center = Player.GetPlayerCorePoint();
+                        Rectangle getRect = GeometryUtils.CenteredSquare(center, checkWidth);
+                        Vector2 startPosition = starwayWormhole.StartPosition;
+                        Vector2 lastPosition = starwayWormhole.LastPosition;
+                        startPosition += startPosition.DirectionTo(center) * checkWidth / 3;
+                        lastPosition += lastPosition.DirectionTo(center) * checkWidth / 3;
+                        if (getRect.Contains(startPosition.ToPoint())) {
                             CollideWithStarwayWormhole(starwayWormhole);
                             break;
                         }
-                        if (getRect.Contains(starwayWormhole.LastPosition.ToPoint())) {
+                        if (getRect.Contains(lastPosition.ToPoint())) {
                             CollideWithStarwayWormhole(starwayWormhole, true);
                             break;
                         }
@@ -1381,6 +1386,7 @@ sealed partial class PlayerCommon : ModPlayer {
                     WormholeCooldown = Helper.Approach(WormholeCooldown, 0f, 1f);
                 }
             }
+            checkWidth = Player.width * 4;
             float maxProgress = 1.5f;
             if (CollidedWithStarwayWormhole) {
                 float progress = WormholeAdventureProgress;
@@ -1418,15 +1424,17 @@ sealed partial class PlayerCommon : ModPlayer {
                 WormholeAdventureReversed2 = false;
 
                 if (!StarwayWormholeICollidedWith.active || completed) {
-                    int size = 10;
-                    if (Collision.SolidCollision(Player.position - Vector2.One * size / 2f, Player.width + size, Player.height + size)) {
+                    int size = 0;
+                    if (!WormholeAdventureReversed3 && Collision.SolidCollision(Player.position - Vector2.One * size / 2f, Player.width + size, Player.height + size)) {
                         WormholeAdventureReversed2 = true;
+                        WormholeAdventureReversed3 = true;
                         CollideWithStarwayWormhole(starwayWormhole, !WormholeAdventureReversed);
                     }
                     else {
                         CollidedWithStarwayWormhole = false;
                         Player.shimmering = false;
                         WormholeCooldown = 10f;
+                        WormholeAdventureReversed3 = false;
                     }
 
                     //Player.velocity = Player.position.DirectionTo(to) * burstSpeed;

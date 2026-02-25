@@ -280,6 +280,16 @@ sealed class StarwayWormhole : NatureProjectile {
             int length = _wormData.Length;
             for (int i = length - 1; i >= 0; i--) {
                 ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
+                Vector3 lightColor = new Color(127, 153, 22).ToVector3() * 0.75f * wormSegmentInfo.Opacity * (1f - wormSegmentInfo.DestroyProgress);
+                if (wormSegmentInfo.Body) {
+                    for (int k = 0; k < wormSegmentInfo.TentacleData.Length; k++) {
+                        TentacleInfo tentacleInfo = wormSegmentInfo.TentacleData[k];
+                        Vector2 to = wormSegmentInfo.Position + Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation + tentacleInfo.Angle) * tentacleInfo.Length * 2f * tentacleInfo.Progress;
+                        DelegateMethods.v3_1 = lightColor * tentacleInfo.Progress;
+                        Vector2 start = wormSegmentInfo.Position;
+                        Utils.PlotTileLine(start, to, 20f, DelegateMethods.CastLight);
+                    }
+                }
                 int currentSegmentIndex = i,
                     previousSegmentIndex = Math.Min(length - 1, i + 1);
                 ref WormSegmentInfo currentSegmentData = ref _wormData[currentSegmentIndex],
@@ -295,11 +305,11 @@ sealed class StarwayWormhole : NatureProjectile {
                         currentSegmentData.TentacleData[k].Progress = Helper.Approach(currentSegmentData.TentacleData[k].Progress, to, down ? 0.2f : currentSegmentData.TentacleData[k].Progress < 0.4f ? 0.1f : 0.05f);
                     }
                 }
+                Lighting.AddLight(wormSegmentInfo.Position, lightColor);
                 if (i != length - 1 && previousSegmentData.Opacity < 0.375f) {
                     continue;
                 }
                 currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, 1f, 0.1f);
-                Lighting.AddLight(wormSegmentInfo.Position, new Color(127, 153, 22).ToVector3() * 1.5f * currentSegmentData.Opacity * currentSegmentData.DestroyProgress);
             }
             float allDeathProgress = 0f;
             for (int i = 0; i < length; i++) {
@@ -324,9 +334,9 @@ sealed class StarwayWormhole : NatureProjectile {
                                 dust2.velocity += Vector2.UnitY.RotatedBy(Main.dust[num492].position.AngleTo(wormSegmentInfo.Position) - MathHelper.PiOver2) * Main.rand.NextFloat(2.5f, 5f);
                             }
                         }
-                        if (Main.rand.NextBool(15)) {
+                        if (Main.rand.NextBool(30)) {
                             for (int num491 = 0; num491 < 1; num491++) {
-                                int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 0.625f);
+                                int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 0.5f);
                                 Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f)
                                     + Vector2.UnitY.RotatedBy(angle + wormSegmentInfo.Rotation - MathHelper.PiOver2) * 30f;
                                 Main.dust[num492].noGravity = true;
