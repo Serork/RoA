@@ -30,8 +30,7 @@ class StarwayWormholeGore1 : ModGore, ICustomGoreDraw {
         float opacity = 1f - gore.alpha / 255f;
         Color baseColor = Color.White;
         baseColor = baseColor.MultiplyAlpha(0.75f);
-        float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true);
-        baseColor *= mainOpacity;
+        baseColor *= opacity;
         Color color = baseColor * Helper.Wave(0.5f, 0.75f, 5f, 0f);
         spriteBatch.Draw(TextureAssets.Gore[gore.type].Value, new Vector2(gore.position.X - Main.screenPosition.X + (float)(TextureAssets.Gore[gore.type].Width() / 2), gore.position.Y - Main.screenPosition.Y + (float)(TextureAssets.Gore[gore.type].Height() / 2)) + gore.drawOffset, new Microsoft.Xna.Framework.Rectangle(0, 0, TextureAssets.Gore[gore.type].Width(), TextureAssets.Gore[gore.type].Height()),
             color, gore.rotation, new Vector2(TextureAssets.Gore[gore.type].Width() / 2, TextureAssets.Gore[gore.type].Height() / 2), gore.scale, SpriteEffects.None, 0f);

@@ -1418,7 +1418,8 @@ sealed partial class PlayerCommon : ModPlayer {
                 WormholeAdventureReversed2 = false;
 
                 if (!StarwayWormholeICollidedWith.active || completed) {
-                    if (Collision.SolidCollision(Player.position, Player.width, Player.height)) {
+                    int size = 10;
+                    if (Collision.SolidCollision(Player.position - Vector2.One * size / 2f, Player.width + size, Player.height + size)) {
                         WormholeAdventureReversed2 = true;
                         CollideWithStarwayWormhole(starwayWormhole, !WormholeAdventureReversed);
                     }
