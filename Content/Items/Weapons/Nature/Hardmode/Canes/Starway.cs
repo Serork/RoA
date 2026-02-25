@@ -12,7 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 
-[AutoloadGlowMask(shouldApplyItemAlpha: true)]
+[AutoloadGlowMask()]
 sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(42, 46);
