@@ -24,7 +24,7 @@ class StarwayWormholeGore1 : ModGore, ICustomGoreDraw {
         GoreHelper.FadeOutOverTime(gore);
 
         float opacity = 1f - gore.alpha / 255f;
-        Vector3 lightColor = new Color(127, 153, 22).ToVector3() * 0.75f * opacity;
+        Vector3 lightColor = new Color(127, 153, 22).ToVector3() * 0.625f * opacity;
         Lighting.AddLight(gore.position, lightColor);
 
         return base.Update(gore);
