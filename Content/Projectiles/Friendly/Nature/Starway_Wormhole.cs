@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using ReLogic.Content;
+
 using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Core;
@@ -45,7 +47,11 @@ sealed class StarwayWormhole : NatureProjectile {
 
     private static float STEP_BASEDONTEXTUREWIDTH => 90f * 0.85f;
 
-    private record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, bool Body = true, bool Broken = false, float BrokenProgress = 0f, bool ShouldShake = false, float ShakeCooldown = 0f, float ShakeCooldown2 = 0f, float Opacity = 0f);
+    private static Asset<Texture2D> _behindTexture = null!;
+
+    private record struct TentacleInfo(float Angle);
+    private record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, TentacleInfo[] TentacleData, bool Body = true, 
+        bool Broken = false, float BrokenProgress = 0f, bool ShouldShake = false, float ShakeCooldown = 0f, float ShakeCooldown2 = 0f, float Opacity = 0f);
 
     private WormSegmentInfo[] _wormData = null!;
     private GeometryUtils.BezierCurve _bezierCurve = null!;
@@ -95,7 +101,9 @@ sealed class StarwayWormhole : NatureProjectile {
     }
 
     public override void SetStaticDefaults() {
-
+        if (!Main.dedServ) {
+            _behindTexture = ModContent.Request<Texture2D>(Texture + "_Behind");
+        }
     }
 
     protected override void SafeSetDefaults() {
@@ -116,6 +124,8 @@ sealed class StarwayWormhole : NatureProjectile {
     }
 
     public override void AI() {
+        Projectile.timeLeft = 2;
+
         Projectile.hide = Used;
 
         void init() {
@@ -178,7 +188,22 @@ sealed class StarwayWormhole : NatureProjectile {
                         if (last) {
                             body = false;
                         }
-                        _wormData[i] = new WormSegmentInfo(position, 0, rotation, body);
+
+                        TentacleInfo[] tentacleData = new TentacleInfo[10];
+                        int half = tentacleData.Length / 2;
+                        float sectorAngle = MathHelper.Pi * 0.333f;
+                        float halfSector = sectorAngle / 2;
+                        float offset = sectorAngle / half * 0.5f;
+                        for (int k = 0; k < half; k++) {
+                            float angle = -halfSector + (k * sectorAngle / half + offset);
+                            tentacleData[k] = new TentacleInfo(angle);
+                        }
+                        for (int k = half; k < tentacleData.Length; k++) {
+                            float angle = MathHelper.Pi - halfSector + ((k - half) * sectorAngle / half + offset);
+                            tentacleData[k] = new TentacleInfo(angle);
+                        }
+
+                        _wormData[i] = new WormSegmentInfo(position, 0, rotation, tentacleData, Body: body);
                         body = true;
                     }
                     List<Vector2> segmentPositions2 = [];
@@ -311,6 +336,8 @@ sealed class StarwayWormhole : NatureProjectile {
 
         SpriteBatch batch = Main.spriteBatch;
 
+        DrawWorm(batch, true);
+
         if (!(!Used || !_drawLights)) {
             var graphicsDevice = Main.instance.GraphicsDevice;
             var sb = batch;
@@ -357,13 +384,14 @@ sealed class StarwayWormhole : NatureProjectile {
             sb.Begin(snapshot);
         }
 
-        DrawWorm(batch);
+        DrawWorm(batch, false);
 
         return false;
     }
 
-    private void DrawWorm(SpriteBatch batch) {
+    private void DrawWorm(SpriteBatch batch, bool drawBehind) {
         Texture2D texture = Projectile.GetTexture();
+        Texture2D behindTexture = _behindTexture.Value;
 
         int length = _wormData.Length;
         bool first = true;
@@ -410,24 +438,46 @@ sealed class StarwayWormhole : NatureProjectile {
                 shakePosition *= shakeProgress;
                 position += shakePosition;
             }
-            batch.Draw(texture, position, drawInfo);
-            if (!wormSegmentInfo.Body) {
-                batch.Draw(texture, position, drawInfo with {
-                    Clip = clip2
-                });
-            }
-            float num184 = Helper.Wave(2f, 6f, 1f, Projectile.identity);
-            for (int num185 = 0; num185 < 4; num185++) {
-                batch.Draw(texture, position + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
-                    Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity
-                });
+
+            void drawSelf(Texture2D texture, bool glow = true) {
+                batch.Draw(texture, position, drawInfo);
                 if (!wormSegmentInfo.Body) {
-                    batch.Draw(texture, position + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
-                        Clip = clip2,
-                        Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity
+                    batch.Draw(texture, position, drawInfo with {
+                        Clip = clip2
                     });
                 }
+                if (glow) {
+                    float num184 = Helper.Wave(2f, 6f, 1f, Projectile.identity);
+                    for (int num185 = 0; num185 < 4; num185++) {
+                        batch.Draw(texture, position + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
+                            Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity
+                        });
+                        if (!wormSegmentInfo.Body) {
+                            batch.Draw(texture, position + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
+                                Clip = clip2,
+                                Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity
+                            });
+                        }
+                    }
+                }
             }
+
+            if (drawBehind) {
+                drawSelf(behindTexture);
+
+                if (wormSegmentInfo.Broken && wormSegmentInfo.Body) {
+                    for (int k = 0; k < wormSegmentInfo.TentacleData.Length; k++) {
+                        TentacleInfo tentacleInfo = wormSegmentInfo.TentacleData[k];
+                        Vector2 from = Vector2.UnitY.RotatedBy(rotation + tentacleInfo.Angle) * 25f;
+                        Vector2 to = Vector2.UnitY.RotatedBy(rotation + tentacleInfo.Angle) * 100f;
+                        batch.Line(position + from, position + to, Color.White);
+                    }
+                }
+            }
+            else {
+                drawSelf(texture);
+            }
+
             first = false;
         }
     }

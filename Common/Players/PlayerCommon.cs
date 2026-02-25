@@ -21,7 +21,6 @@ using RoA.Core.Utility.Vanilla;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Channels;
 
 using Terraria;
 using Terraria.DataStructures;
