@@ -130,8 +130,6 @@ sealed class StarwayWormhole : NatureProjectile {
     public override bool? CanCutTiles() => false;
 
     public override void AI() {
-        Projectile.timeLeft = 2;
-
         Projectile.hide = Used;
 
         void init() {
@@ -536,7 +534,7 @@ sealed class StarwayWormhole : NatureProjectile {
                         float progress = Ease.CubeInOut(MathUtils.Clamp01(tentacleInfo.Progress));
                         ShaderLoader.WormholeTentacleShader.WaveTime = TimeSystem.TimeForVisualEffects * 5f + k * 2 + i * 2;
                         ShaderLoader.WormholeTentacleShader.WaveAmplitude = 1f - 0.25f * progress;
-                        ShaderLoader.WormholeTentacleShader.WaveFrequency = 3.5f;
+                        ShaderLoader.WormholeTentacleShader.WaveFrequency = 2.5f;
                         ShaderLoader.WormholeTentacleShader.WaveSpeed = 1f;
 
                         ShaderLoader.WormholeTentacleShader.BendDirection = 0f;
@@ -545,11 +543,12 @@ sealed class StarwayWormhole : NatureProjectile {
                         ShaderLoader.WormholeTentacleShader.TipWiggle = 0f;
 
                         ShaderLoader.WormholeTentacleShader.Apply(batch, () => {
-                            float startOffset = 37.5f * 0.75f;
-                            Vector2 from = Vector2.UnitY.RotatedBy(rotation + tentacleInfo.Angle) * startOffset;
-                            Vector2 to = Vector2.UnitY.RotatedBy(rotation + tentacleInfo.Angle) * (startOffset + tentacleInfo.Length);
+                            float startOffset = 37.5f * -2f;
+                            Vector2 from = Vector2.UnitY.RotatedBy(rotation + tentacleInfo.Angle) * (startOffset + tentacleInfo.Length * 0.55f);
+                            Vector2 to = Vector2.UnitY.RotatedBy(rotation + tentacleInfo.Angle) * (startOffset + tentacleInfo.Length + tentacleInfo.Length * 0.5f);
                             Vector2 start = position + from;
                             Vector2 end = position + to;
+                            start += start.DirectionTo(position) * 20f;
                             Vector2 tentacleScale = new Vector2(1f, Vector2.Distance(start, end) * 0.1f) * progress;
                             batch.Draw(tentacleTexture, start - Main.screenPosition, null,
                                 color, Utils.AngleTo(start, end) - MathHelper.PiOver2,
