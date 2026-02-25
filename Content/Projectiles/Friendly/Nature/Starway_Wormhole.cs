@@ -521,7 +521,7 @@ sealed class StarwayWormhole : NatureProjectile {
             if (drawBehind) {
                 drawSelf(behindTexture);
 
-                color *= 0.75f;
+                color *= 1f;
 
                 if (wormSegmentInfo.ShouldShake) {
                     position -= shakePosition;
