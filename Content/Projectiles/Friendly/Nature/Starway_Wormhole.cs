@@ -148,7 +148,7 @@ sealed class StarwayWormhole : NatureProjectile {
                     if (tentacleInfo.Progress <= 0f) {
                         continue;
                     }
-                    Vector2 to = wormSegmentInfo.Position + Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation + tentacleInfo.Angle) * tentacleInfo.Length * 2f * tentacleInfo.Progress;
+                    Vector2 to = wormSegmentInfo.Position + Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation + tentacleInfo.Angle) * tentacleInfo.Length * 3.25f * tentacleInfo.Progress;
                     Vector2 start = wormSegmentInfo.Position;
                     if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), start, to)) {
                         return true;
