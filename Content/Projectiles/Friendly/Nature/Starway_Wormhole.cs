@@ -112,6 +112,8 @@ sealed class StarwayWormhole : NatureProjectile {
     }
 
     protected override void SafeSetDefaults() {
+        SetNatureValues(Projectile);
+
         Projectile.SetSizeValues(10);
 
         Projectile.tileCollide = false;
@@ -120,6 +122,8 @@ sealed class StarwayWormhole : NatureProjectile {
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.hide = true;
+
+        Projectile.penetrate = -1;
 
         Projectile.usesLocalNPCImmunity = true;
         Projectile.localNPCHitCooldown = 5;
