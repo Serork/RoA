@@ -120,6 +120,9 @@ sealed class StarwayWormhole : NatureProjectile {
         Projectile.timeLeft = TIMELEFT;
 
         Projectile.hide = true;
+
+        Projectile.usesLocalNPCImmunity = true;
+        Projectile.localNPCHitCooldown = 5;
     }
 
     public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI) {
@@ -128,8 +131,30 @@ sealed class StarwayWormhole : NatureProjectile {
         }
     }
 
-    public override bool? CanDamage() => false;
-    public override bool? CanCutTiles() => false;
+    public override bool? CanDamage() => true;
+    public override bool? CanCutTiles() => true;
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        int length = _wormData.Length;
+        for (int i = 0; i < length; i++) {
+            ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
+            if (wormSegmentInfo.Body) {
+                for (int k = 0; k < wormSegmentInfo.TentacleData.Length; k++) {
+                    TentacleInfo tentacleInfo = wormSegmentInfo.TentacleData[k];
+                    if (tentacleInfo.Progress <= 0f) {
+                        continue;
+                    }
+                    Vector2 to = wormSegmentInfo.Position + Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation + tentacleInfo.Angle) * tentacleInfo.Length * 2f * tentacleInfo.Progress;
+                    Vector2 start = wormSegmentInfo.Position;
+                    if (Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), start, to)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return base.Colliding(projHitbox, targetHitbox);
+    }
 
     public override void AI() {
         Projectile.hide = Used;
