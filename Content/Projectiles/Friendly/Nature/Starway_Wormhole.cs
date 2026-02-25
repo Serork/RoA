@@ -508,7 +508,7 @@ sealed class StarwayWormhole : NatureProjectile {
                                 }
                             }
                         }
-                        wormSegmentInfo.DestroyProgress = Helper.Approach(wormSegmentInfo.DestroyProgress, 1f, 0.333f);
+                        wormSegmentInfo.DestroyProgress = Helper.Approach(wormSegmentInfo.DestroyProgress, 1f, 0.275f);
                         wormSegmentInfo.Destroyed = true;
                     }
                 }
