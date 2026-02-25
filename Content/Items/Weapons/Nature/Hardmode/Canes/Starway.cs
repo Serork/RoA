@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
+using RoA.Common.GlowMasks;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 
@@ -11,6 +12,7 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode.Canes;
 
+[AutoloadGlowMask]
 sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(42, 46);
