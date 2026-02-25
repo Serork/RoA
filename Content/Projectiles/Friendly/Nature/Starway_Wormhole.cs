@@ -414,7 +414,7 @@ sealed class StarwayWormhole : NatureProjectile {
                         wormSegmentInfo.ShakeCooldown2 = wormSegmentInfo.ShakeCooldown;
                     }
                     if (wormSegmentInfo.Body && wormSegmentInfo.BrokenProgress >= 0.25f && wormSegmentInfo.DestroyProgress <= 0f) {
-                        if (Main.rand.NextChance(Ease.CubeOut((wormSegmentInfo.BrokenProgress - 0.25f) * 0.0375f))) {
+                        if (Main.rand.NextChance(Ease.CubeOut((wormSegmentInfo.BrokenProgress - 0.25f) * 0.0325f))) {
                             for (int num491 = 0; num491 < 1; num491++) {
                                 int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 0.75f);
                                 Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f)
