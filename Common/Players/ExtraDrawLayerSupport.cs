@@ -210,7 +210,8 @@ sealed class ExtraDrawLayerSupport : ILoadable {
 
         if (drawinfo.drawPlayer.GetCommon().ShouldDrawProjectileOverArm) {
             orig(ref drawinfo);
-
+        }
+        else {
             if (drawinfo.drawPlayer.heldProj >= 0 && drawinfo.shadow == 0f && !drawinfo.heldProjOverHand) {
                 Main.projectile[drawinfo.drawPlayer.heldProj].hide = true;
             }
