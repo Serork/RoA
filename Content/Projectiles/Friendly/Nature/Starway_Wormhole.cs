@@ -611,7 +611,7 @@ sealed class StarwayWormhole : NatureProjectile {
             Color baseColor = Color.White;
             baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
             float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true) * (1f - wormSegmentInfo.DestroyProgress);
-            mainOpacity *= Ease.SineIn(disappearOpacity);
+            mainOpacity *= Ease.CubeIn(disappearOpacity);
             baseColor *= mainOpacity;
             Color color = baseColor * Helper.Wave(0.5f + shakeIncrease * shakeProgress, 0.75f + shakeIncrease * shakeProgress, 5f, Projectile.identity);
             Rectangle clip = Utils.Frame(texture, 3, 3, frameX: frameX, frameY: frameY);
