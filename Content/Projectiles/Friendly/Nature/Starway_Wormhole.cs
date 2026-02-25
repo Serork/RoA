@@ -201,7 +201,7 @@ sealed class StarwayWormhole : NatureProjectile {
 
                         float rotation = velocity.ToRotation();
 
-                        float waveFactor = 0f + MathHelper.Lerp(0f, 1f, 1f - MathUtils.Clamp01(distance / (step * 5f)));
+                        float waveFactor = 0f + MathHelper.Lerp(0f, 1f, 1f - MathUtils.Clamp01(distance / (step * 6.5f)));
                         waveFactor = Ease.CubeOut(waveFactor);
                         velocity = velocity.RotatedBy(MathF.Sin(StartWaveValue + index) * waveWidth * Projectile.direction * (1f - waveFactor));
                         velocity = Vector2.Lerp(velocity, startPosition.DirectionTo(endPosition), waveFactor);
