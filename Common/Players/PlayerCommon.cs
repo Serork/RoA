@@ -407,6 +407,10 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override bool FreeDodge(Player.HurtInfo info) {
+        if (CollidedWithStarwayWormhole) {
+            return true;
+        }
+
         return base.FreeDodge(info);
     }
 
