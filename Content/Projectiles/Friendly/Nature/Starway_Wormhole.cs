@@ -156,7 +156,7 @@ sealed class StarwayWormhole : NatureProjectile {
             }
         }
 
-        return base.Colliding(projHitbox, targetHitbox);
+        return false;
     }
 
     public override void AI() {
