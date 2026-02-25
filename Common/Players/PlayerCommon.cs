@@ -235,7 +235,7 @@ sealed partial class PlayerCommon : ModPlayer {
     public Projectile StarwayWormholeICollidedWith = null!;
     public float WormholeAdventureProgress;
     public float WormholeCooldown;
-    public bool WormholeAdventureReversed;
+    public bool WormholeAdventureReversed, WormholeAdventureReversed2;
 
     public override void OnEnterWorld() {
 
@@ -755,6 +755,9 @@ sealed partial class PlayerCommon : ModPlayer {
                 value.color = Color.Lerp(value.color, new Color(255, 217, 37, 0), progress1);
                 float progress2 = 1f - Utils.GetLerpValue(0f, 0.1f, WormholeAdventureProgress, true);
                 progress2 += progress3;
+                if (WormholeAdventureReversed2) {
+                    progress2 = 0f;
+                }
                 value.color *= Ease.QuartOut(progress2);
                 drawInfo.DrawDataCache[i] = value;
             }
@@ -1407,16 +1410,24 @@ sealed partial class PlayerCommon : ModPlayer {
                 float burstSpeed = 10f;
 
                 if (completed) {
-                    Player.velocity = Player.position.DirectionTo(to) * burstSpeed / 2f + Vector2.UnitX.RotatedBy((!WormholeAdventureReversed ? starwayWormhole.LastAngle : starwayWormhole.FirstAngle) - MathHelper.Pi) * burstSpeed / 2f;
+                    Player.velocity = Player.position.DirectionTo(to) * burstSpeed / 2f + Vector2.UnitX.RotatedBy((!WormholeAdventureReversed ? starwayWormhole.LastAngle : starwayWormhole.FirstAngle) - MathHelper.Pi * (!WormholeAdventureReversed).ToInt()) * burstSpeed / 2f;
                 }
                 else {
                     Player.velocity = Player.position.DirectionTo(to) * burstSpeed;
                 }
 
+                WormholeAdventureReversed2 = false;
+
                 if (!StarwayWormholeICollidedWith.active || completed) {
-                    CollidedWithStarwayWormhole = false;
-                    Player.shimmering = false;
-                    WormholeCooldown = 10f;
+                    if (Collision.SolidCollision(Player.position, Player.width, Player.height)) {
+                        WormholeAdventureReversed2 = true;
+                        CollideWithStarwayWormhole(starwayWormhole, !WormholeAdventureReversed);
+                    }
+                    else {
+                        CollidedWithStarwayWormhole = false;
+                        Player.shimmering = false;
+                        WormholeCooldown = 10f;
+                    }
 
                     //Player.velocity = Player.position.DirectionTo(to) * burstSpeed;
 

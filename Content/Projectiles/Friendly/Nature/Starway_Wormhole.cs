@@ -437,6 +437,9 @@ sealed class StarwayWormhole : NatureProjectile {
         progress2 = Ease.QuartOut(progress2);
         float progress3 = Ease.QuintIn(Utils.GetLerpValue(1f, 1.1f, _lightPlayer.GetCommon().WormholeAdventureProgress, true));
         progress2 -= progress3;
+        if (_lightPlayer.GetCommon().WormholeAdventureReversed2) {
+            progress2 = 1f;
+        }
         return progress2;
     }
 
