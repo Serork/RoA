@@ -1326,7 +1326,7 @@ sealed partial class PlayerCommon : ModPlayer {
             }
             if (CollidedWithFungalMushroom) {
                 bool flag = FungalMushroomICollidedWith.ai[0] < 0f;
-                if (!FungalMushroomICollidedWith.active || flag) {
+                if (FungalMushroomICollidedWith is null || !FungalMushroomICollidedWith.active || flag) {
                     if (flag) {
                         Player.velocity.Y = -10f;
                     }
@@ -1341,7 +1341,7 @@ sealed partial class PlayerCommon : ModPlayer {
         }
         {
             if (CollidedWithCottonBoll) {
-                if (!CottonBollICollidedWith.active || CottonBollICollidedWith.ai[1] <= 0f || CottonBollICollidedWith.ai[2] >= 1f) {
+                if (CottonBollICollidedWith is null || !CottonBollICollidedWith.active || CottonBollICollidedWith.ai[1] <= 0f || CottonBollICollidedWith.ai[2] >= 1f) {
                     CollidedWithCottonBoll = false;
                     Player.shimmering = false;
                     Player.velocity.Y = -10f;
@@ -1429,7 +1429,7 @@ sealed partial class PlayerCommon : ModPlayer {
 
                 WormholeAdventureReversed2 = false;
 
-                if (!StarwayWormholeICollidedWith.active || completed) {
+                if (StarwayWormholeICollidedWith is null || !StarwayWormholeICollidedWith.active || completed) {
                     int size = 0;
                     if (!WormholeAdventureReversed3 && Collision.SolidCollision(Player.position - Vector2.One * size / 2f, Player.width + size, Player.height + size)) {
                         WormholeAdventureReversed2 = true;
