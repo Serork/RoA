@@ -1,13 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Mono.Cecil;
-
 using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Cache;
-using RoA.Content.NPCs.Enemies.Backwoods;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -20,9 +17,6 @@ using System.Collections.Generic;
 
 using Terraria;
 using Terraria.ModLoader;
-
-using static RoA.Content.Projectiles.Friendly.Nature.WardenHand;
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -59,7 +53,7 @@ sealed class StarwayWormhole : NatureProjectile {
     private record struct TentacleInfo(float Angle, float Length, float Progress = 0f);
     private record struct WormSegmentInfo(Vector2 Position, byte Frame, float Rotation, TentacleInfo[] TentacleData, bool Body = true, 
         bool Broken = false, float BrokenProgress = 0f, bool ShouldShake = false, float ShakeCooldown = 0f, float ShakeCooldown2 = 0f, float Opacity = 0f,
-        bool Destroyed = false);
+        bool Destroyed = false, float DestroyProgress = 0f);
 
     private WormSegmentInfo[] _wormData = null!;
     private GeometryUtils.BezierCurve _bezierCurve = null!;
@@ -333,6 +327,7 @@ sealed class StarwayWormhole : NatureProjectile {
                                 }
                             }
                         }
+                        wormSegmentInfo.DestroyProgress = Helper.Approach(wormSegmentInfo.DestroyProgress, 1f, 0.333f);
                         wormSegmentInfo.Destroyed = true;
                     }
                 }
@@ -446,9 +441,6 @@ sealed class StarwayWormhole : NatureProjectile {
         bool first = true;
         for (int i = 0; i < length; i++) {
             WormSegmentInfo wormSegmentInfo = _wormData[i];
-            if (wormSegmentInfo.Destroyed) {
-                continue;
-            }
             int frameX = (!wormSegmentInfo.Body).ToInt(),
                 frameY = wormSegmentInfo.Frame;
             if (wormSegmentInfo.BrokenProgress > 0f) {
@@ -465,7 +457,7 @@ sealed class StarwayWormhole : NatureProjectile {
             float opacity = wormSegmentInfo.Opacity;
             Color baseColor = Color.White;
             baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
-            float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true);
+            float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true) * (1f - wormSegmentInfo.DestroyProgress);
             baseColor *= mainOpacity;
             Color color = baseColor * Helper.Wave(0.5f + shakeIncrease * shakeProgress, 0.75f + shakeIncrease * shakeProgress, 5f, Projectile.identity);
             Rectangle clip = Utils.Frame(texture, 3, 3, frameX: frameX, frameY: frameY);
