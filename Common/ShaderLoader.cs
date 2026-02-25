@@ -26,6 +26,70 @@ using static Terraria.ModLoader.Core.TmodFile;
 namespace RoA.Common;
 
 sealed class ShaderLoader : ModSystem {
+    public static class WormholeTentacleShader {
+        private static float _waveTime = 0f;
+        private static float _waveAmplitude = 0f;
+        private static float _waveFrequency = 0f;
+        private static float _waveSpeed = 0f;
+
+        private static float _bendDirection = 0f;
+        private static float _bendStrength = 0f;
+        private static float _baseStability = 0f;
+        private static float _tipWiggle = 0f;
+
+        public static float WaveTime {
+            get => _waveTime;
+            set => Effect?.Parameters["waveTime"].SetValue(_waveTime = value);
+        }
+
+        public static float WaveAmplitude {
+            get => _waveAmplitude;
+            set => Effect?.Parameters["waveAmplitude"].SetValue(_waveAmplitude = value);
+        }
+
+        public static float WaveFrequency {
+            get => _waveFrequency;
+            set => Effect?.Parameters["waveFrequency"].SetValue(_waveFrequency = value);
+        }
+
+        public static float WaveSpeed {
+            get => _waveSpeed;
+            set => Effect?.Parameters["waveSpeed"].SetValue(_waveSpeed = value);
+        }
+
+        public static float BendDirection {
+            get => _bendDirection;
+            set => Effect?.Parameters["bendDirection"].SetValue(_bendDirection = value);
+        }
+
+        public static float BendStrength {
+            get => _bendStrength;
+            set => Effect?.Parameters["bendStrength"].SetValue(_bendStrength = value);
+        }
+
+        public static float BaseStability {
+            get => _baseStability;
+            set => Effect?.Parameters["baseStability"].SetValue(_baseStability = value);
+        }
+
+        public static float TipWiggle {
+            get => _tipWiggle;
+            set => Effect?.Parameters["tipWiggle"].SetValue(_tipWiggle = value);
+        }
+
+        public static Effect? Effect => _loadedShaders["WormholeTentacle"].Value;
+
+        public static void Apply(SpriteBatch batch, Action draw) {
+            SpriteBatchSnapshot snapshot = batch.CaptureSnapshot();
+            batch.End();
+            batch.Begin(SpriteSortMode.Immediate, snapshot.blendState, snapshot.samplerState, snapshot.depthStencilState, snapshot.rasterizerState, snapshot.effect, snapshot.transformationMatrix);
+            Effect?.CurrentTechnique.Passes[0].Apply();
+            draw();
+            batch.End();
+            batch.Begin(in snapshot);
+        }
+    }
+
     public static class PixellateShader {
         private static float _pixelDensity = 0f;
         private static Vector2 _bufferSize = new Vector2(320, 180);
@@ -328,6 +392,7 @@ sealed class ShaderLoader : ModSystem {
     public static Asset<Effect> FilamentThread => _loadedShaders["FilamentThread"];
     public static Asset<Effect> WavyCircle => _loadedShaders["WavyCircle"];
     public static Asset<Effect> Pixellate => _loadedShaders["Pixellate"];
+    public static Asset<Effect> WormholeTentacle => _loadedShaders["WormholeTentacle"];
 
     public static Asset<Effect> SimpleReflection => _loadedShaders["SimpleReflection"];
 
