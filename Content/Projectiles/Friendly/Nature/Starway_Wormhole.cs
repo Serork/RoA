@@ -337,7 +337,7 @@ sealed class StarwayWormhole : NatureProjectile {
                             }
                         }
                     }
-                    if (Main.rand.NextBool(75)) {
+                    if (Main.rand.NextBool(50)) {
                         Dust dust = Dust.NewDustPerfect(wormSegmentInfo.Position + Main.rand.RandomPointInArea(40f), ModContent.DustType<FilamentDust>());
                         dust.scale = 2.7f * 0.625f;
                         dust.noGravity = true;
