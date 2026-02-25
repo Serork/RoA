@@ -331,10 +331,10 @@ sealed class StarwayWormhole : NatureProjectile {
                     }
                 }
                 Lighting.AddLight(wormSegmentInfo.Position, lightColor);
-                if (i != length - 1 && previousSegmentData.Opacity < 0.375f) {
+                if (i != length - 1 && previousSegmentData.Opacity < 0.2f) {
                     continue;
                 }
-                currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, 1f, 0.1f);
+                currentSegmentData.Opacity = Helper.Approach(currentSegmentData.Opacity, 1f, 0.05f);
             }
             float allDeathProgress = 0f;
             for (int i = 0; i < length; i++) {
