@@ -126,6 +126,9 @@ sealed class StarwayWormhole : NatureProjectile {
         }
     }
 
+    public override bool? CanDamage() => false;
+    public override bool? CanCutTiles() => false;
+
     public override void AI() {
         Projectile.timeLeft = 2;
 
