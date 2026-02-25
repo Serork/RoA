@@ -92,6 +92,7 @@ sealed class BiedermeierFlower : NatureProjectile_NoTextureLoad, IRequestAssets 
         Projectile.SetSizeValues(10);
 
         Projectile.friendly = true;
+        Projectile.tileCollide = false;
     }
 
     public override bool? CanDamage() => false;
