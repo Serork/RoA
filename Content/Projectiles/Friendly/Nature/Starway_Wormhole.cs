@@ -388,7 +388,7 @@ sealed class StarwayWormhole : NatureProjectile {
                     wormSegmentInfo.BrokenProgress = Helper.Approach(wormSegmentInfo.BrokenProgress, to, 0.015f);
                     if (((wormSegmentInfo.BrokenProgress > 0.05f && wormSegmentInfo.BrokenProgress < 0.25f) || wormSegmentInfo.BrokenProgress >= 1.8f) && wormSegmentInfo.BrokenProgress < to && !wormSegmentInfo.ShouldShake && wormSegmentInfo.ShakeCooldown <= 0f) {
                         if (!wormSegmentInfo.ShouldShake && wormSegmentInfo.Body && wormSegmentInfo.BrokenProgress < 0.1f) {
-                            for (int num491 = 0; num491 < 10; num491++) {
+                            for (int num491 = 0; num491 < 7; num491++) {
                                 int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f);
                                 Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f)
                                     + Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation) * 35f;
@@ -398,7 +398,7 @@ sealed class StarwayWormhole : NatureProjectile {
                                 dust2 = Main.dust[num492];
                                 dust2.velocity += Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation) * Main.rand.NextFloat(2.5f, 5f);
                             }
-                            for (int num491 = 0; num491 < 10; num491++) {
+                            for (int num491 = 0; num491 < 7; num491++) {
                                 int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f);
                                 Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f) +
                                     Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation - MathHelper.Pi) * 35f;
@@ -418,7 +418,7 @@ sealed class StarwayWormhole : NatureProjectile {
                             for (int num491 = 0; num491 < 1; num491++) {
                                 int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 0.75f);
                                 Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f)
-                                    + Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation) * 30f;
+                                    + Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation) * 35f;
                                 Main.dust[num492].noGravity = true;
                                 Dust dust2 = Main.dust[num492];
                                 dust2.velocity *= 1.2f;
@@ -428,7 +428,7 @@ sealed class StarwayWormhole : NatureProjectile {
                             for (int num491 = 0; num491 < 1; num491++) {
                                 int num492 = Dust.NewDust(wormSegmentInfo.Position, 6, 6, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.7f * 0.75f);
                                 Main.dust[num492].position = wormSegmentInfo.Position + Main.rand.RandomPointInArea(14f) +
-                                    Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation - MathHelper.Pi) * 30f;
+                                    Vector2.UnitY.RotatedBy(wormSegmentInfo.Rotation - MathHelper.Pi) * 35f;
                                 Main.dust[num492].noGravity = true;
                                 Dust dust2 = Main.dust[num492];
                                 dust2.velocity *= 1.2f;
@@ -445,7 +445,7 @@ sealed class StarwayWormhole : NatureProjectile {
                         if (!wormSegmentInfo.Destroyed) {
                             int count = 10;
                             for (int k = 0; k < count; k++) {
-                                if (Main.rand.NextBool()) {
+                                if (Main.rand.NextBool(3)) {
                                     continue;
                                 }
                                 Dust dust = Dust.NewDustPerfect(wormSegmentInfo.Position + Main.rand.RandomPointInArea(40f), ModContent.DustType<FilamentDust>());
