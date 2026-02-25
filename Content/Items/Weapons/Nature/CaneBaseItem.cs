@@ -272,7 +272,7 @@ abstract class CaneBaseProjectile : NatureProjectile_NoTextureLoad {
     protected virtual void Initialize() { }
 
     public sealed override void AI() {
-        if (AttachedNatureWeapon.IsEmpty()) {
+        if (AttachedNatureWeapon.IsEmpty() || !Owner.IsAliveAndFree()) {
             Projectile.Kill();
             return;
         }
