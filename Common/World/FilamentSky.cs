@@ -20,17 +20,17 @@ using Terraria.Utilities;
 
 namespace RoA.Common.World;
 
-sealed class TargetLoader : ILoadable {
+sealed class FilamentSkyRenderTargetLoader : ILoadable {
     public static ushort PADDING => 200;
     public static float PADDINGMODIFIER => 1f;
 
-    public static RenderTarget2D BeamRenderTarget = null!;
+    public static RenderTarget2D RenderTarget = null!;
 
     void ILoadable.Load(Mod mod) {
         using var eventSlim = new ManualResetEventSlim();
 
         Main.QueueMainThreadAction(() => {
-            BeamRenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)(Main.screenWidth * PADDINGMODIFIER) + PADDING * 2, (int)(Main.screenHeight * PADDINGMODIFIER) + PADDING * 2);
+            RenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, (int)(Main.screenWidth * PADDINGMODIFIER) + PADDING * 2, (int)(Main.screenHeight * PADDINGMODIFIER) + PADDING * 2);
 
             eventSlim.Set();
         });
@@ -45,24 +45,24 @@ sealed class TargetLoader : ILoadable {
 
         var parameters = gd.PresentationParameters;
 
-        BeamRenderTarget?.Dispose();
-        BeamRenderTarget = new RenderTarget2D(gd, (int)(parameters.BackBufferWidth * PADDINGMODIFIER) + PADDING * 2, (int)(parameters.BackBufferHeight * PADDINGMODIFIER) + PADDING * 2);
+        RenderTarget?.Dispose();
+        RenderTarget = new RenderTarget2D(gd, (int)(parameters.BackBufferWidth * PADDINGMODIFIER) + PADDING * 2, (int)(parameters.BackBufferHeight * PADDINGMODIFIER) + PADDING * 2);
     }
 
     void ILoadable.Unload() {
         Main.graphics.GraphicsDevice.DeviceReset -= OnDeviceReset!;
 
-        if (BeamRenderTarget is not null) {
+        if (RenderTarget is not null) {
             using var eventSlim = new ManualResetEventSlim();
 
             Main.QueueMainThreadAction(() => {
-                BeamRenderTarget.Dispose();
+                RenderTarget.Dispose();
                 eventSlim.Set();
             });
 
             eventSlim.Wait();
 
-            BeamRenderTarget = null!;
+            RenderTarget = null!;
         }
     }
 }
@@ -168,7 +168,7 @@ sealed class FilamentSky : CustomSky {
         sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
         sb.End();
 
-        graphicsDevice.SetRenderTarget(TargetLoader.BeamRenderTarget);
+        graphicsDevice.SetRenderTarget(FilamentSkyRenderTargetLoader.RenderTarget);
         graphicsDevice.Clear(Color.Transparent);
         sb.Begin(snapshot);
 
@@ -187,12 +187,12 @@ sealed class FilamentSky : CustomSky {
         float wavePhase = 0f;
         float waveAmplitude = 0.1f;
         float waveFrequency = 1f;
-        Vector2 renderTargetOffset = new Vector2(-TargetLoader.PADDING, -TargetLoader.PADDING);
+        Vector2 renderTargetOffset = new Vector2(-FilamentSkyRenderTargetLoader.PADDING, -FilamentSkyRenderTargetLoader.PADDING);
         ShaderLoader.FilamentThreadShader.WaveFrequency = waveFrequency;
         ShaderLoader.FilamentThreadShader.WavePhase = wavePhase;
         ShaderLoader.FilamentThreadShader.WaveAmplitude = waveAmplitude;
         ShaderLoader.FilamentThreadShader.Apply(sb, () => {
-            sb.Draw(TargetLoader.BeamRenderTarget, renderTargetOffset, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+            sb.Draw(FilamentSkyRenderTargetLoader.RenderTarget, renderTargetOffset, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
         });
         sb.End();
 

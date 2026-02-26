@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -56,16 +57,22 @@ sealed class StarwayDust : ModDust {
     }
 
     public override bool PreDraw(Dust dust) {
-        float opacity = 1f;
+        float opacity2 = 1f - dust.alpha / 255f;
+        float disappearOpacity = 1f;
+        float opacity = MathF.Min(opacity2, disappearOpacity);
         Color baseColor = Color.White;
-        baseColor = baseColor.MultiplyAlpha(0.75f);
-        baseColor *= opacity;
+        baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
+        float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true);
+        mainOpacity *= Ease.CubeIn(disappearOpacity);
+        baseColor *= mainOpacity;
         Color color = baseColor * Helper.Wave(0.5f, 0.75f, 5f, 0f);
+
         float scale = dust.GetVisualScale();
         Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color, dust.GetVisualRotation(), new Vector2(4f, 4f), scale, SpriteEffects.None, 0f);
         float num184 = Helper.Wave(2f, 6f, 1f, 0f);
         for (int num185 = 0; num185 < 4; num185++) {
-            Main.spriteBatch.Draw(Texture2D.Value, Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184 + dust.position - Main.screenPosition, dust.frame, new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * opacity, dust.GetVisualRotation(), new Vector2(4f, 4f), scale, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(Texture2D.Value, Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184 + dust.position - Main.screenPosition, dust.frame,
+                new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity, dust.GetVisualRotation(), new Vector2(4f, 4f), scale, SpriteEffects.None, 0f);
         }
 
         return false;

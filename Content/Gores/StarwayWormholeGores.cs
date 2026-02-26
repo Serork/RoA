@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common.Gores;
 using RoA.Content.NPCs.Enemies.Backwoods;
+using RoA.Core;
 using RoA.Core.Utility;
 
 using System;
@@ -31,18 +32,23 @@ class StarwayWormholeGore1 : ModGore, ICustomGoreDraw {
     }
 
     void ICustomGoreDraw.Draw(SpriteBatch spriteBatch, Gore gore) {
-        float opacity = 1f - gore.alpha / 255f;
+        float opacity2 = gore.timeLeft < Gore.goreTime - 30 ? 1f : (1f - gore.alpha / 255f);
+        float disappearOpacity = 1f;
+        float opacity = MathF.Min(opacity2, disappearOpacity);
         Color baseColor = Color.White;
-        baseColor = baseColor.MultiplyAlpha(0.75f);
-        baseColor *= opacity;
+        baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
+        float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true) * Utils.GetLerpValue(Gore.goreTime - 120, Gore.goreTime - 60, gore.timeLeft, true);
+        mainOpacity *= Ease.CubeIn(disappearOpacity);
+        baseColor *= mainOpacity;
         Color color = baseColor * Helper.Wave(0.5f, 0.75f, 5f, 0f);
+
         spriteBatch.Draw(TextureAssets.Gore[gore.type].Value, new Vector2(gore.position.X - Main.screenPosition.X + (float)(TextureAssets.Gore[gore.type].Width() / 2), gore.position.Y - Main.screenPosition.Y + (float)(TextureAssets.Gore[gore.type].Height() / 2)) + gore.drawOffset, new Microsoft.Xna.Framework.Rectangle(0, 0, TextureAssets.Gore[gore.type].Width(), TextureAssets.Gore[gore.type].Height()),
             color, gore.rotation, new Vector2(TextureAssets.Gore[gore.type].Width() / 2, TextureAssets.Gore[gore.type].Height() / 2), gore.scale, SpriteEffects.None, 0f);
 
         float num184 = Helper.Wave(2f, 6f, 1f, 0f);
         for (int num185 = 0; num185 < 4; num185++) {
             spriteBatch.Draw(TextureAssets.Gore[gore.type].Value, Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184 + new Vector2(gore.position.X - Main.screenPosition.X + (float)(TextureAssets.Gore[gore.type].Width() / 2), gore.position.Y - Main.screenPosition.Y + (float)(TextureAssets.Gore[gore.type].Height() / 2)) + gore.drawOffset, new Microsoft.Xna.Framework.Rectangle(0, 0, TextureAssets.Gore[gore.type].Width(), TextureAssets.Gore[gore.type].Height()),
-                new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * opacity,
+                new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity,
                 gore.rotation, new Vector2(TextureAssets.Gore[gore.type].Width() / 2, TextureAssets.Gore[gore.type].Height() / 2), gore.scale, SpriteEffects.None, 0f);
         }
     }

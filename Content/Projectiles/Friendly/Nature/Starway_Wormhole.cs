@@ -21,23 +21,23 @@ using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
-sealed class TargetLoader : ILoadable {
-    public static RenderTarget2D LowResTarget = null!;
+sealed class WormholeLightsRenderTargetLoader : ILoadable {
+    public static RenderTarget2D RenderTarget = null!;
 
     void ILoadable.Load(Mod mod) {
         Main.QueueMainThreadAction(() => {
-            LowResTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 840, 525, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+            RenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 840, 525, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
         });
 
     }
 
     void ILoadable.Unload() {
-        if (LowResTarget is not null) {
+        if (RenderTarget is not null) {
             Main.QueueMainThreadAction(() => {
-                LowResTarget.Dispose();
+                RenderTarget.Dispose();
             });
 
-            LowResTarget = null!;
+            RenderTarget = null!;
         }
     }
 }
@@ -344,7 +344,7 @@ sealed class StarwayWormhole : NatureProjectile {
                 ref WormSegmentInfo wormSegmentInfo = ref _wormData[i];
                 allDeathProgress += wormSegmentInfo.DestroyProgress;
 
-                if (wormSegmentInfo.Opacity >= 0.5f) {
+                if (wormSegmentInfo.Opacity >= 0.5f && Projectile.timeLeft > 30) {
                     float angle = 0f;
                     if (i == 0) {
                         angle = MathHelper.Pi;
@@ -587,11 +587,11 @@ sealed class StarwayWormhole : NatureProjectile {
             sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
             sb.End();
 
-            graphicsDevice.SetRenderTarget(TargetLoader.LowResTarget);
+            graphicsDevice.SetRenderTarget(WormholeLightsRenderTargetLoader.RenderTarget);
             graphicsDevice.Clear(Color.Transparent);
 
-            float scaleX = (float)TargetLoader.LowResTarget.Width / Main.screenWidth;
-            float scaleY = (float)TargetLoader.LowResTarget.Height / Main.screenHeight;
+            float scaleX = (float)WormholeLightsRenderTargetLoader.RenderTarget.Width / Main.screenWidth;
+            float scaleY = (float)WormholeLightsRenderTargetLoader.RenderTarget.Height / Main.screenHeight;
             Matrix scaleMatrix = Matrix.CreateScale(scaleX, scaleY, 1f);
             sb.Begin(SpriteSortMode.Deferred,
                      BlendState.AlphaBlend,
@@ -611,7 +611,7 @@ sealed class StarwayWormhole : NatureProjectile {
             sb.End();
 
             sb.Begin(snapshot with { samplerState = SamplerState.PointClamp });
-            sb.Draw(TargetLoader.LowResTarget,
+            sb.Draw(WormholeLightsRenderTargetLoader.RenderTarget,
                     new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
                     Color.White);
             sb.End();
@@ -719,12 +719,10 @@ sealed class StarwayWormhole : NatureProjectile {
                         ShaderLoader.WormholeTentacleShader.WaveAmplitude = 0.75f * progress * mainOpacity;
                         ShaderLoader.WormholeTentacleShader.WaveFrequency = 2.5f;
                         ShaderLoader.WormholeTentacleShader.WaveSpeed = 1f;
-
                         ShaderLoader.WormholeTentacleShader.BendDirection = 0f;
                         ShaderLoader.WormholeTentacleShader.BendStrength = 1f;
                         ShaderLoader.WormholeTentacleShader.BaseStability = 0f;
                         ShaderLoader.WormholeTentacleShader.TipWiggle = 0f;
-
                         ShaderLoader.WormholeTentacleShader.Apply(batch, () => {
                             float startOffset = 37.5f * -2f;
                             Vector2 from = Vector2.UnitY.RotatedBy(rotation + tentacleInfo.Angle) * (startOffset + tentacleInfo.Length * 0.55f);
@@ -767,10 +765,6 @@ sealed class StarwayWormhole : NatureProjectile {
 
     private void DrawLights(SpriteBatch batch) {
         float progress2 = GetLightOpacity();
-        //ShaderLoader.PixellateShader.BufferSize = new Vector2(320, 180);
-        //ShaderLoader.PixellateShader.ScreenSize = new Vector2(640, 320);
-        //ShaderLoader.PixellateShader.PixelDensity = 16f;
-        //ShaderLoader.PixellateShader.Apply(batch, () => {
         for (int i = 0; i < _playerLightData.Length; i++) {
             PlayerLightInfo playerLightInfo = _playerLightData[i];
             int length2 = playerLightInfo.Positions.Length;
@@ -809,8 +803,6 @@ sealed class StarwayWormhole : NatureProjectile {
                 lerpValue = Helper.Approach(lerpValue, 0.15f, 0.025f);
             }
         }
-        //});
-        //ShaderLoader.PixellateShader.Apply(batch, () => {
         for (int i = 0; i < _playerLightData.Length; i++) {
             PlayerLightInfo playerLightInfo = _playerLightData[i];
             Vector2 position = playerLightInfo.Positions[0];
