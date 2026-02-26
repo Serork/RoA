@@ -3053,3 +3053,8 @@ ChlorophyteCowl: {
 	// DisplayName: Chlorophyte Cowl
 	// Tooltip: ""
 }
+
+FilamentYarn: {
+	// DisplayName: Filament Yarn
+	// Tooltip: ""
+}

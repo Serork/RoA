@@ -44,7 +44,8 @@ static partial class ItemDefaults {
         }
     }
 
-    public static void SetUsableValues(this Item item, int vanillaUseStyleID, int timeToUse, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) => item.SetDefaultsToUsable(vanillaUseStyleID, timeToUse, timeToUse, showItemOnUse, useTurn, autoReuse, useSound);
+    public static void SetUsableValues(this Item item, int vanillaUseStyleID, int timeToUse, bool showItemOnUse = true, bool useTurn = false, bool autoReuse = false, SoundStyle? useSound = null) 
+        => item.SetDefaultsToUsable(vanillaUseStyleID, timeToUse, timeToUse, showItemOnUse, useTurn, autoReuse, useSound);
 
     public static void SetOtherValues(this Item item, int value, int rare = ItemRarityID.White) {
         item.value = value;

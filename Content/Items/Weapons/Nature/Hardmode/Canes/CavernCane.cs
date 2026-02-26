@@ -114,6 +114,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
             float visualProgress = GetCubicBezierEaseInForCavernCaneVisuals(AttackProgress01, 1f);
             float visualProgress2 = 1f - MathF.Min(0.8f, AttackProgress01);
             float dustRotationSpeed = 8f - 3f * visualProgress;
+            dustRotationSpeed *= player.direction;
             if (step > 0.025f) {
                 byte circleCount = 2;
                 _gemColor ??= new Color[circleCount];
@@ -125,7 +126,6 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                         Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
                         float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
                         dustAngle += MathHelper.Pi * k;
-                        dustAngle *= player.direction;
                         Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
                         Func<float, float> func = k % 2 == 0 ? MathF.Sin : MathF.Cos;
                         dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi) * 0.5f;
