@@ -94,7 +94,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
             if (Main.rand.NextChance(AfterReleaseProgress01)) {
                 Vector2 mousePosition = Owner.GetViableMousePosition();
                 Owner.SyncMousePosition();
-                if (Main.rand.NextBool(3)) {
+                if (Main.rand.NextChance(MathHelper.Lerp(0.25f, 0.333f, 0.5f))) {
                     for (int i = 0; i < 1; i++) {
                         int type = ModContent.DustType<StarwayDust>();
                         Vector2 position = CorePosition;
