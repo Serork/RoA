@@ -43,14 +43,16 @@ sealed class FilamentYarn : NatureItem {
 
     public sealed class FilamentYarn_Use : ModProjectile {
         private static float MAXLENGTH => 200f;
+        private static ushort LINECOUNT => 5;
 
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<FilamentYarn>()).Texture;
 
         private (Vector2, Vector2?)[] _connectPoints = null!;
+        private Vector2 _mousePosition;
 
         public ref float InitValue => ref Projectile.localAI[0];
         public ref float Cooldown => ref Projectile.ai[1];
-        public ref float CurrentLength => ref Projectile.ai[2];
+        public ref float CurrentLength => ref Projectile.ai[0];
 
         public bool Init {
             get => InitValue != 0f;
@@ -79,16 +81,21 @@ sealed class FilamentYarn : NatureItem {
         private void DrawConnectedLines() {
             SpriteBatch batch = Main.spriteBatch;
             Player owner = Projectile.GetOwnerAsPlayer();
+            int index = 0;
             foreach ((Vector2, Vector2?) connectedPoints in _connectPoints) {
+                index++;
+                if (index > LINECOUNT + 1) {
+                    continue;
+                }
                 Vector2 from = connectedPoints.Item1;
                 if (from == Vector2.Zero) {
                     continue;
                 }
-                Vector2 to = connectedPoints.Item2 ?? owner.GetViableMousePosition();
+                Vector2 to = connectedPoints.Item2 ?? _mousePosition;
                 float distance = from.Distance(to);
                 float length = MAXLENGTH;
                 float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
-                float sineX = TimeSystem.TimeForVisualEffects * 5f,
+                float sineX = TimeSystem.TimeForVisualEffects * 0f,
                       sineY = TimeSystem.TimeForVisualEffects * 0f;
                 SimpleCurve curve = new(from, to, Vector2.Zero);
                 curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 20f;
@@ -103,23 +110,46 @@ sealed class FilamentYarn : NatureItem {
         }
 
         private void AddPoint(Vector2 position) {
-            Array.Resize(ref _connectPoints, _connectPoints.Length + 1);
             ref float currentIndex = ref Projectile.ai[2];
+            if (_connectPoints.Length < LINECOUNT + 2) {
+                Array.Resize(ref _connectPoints, _connectPoints.Length + 1);
+            }
+            if (currentIndex > LINECOUNT) {
+                return;
+            }
             _connectPoints[(int)currentIndex].Item2 = position;
             _connectPoints[(int)(++currentIndex)] = (position, null);
         }
 
         public override void AI() {
             Player player4 = Projectile.GetOwnerAsPlayer();
+
+            if (player4.IsLocal()) {
+                Vector2 mousePosition = player4.GetViableMousePosition();
+                _mousePosition = Vector2.Lerp(_mousePosition, mousePosition, 0.25f);
+                if (Init) {
+                    if (Projectile.ai[2] > 0) {
+                        Vector2 last = _connectPoints[(int)Projectile.ai[2] - 1].Item2!.Value;
+                        if (_mousePosition.Distance(last) > MAXLENGTH) {
+                            _mousePosition = last + last.DirectionTo(mousePosition) * MAXLENGTH;
+                        }
+                    }
+                }
+            }
+
             if (!Init) {
                 Init = true;
 
+                if (player4.IsLocal()) {
+                    _mousePosition = Vector2.Lerp(_mousePosition, player4.GetViableMousePosition(), 1f);
+                }
+
                 _connectPoints = new (Vector2, Vector2?)[1];
-                AddPoint(player4.GetViableMousePosition());
+                AddPoint(_mousePosition);
             }
             else {
                 void addPoint() {
-                    AddPoint(player4.GetViableMousePosition());
+                    AddPoint(_mousePosition);
                 }
                 if (Main.mouseLeft && Main.mouseLeftRelease) {
                     addPoint();
@@ -131,12 +161,12 @@ sealed class FilamentYarn : NatureItem {
                             continue;
                         }
                         Vector2 from = connectedPoints.Item1;
-                        Vector2 to = player4.GetViableMousePosition();
+                        Vector2 to = _mousePosition;
                         float distance = from.Distance(to);
                         float length = MAXLENGTH;
-                        if (distance >= length) {
+                        CurrentLength = distance;
+                        if (CurrentLength >= length) {
                             addPoint();
-                            Cooldown = 30f;
                             break;
                         }
                     }
