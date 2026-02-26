@@ -177,7 +177,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
             float dustSpawnPositionOffsetFactor = 40f * -player.direction * Ease.CubeOut(1f - AttackProgress01);
             float visualProgress = AttackProgress01;
             float visualProgress2 = 1f - MathF.Min(0.5f, AttackProgress01);
-            float dustRotationSpeed = 3f;
+            float dustRotationSpeed = 3f * -player.direction;
             if (step > 0.025f) {
                 byte circleCount = 2;
                 int value = 4;
@@ -188,6 +188,9 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
                         float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
                         dustAngle += MathHelper.Pi * k;
+                        if (player.direction > 0) {
+                            dustAngle *= -player.direction;
+                        }
                         Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
                         Func<float, float> func = k % 2 == 0 ? MathF.Sin : MathF.Cos;
                         dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi) * 0.5f;
@@ -216,7 +219,9 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
                         float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
                         dustAngle += MathHelper.Pi * k;
-                        dustAngle *= player.direction;
+                        if (player.direction < 0) {
+                            dustAngle *= player.direction;
+                        }
                         Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
                         Func<float, float> func = k % 2 == 0 ? MathF.Sin : MathF.Cos;
                         dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi) * 1f;
