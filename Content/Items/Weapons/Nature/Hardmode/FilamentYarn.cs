@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using Newtonsoft.Json.Linq;
 
+using RoA.Common;
 using RoA.Common.Druid;
 using RoA.Common.GlowMasks;
 using RoA.Content.Items.Weapons.Magic.Hardmode;
@@ -49,6 +50,7 @@ sealed class FilamentYarn : NatureItem {
 
         public ref float InitValue => ref Projectile.localAI[0];
         public ref float Cooldown => ref Projectile.ai[1];
+        public ref float CurrentLength => ref Projectile.ai[2];
 
         public bool Init {
             get => InitValue != 0f;
@@ -83,13 +85,13 @@ sealed class FilamentYarn : NatureItem {
                     continue;
                 }
                 Vector2 to = connectedPoints.Item2 ?? owner.GetViableMousePosition();
-                float sineX = 0f,
-                      sineY = 0f;
-                SimpleCurve curve = new(from, to, Vector2.Zero);
                 float distance = from.Distance(to);
                 float length = MAXLENGTH;
                 float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
-                curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 8f;
+                float sineX = TimeSystem.TimeForVisualEffects * 5f,
+                      sineY = TimeSystem.TimeForVisualEffects * 0f;
+                SimpleCurve curve = new(from, to, Vector2.Zero);
+                curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 20f;
                 Vector2 start = curve.Begin;
                 int count = 16;
                 for (int i = 1; i <= count; i++) {
