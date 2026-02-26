@@ -27,7 +27,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
     protected override void SafeSetDefaults() {
         Item.SetSizeValues(42, 46);
         Item.SetWeaponValues(200, 4f);
-        Item.SetUsableValues(ItemUseStyleID.None, 30, useSound: SoundID.Item7);
+        Item.SetUsableValues(ItemUseStyleID.None, 45, useSound: SoundID.Item7);
         Item.SetShopValues(ItemRarityColor.StrongRed10, Item.sellPrice());
 
         NatureWeaponHandler.SetPotentialDamage(Item, 400);
@@ -80,7 +80,10 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                 }
                 Vector2 position = CorePosition;
                 wormInfo.Rotations[0] = wormInfo.Positions[0].AngleTo(position);
-                float speed = 10f;
+                float attackProgress = MathUtils.Clamp01(UseTime / 120f);
+                attackProgress = 1f - attackProgress;
+                attackProgress += 0.5f;
+                float speed = attackProgress * 9f;
                 wormInfo.Positions[0] += Vector2.UnitY.RotatedBy(TimeSystem.TimeForVisualEffects * 10f * Owner.direction) * speed;
                 wormInfo.Positions[0] += wormInfo.Positions[0].DirectionTo(position) * speed;
             }
@@ -106,7 +109,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         frame = 3;
                     }
 
-                    float disappearOpacity = 1f;
+                    float disappearOpacity = Utils.GetLerpValue(0f, 0.5f, AfterReleaseProgress01, true);
                     float opacity = MathF.Min(Utils.GetLerpValue(0f, 1f, AttackProgress01, true), disappearOpacity);
                     Color baseColor = Color.White;
                     baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
