@@ -173,7 +173,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
         private static float GetCubicBezierEaseInForCavernCaneVisuals(float t, float control) => 3f * control * t * t * (1f - t) + t * t * t;
 
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
-            float dustSpawnPositionOffsetFactor = 40f * Ease.CubeOut(1f - AttackProgress01);
+            float dustSpawnPositionOffsetFactor = 40f * -player.direction * Ease.CubeOut(1f - AttackProgress01);
             float visualProgress = AttackProgress01;
             float visualProgress2 = 1f - MathF.Min(0.5f, AttackProgress01);
             float dustRotationSpeed = 3f;

@@ -110,7 +110,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                 return;
             }
 
-            float dustSpawnPositionOffsetFactor = 20f;
+            float dustSpawnPositionOffsetFactor = 20f * -player.direction;
             float visualProgress = GetCubicBezierEaseInForCavernCaneVisuals(AttackProgress01, 1f);
             float visualProgress2 = 1f - MathF.Min(0.8f, AttackProgress01);
             float dustRotationSpeed = 8f - 3f * visualProgress;
