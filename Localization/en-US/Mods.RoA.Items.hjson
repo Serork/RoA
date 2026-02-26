@@ -3027,3 +3027,8 @@ Starway: {
 	DisplayName: Starway
 	Tooltip: "'I placed my faith into the hands of random gods. Now I must endure it to the end'"
 }
+
+ChlorophyteCowl: {
+	DisplayName: Chlorophyte Cowl
+	Tooltip: ""
+}
