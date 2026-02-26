@@ -1,15 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Newtonsoft.Json.Linq;
+
 using RoA.Common.Druid;
 using RoA.Common.GlowMasks;
 using RoA.Content.Items.Weapons.Magic.Hardmode;
+using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System;
+using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Enums;
@@ -37,7 +41,19 @@ sealed class FilamentYarn : NatureItem {
     }
 
     public sealed class FilamentYarn_Use : ModProjectile {
+        private static float MAXLENGTH => 200f;
+
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<FilamentYarn>()).Texture;
+
+        private (Vector2, Vector2?)[] _connectPoints = null!;
+
+        public ref float InitValue => ref Projectile.localAI[0];
+        public ref float Cooldown => ref Projectile.ai[1];
+
+        public bool Init {
+            get => InitValue != 0f;
+            set => InitValue = value.ToInt();
+        }
 
         public override bool? CanDamage() => true;
         public override bool? CanCutTiles() => false;
@@ -58,8 +74,76 @@ sealed class FilamentYarn : NatureItem {
             //Projectile.hide = true;
         }
 
+        private void DrawConnectedLines() {
+            SpriteBatch batch = Main.spriteBatch;
+            Player owner = Projectile.GetOwnerAsPlayer();
+            foreach ((Vector2, Vector2?) connectedPoints in _connectPoints) {
+                Vector2 from = connectedPoints.Item1;
+                if (from == Vector2.Zero) {
+                    continue;
+                }
+                Vector2 to = connectedPoints.Item2 ?? owner.GetViableMousePosition();
+                float sineX = 0f,
+                      sineY = 0f;
+                SimpleCurve curve = new(from, to, Vector2.Zero);
+                float distance = from.Distance(to);
+                float length = MAXLENGTH;
+                float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
+                curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 8f;
+                Vector2 start = curve.Begin;
+                int count = 16;
+                for (int i = 1; i <= count; i++) {
+                    Vector2 point = curve.GetPoint(i / (float)count);
+                    batch.Line(start, point, Color.White);
+                    start = point;
+                }
+            }
+        }
+
+        private void AddPoint(Vector2 position) {
+            Array.Resize(ref _connectPoints, _connectPoints.Length + 1);
+            ref float currentIndex = ref Projectile.ai[2];
+            _connectPoints[(int)currentIndex].Item2 = position;
+            _connectPoints[(int)(++currentIndex)] = (position, null);
+        }
+
         public override void AI() {
             Player player4 = Projectile.GetOwnerAsPlayer();
+            if (!Init) {
+                Init = true;
+
+                _connectPoints = new (Vector2, Vector2?)[1];
+                AddPoint(player4.GetViableMousePosition());
+            }
+            else {
+                void addPoint() {
+                    AddPoint(player4.GetViableMousePosition());
+                }
+                if (Main.mouseLeft && Main.mouseLeftRelease) {
+                    addPoint();
+                }
+
+                if (Cooldown <= 0f) {
+                    foreach ((Vector2, Vector2?) connectedPoints in _connectPoints) {
+                        if (connectedPoints.Item2 is not null) {
+                            continue;
+                        }
+                        Vector2 from = connectedPoints.Item1;
+                        Vector2 to = player4.GetViableMousePosition();
+                        float distance = from.Distance(to);
+                        float length = MAXLENGTH;
+                        if (distance >= length) {
+                            addPoint();
+                            Cooldown = 30f;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    Cooldown = Helper.Approach(Cooldown, 0f, 1f);
+                }
+            }
+
             if (player4.noItems || !player4.IsAliveAndFree()) {
                 Projectile.Kill();
             }
@@ -71,32 +155,27 @@ sealed class FilamentYarn : NatureItem {
             float scale = Projectile.scale;
             Vector2 vector21 = Main.player[owner].GetPlayerCorePoint();
             if (Main.myPlayer == owner) {
-                if (Main.player[owner].channel) {
-                    float num = (float)Math.PI / 2f;
-                    Vector2 vector = vector21;
-                    int num2 = 2;
-                    float num3 = 0f;
-                    float num8 = 1f * Projectile.scale;
-                    Vector2 vector3 = vector;
-                    Vector2 value = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY) - vector3;
-                    if (player.gravDir == -1f)
-                        value.Y = (float)(Main.screenHeight - Main.mouseY) + Main.screenPosition.Y - vector3.Y;
+                float num = (float)Math.PI / 2f;
+                Vector2 vector = vector21;
+                int num2 = 2;
+                float num3 = 0f;
+                float num8 = 1f * Projectile.scale;
+                Vector2 vector3 = vector;
+                Vector2 value = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY) - vector3;
+                if (player.gravDir == -1f)
+                    value.Y = (float)(Main.screenHeight - Main.mouseY) + Main.screenPosition.Y - vector3.Y;
 
 
-                    Vector2 vector4 = Vector2.Normalize(value);
-                    if (float.IsNaN(vector4.X) || float.IsNaN(vector4.Y))
-                        vector4 = -Vector2.UnitY;
+                Vector2 vector4 = Vector2.Normalize(value);
+                if (float.IsNaN(vector4.X) || float.IsNaN(vector4.Y))
+                    vector4 = -Vector2.UnitY;
 
-                    vector4 = Vector2.Normalize(Vector2.Lerp(vector4, Vector2.Normalize(Projectile.velocity), 0f));
-                    vector4 *= num8;
-                    if (vector4.X != Projectile.velocity.X || vector4.Y != Projectile.velocity.Y)
-                        Projectile.netUpdate = true;
+                vector4 = Vector2.Normalize(Vector2.Lerp(vector4, Vector2.Normalize(Projectile.velocity), 0f));
+                vector4 *= num8;
+                if (vector4.X != Projectile.velocity.X || vector4.Y != Projectile.velocity.Y)
+                    Projectile.netUpdate = true;
 
-                    Projectile.velocity = vector4;
-                }
-                else {
-                    Projectile.Kill();
-                }
+                Projectile.velocity = vector4;
             }
 
             if (velocity.X > 0f)
@@ -151,6 +230,8 @@ sealed class FilamentYarn : NatureItem {
             }
 
             Main.EntitySpriteDraw(texture, pos, null, Projectile.GetAlpha(lightColor), rotation, origin, Projectile.scale, effects);
+
+            DrawConnectedLines();
 
             return false;
         }
