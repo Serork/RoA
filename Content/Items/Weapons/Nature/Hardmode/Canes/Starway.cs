@@ -15,6 +15,7 @@ using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Extensions;
 
 using System;
 using System.Collections.Generic;
@@ -94,7 +95,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
             if (Main.rand.NextChance(AfterReleaseProgress01)) {
                 Vector2 mousePosition = Owner.GetViableMousePosition();
                 Owner.SyncMousePosition();
-                if (Main.rand.NextChance(MathHelper.Lerp(0.25f, 0.333f, 0.5f))) {
+                if (Main.rand.NextChance(MathHelper.Lerp(0.25f, 0.333f, 0f))) {
                     for (int i = 0; i < 1; i++) {
                         int type = ModContent.DustType<StarwayDust>();
                         Vector2 position = CorePosition;
@@ -188,7 +189,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
                         float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
                         dustAngle += MathHelper.Pi * k;
-                        if (player.direction > 0) {
+                        if (player.FacedRight()) {
                             dustAngle *= -player.direction;
                         }
                         Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
@@ -219,7 +220,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
                         float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
                         dustAngle += MathHelper.Pi * k;
-                        if (player.direction < 0) {
+                        if (!player.FacedRight()) {
                             dustAngle *= player.direction;
                         }
                         Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
