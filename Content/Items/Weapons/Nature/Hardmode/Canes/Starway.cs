@@ -129,7 +129,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                     }
 
                     float disappearOpacity = Utils.GetLerpValue(0f, 0.5f, AfterReleaseProgress01, true);
-                    float opacity = MathF.Min(Utils.GetLerpValue(0f, 1f, AttackProgress01, true), disappearOpacity);
+                    float opacity = MathF.Min(Utils.GetLerpValue(0.5f, 1f, AttackProgress01, true), disappearOpacity);
                     Color baseColor = Color.White;
                     baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
                     float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true);
