@@ -48,7 +48,7 @@ sealed class LightCompressor : ModItem {
     }
 
     [Tracked]
-    public class LightCompressor_Use : ModProjectile {
+    public sealed class LightCompressor_Use : ModProjectile {
         private static float MAXDISTANCETOTARGETINPIXELS => 600f;
         private static float TARGETTIME => MathUtils.SecondsToFrames(0.5f);
 
@@ -142,10 +142,6 @@ sealed class LightCompressor : ModItem {
         }
 
         public override bool PreDraw(ref Color lightColor) {
-            if (SpawnValue == 0f) {
-                return false;
-            }
-
             var texture = Projectile.GetTexture();
 
             Player player = Projectile.GetOwnerAsPlayer();
