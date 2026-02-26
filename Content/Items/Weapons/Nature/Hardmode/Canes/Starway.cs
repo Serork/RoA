@@ -6,8 +6,12 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Druid;
 using RoA.Common.GlowMasks;
+using RoA.Common.Players;
+using RoA.Content.Dusts;
+using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
+using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
@@ -87,6 +91,21 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                 wormInfo.Positions[0] += Vector2.UnitY.RotatedBy(TimeSystem.TimeForVisualEffects * 10f * Owner.direction) * speed;
                 wormInfo.Positions[0] += wormInfo.Positions[0].DirectionTo(position) * speed;
             }
+            if (Main.rand.NextChance(AfterReleaseProgress01)) {
+                Vector2 mousePosition = Owner.GetViableMousePosition();
+                Owner.SyncMousePosition();
+                if (Main.rand.NextBool(3)) {
+                    for (int i = 0; i < 1; i++) {
+                        int type = ModContent.DustType<StarwayDust>();
+                        Vector2 position = CorePosition;
+                        int dust = Dust.NewDust(position, 6, 6, type, 0, 0, 0, default(Color));
+                        Main.dust[dust].position = position + Main.rand.RandomPointInArea(50f);
+                        Main.dust[dust].noGravity = true;
+                        Main.dust[dust].velocity += Helper.VelocityToPoint(position, mousePosition, 2f);
+                        Main.dust[dust].scale *= 2f;
+                    }
+                }
+            }
         }
 
         public override void PostDraw(Color lightColor) {
@@ -151,25 +170,68 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
 
         }
 
+        private static float GetCubicBezierEaseInForCavernCaneVisuals(float t, float control) => 3f * control * t * t * (1f - t) + t * t * t;
+
         protected override void SpawnCoreDustsBeforeShoot(float step, Player player, Vector2 corePosition) {
-            //if (step > 0.05f) {
-            //    return;
-            //}
-            //step = Ease.CubeIn(step);
-            //float offset = 200f * (1f - MathHelper.Clamp(step, 0.4f, 1f));
-            //Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), 
-            //        spawnPosition = corePosition + randomOffset;
-            //bool flag = !Main.rand.NextBool(3);
-            //float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / offset, 0.25f, 1f) * 2f * Math.Max(step, 0.25f) + 0.25f;
-            //StarwayWormholeAdvancedDust? starwayWormholeAdvancedDust = AdvancedDustSystem.New<StarwayWormholeAdvancedDust>(AdvancedDustLayer.ABOVEDUSTS)?.
-            //    Setup(
-            //            spawnPosition,
-            //            (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor * 2f,
-            //            scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f)
-            //         );
-            //if (starwayWormholeAdvancedDust is not null) {
-            //    starwayWormholeAdvancedDust.Destination = corePosition;
-            //}
+            float dustSpawnPositionOffsetFactor = 40f * -player.direction * Ease.CubeOut(1f - AttackProgress01);
+            float visualProgress = AttackProgress01;
+            float visualProgress2 = 1f - MathF.Min(0.5f, AttackProgress01);
+            float dustRotationSpeed = 3f;
+            if (step > 0.025f) {
+                byte circleCount = 2;
+                int value = 4;
+                for (int k = 0; k < value; k++) {
+                    for (int i = 1; i < circleCount; i++) {
+                        byte nextCircleIndex = (byte)i;
+                        float circleProgress = (float)nextCircleIndex / circleCount;
+                        Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
+                        float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
+                        dustAngle += MathHelper.Pi * k;
+                        Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
+                        Func<float, float> func = k % 2 == 0 ? MathF.Sin : MathF.Cos;
+                        dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi) * 0.5f;
+                        int dustType = Main.rand.NextBool() ? ModContent.DustType<FilamentDust>() : ModContent.DustType<StarwayDust>();
+                        float dustScale = Main.rand.NextFloat(1.25f, 1.5f) * 1f * MathF.Max(0.6f, 1f - visualProgress2);
+                        dustScale *= 2f;
+                        Vector2 dustVelocity = Vector2.Zero;
+                        Dust dust = Dust.NewDustPerfect(dustSpawnPosition - Vector2.One * 1f,
+                                                        dustType,
+                                                        dustVelocity,
+                                                        Scale: dustScale);
+                        dust.noGravity = true;
+                        //dust.color = gemColor;
+                    }
+                }
+                circleCount = 2;
+                value = 4;
+                dustSpawnPositionOffsetFactor *= 2f;
+                for (int k = 0; k < value; k++) {
+                    if (k == 0) {
+                        continue;
+                    }
+                    for (int i = 1; i < circleCount; i++) {
+                        byte nextCircleIndex = (byte)i;
+                        float circleProgress = (float)nextCircleIndex / circleCount;
+                        Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
+                        float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
+                        dustAngle += MathHelper.Pi * k;
+                        dustAngle *= player.direction;
+                        Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
+                        Func<float, float> func = k % 2 == 0 ? MathF.Sin : MathF.Cos;
+                        dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi) * 1f;
+                        int dustType = Main.rand.NextBool() ? ModContent.DustType<FilamentDust>() : ModContent.DustType<StarwayDust>();
+                        float dustScale = Main.rand.NextFloat(1.25f, 1.5f) * 1f * MathF.Max(0.6f, 1f - visualProgress2);
+                        dustScale *= 2f;
+                        Vector2 dustVelocity = Vector2.Zero;
+                        Dust dust = Dust.NewDustPerfect(dustSpawnPosition - Vector2.One * 1f,
+                                                        dustType,
+                                                        dustVelocity,
+                                                        Scale: dustScale);
+                        dust.noGravity = true;
+                        //dust.color = gemColor;
+                    }
+                }
+            }
         }
     }
 }
