@@ -186,28 +186,34 @@ sealed class FilamentYarn : NatureItem {
             ref Vector2 velocity = ref Projectile.velocity;
             float scale = Projectile.scale;
             Vector2 vector21 = Main.player[owner].GetPlayerCorePoint();
-            if (Main.myPlayer == owner) {
-                float num = (float)Math.PI / 2f;
-                Vector2 vector = vector21;
-                int num2 = 2;
-                float num3 = 0f;
-                float num8 = 1f * Projectile.scale;
-                Vector2 vector3 = vector;
-                Vector2 value = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY) - vector3;
-                if (player.gravDir == -1f)
-                    value.Y = (float)(Main.screenHeight - Main.mouseY) + Main.screenPosition.Y - vector3.Y;
+            if (Projectile.ai[2] < LINECOUNT + 1) {
+                Projectile.timeLeft = 30;
+                if (Main.myPlayer == owner) {
+                    float num = (float)Math.PI / 2f;
+                    Vector2 vector = vector21;
+                    int num2 = 2;
+                    float num3 = 0f;
+                    float num8 = 1f * Projectile.scale;
+                    Vector2 vector3 = vector;
+                    Vector2 value = Main.screenPosition + new Vector2(Main.mouseX, Main.mouseY) - vector3;
+                    if (player.gravDir == -1f)
+                        value.Y = (float)(Main.screenHeight - Main.mouseY) + Main.screenPosition.Y - vector3.Y;
 
 
-                Vector2 vector4 = Vector2.Normalize(value);
-                if (float.IsNaN(vector4.X) || float.IsNaN(vector4.Y))
-                    vector4 = -Vector2.UnitY;
+                    Vector2 vector4 = Vector2.Normalize(value);
+                    if (float.IsNaN(vector4.X) || float.IsNaN(vector4.Y))
+                        vector4 = -Vector2.UnitY;
 
-                vector4 = Vector2.Normalize(Vector2.Lerp(vector4, Vector2.Normalize(Projectile.velocity), 0f));
-                vector4 *= num8;
-                if (vector4.X != Projectile.velocity.X || vector4.Y != Projectile.velocity.Y)
-                    Projectile.netUpdate = true;
+                    vector4 = Vector2.Normalize(Vector2.Lerp(vector4, Vector2.Normalize(Projectile.velocity), 0f));
+                    vector4 *= num8;
+                    if (vector4.X != Projectile.velocity.X || vector4.Y != Projectile.velocity.Y)
+                        Projectile.netUpdate = true;
 
-                Projectile.velocity = vector4;
+                    Projectile.velocity = vector4;
+                }
+            }
+            else {
+
             }
 
             if (velocity.X > 0f)
