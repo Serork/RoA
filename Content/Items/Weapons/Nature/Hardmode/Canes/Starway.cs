@@ -114,9 +114,11 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
             for (int i = 0; i < _wormData.Length; i++) {
                 WormInfo wormInfo = _wormData[i];
 
+                Vector2 scale = Vector2.One * 0.75f;
+
                 List<Vector2> oldPositions = [..wormInfo.Positions];
                 for (int k = 1; k < wormInfo.Positions.Length; k++) {
-                    oldPositions[k] = oldPositions[k - 1] + oldPositions[k - 1].DirectionTo(wormInfo.Positions[k]) * 12f;
+                    oldPositions[k] = oldPositions[k - 1] + oldPositions[k - 1].DirectionTo(wormInfo.Positions[k]) * 12f * scale.X;
                 }
 
                 for (int k = oldPositions.Count - 1; k > 0; k--) {
@@ -144,7 +146,8 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         Clip = clip,
                         Origin = origin,
                         Rotation = rotation,
-                        Color = color
+                        Color = color,
+                        Scale = scale
                     };
                     Vector2 position = oldPositions[k];
                     if (position == Vector2.Zero) {
@@ -166,9 +169,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
 
         protected override bool ShouldWaitUntilProjDespawn() => false;
 
-        protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) {
-
-        }
+        protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2) { }
 
         private static float GetCubicBezierEaseInForCavernCaneVisuals(float t, float control) => 3f * control * t * t * (1f - t) + t * t * t;
 
