@@ -7,6 +7,8 @@ using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.Druid;
 using RoA.Common.GlowMasks;
+using RoA.Common.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Defaults;
@@ -130,6 +132,9 @@ sealed class FilamentYarn : NatureItem {
             return t * t * ((s + 1) * t - s);
         }
 
+        private float Tension => EaseBackIn(_tension);
+        private float Tension2 => 1f - Tension;
+
         private void DrawConnectedLines() {
             SpriteBatch batch = Main.spriteBatch;
             Player owner = Projectile.GetOwnerAsPlayer();
@@ -183,7 +188,7 @@ sealed class FilamentYarn : NatureItem {
                     float sineX = TimeSystem.TimeForVisualEffects * 5f,
                           sineY = TimeSystem.TimeForVisualEffects * 5f;
                     SimpleCurve curve = new(from, to, Vector2.Zero);
-                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * EaseBackIn(_tension)) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * Tension) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
 
                     Vector2 start = curve.Begin;
                     int count = 16;
@@ -223,6 +228,19 @@ sealed class FilamentYarn : NatureItem {
             _connectPoints[(int)(++currentIndex)] = (position, null, _connectPoints[(int)currentIndex - 1].Item3);
         }
 
+        private void SpawnStarDust(Vector2 from, float velocitySpeed = 1f) {
+            Vector2 to = from;
+            Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
+            velocity *= Main.rand.NextFloat(0.5f, 1f) * velocitySpeed;
+            FilamentYarnDust? filamentYarnDust = AdvancedDustSystem.New<FilamentYarnDust>(AdvancedDustLayer.ABOVEDUSTS)?
+                .Setup(to,
+                       velocity,
+                       scale: 1.5f);
+            if (filamentYarnDust != null) {
+                filamentYarnDust.CorePosition = to;
+            }
+        }
+
         public override void AI() {
             Projectile.localAI[2] += 0.01f;
 
@@ -258,7 +276,11 @@ sealed class FilamentYarn : NatureItem {
                     }
                     Vector2 from = _connectPoints[i].Item1;
                     Vector2 to = _connectPoints[i].Item2 ?? _mousePosition;
-                    _connectPoints[i].Item3 += 0.01f * from.DirectionTo(to).X.GetDirection();
+                    _connectPoints[i].Item3 += (0.01f + 0.01f * Tension2) * from.DirectionTo(to).X.GetDirection();
+
+                    if (Main.rand.NextBool(100)) {
+                        SpawnStarDust(to + Main.rand.NextVector2CircularEdge(10f, 10f), 2f);
+                    }
 
                     float distance = from.Distance(to);
                     float length = MAXLENGTH;
@@ -266,12 +288,17 @@ sealed class FilamentYarn : NatureItem {
                     float sineX = TimeSystem.TimeForVisualEffects * 5f,
                           sineY = TimeSystem.TimeForVisualEffects * 5f;
                     SimpleCurve curve = new(from, to, Vector2.Zero);
-                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * EaseBackIn(_tension)) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * Tension) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
                     Vector2 start = curve.Begin;
                     int count = 16 / 2;
                     for (int i2 = 1; i2 <= count; i2++) {
                         Vector2 point = curve.GetPoint(i2 / (float)count);
-                        Lighting.AddLight(point, new Color(127, 153, 22).ToVector3() * 1f);
+                        Lighting.AddLight(point, new Color(196, 182, 70).ToVector3() * 1f);
+
+                        if (Main.rand.NextBool(150)) {
+                            SpawnStarDust(point);
+                        }
+
                         start = point;
                     }
                 }
