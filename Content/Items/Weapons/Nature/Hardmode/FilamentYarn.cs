@@ -384,12 +384,12 @@ sealed class FilamentYarn : NatureItem {
 
             Main.EntitySpriteDraw(texture, pos, null, lightColor, rotation, origin, Projectile.scale, effects);
 
-            var glowMaskInfo = ItemGlowMaskHandler.GlowMasks[player.GetSelectedItem().type];
+            var glowMaskInfo = ItemGlowMaskHandler.GlowMasks[ModContent.ItemType<FilamentYarn>()];
             Texture2D heldItemGlowMaskTexture = glowMaskInfo.Texture.Value;
             float brightnessFactor = Lighting.Brightness((int)pos.X / 16, (int)pos.Y / 16);
             Color color = Color.Lerp(glowMaskInfo.Color, lightColor, brightnessFactor);
             Color glowMaskColor = glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - Projectile.alpha / 255f) : glowMaskInfo.Color;
-            Main.EntitySpriteDraw(texture, pos, null, glowMaskColor, rotation, origin, Projectile.scale, effects);
+            Main.EntitySpriteDraw(heldItemGlowMaskTexture, pos, null, glowMaskColor, rotation, origin, Projectile.scale, effects);
 
             {
                 var graphicsDevice = Main.instance.GraphicsDevice;
