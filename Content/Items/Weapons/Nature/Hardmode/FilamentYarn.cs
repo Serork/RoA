@@ -1,27 +1,45 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Newtonsoft.Json.Linq;
-
 using RoA.Common;
+using RoA.Common.Cache;
 using RoA.Common.Druid;
-using RoA.Common.GlowMasks;
-using RoA.Content.Items.Weapons.Magic.Hardmode;
+using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Defaults;
-using RoA.Core.Graphics.Data;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
 
 using System;
-using System.Collections.Generic;
 
 using Terraria;
 using Terraria.Enums;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Weapons.Nature.Hardmode;
+
+sealed class YarnRenderTargetLoader : ILoadable {
+    public static RenderTarget2D RenderTarget = null!;
+
+    void ILoadable.Load(Mod mod) {
+        Main.QueueMainThreadAction(() => {
+            RenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 1680, 1050, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+        });
+
+    }
+
+    void ILoadable.Unload() {
+        if (RenderTarget is not null) {
+            Main.QueueMainThreadAction(() => {
+                RenderTarget.Dispose();
+            });
+
+            RenderTarget = null!;
+        }
+    }
+}
 
 sealed class FilamentYarn : NatureItem {
     public override void SetStaticDefaults() {
@@ -78,10 +96,38 @@ sealed class FilamentYarn : NatureItem {
             //Projectile.hide = true;
         }
 
+        private static void DrawPrettyStarSparkle(float opacity, SpriteEffects dir, Vector2 drawpos, Microsoft.Xna.Framework.Color drawColor, Microsoft.Xna.Framework.Color shineColor, float rotation, Vector2 scale, Vector2 fatness) {
+            Texture2D value = TextureAssets.Extra[98].Value;
+            Microsoft.Xna.Framework.Color color = shineColor * 0.5f;
+            color.A = 0;
+            Vector2 origin = value.Size() / 2f;
+            Microsoft.Xna.Framework.Color color2 = drawColor * 0.5f;
+            float num = 1f;
+            Vector2 vector = new Vector2(fatness.X * 0.5f, scale.X) * num;
+            Vector2 vector2 = new Vector2(fatness.Y * 0.5f, scale.Y) * num;
+            color *= num * opacity;
+            color2 *= num * opacity;
+            Main.EntitySpriteDraw(value, drawpos, null, color, (float)Math.PI / 2f + rotation, origin, vector, dir);
+            Main.EntitySpriteDraw(value, drawpos, null, color, 0f + rotation, origin, vector2, dir);
+            Main.EntitySpriteDraw(value, drawpos, null, color2, (float)Math.PI / 2f + rotation, origin, vector * 0.6f, dir);
+            Main.EntitySpriteDraw(value, drawpos, null, color2, 0f + rotation, origin, vector2 * 0.6f, dir);
+        }
+
         private void DrawConnectedLines() {
             SpriteBatch batch = Main.spriteBatch;
             Player owner = Projectile.GetOwnerAsPlayer();
             int index = 0;
+
+            float opacity2 = 1f;
+            float disappearOpacity = 1f;
+            float opacity = MathF.Min(opacity2, disappearOpacity);
+            Color baseColor = Color.White;
+            baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
+            float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true) * 1f;
+            mainOpacity *= Ease.CubeIn(disappearOpacity);
+            baseColor *= mainOpacity;
+            Color color = baseColor * Helper.Wave(0.5f, 0.75f, 5f, 0f);
+            index = 0;
             foreach ((Vector2, Vector2?) connectedPoints in _connectPoints) {
                 index++;
                 if (index > LINECOUNT + 1) {
@@ -91,19 +137,42 @@ sealed class FilamentYarn : NatureItem {
                 if (from == Vector2.Zero) {
                     continue;
                 }
+
+                void drawStar(Vector2 startPosition) {
+                    DrawPrettyStarSparkle(1f * 0.5f, SpriteEffects.None, startPosition - Main.screenPosition, new Microsoft.Xna.Framework.Color(251, 232, 193, 0), new Color(233, 206, 83),
+                        0f, new Vector2(2f, 2f) * 0.5f, new Vector2(2f, 2f) * 0.5f);
+                }
+                Vector2 startPosition = from;
+                drawStar(startPosition);
+                if (index == LINECOUNT + 1 && connectedPoints.Item2 is not null) {
+                    drawStar(connectedPoints.Item2.Value);
+                }
+
                 Vector2 to = connectedPoints.Item2 ?? _mousePosition;
+                if (to == _mousePosition) {
+                    drawStar(_mousePosition);
+                }
                 float distance = from.Distance(to);
                 float length = MAXLENGTH;
                 float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
-                float sineX = TimeSystem.TimeForVisualEffects * 0f,
-                      sineY = TimeSystem.TimeForVisualEffects * 0f;
+                float sineX = TimeSystem.TimeForVisualEffects * 10f,
+                      sineY = TimeSystem.TimeForVisualEffects * 10f;
                 SimpleCurve curve = new(from, to, Vector2.Zero);
-                curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 20f;
+                curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+
                 Vector2 start = curve.Begin;
                 int count = 16;
+                start = curve.Begin;
+                Color baseColor2 = new Color(196, 182, 70);
+                Color color2 = color.MultiplyRGBA(baseColor2);
                 for (int i = 1; i <= count; i++) {
                     Vector2 point = curve.GetPoint(i / (float)count);
-                    batch.Line(start, point, Color.White);
+                    batch.Line(start, point, color2, 4f);
+                    float num184 = Helper.Wave(2f, 6f, 1f, 0f) * 0.75f;
+                    for (int num185 = 0; num185 < 4; num185++) {
+                        Vector2 offset = Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184;
+                        batch.Line(start + offset, point + offset, new Microsoft.Xna.Framework.Color(64, 64, 64, 0).MultiplyRGBA(baseColor2) * 0.25f * mainOpacity, 4f);
+                    }
                     start = point;
                 }
             }
@@ -269,7 +338,62 @@ sealed class FilamentYarn : NatureItem {
 
             Main.EntitySpriteDraw(texture, pos, null, Projectile.GetAlpha(lightColor), rotation, origin, Projectile.scale, effects);
 
-            DrawConnectedLines();
+            {
+                var graphicsDevice = Main.instance.GraphicsDevice;
+                var sb = Main.spriteBatch;
+
+                sb.End();
+
+                SpriteBatchSnapshot snapshot = sb.CaptureSnapshot();
+
+                graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+                graphicsDevice.Clear(Color.Transparent);
+                sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+                sb.End();
+
+                graphicsDevice.SetRenderTarget(YarnRenderTargetLoader.RenderTarget);
+                graphicsDevice.Clear(Color.Transparent);
+
+                float scaleX = (float)YarnRenderTargetLoader.RenderTarget.Width / Main.screenWidth;
+                float scaleY = (float)YarnRenderTargetLoader.RenderTarget.Height / Main.screenHeight;
+                Matrix scaleMatrix = Matrix.CreateScale(scaleX, scaleY, 1f);
+                sb.Begin(SpriteSortMode.Deferred,
+                         BlendState.AlphaBlend,
+                         SamplerState.PointClamp,
+                         null, null, null,
+                         scaleMatrix);
+
+
+                DrawConnectedLines();
+
+                sb.End();
+
+                graphicsDevice.SetRenderTarget(Main.screenTarget);
+                graphicsDevice.Clear(Color.Transparent);
+
+                sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+                sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+                sb.End();
+
+                sb.Begin(snapshot with { samplerState = SamplerState.PointClamp });
+                ShaderLoader.WormholeTentacleShader.WaveTime = TimeSystem.TimeForVisualEffects * 10f;
+                ShaderLoader.WormholeTentacleShader.WaveAmplitude = 0.001f;
+                ShaderLoader.WormholeTentacleShader.WaveFrequency = 2f;
+                ShaderLoader.WormholeTentacleShader.WaveSpeed = 0.5f;
+                ShaderLoader.WormholeTentacleShader.BendDirection = 0f;
+                ShaderLoader.WormholeTentacleShader.BendStrength = 1f;
+                ShaderLoader.WormholeTentacleShader.BaseStability = 0f;
+                ShaderLoader.WormholeTentacleShader.TipWiggle = 0f;
+                ShaderLoader.WormholeTentacleShader.Apply(sb, () => {
+                    sb.Draw(YarnRenderTargetLoader.RenderTarget,
+                        new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
+                        Color.White);
+                });
+                sb.End();
+
+                sb.Begin(snapshot);
+            }
 
             return false;
         }
