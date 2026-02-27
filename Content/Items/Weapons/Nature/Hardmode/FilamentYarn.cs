@@ -528,7 +528,7 @@ sealed class FilamentYarn : NatureItem {
                          scaleMatrix);
 
 
-                if (CanSpawnMoreLines) {
+                if (CanSpawnMoreLines || _tension > 0f) {
                     DrawConnectedLines();
                 }
                 else {
