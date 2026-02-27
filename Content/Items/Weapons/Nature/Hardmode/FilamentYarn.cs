@@ -65,12 +65,14 @@ sealed class FilamentYarn : NatureItem {
 
     public sealed class FilamentYarn_Use : ModProjectile {
         private static float MAXLENGTH => 200f;
-        private static ushort LINECOUNT => 4;
+        private static ushort LINECOUNT => 5;
+        private static float TENSIONMODIFIER => 0.75f;
 
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<FilamentYarn>()).Texture;
 
         private (Vector2, Vector2?, float)[] _connectPoints = null!;
         private Vector2 _mousePosition;
+        private float _tension;
 
         public ref float InitValue => ref Projectile.localAI[0];
         public ref float Cooldown => ref Projectile.ai[1];
@@ -115,6 +117,16 @@ sealed class FilamentYarn : NatureItem {
             Main.EntitySpriteDraw(value, drawpos, null, color, 0f + rotation, origin, vector2, dir);
             Main.EntitySpriteDraw(value, drawpos, null, color2, (float)Math.PI / 2f + rotation, origin, vector * 0.6f, dir);
             Main.EntitySpriteDraw(value, drawpos, null, color2, 0f + rotation, origin, vector2 * 0.6f, dir);
+        }
+
+        public static float EaseBackOut(float t) {
+            float s = 1.70158f;
+            return 1 + (--t) * t * ((s + 1) * t + s);
+        }
+
+        public static float EaseBackIn(float t) {
+            float s = 1.70158f;
+            return t * t * ((s + 1) * t - s);
         }
 
         private void DrawConnectedLines() {
@@ -170,7 +182,7 @@ sealed class FilamentYarn : NatureItem {
                     float sineX = TimeSystem.TimeForVisualEffects * 5f,
                           sineY = TimeSystem.TimeForVisualEffects * 5f;
                     SimpleCurve curve = new(from, to, Vector2.Zero);
-                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * EaseBackIn(_tension)) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
 
                     Vector2 start = curve.Begin;
                     int count = 16;
@@ -221,8 +233,8 @@ sealed class FilamentYarn : NatureItem {
                 if (Init) {
                     if (Projectile.ai[2] > 0) {
                         Vector2 last = _connectPoints[(int)Projectile.ai[2] - 1].Item2!.Value;
-                        if (_mousePosition.Distance(last) > MAXLENGTH) {
-                            _mousePosition = last + last.DirectionTo(mousePosition) * MAXLENGTH;
+                        if (_mousePosition.Distance(last) > MAXLENGTH * TENSIONMODIFIER) {
+                            _mousePosition = last + last.DirectionTo(mousePosition) * MAXLENGTH * TENSIONMODIFIER;
                         }
                     }
                 }
@@ -253,9 +265,9 @@ sealed class FilamentYarn : NatureItem {
                     float sineX = TimeSystem.TimeForVisualEffects * 5f,
                           sineY = TimeSystem.TimeForVisualEffects * 5f;
                     SimpleCurve curve = new(from, to, Vector2.Zero);
-                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * EaseBackIn(_tension)) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
                     Vector2 start = curve.Begin;
-                    int count = 8;
+                    int count = 16 / 2;
                     for (int i2 = 1; i2 <= count; i2++) {
                         Vector2 point = curve.GetPoint(i2 / (float)count);
                         Lighting.AddLight(point, new Color(127, 153, 22).ToVector3() * 1f);
@@ -280,7 +292,7 @@ sealed class FilamentYarn : NatureItem {
                         float distance = from.Distance(to);
                         float length = MAXLENGTH;
                         CurrentLength = distance;
-                        if (CurrentLength >= length) {
+                        if (CurrentLength >= length * TENSIONMODIFIER) {
                             addPoint();
                             break;
                         }
@@ -301,8 +313,10 @@ sealed class FilamentYarn : NatureItem {
             ref Vector2 velocity = ref Projectile.velocity;
             float scale = Projectile.scale;
             Vector2 vector21 = Main.player[owner].GetPlayerCorePoint();
+            int timeLeftLast = 120;
             if (Projectile.ai[2] < LINECOUNT + 1) {
-                Projectile.timeLeft = 30;
+                Projectile.timeLeft = timeLeftLast;
+                _tension = 1f;
                 if (Main.myPlayer == owner) {
                     float num = (float)Math.PI / 2f;
                     Vector2 vector = vector21;
@@ -328,7 +342,7 @@ sealed class FilamentYarn : NatureItem {
                 }
             }
             else {
-
+                _tension = Helper.Approach(_tension, 0f, TimeSystem.LogicDeltaTime * 3f);
             }
 
             if (velocity.X > 0f)
