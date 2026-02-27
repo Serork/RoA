@@ -1,9 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.Druid;
+using RoA.Common.GlowMasks;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Defaults;
@@ -41,6 +44,7 @@ sealed class YarnRenderTargetLoader : ILoadable {
     }
 }
 
+[AutoloadGlowMask]
 sealed class FilamentYarn : NatureItem {
     public override void SetStaticDefaults() {
         Item.staff[Type] = true;
@@ -61,7 +65,7 @@ sealed class FilamentYarn : NatureItem {
 
     public sealed class FilamentYarn_Use : ModProjectile {
         private static float MAXLENGTH => 200f;
-        private static ushort LINECOUNT => 5;
+        private static ushort LINECOUNT => 4;
 
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<FilamentYarn>()).Texture;
 
@@ -179,11 +183,12 @@ sealed class FilamentYarn : NatureItem {
                         baseColor2 = Color.Lerp(baseColor2, baseColor3, Helper.Wave(0f, 0.75f, 10f, waveOffset + i * 0.5f));
                         Color color2 = color.MultiplyRGBA(baseColor2);
 
-                        batch.Line(start, point, color2, 4f);
-                        float num184 = Helper.Wave(2f, 6f, 1f, 0f) * 0.75f;
+                        float lineThickness = Helper.Wave(2f, 6f, 1f, waveOffset + i * 1f);
+                        batch.Line(start, point, color2, lineThickness);
+                        float num184 = Helper.Wave(2f, 6f, 1f, waveOffset) * 0.75f;
                         for (int num185 = 0; num185 < 4; num185++) {
                             Vector2 offset = Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184;
-                            batch.Line(start + offset, point + offset, new Color(64, 64, 64, 0).MultiplyRGBA(baseColor2) * 0.25f * mainOpacity, 4f);
+                            batch.Line(start + offset, point + offset, new Color(64, 64, 64, 0).MultiplyRGBA(baseColor2) * 0.25f * mainOpacity, lineThickness);
                         }
                         start = point;
                     }
@@ -235,7 +240,27 @@ sealed class FilamentYarn : NatureItem {
             }
             else {
                 for (int i = 0; i < _connectPoints.Length; i++) {
-                    _connectPoints[i].Item3 += 0.01f * _connectPoints[i].Item1.DirectionTo(_connectPoints[i].Item2 ?? _mousePosition).X.GetDirection();
+                    if (i > LINECOUNT) {
+                        continue;
+                    }
+                    Vector2 from = _connectPoints[i].Item1;
+                    Vector2 to = _connectPoints[i].Item2 ?? _mousePosition;
+                    _connectPoints[i].Item3 += 0.01f * from.DirectionTo(to).X.GetDirection();
+
+                    float distance = from.Distance(to);
+                    float length = MAXLENGTH;
+                    float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
+                    float sineX = TimeSystem.TimeForVisualEffects * 5f,
+                          sineY = TimeSystem.TimeForVisualEffects * 5f;
+                    SimpleCurve curve = new(from, to, Vector2.Zero);
+                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+                    Vector2 start = curve.Begin;
+                    int count = 8;
+                    for (int i2 = 1; i2 <= count; i2++) {
+                        Vector2 point = curve.GetPoint(i2 / (float)count);
+                        Lighting.AddLight(point, new Color(127, 153, 22).ToVector3() * 1f);
+                        start = point;
+                    }
                 }
 
                 void addPoint() {
@@ -357,7 +382,14 @@ sealed class FilamentYarn : NatureItem {
                 origin = Vector2.Zero;
             }
 
-            Main.EntitySpriteDraw(texture, pos, null, Projectile.GetAlpha(lightColor), rotation, origin, Projectile.scale, effects);
+            Main.EntitySpriteDraw(texture, pos, null, lightColor, rotation, origin, Projectile.scale, effects);
+
+            var glowMaskInfo = ItemGlowMaskHandler.GlowMasks[player.GetSelectedItem().type];
+            Texture2D heldItemGlowMaskTexture = glowMaskInfo.Texture.Value;
+            float brightnessFactor = Lighting.Brightness((int)pos.X / 16, (int)pos.Y / 16);
+            Color color = Color.Lerp(glowMaskInfo.Color, lightColor, brightnessFactor);
+            Color glowMaskColor = glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - Projectile.alpha / 255f) : glowMaskInfo.Color;
+            Main.EntitySpriteDraw(texture, pos, null, glowMaskColor, rotation, origin, Projectile.scale, effects);
 
             {
                 var graphicsDevice = Main.instance.GraphicsDevice;
