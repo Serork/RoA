@@ -27,7 +27,7 @@ sealed class FilamentYarnDust : AdvancedDust<FilamentYarnDust> {
 
         Velocity *= 0.5f;
 
-        DrawColor = new Color(Color.White.R, Color.White.G, Color.White.B, 0);
+        DrawColor = new Color(Color.White.R, Color.White.G, Color.White.B, 25);
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
@@ -39,7 +39,7 @@ sealed class FilamentYarnDust : AdvancedDust<FilamentYarnDust> {
 
         Position += Velocity;
 
-        Rotation += Velocity.X * 0.1f;
+        Rotation += Velocity.X * 0.5f;
 
         Scale -= 0.025f;
 

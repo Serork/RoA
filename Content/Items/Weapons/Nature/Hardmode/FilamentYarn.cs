@@ -1,6 +1,4 @@
-﻿using Humanizer;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
@@ -79,6 +77,8 @@ sealed class FilamentYarn : NatureItem {
         public ref float Cooldown => ref Projectile.ai[1];
         public ref float CurrentLength => ref Projectile.ai[0];
 
+        public ref float PointAddedValue => ref Projectile.localAI[1];
+
         public bool Init {
             get => InitValue != 0f;
             set => InitValue = value.ToInt();
@@ -103,6 +103,8 @@ sealed class FilamentYarn : NatureItem {
             Projectile.penetrate = -1;
 
             //Projectile.hide = true;
+
+            Projectile.Opacity = 0f;
         }
 
         private static void DrawPrettyStarSparkle(float opacity, SpriteEffects dir, Vector2 drawpos, Microsoft.Xna.Framework.Color drawColor, Microsoft.Xna.Framework.Color shineColor, float rotation, Vector2 scale, Vector2 fatness) {
@@ -132,6 +134,14 @@ sealed class FilamentYarn : NatureItem {
             return t * t * ((s + 1) * t - s);
         }
 
+        private void DrawStar(Vector2 startPosition, float mainOpacity, float waveOffset, float rotation) {
+            float scaleFactor = Helper.Wave(0.625f, 0.75f, 5f, waveOffset) * 0.75f;
+            DrawPrettyStarSparkle(0.875f * scaleFactor * mainOpacity, SpriteEffects.None, startPosition - Main.screenPosition,
+                Color.Lerp(new Color(127, 153, 22), new Color(251, 232, 193, 0), 0.75f),
+                Color.Lerp(new Color(127, 153, 22), new Color(233, 206, 83), 0.75f),
+                rotation, new Vector2(2f, 2f) * scaleFactor, new Vector2(2f, 2f) * scaleFactor);
+        }
+
         private float Tension => EaseBackIn(_tension);
         private float Tension2 => 1f - Tension;
 
@@ -145,7 +155,7 @@ sealed class FilamentYarn : NatureItem {
             float opacity = MathF.Min(opacity2, disappearOpacity);
             Color baseColor = Color.White;
             baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
-            float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true) * 1f;
+            float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true) * Projectile.Opacity;
             mainOpacity *= Ease.CubeIn(disappearOpacity);
             baseColor *= mainOpacity;
             Color color = baseColor * Helper.Wave(0.5f, 0.75f, 5f, 0f);
@@ -162,21 +172,15 @@ sealed class FilamentYarn : NatureItem {
                     }
                     float waveOffset = Projectile.identity * 2 + 1 + index * 3;
                     Vector2 to = connectedPoints.Item2 ?? _mousePosition;
-                    void drawStar(Vector2 startPosition) {
-                        float scaleFactor = Helper.Wave(0.625f, 0.75f, 5f, waveOffset) * 0.75f;
-                        DrawPrettyStarSparkle(0.875f * scaleFactor, SpriteEffects.None, startPosition - Main.screenPosition,
-                            Color.Lerp(new Color(127, 153, 22), new Color(251, 232, 193, 0), 0.75f),
-                            Color.Lerp(new Color(127, 153, 22), new Color(233, 206, 83), 0.75f),
-                            connectedPoints.Item3, new Vector2(2f, 2f) * scaleFactor, new Vector2(2f, 2f) * scaleFactor);
-                    }
                     Vector2 startPosition = from;
+                    float rotation = connectedPoints.Item3;
                     if (onlyStars) {
-                        drawStar(startPosition);
+                        DrawStar(startPosition, mainOpacity, waveOffset, rotation);
                         if (index == LINECOUNT + 1 && connectedPoints.Item2 is not null) {
-                            drawStar(connectedPoints.Item2.Value);
+                            DrawStar(connectedPoints.Item2.Value, mainOpacity, waveOffset, rotation);
                         }
                         if (to == _mousePosition) {
-                            drawStar(_mousePosition);
+                            DrawStar(_mousePosition, mainOpacity, waveOffset, rotation);
                         }
                     }
                     if (onlyStars) {
@@ -228,20 +232,22 @@ sealed class FilamentYarn : NatureItem {
             _connectPoints[(int)(++currentIndex)] = (position, null, _connectPoints[(int)currentIndex - 1].Item3);
         }
 
-        private void SpawnStarDust(Vector2 from, float velocitySpeed = 1f) {
+        private void SpawnStarDust(Vector2 from, float velocitySpeed = 1f, float scaleModifier = 1f) {
             Vector2 to = from;
             Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
             velocity *= Main.rand.NextFloat(0.5f, 1f) * velocitySpeed;
             FilamentYarnDust? filamentYarnDust = AdvancedDustSystem.New<FilamentYarnDust>(AdvancedDustLayer.ABOVEDUSTS)?
                 .Setup(to,
                        velocity,
-                       scale: 1.5f);
+                       scale: 1.5f * scaleModifier);
             if (filamentYarnDust != null) {
                 filamentYarnDust.CorePosition = to;
             }
         }
 
         public override void AI() {
+            Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
+
             Projectile.localAI[2] += 0.01f;
 
             Player player4 = Projectile.GetOwnerAsPlayer();
@@ -305,6 +311,8 @@ sealed class FilamentYarn : NatureItem {
 
                 void addPoint() {
                     AddPoint(_mousePosition);
+
+                    PointAddedValue = 1f;
                 }
                 if (Main.mouseLeft && Main.mouseLeftRelease) {
                     addPoint();
@@ -320,8 +328,13 @@ sealed class FilamentYarn : NatureItem {
                         float distance = from.Distance(to);
                         float length = MAXLENGTH;
                         CurrentLength = distance;
-                        if (CurrentLength >= length * TENSIONMODIFIER) {
+                        if (CanSpawnMoreLines && CurrentLength >= length * TENSIONMODIFIER) {
                             addPoint();
+
+                            //for (int i = 0; i < 5; i++) {
+                            //    SpawnStarDust(to, 1.5f, 1f);
+                            //}
+
                             break;
                         }
                     }
@@ -330,6 +343,8 @@ sealed class FilamentYarn : NatureItem {
                     Cooldown = Helper.Approach(Cooldown, 0f, 1f);
                 }
             }
+
+            PointAddedValue = Helper.Approach(PointAddedValue, 0f, 0.025f);
 
             Player player = Main.player[Projectile.owner];
 
@@ -439,6 +454,8 @@ sealed class FilamentYarn : NatureItem {
                 Color color = Color.Lerp(glowMaskInfo.Color, lightColor, brightnessFactor);
                 Color glowMaskColor = glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - Projectile.alpha / 255f) : glowMaskInfo.Color;
                 Main.EntitySpriteDraw(heldItemGlowMaskTexture, pos, null, glowMaskColor, rotation, origin, Projectile.scale, effects);
+
+                DrawStar(pos + Main.screenPosition + Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2) * 50f, 3f * Projectile.Opacity, 0f, rotation);
             }
 
             {
