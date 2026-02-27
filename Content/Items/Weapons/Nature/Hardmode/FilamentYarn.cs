@@ -67,6 +67,7 @@ sealed class FilamentYarn : NatureItem {
         private static float MAXLENGTH => 200f;
         private static ushort LINECOUNT => 5;
         private static float TENSIONMODIFIER => 0.75f;
+        private static ushort ACTIVETIME => MathUtils.SecondsToFrames(10);
 
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<FilamentYarn>()).Texture;
 
@@ -82,6 +83,8 @@ sealed class FilamentYarn : NatureItem {
             get => InitValue != 0f;
             set => InitValue = value.ToInt();
         }
+
+        public bool CanSpawnMoreLines => Projectile.ai[2] < LINECOUNT + 1;
 
         public override bool? CanDamage() => true;
         public override bool? CanCutTiles() => false;
@@ -303,18 +306,18 @@ sealed class FilamentYarn : NatureItem {
                 }
             }
 
-            if (player4.noItems || !player4.IsAliveAndFree()) {
-                Projectile.Kill();
-            }
-
             Player player = Main.player[Projectile.owner];
 
             int owner = Projectile.owner;
             ref Vector2 velocity = ref Projectile.velocity;
             float scale = Projectile.scale;
             Vector2 vector21 = Main.player[owner].GetPlayerCorePoint();
-            int timeLeftLast = 120;
-            if (Projectile.ai[2] < LINECOUNT + 1) {
+            int timeLeftLast = ACTIVETIME;
+            if (CanSpawnMoreLines) {
+                if (player4.noItems || !player4.IsAliveAndFree()) {
+                    Projectile.Kill();
+                }
+
                 Projectile.timeLeft = timeLeftLast;
                 _tension = 1f;
                 if (Main.myPlayer == owner) {
@@ -340,29 +343,29 @@ sealed class FilamentYarn : NatureItem {
 
                     Projectile.velocity = vector4;
                 }
+
+                if (velocity.X > 0f)
+                    Main.player[owner].ChangeDir(1);
+                else if (velocity.X < 0f)
+                    Main.player[owner].ChangeDir(-1);
+
+                Projectile.spriteDirection = Projectile.direction;
+                Main.player[owner].ChangeDir(Projectile.direction);
+                Main.player[owner].heldProj = Projectile.whoAmI;
+                Main.player[owner].SetDummyItemTime(2);
+                Projectile.position.X = vector21.X - (float)(Projectile.width / 2);
+                Projectile.position.Y = vector21.Y - (float)(Projectile.height / 2);
+                Projectile.rotation = (float)(Math.Atan2(velocity.Y, velocity.X) + 1.5700000524520874) - MathHelper.PiOver2;
+                if (Main.player[owner].direction == 1)
+                    Main.player[owner].itemRotation = (float)Math.Atan2(velocity.Y * (float)Projectile.direction, velocity.X * (float)Projectile.direction);
+                else
+                    Main.player[owner].itemRotation = (float)Math.Atan2(velocity.Y * (float)Projectile.direction, velocity.X * (float)Projectile.direction);
+
+                Projectile.Center = Utils.Floor(Projectile.Center);
             }
             else {
                 _tension = Helper.Approach(_tension, 0f, TimeSystem.LogicDeltaTime * 3f);
             }
-
-            if (velocity.X > 0f)
-                Main.player[owner].ChangeDir(1);
-            else if (velocity.X < 0f)
-                Main.player[owner].ChangeDir(-1);
-
-            Projectile.spriteDirection = Projectile.direction;
-            Main.player[owner].ChangeDir(Projectile.direction);
-            Main.player[owner].heldProj = Projectile.whoAmI;
-            Main.player[owner].SetDummyItemTime(2);
-            Projectile.position.X = vector21.X - (float)(Projectile.width / 2);
-            Projectile.position.Y = vector21.Y - (float)(Projectile.height / 2);
-            Projectile.rotation = (float)(Math.Atan2(velocity.Y, velocity.X) + 1.5700000524520874) - MathHelper.PiOver2;
-            if (Main.player[owner].direction == 1)
-                Main.player[owner].itemRotation = (float)Math.Atan2(velocity.Y * (float)Projectile.direction, velocity.X * (float)Projectile.direction);
-            else
-                Main.player[owner].itemRotation = (float)Math.Atan2(velocity.Y * (float)Projectile.direction, velocity.X * (float)Projectile.direction);
-
-            Projectile.Center = Utils.Floor(Projectile.Center);
             //Projectile.position -= velocity.SafeNormalize() * 14f;
             //Projectile.position -= velocity.TurnLeft().SafeNormalize() * 2f * -player.direction * player.gravDir;
         }
@@ -373,37 +376,40 @@ sealed class FilamentYarn : NatureItem {
             Player player = Projectile.GetOwnerAsPlayer();
 
             var pos = Projectile.Center - Main.screenPosition;
-            var effects = (Projectile.spriteDirection == -1) ? Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically : Microsoft.Xna.Framework.Graphics.SpriteEffects.None;
-            if (player.gravDir < 0) {
-                effects = (Projectile.spriteDirection == -1) ? Microsoft.Xna.Framework.Graphics.SpriteEffects.None : Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically;
-            }
 
-            float rotation = player.itemRotation + 0.785f * (float)player.direction;
-
-            Vector2 origin = new Vector2(0f, texture.Height);
-            if (player.gravDir == -1f) {
-                if (player.direction == -1) {
-                    rotation += MathHelper.Pi + MathHelper.PiOver2;
-                    origin = new Vector2(0f, texture.Height);
+            if (CanSpawnMoreLines) {
+                var effects = (Projectile.spriteDirection == -1) ? Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically : Microsoft.Xna.Framework.Graphics.SpriteEffects.None;
+                if (player.gravDir < 0) {
+                    effects = (Projectile.spriteDirection == -1) ? Microsoft.Xna.Framework.Graphics.SpriteEffects.None : Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically;
                 }
-                else {
-                    rotation -= 1.57f;
+
+                float rotation = player.itemRotation + 0.785f * (float)player.direction;
+
+                Vector2 origin = new Vector2(0f, texture.Height);
+                if (player.gravDir == -1f) {
+                    if (player.direction == -1) {
+                        rotation += MathHelper.Pi + MathHelper.PiOver2;
+                        origin = new Vector2(0f, texture.Height);
+                    }
+                    else {
+                        rotation -= 1.57f;
+                        origin = Vector2.Zero;
+                    }
+                }
+                else if (player.direction == -1) {
+                    rotation += MathHelper.Pi;
                     origin = Vector2.Zero;
                 }
-            }
-            else if (player.direction == -1) {
-                rotation += MathHelper.Pi;
-                origin = Vector2.Zero;
-            }
 
-            Main.EntitySpriteDraw(texture, pos, null, lightColor, rotation, origin, Projectile.scale, effects);
+                Main.EntitySpriteDraw(texture, pos, null, lightColor, rotation, origin, Projectile.scale, effects);
 
-            var glowMaskInfo = ItemGlowMaskHandler.GlowMasks[ModContent.ItemType<FilamentYarn>()];
-            Texture2D heldItemGlowMaskTexture = glowMaskInfo.Texture.Value;
-            float brightnessFactor = Lighting.Brightness((int)pos.X / 16, (int)pos.Y / 16);
-            Color color = Color.Lerp(glowMaskInfo.Color, lightColor, brightnessFactor);
-            Color glowMaskColor = glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - Projectile.alpha / 255f) : glowMaskInfo.Color;
-            Main.EntitySpriteDraw(heldItemGlowMaskTexture, pos, null, glowMaskColor, rotation, origin, Projectile.scale, effects);
+                var glowMaskInfo = ItemGlowMaskHandler.GlowMasks[ModContent.ItemType<FilamentYarn>()];
+                Texture2D heldItemGlowMaskTexture = glowMaskInfo.Texture.Value;
+                float brightnessFactor = Lighting.Brightness((int)pos.X / 16, (int)pos.Y / 16);
+                Color color = Color.Lerp(glowMaskInfo.Color, lightColor, brightnessFactor);
+                Color glowMaskColor = glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - Projectile.alpha / 255f) : glowMaskInfo.Color;
+                Main.EntitySpriteDraw(heldItemGlowMaskTexture, pos, null, glowMaskColor, rotation, origin, Projectile.scale, effects);
+            }
 
             {
                 var graphicsDevice = Main.instance.GraphicsDevice;
