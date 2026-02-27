@@ -59,15 +59,13 @@ sealed class FilamentYarn : NatureItem {
 
         NatureWeaponHandler.SetPotentialDamage(Item, 200);
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
-
-        Item.channel = true;
     }
 
     public sealed class FilamentYarn_Use : ModProjectile {
         private static float MAXLENGTH => 200f;
         private static ushort LINECOUNT => 5;
         private static float TENSIONMODIFIER => 0.75f;
-        private static ushort ACTIVETIME => MathUtils.SecondsToFrames(10);
+        private static ushort ACTIVETIME => MathUtils.SecondsToFrames(5);
 
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<FilamentYarn>()).Texture;
 
@@ -222,7 +220,7 @@ sealed class FilamentYarn : NatureItem {
                 return;
             }
             _connectPoints[(int)currentIndex].Item2 = position;
-            _connectPoints[(int)(++currentIndex)] = (position, null, 0f);
+            _connectPoints[(int)(++currentIndex)] = (position, null, _connectPoints[(int)currentIndex - 1].Item3);
         }
 
         public override void AI() {
@@ -319,6 +317,9 @@ sealed class FilamentYarn : NatureItem {
                 }
 
                 Projectile.timeLeft = timeLeftLast;
+
+                player4.reuseDelay = player4.itemAnimationMax;
+
                 _tension = 1f;
                 if (Main.myPlayer == owner) {
                     float num = (float)Math.PI / 2f;
