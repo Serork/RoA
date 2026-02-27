@@ -9,6 +9,7 @@ using RoA.Common.Druid;
 using RoA.Common.GlowMasks;
 using RoA.Common.VisualEffects;
 using RoA.Content.AdvancedDusts;
+using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Data;
 using RoA.Core.Defaults;
@@ -63,7 +64,7 @@ sealed class FilamentYarn : NatureItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
     }
 
-    public sealed class FilamentYarn_Use : ModProjectile {
+    public sealed class FilamentYarn_Use : NatureProjectile {
         private static float MAXLENGTH => 200f;
         private static ushort LINECOUNT => 5;
         private static float TENSIONMODIFIER => 0.75f;
@@ -92,7 +93,9 @@ sealed class FilamentYarn : NatureItem {
         public override bool? CanCutTiles() => false;
         public override bool ShouldUpdatePosition() => false;
 
-        public override void SetDefaults() {
+        protected override void SafeSetDefaults() {
+            SetNatureValues(Projectile);
+
             Projectile.SetSizeValues(10);
             Projectile.DamageType = DamageClass.Magic;
             Projectile.friendly = true;
@@ -107,6 +110,35 @@ sealed class FilamentYarn : NatureItem {
             //Projectile.hide = true;
 
             Projectile.Opacity = 0f;
+        }
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+            for (int i = 0; i < _connectPoints.Length; i++) {
+                if (i > LINECOUNT) {
+                    continue;
+                }
+                Vector2 from = _connectPoints[i].Item1;
+                Vector2 to = _connectPoints[i].Item2 ?? _mousePosition;
+                float distance = from.Distance(to);
+                float length = MAXLENGTH;
+                float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
+                float sineX = TimeSystem.TimeForVisualEffects * 5f,
+                      sineY = TimeSystem.TimeForVisualEffects * 5f;
+                SimpleCurve curve = new(from, to, Vector2.Zero);
+                curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * Tension) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+                Vector2 start = curve.Begin;
+                int count = 16 / 2;
+                for (int i2 = 1; i2 <= count; i2++) {
+                    Vector2 point = curve.GetPoint(i2 / (float)count);
+                    if (GeometryUtils.CenteredSquare(point, 10).Intersects(targetHitbox)) {
+                        return true;
+                    }
+
+                    start = point;
+                }
+            }
+
+            return false;
         }
 
         private static void DrawPrettyStarSparkle(float opacity, SpriteEffects dir, Vector2 drawpos, Microsoft.Xna.Framework.Color drawColor, Microsoft.Xna.Framework.Color shineColor, float rotation, Vector2 scale, Vector2 fatness) {
