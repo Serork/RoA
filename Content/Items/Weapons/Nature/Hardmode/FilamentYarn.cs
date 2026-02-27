@@ -65,7 +65,7 @@ sealed class FilamentYarn : NatureItem {
 
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<FilamentYarn>()).Texture;
 
-        private (Vector2, Vector2?)[] _connectPoints = null!;
+        private (Vector2, Vector2?, float)[] _connectPoints = null!;
         private Vector2 _mousePosition;
 
         public ref float InitValue => ref Projectile.localAI[0];
@@ -127,55 +127,70 @@ sealed class FilamentYarn : NatureItem {
             mainOpacity *= Ease.CubeIn(disappearOpacity);
             baseColor *= mainOpacity;
             Color color = baseColor * Helper.Wave(0.5f, 0.75f, 5f, 0f);
-            index = 0;
-            foreach ((Vector2, Vector2?) connectedPoints in _connectPoints) {
-                index++;
-                if (index > LINECOUNT + 1) {
-                    continue;
-                }
-                Vector2 from = connectedPoints.Item1;
-                if (from == Vector2.Zero) {
-                    continue;
-                }
-
-                void drawStar(Vector2 startPosition) {
-                    DrawPrettyStarSparkle(1f * 0.5f, SpriteEffects.None, startPosition - Main.screenPosition, new Microsoft.Xna.Framework.Color(251, 232, 193, 0), new Color(233, 206, 83),
-                        0f, new Vector2(2f, 2f) * 0.5f, new Vector2(2f, 2f) * 0.5f);
-                }
-                Vector2 startPosition = from;
-                drawStar(startPosition);
-                if (index == LINECOUNT + 1 && connectedPoints.Item2 is not null) {
-                    drawStar(connectedPoints.Item2.Value);
-                }
-
-                Vector2 to = connectedPoints.Item2 ?? _mousePosition;
-                if (to == _mousePosition) {
-                    drawStar(_mousePosition);
-                }
-                float distance = from.Distance(to);
-                float length = MAXLENGTH;
-                float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
-                float sineX = TimeSystem.TimeForVisualEffects * 10f,
-                      sineY = TimeSystem.TimeForVisualEffects * 10f;
-                SimpleCurve curve = new(from, to, Vector2.Zero);
-                curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
-
-                Vector2 start = curve.Begin;
-                int count = 16;
-                start = curve.Begin;
-                Color baseColor2 = new Color(196, 182, 70);
-                Color color2 = color.MultiplyRGBA(baseColor2);
-                for (int i = 1; i <= count; i++) {
-                    Vector2 point = curve.GetPoint(i / (float)count);
-                    batch.Line(start, point, color2, 4f);
-                    float num184 = Helper.Wave(2f, 6f, 1f, 0f) * 0.75f;
-                    for (int num185 = 0; num185 < 4; num185++) {
-                        Vector2 offset = Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184;
-                        batch.Line(start + offset, point + offset, new Microsoft.Xna.Framework.Color(64, 64, 64, 0).MultiplyRGBA(baseColor2) * 0.25f * mainOpacity, 4f);
+            void drawLine(bool onlyStars = false) {
+                index = 0;
+                foreach ((Vector2, Vector2?, float) connectedPoints in _connectPoints) {
+                    index++;
+                    if (index > LINECOUNT + 1) {
+                        continue;
                     }
-                    start = point;
+                    Vector2 from = connectedPoints.Item1;
+                    if (from == Vector2.Zero) {
+                        continue;
+                    }
+                    float waveOffset = Projectile.identity * 2 + 1 + index * 3;
+                    Vector2 to = connectedPoints.Item2 ?? _mousePosition;
+                    void drawStar(Vector2 startPosition) {
+                        float scaleFactor = Helper.Wave(0.625f, 0.75f, 5f, waveOffset) * 0.75f;
+                        DrawPrettyStarSparkle(0.875f * scaleFactor, SpriteEffects.None, startPosition - Main.screenPosition,
+                            Color.Lerp(new Color(127, 153, 22), new Color(251, 232, 193, 0), 0.75f),
+                            Color.Lerp(new Color(127, 153, 22), new Color(233, 206, 83), 0.75f),
+                            connectedPoints.Item3, new Vector2(2f, 2f) * scaleFactor, new Vector2(2f, 2f) * scaleFactor);
+                    }
+                    Vector2 startPosition = from;
+                    if (onlyStars) {
+                        drawStar(startPosition);
+                        if (index == LINECOUNT + 1 && connectedPoints.Item2 is not null) {
+                            drawStar(connectedPoints.Item2.Value);
+                        }
+                        if (to == _mousePosition) {
+                            drawStar(_mousePosition);
+                        }
+                    }
+                    if (onlyStars) {
+                        continue;
+                    }
+                    float distance = from.Distance(to);
+                    float length = MAXLENGTH;
+                    float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
+                    float sineX = TimeSystem.TimeForVisualEffects * 5f,
+                          sineY = TimeSystem.TimeForVisualEffects * 5f;
+                    SimpleCurve curve = new(from, to, Vector2.Zero);
+                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+
+                    Vector2 start = curve.Begin;
+                    int count = 16;
+                    start = curve.Begin;
+                    for (int i = 1; i <= count; i++) {
+                        Vector2 point = curve.GetPoint(i / (float)count);
+
+                        Color baseColor2 = Color.Lerp(new Color(127, 153, 22), new Color(196, 182, 70), 0.75f);
+                        Color baseColor3 = Color.Lerp(new Color(127, 153, 22), new Color(251, 232, 193), 1f);
+                        baseColor2 = Color.Lerp(baseColor2, baseColor3, Helper.Wave(0f, 0.75f, 10f, waveOffset + i * 0.5f));
+                        Color color2 = color.MultiplyRGBA(baseColor2);
+
+                        batch.Line(start, point, color2, 4f);
+                        float num184 = Helper.Wave(2f, 6f, 1f, 0f) * 0.75f;
+                        for (int num185 = 0; num185 < 4; num185++) {
+                            Vector2 offset = Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184;
+                            batch.Line(start + offset, point + offset, new Color(64, 64, 64, 0).MultiplyRGBA(baseColor2) * 0.25f * mainOpacity, 4f);
+                        }
+                        start = point;
+                    }
                 }
             }
+            drawLine();
+            drawLine(true);
         }
 
         private void AddPoint(Vector2 position) {
@@ -187,10 +202,12 @@ sealed class FilamentYarn : NatureItem {
                 return;
             }
             _connectPoints[(int)currentIndex].Item2 = position;
-            _connectPoints[(int)(++currentIndex)] = (position, null);
+            _connectPoints[(int)(++currentIndex)] = (position, null, 0f);
         }
 
         public override void AI() {
+            Projectile.localAI[2] += 0.01f;
+
             Player player4 = Projectile.GetOwnerAsPlayer();
 
             if (player4.IsLocal()) {
@@ -213,10 +230,14 @@ sealed class FilamentYarn : NatureItem {
                     _mousePosition = Vector2.Lerp(_mousePosition, player4.GetViableMousePosition(), 1f);
                 }
 
-                _connectPoints = new (Vector2, Vector2?)[1];
+                _connectPoints = new (Vector2, Vector2?, float)[1];
                 AddPoint(_mousePosition);
             }
             else {
+                for (int i = 0; i < _connectPoints.Length; i++) {
+                    _connectPoints[i].Item3 += 0.01f * _connectPoints[i].Item1.DirectionTo(_connectPoints[i].Item2 ?? _mousePosition).X.GetDirection();
+                }
+
                 void addPoint() {
                     AddPoint(_mousePosition);
                 }
@@ -225,7 +246,7 @@ sealed class FilamentYarn : NatureItem {
                 }
 
                 if (Cooldown <= 0f) {
-                    foreach ((Vector2, Vector2?) connectedPoints in _connectPoints) {
+                    foreach ((Vector2, Vector2?, float) connectedPoints in _connectPoints) {
                         if (connectedPoints.Item2 is not null) {
                             continue;
                         }
