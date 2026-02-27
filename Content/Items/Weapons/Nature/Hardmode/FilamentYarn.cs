@@ -398,9 +398,10 @@ sealed class FilamentYarn : NatureItem {
 
                 Projectile.timeLeft = timeLeftLast;
 
+                _tension = 1f;
+
                 player4.reuseDelay = player4.itemAnimationMax;
 
-                _tension = 1f;
                 if (Main.myPlayer == owner) {
                     float num = (float)Math.PI / 2f;
                     Vector2 vector = vector21;
@@ -426,12 +427,15 @@ sealed class FilamentYarn : NatureItem {
                 }
             }
             else {
+                if (_tension > 0f) {
+                    player4.reuseDelay = player4.itemAnimationMax;
+                }
                 _tension = Helper.Approach(_tension, 0f, TimeSystem.LogicDeltaTime * 3f);
             }
             //Projectile.position -= velocity.SafeNormalize() * 14f;
             //Projectile.position -= velocity.TurnLeft().SafeNormalize() * 2f * -player.direction * player.gravDir;
 
-            if (CanSpawnMoreLines) {
+            if (CanSpawnMoreLines || _tension > 0f) {
                 if (velocity.X > 0f)
                     Main.player[owner].ChangeDir(1);
                 else if (velocity.X < 0f)
@@ -460,7 +464,7 @@ sealed class FilamentYarn : NatureItem {
 
             var pos = Projectile.Center - Main.screenPosition;
 
-            if (CanSpawnMoreLines) {
+            if (CanSpawnMoreLines || _tension > 0f) {
                 var effects = (Projectile.spriteDirection == -1) ? Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically : Microsoft.Xna.Framework.Graphics.SpriteEffects.None;
                 if (player.gravDir < 0) {
                     effects = (Projectile.spriteDirection == -1) ? Microsoft.Xna.Framework.Graphics.SpriteEffects.None : Microsoft.Xna.Framework.Graphics.SpriteEffects.FlipVertically;
@@ -493,7 +497,8 @@ sealed class FilamentYarn : NatureItem {
                 Color glowMaskColor = glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - Projectile.alpha / 255f) : glowMaskInfo.Color;
                 Main.EntitySpriteDraw(heldItemGlowMaskTexture, pos, null, glowMaskColor, rotation, origin, Projectile.scale, effects);
 
-                DrawStar(pos + Main.screenPosition + Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2) * 50f, 3f * Projectile.Opacity, 0f, rotation);
+                float strength = MathHelper.Lerp(3.5f, 1.5f, Projectile.ai[2] / (LINECOUNT + 1));
+                DrawStar(pos + Main.screenPosition + Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2) * 50f, strength * Projectile.Opacity * _tension, 0f, rotation);
             }
 
             {
