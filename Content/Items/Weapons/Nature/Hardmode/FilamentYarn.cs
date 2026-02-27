@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
@@ -150,12 +152,12 @@ sealed class FilamentYarn : NatureItem {
             Player owner = Projectile.GetOwnerAsPlayer();
             int index = 0;
 
-            float opacity2 = 1f;
-            float disappearOpacity = 1f;
+            float opacity2 = Projectile.Opacity;
+            float disappearOpacity = Utils.GetLerpValue(0f, 30, Projectile.timeLeft, true);
             float opacity = MathF.Min(opacity2, disappearOpacity);
             Color baseColor = Color.White;
             baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
-            float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true) * Projectile.Opacity;
+            float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true);
             mainOpacity *= Ease.CubeIn(disappearOpacity);
             baseColor *= mainOpacity;
             Color color = baseColor * Helper.Wave(0.5f, 0.75f, 5f, 0f);
@@ -233,6 +235,10 @@ sealed class FilamentYarn : NatureItem {
         }
 
         private void SpawnStarDust(Vector2 from, float velocitySpeed = 1f, float scaleModifier = 1f) {
+            if (Projectile.timeLeft < 30) {
+                return;
+            }
+
             Vector2 to = from;
             Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
             velocity *= Main.rand.NextFloat(0.5f, 1f) * velocitySpeed;

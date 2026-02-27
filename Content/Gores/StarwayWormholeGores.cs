@@ -33,11 +33,11 @@ class StarwayWormholeGore1 : ModGore, ICustomGoreDraw {
 
     void ICustomGoreDraw.Draw(SpriteBatch spriteBatch, Gore gore) {
         float opacity2 = gore.timeLeft < Gore.goreTime - 30 ? 1f : (1f - gore.alpha / 255f);
-        float disappearOpacity = 1f;
+        float disappearOpacity = Utils.GetLerpValue(Gore.goreTime - 120, Gore.goreTime - 60, gore.timeLeft, true);
         float opacity = MathF.Min(opacity2, disappearOpacity);
         Color baseColor = Color.White;
         baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
-        float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true) * Utils.GetLerpValue(Gore.goreTime - 120, Gore.goreTime - 60, gore.timeLeft, true);
+        float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true);
         mainOpacity *= Ease.CubeIn(disappearOpacity);
         baseColor *= mainOpacity;
         Color color = baseColor * Helper.Wave(0.5f, 0.75f, 5f, 0f);
