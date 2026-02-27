@@ -343,7 +343,14 @@ sealed class FilamentYarn : NatureItem {
 
                     Projectile.velocity = vector4;
                 }
+            }
+            else {
+                _tension = Helper.Approach(_tension, 0f, TimeSystem.LogicDeltaTime * 3f);
+            }
+            //Projectile.position -= velocity.SafeNormalize() * 14f;
+            //Projectile.position -= velocity.TurnLeft().SafeNormalize() * 2f * -player.direction * player.gravDir;
 
+            if (CanSpawnMoreLines) {
                 if (velocity.X > 0f)
                     Main.player[owner].ChangeDir(1);
                 else if (velocity.X < 0f)
@@ -363,11 +370,6 @@ sealed class FilamentYarn : NatureItem {
 
                 Projectile.Center = Utils.Floor(Projectile.Center);
             }
-            else {
-                _tension = Helper.Approach(_tension, 0f, TimeSystem.LogicDeltaTime * 3f);
-            }
-            //Projectile.position -= velocity.SafeNormalize() * 14f;
-            //Projectile.position -= velocity.TurnLeft().SafeNormalize() * 2f * -player.direction * player.gravDir;
         }
 
         public override bool PreDraw(ref Color lightColor) {
@@ -438,7 +440,13 @@ sealed class FilamentYarn : NatureItem {
                          scaleMatrix);
 
 
-                DrawConnectedLines();
+                if (CanSpawnMoreLines) {
+                    DrawConnectedLines();
+                }
+                else {
+                    DrawConnectedLines();
+                    DrawConnectedLines();
+                }
 
                 sb.End();
 
