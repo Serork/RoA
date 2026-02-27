@@ -69,7 +69,7 @@ sealed class StarwayDust : ModDust {
 
         float scale = dust.GetVisualScale();
         Main.spriteBatch.Draw(Texture2D.Value, dust.position - Main.screenPosition, dust.frame, color, dust.GetVisualRotation(), new Vector2(4f, 4f), scale, SpriteEffects.None, 0f);
-        float num184 = Helper.Wave(2f, 6f, 1f, 0f);
+        float num184 = Helper.Wave(2f, 4f, 1f, 0f);
         for (int num185 = 0; num185 < 4; num185++) {
             Main.spriteBatch.Draw(Texture2D.Value, Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184 + dust.position - Main.screenPosition, dust.frame,
                 new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity, dust.GetVisualRotation(), new Vector2(4f, 4f), scale, SpriteEffects.None, 0f);

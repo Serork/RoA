@@ -156,7 +156,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                     }
                     batch.Draw(texture, position, drawInfo);
 
-                    float num184 = Helper.Wave(2f, 6f, 1f, 0f);
+                    float num184 = Helper.Wave(2f, 4f, 1f, 0f);
                     for (int num185 = 0; num185 < 4; num185++) {
                         batch.Draw(texture, position + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
                             Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 0.25f * mainOpacity

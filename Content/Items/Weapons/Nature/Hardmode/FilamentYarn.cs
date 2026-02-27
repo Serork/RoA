@@ -198,7 +198,7 @@ sealed class FilamentYarn : NatureItem {
 
                         float lineThickness = Helper.Wave(2f, 6f, 1f, waveOffset + i * 1f);
                         batch.Line(start, point, color2, lineThickness);
-                        float num184 = Helper.Wave(2f, 6f, 1f, waveOffset) * 0.75f;
+                        float num184 = Helper.Wave(2f, 4f, 1f, waveOffset);
                         for (int num185 = 0; num185 < 4; num185++) {
                             Vector2 offset = Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184;
                             batch.Line(start + offset, point + offset, new Color(64, 64, 64, 0).MultiplyRGBA(baseColor2) * 0.25f * mainOpacity, lineThickness);

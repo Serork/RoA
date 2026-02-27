@@ -358,7 +358,7 @@ sealed class FilamentNPC1 : ModNPC {
                     spriteBatch.Draw(_tentaclesTexture_Glow.Value, startPosition, drawInfo with {
                         Color = new Microsoft.Xna.Framework.Color(255 - rCurrentNPC.alpha, 255 - rCurrentNPC.alpha, 255 - rCurrentNPC.alpha, 255 - rCurrentNPC.alpha)
                     });
-                    float num184 = Helper.Wave(2f, 6f, 1f, NPC.whoAmI);
+                    float num184 = Helper.Wave(2f, 4f, 1f, NPC.whoAmI);
                     for (int num185 = 0; num185 < 4; num185++) {
                         spriteBatch.Draw(_tentaclesTexture_Glow.Value, startPosition + Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184, drawInfo with {
                             Color = new Microsoft.Xna.Framework.Color(64, 64, 64, 0) * 1f
