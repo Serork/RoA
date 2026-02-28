@@ -464,7 +464,7 @@ sealed class FilamentYarn : NatureItem {
                 return;
             }
             if (Init) {
-                if (/*Projectile.timeLeft < 30*/_tension <= 0f && !_exploded) {
+                if (Projectile.timeLeft < 30/*_tension <= 0f */&& !_exploded) {
                     Explode();
                 }
             }
