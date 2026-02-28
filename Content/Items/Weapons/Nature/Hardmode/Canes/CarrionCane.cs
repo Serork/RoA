@@ -67,7 +67,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                     Index = (byte)i,
                     ShouldBeShowed = false,
                     Frame = (byte)Main.rand.Next(CHARGEFRAMECOUNT),
-                    Position = CorePosition + Main.rand.NextVector2CircularEdge(30f, 30f),
+                    Position = CorePosition + Projectile.GetOwnerAsPlayer().velocity + Main.rand.NextVector2CircularEdge(30f, 30f),
                 };
             }
         }
@@ -157,7 +157,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                 ref ChargeInfo chargeData = ref _chargeData[i];
                 if (chargeData.ShouldBeShowed) {
                     ref Vector2 position = ref chargeData.Position;
-                    position = Vector2.Lerp(position, CorePosition + Vector2.UnitY.RotatedBy(Projectile.rotation + MathHelper.Pi * direction + i * (float)chargeCount / MathHelper.TwoPi * 1.5f * -direction) * (30f * AttackProgress01), 1f);
+                    position = Vector2.Lerp(position, CorePosition + Projectile.GetOwnerAsPlayer().velocity + Vector2.UnitY.RotatedBy(Projectile.rotation + MathHelper.Pi * direction + i * (float)chargeCount / MathHelper.TwoPi * 1.5f * -direction) * (30f * AttackProgress01), 1f);
                     if (AttackProgress01 < 1f) {
                         chargeData.Rotation += 0.05f * direction;
                     }
@@ -181,7 +181,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                         return;
                     }
 
-                    Vector2 endPosition = CorePosition;
+                    Vector2 endPosition = CorePosition + Projectile.GetOwnerAsPlayer().velocity;
                     Vector2 currentPosition = chargeData.Position;
                     if (currentPosition == Vector2.Zero) {
                         continue;
@@ -202,7 +202,7 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                         progress += Main.rand.NextFloat(0.0001f, 0.00033f);
 
                         if (length <= height * 0.3f || 
-                            (CorePosition - currentPosition).Length() < 4f) {
+                            (CorePosition + Projectile.GetOwnerAsPlayer().velocity - currentPosition).Length() < 4f) {
                             break;
                         }
 

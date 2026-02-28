@@ -249,7 +249,7 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                 Scale = waterScale,
                 Rotation = waterRotation
             };
-            Vector2 position = CorePosition - Vector2.One;
+            Vector2 position = CorePosition + Projectile.GetOwnerAsPlayer().velocity - Vector2.One;
             position += Vector2.UnitX.RotatedBy(waterRotation) * 4f * -Projectile.direction;
             SpriteBatch batch = Main.spriteBatch;
             batch.Draw(waterTexture, position, waterDrawInfo);

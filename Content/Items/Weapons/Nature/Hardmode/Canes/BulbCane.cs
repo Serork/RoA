@@ -79,7 +79,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
             _smallSummonMouthData = new SmallSummonMouthInfo[SHARDCOUNT];
             for (int i = 0; i < _smallSummonMouthData.Length; i++) {
                 ref SmallSummonMouthInfo shardInfo = ref _smallSummonMouthData[i];
-                shardInfo.Position = CorePosition;
+                shardInfo.Position = CorePosition + Projectile.GetOwnerAsPlayer().velocity;
                 shardInfo.Progress = shardInfo.Opacity = 0f;
             }
 
@@ -154,7 +154,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
                 float progress = 1f - AttackProgress01;
                 float progress2 = (float)i / totalIndexesInGroup;
                 if (progress2 < progress) {
-                    shardInfo.Position = CorePosition;
+                    shardInfo.Position = CorePosition + Projectile.GetOwnerAsPlayer().velocity;
                     continue;
                 }
 
@@ -170,10 +170,10 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
                 //num *= sizeFactor;
                 shardInfo.Progress = y;
                 shardInfo.Opacity = Utils.GetLerpValue(0.75f, 0.1f, miscCounter, true);
-                Vector2 value = CorePosition + vector2 * new Vector2(0.75f, y) * num;
+                Vector2 value = CorePosition + Projectile.GetOwnerAsPlayer().velocity + vector2 * new Vector2(0.75f, y) * num;
                 Vector2 oldPosition = shardInfo.Position;
                 shardInfo.Position = Vector2.Lerp(shardInfo.Position, value, 0.3f);
-                shardInfo.Position = Vector2.Lerp(shardInfo.Position, CorePosition, ReleaseProgress);
+                shardInfo.Position = Vector2.Lerp(shardInfo.Position, CorePosition + Projectile.GetOwnerAsPlayer().velocity, ReleaseProgress);
                 shardInfo.Rotation = Utils.AngleLerp(shardInfo.Rotation, oldPosition.AngleTo(shardInfo.Position) - MathHelper.PiOver2, 0.5f);
             }
         }
@@ -208,7 +208,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
 
                 Vector2 position = smallSummonMouthInfo.Position;
 
-                Vector2 startPosition = CorePosition,
+                Vector2 startPosition = CorePosition + Projectile.GetOwnerAsPlayer().velocity,
                         endPosition = position;
 
                 while (true) {
@@ -278,7 +278,7 @@ sealed class BulbCane : CaneBaseItem<BulbCane.BulbCaneBase> {
             SpriteBatch batch = Main.spriteBatch;
             Texture2D circleTexture = ResourceManager.Circle6;
             Rectangle circleClip = circleTexture.Bounds;
-            Vector2 circlePosition = CorePosition,
+            Vector2 circlePosition = CorePosition + Projectile.GetOwnerAsPlayer().velocity,
                     circleOrigin = circleClip.Centered();
             circlePosition -= Main.screenPosition;
             float alpha = 0.875f * attackProgress;
