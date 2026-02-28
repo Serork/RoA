@@ -271,7 +271,7 @@ sealed class FilamentYarn : NatureItem {
                 }
             }
 
-            void makeExplosion(Vector2 position, int width, int height) {
+            void makeExplosion(Vector2 position, int width, int height, float mainRotation) {
                 for (int num272 = 0; num272 < 4; num272++) {
                     int dust = Dust.NewDust(new Vector2(position.X, position.Y), width, height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
                     Main.dust[dust].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
@@ -312,7 +312,14 @@ sealed class FilamentYarn : NatureItem {
                     int num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.5f);
                     Main.dust[num274].noGravity = true;
 
-                    Main.dust[num274].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 2f;
+                    Main.dust[num274].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 4f;
+
+                    if (num273 < 10) {
+                        Main.dust[num274].velocity += Vector2.UnitY.RotatedBy(mainRotation);
+                    }
+                    else {
+                        Main.dust[num274].velocity += Vector2.UnitY.RotatedBy(mainRotation - MathHelper.Pi);
+                    }
 
                     Dust dust2 = Main.dust[num274];
                     dust2.velocity *= 3f;
@@ -366,9 +373,12 @@ sealed class FilamentYarn : NatureItem {
                 int count = 16 / 2;
                 for (int i2 = 1; i2 <= count; i2 += 4) {
                     Vector2 point = curve.GetPoint(i2 / (float)count);
+                    Vector2 point2 = curve.GetPoint((i2 + 1) / (float)count);
+
+                    float mainRotation = point.AngleTo(point2);
 
                     int size = 125;
-                    makeExplosion(point - Vector2.One * size / 2f, size, size);
+                    makeExplosion(point - Vector2.One * size / 2f, size, size, mainRotation);
                     //Lighting.AddLight(point, new Color(196, 182, 70).ToVector3() * 1f);
 
                     start = point;

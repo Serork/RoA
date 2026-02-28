@@ -1,18 +1,10 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-using RoA.Common.Druid.Forms;
-using RoA.Common.GlowMasks;
-using RoA.Common.Players;
-using RoA.Content.Forms;
+﻿using RoA.Common.Players;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
+using RoA.Core.Utility.Vanilla;
 
 using Terraria;
-using Terraria.DataStructures;
-using Terraria.Graphics.Shaders;
 using Terraria.ID;
-using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
@@ -29,7 +21,9 @@ sealed class ChlorophyteCowl : NatureItem, IDoubleTap {
     }
 
     public override void UpdateArmorSet(Player player) {
+        player.AddBuff(BuffID.LeafCrystal, 18000);
 
+        player.GetCommon().IsChlorophyteCowlArmorSetActive = true;
     }
 
     void IDoubleTap.OnDoubleTap(Player player, IDoubleTap.TapDirection direction) {
@@ -37,7 +31,7 @@ sealed class ChlorophyteCowl : NatureItem, IDoubleTap {
     }
 
     public override void ArmorSetShadows(Player player) {
-
+        player.armorEffectDrawShadowSubtle = true;
     }
 
     public override bool IsArmorSet(Item head, Item body, Item legs) => body.type == ItemID.ChlorophytePlateMail && legs.type == ItemID.ChlorophyteGreaves;

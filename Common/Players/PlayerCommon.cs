@@ -8,6 +8,7 @@ using RoA.Common.Items;
 using RoA.Content.Buffs;
 using RoA.Content.Dusts;
 using RoA.Content.Items.Equipables.Accessories;
+using RoA.Content.Items.Equipables.Armor.Nature.Hardmode;
 using RoA.Content.Items.Equipables.Miscellaneous;
 using RoA.Content.Items.Equipables.Wreaths.Hardmode;
 using RoA.Content.Items.Weapons.Ranged.Hardmode;
@@ -366,6 +367,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public Vector2[] OldUseItemPos = null!;
     public float[] OldUseItemRot = null!;
 
+    public bool IsChlorophyteCowlArmorSetActive;
+
     public void KeepOldUseItemInfo() {
         if (OldUseItemPos == null) {
             return;
@@ -399,11 +402,33 @@ sealed partial class PlayerCommon : ModPlayer {
     }
 
     public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo) {
+        if (drawInfo.drawPlayer.isDisplayDollOrInanimate) {
+            return;
+        }
+
         drawInfo.colorHead *= HereticVeilEffectOpacity;
         drawInfo.colorHair *= HereticVeilEffectOpacity;
         drawInfo.colorEyes *= HereticVeilEffectOpacity;
         drawInfo.colorEyeWhites *= HereticVeilEffectOpacity;
         drawInfo.colorArmorHead *= HereticVeilEffectOpacity;
+
+        if (IsChlorophyteCowlArmorSetActive) {
+            if (Player.head == EquipLoader.GetEquipSlot(RoA.Instance, nameof(ChlorophyteCowl), EquipType.Head) && Player.body == ArmorIDs.Body.ChlorophytePlateMail && Player.legs == ArmorIDs.Legs.ChlorophyteGreaves) {
+                float num10 = (float)(int)Main.mouseTextColor / 200f - 0.3f;
+                if (drawInfo.shadow != 0f)
+                    num10 = 0f;
+
+                drawInfo.colorArmorHead.R = (byte)((float)(int)drawInfo.colorArmorHead.R * num10);
+                drawInfo.colorArmorHead.G = (byte)((float)(int)drawInfo.colorArmorHead.G * num10);
+                drawInfo.colorArmorHead.B = (byte)((float)(int)drawInfo.colorArmorHead.B * num10);
+                drawInfo.colorArmorBody.R = (byte)((float)(int)drawInfo.colorArmorBody.R * num10);
+                drawInfo.colorArmorBody.G = (byte)((float)(int)drawInfo.colorArmorBody.G * num10);
+                drawInfo.colorArmorBody.B = (byte)((float)(int)drawInfo.colorArmorBody.B * num10);
+                drawInfo.colorArmorLegs.R = (byte)((float)(int)drawInfo.colorArmorLegs.R * num10);
+                drawInfo.colorArmorLegs.G = (byte)((float)(int)drawInfo.colorArmorLegs.G * num10);
+                drawInfo.colorArmorLegs.B = (byte)((float)(int)drawInfo.colorArmorLegs.B * num10);
+            }
+        }
     }
 
     public override bool FreeDodge(Player.HurtInfo info) {
@@ -1871,6 +1896,8 @@ sealed partial class PlayerCommon : ModPlayer {
     public delegate void ResetEffectsDelegate(Player player);
     public static event ResetEffectsDelegate ResetEffectsEvent;
     public override void ResetEffects() {
+        IsChlorophyteCowlArmorSetActive = false;
+
         if (MimicCCed) {
             Player.webbed = true;
         }
