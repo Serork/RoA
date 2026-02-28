@@ -303,7 +303,7 @@ sealed class FilamentYarn : NatureItem {
                     int num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.5f);
                     Main.dust[num274].noGravity = true;
 
-                    Main.dust[num274].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                    Main.dust[num274].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 2f;
 
                     Dust dust2 = Main.dust[num274];
                     dust2.velocity *= 3f;
