@@ -313,15 +313,16 @@ sealed class FilamentYarn : NatureItem {
                     dust2.velocity *= 3f;
                 }
 
-                for (int num273 = 0; num273 < 20; num273++) {
+                int count = 15;
+                for (int num273 = 0; num273 < count; num273++) {
                     if (Main.rand.NextBool()) {
                         int num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.5f);
                         Main.dust[num274].noGravity = true;
                         Main.dust[num274].noLightEmittence = true;
 
-                        Main.dust[num274].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 5f;
+                        Main.dust[num274].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 4f;
 
-                        if (num273 < 10) {
+                        if (num273 <= count / 2) {
                             Main.dust[num274].velocity += Vector2.UnitY.RotatedBy(mainRotation);
                         }
                         else {
@@ -338,13 +339,13 @@ sealed class FilamentYarn : NatureItem {
                     else {
                         Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
                         velocity *= Main.rand.NextFloat(0.5f, 1f);
-                        if (num273 < 10) {
+                        if (num273 <= count / 2) {
                             velocity += Vector2.UnitY.RotatedBy(mainRotation) * 2.5f;
                         }
                         else {
                             velocity += Vector2.UnitY.RotatedBy(mainRotation - MathHelper.Pi) * 2.5f;
                         }
-                        Vector2 from = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 5f;
+                        Vector2 from = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 4f;
                         FilamentYarnDust2? filamentYarnDust = AdvancedDustSystem.New<FilamentYarnDust2>(AdvancedDustLayer.ABOVEDUSTS)?
                             .Setup(from,
                                    velocity,
