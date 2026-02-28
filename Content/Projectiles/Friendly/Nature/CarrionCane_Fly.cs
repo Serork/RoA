@@ -29,7 +29,11 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
 
     private Color _color;
 
-    public override void SetStaticDefaults() => Projectile.SetTrail(0, 5);
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+
+        Projectile.SetTrail(0, 5);
+    }
 
     protected override void SafeSetDefaults() {
         SetNatureValues(Projectile, shouldChargeWreath: true, shouldApplyAttachedItemDamage: true);

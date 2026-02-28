@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
@@ -45,6 +46,10 @@ sealed class HornsLightning : FormProjectile_NoTextureLoad {
 
     public bool EnemySpawn => Seed == 1f;
     public bool SkySpawn => Seed == 2f;
+
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+    }
 
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(80);
