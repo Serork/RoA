@@ -128,7 +128,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                         dustAngle += MathHelper.Pi * k;
                         Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
                         Func<float, float> func = k % 2 == 0 ? MathF.Sin : MathF.Cos;
-                        dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi) * 0.5f;
+                        dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi - MathHelper.PiOver4 * 0.75f) * 0.5f;
                         List<GemType> gemTypes = [.. Enum.GetValues(typeof(GemType)).Cast<GemType>()];
                         int gemCount = gemTypes.Count;
                         ref Color gemColor = ref _gemColor[i];

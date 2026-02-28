@@ -243,12 +243,9 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
                         float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
                         dustAngle += MathHelper.Pi * k;
-                        if (player.FacedRight()) {
-                            dustAngle *= -player.direction;
-                        }
                         Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
-                        Func<float, float> func = k % 2 == 0 ? MathF.Sin : MathF.Cos;
-                        dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi) * 0.5f;
+                        Func<float, float> func = (k % 2 == 0 ? MathF.Sin : MathF.Cos);
+                        dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi - MathHelper.PiOver4 * 0.75f) * 0.5f;
                         int dustType = Main.rand.NextBool() ? ModContent.DustType<FilamentDust>() : ModContent.DustType<StarwayDust>();
                         float dustScale = Main.rand.NextFloat(1.25f, 1.5f) * 1f * MathF.Max(0.6f, 1f - visualProgress2);
                         dustScale *= 2f;
@@ -265,22 +262,17 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                 circleCount = 2;
                 value = 4;
                 dustSpawnPositionOffsetFactor *= 2f;
+                dustRotationSpeed *= -1;
                 for (int k = 0; k < value; k++) {
-                    if (k == 0) {
-                        continue;
-                    }
                     for (int i = 1; i < circleCount; i++) {
                         byte nextCircleIndex = (byte)i;
                         float circleProgress = (float)nextCircleIndex / circleCount;
                         Vector2 circleSize = Vector2.UnitY * dustSpawnPositionOffsetFactor * Ease.CubeOut(circleProgress) * visualProgress2;
                         float dustAngle = step * MathHelper.Pi * dustRotationSpeed;
                         dustAngle += MathHelper.Pi * k;
-                        if (!player.FacedRight()) {
-                            dustAngle *= player.direction;
-                        }
                         Vector2 dustSpawnPosition = corePosition + circleSize.RotatedBy(dustAngle);
-                        Func<float, float> func = k % 2 == 0 ? MathF.Sin : MathF.Cos;
-                        dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi) * 1f;
+                        Func<float, float> func = (k % 2 == 0 ? MathF.Sin : MathF.Cos);
+                        dustSpawnPosition += circleSize.RotatedBy(func(1f - Utils.Clamp(AttackProgress01, 0.5f, 1f)) * MathHelper.Pi - MathHelper.PiOver4 * 0.75f) * 1f;
                         int dustType = Main.rand.NextBool() ? ModContent.DustType<FilamentDust>() : ModContent.DustType<StarwayDust>();
                         float dustScale = Main.rand.NextFloat(1.25f, 1.5f) * 1f * MathF.Max(0.6f, 1f - visualProgress2);
                         dustScale *= 2f;
