@@ -336,7 +336,7 @@ sealed class FilamentYarn : NatureItem {
                 if (!Main.dedServ) {
                     for (int num175 = 0; num175 < 2; num175++) {
                         int num176 = Gore.NewGore(Projectile.GetSource_FromThis(), position + new Vector2((float)(width * Main.rand.Next(100)) / 100f, (float)(height * Main.rand.Next(100)) / 100f) - Vector2.One * 10f, default(Vector2), Main.rand.Next(61, 64));
-                        Main.gore[num176].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                        Main.gore[num176].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) * 0.75f;
                         Gore gore2 = Main.gore[num176];
                         gore2.velocity *= 0.3f;
                         Main.gore[num176].velocity.X += (float)Main.rand.Next(-10, 11) * 0.05f;
