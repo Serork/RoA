@@ -7,6 +7,8 @@ using RoA.Common;
 using RoA.Common.Druid;
 using RoA.Common.GlowMasks;
 using RoA.Common.Players;
+using RoA.Common.VisualEffects;
+using RoA.Content.AdvancedDusts;
 using RoA.Content.Dusts;
 using RoA.Content.Dusts.Backwoods;
 using RoA.Content.Projectiles.Friendly.Nature;
@@ -73,6 +75,49 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
             }
         }
 
+        protected override void SpawnDustsOnShoot(Player player, Vector2 corePosition) {
+            int count = 15;
+            for (int num273 = 0; num273 < count; num273++) {
+                Vector2 position = corePosition;
+                int width = 10;
+                int height = 10;
+                if (num273 < count / 2) {
+                    int num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, Main.rand.NextBool() ? ModContent.DustType<FilamentDust>() : ModContent.DustType<StarwayDust>(), 0f, 0f, 0, default(Color), 2.5f);
+                    Main.dust[num274].noGravity = true;
+                    Main.dust[num274].noLightEmittence = true;
+
+                    Vector2 velocity = Vector2.One.RotatedBy(MathHelper.TwoPi * Main.rand.NextFloat());
+                    velocity *= Main.rand.NextFloat(0.25f, 1f) * 2f;
+
+                    Main.dust[num274].position = position + Main.rand.NextVector2Circular(width, height) / 4f;
+                    Main.dust[num274].velocity += velocity;
+
+
+                    Dust dust2 = Main.dust[num274];
+                    dust2.velocity *= 3f;
+                    num274 = Dust.NewDust(new Vector2(position.X, position.Y) - new Vector2(width, height) / 2f, width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 100, default(Color), 1.5f);
+                    dust2 = Main.dust[num274];
+                    dust2.velocity *= 2f;
+                    Main.dust[num274].noGravity = true;
+                }
+                else {
+                    Vector2 velocity = Vector2.One.RotatedBy(MathHelper.TwoPi * Main.rand.NextFloat());
+                    velocity *= Main.rand.NextFloat(0.25f, 1f) * 3f;
+                    //if (num273 <= count / 2) {
+                    //    velocity += Vector2.UnitY.RotatedBy(mainRotation) * 2.5f;
+                    //}
+                    //else {
+                    //    velocity += Vector2.UnitY.RotatedBy(mainRotation - MathHelper.Pi) * 2.5f;
+                    //}
+                    Vector2 from = position + Main.rand.NextVector2Circular(width, height) / 4f;
+                    FilamentYarnDust2? filamentYarnDust = AdvancedDustSystem.New<FilamentYarnDust2>(AdvancedDustLayer.ABOVEDUSTS)?
+                        .Setup(from,
+                               velocity,
+                               scale: 1f);
+                }
+            }
+        }
+
         protected override void AfterProcessingCane() {
             for (int i = 0; i < _wormData.Length; i++) {
                 ref WormInfo wormInfo = ref _wormData[i];
@@ -110,6 +155,8 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
         }
 
         public override void PostDraw(Color lightColor) {
+            return;
+
             Texture2D texture = _wormTexture.Value;
             SpriteBatch batch = Main.spriteBatch;
             for (int i = 0; i < _wormData.Length; i++) {
