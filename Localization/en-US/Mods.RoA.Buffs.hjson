@@ -375,3 +375,8 @@ FilamentBinding: {
 	DisplayName: Filament Binding
 	Description: Mods.RoA.Buffs.FilamentBinding.Description
 }
+
+ChlorophyteSlug: {
+	DisplayName: Chlorophyte Slug
+	Description: Mods.RoA.Buffs.ChlorophyteSlug.Description
+}
