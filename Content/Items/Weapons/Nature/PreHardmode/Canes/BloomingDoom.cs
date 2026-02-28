@@ -97,12 +97,12 @@ abstract class TulipBase : CaneBaseProjectile {
         dust.velocity = (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor;
         dust.velocity *= 0.9f;
         // hardcoded for now
-        _random.Clear();
-        _random.needsRefresh = true;
-        _random.Add(0);
-        _random.Add(1, 0.25);
-        _random.Add(2, 0.25);
-        dust.customData = _random.Get();
+        //_random.Clear();
+        //_random.needsRefresh = true;
+        //_random.Add(0);
+        //_random.Add(1, 0.25);
+        //_random.Add(2, 0.25);
+        dust.customData = player;
         dust.noGravity = true;
 
         if (flag) {

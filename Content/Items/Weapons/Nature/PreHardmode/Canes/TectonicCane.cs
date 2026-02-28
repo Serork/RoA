@@ -50,11 +50,14 @@ sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
             int count = 10;
             for (int i = 0; i < count; i++) {
                 float progress = (float)i / count;
-                AdvancedDustSystem.New<TectonicDebris>(AdvancedDustLayer.BEHINDPROJS)?.
+                TectonicDebris? tectonicDebris = AdvancedDustSystem.New<TectonicDebris>(AdvancedDustLayer.BEHINDPROJS)?.
                     Setup(
                     corePosition - Vector2.One * 5f + Main.rand.RandomPointInArea(10f, 10f),
                     Vector2.One.RotatedByRandom(MathHelper.TwoPi * progress).SafeNormalize(Vector2.One) * Main.rand.NextFloat(2f, 5f),
                     scale: Main.rand.NextFloat(0.9f, 1.1f) * 1.5f);
+                if (tectonicDebris is not null) {
+                    tectonicDebris.CustomData = player;
+                }
             }
         }
 
@@ -63,13 +66,14 @@ sealed class TectonicCane : CaneBaseItem<TectonicCane.TectonicCaneBase> {
             float offset = 40f * (1f - MathHelper.Clamp(step, 0.4f, 1f));
             Vector2 randomOffset = Main.rand.RandomPointInArea(offset, offset), spawnPosition = corePosition + randomOffset;
             bool flag = !Main.rand.NextBool(3);
-            int dustType = flag ? ModContent.DustType<TectonicDust>() : DustID.Torch;
+            int dustType = flag ? ModContent.DustType<TectonicDust>() : ModContent.DustType<Torch_Normal>();
             float velocityFactor = MathHelper.Clamp(Vector2.Distance(spawnPosition, corePosition) / offset, 0.25f, 1f) * 2f * Math.Max(step, 0.25f) + 0.25f;
             Dust dust = Dust.NewDustPerfect(spawnPosition, dustType,
                 Scale: MathHelper.Clamp(velocityFactor * 1.4f, 1.2f, 1.75f));
             dust.velocity = (corePosition - spawnPosition).SafeNormalize(Vector2.One) * velocityFactor;
             dust.velocity *= 0.9f;
             dust.noGravity = true;
+            dust.customData = player;
 
             if (player.whoAmI == Main.myPlayer) {
                 EvilBranch.GetPos(player, out Point point, out Point point2, maxDistance: 800f);

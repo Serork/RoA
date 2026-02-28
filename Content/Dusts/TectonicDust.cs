@@ -11,6 +11,11 @@ sealed class TectonicDust : ModDust {
     public override void SetStaticDefaults() => UpdateType = -1;
 
     public override bool Update(Dust dust) {
+        if (dust.customData != null && dust.customData is Player) {
+            Player player9 = (Player)dust.customData;
+            dust.position += player9.position - player9.oldPosition;
+        }
+
         if (dust.customData is int v && v == 1) {
             dust.scale -= 0.02f;
             //dust.position.Y += 0.02f;

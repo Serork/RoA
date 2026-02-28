@@ -19,6 +19,11 @@ sealed class TectonicDebris : AdvancedDust<TectonicDebris> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
+        if (CustomData != null && CustomData is Player) {
+            Player player9 = (Player)CustomData;
+            Position += player9.position - player9.oldPosition;
+        }
+
         float length = Velocity.Length();
         Rotation += length * 0.0314f;
 
