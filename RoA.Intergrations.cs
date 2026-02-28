@@ -77,9 +77,12 @@ sealed partial class RoA : Mod {
             musicDisplay.Call(
                 "AddMusic", slotId, displayName, author, mod.DisplayName);
         }
-        addMusicDisplayIntergationFor("Lothor", $"{ResourceManager.SOUNDSPATH}/Music/Lothor");
-        addMusicDisplayIntergationFor("Backwoods", $"{ResourceManager.SOUNDSPATH}/Music/ThicketNight");
-        addMusicDisplayIntergationFor("BackwoodsFog", $"{ResourceManager.SOUNDSPATH}/Music/Fog");
+
+
+        // TODO: add support for new trackes
+        //addMusicDisplayIntergationFor("Lothor", $"{ResourceManager.SOUNDSPATH}/Music/Lothor");
+        //addMusicDisplayIntergationFor("Backwoods", $"{ResourceManager.SOUNDSPATH}/Music/BackwoodsDay");
+        //addMusicDisplayIntergationFor("BackwoodsFog", $"{ResourceManager.SOUNDSPATH}/Music/Fog");
     }
 
     private void DoBossChecklistIntegration() {

@@ -19,7 +19,7 @@ sealed class BackwoodsMenu : ModMenu {
 
     public override Asset<Texture2D> Logo => ModContent.Request<Texture2D>(ResourceManager.Textures + "RiseofAgesLogoAnimation");
 
-    public override int Music => MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "ThicketNight");
+    public override int Music => MusicLoader.GetMusicSlot(RoA.MusicMod, ResourceManager.Music + "BackwoodsDay");
 
     public override ModSurfaceBackgroundStyle MenuBackgroundStyle => ModContent.GetInstance<BackwoodsMenuBG>();
 
