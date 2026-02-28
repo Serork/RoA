@@ -25,6 +25,11 @@ sealed class FilamentYarnDust2 : AdvancedDust<FilamentYarnDust2> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
+        if (CustomData != null && CustomData is Player) {
+            Player player9 = (Player)CustomData;
+            Position += player9.position - player9.oldPosition;
+        }
+
         Velocity *= 0.95f;
         Scale *= 0.975f;
 

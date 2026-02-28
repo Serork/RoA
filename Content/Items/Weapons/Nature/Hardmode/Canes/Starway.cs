@@ -86,12 +86,13 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                     Main.dust[num274].noGravity = true;
                     Main.dust[num274].noLightEmittence = true;
 
+                    Main.dust[num274].customData = player;
+
                     Vector2 velocity = Vector2.One.RotatedBy(MathHelper.TwoPi * Main.rand.NextFloat());
                     velocity *= Main.rand.NextFloat(0.25f, 1f) * 2f;
 
                     Main.dust[num274].position = position + Main.rand.NextVector2Circular(width, height) / 4f;
                     Main.dust[num274].velocity += velocity;
-
 
                     Dust dust2 = Main.dust[num274];
                     dust2.velocity *= 3f;
@@ -99,6 +100,8 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                     dust2 = Main.dust[num274];
                     dust2.velocity *= 2f;
                     Main.dust[num274].noGravity = true;
+
+                    Main.dust[num274].customData = player;
                 }
                 else {
                     Vector2 velocity = Vector2.One.RotatedBy(MathHelper.TwoPi * Main.rand.NextFloat());
@@ -114,6 +117,9 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         .Setup(from,
                                velocity,
                                scale: 1f);
+                    if (filamentYarnDust is not null) {
+                        filamentYarnDust.CustomData = Owner;
+                    }
                 }
             }
         }
@@ -149,6 +155,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].velocity += Helper.VelocityToPoint(position, mousePosition, 2f);
                         Main.dust[dust].scale *= 2f;
+                        Main.dust[dust].customData = Owner;
                     }
                 }
             }
@@ -251,6 +258,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                                                         dustVelocity,
                                                         Scale: dustScale);
                         dust.noGravity = true;
+                        dust.customData = player;
                         //dust.color = gemColor;
                     }
                 }
@@ -282,6 +290,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                                                         dustVelocity,
                                                         Scale: dustScale);
                         dust.noGravity = true;
+                        dust.customData = player;
                         //dust.color = gemColor;
                     }
                 }

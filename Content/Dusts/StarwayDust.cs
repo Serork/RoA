@@ -28,6 +28,11 @@ sealed class StarwayDust : ModDust {
     public override bool Update(Dust dust) {
         DustHelper.BasicDust(dust);
 
+        if (dust.customData != null && dust.customData is Player) {
+            Player player9 = (Player)dust.customData;
+            dust.position += player9.position - player9.oldPosition;
+        }
+
         if (dust.customData != null && dust.customData is int) {
             if ((int)dust.customData == 0) {
                 if (Collision.SolidCollision(dust.position - Vector2.One * 5f, 10, 10) && dust.fadeIn == 0f) {
