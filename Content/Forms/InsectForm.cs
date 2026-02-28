@@ -44,7 +44,7 @@ abstract class InsectForm : BaseForm {
         MountData.totalFrames = 6;
 
         MountData.xOffset = -6;
-        MountData.yOffset = -6;
+        MountData.yOffset = -2;
         MountData.playerHeadOffset = -12;
 
         SafeSetDefaults2();

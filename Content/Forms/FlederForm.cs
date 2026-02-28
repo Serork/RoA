@@ -54,7 +54,7 @@ sealed class FlederForm : BaseForm {
         bool flag = IsInAir(player);
 
         float yOffset = flag ? -3 : 1;
-        player.GetFormHandler().AttackFactor = Helper.Approach(player.GetFormHandler().AttackFactor, yOffset, !flag ? 5 : 1);
+        player.GetFormHandler().AttackFactor = MathHelper.Lerp(player.GetFormHandler().AttackFactor, yOffset, !flag ? 0.5f : 0.1f);
 
         MountData.yOffset = (int)player.GetFormHandler().AttackFactor;
 

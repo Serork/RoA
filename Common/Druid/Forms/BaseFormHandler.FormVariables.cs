@@ -259,6 +259,9 @@ sealed partial class BaseFormHandler : ModPlayer {
         JustJumpedForAnimation = false;
         DashDirection = IDoubleTap.TapDirection.None;
         AttackFactor = 0;
+
+        Player.eocDash = 0;
+        Player.armorEffectDrawShadowEOCShield = true;
     }
 
     public partial void ResetEffects2() {
