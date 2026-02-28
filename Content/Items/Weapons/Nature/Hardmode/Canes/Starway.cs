@@ -151,7 +151,7 @@ sealed class Starway : CaneBaseItem<Starway.StarwayBase> {
                         int type = ModContent.DustType<StarwayDust>();
                         Vector2 position = CorePosition;
                         int dust = Dust.NewDust(position, 6, 6, type, 0, 0, 0, default(Color));
-                        Main.dust[dust].position = position + Main.rand.RandomPointInArea(50f);
+                        Main.dust[dust].position = position + Main.rand.RandomPointInArea(30f);
                         Main.dust[dust].noGravity = true;
                         Main.dust[dust].velocity += Helper.VelocityToPoint(position, mousePosition, 2f);
                         Main.dust[dust].scale *= 2f;
