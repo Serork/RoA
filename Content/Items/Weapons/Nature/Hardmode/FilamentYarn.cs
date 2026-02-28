@@ -440,7 +440,7 @@ sealed class FilamentYarn : NatureItem {
                 Projectile.Kill();
                 return;
             }
-            if (Projectile.timeLeft < 30) {
+            if (Projectile.timeLeft < 30 && !_exploded) {
                 Explode();
             }
 
