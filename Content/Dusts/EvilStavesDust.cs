@@ -1,3 +1,5 @@
+using RoA.Core.Utility;
+
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -5,9 +7,27 @@ using Terraria.ModLoader;
 namespace RoA.Content.Dusts;
 
 sealed class EvilStaff1 : ModDust {
-    public override void SetStaticDefaults() => UpdateType = DustID.CrimsonPlants;
+    public override bool Update(Dust dust) {
+        dust.BasicDust();
+
+        if (dust.customData != null && dust.customData is Player) {
+            Player player9 = (Player)dust.customData;
+            dust.position += player9.position - player9.oldPosition;
+        }
+
+        return false;
+    }
 }
 
 sealed class EvilStaff2 : ModDust {
-    public override void SetStaticDefaults() => UpdateType = DustID.CorruptPlants;
+    public override bool Update(Dust dust) {
+        dust.BasicDust();
+
+        if (dust.customData != null && dust.customData is Player) {
+            Player player9 = (Player)dust.customData;
+            dust.position += player9.position - player9.oldPosition;
+        }
+
+        return false;
+    }
 }

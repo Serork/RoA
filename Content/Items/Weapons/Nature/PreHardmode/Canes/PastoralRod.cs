@@ -69,6 +69,7 @@ sealed class PastoralRod : CaneBaseItem<PastoralRod.PastoralRodBase> {
                 dust.noLight = true;
                 dust.velocity *= 0.4f;
                 dust.color = color;
+                dust.customData = player;
             }
         }
     }

@@ -90,8 +90,9 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                     vector42 += circleSize.RotatedBy(((i == 0 ? (1f - AttackProgress01) : AttackProgress01) * MathHelper.Pi + MathHelper.PiOver4) * -player.direction)
                         .RotatedBy(corePosition.DirectionTo(player.GetWorldMousePosition()).ToRotation() + MathHelper.Pi + (player.direction > 0).ToInt() * MathHelper.Pi) * 1f;
                     int num550 = Dust.NewDust(spinningpoint + vector422 + Vector2.UnitY * 3f - new Vector2(width / 4f, height / 4f),
-                        0, 0, Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>(), vector42.X * 2f, vector42.Y * 2f,
+                        0, 0, ModContent.DustType<Water>(), vector42.X * 2f, vector42.Y * 2f,
                         Main.rand.Next(100, 200), default(Color), 1f + 0.4f * Main.rand.NextFloat());
+                    Main.dust[num550].customData = player;
                     Main.dust[num550].noGravity = Main.rand.NextBool();
                     Main.dust[num550].noLight = true;
                     Dust dust2 = Main.dust[num550];
@@ -116,12 +117,13 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                 if (Main.rand.NextBool()) {
                     continue;
                 }
-                int type = Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>();
+                int type = ModContent.DustType<Water>();
                 Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
                 Vector2 center = CorePosition + Vector2.UnitX.RotatedBy(Projectile.rotation) * 4f * -Projectile.direction + new Vector2(Projectile.direction == 1 ? 3f : -3f, 0f) + spinningpoint * 15;
                 Vector2 rotationPoint = spinningpoint.RotatedBy(0.785 * Projectile.direction);
                 Vector2 position = center + rotationPoint * 5f;
                 int dust = Dust.NewDust(position, 0, 0, type);
+                Main.dust[dust].customData = player;
                 Main.dust[dust].position = position;
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f;
@@ -148,8 +150,9 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                             continue;
                         }
                         Vector2 velocity = spawnPosition.DirectionTo(destination);
-                        int num808 = Dust.NewDust(spawnPosition + Main.rand.RandomPointInArea(10f), width, height, Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>(),
+                        int num808 = Dust.NewDust(spawnPosition + Main.rand.RandomPointInArea(10f), width, height, ModContent.DustType<Water>(),
                             velocity.X, velocity.Y, Main.rand.Next(100, 200), default(Color), 1.1f);
+                        Main.dust[num808].customData = player;
                         Main.dust[num808].noGravity = true;
                         Dust dust2 = Main.dust[num808];
                         dust2.velocity *= 0.1f;
@@ -179,10 +182,12 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                     vector42 += circleSize.RotatedBy(((i == 0 ? (1f - AttackProgress01) : AttackProgress01) * MathHelper.Pi + MathHelper.PiOver4) * -player.direction)
                         .RotatedBy(corePosition.DirectionTo(player.GetWorldMousePosition()).ToRotation() + MathHelper.Pi + (player.direction > 0).ToInt() * MathHelper.Pi) * 1f;
                     int num550 = Dust.NewDust(spinningpoint + vector422 + Vector2.UnitY * 3f - new Vector2(width / 4f, height / 4f),
-                        0, 0, Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>(), vector42.X * 2f, vector42.Y * 2f,
+                        0, 0, ModContent.DustType<Water>(), vector42.X * 2f, vector42.Y * 2f,
                         Main.rand.Next(100, 200), default(Color), 1f + 0.4f * Main.rand.NextFloat());
+                    Main.dust[num550].customData = player;
                     Main.dust[num550].noGravity = Main.rand.NextBool();
                     Main.dust[num550].noLight = true;
+                    Main.dust[num550].customData = player;
                     Dust dust2 = Main.dust[num550];
                     dust2.velocity /= 4f;
                     dust2 = Main.dust[num550];
@@ -202,12 +207,13 @@ sealed class CoralClarionet : CaneBaseItem<CoralClarionet.CoralClarionetBase> {
                 if (!Main.rand.NextBool(3)) {
                     continue;
                 }
-                int type = Main.rand.NextBool() ? DustID.Water : ModContent.DustType<Water>();
+                int type = ModContent.DustType<Water>();
                 Vector2 spinningpoint = Vector2.UnitX.RotatedBy((double)Main.rand.NextFloat() * MathHelper.TwoPi);
                 Vector2 center = CorePosition + Vector2.UnitX.RotatedBy(Projectile.rotation) * 4f * -Projectile.direction + new Vector2(Projectile.direction == 1 ? 3f : -3f, 0f) + spinningpoint * 15;
                 Vector2 rotationPoint = spinningpoint.RotatedBy(0.785 * Projectile.direction);
                 Vector2 position = center + rotationPoint * 5f;
                 int dust = Dust.NewDust(position, 0, 0, type);
+                Main.dust[dust].customData = Projectile.GetOwnerAsPlayer();
                 Main.dust[dust].position = position;
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].fadeIn = Main.rand.NextFloat() * 1.2f;

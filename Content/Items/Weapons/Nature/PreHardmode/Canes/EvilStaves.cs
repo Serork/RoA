@@ -35,7 +35,7 @@ sealed class ShadewoodStaff : CaneBaseItem<ShadewoodStaff.ShadewoodStaffBase> {
 
     public sealed class ShadewoodStaffBase : EvilStaffBase {
         protected override ushort Dust1Type => (ushort)ModContent.DustType<EvilStaff1>();
-        protected override ushort Dust2Type => (ushort)DustID.Shadewood;
+        protected override ushort Dust2Type => (ushort)ModContent.DustType<Shadewood>();
 
         protected override void SetSpawnProjectileSettings(Player player, ref Vector2 spawnPosition, ref Vector2 velocity, ref ushort count, ref float ai0, ref float ai1, ref float ai2)
             => ai2 = 1f;
@@ -53,7 +53,7 @@ sealed class EbonwoodStaff : CaneBaseItem<EbonwoodStaff.EbonwoodStaffBase> {
 
     public sealed class EbonwoodStaffBase : EvilStaffBase {
         protected override ushort Dust1Type => (ushort)ModContent.DustType<EvilStaff2>();
-        protected override ushort Dust2Type => (ushort)DustID.Ebonwood;
+        protected override ushort Dust2Type => (ushort)ModContent.DustType<Ebonwood>();
     }
 }
 
@@ -91,6 +91,7 @@ abstract class EvilStaffBase : CaneBaseProjectile {
             bool flag = !Main.rand.NextBool(3);
             int num30 = Dust.NewDust(r.TopLeft(), r.Width, r.Height, flag ? Dust1Type : Dust2Type, 0f, 0f, 0, default);
             Dust dust2 = Main.dust[num30];
+            dust2.customData = player;
             if (Main.rand.NextChance(0.5) || flag) {
                 dust2.noLight = true;
             }
@@ -121,6 +122,7 @@ abstract class EvilStaffBase : CaneBaseProjectile {
                                             flag ? Dust1Type : Dust2Type,
                                             randomPosition.RotatedBy(player.direction * -MathHelper.PiOver2) * speed,
                                             Scale: scale);
+            dust.customData = player;
             if (Main.rand.NextChance(0.5) || flag) {
                 dust.noLight = true;
             }

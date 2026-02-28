@@ -6,6 +6,7 @@ using ReLogic.Content;
 using RoA.Common;
 using RoA.Common.Druid;
 using RoA.Common.Players;
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core;
 using RoA.Core.Defaults;
@@ -93,7 +94,8 @@ sealed class CarrionCane : CaneBaseItem<CarrionCane.CarrionCaneBase> {
                 Vector2 vector3 = corePosition + vector2;
                 Vector2 vector4 = vector.RotatedBy(MathHelper.PiOver2);
                 vector3 += vector4 * num12;
-                int num14 = Dust.NewDust(vector3, 0, 0, !Main.rand.NextBool(3) ? ModContent.DustType<Dusts.CarrionCane>() : DustID.Torch, 0f, 0f, 0, default);
+                int num14 = Dust.NewDust(vector3, 0, 0, !Main.rand.NextBool(3) ? ModContent.DustType<Dusts.CarrionCane>() : ModContent.DustType<Torch_Normal>(), 0f, 0f, 0, default);
+                Main.dust[num14].customData = player;
                 Main.dust[num14].position = vector3;
                 Main.dust[num14].noGravity = true;
                 Main.dust[num14].scale = 1f + Main.rand.NextFloatRange(0.5f);

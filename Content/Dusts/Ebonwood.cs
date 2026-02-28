@@ -1,15 +1,11 @@
-using Microsoft.Xna.Framework;
-
-using RoA.Core.Utility;
+﻿using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class PastoralRodDust : ModDust {
-    public override Color? GetAlpha(Dust dust, Color lightColor) => lightColor * (1f - (dust.alpha / 255f));
-
+sealed class Ebonwood : ModDust {
     public override bool Update(Dust dust) {
         dust.BasicDust();
 
