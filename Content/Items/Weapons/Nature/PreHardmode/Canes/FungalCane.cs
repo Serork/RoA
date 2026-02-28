@@ -67,6 +67,7 @@ sealed class FungalCane : CaneBaseItem<FungalCane.FungalCaneBase> {
                 dust27.noLight = true;
                 dust27.noLightEmittence = true;
                 dust27.scale *= 0.75f;
+                dust27.customData = player;
             }
         }
 
@@ -96,6 +97,7 @@ sealed class FungalCane : CaneBaseItem<FungalCane.FungalCaneBase> {
                 dust27.noLight = true;
                 dust27.noLightEmittence = true;
                 dust27.scale *= 0.75f;
+                dust27.customData = player;
             }
         }
 

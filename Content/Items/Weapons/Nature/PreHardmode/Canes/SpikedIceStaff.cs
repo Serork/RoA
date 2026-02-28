@@ -122,9 +122,10 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
                                 if (Main.rand.NextChance(0.4f)) {
                                     Vector2 velocity = Helper.VelocityToPoint(CorePosition - Vector2.One * 1f, _mousePos, 2.5f + Main.rand.NextFloatRange(1f));
                                     Vector2 vector2 = velocity.RotatedBy(num * (MathHelper.Pi + MathHelper.PiOver4) / 25f);
-                                    Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, DustID.BubbleBurst_Blue, Scale: Main.rand.NextFloat(1.05f, 1.35f));
+                                    Dust dust = Dust.NewDustDirect(CorePosition, 5, 5, ModContent.DustType<BubbleBurst_Blue>(), Scale: Main.rand.NextFloat(1.05f, 1.35f));
                                     dust.velocity = vector2 * Main.rand.NextFloat(0.8f, 1.1f);
                                     dust.noGravity = true;
+                                    dust.customData = Owner;
                                 }
                             }
                             float min = 7f, max = 5f;
@@ -195,10 +196,11 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
             for (int i = 0; i < count - count / 3; i++) {
                 Vector2 size = new(24f, 24f);
                 Rectangle r = Utils.CenteredRectangle(corePosition, size);
-                Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, 176, 0f, 0f, 0, default, Scale: Main.rand.NextFloat(1.05f, 1.35f) * 0.9f);
+                Dust dust = Dust.NewDustDirect(r.TopLeft(), r.Width, r.Height, ModContent.DustType<BubbleBurst_Blue>(), 0f, 0f, 0, default, Scale: Main.rand.NextFloat(1.05f, 1.35f) * 0.9f);
                 dust.noGravity = true;
                 dust.fadeIn = 0.9f;
                 dust.velocity = new Vector2(Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f);
+                dust.customData = player;
             }
         }
 
@@ -222,6 +224,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
                     Dust dust = Dust.NewDustPerfect(corePosition, ModContent.DustType<BubbleBurst_Blue>(), Scale: 1f);
                     dust.noGravity = true;
                     dust.fadeIn = 0.9f;
+                    dust.customData = player;
                 }
             }
         }

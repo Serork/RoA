@@ -31,6 +31,11 @@ sealed class GlowingMushroom : ModDust {
     public override bool Update(Dust dust) {
         dust.BasicDust(applyGravity: false);
 
+        if (dust.customData != null && dust.customData is Player) {
+            Player player9 = (Player)dust.customData;
+            dust.position += player9.position - player9.oldPosition;
+        }
+
         dust.velocity.X += (float)Main.rand.Next(-10, 11) * 0.01f;
         dust.velocity.Y += (float)Main.rand.Next(-10, 11) * 0.01f;
         if ((double)dust.velocity.X > 0.75)

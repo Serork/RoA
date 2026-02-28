@@ -29,6 +29,11 @@ sealed class Snowflake : AdvancedDust<Snowflake> {
     }
 
     public override void Update(ref ParticleRendererSettings settings) {
+        if (CustomData != null && CustomData is Player) {
+            Player player9 = (Player)CustomData;
+            Position += player9.position - player9.oldPosition;
+        }
+
         DrawColor = Lighting.GetColor(Position.ToTileCoordinates());
 
         if (CorePosition != Vector2.Zero) {

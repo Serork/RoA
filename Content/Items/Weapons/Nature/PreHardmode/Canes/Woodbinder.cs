@@ -140,6 +140,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
                 Main.dust[dust].noGravity = true;
                 Main.dust[dust].fadeIn = 1.25f;
                 Main.dust[dust].velocity += Helper.VelocityToPoint(position, _mousePosition, 2f);
+                Main.dust[dust].customData = player;
             }
 
             PlayAttackSound();

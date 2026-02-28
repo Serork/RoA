@@ -238,6 +238,7 @@ sealed class Cacti : NatureProjectile {
                             int dust = Dust.NewDust(corePosition, 4, 4, ModContent.DustType<CactiCasterDust>(), Main.rand.Next(-50, 51) * 0.05f, Main.rand.Next(-50, 51) * 0.05f, 0, default, 1.5f);
                             Main.dust[dust].noGravity = true;
                             Main.dust[dust].noLight = true;
+                            Main.dust[dust].customData = Projectile.GetOwnerAsPlayer();
                         }
                     }
                 }
