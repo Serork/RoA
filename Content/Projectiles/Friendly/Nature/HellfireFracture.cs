@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using RoA.Common.Cache;
 using RoA.Core;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
@@ -11,9 +12,31 @@ using System.IO;
 
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.Utilities;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
+
+sealed class HellfireFractureRenderTargetLoader : ILoadable {
+    public static RenderTarget2D RenderTarget = null!;
+
+    void ILoadable.Load(Mod mod) {
+        Main.QueueMainThreadAction(() => {
+            RenderTarget = new RenderTarget2D(Main.graphics.GraphicsDevice, 1680, 1050, false, SurfaceFormat.Color, DepthFormat.Depth24Stencil8);
+        });
+
+    }
+
+    void ILoadable.Unload() {
+        if (RenderTarget is not null) {
+            Main.QueueMainThreadAction(() => {
+                RenderTarget.Dispose();
+            });
+
+            RenderTarget = null!;
+        }
+    }
+}
 
 sealed class HellfireFracture : NatureProjectile {
     private Vector2 _first, _last;
@@ -111,12 +134,59 @@ sealed class HellfireFracture : NatureProjectile {
     private static BlendState _multiplyBlendState2 = null;
 
     public override bool PreDraw(ref Color lightColor) {
+        var graphicsDevice = Main.instance.GraphicsDevice;
+        var sb = Main.spriteBatch;
+
+        sb.End();
+
+        SpriteBatchSnapshot snapshot = sb.CaptureSnapshot();
+
+        graphicsDevice.SetRenderTarget(Main.screenTargetSwap);
+        graphicsDevice.Clear(Color.Transparent);
+        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+        sb.Draw(Main.screenTarget, Vector2.Zero, Color.White);
+        sb.End();
+
+        graphicsDevice.SetRenderTarget(HellfireFractureRenderTargetLoader.RenderTarget);
+        graphicsDevice.Clear(Color.Transparent);
+
+        float scaleX = (float)HellfireFractureRenderTargetLoader.RenderTarget.Width / Main.screenWidth;
+        float scaleY = (float)HellfireFractureRenderTargetLoader.RenderTarget.Height / Main.screenHeight;
+        Matrix scaleMatrix = Matrix.CreateScale(scaleX, scaleY, 1f);
+        sb.Begin(SpriteSortMode.Deferred,
+                 BlendState.AlphaBlend,
+                 SamplerState.PointClamp,
+                 null, null, null,
+                 scaleMatrix);
+
+        DrawSlashes(sb, lightColor);
+
+        sb.End();
+
+        graphicsDevice.SetRenderTarget(Main.screenTarget);
+        graphicsDevice.Clear(Color.Transparent);
+
+        sb.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
+        sb.Draw(Main.screenTargetSwap, Vector2.Zero, Color.White);
+        sb.End();
+
+        sb.Begin(snapshot with { blendState = _multiplyBlendState, samplerState = SamplerState.PointClamp });
+        sb.Draw(HellfireFractureRenderTargetLoader.RenderTarget,
+                new Rectangle(0, 0, Main.screenWidth, Main.screenHeight),
+                Color.White);
+        sb.End();
+
+        sb.Begin(snapshot);
+
+        return false;
+    }
+
+    private void DrawSlashes(SpriteBatch spriteBatch, Color lightColor) {
         _timer++;
         _timer += Main.rand.NextFloatRange(0.5f);
         float count = _timer * 0.75f;
         float num13 = ((float)count / 75f * ((float)Math.PI * 2f)).ToRotationVector2().X * 1f + 0f;
         num13 = Utils.Remap(num13, -1f, 1f, 1.5f, 2f);
-        SpriteBatch spriteBatch = Main.spriteBatch;
         if (_multiplyBlendState == null) {
             _ = BlendState.AlphaBlend;
             _ = BlendState.Additive;
@@ -151,15 +221,13 @@ sealed class HellfireFracture : NatureProjectile {
                         break;
                 }
                 extraPosition *= Helper.Wave(-1f * Main.rand.NextFloat(), 1f * Main.rand.NextFloat(), 10f * Main.rand.NextFloat(), Projectile.identity + i * 10);
-                DrawSlash((num13 / 2f * 0.3f + 0.85f), Color.Lerp(color, Color.DarkOrange, 0.75f), extraPosition);
+                DrawSlash((num13 / 2f * 0.3f + 0.85f), Color.Lerp(color, Color.DarkOrange, 1f), extraPosition);
             }
             //for (float num14 = -4f; num14 < 4f; num14 += 1f) {
             //    DrawSlash((num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);
             //}
-            DrawSlash(num13 / 2f * 0.3f + 0.85f, Color.Lerp(color, Color.DarkOrange, 0.75f) * 0.25f, Vector2.Zero, 3f);
+            DrawSlash(num13 / 2f * 0.3f + 0.85f, Color.Lerp(color, Color.DarkOrange, 0.75f) * 0.25f, Vector2.Zero, 2.5f);
         }, blendState: multiplyBlendState, samplerState: SamplerState.LinearClamp);
-
-        return base.PreDraw(ref lightColor);
     }
 
     public override void SafePostAI() {

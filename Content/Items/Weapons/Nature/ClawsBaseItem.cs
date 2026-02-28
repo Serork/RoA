@@ -43,7 +43,7 @@ abstract class ClawsBaseItem : NatureItem {
     public virtual float SecondAttackScaleModifier { get; } = 1f;
     public virtual float ThirdAttackScaleModifier { get; } = 1f;
 
-    public override bool? CanAutoReuseItem(Player player) => Item.autoReuse || player.autoReuseGlove;
+    public override bool? CanAutoReuseItem(Player player) => Item.autoReuse || player.autoReuseGlove || player.autoReuseAllWeapons;
 
     protected virtual ushort SetClawsSlash<T>() where T : ClawsSlash => (ushort)ModContent.ProjectileType<T>();
 
