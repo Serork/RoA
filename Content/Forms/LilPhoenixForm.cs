@@ -107,7 +107,7 @@ sealed class LilPhoenixForm : BaseForm {
         player.fullRotationOrigin = player.getRect().Size() / 2f;
 
         if (!IsInAir(player)) {
-            plr.JustJumped = false;
+            plr.JustJumped2 = false;
         }
 
         float swingTime = SWINGTIME;
@@ -411,7 +411,7 @@ sealed class LilPhoenixForm : BaseForm {
         }
 
         if (!plr.IsPreparing && !plr.Dashed && plr.DashDelay > 0 && plr.DashDelay < SWINGTIME) {
-            if (!plr.JustJumped) {
+            if (!plr.JustJumped2) {
                 if (!plr.JustJumpedForAnimation && plr.DashDelay <= 1) {
                     frame = firstJumpStartFrame;
                     frameCounter = 0f;
@@ -425,14 +425,15 @@ sealed class LilPhoenixForm : BaseForm {
                         frame++;
                         if (frame > jumpFrame) {
                             frame = jumpFrame;
-                            plr.JustJumped = true;
+                            plr.JustJumped2 = true;
                             plr.JustJumpedForAnimation = false;
                         }
                     }
                 }
             }
         }
-        else if (plr.Dashed) {
+        else
+        if (plr.Dashed) {
             frameCounter += MathF.Max(0.5f, player.velocity.Length() * 0.15f) * 0.75f;
             float frequency = dashedFrameFrequency;
             while (frameCounter > frequency) {
@@ -531,6 +532,7 @@ sealed class LilPhoenixForm : BaseForm {
     protected override void SafeSetMount(Player player, ref bool skipDust) {
         BaseFormHandler formHandler = player.GetFormHandler();
         formHandler.JustJumped = false;
+        formHandler.JustJumped2 = false;
         formHandler.JustJumpedForAnimation = false;
         formHandler.JustJumpedForAnimation2 = false;
         formHandler.DashDelay = 0;
@@ -561,6 +563,7 @@ sealed class LilPhoenixForm : BaseForm {
 
         BaseFormHandler formHandler = player.GetFormHandler();
         formHandler.JustJumped = false;
+        formHandler.JustJumped2 = false;
         formHandler.JustJumpedForAnimation = false;
         formHandler.JustJumpedForAnimation2 = false;
         formHandler.DashDelay = 0;

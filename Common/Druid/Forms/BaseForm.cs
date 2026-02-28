@@ -170,6 +170,10 @@ abstract class BaseForm : ModMount {
             NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Main.myPlayer);
         }
 
+        if (!IsInAir(player)) {
+            plr.JumpCD = 0;
+        }
+
         if (player.controlJump && !plr.IsPreparing) {
             if (plr.Jump > 0) {
                 if (player.velocity.Y == 0f) {

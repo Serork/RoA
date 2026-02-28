@@ -37,7 +37,7 @@ sealed partial class BaseFormHandler : ModPlayer {
     public float DirectionChangedFor;
 
     public bool Jumped, Jumped2;
-    public bool JustJumped, JustJumpedForAnimation, JustJumpedForAnimation2;
+    public bool JustJumped, JustJumpedForAnimation, JustJumpedForAnimation2, JustJumped2;
     public int JumpCD;
     public int Jump;
 
