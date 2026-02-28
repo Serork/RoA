@@ -14,7 +14,7 @@ namespace RoA.Content.AdvancedDusts;
 sealed class Snowflake : AdvancedDust<Snowflake> {
     private byte _seed;
 
-    public Vector2 CorePosition;
+    public Vector2 CorePosition, CorePosition2;
 
     protected override void SetDefaults() {
         _seed = (byte)Main.rand.Next(100);
@@ -37,15 +37,21 @@ sealed class Snowflake : AdvancedDust<Snowflake> {
         DrawColor = Lighting.GetColor(Position.ToTileCoordinates());
 
         if (CorePosition != Vector2.Zero) {
+            CorePosition2 = CorePosition;
+            if (CustomData != null && CustomData is Player) {
+                Player player9 = (Player)CustomData;
+                CorePosition += player9.position - player9.oldPosition;
+            }
+
             if (TimeLeft <= 30) {
                 Scale *= Utils.GetLerpValue(0, 30, TimeLeft, true);
             }
 
             Position += Vector2.One.RotatedBy(Velocity.ToRotation()) * Helper.Wave(-1f, 1f, 5f, _seed) * Velocity.Length();
             Position += Vector2.One.RotatedBy(Velocity.TurnRight().ToRotation()) * Velocity.Length();
-            Rotation += -Position.DirectionTo(CorePosition).X.GetDirection() * 0.1f;
-            Position += Position.DirectionTo(CorePosition);
-            if (Position.Distance(CorePosition) < 5f && TimeLeft > 30) {
+            Rotation += -Position.DirectionTo(CorePosition2).X.GetDirection() * 0.1f;
+            Position += Position.DirectionTo(CorePosition2);
+            if (Position.Distance(CorePosition2) < 5f && TimeLeft > 30) {
                 TimeLeft = 30;
             }
             Velocity *= 0.95f;
