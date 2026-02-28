@@ -70,7 +70,7 @@ sealed class FilamentYarn : NatureItem {
         private static float MAXLENGTH => 200f;
         private static ushort LINECOUNT => 5;
         private static float TENSIONMODIFIER => 0.75f;
-        private static ushort ACTIVETIME => MathUtils.SecondsToFrames(2);
+        private static ushort ACTIVETIME => MathUtils.SecondsToFrames(5);
 
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<FilamentYarn>()).Texture;
 
