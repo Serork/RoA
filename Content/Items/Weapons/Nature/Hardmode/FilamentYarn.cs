@@ -9,6 +9,7 @@ using RoA.Common.Druid;
 using RoA.Common.GlowMasks;
 using RoA.Common.VisualEffects;
 using RoA.Content.AdvancedDusts;
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly;
 using RoA.Core;
 using RoA.Core.Data;
@@ -19,6 +20,7 @@ using RoA.Core.Utility.Extensions;
 using System;
 
 using Terraria;
+using Terraria.Audio;
 using Terraria.Enums;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -68,13 +70,14 @@ sealed class FilamentYarn : NatureItem {
         private static float MAXLENGTH => 200f;
         private static ushort LINECOUNT => 5;
         private static float TENSIONMODIFIER => 0.75f;
-        private static ushort ACTIVETIME => MathUtils.SecondsToFrames(5);
+        private static ushort ACTIVETIME => MathUtils.SecondsToFrames(2);
 
         public override string Texture => ItemLoader.GetItem(ModContent.ItemType<FilamentYarn>()).Texture;
 
         private (Vector2, Vector2?, float)[] _connectPoints = null!;
         private Vector2 _mousePosition;
         private float _tension;
+        private bool _exploded;
 
         public ref float InitValue => ref Projectile.localAI[0];
         public ref float Cooldown => ref Projectile.ai[1];
@@ -130,7 +133,7 @@ sealed class FilamentYarn : NatureItem {
                 int count = 16 / 2;
                 for (int i2 = 1; i2 <= count; i2++) {
                     Vector2 point = curve.GetPoint(i2 / (float)count);
-                    if (GeometryUtils.CenteredSquare(point, 10).Intersects(targetHitbox)) {
+                    if (GeometryUtils.CenteredSquare(point, _exploded ? 150 : 10).Intersects(targetHitbox)) {
                         return true;
                     }
 
@@ -168,12 +171,12 @@ sealed class FilamentYarn : NatureItem {
             return t * t * ((s + 1) * t - s);
         }
 
-        private void DrawStar(Vector2 startPosition, float mainOpacity, float waveOffset, float rotation) {
+        private void DrawStar(Vector2 startPosition, float mainOpacity, float waveOffset, float rotation, float scale = 1f) {
             float scaleFactor = Helper.Wave(0.625f, 0.75f, 5f, waveOffset) * 0.75f;
             DrawPrettyStarSparkle(0.875f * scaleFactor * mainOpacity, SpriteEffects.None, startPosition - Main.screenPosition,
                 Color.Lerp(new Color(127, 153, 22), new Color(251, 232, 193, 0), 0.75f),
                 Color.Lerp(new Color(127, 153, 22), new Color(233, 206, 83), 0.75f),
-                rotation, new Vector2(2f, 2f) * scaleFactor, new Vector2(2f, 2f) * scaleFactor);
+                rotation, new Vector2(2f, 2f) * scale * scaleFactor, new Vector2(2f, 2f) * scale * scaleFactor);
         }
 
         private float Tension => EaseBackIn(_tension);
@@ -193,7 +196,7 @@ sealed class FilamentYarn : NatureItem {
             mainOpacity *= Ease.CubeIn(disappearOpacity);
             baseColor *= mainOpacity;
             Color color = baseColor * Helper.Wave(0.5f, 0.75f, 5f, 0f);
-            void drawLine(bool onlyStars = false) {
+            void drawLine(bool onlyStars = false, float scale = 1f, float opacity = 1f, float starRotation = 0f) {
                 index = 0;
                 foreach ((Vector2, Vector2?, float) connectedPoints in _connectPoints) {
                     index++;
@@ -209,12 +212,12 @@ sealed class FilamentYarn : NatureItem {
                     Vector2 startPosition = from;
                     float rotation = connectedPoints.Item3;
                     if (onlyStars) {
-                        DrawStar(startPosition, mainOpacity, waveOffset, rotation);
+                        DrawStar(startPosition, mainOpacity * opacity, waveOffset, rotation + starRotation, scale);
                         if (index == LINECOUNT + 1 && connectedPoints.Item2 is not null) {
-                            DrawStar(connectedPoints.Item2.Value, mainOpacity, waveOffset, rotation);
+                            DrawStar(connectedPoints.Item2.Value, mainOpacity * opacity, waveOffset, rotation + starRotation, scale);
                         }
                         if (to == _mousePosition) {
-                            DrawStar(_mousePosition, mainOpacity, waveOffset, rotation);
+                            DrawStar(_mousePosition, mainOpacity * opacity, waveOffset, rotation + starRotation, scale);
                         }
                     }
                     if (onlyStars) {
@@ -240,18 +243,128 @@ sealed class FilamentYarn : NatureItem {
                         Color color2 = color.MultiplyRGBA(baseColor2);
 
                         float lineThickness = Helper.Wave(2f, 6f, 1f, waveOffset + i * 1f);
-                        batch.Line(start, point, color2, lineThickness);
+                        batch.Line(start, point, color2 * opacity, lineThickness * scale);
                         float num184 = Helper.Wave(2f, 4f, 1f, waveOffset);
                         for (int num185 = 0; num185 < 4; num185++) {
                             Vector2 offset = Vector2.UnitX.RotatedBy((float)num185 * ((float)Math.PI / 4f) - Math.PI) * num184;
-                            batch.Line(start + offset, point + offset, new Color(64, 64, 64, 0).MultiplyRGBA(baseColor2) * 0.25f * mainOpacity, lineThickness);
+                            batch.Line(start + offset, point + offset, new Color(64, 64, 64, 0).MultiplyRGBA(baseColor2) * 0.25f * mainOpacity * opacity, lineThickness * scale);
                         }
                         start = point;
                     }
                 }
             }
+
+            drawLine(scale: 2f, opacity: 0.25f);
+            drawLine(true, scale: 2f, opacity: 0.25f);
+
             drawLine();
             drawLine(true);
+        }
+
+        private void Explode() {
+            void makeExplosion(Vector2 position, int width, int height) {
+                for (int num272 = 0; num272 < 4; num272++) {
+                    int dust = Dust.NewDust(new Vector2(position.X, position.Y), width, height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
+                    Main.dust[dust].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                }
+
+
+                for (int num169 = 0; num169 < 20; num169++) {
+                    if (Main.rand.NextBool()) {
+                        continue;
+                    }
+                    int num170 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, DustID.YellowTorch, 0f, 0f, 200, default(Color), 3.7f);
+                    Main.dust[num170].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                    Main.dust[num170].noGravity = true;
+                    Main.dust[num170].color = Color.LightYellow;
+                    Dust dust2 = Main.dust[num170];
+                    dust2.velocity *= 3f;
+                    num170 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, DustID.OrangeTorch, 0f, 0f, 100, default(Color), 1.5f);
+                    Main.dust[num170].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                    dust2 = Main.dust[num170];
+                    dust2.velocity *= 2f;
+                    Main.dust[num170].noGravity = true;
+                    Main.dust[num170].fadeIn = 1f;
+                    Main.dust[num170].color = Color.LightYellow;
+                }
+
+                for (int num171 = 0; num171 < 20; num171++) {
+                    if (Main.rand.NextBool()) {
+                        continue;
+                    }
+                    int num172 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<StarwayDust>(), 0f, 0f, 0, default(Color), 2.7f);
+                    Main.dust[num172].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                    Main.dust[num172].noGravity = true;
+                    Dust dust2 = Main.dust[num172];
+                    dust2.velocity *= 3f;
+                }
+
+                for (int num273 = 0; num273 < 20; num273++) {
+                    int num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.5f);
+                    Main.dust[num274].noGravity = true;
+
+                    Main.dust[num274].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+
+                    Dust dust2 = Main.dust[num274];
+                    dust2.velocity *= 3f;
+                    num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 100, default(Color), 1.5f);
+                    dust2 = Main.dust[num274];
+                    dust2.velocity *= 2f;
+                    Main.dust[num274].noGravity = true;
+
+                    //Vector2 to = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                    //Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
+                    //velocity *= Main.rand.NextFloat(0.5f, 1f);
+                    //FilamentYarnDust? filamentYarnDust = AdvancedDustSystem.New<FilamentYarnDust>(AdvancedDustLayer.ABOVEDUSTS)?
+                    //    .Setup(to,
+                    //           velocity,
+                    //           scale: 2.5f);
+                    //if (filamentYarnDust != null) {
+                    //    filamentYarnDust.CorePosition = to;
+                    //}
+                }
+
+                if (!Main.dedServ) {
+                    for (int num175 = 0; num175 < 2; num175++) {
+                        int num176 = Gore.NewGore(Projectile.GetSource_FromThis(), position + new Vector2((float)(width * Main.rand.Next(100)) / 100f, (float)(height * Main.rand.Next(100)) / 100f) - Vector2.One * 10f, default(Vector2), Main.rand.Next(61, 64));
+                        Main.gore[num176].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                        Gore gore2 = Main.gore[num176];
+                        gore2.velocity *= 0.3f;
+                        Main.gore[num176].velocity.X += (float)Main.rand.Next(-10, 11) * 0.05f;
+                        Main.gore[num176].velocity.Y += (float)Main.rand.Next(-10, 11) * 0.05f;
+                    }
+                }
+            }
+
+
+            for (int i = 0; i < _connectPoints.Length; i++) {
+                if (i > LINECOUNT) {
+                    continue;
+                }
+                Vector2 from = _connectPoints[i].Item1;
+                Vector2 to = _connectPoints[i].Item2 ?? _mousePosition;
+
+                SoundEngine.PlaySound(SoundID.Item14, from);
+
+                float distance = from.Distance(to);
+                float length = MAXLENGTH;
+                float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
+                float sineX = TimeSystem.TimeForVisualEffects * 5f,
+                      sineY = TimeSystem.TimeForVisualEffects * 5f;
+                SimpleCurve curve = new(from, to, Vector2.Zero);
+                curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * Tension) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+                Vector2 start = curve.Begin;
+                int count = 16 / 2;
+                for (int i2 = 1; i2 <= count; i2 += 4) {
+                    Vector2 point = curve.GetPoint(i2 / (float)count);
+
+                    int size = 125;
+                    makeExplosion(point - Vector2.One * size / 2f, size, size);
+                    //Lighting.AddLight(point, new Color(196, 182, 70).ToVector3() * 1f);
+
+                    start = point;
+                }
+            }
         }
 
         private void AddPoint(Vector2 position) {
@@ -283,7 +396,31 @@ sealed class FilamentYarn : NatureItem {
             }
         }
 
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) {
+            if (_exploded) {
+                modifiers.FinalDamage *= 2f;
+                modifiers.Knockback *= 2f;
+            }
+        }
+
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers) {
+            if (_exploded) {
+                modifiers.FinalDamage *= 2f;
+                modifiers.Knockback *= 2f;
+            }
+        }
+
         public override void AI() {
+            if (_exploded) {
+                Projectile.Kill();
+                return;
+            }
+            if (Projectile.timeLeft < 30) {
+                Explode();
+                Projectile.ResetLocalNPCHitImmunity();
+                _exploded = true;
+            }
+
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
 
             Projectile.localAI[2] += 0.01f;
@@ -526,7 +663,6 @@ sealed class FilamentYarn : NatureItem {
                          SamplerState.PointClamp,
                          null, null, null,
                          scaleMatrix);
-
 
                 if (CanSpawnMoreLines || _tension > 0f) {
                     DrawConnectedLines();
