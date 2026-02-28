@@ -17,6 +17,8 @@ sealed class Hellbat : ModProjectile {
     public override Color? GetAlpha(Color lightColor) => Color.Lerp(lightColor, Color.White, 0.9f) * (1f - Projectile.alpha / 255f) * Projectile.Opacity;
 
     public override void SetStaticDefaults() {
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+
         Main.projFrames[Type] = 5;
     }
 

@@ -6,6 +6,7 @@ using System;
 
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -14,6 +15,8 @@ sealed class LargeBee : NatureProjectile {
 
     public override void SetStaticDefaults() {
         Main.projFrames[Type] = 4;
+
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
     }
 
     protected override void SafeSetDefaults() {

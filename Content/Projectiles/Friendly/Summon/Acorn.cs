@@ -12,6 +12,8 @@ namespace RoA.Content.Projectiles.Friendly.Summon;
 
 sealed class Acorn : ModProjectile {
     public override void SetStaticDefaults() {
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+
         ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
         ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
     }

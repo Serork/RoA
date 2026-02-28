@@ -3,10 +3,15 @@
 using System;
 
 using Terraria;
+using Terraria.ID;
 
 namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
 
 sealed class FlederFlame : FormProjectile {
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+    }
+
     protected override void SafeSetDefaults() {
         Projectile.width = 14;
         Projectile.height = 14;

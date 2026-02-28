@@ -65,6 +65,10 @@ sealed class CoralBubble : NatureProjectile_NoTextureLoad, IRequestAssets {
         }
     }
 
+    public override void SetStaticDefaults() {
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+    }
+
     protected override void SafeSetDefaults() {
         Projectile.SetSizeValues(10);
 

@@ -49,6 +49,8 @@ sealed class PhoenixFireball : FormProjectile {
     private static VertexStrip _vertexStrip = new VertexStrip();
 
     public override void SetStaticDefaults() {
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+
         Projectile.SetFrameCount(10);
 
         Projectile.SetTrail(3, 30);

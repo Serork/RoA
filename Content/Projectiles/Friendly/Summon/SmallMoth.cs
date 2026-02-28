@@ -5,6 +5,7 @@ using RoA.Core.Utility;
 using System;
 
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Projectiles.Friendly.Summon;
@@ -13,6 +14,8 @@ sealed class SmallMoth : ModProjectile {
     public override void SetStaticDefaults() {
         // DisplayName.SetDefault("Small Moth");
         Main.projFrames[Projectile.type] = 4;
+
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
     }
 
     public override void SetDefaults() {

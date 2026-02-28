@@ -102,6 +102,8 @@ sealed class LightCompressor : ModItem {
         }
 
         public override void SetStaticDefaults() {
+            ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+
             if (Main.dedServ) {
                 return;
             }

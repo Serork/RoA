@@ -11,6 +11,8 @@ namespace RoA.Content.Projectiles.Friendly.Nature.Forms;
 
 class CorruptionInsect : FormProjectile {
     public override void SetStaticDefaults() {
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+
         //DisplayName.SetDefault("Corruption Swarmer");
         Main.projFrames[Projectile.type] = 4;
     }

@@ -15,6 +15,8 @@ sealed class BoneHarpyFeather : ModProjectile {
     private const int MAXTIMELEFT = 120;
 
     public override void SetStaticDefaults() {
+        ProjectileID.Sets.CultistIsResistantTo[Type] = true;
+
         ProjectileID.Sets.TrailCacheLength[Type] = 8;
         ProjectileID.Sets.TrailingMode[Type] = 0;
     }
