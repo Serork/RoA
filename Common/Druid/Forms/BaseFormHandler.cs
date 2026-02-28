@@ -345,7 +345,49 @@ sealed partial class BaseFormHandler : ModPlayer, IDoubleTap {
 
         On_LegacyPlayerRenderer.DrawPlayer += On_LegacyPlayerRenderer_DrawPlayer;
 
+        On_PlayerDrawLayers.DrawPlayer_TransformDrawData += On_PlayerDrawLayers_DrawPlayer_TransformDrawData;
+
         Load1();
+    }
+
+    private void On_PlayerDrawLayers_DrawPlayer_TransformDrawData(On_PlayerDrawLayers.orig_DrawPlayer_TransformDrawData orig, ref PlayerDrawSet drawinfo) {
+        if (!drawinfo.drawPlayer.GetFormHandler().IsInADruidicForm) {
+            orig(ref drawinfo);
+            return;
+        }
+
+        _ = drawinfo.rotation;
+        _ = 0f;
+
+        Vector2 vector = drawinfo.drawPlayer.Bottom;
+        Vector2 pos = drawinfo.Position;
+        Vector2 result = Utils.Floor(vector + (pos - vector));
+
+        Vector2 _vector = result - Main.screenPosition + drawinfo.rotationOrigin;
+        Vector2 _vector2 = drawinfo.drawPlayer.position + drawinfo.rotationOrigin;
+        Matrix matrix = Matrix.CreateRotationZ(drawinfo.rotation);
+        for (int i = 0; i < drawinfo.DustCache.Count; i++) {
+            Vector2 position = Main.dust[drawinfo.DustCache[i]].position - _vector2;
+            position = Vector2.Transform(position, matrix);
+            Main.dust[drawinfo.DustCache[i]].position = position + _vector2;
+        }
+
+        for (int j = 0; j < drawinfo.GoreCache.Count; j++) {
+            Vector2 position2 = Main.gore[drawinfo.GoreCache[j]].position - _vector2;
+            position2 = Vector2.Transform(position2, matrix);
+            Main.gore[drawinfo.GoreCache[j]].position = position2 + _vector2;
+        }
+
+        for (int k = 0; k < drawinfo.DrawDataCache.Count; k++) {
+            DrawData value = drawinfo.DrawDataCache[k];
+            if (!value.ignorePlayerRotation) {
+                Vector2 position3 = value.position - _vector;
+                position3 = Vector2.Transform(position3, matrix);
+                value.position = position3 + _vector;
+                value.rotation += drawinfo.rotation;
+                drawinfo.DrawDataCache[k] = value;
+            }
+        }
     }
 
     private void On_PlayerEyeHelper_SetStateByPlayerInfo(On_PlayerEyeHelper.orig_SetStateByPlayerInfo orig, ref PlayerEyeHelper self, Player player) {

@@ -100,7 +100,7 @@ sealed class HallowedGryphon : BaseForm {
         }
 
         player.fullRotation = 0f;
-        player.fullRotationOrigin = player.getRect().Centered() + Vector2.UnitY * 4f;
+        player.fullRotationOrigin = player.getRect().Centered();
 
         HandleLoopAttack(player);
 
