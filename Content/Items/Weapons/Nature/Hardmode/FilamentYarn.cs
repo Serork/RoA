@@ -353,7 +353,7 @@ sealed class FilamentYarn : NatureItem {
                 }
 
                 if (!Main.dedServ) {
-                    for (int num175 = 0; num175 < 2; num175++) {
+                    for (int num175 = 0; num175 < 1; num175++) {
                         int num176 = Gore.NewGore(Projectile.GetSource_FromThis(), position + new Vector2((float)(width * Main.rand.Next(100)) / 100f, (float)(height * Main.rand.Next(100)) / 100f) - Vector2.One * 10f, default(Vector2), Main.rand.Next(61, 64));
                         Main.gore[num176].position = position + new Vector2(width, height) / 2f * 0.75f + Main.rand.NextVector2Circular(width, height) * 0.75f - Vector2.One * 10f;
                         Gore gore2 = Main.gore[num176];
@@ -442,7 +442,7 @@ sealed class FilamentYarn : NatureItem {
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
-            if (_tension > 0f) {
+            if (_tension > 0f || _exploded) {
                 return;
             }
 
@@ -450,7 +450,7 @@ sealed class FilamentYarn : NatureItem {
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info) {
-            if (_tension > 0f) {
+            if (_tension > 0f || _exploded) {
                 return;
             }
 
@@ -462,8 +462,10 @@ sealed class FilamentYarn : NatureItem {
                 Projectile.Kill();
                 return;
             }
-            if (Projectile.timeLeft < 30 && !_exploded) {
-                Explode();
+            if (Init) {
+                if (/*Projectile.timeLeft < 30*/_tension <= 0f && !_exploded) {
+                    Explode();
+                }
             }
 
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
