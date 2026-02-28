@@ -278,66 +278,78 @@ sealed class FilamentYarn : NatureItem {
                 }
 
 
-                for (int num169 = 0; num169 < 20; num169++) {
-                    if (!Main.rand.NextBool(3)) {
+                for (int num169 = 0; num169 < 10; num169++) {
+                    if (!Main.rand.NextBool(4)) {
                         continue;
                     }
-                    int num170 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, DustID.YellowTorch, 0f, 0f, 200, default(Color), 3.7f);
+                    int num170 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<YellowTorch>(), 0f, 0f, 200, default(Color), 3.7f);
                     Main.dust[num170].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                    Main.dust[num170].noLightEmittence = true;
                     Main.dust[num170].noGravity = true;
-                    Main.dust[num170].color = Color.LightYellow;
+                    //Main.dust[num170].color = Color.LightYellow;
+                    Main.dust[num170].scale *= 0.75f;
                     Dust dust2 = Main.dust[num170];
                     dust2.velocity *= 3f;
-                    num170 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, DustID.OrangeTorch, 0f, 0f, 100, default(Color), 1.5f);
+                    num170 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<OrangeTorch>(), 0f, 0f, 100, default(Color), 1.5f);
                     Main.dust[num170].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
+                    Main.dust[num170].noLightEmittence = true;
                     dust2 = Main.dust[num170];
                     dust2.velocity *= 2f;
                     Main.dust[num170].noGravity = true;
                     Main.dust[num170].fadeIn = 1f;
-                    Main.dust[num170].color = Color.LightYellow;
+                    Main.dust[num170].scale *= 0.75f;
+                    //Main.dust[num170].color = Color.LightYellow;
                 }
 
-                for (int num171 = 0; num171 < 20; num171++) {
+                for (int num171 = 0; num171 < 10; num171++) {
                     if (!Main.rand.NextBool(3)) {
                         continue;
                     }
                     int num172 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<StarwayDust>(), 0f, 0f, 0, default(Color), 2.7f);
                     Main.dust[num172].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
                     Main.dust[num172].noGravity = true;
+                    Main.dust[num172].noLightEmittence = true;
                     Dust dust2 = Main.dust[num172];
                     dust2.velocity *= 3f;
                 }
 
                 for (int num273 = 0; num273 < 20; num273++) {
-                    int num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.5f);
-                    Main.dust[num274].noGravity = true;
+                    if (Main.rand.NextBool()) {
+                        int num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 0, default(Color), 2.5f);
+                        Main.dust[num274].noGravity = true;
+                        Main.dust[num274].noLightEmittence = true;
 
-                    Main.dust[num274].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 4f;
+                        Main.dust[num274].position = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 5f;
 
-                    if (num273 < 10) {
-                        Main.dust[num274].velocity += Vector2.UnitY.RotatedBy(mainRotation);
+                        if (num273 < 10) {
+                            Main.dust[num274].velocity += Vector2.UnitY.RotatedBy(mainRotation);
+                        }
+                        else {
+                            Main.dust[num274].velocity += Vector2.UnitY.RotatedBy(mainRotation - MathHelper.Pi);
+                        }
+
+                        Dust dust2 = Main.dust[num274];
+                        dust2.velocity *= 3f;
+                        num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 100, default(Color), 1.5f);
+                        dust2 = Main.dust[num274];
+                        dust2.velocity *= 2f;
+                        Main.dust[num274].noGravity = true;
                     }
                     else {
-                        Main.dust[num274].velocity += Vector2.UnitY.RotatedBy(mainRotation - MathHelper.Pi);
+                        Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
+                        velocity *= Main.rand.NextFloat(0.5f, 1f);
+                        if (num273 < 10) {
+                            velocity += Vector2.UnitY.RotatedBy(mainRotation) * 2.5f;
+                        }
+                        else {
+                            velocity += Vector2.UnitY.RotatedBy(mainRotation - MathHelper.Pi) * 2.5f;
+                        }
+                        Vector2 from = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height) / 5f;
+                        FilamentYarnDust2? filamentYarnDust = AdvancedDustSystem.New<FilamentYarnDust2>(AdvancedDustLayer.ABOVEDUSTS)?
+                            .Setup(from,
+                                   velocity,
+                                   scale: 1f);
                     }
-
-                    Dust dust2 = Main.dust[num274];
-                    dust2.velocity *= 3f;
-                    num274 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<FilamentDust>(), 0f, 0f, 100, default(Color), 1.5f);
-                    dust2 = Main.dust[num274];
-                    dust2.velocity *= 2f;
-                    Main.dust[num274].noGravity = true;
-
-                    //Vector2 to = position + new Vector2(width, height) / 2f + Main.rand.NextVector2Circular(width, height);
-                    //Vector2 velocity = Vector2.One.RotatedByRandom(MathHelper.TwoPi);
-                    //velocity *= Main.rand.NextFloat(0.5f, 1f);
-                    //FilamentYarnDust? filamentYarnDust = AdvancedDustSystem.New<FilamentYarnDust>(AdvancedDustLayer.ABOVEDUSTS)?
-                    //    .Setup(to,
-                    //           velocity,
-                    //           scale: 2.5f);
-                    //if (filamentYarnDust != null) {
-                    //    filamentYarnDust.CorePosition = to;
-                    //}
                 }
 
                 if (!Main.dedServ) {
@@ -360,7 +372,7 @@ sealed class FilamentYarn : NatureItem {
                 Vector2 from = _connectPoints[i].Item1;
                 Vector2 to = _connectPoints[i].Item2 ?? _mousePosition;
 
-                SoundEngine.PlaySound(SoundID.Item14, from);
+                //SoundEngine.PlaySound(SoundID.Item14, from);
 
                 float distance = from.Distance(to);
                 float length = MAXLENGTH;
@@ -509,7 +521,7 @@ sealed class FilamentYarn : NatureItem {
                     int count = 16 / 2;
                     for (int i2 = 1; i2 <= count; i2++) {
                         Vector2 point = curve.GetPoint(i2 / (float)count);
-                        Lighting.AddLight(point, new Color(196, 182, 70).ToVector3() * 1f);
+                        Lighting.AddLight(point, Color.Lerp(new Color(196, 186, 70), new Color(127, 153, 22), 0.5f).ToVector3() * 0.75f);
 
                         if (Main.rand.NextBool(150)) {
                             SpawnStarDust(point);
