@@ -226,7 +226,7 @@ sealed class HellfireFracture : NatureProjectile {
             //for (float num14 = -4f; num14 < 4f; num14 += 1f) {
             //    DrawSlash((num13 / 2f * 0.3f + 0.85f) * 0.35f, lightColor, posExtra: num14 * ((float)Math.PI / 2f).ToRotationVector2() * 0.35f * num13);
             //}
-            DrawSlash(num13 / 2f * 0.3f + 0.85f, Color.Lerp(color, Color.DarkOrange, 0.75f) * 0.25f, Vector2.Zero, 2.5f);
+            //DrawSlash(num13 / 2f * 0.3f + 0.85f, Color.Lerp(color, Color.DarkOrange, 0.75f) * 0f, Vector2.Zero, 2.5f);
         }, blendState: multiplyBlendState, samplerState: SamplerState.LinearClamp);
     }
 
