@@ -93,6 +93,8 @@ static class NPCUtils {
         if (immuneTime == 0 && ((collided != null && collided.Invoke(target.getRect())) || damageSourceHitbox.Value.Intersects(target.getRect()))) {
             var modifiers = target.GetIncomingStrikeModifiers(damageSourceAsProjectile.DamageType, direction.Value);
             modifiers.ArmorPenetration += damageSourceAsProjectile.ArmorPenetration;
+            CombinedHooks.ModifyHitNPCWithProj(damageSourceAsProjectile, target, ref modifiers);
+
             bool crit = false;
             if (damageSourceAsProjectile.DamageType.UseStandardCritCalcs && Main.rand.Next(100) < damageSourceAsProjectile.CritChance) {
                 crit = true;

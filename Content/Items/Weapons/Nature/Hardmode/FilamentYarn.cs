@@ -1,12 +1,11 @@
-﻿using Humanizer;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using RoA.Common;
 using RoA.Common.Cache;
 using RoA.Common.Druid;
 using RoA.Common.GlowMasks;
+using RoA.Common.Projectiles;
 using RoA.Common.VisualEffects;
 using RoA.Content.AdvancedDusts;
 using RoA.Content.Dusts;
@@ -16,6 +15,7 @@ using RoA.Core.Data;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
 using RoA.Core.Utility.Extensions;
+using RoA.Core.Utility.Vanilla;
 
 using System;
 
@@ -66,7 +66,7 @@ sealed class FilamentYarn : NatureItem {
         NatureWeaponHandler.SetFillingRateModifier(Item, 0.2f);
     }
 
-    public sealed class FilamentYarn_Use : NatureProjectile {
+    public sealed class FilamentYarn_Use : NatureProjectile, IUseCustomImmunityFrames {
         private static float MAXLENGTH => 200f;
         private static ushort LINECOUNT => 5;
         private static float TENSIONMODIFIER => 0.75f;
@@ -92,7 +92,7 @@ sealed class FilamentYarn : NatureItem {
 
         public bool CanSpawnMoreLines => Projectile.ai[2] < LINECOUNT + 1;
 
-        public override bool? CanDamage() => true;
+        public override bool? CanDamage() => false/*true*/;
         public override bool? CanCutTiles() => false;
         public override bool ShouldUpdatePosition() => false;
 
@@ -105,8 +105,8 @@ sealed class FilamentYarn : NatureItem {
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
 
-            Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 10;
+            //Projectile.usesLocalNPCImmunity = true;
+            //Projectile.localNPCHitCooldown = 10;
 
             Projectile.penetrate = -1;
 
@@ -115,34 +115,34 @@ sealed class FilamentYarn : NatureItem {
             Projectile.Opacity = 0f;
         }
 
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
-            for (int i = 0; i < _connectPoints.Length; i++) {
-                if (i > LINECOUNT) {
-                    continue;
-                }
-                Vector2 from = _connectPoints[i].Item1;
-                Vector2 to = _connectPoints[i].Item2 ?? _mousePosition;
-                float distance = from.Distance(to);
-                float length = MAXLENGTH;
-                float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
-                float sineX = TimeSystem.TimeForVisualEffects * 5f,
-                      sineY = TimeSystem.TimeForVisualEffects * 5f;
-                SimpleCurve curve = new(from, to, Vector2.Zero);
-                curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * Tension) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
-                Vector2 start = curve.Begin;
-                int count = 16 / 2;
-                for (int i2 = 1; i2 <= count; i2++) {
-                    Vector2 point = curve.GetPoint(i2 / (float)count);
-                    if (GeometryUtils.CenteredSquare(point, _exploded ? 150 : 10).Intersects(targetHitbox)) {
-                        return true;
-                    }
+        //public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox) {
+        //    for (int i = 0; i < _connectPoints.Length; i++) {
+        //        if (i > LINECOUNT) {
+        //            continue;
+        //        }
+        //        Vector2 from = _connectPoints[i].Item1;
+        //        Vector2 to = _connectPoints[i].Item2 ?? _mousePosition;
+        //        float distance = from.Distance(to);
+        //        float length = MAXLENGTH;
+        //        float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
+        //        float sineX = TimeSystem.TimeForVisualEffects * 5f,
+        //              sineY = TimeSystem.TimeForVisualEffects * 5f;
+        //        SimpleCurve curve = new(from, to, Vector2.Zero);
+        //        curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * Tension) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+        //        Vector2 start = curve.Begin;
+        //        int count = 16 / 2;
+        //        for (int i2 = 1; i2 <= count; i2++) {
+        //            Vector2 point = curve.GetPoint(i2 / (float)count);
+        //            if (GeometryUtils.CenteredSquare(point, _exploded ? 150 : 15).Intersects(targetHitbox)) {
+        //                return true;
+        //            }
 
-                    start = point;
-                }
-            }
+        //            start = point;
+        //        }
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         private static void DrawPrettyStarSparkle(float opacity, SpriteEffects dir, Vector2 drawpos, Microsoft.Xna.Framework.Color drawColor, Microsoft.Xna.Framework.Color shineColor, float rotation, Vector2 scale, Vector2 fatness) {
             Texture2D value = TextureAssets.Extra[98].Value;
@@ -270,7 +270,7 @@ sealed class FilamentYarn : NatureItem {
 
 
                 for (int num169 = 0; num169 < 20; num169++) {
-                    if (Main.rand.NextBool()) {
+                    if (!Main.rand.NextBool(3)) {
                         continue;
                     }
                     int num170 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, DustID.YellowTorch, 0f, 0f, 200, default(Color), 3.7f);
@@ -289,7 +289,7 @@ sealed class FilamentYarn : NatureItem {
                 }
 
                 for (int num171 = 0; num171 < 20; num171++) {
-                    if (Main.rand.NextBool()) {
+                    if (!Main.rand.NextBool(3)) {
                         continue;
                     }
                     int num172 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<StarwayDust>(), 0f, 0f, 0, default(Color), 2.7f);
@@ -417,7 +417,12 @@ sealed class FilamentYarn : NatureItem {
             }
             if (Projectile.timeLeft < 30) {
                 Explode();
-                Projectile.ResetLocalNPCHitImmunity();
+                for (int i = 0; i < LINECOUNT + 1; i++) {
+                    for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
+                        ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcId);
+                        immuneTime = 0;
+                    }
+                }
                 _exploded = true;
             }
 
@@ -449,6 +454,8 @@ sealed class FilamentYarn : NatureItem {
 
                 _connectPoints = new (Vector2, Vector2?, float)[1];
                 AddPoint(_mousePosition);
+
+                CustomImmunityFramesHandler.Initialize(Projectile, (byte)(LINECOUNT + 1));
             }
             else {
                 for (int i = 0; i < _connectPoints.Length; i++) {
@@ -592,6 +599,56 @@ sealed class FilamentYarn : NatureItem {
 
                 Projectile.Center = Utils.Floor(Projectile.Center);
             }
+
+            void resetDamageInfo() {
+                for (int i = 0; i < LINECOUNT + 1; i++) {
+                    for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
+                        ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcId);
+                        if (immuneTime > 0) {
+                            immuneTime--;
+                        }
+                    }
+                }
+            }
+            void damageNPCs() {
+                if (!Projectile.IsOwnerLocal()) {
+                    return;
+                }
+
+                for (int i = 0; i < _connectPoints.Length; i++) {
+                    if (i > LINECOUNT) {
+                        continue;
+                    }
+                    Vector2 from = _connectPoints[i].Item1;
+                    Vector2 to = _connectPoints[i].Item2 ?? _mousePosition;
+                    float distance = from.Distance(to);
+                    float length = MAXLENGTH;
+                    float currentLength = MathF.Max(0f, MathF.Min(length, length - distance * 1f));
+                    float sineX = TimeSystem.TimeForVisualEffects * 5f,
+                          sineY = TimeSystem.TimeForVisualEffects * 5f;
+                    SimpleCurve curve = new(from, to, Vector2.Zero);
+                    curve.Control = (curve.Begin + curve.End) / 2f + new Vector2(0f, currentLength * Tension) + new Vector2(MathF.Sin(sineX), MathF.Sin(sineY)) * 2f;
+                    Vector2 start = curve.Begin;
+                    int count = 16 / 2;
+                    for (int i2 = 1; i2 <= count; i2++) {
+                        Vector2 point = curve.GetPoint(i2 / (float)count);
+
+                        foreach (NPC npcForCollisionCheck in Main.ActiveNPCs) {
+                            if (!NPCUtils.DamageNPCWithPlayerOwnedProjectile(npcForCollisionCheck, Projectile,
+                                                                             ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcForCollisionCheck.whoAmI),
+                                                                             collided: (targetHitbox) => GeometryUtils.CenteredSquare(point, _exploded ? 150 : 15).Intersects(targetHitbox),
+                                                                             direction: MathF.Sign(point.X - npcForCollisionCheck.Center.X))) {
+                                continue;
+                            }
+                        }
+
+                        start = point;
+                    }
+                }
+            }
+
+            resetDamageInfo();
+            damageNPCs();
         }
 
         public override bool PreDraw(ref Color lightColor) {
