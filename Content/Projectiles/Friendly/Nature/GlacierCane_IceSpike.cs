@@ -20,10 +20,8 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
 
 using static RoA.Content.Items.Weapons.Nature.Hardmode.Canes.GlacierCane;
-using static tModPorter.ProgressUpdate;
 
 namespace RoA.Content.Projectiles.Friendly.Nature;
 
@@ -298,7 +296,7 @@ sealed class GlacierSpike : NatureProjectile_NoTextureLoad, IRequestAssets {
         float timeToPrepareAttack = MINPROGRESS / 2f;
         bool preparing = AIProgress <= timeToPrepareAttack;
         if (preparing || !_prepared) {
-            Projectile.timeLeft = 65;
+            Projectile.timeLeft = 80;
 
             if (!_prepared && !notEnoughDistance) {
                 _prepared = true;
