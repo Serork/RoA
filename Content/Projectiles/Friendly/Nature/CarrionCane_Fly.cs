@@ -5,6 +5,7 @@ using ReLogic.Content;
 
 using RoA.Common;
 using RoA.Common.Projectiles;
+using RoA.Content.Dusts;
 using RoA.Core;
 using RoA.Core.Defaults;
 using RoA.Core.Graphics.Data;
@@ -113,22 +114,24 @@ sealed class Fly : NatureProjectile_NoTextureLoad, IRequestAssets {
         ProjectileUtils.Animate(Projectile, 4);
     }
 
-    public static void CreateFlyDust(Vector2 position, Vector2 velocity, int width, int height) {
-        Dust dust3 = Dust.NewDustDirect(position, width, height, DustID.BorealWood, 0f, 0f, 0, default, 0.8f + Main.rand.NextFloatRange(0.1f));
+    public static void CreateFlyDust(Player player, Vector2 position, Vector2 velocity, int width, int height) {
+        Dust dust3 = Dust.NewDustDirect(position, width, height, ModContent.DustType<BorealWood>(), 0f, 0f, 0, default, 0.8f + Main.rand.NextFloatRange(0.1f));
         dust3.noGravity = true;
         dust3.velocity += velocity;
+        dust3.customData = player;
         Dust dust2 = dust3;
         dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
-        dust3 = Dust.NewDustDirect(position, width, height, DustID.BorealWood, 0f, 0f, 0, default, 0.8f + Main.rand.NextFloatRange(0.1f));
+        dust3 = Dust.NewDustDirect(position, width, height, ModContent.DustType<BorealWood>(), 0f, 0f, 0, default, 0.8f + Main.rand.NextFloatRange(0.1f));
         dust2 = dust3;
         dust2.velocity += velocity;
         dust2.velocity *= Main.rand.NextFloat(0.75f, 1f);
         dust3.noGravity = true;
+        dust3.customData = player;
     }
 
     public override void OnKill(int timeLeft) {
         for (int j = 0; j < 1; j++) {
-            CreateFlyDust(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
+            CreateFlyDust(Projectile.GetOwnerAsPlayer(), Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
         }
     }
 
