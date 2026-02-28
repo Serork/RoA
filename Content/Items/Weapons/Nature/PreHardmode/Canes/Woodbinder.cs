@@ -159,6 +159,7 @@ sealed class Woodbinder : CaneBaseItem<Woodbinder.WoodbinderBase> {
                                                     Vector2.Zero,
                                                     Scale: Main.rand.NextFloat(1.25f, 1.5f) * Utils.Remap(step, 0f, 1f, 0.5f, 1f));
                     dust.noGravity = true;
+                    dust.customData = player;
                 }
             }
         }

@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 
 using RoA.Common.Druid;
 using RoA.Common.Players;
+using RoA.Content.Dusts;
 using RoA.Content.Projectiles.Friendly.Nature;
 using RoA.Core.Defaults;
 using RoA.Core.Utility;
@@ -218,7 +219,7 @@ sealed class SpikedIceStaff : CaneBaseItem<SpikedIceStaff.SpikedIceStaffBase> {
             }
             if (Main.rand.NextChance(MathHelper.Clamp(step * 2f, 0f, 0.75f))) {
                 for (int i = 0; i < (int)(2 * step + step); i++) {
-                    Dust dust = Dust.NewDustPerfect(corePosition, 176, Scale: 1f);
+                    Dust dust = Dust.NewDustPerfect(corePosition, ModContent.DustType<BubbleBurst_Blue>(), Scale: 1f);
                     dust.noGravity = true;
                     dust.fadeIn = 0.9f;
                 }

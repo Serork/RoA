@@ -1,15 +1,11 @@
-using RoA.Core.Utility;
+﻿using RoA.Core.Utility;
 
 using Terraria;
 using Terraria.ModLoader;
 
 namespace RoA.Content.Dusts;
 
-sealed class CactiCasterDust : ModDust {
-    public override void SetStaticDefaults() {
-
-    }
-
+sealed class BubbleBurst_Blue : ModDust {
     public override bool Update(Dust dust) {
         dust.BasicDust();
 

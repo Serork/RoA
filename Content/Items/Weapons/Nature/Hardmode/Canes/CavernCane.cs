@@ -142,6 +142,7 @@ sealed class CavernCane : CaneBaseItem<CavernCane.CavernCaneBase> {
                                                         dustVelocity,
                                                         Scale: dustScale);
                         dust.noGravity = true;
+                        dust.customData = player;
                         //dust.color = gemColor;
                     }
                 }

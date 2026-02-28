@@ -152,6 +152,7 @@ sealed class CactiCaster : CaneBaseItem<CactiCaster.CactiCasterBase> {
                                                     Scale: Main.rand.NextFloat(1.25f, 1.5f));
                     dust.noGravity = true;
                     dust.noLight = true;
+                    dust.customData = player;
                 }
             }
         }
