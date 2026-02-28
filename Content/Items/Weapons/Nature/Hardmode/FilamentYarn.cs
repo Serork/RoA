@@ -733,8 +733,18 @@ sealed class FilamentYarn : NatureItem {
                 Color glowMaskColor = glowMaskInfo.ShouldApplyItemAlpha ? color * (1f - Projectile.alpha / 255f) : glowMaskInfo.Color;
                 Main.EntitySpriteDraw(heldItemGlowMaskTexture, pos, null, glowMaskColor, rotation, origin, Projectile.scale, effects);
 
+                float opacity2 = Projectile.Opacity;
+                float disappearOpacity = Utils.GetLerpValue(0f, 30, Projectile.timeLeft, true);
+                float opacity = MathF.Min(opacity2, disappearOpacity);
+                Color baseColor = Color.White;
+                baseColor = baseColor.MultiplyAlpha(1f - Utils.GetLerpValue(1f, 0.25f, opacity, true));
+                float mainOpacity = Utils.GetLerpValue(0f, 0.5f, opacity, true);
+                mainOpacity *= Ease.CubeIn(disappearOpacity);
+                baseColor *= mainOpacity;
+
                 float strength = MathHelper.Lerp(3.5f, 1.5f, Projectile.ai[2] / (LINECOUNT + 1));
-                DrawStar(pos + Main.screenPosition + Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2) * 50f, strength * Projectile.Opacity * _tension, 0f, rotation);
+                DrawStar(pos + Main.screenPosition + Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2) * 50f, strength * mainOpacity * _tension * 0.1f, 0f, rotation, 2f);
+                DrawStar(pos + Main.screenPosition + Vector2.UnitY.RotatedBy(Projectile.velocity.ToRotation() - MathHelper.PiOver2) * 50f, strength * mainOpacity * _tension, 0f, rotation);
             }
 
             {
