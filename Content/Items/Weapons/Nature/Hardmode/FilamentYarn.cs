@@ -302,7 +302,7 @@ sealed class FilamentYarn : NatureItem {
                 }
 
                 for (int num171 = 0; num171 < 10; num171++) {
-                    if (!Main.rand.NextBool(3)) {
+                    if (!Main.rand.NextBool(2)) {
                         continue;
                     }
                     int num172 = Dust.NewDust(new Vector2(position.X, position.Y), width, height, ModContent.DustType<StarwayDust>(), 0f, 0f, 0, default(Color), 2.7f);
