@@ -262,6 +262,15 @@ sealed class FilamentYarn : NatureItem {
         }
 
         private void Explode() {
+            _exploded = true;
+
+            for (int i = 0; i < LINECOUNT + 1; i++) {
+                for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
+                    ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcId);
+                    immuneTime = 0;
+                }
+            }
+
             void makeExplosion(Vector2 position, int width, int height) {
                 for (int num272 = 0; num272 < 4; num272++) {
                     int dust = Dust.NewDust(new Vector2(position.X, position.Y), width, height, DustID.Smoke, 0f, 0f, 100, default(Color), 1.5f);
@@ -410,6 +419,22 @@ sealed class FilamentYarn : NatureItem {
             }
         }
 
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone) {
+            if (_tension > 0f) {
+                return;
+            }
+
+            Explode();
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info) {
+            if (_tension > 0f) {
+                return;
+            }
+
+            Explode();
+        }
+
         public override void AI() {
             if (_exploded) {
                 Projectile.Kill();
@@ -417,13 +442,6 @@ sealed class FilamentYarn : NatureItem {
             }
             if (Projectile.timeLeft < 30) {
                 Explode();
-                for (int i = 0; i < LINECOUNT + 1; i++) {
-                    for (int npcId = 0; npcId < Main.npc.Length; npcId++) {
-                        ref ushort immuneTime = ref CustomImmunityFramesHandler.GetImmuneTime(Projectile, (byte)i, npcId);
-                        immuneTime = 0;
-                    }
-                }
-                _exploded = true;
             }
 
             Projectile.Opacity = Helper.Approach(Projectile.Opacity, 1f, 0.1f);
