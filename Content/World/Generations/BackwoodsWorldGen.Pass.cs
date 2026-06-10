@@ -4387,8 +4387,10 @@ sealed class BackwoodsBiomePass(string name, double loadWeight) : GenPass(name, 
         int mid = Main.maxTilesX / 2;
         if (ModLoader.TryGetMod("SpiritReforged", out Mod mod)) {
             SkipTilesByTileType(TileID.HardenedSand, tileCountToCheck: tileCountToCheck * 3, offsetPositionDirectionOnCheck: -1);
-            Rectangle savannaArea = (Rectangle)mod.Call("GetSavannaArea");
-            CenterX += -GenVars.dungeonSide * savannaArea.Width / 8;
+            Rectangle? savannaArea = (Rectangle?)mod.Call("GetSavannaArea");
+            if (savannaArea is not null) {
+                CenterX += -GenVars.dungeonSide * savannaArea.Value.Width / 8;
+            }
         }
         bool hasRemnants = ModLoader.HasMod("Remnants");
         float checkWidthMultiplier = hasRemnants ? 5 : 3;
