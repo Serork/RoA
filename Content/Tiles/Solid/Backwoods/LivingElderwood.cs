@@ -41,6 +41,8 @@ class LivingElderwood : ModTile {
         TileHelper.MergeWith(Type, TileID.Mud);
         TileHelper.MergeWith(Type, (ushort)ModContent.TileType<BackwoodsGreenMoss>());
 
+        TileID.Sets.AvoidedByMeteorLanding[Type] = true;
+
         TileID.Sets.ChecksForMerge[Type] = true;
 
         TileID.Sets.GeneralPlacementTiles[Type] = false;

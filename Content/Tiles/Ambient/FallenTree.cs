@@ -13,6 +13,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.Enums;
 using Terraria.GameContent.Drawing;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -28,6 +29,8 @@ sealed class FallenTree : ModTile, TileHooks.IRequireMinAxePower, TileHooks.IPos
         Main.tileLighted[Type] = true;
         Main.tileAxe[Type] = true;
         Main.tileObsidianKill[Type] = true;
+
+        TileID.Sets.AvoidedByMeteorLanding[Type] = true;
 
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 3;

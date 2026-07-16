@@ -157,6 +157,8 @@ sealed class TreeDryad : ModTile, IRequestAsset, TileHooks.IPreDraw, TileHooks.I
         Main.tileLighted[Type] = true;
         Main.tileHammer[Type] = true;
 
+        TileID.Sets.AvoidedByMeteorLanding[Type] = true;
+
         TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
         TileObjectData.newTile.DrawYOffset = 2;
         TileObjectData.newTile.Width = 2;

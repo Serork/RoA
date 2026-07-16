@@ -22,6 +22,8 @@ sealed class NexusGateway : ModTile {
         Main.tileSolidTop[Type] = false;
         Main.tileSolid[Type] = false;
 
+        TileID.Sets.AvoidedByMeteorLanding[Type] = true;
+
         TileID.Sets.CanBeClearedDuringGeneration[Type] = false;
         TileID.Sets.CanBeClearedDuringOreRunner[Type] = false;
         TileID.Sets.PreventsTileRemovalIfOnTopOfIt[Type] = true;
