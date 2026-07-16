@@ -1,2 +1,3 @@
 - Added a meteor landing protection
 - Fixed not being able to generate a world with Remnants enabled
+- Fixed an issue preventing the world from successfully entering hardmode when RoA and Terraria Origins are both active

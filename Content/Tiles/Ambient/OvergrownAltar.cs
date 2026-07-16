@@ -35,67 +35,43 @@ sealed class OvergrownAltar : ModTile {
 
     private void On_WorldGen_Convert_int_int_int_int_bool_bool(On_WorldGen.orig_Convert_int_int_int_int_bool_bool orig, int i, int j, int conversionType, int size, bool tiles, bool walls) {
         if (WorldGen.IsGeneratingHardMode) {
-            for (int type = TileID.Count; type < TileLoader.TileCount; type++) {
-                if (type == ModContent.TileType<BackwoodsGrass>()) {
-                    TileID.Sets.Conversion.Grass[type] = false;
-                }
-                if (type == ModContent.TileType<BackwoodsStone>()) {
-                    TileID.Sets.Conversion.Stone[type] = false;
-                }
-                if (type == ModContent.TileType<BackwoodsStoneBrick>()) {
-                    TileID.Sets.Conversion.Stone[type] = false;
-                }
-                if (type == ModContent.TileType<BackwoodsGreenMoss>()) {
-                    Main.tileMoss[type] = false;
-                    TileID.Sets.Conversion.Stone[Type] = false;
-                    TileID.Sets.Conversion.Moss[Type] = false;
-                }
-                if (type == ModContent.TileType<BackwoodsGreenMossBrick>()) {
-                    TileID.Sets.Conversion.Stone[Type] = false;
-                    TileID.Sets.Conversion.MossBrick[type] = false;
-                }
-            }
-            for (int type = WallID.Count; type < WallLoader.WallCount; type++) {
-                if (type == ModContent.WallType<BackwoodsGrassWall>()) {
-                    WallID.Sets.Conversion.Grass[type] = false;
-                }
-                if (type == ModContent.WallType<BackwoodsFlowerGrassWall>()) {
-                    WallID.Sets.Conversion.Grass[type] = false;
-                }
-            }
+            TileID.Sets.Conversion.Grass[ModContent.TileType<BackwoodsGrass>()] = false;
+
+            TileID.Sets.Conversion.Stone[ModContent.TileType<BackwoodsStone>()] = false;
+
+            TileID.Sets.Conversion.Stone[ModContent.TileType<BackwoodsStoneBrick>()] = false;
+
+            Main.tileMoss[ModContent.TileType<BackwoodsGreenMoss>()] = false;
+            TileID.Sets.Conversion.Stone[ModContent.TileType<BackwoodsGreenMoss>()] = false;
+            TileID.Sets.Conversion.Moss[ModContent.TileType<BackwoodsGreenMoss>()] = false;
+
+            TileID.Sets.Conversion.Stone[ModContent.TileType<BackwoodsGreenMossBrick>()] = false;
+            TileID.Sets.Conversion.MossBrick[ModContent.TileType<BackwoodsGreenMossBrick>()] = false;
+
+            WallID.Sets.Conversion.Grass[ModContent.WallType<BackwoodsGrassWall>()] = false;
+
+            WallID.Sets.Conversion.Grass[ModContent.WallType<BackwoodsFlowerGrassWall>()] = false;
         }
 
         orig(i, j, conversionType, size, tiles, walls);
 
         if (WorldGen.IsGeneratingHardMode) {
-            for (int type = TileID.Count; type < TileLoader.TileCount; type++) {
-                if (type == ModContent.TileType<BackwoodsGrass>()) {
-                    TileID.Sets.Conversion.Grass[type] = true;
-                }
-                if (type == ModContent.TileType<BackwoodsStone>()) {
-                    TileID.Sets.Conversion.Stone[type] = true;
-                }
-                if (type == ModContent.TileType<BackwoodsStoneBrick>()) {
-                    TileID.Sets.Conversion.Stone[type] = true;
-                }
-                if (type == ModContent.TileType<BackwoodsGreenMoss>()) {
-                    Main.tileMoss[type] = true;
-                    TileID.Sets.Conversion.Stone[Type] = true;
-                    TileID.Sets.Conversion.Moss[Type] = true;
-                }
-                if (type == ModContent.TileType<BackwoodsGreenMossBrick>()) {
-                    TileID.Sets.Conversion.Stone[Type] = true;
-                    TileID.Sets.Conversion.MossBrick[type] = true;
-                }
-            }
-            for (int type = WallID.Count; type < WallLoader.WallCount; type++) {
-                if (type == ModContent.WallType<BackwoodsGrassWall>()) {
-                    WallID.Sets.Conversion.Grass[type] = true;
-                }
-                if (type == ModContent.WallType<BackwoodsFlowerGrassWall>()) {
-                    WallID.Sets.Conversion.Grass[type] = true;
-                }
-            }
+            TileID.Sets.Conversion.Grass[ModContent.TileType<BackwoodsGrass>()] = true;
+
+            TileID.Sets.Conversion.Stone[ModContent.TileType<BackwoodsStone>()] = true;
+
+            TileID.Sets.Conversion.Stone[ModContent.TileType<BackwoodsStoneBrick>()] = true;
+
+            Main.tileMoss[ModContent.TileType<BackwoodsGreenMoss>()] = true;
+            TileID.Sets.Conversion.Stone[ModContent.TileType<BackwoodsGreenMoss>()] = true;
+            TileID.Sets.Conversion.Moss[ModContent.TileType<BackwoodsGreenMoss>()] = true;
+
+            TileID.Sets.Conversion.Stone[ModContent.TileType<BackwoodsGreenMossBrick>()] = true;
+            TileID.Sets.Conversion.MossBrick[ModContent.TileType<BackwoodsGreenMossBrick>()] = true;
+
+            WallID.Sets.Conversion.Grass[ModContent.WallType<BackwoodsGrassWall>()] = true;
+
+            WallID.Sets.Conversion.Grass[ModContent.WallType<BackwoodsFlowerGrassWall>()] = true;
         }
     }
 
