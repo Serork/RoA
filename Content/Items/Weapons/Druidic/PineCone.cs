@@ -405,89 +405,105 @@ sealed class PineCone : NatureItem {
     }
 
     private void On_WorldGen_KillTile_GetTreeDrops(On_WorldGen.orig_KillTile_GetTreeDrops orig, int i, int j, Tile tileCache, ref bool bonusWood, ref int dropItem, ref int secondaryItem) {
-        if (tileCache.TileFrameX >= 22 && tileCache.TileFrameY >= 198) {
-            if (Main.netMode != 1) {
-                if (WorldGen.genRand.Next(2) == 0) {
-                    int k;
-                    for (k = j; Main.tile[i, k] != null && (!Main.tile[i, k].HasTile || !Main.tileSolid[Main.tile[i, k].TileType] || Main.tileSolidTop[Main.tile[i, k].TileType]); k++) {
-                    }
-
-                    if (Main.tile[i, k] != null) {
-                        Tile tile = Main.tile[i, k];
-                        bool vanillaResult = false;
-                        if (tile.TileType == 2 || tile.TileType == 109 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 147 || tile.TileType == 199 || tile.TileType == 23 || tile.TileType == 633) {
-                            vanillaResult = true;
-                        }
-
-                        if (vanillaResult || TileLoader.CanDropAcorn(tile.TileType)) {
-                            dropItem = 9;
-                            secondaryItem = 27;
-                        }
-                        else {
-                            dropItem = 9;
-                        }
-                    }
-                }
-                else {
-                    dropItem = 9;
-                }
-            }
-        }
-        else {
-            dropItem = 9;
-        }
-
-        if (dropItem != 9)
-            return;
+        orig(i, j, tileCache, ref bonusWood, ref dropItem, ref secondaryItem);
 
         bool flag = false;
-        WorldGen.GetTreeBottom(i, j, out var x, out var y);
-        if (Main.tile[x, y].HasTile) {
-            switch (Main.tile[x, y].TileType) {
-                case 633:
-                    dropItem = 5215;
-                    break;
-                case 23:
-                case 661:
-                    dropItem = 619;
-                    break;
-                case 199:
-                case 662:
-                    dropItem = 911;
-                    break;
-                case 60:
-                    dropItem = 620;
-                    break;
-                case 109:
-                case 492:
-                    dropItem = 621;
-                    break;
-                case 70:
-                    if (WorldGen.genRand.Next(2) == 0)
-                        dropItem = 183;
-                    else
-                        dropItem = 0;
-                    break;
-                case 147:
-                    dropItem = 2503;
-                    if (Main.tile[i, j].TileFrameY == 264) {
-                        dropItem = ModContent.ItemType<PineCone>();
-                        flag = true;
-                    }
-                    break;
+        if (dropItem == 2503) {
+            if (Main.tile[i, j].TileFrameY == 264) {
+                dropItem = ModContent.ItemType<PineCone>();
+                flag = true;
             }
-
-            TileLoader.DropTreeWood(Main.tile[x, y].TileType, ref dropItem);
         }
-
-        int num = Player.FindClosest(new Vector2(x * 16, y * 16), 16, 16);
-        int axe = Main.player[num].inventory[Main.player[num].selectedItem].axe;
-        if (WorldGen.genRand.Next(100) < axe || Main.rand.Next(3) == 0)
-            bonusWood = true;
         if (flag && bonusWood) {
             bonusWood = false;
         }
     }
+
+    //private void On_WorldGen_KillTile_GetTreeDrops(On_WorldGen.orig_KillTile_GetTreeDrops orig, int i, int j, Tile tileCache, ref bool bonusWood, ref int dropItem, ref int secondaryItem) {
+    //    if (tileCache.TileFrameX >= 22 && tileCache.TileFrameY >= 198) {
+    //        if (Main.netMode != 1) {
+    //            if (WorldGen.genRand.Next(2) == 0) {
+    //                int k;
+    //                for (k = j; /*Main.tile[i, k] != null && */(!Main.tile[i, k].HasTile || !Main.tileSolid[Main.tile[i, k].TileType] || Main.tileSolidTop[Main.tile[i, k].TileType]); k++) {
+    //                }
+
+        //                //if (Main.tile[i, k] != null)
+        //                {
+        //                    Tile tile = Main.tile[i, k];
+        //                    bool vanillaResult = false;
+        //                    if (tile.TileType == 2 || tile.TileType == 109 || tile.TileType == 477 || tile.TileType == 492 || tile.TileType == 147 || tile.TileType == 199 || tile.TileType == 23 || tile.TileType == 633) {
+        //                        vanillaResult = true;
+        //                    }
+
+        //                    if (vanillaResult || TileLoader.CanDropAcorn(tile.TileType)) {
+        //                        dropItem = 9;
+        //                        secondaryItem = 27;
+        //                    }
+        //                    else {
+        //                        dropItem = 9;
+        //                    }
+        //                }
+        //            }
+        //            else {
+        //                dropItem = 9;
+        //            }
+        //        }
+        //    }
+        //    else {
+        //        dropItem = 9;
+        //    }
+
+        //    if (dropItem != 9)
+        //        return;
+
+        //    bool flag = false;
+        //    WorldGen.GetTreeBottom(i, j, out var x, out var y);
+        //    if (Main.tile[x, y].HasTile) {
+        //        switch (Main.tile[x, y].TileType) {
+        //            case 633:
+        //                dropItem = 5215;
+        //                break;
+        //            case 23:
+        //            case 661:
+        //                dropItem = 619;
+        //                break;
+        //            case 199:
+        //            case 662:
+        //                dropItem = 911;
+        //                break;
+        //            case 60:
+        //                dropItem = 620;
+        //                break;
+        //            case 109:
+        //            case 492:
+        //                dropItem = 621;
+        //                break;
+        //            case 70:
+        //                if (WorldGen.genRand.Next(2) == 0)
+        //                    dropItem = 183;
+        //                else
+        //                    dropItem = 0;
+        //                break;
+        //            case 147:
+        //                dropItem = 2503;
+        //                if (Main.tile[i, j].TileFrameY == 264) {
+        //                    dropItem = ModContent.ItemType<PineCone>();
+        //                    flag = true;
+        //                }
+        //                break;
+        //        }
+
+        //        TileLoader.DropTreeWood(Main.tile[x, y].TileType, ref dropItem);
+        //    }
+
+        //    int num = Player.FindClosest(new Vector2(x * 16, y * 16), 16, 16);
+        //    int axe = Main.player[num].inventory[Main.player[num].selectedItem].axe;
+        //    if (WorldGen.genRand.Next(100) < axe || Main.rand.Next(3) == 0)
+        //        bonusWood = true;
+        //    if (flag && bonusWood) {
+        //        bonusWood = false;
+        //    }
+        //}
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 2;
 

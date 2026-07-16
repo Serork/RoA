@@ -1,3 +1,4 @@
 - Added a meteor landing protection
 - Fixed not being able to generate a world with Remnants enabled
 - Fixed an issue preventing the world from successfully entering hardmode when RoA and Terraria Origins are both active
+- Fixed a rare crash when Wrath of the Gods campsite placement breaks a Pine Cone tile
