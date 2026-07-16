@@ -20,7 +20,7 @@ using Terraria.Initializers;
 using Terraria.ModLoader;
 using Terraria.Net;
 
-namespace RoA;
+namespace RoA; 
 
 sealed partial class RoA : Mod {
     public static readonly string ModSourcePath = Path.Combine(Program.SavePathShared, "ModSources");
