@@ -1,0 +1,2 @@
+- Added a meteor landing protection
+- Fixed not being able to generate a world with Remnants enabled

@@ -9,6 +9,7 @@ using RoA.Content.Items.Weapons.Druidic.Rods;
 using RoA.Content.Tiles.Furniture;
 
 using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -479,6 +480,12 @@ sealed class ExtraVanillaChestItems : ModSystem {
     //}
 
     private void On_WorldGen_MakeDungeon(On_WorldGen.orig_MakeDungeon orig, int x, int y) {
+        bool hasRemnants = ModLoader.HasMod("Remnants");
+        if (hasRemnants) {
+            orig(x, y);
+            return;
+        }
+
         GenVars.dEnteranceX = 0;
         GenVars.numDRooms = 0;
         GenVars.numDDoors = 0;
@@ -1505,6 +1512,14 @@ sealed class ExtraVanillaChestItems : ModSystem {
     }
 
     private bool On_WorldGen_AddBuriedChest_int_int_int_bool_int_bool_ushort(On_WorldGen.orig_AddBuriedChest_int_int_int_bool_int_bool_ushort orig, int i, int j, int contain, bool notNearOtherChests, int Style, bool trySlope, ushort chestTileType) {
+        bool hasRemnants = ModLoader.HasMod("Remnants");
+        if (hasRemnants) {
+            int[] dungeonItems = [155, 157, 157, 2623, 163, 113, 3317, 327, 164];
+            if (dungeonItems.Contains(contain) && WorldGen.genRand.NextBool(10)) {
+                contain = ModContent.ItemType<RagingBoots>();
+            }
+        }
+        
         if (chestTileType == 0)
             chestTileType = 21;
 
