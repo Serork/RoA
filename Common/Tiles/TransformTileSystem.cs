@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-
+using RoA.Core.Utility;
 using System.Runtime.CompilerServices;
 
 using Terraria;
@@ -181,7 +181,7 @@ sealed class TransformTileSystem : ILoadable {
             return;
         }
 
-        Tile tile = Main.tile[i, j];
+        Tile tile = WorldGenHelper.GetTileSafely(i, j);
         ushort replaceTo = ReplaceToTypeOnKill[tile.TileType];
         if (replaceTo != TileID.Count) {
             if (i < 0 || j < 0 || i >= Main.maxTilesX || j >= Main.maxTilesY)
