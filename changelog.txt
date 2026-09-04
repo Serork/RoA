@@ -1,0 +1,2 @@
+- Fixed an "out of bounds" error with Mod of Redemption
+- Fixed a crash when an Elderwood Chest appears on the screen

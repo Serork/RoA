@@ -177,7 +177,19 @@ sealed class ElderwoodChest2 : ModTile, TileHooks.IPostDraw {
 
     public override void NumDust(int i, int j, bool fail, ref int num) => num = 0/*fail ? 3 : 9*/;
 
-    public override void KillMultiTile(int i, int j, int frameX, int frameY) => Chest.DestroyChest(i, j);
+    public override void KillMultiTile(int i2, int j2, int frameX, int frameY) {
+        int id = -1;
+        for (int i = 0; i < 8000; i++) {
+            Chest chest = Main.chest[i];
+            if (chest == null || chest.x != i2 || chest.y != j2)
+                continue;
+
+            id = i;
+        }
+
+        Chest.DestroyChestDirect(i2, j2, id);
+
+    }
 
     public override bool RightClick(int i, int j) {
         Player player = Main.LocalPlayer;
