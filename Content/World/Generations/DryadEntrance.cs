@@ -63,7 +63,9 @@ sealed class DryadEntrance : ModSystem, IPostSetupContent {
     private static Point _bigRubblePosition = Point.Zero;
     internal static bool _dryadStructureGenerated;
 
-    public static bool HasSpiritModAndSavannahSeed => ModLoader.HasMod("SpiritReforged") && (WorldGen.currentWorldSeed.Equals("savanna", StringComparison.CurrentCultureIgnoreCase) || WorldGen.currentWorldSeed.Equals("savannah", StringComparison.CurrentCultureIgnoreCase));
+    public static bool HasSpiritModAndSavannahSeed => 
+        ModLoader.HasMod("SpiritReforged") &&
+        (string.Equals(WorldGen.currentWorldSeed, "savanna", StringComparison.OrdinalIgnoreCase) || string.Equals(WorldGen.currentWorldSeed, "savannah", StringComparison.OrdinalIgnoreCase));
 
     public override void ClearWorld() {
         _dryadStructureGenerated = false;
