@@ -102,8 +102,13 @@ sealed class PrimordialTree : ModTree {
         Tile tile = WorldGenHelper.GetTileSafely(i, j);
         if (tile.ActiveTile(TileID.Trees)) {
             int checkJ = j;
+            int checkCount = 50;
             while (!WorldGenHelper.GetTileSafely(i, checkJ).HasTile || WorldGenHelper.ActiveTile(i, checkJ, TileID.Trees)) {
                 checkJ++;
+                checkCount--;
+                if (checkCount <= 0) {
+                    return false;
+                }
             }
             Tile grassTile = WorldGenHelper.GetTileSafely(i, checkJ);
             if (grassTile.ActiveTile(ModContent.TileType<BackwoodsGrass>())) {
