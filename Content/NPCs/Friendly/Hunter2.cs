@@ -100,6 +100,8 @@ sealed class Hunter2 : ModNPC {
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
         NPC.rarity = 5;
+
+        NPC.friendly = true;
     }
 
     public override void AI() {

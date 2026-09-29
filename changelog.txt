@@ -1,3 +1,1 @@
-- Fixed an issue with "savanna" and "savannah" namings during worldgen
-- Fixed a client freeze that can happen with Primordial Trees
-- Fixed a bug where Underworld generation would incorrectly re-enable after Remnants builds Warrens
+-

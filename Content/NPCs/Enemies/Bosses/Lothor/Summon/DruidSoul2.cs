@@ -58,6 +58,8 @@ sealed class DruidSoul2 : ModNPC {
         SpawnModBiomes = [ModContent.GetInstance<BackwoodsBiome>().Type];
 
         NPC.rarity = 1;
+
+        NPC.friendly = true;
     }
 
     public override void AI() {
