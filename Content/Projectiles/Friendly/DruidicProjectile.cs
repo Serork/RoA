@@ -38,7 +38,7 @@ sealed class CrossmodNatureProjectileHandler : GlobalProjectile {
 
     public override bool InstancePerEntity => true;
 
-    public override bool AppliesToEntity(Projectile entity, bool lateInstantiation) => CrossmodNatureContent.IsProjectileNature(entity);
+    public override bool AppliesToEntity(Projectile entity, bool lateInstantiation) => true/*CrossmodNatureContent.IsProjectileNature(entity)*/;
 
     public override void SendExtraAI(Projectile projectile, BitWriter bitWriter, BinaryWriter binaryWriter) {
         DruidicProjectile.NatureProjectileSendExtraAI(projectile, binaryWriter);

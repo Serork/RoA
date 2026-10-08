@@ -1,1 +1,2 @@
--
+- Fixed cases of unavoidable damage from Druid souls
+- Fixed an issue with placing Eggplant from Consolaria in Magic Storage's units
